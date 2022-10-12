@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogRule\Model\Indexer;
 
@@ -42,6 +43,7 @@ class IndexBuilder
      * @var \Magento\Framework\EntityManager\MetadataPool
      * @deprecated 101.0.0
      * @since 100.1.0
+     * @see Not used anymore
      */
     protected $metadataPool;
 
@@ -52,6 +54,7 @@ class IndexBuilder
      *
      * @var array
      * @deprecated 101.0.0
+     * @see Not used anymore
      */
     protected $_catalogRuleGroupWebsiteColumnsList = ['rule_id', 'customer_group_id', 'website_id'];
 
@@ -265,11 +268,14 @@ class IndexBuilder
         try {
             $this->cleanProductIndex([$id]);
 
-            $products = $this->productLoader->getProducts([$id]);
             $activeRules = $this->getActiveRules();
-            foreach ($products as $product) {
-                $this->applyRules($activeRules, $product);
+            foreach ($activeRules as $rule) {
+                $rule->setProductsFilter([$id]);
+                $this->reindexRuleProduct->execute($rule, $this->batchCount);
             }
+
+            $this->cleanProductPriceIndex([$id]);
+            $this->reindexRuleProductPrice->execute($this->batchCount, $id);
 
             $this->reindexRuleGroupWebsite->execute();
         } catch (\Exception $e) {
@@ -484,28 +490,6 @@ class IndexBuilder
         $this->reindexRuleGroupWebsite->execute();
 
         return $this;
-    }
-
-    /**
-     * Apply rules
-     *
-     * @param RuleCollection $ruleCollection
-     * @param Product $product
-     * @return void
-     */
-    private function applyRules(RuleCollection $ruleCollection, Product $product): void
-    {
-        foreach ($ruleCollection as $rule) {
-            if (!$rule->validate($product)) {
-                continue;
-            }
-
-            $websiteIds = array_intersect($product->getWebsiteIds(), $rule->getWebsiteIds());
-            $this->assignProductToRule($rule, $product->getId(), $websiteIds);
-        }
-
-        $this->cleanProductPriceIndex([$product->getId()]);
-        $this->reindexRuleProductPrice->execute($this->batchCount, $product->getId());
     }
 
     /**
