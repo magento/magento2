@@ -85,22 +85,22 @@ class ChartTest extends TestCase
                 'quantity'
             ],
             [
-                3,
+                2,
                 '7d',
                 'quantity'
             ],
             [
-                4,
+                3,
                 '1m',
                 'quantity'
             ],
             [
-                5,
+                4,
                 '1y',
                 'quantity'
             ],
             [
-                6,
+                5,
                 '2y',
                 'quantity'
             ]
