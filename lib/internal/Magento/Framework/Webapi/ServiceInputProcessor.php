@@ -102,6 +102,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private $defaultPageSizeSetter;
 
     /**
+     * @var array
+     */
+    private $methodReflectionStorage = [];
+
+    /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
@@ -287,7 +292,10 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             // This use case is for REST only. SOAP request data is already camel cased
             $camelCaseProperty = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($propertyName);
             $methodName = $this->getNameFinder()->getGetterMethodName($class, $camelCaseProperty);
-            $methodReflection = $class->getMethod($methodName);
+            if (!isset($this->methodReflectionStorage[$className . $methodName])) {
+                $this->methodReflectionStorage[$className . $methodName] = $class->getMethod($methodName);
+            }
+            $methodReflection = $this->methodReflectionStorage[$className . $methodName];
             if ($methodReflection->isPublic()) {
                 $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
                 try {
