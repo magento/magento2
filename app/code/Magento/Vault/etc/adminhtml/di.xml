@@ -17,7 +17,6 @@
         </arguments>
     </type>
     <type name="Magento\Vault\Model\Method\Vault">
-        <plugin name="vault_payment_model"
-                type="Magento\Vault\Plugin\PaymentVaultModel"/>
+        <plugin name="vault_payment_model" type="Magento\Vault\Plugin\PaymentVaultModel" sortOrder="10" disabled="false"/>
     </type>
 </config>
