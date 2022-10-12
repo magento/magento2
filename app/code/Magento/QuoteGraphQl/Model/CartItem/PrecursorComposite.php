@@ -22,7 +22,7 @@ class PrecursorComposite implements PrecursorInterface
     /**
      * @param array $precursors
      */
-    public function __construct(array $precursors)
+    public function __construct(array $precursors = [])
     {
         $this->precursors = $precursors;
     }
