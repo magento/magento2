@@ -25,7 +25,7 @@ class RuleProductIndexer extends AbstractIndexer
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function doExecuteRow(int $id)
+    protected function doExecuteRow($id)
     {
         $this->indexBuilder->reindexFull();
     }

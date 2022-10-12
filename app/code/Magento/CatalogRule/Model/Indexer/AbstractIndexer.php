@@ -133,10 +133,10 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Execute partial indexation by ID. Template method
      *
      * @param int $id
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
-     *@throws \Magento\Framework\Exception\LocalizedException
      */
-    abstract protected function doExecuteRow(int $id);
+    abstract protected function doExecuteRow($id);
 
     /**
      * Get cache manager
