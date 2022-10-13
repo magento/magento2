@@ -123,6 +123,7 @@ class MassDelete extends ProductController implements HttpPostActionInterface
                     ->getIdFieldName(),
                 $this->getRequest()->getParam('reviews')
             );
+            $collection->addStoreData();
 
             $this->collection = $collection;
         }
