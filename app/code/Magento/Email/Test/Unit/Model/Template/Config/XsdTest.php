@@ -1,9 +1,11 @@
 <?php
 /**
- * Test for validation rules implemented by XSD schemas for email templates configuration
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * Test for validation rules implemented by XSD schemas for email templates configuration
  */
 declare(strict_types=1);
 
