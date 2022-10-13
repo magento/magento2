@@ -8,7 +8,8 @@
         "magento/module-authorization": "*",
         "magento/module-backend": "*",
         "magento/module-config": "*",
-        "magento/module-user": "*"
+        "magento/module-user": "*",
+        "magento/module-integration": "*"
     },
     "type": "magento2-module",
     "license": [
