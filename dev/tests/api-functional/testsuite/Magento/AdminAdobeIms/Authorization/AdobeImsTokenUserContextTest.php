@@ -10,7 +10,6 @@ namespace Magento\AdminAdobeIms\Authorization;
 
 use Exception;
 use Magento\AdminAdobeIms\Api\ImsWebapiRepositoryInterface;
-use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
@@ -29,6 +28,7 @@ use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\User\Model\User;
+use Magento\AdobeIms\Model\Config;
 
 /**
  * Runs the storeConfigs api to check provided token
@@ -106,7 +106,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
      */
     public function testUseAdobeAccessTokenModuleDisabled()
     {
-        $this->configWriter->save(ImsConfig::XML_PATH_ENABLED, 0);
+        $this->configWriter->save(Config::XML_PATH_ENABLED, 0);
         $this->scopeConfig->clean();
 
         $token = $this->createAccessToken();
@@ -136,9 +136,8 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
     {
         $adminUserNameFromFixture = 'webapi_user';
         $token = $this->createAccessToken();
-        $this->configWriter->save(ImsConfig::XML_PATH_ENABLED, 1);
+        $this->configWriter->save(Config::XML_PATH_ENABLED, 1);
         $this->scopeConfig->clean();
-        $this->runWebApiCall($token);
         $this->assertAdminUserIdIsSaved($adminUserNameFromFixture, $token);
     }
 
@@ -186,9 +185,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
                 'SoapFault does not contain expected message.'
             );
         } catch (Exception $exception) {
-            $exceptionData = $this->processRestExceptionResult($exception);
-            $expectedExceptionData = ['message' => $expectedMessage];
-            $this->assertEquals($expectedExceptionData, $exceptionData);
+            $this->assertUnauthorizedAccessException($exception);
         }
         if ($noExceptionOccurred) {
             $this->fail("Exception was expected to be thrown when provided token is expired.");

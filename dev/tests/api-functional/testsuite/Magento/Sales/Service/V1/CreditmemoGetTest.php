@@ -5,6 +5,19 @@
  */
 namespace Magento\Sales\Service\V1;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Test\Fixture\PlaceOrder as PlaceOrderFixture;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
+use Magento\Checkout\Test\Fixture\SetDeliveryMethod as SetDeliveryMethodFixture;
+use Magento\Checkout\Test\Fixture\SetGuestEmail as SetGuestEmailFixture;
+use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethodFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\Sales\Test\Fixture\Creditmemo as CreditmemoFixture;
+use Magento\Sales\Test\Fixture\Invoice as InvoiceFixture;
+use Magento\Sales\Test\Fixture\Shipment as ShipmentFixture;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -81,21 +94,21 @@ class CreditmemoGetTest extends WebapiAbstract
 
     /**
      * Test creditmemo get service
-     *
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:product
-     * @magentoApiDataFixture Magento\Quote\Test\Fixture\GuestCart as:cart
-     * @magentoApiDataFixture Magento\Quote\Test\Fixture\AddProductToCart as:item1
-     * @magentoApiDataFixture Magento\Checkout\Test\Fixture\SetShippingAddress with:{"cart_id":"$cart.id$"}
-     * @magentoApiDataFixture Magento\Checkout\Test\Fixture\SetBillingAddress with:{"cart_id":"$cart.id$"}
-     * @magentoApiDataFixture Magento\Checkout\Test\Fixture\SetGuestEmail with:{"cart_id":"$cart.id$"}
-     * @magentoApiDataFixture Magento\Checkout\Test\Fixture\SetDeliveryMethod with:{"cart_id":"$cart.id$"}
-     * @magentoApiDataFixture Magento\Checkout\Test\Fixture\SetPaymentMethod with:{"cart_id":"$cart.id$"}
-     * @magentoApiDataFixture Magento\Checkout\Test\Fixture\PlaceOrder with:{"cart_id":"$cart.id$"} as:order
-     * @magentoApiDataFixture Magento\Sales\Test\Fixture\Invoice with:{"order_id":"$order.id$"}
-     * @magentoApiDataFixture Magento\Sales\Test\Fixture\Shipment with:{"order_id":"$order.id$"}
-     * @magentoApiDataFixture Magento\Sales\Test\Fixture\Creditmemo with:{"order_id":"$order.id$"} as:creditmemo
-     * @magentoDataFixtureDataProvider {"item1":{"cart_id":"$cart.id$","product_id":"$product.id$","qty":1}}
      */
+    #[
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
+        DataFixture(InvoiceFixture::class, ['order_id' => '$order.id$']),
+        DataFixture(ShipmentFixture::class, ['order_id' => '$order.id$']),
+        DataFixture(CreditmemoFixture::class, ['order_id' => '$order.id$'], 'creditmemo'),
+    ]
     public function testCreditmemoGet()
     {
         $creditmemo = $this->fixtures->get('creditmemo');

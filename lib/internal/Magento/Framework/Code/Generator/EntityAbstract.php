@@ -352,7 +352,7 @@ abstract class EntityAbstract
             $typeName = $parameterType;
         }
 
-        if ($parameter->allowsNull()) {
+        if ($parameter->allowsNull() && $typeName !== 'mixed') {
             $typeName = '?' . $typeName;
         }
 
