@@ -22,6 +22,11 @@ use Magento\Store\Model\ScopeInterface;
 class Url
 {
     /**
+     * No-route url constants
+     */
+    private const XML_PATH_WEB_DEFAULT_NO_ROUTE = 'web/default/no_route';
+
+    /**
      * Route for customer account login page
      */
     public const ROUTE_ACCOUNT_LOGIN = 'customer/account/login';
@@ -263,7 +268,7 @@ class Url
     }
 
     /**
-     *  Check if Referrer url is no route url
+     * Check if Referrer url is no route url
      *
      * @param string $url
      * @return bool
@@ -271,7 +276,7 @@ class Url
     private function isNoRouteUrl($url)
     {
         $defaultNoRouteUrl = $this->scopeConfig->getValue(
-            'web/default/no_route',
+            self::XML_PATH_WEB_DEFAULT_NO_ROUTE,
             ScopeInterface::SCOPE_STORE
         );
         $noRouteUrl = $this->urlBuilder->getUrl($defaultNoRouteUrl);
