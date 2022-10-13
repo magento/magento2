@@ -84,6 +84,9 @@ class SaveTest extends TestCase
     /** @var GroupExtension|MockObject */
     private $groupExtensionMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
@@ -98,7 +101,7 @@ class SaveTest extends TestCase
             ->getMock();
         $this->forwardFactoryMock = $this->getMockBuilder(ForwardFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->pageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
@@ -120,14 +123,14 @@ class SaveTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupMock = $this->getMockBuilder(GroupInterface::class)
-            ->setMethods(['setExtensionAttributes'])
+            ->onlyMethods(['setExtensionAttributes'])
             ->getMockForAbstractClass();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCustomerGroupData'])
+            ->addMethods(['setCustomerGroupData'])
             ->getMock();
         $this->groupExtensionFactoryMock = $this->getMockBuilder(GroupExtensionInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->groupExtensionMock = $this->getMockBuilder(GroupExtension::class)
@@ -160,6 +163,9 @@ class SaveTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteWithTaxClassAndException(): void
     {
         $taxClass = '3';
@@ -208,11 +214,6 @@ class SaveTest extends TestCase
         $this->messageManagerMock->expects(self::once())
             ->method('addSuccessMessage')
             ->with(__('You saved the customer group.'));
-        $exception = new \Exception('Exception');
-        $this->resultRedirectMock->expects(self::at(0))
-            ->method('setPath')
-            ->with('customer/group')
-            ->willThrowException($exception);
         $this->messageManagerMock->expects(self::once())
             ->method('addErrorMessage')
             ->with('Exception');
@@ -223,12 +224,24 @@ class SaveTest extends TestCase
         $this->sessionMock->expects(self::once())
             ->method('setCustomerGroupData')
             ->with(['customer_group_code' => $code]);
-        $this->resultRedirectMock->expects(self::at(1))
+        $exception = new \Exception('Exception');
+        $this->resultRedirectMock
             ->method('setPath')
-            ->with('customer/group/edit', ['id' => $groupId]);
+            ->withConsecutive(
+                ['customer/group'],
+                ['customer/group/edit', ['id' => $groupId]]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->throwException($exception),
+                null
+            );
+
         self::assertSame($this->resultRedirectMock, $this->controller->execute());
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteWithoutTaxClass(): void
     {
         $this->requestMock->expects(self::once())

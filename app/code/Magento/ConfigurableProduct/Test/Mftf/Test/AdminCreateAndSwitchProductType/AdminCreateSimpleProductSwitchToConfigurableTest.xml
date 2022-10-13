@@ -17,6 +17,7 @@
             <useCaseId value="MAGETWO-44165"/>
             <testCaseId value="MAGETWO-29398"/>
             <group value="catalog"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
@@ -26,6 +27,9 @@
         </before>
         <after>
             <deleteData stepKey="deleteAttribute" createDataKey="createConfigProductAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex" after="deleteAttribute">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openProductFillForm">
             <argument name="productType" value="simple"/>

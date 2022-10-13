@@ -188,4 +188,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
+        <plugin name="availableProductsFilter" type="Magento\CatalogGraphQl\Plugin\AvailableProductsFilter" />
+    </type>
 </config>

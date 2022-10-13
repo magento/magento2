@@ -35,6 +35,9 @@ class BuilderTest extends TestCase
      */
     private $factoryMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->factoryMock = $this->createMock(Factory::class);
@@ -52,7 +55,10 @@ class BuilderTest extends TestCase
         );
     }
 
-    public function testProcessCommand()
+    /**
+     * @return void
+     */
+    public function testProcessCommand(): void
     {
         $command = $this->createMock(Add::class);
         $command->expects($this->any())->method('getId')->willReturn(1);
@@ -63,34 +69,26 @@ class BuilderTest extends TestCase
         $this->model->processCommand($command2);
     }
 
-    public function testGetResultBuildsTreeStructure()
+    /**
+     * @return void
+     */
+    public function testGetResultBuildsTreeStructure(): void
     {
         $item1 = $this->createMock(Item::class);
         $item1->expects($this->once())->method('getChildren')->willReturn($this->menuMock);
         $this->factoryMock->expects($this->any())->method('create')->willReturn($item1);
 
         $item2 = $this->createMock(Item::class);
-        $this->factoryMock->expects($this->at(1))->method('create')->willReturn($item2);
+        $this->factoryMock
+            ->method('create')
+            ->willReturn($item2);
 
-        $this->menuMock->expects(
-            $this->at(0)
-        )->method(
-            'add'
-        )->with(
-            $this->isInstanceOf(Item::class),
-            null,
-            2
-        );
-
-        $this->menuMock->expects(
-            $this->at(1)
-        )->method(
-            'add'
-        )->with(
-            $this->isInstanceOf(Item::class),
-            null,
-            4
-        );
+        $this->menuMock
+            ->method('add')
+            ->withConsecutive(
+                [$this->isInstanceOf(Item::class), null, 2],
+                [$this->isInstanceOf(Item::class), null, 4]
+            );
 
         $this->model->processCommand(
             new Add(
@@ -99,7 +97,7 @@ class BuilderTest extends TestCase
                     'title' => 'Item 1',
                     'module' => 'Magento_Backend',
                     'sortOrder' => 2,
-                    'resource' => 'Magento_Backend::item1',
+                    'resource' => 'Magento_Backend::item1'
                 ]
             )
         );
@@ -111,7 +109,7 @@ class BuilderTest extends TestCase
                     'title' => 'two',
                     'module' => 'Magento_Backend',
                     'sortOrder' => 4,
-                    'resource' => 'Magento_Backend::item2',
+                    'resource' => 'Magento_Backend::item2'
                 ]
             )
         );
@@ -119,7 +117,10 @@ class BuilderTest extends TestCase
         $this->model->getResult($this->menuMock);
     }
 
-    public function testGetResultSkipsRemovedItems()
+    /**
+     * @return void
+     */
+    public function testGetResultSkipsRemovedItems(): void
     {
         $this->model->processCommand(
             new Add(
@@ -127,7 +128,7 @@ class BuilderTest extends TestCase
                     'id' => 1,
                     'title' => 'Item 1',
                     'module' => 'Magento_Backend',
-                    'resource' => 'Magento_Backend::i1',
+                    'resource' => 'Magento_Backend::i1'
                 ]
             )
         );
@@ -138,7 +139,10 @@ class BuilderTest extends TestCase
         $this->model->getResult($this->menuMock);
     }
 
-    public function testGetResultSkipItemsWithInvalidParent()
+    /**
+     * @return void
+     */
+    public function testGetResultSkipItemsWithInvalidParent(): void
     {
         $this->expectException('OutOfRangeException');
         $item1 = $this->createMock(Item::class);
@@ -151,7 +155,7 @@ class BuilderTest extends TestCase
                     'parent' => 'not_exists',
                     'title' => 'Item 1',
                     'module' => 'Magento_Backend',
-                    'resource' => 'Magento_Backend::item1',
+                    'resource' => 'Magento_Backend::item1'
                 ]
             )
         );

@@ -24,6 +24,7 @@
             <testCaseId value="MC-14005"/>
             <group value="catalog_import_export"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

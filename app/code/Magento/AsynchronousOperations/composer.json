@@ -11,7 +11,7 @@
         "magento/module-authorization": "*",
         "magento/module-backend": "*",
         "magento/module-ui": "*",
-        "php": "~7.3.0||~7.4.0"
+        "php": "~7.4.0||~8.1.0"
     },
     "suggest": {
         "magento/module-admin-notification": "*",

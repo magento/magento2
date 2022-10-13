@@ -9,6 +9,8 @@ namespace Magento\Framework\App;
 
 /**
  * Feed interface
+ *
+ * @api
  */
 interface FeedInterface
 {
@@ -17,5 +19,5 @@ interface FeedInterface
      *
      * @return string
      */
-    public function getFormattedContent() : string;
+    public function getFormattedContent(): string;
 }

@@ -56,6 +56,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      *
      * @return \Iterator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         $connection = $this->getConnection();

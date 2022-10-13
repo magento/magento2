@@ -33,4 +33,24 @@
         <data key="label">No</data>
         <data key="value">0</data>
     </entity>
+    <entity name="CatalogInventoryManageStockAutoReturnEnable">
+        <!-- Magento default value -->
+        <data key="path">cataloginventory/item_options/auto_return</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="CatalogInventoryManageStockAutoReturnDisable">
+        <!-- Magento default value -->
+        <data key="path">cataloginventory/item_options/auto_return</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="CatalogInventoryManageStockEnable">
+        <!-- Magento default value -->
+        <data key="path">cataloginventory/item_options/manage_stock</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="CatalogInventoryManageStockDisable">
+        <!-- Magento default value -->
+        <data key="path">cataloginventory/item_options/manage_stock</data>
+        <data key="value">0</data>
+    </entity>
 </entities>

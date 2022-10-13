@@ -19,8 +19,6 @@ use Magento\Catalog\Helper\Data as CatalogHelper;
 class Renderer extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer
 {
     /**
-     * Serializer
-     *
      * @var Json
      */
     private $serializer;
@@ -211,7 +209,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\
         if (!$this->isChildCalculated($item)) {
             $attributes = $this->getSelectionAttributes($item);
             if ($attributes) {
-                $result .= " " . $this->getItem()->getOrder()->formatPrice($attributes['price']);
+                $result .= " " . $this->getItem()->getOrder()->formatBasePrice($attributes['price']);
             }
         }
         return $result;

@@ -168,6 +168,7 @@ class Generic implements CacheInterface
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function deleteDir(string $dirname): void
     {
@@ -194,7 +195,8 @@ class Generic implements CacheInterface
                 return null;
             }
             $meta = $this->serializer->unserialize($meta);
-            if (!$meta[$path]) {
+
+            if (empty($meta[$path])) {
                 return null;
             }
             $this->cacheData[$path] = $meta[$path];
