@@ -531,12 +531,12 @@ class SortingTest extends TestCase
             'default_order_position_asc' => [
                 'sort' => 'position',
                 'direction' => 'ASC',
-                'expectation' => ['simple2', 'simple1', 'configurable', 'configurable_12345'],
+                'expectation' => ['configurable', 'simple1', 'simple2', 'configurable_12345'],
             ],
             'default_order_position_desc' => [
                 'sort' => 'position',
                 'direction' => 'DESC',
-                'expectation' => ['simple2', 'simple1', 'configurable', 'configurable_12345'],
+                'expectation' => ['configurable', 'simple1', 'simple2', 'configurable_12345'],
             ],
             'default_order_price_asc' => [
                 'sort' => 'price',

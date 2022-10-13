@@ -117,7 +117,7 @@ class SearchCriteriaBuilderTest extends TestCase
 
         $this->sortOrderBuilder->expects($this->once())
                                 ->method('setField')
-                                ->with('_id')
+                                ->with('entity_id')
                                 ->willReturnSelf();
         $this->sortOrderBuilder->expects($this->once())
                                 ->method('setDirection')

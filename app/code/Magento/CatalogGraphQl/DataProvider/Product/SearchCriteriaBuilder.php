@@ -124,7 +124,7 @@ class SearchCriteriaBuilder
         $this->addEntityIdSort($searchCriteria);
         $this->addVisibilityFilter($searchCriteria, $isSearch, !empty($args['filter']));
 
-        $searchCriteria->setCurrentPage($args['currentPage']);
+        $searchCriteria->setCurrentPage($args['currentPage'] - 1);
         $searchCriteria->setPageSize($args['pageSize']);
 
         return $searchCriteria;
@@ -168,7 +168,7 @@ class SearchCriteriaBuilder
         }
 
         $sortOrderArray[] = $this->sortOrderBuilder
-            ->setField('_id')
+            ->setField('entity_id')
             ->setDirection($sortDir)
             ->create();
         $searchCriteria->setSortOrders($sortOrderArray);

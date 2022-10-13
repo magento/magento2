@@ -28,23 +28,15 @@ class SearchResultApplier implements SearchResultApplierInterface
     private $searchResult;
 
     /**
-     * @var array
-     */
-    private $orders;
-
-    /**
      * @param Collection $collection
      * @param SearchResultInterface $searchResult
-     * @param array $orders
      */
     public function __construct(
         Collection $collection,
-        SearchResultInterface $searchResult,
-        array $orders
+        SearchResultInterface $searchResult
     ) {
         $this->collection = $collection;
         $this->searchResult = $searchResult;
-        $this->orders = $orders;
     }
 
     /**
@@ -56,18 +48,16 @@ class SearchResultApplier implements SearchResultApplierInterface
             $this->collection->getSelect()->where('NULL');
             return;
         }
+
         $ids = [];
         foreach ($this->searchResult->getItems() as $item) {
             $ids[] = (int)$item->getId();
         }
 
         $orderList = implode(',', $ids);
-        $this->collection->getSelect()->where('e.entity_id IN (?)', $ids);
-
-        if (isset($this->orders['relevance'])) {
-            $this->collection->getSelect()
-                ->reset(\Magento\Framework\DB\Select::ORDER)
-                ->order(new \Magento\Framework\DB\Sql\Expression("FIELD(e.entity_id, $orderList)"));
-        }
+        $this->collection->getSelect()
+            ->where('e.entity_id IN (?)', $ids)
+            ->reset(\Magento\Framework\DB\Select::ORDER)
+            ->order(new \Magento\Framework\DB\Sql\Expression("FIELD(e.entity_id, $orderList)"));
     }
 }

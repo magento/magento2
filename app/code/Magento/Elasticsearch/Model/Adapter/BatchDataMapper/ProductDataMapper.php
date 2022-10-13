@@ -311,7 +311,7 @@ class ProductDataMapper implements BatchDataMapperInterface
             && in_array($attribute->getAttributeCode(), $this->sortableAttributesValuesToImplode)
             && count($attributeValues) > 1
         ) {
-            $attributeValues = [$productId => implode(' ', $attributeValues)];
+            $attributeValues = [$productId => implode("\n", $attributeValues)];
         }
 
         if (in_array($attribute->getAttributeCode(), $this->sortableCaseSensitiveAttributes)) {
