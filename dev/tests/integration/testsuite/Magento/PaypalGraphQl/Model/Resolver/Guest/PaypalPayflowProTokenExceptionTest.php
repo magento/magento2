@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 
+use Laminas\Http\Exception\RuntimeException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\PaypalGraphQl\PaypalPayflowProAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -60,7 +61,7 @@ class PaypalPayflowProTokenExceptionTest extends PaypalPayflowProAbstractTest
         $query = $this->getCreatePayflowTokenMutation($cartId);
 
         $expectedExceptionMessage = "Payment Gateway is unreachable at the moment. Please use another payment option.";
-        $expectedException = new \Zend_Http_Client_Exception($expectedExceptionMessage);
+        $expectedException = new RuntimeException($expectedExceptionMessage);
 
         $this->gatewayMock
             ->method('postRequest')

@@ -442,8 +442,8 @@ class Address extends AbstractCustomer
         /** @var $region \Magento\Directory\Model\Region */
         foreach ($this->_regionCollection as $region) {
             $countryNormalized = strtolower($region->getCountryId());
-            $regionCode = strtolower($region->getCode());
-            $regionName = strtolower($region->getDefaultName());
+            $regionCode = $region->getCode() !== null ? strtolower($region->getCode()) : '';
+            $regionName = $region->getDefaultName() !== null ? strtolower($region->getDefaultName()) : '';
             $this->_countryRegions[$countryNormalized][$regionCode] = $region->getId();
             $this->_countryRegions[$countryNormalized][$regionName] = $region->getId();
             $this->_regions[$region->getId()] = $region->getDefaultName();

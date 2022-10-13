@@ -130,6 +130,7 @@ class LinkProcessor
      *
      * @return void
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processLinkBunches(
         Product $importEntity,
@@ -153,7 +154,9 @@ class LinkProcessor
             $linkNameToId = $this->filterProvidedLinkTypes($rowData);
 
             foreach ($linkNameToId as $linkName => $linkId) {
-                $linkSkus = explode($importEntity->getMultipleValueSeparator(), $rowData[$linkName . 'sku']);
+                $linkSkuKey = $linkName . 'sku';
+                $linkSkus = isset($rowData[$linkSkuKey]) ?
+                    explode($importEntity->getMultipleValueSeparator(), $rowData[$linkSkuKey]) : [];
 
                 //process empty value
                 if (!empty($linkSkus[0]) && $linkSkus[0] === $importEntity->getEmptyAttributeValueConstant()) {
@@ -388,7 +391,7 @@ class LinkProcessor
         return array_filter(
             $linkSkus,
             function ($linkedSku) use ($sku, $importEntity) {
-                $linkedSku = trim($linkedSku);
+                $linkedSku = $linkedSku !== null ? trim($linkedSku) : '';
 
                 return (
                         $this->skuProcessor->getNewSku($linkedSku) !== null

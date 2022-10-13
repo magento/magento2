@@ -44,9 +44,6 @@
                     <element key="magentoDbIsolation">
                         <string>magentoDbIsolation</string>
                     </element>
-                    <element key="magentoDataFixtureDataProvider">
-                        <string>magentoDataFixtureDataProvider</string>
-                    </element>
                 </array>
             </arguments>
         </listener>

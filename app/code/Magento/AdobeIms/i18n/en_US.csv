@@ -1,0 +1,17 @@
+"Authorization was successful","Authorization was successful"
+"Something went wrong.","Something went wrong."
+"An error occurred during the callback request from the Adobe service: %error","An error occurred during the callback request from the Adobe service: %error"
+"An error occurred during get user data. Contact support.","An error occurred during get user data. Contact support."
+"The response is empty.","The response is empty."
+"Login failed. Please check if <a href=""%1"">the Secret Key</a> is set correctly and try again.","Login failed. Please check if <a href=""%1"">the Secret Key</a> is set correctly and try again."
+"An error occurred during logout operation.","An error occurred during logout operation."
+"An error occurred during user profile save: %error","An error occurred during user profile save: %error"
+"User profile with id %id not found.","User profile with id %id not found."
+"User profile with user id %id not found.","User profile with user id %id not found."
+"Could not save user profile.","Could not save user profile."
+"The user profile wasn't found.","The user profile wasn't found."
+"Adobe IMS","Adobe IMS"
+Actions,Actions
+Login,Login
+Logout,Logout
+"Get User Profile","Get User Profile"

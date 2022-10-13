@@ -12,6 +12,8 @@ use Magento\Framework\Filter\Template;
 
 /**
  * An easier mechanism to implement custom directives rather than parsing the whole directive manually
+ *
+ * @api
  */
 interface ProcessorInterface
 {

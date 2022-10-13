@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <adobe_ims>
+            <integration>
+                <admin_enabled>0</admin_enabled>
+                <admin>
+                    <auth_url_pattern><![CDATA[#{imsUrl}/ims/authorize/v2?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=#{scope}&response_type=code]]></auth_url_pattern>
+                    <reauth_url_pattern><![CDATA[#{imsUrl}/ims/authorize/v2?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=#{scope}&response_type=code&reauth=check]]></reauth_url_pattern>
+                    <scopes>
+                        <AdobeID>AdobeID</AdobeID>
+                        <openid>openid</openid>
+                        <email>email</email>
+                        <profile>profile</profile>
+                        <org.read>org.read</org.read>
+                    </scopes>
+                </admin>
+                <organization_id backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <profile_url><![CDATA[#{imsUrl}/ims/profile/v1?client_id=#{client_id}]]></profile_url>
+                <organization_membership_url><![CDATA[#{organizationMembershipUrl}/#{org_id}@AdobeOrg/membership]]></organization_membership_url>
+                <admin_logout_url><![CDATA[#{imsUrl}/ims/logout/v1?access_token=#{access_token}&client_id=#{client_id}&client_secret=#{client_secret}]]></admin_logout_url>
+                <certificate_path><![CDATA[#{certificateUrl}/keys/prod/]]></certificate_path>
+                <validate_token_url><![CDATA[#{imsUrl}/ims/validate_token/v1?token=#{token}&client_id=#{client_id}&type=#{token_type}]]></validate_token_url>
+                <organizationMembershipUrl>https://graph.identity.adobe.com</organizationMembershipUrl>
+                <certificateUrl>https://static.adobelogin.com</certificateUrl>
+            </integration>
+            <email>
+                <header_template>admin_adobe_ims_email_header_template</header_template>
+                <footer_template>admin_adobe_ims_email_footer_template</footer_template>
+                <content_template>admin_emails_new_user_created_template</content_template>
+                <new_user_email_identity>general</new_user_email_identity>
+            </email>
+        </adobe_ims>
+    </default>
+</config>

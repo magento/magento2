@@ -249,6 +249,25 @@ class SubselectTest extends TestCase
                     ],
                     false
                 ],
+            'validate true for bundle product data with conditions for attribute base_row_total' =>
+                [
+                    [
+                        'id' => 'attribute_set_id',
+                        'name' => 'base_row_total',
+                        'attributeScope' => 'frontend',
+                        'attributeOperator' => '=='
+                    ],
+                    [
+                        'id'=> 1,
+                        'type' => ProductType::TYPE_BUNDLE,
+                        'qty' => 2,
+                        'price' => 100,
+                        'hasChildren' => true,
+                        'baseRowTotal' => 200,
+                        'valueParsed' => 200
+                    ],
+                    false
+                ],
             'validate true for simple product data with conditions' =>
                 [
                     [

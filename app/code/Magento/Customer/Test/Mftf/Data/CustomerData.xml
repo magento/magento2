@@ -457,4 +457,7 @@
         <data key="group">General</data>
         <requiredEntity type="address">BillingAddressTX</requiredEntity>
     </entity>
+    <entity name="Simple_US_Customer_US_UK_Addresses" type="customer" extends="Simple_US_Customer_ArmedForcesEurope">
+        <requiredEntity type="address">UK_Not_Default_Address</requiredEntity>
+    </entity>
 </entities>

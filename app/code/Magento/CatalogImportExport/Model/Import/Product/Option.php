@@ -2072,6 +2072,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $rowData
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _parseCustomOptions($rowData)
     {
@@ -2095,7 +2096,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $nameAndValue = explode('=', $nameAndValue);
                 $value = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
                 $value = trim($value);
-                $fieldName = trim($nameAndValue[0]);
+                $fieldName = isset($nameAndValue[0]) ? trim($nameAndValue[0]) : '';
                 if ($value && ($fieldName === 'name')) {
                     if ($name != $value) {
                         $name = $value;
