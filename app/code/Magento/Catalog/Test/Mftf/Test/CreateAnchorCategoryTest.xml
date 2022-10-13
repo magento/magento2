@@ -39,6 +39,8 @@
             <deleteData createDataKey="createProductE" stepKey="deleteProductE"/>
             <deleteData createDataKey="createCategoryA" stepKey="deleteCategoryA"/>
         </after>
+
+        <!--add product A to anchor category A and do storefront validation for product qty and visibility-->
         <createData entity="_defaultProduct" stepKey="createProductA">
             <requiredEntity createDataKey="createCategoryA"/>
             <field key="name">A</field>
@@ -50,6 +52,8 @@
         <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductAOnCategoryAPageFirstTime">
             <argument name="productName" value="$$createProductA.name$$"/>
         </actionGroup>
+
+        <!--disable anchor category B and add product B to it and do storefront validation for product qty and visibility in category A and category B-->
         <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
         <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openAdminCategoryPageFirstTime"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetGridFiltersFirstTime"/>
@@ -79,6 +83,8 @@
         <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductBOnCategoryAPageFirstTime">
             <argument name="productName" value="$$createProductB.name$$"/>
         </actionGroup>
+
+        <!--disable anchor category C and add product C to it-->
         <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openAdminCategoryPageSecondTime"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetGridFiltersSecondTime"/>
         <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryC">
@@ -89,7 +95,11 @@
             <requiredEntity createDataKey="createCategoryC"/>
             <field key="name">C</field>
         </createData>
+
+        <!-- admin side category tree hierarchy validation for category A, category B and category C-->
         <seeElement  selector="{{AdminCategoryBasicFieldSection.categoryTreeForThree($createCategoryA.name$,$createCategoryB.name$,$createCategoryC.name$)}}"  stepKey="verifyThreeLayerCategoryTree"/>
+
+        <!--storefront validation for product qty and visibility in category A, category B and category C -->
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryAPageThirdTime">
             <argument name="categoryName" value="$$createCategoryA.name$$"/>
         </actionGroup>
@@ -120,6 +130,8 @@
         <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductCOnCategoryCPage">
             <argument name="productName" value="$$createProductC.name$$"/>
         </actionGroup>
+
+        <!--add product D to anchor category D-->
         <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openAdminCategoryThirdTime"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetGridFiltersThirdTime"/>
         <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryD">
@@ -129,10 +141,14 @@
             <requiredEntity createDataKey="createCategoryD"/>
             <field key="name">D</field>
         </createData>
+
+        <!-- admin side category tree hierarchy validation with product qty for category A, category B, category C and category D-->
         <reloadPage stepKey="refreshEditCategoryDPage" />
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickExpandAll"/>
         <wait time="15" stepKey="waitForExpandAllFourCategoryTree" />
-        <seeElement  selector="{{AdminCategoryBasicFieldSection.categoryTreeForFour($createCategoryA.name$,$createCategoryB.name$,$createCategoryC.name$,$createCategoryD.name$)}}" stepKey="verifyFourLayerCategoryTreeWithProductQty"/>
+        <seeElement  selector="{{AdminCategoryBasicFieldSection.categoryTreeForFour($createCategoryA.name$,'4',$createCategoryB.name$,'1',$createCategoryC.name$,'1',$createCategoryD.name$,'1')}}" stepKey="verifyFourLayerCategoryTreeWithProductQty"/>
+
+        <!--storefront validation for product qty and visibility in category A-->
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryAPageFourthTime">
             <argument name="categoryName" value="$$createCategoryA.name$$"/>
         </actionGroup>
@@ -149,6 +165,8 @@
         <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductDOnCategoryAPageFirstTime">
             <argument name="productName" value="$$createProductD.name$$"/>
         </actionGroup>
+
+        <!--disable anchor category E and add product E to it-->
         <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openAdminCategoryPageFourthTime"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetGridFiltersFourthTime"/>
         <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryE">
@@ -159,10 +177,14 @@
             <requiredEntity createDataKey="createCategoryE"/>
             <field key="name">E</field>
         </createData>
+
+        <!-- admin side category tree hierarchy validation with product qty for category A, category B, category C, category D and category E-->
         <reloadPage stepKey="refreshCategoryEPage" />
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandAllFiveCategoryTree"/>
         <wait time="15" stepKey="waitForExpandAllFiveCategoryTree" />
-        <seeElement  selector="{{AdminCategoryBasicFieldSection.categoryTreeForFive($createCategoryA.name$,$createCategoryB.name$,$createCategoryC.name$,$createCategoryD.name$,$createCategoryE.name$)}}" stepKey="verifyFiveLayerCategoryTreeWithProductQty"/>
+        <seeElement  selector="{{AdminCategoryBasicFieldSection.categoryTreeForFive($createCategoryA.name$,'5',$createCategoryB.name$,'1',$createCategoryC.name$,'1',$createCategoryD.name$,'2',$createCategoryE.name$,'1')}}" stepKey="verifyFiveLayerCategoryTreeWithProductQty"/>
+
+        <!--storefront validation for product qty and visibility in category A and category D-->
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryAPageFifthTime">
             <argument name="categoryName" value="$$createCategoryA.name$$"/>
         </actionGroup>
