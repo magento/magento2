@@ -442,7 +442,6 @@ abstract class AbstractEntity
      * Workaround. Only way to implement dependency and not to break inherited child classes
      *
      * @return Json
-     * @deprecated 100.2.0
      */
     private function getSerializer()
     {
@@ -515,7 +514,7 @@ abstract class AbstractEntity
             // merge global entity index value attributes
             $indexValAttrs = array_merge($indexValAttrs, $this->_indexValueAttributes);
 
-            // should attribute has index (option value) instead of a label?
+            // should attribute have index (option value) instead of a label?
             $index = in_array($attribute->getAttributeCode(), $indexValAttrs) ? 'value' : 'label';
 
             // only default (admin) store values used
