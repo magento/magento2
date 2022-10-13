@@ -265,6 +265,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @return object the newly created and populated object
      * @throws \Exception
      * @throws SerializationException
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _createFromArray($className, $data)
