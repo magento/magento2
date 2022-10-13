@@ -62,7 +62,7 @@ class MethodList
     /**
      * Returns all available payment methods for the given quote.
      *
-     * @param \Magento\Quote\Api\Data\CartInterface $quote
+     * @param \Magento\Quote\Api\Data\CartInterface $quote|null
      * @return \Magento\Payment\Model\MethodInterface[]
      */
     public function getAvailableMethods(\Magento\Quote\Api\Data\CartInterface $quote = null)
