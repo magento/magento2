@@ -227,7 +227,6 @@ class Product extends AbstractEntity
      * Links attribute name-to-link type ID.
      *
      * @deprecated 101.1.0 use DI for LinkProcessor class if you want to add additional types
-     * @see LinkProcessor
      *
      * @see Magento_CatalogImportExport::etc/di.xml
      * @var array
