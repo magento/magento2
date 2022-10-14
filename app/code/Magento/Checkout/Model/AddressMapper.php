@@ -9,6 +9,7 @@ namespace Magento\Checkout\Model;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
@@ -33,20 +34,28 @@ class AddressMapper implements AddressMapperInterface
     private $quoteIdMaskFactory;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * AddressMapper constructor
      *
      * @param CartRepositoryInterface $cartRepository
      * @param AddressRepositoryInterface $addressRepository
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
         AddressRepositoryInterface $addressRepository,
-        QuoteIdMaskFactory $quoteIdMaskFactory
+        QuoteIdMaskFactory $quoteIdMaskFactory,
+        SerializerInterface $serializer
     ) {
         $this->cartRepository = $cartRepository;
         $this->addressRepository = $addressRepository;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -183,8 +192,20 @@ class AddressMapper implements AddressMapperInterface
                 $shippingData = array_intersect_key($quoteShippingAddressData, $billingKeys);
                 $removeKeys = ['region_code', 'save_in_address_book'];
                 $billingData = array_diff_key($billingData, array_flip($removeKeys));
-                $difference = array_diff($billingData, $shippingData);
-                $sameAsBillingFlag = empty($difference);
+                $diff = array_udiff(
+                    $billingData,
+                    $shippingData,
+                    function ($el1, $el2) {
+                        if (is_object($el1)) {
+                            $el1 = $this->serializer->serialize($el1);
+                        }
+                        if (is_object($el2)) {
+                            $el2 = $this->serializer->serialize($el2);
+                        }
+                        return strcmp((string)$el1, (string)$el2);
+                    }
+                );
+                $sameAsBillingFlag = empty($diff);
             } else {
                 $sameAsBillingFlag = false;
             }
