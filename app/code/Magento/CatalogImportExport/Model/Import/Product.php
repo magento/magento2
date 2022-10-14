@@ -16,6 +16,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as Va
 use Magento\CatalogImportExport\Model\Import\Product\StatusProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\StockProcessor;
 use Magento\CatalogImportExport\Model\StockItemImporterInterface;
+use Magento\CatalogImportExport\Model\StockItemProcessorInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
@@ -228,7 +229,6 @@ class Product extends AbstractEntity
      * @deprecated 101.1.0 use DI for LinkProcessor class if you want to add additional types
      *
      * @see Magento_CatalogImportExport::etc/di.xml
-     *
      * @var array
      */
     protected $_linkNameToId = [
@@ -614,8 +614,8 @@ class Product extends AbstractEntity
     /**
      * @var array
      * @deprecated 100.0.3
-     * @since 100.0.3
      *
+     * @since 100.0.3
      * @see we don't recommend this approach anymore
      */
     protected $productUrlKeys = [];
@@ -756,6 +756,11 @@ class Product extends AbstractEntity
     private $linkProcessor;
 
     /**
+     * @var StockItemProcessorInterface
+     */
+    private $stockItemProcessor;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -804,6 +809,7 @@ class Product extends AbstractEntity
      * @param StockProcessor|null $stockProcessor
      * @param LinkProcessor|null $linkProcessor
      * @param File|null $fileDriver
+     * @param StockItemProcessorInterface|null $stockItemProcessor
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -858,7 +864,8 @@ class Product extends AbstractEntity
         StatusProcessor $statusProcessor = null,
         StockProcessor $stockProcessor = null,
         LinkProcessor $linkProcessor = null,
-        ?File $fileDriver = null
+        ?File $fileDriver = null,
+        ?StockItemProcessorInterface $stockItemProcessor = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -922,6 +929,8 @@ class Product extends AbstractEntity
         $this->dateTimeFactory = $dateTimeFactory ?? ObjectManager::getInstance()->get(DateTimeFactory::class);
         $this->productRepository = $productRepository ?? ObjectManager::getInstance()
                 ->get(ProductRepositoryInterface::class);
+        $this->stockItemProcessor = $stockItemProcessor ?? ObjectManager::getInstance()
+            ->get(StockItemProcessorInterface::class);
     }
 
     /**
@@ -1290,6 +1299,7 @@ class Product extends AbstractEntity
      *
      * @deprecated 101.1.0 use linkProcessor Directly
      * @see linkProcessor
+     *
      * @return $this
      */
     protected function _saveLinks()
@@ -2331,6 +2341,7 @@ class Product extends AbstractEntity
     {
         while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $stockData = [];
+            $importedData = [];
             $productIdsToReindex = [];
             $stockChangedProductIds = [];
             // Format bunch to stock data rows
@@ -2356,12 +2367,13 @@ class Product extends AbstractEntity
 
                 if (!isset($stockData[$sku])) {
                     $stockData[$sku] = $row;
+                    $importedData[$sku] = $rowData;
                 }
             }
 
             // Insert rows
             if (!empty($stockData)) {
-                $this->stockItemImporter->import($stockData);
+                $this->stockItemProcessor->process($stockData, $importedData);
             }
 
             $this->reindexStockStatus($stockChangedProductIds);
@@ -2515,6 +2527,7 @@ class Product extends AbstractEntity
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws \Zend_Validate_Exception
      */
     public function validateRow(array $rowData, $rowNum)
     {
