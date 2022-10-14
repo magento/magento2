@@ -12,6 +12,10 @@ use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\AsyncClient\HttpException;
 use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
+use Magento\Framework\HTTP\LaminasClient;
+use Magento\Framework\HTTP\LaminasClientFactory;
+use Magento\Framework\Measure\Length;
+use Magento\Framework\Measure\Weight;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
@@ -25,6 +29,7 @@ use Magento\Usps\Helper\Data as DataHelper;
  * USPS shipping
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
  */
 class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
@@ -122,7 +127,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_productCollectionFactory;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClientFactory
+     * @var LaminasClientFactory
      * @deprecated Use asynchronous client.
      * @see $httpClient
      */
@@ -173,7 +178,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Shipping\Helper\Carrier $carrierHelper
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
+     * @param LaminasClientFactory $httpClientFactory
      * @param array $data
      * @param AsyncClientInterface|null $httpClient
      * @param ProxyDeferredFactory|null $proxyDeferredFactory
@@ -199,7 +204,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         CarrierHelper $carrierHelper,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
+        LaminasClientFactory $httpClientFactory,
         array $data = [],
         ?AsyncClientInterface $httpClient = null,
         ?ProxyDeferredFactory $proxyDeferredFactory = null,
@@ -474,6 +479,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $r->setWeightPounds(floor($weight));
         $ounces = ($weight - floor($weight)) * self::OUNCES_POUND;
         $r->setWeightOunces(sprintf('%.' . self::$weightPrecision . 'f', $ounces));
+        $r->setPackages($this->createPackages((float)$r->getFreeMethodWeight(), []));
         $r->setService($freeMethod);
     }
 
@@ -1522,12 +1528,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $packageParams = $request->getPackageParams();
 
         $packageWeight = $request->getPackageWeight();
-        if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::OUNCE) {
+        if ($packageParams->getWeightUnits() != Weight::OUNCE) {
             $packageWeight = round(
                 (float) $this->_carrierHelper->convertMeasureWeight(
                     (float)$request->getPackageWeight(),
                     $packageParams->getWeightUnits(),
-                    \Zend_Measure_Weight::OUNCE
+                    Weight::OUNCE
                 )
             );
         }
@@ -1616,12 +1622,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
         $packageParams = $request->getPackageParams();
         $packageWeight = $request->getPackageWeight();
-        if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::OUNCE) {
+        if ($packageParams->getWeightUnits() != Weight::OUNCE) {
             $packageWeight = round(
                 (float) $this->_carrierHelper->convertMeasureWeight(
                     (float)$request->getPackageWeight(),
                     $packageParams->getWeightUnits(),
-                    \Zend_Measure_Weight::OUNCE
+                    Weight::OUNCE
                 )
             );
         }
@@ -1702,42 +1708,42 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $length = $packageParams->getLength();
         $girth = $packageParams->getGirth();
         $packageWeight = $request->getPackageWeight();
-        if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::POUND) {
+        if ($packageParams->getWeightUnits() != Weight::POUND) {
             $packageWeight = $this->_carrierHelper->convertMeasureWeight(
                 (float)$request->getPackageWeight(),
                 $packageParams->getWeightUnits(),
-                \Zend_Measure_Weight::POUND
+                Weight::POUND
             );
         }
-        if ($packageParams->getDimensionUnits() != \Zend_Measure_Length::INCH) {
+        if ($packageParams->getDimensionUnits() != Length::INCH) {
             $length = round(
                 (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getLength(),
                     $packageParams->getDimensionUnits(),
-                    \Zend_Measure_Length::INCH
+                    Length::INCH
                 )
             );
             $width = round(
                 (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getWidth(),
                     $packageParams->getDimensionUnits(),
-                    \Zend_Measure_Length::INCH
+                    Length::INCH
                 )
             );
             $height = round(
                 (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getHeight(),
                     $packageParams->getDimensionUnits(),
-                    \Zend_Measure_Length::INCH
+                    Length::INCH
                 )
             );
         }
-        if ($packageParams->getGirthDimensionUnits() != \Zend_Measure_Length::INCH) {
+        if ($packageParams->getGirthDimensionUnits() != Length::INCH) {
             $girth = round(
                 (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getGirth(),
                     $packageParams->getGirthDimensionUnits(),
-                    \Zend_Measure_Length::INCH
+                    Length::INCH
                 )
             );
         }
@@ -1870,11 +1876,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $item->setData($itemShipment);
 
             $itemWeight = $item->getWeight() * $item->getQty();
-            if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::POUND) {
+            if ($packageParams->getWeightUnits() != Weight::POUND) {
                 $itemWeight = $this->_carrierHelper->convertMeasureWeight(
                     $itemWeight,
                     $packageParams->getWeightUnits(),
-                    \Zend_Measure_Weight::POUND
+                    Weight::POUND
                 );
             }
             if (!empty($countriesOfManufacture[$item->getProductId()])) {
@@ -1946,8 +1952,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @deprecated 100.2.1 This method must not be used anymore. Starting from 23.02.2018 USPS elimates API usage for
+     * @deprecated 100.2.1 This method must not be used anymore. Starting from 23.02.2018 USPS eliminates API usage for
      * free shipping labels generating.
+     * @see no alternatives
      */
     protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -1988,12 +1995,17 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (!$url) {
             $url = $this->_defaultGatewayUrl;
         }
+        /** @var LaminasClient $client */
         $client = $this->_httpClientFactory->create();
         $client->setUri($url);
-        $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
-        $client->setParameterGet('API', $api);
-        $client->setParameterGet('XML', $requestXml);
-        $response = $client->request()->getBody();
+        $client->setOptions(['maxredirects' => 0, 'timeout' => 30]);
+        $client->setParameterGet(
+            [
+                'API' => $api,
+                'XML' => $requestXml
+            ]
+        );
+        $response = $client->send()->getBody();
 
         $response = $this->parseXml($response);
 

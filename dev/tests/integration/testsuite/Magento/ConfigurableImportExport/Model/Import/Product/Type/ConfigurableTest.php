@@ -33,7 +33,7 @@ class ConfigurableTest extends TestCase
     /**
      * Configurable product test Type
      */
-    const TEST_PRODUCT_TYPE = 'configurable';
+    public const TEST_PRODUCT_TYPE = 'configurable';
 
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product
@@ -57,6 +57,39 @@ class ConfigurableTest extends TestCase
         /** @var MetadataPool $metadataPool */
         $metadataPool = $this->objectManager->get(MetadataPool::class);
         $this->productMetadata = $metadataPool->getMetadata(ProductInterface::class);
+    }
+
+    /**
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
+     */
+    public function testShouldUpdateConfigurableStockStatusIfChildProductsStockStatusChanged(): void
+    {
+        $sku = 'configurable';
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        /** @var ProductInterface $product */
+        $product = $productRepository->get($sku, true, null, true);
+        $stockItem = $this->getStockItem((int) $product->getId());
+        $this->assertNotNull($stockItem);
+        $this->assertTrue($stockItem->getIsInStock());
+
+        // Set all child product out of stock
+        $pathToFile = __DIR__ . '/../../_files/import_configurable_child_products_stock_item_status_out_of_stock.csv';
+        $errors = $this->doImport($pathToFile);
+        $this->assertEquals(0, $errors->getErrorsCount());
+
+        $stockItem = $this->getStockItem((int) $product->getId());
+        $this->assertNotNull($stockItem);
+        $this->assertFalse($stockItem->getIsInStock());
+
+        // Set some child product in stock
+        $pathToFile = __DIR__ . '/../../_files/import_configurable_child_products_stock_item_status_in_stock.csv';
+        $errors = $this->doImport($pathToFile);
+        $this->assertEquals(0, $errors->getErrorsCount());
+
+        $stockItem = $this->getStockItem((int) $product->getId());
+        $this->assertNotNull($stockItem);
+        $this->assertTrue($stockItem->getIsInStock());
     }
 
     public function configurableImportDataProvider()
@@ -200,39 +233,6 @@ class ConfigurableTest extends TestCase
             $this->assertTrue($errors->getErrorsCount() == 1);
             $this->assertEquals($expectedErrorMessage, $errors->getAllErrors()[0]->getErrorMessage());
         }
-    }
-
-    /**
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
-     */
-    public function testShouldUpdateConfigurableStockStatusIfChildProductsStockStatusChanged(): void
-    {
-        $sku = 'configurable';
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        /** @var ProductInterface $product */
-        $product = $productRepository->get($sku, true, null, true);
-        $stockItem = $this->getStockItem((int) $product->getId());
-        $this->assertNotNull($stockItem);
-        $this->assertTrue($stockItem->getIsInStock());
-
-        // Set all child product out of stock
-        $pathToFile = __DIR__ . '/../../_files/import_configurable_child_products_stock_item_status_out_of_stock.csv';
-        $errors = $this->doImport($pathToFile);
-        $this->assertEquals(0, $errors->getErrorsCount());
-
-        $stockItem = $this->getStockItem((int) $product->getId());
-        $this->assertNotNull($stockItem);
-        $this->assertFalse($stockItem->getIsInStock());
-
-        // Set some child product in stock
-        $pathToFile = __DIR__ . '/../../_files/import_configurable_child_products_stock_item_status_in_stock.csv';
-        $errors = $this->doImport($pathToFile);
-        $this->assertEquals(0, $errors->getErrorsCount());
-
-        $stockItem = $this->getStockItem((int) $product->getId());
-        $this->assertNotNull($stockItem);
-        $this->assertTrue($stockItem->getIsInStock());
     }
 
     /**

@@ -6,8 +6,14 @@
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\Config as ConfigFixture;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -51,9 +57,10 @@ class ProductTest extends TestCase
 
     /**
      * Checks a possibility to retrieve product raw attribute value.
-     *
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple']),
+    ]
     public function testGetAttributeRawValue()
     {
         $sku = 'simple';
@@ -65,14 +72,16 @@ class ProductTest extends TestCase
     }
 
     /**
-     * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "prod_attr"}
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
      * @throws InputException
      * @throws StateException
      */
+    #[
+        AppArea('adminhtml'),
+        DataFixture(AttributeFixture::class, ['attribute_code' => 'prod_attr']),
+        DataFixture(ProductFixture::class, ['sku' => 'simple']),
+    ]
     public function testGetAttributeRawValueGetDefault()
     {
         $product = $this->productRepository->get('simple', true, 0, true);
@@ -84,14 +93,16 @@ class ProductTest extends TestCase
     }
 
     /**
-     * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "prod_attr"}
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
      * @throws InputException
      * @throws StateException
      */
+    #[
+        AppArea('adminhtml'),
+        DataFixture(AttributeFixture::class, ['attribute_code' => 'prod_attr']),
+        DataFixture(ProductFixture::class, ['sku' => 'simple']),
+    ]
     public function testGetAttributeRawValueGetStoreSpecificValueNoDefault()
     {
         $product = $this->productRepository->get('simple', true, 0, true);
@@ -107,14 +118,16 @@ class ProductTest extends TestCase
     }
 
     /**
-     * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "prod_attr"}
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
      * @throws InputException
      * @throws StateException
      */
+    #[
+        AppArea('adminhtml'),
+        DataFixture(AttributeFixture::class, ['attribute_code' => 'prod_attr']),
+        DataFixture(ProductFixture::class, ['sku' => 'simple']),
+    ]
     public function testGetAttributeRawValueGetStoreSpecificValueWithDefault()
     {
         $product = $this->productRepository->get('simple', true, 0, true);
@@ -130,15 +143,17 @@ class ProductTest extends TestCase
     }
 
     /**
-     * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "prod_attr"}
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
      * @throws InputException
      * @throws StateException
      * @throws NoSuchEntityException
      */
+    #[
+        AppArea('adminhtml'),
+        DataFixture(AttributeFixture::class, ['attribute_code' => 'prod_attr']),
+        DataFixture(ProductFixture::class, ['sku' => 'simple']),
+    ]
     public function testGetAttributeRawValueGetStoreValueFallbackToDefault()
     {
         $product = $this->productRepository->get('simple', true, 0, true);
@@ -149,12 +164,12 @@ class ProductTest extends TestCase
         $this->assertEquals('default_value', $actual);
     }
 
-    /**
-     * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple","special_price":"5.99"}
-     * @magentoAppIsolation enabled
-     * @magentoConfigFixture default_store catalog/price/scope 1
-     */
+    #[
+        AppArea('adminhtml'),
+        AppIsolation(true),
+        ConfigFixture('catalog/price/scope', '1', 'store'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple', 'special_price' => 5.99]),
+    ]
     public function testUpdateStoreSpecificSpecialPrice()
     {
         /** @var \Magento\Catalog\Model\Product $product */
