@@ -254,7 +254,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
         $initialConfig = $this->envConfigReader->load(ConfigFilePool::APP_ENV);
 
         try {
-            return parent::runTest();
+            $testResult = parent::runTest();
         } finally {
             $this->formatter = $this->formatter ?: new PhpFormatter();
             $this->filesystem = $this->filesystem ?: Bootstrap::getObjectManager()->get(Filesystem::class);
@@ -265,6 +265,8 @@ abstract class GraphQlAbstract extends WebapiAbstract
             $directoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG);
             $directoryWrite->writeFile($this->envConfigPath, $resetFileContents);
         }
+
+        return $testResult;
     }
 
     /**
