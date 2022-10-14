@@ -9,8 +9,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Operation abstract class
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractModel extends \Magento\Framework\DataObject
 {
