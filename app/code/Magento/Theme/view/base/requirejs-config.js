@@ -69,7 +69,6 @@ var config = {
         'jquery/validate': 'jquery/jquery.validate',
         'jquery/file-uploader': 'jquery/fileUploader/jquery.fileuploader',
         'prototype': 'legacy-build.min',
-        'jquery/jquery.cookie': 'js-cookie/cookie-wrapper',
         'jquery/jquery-storageapi': 'js-storage/storage-wrapper',
         'text': 'mage/requirejs/text',
         'domReady': 'requirejs/domReady',
