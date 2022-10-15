@@ -60,9 +60,11 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
 
     /**
      * Log debug data to file.
+     *
      * Log file dir: var/log/import_export/%Y/%m/%d/%time%_%operation_type%_%entity_type%.log
      *
      * @param mixed $debugData
+     *
      * @return $this
      */
     public function addLogComment($debugData)
@@ -89,9 +91,11 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     {
         $trace = '';
         $lineNumber = 1;
+
         foreach ($this->_logTrace as &$info) {
-            $trace .= $lineNumber++ . ': ' . $info . "\n";
+            $trace .= ($lineNumber++) . ': ' . $info . "\n";
         }
+
         return $trace;
     }
 }
