@@ -10,6 +10,7 @@ namespace Magento\CatalogGraphQl\Model;
 use GraphQL\Language\AST\FieldNode;
 use GraphQL\Language\AST\InlineFragmentNode;
 use GraphQL\Language\AST\NodeKind;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
@@ -75,7 +76,6 @@ class AttributesJoiner
                     $fragmentFields[] = $this->addInlineFragmentFields($resolveInfo, $field);
                 } elseif ($field->kind === NodeKind::FRAGMENT_SPREAD &&
                     ($spreadFragmentNode = $resolveInfo->fragments[$field->name->value])) {
-
                     foreach ($spreadFragmentNode->selectionSet->selections as $spreadNode) {
                         if (isset($spreadNode->selectionSet->selections)) {
                             $fragmentFields[] = $this->getQueryFields($spreadNode, $resolveInfo);
@@ -85,6 +85,10 @@ class AttributesJoiner
                     }
                 } else {
                     $selectedFields[] = $field->name->value;
+                    if ($resolveInfo->fieldName === 'categoryList'
+                        && $field->name->value === CategoryInterface::KEY_PRODUCT_COUNT) {
+                        $selectedFields[] = 'is_anchor';
+                    }
                 }
             }
             if ($fragmentFields) {
