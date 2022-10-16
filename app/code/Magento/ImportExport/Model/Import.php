@@ -30,6 +30,7 @@ use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\Entity\Factory;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\Import\Source\Base64EncodedCsvData;
 use Magento\ImportExport\Model\ResourceModel\Import\Data;
 use Magento\ImportExport\Model\Source\Import\AbstractBehavior;
 use Magento\ImportExport\Model\Source\Import\Behavior\Factory as BehaviorFactory;
@@ -474,8 +475,10 @@ class Import extends AbstractModel
      */
     public function importSource()
     {
-        $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode());
-        $this->setData('behavior', $this->getDataSourceModel()->getBehavior());
+        $ids = $this->_getEntityAdapter()->getIds();
+        $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode($ids));
+        $this->setData('behavior', $this->getDataSourceModel()->getBehavior($ids));
+
         //Validating images temporary directory path if the constraint has been provided
         if ($this->hasData('images_base_directory')
             && $this->getData('images_base_directory') instanceof Filesystem\Directory\ReadInterface
@@ -501,6 +504,7 @@ class Import extends AbstractModel
         $this->addLogComment(__('Begin import of "%1" with "%2" behavior', $this->getEntity(), $this->getBehavior()));
 
         $result = $this->processImport();
+        $this->getDataSourceModel()->markProcessedBunches($ids);
 
         if ($result) {
             $this->addLogComment(
