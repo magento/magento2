@@ -170,6 +170,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @var LockGuardedCacheLoader
      */
     private $lockQuery;
+    
+    /**
+     * Store the disabled modules to avoid retrieving it multiple times.
+     */
+    private static ?array $disabledModules = null;
 
     /**
      * Constructor
@@ -650,10 +655,18 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     public function toHtml()
     {
         $this->_eventManager->dispatch('view_block_abstract_to_html_before', ['block' => $this]);
-        if ($this->_scopeConfig->getValue(
-            'advanced/modules_disable_output/' . $this->getModuleName(),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )) {
+
+        if (static::$disabledModules === null) {
+            static::$disabledModules = $this->_scopeConfig->getValue(
+                'advanced/modules_disable_output',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ) ?? [];
+        }
+
+        if (
+            isset(static::$disabledModules[$this->getModuleName()])
+            && static::$disabledModules[$this->getModuleName()]
+        ) {
             return '';
         }
 
@@ -673,7 +686,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
                 'transport' => $transportObject
             ]
         );
-        $html = $transportObject->getHtml();
+        $html = $transportObject->getData('html');
 
         return $html;
     }
