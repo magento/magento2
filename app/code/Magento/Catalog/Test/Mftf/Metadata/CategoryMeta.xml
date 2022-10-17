@@ -5,64 +5,137 @@
   * See COPYING.txt for license details.
   */
 -->
-<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
-    <operation name="CreateCategory" dataType="category" type="create" auth="adminOauth" url="/V1/categories" method="POST">
-        <contentType>application/json</contentType>
-        <object key="category" dataType="category">
-            <field key="parent_id">integer</field>
-            <field key="name">string</field>
-            <field key="is_active">boolean</field>
-            <field key="position">integer</field>
-            <field key="level">integer</field>
-            <field key="children">string</field>
-            <field key="created_at">string</field>
-            <field key="updated_at">string</field>
-            <field key="path">string</field>
-            <field key="include_in_menu">boolean</field>
-            <array key="available_sort_by">
-                <value>string</value>
-            </array>
-            <field key="extension_attributes">empty_extension_attribute</field>
-            <array key="custom_attributes">
-                <value>custom_attribute</value>
-            </array>
-        </object>
-    </operation>
 
-    <operation name="UpdateCategory" dataType="category" type="update" auth="adminOauth" url="/V1/categories/{id}" method="PUT">
-        <contentType>application/json</contentType>
-        <object key="category" dataType="category">
-            <field key="id">integer</field>
-            <field key="parent_id">integer</field>
-            <field key="name">string</field>
-            <field key="is_active">boolean</field>
-            <field key="position">integer</field>
-            <field key="level">integer</field>
-            <field key="children">string</field>
-            <field key="created_at">string</field>
-            <field key="updated_at">string</field>
-            <field key="path">string</field>
-            <array key="available_sort_by">
-                <value>string</value>
-            </array>
-            <field key="include_in_menu">boolean</field>
-            <field key="extension_attributes">empty_extension_attribute</field>
-            <array key="custom_attributes">
-                <value>custom_attribute</value>
-            </array>
-        </object>
-    </operation>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRefundWithDiscountGifCardAndStoreCreditTest">
+        <annotations>
+            <features value="Testing refund of order for 100$ when 60$ was paid with virtual money (Discount+GiftCard+StoreCredit) and 40$ was paid with offline payment."/>
+            <stories value="TestingRefundofOrderWithVirtualMoney"/>
+            <title value="TestingRefundofOrderWithVirtualMoney"/>
+            <description value="Testing refund of order for 100$ when 60$ was paid with virtual money (Discount+GiftCard+StoreCredit) and 40$ was paid with offline payment."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5669"/>
+        </annotations>
+        <before>
+            <!--Create Category-->
+            <createData entity="_defaultCategory" stepKey="testCategory"/>
+            <!-- Create SimpleProductwithPrice100 -->
+            <createData entity="SimpleProduct_100" stepKey="simpleProductOne">
+                <requiredEntity createDataKey="testCategory"/>
+            </createData>
+            <!-- Assign SimpleProductOne to Category -->
+            <createData entity="AssignProductToCategory" stepKey="assignSimpleProductOneToTestCategory">
+                <requiredEntity createDataKey="testCategory"/>
+                <requiredEntity createDataKey="simpleProductOne"/>
+            </createData>
+            <!-- Create a cart price rule with coupon-->
+            <createData entity="SalesRuleSpecificCouponWithThirtyPercentDiscount" stepKey="createCartPriceRule"/>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createCartPriceRule"/>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+            <deleteData createDataKey="testCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProductOne" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
+        </after>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <amOnPage url="{{AdminStoresConfigurationGiftCardAccountGeneralSettingsPage.url}}" stepKey="amOnGiftCardAccountGeneralSettingsPage"/>
+        <!--  Hit Generate to generate a new pool of gift card accounts -->
+        <click selector="{{AdminGiftCardAccountGeneralSettingsSection.generate}}" stepKey="clickGenerateNewCodePoolButton"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitPopupAppears"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptPopup"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" time="60" stepKey="waitCodePoolGeneratedSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="New code pool was generated." stepKey="seeSuccessMessage"/>
+        <!-- Marketing > Gift Card accounts > Gift Account grid, click Add gift card account -->
+        <actionGroup ref="AddGiftCardAccountActionGroup" stepKey="addGiftCardAmount">
+            <argument name="website" value="Main Website" />
+            <argument name="balanceAmount" value="10" />
+        </actionGroup>
+        <grabTextFrom selector="{{AdminGiftCardAccountGridSection.giftCardCode}}" stepKey="grabGiftCardCode2"/>
 
-    <operation name="DeleteCategory" dataType="category" type="delete" auth="adminOauth" url="/V1/categories/{id}" method="DELETE">
-        <contentType>application/json</contentType>
-    </operation>
+        <!--Create Customer-->
+        <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        <!-- Add Customer Balance-->
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+        <!--Add Balance 20-->
+        <actionGroup ref="UpdateCustomerStoreCreditBalanceAdminActionGroup" stepKey="updateStoreCreditFromAdmin">
+            <argument name="storeCredit" value="20" />
+        </actionGroup>
+        <!--Enable Free Shipping-->
+        <actionGroup ref="CliEnableFreeShippingMethodActionGroup" stepKey="enableFreeShipping"/>
+        <!-- Login to Store Front-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStoreFront">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <!--Go to product page-->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductFromCategory">
+            <argument name="productUrlKey" value="$simpleProductOne.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <!--Add Product to Shopping Cart-->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$simpleProductOne.name$"/>
+        </actionGroup>
+        <!--Go to Checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFreeShipping">
+            <argument name="shippingMethodName" value="Free Shipping"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="clickNextButton"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <!-- Click Apply Discount Code: section is expanded. Input promo code, apply and see success message -->
+        <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyCoupon">
+            <argument name="discountCode" value="$createCouponForCartPriceRule.code$"/>
+        </actionGroup>
+        <wait time="10" stepKey="waitTenSeconds"/>
+        <!--  Step 4: Click Apply Gift Card -->
+        <click selector="{{StorefrontApplyGiftCardAccountSection.openApplyGiftCardSection}}" stepKey="openApplyGiftCardSection"/>
+        <!--  Step 5: Input %GCA_code% in field -->
+        <fillField selector="{{StorefrontApplyGiftCardAccountSection.giftCardCodeField}}" userInput="{$grabGiftCardCode2}" stepKey="inputGCACodeField2"/>
+        <click selector="{{StorefrontApplyGiftCardAccountSection.applyGiftCardButton}}" stepKey="clickApplyGiftCardButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <click selector="{{CheckoutStoreCreditSection.useStoreCredit}}" stepKey="clickUseStoreCredit"/>
+        <!--Click Place Order button-->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <!--GrabOrderLink-->
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="grabOrderNumber"/>
+        <!--OpenOrder From Admin Page-->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrdersGridById">
+            <argument name="entityId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!--Create Invoice for this Order-->
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="createInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!--Make Invoice and Ship the Order-->
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <actionGroup ref="SubmitShipmentIntoOrderActionGroup" stepKey="submitShipmentForSbmecondOrder"/>
+        <!-- Wait up to 30 seconds for the current page to fully load before continuing. -->
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <!--Open Credit memo Page-->
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemoButton"/>
+        <!--Check refund GrandTotal-->
+        <see selector="{{AdminCreditMemoTotalSection.grandTotal}}" userInput="40" stepKey="seeGrandTotalinCreditMemo"/>
+        <!--Create Credit Memo-->
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOffline"/>
+        <!--Assert refund in Credit Memo Tab -->
+        <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemoTab"/>
+        <waitForPageLoad stepKey="waitForTabLoad"/>
+        <grabTextFrom selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="grabMemoId"/>
+        <assertNotEmpty stepKey="assertMemoIdIsNotEmpty" after="grabMemoId">
+            <actualResult type="const">$grabMemoId</actualResult>
+        </assertNotEmpty>
+        <click selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="clickView"/>
+        <waitForPageLoad stepKey="waitForCreditMemo"/>
+        <scrollTo selector="{{AdminCreditMemoViewTotalSection.subtotal}}" stepKey="scrollToTotal"/>
+        <see selector="{{AdminCreditMemoViewTotalSection.grandTotal}}" userInput="40" stepKey="seeGrandTotal"/>
+    </test>
+</tests>
 
-    <operation name="AssignProductToCategory" dataType="category_product_link" type="create" auth="adminOauth" url="/V1/categories/{id}/products" method="POST">
-        <contentType>application/json</contentType>
-        <object key="productLink" dataType="category_product_link">
-            <field key="sku">string</field>
-            <field key="category_id">string</field>
-        </object>
-    </operation>
-</operations>
