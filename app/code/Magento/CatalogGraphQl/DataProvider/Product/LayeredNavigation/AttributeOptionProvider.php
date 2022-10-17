@@ -110,7 +110,7 @@ class AttributeOptionProvider
 
         if (!empty($attributeCodes)) {
             $select->orWhere(
-                'a.attribute_code in (?) AND a.frontend_input = \'boolean\'',
+                'a.attribute_code in (?) AND a.frontend_input in (\'boolean\', \'price\')',
                 $attributeCodes
             );
         }

@@ -27,15 +27,11 @@ class DataMerger
     public function merge(array $defaultData, array $data, bool $isExtensible = true): array
     {
         if ($isExtensible) {
-            if (!isset($data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY])) {
-                $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] = [];
+            if (isset($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES])) {
+                $data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES] = $this->convertCustomAttributesToMap(
+                    $data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES]
+                );
             }
-            if (!isset($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES])) {
-                $data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES] = [];
-            }
-            $data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES] = $this->convertCustomAttributesToMap(
-                $data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES]
-            );
             foreach ($data as $key => $value) {
                 if (!array_key_exists($key, $defaultData)) {
                     if (array_key_exists($key, $defaultData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY])) {
@@ -50,7 +46,7 @@ class DataMerger
 
         $result = $this->mergeRecursive($defaultData, $data);
 
-        if ($isExtensible) {
+        if ($isExtensible && isset($result[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES])) {
             $result[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES] = $this->convertCustomAttributesToCollection(
                 $result[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES]
             );
