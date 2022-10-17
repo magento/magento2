@@ -19,12 +19,14 @@ class MethodList
 {
     /**
      * @var \Magento\Payment\Helper\Data
+     * @see MAGETWO-71174
      * @deprecated 100.1.0 Do not use this property in case of inheritance.
      */
     protected $paymentHelper;
 
     /**
      * @var \Magento\Payment\Model\Checks\SpecificationFactory
+     * @see MAGETWO-71174
      * @deprecated 100.2.0 Do not use this property in case of inheritance.
      */
     protected $methodSpecificationFactory;
@@ -62,7 +64,7 @@ class MethodList
     /**
      * Returns all available payment methods for the given quote.
      *
-     * @param \Magento\Quote\Api\Data\CartInterface $quote|null
+     * @param \Magento\Quote\Api\Data\CartInterface $quote
      * @return \Magento\Payment\Model\MethodInterface[]
      */
     public function getAvailableMethods(\Magento\Quote\Api\Data\CartInterface $quote = null)
