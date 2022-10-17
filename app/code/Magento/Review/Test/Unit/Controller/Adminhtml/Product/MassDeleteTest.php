@@ -74,7 +74,7 @@ class MassDeleteTest extends TestCase
 
     public function testExecute(): void
     {
-        $this->requestMock->expects($this->atLeastOnce())
+        $this->requestMock->expects(self::atLeastOnce())
             ->method('getParam')
             ->willReturnMap(
                 [
@@ -84,7 +84,7 @@ class MassDeleteTest extends TestCase
             );
 
         $collectionMock = $this->createMock(ReviewCollection::class);
-        $this->collectionFactoryMock->expects($this->once())
+        $this->collectionFactoryMock->expects(self::once())
             ->method('create')
             ->willReturn($collectionMock);
         $resource = $this->createMock(ReviewResourceModel::class);
@@ -92,11 +92,11 @@ class MassDeleteTest extends TestCase
             ->willReturn($resource);
         $resource->method('getIdFieldName')
             ->willReturn('id');
-        $collectionMock->expects($this->once())
+        $collectionMock->expects(self::once())
             ->method('addFieldToFilter')
             ->with('main_table.id', [10, 20])
             ->willReturnSelf();
-        $collectionMock->expects($this->once())
+        $collectionMock->expects(self::once())
             ->method('addStoreData')
             ->willReturnSelf();
 
