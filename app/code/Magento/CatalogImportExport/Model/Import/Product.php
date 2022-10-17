@@ -16,6 +16,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as Va
 use Magento\CatalogImportExport\Model\Import\Product\StatusProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\StockProcessor;
 use Magento\CatalogImportExport\Model\StockItemImporterInterface;
+use Magento\CatalogImportExport\Model\StockItemProcessorInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
@@ -23,7 +24,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
@@ -229,7 +229,6 @@ class Product extends AbstractEntity
      * @deprecated 101.1.0 use DI for LinkProcessor class if you want to add additional types
      *
      * @see Magento_CatalogImportExport::etc/di.xml
-     *
      * @var array
      */
     protected $_linkNameToId = [
@@ -615,8 +614,8 @@ class Product extends AbstractEntity
     /**
      * @var array
      * @deprecated 100.0.3
-     * @since 100.0.3
      *
+     * @since 100.0.3
      * @see we don't recommend this approach anymore
      */
     protected $productUrlKeys = [];
@@ -757,6 +756,11 @@ class Product extends AbstractEntity
     private $linkProcessor;
 
     /**
+     * @var StockItemProcessorInterface
+     */
+    private $stockItemProcessor;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -805,6 +809,7 @@ class Product extends AbstractEntity
      * @param StockProcessor|null $stockProcessor
      * @param LinkProcessor|null $linkProcessor
      * @param File|null $fileDriver
+     * @param StockItemProcessorInterface|null $stockItemProcessor
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -859,7 +864,8 @@ class Product extends AbstractEntity
         StatusProcessor $statusProcessor = null,
         StockProcessor $stockProcessor = null,
         LinkProcessor $linkProcessor = null,
-        ?File $fileDriver = null
+        ?File $fileDriver = null,
+        ?StockItemProcessorInterface $stockItemProcessor = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -923,6 +929,8 @@ class Product extends AbstractEntity
         $this->dateTimeFactory = $dateTimeFactory ?? ObjectManager::getInstance()->get(DateTimeFactory::class);
         $this->productRepository = $productRepository ?? ObjectManager::getInstance()
                 ->get(ProductRepositoryInterface::class);
+        $this->stockItemProcessor = $stockItemProcessor ?? ObjectManager::getInstance()
+            ->get(StockItemProcessorInterface::class);
     }
 
     /**
@@ -1053,7 +1061,7 @@ class Product extends AbstractEntity
     {
         $productEntityTable = $this->_resourceFactory->create()->getEntityTable();
 
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $idsToDelete = [];
 
             foreach ($bunch as $rowNum => $rowData) {
@@ -1149,13 +1157,18 @@ class Product extends AbstractEntity
         foreach ($this->_productTypeModels as $productTypeModel) {
             $productTypeModel->saveData();
         }
-        $this->linkProcessor->saveLinks($this, $this->_dataSourceModel, $this->getProductEntityLinkField());
+        $this->linkProcessor->saveLinks(
+            $this,
+            $this->_dataSourceModel,
+            $this->getProductEntityLinkField(),
+            $this->getIds()
+        );
         $this->_saveStockItem();
         if ($this->_replaceFlag) {
             $this->getOptionEntity()->clearProductsSkuToId();
         }
+        $this->getOptionEntity()->setIds($this->getIds());
         $this->getOptionEntity()->importData();
-
         return $this;
     }
 
@@ -1286,11 +1299,12 @@ class Product extends AbstractEntity
      *
      * @deprecated 101.1.0 use linkProcessor Directly
      * @see linkProcessor
+     *
      * @return $this
      */
     protected function _saveLinks()
     {
-        $this->linkProcessor->saveLinks($this, $this->_dataSourceModel, $this->getProductEntityLinkField());
+        $this->linkProcessor->saveLinks($this, $this->_dataSourceModel, $this->getProductEntityLinkField(), []);
         return $this;
     }
 
@@ -1576,7 +1590,7 @@ class Product extends AbstractEntity
         $productsQty = null;
         $entityLinkField = $this->getProductEntityLinkField();
 
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $entityRowsIn = [];
             $entityRowsUp = [];
             $attributes = [];
@@ -1837,7 +1851,6 @@ class Product extends AbstractEntity
                                 $mediaGalleryStoreData['disabled'] = 0;
                                 $mediaGallery[Store::DEFAULT_STORE_ID][$rowSku][$uploadedFile] = $mediaGalleryStoreData;
                             }
-
                         }
                     }
                 }
@@ -2326,8 +2339,9 @@ class Product extends AbstractEntity
      */
     protected function _saveStockItem()
     {
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $stockData = [];
+            $importedData = [];
             $productIdsToReindex = [];
             $stockChangedProductIds = [];
             // Format bunch to stock data rows
@@ -2353,12 +2367,13 @@ class Product extends AbstractEntity
 
                 if (!isset($stockData[$sku])) {
                     $stockData[$sku] = $row;
+                    $importedData[$sku] = $rowData;
                 }
             }
 
             // Insert rows
             if (!empty($stockData)) {
-                $this->stockItemImporter->import($stockData);
+                $this->stockItemProcessor->process($stockData, $importedData);
             }
 
             $this->reindexStockStatus($stockChangedProductIds);
@@ -2463,7 +2478,7 @@ class Product extends AbstractEntity
      */
     public function getNextBunch()
     {
-        return $this->_dataSourceModel->getNextBunch();
+        return $this->_dataSourceModel->getNextUniqueBunch($this->getIds());
     }
 
     /**
@@ -2512,6 +2527,7 @@ class Product extends AbstractEntity
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws \Zend_Validate_Exception
      */
     public function validateRow(array $rowData, $rowNum)
     {
