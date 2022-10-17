@@ -8,14 +8,11 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Test\Unit\Model;
 
 use Magento\AdobeIms\Model\LogIn;
-use Magento\AdobeIms\Model\OAuth\TokenResponse;
-use Magento\AdobeImsApi\Api\Data\TokenResponseInterfaceFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\Intl\DateFormatterFactory;
 use Magento\Framework\Stdlib\DateTime\Timezone;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
