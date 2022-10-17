@@ -2020,6 +2020,18 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         $this->_eventManager->dispatch('checkout_submit_all_after', ['order' => $order, 'quote' => $quote]);
 
+        $this->removeTransferredItems();
+
+        return $order;
+    }
+
+    /**
+     * Remove items that were transferred into shopping cart from their original sources (cart, wishlist, ...)
+     *
+     * @return void
+     */
+    private function removeTransferredItems(): void
+    {
         try {
             if (is_array($this->getSession()->getTransferredItems())) {
                 foreach ($this->getSession()->getTransferredItems() as $from => $itemIds) {
@@ -2032,8 +2044,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         } catch (\Throwable $exception) {
             $this->_logger->error($exception);
         }
-
-        return $order;
     }
 
     /**
