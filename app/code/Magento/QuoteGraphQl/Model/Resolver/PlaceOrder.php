@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
+use Magento\Checkout\Model\PaymentInformationManagement;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -24,16 +25,6 @@ use Magento\Sales\Api\OrderRepositoryInterface;
  */
 class PlaceOrder implements ResolverInterface
 {
-    /**
-     * Static lock prefix for place order locking
-     */
-    public const LOCK_PREFIX = 'PLACE_ORDER_';
-
-    /**
-     * How long to wait for place order to become unlocked
-     */
-    public const LOCK_TIMEOUT = 60;
-
     /**
      * @var GetCartForUser
      */
@@ -92,7 +83,7 @@ class PlaceOrder implements ResolverInterface
         $userId = (int)$context->getUserId();
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
 
-        $lockedName = self::LOCK_PREFIX . $maskedCartId;
+        $lockedName = PaymentInformationManagement::LOCK_PREFIX . $maskedCartId;
         if ($this->lockManager->isLocked($lockedName)) {
             throw new LocalizedException(__(
                 'Unable to place order: A server error stopped your order from being placed. '
@@ -101,7 +92,7 @@ class PlaceOrder implements ResolverInterface
         }
 
         try {
-            $this->lockManager->lock($lockedName, self::LOCK_TIMEOUT);
+            $this->lockManager->lock($lockedName, PaymentInformationManagement::LOCK_TIMEOUT);
             $cart = $this->getCartForUser->getCartForCheckout($maskedCartId, $userId, $storeId);
             $orderId = $this->placeOrder->execute($cart, $maskedCartId, $userId);
             $order = $this->orderRepository->get($orderId);

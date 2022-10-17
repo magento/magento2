@@ -11,8 +11,9 @@ use Magento\Checkout\Api\Exception\PaymentProcessingRateLimitExceededException;
 use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
 use Magento\Checkout\Api\PaymentSavingRateLimiterInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Lock\LockManagerInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 
 /**
@@ -22,7 +23,6 @@ use Magento\Quote\Model\Quote;
  */
 class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPaymentInformationManagementInterface
 {
-
     /**
      * @var \Magento\Quote\Api\GuestBillingAddressManagementInterface
      */
@@ -74,6 +74,11 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     private $saveRateLimitDisabled = false;
 
     /**
+     * @var LockManagerInterface
+     */
+    private $lockManager;
+
+    /**
      * @param \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement
      * @param \Magento\Quote\Api\GuestPaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Quote\Api\GuestCartManagementInterface $cartManagement
@@ -82,6 +87,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
      * @param CartRepositoryInterface $cartRepository
      * @param PaymentProcessingRateLimiterInterface|null $paymentsRateLimiter
      * @param PaymentSavingRateLimiterInterface|null $savingRateLimiter
+     * @param LockManagerInterface|null $lockManager
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -92,7 +98,8 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
         CartRepositoryInterface $cartRepository,
         ?PaymentProcessingRateLimiterInterface $paymentsRateLimiter = null,
-        ?PaymentSavingRateLimiterInterface $savingRateLimiter = null
+        ?PaymentSavingRateLimiterInterface $savingRateLimiter = null,
+        ?LockManagerInterface $lockManager = null
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
@@ -104,6 +111,8 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
             ?? ObjectManager::getInstance()->get(PaymentProcessingRateLimiterInterface::class);
         $this->savingRateLimiter = $savingRateLimiter
             ?? ObjectManager::getInstance()->get(PaymentSavingRateLimiterInterface::class);
+        $this->lockManager = $lockManager
+            ?? ObjectManager::getInstance()->get(LockManagerInterface::class);
     }
 
     /**
@@ -115,6 +124,13 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
+        $lockedName = PaymentInformationManagement::LOCK_PREFIX . $cartId;
+        if ($this->lockManager->isLocked($lockedName)) {
+            throw new CouldNotSaveException(
+                __('A server error stopped your order from being placed. Please try to place your order again.')
+            );
+        }
+        $this->lockManager->lock($lockedName, PaymentInformationManagement::LOCK_TIMEOUT);
         $this->paymentsRateLimiter->limit();
         try {
             //Have to do this hack because of savePaymentInformation() plugins.

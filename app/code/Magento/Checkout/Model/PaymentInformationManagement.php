@@ -11,6 +11,7 @@ use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
 use Magento\Checkout\Api\PaymentSavingRateLimiterInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 
 /**
@@ -20,6 +21,16 @@ use Magento\Quote\Api\CartRepositoryInterface;
  */
 class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInformationManagementInterface
 {
+    /**
+     * Static lock prefix for place order locking
+     */
+    public const LOCK_PREFIX = 'PLACE_ORDER_';
+
+    /**
+     * How long to wait for place order to become unlocked
+     */
+    public const LOCK_TIMEOUT = 60;
+
     /**
      * @var \Magento\Quote\Api\BillingAddressManagementInterface
      * @deprecated 100.1.0 This call was substituted to eliminate extra quote::save call
@@ -72,6 +83,11 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     private $saveRateLimiterDisabled = false;
 
     /**
+     * @var LockManagerInterface
+     */
+    private $lockManager;
+
+    /**
      * @param \Magento\Quote\Api\BillingAddressManagementInterface $billingAddressManagement
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
@@ -80,6 +96,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      * @param PaymentProcessingRateLimiterInterface|null $paymentRateLimiter
      * @param PaymentSavingRateLimiterInterface|null $saveRateLimiter
      * @param CartRepositoryInterface|null $cartRepository
+     * @param LockManagerInterface|null $lockManager
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -90,7 +107,8 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository,
         ?PaymentProcessingRateLimiterInterface $paymentRateLimiter = null,
         ?PaymentSavingRateLimiterInterface $saveRateLimiter = null,
-        ?CartRepositoryInterface $cartRepository = null
+        ?CartRepositoryInterface $cartRepository = null,
+        ?LockManagerInterface $lockManager = null
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
@@ -103,6 +121,8 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
             ?? ObjectManager::getInstance()->get(PaymentSavingRateLimiterInterface::class);
         $this->cartRepository = $cartRepository
             ?? ObjectManager::getInstance()->get(CartRepositoryInterface::class);
+        $this->lockManager = $lockManager
+            ?? ObjectManager::getInstance()->get(LockManagerInterface::class);
     }
 
     /**
@@ -113,7 +133,15 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
+        $lockedName = self::LOCK_PREFIX . $cartId;
+        if ($this->lockManager->isLocked($lockedName)) {
+            throw new CouldNotSaveException(
+                __('A server error stopped your order from being placed. Please try to place your order again.')
+            );
+        }
+        $this->lockManager->lock($lockedName, self::LOCK_TIMEOUT);
         $this->paymentRateLimiter->limit();
+
         try {
             //Have to do this hack because of plugins for savePaymentInformation()
             $this->saveRateLimiterDisabled = true;
@@ -137,6 +165,8 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
                 __('A server error stopped your order from being placed. Please try to place your order again.'),
                 $e
             );
+        } finally {
+            $this->lockManager->unlock($lockedName);
         }
         return $orderId;
     }
