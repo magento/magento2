@@ -66,17 +66,10 @@
         <waitForElementClickable selector="{{AdminOrderFormShippingAddressSection.SameAsBilling}}" stepKey="waitForElementClickableSameAsBilling"/>
         <selectOption userInput="" selector="{{AdminOrderFormBillingAddressSection.selectAddress}}" stepKey="addNewBillingAddress" />
         <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
-        <fillField selector="{{AdminOrderFormBillingAddressSection.FirstName}}" userInput="{{US_Address_NY_Not_Default_Address.firstname}}" stepKey="fillBillingAddressFirstName"/>
-        <fillField selector="{{AdminOrderFormBillingAddressSection.LastName}}" userInput="{{US_Address_NY_Not_Default_Address.lastname}}" stepKey="fillBillingAddressLastName"/>
-        <fillField selector="{{AdminOrderFormBillingAddressSection.StreetLine1}}" userInput="{{US_Address_NY_Not_Default_Address.street[0]}}" stepKey="fillBillingAddressStreetLine1"/>
-        <fillField selector="{{AdminOrderFormBillingAddressSection.StreetLine2}}" userInput="{{US_Address_NY_Not_Default_Address.street[1]}}" stepKey="fillBillingAddressStreetLine2"/>
-        <selectOption userInput="{{US_Address_NY_Not_Default_Address.country}}" selector="{{AdminOrderFormBillingAddressSection.Country}}" stepKey="selectBillingAddressCountry"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearCountry"/>
-        <selectOption userInput="{{US_Address_NY_Not_Default_Address.state}}" selector="{{AdminOrderFormBillingAddressSection.State}}" stepKey="selectBillingAddressState"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearState"/>
-        <fillField selector="{{AdminOrderFormBillingAddressSection.City}}" userInput="{{US_Address_NY_Not_Default_Address.city}}" stepKey="fillBillingAddressCity"/>
-        <fillField selector="{{AdminOrderFormBillingAddressSection.PostalCode}}" userInput="{{US_Address_NY_Not_Default_Address.postcode}}" stepKey="fillBillingAddressPostalCode"/>
-        <fillField selector="{{AdminOrderFormBillingAddressSection.Phone}}" userInput="{{US_Address_NY_Not_Default_Address.telephone}}" stepKey="fillBillingAddressPhone"/>
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="FillOrderNewShippingAddress">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+            <argument name="address" value="US_Address_NY_Not_Default_Address"/>
+        </actionGroup>
         <scrollTo selector="section#order-addresses" stepKey="scrollToSameAsBillingAddress2"/>
         <helper class="\Magento\Sales\Test\Mftf\Helper\AdminProductPage" method="rapidChecksOnCheckBox" stepKey="rapidClickOnSameAsBillingAddressCheckbox">
             <argument name="context">{{AdminOrderFormShippingAddressSection.SameAsBilling}}</argument>
@@ -90,7 +83,7 @@
             <argument name="suffix" value=""/>
             <argument name="company" value=""/>
             <argument name="streetLine1" value="{{US_Address_NY_Not_Default_Address.street[0]}}"/>
-            <argument name="streetLine2" value="{{US_Address_NY_Not_Default_Address.street[1]}}"/>
+            <argument name="streetLine2" value=""/>
             <argument name="countryId" value="{{US_Address_NY_Not_Default_Address.country_id}}"/>
             <argument name="state" value="{{US_Address_NY_Not_Default_Address.state}}"/>
             <argument name="province" value=""/>
