@@ -200,11 +200,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _initFormValues()
     {
         $data = $this->getFilterData()->getData();
-        foreach ($data as $key => $value) {
-            if (is_array($value) && isset($value[0])) {
-                $data[$key] = explode(',', $value[0]);
-            }
-        }
         $this->getForm()->addValues($data);
         return parent::_initFormValues();
     }

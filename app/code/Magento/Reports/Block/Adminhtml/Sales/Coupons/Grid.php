@@ -211,9 +211,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     {
         if ($filterData->getPriceRuleType()) {
             $rulesList = $filterData->getData('rules_list');
-            if (isset($rulesList[0])) {
-                $rulesIds = explode(',', $rulesList[0]);
-                $collection->addRuleFilter($rulesIds);
+            if ($rulesList) {
+                $collection->addRuleFilter($rulesList);
             }
         }
 
