@@ -155,6 +155,8 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
                 __('An error occurred on the server. Please try to place the order again.'),
                 $e
             );
+        } finally {
+            $this->lockManager->unlock($lockedName);
         }
 
         return $orderId;
