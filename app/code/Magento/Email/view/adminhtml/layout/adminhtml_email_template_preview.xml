@@ -12,6 +12,7 @@
         <remove src="css/styles-old.css"/>
         <remove src="css/styles.css"/>
         <remove src="jquery/jstree/themes/default/style.css"/>
+        <css src="Magento_Email::css/email-preview.css" />
     </head>
     <body>
         <attribute name="id" value="html-body"/>
