@@ -1486,8 +1486,12 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $tmpAddress->unsAddressId()->unsAddressType();
             $data = $tmpAddress->getData();
             $data['save_in_address_book'] = 0;
+            $shippingAddressTmp = $this->getShippingAddress()->getData();
             // Do not duplicate address (billing address will do saving too)
             $this->getShippingAddress()->addData($data);
+            if (array_key_exists('weight', $shippingAddressTmp) && !empty($shippingAddressTmp['weight'])) {
+                $this->getShippingAddress()->setWeight($shippingAddressTmp['weight']);
+            }
         }
         $this->getShippingAddress()->setSameAsBilling($flag);
         $this->setRecollect(true);
