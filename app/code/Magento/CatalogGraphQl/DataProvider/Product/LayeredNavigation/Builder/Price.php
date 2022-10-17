@@ -11,6 +11,7 @@ use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\LayerBuilderIn
 use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Api\Search\BucketInterface;
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Formatter\LayerFormatter;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 
 /**
  * @inheritdoc
@@ -28,6 +29,11 @@ class Price implements LayerBuilderInterface
     private $layerFormatter;
 
     /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    private $attributeRepository;
+
+    /**
      * @var array
      */
     private static $bucketMap = [
@@ -39,11 +45,14 @@ class Price implements LayerBuilderInterface
 
     /**
      * @param LayerFormatter $layerFormatter
+     * @param ProductAttributeRepositoryInterface $attributeRepository
      */
     public function __construct(
-        LayerFormatter $layerFormatter
+        LayerFormatter $layerFormatter,
+        ProductAttributeRepositoryInterface $attributeRepository
     ) {
         $this->layerFormatter = $layerFormatter;
+        $this->attributeRepository = $attributeRepository;
     }
 
     /**
@@ -52,13 +61,24 @@ class Price implements LayerBuilderInterface
      */
     public function build(AggregationInterface $aggregation, ?int $storeId): array
     {
+        $storeFrontLabel = '';
+
+        $attribute = $this->attributeRepository->get(
+            self::$bucketMap[self::PRICE_BUCKET]['request_name']
+        );
+
+        if ($attribute) {
+            $storeFrontLabel =  isset($attribute->getStorelabels()[$storeId]) ?
+                $attribute->getStorelabels()[$storeId] : $attribute->getFrontendLabel();
+        }
+
         $bucket = $aggregation->getBucket(self::PRICE_BUCKET);
         if ($this->isBucketEmpty($bucket)) {
             return [];
         }
 
         $result = $this->layerFormatter->buildLayer(
-            self::$bucketMap[self::PRICE_BUCKET]['label'],
+            $storeFrontLabel,
             \count($bucket->getValues()),
             self::$bucketMap[self::PRICE_BUCKET]['request_name']
         );
