@@ -183,7 +183,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
         $installShellCommandExpectation = [
             PHP_BINARY . ' -f %s setup:install -vvv ' .
             '--db-host=%s --db-user=%s --db-password=%s --db-name=%s --db-prefix=%s ' .
-            '--use-secure=%s --use-secure-admin=%s --magento-init-params=%s',
+            '--use-secure=%s --use-secure-admin=%s --magento-init-params=%s --no-interaction',
             [
                 BP . '/bin/magento',
                 '/tmp/mysql.sock',
@@ -214,7 +214,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                     $installShellCommandExpectation,
                     [
                         PHP_BINARY . ' -f %s %s -vvv ' .
-                        '--host=%s --dbname=%s --username=%s --password=%s --magento-init-params=%s',
+                        '--host=%s --dbname=%s --username=%s --password=%s --magento-init-params=%s --no-interaction',
                         [
                             BP . '/bin/magento',
                             'setup:db-schema:add-slave',
@@ -234,7 +234,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                 [
                     $installShellCommandExpectation,
                     [
-                        PHP_BINARY . ' -f %s %s -vvv %s %s --option1=%s -option2=%s --magento-init-params=%s',
+                        PHP_BINARY . ' -f %s %s -vvv %s %s --option1=%s -option2=%s --magento-init-params=%s --no-interaction',
                         [
                             BP . '/bin/magento',
                             'fake:command',
