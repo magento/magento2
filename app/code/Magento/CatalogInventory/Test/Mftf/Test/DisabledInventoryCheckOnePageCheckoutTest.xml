@@ -19,6 +19,7 @@
         </annotations>
 
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!--Create Category-->
             <createData entity="_defaultCategory" stepKey="testCategory"/>
             <!-- Create SimpleProductwithPrice100 -->
