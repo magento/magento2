@@ -446,4 +446,21 @@
         <data key="postcode">12345</data>
         <data key="telephone">512-345-6789</data>
     </entity>
+    <entity name="Canada_Address" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <array key="street">
+            <item>4423  St. John Street</item>
+            <item>113</item>
+        </array>
+        <data key="company">Magento</data>
+        <data key="city">Alameda</data>
+        <data key="state">Saskatchewan</data>
+        <data key="country_id">CA</data>
+        <data key="country">Canada</data>
+        <data key="postcode">S4P3Y2</data>
+        <data key="default_shipping">true</data>
+        <data key="default_billing">true</data>
+        <data key="telephone">613-582-4782</data>
+    </entity>
 </entities>
