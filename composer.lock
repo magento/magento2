@@ -10399,22 +10399,22 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "26",
+            "version": "27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "0263b8952b509848ffdab1ea9ab738f48450677c"
+                "reference": "097bda3e015f35dc7c2efc0b8c7a7d8dfc158a63"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/0263b8952b509848ffdab1ea9ab738f48450677c",
-                "reference": "0263b8952b509848ffdab1ea9ab738f48450677c",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/097bda3e015f35dc7c2efc0b8c7a7d8dfc158a63",
+                "reference": "097bda3e015f35dc7c2efc0b8c7a7d8dfc158a63",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-simplexml": "*",
-                "php": ">=7.3",
+                "php": "^8.1||^8.2",
                 "phpcompatibility/php-compatibility": "^9.3",
                 "rector/rector": "^0.13.0",
                 "squizlabs/php_codesniffer": "^3.6.1",
@@ -10441,9 +10441,9 @@
             "description": "A set of Magento specific PHP CodeSniffer rules.",
             "support": {
                 "issues": "https://github.com/magento/magento-coding-standard/issues",
-                "source": "https://github.com/magento/magento-coding-standard/tree/v26"
+                "source": "https://github.com/magento/magento-coding-standard/tree/v27"
             },
-            "time": "2022-10-04T10:45:15+00:00"
+            "time": "2022-10-17T15:19:28+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
