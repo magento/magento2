@@ -64,7 +64,6 @@ class AttributesJoiner
      * @param FieldNode $fieldNode
      * @param ResolveInfo $resolveInfo
      * @return string[]
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getQueryFields(FieldNode $fieldNode, ResolveInfo $resolveInfo): array
     {
@@ -87,10 +86,11 @@ class AttributesJoiner
                     }
                 } else {
                     $selectedFields[] = $field->name->value;
-                    if ($resolveInfo->fieldName === self::REQUEST_FIELD_NAME
-                        && $field->name->value === CategoryInterface::KEY_PRODUCT_COUNT) {
-                        $selectedFields[] = 'is_anchor';
-                    }
+                    $selectedFields = $this->addIsAnchoredAttributeToSelectedFiled(
+                        $resolveInfo,
+                        $field,
+                        $selectedFields
+                    );
                 }
             }
             if ($fragmentFields) {
@@ -177,5 +177,22 @@ class AttributesJoiner
     private function setSelectionsForFieldNode(FieldNode $fieldNode, array $selectedFields): void
     {
         $this->queryFields[$fieldNode->name->value][$fieldNode->name->loc->start] = $selectedFields;
+    }
+
+    /**
+     * Add `is_anchor` attribute to selected field
+     *
+     * @param $resolveInfo
+     * @param $field
+     * @param $selectedFields
+     * @return array
+     */
+    private function addIsAnchoredAttributeToSelectedFiled($resolveInfo, $field, $selectedFields): array
+    {
+        if ($resolveInfo->fieldName === self::REQUEST_FIELD_NAME
+            && $field->name->value === CategoryInterface::KEY_PRODUCT_COUNT) {
+            $selectedFields[] = 'is_anchor';
+        }
+        return $selectedFields;
     }
 }
