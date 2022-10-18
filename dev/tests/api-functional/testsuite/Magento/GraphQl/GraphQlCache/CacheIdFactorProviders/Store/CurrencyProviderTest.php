@@ -10,6 +10,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Test class for currency CacheIdFactorProvider.
+ * @magentoAppIsolation enabled
  */
 class CurrencyProviderTest extends GraphQlAbstract
 {
