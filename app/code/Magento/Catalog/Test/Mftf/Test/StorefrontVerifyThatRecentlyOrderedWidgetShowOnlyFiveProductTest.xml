@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyThatRecentlyOrderedWidgetShowOnlyFiveProductTest">
+        <annotations>
+            <stories value="Recently Ordered Product Widget"/>
+            <title value="Recently Ordered Product widget show only 5 products"/>
+            <description value="Recently Ordered widget contains no more 5 products if qty of products > 5"/>
+            <testCaseId value="MC-26846"/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <field key="price">11.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createProduct2">
+                <field key="price">12.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createProduct3">
+                <field key="price">13.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createProduct4">
+                <field key="price">14.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <createData entity="SimpleProduct" stepKey="createProduct5">
+                <field key="price">15.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <createData entity="SimpleProduct" stepKey="createProduct6">
+                <field key="price">16.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+        </before>
+
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createProduct3" stepKey="deleteSimpleProduct3"/>
+            <deleteData createDataKey="createProduct4" stepKey="deleteSimpleProduct4"/>
+            <deleteData createDataKey="createProduct5" stepKey="deleteSimpleProduct5"/>
+            <deleteData createDataKey="createProduct6" stepKey="deleteSimpleProduct6"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!--Login to storefront from customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="checkWelcomeMessage"/>
+
+        <!--Open the detail page of each created product and add to cart, get to the category-->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSecondSimpleProductProductToCart2">
+            <argument name="product" value="$$createProduct2$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductProductToCart3">
+            <argument name="product" value="$$createProduct3$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSecondSimpleProductProductToCart4">
+            <argument name="product" value="$$createProduct4$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductProductToCart5">
+            <argument name="product" value="$$createProduct5$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSecondSimpleProductProductToCart6">
+            <argument name="product" value="$$createProduct6$$"/>
+        </actionGroup>
+
+        <!--Place the order-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>
+        <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder">
+            <argument name="shippingMethod" value="Flat Rate"/>
+        </actionGroup>
+
+        <!-- Open My Account Page from Customer dropdown -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
+
+        <!-- Validate that Recent Ordered Widget contains only 5 product -->
+        <grabMultiple selector="{{StorefrontWidgetsSection.RecentOrderedProductCount}}" stepKey="reorders" />
+        <assertCount stepKey="check">
+            <expectedResult type="int">5</expectedResult>
+            <actualResult type="variable">reorders</actualResult>
+        </assertCount>
+    </test>
+</tests>
