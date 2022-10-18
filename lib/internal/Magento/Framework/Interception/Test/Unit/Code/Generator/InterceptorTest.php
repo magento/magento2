@@ -18,6 +18,9 @@ use Magento\Framework\Interception\Code\Generator\TSample;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class InterceptorTest extends TestCase
 {
     /**
