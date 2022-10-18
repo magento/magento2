@@ -39,7 +39,7 @@
             <argument name="WidgetType" value="Catalog Product Link"/>
             <argument name="WidgetTheme" value="Magento Luma"/>
             <argument name="WidgetTitle" value="NewWidget"/>
-            <argument name="AssigntoStoreViews" value="All Store Views"/>
+            <argument name="AssignToStoreViews" value="All Store Views"/>
             <argument name="WidgetDisplayOn" value="All Pages"/>
             <argument name="Container" value="Main Content Area"/>
             <argument name="Template" value="Product Link Block Template"/>

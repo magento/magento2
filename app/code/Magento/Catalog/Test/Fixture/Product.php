@@ -140,6 +140,7 @@ class Product implements RevertibleDataFixtureInterface
 
         $data['product_links'] = $this->prepareLinksData($data);
         $data['options'] = $this->prepareOptions($data);
+        $data['media_gallery_entries'] = $this->prepareMediaGallery($data);
 
         return $this->dataProcessor->process($this, $data);
     }
@@ -198,20 +199,97 @@ class Product implements RevertibleDataFixtureInterface
         $options = [];
         $default = [
             'product_sku' => $data['sku'],
-            'title' => 'customoption%uniqid%',
+            'title' => 'customoption%order%%uniqid%',
             'type' => ProductCustomOptionInterface::OPTION_TYPE_FIELD,
             'is_require' => true,
             'price' => 10.0,
             'price_type' => 'fixed',
-            'sku' => 'customoption%uniqid%',
+            'sku' => 'customoption%order%%uniqid%',
             'max_characters' => null,
             'values' => null,
         ];
         $sortOrder = 1;
         foreach ($data['options'] as $item) {
-            $options[] = $item + ['sort_order' => $sortOrder++] + $default;
+            $option = $item + ['sort_order' => $sortOrder++] + $default;
+            $option['title'] = strtr($option['title'], ['%order%' => $option['sort_order']]);
+            $option['sku'] = strtr($option['sku'], ['%order%' => $option['sort_order']]);
+            $options[] = $option;
         }
 
         return $options;
+    }
+
+    /**
+     * Prepare media gallery entries fixtures
+     *
+     * @param array $data
+     * @return array
+     */
+    private function prepareMediaGallery(array $data): array
+    {
+        $mimeTypeExtensionMap = [
+            'image/jpeg' => 'jpeg',
+            'image/png' => 'png',
+        ];
+        $default = [
+            'id' => null,
+            'position' => 1,
+            'media_type' => 'image',
+            'disabled' => false,
+            'label' => 'Image%position%%uniqid%',
+            'types' => [
+                'image',
+                'small_image',
+                'thumbnail',
+            ],
+            'content' => [
+                'type' => 'image/jpeg',
+                'name' => 'image%position%%uniqid%.%extension%',
+                'base64_encoded_data' => '',
+            ],
+        ];
+        $mediaGalleryEntries = [];
+        $position = 1;
+        foreach ($data['media_gallery_entries'] as $item) {
+            $mediaGalleryEntry = $item + ['position' => $position++] + $default;
+            //reset types for subsequent images
+            $default['types'] = [];
+            $placeholders = [
+                '%position%' => $mediaGalleryEntry['position'],
+                '%extension%' => $mimeTypeExtensionMap[$mediaGalleryEntry['content']['type']]
+            ];
+            $mediaGalleryEntry['label'] = strtr($mediaGalleryEntry['label'], $placeholders);
+            $mediaGalleryEntry['content']['name'] = strtr($mediaGalleryEntry['content']['name'], $placeholders);
+            if (empty($mediaGalleryEntry['content']['base64_encoded_data'])) {
+                $imageContent = base64_encode($this->generateImage($mediaGalleryEntry['content']['type']));
+                $mediaGalleryEntry['content']['base64_encoded_data'] = $imageContent;
+            }
+            $mediaGalleryEntries[] = $mediaGalleryEntry;
+        }
+        return $mediaGalleryEntries;
+    }
+
+    /**
+     * Generate a dummy image
+     *
+     * @param string $type
+     * @return string
+     */
+    private function generateImage(string $type): string
+    {
+        ob_start();
+        $image = imagecreatetruecolor(1024, 768);
+        switch ($type) {
+            case 'image/jpeg':
+                imagejpeg($image);
+                break;
+            case 'image/png':
+                imagepng($image);
+                break;
+        }
+        $content = ob_get_clean();
+        imagedestroy($image);
+
+        return $content;
     }
 }
