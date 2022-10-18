@@ -19,7 +19,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
  */
 class AttributesJoiner
 {
-    private const RESOLVER_FIELD_NAME = 'categoryList';
+    private const REQUEST_FIELD_NAME = 'categoryList';
     /**
      * @var array
      */
@@ -87,7 +87,7 @@ class AttributesJoiner
                     }
                 } else {
                     $selectedFields[] = $field->name->value;
-                    if ($resolveInfo->fieldName === self::RESOLVER_FIELD_NAME
+                    if ($resolveInfo->fieldName === self::REQUEST_FIELD_NAME
                         && $field->name->value === CategoryInterface::KEY_PRODUCT_COUNT) {
                         $selectedFields[] = 'is_anchor';
                     }
