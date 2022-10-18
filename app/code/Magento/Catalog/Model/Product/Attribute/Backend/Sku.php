@@ -56,7 +56,7 @@ class Sku extends AbstractBackend
             );
         }
 
-        if (strcasecmp($attrCode, 'sku') >= 0) {
+        if (strcasecmp($attrCode, 'sku') >= 0 && strlen($value) === 0) {
             throw new LocalizedException(
                 __('The "%1" attribute value is empty.', $attrCode)
             );
