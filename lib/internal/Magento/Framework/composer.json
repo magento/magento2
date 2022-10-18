@@ -23,7 +23,7 @@
         "ext-sodium": "*",
         "ext-xsl": "*",
         "lib-libxml": "*",
-        "colinmollenhour/php-redis-session-abstract": "~1.4.5",
+        "colinmollenhour/php-redis-session-abstract": "v1.5.0",
         "composer/composer": "^1.9 || ^2.0, !=2.2.16",
         "ezyang/htmlpurifier": "^4.14",
         "guzzlehttp/guzzle": "^7.4.2",
