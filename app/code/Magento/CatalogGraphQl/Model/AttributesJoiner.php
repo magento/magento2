@@ -182,15 +182,18 @@ class AttributesJoiner
     /**
      * Add `is_anchor` attribute to selected field
      *
-     * @param $resolveInfo
-     * @param $field
-     * @param $selectedFields
+     * @param ResolveInfo $resolveInfo
+     * @param FieldNode $fieldNode
+     * @param array $selectedFields
      * @return array
      */
-    private function addIsAnchoredAttributeToSelectedFiled($resolveInfo, $field, $selectedFields): array
-    {
+    private function addIsAnchoredAttributeToSelectedFiled(
+        ResolveInfo $resolveInfo,
+        FieldNode $fieldNode,
+        array $selectedFields
+    ): array {
         if ($resolveInfo->fieldName === self::REQUEST_FIELD_NAME
-            && $field->name->value === CategoryInterface::KEY_PRODUCT_COUNT) {
+            && $fieldNode->name->value === CategoryInterface::KEY_PRODUCT_COUNT) {
             $selectedFields[] = 'is_anchor';
         }
         return $selectedFields;
