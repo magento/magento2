@@ -107,8 +107,9 @@ class CollectorTest extends TestCase
         $this->source->expects($this->once())
             ->method('get')
             ->willReturn([$this->fileWithoutName, $this->fileWithName]);
-        $this->fileWithoutName->expects($this->exactly(0))
-            ->method('setDeployedFileName');
+        $this->fileWithoutName->expects($this->exactly(1))
+            ->method('setDeployedFileName')
+            ->with(null);
         $this->fileWithName->expects($this->exactly(1))
             ->method('setDeployedFileName');
         $this->model->collect();
