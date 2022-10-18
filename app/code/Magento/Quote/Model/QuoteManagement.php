@@ -593,6 +593,10 @@ class QuoteManagement implements CartManagementInterface
             $order->setIncrementId($quote->getReservedOrderId());
         }
 
+        if (array_key_exists('send_confirmation', $orderData) && false === $orderData['send_confirmation']) {
+            $order->setCanSendNewEmailFlag(false);
+        }
+
         $this->submitQuoteValidator->validateOrder($order);
 
         $this->eventManager->dispatch(

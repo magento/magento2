@@ -732,7 +732,7 @@ class QuoteManagementTest extends TestCase
      */
     public function testSubmit(): void
     {
-        $orderData = [];
+        $orderData = ['send_confirmation' => false];
         $isGuest = true;
         $isVirtual = false;
         $customerId = 1;
@@ -827,7 +827,8 @@ class QuoteManagementTest extends TestCase
                 ]
             );
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quote);
-        $this->assertEquals($order, $this->model->submit($quote, $orderData));
+        $test = $this->model->submit($quote, $orderData);
+        $this->assertEquals($order, $test);
     }
 
     /**
