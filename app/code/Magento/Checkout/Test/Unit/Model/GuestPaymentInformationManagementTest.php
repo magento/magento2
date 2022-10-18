@@ -139,8 +139,8 @@ class GuestPaymentInformationManagementTest extends TestCase
                 true
             );
         $orderId = 200;
-        $this->assertEquals($orderId, $this->placeOrder($orderId));
-        $this->assertEquals($orderId, $this->placeOrder($orderId));
+        $this->placeOrder($orderId);
+        $this->placeOrder($orderId);
     }
 
     /**
