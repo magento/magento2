@@ -32,7 +32,7 @@
         <!-- Fill Swatch and Description fields for Admin -->
         <fillField selector="{{AttributeManageSwatchSection.swatchField('Admin')}}" userInput="test" stepKey="fillSwatchForAdmin"/>
         <fillField selector="{{AttributeManageSwatchSection.descriptionField('Admin')}}" userInput="test" stepKey="fillDescriptionForAdmin"/>
-        <!-- Grab value Swatch and Description fields for Admin -->
+        <!--  Grab value Swatch and Description fields for Admin  -->
         <grabValueFrom selector="{{AttributeManageSwatchSection.swatchField('Admin')}}" stepKey="grabSwatchForAdmin"/>
         <grabValueFrom selector="{{AttributeManageSwatchSection.descriptionField('Admin')}}" stepKey="grabDescriptionForAdmin"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
