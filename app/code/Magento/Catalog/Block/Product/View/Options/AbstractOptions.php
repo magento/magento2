@@ -53,6 +53,8 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
 
     /**
      * @var CalculateCustomOptionCatalogRule
+     * @deprecated
+     * @see ACP2E-1206
      */
     private $calculateCustomOptionCatalogRule;
 
@@ -194,17 +196,6 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
 
         $customOptionPrice = $this->getProduct()->getPriceInfo()->getPrice('custom_option_price');
         $isPercent = (bool) $value['is_percent'];
-
-        if (!$isPercent) {
-            $catalogPriceValue = $this->calculateCustomOptionCatalogRule->execute(
-                $this->getProduct(),
-                (float)$value['pricing_value'],
-                $isPercent
-            );
-            if ($catalogPriceValue !== null) {
-                $value['pricing_value'] = $catalogPriceValue;
-            }
-        }
 
         $context = [CustomOptionPriceInterface::CONFIGURATION_OPTION_FLAG => true];
         $optionAmount = $isPercent
