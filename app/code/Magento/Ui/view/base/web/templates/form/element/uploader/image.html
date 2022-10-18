@@ -43,7 +43,7 @@
 
             <each args="data: value, as: '$file'" render="$parent.getPreviewTmpl($file)"></each>
 
-            <div if="!hasData()" class="image image-placeholder" click="triggerImageUpload">
+            <div if="!hasData() || isMultipleFiles" class="image image-placeholder" click="triggerImageUpload">
                 <div class="file-uploader-summary product-image-wrapper">
                     <div class="file-uploader-spinner image-uploader-spinner"></div>
                     <p class="image-placeholder-text" translate="'Browse to find or drag image here'"></p>
