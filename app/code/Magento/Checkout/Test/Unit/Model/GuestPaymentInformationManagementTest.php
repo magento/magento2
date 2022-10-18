@@ -13,6 +13,7 @@ use Magento\Checkout\Api\PaymentSavingRateLimiterInterface;
 use Magento\Checkout\Model\GuestPaymentInformationManagement;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -80,6 +81,11 @@ class GuestPaymentInformationManagementTest extends TestCase
      */
     private $saveLimiterMock;
 
+    /**
+     * @var LockManagerInterface|MockObject
+     */
+    private $lockManagerMock;
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -99,6 +105,7 @@ class GuestPaymentInformationManagementTest extends TestCase
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->limiterMock = $this->getMockForAbstractClass(PaymentProcessingRateLimiterInterface::class);
         $this->saveLimiterMock = $this->getMockForAbstractClass(PaymentSavingRateLimiterInterface::class);
+        $this->lockManagerMock = $this->createMock(LockManagerInterface::class);
         $this->model = $objectManager->getObject(
             GuestPaymentInformationManagement::class,
             [
@@ -108,7 +115,8 @@ class GuestPaymentInformationManagementTest extends TestCase
                 'cartRepository' => $this->cartRepositoryMock,
                 'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
                 'paymentsRateLimiter' => $this->limiterMock,
-                'savingRateLimiter' => $this->saveLimiterMock
+                'savingRateLimiter' => $this->saveLimiterMock,
+                'lockManager' => $this->lockManagerMock
             ]
         );
         $objectManager->setBackwardCompatibleProperty($this->model, 'logger', $this->loggerMock);
@@ -117,6 +125,21 @@ class GuestPaymentInformationManagementTest extends TestCase
     public function testSavePaymentInformationAndPlaceOrder()
     {
         $orderId = 200;
+        $this->assertEquals($orderId, $this->placeOrder($orderId));
+    }
+
+    public function testSavePaymentInformationAndPlaceOrderDuplicate()
+    {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->lockManagerMock
+            ->expects($this->exactly(2))
+            ->method('isLocked')
+            ->willReturnOnConsecutiveCalls(
+                false,
+                true
+            );
+        $orderId = 200;
+        $this->assertEquals($orderId, $this->placeOrder($orderId));
         $this->assertEquals($orderId, $this->placeOrder($orderId));
     }
 
