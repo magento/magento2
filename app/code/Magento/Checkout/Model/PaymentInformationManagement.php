@@ -97,6 +97,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      * @param AddressRepositoryInterface|null $addressRepository
      * @param AddressComparatorInterface|null $addressComparator
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Quote\Api\BillingAddressManagementInterface $billingAddressManagement,
@@ -165,7 +166,9 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
 
     /**
      * @inheritdoc
+     *
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function savePaymentInformation(
         $cartId,
@@ -194,15 +197,16 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
             $quote->setBillingAddress($billingAddress);
             $quote->setDataChanges(true);
             $shippingAddress = $quote->getShippingAddress();
-            $sameAsBilling = (bool)$shippingAddress->getSameAsBilling()
-                || $this->addressComparator->isEqual($shippingAddress, $billingAddress);
-            if ($sameAsBilling) {
-                $this->saveNewShippingAddress($quote);
-            }
-            if ($shippingAddress && $shippingAddress->getShippingMethod()) {
-                $shippingRate = $shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod());
-                if ($shippingRate) {
-                    $shippingAddress->setLimitCarrier($shippingRate->getCarrier());
+            if ($shippingAddress) {
+                if ((bool)$shippingAddress->getSameAsBilling()
+                    || $this->addressComparator->isEqual($shippingAddress, $billingAddress)) {
+                    $this->saveNewShippingAddress($quote);
+                }
+                if ($shippingAddress->getShippingMethod()) {
+                    $shippingRate = $shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod());
+                    if ($shippingRate) {
+                        $shippingAddress->setLimitCarrier($shippingRate->getCarrier());
+                    }
                 }
             }
         }
@@ -241,9 +245,10 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      * Save shipping address information
      *
      * @param Quote $quote
+     * @return void
      * @throws LocalizedException
      */
-    private function saveNewShippingAddress(Quote $quote)
+    private function saveNewShippingAddress(Quote $quote): void
     {
         $quote->getShippingAddress()->setSameAsBilling(1);
         $shippingAddressData = $quote->getShippingAddress()->exportCustomerAddress();

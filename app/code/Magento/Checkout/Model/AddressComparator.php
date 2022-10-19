@@ -9,8 +9,25 @@ namespace Magento\Checkout\Model;
 
 use Magento\Quote\Api\Data\AddressInterface;
 
+use Magento\Framework\Serialize\SerializerInterface;
+
 class AddressComparator implements AddressComparatorInterface
 {
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * AddressComparator constructor
+     *
+     * @param SerializerInterface $serializer
+     */
+    public function __construct(SerializerInterface $serializer)
+    {
+        $this->serializer = $serializer;
+    }
+
     /**
      * @inheritDoc
      */
