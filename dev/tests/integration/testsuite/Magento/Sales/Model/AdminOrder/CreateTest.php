@@ -400,7 +400,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ),
             'shipping_method' => $shippingMethod,
             'comment' => ['customer_note' => ''],
-            'send_confirmation' => true,
+            'send_confirmation' => true
         ];
         $paymentData = ['method' => $paymentMethod];
 

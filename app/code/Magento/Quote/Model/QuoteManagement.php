@@ -525,6 +525,8 @@ class QuoteManagement implements CartManagementInterface
      * @throws ValidatorException
      * @throws LocalizedException
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function submitQuote(QuoteEntity $quote, $orderData = [])
     {
