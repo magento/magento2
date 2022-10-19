@@ -15,7 +15,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Calculates prices of custom options of the product with catalog rules applied.
  *
  * @deprecated
- * @see ACP2E-1206
+ * @see Catalog rule should not apply to custom option
  */
 class CalculateCustomOptionCatalogRule
 {

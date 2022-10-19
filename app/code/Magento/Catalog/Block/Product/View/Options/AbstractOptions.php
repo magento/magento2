@@ -53,8 +53,6 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
 
     /**
      * @var CalculateCustomOptionCatalogRule
-     * @deprecated
-     * @see ACP2E-1206
      */
     private $calculateCustomOptionCatalogRule;
 
