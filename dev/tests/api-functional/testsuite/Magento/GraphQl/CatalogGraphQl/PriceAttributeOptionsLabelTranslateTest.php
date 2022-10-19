@@ -91,6 +91,7 @@ class PriceAttributeOptionsLabelTranslateTest extends GraphQlAbstract
         $response = $this->graphQlQuery($query, [], '', $headers);
         $this->assertNotEmpty($response['products']['aggregations']);
         $aggregationAttributes = $response['products']['aggregations'];
+        $priceAttributeOptionLabel = '';
 
         foreach ($aggregationAttributes as $attribute) {
             if ($attribute['attribute_code'] === $attributeCode) {

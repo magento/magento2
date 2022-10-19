@@ -7,11 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder;
 
+use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\AttributeOptionProvider;
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\LayerBuilderInterface;
 use Magento\Framework\Api\Search\AggregationInterface;
+use Magento\Framework\Api\Search\AggregationValueInterface;
 use Magento\Framework\Api\Search\BucketInterface;
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Formatter\LayerFormatter;
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Zend_Db_Statement_Exception;
 
 /**
  * @inheritdoc
@@ -29,9 +31,9 @@ class Price implements LayerBuilderInterface
     private $layerFormatter;
 
     /**
-     * @var ProductAttributeRepositoryInterface
+     * @var AttributeOptionProvider
      */
-    private $attributeRepository;
+    private $attributeOptionProvider;
 
     /**
      * @var array
@@ -45,14 +47,14 @@ class Price implements LayerBuilderInterface
 
     /**
      * @param LayerFormatter $layerFormatter
-     * @param ProductAttributeRepositoryInterface $attributeRepository
+     * @param AttributeOptionProvider $attributeOptionProvider
      */
     public function __construct(
         LayerFormatter $layerFormatter,
-        ProductAttributeRepositoryInterface $attributeRepository
+        AttributeOptionProvider $attributeOptionProvider
     ) {
         $this->layerFormatter = $layerFormatter;
-        $this->attributeRepository = $attributeRepository;
+        $this->attributeOptionProvider = $attributeOptionProvider;
     }
 
     /**
@@ -61,24 +63,16 @@ class Price implements LayerBuilderInterface
      */
     public function build(AggregationInterface $aggregation, ?int $storeId): array
     {
-        $storeFrontLabel = '';
-
-        $attribute = $this->attributeRepository->get(
-            self::$bucketMap[self::PRICE_BUCKET]['request_name']
-        );
-
-        if ($attribute) {
-            $storeFrontLabel =  isset($attribute->getStorelabels()[$storeId]) ?
-                $attribute->getStorelabels()[$storeId] : $attribute->getFrontendLabel();
-        }
-
+        $attributeOptions = $this->getAttributeOptions($aggregation, $storeId);
+        $attributeCode = self::$bucketMap[self::PRICE_BUCKET]['request_name'];
+        $attribute = $attributeOptions[$attributeCode] ?? [];
         $bucket = $aggregation->getBucket(self::PRICE_BUCKET);
         if ($this->isBucketEmpty($bucket)) {
             return [];
         }
 
         $result = $this->layerFormatter->buildLayer(
-            $storeFrontLabel,
+            $attribute['attribute_label'] ?? self::$bucketMap[self::PRICE_BUCKET]['label'],
             \count($bucket->getValues()),
             self::$bucketMap[self::PRICE_BUCKET]['request_name']
         );
@@ -104,5 +98,43 @@ class Price implements LayerBuilderInterface
     private function isBucketEmpty(?BucketInterface $bucket): bool
     {
         return null === $bucket || !$bucket->getValues();
+    }
+
+    /**
+     * Get list of attributes with options
+     *
+     * @param AggregationInterface $aggregation
+     * @param int|null $storeId
+     * @return array
+     * @throws Zend_Db_Statement_Exception
+     */
+    private function getAttributeOptions(AggregationInterface $aggregation, ?int $storeId): array
+    {
+        $attributeOptionIds = [];
+        $attributes = [];
+
+        $bucket = $aggregation->getBucket(self::PRICE_BUCKET);
+
+        if ($this->isBucketEmpty($bucket)) {
+            return [];
+        }
+
+        $attributes[] = \preg_replace('~_bucket$~', '', $bucket->getName());
+        $attributeOptionIds[] = \array_map(
+            function (AggregationValueInterface $value) {
+                return $value->getValue();
+            },
+            $bucket->getValues()
+        );
+
+        if (!$attributeOptionIds) {
+            return [];
+        }
+
+        return $this->attributeOptionProvider->getOptions(
+            \array_merge([], ...$attributeOptionIds),
+            $storeId,
+            $attributes
+        );
     }
 }
