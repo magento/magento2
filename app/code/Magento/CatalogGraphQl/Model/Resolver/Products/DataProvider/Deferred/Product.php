@@ -62,10 +62,7 @@ class Product
      */
     public function addProductSku(string $sku) : void
     {
-        if (!in_array($sku, $this->productSkus) && !empty($this->productList)) {
-            $this->productList = [];
-            $this->productSkus[] = $sku;
-        } elseif (!in_array($sku, $this->productSkus)) {
+        if (!in_array($sku, $this->productSkus)) {
             $this->productSkus[] = $sku;
         }
     }
@@ -79,12 +76,7 @@ class Product
     public function addProductSkus(array $skus) : void
     {
         foreach ($skus as $sku) {
-            if (!in_array($sku, $this->productSkus) && !empty($this->productList)) {
-                $this->productList = [];
-                $this->productSkus[] = $sku;
-            } elseif (!in_array($sku, $this->productSkus)) {
-                $this->productSkus[] = $sku;
-            }
+            $this->addProductSku($sku);
         }
     }
 
@@ -108,13 +100,13 @@ class Product
      */
     public function getProductBySku(string $sku, ContextInterface $context = null) : array
     {
-        $products = $this->fetch($context);
+        $this->fetch($context);
 
-        if (!isset($products[$sku])) {
+        if (!isset($this->productList[$sku])) {
             return [];
         }
 
-        return $products[$sku];
+        return $this->productList[$sku];
     }
 
     /**
@@ -125,11 +117,12 @@ class Product
      */
     private function fetch(ContextInterface $context = null) : array
     {
-        if (empty($this->productSkus) || !empty($this->productList)) {
+        $skusToFetch = array_diff($this->productSkus, array_keys($this->productList));
+        if (empty($this->productSkus) || empty($skusToFetch)) {
             return $this->productList;
         }
 
-        $this->searchCriteriaBuilder->addFilter(ProductInterface::SKU, $this->productSkus, 'in');
+        $this->searchCriteriaBuilder->addFilter(ProductInterface::SKU, $skusToFetch, 'in');
         $result = $this->productDataProvider->getList(
             $this->searchCriteriaBuilder->create(),
             $this->attributeCodes,
