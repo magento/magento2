@@ -36,7 +36,7 @@ class CategoryTree
     /**
      * In depth we need to calculate only children nodes, so the first wrapped node should be ignored
      */
-    private const DEPTH_OFFSET = 1;
+    public const DEPTH_OFFSET = 1;
 
     /**
      * Is anchor const
