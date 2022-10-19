@@ -675,11 +675,7 @@ class QuoteManagement implements CartManagementInterface
             }
         }
 
-        if ((!$billing->getCustomerId() || $billing->getSaveInAddressBook())
-            && (
-                $shipping === null
-                || ($shipping && (!$shipping->getSameAsBilling() || !$shipping->getCustomerAddressId()))
-            )) {
+        if (!$billing->getCustomerId() || $billing->getSaveInAddressBook()) {
             if ($billing->getQuoteId()) {
                 $billingAddress = $billing->exportCustomerAddress();
             } else {
@@ -716,9 +712,6 @@ class QuoteManagement implements CartManagementInterface
                     $shipping->setCustomerAddressId($billingAddress->getId());
                 }
             }
-        }
-        if ($shipping !== null && $shipping->getSameAsBilling() && !$billing->getCustomerAddressId()) {
-            $billing->setCustomerAddressId($shipping->getCustomerAddressId());
         }
         if ($shipping && !$shipping->getCustomerId() && !$hasDefaultBilling) {
             $shipping->setIsDefaultBilling(true);

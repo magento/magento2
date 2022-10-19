@@ -74,9 +74,9 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     private $saveRateLimitDisabled = false;
 
     /**
-     * @var AddressMapperInterface
+     * @var AddressComparatorInterface
      */
-    private $addressMapper;
+    private $addressComparator;
 
     /**
      * @param \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement
@@ -87,7 +87,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
      * @param CartRepositoryInterface $cartRepository
      * @param PaymentProcessingRateLimiterInterface|null $paymentsRateLimiter
      * @param PaymentSavingRateLimiterInterface|null $savingRateLimiter
-     * @param AddressMapperInterface|null $addressMapper
+     * @param AddressComparatorInterface|null $addressComparator
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -99,7 +99,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         CartRepositoryInterface $cartRepository,
         ?PaymentProcessingRateLimiterInterface $paymentsRateLimiter = null,
         ?PaymentSavingRateLimiterInterface $savingRateLimiter = null,
-        ?AddressMapperInterface $addressMapper = null
+        ?AddressComparatorInterface $addressComparator = null
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
@@ -111,7 +111,8 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
             ?? ObjectManager::getInstance()->get(PaymentProcessingRateLimiterInterface::class);
         $this->savingRateLimiter = $savingRateLimiter
             ?? ObjectManager::getInstance()->get(PaymentSavingRateLimiterInterface::class);
-        $this->addressMapper = $addressMapper ?? ObjectManager::getInstance()->get(AddressMapperInterface::class);
+        $this->addressComparator = $addressComparator
+            ?? ObjectManager::getInstance()->get(AddressComparatorInterface::class);
     }
 
     /**
@@ -123,7 +124,6 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
-        $this->addressMapper->guestCheckoutAddressMapper($cartId, $email, $paymentMethod, $billingAddress);
         $this->paymentsRateLimiter->limit();
         try {
             //Have to do this hack because of savePaymentInformation() plugins.
@@ -174,7 +174,10 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         /** @var Quote $quote */
         $quote = $this->cartRepository->getActive($quoteIdMask->getQuoteId());
-
+        $shippingAddress = $quote->getShippingAddress();
+        if ($this->addressComparator->isEqual($shippingAddress, $billingAddress)) {
+            $shippingAddress->setSameAsBilling(1);
+        }
         if ($billingAddress) {
             $billingAddress->setEmail($email);
             $quote->removeAddress($quote->getBillingAddress()->getId());
