@@ -1680,7 +1680,7 @@ QUERY;
                 'options' => [
                     [
                         'label' => 'Colorful Category',
-                        'value' => '330',
+                        'value' => 'MzMw',
                         'count' => 2,
                     ],
                 ],
