@@ -7,13 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Analytics\Test\Unit\Model\Connector;
 
+use Laminas\Http\Exception\RuntimeException;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Connector\Http\ClientInterface;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Analytics\Model\Connector\SignUpCommand;
 use Magento\Analytics\Model\IntegrationManager;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\HTTP\ZendClient;
 use Magento\Integration\Model\Oauth\Token as IntegrationToken;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -85,7 +87,7 @@ class SignUpCommandTest extends TestCase
     }
 
     /**
-     * @throws \Zend_Http_Exception
+     * @throws RuntimeException
      * @return void
      */
     public function testExecuteSuccess()
@@ -105,7 +107,9 @@ class SignUpCommandTest extends TestCase
             ->method('getData')
             ->with('token')
             ->willReturn($data['integration-token']);
-        $httpResponse = new \Zend_Http_Response(201, [], '{"access-token": "' . $data['access-token'] . '"}');
+        $response = new Response();
+        $response->setStatusCode(Response::STATUS_CODE_201);
+        $response->setContent('{"access-token": "' . $data['access-token'] . '"}');
         $this->httpClientMock->expects($this->once())
             ->method('request')
             ->with(
@@ -113,10 +117,10 @@ class SignUpCommandTest extends TestCase
                 $data['url'],
                 $data['body']
             )
-            ->willReturn($httpResponse);
+            ->willReturn($response);
         $this->responseResolverMock
             ->method('getResult')
-            ->with($httpResponse)
+            ->with($response)
             ->willReturn(true);
         $this->assertTrue($this->signUpCommand->execute());
     }
@@ -135,7 +139,7 @@ class SignUpCommandTest extends TestCase
     }
 
     /**
-     * @throws \Zend_Http_Exception
+     * @throws RuntimeException
      * @return void
      */
     public function testExecuteFailureResponseIsEmpty()
@@ -146,10 +150,11 @@ class SignUpCommandTest extends TestCase
         $this->integrationManagerMock->expects($this->once())
             ->method('activateIntegration')
             ->willReturn(true);
-        $httpResponse = new \Zend_Http_Response(0, []);
+        $response = new Response();
+        $response->setCustomStatusCode(Response::STATUS_CODE_CUSTOM);
         $this->httpClientMock->expects($this->once())
             ->method('request')
-            ->willReturn($httpResponse);
+            ->willReturn($response);
         $this->responseResolverMock
             ->method('getResult')
             ->willReturn(false);
@@ -167,7 +172,7 @@ class SignUpCommandTest extends TestCase
             'url' => 'http://www.mystore.com',
             'access-token' => 'thisisaccesstoken',
             'integration-token' => 'thisisintegrationtoken',
-            'method' => ZendClient::POST,
+            'method' => Request::METHOD_POST,
             'body'=> ['token' => 'thisisintegrationtoken','url' => 'http://www.mystore.com'],
         ];
     }

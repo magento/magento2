@@ -87,7 +87,7 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
     /**
      * Tests method \Magento\Indexer\Console\Command\IndexerDimensionsModeCommand::execute
      *
-     * @param string $command
+     * @param array $command
      * @param string $consoleOutput
      * @dataProvider dimensionModesDataProvider
      */

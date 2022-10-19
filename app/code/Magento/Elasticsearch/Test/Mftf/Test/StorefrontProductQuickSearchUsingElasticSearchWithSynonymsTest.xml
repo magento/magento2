@@ -18,7 +18,7 @@
             <useCaseId value="ACP2E-752"/>
             <testCaseId value="AC-3060"/>
             <group value="Catalog"/>
-            <group value="SearchEngineElasticsearch" />
+            <group value="SearchEngine" />
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -81,8 +81,8 @@
 
         <!-- Create 3rd synonym -->
         <actionGroup ref="AdminNavigateToNewSearchSynonymsPageActionGroup" stepKey="navigateToNewThirdSearchSynonym"/>
-        <actionGroup ref="AdminFillNewSearchSynonymsActionGroup" stepKey="fillThirdSearchSynonym">
-            <argument name="scope_id" value="1:3"/>
+        <actionGroup ref="AdminFillNewSearchSynonymsForCustomScopeActionGroup" stepKey="fillThirdSearchSynonym">
+            <argument name="scopeName" value="{{customStore.name}}"/>
             <argument name="synonyms" value="customview,simple"/>
         </actionGroup>
         <click selector="{{AdminSearchSynonymsNewSection.save}}" stepKey="clickSaveSynonymThreeButton"/>

@@ -6,7 +6,7 @@
   */
 -->
 
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminPanelIsFrozenIfStorefrontIsOpenedViaCustomerViewTest">
         <annotations>
@@ -19,6 +19,8 @@
             <group value="customer"/>
         </annotations>
         <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="Simple_US_Customer" stepKey="simpleCustomer"/>
             <createData entity="SimpleSubCategory" stepKey="createSimpleCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
@@ -27,6 +29,8 @@
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="login"/>
         </before>
         <after>
+            <!-- Disable shipping method for customer with default address -->
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <deleteData createDataKey="createSimpleCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

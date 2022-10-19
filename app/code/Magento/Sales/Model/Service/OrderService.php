@@ -267,7 +267,7 @@ class OrderService implements OrderManagementInterface
 
         $this->eventManager->dispatch(
             'sales_order_state_change_before',
-            ['order' => $this, 'transport' => $transport]
+            ['order' => $this, 'transport' => $transport, 'order_object' => $order]
         );
         $status = $transport->getStatus();
         $order->setData('state', $transport->getState());

@@ -1,6 +1,6 @@
 # Magento_Analytics module
 
-The Magento_Analytics module integrates your Magento instance with the [Magento Business Intelligence (MBI)](https://magento.com/products/business-intelligence) to use [Advanced Reporting](https://devdocs.magento.com/guides/v2.4/advanced-reporting/modules.html) functionality.
+The Magento_Analytics module integrates your Magento instance with the [Magento Business Intelligence (MBI)](https://business.adobe.com/products/magento/business-intelligence.html) to use [Advanced Reporting](https://devdocs.magento.com/guides/v2.4/advanced-reporting/modules.html) functionality.
 
 The module implements the following functionality:
 

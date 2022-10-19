@@ -5,7 +5,11 @@
  */
 namespace Magento\Framework\Json;
 
+use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
+use Magento\Framework\Translate\InlineInterface;
+
 /**
+ * phpcs:ignore Magento2.Commenting.ClassAndInterfacePHPDocFormatting
  * @deprecated 101.0.0 @see \Magento\Framework\Serialize\Serializer\Json::serialize
  */
 class Encoder implements EncoderInterface
@@ -13,27 +17,44 @@ class Encoder implements EncoderInterface
     /**
      * Translator
      *
-     * @var \Magento\Framework\Translate\InlineInterface
+     * @var InlineInterface
      */
-    protected $translateInline;
+    protected InlineInterface $translateInline;
 
     /**
-     * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     * @var JsonSerializer
      */
-    public function __construct(\Magento\Framework\Translate\InlineInterface $translateInline)
+    private JsonSerializer $jsonSerializer;
+
+    /**
+     * @param InlineInterface $translateInline
+     * @param JsonSerializer $serializer
+     */
+    public function __construct(InlineInterface $translateInline, JsonSerializer $serializer)
     {
         $this->translateInline = $translateInline;
+        $this->jsonSerializer = $serializer;
     }
 
     /**
      * Encode the mixed $data into the JSON format.
      *
-     * @param mixed $data
+     * @param mixed $valueToEncode
      * @return string
      */
-    public function encode($data)
+    public function encode($valueToEncode)
     {
-        $this->translateInline->processResponseBody($data);
-        return \Zend_Json::encode($data);
+        if (is_object($valueToEncode)) {
+            if (method_exists($valueToEncode, 'toJson')) {
+                return $valueToEncode->toJson();
+            }
+
+            if (method_exists($valueToEncode, 'toArray')) {
+                return self::encode($valueToEncode->toArray());
+            }
+        }
+        $this->translateInline->processResponseBody($valueToEncode);
+
+        return $this->jsonSerializer->serialize($valueToEncode);
     }
 }
