@@ -263,7 +263,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
             $resetConfig = $this->resetAddedSection($initialConfig, $currentConfig, $cacheSaltPathChunks);
             $resetFileContents = $this->formatter->format($resetConfig);
             $directoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG);
-            sleep(1);
+            sleep(4);
             $directoryWrite->writeFile($this->envConfigPath, $resetFileContents);
         }
 
