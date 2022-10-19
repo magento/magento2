@@ -158,6 +158,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @return \Magento\Framework\Reflection\NameFinder
      *
      * @deprecated 100.1.0
+     * @see nothing
      */
     private function getNameFinder()
     {
