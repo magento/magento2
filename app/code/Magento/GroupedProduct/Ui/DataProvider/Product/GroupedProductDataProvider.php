@@ -7,11 +7,13 @@ namespace Magento\GroupedProduct\Ui\DataProvider\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider;
-use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedProductType;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
+use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 
 class GroupedProductDataProvider extends ProductDataProvider
 {
@@ -38,12 +40,12 @@ class GroupedProductDataProvider extends ProductDataProvider
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
      * @param RequestInterface $request
-     * @param StoreRepositoryInterface $storeRepository
      * @param ConfigInterface $config
-     * @param \Magento\Ui\DataProvider\AddFieldToCollectionInterface[] $addFieldStrategies
-     * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
+     * @param StoreRepositoryInterface $storeRepository
      * @param array $meta
      * @param array $data
+     * @param AddFieldToCollectionInterface[] $addFieldStrategies
+     * @param AddFilterToCollectionInterface[] $addFilterStrategies
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -79,6 +81,7 @@ class GroupedProductDataProvider extends ProductDataProvider
      * Get data
      *
      * @return array
+     * @throws NoSuchEntityException
      */
     public function getData()
     {
@@ -86,6 +89,10 @@ class GroupedProductDataProvider extends ProductDataProvider
             $this->getCollection()->addAttributeToFilter(
                 'type_id',
                 $this->config->getComposableTypes()
+            );
+            $this->getCollection()->addAttributeToFilter(
+                'required_options',
+                '0'
             );
             if ($storeId = $this->request->getParam('current_store_id')) {
                 /** @var StoreInterface $store */

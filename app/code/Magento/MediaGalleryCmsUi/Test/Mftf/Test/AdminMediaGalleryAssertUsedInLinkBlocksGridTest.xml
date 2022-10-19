@@ -20,6 +20,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use AdminMediaGalleryAssertImageUsedInLinkBlocksGridTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="_defaultBlock" stepKey="block" />

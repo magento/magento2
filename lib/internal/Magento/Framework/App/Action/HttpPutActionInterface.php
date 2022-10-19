@@ -12,6 +12,8 @@ use Magento\Framework\App\ActionInterface;
 
 /**
  * Marker for actions processing PUT requests.
+ *
+ * @api
  */
 interface HttpPutActionInterface extends ActionInterface
 {

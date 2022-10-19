@@ -20,6 +20,7 @@
             <skip>
                 <issueId value="MC-33951"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Set price scope global-->

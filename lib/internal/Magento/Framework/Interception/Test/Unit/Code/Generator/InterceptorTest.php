@@ -90,7 +90,12 @@ class InterceptorTest extends TestCase
                 \Magento\Framework\Interception\Code\Generator\TSample::class,
                 \Magento\Framework\Interception\Code\Generator\TSample\Interceptor::class,
                 'TInterceptor'
-            ]
+            ],
+            [
+                \Magento\Framework\Interception\Code\Generator\SampleBackendMenu::class,
+                \Magento\Framework\Interception\Code\Generator\SampleBackendMenu\Interceptor::class,
+                'SampleBackendMenuInterceptor',
+            ],
         ];
     }
 }

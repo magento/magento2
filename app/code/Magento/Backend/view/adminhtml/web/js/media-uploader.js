@@ -53,7 +53,7 @@ define([
                 formData: {
                     'form_key': window.FORM_KEY
                 },
-                dropZone: '[data-tab-panel=image-management]',
+                dropZone: this.element.find('input[type=file]').closest('[role="dialog"]'),
                 sequentialUploads: true,
                 acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
                 maxFileSize: this.options.maxFileSize,

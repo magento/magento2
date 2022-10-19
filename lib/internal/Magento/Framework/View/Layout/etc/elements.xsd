@@ -119,7 +119,7 @@
 
     <xs:simpleType name="htmlClassType">
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_]*(\s[a-zA-Z][a-zA-Z\d\-_]*)*"/>
+            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_:]*(\s[a-zA-Z][a-zA-Z\d\-_:]*)*"/>
         </xs:restriction>
     </xs:simpleType>
 

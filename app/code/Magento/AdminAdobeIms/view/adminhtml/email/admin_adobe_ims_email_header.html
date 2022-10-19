@@ -1,0 +1,64 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject {{trans "Header"}} @-->
+<!--@vars {
+"var user.firstname":"Firstname",
+"var logo_url":"Email Logo Image URL",
+"var logo_alt":"Email Logo Alt Text",
+"var logo_height":"Email Logo Image Height",
+"var logo_width":"Email Logo Image Width"
+} @-->
+
+<!DOCTYPE html>
+<html xmlns="https://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+    <link rel="icon" href="https://www.adobe.com/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="https://www.adobe.com/favicon.ico" type="image/x-icon">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="date=no">
+    <meta name="format-detection" content="address=no">
+    <meta name="format-detection" content="email=no">
+
+    <style type="text/css">
+        {{css file="Magento_AdminAdobeIms::css/adobe_email.css"}}
+    </style>
+
+    <!--[if mso]>
+    <style type="text/css">
+        body, table, td {
+            font-family:Helvetica Neue, Helvetica, Verdana, Arial, sans-serif !important;
+        }
+    </style>
+    <xml>
+        <o:OfficeDocumentSettings>
+            <o:AllowPNG/>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+    </xml>
+    <![endif]-->
+</head>
+
+<body class="email-body">
+    <div class="email-preview">{{trans "%user_name, you now have access to Adobe Commerce" user_name=$user.firstname}} &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;</div>
+
+    <table class="background-grey width-100" border="0" cellpadding="0" cellspacing="0" role="presentation">
+        <tr>
+            <td class="padding-top-40">
+                <table class="full-width" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation">
+                    <tr>
+                        <td class="email-container email-header-container">
+
+                            <!-- START email content -->
+                            <table class="email-width" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation">
+                                <tr>
+                                    <td class="email-logo padding-top-50">
+                                        <img alt="Adobe" src="{{var logo_url}}" border="0" hspace="0" vspace="0"/>
+                                    </td>
+                                </tr>

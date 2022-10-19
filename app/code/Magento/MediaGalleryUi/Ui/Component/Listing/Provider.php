@@ -78,7 +78,7 @@ class Provider extends SearchResult
         /** @var AssetInterface $asset */
         foreach ($data as $key => $asset) {
             $data[$key]['thumbnail_url'] = $asset['path'];
-            $data[$key]['content_type'] = strtoupper(str_replace('image/', '', $asset['content_type']));
+            $data[$key]['content_type'] = strtoupper(str_replace('image/', '', $asset['content_type'] ?? ''));
             $data[$key]['preview_url'] = $asset['path'];
             $data[$key]['keywords'] = isset($keywords[$asset['id']]) ? implode(",", $keywords[$asset['id']]) : '';
             $data[$key]['source'] = empty($asset['source']) ? __('Local') : $asset['source'];
