@@ -14,11 +14,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class CurrencyProviderTest extends GraphQlAbstract
 {
-    protected function setUp() :void
-    {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->removeSharedInstance(\Magento\Framework\App\DeploymentConfig::class);
-    }
     /**
      * Tests that the cache id header changes based on the currency and remains consistent for the same currency.
      *
