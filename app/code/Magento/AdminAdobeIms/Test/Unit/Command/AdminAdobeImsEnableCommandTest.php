@@ -9,10 +9,13 @@ namespace Magento\AdminAdobeIms\Test\Unit\Command;
 
 use Exception;
 use Magento\AdminAdobeIms\Console\Command\AdminAdobeImsEnableCommand;
-use Magento\AdminAdobeIms\Service\UpdateTokensService;
 use Magento\AdminAdobeIms\Service\ImsCommandOptionService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdminAdobeIms\Service\UpdateTokensService;
 use Magento\AdobeImsApi\Api\AuthorizationInterface;
+use Magento\Authorization\Model\ResourceModel\Role\Collection as RoleCollection;
+use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory;
+use Magento\Authorization\Model\Role;
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -64,6 +67,16 @@ class AdminAdobeImsEnableCommandTest extends TestCase
     private $questionHelperMock;
 
     /**
+     * @var Role
+     */
+    private $role;
+
+    /**
+     * @var CollectionFactory
+     */
+    private $roleCollection;
+
+    /**
      * @var AdminAdobeImsEnableCommand
      */
     private $enableCommand;
@@ -77,6 +90,28 @@ class AdminAdobeImsEnableCommandTest extends TestCase
         $this->imsCommandOptionService = $this->createMock(ImsCommandOptionService::class);
         $this->typeListInterface = $this->createMock(TypeListInterface::class);
         $this->updateTokensService = $this->createMock(UpdateTokensService::class);
+        $roleCollectionMock = $this->createPartialMock(
+            RoleCollection::class,
+            ['addFieldToFilter', 'getSize']
+        );
+        $roleCollectionMock->method('addFieldToFilter')->willReturnSelf();
+        $this->roleCollection = $this->createPartialMock(
+            CollectionFactory::class,
+            ['create']
+        );
+        $this->roleCollection->method('create')->willReturn(
+            $roleCollectionMock
+        );
+        $this->role =  $this->getMockBuilder(Role::class)
+            ->setMethods(['setParentId','setRoleType','setUserId','setRoleName','setUserType','save'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->role->method('setRoleName')->willReturnSelf();
+        $this->role->method('setUserType')->willReturnSelf();
+        $this->role->method('setUserId')->willReturnSelf();
+        $this->role->method('setRoleType')->willReturnSelf();
+        $this->role->method('setParentId')->willReturnSelf();
+        $this->role->method('save')->willReturnSelf();
 
         $this->questionHelperMock = $this->getMockBuilder(QuestionHelper::class)
             ->disableOriginalConstructor()
@@ -89,7 +124,9 @@ class AdminAdobeImsEnableCommandTest extends TestCase
                 'imsCommandOptionService' => $this->imsCommandOptionService,
                 'cacheTypeList' => $this->typeListInterface,
                 'updateTokenService' => $this->updateTokensService,
-                'authorization' => $this->authorizationUrlMock
+                'authorization' => $this->authorizationUrlMock,
+                'role'  => $this->role,
+                'roleCollection'  => $this->roleCollection
             ]
         );
     }
