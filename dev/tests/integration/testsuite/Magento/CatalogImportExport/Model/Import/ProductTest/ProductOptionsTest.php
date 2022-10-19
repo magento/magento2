@@ -125,7 +125,9 @@ class ProductOptionsTest extends ProductTestBase
 
         // Make sure that after importing existing options again, option IDs and option value IDs are not changed
         $customOptionValues = $this->getCustomOptionValues($sku);
-        $this->createImportModel($pathToFile)->importData();
+        $importModel = $this->createImportModel($pathToFile);
+        $importModel->validateData();
+        $importModel->importData();
         $this->assertEquals($customOptionValues, $this->getCustomOptionValues($sku));
 
         // Cleanup imported products
@@ -222,7 +224,9 @@ class ProductOptionsTest extends ProductTestBase
 
             // Make sure that after importing existing options again, option IDs and option value IDs are not changed
             $customOptionValues = $this->getCustomOptionValues($sku);
-            $this->createImportModel($pathToFile)->importData();
+            $importModel = $this->createImportModel($pathToFile);
+            $importModel->validateData();
+            $importModel->importData();
             $this->assertEquals(
                 $customOptionValues,
                 $this->getCustomOptionValues($sku),

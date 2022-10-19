@@ -99,6 +99,11 @@ class Import extends AbstractModel
     public const FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '_import_empty_attribute_value_constant';
 
     /**
+     * Id of the `importexport_importdata` row after validation.
+     */
+    public const FIELD_IMPORT_IDS = '_import_ids';
+
+    /**
      * Allow multiple values wrapping in double quotes for additional attributes.
      */
     public const FIELDS_ENCLOSURE = 'fields_enclosure';
@@ -476,6 +481,12 @@ class Import extends AbstractModel
     public function importSource()
     {
         $ids = $this->_getEntityAdapter()->getIds();
+        if (empty($ids)) {
+            $idsFromPostData = $this->getData(self::FIELD_IMPORT_IDS);
+            if (null !== $idsFromPostData && '' !== $idsFromPostData) {
+                $ids = explode(",", $idsFromPostData);;
+            }
+        }
         $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode($ids));
         $this->setData('behavior', $this->getDataSourceModel()->getBehavior($ids));
 
@@ -851,5 +862,15 @@ class Import extends AbstractModel
     public function getDeletedItemsCount()
     {
         return $this->_getEntityAdapter()->getDeletedItemsCount();
+    }
+
+    /**
+     * Retrieve Ids of Validated Rows
+     *
+     * @return int[]
+     */
+    public function getValidatedIds() : array
+    {
+        return $this->_getEntityAdapter()->getIds() ?? [];
     }
 }
