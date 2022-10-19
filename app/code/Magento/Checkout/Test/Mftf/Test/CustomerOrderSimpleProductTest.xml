@@ -19,7 +19,7 @@
             <group value="shoppingCart"/>
         </annotations>
         <before>
-        
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!-- create category -->
             <createData entity="_defaultCategory" stepKey="testCategory"/>
             <!-- create data -->
