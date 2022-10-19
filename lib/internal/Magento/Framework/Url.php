@@ -743,7 +743,12 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         if (filter_var($routePath, FILTER_VALIDATE_URL)) {
             return $routePath;
         }
-
+        
+        $cacheKey = \sha1('RouteUrl::' . $routePath . $this->serializer->serialize($routeParams));
+        if (isset($this->cacheUrl[$cacheKey])) {
+            return $this->cacheUrl[$cacheKey];
+        }
+        
         $this->getRouteParamsResolver()->unsetData('route_params');
 
         if (isset($routeParams['_direct'])) {
@@ -758,7 +763,8 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             $this->_setRouteParams($routeParams, false);
         }
 
-        return $this->getBaseUrl($routeParams) . $this->_getRoutePath($routeParams);
+        $this->cacheUrl[$cacheKey] = $this->getBaseUrl($routeParams) . $this->_getRoutePath($routeParams);
+        return $this->cacheUrl[$cacheKey];
     }
 
     /**
