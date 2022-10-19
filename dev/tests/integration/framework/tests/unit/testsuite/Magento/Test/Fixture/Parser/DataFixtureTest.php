@@ -29,17 +29,20 @@ class DataFixtureTest extends TestCase
                 [
                     'name' => 'f1',
                     'factory' => '\Test\Fixture\Test1',
-                    'data' => ['method' => 'testScopeMethod']
+                    'data' => ['method' => 'testScopeMethod'],
+                    'scope' => null
                 ],
                 [
                     'name' => 'f2',
                     'factory' => '\Test\Fixture\Test2',
-                    'data' => []
+                    'data' => [],
+                    'scope' => null
                 ],
                 [
                     'name' => null,
                     'factory' => '\Test\Fixture\Test3',
-                    'data' => []
+                    'data' => [],
+                    'scope' => null
                 ]
             ],
             $model->parse($this, ParserInterface::SCOPE_METHOD)
@@ -57,7 +60,8 @@ class DataFixtureTest extends TestCase
                 [
                     'name' => null,
                     'factory' => '\Test\Fixture\Test',
-                    'data' => ['param1' => 'value1']
+                    'data' => ['param1' => 'value1'],
+                    'scope' => null
                 ]
             ],
             $model->parse($this, ParserInterface::SCOPE_CLASS)
