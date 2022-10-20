@@ -15,15 +15,21 @@ use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Indexer\Test\Fixture\ScheduleMode;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
 
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
- *
- * @magentoAppIsolation enabled
- * @magentoAppArea adminhtml
- * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
- * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
  */
+#[
+    AppIsolation(true),
+    AppArea('adminhtml'),
+    DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => 'catalogsearch_fulltext']),
+    DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => 'catalog_category_product']),
+    DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => 'catalog_product_category']),
+]
 class ProductCategoriesTest extends ProductTestBase
 {
     /**

@@ -9,11 +9,12 @@ namespace Magento\Store\Test\Fixture;
 
 use Magento\Framework\DataObject;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\TestFramework\Fixture\Data\ProcessorInterface;
-use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 use Magento\Store\Api\Data\StoreInterfaceFactory;
 use Magento\Store\Model\ResourceModel\Store as StoreResource;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Db\Sequence;
+use Magento\TestFramework\Fixture\Data\ProcessorInterface;
+use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
 class Store implements RevertibleDataFixtureInterface
 {
@@ -45,21 +46,29 @@ class Store implements RevertibleDataFixtureInterface
     private $dataProcessor;
 
     /**
+     * @var Sequence
+     */
+    private $sequence;
+
+    /**
      * @param StoreInterfaceFactory $storeFactory
      * @param StoreResource $storeResource
      * @param StoreManagerInterface $storeManager
      * @param ProcessorInterface $dataProcessor
+     * @param Sequence $sequence
      */
     public function __construct(
         StoreInterfaceFactory $storeFactory,
         StoreResource $storeResource,
         StoreManagerInterface $storeManager,
-        ProcessorInterface $dataProcessor
+        ProcessorInterface $dataProcessor,
+        Sequence $sequence
     ) {
         $this->storeFactory = $storeFactory;
         $this->storeResource = $storeResource;
         $this->storeManager = $storeManager;
         $this->dataProcessor = $dataProcessor;
+        $this->sequence = $sequence;
     }
 
     /**
@@ -84,7 +93,7 @@ class Store implements RevertibleDataFixtureInterface
         $store->setData($this->prepareData($data));
         $this->storeResource->save($store);
         $this->storeManager->reinitStores();
-
+        $this->regenerateSequenceTables((int)$store->getId());
         return $store;
     }
 
@@ -124,5 +133,20 @@ class Store implements RevertibleDataFixtureInterface
         $data['group_id'] = $data['store_group_id'];
 
         return $this->dataProcessor->process($this, $data);
+    }
+
+    /**
+     * Generate missing sequence tables
+     *
+     * @param int $storeId
+     *
+     * @return void
+     */
+    private function regenerateSequenceTables(int $storeId): void
+    {
+        if ($storeId >= 10) {
+            $n = $storeId + 1;
+            $this->sequence->generateSequences($n);
+        }
     }
 }

@@ -15,12 +15,13 @@ use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 class TaxRule implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
-        'code' => '%uniqid%',
-        'customer_tax_class_ids' => '%uniqid%',
+        'code' => 'taxrule%uniqid%',
         'position' => '0',
         'priority' => '0',
-        'product_tax_class_ids' => ['%uniqid%'],
-        'tax_rate_ids' => ['%uniqid%'],
+        'calculate_subtotal' => false,
+        'customer_tax_class_ids' => [],
+        'product_tax_class_ids' => [],
+        'tax_rate_ids' => [],
     ];
 
     /**

@@ -14,12 +14,19 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\CatalogInventory\Model\Configuration;
 use Magento\ConfigurableProduct\Api\LinkManagementInterface;
 use Magento\ConfigurableProduct\Model\LinkManagement;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 use Magento\Customer\Model\Group;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\GraphQl\Customer\LockCustomer;
 use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -1272,14 +1279,19 @@ QUERY;
     /**
      * Check pricing for Configurable product with "Display Out of Stock Products" enabled
      *
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product with:{"price":10, "special_price":7} as:p1
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product with:{"price":18, "special_price":12.6} as:p2
-     * @magentoApiDataFixture Magento\ConfigurableProduct\Test\Fixture\Attribute as:attr
-     * @magentoApiDataFixture Magento\ConfigurableProduct\Test\Fixture\Product as:conf1
-     * @magentoDataFixtureDataProvider {"conf1":{"_options":["$attr$"],"_links":["$p1$","$p2$"]}}
-     * @magentoConfigFixture default_store cataloginventory/options/show_out_of_stock 1
      * @dataProvider configurableProductPriceRangeWithDisplayOutOfStockProductsEnabledDataProvider
      */
+    #[
+        Config(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, 1, ScopeInterface::SCOPE_STORE, 'default'),
+        DataFixture(ProductFixture::class, ['price' => 10, 'special_price' => 7], 'p1'),
+        DataFixture(ProductFixture::class, ['price' => 18, 'special_price' => 12.6], 'p2'),
+        DataFixture(AttributeFixture::class, as: 'attr'),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            ['_options' => ['$attr$'],'_links' => ['$p1$','$p2$']],
+            'conf1'
+        ),
+    ]
     public function testConfigurableProductPriceRangeWithDisplayOutOfStockProductsEnabled(
         array $productsConfiguration,
         array $expected
