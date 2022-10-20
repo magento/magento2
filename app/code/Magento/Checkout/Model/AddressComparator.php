@@ -40,7 +40,7 @@ class AddressComparator implements AddressComparatorInterface
                 (int)$billingAddress->getCustomerAddressId());
         } else {
             $quoteShippingAddressData = $shippingAddress->getData();
-            $billingAddressData = $billingAddress->getData();
+            $billingAddressData = ($billingAddress !== null) ? $billingAddress->getData() : null;
             if (!empty($quoteShippingAddressData) && !empty($billingAddressData)) {
                 $billingKeys = array_flip(array_keys($billingAddressData));
                 $shippingData = array_intersect_key($quoteShippingAddressData, $billingKeys);

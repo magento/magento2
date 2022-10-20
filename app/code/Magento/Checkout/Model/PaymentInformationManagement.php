@@ -14,6 +14,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\Quote;
 
 /**
@@ -168,7 +169,6 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      * @inheritdoc
      *
      * @throws LocalizedException
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function savePaymentInformation(
         $cartId,
@@ -196,17 +196,12 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
             $quote->removeAddress($quote->getBillingAddress()->getId());
             $quote->setBillingAddress($billingAddress);
             $quote->setDataChanges(true);
+            $this->processShippingIfSameAsBilling($quote, $billingAddress);
             $shippingAddress = $quote->getShippingAddress();
-            if ($shippingAddress) {
-                if ((bool)$shippingAddress->getSameAsBilling()
-                    || $this->addressComparator->isEqual($shippingAddress, $billingAddress)) {
-                    $this->saveNewShippingAddress($quote);
-                }
-                if ($shippingAddress->getShippingMethod()) {
-                    $shippingRate = $shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod());
-                    if ($shippingRate) {
-                        $shippingAddress->setLimitCarrier($shippingRate->getCarrier());
-                    }
+            if ($shippingAddress && $shippingAddress->getShippingMethod()) {
+                $shippingRate = $shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod());
+                if ($shippingRate) {
+                    $shippingAddress->setLimitCarrier($shippingRate->getCarrier());
                 }
             }
         }
@@ -245,29 +240,35 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      * Save shipping address information
      *
      * @param Quote $quote
+     * @param AddressInterface|null $billingAddress
      * @return void
      * @throws LocalizedException
      */
-    private function saveNewShippingAddress(Quote $quote): void
+    private function processShippingIfSameAsBilling(Quote $quote, ?AddressInterface $billingAddress): void
     {
-        $quote->getShippingAddress()->setSameAsBilling(1);
-        $shippingAddressData = $quote->getShippingAddress()->exportCustomerAddress();
-
-        $customer = $quote->getCustomer();
-        $hasDefaultBilling = (bool)$customer->getDefaultBilling();
-        $hasDefaultShipping = (bool)$customer->getDefaultShipping();
-        if (!$hasDefaultShipping) {
-            //Make provided address as default shipping address
-            $shippingAddressData->setIsDefaultShipping(true);
-            if (!$hasDefaultBilling && !$quote->getBillingAddress()->getSaveInAddressBook()) {
-                $shippingAddressData->setIsDefaultBilling(true);
+        $shippingAddress = $quote->getShippingAddress();
+        if ((bool)$shippingAddress->getSameAsBilling()
+            || $this->addressComparator->isEqual($shippingAddress, $billingAddress)) {
+            $shippingAddress->setSameAsBilling(1);
+            if ($shippingAddress->getSaveInAddressBook()) {
+                $shippingAddressData = $shippingAddress->exportCustomerAddress();
+                $customer = $quote->getCustomer();
+                $hasDefaultBilling = (bool)$customer->getDefaultBilling();
+                $hasDefaultShipping = (bool)$customer->getDefaultShipping();
+                if (!$hasDefaultShipping) {
+                    //Make provided address as default shipping address
+                    $shippingAddressData->setIsDefaultShipping(true);
+                    if (!$hasDefaultBilling && !$quote->getBillingAddress()->getSaveInAddressBook()) {
+                        $shippingAddressData->setIsDefaultBilling(true);
+                    }
+                }
+                $shippingAddressData->setCustomerId($quote->getCustomerId());
+                $this->addressRepository->save($shippingAddressData);
+                $quote->addCustomerAddress($shippingAddressData);
+                $shippingAddress->setCustomerAddressData($shippingAddressData);
+                $shippingAddress->setCustomerAddressId($shippingAddressData->getId());
+                $quote->getBillingAddress()->setCustomerAddressId($shippingAddressData->getId());
             }
         }
-        $shippingAddressData->setCustomerId($quote->getCustomerId());
-        $this->addressRepository->save($shippingAddressData);
-        $quote->addCustomerAddress($shippingAddressData);
-        $quote->getShippingAddress()->setCustomerAddressData($shippingAddressData);
-        $quote->getShippingAddress()->setCustomerAddressId($shippingAddressData->getId());
-        $quote->getBillingAddress()->setCustomerAddressId($shippingAddressData->getId());
     }
 }
