@@ -398,14 +398,6 @@ class ProductDataMapper implements BatchDataMapperInterface
              * $attribute->getOptions() loads options into data objects which can be costly.
              */
             $options = $attribute->usesSource() ? $attribute->setStoreId($storeId)->getSource()->getAllOptions() : [];
-
-            if (!empty($options)) {
-                $options = array_combine(
-                    array_column($options, 'value'),
-                    $options
-                );
-            }
-
             $this->attributeOptionsCache[$storeId][$attribute->getId()] = $options;
             $attribute->setStoreId($attributeStoreId);
         }
