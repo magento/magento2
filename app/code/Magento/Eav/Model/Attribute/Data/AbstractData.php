@@ -464,7 +464,7 @@ abstract class AbstractData
                 case 'date':
                     $validator = new Date(
                         [
-                            'format' => \Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT,
+                            'format' => \Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT,
                             'locale' => $this->_localeResolver->getLocale(),
                         ]
                     );
