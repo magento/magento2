@@ -11,8 +11,6 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 
 /**
  * Import edit form block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
