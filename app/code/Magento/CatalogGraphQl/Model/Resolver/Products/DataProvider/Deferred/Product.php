@@ -100,6 +100,10 @@ class Product
      */
     public function getProductBySku(string $sku, ContextInterface $context = null) : array
     {
+        if (isset($this->productList[$sku])) {
+            return $this->productList[$sku];
+        }
+
         $this->fetch($context);
 
         if (!isset($this->productList[$sku])) {
@@ -113,13 +117,17 @@ class Product
      * Fetch product data and return in array format. Keys for products will be their skus.
      *
      * @param null|ContextInterface $context
-     * @return array
      */
-    private function fetch(ContextInterface $context = null) : array
+    private function fetch(ContextInterface $context = null): void
     {
+        if (empty($this->productSkus)) {
+            return;
+        }
+
         $skusToFetch = array_diff($this->productSkus, array_keys($this->productList));
-        if (empty($this->productSkus) || empty($skusToFetch)) {
-            return $this->productList;
+
+        if (empty($skusToFetch)) {
+            return;
         }
 
         $this->searchCriteriaBuilder->addFilter(ProductInterface::SKU, $skusToFetch, 'in');
@@ -135,7 +143,5 @@ class Product
         foreach ($result->getItems() as $product) {
             $this->productList[$product->getSku()] = ['model' => $product];
         }
-
-        return $this->productList;
     }
 }
