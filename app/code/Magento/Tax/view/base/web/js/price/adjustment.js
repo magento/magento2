@@ -62,6 +62,16 @@ define([
         },
 
         /**
+         * UnsanitizedHtml version of getTax.
+         *
+         * @param {Object} row
+         * @return {HTMLElement} tax html
+         */
+        getTaxUnsanitizedHtml: function (row) {
+            return this.getTax(row);
+        },
+
+        /**
          * Set price tax type.
          *
          * @param {String} priceType

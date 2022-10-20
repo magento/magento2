@@ -20,8 +20,8 @@
         <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
         <waitForElementVisible selector="{{AdminCategoryContentSection.uploadButton}}" stepKey="seeImageSectionIsReady"/>
         <attachFile selector="{{AdminCategoryContentSection.uploadImageFile}}" userInput="{{image.file}}" stepKey="uploadFile"/>
-        <waitForAjaxLoad time="30" stepKey="waitForAjaxUpload"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+        <comment userInput="BIC workaround" stepKey="waitForAjaxUpload"/>
+        <waitForElementVisible selector="{{AdminCategoryContentSection.imageFileName}}" stepKey="waitForLoading"/>
         <grabTextFrom selector="{{AdminCategoryContentSection.imageFileName}}" stepKey="grabCategoryFileName"/>
         <assertRegExp stepKey="assertEquals" message="pass">
             <expectedResult type="string">/magento-logo(_[0-9]+)*?\.png$/</expectedResult>

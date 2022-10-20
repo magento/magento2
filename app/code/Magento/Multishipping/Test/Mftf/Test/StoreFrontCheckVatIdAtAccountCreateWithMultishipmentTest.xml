@@ -27,14 +27,12 @@
         </before>
         <after>
             <magentoCLI command="config:set customer/create_account/vat_frontend_visibility 0" stepKey="showVatNumberOnStorefrontNo"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfter">
-                <argument name="tags" value="config"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfter"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="product" stepKey="deleteproduct"/>
         </after>
         <!-- Add product to the cart -->
-        <amOnPage url="$$product.name$$.html" stepKey="goToProductPage"/>
+        <amOnPage url="$$product.custom_attributes[url_key]$$.html" stepKey="goToProductPage"/>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$$product.name$$"/>
         </actionGroup>

@@ -113,14 +113,10 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $defaultHandlerMock->expects($this->once())->method('open')->with('explicit_save_path', 'test_session_id');
 
-        $this->saveHandlerFactoryMock->expects($this->at(0))
+        $this->saveHandlerFactoryMock
             ->method('create')
-            ->with('redis')
-            ->willReturn($redisHandlerMock);
-        $this->saveHandlerFactoryMock->expects($this->at(1))
-            ->method('create')
-            ->with(SaveHandlerInterface::DEFAULT_HANDLER)
-            ->willReturn($defaultHandlerMock);
+            ->withConsecutive(['redis'], [SaveHandlerInterface::DEFAULT_HANDLER])
+            ->willReturnOnConsecutiveCalls($redisHandlerMock, $defaultHandlerMock);
 
         $sessionConfig = $this->objectManager->create(ConfigInterface::class);
         /** @var SaveHandler $saveHandler */

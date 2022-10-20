@@ -444,10 +444,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
      */
     private function updateSubscriptions(CustomerInterface $customer): void
     {
-        if (!$this->_authorization->isAllowed(null)) {
-            return;
-        }
-
         $subscriptionStatus = (array)$this->getRequest()->getParam('subscription_status');
         $subscriptionStore = (array)$this->getRequest()->getParam('subscription_store');
         if (empty($subscriptionStatus)) {
@@ -502,7 +498,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
         }
 
         if ($entityType == AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
-            $scopeData = explode('/', $scope);
+            $scopeData = $scope !== null ? explode('/', $scope) : [];
             if (isset($scopeData[1]) && is_numeric($scopeData[1])) {
                 $customerAddress = $this->addressRepository->getById($scopeData[1]);
                 $attributeValues = $this->addressMapper->toFlatArray($customerAddress);

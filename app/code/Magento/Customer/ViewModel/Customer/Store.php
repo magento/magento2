@@ -109,28 +109,22 @@ class Store implements OptionSourceInterface
     private function getStoreOptionsWithCurrentWebsiteId(): array
     {
         $options = $this->systemStore->getStoreValuesForForm();
+        $websites = $this->systemStore->getWebsiteCollection();
+        $allOptions = [];
 
-        if (!empty($this->dataPersistor->get('customer')['account'])) {
-            $currentWebsiteId = (string)$this->dataPersistor->get('customer')['account']['website_id'];
-        } else {
-            $defaultStore = $this->storeManager->getDefaultStoreView();
-            if (!$defaultStore) {
-                $stores = $this->storeManager->getStores();
-                $defaultStore = array_shift($stores);
-            }
-            $currentWebsiteId = $defaultStore->getWebsiteId();
-        }
-
-        foreach ($options as $key => $option) {
-            $options[$key]['website_id'] = $currentWebsiteId;
-            if (is_array($option['value']) && !empty($option['value'])) {
-                foreach ($option['value'] as $storeViewKey => $storeView) {
-                    $storeView['website_id'] = $currentWebsiteId;
-                    $options[$key]['value'][$storeViewKey] = $storeView;
+        foreach ($websites as $website) {
+            foreach ($options as $key => $option) {
+                $options[$key]['website_id'] = $website->getId();
+                if (is_array($option['value']) && !empty($option['value'])) {
+                    foreach ($option['value'] as $storeViewKey => $storeView) {
+                        $storeView['website_id'] = $website->getId();
+                        $options[$key]['value'][$storeViewKey] = $storeView;
+                    }
                 }
+                $allOptions[] = $options[$key];
             }
         }
 
-        return $options;
+        return $allOptions;
     }
 }

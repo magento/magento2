@@ -68,7 +68,7 @@ abstract class AbstractSimpleObjectBuilder implements SimpleBuilderInterface
     protected function _getDataObjectType()
     {
         $dataObjectType = '';
-        $pattern = '/(?<data_object>.*?)Builder(\\Interceptor)?/';
+        $pattern = '/(?<data_object>.*?)Builder(\\\\Interceptor)?/';
         if (preg_match($pattern, get_class($this), $match)) {
             $dataObjectType = $match['data_object'];
         }

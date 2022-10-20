@@ -5,12 +5,14 @@
  */
 namespace Magento\Framework\ObjectManager\Config;
 
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\ObjectManager\ConfigCacheInterface;
+use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface;
+use Magento\Framework\ObjectManager\Helper\SortItems as SortItemsHelper;
 use Magento\Framework\ObjectManager\RelationsInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
-class Config implements \Magento\Framework\ObjectManager\ConfigInterface
+class Config implements ConfigInterface
 {
     /**
      * Config cache
@@ -22,12 +24,11 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
     /**
      * Class definitions
      *
-     * @var \Magento\Framework\ObjectManager\DefinitionInterface
+     * @var DefinitionInterface
      */
     protected $_definitions;
 
     /**
-     * Current cache key
      *
      * @var string
      */
@@ -41,7 +42,6 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
     protected $_preferences = [];
 
     /**
-     * Virtual types
      *
      * @var array
      */
@@ -76,18 +76,28 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
     protected $_mergedArguments;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var SerializerInterface
      */
     private $serializer;
 
     /**
-     * @param RelationsInterface $relations
-     * @param DefinitionInterface $definitions
+     * @var SortItemsHelper
      */
-    public function __construct(RelationsInterface $relations = null, DefinitionInterface $definitions = null)
-    {
+    private SortItemsHelper $sortItemsHelper;
+
+    /**
+     * @param RelationsInterface|null $relations
+     * @param DefinitionInterface|null $definitions
+     * @param SortItemsHelper|null $sortItemsHelper
+     */
+    public function __construct(
+        RelationsInterface $relations = null,
+        DefinitionInterface $definitions = null,
+        SortItemsHelper $sortItemsHelper = null
+    ) {
         $this->_relations = $relations ?: new \Magento\Framework\ObjectManager\Relations\Runtime();
         $this->_definitions = $definitions ?: new \Magento\Framework\ObjectManager\Definition\Runtime();
+        $this->sortItemsHelper = $sortItemsHelper ?: new \Magento\Framework\ObjectManager\Helper\SortItems();
     }
 
     /**
@@ -160,7 +170,7 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      */
     public function getPreference($type)
     {
-        $type = ltrim($type, '\\');
+        $type = $type !== null ? ltrim($type, '\\') : '';
         $preferencePath = [];
         while (isset($this->_preferences[$type])) {
             if (isset($preferencePath[$this->_preferences[$type]])) {
@@ -185,11 +195,12 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _collectConfiguration($type)
+    protected function _collectConfiguration($type): array
     {
         if (!isset($this->_mergedArguments[$type])) {
             if (isset($this->_virtualTypes[$type])) {
                 $arguments = $this->_collectConfiguration($this->_virtualTypes[$type]);
+                $arguments = $this->sortItemsHelper->sortItems($arguments);
             } elseif ($this->_relations->has($type)) {
                 $relations = $this->_relations->getParents($type);
                 $arguments = [];
@@ -198,6 +209,7 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
                         $relationArguments = $this->_collectConfiguration($relation);
                         if ($relationArguments) {
                             $arguments = array_replace($arguments, $relationArguments);
+                            $arguments = $this->sortItemsHelper->sortItems($arguments);
                         }
                     }
                 }
@@ -208,6 +220,7 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
             if (isset($this->_arguments[$type])) {
                 if ($arguments && count($arguments)) {
                     $arguments = array_replace_recursive($arguments, $this->_arguments[$type]);
+                    $arguments = $this->sortItemsHelper->sortItems($arguments);
                 } else {
                     $arguments = $this->_arguments[$type];
                 }
@@ -272,12 +285,16 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
     {
         if ($this->_cache) {
             if (!$this->_currentCacheKey) {
+                // md5() here is not for cryptographic use.
+                // phpcs:ignore Magento2.Security.InsecureFunction
                 $this->_currentCacheKey = md5(
                     $this->getSerializer()->serialize(
                         [$this->_arguments, $this->_nonShared, $this->_preferences, $this->_virtualTypes]
                     )
                 );
             }
+            // md5() here is not for cryptographic use.
+            // phpcs:ignore Magento2.Security.InsecureFunction
             $key = md5($this->_currentCacheKey . $this->getSerializer()->serialize($configuration));
             $cached = $this->_cache->get($key);
             if ($cached) {
@@ -335,7 +352,7 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
     /**
      * Get serializer
      *
-     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @return SerializerInterface
      * @deprecated 101.0.0
      */
     private function getSerializer()

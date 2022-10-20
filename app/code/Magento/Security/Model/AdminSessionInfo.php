@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Security\Model;
 
 /**
  * Admin Session Info Model
  *
- * @method string getSessionId()
  * @method int getUserId() getUserId()
  * @method int getStatus()
  * @method string getUpdatedAt()
@@ -26,26 +27,27 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
     /**
      * Admin logged in
      */
-    const LOGGED_IN = 1;
+    public const LOGGED_IN = 1;
 
     /**
      * Admin logged out
      */
-    const LOGGED_OUT = 0;
+    public const LOGGED_OUT = 0;
 
     /**
      * User has been logged out by another login with the same credentials
      */
-    const LOGGED_OUT_BY_LOGIN = 2;
+    public const LOGGED_OUT_BY_LOGIN = 2;
 
     /**
      * User has been logged out manually from another session
      */
-    const LOGGED_OUT_MANUALLY = 3;
+    public const LOGGED_OUT_MANUALLY = 3;
 
     /**
      * All other open sessions were terminated
      * @since 100.1.0
+     * @var bool
      */
     protected $isOtherSessionsTerminated = false;
 
@@ -132,10 +134,10 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
         $currentTime = $this->dateTime->gmtTimestamp();
         $lastUpdatedTime = $this->getUpdatedAt();
         if (!is_numeric($lastUpdatedTime)) {
-            $lastUpdatedTime = strtotime($lastUpdatedTime);
+            $lastUpdatedTime = $lastUpdatedTime === null ? 0 : strtotime($lastUpdatedTime);
         }
 
-        return $lastUpdatedTime <= ($currentTime - $lifetime) ? true : false;
+        return $lastUpdatedTime <= ($currentTime - $lifetime);
     }
 
     /**

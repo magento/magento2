@@ -51,7 +51,7 @@
         <!-- Go back to the cart -->
         <click selector="{{MultishippingSection.back}}" stepKey="backToCart"/>
         <!-- Update products quantity -->
-        <fillField selector="{{CheckoutCartProductSection.qty($createdSimpleProduct.name$)}}" userInput="2" stepKey="updateProductQty"/>
+        <fillField selector="{{CheckoutCartProductSection.qty($createdSimpleProduct.sku$)}}" userInput="2" stepKey="updateProductQty"/>
         <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickUpdateShoppingCart"/>
         <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
         <!-- Check subtotals -->

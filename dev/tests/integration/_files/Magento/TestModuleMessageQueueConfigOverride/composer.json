@@ -2,7 +2,7 @@
     "name": "magento/module-test-module-message-queue-config-override",
     "description": "test module for message queue configuration",
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.0.0",
         "magento/framework": "*",
         "magento/module-integration": "*"
     },
