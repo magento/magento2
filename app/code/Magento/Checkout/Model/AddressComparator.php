@@ -46,16 +46,16 @@ class AddressComparator implements AddressComparatorInterface
             $billingAddressData = $billingAddress->getData();
             $billingKeys = array_flip(array_keys($billingAddressData));
             $shippingData = array_intersect_key($shippingAddressData, $billingKeys);
-            $removeKeys = ['region_code', 'save_in_address_book'];
+            $removeKeys = ['address_type', 'region_code', 'save_in_address_book'];
             $billingData = array_diff_key($billingAddressData, array_flip($removeKeys));
             $diff = array_udiff(
                 $billingData,
                 $shippingData,
                 function ($el1, $el2) {
-                    if (is_object($el1)) {
+                    if (is_object($el1) || is_array($el1)) {
                         $el1 = $this->serializer->serialize($el1);
                     }
-                    if (is_object($el2)) {
+                    if (is_object($el2) || is_array($el2)) {
                         $el2 = $this->serializer->serialize($el2);
                     }
                     return strcmp((string)$el1, (string)$el2);

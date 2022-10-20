@@ -14,8 +14,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\Quote;
+use Psr\Log\LoggerInterface;
 
 /**
  * Payment information management service.
@@ -52,11 +52,6 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     protected $cartTotalsRepository;
 
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var CartRepositoryInterface
      */
     private $cartRepository;
@@ -87,6 +82,11 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     private $addressComparator;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Quote\Api\BillingAddressManagementInterface $billingAddressManagement
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
@@ -97,6 +97,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      * @param CartRepositoryInterface|null $cartRepository
      * @param AddressRepositoryInterface|null $addressRepository
      * @param AddressComparatorInterface|null $addressComparator
+     * @param LoggerInterface|null $logger
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -110,7 +111,8 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         ?PaymentSavingRateLimiterInterface $saveRateLimiter = null,
         ?CartRepositoryInterface $cartRepository = null,
         ?AddressRepositoryInterface $addressRepository = null,
-        ?AddressComparatorInterface $addressComparator = null
+        ?AddressComparatorInterface $addressComparator = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
@@ -127,6 +129,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
             ?? ObjectManager::getInstance()->get(AddressRepositoryInterface::class);
         $this->addressComparator = $addressComparator
             ?? ObjectManager::getInstance()->get(AddressComparatorInterface::class);
+        $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -148,7 +151,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         try {
             $orderId = $this->cartManagement->placeOrder($cartId);
         } catch (LocalizedException $e) {
-            $this->getLogger()->critical(
+            $this->logger->critical(
                 'Placing an order with quote_id ' . $cartId . ' is failed: ' . $e->getMessage()
             );
             throw new CouldNotSaveException(
@@ -156,7 +159,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
                 $e
             );
         } catch (\Exception $e) {
-            $this->getLogger()->critical($e);
+            $this->logger->critical($e);
             throw new CouldNotSaveException(
                 __('A server error stopped your order from being placed. Please try to place your order again.'),
                 $e
@@ -196,13 +199,8 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
             $quote->removeAddress($quote->getBillingAddress()->getId());
             $quote->setBillingAddress($billingAddress);
             $quote->setDataChanges(true);
-            $this->processShippingIfSameAsBilling($quote, $billingAddress);
-            $shippingAddress = $quote->getShippingAddress();
-            if ($shippingAddress && $shippingAddress->getShippingMethod()) {
-                $shippingRate = $shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod());
-                if ($shippingRate) {
-                    $shippingAddress->setLimitCarrier($shippingRate->getCarrier());
-                }
+            if ($quote->getShippingAddress()) {
+                $this->processShippingAddress($quote);
             }
         }
         $this->paymentMethodManagement->set($cartId, $paymentMethod);
@@ -222,57 +220,44 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     }
 
     /**
-     * Get logger instance
-     *
-     * @return \Psr\Log\LoggerInterface
-     * @deprecated 100.1.8
-     * @see not in use anymore
-     */
-    private function getLogger()
-    {
-        if (!$this->logger) {
-            $this->logger = ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
-        }
-        return $this->logger;
-    }
-
-    /**
-     * Save shipping address information
+     * Processes shipping address.
      *
      * @param Quote $quote
-     * @param AddressInterface|null $billingAddress
      * @return void
      * @throws LocalizedException
      */
-    private function processShippingIfSameAsBilling(Quote $quote, ?AddressInterface $billingAddress): void
+    private function processShippingAddress(Quote $quote): void
     {
         $shippingAddress = $quote->getShippingAddress();
-        if ($shippingAddress
-            && (
-                (bool)$shippingAddress->getSameAsBilling()
-                || $this->addressComparator->isEqual($shippingAddress, $billingAddress)
-            )
-        ) {
-            $shippingAddress->setSameAsBilling(1);
-            if ($shippingAddress->getSaveInAddressBook()) {
-                $shippingAddressData = $shippingAddress->exportCustomerAddress();
-                $customer = $quote->getCustomer();
-                $hasDefaultBilling = (bool)$customer->getDefaultBilling();
-                $hasDefaultShipping = (bool)$customer->getDefaultShipping();
-                if (!$hasDefaultShipping) {
-                    //Make provided address as default shipping address
-                    $shippingAddressData->setIsDefaultShipping(true);
-                    if (!$hasDefaultBilling && !$quote->getBillingAddress()->getSaveInAddressBook()) {
-                        $shippingAddressData->setIsDefaultBilling(true);
-                    }
-                }
-                $shippingAddressData->setCustomerId($quote->getCustomerId());
-                $this->addressRepository->save($shippingAddressData);
-                $quote->addCustomerAddress($shippingAddressData);
-                $shippingAddress->setCustomerAddressData($shippingAddressData);
-                $shippingAddress->setCustomerAddressId($shippingAddressData->getId());
-                $quote->getBillingAddress()->setCustomerAddressId($shippingAddressData->getId());
+        $billingAddress = $quote->getBillingAddress();
+        if ($shippingAddress->getShippingMethod()) {
+            $shippingRate = $shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod());
+            if ($shippingRate) {
+                $shippingAddress->setLimitCarrier($shippingRate->getCarrier());
             }
+        }
+        if ($this->addressComparator->isEqual($shippingAddress, $billingAddress)) {
+            $shippingAddress->setSameAsBilling(1);
+        }
+        // Save new address in the customer address book and set it id for billing and shipping quote addresses.
+        if ($shippingAddress->getSameAsBilling() && $shippingAddress->getSaveInAddressBook()) {
+            $shippingAddressData = $shippingAddress->exportCustomerAddress();
+            $customer = $quote->getCustomer();
+            $hasDefaultBilling = (bool)$customer->getDefaultBilling();
+            $hasDefaultShipping = (bool)$customer->getDefaultShipping();
+            if (!$hasDefaultShipping) {
+                //Make provided address as default shipping address
+                $shippingAddressData->setIsDefaultShipping(true);
+                if (!$hasDefaultBilling && !$billingAddress->getSaveInAddressBook()) {
+                    $shippingAddressData->setIsDefaultBilling(true);
+                }
+            }
+            $shippingAddressData->setCustomerId($quote->getCustomerId());
+            $this->addressRepository->save($shippingAddressData);
+            $quote->addCustomerAddress($shippingAddressData);
+            $shippingAddress->setCustomerAddressData($shippingAddressData);
+            $shippingAddress->setCustomerAddressId($shippingAddressData->getId());
+            $billingAddress->setCustomerAddressId($shippingAddressData->getId());
         }
     }
 }
