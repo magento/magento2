@@ -22,22 +22,22 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
             <createData entity="SimpleProduct" stepKey="simpleProduct1">
-                 <requiredEntity createDataKey="simpleCategory1"/>
+                <requiredEntity createDataKey="simpleCategory1"/>
             </createData>
 
                 <!--Create Bundle product-->
-                <createData entity="BundleProductPriceViewRange" stepKey="createBundleProduct">
-                    <requiredEntity createDataKey="simpleCategory1"/>
-                </createData>
-                <createData entity="DropDownBundleOption" stepKey="createBundleOption1_1">
-                    <requiredEntity createDataKey="createBundleProduct"/>
-                    <field key="required">True</field>
-                </createData>
-                <createData entity="ApiBundleLink" stepKey="linkOptionToProduct">
-                    <requiredEntity createDataKey="createBundleProduct"/>
-                    <requiredEntity createDataKey="createBundleOption1_1"/>
-                    <requiredEntity createDataKey="simpleProduct1"/>
-                </createData>
+            <createData entity="BundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="simpleCategory1"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption1_1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">True</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct1"/>
+            </createData>
         </before>
 
         <after>
@@ -99,6 +99,5 @@
             <argument name="productId" value="$$createBundleProduct.id$$"/>
         </actionGroup>
         <seeElement selector="{{AdminProductFormSection.textArea}}" stepKey="seeTextAreaAttribute"/>
-        
     </test>
 </tests>
