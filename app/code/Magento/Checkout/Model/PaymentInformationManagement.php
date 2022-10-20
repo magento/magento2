@@ -247,8 +247,12 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     private function processShippingIfSameAsBilling(Quote $quote, ?AddressInterface $billingAddress): void
     {
         $shippingAddress = $quote->getShippingAddress();
-        if ((bool)$shippingAddress->getSameAsBilling()
-            || $this->addressComparator->isEqual($shippingAddress, $billingAddress)) {
+        if ($shippingAddress
+            && (
+                (bool)$shippingAddress->getSameAsBilling()
+                || $this->addressComparator->isEqual($shippingAddress, $billingAddress)
+            )
+        ) {
             $shippingAddress->setSameAsBilling(1);
             if ($shippingAddress->getSaveInAddressBook()) {
                 $shippingAddressData = $shippingAddress->exportCustomerAddress();
