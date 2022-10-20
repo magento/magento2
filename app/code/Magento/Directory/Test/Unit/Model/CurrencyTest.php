@@ -229,7 +229,7 @@ class CurrencyTest extends TestCase
             ],
             ['en_US', 'USD', ' 9999', ['display' => CurrencyData::NO_SYMBOL], '9,999.00'],
             ['en_US', 'USD', '9999', ['precision' => 1], '$9,999.0'],
-            ['en_US', 'USD', '9999', ['precision' => 2, 'symbol' => '#'], '#9,999.00'],
+            ['en_US', 'USD', '9999', ['precision' => 2, 'symbol' => '#'], '# 9,999.00'],
             [
                 'en_US',
                 'USD',
