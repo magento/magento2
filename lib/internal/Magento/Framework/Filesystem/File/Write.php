@@ -33,11 +33,12 @@ class Write extends Read implements WriteInterface
     protected function assertValid()
     {
         $fileExists = $this->driver->isExists($this->path);
-        if (!$fileExists && preg_match('/r/', $this->mode)) {
+        $mode = $this->mode ?? '';
+        if (!$fileExists && preg_match('/r/', $mode)) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('The "%1" file doesn\'t exist.', [$this->path])
             );
-        } elseif ($fileExists && preg_match('/x/', $this->mode)) {
+        } elseif ($fileExists && preg_match('/x/', $mode)) {
             throw new FileSystemException(new \Magento\Framework\Phrase('The file "%1" already exists', [$this->path]));
         }
     }

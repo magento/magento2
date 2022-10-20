@@ -54,6 +54,7 @@ define([
             vatId: addressData['vat_id'],
             saveInAddressBook: addressData['save_in_address_book'],
             customAttributes: addressData['custom_attributes'],
+            extensionAttributes: addressData['extension_attributes'],
 
             /**
              * @return {*}

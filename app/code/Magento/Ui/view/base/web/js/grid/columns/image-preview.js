@@ -5,9 +5,10 @@
 /* eslint-disable no-undef */
 define([
     'jquery',
+    'underscore',
     'Magento_Ui/js/grid/columns/column',
     'Magento_Ui/js/lib/key-codes'
-], function ($, Column, keyCodes) {
+], function ($, _, Column, keyCodes) {
     'use strict';
 
     return Column.extend({

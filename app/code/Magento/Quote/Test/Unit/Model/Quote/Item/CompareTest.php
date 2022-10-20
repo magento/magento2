@@ -13,6 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Compare;
 use Magento\Quote\Model\Quote\Item\Option;
+use Magento\Quote\Model\Quote\Item\Option\Comparator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -51,15 +52,22 @@ class CompareTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManagerHelper = new ObjectManager($this);
+        $constrArgs = $objectManagerHelper->getConstructArguments(
+            Item::class,
+            [
+                'itemOptionComparator' => new Comparator()
+            ]
+        );
         $this->itemMock = $this->getMockBuilder(Item::class)
             ->addMethods(['getProductId'])
             ->onlyMethods(['__wakeup', 'getOptions', 'getOptionsByCode'])
-            ->disableOriginalConstructor()
+            ->setConstructorArgs($constrArgs)
             ->getMock();
         $this->comparedMock = $this->getMockBuilder(Item::class)
             ->addMethods(['getProductId'])
             ->onlyMethods(['__wakeup', 'getOptions', 'getOptionsByCode'])
-            ->disableOriginalConstructor()
+            ->setConstructorArgs($constrArgs)
             ->getMock();
         $this->optionMock = $this->getMockBuilder(Option::class)
             ->addMethods(['getCode'])
@@ -82,7 +90,6 @@ class CompareTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManagerHelper = new ObjectManager($this);
         $this->helper = $objectManagerHelper->getObject(
             Compare::class,
             [

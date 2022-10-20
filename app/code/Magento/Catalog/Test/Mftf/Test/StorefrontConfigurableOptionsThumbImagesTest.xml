@@ -170,7 +170,7 @@
         </after>
 
         <!-- Open ConfigProduct in Store Front Page -->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="openProductInStoreFront"/>
+        <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="openProductInStoreFront"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
 
         <!-- Check fotorama thumbnail images (no selected options) -->

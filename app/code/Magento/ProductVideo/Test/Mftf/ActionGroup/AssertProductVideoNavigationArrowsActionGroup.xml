@@ -18,25 +18,28 @@
         </arguments>
 
         <dontSeeElement selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="dontSeePrevButton"/>
-        <moveMouseOver selector="{{StorefrontProductMediaSection.mainImageForJsActions}}" stepKey="hoverOverImage"/>
-        <seeElement selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="seeNextButton"/>
+        <moveMouseOver selector="{{StorefrontProductInfoMainSection.clickPlayVideo}}" stepKey="hoverOverImage"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="seeNextButton"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickNextButton"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productVideo(videoType)}}" stepKey="seeProductVideoDataType"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productVideo(videoType)}}" stepKey="seeProductVideoDataType"/>
 
         <dontSeeElement selector="{{StorefrontProductInfoMainSection.clickCloseVideo}}" stepKey="dontSeeCloseVideo"/>
 
         <click selector="{{StorefrontProductInfoMainSection.clickPlayVideo}}" stepKey="clickToPlayVideo"/>
-        <wait stepKey="waitFiveSecondsToPlayVideo" time="5"/>
+        <wait time="5" stepKey="waitFiveSecondsToPlayVideo"/>
 
         <dontSeeElement selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="dontSeePrevButtonSecond"/>
         <dontSeeElement selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="dontSeeNextButton"/>
 
         <seeElement selector="{{StorefrontProductInfoMainSection.clickCloseVideo}}" stepKey="seeCloseVideo"/>
         <click selector="{{StorefrontProductInfoMainSection.clickCloseVideo}}" stepKey="clickToCloseVideo"/>
-        <wait stepKey="waitTwoSecondsToCloseVideo" time="2"/>
+        <wait time="2" stepKey="waitTwoSecondsToCloseVideo"/>
+        <dontSeeElementInDOM selector="{{StorefrontProductMediaSection.galleryNoControlsElement}}" stepKey="videoFocused"/>
+        <moveMouseOver selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="unFocusVideo"/>
+        <waitForElement selector="{{StorefrontProductMediaSection.galleryNoControlsElement}}" stepKey="waitForVideoUnFocus"/>
 
-        <moveMouseOver selector="{{StorefrontProductMediaSection.mainImageForJsActions}}" stepKey="hoverOverImageSecond"/>
-        <seeElement selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="seePrevButton"/>
+        <moveMouseOver selector="{{StorefrontProductInfoMainSection.clickPlayVideo}}" stepKey="hoverOverImageSecond"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="seePrevButton"/>
         <click selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="clickPrevButton"/>
     </actionGroup>
 </actionGroups>

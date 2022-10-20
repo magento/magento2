@@ -29,6 +29,9 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -52,7 +55,9 @@
         <seeInField stepKey="assertAttrCode" selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="{{priceProductAttribute.attribute_code}}"/>
 
         <!--Go to New Product page, add Attribute and check values-->
-        <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToCreateSimpleProductPage"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToCreateSimpleProductPage">
+            <argument name="attributeSetId" value="4"/>
+        </actionGroup>
         <actionGroup ref="AddProductAttributeInProductModalActionGroup" stepKey="addAttributeToProduct">
             <argument name="attributeCode" value="{{priceProductAttribute.attribute_code}}"/>
         </actionGroup>

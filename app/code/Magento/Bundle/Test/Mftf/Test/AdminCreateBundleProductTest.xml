@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateBundleProductTest">
+        <annotations>
+            <features value="BundleProduct"/>
+            <stories value="Create product"/>
+            <title value="Admin Create Bundle Product"/>
+            <description value="Admin should be able to create a Bundle product"/>
+            <testCaseId value="MC-27223"/>
+            <severity value="MAJOR"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- creating category, simple products -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ImportProductSimple2_Bundle" stepKey="simpleProduct1"/>
+            <createData entity="ImportProductSimple1_Bundle" stepKey="simpleProduct2"/>
+        </before>
+        <after>
+            <!-- Delete bundle product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+            <!-- deleting category, simple products -->
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProductOne"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteProductTwo"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- Create Bundle product via Admin  -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <!-- Entering Bundle Product name,SKU, category, url key -->
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{BundleProduct.name}}" stepKey="fillProductName"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+
+        <!-- Add two bundle items -->
+        <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
+        <!-- Add bundle option to the product -->
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="clickAddSelectedBundleProducts">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
+            <argument name="prodTwoSku" value="$$simpleProduct2.sku$$"/>
+            <argument name="optionTitle" value="{{DropDownBundleOption.title}}"/>
+            <argument name="inputType" value="{{DropDownBundleOption.type}}"/>
+        </actionGroup>
+
+        <!-- Check that Bundle Options initialized with proper quantity -->
+        <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" stepKey="grabbedFirstBundleOptionQuantity"/>
+        <assertEquals stepKey="assertFirstBundleOptionDefaultQuantity">
+            <expectedResult type="string">50</expectedResult>
+            <actualResult type="string">$grabbedFirstBundleOptionQuantity</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" stepKey="grabbedSecondBundleOptionQuantity"/>
+        <assertEquals stepKey="assertSecondBundleOptionDefaultQuantity">
+            <expectedResult type="string">50</expectedResult>
+            <actualResult type="string">$grabbedSecondBundleOptionQuantity</actualResult>
+        </assertEquals>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductDefaultQty1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductDefaultQty2"/>
+
+        <wait stepKey="k1" time="10"/>
+        <click selector="{{AdminProductFormBundleSection.isDefault('$$simpleProduct1.name$$')}}" stepKey="clickIsDefault"/>
+
+        <!--Save the product-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+
+        <!-- Verify we see created bundle product(from the above step) on the product grid page-->
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage1"/>
+        <actionGroup ref="FilterProductGridBySkuAndNameActionGroup" stepKey="clickSearch">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="openCreatedBundleProduct"/>
+
+        <!-- Admin: Verify Bundle Product Information on Edit Product Page -->
+        <scrollTo selector="{{AdminProductFormBundleSection.allBundleOptions}}" stepKey="scrollToAllBundleOptions" />
+        <actionGroup ref="AdminVerifyProductInBundleProductOptionActionGroup" stepKey="verifyBundleProductOption1Product1">
+            <argument name="name" value="{{ImportProductSimple2_Bundle.name}}"/>
+            <argument name="sku" value="{{ImportProductSimple2_Bundle.sku}}"/>
+            <argument name="defaultQuantity" value="50"/>
+            <argument name="isDefault" value="{{ImportProductSimple2_Bundle.bundleIsDefault}}"/>
+            <argument name="userDefined" value="{{ImportProductSimple2_Bundle.bundleUserDefined}}"/>
+            <argument name="optionIndex" value="1"/>
+            <argument name="productIndex" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminVerifyProductInBundleProductOptionActionGroup" stepKey="verifyBundleProductOption1Product2">
+            <argument name="name" value="{{ImportProductSimple1_Bundle.name}}"/>
+            <argument name="sku" value="{{ImportProductSimple1_Bundle.sku}}"/>
+            <argument name="defaultQuantity" value="50"/>
+            <argument name="isDefault" value="{{ImportProductSimple1_Bundle.bundleIsDefault}}"/>
+            <argument name="userDefined" value="false"/>
+            <argument name="optionIndex" value="1"/>
+            <argument name="productIndex" value="2"/>
+        </actionGroup>
+
+        <!-- Storefront: Verify Bundle Product In Category -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="GoToProductPage">
+            <argument name="productUrl" value="{{BundleProduct.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductPageToLoad"/>
+
+        <!-- Storefront: Verify Product details -->
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="LookingForNameOfProduct">
+            <argument name="productName" value="{{BundleProduct.name}}"/>
+        </actionGroup>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{BundleProduct.name}}" stepKey="seeProductName"/>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{BundleProduct.sku}}" stepKey="seeSku"/>
+        <see userInput="From $500.00 To $1,000.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seePrice"/>
+
+        <!-- Storefront: Verify Product option details -->
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomizeAndAddToCart"/>
+        <click selector="{{StorefrontBundleProductActionSection.dropdownSelectOption}}" stepKey="clickOnSelectOption"/>
+        <wait stepKey="k2" time="10"/>
+        <seeElement selector="{{StorefrontBundleProductActionSection.dropdownProductSelection('$$simpleProduct1.name$$ +$$$simpleProduct1.price$$')}}" stepKey="seeOption1Product1Details"/>
+        <seeElement selector="{{StorefrontBundleProductActionSection.dropdownProductSelection('$$simpleProduct2.name$$ +$$$simpleProduct2.price$$')}}" stepKey="seeOption1Product2Details"/>
+
+
+    </test>
+</tests>

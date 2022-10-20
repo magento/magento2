@@ -67,6 +67,11 @@ class Emulation extends \Magento\Framework\DataObject
     private $logger;
 
     /**
+     * @var \Magento\Framework\View\DesignInterface
+     */
+    private $_viewDesign;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\DesignInterface $viewDesign
      * @param \Magento\Framework\App\DesignInterface $design

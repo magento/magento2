@@ -31,7 +31,8 @@ class Tax extends AbstractTotal
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -104,7 +105,9 @@ class Tax extends AbstractTotal
                 $baseShippingTaxAmount = $creditmemo->roundPrice($baseShippingTaxAmount, 'base');
                 $totalDiscountTaxCompensation = $creditmemo->roundPrice($totalDiscountTaxCompensation);
                 $baseTotalDiscountTaxCompensation = $creditmemo->roundPrice($baseTotalDiscountTaxCompensation, 'base');
-                if ($taxFactor < 1 && $invoice->getShippingTaxAmount() > 0) {
+                if ($taxFactor < 1 && $invoice->getShippingTaxAmount() > 0 ||
+                    ($order->getShippingDiscountAmount() >= $order->getShippingAmount())
+                ) {
                     $isPartialShippingRefunded = true;
                 }
                 $totalTax += $shippingTaxAmount;
@@ -136,7 +139,9 @@ class Tax extends AbstractTotal
                     $baseShippingDiscountTaxCompensationAmount,
                     'base'
                 );
-                if ($part < 1 && $order->getShippingTaxAmount() > 0) {
+                if ($part < 1 && ($order->getShippingTaxAmount() > 0 ||
+                        ($order->getShippingDiscountAmount() >= $order->getShippingAmount()))
+                ) {
                     $isPartialShippingRefunded = true;
                 }
             } elseif ($shippingDelta == $creditmemo->getBaseShippingAmount()) {
@@ -187,7 +192,6 @@ class Tax extends AbstractTotal
             $creditmemo->getBaseGrandTotal() + $baseTotalTax + $baseTotalDiscountTaxCompensation
         );
         return $this;
-
     }
 
     /**

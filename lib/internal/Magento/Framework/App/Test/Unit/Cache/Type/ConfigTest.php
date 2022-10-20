@@ -27,6 +27,9 @@ class ConfigTest extends TestCase
      */
     protected $frontendMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $cacheFrontendPoolMock = $this->getMockBuilder(FrontendPool::class)
@@ -47,9 +50,11 @@ class ConfigTest extends TestCase
      * @param string $method
      * @param array $params
      * @param mixed $expectedResult
+     *
+     * @return void
      * @dataProvider proxyMethodDataProvider
      */
-    public function testProxyMethod($method, $params, $expectedResult)
+    public function testProxyMethod($method, $params, $expectedResult): void
     {
         $helper = new ProxyTesting();
         $result = $helper->invokeWithExpectations($this->model, $this->frontendMock, $method, $params, $expectedResult);
@@ -59,18 +64,18 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function proxyMethodDataProvider()
+    public function proxyMethodDataProvider(): array
     {
         return [
             ['test', ['record_id'], 111],
             ['load', ['record_id'], '111'],
             ['remove', ['record_id'], true],
             ['getBackend', [], $this->createMock(\Zend_Cache_Backend::class)],
-            ['getLowLevelFrontend', [], $this->createMock(\Zend_Cache_Core::class)],
+            ['getLowLevelFrontend', [], $this->createMock(\Zend_Cache_Core::class)]
         ];
     }
 
-    public function testSave()
+    public function testSave(): void
     {
         $expectedResult = new \stdClass();
         $this->frontendMock->expects(
@@ -89,7 +94,7 @@ class ConfigTest extends TestCase
         $this->assertSame($expectedResult, $actualResult);
     }
 
-    public function testCleanModeAll()
+    public function testCleanModeAll(): void
     {
         $expectedResult = new \stdClass();
         $this->frontendMock->expects(
@@ -109,7 +114,7 @@ class ConfigTest extends TestCase
         $this->assertSame($expectedResult, $actualResult);
     }
 
-    public function testCleanModeMatchingTag()
+    public function testCleanModeMatchingTag(): void
     {
         $expectedResult = new \stdClass();
         $this->frontendMock->expects(
@@ -135,28 +140,14 @@ class ConfigTest extends TestCase
      * @param bool $expectedResult
      * @dataProvider cleanModeMatchingAnyTagDataProvider
      */
-    public function testCleanModeMatchingAnyTag($fixtureResultOne, $fixtureResultTwo, $expectedResult)
+    public function testCleanModeMatchingAnyTag($fixtureResultOne, $fixtureResultTwo, $expectedResult): void
     {
-        $this->frontendMock->expects(
-            $this->at(0)
-        )->method(
-            'clean'
-        )->with(
-            \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-            ['test_tag_one', Config::CACHE_TAG]
-        )->willReturn(
-            $fixtureResultOne
-        );
-        $this->frontendMock->expects(
-            $this->at(1)
-        )->method(
-            'clean'
-        )->with(
-            \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-            ['test_tag_two', Config::CACHE_TAG]
-        )->willReturn(
-            $fixtureResultTwo
-        );
+        $this->frontendMock
+            ->method('clean')
+            ->withConsecutive(
+                [\Zend_Cache::CLEANING_MODE_MATCHING_TAG, ['test_tag_one', Config::CACHE_TAG]],
+                [\Zend_Cache::CLEANING_MODE_MATCHING_TAG, ['test_tag_two', Config::CACHE_TAG]]
+            )->willReturnOnConsecutiveCalls($fixtureResultOne, $fixtureResultTwo);
         $actualResult = $this->model->clean(
             \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
             ['test_tag_one', 'test_tag_two']
@@ -167,7 +158,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function cleanModeMatchingAnyTagDataProvider()
+    public function cleanModeMatchingAnyTagDataProvider(): array
     {
         return [
             'failure, failure' => [false, false, false],

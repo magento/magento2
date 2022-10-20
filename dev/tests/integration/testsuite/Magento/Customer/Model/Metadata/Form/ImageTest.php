@@ -73,20 +73,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcessCustomerAddressValue()
     {
-        $this->mediaDirectory->delete('customer_address');
-        $this->mediaDirectory->create($this->mediaDirectory->getRelativePath('customer_address/tmp/'));
-        $tmpFilePath = $this->mediaDirectory->getAbsolutePath('customer_address/tmp/' . $this->fileName);
-        copy($this->imageFixtureDir . DIRECTORY_SEPARATOR . $this->fileName, $tmpFilePath);
+        $entityTypeCode = 'customer_address';
+        $tmpFilePath = $this->prepareImageForTest($entityTypeCode);
 
-        $imageFile = [
-            'name' => $this->fileName,
-            'type' => 'image/jpeg',
-            'tmp_name' => $this->fileName,
-            'file' => $this->fileName,
-            'error' => 0,
-            'size' => 12500,
-            'previewType' => 'image',
-        ];
+        $imageFile = $this->getImageValues();
 
         $params = [
             'entityTypeCode' => 'customer_address',
@@ -106,7 +96,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $processCustomerAddressValueMethod->setAccessible(true);
         $actual = $processCustomerAddressValueMethod->invoke($image, $imageFile);
         $this->assertEquals($this->expectedFileName, $actual);
-        $this->assertFileExists($expectedPath);
+        $this->assertTrue($this->mediaDirectory->isExist($expectedPath));
         $this->assertFileDoesNotExist($tmpFilePath);
     }
 
@@ -119,23 +109,12 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcessCustomerValue()
     {
-        $this->mediaDirectory->delete('customer');
-        $this->mediaDirectory->create($this->mediaDirectory->getRelativePath('customer/tmp/'));
-        $tmpFilePath = $this->mediaDirectory->getAbsolutePath('customer/tmp/' . $this->fileName);
-        copy($this->imageFixtureDir . DIRECTORY_SEPARATOR . $this->fileName, $tmpFilePath);
-
-        $imageFile = [
-            'name' => $this->fileName,
-            'type' => 'image/jpeg',
-            'tmp_name' => $this->fileName,
-            'file' => $this->fileName,
-            'error' => 0,
-            'size' => 12500,
-            'previewType' => 'image',
-        ];
+        $entityTypeCode = 'customer';
+        $tmpFilePath = $this->prepareImageForTest($entityTypeCode);
+        $imageFile = $this->getImageValues();
 
         $params = [
-            'entityTypeCode' => 'customer',
+            'entityTypeCode' => $entityTypeCode,
             'formCode' => 'customer_edit',
             'isAjax' => false,
             'value' => $imageFile
@@ -167,23 +146,14 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Exception\ValidatorException::class
         );
 
-        $this->mediaDirectory->delete('customer');
-        $this->mediaDirectory->create($this->mediaDirectory->getRelativePath('customer/tmp/'));
-        $tmpFilePath = $this->mediaDirectory->getAbsolutePath('customer/tmp/' . $this->fileName);
-        copy($this->imageFixtureDir . DIRECTORY_SEPARATOR . $this->fileName, $tmpFilePath);
+        $entityTypeCode = 'customer';
+        $this->prepareImageForTest($entityTypeCode);
 
-        $imageFile = [
-            'name' => $this->fileName,
-            'type' => 'image/jpeg',
-            'tmp_name' => $this->fileName,
-            'file' => $this->invalidFileName,
-            'error' => 0,
-            'size' => 12500,
-            'previewType' => 'image',
-        ];
+        $imageFile = $this->getImageValues();
+        $imageFile['file'] = $this->invalidFileName;
 
         $params = [
-            'entityTypeCode' => 'customer',
+            'entityTypeCode' => $entityTypeCode,
             'formCode' => 'customer_edit',
             'isAjax' => false,
             'value' => $imageFile
@@ -200,6 +170,36 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test for _validateByRules method with not existed file
+     *
+     * @magentoAppIsolation enabled
+     *
+     * @throws FileSystemException
+     * @throws \ReflectionException
+     */
+    public function testValidateByRulesWithNotValidFile()
+    {
+        $entityTypeCode = 'customer';
+        $this->mediaDirectory->delete($entityTypeCode);
+        $imageFile = $this->getImageValues();
+        $params = [
+            'entityTypeCode' => $entityTypeCode,
+            'formCode' => 'customer_edit',
+            'isAjax' => false,
+            'value' => $imageFile
+        ];
+
+        $image = $this->objectManager->create(\Magento\Customer\Model\Metadata\Form\Image::class, $params);
+        $processValidateMethod = new \ReflectionMethod(
+            \Magento\Customer\Model\Metadata\Form\Image::class,
+            '_validateByRules'
+        );
+        $processValidateMethod->setAccessible(true);
+        $validationResult = $processValidateMethod->invoke($image, $imageFile);
+        $this->assertEquals('"' . $this->fileName .'" is not a valid file.', $validationResult[0]->__toString());
+    }
+
+    /**
      * @inheritdoc
      * @throws FileSystemException
      */
@@ -213,5 +213,51 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory->delete('customer');
         $mediaDirectory->delete('customer_address');
+    }
+
+    /**
+     * @param string $source
+     * @param string $destination
+     * @throws FileSystemException
+     */
+    private function copyFile(string $source, string $destination)
+    {
+        $driver = $this->mediaDirectory->getDriver();
+        $driver->createDirectory(dirname($destination));
+        $driver->filePutContents($destination, file_get_contents($source));
+    }
+
+    /**
+     * Returns image values
+     *
+     * @return array
+     */
+    private function getImageValues(): array
+    {
+        return [
+            'name' => $this->fileName,
+            'type' => 'image/jpeg',
+            'tmp_name' => $this->fileName,
+            'file' => $this->fileName,
+            'error' => 0,
+            'size' => 12500,
+            'previewType' => 'image',
+        ];
+    }
+
+    /**
+     * Copies image from fixture to necessary for test dir
+     *
+     * @param string $entityTypeCode
+     * @return string
+     * @throws FileSystemException
+     */
+    private function prepareImageForTest(string $entityTypeCode): string
+    {
+        $this->mediaDirectory->delete($entityTypeCode);
+        $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($entityTypeCode . '/tmp/'));
+        $tmpFilePath = $this->mediaDirectory->getAbsolutePath($entityTypeCode . '/tmp/' . $this->fileName);
+        $this->copyFile($this->imageFixtureDir . DIRECTORY_SEPARATOR . $this->fileName, $tmpFilePath);
+        return $tmpFilePath;
     }
 }

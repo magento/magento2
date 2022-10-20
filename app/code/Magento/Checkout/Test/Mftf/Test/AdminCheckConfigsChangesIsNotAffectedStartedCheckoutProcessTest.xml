@@ -88,10 +88,7 @@
         <!-- Enable "Flat Rate" -->
         <actionGroup ref="AdminChangeFlatRateShippingMethodStatusActionGroup" stepKey="enableFlatRateShippingStatus"/>
 
-        <!-- Flush cache -->
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Back to the Checkout and refresh the page -->
         <switchToPreviousTab stepKey="switchToPreviousTab"/>

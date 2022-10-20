@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyMapMessagePopupOnCartViewPageTest">
+        <annotations>
+            <stories value="Shopping Cart"/>
+            <features value="Checkout"/>
+            <title value="Minimum Advertised Price 'What's this?' popup does not displays in cart"/>
+            <description value="When Minimum Advertised Price (MAP) is enabled and the product has MAP set in Advanced Pricing, click on 'What's this?' at the product listing in the shopping cart must display the popup with the info message."/>
+            <testCaseId value="MC-41596"/>
+            <useCaseId value="MC-41494"/>
+            <severity value="MAJOR"/>
+            <group value="shoppingCart"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Enable MAP functionality in Magento Instance -->
+            <createData entity="MsrpEnableMAP" stepKey="enableMAP"/>
+            <!-- Create product and category -->
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Disable MAP functionality in Magento Instance -->
+            <createData entity="MsrpDisableMAP" stepKey="disableMAP"/>
+            <!-- Delete product and category -->
+            <deleteData createDataKey="product" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- Add MAP to the newly created product Advanced Pricing -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminProductEditPage">
+            <argument name="productId" value="$$product.id$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddMinimumAdvertisedPriceActionGroup" stepKey="setMapToCreatedProduct">
+            <argument name="msrpData" value="MsrpBeforeOrderConfirmation"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+
+        <!--Adding the newly created product to shopping cart.-->
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToCategoryPageOnFrontEnd">
+            <argument name="categoryUrl" value="$category.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$product$"/>
+        </actionGroup>
+
+        <!-- Navigate to the cart edit page -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartViewAndEditPage"/>
+
+        <!-- Check if MAP message and link are present and functioning -->
+        <actionGroup ref="StorefrontCartPageCheckMapMessagePresentAndClickableActionGroup" stepKey="checkFormMapFunctioning"/>
+    </test>
+</tests>

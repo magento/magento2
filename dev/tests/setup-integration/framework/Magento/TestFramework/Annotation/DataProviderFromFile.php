@@ -10,6 +10,7 @@ use Magento\Framework\DB\Adapter\SqlVersionProvider;
 use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\TestCase\MutableDataInterface;
+use PHPUnit\Util\Test as TestUtil;
 
 /**
  * Handler for applying reinstallMagento annotation.
@@ -56,7 +57,10 @@ class DataProviderFromFile
      */
     public function startTest(\PHPUnit\Framework\TestCase $test)
     {
-        $annotations = $test->getAnnotations();
+        $annotations = TestUtil::parseTestMethodAnnotations(
+            get_class($test),
+            $test->getName(false)
+        );
         //This annotation can be declared only on method level
         if (isset($annotations['method']['dataProviderFromFile']) && $test instanceof MutableDataInterface) {
             $test->setData(

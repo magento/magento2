@@ -10,7 +10,7 @@
 namespace Magento\Framework\View\Utility;
 
 /**
- * Class Layout
+ * The integration testsuite for Layout view utility
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -71,7 +71,7 @@ class Layout
      *
      * @param string|array $layoutUpdatesFile
      * @param array $args
-     * @return \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getLayoutFromFixture($layoutUpdatesFile, array $args = [])
     {
@@ -105,7 +105,7 @@ class Layout
             'structure' => $objectManager->create(\Magento\Framework\View\Layout\Data\Structure::class, []),
             'messageManager' => $objectManager->get(\Magento\Framework\Message\ManagerInterface::class),
             'themeResolver' => $objectManager->get(\Magento\Framework\View\Design\Theme\ResolverInterface::class),
-            'reader' => $objectManager->get('commonRenderPool'),
+            'readerPool' => $objectManager->get('commonRenderPool'),
             'generatorPool' => $objectManager->get(\Magento\Framework\View\Layout\GeneratorPool::class),
             'cache' => $objectManager->get(\Magento\Framework\App\Cache\Type\Layout::class),
             'readerContextFactory' => $objectManager->get(\Magento\Framework\View\Layout\Reader\ContextFactory::class),
