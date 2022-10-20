@@ -10,7 +10,7 @@ namespace Magento\Elasticsearch\Catalog\Controller\Adminhtml\Product\Attribute;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save\AbstractSaveAttributeTest;
 
 /**
- * Test cases related to creating attribute and elasticsearch.
+ * Test cases related to creating attribute and search engine.
  */
 class SaveTest extends AbstractSaveAttributeTest
 {

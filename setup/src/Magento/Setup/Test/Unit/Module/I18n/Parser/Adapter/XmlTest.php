@@ -60,6 +60,7 @@ class XmlTest extends TestCase
                     ['phrase' => 'Phrase 3', 'file' => $default, 'line' => '', 'quote' => ''],
                     ['phrase' => 'Phrase 1', 'file' => $default, 'line' => '', 'quote' => ''],
                     ['phrase' => 'Comment from new line.', 'file' => $default, 'line' => '', 'quote' => ''],
+                    ['phrase' => 'Title', 'file' => $default, 'line' => '', 'quote' => ''],
                 ],
             ],
             [

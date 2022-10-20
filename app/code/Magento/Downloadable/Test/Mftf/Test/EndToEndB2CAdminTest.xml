@@ -8,6 +8,9 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="EndToEndB2CAdminTest">
+        <before>
+            <magentoCLI command="downloadable:domains:add static.magento.com" stepKey="addDownloadableDomain"/>
+        </before>
         <!--Create Downloadable Product-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitProductPageDownloadable" after="seeSimpleProductInGrid"/>
         <waitForPageLoad stepKey="waitForProductPageLoadDownloadable" after="visitProductPageDownloadable"/>
@@ -56,5 +59,8 @@
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+        <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
+        </after>
     </test>
 </tests>

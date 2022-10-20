@@ -12,6 +12,10 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
+use Magento\SalesRule\Test\Fixture\ProductCondition as ProductConditionFixture;
+use Magento\SalesRule\Test\Fixture\Rule as RuleFixture;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -45,26 +49,46 @@ class DiscountTest extends TestCase
     }
 
     /**
-     * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento\SalesRule\Test\Fixture\ProductCondition as:cond1
-     * @magentoDataFixture Magento\SalesRule\Test\Fixture\Rule as:rule1
-     * @magentoDataFixture Magento\SalesRule\Test\Fixture\ProductCondition as:cond2
-     * @magentoDataFixture Magento\SalesRule\Test\Fixture\Rule as:rule2
-     * @magentoDataFixture Magento\SalesRule\Test\Fixture\ProductCondition as:cond3
-     * @magentoDataFixture Magento\SalesRule\Test\Fixture\Rule as:rule3
      * @magentoDataFixture Magento/Checkout/_files/quote_with_bundle_product_with_dynamic_price.php
-     * @magentoDataFixtureDataProvider {"cond1":{"attribute":"sku","value":"bundle_product_with_dynamic_price"}}
-     * @magentoDataFixtureDataProvider {"cond2":{"attribute":"sku","value":"simple1"}}
-     * @magentoDataFixtureDataProvider {"cond3":{"attribute":"sku","value":"simple2"}}
-     * @magentoDataFixtureDataProvider {"rule1":{"coupon_code":"bundle_cc","discount_amount":50,"actions":["$cond1$"]}}
-     * @magentoDataFixtureDataProvider {"rule2":{"coupon_code":"simple1_cc","discount_amount":50,"actions":["$cond2$"]}}
-     * @magentoDataFixtureDataProvider {"rule3":{"coupon_code":"simple2_cc","discount_amount":50,"actions":["$cond3$"]}}
      * @dataProvider bundleProductWithDynamicPriceAndCartPriceRuleDataProvider
      * @param string $coupon
      * @param array $discounts
      * @param float $totalDiscount
      * @return void
      */
+    #[
+        AppIsolation(true),
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'sku', 'value' => 'bundle_product_with_dynamic_price'],
+            'cond1'
+        ),
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'sku', 'value' => 'simple1'],
+            'cond2'
+        ),
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'sku', 'value' => 'simple2'],
+            'cond3'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            ['coupon_code' => 'bundle_cc', 'discount_amount' => 50, 'actions' => ['$cond1$']],
+            'rule1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            ['coupon_code' => 'simple1_cc', 'discount_amount' => 50, 'actions' => ['$cond2$']],
+            'rule2'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            ['coupon_code' => 'simple2_cc', 'discount_amount' => 50, 'actions' => ['$cond3$']],
+            'rule3'
+        ),
+    ]
     public function testBundleProductWithDynamicPriceAndCartPriceRule(
         string $coupon,
         array $discounts,
