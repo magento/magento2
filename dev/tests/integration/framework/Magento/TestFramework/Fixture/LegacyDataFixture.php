@@ -17,7 +17,7 @@ class LegacyDataFixture implements RevertibleDataFixtureInterface
     /**
      * @var string
      */
-    private $filePath;
+    private string $filePath;
 
     /**
      * @param LegacyDataFixturePathResolver $fixturePathResolver
@@ -35,7 +35,7 @@ class LegacyDataFixture implements RevertibleDataFixtureInterface
      */
     public function apply(array $data = []): ?DataObject
     {
-        $this->execute($this->filePath);
+        require $this->filePath;
         return null;
     }
 
@@ -51,27 +51,7 @@ class LegacyDataFixture implements RevertibleDataFixtureInterface
         }
         $rollbackScript = $fileInfo['dirname'] . DIRECTORY_SEPARATOR . $fileInfo['filename'] . '_rollback' . $extension;
         if (file_exists($rollbackScript)) {
-            $this->execute($rollbackScript);
-        }
-    }
-
-    /**
-     * Execute file
-     *
-     * @param string $filePath
-     */
-    private function execute(string $filePath): void
-    {
-        try {
-            require $filePath;
-        } catch (\Throwable $e) {
-            throw new \Exception(
-                'Error in fixture: ' . $filePath
-                . PHP_EOL . $e->getMessage()
-                . PHP_EOL . $e->getTraceAsString(),
-                0,
-                $e
-            );
+            require $rollbackScript;
         }
     }
 }

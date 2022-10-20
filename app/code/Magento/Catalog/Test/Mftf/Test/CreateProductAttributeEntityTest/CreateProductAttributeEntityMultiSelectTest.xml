@@ -84,7 +84,9 @@
         <seeCheckboxIsChecked stepKey="seeOption3Default" selector="{{AttributePropertiesSection.dropdownNthOptionIsDefault('3')}}"/>
 
         <!--Go to New Product page, add Attribute and check multiselect values-->
-        <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToCreateSimpleProductPage"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToCreateSimpleProductPage">
+            <argument name="attributeSetId" value="4"/>
+        </actionGroup>
         <actionGroup ref="AddProductAttributeInProductModalActionGroup" stepKey="addAttributeToProduct">
             <argument name="attributeCode" value="{{multiselectProductAttribute.attribute_code}}"/>
         </actionGroup>
