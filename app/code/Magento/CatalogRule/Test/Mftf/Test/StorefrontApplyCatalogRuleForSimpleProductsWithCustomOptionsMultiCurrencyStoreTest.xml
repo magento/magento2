@@ -124,6 +124,5 @@
         <actionGroup ref="AssertStorefrontCustomOptionCheckboxByPriceActionGroup" stepKey="checkPriceProductOptionEUR">
             <argument name="price" value="110.7"/>
         </actionGroup>
-
     </test>
 </tests>
