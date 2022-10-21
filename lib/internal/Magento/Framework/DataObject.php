@@ -57,7 +57,7 @@ class DataObject implements \ArrayAccess
         }
 
         foreach ($arr as $index => $value) {
-            $this->setData($index, $value);
+            $this->_data[$key] = $value;
         }
         return $this;
     }
@@ -387,22 +387,26 @@ class DataObject implements \ArrayAccess
      */
     public function __call($method, $args)
     {
-        switch (substr((string)$method, 0, 3)) {
-            case 'get':
-                $key = $this->_underscore(substr($method, 3));
-                $index = isset($args[0]) ? $args[0] : null;
-                return $this->getData($key, $index);
-            case 'set':
-                $key = $this->_underscore(substr($method, 3));
-                $value = isset($args[0]) ? $args[0] : null;
-                return $this->setData($key, $value);
-            case 'uns':
-                $key = $this->_underscore(substr($method, 3));
-                return $this->unsetData($key);
-            case 'has':
-                $key = $this->_underscore(substr($method, 3));
-                return isset($this->_data[$key]);
+        switch($method[0]) {
+            case 'g':
+                return $this->_data[
+                    self::$_underscoreCache[$method] ?? $this->_underscore($method)
+                ] ?? null;
+            case 's':
+                $this->_data[
+                    self::$_underscoreCache[$method] ?? $this->_underscore($method)
+                ] = $args[0] ?? null;
+                return $this;
+            case 'u':
+                return $this->unsetData(self::$_underscoreCache[$method] ?? $this->_underscore($method));
+            case 'h':
+                return isset(
+                    $this->_data[
+                        self::$_underscoreCache[$method] ?? $this->_underscore($method)
+                    ]
+                );
         }
+        
         throw new \Magento\Framework\Exception\LocalizedException(
             new \Magento\Framework\Phrase('Invalid method %1::%2', [get_class($this), $method])
         );
@@ -435,7 +439,17 @@ class DataObject implements \ArrayAccess
         if (isset(self::$_underscoreCache[$name])) {
             return self::$_underscoreCache[$name];
         }
-        $result = strtolower(trim(preg_replace('/([A-Z]|[0-9]+)/', "_$1", $name), '_'));
+        
+        $result = strtolower(
+            trim(
+                preg_replace(
+                    '/([A-Z]|[0-9])/', "_$1",
+                    lcfirst(substr($name, 3))
+                ),
+                '_'
+            )
+        );
+        
         self::$_underscoreCache[$name] = $result;
         return $result;
     }
