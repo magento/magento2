@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminExportDownloadableProductWithFileLinksTest">
+
+        <!-- S3 stores import/export artifacts in a different path than the local file system.
+        This test is used to merge with the local file system test and allows the resulting merged test
+        to use the correct path when Magento is either installed with S3 enabled or with S3 disabled -->
+
+        <after>
+            <helper class="\Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="deleteDirectory" stepKey="deleteExportFileDirectory">
+                <argument name="path">{"local":"var/export","s3":"import_export/export"}</argument>
+            </helper>
+        </after>
+
+        <!-- Validate Export File in the filesystem depending on the storage type -->
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="assertFileExists" stepKey="assertExportFileExists">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsDownloadableProduct">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
+            <argument name="text">$$createProduct.name$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsDownloadableLink">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
+            <argument name="text">title=$addDownloadableLink.link[title]$,sort_order=$addDownloadableLink.link[sort_order]$,sample_type=$addDownloadableLink.link[sample_type]$,sample_file=/a/d/$addDownloadableLink.link[sample_file_content][name]$,price=$addDownloadableLink.link[price]$0000,number_of_downloads=$addDownloadableLink.link[number_of_downloads]$,is_shareable=$addDownloadableLink.link[is_shareable]$,link_type=$addDownloadableLink.link[link_type]$,link_file=/m/a/$addDownloadableLink.link[link_file_content][name]$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsDownloadableSampleLink">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
+            <argument name="text">title=$addDownloadableSamples.sample[title]$,sample_type=$addDownloadableSamples.sample[sample_type]$,sample_file=/t/e/$addDownloadableSamples.sample[sample_file_content][name]$</argument>
+        </helper>
+
+        <!-- Delete Export File -->
+        <helper class="\Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="assertFileDoesNotExist" stepKey="assertExportFileDeleted">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
+        </helper>
+    </test>
+</tests>

@@ -27,7 +27,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class FileTest extends AbstractFormTestCase
 {
-    const ENTITY_TYPE = 0;
+    public const ENTITY_TYPE = 0;
 
     /**
      * @var MockObject|EncoderInterface
@@ -130,7 +130,7 @@ class FileTest extends AbstractFormTestCase
                 'entityTypeCode' => self::ENTITY_TYPE,
             ]
         );
-
+        $model->setRequestScope('');
         $this->assertEquals($expected, $model->extractValue($this->requestMock));
         if (!empty($attributeCode)) {
             unset($_FILES[$attributeCode]);

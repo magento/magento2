@@ -6,13 +6,25 @@
 
 namespace Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock;
 
+use Exception;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
+use Magento\CatalogInventory\Model\Configuration;
 use Magento\CatalogInventory\Model\Stock;
+use Magento\Eav\Model\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Indexer\Table\StrategyInterface;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Store\Model\ScopeInterface;
+use PDO;
+use Zend_Db;
 
 /**
  * CatalogInventory Default Stock Status Indexer Resource Model
@@ -37,7 +49,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     protected $_isComposite = false;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -63,27 +75,35 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     private $getStatusExpression;
 
     /**
-     * Class constructor
-     *
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param Context $context
+     * @param StrategyInterface $tableStrategy
+     * @param Config $eavConfig
+     * @param ScopeConfigInterface $scopeConfig
      * @param string $connectionName
-     * @param \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\GetStatusExpression|null $getStatusExpression
+     * @param GetStatusExpression|null $getStatusExpression
+     * @param StockConfigurationInterface|null $stockConfiguration
+     * @param QueryProcessorComposite|null $queryProcessorComposite
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        Context  $context,
+        StrategyInterface $tableStrategy,
+        Config $eavConfig,
+        ScopeConfigInterface $scopeConfig,
         $connectionName = null,
-        \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\GetStatusExpression $getStatusExpression = null
+        GetStatusExpression $getStatusExpression = null,
+        StockConfigurationInterface $stockConfiguration = null,
+        QueryProcessorComposite $queryProcessorComposite = null
     ) {
         $this->_scopeConfig = $scopeConfig;
         parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
         $this->getStatusExpression = $getStatusExpression ?: ObjectManager::getInstance()->get(
-            \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\GetStatusExpression::class
+            GetStatusExpression::class
+        );
+        $this->stockConfiguration = $stockConfiguration ?: ObjectManager::getInstance()->get(
+            StockConfigurationInterface::class
+        );
+        $this->queryProcessorComposite = $queryProcessorComposite ?: ObjectManager::getInstance()->get(
+            QueryProcessorComposite::class
         );
     }
 
@@ -101,7 +121,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * Reindex all stock status data for default logic product type
      *
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function reindexAll()
     {
@@ -110,7 +130,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         try {
             $this->_prepareIndexTable();
             $this->commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->rollBack();
             throw $e;
         }
@@ -175,12 +195,12 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * Retrieve active Product Type Id
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getTypeId()
     {
         if ($this->_typeId === null) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Undefined product type'));
+            throw new LocalizedException(__('Undefined product type'));
         }
         return $this->_typeId;
     }
@@ -216,8 +236,8 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     protected function _isManageStock()
     {
         return $this->_scopeConfig->isSetFlag(
-            \Magento\CatalogInventory\Model\Configuration::XML_PATH_MANAGE_STOCK,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            Configuration::XML_PATH_MANAGE_STOCK,
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -226,14 +246,14 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      *
      * @param int|array $entityIds
      * @param bool $usePrimaryTable use primary or temporary index table
-     * @return \Magento\Framework\DB\Select
+     * @return Select
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
         $connection = $this->getConnection();
         $qtyExpr = $connection->getCheckSql('cisi.qty > 0', 'cisi.qty', 0);
-        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $linkField = $metadata->getLinkField();
 
         $select = $connection->select()->from(
@@ -255,20 +275,20 @@ class DefaultStock extends AbstractIndexer implements StockInterface
             . ' AND mcpei.value = ' . ProductStatus::STATUS_ENABLED,
             []
         )->joinLeft(
-            ['css' => 'cataloginventory_stock_status'],
+            ['css' => $this->getTable('cataloginventory_stock_status')],
             'css.product_id = e.entity_id',
             []
         )->columns(
             ['qty' => $qtyExpr]
         )->where(
             'cis.website_id = ?',
-            $this->getStockConfiguration()->getDefaultScopeId()
+            $this->stockConfiguration->getDefaultScopeId()
         )->where('e.type_id = ?', $this->getTypeId())
             ->group(['e.entity_id', 'cis.website_id', 'cis.stock_id']);
 
         $select->columns(['status' => $this->getStatusExpression($connection, true)]);
         if ($entityIds !== null) {
-            $select->where('e.entity_id IN(?)', $entityIds, \Zend_Db::INT_TYPE);
+            $select->where('e.entity_id IN(?)', $entityIds, Zend_Db::INT_TYPE);
         }
 
         return $select;
@@ -284,7 +304,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     {
         $connection = $this->getConnection();
         $select = $this->_getStockStatusSelect($entityIds, true);
-        $select = $this->getQueryProcessorComposite()->processQuery($select, $entityIds);
+        $select = $this->queryProcessorComposite->processQuery($select, $entityIds);
         $query = $select->insertFromSelect($this->getIdxTable());
         $connection->query($query);
 
@@ -301,13 +321,13 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     {
         $connection = $this->getConnection();
         $select = $this->_getStockStatusSelect($entityIds, true);
-        $select = $this->getQueryProcessorComposite()->processQuery($select, $entityIds, true);
+        $select = $this->queryProcessorComposite->processQuery($select, $entityIds, true);
         $query = $connection->query($select);
 
         $i = 0;
         $data = [];
         $savedEntityIds = [];
-        while ($row = $query->fetch(\PDO::FETCH_ASSOC)) {
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             $i++;
             $data[] = [
                 'product_id' => (int)$row['entity_id'],
@@ -336,7 +356,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      *
      * @param array $ids
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function deleteOldRecords(array $ids)
     {
@@ -398,24 +418,6 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      */
     protected function getStockConfiguration()
     {
-        if ($this->stockConfiguration === null) {
-            $this->stockConfiguration = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
-        }
         return $this->stockConfiguration;
-    }
-
-    /**
-     * Get query processor composite
-     *
-     * @return QueryProcessorComposite
-     */
-    private function getQueryProcessorComposite()
-    {
-        if (null === $this->queryProcessorComposite) {
-            $this->queryProcessorComposite = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\QueryProcessorComposite::class);
-        }
-        return $this->queryProcessorComposite;
     }
 }

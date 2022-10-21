@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <catalog>
+            <search>
+                <engine>opensearch</engine>
+                <opensearch_server_hostname>localhost</opensearch_server_hostname>
+                <opensearch_server_port>9200</opensearch_server_port>
+                <opensearch_index_prefix>magento2</opensearch_index_prefix>
+                <opensearch_enable_auth>0</opensearch_enable_auth>
+                <opensearch_server_timeout>15</opensearch_server_timeout>
+                <opensearch_minimum_should_match/>
+            </search>
+        </catalog>
+    </default>
+</config>

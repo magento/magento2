@@ -17,6 +17,7 @@ use Magento\Framework\Phrase;
 /**
  * Get Customer By reset password token
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @deprecated Rp Tokens cannot be looked up directly
  */
 class GetCustomerByToken
 {

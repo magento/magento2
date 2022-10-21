@@ -30,5 +30,6 @@
         <element name="removeItems" type="select" selector="//span[.='{{arg}}']/parent::td/following-sibling::td/select[@class='admin__control-select']" parameterized="true"/>
         <element name="applyCoupon" type="input" selector="#coupons:code"/>
         <element name="submitOrder" type="button" selector="#submit_order_top_button" timeout="60"/>
+        <element name="orderID" type="text" selector="|Order # (\d+)|"/>
     </section>
 </sections>
