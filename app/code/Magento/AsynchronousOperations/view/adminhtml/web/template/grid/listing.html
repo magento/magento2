@@ -9,13 +9,13 @@
         <div class="message-system-short">
             <button class="message-system-action-dropdown" toggleCollapsible>
                 <span>
-                    <translate args="'System Messages'"/>:
-                    <text args="totalRecords"/>
+                    <translate args="'System Messages'"></translate>:
+                    <text args="totalRecords"></text>
                 </span>
             </button>
             <div class="message-system-short-wrapper" if="rows[0]" repeat="foreach: [rows[0]], item: '$row'" visible="!$collapsible.opened()">
                 <fastForEach args="data: getVisible(), as: '$col'" >
-                    <render args="$col.getBody()"/>
+                    <render args="$col.getBody()"></render>
                 </fastForEach>
             </div>
         </div>
@@ -23,7 +23,7 @@
             <ul class="message-system-list">
                 <li repeat="foreach: rows, item: '$row'">
                     <fastForEach args="data: getVisible(), as: '$col'" >
-                        <render args="$col.getBody()"/>
+                        <render args="$col.getBody()"></render>
                     </fastForEach>
                 </li>
             </ul>

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Backend\Test\Mftf\Helper;
 
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\FunctionalTestingFramework\Helper\Helper;
 
 /**
@@ -56,8 +57,6 @@ class CurlHelpers extends Helper
         $message = ''
     ): void {
         $cookie = $this->getCookie($cookieName);
-        $imageContent = $this->getCurlResponse($url, $cookie, $postBody);
-        // Must make request twice until bug is resolved: B2B-1789
         $imageContent = $this->getCurlResponse($url, $cookie, $postBody);
         // md5() here is not for cryptographic use.
         // phpcs:ignore Magento2.Security.InsecureFunction
@@ -113,6 +112,28 @@ class CurlHelpers extends Helper
             ]
         );
         $this->assertStringContainsString($expectedString, $curlResponse);
+    }
+
+    /**
+     * Saves file to provided $targetPath with content retrieved from file by $url
+     *
+     * @param string $url
+     * @param string $targetPath File path where to save downloaded data from $url
+     * @param string $cookieName
+     * @param string|null $postBody
+     * @throws \Exception
+     */
+    public function downloadFile(
+        string $url,
+        string $targetPath,
+        string $cookieName = 'admin',
+        ?string $postBody = null
+    ): void {
+        $cookie = $this->getCookie($cookieName);
+        $content = $this->getCurlResponse($url, $cookie, $postBody);
+        $targetPath = (substr($targetPath, 0, 1) === '/') ? $targetPath : MAGENTO_BP . '/' . $targetPath;
+        $driver = new File();
+        $driver->filePutContents($targetPath, $content);
     }
 
     /**

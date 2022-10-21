@@ -1,7 +1,5 @@
 <?php
 /**
- * Service Input Processor
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -24,6 +22,7 @@ use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
 use Laminas\Code\Reflection\ClassReflection;
+use Magento\Framework\Webapi\Validator\IOLimit\DefaultPageSizeSetter;
 use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
 
 /**
@@ -35,7 +34,7 @@ use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
  */
 class ServiceInputProcessor implements ServicePayloadConverterInterface
 {
-    const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
+    public const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
     /**
      * @var \Magento\Framework\Reflection\TypeProcessor
@@ -98,6 +97,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private $defaultPageSize;
 
     /**
+     * @var DefaultPageSizeSetter|null
+     */
+    private $defaultPageSizeSetter;
+
+    /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
@@ -110,6 +114,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param array $customAttributePreprocessors
      * @param ServiceInputValidatorInterface|null $serviceInputValidator
      * @param int $defaultPageSize
+     * @param DefaultPageSizeSetter|null $defaultPageSizeSetter
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         TypeProcessor $typeProcessor,
@@ -121,7 +127,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         ConfigInterface $config = null,
         array $customAttributePreprocessors = [],
         ServiceInputValidatorInterface $serviceInputValidator = null,
-        int $defaultPageSize = 20
+        int $defaultPageSize = 20,
+        ?DefaultPageSizeSetter $defaultPageSizeSetter = null
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->objectManager = $objectManager;
@@ -136,6 +143,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $this->serviceInputValidator = $serviceInputValidator
             ?: ObjectManager::getInstance()->get(ServiceInputValidatorInterface::class);
         $this->defaultPageSize = $defaultPageSize >= 10 ? $defaultPageSize : 10;
+        $this->defaultPageSizeSetter = $defaultPageSizeSetter ?? ObjectManager::getInstance()
+            ->get(DefaultPageSizeSetter::class);
     }
 
     /**
@@ -309,10 +318,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             }
         }
 
-        if ($object instanceof SearchCriteriaInterface
-            && $object->getPageSize() === null
-        ) {
-            $object->setPageSize($this->defaultPageSize);
+        if ($object instanceof SearchCriteriaInterface) {
+            $this->defaultPageSizeSetter->processSearchCriteria($object, $this->defaultPageSize);
         }
 
         return $object;
@@ -462,7 +469,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      */
     protected function _createDataObjectForTypeAndArrayValue($type, $customAttributeValue)
     {
-        if (substr($type, -2) === "[]") {
+        if ($type !== null && substr($type, -2) === "[]") {
             $type = substr($type, 0, -2);
             $attributeValue = [];
             foreach ($customAttributeValue as $value) {

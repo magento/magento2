@@ -29,6 +29,9 @@ class NodeMergingConfigTest extends TestCase
      */
     protected $nodePathMatcher;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->nodePathMatcher = $this->createMock(NodePathMatcher::class);
@@ -38,65 +41,36 @@ class NodeMergingConfigTest extends TestCase
         );
     }
 
-    public function testGetIdAttributeMatched()
+    /**
+     * @return void
+     */
+    public function testGetIdAttributeMatched(): void
     {
         $xpath = '/root/two[@attr="value"]';
-        $this->nodePathMatcher->expects(
-            $this->at(0)
-        )->method(
-            'match'
-        )->with(
-            '/root/one',
-            $xpath
-        )->willReturn(
-            false
-        );
-        $this->nodePathMatcher->expects(
-            $this->at(1)
-        )->method(
-            'match'
-        )->with(
-            '/root/two',
-            $xpath
-        )->willReturn(
-            true
-        );
+        $this->nodePathMatcher
+            ->method('match')
+            ->withConsecutive(
+                ['/root/one', $xpath],
+                ['/root/two', $xpath]
+            )
+            ->willReturnOnConsecutiveCalls(false, true);
         $this->assertEquals('id', $this->object->getIdAttribute($xpath));
     }
 
-    public function testGetIdAttributeNotMatched()
+    /**
+     * @return void
+     */
+    public function testGetIdAttributeNotMatched(): void
     {
         $xpath = '/root/four[@attr="value"]';
-        $this->nodePathMatcher->expects(
-            $this->at(0)
-        )->method(
-            'match'
-        )->with(
-            '/root/one',
-            $xpath
-        )->willReturn(
-            false
-        );
-        $this->nodePathMatcher->expects(
-            $this->at(1)
-        )->method(
-            'match'
-        )->with(
-            '/root/two',
-            $xpath
-        )->willReturn(
-            false
-        );
-        $this->nodePathMatcher->expects(
-            $this->at(2)
-        )->method(
-            'match'
-        )->with(
-            '/root/three',
-            $xpath
-        )->willReturn(
-            false
-        );
+        $this->nodePathMatcher
+            ->method('match')
+            ->withConsecutive(
+                ['/root/one', $xpath],
+                ['/root/two', $xpath],
+                ['/root/three', $xpath]
+            )
+            ->willReturnOnConsecutiveCalls(false, false, false);
         $this->assertNull($this->object->getIdAttribute($xpath));
     }
 }

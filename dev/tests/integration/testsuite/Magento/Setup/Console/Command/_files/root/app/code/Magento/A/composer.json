@@ -4,7 +4,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.0.0",
         "magento/framework": "0.1",
         "magento/module-b": "0.1"
     },

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="WebSetupPageTest">
+        <annotations>
+            <features value="Setup"/>
+            <stories value="Setup Magento via Web Interface"/>
+            <title value="Setup Magento via Web Interface"/>
+            <description value="Setup Magento via Web Interface should show only landing section with logo, version, and welcome and licence section"/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <actionGroup ref="GoToWebSetupPageActionGroup" stepKey="goToWebSetupPage"/>
+        <seeElement selector="{{WebSetupPageLandingSection.section}}" stepKey="assertLandingSectionVisibleInSetupPage"/>
+        <dontSeeElement selector="{{WebSetupPageLicenseSection.section}}" stepKey="assertLicenseSectionInvisibleInSetupPage"/>
+        <seeElement selector="{{WebSetupPageLandingSection.logo}}" stepKey="assertSetupPageLogoVisibleInSetupPage"/>
+        <seeElement selector="{{WebSetupPageLandingSection.version}}" stepKey="assertVersionVisibleInSetupPage"/>
+        <seeElement selector="{{WebSetupPageLandingSection.welcome}}" stepKey="assertWelcomeVisibleInSetupPage"/>
+        <actionGroup ref="WebSetupShowLicenseSectionActionGroup" stepKey="showLicense"/>
+        <seeElement selector="{{WebSetupPageLicenseSection.section}}" stepKey="assertLicenseSectionVisibleInSetupPage"/>
+        <dontSeeElement selector="{{WebSetupPageLandingSection.section}}" stepKey="assertLandingSectionInvisibleInSetupPage"/>
+        <actionGroup ref="WebSetupShowLandingSectionActionGroup" stepKey="goBackToLanding"/>
+        <seeElement selector="{{WebSetupPageLandingSection.section}}" stepKey="assertLandingSectionVisibleAfterGoingBackFromLicenseSection"/>
+        <dontSeeElement selector="{{WebSetupPageLicenseSection.section}}" stepKey="assertLicenseSectionInvisibleAfterGoingBackFromLicenseSection"/>
+    </test>
+</tests>

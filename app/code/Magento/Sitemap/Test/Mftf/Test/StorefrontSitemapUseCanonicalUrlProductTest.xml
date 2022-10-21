@@ -34,7 +34,7 @@
             </actionGroup>
             <actionGroup ref="AdminMarketingSiteMapNavigateNewActionGroup" stepKey="navigateToNewSitemapPage"/>
             <actionGroup ref="AdminMarketingSiteMapFillFormSaveAndGenerateActionGroup" stepKey="createAndGenerateSitemap">
-                <argument name="sitemap" value="UniqueSitemapName"/>
+                <argument name="sitemap" value="UniqueSitemapNameMediaPath"/>
             </actionGroup>
         </before>
         <after>

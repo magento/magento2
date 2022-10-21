@@ -51,7 +51,10 @@ class MainTest extends TestCase
      */
     protected $collectionFactory;
 
-    public function testConstruct()
+    /**
+     * @return void
+     */
+    public function testConstruct(): void
     {
         $this->customerRepository = $this
             ->getMockForAbstractClass(CustomerRepositoryInterface::class);
@@ -68,14 +71,10 @@ class MainTest extends TestCase
             ->with($dummyCustomer)
             ->willReturn(new DataObject());
         $this->request = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->request->expects($this->at(0))
+        $this->request
             ->method('getParam')
-            ->with('customerId', false)
-            ->willReturn('customer id');
-        $this->request->expects($this->at(1))
-            ->method('getParam')
-            ->with('productId', false)
-            ->willReturn(false);
+            ->withConsecutive(['customerId', false], ['productId', false])
+            ->willReturnOnConsecutiveCalls('customer id', false);
         $productCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();

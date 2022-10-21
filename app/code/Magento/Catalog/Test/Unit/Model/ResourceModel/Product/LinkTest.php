@@ -37,6 +37,9 @@ class LinkTest extends TestCase
      */
     protected $dbSelect;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -50,23 +53,25 @@ class LinkTest extends TestCase
         );
     }
 
-    protected function prepareAdapter()
+    /**
+     * @return void
+     */
+    protected function prepareAdapter(): void
     {
         $this->dbSelect = $this->createMock(Select::class);
 
         // method flow
-        $this->resource->expects(
-            $this->at(0)
-        )->method(
-            'getConnection'
-        )->willReturn(
-            $this->connection
-        );
+        $this->resource
+            ->method('getConnection')
+            ->willReturn($this->connection);
 
         $this->connection->expects($this->once())->method('select')->willReturn($this->dbSelect);
     }
 
-    public function testGetAttributesByType()
+    /**
+     * @return void
+     */
+    public function testGetAttributesByType(): void
     {
         $typeId = 4;
         $result = [100, 200, 300, 400];
@@ -87,7 +92,10 @@ class LinkTest extends TestCase
         $this->assertEquals($result, $this->model->getAttributesByType($typeId));
     }
 
-    public function testGetAttributeTypeTable()
+    /**
+     * @return void
+     */
+    public function testGetAttributeTypeTable(): void
     {
         $inputTable = 'megatable';
         $resultTable = 'advancedTable';
@@ -104,7 +112,10 @@ class LinkTest extends TestCase
         $this->assertEquals($resultTable, $this->model->getAttributeTypeTable($inputTable));
     }
 
-    public function testGetChildrenIds()
+    /**
+     * @return void
+     */
+    public function testGetChildrenIds(): void
     {
         //prepare mocks and data
         $parentId = 100;
@@ -133,7 +144,10 @@ class LinkTest extends TestCase
         $this->assertEquals($result, $this->model->getChildrenIds($parentId, $typeId));
     }
 
-    public function testGetParentIdsByChild()
+    /**
+     * @return void
+     */
+    public function testGetParentIdsByChild(): void
     {
         $childId = 234;
         $typeId = 4;

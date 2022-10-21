@@ -11,6 +11,7 @@ use Magento\Framework\Config\ConverterInterface;
 
 /**
  * Media gallery directory config converter
+ * @deprecated
  */
 class Converter implements ConverterInterface
 {

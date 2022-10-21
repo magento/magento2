@@ -13,6 +13,8 @@ use Magento\Ui\Controller\Adminhtml\AbstractAction;
 
 /**
  * Class Delete action
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 class Delete extends AbstractAction
 {
@@ -50,7 +52,7 @@ class Delete extends AbstractAction
      */
     public function execute()
     {
-        $viewIds = explode('.', $this->_request->getParam('data'));
+        $viewIds = explode('.', $this->_request->getParam('data', ''));
         $bookmark = $this->bookmarkManagement->getByIdentifierNamespace(
             array_pop($viewIds),
             $this->_request->getParam('namespace')

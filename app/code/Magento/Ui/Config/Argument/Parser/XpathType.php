@@ -25,7 +25,7 @@ class XpathType implements ParserInterface
         }
         unset($data['type']);
         $domXPath = new \DOMXPath($node->ownerDocument);
-        $nodeList = $domXPath->query(trim($data['value']), $node);
+        $nodeList = $domXPath->query(trim($data['value'] ?? ''), $node);
         if ($nodeList->length == 1) {
             $nodeItem = $nodeList->item(0);
             $data['xsi:type'] = $type;

@@ -8,7 +8,7 @@
         "magento/framework": "*",
         "magento/framework-message-queue": "*",
         "magento/magento-composer-installer": "*",
-        "php": "~7.3.0||~7.4.0"
+        "php": "~7.4.0||~8.1.0"
     },
     "type": "magento2-module",
     "license": [

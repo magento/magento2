@@ -20,7 +20,6 @@ use PHPUnit\Framework\TestCase;
  * Base class for url rewrites tests logic
  *
  * @magentoDbIsolation enabled
- * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
  */
 abstract class AbstractUrlRewriteTest extends TestCase
 {
