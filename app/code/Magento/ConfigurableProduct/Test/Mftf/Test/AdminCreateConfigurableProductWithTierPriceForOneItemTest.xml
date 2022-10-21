@@ -16,6 +16,7 @@
             <testCaseId value="MC-13695"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <!-- Create attribute with 2 options to be used in children products -->

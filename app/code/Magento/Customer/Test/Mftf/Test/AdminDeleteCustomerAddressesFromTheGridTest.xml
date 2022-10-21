@@ -16,6 +16,7 @@
             <testCaseId value="MAGETWO-94850"/>
             <stories value="MAGETWO-94346: Implement handling of large number of addresses on admin edit customer page"/>
             <group value="customer"/>
+            <group value="cloud_smoke"/>
         </annotations>
 
         <before>

@@ -19,6 +19,7 @@
     <preference for="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface" type="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilder" />
     <preference for="Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\OptionsIndexerInterface" type="Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\OptionsIndexer" />
     <preference for="Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\OptionsSelectBuilderInterface" type="Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\OptionsSelectBuilder" />
+    <preference for="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsFilterInterface" type="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsCompositeFilter" />
 
     <type name="Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option">
         <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct" sortOrder="50" />
@@ -279,5 +280,8 @@
         <arguments>
             <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Json</argument>
         </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
+        <plugin name="updateStockChangedAuto" type="Magento\ConfigurableProduct\Model\Plugin\UpdateStockChangedAuto" />
     </type>
 </config>

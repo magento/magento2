@@ -49,7 +49,7 @@ class HttpVerbValidator implements HttpRequestValidatorInterface
                     ]
                 );
 
-                if (strtolower($operationType) === 'mutation') {
+                if ($operationType !== null && strtolower($operationType) === 'mutation') {
                     throw new GraphQlInputException(
                         new Phrase('Mutation requests allowed only for POST requests')
                     );

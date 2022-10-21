@@ -105,7 +105,7 @@ class UploaderTest extends TestCase
                 'a.' . str_repeat('b', 88)
             ],
             [
-                'a.' . str_repeat('b', 89),
+                'a.' . str_repeat('b', 256),
                 true
             ]
         ];

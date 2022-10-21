@@ -48,9 +48,10 @@ define([
      */
     invalidateCacheByCloseCookieSession = function () {
         if (!$.cookieStorage.isSet('mage-cache-sessid')) {
-            $.cookieStorage.set('mage-cache-sessid', true);
             storage.removeAll();
         }
+
+        $.cookieStorage.set('mage-cache-sessid', true);
     };
 
     dataProvider = {

@@ -17,13 +17,18 @@ define([
          */
         onUpdate: function (value) {
             var groupIdFieldKey = 'group_id',
+                sendEmailStoreIdFieldKey = 'sendemail_store_id',
                 groupId = registry.get('index = ' + groupIdFieldKey),
+                sendEmailStoreId = registry.get('index = ' + sendEmailStoreIdFieldKey),
                 option = this.getOption(value);
 
             if (groupId) {
                 groupId.value(option[groupIdFieldKey]);
             }
 
+            if (sendEmailStoreId && option['default_store_view_id']) {
+                sendEmailStoreId.value(option['default_store_view_id']);
+            }
             return this._super();
         }
     });

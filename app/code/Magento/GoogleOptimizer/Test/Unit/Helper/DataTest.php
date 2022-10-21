@@ -21,6 +21,16 @@ use PHPUnit\Framework\TestCase;
 class DataTest extends TestCase
 {
     /**
+     * Xml path google experiments enabled
+     */
+    private const XML_PATH_ENABLED = 'google/analytics/experiments';
+
+    /**
+     * Xml path google experiments enabled for GA4
+     */
+    private const XML_PATH_ENABLED_GA4 = 'google/gtag/analytics4/experiments';
+
+    /**
      * @var MockObject
      */
     protected $_scopeConfigMock;
@@ -55,13 +65,20 @@ class DataTest extends TestCase
     {
         $store = 1;
         $this->_scopeConfigMock->expects(
-            $this->once()
+            $this->any()
         )->method(
             'isSetFlag'
-        )->with(
-            Data::XML_PATH_ENABLED,
-            ScopeInterface::SCOPE_STORE,
-            $store
+        )->withConsecutive(
+            [
+                self::XML_PATH_ENABLED,
+                ScopeInterface::SCOPE_STORE,
+                $store
+            ],
+            [
+                self::XML_PATH_ENABLED_GA4,
+                ScopeInterface::SCOPE_STORE,
+                $store
+            ]
         )->willReturn(
             $isExperimentsEnabled
         );
@@ -87,13 +104,20 @@ class DataTest extends TestCase
     {
         $store = 1;
         $this->_scopeConfigMock->expects(
-            $this->once()
+            $this->any()
         )->method(
             'isSetFlag'
-        )->with(
-            Data::XML_PATH_ENABLED,
-            ScopeInterface::SCOPE_STORE,
-            $store
+        )->withConsecutive(
+            [
+                self::XML_PATH_ENABLED,
+                ScopeInterface::SCOPE_STORE,
+                $store
+            ],
+            [
+                self::XML_PATH_ENABLED_GA4,
+                ScopeInterface::SCOPE_STORE,
+                $store
+            ]
         )->willReturn(
             $isExperimentsEnabled
         );

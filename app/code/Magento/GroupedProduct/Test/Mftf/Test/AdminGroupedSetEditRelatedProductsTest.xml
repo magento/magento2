@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-3755"/>
             <group value="GroupedProduct"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before></before>
         <after>
