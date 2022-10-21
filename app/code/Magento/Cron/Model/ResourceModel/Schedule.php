@@ -18,7 +18,7 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return void
      */
-    public function _construct()
+    protected function _construct()
     {
         $this->_init('cron_schedule', 'schedule_id');
     }
