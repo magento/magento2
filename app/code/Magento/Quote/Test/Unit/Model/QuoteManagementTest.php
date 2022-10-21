@@ -240,7 +240,17 @@ class QuoteManagementTest extends TestCase
         );
 
         $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['setCustomerEmail', 'setCustomerGroupId', 'setCustomerId', 'setRemoteIp', 'setXForwardedFor'])
+            ->addMethods(
+                [
+                    'getCustomerEmail',
+                    'setCustomerEmail',
+                    'setCustomerGroupId',
+                    'getCustomerId',
+                    'setCustomerId',
+                    'setRemoteIp',
+                    'setXForwardedFor',
+                ]
+            )
             ->onlyMethods(
                 [
                     'assignCustomer',
@@ -821,9 +831,10 @@ class QuoteManagementTest extends TestCase
     }
 
     /**
+     * @dataProvider guestPlaceOrderDataProvider
      * @return void
      */
-    public function testPlaceOrderIfCustomerIsGuest(): void
+    public function testPlaceOrderIfCustomerIsGuest(?string $settledEmail, int $countSetAddress): void
     {
         $cartId = 100;
         $orderId = 332;
@@ -845,14 +856,21 @@ class QuoteManagementTest extends TestCase
         $this->quoteMock->expects($this->once())
             ->method('getCustomer')
             ->willReturn($customerMock);
+        $this->quoteMock->expects($this->once())
+            ->method('getCustomerEmail')
+            ->willReturn($settledEmail);
         $this->quoteMock->expects($this->once())->method('setCustomerId')->with(null)->willReturnSelf();
-        $this->quoteMock->expects($this->once())->method('setCustomerEmail')->with($email)->willReturnSelf();
+        $this->quoteMock->expects($this->exactly($countSetAddress))
+            ->method('setCustomerEmail')
+            ->with($email)
+            ->willReturnSelf();
 
         $addressMock = $this->createPartialMock(Address::class, ['getEmail']);
-        $addressMock->expects($this->once())->method('getEmail')->willReturn($email);
+        $addressMock->expects($this->exactly($countSetAddress))->method('getEmail')->willReturn($email);
         $this->quoteMock->expects($this->any())->method('getBillingAddress')->with()->willReturn($addressMock);
 
         $this->quoteMock->expects($this->once())->method('setCustomerIsGuest')->with(true)->willReturnSelf();
+        $this->quoteMock->expects($this->once())->method('getCustomerId')->willReturn(null);
         $this->quoteMock->expects($this->once())
             ->method('setCustomerGroupId')
             ->with(GroupInterface::NOT_LOGGED_IN_ID);
@@ -910,6 +928,17 @@ class QuoteManagementTest extends TestCase
         $this->checkoutSessionMock->expects($this->once())->method('setLastOrderStatus')->with($orderStatus);
 
         $this->assertEquals($orderId, $service->placeOrder($cartId));
+    }
+
+    /**
+     * @return array
+     */
+    public function guestPlaceOrderDataProvider(): array
+    {
+        return [
+            [null, 1],
+            ['test@example.com', 0],
+        ];
     }
 
     /**

@@ -87,7 +87,7 @@ class MysqlTest extends TestCase
         $this->pdoStatementMock->expects($this->once())
             ->method('execute')
             ->willThrowException(new \PDOException('test message'));
-
+        $this->setQueryStringForPdoStmtMock($query);
         $this->assertEquals($errorReporting, error_reporting(), 'Error report level was\'t restored');
 
         (new Mysql($this->adapterMock, $query))->_execute();
@@ -151,5 +151,24 @@ class MysqlTest extends TestCase
             ->method('execute');
 
         (new Mysql($this->adapterMock, $query))->_execute($params);
+    }
+
+    /**
+     * Initialize queryString property.
+     *
+     * @param string $query
+     *
+     * @return void
+     */
+    private function setQueryStringForPdoStmtMock(string $query): void
+    {
+        /*
+         * In PHP 8.1 $queryString is a Typed property, thus it should be initialized before the 1st call.
+         * But it's not automatically initialized in case of Mocking, so we do it here.
+         * Note: In PHP < 8.1 such assignment prohibited.
+         */
+        if (PHP_VERSION_ID >= 80100) {
+            $this->pdoStatementMock->queryString = $query;
+        }
     }
 }

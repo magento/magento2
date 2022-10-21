@@ -265,7 +265,7 @@ class Changelog implements ChangelogInterface
      */
     public function getName()
     {
-        if (strlen($this->viewId) == 0) {
+        if (!$this->viewId || strlen($this->viewId) == 0) {
             throw new \DomainException(
                 new Phrase("View's identifier is not set")
             );

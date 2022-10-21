@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Model\Design\Config;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\TemplateInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Theme\Api\Data\DesignConfigInterface;
@@ -71,6 +72,7 @@ class ValidatorTest extends TestCase
 
     /**
      * @return void
+     * @throws LocalizedException
      */
     public function testGetDefaultTemplateTextDefaultScope(): void
     {
@@ -85,7 +87,7 @@ class ValidatorTest extends TestCase
         $this->template->expects($this->once())->method('emulateDesign');
         $this->template->expects($this->once())->method('setForcedArea')->with($templateId);
         $this->template->expects($this->once())->method('loadDefault')->with($templateId);
-        $this->template->expects($this->once())->method('getTemplateText');
+        $this->template->expects($this->once())->method('getTemplateText')->willReturn('');
         $this->template->expects($this->once())->method('revertDesign');
 
         $extensionAttributes = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigExtensionInterface::class)

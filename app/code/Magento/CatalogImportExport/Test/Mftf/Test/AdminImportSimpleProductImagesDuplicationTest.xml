@@ -18,6 +18,7 @@
             <testCaseId value="MC-42985"/>
             <useCaseId value="MC-42330"/>
             <group value="catalog_import_export"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

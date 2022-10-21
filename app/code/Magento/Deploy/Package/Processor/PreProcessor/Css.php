@@ -121,6 +121,20 @@ class Css implements ProcessorInterface
     }
 
     /**
+     * See if given path is local or remote URL
+     *
+     * @param string $path
+     * @return bool
+     */
+    private function isLocal(string $path): bool
+    {
+        $pattern = '{^(file://(?!//)|/(?!/)|/?[a-z]:[\\\\/]|\.\.[\\\\/]|[a-z0-9_.-]+[\\\\/])}i';
+        $result = preg_match($pattern, $path);
+
+        return is_int($result) ? (bool) $result : true;
+    }
+
+    /**
      * Build map file
      *
      * @param string $packagePath
@@ -135,13 +149,22 @@ class Css implements ProcessorInterface
             $imports = [];
             $this->map[$fullPath] = [];
 
-            $content = $this->staticDir->readFile($this->minification->addMinifiedSign($fullPath));
+            $tmpFilename = $this->minification->addMinifiedSign($fullPath);
+            if ($this->staticDir->isReadable($tmpFilename)) {
+                $content = $this->staticDir->readFile($tmpFilename);
+            } else {
+                $content = '';
+            }
 
             $callback = function ($matchContent) use ($packagePath, $filePath, &$imports) {
-                $importRelPath = $this->normalize(pathinfo($filePath, PATHINFO_DIRNAME) . '/' . $matchContent['path']);
-                $imports[$importRelPath] = $this->normalize(
-                    $packagePath . '/' . pathinfo($filePath, PATHINFO_DIRNAME) . '/' . $matchContent['path']
-                );
+                if ($this->isLocal($matchContent['path'])) {
+                    $importRelPath = $this->normalize(
+                        pathinfo($filePath, PATHINFO_DIRNAME) . '/' . $matchContent['path']
+                    );
+                    $imports[$importRelPath] = $this->normalize(
+                        $packagePath . '/' . pathinfo($filePath, PATHINFO_DIRNAME) . '/' . $matchContent['path']
+                    );
+                }
             };
             preg_replace_callback(Import::REPLACE_PATTERN, $callback, $content);
 

@@ -53,6 +53,8 @@ class FileTest extends TestCase
             ['/root/path/', '/sub', '/root/path/sub'],
             ['/root/path/', '../sub', '/root/path/../sub'],
             ['/root/path/', '/root/path/sub', '/root/path/sub'],
+            ['', '', ''],
+            ['0', '0', '0']
         ];
     }
 
@@ -82,6 +84,8 @@ class FileTest extends TestCase
             ['/root/path/', '/sub', '/sub'],
             ['/root/path/', '/root/path/sub', 'sub'],
             ['/root/path/sub', '/root/path/other', '/root/path/other'],
+            ['/root/path/', '', ''],
+            ['0', '0', '']
         ];
     }
 

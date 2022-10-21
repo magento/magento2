@@ -1,7 +1,5 @@
 <?php
 /**
- * Response redirector
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -251,9 +249,8 @@ class Redirect implements RedirectInterface
      */
     protected function _isUrlInternal($url)
     {
-        return strpos($url, 'http') !== false
-            ? $this->isInternalUrl($url) || $this->isCustomAdminUrl($url)
-            : false;
+        return is_string($url) && strpos($url, 'http') !== false
+            && ($this->isInternalUrl($url) || $this->isCustomAdminUrl($url));
     }
 
     /**
