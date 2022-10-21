@@ -69,7 +69,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
         \Magento\Framework\App\DeploymentConfig $configReader = null
     ) {
         if (!isset($data['mode'])) {
-            $data['mode'] = self::MODE_DISABLED;
+            $data['mode'] = self::MODE_ENABLED;
         }
         if (!isset($data['status'])) {
             $data['status'] = self::STATUS_IDLE;

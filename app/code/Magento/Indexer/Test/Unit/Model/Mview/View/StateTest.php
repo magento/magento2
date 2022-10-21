@@ -162,7 +162,7 @@ class StateTest extends TestCase
 
     public function testDefaultValues(): void
     {
-        $this->assertEquals(StateInterface::MODE_DISABLED, $this->model->getMode());
+        $this->assertEquals(StateInterface::MODE_ENABLED, $this->model->getMode());
         $this->assertEquals(StateInterface::STATUS_IDLE, $this->model->getStatus());
         $this->assertNull($this->model->getUpdated());
         $this->assertNull($this->model->getVersionId());
