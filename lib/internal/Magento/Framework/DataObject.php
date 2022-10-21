@@ -387,19 +387,21 @@ class DataObject implements \ArrayAccess
      */
     public function __call($method, $args)
     {
-        switch($method[0]) {
-            case 'g':
+        switch(\substr((string)$method, 0, 3)) {
+            case 'get':
                 return $this->_data[
                     self::$_underscoreCache[$method] ?? $this->_underscore($method)
                 ] ?? null;
-            case 's':
+            case 'set':
                 $this->_data[
                     self::$_underscoreCache[$method] ?? $this->_underscore($method)
                 ] = $args[0] ?? null;
                 return $this;
-            case 'u':
-                return $this->unsetData(self::$_underscoreCache[$method] ?? $this->_underscore($method));
-            case 'h':
+            case 'uns':
+                return $this->unsetData(
+                    self::$_underscoreCache[$method] ?? $this->_underscore($method)
+                );
+            case 'has':
                 return isset(
                     $this->_data[
                         self::$_underscoreCache[$method] ?? $this->_underscore($method)
