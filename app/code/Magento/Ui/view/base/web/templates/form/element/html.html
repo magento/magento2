@@ -4,10 +4,12 @@
  * See COPYING.txt for license details.
  */
 -->
+<!-- ko with: {valueUnsanitizedHtml: value, inputName: inputName, uid: uid} -->
 <span class="admin__field-value"
        data-bind="
-        html: value,
+        html: valueUnsanitizedHtml,
         attr: {
             name: inputName,
             id: uid
-    }"/>
+    }"></span>
+<!-- /ko -->

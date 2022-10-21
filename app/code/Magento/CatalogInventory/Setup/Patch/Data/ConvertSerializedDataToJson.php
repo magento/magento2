@@ -6,7 +6,6 @@
 
 namespace Magento\CatalogInventory\Setup\Patch\Data;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\Select\QueryModifierFactory;
@@ -15,8 +14,7 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
- * Class ConvertSerializedDataToJson
- * @package Magento\CatalogInventory\Setup\Patch
+ * Class to convert serialized data to json.
  */
 class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInterface
 {
@@ -52,7 +50,7 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -86,6 +84,8 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
             'value',
             $queryModifier
         );
+
+        return $this;
     }
 
     /**
@@ -96,11 +96,11 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
      */
     private function isSerialized($value)
     {
-        return (boolean) preg_match('/^((s|i|d|b|a|O|C):|N;)/', $value);
+        return $value && preg_match('/^((s|i|d|b|a|O|C):|N;)/', $value);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -110,7 +110,7 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -118,7 +118,7 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

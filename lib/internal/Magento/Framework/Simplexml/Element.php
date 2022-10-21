@@ -66,6 +66,7 @@ class Element extends \SimpleXMLElement
      * @return boolean
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
+    #[\ReturnTypeWillChange]
     public function hasChildren()
     {
         if (!$this->children()) {
@@ -111,6 +112,7 @@ class Element extends \SimpleXMLElement
             // Simple exploding by / does not suffice,
             // as an attribute value may contain a / inside
             // Note that there are three matches for different kinds of attribute values specification
+            $path = $path !== null ? $path : '';
             if (strpos($path, "@") === false) {
                 $pathArr = explode('/', $path);
             } else {
@@ -125,10 +127,10 @@ class Element extends \SimpleXMLElement
         foreach ($pathArr as $nodeName) {
             if (strpos($nodeName, '@') !== false) {
                 $a = explode('@', $nodeName);
-                $b = explode('=', $a[1]);
+                $b = explode('=', $a[1] ?? '');
                 $nodeName = $a[0];
                 $attributeName = $b[0];
-                $attributeValue = $b[1];
+                $attributeValue = $b[1] ?? '';
                 //
                 // Does a very simplistic trimming of attribute value.
                 //
@@ -445,7 +447,7 @@ class Element extends \SimpleXMLElement
      */
     public function setNode($path, $value, $overwrite = true)
     {
-        $arr1 = explode('/', $path);
+        $arr1 = explode('/', (string)$path);
         $arr = [];
         foreach ($arr1 as $v) {
             if (!empty($v)) {

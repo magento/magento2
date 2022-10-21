@@ -19,6 +19,9 @@
         </annotations>
 
         <before>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value="customer_grid"/>
+            </actionGroup>
             <createData entity="CustomCustomerGroup" stepKey="customerGroup" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
@@ -26,6 +29,7 @@
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{CustomerEntityOne.email}}" />
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
             <deleteData createDataKey="customerGroup" stepKey="deleteCustomerGroup"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

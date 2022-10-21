@@ -185,7 +185,7 @@ class QuantityValidator
          * Check item for options
          */
         if ($options) {
-            $qty = $product->getTypeInstance()->prepareQuoteItemQty($qty, $product);
+            $qty = $product->getTypeInstance()->prepareQuoteItemQty($quoteItem->getQty(), $product);
             $quoteItem->setData('qty', $qty);
             if ($stockStatus) {
                 $this->checkOptionsQtyIncrements($quoteItem, $options);

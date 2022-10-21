@@ -7,7 +7,7 @@ The Magento_AdvancedSearch module introduces advanced search functionality and p
 Before disabling or uninstalling this module, note that the following modules depends on this module:
 
 - Magento_Elasticsearch
-- Magento_Elasticsearch6
+- Magento_Elasticsearch7
 
 For information about module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 

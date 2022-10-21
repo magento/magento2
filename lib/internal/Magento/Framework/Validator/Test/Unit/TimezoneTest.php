@@ -17,10 +17,10 @@ class TimezoneTest extends TestCase
      * @var array
      */
     protected $expectedTimezones = [
-        'Australia/Darwin',
-        'America/Los_Angeles',
-        'Europe/Kiev',
-        'Asia/Jerusalem',
+        'Australia/Darwin' => 'Darwind description',
+        'America/Los_Angeles' => 'Los_Angeles description',
+        'Europe/Kiev' => 'Kiev description',
+        'Asia/Jerusalem' => 'Jerusalem description'
     ];
 
     public function testIsValid()

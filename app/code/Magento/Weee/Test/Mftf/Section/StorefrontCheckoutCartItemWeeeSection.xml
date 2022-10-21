@@ -13,5 +13,6 @@
         <element name="productWeeeSubtotalByName" type="text" selector="//a[contains(text(),'{{productName}}')]/ancestor::tr//td[contains(@class, 'subtotal')]//span[contains(@class,'weee')]" parameterized="true"/>
         <element name="productWeeePriceExcludingTaxByName" type="text" selector="//a[contains(text(),'{{productName}}')]/ancestor::tr//td[contains(@class, 'price')]//span[contains(@class,'price-excluding-tax')]//span[contains(@class,'weee')]" parameterized="true"/>
         <element name="productWeeeSubtotalExcludingTaxByName" type="text" selector="//a[contains(text(),'{{productName}}')]/ancestor::tr//td[contains(@class, 'subtotal')]//span[contains(@class,'price-excluding-tax')]//span[contains(@class,'weee')]" parameterized="true"/>
+        <element name="productWeeeSubtotalIncludingTax" type="text" selector="//span[@class='cart-tax-total']/span[@class='weee']/span[@class='price']"/>
     </section>
 </sections>

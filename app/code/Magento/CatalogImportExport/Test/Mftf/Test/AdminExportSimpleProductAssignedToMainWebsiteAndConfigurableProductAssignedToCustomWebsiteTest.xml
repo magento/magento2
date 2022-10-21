@@ -103,16 +103,19 @@
         </actionGroup>
         <reloadPage stepKey="refreshPage"/>
         <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
-        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
+        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="getFilename"/>
+        <actionGroup ref="AdminGetExportFilenameOnServerActionGroup" stepKey="grabNameFile">
+            <argument name="rowIndex" value="0"/>
+        </actionGroup>
 
         <!-- Download product -->
         <actionGroup ref="DownloadFileActionGroup" stepKey="downloadCreatedProducts">
-            <argument name="fileName" value="{$grabNameFile}"/>
+            <argument name="fileName" value="{$getFilename}"/>
         </actionGroup>
 
         <!-- Delete exported file -->
         <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
-            <argument name="fileName" value="{$grabNameFile}"/>
+            <argument name="fileName" value="{$getFilename}"/>
         </actionGroup>
     </test>
 </tests>

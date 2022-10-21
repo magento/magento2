@@ -48,9 +48,10 @@ define([
      */
     invalidateCacheByCloseCookieSession = function () {
         if (!$.cookieStorage.isSet('mage-cache-sessid')) {
-            $.cookieStorage.set('mage-cache-sessid', true);
             storage.removeAll();
         }
+
+        $.cookieStorage.set('mage-cache-sessid', true);
     };
 
     dataProvider = {
@@ -102,7 +103,7 @@ define([
                 storage.remove(sectionName);
                 sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
                 _.each(sectionDataIds, function (data, name) {
-                    if (name != sectionName) { //eslint-disable-line eqeqeq
+                    if (name !== sectionName) {
                         newSectionDataIds[name] = data;
                     }
                 });
@@ -219,8 +220,7 @@ define([
         initStorage: function () {
             $.cookieStorage.setConf({
                 path: '/',
-                expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000),
-                samesite: 'lax'
+                expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000)
             });
             storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
             storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
@@ -256,7 +256,7 @@ define([
 
                 if (typeof sectionData === 'undefined' ||
                     typeof sectionData === 'object' &&
-                    cookieSectionTimestamp != sectionData['data_id'] //eslint-disable-line
+                    cookieSectionTimestamp !== sectionData['data_id']
                 ) {
                     expiredSectionNames.push(sectionName);
                 }

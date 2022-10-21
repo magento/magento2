@@ -10,6 +10,7 @@ namespace Magento\Catalog\Model\Layer;
 /**
  * Interface \Magento\Catalog\Model\Layer\ItemCollectionProviderInterface
  *
+ * @api
  */
 interface ItemCollectionProviderInterface
 {
