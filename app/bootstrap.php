@@ -27,6 +27,7 @@ if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 70400) {
 </div>
 HTML;
     }
+    http_response_code(503);
     exit(1);
 }
 

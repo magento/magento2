@@ -17,6 +17,7 @@
             <testCaseId value="MC-38053"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableCategoryProductRewrites"/>
             <magentoCLI command="config:set catalog/seo/product_use_categories 1" stepKey="setEnableUseCategoriesPath"/>
             <createData entity="SubCategory" stepKey="rootCategory"/>
             <createData entity="SimpleSubCategoryDifferentUrlStore" stepKey="subCategory">
@@ -44,6 +45,7 @@
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableCategoryProductRewrites"/>
         </after>
 
         <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="navigateToCreatedSubCategory">

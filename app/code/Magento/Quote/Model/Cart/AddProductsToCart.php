@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\Quote\Model\Cart;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Cart\BuyRequest\BuyRequestBuilder;
@@ -66,21 +68,31 @@ class AddProductsToCart
     private $requestBuilder;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param CartRepositoryInterface $cartRepository
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param BuyRequestBuilder $requestBuilder
+     * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         CartRepositoryInterface $cartRepository,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
-        BuyRequestBuilder $requestBuilder
+        BuyRequestBuilder $requestBuilder,
+        SearchCriteriaBuilder $searchCriteriaBuilder = null
     ) {
         $this->productRepository = $productRepository;
         $this->cartRepository = $cartRepository;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->requestBuilder = $requestBuilder;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()->get(
+            SearchCriteriaBuilder::class
+        );
     }
 
     /**
@@ -145,6 +157,16 @@ class AddProductsToCart
     public function addItemsToCart(Quote $cart, array $cartItems): array
     {
         $failedCartItems = [];
+        $cartItemSkus = \array_map(
+            function ($item) {
+                return $item->getSku();
+            },
+            $cartItems
+        );
+
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter('sku', $cartItemSkus, 'in')->create();
+        // getList() call caches product models in runtime cache
+        $this->productRepository->getList($searchCriteria)->getItems();
 
         foreach ($cartItems as $cartItemPosition => $cartItem) {
             $errors = $this->addItemToCart($cart, $cartItem, $cartItemPosition);
@@ -178,7 +200,7 @@ class AddProductsToCart
             );
         } else {
             try {
-                $product = $this->productRepository->get($sku, false, null, true);
+                $product = $this->productRepository->get($sku, false, $cart->getStoreId(), false);
             } catch (NoSuchEntityException $e) {
                 $errors[] = $this->createError(
                     __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
