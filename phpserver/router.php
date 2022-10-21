@@ -28,7 +28,7 @@ $debug = function ($val) {
         $val = json_encode($val);
     }
 
-    error_log('debug: '.$val);
+    error_log('debug: ' . $val);
 };
 
 /**
@@ -59,7 +59,7 @@ if (php_sapi_name() === 'cli-server') {
         $route = preg_replace('#pub/errors/default/#', 'errors/default/', $route, 1);
     }
 
-    $magentoPackagePubDir = __DIR__."/../pub";
+    $magentoPackagePubDir = __DIR__ . "/../pub";
 
     if (strpos($route, 'media/') === 0 ||
         strpos($route, 'opt/') === 0 ||
@@ -67,12 +67,12 @@ if (php_sapi_name() === 'cli-server') {
         strpos($route, 'errors/default/css/') === 0 ||
         strpos($route, 'errors/default/images/') === 0
     ) {
-        $origFile = $magentoPackagePubDir.'/'.$route;
+        $origFile = $magentoPackagePubDir . '/' . $route;
 
         if (strpos($route, 'static/version') === 0) {
             $route = preg_replace('#static/(version\d+/)?#', 'static/', $route, 1);
         }
-        $file = $magentoPackagePubDir.'/'.$route;
+        $file = $magentoPackagePubDir . '/' . $route;
 
         $debug("file: $file");
 
@@ -106,16 +106,16 @@ if (php_sapi_name() === 'cli-server') {
                 $route = preg_replace('#static/#', '', $route, 1);
                 $_GET['resource'] = $route;
                 $debug("static: $route");
-                include($magentoPackagePubDir.'/static.php');
+                include $magentoPackagePubDir . '/static.php';
                 exit;
             } elseif (strpos($route, 'media/') === 0) {
                 $debug("media: $route");
-                include($magentoPackagePubDir.'/get.php');
+                include $magentoPackagePubDir . '/get.php';
                 exit;
             }
         }
     } else {
         $debug("thunk to index in $route");
-        include($magentoPackagePubDir.'/index.php');
+        include $magentoPackagePubDir . '/index.php';
     }
 }
