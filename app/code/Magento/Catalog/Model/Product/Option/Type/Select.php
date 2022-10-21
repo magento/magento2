@@ -90,19 +90,8 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $option = $this->getOption();
         $value = $this->getUserValue();
 
-        if (empty($value) && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
-            $this->setIsValid(false);
-            throw new LocalizedException(
-                __("The product's required option(s) weren't entered. Make sure the options are entered and try again.")
-            );
-        }
-        if (!$this->_isSingleSelection()) {
-            if (is_string($value)) {
-                $value = explode(',', $value);
-            }
-            $valuesCollection = $option->getOptionValuesByOptionId($value, $this->getProduct()->getStoreId())->load();
-            $valueCount = is_array($value) ? count($value) : 0;
-            if ($valuesCollection->count() != $valueCount) {
+        if (empty($value)) {
+            if ($option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
                 $this->setIsValid(false);
                 throw new LocalizedException(
                     __(
@@ -110,6 +99,21 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                         . "Make sure the options are entered and try again."
                     )
                 );
+            }
+        } else {
+            if (!$this->_isSingleSelection()) {
+                if (is_string($value)) {
+                    $value = explode(',', $value);
+                }
+                $valuesCollection = $option->getOptionValuesByOptionId($value, $this->getProduct()->getStoreId());
+                $valueCount = is_array($value) ? count($value) : 0;
+                if ($valuesCollection->count() != $valueCount) {
+                    $this->setIsValid(false);
+                    throw new LocalizedException($this->_getWrongConfigurationMessage());
+                }
+            } elseif (!$option->getValueById($value)) {
+                $this->setIsValid(false);
+                throw new LocalizedException($this->_getWrongConfigurationMessage());
             }
         }
         return $this;
