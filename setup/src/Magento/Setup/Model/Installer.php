@@ -30,6 +30,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
+use Magento\Framework\Module\ModuleResource;
 use Magento\Framework\Mview\TriggerCleaner;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\FilePermissions;
@@ -68,35 +69,34 @@ use ReflectionException;
  */
 class Installer
 {
-    /**#@+
+    /**
      * Parameters for enabling/disabling modules
      */
-    const ENABLE_MODULES = 'enable-modules';
-    const DISABLE_MODULES = 'disable-modules';
-    /**#@- */
+    public const ENABLE_MODULES = 'enable-modules';
+    public const DISABLE_MODULES = 'disable-modules';
 
-    /**#@+
+    /**
      * Formatting for progress log
      */
-    const PROGRESS_LOG_RENDER = '[Progress: %d / %d]';
-    const PROGRESS_LOG_REGEX = '/\[Progress: (\d+) \/ (\d+)\]/s';
-    /**#@- */
+    public const PROGRESS_LOG_RENDER = '[Progress: %d / %d]';
+    public const PROGRESS_LOG_REGEX = '/\[Progress: (\d+) \/ (\d+)\]/s';
 
-    /**#@+
+    /**
      * Instance types for schema and data handler
      */
-    const SCHEMA_INSTALL = \Magento\Framework\Setup\InstallSchemaInterface::class;
-    const SCHEMA_UPGRADE = \Magento\Framework\Setup\UpgradeSchemaInterface::class;
-    const DATA_INSTALL = \Magento\Framework\Setup\InstallDataInterface::class;
-    const DATA_UPGRADE = \Magento\Framework\Setup\UpgradeDataInterface::class;
-    /**#@- */
+    public const SCHEMA_INSTALL = \Magento\Framework\Setup\InstallSchemaInterface::class;
+    public const SCHEMA_UPGRADE = \Magento\Framework\Setup\UpgradeSchemaInterface::class;
+    public const DATA_INSTALL = \Magento\Framework\Setup\InstallDataInterface::class;
+    public const DATA_UPGRADE = \Magento\Framework\Setup\UpgradeDataInterface::class;
 
-    const INFO_MESSAGE = 'message';
+    public const INFO_MESSAGE = 'message';
+
+    public const ENTITY_TYPE_ORDER = 'order';
 
     /**
      * The lowest supported MySQL verion
      */
-    const MYSQL_VERSION_REQUIRED = '5.6.0';
+    public const MYSQL_VERSION_REQUIRED = '5.6.0';
 
     /**
      * File permissions checker
@@ -106,22 +106,16 @@ class Installer
     private $filePermissions;
 
     /**
-     * Deployment configuration repository
-     *
      * @var Writer
      */
     private $deploymentConfigWriter;
 
     /**
-     * Deployment configuration reader
-     *
      * @var Reader
      */
     private $deploymentConfigReader;
 
     /**
-     * Module list
-     *
      * @var ModuleListInterface
      */
     private $moduleList;
@@ -134,8 +128,6 @@ class Installer
     private $moduleLoader;
 
     /**
-     * Admin account factory
-     *
      * @var AdminAccountFactory
      */
     private $adminAccountFactory;
@@ -232,8 +224,6 @@ class Installer
     protected $sampleDataState;
 
     /**
-     * Component Registrar
-     *
      * @var ComponentRegistrar
      */
     private $componentRegistrar;
@@ -1029,7 +1019,7 @@ class Installer
             // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw  new Exception("Unsupported operation type $type is requested");
         }
-        $resource = new \Magento\Framework\Module\ModuleResource($this->context);
+        $resource = $this->getModuleResource();
         $verType = $type . '-version';
         $installType = $type . '-install';
         $upgradeType = $type . '-upgrade';
@@ -1063,7 +1053,7 @@ class Installer
             $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
             $currentVersion = $moduleContextList[$moduleName]->getVersion();
             // Schema/Data is installed
-            if ($currentVersion !== '') {
+            if ($configVer !== null && $currentVersion !== '') {
                 $status = version_compare($configVer, $currentVersion);
                 if ($status == \Magento\Framework\Setup\ModuleDataSetupInterface::VERSION_COMPARE_GREATER) {
                     $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
@@ -1131,6 +1121,16 @@ class Installer
             }
             $this->logProgress();
         }
+    }
+
+    /**
+     * Get a module Resource object
+     *
+     * @return ModuleResource
+     */
+    public function getModuleResource(): ModuleResource
+    {
+        return new ModuleResource($this->context);
     }
 
     /**
@@ -1272,14 +1272,15 @@ class Installer
         // get entity_type_id for order
         $select = $dbConnection->select()
             ->from($setup->getTable('eav_entity_type'), 'entity_type_id')
-            ->where('entity_type_code = \'order\'');
+            ->where('entity_type_code = ?', self::ENTITY_TYPE_ORDER);
         $entityTypeId = $dbConnection->fetchOne($select);
 
         // See if row already exists
-        $incrementRow = $dbConnection->fetchRow(
-            'SELECT * FROM ' . $setup->getTable('eav_entity_store') . ' WHERE entity_type_id = ? AND store_id = ?',
-            [$entityTypeId, Store::DISTRO_STORE_ID]
-        );
+        $eavEntityStore = $dbConnection->select()
+            ->from($setup->getTable('eav_entity_store'))
+            ->where('entity_type_id = ?', $entityTypeId)
+            ->where('store_id = ?', Store::DISTRO_STORE_ID);
+        $incrementRow = $dbConnection->fetchRow($eavEntityStore);
 
         if (!empty($incrementRow)) {
             // row exists, update it
@@ -1297,6 +1298,28 @@ class Installer
                 'increment_prefix' => $orderIncrementPrefix,
             ];
             $dbConnection->insert($setup->getTable('eav_entity_store'), $rowData);
+        }
+
+        // Get meta id for adding in profile table for order prefix
+        $selectMeta = $dbConnection->select()
+            ->from($setup->getTable('sales_sequence_meta'), 'meta_id')
+            ->where('entity_type = ?', self::ENTITY_TYPE_ORDER)
+            ->where('store_id = ?', Store::DISTRO_STORE_ID);
+        $metaId = $dbConnection->fetchOne($selectMeta);
+
+        // See if row already exists
+        $profile = $dbConnection->select()
+            ->from($setup->getTable('sales_sequence_profile'))
+            ->where('meta_id = ?', $metaId);
+        $incrementRow = $dbConnection->fetchRow($profile);
+
+        if (!empty($incrementRow)) {
+            // Row exists, update it
+            $dbConnection->update(
+                $setup->getTable('sales_sequence_profile'),
+                ['prefix' => $orderIncrementPrefix, 'is_active' => '1'],
+                'profile_id = ' . $incrementRow['profile_id']
+            );
         }
     }
 
@@ -1663,7 +1686,7 @@ class Installer
     /**
      * Generates list of ModuleContext
      *
-     * @param \Magento\Framework\Module\ModuleResource $resource
+     * @param ModuleResource $resource
      * @param string $type
      * @return ModuleContext[]
      * @throws Exception

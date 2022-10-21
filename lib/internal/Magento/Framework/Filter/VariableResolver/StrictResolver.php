@@ -86,7 +86,7 @@ class StrictResolver implements VariableResolverInterface
                 $stackArgs[$i]['variable'] = $stackArgs[$i - 1]['variable']
                     ->getData($stackArgs[$i]['name']);
             }
-        } elseif ($stackArgs[$i]['type'] == 'method' && substr($stackArgs[$i]['name'], 0, 3) == 'get') {
+        } elseif ($stackArgs[$i]['type'] == 'method' && substr($stackArgs[$i]['name'] ?? '', 0, 3) == 'get') {
             $this->handleGetterMethod($i, $filter, $templateVariables, $stackArgs);
         }
     }

@@ -15,6 +15,9 @@
             <container name="customer.login.container" label="Customer Login Container" htmlTag="div" htmlClass="login-container">
                 <block class="Magento\Customer\Block\Form\Login" name="customer_form_login" template="Magento_Customer::form/login.phtml">
                     <container name="form.additional.info" as="form_additional_info"/>
+                    <arguments>
+                        <argument name="login_button_view_model" xsi:type="object">Magento\Customer\ViewModel\LoginButton</argument>
+                    </arguments>
                 </block>
                 <block class="Magento\Customer\Block\Form\Login\Info" name="customer.new" template="Magento_Customer::newcustomer.phtml"/>
             </container>

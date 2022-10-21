@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Model\UserToken;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Integration\Api\Data\UserToken;
 use Magento\Integration\Api\Data\UserTokenDataInterface;
@@ -62,10 +63,22 @@ class ExpirationValidatorTest extends TestCase
             ->willReturn(\DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2021-04-07 16:00:00'));
         $futureToken->method('getData')->willReturn($futureData);
 
+        $integrationToken = $this->createMock(UserToken::class);
+        $userContext = $this->createMock(UserContextInterface::class);
+        $userContext->method('getUserType')
+            ->willReturn(UserContextInterface::USER_TYPE_INTEGRATION);
+        $integrationData = $this->createMock(UserTokenDataInterface::class);
+        $integrationData->method('getExpires')
+            ->willReturn(\DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2021-04-07 12:00:00'));
+        $integrationToken->method('getData')->willReturn($pastData);
+        $integrationToken->method('getUserContext')
+            ->willReturn($userContext);
+
         return [
             'past' => [$pastToken, false, $currentTs],
             'exact' => [$exactToken, false, $currentTs],
-            'future' => [$futureToken, true, $currentTs]
+            'future' => [$futureToken, true, $currentTs],
+            'integration' => [$integrationToken, true, $currentTs],
         ];
     }
 
