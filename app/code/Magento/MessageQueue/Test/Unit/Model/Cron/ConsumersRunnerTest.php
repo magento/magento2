@@ -103,13 +103,12 @@ class ConsumersRunnerTest extends TestCase
 
     public function testRunDisabled()
     {
-        $this->deploymentConfigMock->expects($this->once())
+        $this->deploymentConfigMock->expects($this->atLeastOnce())
             ->method('get')
             ->willReturnMap(
                 [
                     ['cron_consumers_runner/cron_run', true, false],
-                    ['cron_consumers_runner/max_messages', 10000, 10000],
-                    ['cron_consumers_runner/consumers', [], []],
+                    ['cron_consumers_runner/multiple_processes', [], []],
                 ]
             );
 
@@ -154,6 +153,7 @@ class ConsumersRunnerTest extends TestCase
                     ['cron_consumers_runner/max_messages', 10000, $maxMessages],
                     ['cron_consumers_runner/consumers', [], $allowedConsumers],
                     ['queue/only_spawn_when_message_available', null, 0],
+                    ['cron_consumers_runner/multiple_processes', [], []]
                 ]
             );
 
@@ -272,6 +272,124 @@ class ConsumersRunnerTest extends TestCase
     }
 
     /**
+     * @param int $maxMessages
+     * @param array $isLocked
+     * @param string $php
+     * @param array $returnMap
+     * @param array $allowedConsumers
+     * @param int $shellBackgroundExpects
+     * @dataProvider runMultiProcessesDataProvider
+     */
+    public function testRunMultiProcesses(
+        int    $maxMessages,
+        array  $isLocked,
+        string $php,
+        array  $returnMap,
+        array  $allowedConsumers,
+        int    $shellBackgroundExpects
+    ): void {
+        $consumerName = 'consumerName';
+
+        $this->deploymentConfigMock
+            ->method('get')
+            ->willReturnMap(
+                [
+                    ['cron_consumers_runner/cron_run', true, true],
+                    ['cron_consumers_runner/max_messages', 10000, $maxMessages],
+                    ['cron_consumers_runner/consumers', [], $allowedConsumers],
+                    ['queue/only_spawn_when_message_available', null, 0],
+                    ['cron_consumers_runner/multiple_processes',
+                        [],
+                        ['consumerName' => 2]
+                    ]
+                ]
+            );
+
+        /** @var ConsumerConfigInterface|MockObject $firstCunsumer */
+        $consumer = $this->getMockBuilder(ConsumerConfigItemInterface::class)
+            ->getMockForAbstractClass();
+        $consumer->method('getName')->willReturn($consumerName);
+
+        $this->phpExecutableFinderMock->expects($this->once())
+            ->method('find')
+            ->willReturn($php);
+
+        $this->consumerConfigMock->expects($this->once())
+            ->method('getConsumers')
+            ->willReturn([$consumer]);
+
+        $this->lockManagerMock->expects(self::exactly(2))
+            ->method('isLocked')
+            ->withConsecutive(
+                [md5($consumerName . '-' . 1)], //phpcs:ignore
+                [md5($consumerName . '-' . 2)]  //phpcs:ignore
+            )
+            ->willReturnOnConsecutiveCalls($isLocked[0], $isLocked[1]);
+
+        $this->shellBackgroundMock->expects(self::exactly($shellBackgroundExpects))
+            ->method('execute')
+            ->willReturnMap($returnMap);
+
+        $this->consumersRunner->run();
+    }
+
+    /**
+     * @return array
+     */
+    public function runMultiProcessesDataProvider()
+    {
+        return [
+            [
+                'maxMessages' => 20000,
+                'isLocked' => [false, false],
+                'php' => '',
+                'returnMap' => [
+                    [
+                        'php ' . BP . '/bin/magento queue:consumers:start %s %s %s',
+                        ['consumerName', '--multi-process=1', '--max-messages=20000'],
+                        'value1'
+                    ],
+                    [
+                        'php ' . BP . '/bin/magento queue:consumers:start %s %s %s',
+                        ['consumerName', '--multi-process=2', '--max-messages=20000'],
+                        'value2'
+                    ]
+                ],
+                'allowedConsumers' => [],
+                'shellBackgroundExpects' => 2
+            ],
+            [
+                'maxMessages' => 20000,
+                'isLocked' => [true, false],
+                'php' => '',
+                'returnMap' => [
+                    [
+                        'php ' . BP . '/bin/magento queue:consumers:start %s %s %s',
+                        ['consumerName', '--multi-process=2', '--max-messages=20000'],
+                        'value2'
+                    ]
+                ],
+                'allowedConsumers' => [],
+                'shellBackgroundExpects' => 1
+            ],
+            [
+                'maxMessages' => 20000,
+                'isLocked' => [true, true],
+                'php' => '',
+                'returnMap' => [
+                    [
+                        'php ' . BP . '/bin/magento queue:consumers:start %s %s %s',
+                        ['consumerName', '--multi-process=2', '--max-messages=20000'],
+                        'value2'
+                    ]
+                ],
+                'allowedConsumers' => [],
+                'shellBackgroundExpects' => 0
+            ],
+        ];
+    }
+
+    /**
      * @param boolean $onlySpawnWhenMessageAvailable
      * @param boolean $isMassagesAvailableInTheQueue
      * @param int $shellBackgroundExpects
@@ -291,7 +409,7 @@ class ConsumersRunnerTest extends TestCase
         $consumerName = 'consumerName';
         $connectionName = 'connectionName';
         $queueName = 'queueName';
-        $this->deploymentConfigMock->expects($this->exactly(4))
+        $this->deploymentConfigMock->expects($this->exactly(5))
             ->method('get')
             ->willReturnMap(
                 [
@@ -299,6 +417,7 @@ class ConsumersRunnerTest extends TestCase
                     ['cron_consumers_runner/max_messages', 10000, 1000],
                     ['cron_consumers_runner/consumers', [], []],
                     ['queue/only_spawn_when_message_available', true, $globalOnlySpawnWhenMessageAvailable],
+                    ['cron_consumers_runner/multiple_processes', [], []]
                 ]
             );
 
@@ -321,9 +440,7 @@ class ConsumersRunnerTest extends TestCase
             ->method('find')
             ->willReturn('');
 
-        $this->lockManagerMock->expects($this->once())
-            ->method('isLocked')
-            ->willReturn(false);
+        $this->lockManagerMock->method('isLocked')->willReturn(false);
 
         $this->checkIsAvailableMessagesMock->expects($this->exactly($isMassagesAvailableInTheQueueCallCount))
             ->method('execute')

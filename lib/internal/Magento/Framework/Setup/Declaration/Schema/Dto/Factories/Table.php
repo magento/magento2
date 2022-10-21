@@ -18,17 +18,17 @@ class Table implements FactoryInterface
      * Default engine.
      * May be redefined for other DBMS.
      */
-    const DEFAULT_ENGINE = 'innodb';
+    public const DEFAULT_ENGINE = 'innodb';
 
     /**
      * Default charset for SQL
      */
-    const DEFAULT_CHARSET = 'utf8';
+    public const DEFAULT_CHARSET = 'utf8';
 
     /**
      * Default collation
      */
-    const DEFAULT_COLLATION = 'utf8_general_ci';
+    public const DEFAULT_COLLATION = 'utf8_general_ci';
 
     /**
      * @var ObjectManagerInterface
@@ -63,7 +63,7 @@ class Table implements FactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function create(array $data)
     {
@@ -84,7 +84,7 @@ class Table implements FactoryInterface
         }
 
         $tablePrefix = $this->resourceConnection->getTablePrefix();
-        $nameWithoutPrefix = $data['name'];
+        $nameWithoutPrefix = $data['name'] ?? '';
         if (!empty($tablePrefix) && strpos($nameWithoutPrefix, $tablePrefix) === 0) {
             $data['nameWithoutPrefix'] = preg_replace('/^' . $tablePrefix . '/i', '', $data['name']);
         } else {

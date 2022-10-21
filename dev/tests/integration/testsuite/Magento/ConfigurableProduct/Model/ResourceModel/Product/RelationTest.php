@@ -6,9 +6,13 @@
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Relation;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -53,17 +57,33 @@ class RelationTest extends TestCase
     /**
      * Tests that getRelationsByChildren will return parent products entity ids of child products entity ids.
      *
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple_10'], 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple_20'], 'p2'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple_30'], 'p3'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple_40'], 'p4'),
+        DataFixture(AttributeFixture::class, as: 'attr'),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            ['sku' => 'conf1','_options' => ['$attr$'],'_links' => ['$p1$','$p2$']],
+            'conf1'
+        ),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            ['sku' => 'conf2','_options' => ['$attr$'],'_links' => ['$p3$','$p4$']],
+            'conf2'
+        ),
+    ]
     public function testGetRelationsByChildren(): void
     {
         $childSkusOfParentSkus = [
-            'configurable' => ['simple_10', 'simple_20'],
-            'configurable_12345' => ['simple_30', 'simple_40'],
+            'conf1' => ['simple_10', 'simple_20'],
+            'conf2' => ['simple_30', 'simple_40'],
         ];
         $configurableSkus = [
-            'configurable',
-            'configurable_12345',
+            'conf1',
+            'conf2',
             'simple_10',
             'simple_20',
             'simple_30',
@@ -114,7 +134,7 @@ class RelationTest extends TestCase
      */
     private function sortParentIdsOfChildIds(array $array): array
     {
-        foreach ($array as $childId => &$parentIds) {
+        foreach ($array as &$parentIds) {
             sort($parentIds, SORT_NUMERIC);
         }
 

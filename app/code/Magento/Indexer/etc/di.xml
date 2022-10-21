@@ -12,6 +12,7 @@
     <preference for="Magento\Framework\Indexer\IndexerInterface" type="Magento\Indexer\Model\Indexer\DependencyDecorator" />
     <preference for="Magento\Framework\Indexer\Table\StrategyInterface" type="Magento\Framework\Indexer\Table\Strategy" />
     <preference for="Magento\Framework\Indexer\StateInterface" type="Magento\Indexer\Model\Indexer\State" />
+    <preference for="Magento\Framework\Indexer\IndexMutexInterface" type="Magento\Indexer\Model\IndexMutex" />
     <type name="Magento\Framework\Indexer\Table\StrategyInterface" shared="false" />
     <type name="Magento\Indexer\Model\Indexer">
         <arguments>
@@ -69,5 +70,8 @@
     </type>
     <type name="Magento\Framework\Indexer\ActionInterface">
         <plugin name="cache_cleaner_after_reindex" type="Magento\Indexer\Model\Indexer\CacheCleaner" />
+    </type>
+    <type name="Magento\Framework\Indexer\CacheContext">
+        <plugin name="defer_cache_cleaning" type="Magento\Indexer\Model\Indexer\DeferCacheCleaning" />
     </type>
 </config>

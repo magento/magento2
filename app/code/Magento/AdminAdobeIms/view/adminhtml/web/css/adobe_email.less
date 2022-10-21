@@ -1,0 +1,210 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+@color-blue: #1473e6;
+@color-red: #eb1000;
+@color-light-grey: #e4e4e4;
+@color-grey: #959595;
+@color-dark-grey: #2c2c2c;
+@color-white-smoke: #f5f5f5;
+@color-white: #fff;
+@color-black: #000;
+
+@import url("https://use.typekit.net/onr8tbr.css");
+@media (prefers-color-scheme: dark) {
+    table {
+        border-collapse: collapse;
+        margin: 0 auto;
+    }
+
+    a,
+    a:visited {
+        color: @color-blue;
+        text-decoration: none;
+    }
+
+    .legal a {
+        text-decoration: underline;
+    }
+
+    /* iOS BLUE LINKS */
+    a[x-apple-data-detectors] {
+        color: inherit !important;
+        font-family: inherit !important;
+        font-size: inherit !important;
+        font-weight: inherit !important;
+        line-height: inherit !important;
+        text-decoration: none !important;
+    }
+}
+
+@media only screen and (max-width:480px) {
+    u ~ div {
+        min-width: 100vw;
+    }
+    div > u ~ div {
+        min-width: 100%;
+    }
+
+    .email-width,
+    .email-width-400 {
+        width: 84% !important;
+    }
+
+    .full-width {
+        width: 100% !important;
+    }
+}
+
+.full-width {
+    width: 600px;
+}
+
+.email-width {
+    width: 500px;
+}
+
+.email-width-400 {
+    width: 400px;
+}
+
+.width-100 {
+    width: 100%;
+}
+
+.background-grey {
+    background-color: @color-light-grey;
+}
+
+.background-light {
+    background-color: @color-white-smoke;
+}
+
+.padding-top-0 {
+    padding-top: 0 !important;
+}
+
+.padding-top-25 {
+    padding-top: 25px;
+}
+
+.padding-top-40 {
+    padding-top: 40px;
+}
+
+.padding-top-50 {
+    padding-top: 40px;
+}
+
+.email-body {
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: none;
+    background-color: @color-light-grey;
+    margin: 0;
+    padding: 0;
+    width: 100% !important;
+}
+
+.email-preview {
+    color: @color-light-grey;
+    display: none;
+    font-size: 1px;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+.email-header-container {
+    background-color: @color-white;
+    border-top: 4px solid @color-red;
+    padding-bottom: 60px;
+}
+
+.email-logo {
+    color: @color-red;
+    font-family: adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif;
+    font-size: 12px;
+    line-height: 18px;
+
+    img {
+        color: @color-red;
+        display: block;
+        font-family: adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif;
+        font-size: 12px;
+        height: 50px;
+        line-height: 18px;
+        vertical-align: top;
+    }
+}
+
+.email-footer-legal {
+    color: @color-grey;
+    font-family: adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 32px;
+    padding-top: 60px;
+
+    a {
+        color: @color-grey;
+        text-decoration: underline;
+    }
+}
+
+.email-footer-copyright {
+    color: @color-grey;
+    font-family: adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif;
+    font-size: 11px;
+    line-height: 18px;
+    padding-bottom: 50px;
+    padding-top: 50px;
+}
+
+.email-subject {
+    color: @color-black;
+    font-family: adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif;
+    font-size: 23px;
+    line-height: 30px;
+    padding-top: 50px;
+}
+
+.email-text {
+    color: @color-dark-grey;
+    font-family: adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif;
+    font-size: 18px;
+    line-height: 26px;
+    padding-top: 25px;
+}
+
+.cta-button-container {
+    color: @color-blue;
+    font-family: adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+    padding-bottom: 40px;
+    padding-top: 40px;
+}
+
+.cta-button {
+    -webkit-text-size-adjust: none;
+    background-color: @color-blue;
+    border-radius: 20px;
+    color: @color-white;
+    display: inline-block;
+    font-size: 16px;
+    line-height: 40px;
+    text-align: center;
+    text-decoration: none;
+    width: 200px;
+}
+
+.cta-button-mso {
+    font-size: 0;
+    line-height: 0;
+    margin: 0;
+}
+
+.email-information-link {
+    color: @color-blue;
+    text-decoration: none;
+}

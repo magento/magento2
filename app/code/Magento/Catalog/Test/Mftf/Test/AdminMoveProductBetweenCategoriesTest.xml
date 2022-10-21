@@ -144,7 +144,9 @@
         <waitForPageLoad stepKey="waitForProductPageLoading"/>
 
         <!-- # Product page should open successfully # Breadcrumb for product should be like <Cat 2> -->
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$simpleProduct.name$$" stepKey="seeProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
+            <argument name="value" value="$$simpleProduct.name$$"/>
+        </actionGroup>
         <see userInput="$$createSecondCategory.name$$" selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}" stepKey="seeCategoryInBreadcrumbs"/>
 
         <!-- Open <Cat1_anchored> category -->

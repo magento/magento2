@@ -242,6 +242,6 @@ gzip_types
 gzip_vary on;
 
 # Banned locations (only reached if the earlier PHP entry point regexes don't match)
-location ~* (\.php$|\.phtml$|\.htaccess$|\.git) {
+location ~* (\.php$|\.phtml$|\.htaccess$|\.htpasswd$|\.git) {
     deny all;
 }

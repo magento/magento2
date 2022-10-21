@@ -29,14 +29,14 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->_eventManager = $this->getMockBuilder(\Magento\TestFramework\EventManager::class)
-            ->setMethods(['fireEvent'])
+            ->onlyMethods(['fireEvent'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->_adapter =
             $this->createPartialMock(\Magento\TestFramework\Db\Adapter\Mysql::class, ['beginTransaction', 'rollBack']);
         $this->_object = $this->getMockBuilder(\Magento\TestFramework\Event\Transaction::class)
-            ->setMethods(['_getConnection'])
+            ->onlyMethods(['_getConnection'])
             ->setConstructorArgs([$this->_eventManager])
             ->getMock();
 
@@ -55,25 +55,17 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
             $param = $parameters[1];
             $param->requestTransactionStart();
         };
-        $this->_eventManager->expects(
-            $this->at(0)
-        )->method(
-            'fireEvent'
-        )->with(
-            $eventName
-        )->willReturnCallback(
-            $callback
-        );
+        $this->_eventManager
+            ->method('fireEvent')
+            ->withConsecutive([$eventName])
+            ->willReturnOnConsecutiveCalls($this->returnCallback($callback));
     }
 
     /**
-     * Setup expectations for "transaction start" use case
-     *
-     * @param \PHPUnit\Framework\MockObject\Rule\InvocationOrder $invocationMatcher
+     * Setup expectations for "transaction start" use case.
      */
-    protected function _expectTransactionStart(\PHPUnit\Framework\MockObject\Rule\InvocationOrder $invocationMatcher)
+    protected function _expectTransactionStart()
     {
-        $this->_eventManager->expects($invocationMatcher)->method('fireEvent')->with('startTransaction');
         $this->_adapter->expects($this->once())->method('beginTransaction');
     }
 
@@ -89,25 +81,17 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
             $param = $parameters[1];
             $param->requestTransactionRollback();
         };
-        $this->_eventManager->expects(
-            $this->at(0)
-        )->method(
-            'fireEvent'
-        )->with(
-            $eventName
-        )->willReturnCallback(
-            $callback
-        );
+        $this->_eventManager
+            ->method('fireEvent')
+            ->withConsecutive([$eventName])
+            ->willReturnOnConsecutiveCalls($this->returnCallback($callback));
     }
 
     /**
-     * Setup expectations for "transaction rollback" use case
-     *
-     * @param \PHPUnit\Framework\MockObject\Rule\InvocationOrder $invocationMatcher
+     * Setup expectations for "transaction rollback" use case.
      */
-    protected function _expectTransactionRollback(\PHPUnit\Framework\MockObject\Rule\InvocationOrder $invocationMatcher)
+    protected function _expectTransactionRollback()
     {
-        $this->_eventManager->expects($invocationMatcher)->method('fireEvent')->with('rollbackTransaction');
         $this->_adapter->expects($this->once())->method('rollback');
     }
 
@@ -118,13 +102,20 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
      */
     public function testStartAndRollbackTransaction($method, $eventName)
     {
+        $eventManagerWithArgs = [];
         $this->_imitateTransactionStartRequest($eventName);
-        $this->_expectTransactionStart($this->at(1));
+        $this->_expectTransactionStart();
+        $eventManagerWithArgs[] = ['startTransaction'];
         $this->_object->{$method}($this);
 
         $this->_imitateTransactionRollbackRequest($eventName);
-        $this->_expectTransactionRollback($this->at(1));
+        $this->_expectTransactionRollback();
+        $eventManagerWithArgs[] = ['rollbackTransaction'];
         $this->_object->{$method}($this);
+
+        $this->_eventManager
+            ->method('fireEvent')
+            ->withConsecutive($eventManagerWithArgs);
     }
 
     public function startAndRollbackTransactionDataProvider()
@@ -159,7 +150,11 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
         $this->_imitateTransactionStartRequest('startTestTransactionRequest');
         $this->_object->startTest($this);
 
-        $this->_expectTransactionRollback($this->once());
+        $this->_expectTransactionRollback();
+        $this->_eventManager
+            ->method('fireEvent')
+            ->withConsecutive(['rollbackTransaction']);
+
         $this->_object->endTestSuite();
     }
 }

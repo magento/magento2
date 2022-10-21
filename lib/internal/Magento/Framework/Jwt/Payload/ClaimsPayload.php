@@ -24,7 +24,10 @@ class ClaimsPayload implements ClaimsPayloadInterface
      */
     public function __construct(array $claims)
     {
-        $this->claims = $claims;
+        $this->claims = [];
+        foreach ($claims as $claim) {
+            $this->claims[$claim->getName()] = $claim;
+        }
     }
 
     /**

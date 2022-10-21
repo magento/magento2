@@ -26,6 +26,7 @@ use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
  * @magentoAppArea adminhtml
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductOtherTest extends ProductTestBase
 {
@@ -147,32 +148,17 @@ class ProductOtherTest extends ProductTestBase
             );
             $productAfterImport->load($productBeforeImport->getId());
             $this->assertEquals(
-                @strtotime(date('m/d/Y', @strtotime($row['news_from_date']))),
-                @strtotime($productAfterImport->getNewsFromDate())
+                strtotime(date('m/d/Y', strtotime($row['news_from_date']))),
+                strtotime($productAfterImport->getNewsFromDate())
             );
             $this->assertEquals(
-                @strtotime($row['news_to_date']),
-                @strtotime($productAfterImport->getNewsToDate())
+                strtotime($row['news_to_date']),
+                strtotime($productAfterImport->getNewsToDate())
             );
             unset($productAfterImport);
         }
         unset($productsBeforeImport, $product);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * @magentoAppArea adminhtml
@@ -243,9 +229,8 @@ class ProductOtherTest extends ProductTestBase
         $this->assertEquals($linksData, $importedProductLinks);
     }
 
-
-
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
@@ -303,8 +288,64 @@ class ProductOtherTest extends ProductTestBase
         }
     }
 
+    /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 0
+     * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testUpdateUrlRewritesOnImportWithoutGenerateCategoryProductRewrites()
+    {
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
 
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/../_files/products_to_import_with_category.csv',
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                'entity' => \Magento\Catalog\Model\Product::ENTITY
+            ]
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+
+        $this->_model->importData();
+
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->objectManager->create(\Magento\Catalog\Model\ProductRepository::class)->get('simple');
+        $listOfProductUrlKeys = [
+            sprintf('%s.html', $product->getUrlKey()),
+            sprintf('men/tops/%s.html', $product->getUrlKey()),
+            sprintf('men/%s.html', $product->getUrlKey())
+        ];
+        $repUrlRewriteCol = $this->objectManager->create(
+            UrlRewriteCollection::class
+        );
+
+        /** @var UrlRewriteCollection $collUrlRewrite */
+        $collUrlRewrite = $repUrlRewriteCol->addFieldToSelect(['request_path'])
+            ->addFieldToFilter('entity_id', ['eq'=> $product->getEntityId()])
+            ->addFieldToFilter('entity_type', ['eq'=> 'product'])
+            ->load();
+        $listOfUrlRewriteIds = $collUrlRewrite->getAllIds();
+        $this->assertCount(1, $collUrlRewrite);
+
+        foreach ($listOfUrlRewriteIds as $key => $id) {
+            $this->assertEquals(
+                $listOfProductUrlKeys[$key],
+                $collUrlRewrite->getItemById($id)->getRequestPath()
+            );
+        }
+    }
 
     /**
      * @magentoAppIsolation enabled
@@ -345,8 +386,6 @@ class ProductOtherTest extends ProductTestBase
             $this->assertEquals($manageStockUseConfig, $stockItem->getUseConfigManageStock());
         }
     }
-
-
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/multiselect_attribute_with_incorrect_values.php
@@ -608,10 +647,6 @@ class ProductOtherTest extends ProductTestBase
             );
         }
     }
-
-
-
-
 
     /**
      * Checks possibility to double importing products using the same import file.

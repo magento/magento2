@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Shipping\Model\Simplexml;
 
 /**
@@ -19,11 +20,10 @@ class Element extends \Magento\Framework\Simplexml\Element
      * @param string $namespace If specified, the namespace to which the attribute belongs.
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function addAttribute($name, $value = null, $namespace = null)
     {
-        if ($value !== null) {
-            $value = $this->xmlentities($value);
-        }
+        $value = $value !== null ? $this->xmlentities($value) : '';
         parent::addAttribute($name, $value, $namespace);
     }
 
@@ -35,6 +35,7 @@ class Element extends \Magento\Framework\Simplexml\Element
      * @param string $namespace If specified, the namespace to which the child element belongs.
      * @return \Magento\Shipping\Model\Simplexml\Element
      */
+    #[\ReturnTypeWillChange]
     public function addChild($name, $value = null, $namespace = null)
     {
         if ($value !== null) {
@@ -51,8 +52,13 @@ class Element extends \Magento\Framework\Simplexml\Element
      */
     public function xmlentities($value = null)
     {
+        if ($value === null) {
+            return '';
+        }
+
         $value = str_replace('&amp;', '&', $value);
         $value = str_replace('&', '&amp;', $value);
+
         return $value;
     }
 }

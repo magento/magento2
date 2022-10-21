@@ -10,7 +10,7 @@
         <newrelicreporting>
             <general>
                 <enable>0</enable>
-                <api_url>https://api.newrelic.com/deployments.xml</api_url>
+                <api_url>https://api.newrelic.com/v2/applications/%s/deployments.json</api_url>
                 <insights_api_url>https://insights-collector.newrelic.com/v1/accounts/%s/events</insights_api_url>
             </general>
             <cron>

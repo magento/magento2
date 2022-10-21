@@ -5,17 +5,20 @@
  */
 namespace Magento\Framework\Filter\Encrypt;
 
-class Basic implements \Zend_Filter_Encrypt_Interface
+use Laminas\Filter\Encrypt\EncryptionAlgorithmInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
+
+class Basic implements EncryptionAlgorithmInterface
 {
     /**
-     * @var \Magento\Framework\Encryption\EncryptorInterface
+     * @var EncryptorInterface
      */
     protected $encryptor;
 
     /**
-     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
+     * @param EncryptorInterface $encryptor
      */
-    public function __construct(\Magento\Framework\Encryption\EncryptorInterface $encryptor)
+    public function __construct(EncryptorInterface $encryptor)
     {
         $this->encryptor = $encryptor;
     }
@@ -40,5 +43,13 @@ class Basic implements \Zend_Filter_Encrypt_Interface
     public function decrypt($value)
     {
         return $this->encryptor->encrypt($value);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function toString()
+    {
+        return 'Basic';
     }
 }

@@ -34,7 +34,7 @@
         <div class="items-total">
             <span class="count" if="maxItemsToDisplay < getCartLineItemsCount()" text="maxItemsToDisplay"></span>
             <translate args="'of'" if="maxItemsToDisplay < getCartLineItemsCount()"></translate>
-            <span class="count" text="getCartParam('summary_count')"></span>
+            <span class="count" text="getCartParam('summary_count').toLocaleString(window.LOCALE)"></span>
                 <!-- ko if: (getCartParam('summary_count') > 1) -->
                     <span translate="'Items in Cart'"></span>
                 <!--/ko-->

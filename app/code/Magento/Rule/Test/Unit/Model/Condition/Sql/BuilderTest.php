@@ -25,8 +25,11 @@ class BuilderTest extends TestCase
     /**
      * @var Builder|MockObject
      */
-    protected $_builder;
+    protected $builder;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $expressionMock = $this->createMock(Expression::class);
@@ -37,13 +40,16 @@ class BuilderTest extends TestCase
         $expressionFactory->expects($this->any())
             ->method('create')
             ->willReturn($expressionMock);
-        $this->_builder = (new ObjectManagerHelper($this))->getObject(
+        $this->builder = (new ObjectManagerHelper($this))->getObject(
             Builder::class,
             ['expressionFactory' => $expressionFactory]
         );
     }
 
-    public function testAttachConditionToCollection()
+    /**
+     * @return void
+     */
+    public function testAttachConditionToCollection(): void
     {
         $collection = $this->getMockBuilder(AbstractCollection::class)
             ->addMethods(['getStoreId', 'getDefaultStoreId'])
@@ -78,16 +84,15 @@ class BuilderTest extends TestCase
             ->method('getConditions')
             ->willReturn([]);
 
-        $this->_builder->attachConditionToCollection($collection, $combine);
+        $this->builder->attachConditionToCollection($collection, $combine);
     }
 
     /**
      * Test for attach condition to collection with operator in html format
      *
-     * @covers \Magento\Rule\Model\Condition\Sql\Builder::attachConditionToCollection()
-     * @return void;
+     * @return void
      */
-    public function testAttachConditionAsHtmlToCollection()
+    public function testAttachConditionAsHtmlToCollection(): void
     {
         $abstractCondition = $this->getMockForAbstractClass(
             AbstractCondition::class,
@@ -101,8 +106,9 @@ class BuilderTest extends TestCase
 
         $abstractCondition->expects($this->once())->method('getMappedSqlField')->willReturn('argument');
         $abstractCondition->expects($this->once())->method('getOperatorForValidate')->willReturn('&gt;');
-        $abstractCondition->expects($this->at(1))->method('getAttribute')->willReturn('attribute');
-        $abstractCondition->expects($this->at(2))->method('getAttribute')->willReturn('attribute');
+        $abstractCondition
+            ->method('getAttribute')
+            ->willReturnOnConsecutiveCalls('attribute', 'attribute');
         $abstractCondition->expects($this->once())->method('getBindArgumentValue')->willReturn(10);
 
         $conditions = [$abstractCondition];
@@ -135,11 +141,10 @@ class BuilderTest extends TestCase
         $resource->expects($this->once())->method('getConnection')->willReturn($connection);
         $combine->expects($this->once())->method('getValue')->willReturn('attribute');
         $combine->expects($this->once())->method('getAggregator')->willReturn(' AND ');
-        $combine->expects($this->at(0))->method('getConditions')->willReturn($conditions);
-        $combine->expects($this->at(1))->method('getConditions')->willReturn($conditions);
-        $combine->expects($this->at(2))->method('getConditions')->willReturn($conditions);
-        $combine->expects($this->at(3))->method('getConditions')->willReturn($conditions);
+        $combine
+            ->method('getConditions')
+            ->willReturnOnConsecutiveCalls($conditions, $conditions, $conditions, $conditions);
 
-        $this->_builder->attachConditionToCollection($collection, $combine);
+        $this->builder->attachConditionToCollection($collection, $combine);
     }
 }

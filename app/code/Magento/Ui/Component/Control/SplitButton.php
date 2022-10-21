@@ -161,7 +161,12 @@ class SplitButton extends Button
             $classes[] = $disabled;
         }
 
-        $attributes = ['title' => $title, 'class' => join(' ', $classes), 'disabled' => $disabled];
+        $attributes = [
+            'title' => $title,
+            'class' => join(' ', $classes),
+            'disabled' => $disabled,
+            'aria-label' => (string)$this->getData('dropdown_button_aria_label'),
+        ];
         $this->getDataAttributes(['mage-init' => '{"dropdown": {}}', 'toggle' => 'dropdown'], $attributes);
 
         $html = $this->attributesToHtml($attributes);

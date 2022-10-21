@@ -32,19 +32,21 @@ class HttpContentProvider implements ContentProviderInterface
     private $urlBuilder;
 
     /**
-     * HttpContentProvider constructor.
      * @param ClientInterface $httpClient
      * @param UrlBuilder $urlBuilder
      * @param LoggerInterface $logger
+     * @param int $requestTimeout
      */
     public function __construct(
         ClientInterface $httpClient,
         UrlBuilder $urlBuilder,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        int $requestTimeout = 30
     ) {
         $this->httpClient = $httpClient;
         $this->urlBuilder = $urlBuilder;
         $this->logger = $logger;
+        $this->httpClient->setTimeout($requestTimeout);
     }
 
     /**
@@ -63,12 +65,7 @@ class HttpContentProvider implements ContentProviderInterface
                 }
             }
         } catch (\Exception $e) {
-            $this->logger->warning(
-                sprintf(
-                    'Failed to retrieve the release notification content. The response is: %s',
-                    empty($result) ? 'Response body is empty.' : $result
-                )
-            );
+            $this->logger->warning('Failed to retrieve the release notification content.', ['exception' => $e]);
         }
 
         return $result;
@@ -91,7 +88,7 @@ class HttpContentProvider implements ContentProviderInterface
     /**
      * Returns the response body from the HTTP client
      *
-     * @param $url
+     * @param string $url
      * @return string
      */
     private function getResponse($url)
