@@ -6,11 +6,11 @@
 
 namespace Magento\Quote\Model;
 
-use Magento\Framework\Exception\InputException;
-use Magento\Quote\Model\Quote\Address\BillingAddressPersister;
-use Psr\Log\LoggerInterface as Logger;
-use Magento\Quote\Api\BillingAddressManagementInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\InputException;
+use Magento\Quote\Api\BillingAddressManagementInterface;
+use Magento\Quote\Api\Data\AddressInterface;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Quote billing address write service object.
@@ -72,10 +72,18 @@ class BillingAddressManagement implements BillingAddressManagementInterface
      * @inheritdoc
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address, $useForShipping = false)
+    public function assign($cartId, AddressInterface $address, $useForShipping = false)
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
+
+        // reset the address id, if it doesn't belong to quote.
+        $old = $quote->getAddressesCollection()->getItemById($address->getId())
+            ?? $quote->getBillingAddress();
+        if ($old !== null) {
+            $address->setId($old->getId());
+        }
+
         $address->setCustomerId($quote->getCustomerId());
         $quote->removeAddress($quote->getBillingAddress()->getId());
         $quote->setBillingAddress($address);
