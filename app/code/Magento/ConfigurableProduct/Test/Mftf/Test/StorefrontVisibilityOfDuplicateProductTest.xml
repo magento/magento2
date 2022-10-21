@@ -33,7 +33,7 @@
             <actionGroup ref="DeleteAllDuplicateProductUsingProductGridActionGroup" stepKey="deleteDuplicatedProduct">
                 <argument name="product" value="$$createConfigProduct$$"/>
             </actionGroup>
-            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
             <!--Delete product attributes-->
             <comment userInput="Delete product attributes" stepKey="deleteCommentAttributes"/>
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">

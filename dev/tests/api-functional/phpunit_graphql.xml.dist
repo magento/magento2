@@ -110,9 +110,6 @@
                     <element key="Override">
                         <string>Override</string>
                     </element>
-                    <element key="magentoDataFixtureDataProvider">
-                        <string>magentoDataFixtureDataProvider</string>
-                    </element>
                 </array>
             </arguments>
         </listener>

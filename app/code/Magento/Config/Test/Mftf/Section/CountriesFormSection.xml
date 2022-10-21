@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CountriesFormSection">
+        <element name="optionvalue" type="select" selector='//*[@id="general_country_eu_countries"]'/>
+        <element name="saveConfig" type="button" selector="#save" timeout="30"/>
+        <element name="label" type="input" selector="#row_general_country_optional_zip_countries"/>
+        <element name="useConfigSettings" type="checkbox" selector="//input[@name='groups[country][fields][eu_countries][inherit]']"/>
+        <element name="block" type="button" selector='a#general_country-head'/>
+    </section>
+</sections>

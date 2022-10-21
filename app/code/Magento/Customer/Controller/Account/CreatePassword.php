@@ -17,6 +17,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Controller for front-end customer password reset form
@@ -49,12 +50,18 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implem
     private $getByToken;
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param PageFactory $resultPageFactory
      * @param AccountManagementInterface $accountManagement
      * @param ConfirmCustomerByToken|null $confirmByToken
      * @param GetCustomerByToken|null $getByToken
+     * @param CustomerRepositoryInterface|null $customerRepository
      */
     public function __construct(
         Context $context,
@@ -62,7 +69,8 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implem
         PageFactory $resultPageFactory,
         AccountManagementInterface $accountManagement,
         ConfirmCustomerByToken $confirmByToken = null,
-        GetCustomerByToken $getByToken = null
+        GetCustomerByToken $getByToken = null,
+        CustomerRepositoryInterface $customerRepository = null
     ) {
         $this->session = $customerSession;
         $this->resultPageFactory = $resultPageFactory;
@@ -71,6 +79,8 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implem
             ?? ObjectManager::getInstance()->get(ConfirmCustomerByToken::class);
         $this->getByToken = $getByToken
             ?? ObjectManager::getInstance()->get(GetCustomerByToken::class);
+        $this->customerRepository = $customerRepository
+            ?? ObjectManager::getInstance()->get(CustomerRepositoryInterface::class);
 
         parent::__construct($context);
     }
@@ -83,23 +93,25 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implem
     public function execute()
     {
         $resetPasswordToken = (string)$this->getRequest()->getParam('token');
+        $customerId = (int)$this->getRequest()->getParam('id');
         $isDirectLink = $resetPasswordToken != '';
         if (!$isDirectLink) {
             $resetPasswordToken = (string)$this->session->getRpToken();
+            $customerId = (int)$this->session->getRpCustomerId();
         }
 
         try {
-            $this->accountManagement->validateResetPasswordLinkToken(null, $resetPasswordToken);
-
-            $this->confirmByToken->execute($resetPasswordToken);
+            $this->accountManagement->validateResetPasswordLinkToken($customerId, $resetPasswordToken);
+            $this->confirmByToken->resetCustomerConfirmation($customerId);
 
             // Extend token validity to avoid expiration while this form is
             // being completed by the user.
-            $customer = $this->getByToken->execute($resetPasswordToken);
+            $customer = $this->customerRepository->getById($customerId);
             $this->accountManagement->changeResetPasswordLinkToken($customer, $resetPasswordToken);
 
             if ($isDirectLink) {
                 $this->session->setRpToken($resetPasswordToken);
+                $this->session->setRpCustomerId($customerId);
                 $resultRedirect = $this->resultRedirectFactory->create();
                 $resultRedirect->setPath('*/*/createpassword');
 
@@ -109,7 +121,8 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implem
                 $resultPage = $this->resultPageFactory->create();
                 $resultPage->getLayout()
                            ->getBlock('resetPassword')
-                           ->setResetPasswordLinkToken($resetPasswordToken);
+                           ->setResetPasswordLinkToken($resetPasswordToken)
+                           ->setRpCustomerId($customerId);
 
                 return $resultPage;
             }

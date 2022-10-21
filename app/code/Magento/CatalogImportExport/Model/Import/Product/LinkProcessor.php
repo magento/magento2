@@ -78,13 +78,15 @@ class LinkProcessor
      * @param Product $importEntity
      * @param Data $dataSourceModel
      * @param string $linkField
+     * @param array $ids
      * @return void
      * @throws LocalizedException
      */
     public function saveLinks(
         Product $importEntity,
         Data $dataSourceModel,
-        string $linkField
+        string $linkField,
+        array $ids
     ): void {
         $resource = $this->linkFactory->create();
         $mainTable = $resource->getMainTable();
@@ -101,7 +103,7 @@ class LinkProcessor
             $bind = [':link_id' => $linkId, ':position' => 'position'];
             $positionAttrId[$linkId] = $importEntity->getConnection()->fetchOne($select, $bind);
         }
-        while ($bunch = $dataSourceModel->getNextBunch()) {
+        while ($bunch = $dataSourceModel->getNextUniqueBunch($ids)) {
             $nextLinkId = $this->resourceHelper->getNextAutoincrement($mainTable);
             $this->processLinkBunches($importEntity, $linkField, $bunch, $resource, $nextLinkId, $positionAttrId);
         }
@@ -111,6 +113,7 @@ class LinkProcessor
      * Add link types (exists for backwards compatibility)
      *
      * @deprecated 101.1.0 Use DI to inject to the constructor
+     * @see Nothing
      * @param array $nameToIds
      */
     public function addNameToIds(array $nameToIds): void
@@ -130,6 +133,7 @@ class LinkProcessor
      *
      * @return void
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processLinkBunches(
         Product $importEntity,
@@ -153,7 +157,9 @@ class LinkProcessor
             $linkNameToId = $this->filterProvidedLinkTypes($rowData);
 
             foreach ($linkNameToId as $linkName => $linkId) {
-                $linkSkus = explode($importEntity->getMultipleValueSeparator(), $rowData[$linkName . 'sku']);
+                $linkSkuKey = $linkName . 'sku';
+                $linkSkus = isset($rowData[$linkSkuKey]) ?
+                    explode($importEntity->getMultipleValueSeparator(), $rowData[$linkSkuKey]) : [];
 
                 //process empty value
                 if (!empty($linkSkus[0]) && $linkSkus[0] === $importEntity->getEmptyAttributeValueConstant()) {
@@ -388,7 +394,7 @@ class LinkProcessor
         return array_filter(
             $linkSkus,
             function ($linkedSku) use ($sku, $importEntity) {
-                $linkedSku = trim($linkedSku);
+                $linkedSku = $linkedSku !== null ? trim($linkedSku) : '';
 
                 return (
                         $this->skuProcessor->getNewSku($linkedSku) !== null

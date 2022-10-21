@@ -25,11 +25,13 @@
             <createData entity="defaultVirtualProduct" stepKey="initialVirtualProduct">
                 <requiredEntity createDataKey="initialCategoryEntity"/>
             </createData>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteDefaultVirtualProduct">
                 <argument name="sku" value="{{updateVirtualProductRegularPrice99OutOfStock.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

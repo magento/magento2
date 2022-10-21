@@ -20,13 +20,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  */
 class Manager
 {
-    const BUNDLE_JS_DIR = 'js/bundle';
+    public const BUNDLE_JS_DIR = 'js/bundle';
 
-    const BUNDLE_PATH = '/js/bundle/bundle';
+    public const BUNDLE_PATH = '/js/bundle/bundle';
 
-    const ASSET_TYPE_JS = 'js';
+    public const ASSET_TYPE_JS = 'js';
 
-    const ASSET_TYPE_HTML = 'html';
+    public const ASSET_TYPE_HTML = 'html';
 
     /**
      * @var \Magento\Framework\Filesystem
@@ -127,7 +127,7 @@ class Manager
         /** @var $asset LocalInterface */
         $directoryPathInfo = $this->splitPath($directoryPath);
         if ($directoryPathInfo && $this->compareModules($directoryPathInfo, $asset)) {
-            return strpos($assetDirectory, $directoryPathInfo['excludedPath']) === 0;
+            return strpos($assetDirectory, $directoryPathInfo['excludedPath'] ?? '') === 0;
         }
         return false;
     }
@@ -175,7 +175,7 @@ class Manager
      */
     protected function splitPath($path)
     {
-        if (strpos($path, '::') !== false) {
+        if ($path && strpos($path, '::') !== false) {
             list($excludedModule, $excludedPath) = explode('::', $path);
             return [
                 'excludedModule' => $excludedModule,
@@ -215,7 +215,7 @@ class Manager
             return false;
         }
 
-        if (strpos($sourceFile, '.min.') === false) {
+        if ($sourceFile && strpos($sourceFile, '.min.') === false) {
             $info = pathinfo($asset->getPath());
             $assetMinifiedPath = $info['dirname'] . '/' . $info['filename'] . '.min.' . $info['extension'];
             if ($this->filesystem->getDirectoryRead(DirectoryList::APP)->isExist($assetMinifiedPath)) {

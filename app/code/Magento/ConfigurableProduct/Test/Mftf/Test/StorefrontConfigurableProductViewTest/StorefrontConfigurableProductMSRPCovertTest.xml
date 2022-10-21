@@ -80,6 +80,9 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <createData entity="MsrpDisableMAP" stepKey="disableMAP"/>
             <magentoCLI command="config:set currency/options/allow USD" stepKey="setCurrencyAllow"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
