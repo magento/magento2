@@ -59,6 +59,7 @@ class AddressComparator implements AddressComparatorInterface
      * @param array $array1
      * @param array $array2
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function arrayDiffAssocRecursive(array $array1, array $array2): array
     {
