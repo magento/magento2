@@ -14,6 +14,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Filter\LocalizedToNormalized;
 
 /**
  * Controller for processing add to cart action.
@@ -105,7 +106,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
         $params = $this->getRequest()->getParams();
         try {
             if (isset($params['qty'])) {
-                $filter = new \Zend_Filter_LocalizedToNormalized(
+                $filter = new LocalizedToNormalized(
                     ['locale' => $this->_objectManager->get(
                         \Magento\Framework\Locale\ResolverInterface::class
                     )->getLocale()]

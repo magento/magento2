@@ -90,12 +90,12 @@ class IpnTest extends TestCase
             ->willReturn('https://ipnpb_paypal_url');
 
         $this->curlFactory = $this->getMockBuilder(CurlFactory::class)
-            ->addMethods(['setConfig', 'write', 'read'])
+            ->addMethods(['setOptions', 'write', 'read'])
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->curlFactory->expects($this->any())->method('create')->willReturnSelf();
-        $this->curlFactory->expects($this->any())->method('setConfig')->willReturnSelf();
+        $this->curlFactory->expects($this->any())->method('setOptions')->willReturnSelf();
         $this->curlFactory->expects($this->any())->method('write')->willReturnSelf();
         $this->curlFactory->expects($this->any())->method('read')->willReturn(
             '

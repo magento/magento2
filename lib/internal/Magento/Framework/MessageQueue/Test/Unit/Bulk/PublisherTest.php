@@ -131,8 +131,8 @@ class PublisherTest extends TestCase
             [
                 'body' => $encodedMessage,
                 'properties' => [
-                    'delivery_mode' => 2,
                     'message_id' => $messageId,
+                    'topic_name' => $topicName
                 ]
             ]
         )->willReturn($envelope);

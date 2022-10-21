@@ -72,6 +72,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Bundle\Pricing\Price\BundleRegularPrice">
+        <arguments>
+            <argument name="calculator" xsi:type="object">Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface</argument>
+        </arguments>
+    </type>
     <type name="Magento\Bundle\Pricing\Price\FinalPrice">
         <arguments>
             <argument name="calculator" xsi:type="object">Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface</argument>
@@ -275,6 +280,13 @@
         <arguments>
             <argument name="priceModifiers" xsi:type="array">
                 <item name="DisabledProductOptionPriceModifier" xsi:type="object">Magento\Bundle\Model\ResourceModel\Indexer\Price\DisabledProductOptionPriceModifier</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Observer\SaveInventoryDataObserver">
+        <arguments>
+            <argument name="parentItemProcessorPool" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\Bundle\Model\Inventory\ParentItemProcessor</item>
             </argument>
         </arguments>
     </type>

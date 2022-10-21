@@ -78,6 +78,11 @@ class CurrentTest extends TestCase
      */
     public function testIsCurrentIfIsset(): void
     {
+        $pathStub = '';
+        $this->_urlBuilderMock->method('getUrl')
+            ->with($pathStub)
+            ->willReturn('http://example.com/');
+        $this->currentLink->setPath($pathStub);
         $this->currentLink->setCurrent(true);
         $this->assertTrue($this->currentLink->isCurrent());
     }
@@ -114,10 +119,12 @@ class CurrentTest extends TestCase
         $willReturnArgs[] = $this->returnValue($urlStub);
         $withArgs[] = [$request['mcaStub']];
         $willReturnArgs[] = $this->returnValue($request['getUrl']);
+        $withArgs[] = ['*/*/*', ['_current' => false, '_use_rewrite' => true]];
 
         if ($request['mcaStub'] == '') {
-            $withArgs[] = ['*/*/*', ['_current' => false, '_use_rewrite' => true]];
             $willReturnArgs[] = $this->returnValue($urlStub);
+        } else {
+            $willReturnArgs[] = $this->returnValue('');
         }
         $this->_urlBuilderMock
             ->method('getUrl')

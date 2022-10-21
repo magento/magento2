@@ -4,7 +4,7 @@ The Magento_Authorization module enables management of access control list roles
 
 ## Installation details
 
-The Magento_AdminNotification module creates the following tables in the database:
+The Magento_Authorization module creates the following tables in the database using `db_schema.xml`:
 
 - `authorization_role`
 - `authorization_rule`

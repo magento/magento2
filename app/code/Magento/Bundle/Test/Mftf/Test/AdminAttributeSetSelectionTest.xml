@@ -40,8 +40,11 @@
 
         <!-- Go to new product page and see a default attribute -->
         <!-- Switch from default attribute set to new attribute set -->
-        <amOnPage url="{{AdminProductCreatePage.url('4', 'bundle')}}" stepKey="goToNewProductPage"/>
-        <waitForPageLoad stepKey="wait2"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToNewProductPage">
+            <argument name="attributeSetId" value="4"/>
+            <argument name="productType" value="bundle"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait2"/>
 
         <actionGroup ref="AdminSelectAttributeSetOnEditProductPageActionGroup" stepKey="startEditAttrSet">
             <argument name="attributeSet" value="{{ProductAttributeFrontendLabel.label}}"/>

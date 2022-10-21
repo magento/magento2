@@ -69,7 +69,7 @@ define([
         }
     });
 
-    $(document).ready(function () {
+    $(function () {
         $('#system_messages .message-system-short .error').on('click', function () {
             $('#message-system-all').systemMessageDialog('openModal', 1);
         });

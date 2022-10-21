@@ -6,21 +6,20 @@
 
 namespace Magento\Webapi\Controller;
 
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Webapi\ErrorProcessor;
-use Magento\Framework\Webapi\Request;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
+use Magento\Framework\Webapi\Rest\RequestValidatorInterface;
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
 use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Webapi\Controller\Rest\ParamsOverrider;
+use Magento\Webapi\Controller\Rest\RequestProcessorPool;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
-use Magento\Webapi\Controller\Rest\RequestProcessorPool;
 
 /**
  * Front controller for WebAPI REST area.
@@ -35,17 +34,19 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      *
      * @deprecated 100.3.0
      */
-    const SCHEMA_PATH = '/schema';
+    public const SCHEMA_PATH = '/schema';
 
     /**
      * @var Router
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected $_router;
 
     /**
      * @var Route
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected $_route;
 
@@ -72,12 +73,14 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     /**
      * @var Authorization
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected $authorization;
 
     /**
      * @var ServiceInputProcessor
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected $serviceInputProcessor;
 
@@ -104,6 +107,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     /**
      * @var ParamsOverrider
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected $paramsOverrider;
 
@@ -113,8 +117,14 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected $requestProcessorPool;
 
     /**
+     * @var RequestValidatorInterface
+     */
+    private $requestValidator;
+
+    /**
      * @var StoreManagerInterface
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     private $storeManager;
 
@@ -134,6 +144,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @param ParamsOverrider $paramsOverrider
      * @param StoreManagerInterface $storeManager
      * @param RequestProcessorPool $requestProcessorPool
+     * @param RequestValidatorInterface $requestValidator
      *
      * TODO: Consider removal of warning suppression
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -151,7 +162,8 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         \Magento\Framework\App\AreaList $areaList,
         ParamsOverrider $paramsOverrider,
         StoreManagerInterface $storeManager,
-        RequestProcessorPool $requestProcessorPool
+        RequestProcessorPool $requestProcessorPool,
+        RequestValidatorInterface $requestValidator
     ) {
         $this->_router = $router;
         $this->_request = $request;
@@ -166,6 +178,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->paramsOverrider = $paramsOverrider;
         $this->storeManager = $storeManager;
         $this->requestProcessorPool = $requestProcessorPool;
+        $this->requestValidator = $requestValidator;
     }
 
     /**
@@ -184,8 +197,13 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->areaList->getArea($this->_appState->getAreaCode())
             ->load(\Magento\Framework\App\Area::PART_TRANSLATE);
         try {
+            $this->requestValidator->validate($this->_request);
             $processor = $this->requestProcessorPool->getProcessor($this->_request);
             $processor->process($this->_request);
+        } catch (CouldNotSaveException $e) {
+            $maskedException = $this->_errorProcessor->maskException($e);
+            $this->_response->setException($maskedException);
+            $this->_response->setHeader('errorRedirectAction', '#shipping');
         } catch (\Exception $e) {
             $maskedException = $this->_errorProcessor->maskException($e);
             $this->_response->setException($maskedException);
@@ -257,7 +275,8 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         if ($this->storeManager->getStore()->getCode() === Store::ADMIN_CODE
             && strtoupper($this->_request->getMethod()) === RestRequest::HTTP_METHOD_GET
         ) {
-            throw new \Magento\Framework\Webapi\Exception(__('Cannot perform GET operation with store code \'all\''));
+            throw
+            new \Magento\Framework\Webapi\Exception(__('Cannot perform GET operation with store code \'all\''));
         }
     }
 }

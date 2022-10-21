@@ -8,9 +8,10 @@ declare(strict_types=1);
 namespace Magento\Quote\Model\Cart;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Cart\BuyRequest\BuyRequestBuilder;
 use Magento\Quote\Model\Cart\Data\AddProductsToCartOutput;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
@@ -52,11 +53,6 @@ class AddProductsToCart
     private $productRepository;
 
     /**
-     * @var array
-     */
-    private $errors = [];
-
-    /**
      * @var CartRepositoryInterface
      */
     private $cartRepository;
@@ -72,21 +68,31 @@ class AddProductsToCart
     private $requestBuilder;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param CartRepositoryInterface $cartRepository
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param BuyRequestBuilder $requestBuilder
+     * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         CartRepositoryInterface $cartRepository,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
-        BuyRequestBuilder $requestBuilder
+        BuyRequestBuilder $requestBuilder,
+        SearchCriteriaBuilder $searchCriteriaBuilder = null
     ) {
         $this->productRepository = $productRepository;
         $this->cartRepository = $cartRepository;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->requestBuilder = $requestBuilder;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()->get(
+            SearchCriteriaBuilder::class
+        );
     }
 
     /**
@@ -101,87 +107,138 @@ class AddProductsToCart
     {
         $cartId = $this->maskedQuoteIdToQuoteId->execute($maskedCartId);
         $cart = $this->cartRepository->get($cartId);
-
-        foreach ($cartItems as $cartItemPosition => $cartItem) {
-            $this->addItemToCart($cart, $cartItem, $cartItemPosition);
-        }
-
+        $allErrors = [];
         if ($cart->getData('has_error')) {
             $errors = $cart->getErrors();
 
             /** @var MessageInterface $error */
             foreach ($errors as $error) {
-                $this->addError($error->getText());
+                $allErrors[] = $this->createError($error->getText());
             }
         }
 
-        if (count($this->errors) !== 0) {
+        $failedCartItems = $this->addItemsToCart($cart, $cartItems);
+        $saveCart = empty($failedCartItems);
+        if (!empty($failedCartItems)) {
+            /* Check if some cart items were successfully added to the cart */
+            if (count($failedCartItems) < count($cartItems)) {
+                /* Revert changes introduced by add to cart processes in case of an error */
+                $cart->getItemsCollection()->clear();
+                $newFailedCartItems = $this->addItemsToCart($cart, array_diff_key($cartItems, $failedCartItems));
+                $failedCartItems += $newFailedCartItems;
+                $saveCart = empty($newFailedCartItems);
+            }
+            foreach (array_keys($cartItems) as $cartItemPosition) {
+                if (isset($failedCartItems[$cartItemPosition])) {
+                    array_push($allErrors, ...$failedCartItems[$cartItemPosition]);
+                }
+            }
+        }
+
+        if ($saveCart) {
+            $this->cartRepository->save($cart);
+        }
+
+        if (count($allErrors) !== 0) {
             /* Revert changes introduced by add to cart processes in case of an error */
             $cart->getItemsCollection()->clear();
         }
 
-        return $this->prepareErrorOutput($cart);
+        return $this->prepareErrorOutput($cart, $allErrors);
+    }
+
+    /**
+     * Add cart items to cart
+     *
+     * @param Quote $cart
+     * @param array $cartItems
+     * @return array
+     */
+    public function addItemsToCart(Quote $cart, array $cartItems): array
+    {
+        $failedCartItems = [];
+        $cartItemSkus = \array_map(
+            function ($item) {
+                return $item->getSku();
+            },
+            $cartItems
+        );
+
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter('sku', $cartItemSkus, 'in')->create();
+        // getList() call caches product models in runtime cache
+        $this->productRepository->getList($searchCriteria)->getItems();
+
+        foreach ($cartItems as $cartItemPosition => $cartItem) {
+            $errors = $this->addItemToCart($cart, $cartItem, $cartItemPosition);
+            if ($errors) {
+                $failedCartItems[$cartItemPosition] = $errors;
+            }
+        }
+
+        return $failedCartItems;
     }
 
     /**
      * Adds a particular item to the shopping cart
      *
-     * @param CartInterface|Quote $cart
+     * @param Quote $cart
      * @param Data\CartItem $cartItem
      * @param int $cartItemPosition
+     * @return array
      */
-    private function addItemToCart(CartInterface $cart, Data\CartItem $cartItem, int $cartItemPosition): void
+    private function addItemToCart(Quote $cart, Data\CartItem $cartItem, int $cartItemPosition): array
     {
         $sku = $cartItem->getSku();
+        $errors = [];
+        $result = null;
+        $product = null;
 
         if ($cartItem->getQuantity() <= 0) {
-            $this->addError(__('The product quantity should be greater than 0')->render());
-
-            return;
-        }
-
-        try {
-            $product = $this->productRepository->get($sku, false, null, true);
-        } catch (NoSuchEntityException $e) {
-            $this->addError(
-                __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
+            $errors[] = $this->createError(
+                __('The product quantity should be greater than 0')->render(),
                 $cartItemPosition
             );
+        } else {
+            try {
+                $product = $this->productRepository->get($sku, false, $cart->getStoreId(), false);
+            } catch (NoSuchEntityException $e) {
+                $errors[] = $this->createError(
+                    __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
+                    $cartItemPosition
+                );
+            }
 
-            return;
-        }
+            if ($product !== null) {
+                try {
+                    $result = $cart->addProduct($product, $this->requestBuilder->build($cartItem));
+                } catch (\Throwable $e) {
+                    $errors[] = $this->createError(
+                        __($e->getMessage())->render(),
+                        $cartItemPosition
+                    );
+                }
 
-        try {
-            $result = $cart->addProduct($product, $this->requestBuilder->build($cartItem));
-            $this->cartRepository->save($cart);
-        } catch (\Throwable $e) {
-            $this->addError(
-                __($e->getMessage())->render(),
-                $cartItemPosition
-            );
-            $cart->setHasError(false);
-
-            return;
-        }
-
-        if (is_string($result)) {
-            $errors = array_unique(explode("\n", $result));
-            foreach ($errors as $error) {
-                $this->addError(__($error)->render(), $cartItemPosition);
+                if (is_string($result)) {
+                    foreach (array_unique(explode("\n", $result)) as $error) {
+                        $errors[] = $this->createError(__($error)->render(), $cartItemPosition);
+                    }
+                }
             }
         }
+
+        return $errors;
     }
 
     /**
-     * Add order line item error
+     * Returns an error object
      *
      * @param string $message
      * @param int $cartItemPosition
-     * @return void
+     * @return Data\Error
      */
-    private function addError(string $message, int $cartItemPosition = 0): void
+    private function createError(string $message, int $cartItemPosition = 0): Data\Error
     {
-        $this->errors[] = new Data\Error(
+        return new Data\Error(
             $message,
             $this->getErrorCode($message),
             $cartItemPosition
@@ -211,13 +268,13 @@ class AddProductsToCart
     /**
      * Creates a new output from existing errors
      *
-     * @param CartInterface $cart
+     * @param Quote $cart
+     * @param array $errors
      * @return AddProductsToCartOutput
      */
-    private function prepareErrorOutput(CartInterface $cart): AddProductsToCartOutput
+    private function prepareErrorOutput(Quote $cart, array $errors = []): AddProductsToCartOutput
     {
-        $output = new AddProductsToCartOutput($cart, $this->errors);
-        $this->errors = [];
+        $output = new AddProductsToCartOutput($cart, $errors);
         $cart->setHasError(false);
 
         return $output;

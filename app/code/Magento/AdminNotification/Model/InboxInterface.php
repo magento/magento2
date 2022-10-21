@@ -18,7 +18,6 @@ interface InboxInterface
      *
      * @param int|null $severity
      * @return array|string|null
-     * @api
      */
     public function getSeverities($severity = null);
 
@@ -26,7 +25,6 @@ interface InboxInterface
      * Retrieve Latest Notice
      *
      * @return $this
-     * @api
      */
     public function loadLatestNotice();
 
@@ -34,7 +32,6 @@ interface InboxInterface
      * Retrieve notice statuses
      *
      * @return array
-     * @api
      */
     public function getNoticeStatus();
 }

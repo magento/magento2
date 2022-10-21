@@ -18,6 +18,7 @@
             <severity value="MAJOR"/>
             <group value="backend"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{MinifyJavaScriptFilesEnableConfigData.path}} {{MinifyJavaScriptFilesEnableConfigData.value}}" stepKey="enableJsMinification"/>

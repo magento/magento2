@@ -25,6 +25,7 @@
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCreatedStore">
                 <argument name="storeGroupName" value="customStore.code"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

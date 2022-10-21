@@ -49,12 +49,6 @@ script;
             <span class="title"><?= $block->escapeHtml(__('Unassigned Attributes')) ?></span>
         </div>
         <div id="tree-div2" class="attribute-set-tree"></div>
-        <?= /* @noEscape */ $secureRenderer->renderTag(
-            'script',
-            ['id' => "ie-deferred-loader",  'defer' => "defer", 'src' => "//:"],
-            '&nbsp;',
-            false
-        ) ?>
         <?php $readOnly = ($block->getIsReadOnly() ? 'false' : 'true');
         $groupTree = /* @noEscape */ $block->getGroupTreeJson();
         $attributeTreeJson = /* @noEscape */ $block->getAttributeTreeJson();

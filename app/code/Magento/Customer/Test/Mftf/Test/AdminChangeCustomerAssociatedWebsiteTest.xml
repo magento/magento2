@@ -38,6 +38,7 @@
                 <argument name="StoreGroup" value="NewStoreData"/>
                 <argument name="customStore" value="NewStoreViewData"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <!--Create customer-->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
@@ -48,6 +49,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <!--Logout from admin-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>

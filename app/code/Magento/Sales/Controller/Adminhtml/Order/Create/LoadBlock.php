@@ -10,8 +10,10 @@ use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterf
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Sales\Controller\Adminhtml\Order\Create as CreateAction;
+use Magento\Store\Model\StoreManagerInterface;
 
 class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGetActionInterface
 {
@@ -21,12 +23,18 @@ class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGet
     protected $resultRawFactory;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\Escaper $escaper
      * @param PageFactory $resultPageFactory
      * @param ForwardFactory $resultForwardFactory
      * @param RawFactory $resultRawFactory
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         Action\Context $context,
@@ -34,7 +42,8 @@ class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGet
         \Magento\Framework\Escaper $escaper,
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory,
-        RawFactory $resultRawFactory
+        RawFactory $resultRawFactory,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->resultRawFactory = $resultRawFactory;
         parent::__construct(
@@ -44,16 +53,24 @@ class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGet
             $resultPageFactory,
             $resultForwardFactory
         );
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
+            ->get(StoreManagerInterface::class);
     }
 
     /**
      * Loading page block
      *
      * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\Controller\Result\Raw
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
         $request = $this->getRequest();
+        if ($request->getParam('store_id') !== 'false') {
+            $this->storeManager->setCurrentStore($request->getParam('store_id'));
+        }
         try {
             $this->_initSession()->_processData();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {

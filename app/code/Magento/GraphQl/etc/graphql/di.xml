@@ -30,4 +30,15 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQl\Model\Mutation\Resolver\ErrorTypeResolver">
+        <arguments>
+            <argument name="validErrorTypes" xsi:type="array">
+                <item name="no_such_entity_uid" xsi:type="string">NoSuchEntityUidError</item>
+                <item name="internal_error" xsi:type="string">InternalError</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Session\SessionStartChecker">
+        <plugin name="graphql_session_disable" type="Magento\GraphQl\Plugin\DisableSession"/>
+    </type>
 </config>

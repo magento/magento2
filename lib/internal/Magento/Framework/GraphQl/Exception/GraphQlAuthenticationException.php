@@ -13,6 +13,8 @@ use Magento\Framework\Phrase;
 
 /**
  * Exception for GraphQL to be thrown when authentication fails
+ *
+ * @api
  */
 class GraphQlAuthenticationException extends AuthenticationException implements ClientAware
 {

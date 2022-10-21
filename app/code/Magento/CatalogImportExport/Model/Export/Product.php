@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Product as ProductEntity;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\Store;
@@ -38,7 +39,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Value that means all entities (e.g. websites, groups etc.)
      */
-    const VALUE_ALL = 'all';
+    public const VALUE_ALL = 'all';
 
     /**
      * Permanent column names.
@@ -46,25 +47,25 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Names that begins with underscore is not an attribute. This name convention is for
      * to avoid interference with same attribute name.
      */
-    const COL_STORE = '_store';
+    public const COL_STORE = '_store';
 
-    const COL_ATTR_SET = '_attribute_set';
+    public const COL_ATTR_SET = '_attribute_set';
 
-    const COL_TYPE = '_type';
+    public const COL_TYPE = '_type';
 
-    const COL_PRODUCT_WEBSITES = '_product_websites';
+    public const COL_PRODUCT_WEBSITES = '_product_websites';
 
-    const COL_CATEGORY = '_category';
+    public const COL_CATEGORY = '_category';
 
-    const COL_ROOT_CATEGORY = '_root_category';
+    public const COL_ROOT_CATEGORY = '_root_category';
 
-    const COL_SKU = 'sku';
+    public const COL_SKU = 'sku';
 
-    const COL_VISIBILITY = 'visibility';
+    public const COL_VISIBILITY = 'visibility';
 
-    const COL_MEDIA_IMAGE = '_media_image';
+    public const COL_MEDIA_IMAGE = '_media_image';
 
-    const COL_ADDITIONAL_ATTRIBUTES = 'additional_attributes';
+    public const COL_ADDITIONAL_ATTRIBUTES = 'additional_attributes';
 
     /**
      * Pairs of attribute set ID-to-name.
@@ -123,14 +124,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_storeIdToCode = [];
 
     /**
-     * Website ID-to-code.
+     * Array of Website ID-to-code.
      *
      * @var array
      */
     protected $_websiteIdToCode = [];
 
     /**
-     * Attribute types
+     * Attributes type
      *
      * @var array
      */
@@ -169,6 +170,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      *
      * @var array
      * @deprecated 100.2.0
+     * @see we don't use this variable anymore
      */
     protected $_headerColumns = [];
 
@@ -285,6 +287,18 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     ];
 
     /**
+     * Image labels array
+     *
+     * @var array
+     */
+    private $imageLabelAttributes = [
+        'base_image_label',
+        'small_image_label',
+        'thumbnail_image_label',
+        'swatch_image_label',
+    ];
+
+    /**
      * Attributes codes which are appropriate for export and not the part of additional_attributes.
      *
      * @var array
@@ -346,7 +360,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $metadataPool;
 
     /**
-     * Product entity link field
+     * Link field of Product entity
      *
      * @var string
      */
@@ -355,6 +369,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @var ProductFilterInterface
      */
     private $filter;
+
+    /**
+     * @var StockConfigurationInterface
+     */
+    private $stockConfiguration;
 
     /**
      * Product constructor.
@@ -376,7 +395,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param ProductEntity\LinkTypeProvider $linkTypeProvider
      * @param RowCustomizerInterface $rowCustomizer
      * @param array $dateAttrCodes
-     * @param ProductFilterInterface $filter
+     * @param ProductFilterInterface|null $filter
+     * @param StockConfigurationInterface|null $stockConfiguration
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -397,7 +417,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer,
         array $dateAttrCodes = [],
-        ?ProductFilterInterface $filter = null
+        ?ProductFilterInterface $filter = null,
+        ?StockConfigurationInterface $stockConfiguration = null
     ) {
         $this->_entityCollectionFactory = $collectionFactory;
         $this->_exportConfig = $exportConfig;
@@ -414,7 +435,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $this->rowCustomizer = $rowCustomizer;
         $this->dateAttrCodes = array_merge($this->dateAttrCodes, $dateAttrCodes);
         $this->filter = $filter ?? ObjectManager::getInstance()->get(ProductFilterInterface::class);
-
+        $this->stockConfiguration = $stockConfiguration ?? ObjectManager::getInstance()
+                ->get(StockConfigurationInterface::class);
         parent::__construct($localeDate, $config, $resource, $storeManager);
 
         $this->initTypeModels()
@@ -457,7 +479,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     $childCategory = $collection->getItemById($structure[$i]);
                     if ($childCategory) {
                         $name = $childCategory->getName();
-                        $path[] = $this->quoteCategoryDelimiter($name);
+                        $path[] = $name !== null ? $this->quoteCategoryDelimiter($name) : '';
                     }
                 }
                 $this->_rootCategories[$category->getId()] = array_shift($path);
@@ -613,6 +635,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $stockItemRow['stock_id'],
                 $stockItemRow['stock_status_changed_auto']
             );
+
+            if ($stockItemRow['use_config_max_sale_qty']) {
+                $stockItemRow['max_sale_qty'] = $this->stockConfiguration->getMaxSaleQty();
+            }
+
+            if ($stockItemRow['use_config_min_sale_qty']) {
+                $stockItemRow['min_sale_qty'] = $this->stockConfiguration->getMinSaleQty();
+            }
             $stockItemRows[$productId] = $stockItemRow;
         }
         return $stockItemRows;
@@ -743,7 +773,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param array $customOptionsData
      * @param array $stockItemRows
      * @return void
-     * @deprecated 100.2.0 Logic will be moved to _getHeaderColumns in future release
+     * @deprecated 100.2.0
+     * @see Logic is moved to _getHeaderColumns
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -828,12 +859,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             switch ($lastMemoryLimitLetter) {
                 case 'g':
                     $memoryLimit *= 1024;
-                    // fall-through intentional
-                    // no break
+                // fall-through intentional
+                // no break
                 case 'm':
                     $memoryLimit *= 1024;
-                    // fall-through intentional
-                    // no break
+                // fall-through intentional
+                // no break
                 case 'k':
                     $memoryLimit *= 1024;
                     break;
@@ -962,6 +993,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                         // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                         $dataRow = array_merge($dataRow, $stockItemRows[$productId]);
                     }
+                    $this->updateGalleryImageData($dataRow, $rawData);
                     $this->appendMultirowData($dataRow, $multirawData);
                     if ($dataRow) {
                         $exportData[] = $dataRow;
@@ -1111,7 +1143,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     {
         if (!empty($this->_parameters[\Magento\ImportExport\Model\Export::FIELDS_ENCLOSURE])) {
             $wrap = function ($value) {
-                return sprintf('"%s"', str_replace('"', '""', $value));
+                return sprintf('"%s"', $value !== null ? str_replace('"', '""', $value) : '');
             };
 
             $value = is_array($value) ? array_map($wrap, $value) : $wrap($value);
@@ -1169,6 +1201,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param int $storeId
      * @return bool
      * @deprecated 100.2.3
+     * @see This protected method is not used anymore
      */
     protected function hasMultiselectData($item, $storeId)
     {
@@ -1187,7 +1220,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function collectMultiselectValues($item, $attrCode, $storeId)
     {
         $attrValue = $item->getData($attrCode);
-        $optionIds = explode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $attrValue);
+        $optionIds = $attrValue !== null ? explode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $attrValue) : [];
         $options = array_intersect_key(
             $this->_attributeValues[$attrCode],
             array_flip($optionIds)
@@ -1371,9 +1404,33 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Add image column if image label exists for all scope
+     *
+     * @param array $dataRow
+     * @param array $rawData
+     * @return void
+     */
+    private function updateGalleryImageData(&$dataRow, $rawData)
+    {
+        $storeId = $dataRow['store_id'];
+        $productId = $dataRow['product_id'];
+        foreach ($this->imageLabelAttributes as $imageLabelCode) {
+            $imageAttributeCode = str_replace('_label', '', $imageLabelCode);
+            if ($storeId != Store::DEFAULT_STORE_ID
+                && isset($dataRow[$imageLabelCode])
+                && $dataRow[$imageLabelCode]
+                && (!isset($dataRow[$imageAttributeCode]) || !$dataRow[$imageAttributeCode])
+            ) {
+                $dataRow[$imageAttributeCode] = $rawData[$productId][Store::DEFAULT_STORE_ID][$imageAttributeCode];
+            }
+        }
+    }
+
+    /**
      * Add multi row data to export
      *
      * @deprecated 100.1.0
+     * @see This protected method is not used anymore
      * @param array $dataRow
      * @param array $multiRawData
      * @return array

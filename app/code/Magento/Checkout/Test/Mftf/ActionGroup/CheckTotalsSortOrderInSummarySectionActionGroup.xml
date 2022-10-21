@@ -17,6 +17,7 @@
             <argument name="positionNumber" type="string"/>
         </arguments>
 
-        <see userInput="{{elementName}}" selector="{{CheckoutCartSummarySection.elementPosition(positionNumber)}}" stepKey="assertElementPosition"/>
+        <waitForPageLoad stepKey="waitForCartLoad"/>
+        <waitForText userInput="{{elementName}}" selector="{{CheckoutCartSummarySection.elementPosition(positionNumber)}}" stepKey="assertElementPosition"/>
     </actionGroup>
 </actionGroups>

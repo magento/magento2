@@ -14,7 +14,7 @@ class NamespaceResolver
     /**
      * Namespace separator
      */
-    const NS_SEPARATOR = '\\';
+    public const NS_SEPARATOR = '\\';
 
     /**
      * @var ScalarTypesProvider
@@ -44,9 +44,9 @@ class NamespaceResolver
      */
     public function resolveNamespace($type, array $availableNamespaces)
     {
-        if (substr($type, 0, 1) !== self::NS_SEPARATOR
+        if (!empty($type)
+            && substr($type, 0, 1) !== self::NS_SEPARATOR
             && !in_array($type, $this->scalarTypesProvider->getTypes())
-            && !empty($type)
         ) {
             $name = explode(self::NS_SEPARATOR, $type);
             $unqualifiedName = $name[0];
