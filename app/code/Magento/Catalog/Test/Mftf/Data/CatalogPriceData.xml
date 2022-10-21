@@ -29,4 +29,20 @@
     <entity name="defaultProductPrice" type="default_product_price">
         <data key="value"/>
     </entity>
+    <entity name="CustomCatalogPrices">
+        <data key="path">tax/calculation/price_includes_tax</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="CustomDisplayProductPricesInCatalog">
+        <data key="path">tax/display/type</data>
+        <data key="value">3</data>
+    </entity>
+    <entity name="CatalogPrices">
+        <data key="path">tax/calculation/price_includes_tax</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="DisplayProductPricesInCatalog">
+        <data key="path">tax/display/type</data>
+        <data key="value">1</data>
+    </entity>
 </entities>

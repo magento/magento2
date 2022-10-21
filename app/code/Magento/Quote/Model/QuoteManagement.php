@@ -25,6 +25,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -411,7 +412,9 @@ class QuoteManagement implements CartManagementInterface
         if ($quote->getCheckoutMethod() === self::METHOD_GUEST || !$customerId) {
             $quote->setCustomerId(null);
             $billingAddress = $quote->getBillingAddress();
-            $quote->setCustomerEmail($billingAddress ? $billingAddress->getEmail() : null);
+            if (!$quote->getCustomerEmail()) {
+                $quote->setCustomerEmail($billingAddress ? $billingAddress->getEmail() : null);
+            }
             if ($quote->getCustomerFirstname() === null
                 && $quote->getCustomerLastname() === null
                 && $billingAddress
@@ -423,8 +426,9 @@ class QuoteManagement implements CartManagementInterface
                 }
             }
             $quote->setCustomerIsGuest(true);
-            $groupId = $customer ? $customer->getGroupId() : GroupInterface::NOT_LOGGED_IN_ID;
-            $quote->setCustomerGroupId($groupId);
+            $quote->setCustomerGroupId(
+                $quote->getCustomerId() ? $customer->getGroupId() : GroupInterface::NOT_LOGGED_IN_ID
+            );
         }
 
         $remoteAddress = $this->remoteAddress->getRemoteAddress();
@@ -518,8 +522,9 @@ class QuoteManagement implements CartManagementInterface
      * @param Quote $quote
      * @param array $orderData
      * @return AbstractExtensibleModel|OrderInterface|object
-     * @throws \Exception
+     * @throws ValidatorException
      * @throws LocalizedException
+     * @throws \Exception
      */
     protected function submitQuote(QuoteEntity $quote, $orderData = [])
     {

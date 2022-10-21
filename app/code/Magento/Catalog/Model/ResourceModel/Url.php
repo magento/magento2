@@ -17,9 +17,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 
 /**
- * Class Url
- * @package Magento\Catalog\Model\ResourceModel
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
@@ -65,29 +62,21 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_logger;
 
     /**
-     * Catalog category
-     *
      * @var \Magento\Catalog\Model\Category
      */
     protected $_catalogCategory;
 
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Model\Product
      */
     protected $_catalogProduct;
 
     /**
-     * Eav config
-     *
      * @var \Magento\Eav\Model\Config
      */
     protected $_eavConfig;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -115,7 +104,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param Product $productResource
      * @param \Magento\Catalog\Model\Category $catalogCategory
      * @param \Psr\Log\LoggerInterface $logger
-     * @param null $connectionName
+     * @param string|null $connectionName
      * @param TableMaintainer|null $tableMaintainer
      */
     public function __construct(
@@ -231,7 +220,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $valueExpr = $connection->getCheckSql('t2.value_id > 0', 't2.value', 't1.value');
             $select->from(
                 ['t1' => $attributeTable],
-                [$identifierFiled => 'e.'.$identifierFiled, 'value' => $valueExpr]
+                [$identifierFiled => 'e.' . $identifierFiled, 'value' => $valueExpr]
             )->joinLeft(
                 ['t2' => $attributeTable],
                 "t1.{$linkField} = t2.{$linkField} AND t1.attribute_id = t2.attribute_id AND t2.store_id = :store_id",
@@ -361,7 +350,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _prepareCategoryParentId(\Magento\Framework\DataObject $category)
     {
         if ($category->getPath() != $category->getId()) {
-            $split = explode('/', $category->getPath());
+            $split = explode('/', $category->getPath() ?? '');
             $category->setParentId($split[count($split) - 2]);
         } else {
             $category->setParentId(0);
@@ -400,6 +389,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Retrieve categories objects
+     *
      * Either $categoryIds or $path (with ending slash) must be specified
      *
      * @param int|array $categoryIds
@@ -457,20 +447,23 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         if ($storeId !== null) {
             $rootCategoryPath = $this->getStores($storeId)->getRootCategoryPath();
-            $rootCategoryPathLength = strlen($rootCategoryPath);
+            $rootCategoryPathLength = $rootCategoryPath !== null ? strlen($rootCategoryPath) : 0;
         }
         $bind = ['attribute_id' => (int)$isActiveAttribute->getId(), 'store_id' => (int)$storeId];
-
         $rowSet = $connection->fetchAll($select, $bind);
+
         foreach ($rowSet as $row) {
             if ($storeId !== null) {
+                $rowPath = $row['path'] ?? '';
                 // Check the category to be either store's root or its descendant
                 // First - check that category's start is the same as root category
-                if (substr($row['path'], 0, $rootCategoryPathLength) != $rootCategoryPath) {
+                // @phpstan-ignore-next-line
+                if (substr($rowPath, 0, $rootCategoryPathLength) != $rootCategoryPath) {
                     continue;
                 }
                 // Second - check non-root category - that it's really a descendant, not a simple string match
-                if (strlen($row['path']) > $rootCategoryPathLength && $row['path'][$rootCategoryPathLength] != '/') {
+                // @phpstan-ignore-next-line
+                if (strlen($rowPath) > $rootCategoryPathLength && $row['path'][$rootCategoryPathLength] != '/') {
                     continue;
                 }
             }
@@ -485,7 +478,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
         unset($rowSet);
 
-        if ($storeId !== null && $categories) {
+        if ($storeId !== null && $categories && isset($category)) {
             foreach (['name', 'url_key', 'url_path'] as $attributeCode) {
                 $attributes = $this->_getCategoryAttribute(
                     $attributeCode,
@@ -541,9 +534,9 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Retrieve Product data objects
      *
      * @param int|array $productIds
-     * @param int $storeId
-     * @param int $entityId
-     * @param int &$lastEntityId
+     * @param int       $storeId
+     * @param int       $entityId
+     * @param int      &$lastEntityId
      * @return array
      */
     protected function _getProducts($productIds, $storeId, $entityId, &$lastEntityId)
@@ -638,7 +631,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Retrieve Product data objects for store
      *
-     * @param int $storeId
+     * @param int  $storeId
      * @param int &$lastEntityId
      * @return array
      */
@@ -722,6 +715,8 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Method to get metadata pool.
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()

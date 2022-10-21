@@ -33,7 +33,7 @@ use Magento\SalesRule\Model\RulesApplier;
  */
 class Discount extends AbstractTotal
 {
-    const COLLECTOR_TYPE_CODE = 'discount';
+    public const COLLECTOR_TYPE_CODE = 'discount';
 
     /**
      * Discount calculation object
@@ -182,6 +182,9 @@ class Discount extends AbstractTotal
         foreach ($rules as $rule) {
             /** @var Item $item */
             foreach ($items as $item) {
+                if ($quote->getIsMultiShipping() && $item->getAddress()->getId() !== $address->getId()) {
+                    continue;
+                }
                 if ($item->getNoDiscount() || !$this->calculator->canApplyDiscount($item) || $item->getParentItem()) {
                     continue;
                 }
@@ -293,7 +296,7 @@ class Discount extends AbstractTotal
         $amount = $total->getDiscountAmount();
 
         if ($amount != 0) {
-            $description = $total->getDiscountDescription();
+            $description = $total->getDiscountDescription() ?? '';
             $result = [
                 'code' => $this->getCode(),
                 'title' => strlen($description) ? __('Discount (%1)', $description) : __('Discount'),

@@ -30,12 +30,14 @@ class Unserialize
     }
 
     /**
+     * Unserialize
+     *
      * @param string $string
      * @return bool|mixed
      */
     public function unserialize($string)
     {
-        if (preg_match('/[oc]:[+\-]?\d+:"/i', $string)) {
+        if ($string !== null && preg_match('/[oc]:[+\-]?\d+:"/i', $string)) {
             trigger_error('String contains serialized object');
             return false;
         }

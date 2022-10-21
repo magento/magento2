@@ -15,6 +15,7 @@
             <description value="Admin should not be able to submit orders without invalid address fields"/>
             <severity value="AVERAGE"/>
             <group value="sales"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>

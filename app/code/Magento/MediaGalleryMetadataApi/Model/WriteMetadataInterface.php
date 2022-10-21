@@ -11,6 +11,7 @@ use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 
 /**
  * Metadata writer
+ * @api
  */
 interface WriteMetadataInterface
 {

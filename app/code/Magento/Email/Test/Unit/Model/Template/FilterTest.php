@@ -26,7 +26,7 @@ use Magento\Framework\Filter\DirectiveProcessor\DependDirective;
 use Magento\Framework\Filter\DirectiveProcessor\IfDirective;
 use Magento\Framework\Filter\DirectiveProcessor\LegacyDirective;
 use Magento\Framework\Filter\DirectiveProcessor\TemplateDirective;
-use Magento\Framework\Filter\VariableResolver\StrategyResolver;
+use Magento\Framework\Filter\VariableResolver\StrictResolver;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
@@ -137,7 +137,7 @@ class FilterTest extends TestCase
     private $pubDirectoryRead;
 
     /**
-     * @var MockObject|StrategyResolver
+     * @var MockObject|StrictResolver
      */
     private $variableResolver;
 
@@ -222,7 +222,7 @@ class FilterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->variableResolver =
-            $this->getMockBuilder(StrategyResolver::class)
+            $this->getMockBuilder(StrictResolver::class)
                 ->disableOriginalConstructor()
                 ->getMock();
 

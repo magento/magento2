@@ -35,6 +35,7 @@
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="deleteMessage">
             <argument name="message" value="A total of 1 record(s) have been deleted."/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
         <!--Verify product on Product Page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="amOnSimpleProductPage">
