@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13212"/>
             <group value="checkout"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <!-- Create simple product -->

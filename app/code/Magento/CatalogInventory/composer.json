@@ -28,5 +28,5 @@
             "Magento\\CatalogInventory\\": ""
         }
     },
-    "abandoned": "magento/inventory-composer-metapackage"
+    "abandoned": "magento/inventory-metapackage"
 }

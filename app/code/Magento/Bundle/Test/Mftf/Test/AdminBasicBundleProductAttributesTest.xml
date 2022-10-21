@@ -28,6 +28,9 @@
             <actionGroup ref="DeleteAttributeSetByLabelActionGroup" stepKey="deleteAttributeSet2">
                 <argument name="label" value="{{ProductAttributeFrontendLabelTwo.label}}"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clearGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
@@ -37,9 +40,12 @@
         </actionGroup>
 
         <!--Go to product creation page-->
-        <actionGroup ref="AdminOpenCreateBundleProductPageActionGroup" stepKey="goToBundleProductCreationPage"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToBundleProductCreationPage">
+            <argument name="attributeSetId" value="{{BundleProduct.set}}"/>
+            <argument name="productType" value="{{BundleProduct.type}}"/>
+        </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreationPage"/>
-    
+
         <!--Enable/Disable Toggle-->
         <checkOption selector="{{AdminProductFormBundleSection.enableDisableToggle}}" stepKey="clickOnEnableDisableToggle"/>
 

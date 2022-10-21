@@ -7,23 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Model\Import;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\ProductImport;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\File\Csv;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write;
-use Magento\Framework\MessageQueue\MessageEncoder;
+use Magento\Framework\MessageQueue\ConsumerFactory;
+use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\ImportExport\Model\Export\Consumer;
+use Magento\ImportExport\Model\Export\Entity\ExportInfo;
+use Magento\ImportExport\Model\Export\Entity\ExportInfoFactory;
 use Magento\ImportExport\Model\Import as ImportModel;
 use Magento\ImportExport\Model\Import\Source\Csv as CsvSource;
 use Magento\ImportExport\Model\Import\Source\CsvFactory;
-use Magento\MysqlMq\Model\Driver\Queue;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\MysqlMq\DeleteTopicRelatedMessages;
+use Magento\TestFramework\MessageQueue\ClearQueueProcessor;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -42,17 +44,8 @@ class ImportWithNotExistImagesTest extends TestCase
     /** @var ObjectManagerInterface */
     private $objectManager;
 
-    /** @var MessageEncoder */
-    private $messageEncoder;
-
-    /** @var Consumer */
-    private $consumer;
-
-    /** @var Queue */
-    private $queue;
-
-    /** @var Csv */
-    private $csvReader;
+    /** @var ConsumerFactory */
+    private $consumerFactory;
 
     /** @var Write */
     private $directory;
@@ -80,9 +73,9 @@ class ImportWithNotExistImagesTest extends TestCase
         parent::setUpBeforeClass();
 
         $objectManager = Bootstrap::getObjectManager();
-        /** @var  DeleteTopicRelatedMessages $deleteMessages */
-        $deleteMessages = $objectManager->get(DeleteTopicRelatedMessages::class);
-        $deleteMessages->execute(self::TOPIC);
+        /** @var  ClearQueueProcessor $clearQueueProcessor */
+        $clearQueueProcessor = $objectManager->get(ClearQueueProcessor::class);
+        $clearQueueProcessor->execute('exportProcessor');
     }
 
     /**
@@ -93,10 +86,7 @@ class ImportWithNotExistImagesTest extends TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->queue = $this->objectManager->create(Queue::class, ['queueName' => 'export']);
-        $this->messageEncoder = $this->objectManager->get(MessageEncoder::class);
-        $this->consumer = $this->objectManager->get(Consumer::class);
-        $this->csvReader = $this->objectManager->get(Csv::class);
+        $this->consumerFactory = $this->objectManager->get(ConsumerFactory::class);
         $this->import = $this->objectManager->get(ProductFactory::class)->create();
         $this->csvFactory = $this->objectManager->get(CsvFactory::class);
         $this->fileSystem = $this->objectManager->get(Filesystem::class);
@@ -118,13 +108,27 @@ class ImportWithNotExistImagesTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/CatalogImportExport/_files/export_queue_product_with_images.php
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
      *
      * @return void
      */
     public function testImportWithUnexistingImages(): void
     {
+        $cache = $this->objectManager->get(\Magento\Framework\App\Cache::class);
+        $cache->clean();
+        /** @var ExportInfoFactory $exportInfoFactory */
+        $exportInfoFactory = $this->objectManager->get(ExportInfoFactory::class);
+        $messagePublisher = $this->objectManager->get(PublisherInterface::class);
+        /** @var ExportInfo $dataObject */
+        $dataObject = $exportInfoFactory->create(
+            'csv',
+            ProductAttributeInterface::ENTITY_TYPE_CODE,
+            [ProductInterface::SKU => 'simple'],
+            []
+        );
+        $messagePublisher->publish(self::TOPIC, $dataObject);
         $this->exportProducts();
+        $this->filePath = 'export/' . $dataObject->getFileName();
         $this->assertTrue($this->directory->isExist($this->filePath), 'Products were not imported to file');
         $fileContent = $this->getCsvData($this->directory->getAbsolutePath($this->filePath));
         $this->assertCount(2, $fileContent);
@@ -147,10 +151,8 @@ class ImportWithNotExistImagesTest extends TestCase
      */
     private function exportProducts(): void
     {
-        $envelope = $this->queue->dequeue();
-        $decodedMessage = $this->messageEncoder->decode(self::TOPIC, $envelope->getBody());
-        $this->consumer->process($decodedMessage);
-        $this->filePath = 'export/' . $decodedMessage->getFileName();
+        $consumer = $this->consumerFactory->get('exportProcessor');
+        $consumer->process(1);
     }
 
     /**

@@ -604,7 +604,7 @@ class Processor
      */
     private function isReportIdValid(string $reportId): bool
     {
-        return (bool)preg_match('/[a-fA-F0-9]{64}/', $reportId);
+        return (bool)preg_match('/^[a-fA-F0-9]{64}$/', $reportId);
     }
 
     /**

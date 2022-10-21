@@ -7,6 +7,8 @@ namespace Magento\Ui\Component\Wysiwyg;
 
 /**
  * Interface ConfigInterface
+ *
+ * @api
  */
 interface ConfigInterface
 {

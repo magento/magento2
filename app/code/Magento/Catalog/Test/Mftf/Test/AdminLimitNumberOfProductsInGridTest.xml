@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLimitNumberOfProductsInGridTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Limit number of products in grid"/>
+            <title value="Limit total number of products in grid collection"/>
+            <description value="Verify that total number of products in grid collection can be limited"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACPT-699"/>
+            <group value="Catalog"/>
+        </annotations>
+
+        <before>
+            <magentoCLI stepKey="enableLimitNumberOfProductsInGrid" command="config:set admin/grid/limit_total_number_of_products 1"/>
+            <magentoCLI stepKey="setCustomRecordsLimit" command="config:set admin/grid/records_limit 2"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <magentoCLI stepKey="disableLimitNumberOfProductsInGrid" command="config:set admin/grid/limit_total_number_of_products 0"/>
+            <magentoCLI stepKey="setDefaultRecordsLimit" command="config:set admin/grid/records_limit 20000"/>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
+            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Check that 1 record found and pagination is displayed because number of products is less than limit -->
+        <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
+        <actionGroup ref="AdminAssertNumberOfRecordsInUiGridActionGroup" stepKey="assert1RecordInProductGrid">
+            <argument name="number" value="1"/>
+        </actionGroup>
+        <see selector="{{AdminGridHeaders.numberOfPages}}" userInput="of 1" stepKey="see1PageFound"/>
+
+        <!-- Create 2 more products -->
+        <createData entity="SimpleProduct2" stepKey="createSimpleProduct2"/>
+        <createData entity="SimpleProduct3" stepKey="createSimpleProduct3"/>
+        <!-- Check that 3 records found and pagination is not displayed because number of products is greater than limit -->
+        <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter2"/>
+        <dontSee userInput="3 records found" selector="{{AdminGridHeaders.totalRecords}}" stepKey="dontSeeRecords"/>
+        <dontSee selector="{{AdminGridHeaders.numberOfPages}}" userInput="of 1" stepKey="dontSee1PageFound"/>
+
+        <!-- Search for 1 simple product by name in filter -->
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterSimpleProductByName">
+            <argument name="product" value="SimpleProduct3"/>
+        </actionGroup>
+        <!-- Check that 1 record found and pagination is displayed because number of filtered products is less than limit -->
+        <actionGroup ref="AdminAssertNumberOfRecordsInUiGridActionGroup" stepKey="assertOneRecordInProductGrid">
+            <argument name="number" value="1"/>
+        </actionGroup>
+        <see selector="{{AdminGridHeaders.numberOfPages}}" userInput="of 1" stepKey="see1PageFound2"/>
+
+        <!-- Search for all 3 simple products in filter -->
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="Simple Product" stepKey="fillProductNameFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
+        <!-- Check that 3 records found and pagination is not displayed because number of filtered products is greater than limit -->
+        <dontSee userInput="3 records found" selector="{{AdminGridHeaders.totalRecords}}" stepKey="dontSeeThreeRecords"/>
+        <dontSee selector="{{AdminGridHeaders.numberOfPages}}" userInput="of 1" stepKey="dontSee1PageFound2"/>
+    </test>
+</tests>
