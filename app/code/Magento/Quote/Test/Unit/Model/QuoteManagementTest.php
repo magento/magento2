@@ -198,6 +198,11 @@ class QuoteManagementTest extends TestCase
     private $quoteIdMaskFactoryMock;
 
     /**
+     * @var LockManagerInterface|MockObject
+     */
+    private $lockManagerMock;
+
+    /**
      * @inheriDoc
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
