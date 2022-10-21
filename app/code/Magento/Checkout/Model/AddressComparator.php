@@ -48,20 +48,43 @@ class AddressComparator implements AddressComparatorInterface
             $shippingData = array_intersect_key($shippingAddressData, $billingKeys);
             $removeKeys = ['address_type', 'region_code', 'save_in_address_book'];
             $billingData = array_diff_key($billingAddressData, array_flip($removeKeys));
-            $diff = array_udiff(
-                $billingData,
-                $shippingData,
-                function ($el1, $el2) {
-                    if (is_object($el1) || is_array($el1)) {
-                        $el1 = $this->serializer->serialize($el1);
-                    }
-                    if (is_object($el2) || is_array($el2)) {
-                        $el2 = $this->serializer->serialize($el2);
-                    }
-                    return strcmp((string)$el1, (string)$el2);
-                }
-            );
+            $diff = $this->arrayDiffAssocRecursive($billingData, $shippingData);
             return empty($diff);
         }
+    }
+
+    /**
+     * Compare two arrays
+     *
+     * @param array $array1
+     * @param array $array2
+     * @return array
+     */
+    private function arrayDiffAssocRecursive(array $array1, array $array2): array
+    {
+        $difference = [];
+        foreach ($array1 as $key => $value) {
+            if (is_array($value)) {
+                if (!isset($array2[$key])) {
+                    $difference[$key] = $value;
+                } elseif (!is_array($array2[$key])) {
+                    $difference[$key] = $value;
+                } else {
+                    $new_diff = $this->arrayDiffAssocRecursive($value, $array2[$key]);
+                    if (!empty($new_diff)) {
+                        $difference[$key] = $new_diff;
+                    }
+                }
+            } else {
+                $str1 = is_object($array2[$key]) ? $this->serializer->serialize($array2[$key]) : (string)$array2[$key];
+                $str2 = is_object($array2[$key]) ? $this->serializer->serialize($value) : (string)$value;
+                if ((!empty($str1) && !empty($str2) && $str1 !== $str2)
+                    || (!empty($str1) && empty($str2))
+                    || (!empty($str1) && empty($str2))) {
+                    $difference[$key] = $str2;
+                }
+            }
+        }
+        return $difference;
     }
 }
