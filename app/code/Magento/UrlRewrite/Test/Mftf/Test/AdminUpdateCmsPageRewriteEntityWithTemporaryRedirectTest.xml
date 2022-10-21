@@ -28,6 +28,7 @@
 
         <!--Create Custom Store View-->
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView"/>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!-- Open CMS Edit Page, Get the CMS ID and Modify Store View Option to All Store Views -->
         <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
@@ -81,6 +82,7 @@
             <argument name="requestPath" value="temporaryrequestpath.html"/>
         </actionGroup>
         <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCustomStoreView"/>
+        <magentoCron groups="index" stepKey="reindex2"/>
 
     </test>
 </tests>

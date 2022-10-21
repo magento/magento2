@@ -26,10 +26,12 @@
         <fillField selector="{{AdminNewStoreSection.storeNameTextField}}" userInput="{{customStore.name}}" stepKey="enterStoreViewName"/>
         <fillField selector="{{AdminNewStoreSection.storeCodeTextField}}" userInput="{{customStore.code}}" stepKey="enterStoreViewCode"/>
         <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="Enabled" stepKey="setStatus"/>
-        <click selector="{{AdminNewStoreViewActionsSection.saveButton}}" stepKey="clickSaveStoreView"/>
+        <waitForPageLoad stepKey="waitForStoresPageLoadBeforeSavingStoreView"/>
+        <click selector="{{AdminNewStoreViewActionsSection.btnSaveStoreView}}" stepKey="clickSaveStoreView"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal"/>
         <see selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarningAboutTakingALongTimeToComplete"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmModal"/>
+        <waitForPageLoad stepKey="waitForSuccess"/>
         <waitForText selector="{{AdminMessagesSection.success}}" userInput="You saved the store view." stepKey="seeSavedMessage"/>
     </actionGroup>
 </actionGroups>

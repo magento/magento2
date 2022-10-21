@@ -43,7 +43,6 @@ class DateTime
      * @param string|\DateTimeInterface|bool|null $date
      * @param boolean $includeTime
      * @return string|null
-     * @api
      */
     public function formatDate($date, $includeTime = true)
     {

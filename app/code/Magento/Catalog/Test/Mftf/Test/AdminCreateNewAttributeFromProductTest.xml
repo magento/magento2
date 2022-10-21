@@ -41,6 +41,9 @@
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="productDropDownAttribute"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -52,6 +55,7 @@
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
             <argument name="customStore" value="customStoreFR"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Go to created product page and create new attribute-->
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminEditPage">

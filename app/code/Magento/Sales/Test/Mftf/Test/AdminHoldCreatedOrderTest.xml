@@ -64,7 +64,8 @@
 
         <!-- Verify order information -->
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
 
         <!-- Hold the Order -->
         <click selector="{{AdminOrderDetailsMainActionsSection.hold}}" stepKey="clickOnHoldButton"/>
@@ -90,7 +91,7 @@
         <click selector="{{StorefrontCustomerSidebarSection.sidebarCurrentTab('My Orders')}}" stepKey="clickOnMyOrders"/>
         <waitForPageLoad stepKey="waitForOrderDetailsToLoad"/>
         <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
-            <argument name="orderId" value="$orderId"/>
+            <argument name="orderId" value="$orderNumber"/>
             <argument name="status" value="On Hold"/>
         </actionGroup>
     </test>

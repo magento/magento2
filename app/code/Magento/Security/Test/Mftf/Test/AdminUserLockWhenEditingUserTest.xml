@@ -18,6 +18,7 @@
             <testCaseId value="MC-14372" />
             <group value="security"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="NewAdminUser" stepKey="user" />

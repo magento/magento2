@@ -22,7 +22,7 @@ class Dependency
     /**
      * Sample data version text
      */
-    const SAMPLE_DATA_SUGGEST = 'Sample Data version:';
+    public const SAMPLE_DATA_SUGGEST = 'Sample Data version:';
 
     /**
      * @var ComposerInformation
@@ -80,7 +80,7 @@ class Dependency
         $suggests = $this->composerInformation->getSuggestedPackages();
         $suggests = array_merge($suggests, $this->getSuggestsFromModules());
         foreach ($suggests as $name => $version) {
-            if (strpos($version, self::SAMPLE_DATA_SUGGEST) === 0) {
+            if ($version !== null && strpos($version, self::SAMPLE_DATA_SUGGEST) === 0) {
                 $installExtensions[$name] = trim(substr($version, strlen(self::SAMPLE_DATA_SUGGEST)));
             }
         }

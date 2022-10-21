@@ -1,0 +1,22 @@
+{
+    "admin_adobe_ims_webapi": {
+        "column": {
+            "id": true,
+            "admin_user_id": true,
+            "access_token_hash": true,
+            "access_token": true,
+            "created_at": true,
+            "updated_at": true,
+            "last_check_time": true,
+            "access_token_expires_at": true
+        },
+        "index": {
+            "ADMIN_ADOBE_IMS_WEBAPI_ADMIN_USER_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ADMIN_ADOBE_IMS_WEBAPI_ACCESS_TOKEN_HASH": true,
+            "ADMIN_ADOBE_IMS_WEBAPI_ADMIN_USER_ID_ADMIN_USER_USER_ID": true
+        }
+    }
+}

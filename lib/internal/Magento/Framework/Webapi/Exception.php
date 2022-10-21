@@ -5,6 +5,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Framework\Webapi;
 
 use Magento\Framework\Exception\ErrorMessage;
@@ -16,6 +19,8 @@ use Magento\Framework\Phrase;
  *
  * During web API requests, all exceptions are converted to this exception,
  * which is then used for proper error response generation.
+ *
+ * @api
  */
 class Exception extends LocalizedException
 {

@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Webapi\Model\Rest;
 
 use Magento\Webapi\Controller\Rest\Router\Route;
@@ -17,25 +20,28 @@ class Config
     /**#@+
      * HTTP methods supported by REST.
      */
-    const HTTP_METHOD_GET = 'GET';
-    const HTTP_METHOD_DELETE = 'DELETE';
-    const HTTP_METHOD_PUT = 'PUT';
-    const HTTP_METHOD_POST = 'POST';
-    const HTTP_METHOD_PATCH = 'PATCH';
+    public const HTTP_METHOD_GET = 'GET';
+    public const HTTP_METHOD_DELETE = 'DELETE';
+    public const HTTP_METHOD_PUT = 'PUT';
+    public const HTTP_METHOD_POST = 'POST';
+    public const HTTP_METHOD_PATCH = 'PATCH';
     /**#@-*/
 
     /**#@+
      * Keys that a used for config internal representation.
      */
-    const KEY_IS_SECURE = 'isSecure';
-    const KEY_CLASS = 'class';
-    const KEY_METHOD = 'method';
-    const KEY_ROUTE_PATH = 'routePath';
-    const KEY_ACL_RESOURCES = 'resources';
-    const KEY_PARAMETERS = 'parameters';
+    public const KEY_IS_SECURE = 'isSecure';
+    public const KEY_CLASS = 'class';
+    public const KEY_METHOD = 'method';
+    public const KEY_ROUTE_PATH = 'routePath';
+    public const KEY_ACL_RESOURCES = 'resources';
+    public const KEY_PARAMETERS = 'parameters';
+    public const KEY_INPUT_ARRAY_SIZE_LIMIT = 'input-array-size-limit';
     /*#@-*/
 
-    /*#@-*/
+    /**
+     * @var ModelConfigInterface
+     */
     protected $_config;
 
     /**
@@ -79,7 +85,8 @@ class Config
             ->setServiceMethod($routeData[self::KEY_METHOD])
             ->setSecure($routeData[self::KEY_IS_SECURE])
             ->setAclResources($routeData[self::KEY_ACL_RESOURCES])
-            ->setParameters($routeData[self::KEY_PARAMETERS]);
+            ->setParameters($routeData[self::KEY_PARAMETERS])
+            ->setInputArraySizeLimit($routeData[self::KEY_INPUT_ARRAY_SIZE_LIMIT]);
         return $route;
     }
 
@@ -120,6 +127,7 @@ class Config
                     self::KEY_IS_SECURE => $methodInfo[Converter::KEY_SECURE],
                     self::KEY_ACL_RESOURCES => array_keys($methodInfo[Converter::KEY_ACL_RESOURCES]),
                     self::KEY_PARAMETERS => $methodInfo[Converter::KEY_DATA_PARAMETERS],
+                    self::KEY_INPUT_ARRAY_SIZE_LIMIT => $methodInfo[Converter::KEY_INPUT_ARRAY_SIZE_LIMIT],
                 ]
             );
             return $routes;
@@ -143,6 +151,7 @@ class Config
                             self::KEY_IS_SECURE => $methodInfo[Converter::KEY_SECURE],
                             self::KEY_ACL_RESOURCES => $aclResources,
                             self::KEY_PARAMETERS => $methodInfo[Converter::KEY_DATA_PARAMETERS],
+                            self::KEY_INPUT_ARRAY_SIZE_LIMIT => $methodInfo[Converter::KEY_INPUT_ARRAY_SIZE_LIMIT],
                         ]
                     );
                 }

@@ -16,10 +16,10 @@
         <arguments>
             <argument name="storeGroupName" type="string"/>
         </arguments>
-        
+
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
         <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
-        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="resetSearchFilter"/>
         <fillField userInput="{{storeGroupName}}" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" stepKey="fillSearchStoreGroupField"/>
         <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
         <waitForPageLoad stepKey="waitForStoreToLoad"/>
