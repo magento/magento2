@@ -16,6 +16,7 @@
             <testCaseId value="MC-38683"/>
             <useCaseId value="MC-37663"/>
             <group value="Bundle"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <createData entity="CustomerEntityOne" stepKey="createCustomer"/>

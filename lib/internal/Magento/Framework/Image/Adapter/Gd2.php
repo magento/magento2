@@ -364,7 +364,7 @@ class Gd2 extends AbstractAdapter
      */
     public function checkAlpha($fileName)
     {
-        return (ord(file_get_contents($fileName, false, null, 25, 1)) & 6 & 4) == 4;
+        return (ord(file_get_contents((string)$fileName, false, null, 25, 1)) & 6 & 4) == 4;
     }
 
     /**
@@ -822,7 +822,7 @@ class Gd2 extends AbstractAdapter
      */
     protected function _createImageFromText($text)
     {
-        $width = imagefontwidth($this->_fontSize) * strlen($text);
+        $width = imagefontwidth($this->_fontSize) * strlen((string)$text);
         $height = imagefontheight($this->_fontSize);
 
         $this->_createEmptyImage($width, $height);

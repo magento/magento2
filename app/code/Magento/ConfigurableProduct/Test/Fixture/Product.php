@@ -53,19 +53,19 @@ class Product extends \Magento\Catalog\Test\Fixture\Product
      * @param ServiceFactory $serviceFactory
      * @param ProcessorInterface $dataProcessor
      * @param DataMerger $dataMerger
-     * @param Config $eavConfig
      * @param ProductRepositoryInterface $productRepository
+     * @param Config $eavConfig
      * @param VariationMatrix $variationMatrix
      */
     public function __construct(
         ServiceFactory $serviceFactory,
         ProcessorInterface $dataProcessor,
         DataMerger $dataMerger,
-        Config $eavConfig,
         ProductRepositoryInterface $productRepository,
+        Config $eavConfig,
         VariationMatrix $variationMatrix
     ) {
-        parent::__construct($serviceFactory, $dataProcessor, $dataMerger);
+        parent::__construct($serviceFactory, $dataProcessor, $dataMerger, $productRepository);
         $this->eavConfig = $eavConfig;
         $this->variationMatrix = $variationMatrix;
         $this->productRepository = $productRepository;

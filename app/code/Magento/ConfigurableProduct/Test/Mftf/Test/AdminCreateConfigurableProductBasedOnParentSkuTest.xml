@@ -25,6 +25,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProducts">
                 <argument name="sku" value="{{ApiConfigurableProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Delete product attribute -->
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">

@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
  * phpcs:disable Magento2.Classes.AbstractApi
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -553,7 +554,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
 
             if ($attr && $attr->getFrontendInput() == 'multiselect') {
                 $value = $model->getData($attrCode);
-                $value = strlen($value) ? explode(',', $value) : [];
+                $value = ($value && strlen($value)) ? explode(',', $value) : [];
                 return $this->validateAttribute($value);
             }
 
@@ -569,7 +570,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
                 if ($attr && $attr->getBackendType() == 'datetime') {
                     $value = strtotime($value);
                 } elseif ($attr && $attr->getFrontendInput() == 'multiselect') {
-                    $value = strlen($value) ? explode(',', $value) : [];
+                    $value = ($value && strlen($value)) ? explode(',', $value) : [];
                 }
 
                 $model->setData($attrCode, $value);

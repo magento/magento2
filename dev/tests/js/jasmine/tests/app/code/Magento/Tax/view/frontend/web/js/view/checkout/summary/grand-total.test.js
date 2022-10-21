@@ -14,7 +14,7 @@ define(['squire', 'ko'], function (Squire, ko) {
                 totals: jasmine.createSpy()
             },
             'Magento_Catalog/js/price-utils': {
-                formatPrice: function () {
+                formatPriceLocale: function () {
                 }
             }
         },
@@ -53,7 +53,7 @@ define(['squire', 'ko'], function (Squire, ko) {
                 };
 
                 obj.totals = ko.observable(totalsData);
-                spyOn(mocks['Magento_Catalog/js/price-utils'], 'formatPrice')
+                spyOn(mocks['Magento_Catalog/js/price-utils'], 'formatPriceLocale')
                     .and.returnValue(10);
                 expect(obj.getGrandTotalExclTax()).toBe(10);
             });

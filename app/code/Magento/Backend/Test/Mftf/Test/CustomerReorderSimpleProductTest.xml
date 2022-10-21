@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CustomerReorderSimpleProductTest" extends="CustomerOrderSimpleProductTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Customer Reorder simple product"/>
+            <title value="Customer Reorder simple product"/>
+            <description value="Customer Reorder simple product"/>
+            <stories value="Customer Reorder simple product"/>
+            <testCaseId value="MC-27191"/>
+            <severity value="MAJOR"/>
+            <group value="reorder"/>
+        </annotations>
+
+        <!-- Log in as admin-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!-- Go to orders page and validate the order details -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
+            <argument name="orderId" value="{$getOrderNumber}"/>
+        </actionGroup>
+
+        <!-- create an shipment for the order-->
+        <actionGroup ref="AdminCreateShipmentFromOrderPage" stepKey="createNewShipment">
+            <argument name="Title" value="Title"/>
+            <argument name="Number" value="99"/>
+            <argument name="Qty" value="1"/>
+            <argument name="Comment" value="comments for shipment"/>
+        </actionGroup>
+
+
+        <!-- Open My Account Page from Customer dropdown -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
+
+        <!-- Goto Orders tab from Sidebar menu in Storefront page -->
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToSidebarMenu">
+            <argument name="menu" value="My Orders"/>
+        </actionGroup>
+
+        <!-- Clicking View Order from My Orders Grid -->
+        <actionGroup ref="StorefrontClickViewOrderLinkOnMyOrdersPageActionGroup" stepKey="clickViewOrder"/>
+
+
+        <!-- Clicking on Reorder link from Order Details Tab -->
+        <click selector="{{StorefrontCustomerOrderViewSection.reorder}}" stepKey="clickReorder"/>
+
+        <!-- Reorder Simple Product -->
+        <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeReorder">
+            <argument name="shippingMethod" value="Flat Rate"/>
+        </actionGroup>
+
+    </test>
+</tests>

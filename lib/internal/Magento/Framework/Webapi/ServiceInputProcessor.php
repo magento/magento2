@@ -469,7 +469,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      */
     protected function _createDataObjectForTypeAndArrayValue($type, $customAttributeValue)
     {
-        if (substr($type, -2) === "[]") {
+        if ($type !== null && substr($type, -2) === "[]") {
             $type = substr($type, 0, -2);
             $attributeValue = [];
             foreach ($customAttributeValue as $value) {

@@ -37,6 +37,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="navigateToStores"/>
             <actionGroup ref="AdminDeleteMultipleWebsitesActionGroup" stepKey="deleteWebsites"/>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
@@ -60,8 +61,8 @@
         </actionGroup>
         <!-- Change root category for Main Website Store. -->
         <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="s1"/>
-        <click stepKey="s2" selector="{{AdminStoresGridSection.resetButton}}"/>
-        <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterResetButton" time="10"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="s2"/>
+        <comment userInput="BIC workaround" stepKey="waitForPageAdminStoresGridLoadAfterResetButton"/>
         <fillField stepKey="s4" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"/>
         <click stepKey="s5" selector="{{AdminStoresGridSection.searchButton}}"/>
         <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterSearchButton"/>
