@@ -297,7 +297,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
      * @param string $filePathJson - path to file or json structure with paths by storage type.
      * @return mixed
      */
-    private function extractFilePath($filePathJson)
+    public function extractFilePath($filePathJson)
     {
         $filePathArgs = json_decode($filePathJson, true);
         if (isset($filePathArgs[$this->storageType])) {

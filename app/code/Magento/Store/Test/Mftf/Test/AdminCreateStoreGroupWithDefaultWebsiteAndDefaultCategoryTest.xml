@@ -25,6 +25,7 @@
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStoreGroup">
                 <argument name="storeGroupName" value="SecondStoreGroupUnique.name"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -34,6 +35,7 @@
             <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
             <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Search created store group(from above step) in grid and verify AssertStoreGroupInGrid-->
         <actionGroup ref="AssertStoreGroupInGridActionGroup" stepKey="seeCreatedStoreGroupInGrid">

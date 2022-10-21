@@ -7,11 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Fixture;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Fixture\Api\DataMerger;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
@@ -50,6 +53,12 @@ class Product implements RevertibleDataFixtureInterface
         'updated_at' => null,
     ];
 
+    private const DEFAULT_PRODUCT_LINK_DATA = [
+        'sku' => null,
+        'type' => 'related',
+        'position' => 1,
+    ];
+
     /**
      * @var ServiceFactory
      */
@@ -66,17 +75,24 @@ class Product implements RevertibleDataFixtureInterface
     private $dataMerger;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @param ServiceFactory $serviceFactory
      * @param ProcessorInterface $dataProcessor
      */
     public function __construct(
         ServiceFactory $serviceFactory,
         ProcessorInterface $dataProcessor,
-        DataMerger $dataMerger
+        DataMerger $dataMerger,
+        ProductRepositoryInterface $productRepository
     ) {
         $this->serviceFactory = $serviceFactory;
         $this->dataProcessor = $dataProcessor;
         $this->dataMerger = $dataMerger;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -122,6 +138,158 @@ class Product implements RevertibleDataFixtureInterface
             unset($data['extension_attributes']['category_links']);
         }
 
+        $data['product_links'] = $this->prepareLinksData($data);
+        $data['options'] = $this->prepareOptions($data);
+        $data['media_gallery_entries'] = $this->prepareMediaGallery($data);
+
         return $this->dataProcessor->process($this, $data);
+    }
+
+    /**
+     * Prepare links data
+     *
+     * @param array $data
+     * @return array
+     * @throws NoSuchEntityException
+     */
+    private function prepareLinksData(array $data): array
+    {
+        $links = [];
+
+        $position = 1;
+        foreach ($data['product_links'] as $link) {
+            $defaultLinkData = self::DEFAULT_PRODUCT_LINK_DATA;
+            $defaultLinkData['position'] = $position;
+            $linkData = [];
+            if (is_numeric($link)) {
+                $product = $this->productRepository->getById($link);
+            } elseif (is_string($link)) {
+                $product = $this->productRepository->get($link);
+            } elseif ($link instanceof ProductInterface) {
+                $product = $this->productRepository->get($link->getSku());
+            } else {
+                $linkData = $link instanceof DataObject ? $link->toArray() : $link;
+                $product = $this->productRepository->get($linkData['sku']);
+            }
+
+            $linkData += $defaultLinkData;
+            $links[] = [
+                'sku' => $data['sku'],
+                'link_type' => $linkData['type'],
+                'linked_product_sku' => $product->getSku(),
+                'linked_product_type' =>  $product->getTypeId(),
+                'position' => $linkData['position'],
+                'extension_attributes' => array_diff_key($linkData, $defaultLinkData),
+            ];
+            $position++;
+        }
+
+        return $links;
+    }
+
+    /**
+     *
+     * Prepare custom option fixtures
+     *
+     * @param array $data
+     * @return array
+     */
+    private function prepareOptions(array $data): array
+    {
+        $options = [];
+        $default = [
+            'product_sku' => $data['sku'],
+            'title' => 'customoption%order%%uniqid%',
+            'type' => ProductCustomOptionInterface::OPTION_TYPE_FIELD,
+            'is_require' => true,
+            'price' => 10.0,
+            'price_type' => 'fixed',
+            'sku' => 'customoption%order%%uniqid%',
+            'max_characters' => null,
+            'values' => null,
+        ];
+        $sortOrder = 1;
+        foreach ($data['options'] as $item) {
+            $option = $item + ['sort_order' => $sortOrder++] + $default;
+            $option['title'] = strtr($option['title'], ['%order%' => $option['sort_order']]);
+            $option['sku'] = strtr($option['sku'], ['%order%' => $option['sort_order']]);
+            $options[] = $option;
+        }
+
+        return $options;
+    }
+
+    /**
+     * Prepare media gallery entries fixtures
+     *
+     * @param array $data
+     * @return array
+     */
+    private function prepareMediaGallery(array $data): array
+    {
+        $mimeTypeExtensionMap = [
+            'image/jpeg' => 'jpeg',
+            'image/png' => 'png',
+        ];
+        $default = [
+            'id' => null,
+            'position' => 1,
+            'media_type' => 'image',
+            'disabled' => false,
+            'label' => 'Image%position%%uniqid%',
+            'types' => [
+                'image',
+                'small_image',
+                'thumbnail',
+            ],
+            'content' => [
+                'type' => 'image/jpeg',
+                'name' => 'image%position%%uniqid%.%extension%',
+                'base64_encoded_data' => '',
+            ],
+        ];
+        $mediaGalleryEntries = [];
+        $position = 1;
+        foreach ($data['media_gallery_entries'] as $item) {
+            $mediaGalleryEntry = $item + ['position' => $position++] + $default;
+            //reset types for subsequent images
+            $default['types'] = [];
+            $placeholders = [
+                '%position%' => $mediaGalleryEntry['position'],
+                '%extension%' => $mimeTypeExtensionMap[$mediaGalleryEntry['content']['type']]
+            ];
+            $mediaGalleryEntry['label'] = strtr($mediaGalleryEntry['label'], $placeholders);
+            $mediaGalleryEntry['content']['name'] = strtr($mediaGalleryEntry['content']['name'], $placeholders);
+            if (empty($mediaGalleryEntry['content']['base64_encoded_data'])) {
+                $imageContent = base64_encode($this->generateImage($mediaGalleryEntry['content']['type']));
+                $mediaGalleryEntry['content']['base64_encoded_data'] = $imageContent;
+            }
+            $mediaGalleryEntries[] = $mediaGalleryEntry;
+        }
+        return $mediaGalleryEntries;
+    }
+
+    /**
+     * Generate a dummy image
+     *
+     * @param string $type
+     * @return string
+     */
+    private function generateImage(string $type): string
+    {
+        ob_start();
+        $image = imagecreatetruecolor(1024, 768);
+        switch ($type) {
+            case 'image/jpeg':
+                imagejpeg($image);
+                break;
+            case 'image/png':
+                imagepng($image);
+                break;
+        }
+        $content = ob_get_clean();
+        imagedestroy($image);
+
+        return $content;
     }
 }

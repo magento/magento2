@@ -118,8 +118,6 @@ QUERY;
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('CustomerCreateInput.email of required type String! was not provided.');
-        $this->expectExceptionMessage('CustomerCreateInput.firstname of required type String! was not provided.');
-        $this->expectExceptionMessage('CustomerCreateInput.lastname of required type String! was not provided.');
 
         $query = <<<QUERY
 mutation {

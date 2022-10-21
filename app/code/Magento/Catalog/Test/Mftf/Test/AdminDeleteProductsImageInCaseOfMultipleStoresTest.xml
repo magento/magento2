@@ -36,6 +36,7 @@
                 <argument name="StoreGroup" value="NewStoreData"/>
                 <argument name="customStore" value="NewStoreViewData"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <!--Create Product-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <createData entity="SubCategory" stepKey="createSubCategory"/>
@@ -65,7 +66,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
             </actionGroup>
-            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <magentoCron groups="index" stepKey="reindex"/>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <deleteData createDataKey="createSubCategory" stepKey="deleteSubCategory"/>
             <deleteData createDataKey="createRootCategory" stepKey="deleteRootCategory"/>
@@ -80,8 +81,8 @@
         <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickFirstRow"/>
         <grabValueFrom selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="grabStoreViewCode"/>
         <click selector="{{AdminNewStoreViewActionsSection.backButton}}" stepKey="clickBack"/>
-        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickResetButton"/>
-        <waitForPageLoad stepKey="waitForStorePageLoad"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickResetButton"/>
+        <comment userInput="BIC workaround" stepKey="waitForStorePageLoad"/>
         <!--Open product page on admin-->
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
             <argument name="productId" value="$$createProduct.id$$"/>

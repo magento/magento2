@@ -14,10 +14,10 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Validation error constants
      */
-    const VERR_MANYSLASHES = 1;
+    public const VERR_MANYSLASHES = 1;
 
     // Too many slashes in a row of request path, e.g. '///foo//'
-    const VERR_ANCHOR = 2;
+    public const VERR_ANCHOR = 2;
 
     // Anchor is not supported in request path, e.g. 'foo#bar'
 
@@ -47,6 +47,7 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function _validateRequestPath($requestPath)
     {
+        $requestPath = $requestPath !== null ? $requestPath : '';
         if (strpos($requestPath, '//') !== false) {
             throw new \Exception(
                 __('Do not use two or more consecutive slashes in the request path.'),
