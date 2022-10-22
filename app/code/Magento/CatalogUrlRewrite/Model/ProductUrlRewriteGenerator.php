@@ -131,17 +131,12 @@ class ProductUrlRewriteGenerator
             return [];
         }
 
-        $storeId = $product->getStoreId();
-
         $productCategories = $product->getCategoryCollection()
             ->addAttributeToSelect('url_key')
             ->addAttributeToSelect('url_path');
 
-        $urls = $this->isGlobalScope($storeId)
-            ? $this->generateForGlobalScope($productCategories, $product, $rootCategoryId)
-            : $this->generateForSpecificStoreView($storeId, $productCategories, $product, $rootCategoryId);
-
-        return $urls;
+        // Generate url rewrites for all store views to ensure store views with different url-key are generated as well.
+        return $this->generateForGlobalScope($productCategories, $product, $rootCategoryId);
     }
 
     /**

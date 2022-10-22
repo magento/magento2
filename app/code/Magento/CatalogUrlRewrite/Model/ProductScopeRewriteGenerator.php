@@ -7,6 +7,7 @@ namespace Magento\CatalogUrlRewrite\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator;
@@ -79,6 +80,11 @@ class ProductScopeRewriteGenerator
     private $categoryRepository;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @param StoreViewService $storeViewService
      * @param StoreManagerInterface $storeManager
      * @param ObjectRegistryFactory $objectRegistryFactory
@@ -86,6 +92,7 @@ class ProductScopeRewriteGenerator
      * @param CategoriesUrlRewriteGenerator $categoriesUrlRewriteGenerator
      * @param CurrentUrlRewritesRegenerator $currentUrlRewritesRegenerator
      * @param AnchorUrlRewriteGenerator $anchorUrlRewriteGenerator
+     * @param ProductRepositoryInterface $productRepository
      * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
      * @param CategoryRepositoryInterface|null $categoryRepository
      * @param ScopeConfigInterface|null $config
@@ -99,6 +106,7 @@ class ProductScopeRewriteGenerator
         CategoriesUrlRewriteGenerator $categoriesUrlRewriteGenerator,
         CurrentUrlRewritesRegenerator $currentUrlRewritesRegenerator,
         AnchorUrlRewriteGenerator $anchorUrlRewriteGenerator,
+        ProductRepositoryInterface $productRepository,
         MergeDataProviderFactory $mergeDataProviderFactory = null,
         CategoryRepositoryInterface $categoryRepository = null,
         ScopeConfigInterface $config = null
@@ -110,6 +118,7 @@ class ProductScopeRewriteGenerator
         $this->categoriesUrlRewriteGenerator = $categoriesUrlRewriteGenerator;
         $this->currentUrlRewritesRegenerator = $currentUrlRewritesRegenerator;
         $this->anchorUrlRewriteGenerator = $anchorUrlRewriteGenerator;
+        $this->productRepository = $productRepository;
         if (!isset($mergeDataProviderFactory)) {
             $mergeDataProviderFactory = ObjectManager::getInstance()->get(MergeDataProviderFactory::class);
         }
@@ -143,15 +152,12 @@ class ProductScopeRewriteGenerator
         $productId = $product->getEntityId();
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
 
-        foreach ($product->getStoreIds() as $id) {
-            if (!$this->isGlobalScope($id) &&
-                !$this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
-                    $id,
-                    $productId,
-                    Product::ENTITY
-                )) {
+        foreach ($product->getStoreIds() as $storeId) {
+            if (!$this->isGlobalScope($storeId)) {
+                $productByStore = ((int)$storeId === $product->getStoreId())
+                    ? $product : $this->productRepository->getById($product->getEntityId(), false, $storeId);
                 $mergeDataProvider->merge(
-                    $this->generateForSpecificStoreView($id, $productCategories, $product, $rootCategoryId)
+                    $this->generateForSpecificStoreView($storeId, $productCategories, $productByStore, $rootCategoryId)
                 );
             }
         }
