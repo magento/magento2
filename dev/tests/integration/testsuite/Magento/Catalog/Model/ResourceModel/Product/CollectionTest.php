@@ -385,4 +385,16 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             'condition is null' => [null]
         ];
     }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_with_category.php
+     *
+     * @return void
+     */
+    public function testAddCategoryNamesToResult(): void
+    {
+        $product = $this->collection->addCategoryNamesToResult()->getFirstItem();
+
+        $this->assertEquals('Category 1', $product->getData('categories'));
+    }
 }

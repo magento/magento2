@@ -87,9 +87,11 @@
         <arguments>
             <argument name="addFieldStrategies" xsi:type="array">
                 <item name="websites" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddWebsitesFieldToCollection</item>
+                <item name="categories" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddCategoriesFieldToCollection</item>
             </argument>
             <argument name="addFilterStrategies" xsi:type="array">
                 <item name="store_id" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddStoreFieldToCollection</item>
+                <item name="category_id" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddCategoriesFieldToCollection</item>
             </argument>
             <argument name="collectionFactory" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\ProductCollectionFactory</argument>
             <argument name="modifiersPool" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Listing\Modifier\Pool</argument>
