@@ -246,7 +246,7 @@ class ProxyDeferredGenerator extends EntityAbstract
         $returnTypeValue = null;
         $returnType = $method->getReturnType();
         if ($returnType) {
-            $returnTypeValue = ($returnType->allowsNull() ? '?' : '');
+            $returnTypeValue = ($returnType->allowsNull() && $returnType->getName() !== 'mixed' ? '?' : '');
             $returnTypeValue .= ($returnType->getName() === 'self')
                 ? $this->_getFullyQualifiedClassName($method->getDeclaringClass()->getName())
                 : $returnType->getName();

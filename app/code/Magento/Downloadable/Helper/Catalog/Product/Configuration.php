@@ -46,7 +46,8 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
         $linkIds = $item->getOptionByCode('downloadable_link_ids');
         if ($linkIds) {
             $productLinks = $product->getTypeInstance()->getLinks($product);
-            foreach (explode(',', $linkIds->getValue()) as $linkId) {
+            $links = $linkIds->getValue() !== null ? explode(',', $linkIds->getValue()) : [];
+            foreach ($links as $linkId) {
                 if (isset($productLinks[$linkId])) {
                     $itemLinks[] = $productLinks[$linkId];
                 }

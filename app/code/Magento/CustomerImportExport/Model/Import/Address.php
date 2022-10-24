@@ -160,6 +160,7 @@ class Address extends AbstractCustomer
      *
      * @var array
      * @deprecated 100.3.4 field not in use
+     * @see Nothing
      */
     protected $_regionParameters;
 
@@ -190,18 +191,21 @@ class Address extends AbstractCustomer
     /**
      * @var \Magento\Eav\Model\Config
      * @deprecated 100.3.4 field not-in use
+     * @see Nothing
      */
     protected $_eavConfig;
 
     /**
      * @var \Magento\Customer\Model\AddressFactory
      * @deprecated 100.3.4 not utilized anymore
+     * @see Nothing
      */
     protected $_addressFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
      * @deprecated 100.3.4 the property isn't used
+     * @see Nothing
      */
     protected $dateTime;
 
@@ -442,8 +446,8 @@ class Address extends AbstractCustomer
         /** @var $region \Magento\Directory\Model\Region */
         foreach ($this->_regionCollection as $region) {
             $countryNormalized = strtolower($region->getCountryId());
-            $regionCode = strtolower($region->getCode());
-            $regionName = strtolower($region->getDefaultName());
+            $regionCode = $region->getCode() !== null ? strtolower($region->getCode()) : '';
+            $regionName = $region->getDefaultName() !== null ? strtolower($region->getDefaultName()) : '';
             $this->_countryRegions[$countryNormalized][$regionCode] = $region->getId();
             $this->_countryRegions[$countryNormalized][$regionName] = $region->getId();
             $this->_regions[$region->getId()] = $region->getDefaultName();
@@ -512,7 +516,7 @@ class Address extends AbstractCustomer
     {
         //Preparing data for mass validation/import.
         $rows = [];
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $rows[] = $bunch;
         }
 
@@ -521,7 +525,7 @@ class Address extends AbstractCustomer
         $this->_dataSourceModel->getIterator()->rewind();
 
         //Importing
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $newRows = [];
             $updateRows = [];
             $attributes = [];

@@ -6,6 +6,7 @@
 namespace Magento\Newsletter\Model;
 
 use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -97,8 +98,11 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      */
     public function getProcessedTemplateAreaDataProvider()
     {
+        $designTheme = Bootstrap::getObjectManager()
+            ->get(DesignInterface::class)
+            ->getConfigurationDesignTheme('adminhtml');
         return [
-            'backend' => ['adminhtml', 'Magento/backend']
+            'backend' => ['adminhtml', $designTheme]
         ];
     }
 

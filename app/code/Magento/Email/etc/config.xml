@@ -28,6 +28,8 @@
                 <host>localhost</host>
                 <port>25</port>
                 <set_return_path>0</set_return_path>
+                <transport>sendmail</transport>
+                <auth>none</auth>
             </smtp>
         </system>
         <trans_email>

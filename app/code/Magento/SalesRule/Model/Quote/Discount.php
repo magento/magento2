@@ -182,6 +182,9 @@ class Discount extends AbstractTotal
         foreach ($rules as $rule) {
             /** @var Item $item */
             foreach ($items as $item) {
+                if ($quote->getIsMultiShipping() && $item->getAddress()->getId() !== $address->getId()) {
+                    continue;
+                }
                 if ($item->getNoDiscount() || !$this->calculator->canApplyDiscount($item) || $item->getParentItem()) {
                     continue;
                 }

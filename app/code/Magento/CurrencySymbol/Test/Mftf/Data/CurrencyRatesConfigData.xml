@@ -152,4 +152,22 @@
         <data key="scope">websites</data>
         <data key="scope_code">base</data>
     </entity>
+    <entity name="SetCurrencyIDRBaseConfig">
+        <data key="path">currency/options/base</data>
+        <data key="value">IDR</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetDefaultCurrencyIDRConfig">
+        <data key="path">currency/options/default</data>
+        <data key="value">IDR</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetAllowedCurrenciesConfigForIDR">
+        <data key="path">currency/options/allow</data>
+        <data key="value">IDR</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
 </entities>

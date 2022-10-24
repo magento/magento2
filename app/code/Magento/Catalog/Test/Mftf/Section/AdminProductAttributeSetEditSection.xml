@@ -24,9 +24,11 @@
         <element name="xThLineItemUnassignedAttribute" type="text" selector="//*[@id='tree-div2']//li[{{x}}]//a/span" parameterized="true"/>
         <!-- Buttons -->
         <element name="AddNewGroup" type="button" selector="button[data-ui-id='adminhtml-catalog-product-set-edit-add-group-button']"/>
+        <element name="DeleteSelectedGroup" type="button" selector="button[data-ui-id='adminhtml-catalog-product-set-edit-delete-group-button']"/>
         <!-- Modal Window Add New Group -->
         <element name="newGroupName" type="input" selector="input[data-role='promptField']"/>
         <element name="buttonOk" type="button" selector=".modal-footer .action-primary.action-accept"/>
         <element name="errorLabel" type="text" selector="label.mage-error"/>
+        <element name="attentionMessage" type="text" selector="(//div[@class='modal-inner-wrap'])[2]//div[contains(text(),'This group')]"/>
     </section>
 </sections>

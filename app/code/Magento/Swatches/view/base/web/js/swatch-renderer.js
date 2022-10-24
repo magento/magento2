@@ -280,7 +280,8 @@ define([
             // tier prise selectors end
 
             // A price label selector
-            normalPriceLabelSelector: '.product-info-main .normal-price .price-label'
+            normalPriceLabelSelector: '.product-info-main .normal-price .price-label',
+            qtyInfo: '#qty'
         },
 
         /**
@@ -369,6 +370,7 @@ define([
 
             this.productForm = this.element.parents(this.options.selectorProductTile).find('form:first');
             this.inProductList = this.productForm.length > 0;
+            $(this.options.qtyInfo).on('input', this._onQtyChanged.bind(this));
         },
 
         /**
@@ -494,6 +496,27 @@ define([
             //Emulate click on all swatches from Request
             $widget._EmulateSelected($.parseQuery());
             $widget._EmulateSelected($widget._getSelectedAttributes());
+        },
+
+        disableSwatchForOutOfStockProducts: function () {
+            let $widget = this, container = this.element;
+
+            $.each(this.options.jsonConfig.attributes, function () {
+                let item = this;
+
+                if ($widget.options.jsonConfig.canDisplayShowOutOfStockStatus) {
+                    let salableProducts = $widget.options.jsonConfig.salable[item.id],
+                        swatchOptions = $(container).find(`[data-attribute-id='${item.id}']`).find('.swatch-option');
+
+                    swatchOptions.each(function (key, value) {
+                        let optionId = $(value).data('option-id');
+
+                        if (!salableProducts.hasOwnProperty(optionId)) {
+                            $(value).attr('disabled', true).addClass('disabled');
+                        }
+                    });
+                }
+            });
         },
 
         /**
@@ -886,6 +909,7 @@ define([
                 .attr('disabled', true)
                 .addClass('disabled')
                 .attr('tabindex', '-1');
+            this.disableSwatchForOutOfStockProducts();
         },
 
         /**
@@ -1445,6 +1469,21 @@ define([
 
                 this.options.mediaCache[JSON.stringify(mediaCallData)] = this.options.jsonConfig.preSelectedGallery;
             }
+        },
+
+        /**
+         * Callback for quantity change event.
+         */
+        _onQtyChanged: function () {
+            var $price = this.element.parents(this.options.selectorProduct)
+                .find(this.options.selectorProductPrice);
+
+            $price.trigger(
+                'updatePrice',
+                {
+                    'prices': this._getPrices(this._getNewPrices(), $price.priceBox('option').prices)
+                }
+            );
         }
     });
 
