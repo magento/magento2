@@ -120,7 +120,7 @@ class AdapterTest extends TestCase
                 'query' => [],
             ],
         ];
-        $this->mapperMock->expects(self::once())
+        $this->mapperMock->expects($this->once())
             ->method('buildQuery')
             ->with($requestMock)
             ->willReturn($query);
@@ -140,18 +140,18 @@ class AdapterTest extends TestCase
                 ],
             ],
         ];
-        $this->connectionMock->expects(self::once())
+        $this->connectionMock->expects($this->once())
             ->method('query')
             ->with($query)
             ->willReturn($response);
-        $this->connectionMock->expects(self::never())
+        $this->connectionMock->expects($this->never())
             ->method('openPointInTime');
-        $this->connectionMock->expects(self::never())
+        $this->connectionMock->expects($this->never())
             ->method('closePointInTime');
 
         $queryResponseMock = $this->mockQueryResponse($requestMock, $query, $response);
         $queryResponse = $this->adapter->query($requestMock);
-        self::assertEquals($queryResponseMock, $queryResponse);
+        $this->assertEquals($queryResponseMock, $queryResponse);
     }
 
     public function queryDataProvider(): array
@@ -186,10 +186,10 @@ class AdapterTest extends TestCase
                 'query' => [],
             ],
         ];
-        $this->mapperMock->expects(self::once())->method('buildQuery')->with($requestMock)->willReturn($query);
+        $this->mapperMock->expects($this->once())->method('buildQuery')->with($requestMock)->willReturn($query);
 
         $pit = ['id' => 'abc'];
-        $this->connectionMock->expects(self::once())
+        $this->connectionMock->expects($this->once())
             ->method('openPointInTime')
             ->with(
                 [
@@ -255,15 +255,15 @@ class AdapterTest extends TestCase
                 ],
             ],
         ];
-        $this->connectionMock->expects(self::exactly(2))
+        $this->connectionMock->expects($this->exactly(2))
             ->method('query')
             ->withConsecutive([$firstQuery], [$finalQuery])
             ->willReturnOnConsecutiveCalls($firstResponse, $finalResponse);
-        $this->connectionMock->expects(self::once())->method('closePointInTime')->with(['body' => $pit]);
+        $this->connectionMock->expects($this->once())->method('closePointInTime')->with(['body' => $pit]);
 
         $queryResponseMock = $this->mockQueryResponse($requestMock, $finalQuery, $finalResponse);
         $queryResponse = $this->adapter->query($requestMock);
-        self::assertEquals($queryResponseMock, $queryResponse);
+        $this->assertEquals($queryResponseMock, $queryResponse);
     }
 
     public function queryExceedingPageSizeLimitDataProvider(): array
@@ -293,17 +293,17 @@ class AdapterTest extends TestCase
                 'query' => [],
             ],
         ];
-        $this->mapperMock->expects(self::once())
+        $this->mapperMock->expects($this->once())
             ->method('buildQuery')
             ->with($requestMock)
             ->willReturn($query);
 
         $exception = new \Exception('error');
-        $this->connectionMock->expects(self::once())
+        $this->connectionMock->expects($this->once())
             ->method('query')
             ->with($query)
             ->willThrowException($exception);
-        $this->loggerMock->expects(self::once())
+        $this->loggerMock->expects($this->once())
             ->method('critical')
             ->with($exception);
 
@@ -316,27 +316,27 @@ class AdapterTest extends TestCase
         ];
         $queryResponseMock = $this->mockQueryResponse($requestMock, $query, $response);
         $queryResponse = $this->adapter->query($requestMock);
-        self::assertEquals($queryResponseMock, $queryResponse);
+        $this->assertEquals($queryResponseMock, $queryResponse);
     }
 
     private function mockQueryResponse(MockObject $requestMock, array $query, array $rawResponse): MockObject
     {
         $queryContainerMock = $this->createMock(QueryContainer::class);
-        $this->queryContainerFactoryMock->expects(self::once())
+        $this->queryContainerFactoryMock->expects($this->once())
             ->method('create')
             ->with(['query' => $query])
             ->willReturn($queryContainerMock);
-        $this->aggregationBuilderMock->expects(self::once())
+        $this->aggregationBuilderMock->expects($this->once())
             ->method('setQuery')
             ->with($queryContainerMock)
             ->willReturnSelf();
         $aggregations = [];
-        $this->aggregationBuilderMock->expects(self::once())
+        $this->aggregationBuilderMock->expects($this->once())
             ->method('build')
             ->with($requestMock, $rawResponse)
             ->willReturn($aggregations);
         $queryResponseMock = $this->createMock(QueryResponse::class);
-        $this->responseFactoryMock->expects(self::once())
+        $this->responseFactoryMock->expects($this->once())
             ->method('create')
             ->with(
                 [

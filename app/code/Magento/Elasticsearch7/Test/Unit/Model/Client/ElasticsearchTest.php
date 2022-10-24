@@ -709,17 +709,17 @@ class ElasticsearchTest extends TestCase
     {
         $params = ['keep_alive' => '1m'];
         $pit = ['id' => 'abc'];
-        $this->elasticsearchClientMock->expects(self::once())
+        $this->elasticsearchClientMock->expects($this->once())
             ->method('openPointInTime')
             ->with($params)
             ->willReturn($pit);
-        self::assertEquals($pit, $this->model->openPointInTime($params));
+        $this->assertEquals($pit, $this->model->openPointInTime($params));
     }
 
     public function testClosePointInTime(): void
     {
         $params = ['body' => ['id' => 'abc']];
-        $this->elasticsearchClientMock->expects(self::once())
+        $this->elasticsearchClientMock->expects($this->once())
             ->method('closePointInTime')
             ->with($params)
             ->willReturn([]);
