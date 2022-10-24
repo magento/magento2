@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -15,10 +15,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class VarnishTest extends GraphQlAbstract
 {
-    protected function setUp(): void
-    {
-        $this->markTestSkipped("Tests are skipped until vcl files are merged into mainline");
-    }
     /**
      * Test that we obtain cache MISS/HIT when expected for a guest.
      *
