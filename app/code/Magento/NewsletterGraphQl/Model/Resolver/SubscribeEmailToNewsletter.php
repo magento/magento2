@@ -90,9 +90,13 @@ class SubscribeEmailToNewsletter implements ResolverInterface
             );
         }
 
-        $currentUserId = (int)$context->getUserId();
+        $currentUserId = 0;
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $websiteId = (int)$context->getExtensionAttributes()->getStore()->getWebsiteId();
+
+        if ((int)$context->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER) {
+            $currentUserId = (int)$context->getUserId();
+        }
 
         $this->validator->execute($email, $currentUserId, $websiteId);
 
