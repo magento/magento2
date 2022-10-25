@@ -24,6 +24,7 @@ class Attribute extends \Magento\Catalog\Test\Fixture\Attribute
             ]
         ],
         'scope' => 'global',
+        'backend_type' => 'int'
     ];
 
     /**
