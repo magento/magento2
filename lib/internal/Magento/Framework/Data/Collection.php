@@ -622,7 +622,9 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function getNewEmptyItem()
     {
-        return $this->_entityFactory->create($this->_itemObjectClass);
+        return key($this->_items) === null
+            ? $this->_entityFactory->create($this->_itemObjectClass)
+            : clone current($this->_items);
     }
 
     /**
