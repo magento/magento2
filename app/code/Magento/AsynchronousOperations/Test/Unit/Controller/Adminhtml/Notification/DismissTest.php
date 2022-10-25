@@ -95,7 +95,7 @@ class DismissTest extends TestCase
 
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
-            ->with(ResultFactory::TYPE_JSON, [])
+            ->with(ResultFactory::TYPE_RAW, [])
             ->willReturn($this->jsonResultMock);
 
         $this->notificationManagementMock->expects($this->once())
