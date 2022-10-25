@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddProductToCartVerifyThatErrorMessageShouldNotDisappearTest">
+        <annotations>
+            <title value="Adding a product to cart from product detail page with higher quantity then available when synchronize widget products with backend storage enabled"/>
+            <description value="Adding a product to cart from product detail page with higher quantity then available when synchronize widget products with backend storage enabled"/>
+            <features value="Module/ Catalog"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-1571"/>
+            <useCaseId value="ACP2E-23"/>
+            <stories value="[Magento Cloud] Error message in PDP disappearing quickly"/>
+            <group value="customer"/>
+        </annotations>
+
+        <before>
+            <!-- Set in Stores > Configuration > Catalog > Catalog > Recently Viewed/Compared Products > Synchronize Widget Products With Backend Storage = "Yes" -->
+            <magentoCLI command="config:set {{EnableSynchronizeWidgetProductsWithBackendStorage.path}} {{EnableSynchronizeWidgetProductsWithBackendStorage.value}}" stepKey="setEnableSynchronizeWidgetProductsWithBackendStorage"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!--Reindex and flush cache-->
+            <magentoCLI command="cron:run --group=index" stepKey="runCronReindex"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <magentoCLI command="config:set {{DisableSynchronizeWidgetProductsWithBackendStorage.path}} {{DisableSynchronizeWidgetProductsWithBackendStorage.value}}" stepKey="setDisableSynchronizeWidgetProductsWithBackendStorage"/>
+            <!--Reindex and flush cache-->
+            <magentoCLI command="cron:run --group=index" stepKey="runCronReindex"/>
+        </after>
+
+        <waitForPageLoad time="60" stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+
+        <fillField selector="{{StorefrontProductInfoMainSection.qty}}" userInput="1001" stepKey="fillQuantity"/>
+
+        <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addProductToCart"/>
+        <!-- Check that error remains -->
+        <actionGroup ref="StorefrontAssertProductAddToCartErrorMessageActionGroup" stepKey="assertFailure">
+            <argument name="message" value="The requested qty is not available"/>
+        </actionGroup>
+    </test>
+</tests>

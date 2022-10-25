@@ -33,11 +33,11 @@
         <label class="admin__field-error" if="error" attr="for: uid" text="error"></label>
 
         <div class="admin__field-note" if="$data.notice" attr="id: noticeId">
-            <span><strong translate="NOTE"></strong>: <translate args="$data.notice"/></span>
+            <span><strong translate="NOTE"></strong>: <translate args="$data.notice"></translate></span>
         </div>
 
         <div class="admin__additional-info" if="$data.additionalInfo" html="$data.additionalInfoUnsanitizedHtml"></div>
 
-        <render args="$data.service.template" if="$data.hasService()"/>
+        <render args="$data.service.template" if="$data.hasService()"></render>
     </div>
 </fieldset>

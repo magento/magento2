@@ -17,7 +17,7 @@ class AccountConfirmation
     /**
      * Configuration path for email confirmation.
      */
-    const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
+    public const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
 
     /**
      * @var ScopeConfigInterface
@@ -73,7 +73,7 @@ class AccountConfirmation
      */
     private function canSkipConfirmation($customerId, $customerEmail): bool
     {
-        if (!$customerId) {
+        if (!$customerId || $customerEmail === null) {
             return false;
         }
 

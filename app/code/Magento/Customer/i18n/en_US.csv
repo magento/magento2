@@ -543,3 +543,6 @@ Addresses,Addresses
 "The Store View selected for sending Welcome email from is not related to the customer's associated website.","The Store View selected for sending Welcome email from is not related to the customer's associated website."
 "Add/Update Address","Add/Update Address"
 "The specified customer group id does not exist.","The specified customer group id does not exist."
+"Partial Match","Partial Match"
+"Full Match","Full Match"
+"Prefix Match","Prefix Match"

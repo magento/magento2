@@ -24,13 +24,19 @@ class ServiceTest extends TestCase
      */
     protected $_importConfig;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->_importConfig = $this->createMock(Config::class);
         $this->_model = new Service($this->_importConfig);
     }
 
-    public function testToOptionArray()
+    /**
+     * @return void
+     */
+    public function testToOptionArray(): void
     {
         $this->_importConfig->expects(
             $this->once()
@@ -39,24 +45,10 @@ class ServiceTest extends TestCase
         )->willReturn(
             ['service_one', 'service_two']
         );
-        $this->_importConfig->expects(
-            $this->at(1)
-        )->method(
-            'getServiceLabel'
-        )->with(
-            'service_one'
-        )->willReturn(
-            'Service One'
-        );
-        $this->_importConfig->expects(
-            $this->at(2)
-        )->method(
-            'getServiceLabel'
-        )->with(
-            'service_two'
-        )->willReturn(
-            'Service Two'
-        );
+        $this->_importConfig
+            ->method('getServiceLabel')
+            ->withConsecutive(['service_one'], ['service_two'])
+            ->willReturnOnConsecutiveCalls('Service One', 'Service Two');
         $expectedResult = [
             ['value' => 'service_one', 'label' => 'Service One'],
             ['value' => 'service_two', 'label' => 'Service Two'],

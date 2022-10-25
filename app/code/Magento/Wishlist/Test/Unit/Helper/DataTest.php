@@ -184,11 +184,11 @@ class DataTest extends TestCase
 
     public function testGetConfigureUrl()
     {
-        $url = 'http://magento2ce/wishlist/index/configure/id/4/product_id/30/';
+        $url = 'http://magento2ce/wishlist/index/configure/id/4/product_id/30/qty/1000';
 
         /** @var WishlistItem|MockObject $wishlistItem */
         $wishlistItem = $this->getMockBuilder(WishlistItem::class)
-            ->addMethods(['getWishlistItemId', 'getProductId'])
+            ->addMethods(['getWishlistItemId', 'getProductId', 'getQty'])
             ->disableOriginalConstructor()
             ->getMock();
         $wishlistItem
@@ -199,10 +199,14 @@ class DataTest extends TestCase
             ->expects($this->once())
             ->method('getProductId')
             ->willReturn(30);
+        $wishlistItem
+            ->expects($this->once())
+            ->method('getQty')
+            ->willReturn(1000);
 
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
-            ->with('wishlist/index/configure', ['id' => 4, 'product_id' => 30])
+            ->with('wishlist/index/configure', ['id' => 4, 'product_id' => 30, 'qty' => 1000])
             ->willReturn($url);
 
         $this->assertEquals($url, $this->model->getConfigureUrl($wishlistItem));

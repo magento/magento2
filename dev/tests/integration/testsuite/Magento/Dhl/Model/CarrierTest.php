@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Dhl\Model;
 
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\AsyncClient\HttpException;
 use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
@@ -49,6 +50,11 @@ class CarrierTest extends TestCase
     private $config;
 
     /**
+     * @var ProductMetadataInterface
+     */
+    private $productMetadata;
+
+    /**
      * @var string
      */
     private $restoreCountry;
@@ -62,6 +68,7 @@ class CarrierTest extends TestCase
         $this->dhlCarrier = $objectManager->get(Carrier::class);
         $this->httpClient = $objectManager->get(AsyncClientInterface::class);
         $this->config = $objectManager->get(ReinitableConfigInterface::class);
+        $this->productMetadata = $objectManager->get(ProductMetadataInterface::class);
         $this->restoreCountry = $this->config->getValue('shipping/origin/country_id', 'store', 'default_store');
     }
 
@@ -402,6 +409,7 @@ class CarrierTest extends TestCase
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $expectedRequestElement = new ShippingElement(file_get_contents(__DIR__ . $requestXmlPath));
 
+        $expectedRequestElement->Request->MetaData->SoftwareVersion = $this->buildSoftwareVersion();
         $expectedRequestElement->Consignee->CountryCode = $destCountryId;
         $expectedRequestElement->Consignee->CountryName = $countryNames[$destCountryId];
         $expectedRequestElement->Shipper->CountryCode = $origCountryId;
@@ -413,6 +421,16 @@ class CarrierTest extends TestCase
         }
 
         return $expectedRequestElement->asXML();
+    }
+
+    /**
+     * Builds a string to be used as the request SoftwareVersion.
+     *
+     * @return string
+     */
+    private function buildSoftwareVersion(): string
+    {
+        return substr($this->productMetadata->getVersion(), 0, 10);
     }
 
     /**

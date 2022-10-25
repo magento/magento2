@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
+// phpcs:disable Magento2.Files.LineLength, Generic.Files.LineLength
+
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var Magento\Framework\Escaper $escaper */
 ?>
 <?php $_giftMessage = false;
 switch ($block->getCheckoutType()):
@@ -61,9 +64,7 @@ switch ($block->getCheckoutType()):
                                            name="giftmessage[quote][<?= (int) $block->getEntity()->getId() ?>][from]"
                                            id="gift-message-whole-from"
                                            title="<?= $block->escapeHtmlAttr(__('From')) ?>"
-                                           value="<?= /* @noEscape */ $block
-                                               ->getEscaped($block->getMessage()->getSender(), $block->getDefaultFrom())
-                                            ?>"
+                                           value="<?= /* @noEscape */ $block->getEscaped($block->getMessage()->getSender(), $block->getDefaultFrom()) ?>"
                                            class="input-text">
                                 </div>
                             </div>
@@ -75,9 +76,8 @@ switch ($block->getCheckoutType()):
                                     <input type="text"
                                            name="giftmessage[quote][<?= (int) $block->getEntity()->getId() ?>][to]"
                                            id="gift-message-whole-to" title="<?= $block->escapeHtmlAttr(__('To')) ?>"
-                                           value="<?= /* @noEscape */ $block
-                                              ->getEscaped($block->getMessage()->getRecipient(), $block->getDefaultTo())
-                                            ?>" class="input-text">
+                                           value="<?= /* @noEscape */ $block->getEscaped($block->getMessage()->getRecipient(), $block->getDefaultTo()) ?>"
+                                           class="input-text">
                                 </div>
                             </div>
                             <div class="field text">
@@ -87,7 +87,7 @@ switch ($block->getCheckoutType()):
                                 <div class="control">
                                     <textarea id="gift-message-whole-message" class="input-text"
                                               name="giftmessage[quote][<?=(int)$block->getEntity()->getId()?>][message]"
-                                              title="<?= $block->escapeHtmlAttr(__('Message')) ?>" rows="5" cols="10"><?= /* @noEscape */ $block->getEscaped($block->getMessage()->getMessage()) ?></textarea>
+                                              title="<?= $block->escapeHtmlAttr(__('Message')) ?>" rows="5" cols="10"><?= $escaper->escapeHtml($block->getMessage()->getMessage()) ?></textarea>
                                 </div>
                             </div>
                         </fieldset>
@@ -179,8 +179,7 @@ script;
                                                    name="giftmessage[quote_item][<?= (int) $_item->getId() ?>][to]"
                                                    id="gift-message-<?= (int) $_item->getId() ?>-to"
                                                    title="<?= $block->escapeHtmlAttr(__('To')) ?>"
-                                                   value="<?= /* @noEscape */ $block->getEscaped($block
-                                                       ->getMessage($_item)->getRecipient(), $block->getDefaultTo()) ?>"
+                                                   value="<?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getRecipient(), $block->getDefaultTo()) ?>"
                                                    class="input-text">
                                         </div>
                                      </div>
@@ -194,7 +193,7 @@ script;
                                                       name="giftmessage[quote_item][<?= (int) $_item->getId()
                                                         ?>][message]"
                                                       title="<?= $block->escapeHtmlAttr(__('Message')) ?>"
-                                                      rows="5" cols="40"><?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getMessage()) ?></textarea>
+                                                      rows="5" cols="40"><?= $escaper->escapeHtml($block->getMessage($_item)->getMessage()) ?></textarea>
                                          </div>
                                      </div>
                                 </fieldset>
@@ -221,6 +220,7 @@ script;
             </dt>
         </dl>
     </fieldset>
+    <?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
     <script type="text/x-magento-init">
     {
         "#allow_gift_options, #allow_gift_options_for_order, #allow_gift_options_for_items": {
@@ -291,8 +291,8 @@ script;
                                         ->getId() ?>][from]"
                                            id="gift-message-<?= (int) $block->getEntity()->getId() ?>-from"
                                            title="<?= $block->escapeHtmlAttr(__('From')) ?>"
-                                           value="<?= /* @noEscape */ $block->getEscaped($block->getMessage()
-                                               ->getSender(), $block->getDefaultFrom()) ?>" class="input-text">
+                                           value="<?= /* @noEscape */ $block->getEscaped($block->getMessage()->getSender(), $block->getDefaultFrom()) ?>"
+                                           class="input-text">
                                 </div>
                             </div>
                             <div class="field to">
@@ -304,8 +304,8 @@ script;
                                         ->getId() ?>][to]"
                                            id="gift-message-<?= (int) $block->getEntity()->getId() ?>-to"
                                            title="<?= $block->escapeHtmlAttr(__('To')) ?>"
-                                           value="<?= /* @noEscape */ $block->getEscaped($block->getMessage()
-                                               ->getRecipient(), $block->getDefaultTo()) ?>" class="input-text">
+                                           value="<?= /* @noEscape */ $block->getEscaped($block->getMessage()->getRecipient(), $block->getDefaultTo()) ?>"
+                                           class="input-text">
                                 </div>
                             </div>
                             <div class="field text">
@@ -316,7 +316,7 @@ script;
                                     <textarea id="gift-message-<?= (int) $block->getEntity()->getId() ?>-message"
                                               class="input-text" name="giftmessage[quote_address][<?= (int) $block
                                                 ->getEntity()->getId() ?>][message]"
-                                              title="<?= $block->escapeHtmlAttr(__('Message')) ?>" rows="5" cols="40"><?= /* @noEscape */ $block->getEscaped($block->getMessage()->getMessage()) ?></textarea>
+                                              title="<?= $block->escapeHtmlAttr(__('Message')) ?>" rows="5" cols="40"><?= $escaper->escapeHtml($block->getMessage()->getMessage()) ?></textarea>
                                 </div>
                             </div>
                         </fieldset>
@@ -391,9 +391,8 @@ script;
                                                        name="giftmessage[quote_address_item][<?= (int) $_item->getId()
                                                         ?>][from]" id="gift-message-<?= (int) $_item->getId() ?>-from"
                                                        title="<?= $block->escapeHtmlAttr(__('From')) ?>"
-                                                       value="<?= /* @noEscape */ $block->getEscaped($block
-                                                           ->getMessage($_item)->getSender(), $block->getDefaultFrom())
-                                                                ?>" class="input-text">
+                                                       value="<?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getSender(), $block->getDefaultFrom()) ?>"
+                                                       class="input-text">
                                             </div>
                                         </div>
                                         <div class="field to">
@@ -405,10 +404,8 @@ script;
                                                        name="giftmessage[quote_address_item][<?= (int) $_item->getId()
                                                         ?>][to]" id="gift-message-<?= (int) $_item->getId() ?>-to"
                                                        title="<?= $block->escapeHtmlAttr(__('To')) ?>"
-                                                       value=
-                                                       "<?= /* @noEscape */ $block->getEscaped($block
-                                                           ->getMessage($_item)->getRecipient(), $block->getDefaultTo())
-                                                        ?>" class="input-text">
+                                                       value="<?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getRecipient(), $block->getDefaultTo()) ?>"
+                                                       class="input-text">
                                             </div>
                                         </div>
                                         <div class="field text">
@@ -421,7 +418,7 @@ script;
                                                           name="giftmessage[quote_address_item][<?= (int) $_item
                                                               ->getId() ?>][message]"
                                                           title="<?= $block->escapeHtmlAttr(__('Message')) ?>" rows="5"
-                                                          cols="10"><?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getMessage()) ?></textarea>
+                                                          cols="10"><?= $escaper->escapeHtml($block->getMessage($_item)->getMessage()) ?></textarea>
                                             </div>
                                         </div>
                                  </fieldset>
@@ -437,7 +434,8 @@ script;
             </dt>
         </dl>
     </fieldset>
-    <?php $entityId = (int) $block->getEntity()->getId(); ?>
+        <?php $entityId = (int) $block->getEntity()->getId(); ?>
+        <?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
     <script type="text/x-magento-init">
         {
             "#allow_gift_options_<?= /* @noEscape */ $entityId ?>, #allow_gift_options_for_order_<?= /* @noEscape */ $entityId ?>, #allow_gift_options_for_items_<?= /* @noEscape */ $entityId ?>": {
@@ -449,6 +447,7 @@ script;
         break;
     endswitch;
 if ($_giftMessage): ?>
+<?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
 <script type="text/x-magento-init">
     {
         "#shipping_method_form": {

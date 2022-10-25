@@ -1,11 +1,11 @@
 Options -Indexes
 
-<IfModule mod_php5.c>
-php_flag engine 0
+<IfModule mod_php7.c>
+    php_flag engine 0
 </IfModule>
 
-<IfModule mod_php7.c>
-php_flag engine 0
+<IfModule mod_php.c>
+    php_flag engine 0
 </IfModule>
 
 AddHandler cgi-script .php .pl .py .jsp .asp .htm .shtml .sh .cgi

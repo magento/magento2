@@ -556,10 +556,6 @@
                         "lib/web/ko"
                     ],
                     [
-                        "lib/web/modernizr",
-                        "lib/web/modernizr"
-                    ],
-                    [
                         "lib/web/date-format-normalizer.js",
                         "lib/web/date-format-normalizer.js"
                     ],

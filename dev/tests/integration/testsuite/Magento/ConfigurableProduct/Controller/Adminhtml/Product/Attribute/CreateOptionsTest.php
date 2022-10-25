@@ -22,15 +22,6 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  */
 class CreateOptionsTest extends AbstractBackendController
 {
-    /** @var ProductRepositoryInterface */
-    private $productRepository;
-
-    /** @var SerializerInterface */
-    private $json;
-
-    /** @var ProductAttributeRepositoryInterface */
-    private $attributeRepository;
-
     /**
      * @inheritdoc
      */
@@ -38,10 +29,8 @@ class CreateOptionsTest extends AbstractBackendController
     {
         parent::setUp();
 
-        $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
-        $this->productRepository->cleanCache();
-        $this->json = $this->_objectManager->get(SerializerInterface::class);
-        $this->attributeRepository = $this->_objectManager->get(ProductAttributeRepositoryInterface::class);
+        $productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
+        $productRepository->cleanCache();
     }
 
     /**
@@ -52,7 +41,8 @@ class CreateOptionsTest extends AbstractBackendController
     public function testAddAlreadyAddedOption(): void
     {
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $attribute = $this->attributeRepository->get('test_configurable');
+        $attribute = $this->_objectManager->get(ProductAttributeRepositoryInterface::class)
+            ->get('test_configurable');
         $this->getRequest()->setParams([
             'options' => [
                 [
@@ -63,11 +53,27 @@ class CreateOptionsTest extends AbstractBackendController
             ],
         ]);
         $this->dispatch('backend/catalog/product_attribute/createOptions');
-        $responseBody = $this->json->unserialize($this->getResponse()->getBody());
+        $responseBody = $this->_objectManager->get(SerializerInterface::class)
+            ->unserialize($this->getResponse()->getBody());
         $this->assertNotEmpty($responseBody);
         $this->assertStringContainsString(
             (string)__('The value of attribute ""%1"" must be unique', $attribute->getAttributeCode()),
             $responseBody['message']
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setAccessible(true);
+                $property->setValue($this, null);
+            }
+        }
     }
 }

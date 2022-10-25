@@ -31,7 +31,7 @@ class Viewfile extends Action implements HttpGetActionInterface
     /**
      * Authorization level of a basic admin session
      */
-    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+    public const ADMIN_RESOURCE = 'Magento_Customer::manage';
 
     /**
      * @var RawFactory
@@ -159,17 +159,16 @@ class Viewfile extends Action implements HttpGetActionInterface
      */
     private function getFileParams() : array
     {
-        $file = null;
         $plain = false;
-        if ($this->getRequest()->getParam('file')) {
+        if ($this->getRequest()->getParam('file', '')) {
             // download file
             $file = $this->urlDecoder->decode(
-                $this->getRequest()->getParam('file')
+                $this->getRequest()->getParam('file', '')
             );
-        } elseif ($this->getRequest()->getParam('image')) {
+        } elseif ($this->getRequest()->getParam('image', '')) {
             // show plain image
             $file = $this->urlDecoder->decode(
-                $this->getRequest()->getParam('image')
+                $this->getRequest()->getParam('image', '')
             );
             $plain = true;
         } else {

@@ -31,6 +31,12 @@
                 <max_height>1200</max_height>
             </upload_configuration>
         </system>
+        <admin>
+            <grid>
+                <limit_total_number_of_products>0</limit_total_number_of_products>
+                <records_limit>20000</records_limit>
+            </grid>
+        </admin>
         <general>
             <validator_data>
                 <input_types>
@@ -44,6 +50,10 @@
             <seo>
                 <use_rewrites>0</use_rewrites>
             </seo>
+            <secure>
+                <use_in_frontend>1</use_in_frontend>
+                <use_in_adminhtml>1</use_in_adminhtml>
+            </secure>
         </web>
     </default>
     <stores>

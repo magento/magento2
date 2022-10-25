@@ -82,15 +82,23 @@
             <argument name="productId" value="$$createConfigProduct.id$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForEditPage"/>
-        <fillField selector="{{AdminProductFormSection.setProductAsNewFrom}}" userInput="01/1/2000" stepKey="fillProductNewFrom"/>
-        <fillField selector="{{AdminProductFormSection.setProductAsNewTo}}" userInput="01/1/2099" stepKey="fillProductNewTo"/>
+        <actionGroup ref="AdminSetProductAsNewDateActionGroup" stepKey="fillProductNewFrom">
+            <argument name="fromDate" value="01/1/2000"/>
+            <argument name="toDate" value="01/1/2099"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductNewTo"/>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveProduct"/>
 
         <!-- If PageCache is enabled, Cache clearing happens here, via merge -->
 
         <!-- Check for product on the CMS page with the New Products widget -->
-        <amOnPage url="{{_newDefaultCmsPage.identifier}}" stepKey="amOnCmsPage"/>
-        <waitForPageLoad stepKey="waitForCmsPage"/>
-        <see selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" userInput="$$createConfigProduct.name$$" stepKey="seeProductName"/>
+        <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="amOnCmsPage">
+            <argument name="identifier" value="{{_newDefaultCmsPage.identifier}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCmsPage"/>
+        <actionGroup ref="AssertStorefrontProductIsShownOnCmsPageActionGroup" stepKey="seeProductName">
+            <argument name="cmsTitle" value="{{_newDefaultCmsPage.title}}"/>
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
     </test>
 </tests>

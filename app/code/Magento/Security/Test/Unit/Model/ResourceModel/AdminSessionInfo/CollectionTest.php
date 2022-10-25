@@ -115,7 +115,7 @@ class CollectionTest extends TestCase
             ->withConsecutive(
                 ['user_id', $userId],
                 ['status', $status],
-                ['session_id', ['neq' => $sessionIdToExclude]]
+                ['id', ['neq' => $sessionIdToExclude]]
             )
             ->willReturnSelf();
 

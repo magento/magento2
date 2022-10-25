@@ -15,11 +15,13 @@ use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Registry;
 use Magento\ImportExport\Helper\Data;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\RemoteStorage\Plugin\Image;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Indexer\TestCase;
@@ -40,7 +42,8 @@ use Psr\Log\LoggerInterface;
  */
 class ProductTestBase extends TestCase
 {
-    protected const LONG_FILE_NAME_IMAGE = 'magento_long_image_name_magento_long_image_name_magento_long_image_name.jpg';
+    protected const LONG_FILE_NAME_IMAGE =
+        'magento_long_image_name_magento_long_image_name_magento_long_image_name.jpg';
 
     /**
      * @var array
@@ -93,7 +96,7 @@ class ProductTestBase extends TestCase
     }
 
     /**
-     * @inheriDoc
+     * @inheritDoc
      */
     protected function tearDown(): void
     {
@@ -108,10 +111,14 @@ class ProductTestBase extends TestCase
                 // nothing to delete
             }
         }
+        // Removing cached images from previous tests in cases when Remote storage is configured
+        $image = $this->objectManager->get(Image::class);
+        $image->__destruct();
     }
 
-
     /**
+     * Creates import model based on given file
+     *
      * @param string $pathToFile
      * @param string $behavior
      * @return \Magento\CatalogImportExport\Model\Import\Product
@@ -146,14 +153,14 @@ class ProductTestBase extends TestCase
     public static function mediaImportImageFixture()
     {
         /** @var \Magento\Framework\Filesystem\Directory\Write $varDirectory */
-        $varDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\Filesystem::class
         )->getDirectoryWrite(
-            DirectoryList::VAR_DIR
+            DirectoryList::MEDIA
         );
 
-        $varDirectory->create('import' . DIRECTORY_SEPARATOR . 'images');
-        $dirPath = $varDirectory->getAbsolutePath('import' . DIRECTORY_SEPARATOR . 'images');
+        $mediaDirectory->create('import' . DIRECTORY_SEPARATOR . 'images');
+        $dirPath = $mediaDirectory->getAbsolutePath('import' . DIRECTORY_SEPARATOR . 'images');
 
         $items = [
             [
@@ -191,7 +198,7 @@ class ProductTestBase extends TestCase
         ];
 
         foreach ($items as $item) {
-            copy($item['source'], $item['dest']);
+            static::copyFile($item['source'], $item['dest'], $mediaDirectory);
         }
     }
 
@@ -210,6 +217,7 @@ class ProductTestBase extends TestCase
         $varDirectory = $fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $varDirectory->delete('import');
         $mediaDirectory->delete('catalog');
+        $mediaDirectory->delete('import');
     }
 
     /**
@@ -218,12 +226,12 @@ class ProductTestBase extends TestCase
     public static function mediaImportImageFixtureError()
     {
         /** @var \Magento\Framework\Filesystem\Directory\Write $varDirectory */
-        $varDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\Filesystem::class
         )->getDirectoryWrite(
-            DirectoryList::VAR_DIR
+            DirectoryList::MEDIA
         );
-        $dirPath = $varDirectory->getAbsolutePath('import' . DIRECTORY_SEPARATOR . 'images');
+        $dirPath = $mediaDirectory->getAbsolutePath('import' . DIRECTORY_SEPARATOR . 'images');
         $items = [
             [
                 'source' => __DIR__ . '/_files/magento_additional_image_error.jpg',
@@ -231,7 +239,7 @@ class ProductTestBase extends TestCase
             ],
         ];
         foreach ($items as $item) {
-            copy($item['source'], $item['dest']);
+            static::copyFile($item['source'], $item['dest'], $mediaDirectory);
         }
     }
 
@@ -271,9 +279,8 @@ class ProductTestBase extends TestCase
      */
     protected function importDataForMediaTest(string $fileName, int $expectedErrors = 0)
     {
-        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $filesystem = $this->objectManager->get(Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-
         $source = $this->objectManager->create(
             \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
@@ -281,29 +288,21 @@ class ProductTestBase extends TestCase
                 'directory' => $directory
             ]
         );
+        $mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $mediaDirPath = $this->getMediaDirPath($mediaDirectory);
+        $destDir = $mediaDirPath . DIRECTORY_SEPARATOR . 'catalog' . DIRECTORY_SEPARATOR . 'product';
+        $tmpDir = $mediaDirPath . DIRECTORY_SEPARATOR . 'import' . DIRECTORY_SEPARATOR . 'images';
+        $mediaDirectory->create('catalog' . DIRECTORY_SEPARATOR . 'product');
+        $mediaDirectory->create('import' . DIRECTORY_SEPARATOR . 'images');
+
         $this->_model->setParameters(
             [
                 'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
                 'entity' => 'catalog_product',
-                'import_images_file_dir' => 'pub/media/import'
+                Import::FIELD_NAME_IMG_FILE_DIR => $mediaDirPath . '/import'
             ]
         );
-        $appParams = \Magento\TestFramework\Helper\Bootstrap::getInstance()
-            ->getBootstrap()
-            ->getApplication()
-            ->getInitParams()[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
         $uploader = $this->_model->getUploader();
-
-        $mediaPath = $appParams[DirectoryList::MEDIA][DirectoryList::PATH];
-        $varPath = $appParams[DirectoryList::VAR_DIR][DirectoryList::PATH];
-        $destDir = $directory->getRelativePath(
-            $mediaPath . DIRECTORY_SEPARATOR . 'catalog' . DIRECTORY_SEPARATOR . 'product'
-        );
-        $tmpDir = $directory->getRelativePath(
-            $varPath . DIRECTORY_SEPARATOR . 'import' . DIRECTORY_SEPARATOR . 'images'
-        );
-
-        $directory->create($destDir);
         $this->assertTrue($uploader->setDestDir($destDir));
         $this->assertTrue($uploader->setTmpDir($tmpDir));
         $errors = $this->_model->setSource(
@@ -376,11 +375,14 @@ class ProductTestBase extends TestCase
                 'directory' => $directory,
             ]
         );
+        $mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $mediaDirectory->create('import');
         $errors = $this->_model->setParameters(
             [
                 'behavior' => Import::BEHAVIOR_APPEND,
                 'entity' => 'catalog_product',
                 Import::FIELDS_ENCLOSURE => 1,
+                Import::FIELD_NAME_IMG_FILE_DIR => $this->getMediaDirPath($mediaDirectory) . '/import'
             ]
         )
             ->setSource($source)
@@ -443,6 +445,8 @@ class ProductTestBase extends TestCase
     }
 
     /**
+     * Asserts expected errors count with actual
+     *
      * @param int $count
      * @param ProcessingErrorAggregatorInterface $errors
      */
@@ -459,5 +463,44 @@ class ProductTestBase extends TestCase
                 ''
             )
         );
+    }
+
+    /**
+     * Copies file from local to the destination based on driver
+     *
+     * @param string $source
+     * @param string $destination
+     * @param Filesystem\Directory\Write $directory
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\ValidatorException
+     */
+    private static function copyFile(string $source, string $destination, Filesystem\Directory\Write $directory): void
+    {
+        $driver = $directory->getDriver();
+        $absolutePath = $directory->getAbsolutePath($destination);
+
+        $driver->createDirectory(dirname($absolutePath));
+        $driver->filePutContents($destination, file_get_contents($source));
+    }
+
+    /**
+     * Returns path to media directory based on directory driver. Returns `media` for drivers different from File
+     *
+     * @param Filesystem\Directory\WriteInterface $directory
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getMediaDirPath(Filesystem\Directory\WriteInterface $directory): string
+    {
+        if (!$directory->getDriver() instanceof Filesystem\Driver\File) {
+            return 'media';
+        }
+
+        $appParams = \Magento\TestFramework\Helper\Bootstrap::getInstance()
+            ->getBootstrap()
+            ->getApplication()
+            ->getInitParams()[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
+
+        return $appParams[DirectoryList::MEDIA][DirectoryList::PATH];
     }
 }
