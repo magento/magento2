@@ -12,11 +12,11 @@ use Magento\Quote\Api\Data\AddressInterface;
 interface AddressComparatorInterface
 {
     /**
-     * Returns true/false, if shipping address is same as billing
+     * Returns true/false, after addresses comparison
      *
-     * @param AddressInterface|null $shippingAddress
-     * @param AddressInterface|null $billingAddress
+     * @param AddressInterface|null $address1
+     * @param AddressInterface|null $address2
      * @return bool
      */
-    public function isEqual(?AddressInterface $shippingAddress, ?AddressInterface $billingAddress): bool;
+    public function isEqual(?AddressInterface $address1, ?AddressInterface $address2): bool;
 }

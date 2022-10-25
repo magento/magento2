@@ -30,62 +30,50 @@ class AddressComparator implements AddressComparatorInterface
     /**
      * @inheritDoc
      */
-    public function isEqual(?AddressInterface $shippingAddress, ?AddressInterface $billingAddress): bool
+    public function isEqual(?AddressInterface $address1, ?AddressInterface $address2): bool
     {
-        if ($shippingAddress === null || $billingAddress === null) {
+        if ($address1 === null || $address2 === null) {
             return false;
         }
 
-        if ($shippingAddress->getCustomerAddressId() !== null &&
-            $billingAddress->getCustomerAddressId() !== null
+        if ($address1->getCustomerAddressId() !== null &&
+            $address2->getCustomerAddressId() !== null
         ) {
-            return ((int)$shippingAddress->getCustomerAddressId() ===
-                (int)$billingAddress->getCustomerAddressId());
+            return ((int)$address1->getCustomerAddressId() ===
+                (int)$address2->getCustomerAddressId());
         } else {
-            $shippingAddressData = $shippingAddress->getData();
-            $billingAddressData = $billingAddress->getData();
-            $billingKeys = array_flip(array_keys($billingAddressData));
-            $shippingData = array_intersect_key($shippingAddressData, $billingKeys);
+            $addressKeys = array_intersect_key($address1->getData(), $address2->getData());
             $removeKeys = ['address_type', 'region_code', 'save_in_address_book'];
-            $billingData = array_diff_key($billingAddressData, array_flip($removeKeys));
-            $diff = $this->arrayDiffAssocRecursive($billingData, $shippingData);
+            $addressKeys = array_diff_key($addressKeys, array_flip($removeKeys));
+
+            $address1Data = array_intersect_key($address1->getData(), $addressKeys);
+            $address2Data = array_intersect_key($address2->getData(), $addressKeys);
+            $diff = $this->computeArrayDifference($address1Data, $address2Data);
             return empty($diff);
         }
     }
 
     /**
-     * Compare two arrays
+     * Computing the difference of two arrays
      *
      * @param array $array1
      * @param array $array2
      * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function arrayDiffAssocRecursive(array $array1, array $array2): array
+    private function computeArrayDifference(array $array1, array $array2): array
     {
-        $difference = [];
-        foreach ($array1 as $key => $value) {
-            if (is_array($value)) {
-                if (!isset($array2[$key])) {
-                    $difference[$key] = $value;
-                } elseif (!is_array($array2[$key])) {
-                    $difference[$key] = $value;
-                } else {
-                    $new_diff = $this->arrayDiffAssocRecursive($value, $array2[$key]);
-                    if (!empty($new_diff)) {
-                        $difference[$key] = $new_diff;
-                    }
+        return array_udiff_assoc(
+            $array1,
+            $array2,
+            function ($el1, $el2) {
+                if (is_object($el1) || is_array($el1)) {
+                    $el1 = $this->serializer->serialize($el1);
                 }
-            } else {
-                $str1 = is_object($array2[$key]) ? $this->serializer->serialize($array2[$key]) : (string)$array2[$key];
-                $str2 = is_object($array2[$key]) ? $this->serializer->serialize($value) : (string)$value;
-                if ((!empty($str1) && !empty($str2) && $str1 !== $str2)
-                    || (!empty($str1) && empty($str2))
-                    || (!empty($str1) && empty($str2))) {
-                    $difference[$key] = $str2;
+                if (is_object($el2) || is_array($el2)) {
+                    $el2 = $this->serializer->serialize($el2);
                 }
+                return strcmp((string)$el1, (string)$el2);
             }
-        }
-        return $difference;
+        );
     }
 }
