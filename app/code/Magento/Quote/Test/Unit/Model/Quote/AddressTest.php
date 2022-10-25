@@ -299,7 +299,14 @@ class AddressTest extends TestCase
     }
 
     /**
+     * Tests minimum order amount validation
+     *
+     * @param array $scopeConfigValues
+     * @param array $address
+     * @param array $quote
+     * @param bool $result
      * @dataProvider getDataProvider
+     *
      * @return void
      */
     public function testValidateMinimumAmount(
