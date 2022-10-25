@@ -400,7 +400,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ),
             'shipping_method' => $shippingMethod,
             'comment' => ['customer_note' => ''],
-            'send_confirmation' => true
+            'send_confirmation' => true,
         ];
         $paymentData = ['method' => $paymentMethod];
 
@@ -419,7 +419,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($this->model->getQuote()->getCustomerLastname(), $newBillAddress->getLastname());
         self::assertEquals($order->getCustomerFirstname(), $newBillAddress->getFirstname());
         self::assertEquals($order->getCustomerLastname(), $newBillAddress->getLastname());
-        self::assertTrue($order->getEmailSent());
         $this->verifyCreatedOrder($order, $shippingMethod);
         /** @var Customer $customer */
         $customer = $this->objectManager->create(Customer::class);
@@ -463,7 +462,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             $paymentMethod
         );
         $order = $this->model->createOrder();
-        self::assertNull($order->getEmailSent());
         //Check, order considering decimal qty in product.
         foreach ($order->getItems() as $orderItem) {
             self::assertTrue($orderItem->getIsQtyDecimal());
@@ -535,7 +533,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         );
 
         $order = $this->model->createOrder();
-        self::assertNull($order->getEmailSent());
         $this->verifyCreatedOrder($order, $shippingMethod);
     }
 
@@ -596,7 +593,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $this->model->getQuote()->setCustomer($customerMock);
         $order = $this->model->createOrder();
-        self::assertNull($order->getEmailSent());
         $this->verifyCreatedOrder($order, $shippingMethod);
         $this->objectManager->get(CustomerRegistry::class)
             ->remove($order->getCustomerId());
@@ -648,7 +644,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $this->model->getQuote()->setCustomer($customerMock);
         $order = $this->model->createOrder();
-        self::assertNull($order->getEmailSent());
         if ($this->model->getSendConfirmation() && !$order->getEmailSent()) {
             $this->emailSenderMock->expects($this->once())
                 ->method('send')
@@ -971,7 +966,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $this->model->setBillingAddress($orderData['billing_address']);
         try {
             $order =$this->model->createOrder();
-            self::assertNull($order->getEmailSent());
             $orderData = $order->getData();
             self::assertNotEmpty($orderData['increment_id'], 'Order increment ID is empty.');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {

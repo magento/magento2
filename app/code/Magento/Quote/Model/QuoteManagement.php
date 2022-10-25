@@ -525,8 +525,6 @@ class QuoteManagement implements CartManagementInterface
      * @throws ValidatorException
      * @throws LocalizedException
      * @throws \Exception
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function submitQuote(QuoteEntity $quote, $orderData = [])
     {
@@ -593,10 +591,6 @@ class QuoteManagement implements CartManagementInterface
 
         if ($quote->getReservedOrderId()) {
             $order->setIncrementId($quote->getReservedOrderId());
-        }
-
-        if (array_key_exists('send_confirmation', $orderData) && false === $orderData['send_confirmation']) {
-            $order->setCanSendNewEmailFlag(false);
         }
 
         $this->submitQuoteValidator->validateOrder($order);

@@ -1985,7 +1985,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         $this->_prepareQuoteItems();
 
-        $orderData = ['send_confirmation' => (bool)$this->getSendConfirmation()];
+        $orderData = [];
         if ($this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
             $originalId = $oldOrder->getOriginalIncrementId();
@@ -1997,13 +1997,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 'relation_parent_id' => $oldOrder->getId(),
                 'relation_parent_real_id' => $oldOrder->getIncrementId(),
                 'edit_increment' => $oldOrder->getEditIncrement() + 1,
-                'increment_id' => $originalId . '-' . ($oldOrder->getEditIncrement() + 1),
-                'send_confirmation' => (bool)$this->getSendConfirmation()
+                'increment_id' => $originalId . '-' . ($oldOrder->getEditIncrement() + 1)
             ];
             $quote->setReservedOrderId($orderData['increment_id']);
         }
         $order = $this->quoteManagement->submit($quote, $orderData);
-
         if ($this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
             $oldOrder->setRelationChildId($order->getId());
@@ -2011,10 +2009,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $oldOrder->save();
             $this->orderManagement->cancel($oldOrder->getEntityId());
             $order->save();
-        }
-
-        if ($this->getSendConfirmation() && !$order->getEmailSent()) {
-            $this->emailSender->send($order);
         }
 
         $this->_eventManager->dispatch('checkout_submit_all_after', ['order' => $order, 'quote' => $quote]);
