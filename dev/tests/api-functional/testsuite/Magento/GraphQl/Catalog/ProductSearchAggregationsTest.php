@@ -125,7 +125,7 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
         $priceAggregation = array_filter(
             $result['products']['aggregations'],
             function ($a) {
-                return $a['attribute_code'] == 'product_price_attribute_bucket';
+                return $a['attribute_code'] == 'product_price_attribute';
             }
         );
         $this->assertNotEmpty($priceAggregation);
