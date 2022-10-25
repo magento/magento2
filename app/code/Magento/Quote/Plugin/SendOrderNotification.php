@@ -33,6 +33,7 @@ class SendOrderNotification
 
     /**
      * Adjusts order flag for confirmation email delivery
+     *
      * @param SubmitObserver $subject
      * @param Observer $observer
      * @return Observer[]
