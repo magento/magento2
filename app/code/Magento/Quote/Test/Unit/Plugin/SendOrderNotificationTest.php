@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Plugin;
 
@@ -6,17 +11,39 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Quote\Observer\SubmitObserver;
 use Magento\Quote\Plugin\SendOrderNotification;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Sales\Model\Order;
 use Magento\Framework\Event;
 
+/**
+ * Unit test for SendOrderNotification plugin
+ */
 class SendOrderNotificationTest extends TestCase
 {
+    /**
+     * @var RestRequest|RestRequest&MockObject|MockObject
+     */
     private RestRequest $request;
+
+    /**
+     * @var SubmitObserver|SubmitObserver&MockObject|MockObject
+     */
     private SubmitObserver $subject;
+
+    /**
+     * @var Observer|Observer&MockObject|MockObject
+     */
     private Observer $observer;
+
+    /**
+     * @var SendOrderNotification
+     */
     private SendOrderNotification $notification;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->request = $this->createMock(RestRequest::class);
@@ -25,6 +52,9 @@ class SendOrderNotificationTest extends TestCase
         $this->notification = new SendOrderNotification($this->request);
     }
 
+    /**
+     * @return void
+     */
     public function testBeforeExecuteWithSendConfirmation()
     {
         $this->request->expects($this->once())->method('getPostValue')->with('order')
@@ -53,6 +83,9 @@ class SendOrderNotificationTest extends TestCase
         $this->assertTrue($orderCheck->getCanSendNewEmailFlag());
     }
 
+    /**
+     * @return void
+     */
     public function testBeforeExecuteWithoutSendConfirmation()
     {
         $this->request->expects($this->once())->method('getPostValue')->with('order')
