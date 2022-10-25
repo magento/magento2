@@ -8,8 +8,10 @@ namespace Magento\Quote\Model;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\BillingAddressManagementInterface;
 use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Api\Data\CartInterface;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -77,12 +79,8 @@ class BillingAddressManagement implements BillingAddressManagementInterface
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
 
-        // reset the address id, if it doesn't belong to quote.
-        $old = $quote->getAddressesCollection()->getItemById($address->getId())
-            ?? $quote->getBillingAddress();
-        if ($old !== null) {
-            $address->setId($old->getId());
-        }
+        // validate the address
+        $this->validateAddress($quote, $address);
 
         $address->setCustomerId($quote->getCustomerId());
         $quote->removeAddress($quote->getBillingAddress()->getId());
@@ -120,5 +118,25 @@ class BillingAddressManagement implements BillingAddressManagementInterface
                 ->get(\Magento\Quote\Model\ShippingAddressAssignment::class);
         }
         return $this->shippingAddressAssignment;
+    }
+
+    /**
+     * Validate address to be used for cart.
+     *
+     * @param CartInterface $cart
+     * @param AddressInterface $address
+     * @return void
+     * @throws InputException The specified address belongs to another customer.
+     * @throws NoSuchEntityException The specified customer ID or address ID is not valid.
+     */
+    public function validateAddress(CartInterface $cart, AddressInterface $address): void
+    {
+        // check if address belongs to quote.
+        if ($address->getId() !== null) {
+            $old = $cart->getAddressesCollection()->getItemById($address->getId());
+            if ($old === null) {
+                throw new InputException(__('Invalid address'));
+            }
+        }
     }
 }
