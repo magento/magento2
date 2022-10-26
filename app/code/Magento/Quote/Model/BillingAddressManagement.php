@@ -8,7 +8,6 @@ namespace Magento\Quote\Model;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\BillingAddressManagementInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\CartInterface;
@@ -127,7 +126,6 @@ class BillingAddressManagement implements BillingAddressManagementInterface
      * @param AddressInterface $address
      * @return void
      * @throws InputException The specified address belongs to another customer.
-     * @throws NoSuchEntityException The specified customer ID or address ID is not valid.
      */
     public function validateAddress(CartInterface $cart, AddressInterface $address): void
     {
