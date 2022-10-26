@@ -179,7 +179,8 @@ abstract class AbstractAction
         // for backward compatibility split data from old idx table on dimension tables
         foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
             $insertSelect = $this->getConnection()->select()->from(
-                ['ip_tmp' => $this->_defaultIndexerResource->getIdxTable()]
+                ['ip_tmp' => $this->_defaultIndexerResource->getIdxTable()],
+                array_keys($this->getConnection()->describeTable('catalog_product_index_price'))
             );
 
             foreach ($dimensions as $dimension) {
