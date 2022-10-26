@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\Quote\Plugin;
 
 use Magento\Framework\Event\Observer;
-use Magento\Framework\Webapi\Rest\Request as RestRequest;
+use Magento\Framework\App\RequestInterface;
 use Magento\Quote\Observer\SubmitObserver;
 use Magento\Sales\Model\Order;
 
@@ -19,14 +19,14 @@ use Magento\Sales\Model\Order;
 class SendOrderNotification
 {
     /**
-     * @var RestRequest $request
+     * @var RequestInterface $request
      */
-    private RestRequest $request;
+    private RequestInterface $request;
 
     /**
-     * @param RestRequest $request
+     * @param RequestInterface $request
      */
-    public function __construct(RestRequest $request)
+    public function __construct(RequestInterface $request)
     {
         $this->request = $request;
     }
@@ -43,7 +43,7 @@ class SendOrderNotification
     {
         /** @var  Order $order */
         $order = $observer->getEvent()->getOrder();
-        $requestInfo = $this->request->getPostValue('order');
+        $requestInfo = $this->request->getParam('order');
         $order->setCanSendNewEmailFlag((bool)($requestInfo['send_confirmation'] ?? 0));
 
         return [$observer];

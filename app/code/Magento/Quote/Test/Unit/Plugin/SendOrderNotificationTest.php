@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Quote\Test\Unit\Plugin;
 
 use Magento\Framework\Event\Observer;
-use Magento\Framework\Webapi\Rest\Request as RestRequest;
+use Magento\Framework\App\RequestInterface;
 use Magento\Quote\Observer\SubmitObserver;
 use Magento\Quote\Plugin\SendOrderNotification;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -22,9 +22,9 @@ use Magento\Framework\Event;
 class SendOrderNotificationTest extends TestCase
 {
     /**
-     * @var RestRequest|RestRequest&MockObject|MockObject
+     * @var RequestInterface|RequestInterface&MockObject|MockObject
      */
-    private RestRequest $request;
+    private RequestInterface $request;
 
     /**
      * @var SubmitObserver|SubmitObserver&MockObject|MockObject
@@ -46,7 +46,7 @@ class SendOrderNotificationTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->request = $this->createMock(RestRequest::class);
+        $this->request = $this->createMock(RequestInterface::class);
         $this->subject = $this->createMock(SubmitObserver::class);
         $this->observer = $this->createMock(Observer::class);
         $this->notification = new SendOrderNotification($this->request);
@@ -57,7 +57,7 @@ class SendOrderNotificationTest extends TestCase
      */
     public function testBeforeExecuteWithSendConfirmation()
     {
-        $this->request->expects($this->once())->method('getPostValue')->with('order')
+        $this->request->expects($this->once())->method('getParam')->with('order')
             ->willReturn(['send_confirmation' => 1]);
 
         $order = $this->getMockBuilder(Order::class)
@@ -88,7 +88,7 @@ class SendOrderNotificationTest extends TestCase
      */
     public function testBeforeExecuteWithoutSendConfirmation()
     {
-        $this->request->expects($this->once())->method('getPostValue')->with('order')
+        $this->request->expects($this->once())->method('getParam')->with('order')
             ->willReturn(['order' => []]);
 
         $order = $this->getMockBuilder(Order::class)
