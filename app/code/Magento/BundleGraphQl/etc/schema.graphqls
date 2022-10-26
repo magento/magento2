@@ -69,7 +69,7 @@ type BundleItemOption @doc(description: "Defines the characteristics that compri
     price: Float @doc(description: "The price of the selected option.")
     price_type: PriceTypeEnum @doc(description: "One of FIXED, PERCENT, or DYNAMIC.")
     can_change_quantity: Boolean @doc(description: "Indicates whether the customer can change the number of items for this option.")
-    product: ProductInterface @doc(description: "Contains details about this product option.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product")
+    product: ProductInterface @doc(description: "Contains details about this product option.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Options\\Product")
     uid: ID! @doc(description: "The unique ID for a `BundleItemOption` object.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Options\\BundleItemOptionUid")
 }
 
