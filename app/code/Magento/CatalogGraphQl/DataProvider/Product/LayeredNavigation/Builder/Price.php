@@ -111,7 +111,7 @@ class Price implements LayerBuilderInterface
     private function getAttributeOptions(AggregationInterface $aggregation, ?int $storeId): array
     {
         $attributeOptionIds = [];
-        $attributes = [];
+        $attributes = []; 
 
         $bucket = $aggregation->getBucket(self::PRICE_BUCKET);
 
