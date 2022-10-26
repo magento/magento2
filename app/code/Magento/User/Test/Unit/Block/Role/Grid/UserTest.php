@@ -319,8 +319,9 @@ class UserTest extends TestCase
      */
     public function testGetUsers(): void
     {
-        $paramValue = array("1");
-        $this->requestInterfaceMock->expects($this->once())->method('getParam')->with('in_role_user')->willReturn($paramValue);
+        $paramValue = ['1'];
+        $this->requestInterfaceMock->expects($this->once())->method('getParam')
+            ->with('in_role_user')->willReturn($paramValue);
         $this->assertEquals($paramValue, $this->model->getUsers());
     }
 }

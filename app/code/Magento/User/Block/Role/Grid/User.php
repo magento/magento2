@@ -16,7 +16,7 @@ use Magento\Backend\Block\Widget\Grid\Column;
 class User extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * Core registry
+     * Framework class for Core Registry
      *
      * @var \Magento\Framework\Registry
      */
