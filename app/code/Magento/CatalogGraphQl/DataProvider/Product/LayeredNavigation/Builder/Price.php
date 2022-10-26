@@ -127,10 +127,6 @@ class Price implements LayerBuilderInterface
             $bucket->getValues()
         );
 
-        if (!$attributeOptionIds) {
-            return [];
-        }
-
         return $this->attributeOptionProvider->getOptions(
             \array_merge([], ...$attributeOptionIds),
             $storeId,
