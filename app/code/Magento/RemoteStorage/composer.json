@@ -4,8 +4,8 @@
     "require": {
         "php": "^7.4||^8.1",
         "magento/framework": "*",
-        "league/flysystem": "~2.4.3",
-        "league/flysystem-aws-s3-v3": "^2.4.3"
+        "league/flysystem": "^2.4",
+        "league/flysystem-aws-s3-v3": "^2.4"
     },
     "suggest": {
         "magento/module-backend": "*",
