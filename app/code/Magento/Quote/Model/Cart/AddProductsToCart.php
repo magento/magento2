@@ -187,7 +187,7 @@ class AddProductsToCart
             );
         } else {
             $product = $this->productReader->getProductBySku($sku);
-            if (!$product) {
+            if (!$product || !$product->isSaleable() || !$product->isAvailable()) {
                 $errors[] = $this->createError(
                     __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
                     $cartItemPosition
