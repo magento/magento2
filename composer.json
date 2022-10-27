@@ -37,7 +37,7 @@
         "colinmollenhour/cache-backend-file": "^1.4",
         "colinmollenhour/cache-backend-redis": "^1.14",
         "colinmollenhour/credis": "^1.13",
-        "colinmollenhour/php-redis-session-abstract": "^1.4",
+        "colinmollenhour/php-redis-session-abstract": "^1.5",
         "composer/composer": "^1.9 || ^2.0, !=2.2.16",
         "elasticsearch/elasticsearch": "^7.17",
         "ezyang/htmlpurifier": "^4.14",
@@ -347,8 +347,7 @@
             "trentrichardson/jquery-timepicker-addon": "lib/web/jquery/jquery-ui-timepicker-addon.js",
             "components/jquery": [
                 "lib/web/jquery.js",
-                "lib/web/jquery/jquery.min.js",
-                "lib/web/jquery/jquery-migrate.js"
+                "lib/web/jquery/jquery.min.js"
             ],
             "blueimp/jquery-file-upload": "lib/web/jquery/fileUploader",
             "components/jqueryui": [
