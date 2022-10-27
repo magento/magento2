@@ -19,3 +19,7 @@ type StoreConfig {
     check_money_order_max_order_total: String @doc(description: "The maximum order amount required to qualify for the Check/Money Order payment method.")
     check_money_order_sort_order: Int @doc(description: "A number indicating the position of the Check/Money Order payment method in the list of available payment methods during checkout.")
 }
+
+type AvailablePaymentMethod @doc(description: "Describes a payment method that the shopper can use to pay for the order.") {
+    is_deferred: Boolean! @doc(description: "If the payment method is an online integration") @resolver(class: "\\Magento\\PaymentGraphQl\\Model\\Resolver\\IsDeferred") 
+}
