@@ -44,7 +44,9 @@ class SendOrderNotification
         /** @var  Order $order */
         $order = $observer->getEvent()->getOrder();
         $requestInfo = $this->request->getParam('order');
-        $order->setCanSendNewEmailFlag((bool)($requestInfo['send_confirmation'] ?? 0));
+        if (!empty($requestInfo)) {
+            $order->setCanSendNewEmailFlag((bool)($requestInfo['send_confirmation'] ?? 0));
+        }
 
         return [$observer];
     }
