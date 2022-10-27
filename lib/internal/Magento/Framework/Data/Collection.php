@@ -40,6 +40,11 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     protected $_itemObjectClass = DataObject::class;
 
     /**
+     * Instance of a new item used for faster creation of new items.
+     */
+    private $newEmptyItem = null;
+
+    /**
      * Order configuration
      *
      * @var array
@@ -375,7 +380,11 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Search first item by field value
      *
      * @param string $column
-     * @param string|int $value
+     * @param string|int $value        if ($this->newEmptyItem !== null
+            && $this->_itemObjectClass !== $className
+        ) {
+            $this->newEmptyItem === null;
+        }
      * @return DataObject|null
      */
     public function getItemByColumnValue($column, $value)
@@ -611,6 +620,13 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         if (!is_a($className, DataObject::class, true)) {
             throw new \InvalidArgumentException($className . ' does not extend \Magento\Framework\DataObject');
         }
+        
+        if ($this->newEmptyItem !== null
+            && $this->_itemObjectClass !== $className
+        ) {
+            $this->newEmptyItem === null;
+        }
+        
         $this->_itemObjectClass = $className;
         return $this;
     }
@@ -622,9 +638,10 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function getNewEmptyItem()
     {
-        return key($this->_items) === null
-            ? $this->_entityFactory->create($this->_itemObjectClass)
-            : clone current($this->_items);
+        if ($this->newEmptyItem === null) {
+            $this->newEmptyItem = $this->_entityFactory->create($this->_itemObjectClass);
+        }
+        return clone $this->newEmptyItem;
     }
 
     /**
