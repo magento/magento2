@@ -2011,6 +2011,10 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $order->save();
         }
 
+        if ($this->getSendConfirmation() && !$order->getEmailSent()) {
+            $this->emailSender->send($order);
+        }
+
         $this->_eventManager->dispatch('checkout_submit_all_after', ['order' => $order, 'quote' => $quote]);
 
         return $order;
