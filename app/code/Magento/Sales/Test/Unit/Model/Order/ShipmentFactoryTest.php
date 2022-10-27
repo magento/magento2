@@ -176,7 +176,7 @@ class ShipmentFactoryTest extends TestCase
      * @dataProvider createDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testCreateWithFloatQtyShipment($tracks)
+    public function testCreateWithFloatQtyShipment(?array $tracks): void
     {
         $orderItem = $this->createPartialMock(
             Item::class,
