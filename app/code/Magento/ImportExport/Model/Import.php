@@ -484,7 +484,7 @@ class Import extends AbstractModel
         if (empty($ids)) {
             $idsFromPostData = $this->getData(self::FIELD_IMPORT_IDS);
             if (null !== $idsFromPostData && '' !== $idsFromPostData) {
-                $ids = explode(",", $idsFromPostData);;
+                $ids = explode(",", $idsFromPostData);
             }
         }
         $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode($ids));

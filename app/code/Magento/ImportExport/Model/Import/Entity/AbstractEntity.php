@@ -917,4 +917,14 @@ abstract class AbstractEntity
     {
         $this->ids = $ids;
     }
+
+    /**
+     * Gets the currently used DataSourceModel
+     *
+     * @return array
+     */
+    public function getDataSourceModel()
+    {
+        return $this->_dataSourceModel;
+    }
 }
