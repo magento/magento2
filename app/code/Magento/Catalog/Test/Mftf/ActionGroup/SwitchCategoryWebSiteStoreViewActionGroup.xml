@@ -18,15 +18,15 @@
         </arguments>
 
         <amOnPage url="{{AdminCategoryPage.page}}" stepKey="amOnCategoryPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(CatName)}}" stepKey="navigateToCreatedCategory"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForSpinner"/>
-        <scrollToTopOfPage stepKey="scrollToToggle"/>
+        <waitForPageLoad stepKey="waitForCreatedCategoryPageLoad"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskSpinner"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfToggle"/>
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewDropdownToggle}}" stepKey="openStoreViewDropDown"/>
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewOption(Store)}}" stepKey="selectStoreView"/>
-        <waitForPageLoad stepKey="waitForPageLoad3"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForSpinner2"/>
+        <waitForPageLoad stepKey="waitForSelectStoreViewLoad"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskSpinnerAgain"/>
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}" stepKey="selectStoreViewAccept"/>
         <waitForPageLoad stepKey="waitForStoreViewChangeLoad"/>
     </actionGroup>
