@@ -380,11 +380,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Search first item by field value
      *
      * @param string $column
-     * @param string|int $value        if ($this->newEmptyItem !== null
-            && $this->_itemObjectClass !== $className
-        ) {
-            $this->newEmptyItem === null;
-        }
+     * @param string|int $value
      * @return DataObject|null
      */
     public function getItemByColumnValue($column, $value)
