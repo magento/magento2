@@ -69,7 +69,6 @@ class StockStatusFilter implements StockStatusFilterInterface
             []
         );
         $select->where("{$stockStatusTableAlias}.stock_status = ?", StockStatusInterface::STATUS_IN_STOCK);
-
         return $select;
     }
 }
