@@ -59,7 +59,7 @@ class QuoteAddressValidator
      * @param int|null $customerId Cart belongs to
      * @return void
      * @throws \Magento\Framework\Exception\InputException The specified address belongs to another customer.
-     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified customer ID or address ID is not valid.
+     * @throws NoSuchEntityException The specified customer ID or address ID is not valid.
      */
     private function doValidate(AddressInterface $address, ?int $customerId): void
     {
@@ -67,7 +67,7 @@ class QuoteAddressValidator
         if ($customerId) {
             $customer = $this->customerRepository->getById($customerId);
             if (!$customer->getId()) {
-                throw new \Magento\Framework\Exception\NoSuchEntityException(
+                throw new NoSuchEntityException(
                     __('Invalid customer id %1', $customerId)
                 );
             }
@@ -76,7 +76,7 @@ class QuoteAddressValidator
         if ($address->getCustomerAddressId()) {
             //Existing address cannot belong to a guest
             if (!$customerId) {
-                throw new \Magento\Framework\Exception\NoSuchEntityException(
+                throw new NoSuchEntityException(
                     __('Invalid customer address id %1', $address->getCustomerAddressId())
                 );
             }
@@ -84,7 +84,7 @@ class QuoteAddressValidator
             try {
                 $this->addressRepository->getById($address->getCustomerAddressId());
             } catch (NoSuchEntityException $e) {
-                throw new \Magento\Framework\Exception\NoSuchEntityException(
+                throw new NoSuchEntityException(
                     __('Invalid address id %1', $address->getId())
                 );
             }
@@ -94,7 +94,7 @@ class QuoteAddressValidator
                 return $address->getId();
             }, $this->customerRepository->getById($customerId)->getAddresses());
             if (!in_array($address->getCustomerAddressId(), $applicableAddressIds)) {
-                throw new \Magento\Framework\Exception\NoSuchEntityException(
+                throw new NoSuchEntityException(
                     __('Invalid customer address id %1', $address->getCustomerAddressId())
                 );
             }
@@ -107,7 +107,7 @@ class QuoteAddressValidator
      * @param \Magento\Quote\Api\Data\AddressInterface $addressData The address data object.
      * @return bool
      * @throws \Magento\Framework\Exception\InputException The specified address belongs to another customer.
-     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified customer ID or address ID is not valid.
+     * @throws NoSuchEntityException The specified customer ID or address ID is not valid.
      */
     public function validate(AddressInterface $addressData)
     {
@@ -123,10 +123,31 @@ class QuoteAddressValidator
      * @param AddressInterface $address
      * @return void
      * @throws \Magento\Framework\Exception\InputException The specified address belongs to another customer.
-     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified customer ID or address ID is not valid.
+     * @throws NoSuchEntityException The specified customer ID or address ID is not valid.
      */
     public function validateForCart(CartInterface $cart, AddressInterface $address): void
     {
         $this->doValidate($address, $cart->getCustomerIsGuest() ? null : $cart->getCustomer()->getId());
+    }
+
+    /**
+     * Validate address id to be used for cart.
+     *
+     * @param CartInterface $cart
+     * @param AddressInterface $address
+     * @return void
+     * @throws NoSuchEntityException The specified customer ID or address ID is not valid.
+     */
+    public function validateAddress(CartInterface $cart, AddressInterface $address): void
+    {
+        // check if address belongs to quote.
+        if ($address->getId() !== null) {
+            $old = $cart->getAddressesCollection()->getItemById($address->getId());
+            if ($old === null) {
+                throw new NoSuchEntityException(
+                    __('Invalid quote address id %1', $address->getId())
+                );
+            }
+        }
     }
 }
