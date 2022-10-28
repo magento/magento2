@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Helper\Error\AggregateExceptionMessageFormatter;
-use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\QuoteGraphQl\Model\Cart\GetCartForCheckout;
 use Magento\QuoteGraphQl\Model\Cart\PlaceOrder as PlaceOrderModel;
 use Magento\Sales\Api\OrderRepositoryInterface;
 
@@ -23,9 +23,9 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 class PlaceOrder implements ResolverInterface
 {
     /**
-     * @var GetCartForUser
+     * @var GetCartForCheckout
      */
-    private $getCartForUser;
+    private $getCartForCheckout;
 
     /**
      * @var PlaceOrderModel
@@ -43,18 +43,18 @@ class PlaceOrder implements ResolverInterface
     private $errorMessageFormatter;
 
     /**
-     * @param GetCartForUser $getCartForUser
+     * @param GetCartForCheckout $getCartForCheckout
      * @param PlaceOrderModel $placeOrder
      * @param OrderRepositoryInterface $orderRepository
      * @param AggregateExceptionMessageFormatter $errorMessageFormatter
      */
     public function __construct(
-        GetCartForUser $getCartForUser,
+        GetCartForCheckout $getCartForCheckout,
         PlaceOrderModel $placeOrder,
         OrderRepositoryInterface $orderRepository,
         AggregateExceptionMessageFormatter $errorMessageFormatter
     ) {
-        $this->getCartForUser = $getCartForUser;
+        $this->getCartForCheckout = $getCartForCheckout;
         $this->placeOrder = $placeOrder;
         $this->orderRepository = $orderRepository;
         $this->errorMessageFormatter = $errorMessageFormatter;
@@ -73,7 +73,7 @@ class PlaceOrder implements ResolverInterface
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
 
         try {
-            $cart = $this->getCartForUser->getCartForCheckout($maskedCartId, $userId, $storeId);
+            $cart = $this->getCartForCheckout->execute($maskedCartId, $userId, $storeId);
             $orderId = $this->placeOrder->execute($cart, $maskedCartId, $userId);
             $order = $this->orderRepository->get($orderId);
         } catch (LocalizedException $e) {
