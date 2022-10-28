@@ -18,9 +18,9 @@
         <element name="viewGiftOptions" type="button" selector="//tbody[@class='cart item']//a[text()='{{product_name}}']/../../../../..//tr[@class='item-actions']//button[@class='action action-gift']" parameterized="true"/>
         <element name="giftWrapIcon" type="button" selector="//img[@title='{{var}}']" parameterized="true"/>
         <element name="giftWrapIconPreview" type="button" selector="//div[@class='gift-wrapping-preview']//img[@title='{{var}}']" parameterized="true"/>
-        <element name="giftWrappingItemAmt" type="button" selector="//td[@data-th='Gift Wrapping for Items' and text()='${{amt}}']" parameterized="true"/>
-        <element name="giftWrappingOrderAmt" type="button" selector="//td[@data-th='Gift Wrapping for Order' and text()='${{amt}}']" parameterized="true"/>
-        <element name="giftWrappingPrintedCard" type="button" selector="//td[@data-th='Printed Card' and text()='${{amt}}']" parameterized="true"/>
+        <element name="giftsWrappingItemAmt" type="button" selector="//td[@data-th='Gift Wrapping for Items' and text()='${{amt}}']" parameterized="true"/>
+        <element name="giftsWrappingOrderAmt" type="button" selector="//td[@data-th='Gift Wrapping for Order' and text()='${{amt}}']" parameterized="true"/>
+        <element name="giftsWrappingPrintedCard" type="button" selector="//td[@data-th='Printed Card' and text()='${{amt}}']" parameterized="true"/>
         <element name="editGiftSummary" type="button" selector="//div[@class='gift-summary']//button[@title='Edit']"/>
         <element name="removeGift_Wrapping" type="button" selector="//div[@class='gift-wrapping-title']//button[@class='action action-remove']"/>
         <element name="giftOptionsMessageSummary" type="text" selector="//div[@class='gift-message-summary' and text()='{{var}}']" parameterized="true"/>
