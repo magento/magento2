@@ -15,12 +15,10 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14706"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="ACQE-3908"></issueId>
-            </skip>
         </annotations>
 
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <magentoCLI command="config:set {{EnablePaymentBankTransferConfigData.path}} {{EnablePaymentBankTransferConfigData.value}}" stepKey="enableBankTransferPayment"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct">

@@ -84,4 +84,15 @@
         <plugin name="admin_adobe_ims_reauth_button_integration_edit"
                 type="Magento\AdminAdobeIms\Plugin\Block\Adminhtml\Integration\Edit\Tab\AddReAuthVerification"/>
     </type>
+
+    <type name="Magento\Authorization\Model\CompositeUserContext">
+        <arguments>
+            <argument name="userContexts" xsi:type="array">
+                <item name="adobeImsTokenUserContext" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\AdminAdobeIms\Model\Authorization\AdobeImsAdminTokenUserContext\Proxy</item>
+                    <item name="sortOrder" xsi:type="string">20</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
