@@ -633,6 +633,7 @@ class QuoteManagement implements CartManagementInterface
             $this->quoteRepository->save($quote);
             $this->lockManager->unlock($lockedName);
         } catch (\Exception $e) {
+            $this->lockManager->unlock($lockedName);
             $this->rollbackAddresses($quote, $order, $e);
             throw $e;
         }
