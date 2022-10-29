@@ -616,13 +616,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         if (!is_a($className, DataObject::class, true)) {
             throw new \InvalidArgumentException($className . ' does not extend \Magento\Framework\DataObject');
         }
-        
-        if ($this->newEmptyItem !== null
-            && $this->_itemObjectClass !== $className
-        ) {
-            $this->newEmptyItem === null;
-        }
-        
         $this->_itemObjectClass = $className;
         return $this;
     }
