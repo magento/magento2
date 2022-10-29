@@ -40,9 +40,11 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     protected $_itemObjectClass = DataObject::class;
 
     /**
-     * Instance of a new item used for faster creation of new items.
+     * Instance of a new item used for faster creation of new items
+     *
+     * @var DataObject
      */
-    private $newEmptyItem = null;
+    private $newEmptyItem;
 
     /**
      * Order configuration
@@ -627,7 +629,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function getNewEmptyItem()
     {
-        if ($this->newEmptyItem === null) {
+        if (!isset($this->newEmptyItem)) {
             $this->newEmptyItem = $this->_entityFactory->create($this->_itemObjectClass);
         }
         return clone $this->newEmptyItem;
