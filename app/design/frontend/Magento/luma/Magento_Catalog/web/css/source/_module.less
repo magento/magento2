@@ -622,20 +622,6 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
-
-    .product-info-price {
-        margin: 0 -@indent__s 0;
-        width: ~'calc(100% + 2*@{indent__s})' !important;
-
-        > *:first-child {
-            padding-left: @indent__s;
-        }
-
-        > *:last-child {
-            padding-right: @indent__s;
-        }
-    }
-
     .product.info.detailed {
         .additional-attributes-wrapper {
             &:extend(.abs-no-border-top all);
