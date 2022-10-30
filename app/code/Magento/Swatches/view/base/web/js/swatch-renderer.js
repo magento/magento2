@@ -506,7 +506,7 @@ define([
 
                 if ($widget.options.jsonConfig.canDisplayShowOutOfStockStatus) {
                     let salableProducts = $widget.options.jsonConfig.salable[item.id],
-                        swatchOptions = container.find('.swatch-option');
+                        swatchOptions = $(container).find(`[data-attribute-id='${item.id}']`).find('.swatch-option');
 
                     swatchOptions.each(function (key, value) {
                         let optionId = $(value).data('option-id');

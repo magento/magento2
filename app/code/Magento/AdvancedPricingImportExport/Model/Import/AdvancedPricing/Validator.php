@@ -6,7 +6,7 @@
 namespace Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
 
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
-use \Magento\Framework\Validator\AbstractValidator;
+use Magento\Framework\Validator\AbstractValidator;
 
 class Validator extends AbstractValidator implements RowValidatorInterface
 {
@@ -28,7 +28,6 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      *
      * @param array $value
      * @return bool
-     * @throws \Zend_Validate_Exception
      */
     public function isValid($value)
     {
@@ -44,8 +43,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
-     * @param \Magento\CatalogImportExport\Model\Import\Product $context
-     * @return $this
+     * @inheritdoc
      */
     public function init($context)
     {

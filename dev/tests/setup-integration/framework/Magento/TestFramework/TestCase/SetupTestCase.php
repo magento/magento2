@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\TestCase;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\SqlVersionProvider;
 use Magento\TestFramework\Annotation\DataProviderFromFile;
 use Magento\TestFramework\Helper\Bootstrap;
+use Zend_Db_Statement_Exception;
 
 /**
  * Instance of Setup test case. Used in order to tweak dataProviders functionality.
@@ -33,16 +35,24 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
     private $sqlVersionProvider;
 
     /**
+     * @var ResourceConnection
+     */
+    private ResourceConnection $resourceConnection;
+
+    /**
      * @inheritDoc
      */
     public function __construct(
         $name = null,
         array $data = [],
-        $dataName = ''
+        $dataName = '',
+        ResourceConnection $resourceConnection = null
     ) {
         parent::__construct($name, $data, $dataName);
 
-        $this->sqlVersionProvider = Bootstrap::getObjectManager()->get(SqlVersionProvider::class);
+        $objectManager = Bootstrap::getObjectManager();
+        $this->sqlVersionProvider = $objectManager->get(SqlVersionProvider::class);
+        $this->resourceConnection = $resourceConnection ?? $objectManager->get(ResourceConnection::class);
     }
 
     /**
@@ -104,5 +114,21 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
         }
 
         return $this->dbKey;
+    }
+
+    /**
+     * Checks if the DB connection Aurora RDS
+     *
+     * @param string $resource
+     * @return bool
+     */
+    public function isUsingAuroraDb(string $resource = ResourceConnection::DEFAULT_CONNECTION): bool
+    {
+        try {
+            $this->resourceConnection->getConnection($resource)->query('SELECT AURORA_VERSION();');
+            return true;
+        } catch (Zend_Db_Statement_Exception $e) {
+            return false;
+        }
     }
 }
