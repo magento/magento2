@@ -310,4 +310,31 @@ class RendererTest extends TestCase
             [false, ['product_calculations' => 0], false],
         ];
     }
+
+    /**
+     * @dataProvider getValueHtmlWithoutShipmentSeparatelyDataProvider
+     */
+    public function testGetValueHtmlWithoutShipmentSeparately($qty)
+    {
+        $model = $this->getMockBuilder(Renderer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['escapeHtml', 'isShipmentSeparately', 'getSelectionAttributes', 'isChildCalculated'])
+            ->getMock();
+        $model->expects($this->any())->method('escapeHtml')->willReturn('Test');
+        $model->expects($this->any())->method('isShipmentSeparately')->willReturn(false);
+        $model->expects($this->any())->method('isChildCalculated')->willReturn(true);
+        $model->expects($this->any())->method('getSelectionAttributes')->willReturn(['qty' => $qty]);
+        $this->assertSame($qty . ' x Test', $model->getValueHtml($this->orderItem));
+    }
+
+    /**
+     * @return array
+     */
+    public function getValueHtmlWithoutShipmentSeparatelyDataProvider()
+    {
+        return [
+            [1],
+            [1.5],
+        ];
+    }
 }
