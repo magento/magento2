@@ -370,8 +370,8 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
         /** @var $configValue \Magento\Framework\App\Config\ValueInterface */
         $configValue = $valueFactory->create();
 
-        $hour = rand(0, 23);
-        $min = rand(0, 59);
+        $hour = 6;
+        $min = 30;
         $data = [
             'system' => [
                 'default' => [
