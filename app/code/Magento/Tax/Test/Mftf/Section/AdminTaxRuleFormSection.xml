@@ -26,5 +26,6 @@
         <element name="productTaxClassSelected" type="checkbox" selector="//*[@id='tax_product_class']/..//span[.='{{taxProductClass}}' and preceding-sibling::input[contains(@class, 'mselect-checked')]]" parameterized="true"/>
         <element name="priority" type="text" selector="#priority"/>
         <element name="sortOrder" type="text" selector="#position"/>
+        <element name="calculateSubtotal" type="checkbox" selector="[name='calculate_subtotal']"/>
     </section>
 </sections>
