@@ -11,6 +11,7 @@ use Magento\Directory\Model\RegionFactory;
 use Magento\Directory\Model\ResourceModel\Region as RegionResource;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
@@ -22,6 +23,7 @@ use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\ProductOption;
+use Magento\Sales\Model\Order\StatusLabel;
 use Magento\Sales\Model\ResourceModel\Order\Address\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection as CreditmemoCollection;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
@@ -31,8 +33,6 @@ use Magento\Sales\Model\ResourceModel\Order\Shipment\Collection as ShipmentColle
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection as TrackCollection;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection as HistoryCollection;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\App\Area;
-use Magento\Sales\Model\Order\StatusLabel;
 
 /**
  * Order model
@@ -1509,6 +1509,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $product = $productsCollection->getItemById($item->getProductId());
             if ($product) {
                 $item->setProduct($product);
+            } else {
+                $collection->removeItemByKey($item->getId());
             }
         }
 
