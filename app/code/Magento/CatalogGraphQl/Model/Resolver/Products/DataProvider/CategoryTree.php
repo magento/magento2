@@ -7,25 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
+use Exception;
 use GraphQL\Language\AST\FieldNode;
-use GraphQL\Language\AST\NodeKind;
 
-use Magento\Store\Api\Data\StoreInterface;
+use GraphQL\Language\AST\NodeKind;
+use Iterator;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
-use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\CatalogGraphQl\Model\AttributesJoiner;
 use Magento\CatalogGraphQl\Model\Category\DepthCalculator;
+use Magento\CatalogGraphQl\Model\Category\Filter\SearchCriteria;
 use Magento\CatalogGraphQl\Model\Category\LevelCalculator;
 use Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CollectionProcessorInterface;
-use Magento\CatalogGraphQl\Model\Category\Filter\SearchCriteria;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Exception\LocalizedException;
-use \Exception;
-use \Iterator;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\GraphQl\Model\Query\ContextInterface;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Category tree data provider
@@ -125,7 +125,8 @@ class CategoryTree
      * @throws LocalizedException
      * @throws Exception
      */
-    private function getCollection(ResolveInfo $resolveInfo, int $rootCategoryId) : Collection {
+    private function getCollection(ResolveInfo $resolveInfo, int $rootCategoryId) : Collection
+    {
         $categoryQuery = $resolveInfo->fieldNodes[0];
         $collection = $this->collectionFactory->create();
         $this->joinAttributesRecursively($collection, $categoryQuery, $resolveInfo);
@@ -138,6 +139,8 @@ class CategoryTree
         } else {
             $regExpPathFilter = sprintf('.*/%s/[/0-9]*$', $rootCategoryId);
         }
+
+        //Add `is_anchor` attribute to selected field
         $collection->addAttributeToSelect('is_anchor');
 
         //Search for desired part of category tree
