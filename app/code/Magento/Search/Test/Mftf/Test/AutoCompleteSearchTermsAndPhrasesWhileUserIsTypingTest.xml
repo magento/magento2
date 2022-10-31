@@ -11,7 +11,7 @@
         <annotations>
             <stories value="Search Terms"/>
             <title value="In this test-case we need to verify that previously used earlier search terms are auto-complete"/>
-            <description value=" search terms are auto-complete for Customer when he tries to input the same search term in quick search on Storefront"/>
+            <description value="search terms are auto-complete for Customer when he tries to input the same search term in quick search on Storefront"/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5003"/>
             <group value="mtf_migrated"/>
