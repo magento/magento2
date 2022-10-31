@@ -11,7 +11,7 @@
     <test name="AdminCreateCmsBlockWithH6TagTest">
         <annotations>
             <features value="Cms"/>
-            <stories value="CMS Block Identifier with H6 tag"/>
+            <stories value="CMS Block Content with H6 tag"/>
             <title value="Admin should be able to create a CMS block with H6 tag"/>
             <description value="Admin should be able to create a CMS block with H6 tag"/>
             <severity value="CRITICAL"/>
