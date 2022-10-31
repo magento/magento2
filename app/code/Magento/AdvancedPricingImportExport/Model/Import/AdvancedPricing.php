@@ -416,7 +416,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                         'website_id' => $this->getWebSiteId($rowData[self::COL_TIER_PRICE_WEBSITE])
                     ];
                     if (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND == $behavior) {
-                         $bunchTierPrices[$rowSku][] = $tierPrice;
+                        $bunchTierPrices[$rowSku][] = $tierPrice;
                     }
                     if (\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE == $behavior) {
                         $tierPrices[$rowSku][] = $tierPrice;
@@ -436,6 +436,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             if ($listSku) {
                 $this->setUpdatedAt($listSku);
             }
+            $this->countItemsCreated -= $this->countItemsUpdated;
         } elseif (\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE == $behavior) {
             if ($listSku) {
                 $this->processCountNewPrices($tierPrices);
@@ -649,7 +650,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         foreach ($tierPrices as $productPrices) {
             $this->countItemsCreated += count($productPrices);
         }
-        $this->countItemsCreated -= $this->countItemsUpdated;
+//        $this->countItemsCreated -= $this->countItemsUpdated; ///
 
         return $this;
     }
