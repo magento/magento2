@@ -436,7 +436,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             if ($listSku) {
                 $this->setUpdatedAt($listSku);
             }
-            $this->countItemsCreated -= $this->countItemsUpdated;
         } elseif (\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE == $behavior) {
             if ($listSku) {
                 $this->processCountNewPrices($tierPrices);
@@ -446,6 +445,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 }
             }
         }
+        $this->finalizeCount();
 
         return $this;
     }
@@ -650,9 +650,16 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         foreach ($tierPrices as $productPrices) {
             $this->countItemsCreated += count($productPrices);
         }
-//        $this->countItemsCreated -= $this->countItemsUpdated; ///
 
         return $this;
+    }
+
+    /**
+     *  Finalize count of new and existing records
+     */
+    protected function finalizeCount()
+    {
+        $this->countItemsCreated -= $this->countItemsUpdated;
     }
 
     /**
