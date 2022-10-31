@@ -50,9 +50,9 @@ class InterceptionConfigurationBuilder
     private $interceptableValidator;
 
     /**
-     * @var InterceptableValidator
+     * @var ConfigInterface
      */
-    private $interceptableValidator;
+    private $omConfig;
 
     /**
      * @param InterceptionConfig $interceptionConfig
