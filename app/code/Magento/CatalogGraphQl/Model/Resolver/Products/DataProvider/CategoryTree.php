@@ -138,6 +138,7 @@ class CategoryTree
         } else {
             $regExpPathFilter = sprintf('.*/%s/[/0-9]*$', $rootCategoryId);
         }
+        $collection->addAttributeToSelect('is_anchor');
 
         //Search for desired part of category tree
         $collection->addPathFilter($regExpPathFilter);
