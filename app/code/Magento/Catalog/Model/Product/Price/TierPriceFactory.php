@@ -95,7 +95,8 @@ class TierPriceFactory
         $price->setCustomerGroup(
             $rawPrice['all_groups'] == $this->allGroupsId
             ? $this->allGroupsValue
-            : $this->customerGroupRepository->getById($rawPrice['customer_group_id'])->getCode()
+            : ($rawPrice['customer_group_code']
+                ?? $this->customerGroupRepository->getById($rawPrice['customer_group_id'])->getCode())
         );
         $price->setQuantity($rawPrice['qty']);
 

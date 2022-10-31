@@ -14,6 +14,7 @@ use Magento\Framework\Stdlib\StringUtils;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\Import\Source\Base64EncodedCsvData;
 use Magento\ImportExport\Model\ImportFactory;
 use Magento\ImportExport\Model\ResourceModel\Helper;
 use Magento\Store\Model\ScopeInterface;
@@ -292,6 +293,13 @@ abstract class AbstractEntity
     private $serializer;
 
     /**
+     * Ids of saved data in DB
+     *
+     * @var array
+     */
+    private array $ids = [];
+
+    /**
      * @param StringUtils $string
      * @param ScopeConfigInterface $scopeConfig
      * @param ImportFactory $importFactory
@@ -413,7 +421,9 @@ abstract class AbstractEntity
         $startNewBunch = false;
 
         $source->rewind();
-        $this->_dataSourceModel->cleanBunches();
+        if (!$source instanceof Base64EncodedCsvData) {
+            $this->_dataSourceModel->cleanBunches();
+        }
         $mainAttributeCode = $this->getMasterAttributeCode();
 
         while ($source->valid() || count($bunchRows) || isset($entityGroup)) {
@@ -425,7 +435,8 @@ abstract class AbstractEntity
                     }
                     unset($entityGroup);
                 }
-                $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
+                $this->ids[] =
+                    $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
 
                 $bunchRows = [];
                 $startNewBunch = false;
@@ -896,5 +907,15 @@ abstract class AbstractEntity
     public function getValidColumnNames()
     {
         return $this->validColumnNames;
+    }
+
+    /**
+     * Retrieve Ids of Validated Rows
+     *
+     * @return array
+     */
+    public function getIds()
+    {
+        return $this->ids;
     }
 }

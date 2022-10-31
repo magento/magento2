@@ -7,6 +7,7 @@
 namespace Magento\CatalogWidget\Model\Rule\Condition;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
@@ -43,10 +44,34 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey(ProductInterface::SKU, $options);
         $this->assertArrayHasKey(ProductInterface::ATTRIBUTE_SET_ID, $options);
         $this->assertArrayHasKey('category_ids', $options);
-        $this->assertArrayNotHasKey(ProductInterface::STATUS, $options);
+        $this->assertArrayHasKey(ProductInterface::STATUS, $options);
         foreach ($options as $code => $label) {
             $this->assertNotEmpty($label);
             $this->assertNotEmpty($code);
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function testLoadAttributeOptionsContainsTextAttributes()
+    {
+        $this->conditionProduct->loadAttributeOptions();
+        $options = $this->conditionProduct->getAttributeOption();
+
+        /** @var ProductResource $productResource */
+        $productResource = $this->objectManager->create(ProductResource::class);
+        $attributes = $productResource->loadAllAttributes()->getAttributesByCode();
+        foreach ($attributes as $key => $attribute) {
+            if (!$attribute->getFrontendLabel() || $attribute->getFrontendInput() !== 'text') {
+                unset($attributes[$key]);
+            }
+        }
+
+        $textAttributeCodes = array_keys($attributes);
+        foreach ($textAttributeCodes as $textAttributeCode) {
+            $this->assertArrayHasKey($textAttributeCode, $options);
+            $this->assertNotEmpty($options[$textAttributeCode]);
         }
     }
 

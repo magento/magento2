@@ -7,6 +7,7 @@
 namespace Magento\Elasticsearch\Model\Adapter;
 
 use Elasticsearch\Common\Exceptions\Missing404Exception;
+use Exception;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\StaticField;
@@ -28,10 +29,10 @@ class Elasticsearch
     /**#@+
      * Text flags for Elasticsearch bulk actions
      */
-    const BULK_ACTION_INDEX = 'index';
-    const BULK_ACTION_CREATE = 'create';
-    const BULK_ACTION_DELETE = 'delete';
-    const BULK_ACTION_UPDATE = 'update';
+    public const BULK_ACTION_INDEX = 'index';
+    public const BULK_ACTION_CREATE = 'create';
+    public const BULK_ACTION_DELETE = 'delete';
+    public const BULK_ACTION_UPDATE = 'update';
     /**#@-*/
 
     /**
@@ -110,6 +111,13 @@ class Elasticsearch
     private $arrayManager;
 
     /**
+     * @var array
+     */
+    private $responseErrorExceptionList = [
+        'elasticsearchMissing404' => Missing404Exception::class
+    ];
+
+    /**
      * @param ConnectionManager $connectionManager
      * @param FieldMapperInterface $fieldMapper
      * @param Config $clientConfig
@@ -121,6 +129,7 @@ class Elasticsearch
      * @param ProductAttributeRepositoryInterface|null $productAttributeRepository
      * @param StaticField|null $staticFieldProvider
      * @param ArrayManager|null $arrayManager
+     * @param array $responseErrorExceptionList
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -135,7 +144,8 @@ class Elasticsearch
         $options = [],
         ProductAttributeRepositoryInterface $productAttributeRepository = null,
         StaticField $staticFieldProvider = null,
-        ArrayManager $arrayManager = null
+        ArrayManager $arrayManager = null,
+        array $responseErrorExceptionList = []
     ) {
         $this->connectionManager = $connectionManager;
         $this->fieldMapper = $fieldMapper;
@@ -150,10 +160,11 @@ class Elasticsearch
             ObjectManager::getInstance()->get(StaticField::class);
         $this->arrayManager = $arrayManager ?:
             ObjectManager::getInstance()->get(ArrayManager::class);
+        $this->responseErrorExceptionList = array_merge($this->responseErrorExceptionList, $responseErrorExceptionList);
 
         try {
             $this->client = $this->connectionManager->getConnection($options);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->critical($e);
             throw new LocalizedException(
                 __('The search failed because of a search engine misconfiguration.')
@@ -171,7 +182,7 @@ class Elasticsearch
     {
         try {
             $response = $this->client->ping();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new LocalizedException(
                 __('Could not ping search engine: %1', $e->getMessage())
             );
@@ -205,7 +216,7 @@ class Elasticsearch
      * @param int $storeId
      * @param string $mappedIndexerId
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function addDocs(array $documents, $storeId, $mappedIndexerId)
     {
@@ -214,7 +225,7 @@ class Elasticsearch
                 $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex);
                 $bulkIndexDocuments = $this->getDocsArrayInBulkIndexFormat($documents, $indexName);
                 $this->client->bulkQuery($bulkIndexDocuments);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->critical($e);
                 throw $e;
             }
@@ -258,7 +269,7 @@ class Elasticsearch
             // remove index if already exists, wildcard deletion may cause collisions
             try {
                 $this->client->deleteIndex($indexToDelete);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->critical($e);
             }
         }
@@ -276,7 +287,7 @@ class Elasticsearch
      * @param int $storeId
      * @param string $mappedIndexerId
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function deleteDocs(array $documentIds, $storeId, $mappedIndexerId)
     {
@@ -289,7 +300,7 @@ class Elasticsearch
                 self::BULK_ACTION_DELETE
             );
             $this->client->bulkQuery($bulkDeleteDocuments);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->critical($e);
             throw $e;
         }
@@ -391,7 +402,7 @@ class Elasticsearch
         if ($oldIndex) {
             try {
                 $this->client->deleteIndex($oldIndex);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->critical($e);
             }
             unset($this->indexByCode[$mappedIndexerId . '_' . $storeId]);
@@ -417,13 +428,28 @@ class Elasticsearch
 
         try {
             $this->updateMapping($attributeCode, $indexName);
-        } catch (Missing404Exception $e) {
-            unset($this->indexByCode[$mappedIndexerId . '_' . $storeId]);
-            $indexName = $this->getIndexFromAlias($storeId, $mappedIndexerId);
-            $this->updateMapping($attributeCode, $indexName);
+        } catch (Exception $e) {
+            if ($this->validateException($e)) {
+                unset($this->indexByCode[$mappedIndexerId . '_' . $storeId]);
+                $indexName = $this->getIndexFromAlias($storeId, $mappedIndexerId);
+                $this->updateMapping($attributeCode, $indexName);
+            } else {
+                throw $e;
+            }
         }
 
         return $this;
+    }
+
+    /**
+     * Check if the given class name is in the exception list
+     *
+     * @param Exception $exception
+     * @return bool
+     */
+    private function validateException(Exception $exception): bool
+    {
+        return in_array(get_class($exception), $this->responseErrorExceptionList, true);
     }
 
     /**
