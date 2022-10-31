@@ -3,9 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Registry;
+use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\View\Result\LayoutFactory;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -15,11 +26,11 @@ use Psr\Log\LoggerInterface;
 /**
  * Adminhtml sales orders controller
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class Order extends \Magento\Backend\App\Action
+abstract class Order extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -38,37 +49,37 @@ abstract class Order extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @var FileFactory
      */
     protected $_fileFactory;
 
     /**
-     * @var \Magento\Framework\Translate\InlineInterface
+     * @var InlineInterface
      */
     protected $_translateInline;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     protected $resultPageFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     protected $resultJsonFactory;
 
     /**
-     * @var \Magento\Framework\View\Result\LayoutFactory
+     * @var LayoutFactory
      */
     protected $resultLayoutFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory
+     * @var RawFactory
      */
     protected $resultRawFactory;
 
@@ -89,13 +100,13 @@ abstract class Order extends \Magento\Backend\App\Action
 
     /**
      * @param Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Framework\Translate\InlineInterface $translateInline
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
-     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param Registry $coreRegistry
+     * @param FileFactory $fileFactory
+     * @param InlineInterface $translateInline
+     * @param PageFactory $resultPageFactory
+     * @param JsonFactory $resultJsonFactory
+     * @param LayoutFactory $resultLayoutFactory
+     * @param RawFactory $resultRawFactory
      * @param OrderManagementInterface $orderManagement
      * @param OrderRepositoryInterface $orderRepository
      * @param LoggerInterface $logger
@@ -105,13 +116,13 @@ abstract class Order extends \Magento\Backend\App\Action
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Framework\Translate\InlineInterface $translateInline,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
+        Registry $coreRegistry,
+        FileFactory $fileFactory,
+        InlineInterface $translateInline,
+        PageFactory $resultPageFactory,
+        JsonFactory $resultJsonFactory,
+        LayoutFactory $resultLayoutFactory,
+        RawFactory $resultRawFactory,
         OrderManagementInterface $orderManagement,
         OrderRepositoryInterface $orderRepository,
         LoggerInterface $logger
@@ -132,7 +143,7 @@ abstract class Order extends \Magento\Backend\App\Action
     /**
      * Init layout, menu and breadcrumb
      *
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return Page
      */
     protected function _initAction()
     {
@@ -146,7 +157,7 @@ abstract class Order extends \Magento\Backend\App\Action
     /**
      * Initialize order model instance
      *
-     * @return \Magento\Sales\Api\Data\OrderInterface|false
+     * @return OrderInterface|false
      */
     protected function _initOrder()
     {

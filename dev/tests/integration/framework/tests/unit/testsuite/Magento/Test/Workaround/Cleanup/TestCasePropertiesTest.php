@@ -32,8 +32,8 @@ class TestCasePropertiesTest extends TestCase
     ];
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testEndTestSuiteDestruct(): void
     {
         $phpUnitTestSuite = new TestSuite();

@@ -34,6 +34,10 @@
                 <requiredEntity createDataKey="createCategoryB"/>
             </createData>
             <createData entity="NewRootCategory" stepKey="createNewRootCategoryA"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="navigateToStores"/>
+            <actionGroup ref="AdminDeleteMultipleWebsitesActionGroup" stepKey="deleteWebsites"/>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
@@ -41,7 +45,7 @@
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="createProduct3" stepKey="deleteProduct3"/>
         </after>
-        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+        <comment userInput="BIC workaround" stepKey="loginAsAdmin1"/>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage1"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createNewRootCategoryA.name$$)}}" stepKey="openNewRootCategory"/>
         <waitForPageLoad stepKey="waitForPageCategoryLoadAfterClickOnNewRootCategory"/>
@@ -57,8 +61,8 @@
         </actionGroup>
         <!-- Change root category for Main Website Store. -->
         <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="s1"/>
-        <click stepKey="s2" selector="{{AdminStoresGridSection.resetButton}}"/>
-        <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterResetButton" time="10"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="s2"/>
+        <comment userInput="BIC workaround" stepKey="waitForPageAdminStoresGridLoadAfterResetButton"/>
         <fillField stepKey="s4" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"/>
         <click stepKey="s5" selector="{{AdminStoresGridSection.searchButton}}"/>
         <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterSearchButton"/>

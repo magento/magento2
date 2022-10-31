@@ -25,7 +25,7 @@
         <click selector="{{CheckoutShippingSection.state}}" stepKey="clickToChooseState"/>
         <see userInput="$0.00	Free	Free Shipping" selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Free Shipping')}}" stepKey="seeShippingMethod" after="clickToChooseState"/>
         <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Free Shipping')}}" stepKey="selectFlatShippingMethod" after="seeShippingMethod"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask" after="selectFlatShippingMethod"/>
+        <waitForPageLoad stepKey="waitForLoadingMask" after="selectFlatShippingMethod"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickToSaveShippingInfo"/>
         <waitForPageLoad time="5" stepKey="waitForReviewAndPaymentsPageIsLoaded"/>
         <seeInCurrentUrl url="payment" stepKey="reviewAndPaymentIsShown"/>

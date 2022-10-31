@@ -16,6 +16,7 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Validator\Alnum;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -141,10 +142,10 @@ class TextTest extends TestCase
             ['QazWsx', true],
             ['QazWsx123', true],
             ['QazWsx 123',
-                [\Zend_Validate_Alnum::NOT_ALNUM => '"Test" contains non-alphabetic or non-numeric characters.']
+                [Alnum::NOT_ALNUM => '"Test" contains non-alphabetic or non-numeric characters.']
             ],
             ['QazWsx_123',
-                [\Zend_Validate_Alnum::NOT_ALNUM => '"Test" contains non-alphabetic or non-numeric characters.']
+                [Alnum::NOT_ALNUM => '"Test" contains non-alphabetic or non-numeric characters.']
             ],
             ['QazWsx12345', [
                 __('"%1" length must be equal or less than %2 characters.', 'Test', 10)]
@@ -190,7 +191,7 @@ class TextTest extends TestCase
             ['QazWsx123', true],
             ['QazWsx 123', true],
             ['QazWsx_123',
-                [\Zend_Validate_Alnum::NOT_ALNUM => '"Test" contains non-alphabetic or non-numeric characters.']
+                [Alnum::NOT_ALNUM => '"Test" contains non-alphabetic or non-numeric characters.']
             ],
             ['QazWsx12345', [
                 __('"%1" length must be equal or less than %2 characters.', 'Test', 10)]

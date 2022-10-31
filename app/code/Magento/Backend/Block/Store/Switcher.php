@@ -20,7 +20,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * URL for store switcher hint
      */
-    const HINT_URL = 'https://docs.magento.com/user-guide/configuration/scope.html';
+    public const HINT_URL = 'https://docs.magento.com/user-guide/configuration/scope.html';
 
     /**
      * Name of website variable
@@ -68,22 +68,16 @@ class Switcher extends \Magento\Backend\Block\Template
     protected $_template = 'Magento_Backend::store/switcher.phtml';
 
     /**
-     * Website factory
-     *
      * @var \Magento\Store\Model\WebsiteFactory
      */
     protected $_websiteFactory;
 
     /**
-     * Store Group Factory
-     *
      * @var \Magento\Store\Model\GroupFactory
      */
     protected $_storeGroupFactory;
 
     /**
-     * Store Factory
-     *
      * @var \Magento\Store\Model\StoreFactory
      */
     protected $_storeFactory;
@@ -617,9 +611,9 @@ class Switcher extends \Magento\Backend\Block\Template
         $url = $this->getHintUrl();
         if ($url) {
             $html = '<div class="admin__field-tooltip tooltip"><a href="%s" onclick="this.target=\'_blank\'"  title="%s"
-           class="admin__field-tooltip-action action-help"><span>%s</span></a></span></div>';
-            $title =  $this->escapeHtmlAttr(__('What is this?'));
-            $span= $this->escapeHtml(__('What is this?'));
+            class="admin__field-tooltip-action action-help"><span>%s</span></a></div>';
+            $title = $this->escapeHtmlAttr(__('What is this?'));
+            $span = $this->escapeHtml(__('What is this?'));
             $html = sprintf($html, $this->escapeUrl($url), $title, $span);
         }
         return $html;

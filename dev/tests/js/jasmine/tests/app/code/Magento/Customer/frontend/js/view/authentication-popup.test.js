@@ -30,7 +30,8 @@ define(['squire', 'ko'], function (Squire, ko) {
             customerRegisterUrl: 'register_url',
             customerForgotPasswordUrl: 'forgot_password_url',
             autocomplete: 'autocomplete_flag',
-            baseUrl: 'base_url'
+            baseUrl: 'base_url',
+            customerLoginUrl:'customer_login_url'
         };
 
         injector.mock(mocks);
@@ -119,7 +120,8 @@ define(['squire', 'ko'], function (Squire, ko) {
 
                 expect(obj.login(null, event)).toBeFalsy();
                 expect(mocks['Magento_Customer/js/action/login']).toHaveBeenCalledWith({
-                    username: 'customer'
+                    username: 'customer',
+                    customerLoginUrl: 'customer_login_url'
                 });
             });
         });

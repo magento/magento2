@@ -18,6 +18,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\CustomerFactory;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\ManagerInterface;
@@ -239,7 +240,17 @@ class QuoteManagementTest extends TestCase
         );
 
         $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['setCustomerEmail', 'setCustomerGroupId', 'setCustomerId', 'setRemoteIp', 'setXForwardedFor'])
+            ->addMethods(
+                [
+                    'getCustomerEmail',
+                    'setCustomerEmail',
+                    'setCustomerGroupId',
+                    'getCustomerId',
+                    'setCustomerId',
+                    'setRemoteIp',
+                    'setXForwardedFor',
+                ]
+            )
             ->onlyMethods(
                 [
                     'assignCustomer',
@@ -274,7 +285,7 @@ class QuoteManagementTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->customerSessionMock = $this->createMock(CustomerSession::class);
         $this->accountManagementMock = $this->getMockForAbstractClass(AccountManagementInterface::class);
 
         $this->quoteFactoryMock = $this->createPartialMock(QuoteFactory::class, ['create']);
@@ -716,6 +727,8 @@ class QuoteManagementTest extends TestCase
 
     /**
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSubmit(): void
     {
@@ -737,11 +750,9 @@ class QuoteManagementTest extends TestCase
         $convertedShipping = $this->createPartialMockForAbstractClass(OrderAddressInterface::class, ['setData']);
         $convertedPayment = $this->getMockForAbstractClass(OrderPaymentInterface::class);
         $convertedQuoteItem = $this->getMockForAbstractClass(OrderItemInterface::class);
-
         $addresses = [$convertedShipping, $convertedBilling];
         $quoteItems = [$quoteItem];
         $convertedItems = [$convertedQuoteItem];
-
         $quote = $this->getQuote(
             $isGuest,
             $isVirtual,
@@ -820,9 +831,10 @@ class QuoteManagementTest extends TestCase
     }
 
     /**
+     * @dataProvider guestPlaceOrderDataProvider
      * @return void
      */
-    public function testPlaceOrderIfCustomerIsGuest(): void
+    public function testPlaceOrderIfCustomerIsGuest(?string $settledEmail, int $countSetAddress): void
     {
         $cartId = 100;
         $orderId = 332;
@@ -844,14 +856,21 @@ class QuoteManagementTest extends TestCase
         $this->quoteMock->expects($this->once())
             ->method('getCustomer')
             ->willReturn($customerMock);
+        $this->quoteMock->expects($this->once())
+            ->method('getCustomerEmail')
+            ->willReturn($settledEmail);
         $this->quoteMock->expects($this->once())->method('setCustomerId')->with(null)->willReturnSelf();
-        $this->quoteMock->expects($this->once())->method('setCustomerEmail')->with($email)->willReturnSelf();
+        $this->quoteMock->expects($this->exactly($countSetAddress))
+            ->method('setCustomerEmail')
+            ->with($email)
+            ->willReturnSelf();
 
         $addressMock = $this->createPartialMock(Address::class, ['getEmail']);
-        $addressMock->expects($this->once())->method('getEmail')->willReturn($email);
+        $addressMock->expects($this->exactly($countSetAddress))->method('getEmail')->willReturn($email);
         $this->quoteMock->expects($this->any())->method('getBillingAddress')->with()->willReturn($addressMock);
 
         $this->quoteMock->expects($this->once())->method('setCustomerIsGuest')->with(true)->willReturnSelf();
+        $this->quoteMock->expects($this->once())->method('getCustomerId')->willReturn(null);
         $this->quoteMock->expects($this->once())
             ->method('setCustomerGroupId')
             ->with(GroupInterface::NOT_LOGGED_IN_ID);
@@ -862,7 +881,7 @@ class QuoteManagementTest extends TestCase
             ->setConstructorArgs(
                 [
                     'eventManager' => $this->eventManager,
-                    'quoteValidator' => $this->submitQuoteValidator,
+                    'submitQuoteValidator' => $this->submitQuoteValidator,
                     'orderFactory' => $this->orderFactory,
                     'orderManagement' => $this->orderManagement,
                     'customerManagement' => $this->customerManagement,
@@ -912,6 +931,17 @@ class QuoteManagementTest extends TestCase
     }
 
     /**
+     * @return array
+     */
+    public function guestPlaceOrderDataProvider(): array
+    {
+        return [
+            [null, 1],
+            ['test@example.com', 0],
+        ];
+    }
+
+    /**
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -930,7 +960,7 @@ class QuoteManagementTest extends TestCase
             ->setConstructorArgs(
                 [
                     'eventManager' => $this->eventManager,
-                    'quoteValidator' => $this->submitQuoteValidator,
+                    'submitQuoteValidator' => $this->submitQuoteValidator,
                     'orderFactory' => $this->orderFactory,
                     'orderManagement' => $this->orderManagement,
                     'customerManagement' => $this->customerManagement,
@@ -976,9 +1006,6 @@ class QuoteManagementTest extends TestCase
         $this->quoteMock->expects($this->once())
             ->method('getCheckoutMethod')
             ->willReturn(Onepage::METHOD_CUSTOMER);
-        $this->quoteMock->expects($this->never())
-            ->method('setCustomerIsGuest')
-            ->with(true);
 
         $this->remoteAddressMock
             ->method('getRemoteAddress')

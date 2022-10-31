@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <adobe_ims>
+            <integration>
+                <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <token_url>#{imsUrl}/ims/token</token_url>
+                <logout_url><![CDATA[#{imsUrl}/ims/logout?access_token=#{access_token}&redirect_uri=#{redirect_uri}]]></logout_url>
+                <image_url><![CDATA[#{imageUrl}/v2/users/me?api_key=#{api_key}]]></image_url>
+                <auth_url_pattern><![CDATA[#{imsUrl}/ims/authorize?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=#{scope}&response_type=code]]></auth_url_pattern>
+                <imsUrl>https://ims-na1.adobelogin.com</imsUrl>
+                <imageUrl>https://cc-api-behance.adobe.io</imageUrl>
+                <scopes>
+                    <creative_sdk>creative_sdk</creative_sdk>
+                    <openid>openid</openid>
+                    <email>email</email>
+                    <profile>profile</profile>
+                </scopes>
+                <logging_enabled>0</logging_enabled>
+            </integration>
+        </adobe_ims>
+    </default>
+</config>

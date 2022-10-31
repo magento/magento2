@@ -135,8 +135,8 @@ class ShellTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecuteFailure(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');

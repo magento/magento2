@@ -21,6 +21,8 @@
 
         <before>
             <magentoCLI command="config:set {{MinimalQueryLengthFourConfigData.path}} {{MinimalQueryLengthFourConfigData.value}}" after="createSimpleProduct" stepKey="setMinimalQueryLengthToFour"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
 
         <after>

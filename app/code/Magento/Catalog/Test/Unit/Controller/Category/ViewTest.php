@@ -245,7 +245,7 @@ class ViewTest extends TestCase
             ->willReturnOnConsecutiveCalls(
                 $expectedData[1][0]['type'] === 'default'
             );
-        $this->category->expects($this->once())
+        $this->category->expects($this->any())
             ->method('getDisplayMode')
             ->willReturn($expectedData[2][0]['displaymode']);
         $this->expectationForPageLayoutHandles($expectedData);

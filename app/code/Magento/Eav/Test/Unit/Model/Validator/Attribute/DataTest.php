@@ -42,7 +42,7 @@ class DataTest extends TestCase
     private $objectManager;
 
     /**
-     * @inheritdoc 
+     * @inheritdoc
      */
     protected function setUp(): void
     {

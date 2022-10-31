@@ -99,7 +99,7 @@ define([
             formDataArray.forEach(function (entry) {
                 loginData[entry.name] = entry.value;
             });
-
+            loginData['customerLoginUrl'] = window.authenticationPopup.customerLoginUrl;
             if (formElement.validation() &&
                 formElement.validation('isValid')
             ) {

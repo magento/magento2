@@ -254,7 +254,13 @@ class RepositoryTest extends TestCase
                 ['area' => 'AREA', 'themeModel' => $this->getThemeMock(), 'module' => false, 'locale' => 'locale']],
             [
                 ['themeId' => 'ThemeID'],
-                ['area' => 'area', 'themeId' => 'ThemeID', 'themeModel' => 'ThemeID', 'module' => false, 'locale' => 'locale']
+                [
+                    'area' => 'area',
+                    'themeId' => 'ThemeID',
+                    'themeModel' => 'ThemeID',
+                    'module' => false,
+                    'locale' => 'locale'
+                ]
             ]
         ];
     }
@@ -270,7 +276,7 @@ class RepositoryTest extends TestCase
             ->method('getThemeByFullPath')
             ->willReturnArgument(0);
 
-        $fallbackContextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContex::class)
+        $fallbackContextMock = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContex')
             ->disableOriginalConstructor()
             ->getMock();
         $this->fallbackFactoryMock
@@ -335,7 +341,7 @@ class RepositoryTest extends TestCase
             ->method('isSecure')
             ->willReturn(false);
 
-        $fallbackContextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContex::class)
+        $fallbackContextMock = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContex')
             ->disableOriginalConstructor()
             ->getMock();
         $this->fallbackFactoryMock
@@ -372,12 +378,10 @@ class RepositoryTest extends TestCase
 
         $originalAssetMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getModule', 'getContext'])
+            ->onlyMethods(['getModule', 'getContext', 'getFilePath'])
             ->getMock();
-        $originalAssetMock
-            ->expects($this->any())
-            ->method('getContext')
-            ->willReturn($originalContextMock);
+        $originalAssetMock->method('getContext')->willReturn($originalContextMock);
+        $originalAssetMock->method('getFilePath')->willReturn('');
 
         $assetMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()

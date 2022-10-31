@@ -21,40 +21,40 @@ class Vat
     /**
      * Config paths to VAT related customer groups
      */
-    const XML_PATH_CUSTOMER_VIV_INTRA_UNION_GROUP = 'customer/create_account/viv_intra_union_group';
+    public const XML_PATH_CUSTOMER_VIV_INTRA_UNION_GROUP = 'customer/create_account/viv_intra_union_group';
 
-    const XML_PATH_CUSTOMER_VIV_DOMESTIC_GROUP = 'customer/create_account/viv_domestic_group';
+    public const XML_PATH_CUSTOMER_VIV_DOMESTIC_GROUP = 'customer/create_account/viv_domestic_group';
 
-    const XML_PATH_CUSTOMER_VIV_INVALID_GROUP = 'customer/create_account/viv_invalid_group';
+    public const XML_PATH_CUSTOMER_VIV_INVALID_GROUP = 'customer/create_account/viv_invalid_group';
 
-    const XML_PATH_CUSTOMER_VIV_ERROR_GROUP = 'customer/create_account/viv_error_group';
+    public const XML_PATH_CUSTOMER_VIV_ERROR_GROUP = 'customer/create_account/viv_error_group';
 
     /**
      * VAT class constants
      */
-    const VAT_CLASS_DOMESTIC = 'domestic';
+    public const VAT_CLASS_DOMESTIC = 'domestic';
 
-    const VAT_CLASS_INTRA_UNION = 'intra_union';
+    public const VAT_CLASS_INTRA_UNION = 'intra_union';
 
-    const VAT_CLASS_INVALID = 'invalid';
+    public const VAT_CLASS_INVALID = 'invalid';
 
-    const VAT_CLASS_ERROR = 'error';
+    public const VAT_CLASS_ERROR = 'error';
 
     /**
      * WSDL of VAT validation service
      *
      */
-    const VAT_VALIDATION_WSDL_URL = 'https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
+    public const VAT_VALIDATION_WSDL_URL = 'https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
 
     /**
      * Config path to option that enables/disables automatic group assignment based on VAT
      */
-    const XML_PATH_CUSTOMER_GROUP_AUTO_ASSIGN = 'customer/create_account/auto_group_assign';
+    public const XML_PATH_CUSTOMER_GROUP_AUTO_ASSIGN = 'customer/create_account/auto_group_assign';
 
     /**
      * Config path to UE country list
      */
-    const XML_PATH_EU_COUNTRIES_LIST = 'general/country/eu_countries';
+    public const XML_PATH_EU_COUNTRIES_LIST = 'general/country/eu_countries';
 
     /**
      * @var ScopeConfigInterface
@@ -187,11 +187,13 @@ class Vat
 
             $requestParams = [];
             $requestParams['countryCode'] = $countryCodeForVatNumber;
+            $vatNumber = $vatNumber !== null ? $vatNumber : '';
             $vatNumberSanitized = $this->isCountryInEU($countryCode)
                 ? str_replace([' ', '-', $countryCodeForVatNumber], ['', '', ''], $vatNumber)
                 : str_replace([' ', '-'], ['', ''], $vatNumber);
             $requestParams['vatNumber'] = $vatNumberSanitized;
             $requestParams['requesterCountryCode'] = $requesterCountryCodeForVatNumber;
+            $requesterVatNumber = $requesterVatNumber !== null ? $requesterVatNumber : '';
             $reqVatNumSanitized = $this->isCountryInEU($requesterCountryCode)
                 ? str_replace([' ', '-', $requesterCountryCodeForVatNumber], ['', '', ''], $requesterVatNumber)
                 : str_replace([' ', '-'], ['', ''], $requesterVatNumber);
@@ -300,7 +302,7 @@ class Vat
     {
         $euCountries = explode(
             ',',
-            $this->scopeConfig->getValue(self::XML_PATH_EU_COUNTRIES_LIST, ScopeInterface::SCOPE_STORE, $storeId)
+            $this->scopeConfig->getValue(self::XML_PATH_EU_COUNTRIES_LIST, ScopeInterface::SCOPE_STORE, $storeId) ?? ''
         );
         return in_array($countryCode, $euCountries);
     }
