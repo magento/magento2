@@ -9,7 +9,6 @@ use Magento\Framework\Filesystem\Directory\Write;
 
 /**
  * Import adapter model
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Adapter
 {
