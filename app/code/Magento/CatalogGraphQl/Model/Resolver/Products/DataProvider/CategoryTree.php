@@ -9,7 +9,6 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
 use Exception;
 use GraphQL\Language\AST\FieldNode;
-
 use GraphQL\Language\AST\NodeKind;
 use Iterator;
 use Magento\Catalog\Api\Data\CategoryInterface;
@@ -29,13 +28,15 @@ use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Category tree data provider
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryTree
 {
     /**
      * In depth we need to calculate only children nodes, so the first wrapped node should be ignored
      */
-    const DEPTH_OFFSET = 1;
+    private const DEPTH_OFFSET = 1;
 
     /**
      * @var CollectionFactory
