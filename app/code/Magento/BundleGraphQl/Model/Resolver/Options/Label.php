@@ -15,7 +15,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * Class Label
+ * Bundle product option label resolver
  */
 class Label implements ResolverInterface
 {
@@ -56,8 +56,8 @@ class Label implements ResolverInterface
         $this->product->addProductSku($value['sku']);
         $this->product->addEavAttributes(['name']);
 
-        $result = function () use ($value) {
-            $productData = $this->product->getProductBySku($value['sku']);
+        $result = function () use ($value, $context) {
+            $productData = $this->product->getProductBySku($value['sku'], $context);
             /** @var \Magento\Catalog\Model\Product $productModel */
             $productModel = isset($productData['model']) ? $productData['model'] : null;
             return $productModel ? $productModel->getName() : null;
