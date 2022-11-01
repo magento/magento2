@@ -454,7 +454,8 @@ class DataObject implements \ArrayAccess
         $result = strtolower(
             trim(
                 preg_replace(
-                    '/([A-Z]|[0-9])/', "_$1",
+                    '/([A-Z]|[0-9]+)/', 
+                    "_$1",
                     lcfirst(
                         substr(
                             $name,
