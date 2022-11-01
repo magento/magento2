@@ -387,7 +387,7 @@ class DataObject implements \ArrayAccess
      */
     public function __call($method, $args)
     {
-        switch(\substr((string)$method, 0, 3)) {
+        switch($method[0].($method[1] ?? '').($method[2] ?? '')) {
             case 'get':
                 if (isset($args[0]) && $args[0] !== null) {
                     return $this->getData(
@@ -398,7 +398,9 @@ class DataObject implements \ArrayAccess
 
                 return $this->_data[
                     self::$_underscoreCache[$method] ?? $this->_underscore($method)
-                ] ?? null;
+                ] ?? $this->getData(
+                    self::$_underscoreCache[$method] ?? $this->_underscore($method)
+                );
             case 'set':
                 $this->_data[
                     self::$_underscoreCache[$method] ?? $this->_underscore($method)
@@ -453,7 +455,12 @@ class DataObject implements \ArrayAccess
             trim(
                 preg_replace(
                     '/([A-Z]|[0-9])/', "_$1",
-                    lcfirst(substr($name, 3))
+                    lcfirst(
+                        substr(
+                            $name,
+                            3
+                        )
+                    )
                 ),
                 '_'
             )
