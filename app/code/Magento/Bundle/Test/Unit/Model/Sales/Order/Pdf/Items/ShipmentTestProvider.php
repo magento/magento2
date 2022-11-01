@@ -13,7 +13,7 @@ namespace Magento\Bundle\Test\Unit\Model\Sales\Order\Pdf\Items;
 class ShipmentTestProvider
 {
     /**
-     * Returns shipment test variations data
+     * Returns shipment test data
      *
      * @return array[]
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -24,95 +24,81 @@ class ShipmentTestProvider
             [
                 [
                     [
-                        1 =>
-                            [
-                                'lines' =>
+                        [
+                            'lines' =>
+                                [
                                     [
-                                        0 =>
-                                            [
-                                                0 =>
-                                                    [
-                                                        'text' => 0,
-                                                        'feed' => 35,
-                                                    ],
-                                                1 =>
-                                                    [
-                                                        'text' =>
-                                                            [
-                                                                0 => 'Bundle',
-                                                            ],
-                                                        'feed' => 100,
-                                                    ],
-                                                2 =>
-                                                    [
-                                                        'text' =>
-                                                            [
-                                                                0 => 'bundle-simple',
-                                                            ],
-                                                        'feed' => 565,
-                                                        'align' => 'right',
-                                                    ],
-                                            ],
-                                        1 =>
-                                            [
-                                                0 =>
-                                                    [
-                                                        'text' => 0,
-                                                        'feed' => 35,
-                                                    ],
-                                                1 =>
-                                                    [
-                                                        'text' =>
-                                                            [
-                                                                0 => 'Simple1',
-                                                            ],
-                                                        'feed' => 100,
-                                                    ],
-                                                2 =>
-                                                    [
-                                                        'text' =>
-                                                            [
-                                                                0 => 'simple1',
-                                                            ],
-                                                        'feed' => 565,
-                                                        'align' => 'right',
-                                                    ],
-                                            ],
+                                        [
+                                            'text' => 0,
+                                            'feed' => 35,
+                                        ],
+                                        [
+                                            'text' =>
+                                                [
+                                                    'Simple2',
+                                                ],
+                                            'feed' => 100,
+                                        ],
+                                        [
+                                            'text' =>
+                                                [
+                                                    'simple2',
+                                                ],
+                                            'feed' => 565,
+                                            'align' => 'right',
+                                        ],
                                     ],
-                                'height' => 15,
-                            ],
-                        0 =>
-                            [
-                                'lines' =>
+                                ],
+                            'height' => 15,
+                        ],
+                        [
+                            'lines' =>
+                                [
                                     [
-                                        0 =>
-                                            [
-                                                0 =>
-                                                    [
-                                                        'text' => 0,
-                                                        'feed' => 35,
-                                                    ],
-                                                1 =>
-                                                    [
-                                                        'text' =>
-                                                            [
-                                                                0 => 'Simple2',
-                                                            ],
-                                                        'feed' => 100,
-                                                    ],
-                                                2 =>
-                                                    [
-                                                        'text' =>
-                                                            [
-                                                                0 => 'simple2',
-                                                            ],
-                                                        'feed' => 565,
-                                                        'align' => 'right',
-                                                    ],
-                                            ],
+                                        [
+                                            'text' => 0,
+                                            'feed' => 35,
+                                        ],
+                                        [
+                                            'text' =>
+                                                [
+                                                    'Bundle',
+                                                ],
+                                            'feed' => 100,
+                                        ],
+                                        [
+                                            'text' =>
+                                                [
+                                                    'bundle-simple',
+                                                ],
+                                            'feed' => 565,
+                                            'align' => 'right',
+                                        ],
                                     ],
-                                'height' => 15,
-                            ],
+                                    [
+                                        [
+                                            'text' => 0,
+                                            'feed' => 35,
+                                        ],
+                                        [
+                                            'text' =>
+                                                [
+                                                    'Simple1',
+                                                ],
+                                            'feed' => 100,
+                                        ],
+                                        [
+                                            'text' =>
+                                                [
+                                                    'simple1',
+                                                ],
+                                            'feed' => 565,
+                                            'align' => 'right',
+                                        ],
+                                    ],
+                                ],
+                            'height' => 15,
+                        ],
                     ]
                 ]
             ];

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model\Sales\Order\Pdf\Items;
 
-use Magento\Bundle\Model\Sales\Order\Pdf\Items\Shipment;
+use Magento\Bundle\Model\Sales\Order\Pdf\Items\Creditmemo;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filesystem;
@@ -25,15 +25,20 @@ use PHPUnit\Framework\TestCase;
 use Zend_Pdf_Page;
 
 /**
- * Test for the vertical alignment of the printed elements of the shipment PDF
+ * Test for the vertical alignment of the printed elements of the creditmemo PDF
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ShipmentTest extends TestCase
+class CreditmemoTest extends TestCase
 {
     /**
-     * @var Shipment|MockObject
+     * @var Creditmemo|MockObject
      */
     private $model;
+
+    /**
+     * @var Data|MockObject
+     */
+    private $taxDataMock;
 
     /**
      * @inheritDoc
@@ -49,12 +54,11 @@ class ShipmentTest extends TestCase
         $filesystemMock->expects($this->any())->method('getDirectoryRead')->willReturn($directoryMock);
         $filterManagerMock = $this->createMock(FilterManager::class);
         $stringUtils = new StringUtils();
-
         $resourceMock = $this->createMock(AbstractResource::class);
         $collectionMock = $this->createMock(AbstractDb::class);
         $serializerMock = $this->createMock(Json::class);
 
-        $this->model = $this->getMockBuilder(Shipment::class)
+        $this->model = $this->getMockBuilder(Creditmemo::class)
             ->setConstructorArgs(
                 [
                     $contextMock,
@@ -62,8 +66,8 @@ class ShipmentTest extends TestCase
                     $this->taxDataMock,
                     $filesystemMock,
                     $filterManagerMock,
-                    $stringUtils,
                     $serializerMock,
+                    $stringUtils,
                     $resourceMock,
                     $collectionMock,
                     []
@@ -84,9 +88,10 @@ class ShipmentTest extends TestCase
 
     /**
      * @param array $expected
+     * @param string $method
      *
      * @return void
-     * @dataProvider \Magento\Bundle\Test\Unit\Model\Sales\Order\Pdf\Items\ShipmentTestProvider::getData
+     * @dataProvider \Magento\Bundle\Test\Unit\Model\Sales\Order\Pdf\Items\CreditmemoTestProvider::getData
      */
     public function testDrawPrice(array $expected): void
     {
