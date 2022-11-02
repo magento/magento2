@@ -178,7 +178,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
      */
     protected function addExceptionToContext($message, array $context = []): array
     {
-        if ($message instanceof \Throwable) {
+        if ($message instanceof \Throwable && !isset($context['exception'])) {
             $context['exception'] = $message;
         }
         return $context;
