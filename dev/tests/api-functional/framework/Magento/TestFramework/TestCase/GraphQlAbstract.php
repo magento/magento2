@@ -254,7 +254,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
         $initialConfig = $this->envConfigReader->load(ConfigFilePool::APP_ENV);
 
         try {
-            $testResult = parent::runTest();
+            return parent::runTest();
         } finally {
             $this->formatter = $this->formatter ?: new PhpFormatter();
             $this->filesystem = $this->filesystem ?: Bootstrap::getObjectManager()->get(Filesystem::class);
@@ -263,10 +263,9 @@ abstract class GraphQlAbstract extends WebapiAbstract
             $resetConfig = $this->resetAddedSection($initialConfig, $currentConfig, $cacheSaltPathChunks);
             $resetFileContents = $this->formatter->format($resetConfig);
             $directoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG);
+            sleep(4);
             $directoryWrite->writeFile($this->envConfigPath, $resetFileContents);
         }
-
-        return $testResult;
     }
 
     /**

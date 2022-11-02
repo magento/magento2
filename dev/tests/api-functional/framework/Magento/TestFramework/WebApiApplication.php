@@ -55,19 +55,6 @@ class WebApiApplication extends Application
     }
 
     /**
-     * Initialize application
-     *
-     * @param array $overriddenParams
-     * @return void
-     */
-    public function initialize($overriddenParams = [])
-    {
-        parent::initialize($overriddenParams);
-        $objectManager = Helper\Bootstrap::getObjectManager();
-        $objectManager->removeSharedInstance(\Magento\Framework\App\DeploymentConfig::class);
-    }
-
-    /**
      * @inheritdoc
      *
      * Return empty array of custom directories
