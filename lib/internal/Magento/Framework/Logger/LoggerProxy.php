@@ -172,7 +172,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
     /**
      * Ensure exception logging by adding it to context
      *
-     * @param $message
+     * @param mixed $message
      * @param array $context
      * @return array
      */
