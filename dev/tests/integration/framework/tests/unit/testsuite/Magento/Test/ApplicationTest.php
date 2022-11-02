@@ -235,8 +235,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                 [
                     $installShellCommandExpectation,
                     [
-                        PHP_BINARY . ' -f %s %s -vvv --no-interaction %s %s --option1=%s -option2=%s
-                        --magento-init-params=%s',
+                        PHP_BINARY . ' -f %s %s -vvv --no-interaction %s %s --option1=%s -option2=%s --magento-init-params=%s', // phpcs:ignore
                         [
                             BP . '/bin/magento',
                             'fake:command',
