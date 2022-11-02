@@ -387,7 +387,7 @@ class DataObject implements \ArrayAccess
      */
     public function __call($method, $args)
     {
-        switch($method[0].($method[1] ?? '').($method[2] ?? '')) {
+        switch ($method[0].($method[1] ?? '').($method[2] ?? '')) {
             case 'get':
                 if (isset($args[0]) && $args[0] !== null) {
                     return $this->getData(
@@ -454,7 +454,7 @@ class DataObject implements \ArrayAccess
         $result = strtolower(
             trim(
                 preg_replace(
-                    '/([A-Z]|[0-9]+)/', 
+                    '/([A-Z]|[0-9]+)/',
                     "_$1",
                     lcfirst(
                         substr(
