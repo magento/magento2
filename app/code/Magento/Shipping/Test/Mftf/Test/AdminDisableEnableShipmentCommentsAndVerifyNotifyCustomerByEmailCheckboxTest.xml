@@ -10,6 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminDisableEnableShipmentCommentsAndVerifyNotifyCustomerByEmailCheckboxTest">
         <annotations>
+            <stories value="There is no Notify Customer by Email checkbox available when shipment comments are disabled"/>
             <title value="Disable shipment comments section and validate Notify Customer by Email is disabled"/>
             <description value="Disable shipment comments section and validate Notify Customer by Email is disabled"/>
             <severity value="MAJOR"/>
