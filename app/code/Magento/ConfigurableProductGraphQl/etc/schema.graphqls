@@ -12,7 +12,7 @@ type ConfigurableProduct implements ProductInterface, RoutableInterface, Physica
 
 type ConfigurableVariant @doc(description: "Contains all the simple product variants of a configurable product.") {
     attributes: [ConfigurableAttributeOption] @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Attributes") @doc(description: "An array of configurable attribute options.")
-    product: SimpleProduct @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product") @doc(description: "An array of linked simple products.")
+    product: SimpleProduct @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Product") @doc(description: "An array of linked simple products.")
 }
 
 type ConfigurableAttributeOption @doc(description: "Contains details about a configurable product attribute option.") {
