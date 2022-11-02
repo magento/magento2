@@ -194,6 +194,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                 '0',
                 '0',
                 $this->getInitParamsQuery(sys_get_temp_dir()),
+                true
             ]
         ];
 
@@ -213,8 +214,8 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                 [
                     $installShellCommandExpectation,
                     [
-                        PHP_BINARY . ' -f %s %s -vvv ' .
-                        '--host=%s --dbname=%s --username=%s --password=%s --magento-init-params=%s --no-interaction',
+                        PHP_BINARY . ' -f %s %s -vvv --no-interaction ' .
+                        '--host=%s --dbname=%s --username=%s --password=%s --magento-init-params=%s',
                         [
                             BP . '/bin/magento',
                             'setup:db-schema:add-slave',
@@ -234,7 +235,8 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                 [
                     $installShellCommandExpectation,
                     [
-                        PHP_BINARY . ' -f %s %s -vvv %s %s --option1=%s -option2=%s --magento-init-params=%s --no-interaction',
+                        PHP_BINARY . ' -f %s %s -vvv --no-interaction %s %s --option1=%s -option2=%s
+                        --magento-init-params=%s',
                         [
                             BP . '/bin/magento',
                             'fake:command',
