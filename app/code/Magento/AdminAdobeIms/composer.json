@@ -20,9 +20,6 @@
         "magento/module-jwt-user-token": "*",
         "magento/module-security": "*"
     },
-    "suggest": {
-        "magento/module-theme": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",

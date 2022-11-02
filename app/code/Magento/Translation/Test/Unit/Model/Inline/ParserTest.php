@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Translation\Test\Unit\Model\Inline;
 
+use Laminas\Filter\FilterInterface;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Escaper;
@@ -57,7 +58,7 @@ class ParserTest extends TestCase
     private $storeMock;
 
     /**
-     * @var \Zend_Filter_Interface|MockObject
+     * @var FilterInterface|MockObject
      */
     private $inputFilterMock;
 
@@ -102,7 +103,7 @@ class ParserTest extends TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->inputFilterMock = $this->getMockForAbstractClass('Zend_Filter_Interface');
+        $this->inputFilterMock = $this->getMockForAbstractClass(FilterInterface::class);
 
         $this->resourceFactoryMock->method('create')
             ->willReturn($this->resourceMock);
