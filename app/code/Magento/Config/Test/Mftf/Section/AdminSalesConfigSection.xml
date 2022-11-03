@@ -25,3 +25,4 @@
         <element name="defaultPrice" type="text" selector="#sales_gift_options_printed_card_price"/>
     </section>
 </sections>
+
