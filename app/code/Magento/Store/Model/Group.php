@@ -9,6 +9,7 @@
  */
 namespace Magento\Store\Model;
 
+use Laminas\Validator\ValidatorInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
 use Magento\Store\Model\Validation\StoreValidator;
@@ -178,10 +179,9 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Validation rules for store
      *
-     * @return \Zend_Validate_Interface|null
-     * @throws \Zend_Validate_Exception
+     * @return ValidatorInterface|null
      */
-    protected function _getValidationRulesBeforeSave(): ?\Zend_Validate_Interface
+    protected function _getValidationRulesBeforeSave()
     {
         return $this->modelValidator;
     }
