@@ -45,3 +45,4 @@
         <element name="priceForGiftsWrapping" type="input" selector="//input[@name='product[gift_wrapping_price]']"/>
     </section>
 </sections>
+
