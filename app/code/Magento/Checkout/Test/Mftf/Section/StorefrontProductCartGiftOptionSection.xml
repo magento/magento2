@@ -39,3 +39,4 @@
         <element name="orderLevelGiftsReceipt" type="button" selector="//div[@id='gift-options-cart']//span[text()='Gift receipt']"/>
     </section>
 </sections>
+
