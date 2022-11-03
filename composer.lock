@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3f293d4d78b3671f50ef799b17f4a5b7",
+    "content-hash": "cf077de4e7c0d4b917b24cb614c17799",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -11011,6 +11011,7 @@
                 "issues": "https://github.com/PHP-CS-Fixer/diff/issues",
                 "source": "https://github.com/PHP-CS-Fixer/diff/tree/v2.0.2"
             },
+            "abandoned": true,
             "time": "2020-10-14T08:32:19+00:00"
         },
         {
