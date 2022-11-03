@@ -12,7 +12,6 @@ use Magento\ImportExport\Model\Import\Source\Factory;
  * Import adapter model
  * @Deprecated
  * @see \Magento\ImportExport\Model\Import\Source\Factory
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Adapter
 {
