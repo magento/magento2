@@ -26,14 +26,14 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     protected $addressValidator;
 
     /**
-     * Logger.
+     * Logger object.
      *
      * @var Logger
      */
     protected $logger;
 
     /**
-     * Quote repository.
+     * Quote repository object.
      *
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */

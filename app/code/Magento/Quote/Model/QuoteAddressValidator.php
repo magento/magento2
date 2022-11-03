@@ -24,7 +24,7 @@ class QuoteAddressValidator
     protected $addressRepository;
 
     /**
-     * Customer repository.
+     * Customer repository object.
      *
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
@@ -32,6 +32,8 @@ class QuoteAddressValidator
 
     /**
      * @deprecated 101.1.1 This class is not a part of HTML presentation layer and should not use sessions.
+     *
+     * @var \Magento\Customer\Model\Session
      */
     protected $customerSession;
 
