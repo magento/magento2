@@ -7,6 +7,7 @@
 namespace Magento\Reports\Model\ResourceModel\Order;
 
 use Magento\Framework\DB\Select;
+use DateTimeZone;
 
 /**
  * Reports orders collection
@@ -237,6 +238,12 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
 
         $dateRange = $this->getDateRange($range, $customStart, $customEnd);
 
+        $dateRange = [
+            'from' => $this->_localeDate->convertConfigTimeToUtc($dateRange['from']),
+            'to' => $this->_localeDate->convertConfigTimeToUtc($dateRange['to']),
+            'datetime' => true
+        ];
+
         $tzRangeOffsetExpression = $this->_getTZRangeOffsetExpression(
             $range,
             'created_at',
@@ -411,19 +418,20 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
     public function getDateRange($range, $customStart, $customEnd, $returnObjects = false)
     {
         $dateEnd = new \DateTime();
-        $dateStart = new \DateTime();
+        $timezoneLocal = $this->_localeDate->getConfigTimezone();
+
+        $dateEnd->setTimezone(new DateTimeZone($timezoneLocal));
 
         // go to the end of a day
         $dateEnd->setTime(23, 59, 59);
 
+        $dateStart = clone $dateEnd;
         $dateStart->setTime(0, 0, 0);
 
         switch ($range) {
-            case 'today':
-                $dateEnd->modify('now');
-                break;
             case '24h':
                 $dateEnd = new \DateTime();
+                $dateEnd->setTimezone(new DateTimeZone($timezoneLocal));
                 $dateEnd->modify('+1 hour');
                 $dateStart = clone $dateEnd;
                 $dateStart->modify('-1 day');

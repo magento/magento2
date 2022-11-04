@@ -9,12 +9,19 @@ namespace Magento\Backend\Model\Dashboard;
 
 use Magento\Backend\Helper\Dashboard\Order as OrderHelper;
 use Magento\Backend\Model\Dashboard\Chart\Date;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Dashboard chart data retriever
  */
 class Chart
 {
+    /**
+     * @var TimezoneInterface
+     */
+    private $timeZone;
+
     /**
      * @var Date
      */
@@ -35,15 +42,18 @@ class Chart
      * @param Date $dateRetriever
      * @param OrderHelper $orderHelper
      * @param Period $period
+     * @param TimezoneInterface|null $timeZone
      */
     public function __construct(
         Date $dateRetriever,
         OrderHelper $orderHelper,
-        Period $period
+        Period $period,
+        TimezoneInterface $timeZone = null
     ) {
         $this->dateRetriever = $dateRetriever;
         $this->orderHelper = $orderHelper;
         $this->period = $period;
+        $this->timeZone = $timeZone ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
     }
 
     /**
@@ -81,7 +91,8 @@ class Chart
 
         if ($collection->count() > 0) {
             foreach ($dates as $date) {
-                $item = $collection->getItemByColumnValue('range', $date);
+                $utcDate = $this->timeZone->convertConfigTimeToUtc($date);
+                $item = $collection->getItemByColumnValue('range', $utcDate);
 
                 $data[] = [
                     'x' => $date,

@@ -56,20 +56,6 @@ class Date
             true
         );
 
-        $timezoneLocal = $this->localeDate->getConfigTimezone();
-        
-        $dateStart->setTimezone(new DateTimeZone($timezoneLocal));
-        $dateEnd->setTimezone(new DateTimeZone($timezoneLocal));
-
-        if ($period === Period::PERIOD_24_HOURS) {
-            $dateEnd->modify('-1 hour');
-        } elseif ($period === Period::PERIOD_TODAY) {
-            $dateEnd->modify('now');
-        } else {
-            $dateEnd->setTime(23, 59, 59);
-            $dateStart->setTime(0, 0, 0);
-        }
-
         $dates = [];
 
         while ($dateStart <= $dateEnd) {
@@ -77,16 +63,13 @@ class Date
                 case Period::PERIOD_7_DAYS:
                 case Period::PERIOD_1_MONTH:
                     $d = $dateStart->format('Y-m-d');
-                    $dateStart->modify('+1 day');
                     break;
                 case Period::PERIOD_1_YEAR:
                 case Period::PERIOD_2_YEARS:
                     $d = $dateStart->format('Y-m');
-                    $dateStart->modify('first day of next month');
                     break;
                 default:
                     $d = $dateStart->format('Y-m-d H:00');
-                    $dateStart->modify('+1 hour');
             }
 
             $dates[] = $d;
