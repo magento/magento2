@@ -30,6 +30,11 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
     private $eavConfig;
 
     /**
+     * @var array
+     */
+    private $metadataCache;
+
+    /**
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Eav\Api\AttributeRepositoryInterface $eavAttributeRepository
@@ -75,18 +80,21 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)
     {
-        $defaultAttributeSetId = $this->eavConfig
-            ->getEntityType(\Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE)
-            ->getDefaultAttributeSetId();
-        $searchCriteria = $this->searchCriteriaBuilder->addFilters(
-            [
-                $this->filterBuilder
-                    ->setField('attribute_set_id')
-                    ->setValue($defaultAttributeSetId)
-                    ->create(),
-            ]
-        );
-
-        return $this->getList($searchCriteria->create())->getItems();
+        if (empty($this->metadataCache[$dataObjectClassName])) {
+            $defaultAttributeSetId = $this->eavConfig
+                ->getEntityType(\Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE)
+                ->getDefaultAttributeSetId();
+            $searchCriteria = $this->searchCriteriaBuilder->addFilters(
+                [
+                    $this->filterBuilder
+                        ->setField('attribute_set_id')
+                        ->setValue($defaultAttributeSetId)
+                        ->create(),
+                ]
+            );
+            $this->metadataCache[$dataObjectClassName] = $this->getList($searchCriteria->create())
+                ->getItems();
+        }
+        return $this->metadataCache[$dataObjectClassName];
     }
 }
