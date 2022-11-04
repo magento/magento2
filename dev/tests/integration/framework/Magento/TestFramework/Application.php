@@ -13,7 +13,9 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem\Glob;
 use Magento\Framework\Mail;
 use Magento\TestFramework;
+use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Psr\Log\LoggerInterface;
+use DomainException;
 
 /**
  * Encapsulates application installation, initialization and uninstall.
@@ -26,7 +28,7 @@ class Application
     /**
      * Default application area.
      */
-    const DEFAULT_APP_AREA = 'global';
+    public const DEFAULT_APP_AREA = 'global';
 
     /**
      * DB vendor adapter instance.
@@ -50,11 +52,25 @@ class Application
     private $installConfigFile;
 
     /**
+     * Configuration file that contains array of post-installation commands to run through bin/magento CLI tool.
+     *
+     * @var string|null
+     */
+    private $postInstallSetupCommandsFile;
+
+    /**
      * The loaded installation parameters.
      *
      * @var array
      */
     protected $installConfig;
+
+    /**
+     * The loaded post-installation commands.
+     *
+     * @var array
+     */
+    private $postInstallSetupCommands;
 
     /**
      * Application *.xml configuration files.
@@ -153,12 +169,13 @@ class Application
      *
      * @param \Magento\Framework\Shell $shell
      * @param string $installDir
-     * @param array $installConfigFile
+     * @param string $installConfigFile
      * @param string $globalConfigFile
      * @param string $globalConfigDir
      * @param string $appMode
      * @param AutoloaderInterface $autoloadWrapper
      * @param bool|null $loadTestExtensionAttributes
+     * @param string|null $postInstallSetupCommandsFile
      */
     public function __construct(
         \Magento\Framework\Shell $shell,
@@ -168,7 +185,8 @@ class Application
         $globalConfigDir,
         $appMode,
         AutoloaderInterface $autoloadWrapper,
-        $loadTestExtensionAttributes = false
+        $loadTestExtensionAttributes = false,
+        $postInstallSetupCommandsFile = null
     ) {
         if (getcwd() != BP . '/dev/tests/integration') {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -176,6 +194,7 @@ class Application
         }
         $this->_shell = $shell;
         $this->installConfigFile = $installConfigFile;
+        $this->postInstallSetupCommandsFile = $postInstallSetupCommandsFile;
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $this->_globalConfigDir = realpath($globalConfigDir);
         $this->_appMode = $appMode;
@@ -258,8 +277,26 @@ class Application
         if (null === $this->installConfig) {
             // phpcs:ignore Magento2.Security.IncludeFile
             $this->installConfig = include $this->installConfigFile;
+            $this->installConfig['use-secure'] = '0';
+            $this->installConfig['use-secure-admin'] = '0';
         }
         return $this->installConfig;
+    }
+
+    /**
+     * Gets post-installation commands.
+     *
+     * @return array
+     */
+    protected function getPostInstallSetupCommands()
+    {
+        if (null === $this->postInstallSetupCommandsFile) {
+            $this->postInstallSetupCommands = [];
+        } elseif (null === $this->postInstallSetupCommands) {
+            // phpcs:ignore Magento2.Security.IncludeFile
+            $this->postInstallSetupCommands = include $this->postInstallSetupCommandsFile;
+        }
+        return $this->postInstallSetupCommands;
     }
 
     /**
@@ -382,6 +419,7 @@ class Application
                 \Magento\Framework\App\State::class => TestFramework\App\State::class,
                 Mail\TransportInterface::class => TestFramework\Mail\TransportInterfaceMock::class,
                 Mail\Template\TransportBuilder::class => TestFramework\Mail\Template\TransportBuilderMock::class,
+                ProcessorInterface::class => \Magento\TestFramework\Fixture\Data\CompositeProcessor::class,
             ]
         ];
         if ($this->loadTestExtensionAttributes) {
@@ -525,6 +563,8 @@ class Application
             array_merge([BP . '/bin/magento'], array_values($installParams))
         );
 
+        $this->runPostInstallCommands();
+
         // enable only specified list of caches
         $initParamsQuery = $this->getInitParamsQuery();
         $this->_shell->execute(
@@ -546,6 +586,51 @@ class Application
         // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
         if (!$db->isDbDumpExists() && $this->dumpDb) {
             $this->getDbInstance()->storeDbDump();
+        }
+    }
+
+    /**
+     * Run commands after installation configured in post-install-setup-command-config.php
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function runPostInstallCommands()
+    {
+        // run post-install setup commands
+        $postInstallSetupCommands = $this->getPostInstallSetupCommands();
+
+        foreach ($postInstallSetupCommands as $postInstallSetupCommand) {
+            if (!isset($postInstallSetupCommand['command'])) {
+                throw new DomainException('"command" must be present in post install setup command arrays');
+            }
+
+            $command = $postInstallSetupCommand['command'];
+            $argumentsAndOptions = $postInstallSetupCommand['config'];
+
+            $argumentsAndOptionsPlaceholders = [];
+
+            foreach (array_keys($argumentsAndOptions) as $key) {
+                $isArgument = is_numeric($key);
+
+                if ($isArgument) {
+                    $argumentsAndOptionsPlaceholders[] = '%s';
+                } else {
+                    $argumentsAndOptionsPlaceholders[] = "$key=%s";
+                }
+            }
+
+            $argumentsAndOptionsPlaceholders[] = "--magento-init-params=%s";
+            $argumentsAndOptions[] = $this->getInitParamsQuery();
+
+            $this->_shell->execute(
+                PHP_BINARY . ' -f %s %s -vvv ' . implode(' ', array_values($argumentsAndOptionsPlaceholders)),
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                array_merge(
+                    [BP . '/bin/magento'],
+                    [$command],
+                    array_values($argumentsAndOptions)
+                ),
+            );
         }
     }
 

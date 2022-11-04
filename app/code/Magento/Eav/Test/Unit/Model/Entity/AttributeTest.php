@@ -62,7 +62,7 @@ class AttributeTest extends TestCase
             ['text', 'varchar'],
             ['gallery', 'varchar'],
             ['media_image', 'varchar'],
-            ['multiselect', 'varchar'],
+            ['multiselect', 'text'],
             ['image', 'text'],
             ['textarea', 'text'],
             ['date', 'datetime'],

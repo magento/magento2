@@ -34,6 +34,7 @@ use Psr\Log\LoggerInterface;
  *
  * @see \Magento\Quote\Model\QuoteManagement
  * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QuoteManagementTest extends TestCase
@@ -131,7 +132,7 @@ class QuoteManagementTest extends TestCase
         $quote = $this->getQuoteByReservedOrderId->execute('guest_quote');
         $this->cartManagement->placeOrder($quote->getId());
         $quoteAfterOrderPlaced = $this->getQuoteByReservedOrderId->execute('guest_quote');
-        self::assertEquals(2, $quoteAfterOrderPlaced->getCustomerGroupId());
+        self::assertEquals(0, $quoteAfterOrderPlaced->getCustomerGroupId());
         self::assertEquals(3, $quoteAfterOrderPlaced->getCustomerTaxClassId());
     }
 
@@ -181,6 +182,7 @@ class QuoteManagementTest extends TestCase
     /**
      * Tries to create order with product that has child items and one of them was deleted.
      *
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 1
      * @magentoAppArea adminhtml
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Sales/_files/quote_with_bundle.php
@@ -196,8 +198,23 @@ class QuoteManagementTest extends TestCase
     }
 
     /**
+     * Tries to create order with product that has child items and one of them
+     * was deleted when item data check is disabled on quote load.
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 0
+     * @magentoAppArea adminhtml
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Sales/_files/quote_with_bundle.php
+     */
+    public function testSubmitWithDeletedItemWithDisabledInventoryCheck(): void
+    {
+        $this->productRepository->deleteById('simple-2');
+        $quote = $this->getQuoteByReservedOrderId->execute('test01');
+        $this->cartManagement->placeOrder($quote->getId());
+    }
+
+    /**
      * Tries to create order with item of stock during checkout.
-     *
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 1
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDbIsolation enabled
      */
@@ -206,6 +223,25 @@ class QuoteManagementTest extends TestCase
         $this->makeProductOutOfStock('simple');
         $quote = $this->getQuoteByReservedOrderId->execute('test01');
         $this->expectExceptionObject(new LocalizedException(__('Some of the products are out of stock.')));
+        $this->cartManagement->placeOrder($quote->getId());
+    }
+
+    /**
+     * Tries to create order with item of stock during checkout
+     * when item data check is disabled on quote load.
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 0
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDbIsolation enabled
+     */
+    public function testSubmitWithItemOutOfStockWithDisabledInventoryCheck(): void
+    {
+        $this->makeProductOutOfStock('simple');
+        $quote = $this->getQuoteByReservedOrderId->execute('test01');
+        $this->expectExceptionObject(
+            new LocalizedException(
+                __('The shipping method is missing. Select the shipping method and try again.')
+            )
+        );
         $this->cartManagement->placeOrder($quote->getId());
     }
 

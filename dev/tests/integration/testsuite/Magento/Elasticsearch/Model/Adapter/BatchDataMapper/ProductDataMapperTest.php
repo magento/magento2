@@ -69,7 +69,6 @@ class ProductDataMapperTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Elasticsearch/_files/select_attribute_store_labels.php
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch
      */
     public function testMapSelectAttributeWithDifferentStoreLabels(): void
     {

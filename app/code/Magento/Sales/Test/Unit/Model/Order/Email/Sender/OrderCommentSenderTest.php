@@ -29,12 +29,15 @@ class OrderCommentSenderTest extends AbstractSenderTest
             $this->senderBuilderFactoryMock,
             $this->loggerMock,
             $this->addressRenderer,
-            $this->eventManagerMock
+            $this->eventManagerMock,
+            $this->appEmulator
         );
     }
 
     public function testSendFalse()
     {
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->stepAddressFormat($this->addressMock);
         $result = $this->sender->send($this->orderMock);
         $this->assertFalse($result);
@@ -76,6 +79,8 @@ class OrderCommentSenderTest extends AbstractSenderTest
                     ]
                 ]
             );
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->stepSendWithoutSendCopy();
         $result = $this->sender->send($this->orderMock, true, $comment);
         $this->assertTrue($result);
@@ -114,6 +119,8 @@ class OrderCommentSenderTest extends AbstractSenderTest
                     ]
                 ]
             );
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->assertFalse($this->sender->send($this->orderMock));
     }
 }

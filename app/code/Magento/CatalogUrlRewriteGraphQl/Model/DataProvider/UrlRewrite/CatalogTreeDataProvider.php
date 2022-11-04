@@ -52,16 +52,18 @@ class CatalogTreeDataProvider implements EntityDataProviderInterface
      * @param string $entity_type
      * @param int $id
      * @param ResolveInfo|null $info
+     * @param int|null $storeId
      * @return array
      * @throws GraphQlNoSuchEntityException
      */
     public function getData(
         string $entity_type,
         int $id,
-        ResolveInfo $info = null
+        ResolveInfo $info = null,
+        int $storeId = null
     ): array {
         $categoryId = (int)$id;
-        $categoriesTree = $this->categoryTree->getTree($info, $categoryId);
+        $categoriesTree = $this->categoryTree->getTree($info, $categoryId, $storeId);
         if (empty($categoriesTree) || ($categoriesTree->count() == 0)) {
             throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
         }

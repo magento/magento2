@@ -68,14 +68,17 @@ class ProductCategories
             ->joinInner(['store' => $storeTable], $connection->quoteInto('store.store_id = ?', $storeId), [])
             ->joinInner(
                 ['store_group' => $storeGroupTable],
-                'store.group_id = store_group.group_id AND cat_index.category_id != store_group.root_category_id',
-                []
+                $connection->quoteInto(
+                    'store.group_id = store_group.group_id AND NOT EXISTS
+                    (SELECT 1 FROM store_group WHERE cat_index.category_id IN (store_group.root_category_id)
+                    and cat_index.product_id = ?)',
+                    $productId,
+                    \Zend_Db::INT_TYPE
+                ),
             )
             ->where('product_id = ?', $productId);
 
-        $categoryIds = $connection->fetchCol($select);
-
-        return $categoryIds;
+        return $connection->fetchCol($select);
     }
 
     /**

@@ -133,7 +133,7 @@ define([
          * @param {Event} e
          */
         triggerImageUpload: function (imageUploader, e) {
-            $(e.target).closest('.file-uploader').find('input[type="file"]').click();
+            $(e.target).closest('.file-uploader').find('input[type="file"]').trigger('click');
         },
 
         /**

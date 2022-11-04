@@ -25,7 +25,7 @@ define([
         }));
     }
 
-    $('#customer-edit-delete-button').click(function () {
+    $('#customer-edit-delete-button').on('click', function () {
         var msg = $.mage.__('Are you sure you want to do this?'),
             url = $('#customer-edit-delete-button').data('url');
 

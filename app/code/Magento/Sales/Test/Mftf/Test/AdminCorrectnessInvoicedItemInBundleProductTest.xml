@@ -63,7 +63,7 @@
         <amOnPage url="{{StorefrontProductPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToBundleProductPage"/>
 
         <!--Place order bundle product with 10 options-->
-        <actionGroup ref="StorefrontAddCategoryBundleProductToCartActionGroup" stepKey="addBundleProductToCart">
+        <actionGroup ref="StorefrontAddCategoryBundleProductWithSingleChoiceToCartActionGroup" stepKey="addBundleProductToCart">
             <argument name="product" value="$$createBundleProduct$$"/>
             <argument name="quantity" value="10"/>
         </actionGroup>

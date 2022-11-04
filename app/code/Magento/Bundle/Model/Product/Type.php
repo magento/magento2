@@ -31,7 +31,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Product type
      */
-    const TYPE_CODE = 'bundle';
+    public const TYPE_CODE = 'bundle';
 
     /**
      * Product is composite
@@ -52,6 +52,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @var string
      * @deprecated 100.2.0
+     * @see MAGETWO-71174
      */
     protected $_keySelectionsCollection = '_cache_instance_selections_collection';
 
@@ -91,14 +92,14 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_canConfigure = true;
 
     /**
-     * Catalog data
+     * Catalog data helper
      *
      * @var \Magento\Catalog\Helper\Data
      */
     protected $_catalogData = null;
 
     /**
-     * Catalog product
+     * Catalog product helper
      *
      * @var \Magento\Catalog\Helper\Product
      */
@@ -665,7 +666,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $skipSaleableCheck = $this->_catalogProduct->getSkipSaleableCheck();
             $_appendAllSelections = (bool)$product->getSkipCheckRequiredOption() || $skipSaleableCheck;
 
-            $options = $buyRequest->getBundleOption();
+            if ($buyRequest->getBundleOptionsData()) {
+                $options = $this->getPreparedOptions($buyRequest->getBundleOptionsData());
+            } else {
+                $options = $buyRequest->getBundleOption();
+            }
             if (is_array($options)) {
                 $options = $this->recursiveIntval($options);
                 $optionIds = array_keys($options);
@@ -732,7 +737,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             if ((is_array($selections) && count($selections) > 0) || !$isStrictProcessMode) {
                 $uniqueKey = [$product->getId()];
                 $selectionIds = [];
-                $qtys = $buyRequest->getBundleOptionQty();
+                if ($buyRequest->getBundleOptionsData()) {
+                    $qtys = $buyRequest->getBundleOptionsData();
+                } else {
+                    $qtys = $buyRequest->getBundleOptionQty();
+                }
 
                 // Shuffle selection array by option position
                 usort($selections, [$this, 'shakeSelections']);
@@ -1231,7 +1240,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected function getQty($selection, $qtys, $selectionOptionId)
     {
         if ($selection->getSelectionCanChangeQty() && isset($qtys[$selectionOptionId])) {
-            $qty = (float)$qtys[$selectionOptionId] > 0 ? $qtys[$selectionOptionId] : 1;
+            if (is_array($qtys[$selectionOptionId]) && isset($qtys[$selectionOptionId][$selection->getSelectionId()])) {
+                $selectionQty = $qtys[$selectionOptionId][$selection->getSelectionId()];
+                $qty = (float)$selectionQty > 0 ? $selectionQty : 1;
+            } else {
+                $qty = (float)$qtys[$selectionOptionId] > 0 ? $qtys[$selectionOptionId] : 1;
+            }
         } else {
             $qty = (float)$selection->getSelectionQty() ? $selection->getSelectionQty() : 1;
         }
@@ -1273,7 +1287,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         if (!$product->getSkipCheckRequiredOption() && $isStrictProcessMode) {
             foreach ($optionsCollection->getItems() as $option) {
-                if ($option->getRequired() && !isset($options[$option->getId()])) {
+                if ($option->getRequired() && empty($options[$option->getId()])) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __('Please select all required options.')
                     );
@@ -1403,5 +1417,23 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
 
         return array_merge([], ...$selections);
+    }
+
+    /**
+     * Get prepared options with selection ids
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @param array $options
+     * @return array
+     */
+    private function getPreparedOptions(array $options): array
+    {
+        foreach ($options as $optionId => $option) {
+            foreach ($option as $selectionId => $optionQty) {
+                $options[$optionId][$selectionId] = $selectionId;
+            }
+        }
+
+        return $options;
     }
 }

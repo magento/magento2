@@ -35,11 +35,17 @@ class Page implements EntityDataProviderInterface
      * @param string $entity_type
      * @param int $id
      * @param ResolveInfo|null $info
+     * @param int|null $storeId
      * @return array
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getData(string $entity_type, int $id, ResolveInfo $info = null): array
-    {
+    public function getData(
+        string $entity_type,
+        int $id,
+        ResolveInfo $info = null,
+        int $storeId = null
+    ): array {
         $result = $this->pageDataProvider->getDataByPageId((int)$id);
         $result['type_id'] = $entity_type;
         return $result;

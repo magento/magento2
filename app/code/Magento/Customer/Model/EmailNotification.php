@@ -10,6 +10,7 @@ namespace Magento\Customer\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Mail\Template\SenderResolverInterface;
+use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Customer\Helper\View as CustomerViewHelper;
@@ -104,6 +105,11 @@ class EmailNotification implements EmailNotificationInterface
     private $senderResolver;
 
     /**
+     * @var Emulation
+     */
+    private $emulation;
+
+    /**
      * @param CustomerRegistry $customerRegistry
      * @param StoreManagerInterface $storeManager
      * @param TransportBuilder $transportBuilder
@@ -111,6 +117,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param DataObjectProcessor $dataProcessor
      * @param ScopeConfigInterface $scopeConfig
      * @param SenderResolverInterface|null $senderResolver
+     * @param Emulation|null $emulation
      */
     public function __construct(
         CustomerRegistry $customerRegistry,
@@ -119,7 +126,8 @@ class EmailNotification implements EmailNotificationInterface
         CustomerViewHelper $customerViewHelper,
         DataObjectProcessor $dataProcessor,
         ScopeConfigInterface $scopeConfig,
-        SenderResolverInterface $senderResolver = null
+        SenderResolverInterface $senderResolver = null,
+        Emulation $emulation =null
     ) {
         $this->customerRegistry = $customerRegistry;
         $this->storeManager = $storeManager;
@@ -128,6 +136,7 @@ class EmailNotification implements EmailNotificationInterface
         $this->dataProcessor = $dataProcessor;
         $this->scopeConfig = $scopeConfig;
         $this->senderResolver = $senderResolver ?? ObjectManager::getInstance()->get(SenderResolverInterface::class);
+        $this->emulation = $emulation ?? ObjectManager::getInstance()->get(Emulation::class);
     }
 
     /**
@@ -274,7 +283,9 @@ class EmailNotification implements EmailNotificationInterface
             ->addTo($email, $this->customerViewHelper->getCustomerName($customer))
             ->getTransport();
 
+        $this->emulation->startEnvironmentEmulation($storeId, \Magento\Framework\App\Area::AREA_FRONTEND);
         $transport->sendMessage();
+        $this->emulation->stopEnvironmentEmulation();
     }
 
     /**

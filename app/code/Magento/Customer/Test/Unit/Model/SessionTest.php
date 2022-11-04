@@ -74,7 +74,7 @@ class SessionTest extends TestCase
     protected $_model;
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -86,13 +86,12 @@ class SessionTest extends TestCase
         $this->_eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->_httpContextMock = $this->createMock(Context::class);
         $this->urlFactoryMock = $this->createMock(UrlFactory::class);
-        $this->customerFactoryMock = $this->getMockBuilder(CustomerFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create', 'save'])
+        $this->customerFactoryMock = $this->getMockBuilder(CustomerFactory::class)->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->addMethods(['save'])
             ->getMock();
-        $this->_customerResourceMock = $this->getMockBuilder(ResourceCustomer::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['load', 'save'])
+        $this->_customerResourceMock = $this->getMockBuilder(ResourceCustomer::class)->disableOriginalConstructor()
+            ->onlyMethods(['load', 'save'])
             ->getMock();
         $this->customerRepositoryMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
         $helper = new ObjectManagerHelper($this);
@@ -107,7 +106,7 @@ class SessionTest extends TestCase
                 'urlFactory' => $this->urlFactoryMock,
                 'customerRepository' => $this->customerRepositoryMock,
                 'response' => $this->responseMock,
-                '_customerResource' => $this->_customerResourceMock,
+                '_customerResource' => $this->_customerResourceMock
             ]
         );
     }
@@ -115,7 +114,7 @@ class SessionTest extends TestCase
     /**
      * @return void
      */
-    public function testSetCustomerAsLoggedIn()
+    public function testSetCustomerAsLoggedIn(): void
     {
         $customer = $this->createMock(Customer::class);
         $customerDto = $this->getMockForAbstractClass(CustomerInterface::class);
@@ -123,12 +122,12 @@ class SessionTest extends TestCase
             ->method('getDataModel')
             ->willReturn($customerDto);
 
-        $this->_eventManagerMock->expects($this->at(0))
+        $this->_eventManagerMock
             ->method('dispatch')
-            ->with('customer_login', ['customer' => $customer]);
-        $this->_eventManagerMock->expects($this->at(1))
-            ->method('dispatch')
-            ->with('customer_data_object_login', ['customer' => $customerDto]);
+            ->withConsecutive(
+                ['customer_login', ['customer' => $customer]],
+                ['customer_data_object_login', ['customer' => $customerDto]]
+            );
 
         $_SESSION = [];
         $this->_model->setCustomerAsLoggedIn($customer);
@@ -138,7 +137,7 @@ class SessionTest extends TestCase
     /**
      * @return void
      */
-    public function testSetCustomerDataAsLoggedIn()
+    public function testSetCustomerDataAsLoggedIn(): void
     {
         $customer = $this->createMock(Customer::class);
         $customerDto = $this->getMockForAbstractClass(CustomerInterface::class);
@@ -151,12 +150,12 @@ class SessionTest extends TestCase
             ->with($customerDto)
             ->willReturnSelf();
 
-        $this->_eventManagerMock->expects($this->at(0))
+        $this->_eventManagerMock
             ->method('dispatch')
-            ->with('customer_login', ['customer' => $customer]);
-        $this->_eventManagerMock->expects($this->at(1))
-            ->method('dispatch')
-            ->with('customer_data_object_login', ['customer' => $customerDto]);
+            ->withConsecutive(
+                ['customer_login', ['customer' => $customer]],
+                ['customer_data_object_login', ['customer' => $customerDto]]
+            );
 
         $this->_model->setCustomerDataAsLoggedIn($customerDto);
         $this->assertSame($customer, $this->_model->getCustomer());
@@ -165,7 +164,7 @@ class SessionTest extends TestCase
     /**
      * @return void
      */
-    public function testAuthenticate()
+    public function testAuthenticate(): void
     {
         $urlMock = $this->createMock(Url::class);
         $urlMock->expects($this->exactly(2))
@@ -192,7 +191,7 @@ class SessionTest extends TestCase
     /**
      * @return void
      */
-    public function testLoginById()
+    public function testLoginById(): void
     {
         $customerId = 1;
 
@@ -208,9 +207,10 @@ class SessionTest extends TestCase
 
     /**
      * @param int $customerId
+     *
      * @return MockObject
      */
-    protected function prepareLoginDataMock($customerId)
+    protected function prepareLoginDataMock(int $customerId): MockObject
     {
         $customerDataMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $customerDataMock->expects($this->once())
@@ -246,10 +246,15 @@ class SessionTest extends TestCase
      * @param bool $expectedResult
      * @param bool $isCustomerIdValid
      * @param bool $isCustomerEmulated
+     *
+     * @return void
      * @dataProvider getIsLoggedInDataProvider
      */
-    public function testIsLoggedIn($expectedResult, $isCustomerIdValid, $isCustomerEmulated)
-    {
+    public function testIsLoggedIn(
+        bool $expectedResult,
+        bool $isCustomerIdValid,
+        bool $isCustomerEmulated
+    ): void {
         $customerId = 1;
         $this->_storageMock->expects($this->any())->method('getData')->with('customer_id')
             ->willReturn($customerId);
@@ -272,20 +277,20 @@ class SessionTest extends TestCase
     /**
      * @return array
      */
-    public function getIsLoggedInDataProvider()
+    public function getIsLoggedInDataProvider(): array
     {
         return [
             ['expectedResult' => true, 'isCustomerIdValid' => true, 'isCustomerEmulated' => false],
             ['expectedResult' => false, 'isCustomerIdValid' => true, 'isCustomerEmulated' => true],
             ['expectedResult' => false, 'isCustomerIdValid' => false, 'isCustomerEmulated' => false],
-            ['expectedResult' => false, 'isCustomerIdValid' => false, 'isCustomerEmulated' => true],
+            ['expectedResult' => false, 'isCustomerIdValid' => false, 'isCustomerEmulated' => true]
         ];
     }
 
     /**
      * @return void
      */
-    public function testSetCustomerRemovesFlagThatShowsIfCustomerIsEmulated()
+    public function testSetCustomerRemovesFlagThatShowsIfCustomerIsEmulated(): void
     {
         $customerMock = $this->createMock(Customer::class);
         $this->_storageMock->expects($this->once())->method('unsIsCustomerEmulated');
@@ -297,7 +302,7 @@ class SessionTest extends TestCase
      *
      * @return void
      */
-    public function testGetCustomerForGuestUser()
+    public function testGetCustomerForGuestUser(): void
     {
         $customerMock = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
@@ -316,7 +321,7 @@ class SessionTest extends TestCase
      *
      * @return void
      */
-    public function testGetCustomerForRegisteredUser()
+    public function testGetCustomerForRegisteredUser(): void
     {
         $customerId = 1;
 

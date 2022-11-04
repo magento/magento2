@@ -5,10 +5,10 @@
  */
 -->
 <div class="admin__tooltip-title" if="$data.tooltipTitle.length">
-    <span translate="$data.tooltipTitle"/>
+    <span translate="$data.tooltipTitle"></span>
 </div>
 <ul class="items">
     <li class="item" repeat="foreach: $col.getLabelsArray($row()), item: '$item'">
-        <span text="$item()"/>
+        <span text="$item()"></span>
     </li>
 </ul>

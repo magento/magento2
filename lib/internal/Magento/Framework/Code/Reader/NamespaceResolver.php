@@ -14,7 +14,7 @@ class NamespaceResolver
     /**
      * Namespace separator
      */
-    const NS_SEPARATOR = '\\';
+    public const NS_SEPARATOR = '\\';
 
     /**
      * @var ScalarTypesProvider
@@ -44,9 +44,9 @@ class NamespaceResolver
      */
     public function resolveNamespace($type, array $availableNamespaces)
     {
-        if (substr($type, 0, 1) !== self::NS_SEPARATOR
+        if (!empty($type)
+            && substr($type, 0, 1) !== self::NS_SEPARATOR
             && !in_array($type, $this->scalarTypesProvider->getTypes())
-            && !empty($type)
         ) {
             $name = explode(self::NS_SEPARATOR, $type);
             $unqualifiedName = $name[0];
@@ -86,6 +86,7 @@ class NamespaceResolver
         $classStart = array_search('{', $fileContent);
         $fileContent = array_slice($fileContent, 0, $classStart);
         $output = [];
+
         foreach ($fileContent as $position => $token) {
             if (is_array($token) && $token[0] === T_USE) {
                 $import = array_slice($fileContent, $position);
@@ -104,8 +105,14 @@ class NamespaceResolver
                     $import = array_filter(
                         $import,
                         function ($token) {
-                            $whitelist = [T_NS_SEPARATOR, T_STRING, T_AS];
-                            if (isset($token[0]) && in_array($token[0], $whitelist)) {
+                            $whitelist = [
+                                T_NS_SEPARATOR => T_NS_SEPARATOR,
+                                T_STRING => T_STRING,
+                                T_AS => T_AS,
+                                T_NAME_QUALIFIED => T_NAME_QUALIFIED,
+                                T_NAME_FULLY_QUALIFIED => T_NAME_FULLY_QUALIFIED
+                            ];
+                            if (isset($token[0], $whitelist[$token[0]])) {
                                 return true;
                             }
                             return false;

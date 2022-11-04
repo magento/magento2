@@ -254,6 +254,21 @@
             <argument name="modifiers" xsi:type="array">
                 <item name="search" xsi:type="object">Magento\CatalogSearch\Model\Search\Request\SearchModifier</item>
                 <item name="partial_search" xsi:type="object">Magento\CatalogSearch\Model\Search\Request\PartialSearchModifier</item>
+                <item name="match_queries" xsi:type="object">Magento\CatalogSearch\Model\Search\Request\MatchQueriesModifier</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Search\Request\MatchQueriesModifier">
+        <arguments>
+            <argument name="queries" xsi:type="array">
+                <item name="partial_search" xsi:type="array">
+                    <item name="name" xsi:type="array">
+                        <item name="analyzer" xsi:type="string">prefix_search</item>
+                    </item>
+                    <item name="sku" xsi:type="array">
+                        <item name="analyzer" xsi:type="string">sku_prefix_search</item>
+                    </item>
+                </item>
             </argument>
         </arguments>
     </type>
