@@ -2,7 +2,7 @@
     "name": "magento/module-quote-configurable-options",
     "description": "Magento module provides data provider for creating buy request for configurable products",
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
         "magento/module-quote": "*"
     },

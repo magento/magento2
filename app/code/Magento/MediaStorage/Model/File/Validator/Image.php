@@ -7,13 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\MediaStorage\Model\File\Validator;
 
+use Laminas\Validator\AbstractValidator;
 use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Image\Factory;
 
 /**
  * Image validator
  */
-class Image extends \Zend_Validate_Abstract
+class Image extends AbstractValidator
 {
     /**
      * @var array
@@ -34,20 +36,30 @@ class Image extends \Zend_Validate_Abstract
     private $fileMime;
 
     /**
+     * @var Factory
+     */
+    private $imageFactory;
+
+    /**
      * @var File
      */
     private $file;
 
     /**
      * @param Mime $fileMime
+     * @param Factory $imageFactory
      * @param File $file
      */
     public function __construct(
         Mime $fileMime,
+        Factory $imageFactory,
         File $file
     ) {
         $this->fileMime = $fileMime;
+        $this->imageFactory = $imageFactory;
         $this->file = $file;
+
+        parent::__construct();
     }
 
     /**
@@ -60,10 +72,8 @@ class Image extends \Zend_Validate_Abstract
 
         if (in_array($fileMimeType, $this->imageMimeTypes)) {
             try {
-                //phpcs:ignore Magento2.Functions.DiscouragedFunction
-                $image = imagecreatefromstring($this->file->fileGetContents($filePath));
-
-                $isValid = $image ? true : false;
+                $image = $this->imageFactory->create($filePath);
+                $image->open();
             } catch (\Exception $e) {
                 $isValid = false;
             }

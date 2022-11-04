@@ -22,7 +22,11 @@
                         <block class="Magento\Sales\Block\Adminhtml\Items\Column\Name" name="column_name" template="Magento_Sales::items/column/name.phtml" group="column"/>
                         <block class="Magento\Framework\View\Element\Text\ListText" name="order_item_extra_info"/>
                     </block>
-                    <block class="Magento\Sales\Block\Adminhtml\Order\Comments\View" name="order_comments" template="Magento_Sales::order/comments/view.phtml"/>
+                    <block class="Magento\Sales\Block\Adminhtml\Order\Comments\View" name="order_comments" template="Magento_Sales::order/comments/view.phtml">
+                        <action method="setParentType">
+                            <argument name="type" xsi:type="string">shipment</argument>
+                        </action>
+                    </block>
                     <block class="Magento\Shipping\Block\Adminhtml\Order\Tracking\View" name="shipment_tracking" template="Magento_Shipping::order/tracking/view.phtml"/>
                     <block class="Magento\Shipping\Block\Adminhtml\Order\Packaging" name="shipment_packaging" template="Magento_Shipping::order/packaging/popup.phtml"/>
                     <block class="Magento\Shipping\Block\Adminhtml\Order\Packaging" name="shipment_packed" template="Magento_Shipping::order/packaging/packed.phtml"/>

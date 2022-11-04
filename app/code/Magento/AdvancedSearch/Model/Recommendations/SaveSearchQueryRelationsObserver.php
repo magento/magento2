@@ -35,7 +35,7 @@ class SaveSearchQueryRelationsObserver implements ObserverInterface
     {
         $searchQueryModel = $observer->getEvent()->getDataObject();
         $queryId = $searchQueryModel->getId();
-        $relatedQueries = $searchQueryModel->getSelectedQueriesGrid();
+        $relatedQueries = $searchQueryModel->getSelectedQueriesGrid() ?? '';
 
         if (strlen($relatedQueries) == 0) {
             $relatedQueries = [];

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminPlaceOrderWhenCountryAllowedOnlyOnCurrentWebsiteScopeTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Customer Order"/>
+            <title value="Place an order when country allowed only on current website"/>
+            <description value="Place an order when country allowed only on current website scope"/>
+            <severity value="MAJOR"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set --scope={{SetAllowedCountryUsConfig.scope}} --scope-code={{SetAllowedCountryUsConfig.scope_code}} {{SetAllowedCountryUsConfig.path}} {{SetAllowedCountryUsConfig.value}}" stepKey="setAllowedCountryUs"/>
+            <magentoCLI command="config:set {{SetAllowedCountryUsConfig.path}} ''" stepKey="unselectAllCountriesFromAllowedCounties"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <createData entity="DisableAdminAccountAllowCountry" stepKey="setDefaultValueForAllowCountries"/>
+            <createData entity="SetAdminAccountAllowCountryToDefaultForDefaultWebsite" stepKey="setDefaultValueForAllowCountriesForDefaultWebsites"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToTheOrder">
+            <argument name="product" value="$createSimpleProduct$"/>
+            <argument name="productQty" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+    </test>
+</tests>

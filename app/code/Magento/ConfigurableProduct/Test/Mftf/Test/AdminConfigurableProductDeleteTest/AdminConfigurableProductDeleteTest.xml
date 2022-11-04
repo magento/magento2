@@ -75,9 +75,11 @@
         </after>
 
         <!-- assert product visible in storefront -->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="gotoStorefront1"/>
+        <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="gotoStorefront1"/>
         <waitForPageLoad stepKey="wait1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="seeProduct"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProduct">
+            <argument name="value" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
 
         <!-- go to admin and delete -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
@@ -94,9 +96,11 @@
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="seeSuccessMsg"/>
 
         <!-- after delete, assert product page is 404 -->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="gotoStorefront2"/>
+        <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="gotoStorefront2"/>
         <waitForPageLoad stepKey="wait3"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeWhoops">
+            <argument name="value" value="Whoops, our bad..."/>
+        </actionGroup>
         <dontSee selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="dontSeeProduct"/>
     </test>
 </tests>

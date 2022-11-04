@@ -11,5 +11,6 @@
     <section name="AdminProductMessagesSection">
         <element name="successMessage" type="text" selector=".message.message-success.success"/>
         <element name="errorMessage" type="text" selector=".message.message-error.error"/>
+        <element name="saveProductWarningMessage" type="text" selector=".message-warning"/>
     </section>
 </sections>

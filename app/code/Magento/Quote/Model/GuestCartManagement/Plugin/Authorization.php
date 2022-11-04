@@ -39,7 +39,7 @@ class Authorization
         $customerId,
         $storeId
     ) {
-        if ($customerId !== (int)$this->userContext->getUserId()) {
+        if (((int) $customerId) !== (int)$this->userContext->getUserId()) {
             throw new StateException(
                 __("You don't have the correct permissions to assign the customer to the cart.")
             );

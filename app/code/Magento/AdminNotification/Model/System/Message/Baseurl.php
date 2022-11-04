@@ -101,6 +101,8 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
      */
     public function getIdentity()
     {
+        // md5() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         return md5('BASE_URL' . $this->_getConfigUrl());
     }
 

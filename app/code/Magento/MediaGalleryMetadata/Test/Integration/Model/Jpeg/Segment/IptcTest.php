@@ -34,11 +34,6 @@ class IptcTest extends TestCase
     private $iptcReader;
 
     /**
-     * @var DriverInterface
-     */
-    private $driver;
-
-    /**
      * @var ReadFile
      */
     private $fileReader;
@@ -51,20 +46,28 @@ class IptcTest extends TestCase
     /**
      * @var WriteInterface
      */
-    private $varDirectory;
+    private $directory;
 
     /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->varDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
-            ->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->directory = Bootstrap::getObjectManager()->get(FileSystem::class)
+            ->getDirectoryWrite(DirectoryList::MEDIA);
         $this->iptcWriter = Bootstrap::getObjectManager()->get(WriteIptc::class);
         $this->iptcReader = Bootstrap::getObjectManager()->get(ReadIptc::class);
         $this->fileReader = Bootstrap::getObjectManager()->get(ReadFile::class);
-        $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
         $this->metadataFactory = Bootstrap::getObjectManager()->get(MetadataFactory::class);
+        $this->directory->create('testDir');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        $this->directory->delete('testDir');
     }
 
     /**
@@ -83,13 +86,12 @@ class IptcTest extends TestCase
         string $description,
         array $keywords
     ): void {
-        $path = realpath(__DIR__ . '/../../../../_files/' . $fileName);
-        $modifiableFilePath = $this->varDirectory->getAbsolutePath($fileName);
-        $this->driver->copy(
+        $path = $this->directory->getAbsolutePath('testDir/' . $fileName);
+        $this->directory->getDriver()->filePutContents(
             $path,
-            $modifiableFilePath
+            file_get_contents(__DIR__ . '/../../../../_files/' . $fileName)
         );
-        $modifiableFilePath = $this->fileReader->execute($modifiableFilePath);
+        $modifiableFilePath = $this->fileReader->execute($path);
         $originalMetadata = $this->iptcReader->execute($modifiableFilePath);
 
         $this->assertEmpty($originalMetadata->getTitle());

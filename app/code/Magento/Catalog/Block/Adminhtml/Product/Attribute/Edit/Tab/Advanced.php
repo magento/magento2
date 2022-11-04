@@ -61,7 +61,7 @@ class Advanced extends Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         Yesno $yesNo,
         Data $eavData,
-        array $disableScopeChangeList = ['sku'],
+        array $disableScopeChangeList = [],
         array $data = []
     ) {
         $this->_yesNo = $yesNo;

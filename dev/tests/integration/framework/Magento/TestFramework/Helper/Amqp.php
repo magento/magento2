@@ -16,7 +16,9 @@ class Amqp
     const CONFIG_PATH_HOST = 'queue/amqp/host';
     const CONFIG_PATH_USER = 'queue/amqp/user';
     const CONFIG_PATH_PASSWORD = 'queue/amqp/password';
+    const DEFAULT_MANAGEMENT_PROTOCOL = 'http';
     const DEFAULT_MANAGEMENT_PORT = '15672';
+    const DEFAULT_VIRTUALHOST = '/';
 
     /**
      * @var Curl
@@ -29,11 +31,14 @@ class Amqp
     private $deploymentConfig;
 
     /**
-     * RabbitMQ API host
-     *
      * @var string
      */
     private $host;
+
+    /**
+     * @var string
+     */
+    private $virtualHost;
 
     /**
      * Initialize dependencies.
@@ -51,10 +56,14 @@ class Amqp
         );
         $this->curl->addHeader('content-type', 'application/json');
         $this->host = sprintf(
-            'http://%s:%s/api/',
+            '%s://%s:%s/api/',
+            defined('RABBITMQ_MANAGEMENT_PROTOCOL')
+                ? RABBITMQ_MANAGEMENT_PROTOCOL
+                : self::DEFAULT_MANAGEMENT_PROTOCOL,
             $this->deploymentConfig->get(self::CONFIG_PATH_HOST),
             defined('RABBITMQ_MANAGEMENT_PORT') ? RABBITMQ_MANAGEMENT_PORT : self::DEFAULT_MANAGEMENT_PORT
         );
+        $this->virtualHost = defined('RABBITMQ_VIRTUALHOST') ? RABBITMQ_VIRTUALHOST : self::DEFAULT_VIRTUALHOST;
     }
 
     /**
@@ -78,7 +87,7 @@ class Amqp
      */
     public function getExchanges()
     {
-        $this->curl->get($this->host . 'exchanges');
+        $this->curl->get($this->host . 'exchanges/' . urlencode($this->virtualHost));
         $data = $this->curl->getBody();
         $data = json_decode($data, true);
         $output = [];
@@ -96,7 +105,7 @@ class Amqp
      */
     public function getExchangeBindings($name)
     {
-        $this->curl->get($this->host . 'exchanges/%2f/' . $name . '/bindings/source');
+        $this->curl->get($this->host . 'exchanges/' . urlencode($this->virtualHost) . '/' . $name . '/bindings/source');
         $data = $this->curl->getBody();
         return json_decode($data, true);
     }
@@ -108,7 +117,7 @@ class Amqp
      */
     public function getConnections()
     {
-        $this->curl->get($this->host . 'connections');
+        $this->curl->get($this->host . 'vhosts/' . urlencode($this->virtualHost) . '/connections');
         $data = $this->curl->getBody();
         $data = json_decode($data, true);
         $output = [];
@@ -133,7 +142,10 @@ class Amqp
             "encoding" => "auto",
             "truncate" => 50000
         ];
-        $this->curl->post($this->host . 'queue/%2f/' . $name . '/get', json_encode($body));
+        $this->curl->post(
+            $this->host . 'queue/' . urlencode($this->virtualHost) . '/' . $name . '/get',
+            json_encode($body)
+        );
         return $this->curl->getBody();
     }
 

@@ -171,4 +171,11 @@
         <data key="original">Shipping Method:</data>
         <data key="custom">Shipping Method:</data>
     </entity>
+    <entity name="RevertWelcomeMessageTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertWelcomeMessageTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertWelcomeMessageTranslateData" type="translation_operation_translate">
+        <data key="original">Default welcome msg!</data>
+        <data key="custom">Default welcome msg!</data>
+    </entity>
 </entities>

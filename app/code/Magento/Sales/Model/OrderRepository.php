@@ -186,7 +186,13 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         if ($extensionAttributes === null) {
             $extensionAttributes = $this->orderExtensionFactory->create();
         }
-        $paymentAdditionalInformation = $order->getPayment()->getAdditionalInformation();
+
+        $paymentAdditionalInformation = [];
+        $payment = $order->getPayment();
+
+        if ($payment) {
+            $paymentAdditionalInformation = $payment->getAdditionalInformation();
+        }
 
         $objects = [];
         foreach ($paymentAdditionalInformation as $key => $value) {
