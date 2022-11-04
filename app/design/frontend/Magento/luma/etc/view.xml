@@ -272,6 +272,7 @@
     <exclude>
         <item type="file">Lib::chartjs/Chart.min.js</item>
         <item type="file">Lib::chartjs/chartjs-adapter-moment.js</item>
+        <item type="file">Lib::chartjs/es6-shim.min.js</item>
         <item type="file">Lib::jquery/jquery.min.js</item>
         <item type="file">Lib::jquery/jquery-ui.js</item>
         <item type="file">Lib::jquery/colorpicker/js/colorpicker.js</item>
