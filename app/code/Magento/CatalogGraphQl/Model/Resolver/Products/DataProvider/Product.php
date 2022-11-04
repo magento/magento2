@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionPostProcessor;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -94,7 +93,7 @@ class Product
             $visibilityIds = $isSearch
                 ? $this->visibility->getVisibleInSearchIds()
                 : $this->visibility->getVisibleInCatalogIds();
-            $collection->addAttributeToFilter(ProductInterface::VISIBILITY, $visibilityIds);
+            $collection->setVisibility($visibilityIds);
         }
 
         $collection->load();
