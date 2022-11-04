@@ -79,7 +79,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
         $quote = $this->quoteRepository->getActive($cartId);
 
         // validate the address
-        $this->addressValidator->validateAddress($quote, $address);
+        $this->addressValidator->validateWithExistingAddress($quote, $address);
 
         $address->setCustomerId($quote->getCustomerId());
         $quote->removeAddress($quote->getBillingAddress()->getId());

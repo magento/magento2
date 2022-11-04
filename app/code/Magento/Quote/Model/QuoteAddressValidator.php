@@ -140,7 +140,7 @@ class QuoteAddressValidator
      * @return void
      * @throws NoSuchEntityException The specified customer ID or address ID is not valid.
      */
-    public function validateAddress(CartInterface $cart, AddressInterface $address): void
+    public function validateWithExistingAddress(CartInterface $cart, AddressInterface $address): void
     {
         // check if address belongs to quote.
         if ($address->getId() !== null) {
