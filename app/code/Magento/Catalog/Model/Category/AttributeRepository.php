@@ -80,7 +80,7 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)
     {
-        if (empty($this->metadataCache[$dataObjectClassName])) {
+        if (!isset($this->metadataCache[$dataObjectClassName])) {
             $defaultAttributeSetId = $this->eavConfig
                 ->getEntityType(\Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE)
                 ->getDefaultAttributeSetId();
