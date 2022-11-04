@@ -891,9 +891,9 @@ abstract class AbstractEntity
      */
     protected function updateItemsCounterStats(array $created = [], array $updated = [], array $deleted = [])
     {
-        $this->countItemsCreated = count($created);
-        $this->countItemsUpdated = count($updated);
-        $this->countItemsDeleted = count($deleted);
+        $this->countItemsCreated += count($created);
+        $this->countItemsUpdated += count($updated);
+        $this->countItemsDeleted += count($deleted);
         return $this;
     }
 
