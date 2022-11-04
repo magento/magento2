@@ -968,7 +968,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 $item = $this->getCustomerCart()->getItemById($itemId);
                 if ($item) {
                     $this->moveQuoteItem($item, 'order', $qty);
-                    $this->removeItem($itemId, 'cart');
+                    $transferredItems = $this->_session->getTransferredItems() ?? [];
+                    $transferredItems['cart'][] = $itemId;
+                    $this->_session->setTransferredItems($transferredItems) ;
                 }
             }
         }
@@ -982,7 +984,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 );
                 if ($item->getId()) {
                     $this->addProduct($item->getProduct(), $item->getBuyRequest()->toArray());
-                    $this->removeItem($itemId, 'wishlist');
+                    $transferredItems = $this->_session->getTransferredItems() ?? [];
+                    $transferredItems['wishlist'][] = $itemId;
+                    $this->_session->setTransferredItems($transferredItems) ;
                 }
             }
         }
@@ -1175,7 +1179,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @deprecated 101.0.0
-     * @see not in use anymore
+     * @see void
      */
     protected function _parseOptions(\Magento\Quote\Model\Quote\Item $item, $additionalOptions)
     {
@@ -1246,7 +1250,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @return $this
      *
      * @deprecated 101.0.0
-     * @see not in use anymore
+     * @see void
      */
     protected function _assignOptionsToItem(\Magento\Quote\Model\Quote\Item $item, $options)
     {
@@ -2016,7 +2020,30 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         $this->_eventManager->dispatch('checkout_submit_all_after', ['order' => $order, 'quote' => $quote]);
 
+        $this->removeTransferredItems();
+
         return $order;
+    }
+
+    /**
+     * Remove items that were transferred into shopping cart from their original sources (cart, wishlist, ...)
+     *
+     * @return void
+     */
+    private function removeTransferredItems(): void
+    {
+        try {
+            if (is_array($this->getSession()->getTransferredItems())) {
+                foreach ($this->getSession()->getTransferredItems() as $from => $itemIds) {
+                    foreach ($itemIds as $itemId) {
+                        $this->removeItem($itemId, $from);
+                    }
+                }
+                $this->recollectCart();
+            }
+        } catch (\Throwable $exception) {
+            $this->_logger->error($exception);
+        }
     }
 
     /**
