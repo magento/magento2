@@ -9,17 +9,16 @@ declare(strict_types=1);
 namespace Magento\GroupedImportExport\Test\Unit\Model\Import\Product\Type\Grouped;
 
 use Magento\Catalog\Model\ResourceModel\Product\Link;
+use Magento\CatalogImportExport\Model\Import\Product as ProductImport;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\GroupedImportExport\Model\Import\Product\Type\Grouped\Links;
-use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\ImportFactory;
 use Magento\ImportExport\Model\ResourceModel\Import\Data;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\CatalogImportExport\Model\Import\Product as ProductImport;
 
 class LinksTest extends TestCase
 {
@@ -64,7 +63,7 @@ class LinksTest extends TestCase
             ]
         );
         $this->productImport = $this->createMock(ProductImport::class);
-        $this->productImport->expects($this->any())->method('getIds')->willReturn(null);
+        $this->productImport->expects($this->any())->method('getIds')->willReturn([]);
     }
 
     /**

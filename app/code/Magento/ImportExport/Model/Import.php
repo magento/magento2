@@ -28,9 +28,9 @@ use Magento\ImportExport\Model\Import\Adapter;
 use Magento\ImportExport\Model\Import\ConfigInterface;
 use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\Entity\Factory;
+use Magento\ImportExport\Model\Import\EntityInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\ImportExport\Model\Import\Source\Base64EncodedCsvData;
 use Magento\ImportExport\Model\ResourceModel\Import\Data;
 use Magento\ImportExport\Model\Source\Import\AbstractBehavior;
 use Magento\ImportExport\Model\Source\Import\Behavior\Factory as BehaviorFactory;
@@ -123,7 +123,7 @@ class Import extends AbstractModel
     public const IMPORT_DIR = 'import/';
 
     /**
-     * @var AbstractEntity|ImportAbstractEntity
+     * @var EntityInterface
      */
     protected $_entityAdapter;
 
@@ -277,7 +277,7 @@ class Import extends AbstractModel
      * Create instance of entity adapter and return it
      *
      * @throws LocalizedException
-     * @return AbstractEntity|ImportAbstractEntity
+     * @return EntityInterface
      */
     protected function _getEntityAdapter()
     {
