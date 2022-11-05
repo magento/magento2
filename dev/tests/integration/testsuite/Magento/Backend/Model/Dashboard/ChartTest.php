@@ -14,6 +14,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Stdlib\DateTime;
+use DateTimeZone;
 
 /**
  * Verify chart data by different period.
@@ -48,8 +49,35 @@ class ChartTest extends TestCase
      * @dataProvider getChartDataProvider
      * @return void
      */
-    public function testGetByPeriodWithParam(int $expectedDataQty, string $period, string $chartParam): void
-    {
+    public function testGetByPeriodWithParam(
+        int $expectedDataQty,
+        string $period,
+        string $chartParam,
+        string $orderIncrementId
+    ): void {
+        $timezoneLocal = $this->objectManager->get(TimezoneInterface::class)->getConfigTimezone();
+
+        $order = $this->objectManager->get(Order::class);
+        $order->loadByIncrementId($orderIncrementId);
+        $payment = $this->objectManager->get(Payment::class);
+        $payment->setMethod('checkmo');
+        $payment->setAdditionalInformation('last_trans_id', '11122');
+        $payment->setAdditionalInformation('metadata', [
+            'type' => 'free',
+            'fraudulent' => false
+        ]);
+        $dateTime = new \DateTime('now', new \DateTimeZone($timezoneLocal));
+        if ($period === '1m') {
+            $dateTime->modify('first day of this month')->format(DateTime::DATETIME_PHP_FORMAT);
+        } elseif ($period === '1y') {
+            $dateTime->modify('first day of january this year')->format(DateTime::DATETIME_PHP_FORMAT);
+        } elseif ($period === '2y') {
+            $dateTime->modify('first day of january last year')->format(DateTime::DATETIME_PHP_FORMAT);
+        }
+        $dateTime->setTimezone(new DateTimeZone('UTC'));
+        $order->setCreatedAt($dateTime->format(DateTime::DATETIME_PHP_FORMAT));
+        $order->setPayment($payment);
+        $order->save();
         $ordersData = $this->model->getByPeriod($period, $chartParam);
         $ordersCount = array_sum(array_map(function ($item) {
             return $item['y'];
@@ -68,27 +96,32 @@ class ChartTest extends TestCase
             [
                 2,
                 '24h',
-                'quantity'
+                'quantity',
+                '100000002'
             ],
             [
                 3,
                 '7d',
-                'quantity'
+                'quantity',
+                '100000003'
             ],
             [
                 4,
                 '1m',
-                'quantity'
+                'quantity',
+                '100000004'
             ],
             [
                 5,
                 '1y',
-                'quantity'
+                'quantity',
+                '100000005'
             ],
             [
                 6,
                 '2y',
-                'quantity'
+                'quantity',
+                '100000006'
             ]
         ];
     }
