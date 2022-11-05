@@ -12,6 +12,7 @@ use Magento\Backend\Model\Dashboard\Chart;
 use Magento\Backend\Model\Dashboard\Chart\Date as DateRetriever;
 use Magento\Backend\Model\Dashboard\Period;
 use Magento\Framework\DataObject;
+use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Model\ResourceModel\Order\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,6 +24,11 @@ class ChartTest extends TestCase
      * @var Chart
      */
     private $model;
+
+    /**
+     * @var Timezone|MockObject
+     */
+    private $timeZoneMock;
 
     /**
      * @var ObjectManager
@@ -55,6 +61,10 @@ class ChartTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->timeZoneMock = $this->getMockBuilder(Timezone::class)
+            ->onlyMethods(['convertConfigTimeToUtc'])
+            ->disableOriginalConstructor()->getMock();
+
         $this->orderHelperMock = $this->getMockBuilder(OrderHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -72,20 +82,22 @@ class ChartTest extends TestCase
             [
                 'dateRetriever' => $this->dateRetrieverMock,
                 'orderHelper' => $this->orderHelperMock,
-                'period' => $period
+                'period' => $period,
+                'timeZone' => $this->timeZoneMock
             ]
         );
     }
 
     /**
      * @param string $period
+     * @param string $dateformat
      * @param string $chartParam
      * @param array $result
      *
      * @return void
      * @dataProvider getByPeriodDataProvider
      */
-    public function testGetByPeriod(string $period, string $chartParam, array $result): void
+    public function testGetByPeriod(string $period, string $dateformat, string $chartParam, array $result): void
     {
         $this->orderHelperMock
             ->method('setParam')
@@ -106,8 +118,15 @@ class ChartTest extends TestCase
         $this->collectionMock->method('count')
             ->willReturn(2);
 
+        $utcMap = [];
         $valueMap = [];
         foreach ($result as $resultItem) {
+            $utcMap[] = [
+                $resultItem['x'],
+                $dateformat,
+                $resultItem['x']
+            ];
+
             $dataObjectMock = $this->getMockBuilder(DataObject::class)
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -121,6 +140,11 @@ class ChartTest extends TestCase
                 $dataObjectMock
             ];
         }
+        $this->timeZoneMock
+            ->expects($this->any())
+            ->method('convertConfigTimeToUtc')
+            ->willReturnMap($utcMap);
+
         $this->collectionMock->method('getItemByColumnValue')
             ->willReturnMap($valueMap);
 
@@ -138,6 +162,7 @@ class ChartTest extends TestCase
         return [
             [
                 Period::PERIOD_7_DAYS,
+                'Y-m-d',
                 'revenue',
                 [
                     [
@@ -160,6 +185,7 @@ class ChartTest extends TestCase
             ],
             [
                 Period::PERIOD_1_MONTH,
+                'Y-m-d',
                 'quantity',
                 [
                     [
@@ -182,6 +208,7 @@ class ChartTest extends TestCase
             ],
             [
                 Period::PERIOD_1_YEAR,
+                'Y-m',
                 'quantity',
                 [
                     [
