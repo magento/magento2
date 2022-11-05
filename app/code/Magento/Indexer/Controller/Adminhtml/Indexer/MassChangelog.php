@@ -39,7 +39,7 @@ class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer implem
                     }
                 }
 
-                $this->messageManager->addSuccess(
+                $this->messageManager->addSuccessMessage(
                     __(
                         '%1 indexer(s) have been updated to "Update by Schedule" mode. %2 were skipped because there was nothing to change.',
                         $updatedIndexersCount,
