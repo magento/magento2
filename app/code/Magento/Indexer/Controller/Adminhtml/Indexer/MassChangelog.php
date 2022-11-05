@@ -30,7 +30,10 @@ class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer implem
                     $model = $this->_objectManager->get(
                         \Magento\Framework\Indexer\IndexerRegistry::class
                     )->get($indexerId);
-                    $model->setScheduled(true);
+
+                    if (!$model->isScheduled()) {
+                        $model->setScheduled(true);
+                    }
                 }
                 $this->messageManager->addSuccess(
                     __('%1 indexer(s) are in "Update by Schedule" mode.', count($indexerIds))

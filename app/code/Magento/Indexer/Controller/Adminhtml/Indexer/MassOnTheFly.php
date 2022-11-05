@@ -30,7 +30,10 @@ class MassOnTheFly extends \Magento\Indexer\Controller\Adminhtml\Indexer impleme
                     $model = $this->_objectManager->get(
                         \Magento\Framework\Indexer\IndexerRegistry::class
                     )->get($indexerId);
-                    $model->setScheduled(false);
+
+                    if ($model->isScheduled()) {
+                        $model->setScheduled(false);
+                    }
                 }
                 $this->messageManager->addSuccess(
                     __('%1 indexer(s) are in "Update on Save" mode.', count($indexerIds))
