@@ -91,18 +91,7 @@ class Chart
 
         if ($collection->count() > 0) {
             foreach ($dates as $date) {
-                switch ($period) {
-                    case Period::PERIOD_7_DAYS:
-                    case Period::PERIOD_1_MONTH:
-                        $utcDate = $this->timeZone->convertConfigTimeToUtc($date, 'Y-m-d');
-                        break;
-                    case Period::PERIOD_1_YEAR:
-                    case Period::PERIOD_2_YEARS:
-                        $utcDate = $this->timeZone->convertConfigTimeToUtc($date, 'Y-m');
-                        break;
-                    default:
-                        $utcDate = $this->timeZone->convertConfigTimeToUtc($date, 'Y-m-d H:00');
-                }
+                $utcDate = $this->getUTCDatetimeByPeriod($period, $date);
                 $item = $collection->getItemByColumnValue('range', $utcDate);
 
                 $data[] = [
@@ -113,5 +102,29 @@ class Chart
         }
 
         return $data;
+    }
+
+    /**
+     * Get UTC date and time by period.
+     *
+     * @param string $period
+     * @param string $date
+     * @return string
+     */
+    private function getUTCDatetimeByPeriod(string $period, string $date)
+    {
+        switch ($period) {
+            case Period::PERIOD_7_DAYS:
+            case Period::PERIOD_1_MONTH:
+                $utcDate = $this->timeZone->convertConfigTimeToUtc($date, 'Y-m-d');
+                break;
+            case Period::PERIOD_1_YEAR:
+            case Period::PERIOD_2_YEARS:
+                $utcDate = $this->timeZone->convertConfigTimeToUtc($date, 'Y-m');
+                break;
+            default:
+                $utcDate = $this->timeZone->convertConfigTimeToUtc($date, 'Y-m-d H:00');
+        }
+        return $utcDate;
     }
 }
