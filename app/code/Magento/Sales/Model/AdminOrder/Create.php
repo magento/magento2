@@ -1990,6 +1990,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->_prepareCustomer();
         $this->_validate();
         $quote = $this->getQuote();
+
         $this->_prepareQuoteItems();
 
         $orderData = [];
@@ -2009,7 +2010,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $quote->setReservedOrderId($orderData['increment_id']);
         }
         $order = $this->quoteManagement->submit($quote, $orderData);
-
         if ($this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
             $oldOrder->setRelationChildId($order->getId());
@@ -2018,6 +2018,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $this->orderManagement->cancel($oldOrder->getEntityId());
             $order->save();
         }
+
         if ($this->getSendConfirmation() && !$order->getEmailSent()) {
             $this->emailSender->send($order);
         }
