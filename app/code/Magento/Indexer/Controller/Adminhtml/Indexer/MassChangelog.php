@@ -24,6 +24,8 @@ class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer implem
         if (!is_array($indexerIds)) {
             $this->messageManager->addErrorMessage(__('Please select indexers.'));
         } else {
+            $updatedIndexersCount = 0;
+
             try {
                 foreach ($indexerIds as $indexerId) {
                     /** @var \Magento\Framework\Indexer\IndexerInterface $model */
@@ -33,10 +35,16 @@ class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer implem
 
                     if (!$model->isScheduled()) {
                         $model->setScheduled(true);
+                        $updatedIndexersCount++;
                     }
                 }
+
                 $this->messageManager->addSuccess(
-                    __('%1 indexer(s) are in "Update by Schedule" mode.', count($indexerIds))
+                    __(
+                        '%1 indexer(s) have been updated to "Update by Schedule" mode. %2 were skipped because there was nothing to change.',
+                        $updatedIndexersCount,
+                        count($indexerIds) - $updatedIndexersCount
+                    )
                 );
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
