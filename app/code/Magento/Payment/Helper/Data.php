@@ -220,7 +220,9 @@ class Data extends AbstractHelper
      */
     public function getInfoBlockHtml(InfoInterface $info, $storeId)
     {
-        $this->_appEmulation->startEnvironmentEmulation($storeId, Area::AREA_FRONTEND, true);
+        if ($this->_appEmulation->getInitialEnvironmentInfo() === null) {
+            $this->_appEmulation->startEnvironmentEmulation($storeId, Area::AREA_FRONTEND, true);
+        }
 
         try {
             // Retrieve specified view block from appropriate design package (depends on emulated store)

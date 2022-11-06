@@ -246,4 +246,14 @@ class Emulation extends \Magento\Framework\DataObject
 
         return $this;
     }
+
+    /**
+     * Get initialEnvironmentInfo
+     *
+     * @return \Magento\Framework\DataObject|null
+     */
+    public function getInitialEnvironmentInfo()
+    {
+        return $this->initialEnvironmentInfo?:null;
+    }
 }

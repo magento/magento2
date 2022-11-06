@@ -9,6 +9,7 @@ namespace Magento\Payment\Test\Unit\Helper;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 use Magento\Framework\View\Element\BlockInterface;
@@ -243,9 +244,12 @@ class DataTest extends TestCase
     }
 
     /**
+     * @param DataObject|null $initialEnvironmentInfo
+     *
      * @return void
+     * @dataProvider getInitialEnvironmentInfoProvider
      */
-    public function testGetInfoBlockHtml(): void
+    public function testGetInfoBlockHtml(DataObject $initialEnvironmentInfo = null): void
     {
         list($storeId, $blockHtml, $secureMode, $blockType) = [1, 'HTML MARKUP', true, 'method_block_type'];
 
@@ -260,8 +264,19 @@ class DataTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->appEmulation->expects($this->once())
-            ->method('startEnvironmentEmulation')
-            ->with($storeId, Area::AREA_FRONTEND, true);
+            ->method('getInitialEnvironmentInfo')
+            ->willReturn($initialEnvironmentInfo);
+
+        if ($initialEnvironmentInfo !== null) {
+            $this->appEmulation->expects($this->never())
+                ->method('startEnvironmentEmulation')
+                ->with($storeId, Area::AREA_FRONTEND, true);
+        } else {
+            $this->appEmulation->expects($this->once())
+                ->method('startEnvironmentEmulation')
+                ->with($storeId, Area::AREA_FRONTEND, true);
+        }
+
         $infoMock->expects($this->once())->method('getMethodInstance')->willReturn($methodMock);
         $methodMock->expects($this->once())->method('getInfoBlockType')->willReturn($blockType);
         $this->layoutMock->expects($this->once())->method('createBlock')
@@ -282,6 +297,17 @@ class DataTest extends TestCase
         $this->appEmulation->expects($this->once())->method('stopEnvironmentEmulation');
 
         $this->assertEquals($blockHtml, $this->helper->getInfoBlockHtml($infoMock, $storeId));
+    }
+
+    /**
+     * @return array
+     */
+    public function getInitialEnvironmentInfoProvider(): array
+    {
+        return [
+            [new DataObject()],
+            [null]
+        ];
     }
 
     /**
