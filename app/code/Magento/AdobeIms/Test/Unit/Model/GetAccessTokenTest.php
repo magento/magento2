@@ -72,6 +72,13 @@ class GetAccessTokenTest extends TestCase
             ->willReturn($userProfileMock);
         $userProfileMock->expects($this->once())->method('getAccessToken')->willReturn($token);
 
+        $decryptedToken = $token ?? '';
+
+        $this->encryptor->expects($this->once())
+            ->method('decrypt')
+            ->with($token)
+            ->willReturn($decryptedToken);
+
         $this->assertEquals($token, $this->getAccessToken->execute());
     }
 

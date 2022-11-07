@@ -71,6 +71,15 @@ define(['prototype'], function () {
             if (this.packagesContent.childElements().length == 0) {
                 this.newPackage();
             }
+            const allowedPackageTypes = ["N","D"];
+
+            if (!Object.values(this.customizableContainers).some(packageType => allowedPackageTypes.includes(packageType))) {
+                $('packaging_window').select(
+                    'th.col-length,th.col-width,th.col-height'
+                ).forEach(element => {
+                    element.classList.remove('_required')
+                });
+            }
             jQuery(this.window).modal('openModal');
         },
 
@@ -262,7 +271,15 @@ define(['prototype'], function () {
             }
             dimensionElements.each(callback);
 
-            return result = $$('[id^="package_block_"] input').collect(function (element) {
+            const allowedPackageTypes = ["N","D"];
+
+            if (Object.values(this.customizableContainers).some(packageType => allowedPackageTypes.includes(packageType))) {
+                dimensionElements.each(function(element) {
+                    $(element).addClassName('required-entry');
+                });
+            }
+
+            return result = $$('[id^="package_block_"]      input').collect(function (element) {
                 return this.validateElement(element);
             }, this).all();
         },

@@ -41,18 +41,18 @@ class Discounts implements ResolverInterface
     {
         $discountValues=[];
         $address = $quote->getShippingAddress();
-        $totalDiscounts = $address->getExtensionAttributes()->getDiscounts();
-        if ($totalDiscounts && is_array($totalDiscounts)) {
-            foreach ($totalDiscounts as $value) {
-                $discount = [];
-                $amount = [];
-                $discount['label'] = $value->getRuleLabel() ?: __('Discount');
-                /* @var \Magento\SalesRule\Api\Data\DiscountDataInterface $discountData */
-                $discountData = $value->getDiscountData();
-                $amount['value'] = $discountData->getAmount();
-                $amount['currency'] = $quote->getQuoteCurrencyCode();
-                $discount['amount'] = $amount;
-                $discountValues[] = $discount;
+        $totals = $address->getTotals();
+        if ($totals && is_array($totals)) {
+            foreach ($totals as $total) {
+                if (stripos($total->getCode(), 'total') === false && $total->getValue() < 0.00) {
+                    $discount = [];
+                    $amount = [];
+                    $discount['label'] = $total->getTitle() ?: __('Discount');
+                    $amount['value'] = $total->getValue() * -1;
+                    $amount['currency'] = $quote->getQuoteCurrencyCode();
+                    $discount['amount'] = $amount;
+                    $discountValues[] = $discount;
+                }
             }
             return $discountValues;
         }
