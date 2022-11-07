@@ -76,7 +76,7 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
 
     /**
      * @inheritdoc
-     * 
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)
