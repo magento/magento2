@@ -25,7 +25,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
         $actions[] = [
             'url' => $this->getUrl('adminhtml/*/preview', ['id' => $row->getId()]),
             'caption' => __('Preview'),
-            'target' => 'blank'
+            'target' => '_blank'
         ];
 
         $this->getColumn()->setActions($actions);
