@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Sales\Test\Fixture;
 
 use Magento\Framework\DataObject;
@@ -46,10 +49,9 @@ class InvoiceComment implements RevertibleDataFixtureInterface
     public function apply(array $data = []): ?DataObject
     {
         $service = $this->serviceFactory->create(InvoiceCommentRepositoryInterface::class, 'save');
+        $invoiceComment = $service->execute($this->prepareData($data));
 
-        $invoiceCommentId = $service->execute($this->prepareData($data));
-
-        return $this->invoiceCommentRepository->get($invoiceCommentId->getId());
+        return $this->invoiceCommentRepository->get($invoiceComment->getId());
     }
 
     public function revert(DataObject $data): void
