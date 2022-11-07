@@ -22,6 +22,9 @@
         <element name="guestFirstName" type="input" selector=".payment-method._active .billing-address-form input[name='firstname']"/>
         <element name="guestLastName" type="input" selector=".payment-method._active .billing-address-form input[name*='lastname']"/>
         <element name="guestStreet" type="input" selector=".payment-method._active .billing-address-form input[name*='street[0]']"/>
+        <element name="guestStreet2" type="input" selector=".payment-method._active .billing-address-form input[name*='street[1]']"/>
+        <element name="guestStreet3" type="input" selector=".payment-method._active .billing-address-form input[name*='street[2]']"/>
+        <element name="guestStreet4" type="input" selector=".payment-method._active .billing-address-form input[name*='street[3]']"/>
         <element name="guestCity" type="input" selector=".payment-method._active .billing-address-form input[name*='city']"/>
         <element name="guestCountry" type="select" selector=".payment-method._active .billing-address-form select[name*='country_id']"/>
         <element name="guestRegion" type="select" selector=".payment-method._active .billing-address-form select[name*='region_id']"/>
