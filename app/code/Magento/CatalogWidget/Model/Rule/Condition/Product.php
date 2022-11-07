@@ -9,9 +9,9 @@
  */
 namespace Magento\CatalogWidget\Model\Rule\Condition;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ProductCategoryList;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 
 /**
@@ -201,7 +201,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
         Collection $collection
     ) {
-        $storeId = $this->storeManager->getStore()->getId();
+        /*$storeId = $this->storeManager->getStore()->getId();
         $values = $collection->getAllAttributeValues($attribute);
         $validEntities = [];
         if ($values) {
@@ -226,6 +226,56 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         } else {
             $this->unsetData('value');
         }
+
+        return $this;*/
+
+        $connection = $this->_productResource->getConnection();
+        switch ($attribute->getBackendType()) {
+            case 'decimal':
+            case 'datetime':
+            case 'int':
+            case 'varchar':
+            case 'text':
+                $aliasDefault = 'at_' . $attribute->getAttributeCode() . '_default';
+                $aliasStore = 'at_' . $attribute->getAttributeCode();
+                $collection->addAttributeToSelect($attribute->getAttributeCode(), 'left');
+                break;
+            default:
+                $aliasDefault = 'at_' . sha1($this->getId()) . $attribute->getAttributeCode() . '_default';
+                $aliasStore = 'at_' . sha1($this->getId()) . $attribute->getAttributeCode();
+
+                $storeDefaultId = $connection->getIfNullSql($aliasDefault . '.store_id', Store::DEFAULT_STORE_ID);
+                $storeId = $connection->getIfNullSql($aliasStore . '.store_id', $this->storeManager->getStore()->getId());
+                $linkField = $attribute->getEntity()->getLinkField();
+
+                $collection->getSelect()->joinLeft(
+                    [$aliasDefault => $collection->getTable($attribute->getBackendTable())],
+                    "($aliasDefault.$linkField = e.$linkField) AND ($aliasDefault.store_id = $storeDefaultId)" .
+                    " AND ($aliasDefault.attribute_id = {$attribute->getId()})",
+                    []
+                );
+                $collection->getSelect()->joinLeft(
+                    [$aliasStore => $collection->getTable($attribute->getBackendTable())],
+                    "($aliasStore.$linkField = e.$linkField) AND ($aliasStore.store_id = $storeId)" .
+                    " AND ($aliasStore.attribute_id = {$attribute->getId()})",
+                    []
+                );
+        }
+
+        $fromPart = $collection->getSelect()->getPart(Select::FROM);
+        if (isset($fromPart['search_result']['joinType'])
+            && $fromPart['search_result']['joinType'] == Select::LEFT_JOIN
+        ) {
+            $conditionCheck = $connection->quoteIdentifier($aliasStore . '.value_id') . " > 0";
+            $conditionTrue = $connection->quoteIdentifier($aliasStore . '.value');
+            $conditionFalse = $connection->quoteIdentifier($aliasDefault . '.value');
+            $ifSql = "IF ($conditionCheck, $conditionTrue, $conditionFalse)";
+            $joinedAttribute = new \Zend_Db_Expr($ifSql);
+        } else {
+            $joinedAttribute = $aliasStore . '.' . 'value';
+        }
+
+        $this->joinedAttributes[$attribute->getAttributeCode()] = $joinedAttribute;
 
         return $this;
     }
