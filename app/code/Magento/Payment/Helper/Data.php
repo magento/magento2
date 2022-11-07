@@ -38,7 +38,7 @@ use UnexpectedValueException;
  */
 class Data extends AbstractHelper
 {
-    const XML_PATH_PAYMENT_METHODS = 'payment';
+    public const XML_PATH_PAYMENT_METHODS = 'payment';
 
     /**
      * @var Config
@@ -46,10 +46,11 @@ class Data extends AbstractHelper
     protected $_paymentConfig;
 
     /**
-     * Layout
+     * Layout object
      *
      * @deprecated
      * @var LayoutInterface
+     * @see we don't use this variable anymore
      */
     protected $_layout;
 

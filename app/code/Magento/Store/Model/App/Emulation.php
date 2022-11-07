@@ -10,12 +10,13 @@
 namespace Magento\Store\Model\App;
 
 use Magento\Framework\Translate\Inline\ConfigInterface;
+use Magento\Store\Api\Data\EmulationInterface;
 
 /**
  * @api
  * @since 100.0.2
  */
-class Emulation extends \Magento\Framework\DataObject
+class Emulation extends \Magento\Framework\DataObject implements EmulationInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
