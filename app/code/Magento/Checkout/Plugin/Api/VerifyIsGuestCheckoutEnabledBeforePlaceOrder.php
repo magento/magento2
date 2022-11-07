@@ -10,6 +10,7 @@ namespace Magento\Checkout\Plugin\Api;
 use Magento\Checkout\Helper\Data as CheckoutHelper;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
@@ -51,12 +52,14 @@ class VerifyIsGuestCheckoutEnabledBeforePlaceOrder
      *
      * @param GuestCartManagementInterface $subject
      * @param string $cartId
+     * @param PaymentInterface|null $paymentMethod
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforePlaceOrder(
         GuestCartManagementInterface $subject,
-        $cartId
+        $cartId,
+        PaymentInterface $paymentMethod = null
     ): void {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');

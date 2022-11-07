@@ -10,6 +10,7 @@ namespace Magento\Checkout\Plugin\Api;
 use Magento\Checkout\Helper\Data as CheckoutHelper;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\GuestBillingAddressManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
@@ -51,12 +52,16 @@ class VerifyIsGuestCheckoutEnabledBeforeAssignBillingAddress
      *
      * @param GuestBillingAddressManagementInterface $subject
      * @param string $cartId
+     * @param AddressInterface $address
+     * @param bool $useForShipping
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeAssign(
         GuestBillingAddressManagementInterface $subject,
-        $cartId
+        $cartId,
+        AddressInterface $address,
+        $useForShipping = false
     ): void {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');

@@ -11,6 +11,8 @@ use Magento\Checkout\Api\GuestPaymentInformationManagementInterface;
 use Magento\Checkout\Helper\Data as CheckoutHelper;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 
@@ -51,12 +53,18 @@ class VerifyIsGuestCheckoutEnabledBeforeSavePaymentInformation
      *
      * @param GuestPaymentInformationManagementInterface $subject
      * @param string $cartId
+     * @param string $email
+     * @param PaymentInterface $paymentMethod
+     * @param AddressInterface|null $billingAddress
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSavePaymentInformation(
         GuestPaymentInformationManagementInterface $subject,
-        $cartId
+        $cartId,
+        $email,
+        PaymentInterface $paymentMethod,
+        AddressInterface $billingAddress = null
     ): void {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');

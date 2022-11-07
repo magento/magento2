@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Checkout\Plugin\Api;
 
+use Magento\Checkout\Api\Data\ShippingInformationInterface;
 use Magento\Checkout\Api\GuestShippingInformationManagementInterface;
 use Magento\Checkout\Helper\Data as CheckoutHelper;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -51,12 +52,14 @@ class VerifyIsGuestCheckoutEnabledBeforeSaveShippingInformation
      *
      * @param GuestShippingInformationManagementInterface $subject
      * @param string $cartId
+     * @param ShippingInformationInterface $addressInformation
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSaveAddressInformation(
         GuestShippingInformationManagementInterface $subject,
-        $cartId
+        $cartId,
+        ShippingInformationInterface $addressInformation
     ): void {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
