@@ -1,0 +1,25 @@
+{
+    "name": "magento/module-async-config",
+    "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "*",
+        "magento/framework-message-queue": "*",
+        "magento/module-config": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "proprietary"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\AsyncConfig\\": ""
+        }
+    }
+}

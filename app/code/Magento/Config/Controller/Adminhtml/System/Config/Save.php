@@ -6,14 +6,15 @@
 
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\AsyncConfig\Api\AsyncConfigPublisherInterface;
 use Magento\Config\Controller\Adminhtml\System\AbstractConfig;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * System Configuration Save Controller
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends AbstractConfig implements HttpPostActionInterface
@@ -36,12 +37,26 @@ class Save extends AbstractConfig implements HttpPostActionInterface
     protected $string;
 
     /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
+     * @var AsyncConfigPublisherInterface
+     */
+    private $asyncConfigPublisher;
+
+    public const ASYNC_CONFIG_OPTION_PATH = 'config/async';
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Config\Model\Config\Structure $configStructure
      * @param \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker
      * @param \Magento\Config\Model\Config\Factory $configFactory
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param DeploymentConfig $deploymentConfig
+     * @param AsyncConfigPublisherInterface $asyncConfigPublisher
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -49,12 +64,16 @@ class Save extends AbstractConfig implements HttpPostActionInterface
         \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker,
         \Magento\Config\Model\Config\Factory $configFactory,
         \Magento\Framework\Cache\FrontendInterface $cache,
-        \Magento\Framework\Stdlib\StringUtils $string
+        \Magento\Framework\Stdlib\StringUtils $string,
+        DeploymentConfig $deploymentConfig,
+        AsyncConfigPublisherInterface $asyncConfigPublisher
     ) {
         parent::__construct($context, $configStructure, $sectionChecker);
         $this->_configFactory = $configFactory;
         $this->_cache = $cache;
         $this->string = $string;
+        $this->deploymentConfig = $deploymentConfig;
+        $this->asyncConfigPublisher = $asyncConfigPublisher;
     }
 
     /**
@@ -215,11 +234,11 @@ class Save extends AbstractConfig implements HttpPostActionInterface
             $website = $this->getRequest()->getParam('website');
             $store = $this->getRequest()->getParam('store');
             $configData = [
-                'section' => $section,
-                'website' => $website,
-                'store' => $store,
-                'groups' => $this->_getGroupsForSave(),
-            ];
+            'section' => $section,
+            'website' => $website,
+            'store' => $store,
+            'groups' => $this->_getGroupsForSave(),
+        ];
             $configData = $this->filterNodes($configData);
 
             $groups = $this->getRequest()->getParam('groups');
@@ -228,17 +247,20 @@ class Save extends AbstractConfig implements HttpPostActionInterface
                 if (isset($groups['country']['fields']['eu_countries'])) {
                     $countries = $groups['country']['fields']['eu_countries'];
                     if (empty($countries['value']) &&
-                        !isset($countries['inherit'])) {
+                    !isset($countries['inherit'])) {
                         throw new LocalizedException(
                             __('Something went wrong while saving this configuration.')
                         );
                     }
                 }
             }
-
-            /** @var \Magento\Config\Model\Config $configModel */
-            $configModel = $this->_configFactory->create(['data' => $configData]);
-            $configModel->save();
+            if (!$this->deploymentConfig->get(self::ASYNC_CONFIG_OPTION_PATH)) {
+                /** @var \Magento\Config\Model\Config $configModel */
+                $configModel = $this->_configFactory->create(['data' => $configData]);
+                $configModel->save();
+            } else {
+                $this->asyncConfigPublisher->saveConfigData($configData);
+            }
             $this->_eventManager->dispatch(
                 'admin_system_config_save',
                 ['configData' => $configData, 'request' => $this->getRequest()]
@@ -259,6 +281,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
         $this->_saveState($this->getRequest()->getPost('config_state'));
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
+
         return $resultRedirect->setPath(
             'adminhtml/system_config/edit',
             [
@@ -283,7 +306,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
         $filtered = [];
         foreach ($groups as $groupName => $childPaths) {
             //When group accepts arbitrary fields and clones them we allow it
-            $group = $this->_configStructure->getElement($prefix .'/' .$groupName);
+            $group = $this->_configStructure->getElement($prefix . '/' . $groupName);
             if (array_key_exists('clone_fields', $group->getData()) && $group->getData()['clone_fields']) {
                 $filtered[$groupName] = $childPaths;
                 continue;
@@ -294,7 +317,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
             if (array_key_exists('fields', $childPaths)) {
                 foreach ($childPaths['fields'] as $field => $fieldData) {
                     //Constructing config path for the $field
-                    $path = $prefix .'/' .$groupName .'/' .$field;
+                    $path = $prefix . '/' . $groupName . '/' . $field;
                     $element = $this->_configStructure->getElement($path);
                     if ($element
                         && ($elementData = $element->getData())
@@ -311,7 +334,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
             //Recursively filtering this group's groups.
             if (array_key_exists('groups', $childPaths) && $childPaths['groups']) {
                 $filteredGroups = $this->filterPaths(
-                    $prefix .'/' .$groupName,
+                    $prefix . '/' . $groupName,
                     $childPaths['groups'],
                     $systemXmlConfig
                 );
