@@ -16,7 +16,7 @@
             <description value="Check if email template preview action in the grid opens in a new tab"/>
             <severity value="AVERAGE"/>
             <testCaseId value="AC-6988"/>
-            <useCaseId value="ACP2E-107"/>
+            <useCaseId value="ACP2E-1323"/>
             <group value="email"/>
             <group value="WYSIWYGDisabled"/>
         </annotations>
