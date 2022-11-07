@@ -919,4 +919,46 @@ QUERY;
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertCount(1, $result['categoryList']);
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testQueryParentCategoriesProductCount()
+    {
+        $query = <<<QUERY
+{
+    categoryList(filters: {ids: {eq: "3"}}){
+        id
+        name
+        product_count
+        level
+        children{
+          name
+          product_count
+          level
+          children{
+            name
+            product_count
+            level
+            children{
+                name
+                product_count
+                level
+                children {
+                    name
+                    product_count
+                    level
+                }
+            }
+          }
+        }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertArrayHasKey('categoryList', $response);
+        $baseCategory = $response['categoryList'][0];
+        $this->assertEquals(3, $baseCategory['product_count']);
+    }
 }
