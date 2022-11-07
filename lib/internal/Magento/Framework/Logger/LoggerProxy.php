@@ -126,6 +126,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
      */
     public function error($message, array $context = [])
     {
+        $context = $this->addExceptionToContext($message, $context);
         $this->getLogger()->error($message, $context);
     }
 
@@ -134,6 +135,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
      */
     public function warning($message, array $context = [])
     {
+        $context = $this->addExceptionToContext($message, $context);
         $this->getLogger()->warning($message, $context);
     }
 
@@ -142,6 +144,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
      */
     public function notice($message, array $context = [])
     {
+        $context = $this->addExceptionToContext($message, $context);
         $this->getLogger()->notice($message, $context);
     }
 
@@ -150,6 +153,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
      */
     public function info($message, array $context = [])
     {
+        $context = $this->addExceptionToContext($message, $context);
         $this->getLogger()->info($message, $context);
     }
 
@@ -158,6 +162,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
      */
     public function debug($message, array $context = [])
     {
+        $context = $this->addExceptionToContext($message, $context);
         $this->getLogger()->debug($message, $context);
     }
 
@@ -166,6 +171,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
      */
     public function log($level, $message, array $context = [])
     {
+        $context = $this->addExceptionToContext($message, $context);
         $this->getLogger()->log($level, $message, $context);
     }
 

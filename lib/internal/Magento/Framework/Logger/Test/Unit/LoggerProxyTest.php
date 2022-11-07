@@ -124,11 +124,8 @@ class LoggerProxyTest extends TestCase
             ->withConsecutive([DeploymentConfig::class], [Monolog::class])
             ->willReturnOnConsecutiveCalls($deploymentConfig, $logger);
 
-        if (in_array($method, ['critical', 'emergency', 'alert'])) {
-            $message = new \Exception('This is an exception.');
-        } else {
-            $message = 'test';
-        }
+        $message = new \Exception('This is an exception.');
+
         $logger->expects($this->once())->method($method)->with($message);
 
         $loggerProxy = new LoggerProxy($objectManager);
