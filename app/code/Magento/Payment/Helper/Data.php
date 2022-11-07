@@ -38,7 +38,7 @@ use UnexpectedValueException;
  */
 class Data extends AbstractHelper
 {
-    public const XML_PATH_PAYMENT_METHODS = 'payment';
+    const XML_PATH_PAYMENT_METHODS = 'payment';
 
     /**
      * @var Config
@@ -46,11 +46,10 @@ class Data extends AbstractHelper
     protected $_paymentConfig;
 
     /**
-     * Layout object
+     * Layout
      *
      * @deprecated
      * @var LayoutInterface
-     * @see we don't use this variable anymore
      */
     protected $_layout;
 
@@ -221,9 +220,7 @@ class Data extends AbstractHelper
      */
     public function getInfoBlockHtml(InfoInterface $info, $storeId)
     {
-        if ($this->_appEmulation->getInitialEnvironmentInfo() === null) {
-            $this->_appEmulation->startEnvironmentEmulation($storeId, Area::AREA_FRONTEND, true);
-        }
+        $this->_appEmulation->startEnvironmentEmulation($storeId, Area::AREA_FRONTEND, true);
 
         try {
             // Retrieve specified view block from appropriate design package (depends on emulated store)

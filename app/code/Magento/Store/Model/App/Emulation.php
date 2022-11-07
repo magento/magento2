@@ -10,13 +10,12 @@
 namespace Magento\Store\Model\App;
 
 use Magento\Framework\Translate\Inline\ConfigInterface;
-use Magento\Store\Api\Data\EmulationInterface;
 
 /**
  * @api
  * @since 100.0.2
  */
-class Emulation extends \Magento\Framework\DataObject implements EmulationInterface
+class Emulation extends \Magento\Framework\DataObject
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -124,7 +123,6 @@ class Emulation extends \Magento\Framework\DataObject implements EmulationInterf
     ) {
         // Only allow a single level of emulation
         if ($this->initialEnvironmentInfo !== null) {
-            $this->logger->error(__('Environment emulation nesting is not allowed.'));
             return;
         }
 
@@ -246,15 +244,5 @@ class Emulation extends \Magento\Framework\DataObject implements EmulationInterf
         $this->_translate->loadData($initialArea);
 
         return $this;
-    }
-
-    /**
-     * Get initialEnvironmentInfo
-     *
-     * @return \Magento\Framework\DataObject|null
-     */
-    public function getInitialEnvironmentInfo()
-    {
-        return $this->initialEnvironmentInfo?:null;
     }
 }
