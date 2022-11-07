@@ -12,7 +12,9 @@ namespace Magento\CatalogWidget\Model\Rule\Condition;
 use Magento\Catalog\Model\ProductCategoryList;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
+use Zend_Db_Select_Exception;
 
 /**
  * Rule product condition data model
@@ -201,34 +203,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
         Collection $collection
     ) {
-        /*$storeId = $this->storeManager->getStore()->getId();
-        $values = $collection->getAllAttributeValues($attribute);
-        $validEntities = [];
-        if ($values) {
-            foreach ($values as $entityId => $storeValues) {
-                if (isset($storeValues[$storeId])) {
-                    if ($this->validateAttribute($storeValues[$storeId])) {
-                        $validEntities[] = $entityId;
-                    }
-                } else {
-                    if (isset($storeValues[Store::DEFAULT_STORE_ID]) &&
-                        $this->validateAttribute($storeValues[Store::DEFAULT_STORE_ID])
-                    ) {
-                        $validEntities[] = $entityId;
-                    }
-                }
-            }
-        }
-        $this->setOperator('()');
-        $this->unsetData('value_parsed');
-        if ($validEntities) {
-            $this->setData('value', implode(',', $validEntities));
-        } else {
-            $this->unsetData('value');
-        }
-
-        return $this;*/
-
         $connection = $this->_productResource->getConnection();
         switch ($attribute->getBackendType()) {
             case 'decimal':
@@ -244,8 +218,14 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 $aliasDefault = 'at_' . sha1($this->getId()) . $attribute->getAttributeCode() . '_default';
                 $aliasStore = 'at_' . sha1($this->getId()) . $attribute->getAttributeCode();
 
-                $storeDefaultId = $connection->getIfNullSql($aliasDefault . '.store_id', Store::DEFAULT_STORE_ID);
-                $storeId = $connection->getIfNullSql($aliasStore . '.store_id', $this->storeManager->getStore()->getId());
+                $storeDefaultId = $connection->getIfNullSql(
+                    $aliasDefault . '.store_id',
+                    Store::DEFAULT_STORE_ID
+                );
+                $storeId = $connection->getIfNullSql(
+                    $aliasStore . '.store_id',
+                    $this->storeManager->getStore()->getId()
+                );
                 $linkField = $attribute->getEntity()->getLinkField();
 
                 $collection->getSelect()->joinLeft(
@@ -263,8 +243,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         }
 
         $fromPart = $collection->getSelect()->getPart(Select::FROM);
-        if (isset($fromPart['search_result']['joinType'])
-            && $fromPart['search_result']['joinType'] == Select::LEFT_JOIN
+        if (isset($fromPart[$aliasStore]['joinType'])
+            && isset($fromPart[$aliasDefault]['joinType'])
         ) {
             $conditionCheck = $connection->quoteIdentifier($aliasStore . '.value_id') . " > 0";
             $conditionTrue = $connection->quoteIdentifier($aliasStore . '.value');

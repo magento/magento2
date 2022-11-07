@@ -144,6 +144,7 @@ class Builder
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _getMappedSqlCondition(
         AbstractCondition $condition,
