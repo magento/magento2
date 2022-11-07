@@ -14,7 +14,7 @@ use Magento\Store\Model\Store;
 /**
  * Export EAV entity abstract model
  *
- * phpcs:disable Magento2.Classes.AbstractApi
+ * phpcs:ignore Magento2.Classes.AbstractApi
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -130,7 +130,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      * @param AbstractCollection $collection
      * @return AbstractCollection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * phpcs:disable Generic.Metrics.NestingLevel
      */
     public function filterEntityCollection(AbstractCollection $collection)
     {
@@ -167,13 +166,11 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
                 } elseif (Export::FILTER_TYPE_MULTISELECT == $attributeFilterType) {
                     if (is_array($exportFilter[$attributeCode])) {
                         array_filter($exportFilter[$attributeCode]);
-                        if (!empty($exportFilter[$attributeCode])) {
-                            foreach ($exportFilter[$attributeCode] as $val) {
-                                $collection->addAttributeToFilter(
-                                    $attributeCode,
-                                    ['finset' => $val]
-                                );
-                            }
+                        foreach ($exportFilter[$attributeCode] as $val) {
+                            $collection->addAttributeToFilter(
+                                $attributeCode,
+                                ['finset' => $val]
+                            );
                         }
                     }
                 } elseif (Export::FILTER_TYPE_INPUT == $attributeFilterType) {
@@ -189,11 +186,11 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
                         $to = array_shift($exportFilter[$attributeCode]);
 
                         if (is_scalar($from) && !empty($from)) {
-                            $date = (new \DateTime($from))->format('m/d/Y');
+                            $date = $this->_localeDate->date($from);
                             $collection->addAttributeToFilter($attributeCode, ['from' => $date, 'date' => true]);
                         }
                         if (is_scalar($to) && !empty($to)) {
-                            $date = (new \DateTime($to))->format('m/d/Y');
+                            $date = $this->_localeDate->date($to);
                             $collection->addAttributeToFilter($attributeCode, ['to' => $date, 'date' => true]);
                         }
                     }
@@ -214,7 +211,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
         }
         return $collection;
     }
-    // phpcs:enable Generic.Metrics.NestingLevel
 
     /**
      * Add not skipped attributes to select
