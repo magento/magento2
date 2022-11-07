@@ -155,7 +155,7 @@ QUERY;
         $lastPageQuery = sprintf($baseQuery, $page1Result['categories']['page_info']['total_pages']);
         $lastPageResult = $this->graphQlQuery($lastPageQuery);
         $this->assertCount(1, $lastPageResult['categories']['items']);
-        $this->assertEquals('Category 1.2', $lastPageResult['categories']['items'][0]['name']);
+        $this->assertEquals('Category 12', $lastPageResult['categories']['items'][0]['name']);
     }
 
     /**

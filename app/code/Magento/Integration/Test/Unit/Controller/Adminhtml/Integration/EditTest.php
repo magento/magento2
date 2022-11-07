@@ -62,7 +62,7 @@ class EditTest extends IntegrationTest
     {
         $exceptionMessage = 'This integration no longer exists.';
         // verify the error
-        $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($exceptionMessage);
         $this->_requestMock->expects($this->any())->method('getParam')->willReturn(self::INTEGRATION_ID);
         // put data in session, the magic function getFormData is called so, must match __call method name
         $this->_backendSessionMock->expects(
@@ -93,7 +93,7 @@ class EditTest extends IntegrationTest
     {
         $exceptionMessage = 'Integration ID is not specified or is invalid.';
         // verify the error
-        $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($exceptionMessage);
         $this->_verifyLoadAndRenderLayout();
         $integrationContr = $this->_createIntegrationController('Edit');
         $integrationContr->execute();
@@ -103,7 +103,7 @@ class EditTest extends IntegrationTest
     {
         $exceptionMessage = 'Integration ID is not specified or is invalid.';
         // verify the error
-        $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($exceptionMessage);
         $this->_controller = $this->_createIntegrationController('Edit');
         $this->_controller->execute();
     }

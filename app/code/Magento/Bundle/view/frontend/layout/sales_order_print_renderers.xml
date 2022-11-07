@@ -10,5 +10,10 @@
         <referenceBlock name="sales.order.print.renderers">
             <block class="Magento\Bundle\Block\Sales\Order\Items\Renderer" name="sales.order.print.renderers.bundle" as="bundle" template="Magento_Bundle::sales/order/items/renderer.phtml"/>
         </referenceBlock>
+        <referenceBlock name="sales.order.print.renderers.bundle">
+            <arguments>
+                <argument name="view_model" xsi:type="object">Magento\Bundle\ViewModel\Sales\Order\Items\Renderer</argument>
+            </arguments>
+        </referenceBlock>
     </body>
 </page>

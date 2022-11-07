@@ -12,14 +12,16 @@ use Magento\Cms\Model\ResourceModel\Block as ResourceBlock;
 use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollectionFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\EntityManager\HydratorInterface;
 
 /**
- * Class BlockRepository
+ * Default block repo impl.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BlockRepository implements BlockRepositoryInterface
@@ -70,6 +72,11 @@ class BlockRepository implements BlockRepositoryInterface
     private $collectionProcessor;
 
     /**
+     * @var HydratorInterface
+     */
+    private $hydrator;
+
+    /**
      * @param ResourceBlock $resource
      * @param BlockFactory $blockFactory
      * @param Data\BlockInterfaceFactory $dataBlockFactory
@@ -79,6 +86,9 @@ class BlockRepository implements BlockRepositoryInterface
      * @param DataObjectProcessor $dataObjectProcessor
      * @param StoreManagerInterface $storeManager
      * @param CollectionProcessorInterface $collectionProcessor
+     * @param HydratorInterface|null $hydrator
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ResourceBlock $resource,
@@ -89,7 +99,8 @@ class BlockRepository implements BlockRepositoryInterface
         DataObjectHelper $dataObjectHelper,
         DataObjectProcessor $dataObjectProcessor,
         StoreManagerInterface $storeManager,
-        CollectionProcessorInterface $collectionProcessor = null
+        CollectionProcessorInterface $collectionProcessor = null,
+        ?HydratorInterface $hydrator = null
     ) {
         $this->resource = $resource;
         $this->blockFactory = $blockFactory;
@@ -100,6 +111,7 @@ class BlockRepository implements BlockRepositoryInterface
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->storeManager = $storeManager;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
+        $this->hydrator = $hydrator ?? ObjectManager::getInstance()->get(HydratorInterface::class);
     }
 
     /**
@@ -113,6 +125,10 @@ class BlockRepository implements BlockRepositoryInterface
     {
         if (empty($block->getStoreId())) {
             $block->setStoreId($this->storeManager->getStore()->getId());
+        }
+
+        if ($block->getId() && $block instanceof Block && !$block->getOrigData()) {
+            $block = $this->hydrator->hydrate($this->getById($block->getId()), $this->hydrator->extract($block));
         }
 
         try {
@@ -196,11 +212,12 @@ class BlockRepository implements BlockRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()
     {
+        //phpcs:disable Magento2.PHP.LiteralNamespaces
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
                 'Magento\Cms\Model\Api\SearchCriteria\BlockCollectionProcessor'

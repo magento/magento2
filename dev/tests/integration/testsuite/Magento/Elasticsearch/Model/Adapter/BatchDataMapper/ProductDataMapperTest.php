@@ -54,7 +54,7 @@ class ProductDataMapperTest extends TestCase
         $this->model = $this->objectManager->create(
             ProductDataMapper::class,
             [
-                'additionalFieldsProvider' => $additionalFieldsProvider
+                'additionalFieldsProvider' => $additionalFieldsProvider,
             ]
         );
         $this->eavConfig = $this->objectManager->get(Config::class);
@@ -69,7 +69,6 @@ class ProductDataMapperTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Elasticsearch/_files/select_attribute_store_labels.php
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch
      */
     public function testMapSelectAttributeWithDifferentStoreLabels(): void
     {
@@ -83,24 +82,24 @@ class ProductDataMapperTest extends TestCase
         $defaultStoreMap = [
             $productId => [
                 'store_id' => $defaultStore->getId(),
-                'select_attribute' => $attributeValue,
+                'select_attribute' => (int)$attributeValue,
                 'select_attribute_value' => 'Table_default',
-            ]
+            ],
         ];
         $secondStoreMap = [
             $productId => [
                 'store_id' => $secondStore->getId(),
-                'select_attribute' => $attributeValue,
+                'select_attribute' => (int)$attributeValue,
                 'select_attribute_value' => 'Table_fixture_second_store',
-            ]
+            ],
         ];
         $data = [
             $productId => [
-                $attributeId => $attributeValue
-            ]
+                $attributeId => $attributeValue,
+            ],
         ];
-        $this->assertEquals($defaultStoreMap, $this->model->map($data, $defaultStore->getId(), []));
-        $this->assertEquals($secondStoreMap, $this->model->map($data, $secondStore->getId(), []));
+        $this->assertSame($defaultStoreMap, $this->model->map($data, $defaultStore->getId(), []));
+        $this->assertSame($secondStoreMap, $this->model->map($data, $secondStore->getId(), []));
     }
 
     /**

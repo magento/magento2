@@ -6,56 +6,65 @@
 
 namespace Magento\Analytics\ReportXml;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ResourceConnection\ConfigInterface as ResourceConfigInterface;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 
 /**
  * Creates connection instance for export according to existing one
+ *
  * This connection does not use buffered statement, also this connection is not persistent
  */
 class ConnectionFactory
 {
     /**
-     * @var ResourceConnection
+     * @var ResourceConfigInterface
      */
-    private $resourceConnection;
+    private $resourceConfig;
 
     /**
-     * @var ObjectManagerInterface
+     * @var DeploymentConfig
      */
-    private $objectManager;
+    private $deploymentConfig;
 
     /**
-     * @param ResourceConnection $resourceConnection
-     * @param ObjectManagerInterface $objectManager
+     * @var ConnectionFactoryInterface
+     */
+    private $connectionFactory;
+
+    /**
+     * @param ResourceConfigInterface $resourceConfig
+     * @param DeploymentConfig $deploymentConfig
+     * @param ConnectionFactoryInterface $connectionFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
-        ObjectManagerInterface $objectManager
+        ResourceConfigInterface $resourceConfig,
+        DeploymentConfig $deploymentConfig,
+        ConnectionFactoryInterface $connectionFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
-        $this->objectManager = $objectManager;
+        $this->resourceConfig = $resourceConfig;
+        $this->deploymentConfig = $deploymentConfig;
+        $this->connectionFactory = $connectionFactory;
     }
 
     /**
      * Creates one-time connection for export
      *
-     * @param string $connectionName
+     * @param string $resourceName
      * @return AdapterInterface
      */
-    public function getConnection($connectionName)
+    public function getConnection($resourceName)
     {
-        $connection = $this->resourceConnection->getConnection($connectionName);
-        $connectionClassName = get_class($connection);
-        $configData = $connection->getConfig();
+        $connectionName = $this->resourceConfig->getConnectionName($resourceName);
+        $configData = $this->deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS . '/' . $connectionName
+        );
         $configData['use_buffered_query'] = false;
         unset($configData['persistent']);
-        return $this->objectManager->create(
-            $connectionClassName,
-            [
-                'config' => $configData
-            ]
-        );
+        $connection = $this->connectionFactory->create($configData);
+
+        return $connection;
     }
 }

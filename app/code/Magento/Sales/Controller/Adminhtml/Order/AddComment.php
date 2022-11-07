@@ -10,6 +10,8 @@ use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 
 /**
  * Class AddComment
+ *
+ * Controller responsible for addition of the order comment to the order
  */
 class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements HttpPostActionInterface
 {
@@ -18,12 +20,12 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::comment';
+    public const ADMIN_RESOURCE = 'Magento_Sales::comment';
 
     /**
      * ACL resource needed to send comment email notification
      */
-    const ADMIN_SALES_EMAIL_RESOURCE = 'Magento_Sales::emails';
+    public const ADMIN_SALES_EMAIL_RESOURCE = 'Magento_Sales::emails';
 
     /**
      * Add order comment action
@@ -42,6 +44,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
                     );
                 }
 
+                $order->setStatus($data['status']);
                 $notify = $data['is_customer_notified'] ?? false;
                 $visible = $data['is_visible_on_front'] ?? false;
 
@@ -49,12 +52,11 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
                     $notify = false;
                 }
 
-                $history = $order->addStatusHistoryComment($data['comment'], $data['status']);
+                $comment = trim(strip_tags($data['comment']));
+                $history = $order->addStatusHistoryComment($comment, $data['status']);
                 $history->setIsVisibleOnFront($visible);
                 $history->setIsCustomerNotified($notify);
                 $history->save();
-
-                $comment = trim(strip_tags($data['comment']));
 
                 $order->save();
                 /** @var OrderCommentSender $orderCommentSender */

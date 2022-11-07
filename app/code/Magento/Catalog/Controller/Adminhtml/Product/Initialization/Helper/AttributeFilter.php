@@ -80,7 +80,7 @@ class AttributeFilter
             // For non-numeric types set the attributeValue to 'false' to trigger their removal from the db
             if ($attributeType === 'varchar' || $attributeType === 'text' || $attributeType === 'datetime') {
                 $attribute->setIsRequired(false);
-                $productData[$attributeCode] = false;
+                $productData[$attributeCode] = $attribute->getDefaultValue() ?: false;
             } else {
                 $productData[$attributeCode] = null;
             }
@@ -102,6 +102,6 @@ class AttributeFilter
     {
         $considerUseDefaultsAttribute = !isset($useDefaults[$attribute]) || $useDefaults[$attribute] === '1';
 
-        return ($value === '' && $considerUseDefaultsAttribute && !$product->getData($attribute));
+        return ($value === '' && $considerUseDefaultsAttribute && ($product->getData($attribute) === null));
     }
 }

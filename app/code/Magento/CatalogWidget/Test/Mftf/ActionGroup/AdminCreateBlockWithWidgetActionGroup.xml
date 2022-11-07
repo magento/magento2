@@ -18,11 +18,11 @@
             <argument name="fieldCondition" type="string"/>
         </arguments>
 
-        <click stepKey="clickShowHideButton" selector="{{BlockWYSIWYGSection.ShowHideBtn}}"/>
+        <click stepKey="clickShowHideButton" selector="{{TinyMCESection.ShowHideBtn}}"/>
         <waitForElementVisible stepKey="waitForInsertWidgetButton" selector="{{CatalogWidgetSection.insertWidgetButton}}"/>
 
         <selectOption stepKey="selectAllStoreView" userInput="All Store Views" selector="{{CatalogWidgetSection.storeViewOption}}"/>
-        <fillField selector="{{BlockContentSection.TextArea}}" userInput="" stepKey="makeContentFieldEmpty"/>
+        <fillField selector="{{TinyMCESection.Content}}" userInput="" stepKey="makeContentFieldEmpty"/>
 
         <click selector="{{CatalogWidgetSection.insertWidgetButton}}" stepKey="clickInsertWidgetButton"/>
         <waitForElementVisible stepKey="waitForInsertWidgetFrame" selector="{{InsertWidgetSection.widgetTypeDropDown}}" time="10"/>

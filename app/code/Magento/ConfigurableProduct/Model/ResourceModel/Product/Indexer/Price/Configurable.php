@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price;
 
+use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -13,10 +16,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\BaseFinalPri
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\CatalogInventory\Model\Stock;
-use Magento\CatalogInventory\Model\Configuration;
 
 /**
  * Configurable Products Price Indexer Resource model
@@ -76,6 +76,16 @@ class Configurable implements DimensionalIndexerInterface
     private $scopeConfig;
 
     /**
+     * @var BaseSelectProcessorInterface
+     */
+    private $baseSelectProcessor;
+
+    /**
+     * @var OptionsIndexerInterface
+     */
+    private $optionsIndexer;
+
+    /**
      * @param BaseFinalPrice $baseFinalPrice
      * @param IndexTableStructureFactory $indexTableStructureFactory
      * @param TableMaintainer $tableMaintainer
@@ -84,7 +94,10 @@ class Configurable implements DimensionalIndexerInterface
      * @param BasePriceModifier $basePriceModifier
      * @param bool $fullReindexAction
      * @param string $connectionName
-     * @param ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface|null $scopeConfig
+     * @param BaseSelectProcessorInterface|null $baseSelectProcessor
+     * @param OptionsIndexerInterface|null $optionsIndexer
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         BaseFinalPrice $baseFinalPrice,
@@ -95,7 +108,9 @@ class Configurable implements DimensionalIndexerInterface
         BasePriceModifier $basePriceModifier,
         $fullReindexAction = false,
         $connectionName = 'indexer',
-        ScopeConfigInterface $scopeConfig = null
+        ScopeConfigInterface $scopeConfig = null,
+        ?BaseSelectProcessorInterface $baseSelectProcessor = null,
+        ?OptionsIndexerInterface $optionsIndexer = null
     ) {
         $this->baseFinalPrice = $baseFinalPrice;
         $this->indexTableStructureFactory = $indexTableStructureFactory;
@@ -106,6 +121,10 @@ class Configurable implements DimensionalIndexerInterface
         $this->fullReindexAction = $fullReindexAction;
         $this->basePriceModifier = $basePriceModifier;
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->baseSelectProcessor = $baseSelectProcessor ?:
+            ObjectManager::getInstance()->get(BaseSelectProcessorInterface::class);
+        $this->optionsIndexer = $optionsIndexer
+            ?: ObjectManager::getInstance()->get(OptionsIndexerInterface::class);
     }
 
     /**
@@ -134,7 +153,21 @@ class Configurable implements DimensionalIndexerInterface
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE,
             iterator_to_array($entityIds)
         );
-        $this->tableMaintainer->insertFromSelect($select, $temporaryPriceTable->getTableName(), []);
+        $this->tableMaintainer->insertFromSelect(
+            $select,
+            $temporaryPriceTable->getTableName(),
+            [
+                "entity_id",
+                "customer_group_id",
+                "website_id",
+                "tax_class_id",
+                "price",
+                "final_price",
+                "min_price",
+                "max_price",
+                "tier_price",
+            ]
+        );
 
         $this->basePriceModifier->modifyPrice($temporaryPriceTable, iterator_to_array($entityIds));
         $this->applyConfigurableOption($temporaryPriceTable, $dimensions, iterator_to_array($entityIds));
@@ -162,68 +195,13 @@ class Configurable implements DimensionalIndexerInterface
             true
         );
 
-        $this->fillTemporaryOptionsTable($temporaryOptionsTableName, $dimensions, $entityIds);
+        $indexTableName = $this->getMainTable($dimensions);
+        $this->optionsIndexer->execute($indexTableName, $temporaryOptionsTableName, $entityIds);
         $this->updateTemporaryTable($temporaryPriceTable->getTableName(), $temporaryOptionsTableName);
 
         $this->getConnection()->delete($temporaryOptionsTableName);
 
         return $this;
-    }
-
-    /**
-     * Put data into catalog product price indexer config option temp table
-     *
-     * @param string $temporaryOptionsTableName
-     * @param array $dimensions
-     * @param array $entityIds
-     *
-     * @return void
-     * @throws \Exception
-     */
-    private function fillTemporaryOptionsTable(string $temporaryOptionsTableName, array $dimensions, array $entityIds)
-    {
-        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
-        $linkField = $metadata->getLinkField();
-
-        $select = $this->getConnection()->select()->from(
-            ['i' => $this->getMainTable($dimensions)],
-            []
-        )->join(
-            ['l' => $this->getTable('catalog_product_super_link')],
-            'l.product_id = i.entity_id',
-            []
-        )->join(
-            ['le' => $this->getTable('catalog_product_entity')],
-            'le.' . $linkField . ' = l.parent_id',
-            []
-        );
-
-        // Does not make sense to extend query if out of stock products won't appear in tables for indexing
-        if ($this->isConfigShowOutOfStock()) {
-            $select->join(
-                ['si' => $this->getTable('cataloginventory_stock_item')],
-                'si.product_id = l.product_id',
-                []
-            );
-            $select->where('si.is_in_stock = ?', Stock::STOCK_IN_STOCK);
-        }
-
-        $select->columns(
-            [
-                'le.entity_id',
-                'customer_group_id',
-                'website_id',
-                'MIN(final_price)',
-                'MAX(final_price)',
-                'MIN(tier_price)',
-            ]
-        )->group(
-            ['le.entity_id', 'customer_group_id', 'website_id']
-        );
-        if ($entityIds !== null) {
-            $select->where('le.entity_id IN (?)', $entityIds);
-        }
-        $this->tableMaintainer->insertFromSelect($select, $temporaryOptionsTableName, []);
     }
 
     /**
@@ -294,18 +272,5 @@ class Configurable implements DimensionalIndexerInterface
     private function getTable($tableName)
     {
         return $this->resource->getTableName($tableName, $this->connectionName);
-    }
-
-    /**
-     * Is flag Show Out Of Stock setted
-     *
-     * @return bool
-     */
-    private function isConfigShowOutOfStock(): bool
-    {
-        return $this->scopeConfig->isSetFlag(
-            Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
-            ScopeInterface::SCOPE_STORE
-        );
     }
 }

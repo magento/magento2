@@ -66,7 +66,7 @@
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_CA.state}}" stepKey="selectCaliforniaRegion"/>
         <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{US_Address_CA.postcode}}" stepKey="inputPostCode"/>
         <!--Step 6: Go to Homepage-->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePageAfterChangingShippingAndTaxSection"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePageAfterChangingShippingAndTaxSection"/>
         <!--Step 7: Go to shopping cart and check "Estimate Shipping and Tax" fields values are saved-->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" after="goToHomePageAfterChangingShippingAndTaxSection" stepKey="goToShoppingCartAfterChangingShippingAndTaxSection"/>
         <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingAndTaxAfterChanging" />

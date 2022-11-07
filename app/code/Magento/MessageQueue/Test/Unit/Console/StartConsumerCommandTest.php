@@ -90,25 +90,26 @@ class StartConsumerCommandTest extends TestCase
      *
      * @param string|null $pidFilePath
      * @param bool $singleThread
+     * @param int|null $multiProcess
      * @param int $lockExpects
-     * @param int $isLockedExpects
      * @param bool $isLocked
      * @param int $unlockExpects
      * @param int $runProcessExpects
      * @param int $expectedReturn
      * @return void
+     * @throws \Exception
      * @dataProvider executeDataProvider
      */
     public function testExecute(
-        $pidFilePath,
-        $singleThread,
-        $lockExpects,
-        $isLockedExpects,
-        $isLocked,
-        $unlockExpects,
-        $runProcessExpects,
-        $expectedReturn
-    ) {
+        ?string $pidFilePath,
+        bool $singleThread,
+        ?int $multiProcess,
+        int $lockExpects,
+        bool $isLocked,
+        int $unlockExpects,
+        int $runProcessExpects,
+        int $expectedReturn
+    ): void {
         $areaCode = 'area_code';
         $numberOfMessages = 10;
         $batchSize = null;
@@ -122,19 +123,21 @@ class StartConsumerCommandTest extends TestCase
         $input->expects($this->once())->method('getArgument')
             ->with(StartConsumerCommand::ARGUMENT_CONSUMER)
             ->willReturn($consumerName);
-        $input->expects($this->exactly(5))->method('getOption')
+        $input->expects($this->exactly(6))->method('getOption')
             ->withConsecutive(
                 [StartConsumerCommand::OPTION_NUMBER_OF_MESSAGES],
                 [StartConsumerCommand::OPTION_BATCH_SIZE],
                 [StartConsumerCommand::OPTION_AREACODE],
                 [StartConsumerCommand::PID_FILE_PATH],
-                [StartConsumerCommand::OPTION_SINGLE_THREAD]
+                [StartConsumerCommand::OPTION_SINGLE_THREAD],
+                [StartConsumerCommand::OPTION_MULTI_PROCESS]
             )->willReturnOnConsecutiveCalls(
                 $numberOfMessages,
                 $batchSize,
                 $areaCode,
                 $pidFilePath,
-                $singleThread
+                $singleThread,
+                $multiProcess
             );
         $this->appState->expects($this->exactly($runProcessExpects))->method('setAreaCode')->with($areaCode);
         $consumer = $this->getMockBuilder(ConsumerInterface::class)
@@ -144,14 +147,15 @@ class StartConsumerCommandTest extends TestCase
             ->method('get')->with($consumerName, $batchSize)->willReturn($consumer);
         $consumer->expects($this->exactly($runProcessExpects))->method('process')->with($numberOfMessages);
 
-        $this->lockManagerMock->expects($this->exactly($isLockedExpects))
-            ->method('isLocked')
-            ->with(md5($consumerName)) //phpcs:ignore
-            ->willReturn($isLocked);
+        if ($multiProcess !== null) {
+            $consumerName .= '-' . $multiProcess;
+        }
 
         $this->lockManagerMock->expects($this->exactly($lockExpects))
             ->method('lock')
-            ->with(md5($consumerName)); //phpcs:ignore
+            ->with(md5($consumerName))//phpcs:ignore
+            ->willReturn($isLocked);
+
         $this->lockManagerMock->expects($this->exactly($unlockExpects))
             ->method('unlock')
             ->with(md5($consumerName)); //phpcs:ignore
@@ -165,15 +169,15 @@ class StartConsumerCommandTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public function executeDataProvider(): array
     {
         return [
             [
                 'pidFilePath' => null,
                 'singleThread' => false,
+                'multiProcess' => null,
                 'lockExpects' => 0,
-                'isLockedExpects' => 0,
-                'isLocked' => false,
+                'isLocked' => true,
                 'unlockExpects' => 0,
                 'runProcessExpects' => 1,
                 'expectedReturn' => Cli::RETURN_SUCCESS,
@@ -181,9 +185,9 @@ class StartConsumerCommandTest extends TestCase
             [
                 'pidFilePath' => '/var/consumer.pid',
                 'singleThread' => true,
+                'multiProcess' => null,
                 'lockExpects' => 1,
-                'isLockedExpects' => 1,
-                'isLocked' => false,
+                'isLocked' => true,
                 'unlockExpects' => 1,
                 'runProcessExpects' => 1,
                 'expectedReturn' => Cli::RETURN_SUCCESS,
@@ -191,9 +195,29 @@ class StartConsumerCommandTest extends TestCase
             [
                 'pidFilePath' => '/var/consumer.pid',
                 'singleThread' => true,
-                'lockExpects' => 0,
-                'isLockedExpects' => 1,
+                'multiProcess' => null,
+                'lockExpects' => 1,
+                'isLocked' => false,
+                'unlockExpects' => 0,
+                'runProcessExpects' => 0,
+                'expectedReturn' => Cli::RETURN_FAILURE,
+            ],
+            [
+                'pidFilePath' => null,
+                'singleThread' => false,
+                'multiProcess' => 3,
+                'lockExpects' => 1,
                 'isLocked' => true,
+                'unlockExpects' => 1,
+                'runProcessExpects' => 1,
+                'expectedReturn' => Cli::RETURN_SUCCESS,
+            ],
+            [
+                'pidFilePath' => null,
+                'singleThread' => false,
+                'multiProcess' => 3,
+                'lockExpects' => 1,
+                'isLocked' => false,
                 'unlockExpects' => 0,
                 'runProcessExpects' => 0,
                 'expectedReturn' => Cli::RETURN_FAILURE,

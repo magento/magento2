@@ -24,8 +24,7 @@
             <actionGroup ref="RestoreLayoutSetting" stepKey="sampleActionGroup"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminOpenWebConfigurationPageActionGroup" stepKey="navigateToWebConfigurationPage"/>
         <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true"/>
         <waitForElementVisible selector="{{DefaultLayoutsSection.categoryLayout}}" stepKey="waitForDefaultCategoryLayout"/>
         <seeOptionIsSelected selector="{{DefaultLayoutsSection.categoryLayout}}" userInput="No layout updates" stepKey="seeNoLayoutUpdatesSelected"/>

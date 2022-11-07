@@ -42,6 +42,8 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     *  Returns serialize jsLayout
+     *
      * @return string
      */
     public function getJsLayout()
@@ -60,7 +62,8 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
             'autocomplete' => $this->escapeHtml($this->isAutocompleteEnabled()),
             'customerRegisterUrl' => $this->escapeUrl($this->getCustomerRegisterUrlUrl()),
             'customerForgotPasswordUrl' => $this->escapeUrl($this->getCustomerForgotPasswordUrl()),
-            'baseUrl' => $this->escapeUrl($this->getBaseUrl())
+            'baseUrl' => $this->escapeUrl($this->getBaseUrl()),
+            'customerLoginUrl' => $this->getUrl('customer/ajax/login'),
         ];
     }
 
@@ -70,7 +73,7 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
      * Added in scope of https://github.com/magento/magento2/pull/8617
      *
      * @return bool|string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getSerializedConfig()
     {

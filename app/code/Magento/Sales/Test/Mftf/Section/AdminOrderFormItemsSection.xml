@@ -35,5 +35,8 @@
         <element name="configure" type="button" selector=".product-configure-block button.action-default.scalable" timeout="30"/>
         <element name="couponCode" type="input" selector="#order-coupons input" timeout="30"/>
         <element name="applyCoupon" type="button" selector="#order-coupons button"/>
+        <element name="removeCoupon" type="button" selector=".added-coupon-code .action-remove"/>
+        <element name="totalRecords" type="text" selector="#sales_order_create_search_grid-total-count"/>
+        <element name="numberOfPages" type="text" selector="div.admin__data-grid-pager-wrap div.admin__data-grid-pager > label"/>
     </section>
 </sections>

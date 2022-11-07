@@ -36,8 +36,6 @@ class Inline extends \Magento\Framework\View\Element\Template
     protected $_template = 'Magento_GiftMessage::inline.phtml';
 
     /**
-     * Gift message message
-     *
      * @var \Magento\GiftMessage\Helper\Message|null
      */
     protected $_giftMessageMessage = null;
@@ -280,7 +278,7 @@ class Inline extends \Magento\Framework\View\Element\Template
     /**
      * Call method getItemsHasMessages
      *
-     * @deprecated Misspelled method
+     * @deprecated 100.2.4 Misspelled method
      * @see getItemsHasMessages
      */
     public function getItemsHasMesssages()
@@ -324,7 +322,8 @@ class Inline extends \Magento\Framework\View\Element\Template
      */
     public function getEscaped($value, $defaultValue = '')
     {
-        return $this->escapeHtml(trim($value) != '' ? $value : $defaultValue);
+        $value = ($value !== null && trim($value) != '') ? $value : $defaultValue;
+        return $this->escapeHtml($value);
     }
 
     /**
@@ -359,7 +358,8 @@ class Inline extends \Magento\Framework\View\Element\Template
      */
     public function isItemMessagesAvailable($item)
     {
-        $type = substr($this->getType(), 0, 5) == 'multi' ? 'address_item' : 'item';
+        $type = $this->getType() !== null && substr($this->getType(), 0, 5) === 'multi' ?
+            'address_item' : 'item';
         return $this->_giftMessageMessage->isMessagesAllowed($type, $item);
     }
 

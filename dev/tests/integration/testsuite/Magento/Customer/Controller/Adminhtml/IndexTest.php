@@ -6,13 +6,21 @@
 
 namespace Magento\Customer\Controller\Adminhtml;
 
+use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Model\Session;
 use Magento\Customer\Api\CustomerNameGenerationInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\EmailNotification;
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Acl\Builder;
+use Magento\Framework\App\Area;
+use Magento\Framework\Mail\Template\TransportBuilder;
+use Magento\Framework\Mail\TransportInterface;
+use Magento\Framework\Message\MessageInterface;
+use Magento\TestFramework\Bootstrap;
+use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @magentoAppArea adminhtml
@@ -21,8 +29,6 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 class IndexTest extends AbstractBackendController
 {
     /**
-     * Base controller URL
-     *
      * @var string
      */
     private $baseControllerUrl = 'backend/customer/index/';
@@ -102,7 +108,7 @@ class IndexTest extends AbstractBackendController
         /**
          * Check that no errors were generated and set to session
          */
-        $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
+        $this->assertSessionMessages($this->isEmpty(), MessageInterface::TYPE_ERROR);
     }
 
     /**
@@ -148,7 +154,7 @@ class IndexTest extends AbstractBackendController
                 'customer_address' => [],
             ],
         ];
-        $context = Bootstrap::getObjectManager()->get(\Magento\Backend\Block\Template\Context::class);
+        $context = BootstrapHelper::getObjectManager()->get(Context::class);
         $context->getBackendSession()->setCustomerData($customerData);
         $this->testNewAction();
     }
@@ -186,9 +192,35 @@ class IndexTest extends AbstractBackendController
         $this->dispatch('backend/customer/index/resetPassword');
         $this->assertSessionMessages(
             $this->equalTo(['The customer will receive an email with a link to reset password.']),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
+            MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringContains($this->baseControllerUrl . 'edit'));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testAclDeleteActionAllow()
+    {
+        $this->getRequest()->setParam('id', 1);
+        $this->dispatch('backend/customer/index/edit');
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('Delete Customer', $body);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testAclDeleteActionDeny()
+    {
+        $resource= 'Magento_Customer::delete';
+        $this->_objectManager->get(Builder::class)
+            ->getAcl()
+            ->deny(Bootstrap::ADMIN_ROLE_ID, $resource);
+        $this->getRequest()->setParam('id', 1);
+        $this->dispatch('backend/customer/index/edit');
+        $body = $this->getResponse()->getBody();
+        $this->assertStringNotContainsString('Delete Customer', $body);
     }
 
     /**
@@ -199,7 +231,7 @@ class IndexTest extends AbstractBackendController
      * @param array $sender
      * @param int $customerId
      * @param string|null $newEmail
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     protected function prepareEmailMock(
@@ -208,18 +240,18 @@ class IndexTest extends AbstractBackendController
         array $sender,
         int $customerId,
         $newEmail = null
-    ) : \PHPUnit\Framework\MockObject\MockObject {
-        $area = \Magento\Framework\App\Area::AREA_FRONTEND;
+    ) : MockObject {
+        $area = Area::AREA_FRONTEND;
         $customer = $this->customerRepository->getById($customerId);
         $storeId = $customer->getStoreId();
         $name = $this->customerViewHelper->getCustomerName($customer);
 
-        $transportMock = $this->getMockBuilder(\Magento\Framework\Mail\TransportInterface::class)
+        $transportMock = $this->getMockBuilder(TransportInterface::class)
             ->setMethods(['sendMessage'])
             ->getMockForAbstractClass();
         $transportMock->expects($this->exactly($occurrenceNumber))
             ->method('sendMessage');
-        $transportBuilderMock = $this->getMockBuilder(\Magento\Framework\Mail\Template\TransportBuilder::class)
+        $transportBuilderMock = $this->getMockBuilder(TransportBuilder::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -254,11 +286,11 @@ class IndexTest extends AbstractBackendController
     }
 
     /**
-     * @param \PHPUnit\Framework\MockObject\MockObject $transportBuilderMock
+     * @param MockObject $transportBuilderMock
      * @param string $className
      */
     protected function addEmailMockToClass(
-        \PHPUnit\Framework\MockObject\MockObject $transportBuilderMock,
+        MockObject $transportBuilderMock,
         $className
     ) {
         $mocked = $this->_objectManager->create(

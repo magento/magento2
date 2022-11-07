@@ -162,6 +162,6 @@ class CacheTest extends TestCase
             ->with(self::LOCK_PREFIX . $identifier)
             ->willReturn(\uniqid('some_rand-', true));
 
-        $this->assertEquals(false, $this->cache->lock($identifier));
+        $this->assertEquals(false, $this->cache->lock($identifier, 0));
     }
 }

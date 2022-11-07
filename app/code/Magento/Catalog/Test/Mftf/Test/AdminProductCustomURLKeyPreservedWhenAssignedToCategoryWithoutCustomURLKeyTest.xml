@@ -34,9 +34,8 @@
                 <argument name="customStore" value="storeViewData"/>
             </actionGroup>
 
-            <!--Run full reindex and clear caches -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" arguments="full_page" stepKey="flushCache"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProductFirst" stepKey="deleteFirstSimpleProduct"/>
@@ -46,6 +45,7 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
                 <argument name="customStore" value="storeViewData"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -79,8 +79,8 @@
         <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategory"/>
 
         <executeJS function="return '$createCategory.name$'.toLowerCase();" stepKey="categoryNameLower" />
-        <executeJS function="return '$createSimpleProductFirst.name$'.toLowerCase();" stepKey="simpleProductFirstNameLower" />
-        <executeJS function="return '$createSimpleProductSecond.name$'.toLowerCase();" stepKey="simpleProductSecondNameLower" />
+        <executeJS function="return '$createSimpleProductFirst.custom_attributes[url_key]$'.toLowerCase();" stepKey="simpleProductFirstNameLower" />
+        <executeJS function="return '$createSimpleProductSecond.custom_attributes[url_key]$'.toLowerCase();" stepKey="simpleProductSecondNameLower" />
 
         <!-- Make assertions on frontend -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>

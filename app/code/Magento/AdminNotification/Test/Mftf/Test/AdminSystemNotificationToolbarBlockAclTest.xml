@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSystemNotificationToolbarBlockAclTest">
+        <annotations>
+            <features value="AdminNotification"/>
+            <stories value="Acl notification toolbar"/>
+            <title value="Admin system notification toolbar block acl test"/>
+            <description value="Admin should not see system notification toolbar block if acl not restricted"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-36011"/>
+            <group value="menu"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+            <actionGroup ref="AdminFillUserRoleRequiredDataActionGroup" stepKey="fillUserRoleRequiredData">
+                <argument name="User" value="adminRole"/>
+                <argument name="restrictedRole" value="Stores"/>
+            </actionGroup>
+            <actionGroup ref="AdminUserClickRoleResourceTabActionGroup" stepKey="goToRoleResourcesTab" />
+            <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="addRestrictedRoleStores">
+                <argument name="User" value="adminRole"/>
+                <argument name="restrictedRole" value="Products"/>
+            </actionGroup>
+            <actionGroup ref="AdminUserSaveRoleActionGroup" stepKey="saveUserRole" />
+
+            <actionGroup ref="AdminCreateUserActionGroup" stepKey="createAdminUser">
+                <argument name="role" value="adminRole"/>
+                <argument name="User" value="admin2"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsSaleRoleUser"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Delete created data-->
+            <actionGroup ref="AdminUserOpenAdminRolesPageActionGroup" stepKey="navigateToUserRoleGrid"/>
+            <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
+                <argument name="role" value="adminRole"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenAdminUsersPageActionGroup" stepKey="goToAllUsersPage"/>
+            <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="deleteUser">
+                <argument name="userName" value="{{admin2.username}}"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUser">
+            <argument name="username" value="{{admin2.username}}"/>
+            <argument name="password" value="{{admin2.password}}"/>
+        </actionGroup>
+
+        <waitForPageLoad stepKey="waitBeforePageLoad"/>
+        <dontSeeElement selector="{{AdminNotificationToolbarSection.notification}}" stepKey="doNotSeeNotificationBellIcon"/>
+    </test>
+</tests>

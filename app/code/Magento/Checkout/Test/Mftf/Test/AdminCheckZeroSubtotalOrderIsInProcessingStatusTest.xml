@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckZeroSubtotalOrderIsInProcessingStatusTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="MAGETWO-71375: Zero Subtotal Orders have incorrect status"/>
+            <title value="Zero Subtotal Orders should have the 'Processing' status on creating"/>
+            <description value="Created order should be in Processing status"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-94178"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleproduct">
+                <requiredEntity createDataKey="simplecategory"/>
+            </createData>
+            <createData entity="PaymentMethodsSettingConfig" stepKey="paymentMethodsSettingConfig"/>
+            <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+
+            <createData entity="ApiSalesRule" stepKey="createCartPriceRule">
+                <field key="discount_amount">100</field>
+            </createData>
+            <createData entity="ApiSalesRuleCoupon" stepKey="createCartPriceRuleCoupon">
+                <requiredEntity createDataKey="createCartPriceRule"/>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        </before>
+
+        <after>
+            <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleproduct" stepKey="deleteProduct"/>
+            <createData entity="DisablePaymentMethodsSettingConfig" stepKey="disablePaymentMethodsSettingConfig"/>
+            <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
+            <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteSalesRule"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="AddProductToCard">
+            <argument name="product" value="$$simpleproduct$$"/>
+        </actionGroup>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="clickToProceedToCheckout"/>
+
+        <actionGroup ref="ShipmentFormFreeShippingActionGroup" stepKey="shipmentFormFreeShippingActionGroup"/>
+
+        <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyDiscountCoupon">
+            <argument name="discountCode" value="$createCartPriceRuleCoupon.code$"/>
+        </actionGroup>
+
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchForOrder">
+            <argument name="keyword" value="{$grabOrderNumber}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
+            <argument name="orderId" value="$grabOrderNumber"/>
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+
+    </test>
+</tests>

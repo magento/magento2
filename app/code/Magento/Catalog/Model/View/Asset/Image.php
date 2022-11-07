@@ -6,11 +6,16 @@
 
 namespace Magento\Catalog\Model\View\Asset;
 
+use Magento\Catalog\Model\Config\CatalogMediaConfig;
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Asset\ContextInterface;
 use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Catalog\Helper\Image as ImageHelper;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * A locally available image file asset that can be referred with a file path
@@ -59,6 +64,21 @@ class Image implements LocalInterface
     private $encryptor;
 
     /**
+     * @var ImageHelper
+     */
+    private $imageHelper;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var string
+     */
+    private $mediaFormatUrl;
+
+    /**
      * Image constructor.
      *
      * @param ConfigInterface $mediaConfig
@@ -66,13 +86,19 @@ class Image implements LocalInterface
      * @param EncryptorInterface $encryptor
      * @param string $filePath
      * @param array $miscParams
+     * @param ImageHelper $imageHelper
+     * @param CatalogMediaConfig $catalogMediaConfig
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ConfigInterface $mediaConfig,
         ContextInterface $context,
         EncryptorInterface $encryptor,
         $filePath,
-        array $miscParams
+        array $miscParams,
+        ImageHelper $imageHelper = null,
+        CatalogMediaConfig $catalogMediaConfig = null,
+        StoreManagerInterface $storeManager = null
     ) {
         if (isset($miscParams['image_type'])) {
             $this->sourceContentType = $miscParams['image_type'];
@@ -85,14 +111,73 @@ class Image implements LocalInterface
         $this->filePath = $filePath;
         $this->miscParams = $miscParams;
         $this->encryptor = $encryptor;
+        $this->imageHelper = $imageHelper ?: ObjectManager::getInstance()->get(ImageHelper::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+
+        $catalogMediaConfig =  $catalogMediaConfig ?: ObjectManager::getInstance()->get(CatalogMediaConfig::class);
+        $this->mediaFormatUrl = $catalogMediaConfig->getMediaUrlFormat();
     }
 
     /**
-     * @inheritdoc
+     * Get catalog image URL.
+     *
+     * @return string
+     * @throws LocalizedException
      */
     public function getUrl()
     {
-        return $this->context->getBaseUrl() . DIRECTORY_SEPARATOR . $this->getImageInfo();
+        switch ($this->mediaFormatUrl) {
+            case CatalogMediaConfig::IMAGE_OPTIMIZATION_PARAMETERS:
+                return $this->getUrlWithTransformationParameters();
+            case CatalogMediaConfig::HASH:
+                return $this->context->getBaseUrl() . DIRECTORY_SEPARATOR . $this->getImageInfo();
+            default:
+                throw new LocalizedException(
+                    __("The specified Catalog media URL format '$this->mediaFormatUrl' is not supported.")
+                );
+        }
+    }
+
+    /**
+     * Get image URL with transformation parameters
+     *
+     * @return string
+     */
+    private function getUrlWithTransformationParameters()
+    {
+        return $this->getOriginalImageUrl() . '?' . http_build_query($this->getImageTransformationParameters());
+    }
+
+    /**
+     * The list of parameters to be used during image transformations (e.g. resizing or applying watermarks).
+     *
+     * This method can be used as an extension point.
+     *
+     * @return string[]
+     */
+    public function getImageTransformationParameters()
+    {
+        return [
+            'width' => $this->miscParams['image_width'],
+            'height' => $this->miscParams['image_height'],
+            'store' => $this->storeManager->getStore()->getCode(),
+            'image-type' => $this->sourceContentType
+        ];
+    }
+
+    /**
+     * Get URL to the original version of the product image.
+     *
+     * @return string
+     */
+    private function getOriginalImageUrl()
+    {
+        $originalImageFile = $this->getSourceFile();
+        if (!$originalImageFile) {
+            return $this->imageHelper->getDefaultPlaceholderUrl();
+        } else {
+            return $this->context->getBaseUrl() . $this->getFilePath();
+        }
     }
 
     /**
@@ -116,8 +201,8 @@ class Image implements LocalInterface
      */
     public function getSourceFile()
     {
-        return $this->mediaConfig->getBaseMediaPath()
-            . DIRECTORY_SEPARATOR . ltrim($this->getFilePath(), DIRECTORY_SEPARATOR);
+        $path = $this->getFilePath() ? ltrim($this->getFilePath(), DIRECTORY_SEPARATOR) : '';
+        return $this->mediaConfig->getBaseMediaPath() . DIRECTORY_SEPARATOR . $path;
     }
 
     /**

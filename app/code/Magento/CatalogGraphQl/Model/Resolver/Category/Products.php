@@ -63,7 +63,7 @@ class Products implements ResolverInterface
                 'eq' => $value['id']
             ]
         ];
-        $searchResult = $this->searchQuery->getResult($args, $info);
+        $searchResult = $this->searchQuery->getResult($args, $info, $context);
 
         //possible division by 0
         if ($searchResult->getPageSize()) {

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSelectFieldToColumnActionGroup">
+        <annotations>
+            <description>Select or clear the checkbox to display the column on the Orders grid page.</description>
+        </annotations>
+        <arguments>
+            <argument name="column" type="string" defaultValue="Purchase Point"/>
+        </arguments>
+        <click selector="{{AdminOrdersGridSection.columnsDropdown}}" stepKey="openColumnsDropdown" />
+        <click selector="{{AdminOrdersGridSection.viewColumnCheckbox(column)}}" stepKey="disableColumn"/>
+        <click selector="{{AdminOrdersGridSection.columnsDropdown}}" stepKey="closeColumnsDropdown" />
+    </actionGroup>
+</actionGroups>

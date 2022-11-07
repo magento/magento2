@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup">
+        <annotations>
+            <description>Delete image from the View Details panel</description>
+        </annotations>
+
+        <click selector="{{AdminEnhancedMediaGalleryViewDetailsSection.delete}}" stepKey="deleteImage"/>
+        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryViewDetailsSection.confirmDelete}}" stepKey="waitForConfirmation"/>
+        <click selector="{{AdminEnhancedMediaGalleryViewDetailsSection.confirmDelete}}" stepKey="confirmDelete"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+    </actionGroup>
+</actionGroups>

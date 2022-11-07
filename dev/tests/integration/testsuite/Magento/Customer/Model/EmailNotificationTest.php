@@ -142,6 +142,36 @@ class EmailNotificationTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     *
+     * @return void
+     */
+    public function testChangeEmailCustomTemplate(): void
+    {
+        $this->setEmailTemplateConfig(EmailNotification::XML_PATH_CHANGE_EMAIL_TEMPLATE);
+        $customer = $this->customerRepository->get('customer@example.com');
+        $customer->setEmail('customer_update@example.com');
+        $this->emailNotification->credentialsChanged($customer, 'customer@example.com');
+        $expectedSender = ['name' => 'CustomerSupport', 'email' => 'support@example.com'];
+        $this->assertMessage($expectedSender);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     *
+     * @return void
+     */
+    public function testChangeEmailAndPasswordCustomTemplate(): void
+    {
+        $this->setEmailTemplateConfig(EmailNotification::XML_PATH_CHANGE_EMAIL_AND_PASSWORD_TEMPLATE);
+        $customer = $this->customerRepository->get('customer@example.com');
+        $customer->setEmail('customer_update@example.com');
+        $this->emailNotification->credentialsChanged($customer, 'customer@example.com', true);
+        $expectedSender = ['name' => 'CustomerSupport', 'email' => 'support@example.com'];
+        $this->assertMessage($expectedSender);
+    }
+
+    /**
      * Assert message.
      *
      * @param array $expectedSender

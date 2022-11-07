@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminSaveProductAttributeActionGroup">
         <annotations>
-            <description>Clicks on Save button to save the attribute.</description>
+            <description>DEPRECATED. Use AdminProductAttributeSaveActionGroup instead. Clicks on Save button to save the attribute.</description>
         </annotations>
 
         <waitForElementVisible selector="{{AttributePropertiesSection.Save}}" stepKey="waitForSaveButton"/>

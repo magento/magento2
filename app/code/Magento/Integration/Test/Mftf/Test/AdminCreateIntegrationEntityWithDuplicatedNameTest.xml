@@ -18,6 +18,7 @@
             <testCaseId value="MC-19889"/>
             <group value="integration"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
@@ -53,6 +54,9 @@
         <actionGroup ref="AssertAdminMessageCreateIntegrationEntityActionGroup" stepKey="seeErrorMessage">
             <argument name="message" value="The integration with name &quot;{{defaultIntegrationData.name}}&quot; exists."/>
             <argument value="error" name="messageType"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminIntegrationNameInFormActionGroup" stepKey="checkEnteredValueIsPreserved">
+            <argument name="name" value="{{defaultIntegrationData.name}}"/>
         </actionGroup>
     </test>
 </tests>

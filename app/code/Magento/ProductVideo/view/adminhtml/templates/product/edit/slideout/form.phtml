@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/* @var Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo $block */
+/**
+ * @var Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
-<div id="<?= $block->escapeHtmlAttr($block->getNameInLayout()) ?>" style="display:none"
+<div id="<?= $block->escapeHtmlAttr($block->getNameInLayout()) ?>"
     data-modal-info='<?= /* @noEscape */ $block->getWidgetOptions() ?>'
 >
     <?= $block->getFormHtml() ?>
@@ -25,3 +28,7 @@
         </div>
     </div>
 </div>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    'display:none',
+    'div#' . $block->escapeJs($block->getNameInLayout())
+) ?>

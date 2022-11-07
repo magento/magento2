@@ -33,7 +33,7 @@ use Magento\Customer\Model\FileUploaderDataResolver;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
- * @deprecated \Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses is used instead
+ * @deprecated 102.0.1 \Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses is used instead
  * @api
  * @since 100.0.2
  */
@@ -324,7 +324,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Retrieve Country With Websites Source
      *
      * @return CountryWithWebsites
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getCountryWithWebsiteSource()
     {

@@ -11,6 +11,11 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\ConverterInterface;
 use Magento\Framework\Config\SchemaLocatorInterface;
 use Magento\Framework\View\File\CollectorInterface;
+use Magento\TestFramework\Annotation\AdminConfigFixture;
+use Magento\TestFramework\Annotation\ApiConfigFixture;
+use Magento\TestFramework\Annotation\ApiDataFixture;
+use Magento\TestFramework\Annotation\DataFixture;
+use Magento\TestFramework\Annotation\DataFixtureBeforeTransaction;
 use Magento\TestFramework\WebapiWorkaround\Override\Config\Converter;
 use Magento\TestFramework\WebapiWorkaround\Override\Config\FileCollector;
 use Magento\TestFramework\WebapiWorkaround\Override\Config\SchemaLocator;
@@ -24,9 +29,20 @@ class Config extends IntegrationConfig
     /**
      * @inheritdoc
      */
+    protected const FIXTURE_TYPES = [
+        ApiDataFixture::ANNOTATION,
+        ApiConfigFixture::ANNOTATION,
+        DataFixture::ANNOTATION,
+        DataFixtureBeforeTransaction::ANNOTATION,
+        AdminConfigFixture::ANNOTATION,
+    ];
+
+    /**
+     * @inheritdoc
+     */
     protected function getConverter(): ConverterInterface
     {
-        return ObjectManager::getInstance()->create(Converter::class);
+        return ObjectManager::getInstance()->create(Converter::class, ['types' => $this::FIXTURE_TYPES]);
     }
 
     /**

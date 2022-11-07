@@ -19,7 +19,7 @@
                     <label>Use CSS critical path</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>
-                        <![CDATA[<strong style="color:red">Warning!</strong> Be sure that you have critical.css file for your theme. Other CSS files will be loaded asynchronously.]]>
+                        <![CDATA[<strong class="colorRed">Warning!</strong> Be sure that you have critical.css file for your theme. Other CSS files will be loaded asynchronously.]]>
                     </comment>
                 </field>
             </group>

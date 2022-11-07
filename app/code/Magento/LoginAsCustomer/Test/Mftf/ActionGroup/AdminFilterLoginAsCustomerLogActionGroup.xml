@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFilterLoginAsCustomerLogActionGroup">
+        <annotations>
+            <description>Filter Login as Customer Log records.</description>
+        </annotations>
+        <arguments>
+            <argument name="adminId" type="string"/>
+            <argument name="customerId" type="string"/>
+        </arguments>
+
+        <seeInCurrentUrl url="{{AdminLoginAsCustomerLogPage.url}}" stepKey="checkUrl"/>
+        <click selector="{{AdminLoginAsCustomerLogToolbarSection.resetFilter}}" stepKey="resetFilters"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForResetFilter"/>
+        <fillField selector="{{AdminLoginAsCustomerLogFiltersSection.adminId}}" userInput="{{adminId}}"
+                   stepKey="fillAdminId"/>
+        <fillField selector="{{AdminLoginAsCustomerLogFiltersSection.customerId}}" userInput="{{customerId}}"
+                   stepKey="fillCustomerId"/>
+        <click selector="{{AdminLoginAsCustomerLogToolbarSection.search}}" stepKey="applyFilters"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForApplyFilter"/>
+    </actionGroup>
+</actionGroups>

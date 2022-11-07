@@ -9,6 +9,7 @@ namespace Magento\Framework\Setup;
  * Interface for data installs of a module
  *
  * @api
+ * @since 100.0.2
  */
 interface InstallDataInterface
 {

@@ -123,4 +123,17 @@
     <entity name="TaxRuleZeroRate" type="taxRule">
         <data key="name" unique="suffix">TaxNameZeroRate</data>
     </entity>
+    <entity name="DefaultTaxRuleWithCustomTaxRate" type="taxRule">
+        <data key="code" unique="suffix">TaxRule</data>
+        <data key="position">0</data>
+        <data key="priority">0</data>
+        <array key="customer_tax_class_ids">
+            <item>3</item>
+        </array>
+        <array key="product_tax_class_ids">
+            <item>2</item>
+        </array>
+        <var key="tax_rate_ids" entityType="taxRate" entityKey="id"/>
+        <data key="calculate_subtotal">false</data>
+    </entity>
 </entities>

@@ -4,11 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Review\Block\Customer\View $block */
+/**
+ * @var \Magento\Review\Block\Customer\View $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 
 $product = $block->getProductData();
 ?>
-<?php if ($product->getId()) : ?>
+<?php if ($product->getId()): ?>
 <div class="customer-review view">
     <div class="product-details">
         <div class="product-media">
@@ -19,7 +22,7 @@ $product = $block->getProductData();
         </div>
         <div class="product-info">
             <h2 class="product-name"><?= $block->escapeHtml($product->getName()) ?></h2>
-            <?php if ($block->getRating() && $block->getRating()->getSize()) : ?>
+            <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
                 <span class="rating-average-label"><?= $block->escapeHtml(__('Average Customer Rating:')) ?></span>
                 <?= $block->getReviewsSummaryHtml($product) ?>
             <?php endif; ?>
@@ -27,21 +30,32 @@ $product = $block->getProductData();
     </div>
 
     <div class="review-details">
-        <?php if ($block->getRating() && $block->getRating()->getSize()) : ?>
+        <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
             <div class="title">
                 <strong><?= $block->escapeHtml(__('Your Review')) ?></strong>
             </div>
             <div class="customer-review-rating">
-                <?php foreach ($block->getRating() as $_rating) : ?>
-                    <?php if ($_rating->getPercent()) : ?>
+                <?php foreach ($block->getRating() as $_rating): ?>
+                    <?php if ($_rating->getPercent()): ?>
                         <?php $rating = ceil($_rating->getPercent()) ?>
+                        <?php $ratingId = $_rating->getRatingId() ?>
                         <div class="rating-summary item">
-                            <span class="rating-label"><span><?= $block->escapeHtml($_rating->getRatingCode()) ?></span></span>
-                            <div class="rating-result" title="<?= /* @noEscape */ $rating ?>%">
-                                <span style="width:<?= /* @noEscape */ $rating ?>%">
+                            <span class="rating-label">
+                                <span><?= $block->escapeHtml($_rating->getRatingCode()) ?></span>
+                            </span>
+                            <div class="rating-result <?= $block->escapeHtml($_rating->getRatingCode()) ?>"
+                                 id="rating-div-<?= $block->escapeHtml($ratingId) ?>"
+                                 title="<?= /* @noEscape */ $rating ?>%">
+                                <span>
                                     <span><?= /* @noEscape */ $rating ?>%</span>
                                 </span>
                             </div>
+                            <?= /* @noEscape */
+                            $secureRenderer->renderStyleAsTag(
+                                "width:" . /* @noEscape */ $rating . "%",
+                                'div#rating-div-'.$_rating->getRatingId().
+                                '>span:first-child'
+                            ) ?>
                         </div>
                     <?php endif; ?>
                 <?php endforeach; ?>
@@ -49,15 +63,20 @@ $product = $block->getProductData();
         <?php endif; ?>
 
         <div class="review-title"><?= $block->escapeHtml($block->getReviewData()->getTitle()) ?></div>
-        <div class="review-content"><?= /* @noEscape */ nl2br($block->escapeHtml($block->getReviewData()->getDetail())) ?></div>
+        <div class="review-content">
+            <?= /* @noEscape */ nl2br($block->escapeHtml($block->getReviewData()->getDetail())) ?>
+        </div>
         <div class="review-date">
-            <?= $block->escapeHtml(__('Submitted on %1', '<time class="date">' . $block->dateFormat($block->getReviewData()->getCreatedAt()) . '</time>'), ['time']) ?>
+            <?= $block->escapeHtml(__('Submitted on %1', '<time class="date">' .
+                $block->dateFormat($block->getReviewData()->getCreatedAt()) . '</time>'), ['time']) ?>
         </div>
     </div>
 </div>
 <div class="actions-toolbar">
     <div class="secondary">
-        <a class="action back" href="<?= $block->escapeUrl($block->getBackUrl()) ?>"><span><?= $block->escapeHtml(__('Back to My Reviews')) ?></span></a>
+        <a class="action back" href="<?= $block->escapeUrl($block->getBackUrl()) ?>">
+            <span><?= $block->escapeHtml(__('Back to My Reviews')) ?></span>
+        </a>
     </div>
 </div>
 <?php endif; ?>

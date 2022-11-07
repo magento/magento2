@@ -51,9 +51,7 @@
                 <argument name="StoreGroup" value="SecondStoreGroupUnique"/>
                 <argument name="customStore" value="SecondStoreUnique"/>
             </actionGroup>
-
-            <!-- Reindex -->
-            <magentoCLI command="indexer:reindex" stepKey="reindexAllIndexes"/>
+            <magentoCron groups="index" stepKey="reindexAllIndexes"/>
         </before>
 
         <after>
@@ -68,6 +66,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridFilter"/>
 

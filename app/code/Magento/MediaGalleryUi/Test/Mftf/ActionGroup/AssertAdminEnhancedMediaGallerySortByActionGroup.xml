@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminEnhancedMediaGallerySortByActionGroup">
+        <annotations>
+            <description>Assert the images position in the grid after sorting has been applied.</description>
+        </annotations>
+        <arguments>
+            <argument name="firstImageFile" type="string"/>
+            <argument name="secondImageFile" type="string"/>
+            <argument name="thirdImageFile" type="string"/>
+        </arguments>
+
+        <grabAttributeFrom selector="{{AdminMediaGalleryGridSection.nthImageInGrid('0')}}" userInput="src"
+                           stepKey="getFirstImageSrcAfterSort"/>
+        <grabAttributeFrom selector="{{AdminMediaGalleryGridSection.nthImageInGrid('1')}}" userInput="src"
+                           stepKey="getSecondImageSrcAfterSort"/>
+        <grabAttributeFrom selector="{{AdminMediaGalleryGridSection.nthImageInGrid('2')}}" userInput="src"
+                           stepKey="getThirdImageSrcAfterSort"/>
+
+        <assertStringContainsString stepKey="assertFirstImagePositionAfterSort">
+            <actualResult type="string">{$getFirstImageSrcAfterSort}</actualResult>
+            <expectedResult type="string">{{firstImageFile}}</expectedResult>
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="assertSecondImagePositionAfterSort">
+            <actualResult type="string">{$getSecondImageSrcAfterSort}</actualResult>
+            <expectedResult type="string">{{secondImageFile}}</expectedResult>
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="assertThirdImagePositionAfterSort">
+            <actualResult type="string">{$getThirdImageSrcAfterSort}</actualResult>
+            <expectedResult type="string">{{thirdImageFile}}</expectedResult>
+        </assertStringContainsString>
+    </actionGroup>
+</actionGroups>

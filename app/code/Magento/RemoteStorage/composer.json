@@ -1,0 +1,37 @@
+{
+    "name": "magento/module-remote-storage",
+    "description": "N/A",
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "*",
+        "league/flysystem": "~2.4.3",
+        "league/flysystem-aws-s3-v3": "^2.4.3"
+    },
+    "suggest": {
+        "magento/module-backend": "*",
+        "magento/module-sitemap": "*",
+        "magento/module-cms": "*",
+        "magento/module-downloadable": "*",
+        "magento/module-catalog": "*",
+        "magento/module-media-storage": "*",
+        "magento/module-media-gallery-metadata": "*",
+        "magento/module-media-gallery-synchronization": "*",
+        "magento/module-import-export": "*",
+        "magento/module-catalog-import-export": "*",
+        "magento/module-downloadable-import-export": "*",
+        "predis/predis": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\RemoteStorage\\": ""
+        }
+    }
+}

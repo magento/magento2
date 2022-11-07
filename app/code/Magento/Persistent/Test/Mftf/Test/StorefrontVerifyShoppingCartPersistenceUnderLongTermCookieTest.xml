@@ -49,7 +49,7 @@
         </after>
 
         <!-- 1. Go to storefront and click the Create an Account link-->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnHomePage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage"/>
         <click selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" stepKey="clickCreateAnAccountLink" />
         <actionGroup ref="StorefrontAssertPersistentRegistrationPageFields" stepKey="assertPersistentRegistrationPageFields"/>
 
@@ -73,7 +73,7 @@
 
         <!-- 4. Click Sign Out -->
         <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="logoutJohnSmithCustomer"/>
-        <seeInCurrentUrl url="{{StorefrontCustomerLogoutSuccessPage.url}}" stepKey="seeLogoutSuccessPageUrlAfterLogOutJohnSmithCustomer"/>
+        <actionGroup ref="AssertStorefrontCustomerLogoutSuccessPageActionGroup" stepKey="seeLogoutSuccessPageUrlAfterLogOutJohnSmithCustomer"/>
         <waitForPageLoad stepKey="waitForRedirectToHomePage"/>
         <waitForText selector="{{StorefrontCMSPageSection.mainContent}}" userInput="CMS homepage content goes here." stepKey="waitForLoadContentMessage"/>
         <actionGroup ref="StorefrontAssertPersistentCustomerWelcomeMessageNotPresentActionGroup" stepKey="dontSeeWelcomeJohnSmithCustomerNotYouMessage">
@@ -102,7 +102,7 @@
 
         <!-- 7. Click Log Out  -->
         <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="logoutJohnDoeCustomer"/>
-        <seeInCurrentUrl url="{{StorefrontCustomerLogoutSuccessPage.url}}" stepKey="seeLogoutSuccessPageUrlAfterLogOutJohnDoeCustomer"/>
+        <actionGroup ref="AssertStorefrontCustomerLogoutSuccessPageActionGroup" stepKey="seeLogoutSuccessPageUrlAfterLogOutJohnDoeCustomer"/>
         <actionGroup ref="StorefrontAssertPersistentCustomerWelcomeMessageActionGroup" stepKey="seeWelcomeForJohnDoeCustomer">
             <argument name="customerFullName" value="{{Simple_Customer_Without_Address.fullname}}"/>
         </actionGroup>
@@ -131,7 +131,7 @@
         <see selector="{{StorefrontMinicartSection.productCount}}" userInput="2" stepKey="miniCartContainsTwoProductForGuest"/>
 
         <!-- 10. Go to My Account section  -->
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="amOnCustomerAccountPage"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="amOnCustomerAccountPage"/>
         <seeInCurrentUrl url="{{StorefrontCustomerSignInPage.url}}" stepKey="redirectToCustomerAccountLoginPage"/>
         <seeElement selector="{{StorefrontCustomerSignInFormSection.customerLoginBlock}}" stepKey="checkSystemRequiresToLogIn"/>
 
@@ -149,7 +149,7 @@
 
         <!-- 12. Sign out and click the Not you? link  -->
         <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="logoutJohnDoeCustomerSecondTime"/>
-        <seeInCurrentUrl url="{{StorefrontCustomerLogoutSuccessPage.url}}" stepKey="seeLogoutSuccessPageUrlAfterLogOutJohnSmithCustomerSecondTime"/>
+        <actionGroup ref="AssertStorefrontCustomerLogoutSuccessPageActionGroup" stepKey="seeLogoutSuccessPageUrlAfterLogOutJohnSmithCustomerSecondTime"/>
         <waitForPageLoad stepKey="waitForHomePageLoadAfter5Seconds"/>
         <waitForText selector="{{StorefrontCMSPageSection.mainContent}}" userInput="CMS homepage content goes here." stepKey="waitForLoadMainContentMessageOnHomePage"/>
         <click selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="clickOnNotYouLink" />

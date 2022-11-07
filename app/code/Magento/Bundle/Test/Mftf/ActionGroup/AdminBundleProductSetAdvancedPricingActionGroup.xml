@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminBundleProductSetAdvancedPricingActionGroup" extends="ProductSetAdvancedPricingActionGroup">
+        <annotations>
+            <description>Sets the provided Advanced Pricing on the Admin Bundle Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="priceView" type="string" defaultValue="Price Range"/>
+        </arguments>
+        <remove keyForRemoval="selectProductCustomGroupValue"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.bundleAdvancedPriceView}}" userInput="{{priceView}}" stepKey="selectPriceView" before="clickDoneButton"/>
+    </actionGroup>
+</actionGroups>

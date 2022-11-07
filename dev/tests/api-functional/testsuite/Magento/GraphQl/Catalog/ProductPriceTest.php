@@ -12,13 +12,29 @@ use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\CatalogInventory\Model\Configuration;
 use Magento\ConfigurableProduct\Api\LinkManagementInterface;
 use Magento\ConfigurableProduct\Model\LinkManagement;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 use Magento\Customer\Model\Group;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\GraphQl\Customer\LockCustomer;
 use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductPriceTest extends GraphQlAbstract
 {
     /** @var ObjectManager $objectManager */
@@ -27,11 +43,29 @@ class ProductPriceTest extends GraphQlAbstract
     /** @var ProductRepositoryInterface $productRepository */
     private $productRepository;
 
+    /**
+     * @var CustomerTokenServiceInterface
+     */
+    private $customerTokenService;
+
+    /**
+     * @var LockCustomer
+     */
+    private $lockCustomer;
+
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         /** @var ProductRepositoryInterface $productRepository */
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
+        $this->lockCustomer = $this->objectManager->get(LockCustomer::class);
+        $this->fixtures = DataFixtureStorageManager::getStorage();
     }
 
     /**
@@ -76,6 +110,55 @@ class ProductPriceTest extends GraphQlAbstract
         ];
 
         $this->assertPrices($expectedPriceRange, $product['price_range']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
+     * @magentoApiDataFixture Magento/Directory/_files/usd_cny_rate.php
+     * @magentoConfigFixture default_store currency/options/allow CNY,USD
+     */
+    public function testProductWithSinglePriceNonDefaultCurrency()
+    {
+        $skus = ['simple'];
+        $query = $this->getProductQuery($skus);
+        $headerMap = [
+            'Content-Currency' => 'CNY'
+        ];
+        $result = $this->graphQlQuery($query, [], '', $headerMap);
+
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertNotEmpty($result['products']['items']);
+        $product = $result['products']['items'][0];
+        $this->assertNotEmpty($product['price_range']);
+
+        $expectedPriceRange = [
+            "minimum_price" => [
+                "regular_price" => [
+                    "value" => 70
+                ],
+                "final_price" => [
+                    "value" => 70
+                ],
+                "discount" => [
+                    "amount_off" => 0,
+                    "percent_off" => 0
+                ]
+            ],
+            "maximum_price" => [
+                "regular_price" => [
+                    "value" => 70
+                ],
+                "final_price" => [
+                    "value" => 70
+                ],
+                "discount" => [
+                    "amount_off" => 0,
+                    "percent_off" => 0
+                ]
+            ]
+        ];
+
+        $this->assertPrices($expectedPriceRange, $product['price_range'], 'CNY');
     }
 
     /**
@@ -186,10 +269,20 @@ class ProductPriceTest extends GraphQlAbstract
      * Simple products with special price and tier price with % discount
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @param int $customerGroup
+     * @param array $expectedPriceRange
+     * @param array $expectedTierPrices
+     * @param array $customerData
+     * @param bool $isTierPriceExists
+     * @dataProvider priceDataProvider
      */
-    public function testSimpleProductsWithSpecialPriceAndTierPrice()
-    {
+    public function testSimpleProductsWithSpecialPriceAndTierPrice(
+        int $customerGroup,
+        array $expectedPriceRange,
+        array $expectedTierPrices,
+        array $customerData
+    ) {
         $skus = ["simple1", "simple2"];
         $tierPriceFactory = $this->objectManager->get(ProductTierPriceInterfaceFactory::class);
 
@@ -200,7 +293,7 @@ class ProductPriceTest extends GraphQlAbstract
         $tierPrices[] = $tierPriceFactory->create(
             [
                 'data' => [
-                    'customer_group_id' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
+                    'customer_group_id' => $customerGroup,
                     'qty' => 2
                 ]
             ]
@@ -211,88 +304,20 @@ class ProductPriceTest extends GraphQlAbstract
             $simpleProduct->setTierPrices($tierPrices);
             $this->productRepository->save($simpleProduct);
         }
+
+        $headerMap = [];
+        if (!empty($customerData)) {
+            $customerToken = $this->customerTokenService->createCustomerAccessToken(
+                $customerData['username'],
+                $customerData['password']
+            );
+            $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
+        }
+
         $query = $this->getProductQuery($skus);
-        $result = $this->graphQlQuery($query);
+        $result = $this->graphQlQuery($query, [], '', $headerMap);
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertCount(2, $result['products']['items']);
-
-        $expectedPriceRange = [
-            "simple1" => [
-                "minimum_price" => [
-                    "regular_price" => [
-                        "value" => 10
-                    ],
-                    "final_price" => [
-                        "value" => 5.99
-                    ],
-                    "discount" => [
-                        "amount_off" => 4.01,
-                        "percent_off" => 40.1
-                    ]
-                ],
-                "maximum_price" => [
-                    "regular_price" => [
-                        "value" => 10
-                    ],
-                    "final_price" => [
-                        "value" => 5.99
-                    ],
-                    "discount" => [
-                        "amount_off" => 4.01,
-                        "percent_off" => 40.1
-                    ]
-                ]
-            ],
-            "simple2" => [
-                "minimum_price" => [
-                    "regular_price" => [
-                        "value" => 20
-                    ],
-                    "final_price" => [
-                        "value" => 15.99
-                    ],
-                    "discount" => [
-                        "amount_off" => 4.01,
-                        "percent_off" => 20.05
-                    ]
-                ],
-                "maximum_price" => [
-                    "regular_price" => [
-                        "value" => 20
-                    ],
-                    "final_price" => [
-                        "value" => 15.99
-                    ],
-                    "discount" => [
-                        "amount_off" => 4.01,
-                        "percent_off" => 20.05
-                    ]
-                ]
-            ]
-        ];
-        $expectedTierPrices = [
-            "simple1" => [
-                0 => [
-                    'discount' =>[
-                        'amount_off' => 1,
-                        'percent_off' => 10
-                    ],
-                    'final_price' =>['value'=> 9],
-                    'quantity' => 2
-                ]
-            ],
-            "simple2" => [
-                0 => [
-                    'discount' =>[
-                        'amount_off' => 2,
-                        'percent_off' => 10
-                    ],
-                    'final_price' =>['value'=> 18],
-                    'quantity' => 2
-                ]
-
-            ]
-        ];
 
         foreach ($result['products']['items'] as $product) {
             $this->assertNotEmpty($product['price_range']);
@@ -300,6 +325,113 @@ class ProductPriceTest extends GraphQlAbstract
             $this->assertPrices($expectedPriceRange[$product['sku']], $product['price_range']);
             $this->assertResponseFields($product['price_tiers'], $expectedTierPrices[$product['sku']]);
         }
+    }
+
+    /**
+     * Data provider for prices
+     *
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function priceDataProvider() : array
+    {
+        return [
+            [
+                'customer_group' => Group::CUST_GROUP_ALL,
+                'expected_price_range' => [
+                    "simple1" => [
+                        "minimum_price" => [
+                            "regular_price" => ["value" => 10],
+                            "final_price" => ["value" => 5.99],
+                            "discount" => ["amount_off" => 4.01, "percent_off" => 40.1]
+                        ],
+                        "maximum_price" => [
+                            "regular_price" => ["value" => 10],
+                            "final_price" => ["value" => 5.99],
+                            "discount" => ["amount_off" => 4.01, "percent_off" => 40.1]
+                        ]
+                    ],
+                    "simple2" => [
+                        "minimum_price" => [
+                            "regular_price" => ["value" => 20],
+                            "final_price" => ["value" => 15.99],
+                            "discount" => ["amount_off" => 4.01, "percent_off" => 20.05]
+                        ],
+                        "maximum_price" => [
+                            "regular_price" => ["value" => 20],
+                            "final_price" => ["value" => 15.99],
+                            "discount" => ["amount_off" => 4.01, "percent_off" => 20.05]
+                        ]
+                    ]
+                ],
+                'expected_tier_prices' => [
+                    "simple1" => [
+                        0 => [
+                            'discount' =>['amount_off' => 1, 'percent_off' => 10],
+                            'final_price' =>['value'=> 9],
+                            'quantity' => 2
+                        ]
+                    ],
+                    "simple2" => [
+                        0 => [
+                            'discount' =>['amount_off' => 2, 'percent_off' => 10],
+                            'final_price' =>['value'=> 18],
+                            'quantity' => 2
+                        ]
+                    ]
+                ],
+                'customer_data' => []
+            ],
+            [
+                'customer_group' => 1,
+                'expected_price_range' => [
+                    "simple1" => [
+                        "minimum_price" => [
+                            "regular_price" => ["value" => 10],
+                            "final_price" => ["value" => 5.99],
+                            "discount" => ["amount_off" => 4.01, "percent_off" => 40.1]
+                        ],
+                        "maximum_price" => [
+                            "regular_price" => ["value" => 10],
+                            "final_price" => ["value" => 5.99],
+                            "discount" => ["amount_off" => 4.01, "percent_off" => 40.1]
+                        ]
+                    ],
+                    "simple2" => [
+                        "minimum_price" => [
+                            "regular_price" => ["value" => 20],
+                            "final_price" => ["value" => 15.99],
+                            "discount" => ["amount_off" => 4.01, "percent_off" => 20.05]
+                        ],
+                        "maximum_price" => [
+                            "regular_price" => ["value" => 20],
+                            "final_price" => ["value" => 15.99],
+                            "discount" => ["amount_off" => 4.01, "percent_off" => 20.05]
+                        ]
+                    ]
+                ],
+                'expected_tier_prices' => [
+                    "simple1" => [
+                        0 => [
+                            'discount' =>['amount_off' => 1, 'percent_off' => 10],
+                            'final_price' =>['value'=> 9],
+                            'quantity' => 2
+                        ]
+                    ],
+                    "simple2" => [
+                        0 => [
+                            'discount' =>['amount_off' => 2, 'percent_off' => 10],
+                            'final_price' =>['value'=> 18],
+                            'quantity' => 2
+                        ]
+                    ]
+                ],
+                'customer_data' => [
+                    'username' => 'customer@example.com',
+                    'password' => 'password'
+                ]
+            ],
+        ];
     }
 
     /**
@@ -637,7 +769,7 @@ class ProductPriceTest extends GraphQlAbstract
                         "value" => $configurableProductVariants[$key]->getPrice()
                     ],
                     "final_price" => [
-                        "value" => round($configurableProductVariants[$key]->getSpecialPrice(), 2)
+                        "value" => round((float) $configurableProductVariants[$key]->getSpecialPrice(), 2)
                     ],
                     "discount" => [
                         "amount_off" => ($regularPrice[$key] - $finalPrice[$key]),
@@ -649,7 +781,7 @@ class ProductPriceTest extends GraphQlAbstract
                         "value" => $configurableProductVariants[$key]->getPrice()
                     ],
                     "final_price" => [
-                        "value" => round($configurableProductVariants[$key]->getSpecialPrice(), 2)
+                        "value" => round((float) $configurableProductVariants[$key]->getSpecialPrice(), 2)
                     ],
                     "discount" => [
                         "amount_off" => $regularPrice[$key] - $finalPrice[$key],
@@ -833,6 +965,72 @@ class ProductPriceTest extends GraphQlAbstract
     }
 
     /**
+     * Check if the special price visible if the current date is in the date range set
+     * for the special price
+     *
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_special_price.php
+     */
+    public function testSpecialPriceVisibleIfInDateRange()
+    {
+        $query = <<<QUERY
+{
+    products(filter: {sku: {eq: "simple_product"}}) {
+        items {
+            price_range {
+                minimum_price {
+                    regular_price {
+                        value
+                    }
+                }
+            }
+            special_price
+        }
+    }
+}
+QUERY;
+        $result = $this->graphQlQuery($query);
+        $productInformation = $result['products']['items'][0];
+        $productRegularPrice = $productInformation['price_range']['minimum_price']['regular_price']['value'];
+
+        self::assertEquals('10', $productRegularPrice);
+        self::assertEquals('5.99', $productInformation['special_price']);
+    }
+
+    /**
+     * Check if the special price is not visible if the current date is not in the date range set
+     * for the special price
+     *
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_special_price_future_date.php
+     */
+    public function testSpecialPriceNotVisibleIfNotInDateRange()
+    {
+        $query = <<<QUERY
+{
+    products(filter: {sku: {eq: "simple_product"}}) {
+        items {
+            price_range {
+                minimum_price {
+                    regular_price {
+                        value
+                    }
+                }
+            }
+            special_price
+        }
+    }
+}
+QUERY;
+        $result = $this->graphQlQuery($query);
+        $productInformation = $result['products']['items'][0];
+        $productRegularPrice = $productInformation['price_range']['minimum_price']['regular_price']['value'];
+
+        self::assertEquals('10', $productRegularPrice);
+        self::assertEquals(null, $productInformation['special_price']);
+    }
+
+    /**
      * Get GraphQl query to fetch products by sku
      *
      * @param array $skus
@@ -909,7 +1107,7 @@ QUERY;
       name
       sku
       price_range {
-        minimum_price {regular_price 
+        minimum_price {regular_price
         {
          value
          currency
@@ -949,13 +1147,13 @@ QUERY;
       ... on ConfigurableProduct{
         variants{
           product{
-           
+
             sku
             price_range {
         minimum_price {regular_price {value}
           final_price {
             value
-            
+
           }
           discount {
             amount_off
@@ -965,11 +1163,11 @@ QUERY;
         maximum_price {
           regular_price {
             value
-           
+
           }
           final_price {
             value
-            
+
           }
           discount {
             amount_off
@@ -985,7 +1183,7 @@ QUERY;
               final_price{value}
                 quantity
               }
-            
+
             }
           }
         }
@@ -1043,5 +1241,190 @@ QUERY;
             $product->setTierPrices($tierPrices);
             $product->save();
         }
+    }
+
+    /**
+     * Test products with the same price reverse position with ASC and DESC sorting
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/category_with_three_products.php
+     */
+    public function testSortByEqualPriceAndAscDescReversePosition()
+    {
+        /** @var Product $product */
+        $product = $this->productRepository->get('simple1001');
+        //setting the same price for the product as all the rest have
+        $product->setPrice('10');
+        $this->productRepository->save($product);
+
+        /** @var Collection $categoryCollection */
+        $categoryCollection = Bootstrap::getObjectManager()->get(Collection::class);
+        $category = $categoryCollection->addFieldToFilter('name', 'Category 999')->getFirstItem();
+        $categoryId = (int) $category->getId();
+
+        $expectedProductsAsc = ['simple1000', 'simple1001', 'simple1002'];
+        $queryAsc = $this->getCategoryFilterPriceQuery($categoryId, 'ASC');
+        $resultAsc = $this->graphQlQuery($queryAsc);
+        $this->assertArrayNotHasKey('errors', $resultAsc);
+        $productsAsc = array_column($resultAsc['products']['items'], 'sku');
+        $this->assertEquals($expectedProductsAsc, $productsAsc);
+
+        $expectedProductsDesc = array_reverse($expectedProductsAsc);
+        $queryDesc = $this->getCategoryFilterPriceQuery($categoryId, 'DESC');
+        $resultDesc = $this->graphQlQuery($queryDesc);
+        $this->assertArrayNotHasKey('errors', $resultDesc);
+        $productsDesc = array_column($resultDesc['products']['items'], 'sku');
+        $this->assertEquals($expectedProductsDesc, $productsDesc);
+    }
+
+    /**
+     * Check pricing for Configurable product with "Display Out of Stock Products" enabled
+     *
+     * @dataProvider configurableProductPriceRangeWithDisplayOutOfStockProductsEnabledDataProvider
+     */
+    #[
+        Config(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, 1, ScopeInterface::SCOPE_STORE, 'default'),
+        DataFixture(ProductFixture::class, ['price' => 10, 'special_price' => 7], 'p1'),
+        DataFixture(ProductFixture::class, ['price' => 18, 'special_price' => 12.6], 'p2'),
+        DataFixture(AttributeFixture::class, as: 'attr'),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            ['_options' => ['$attr$'],'_links' => ['$p1$','$p2$']],
+            'conf1'
+        ),
+    ]
+    public function testConfigurableProductPriceRangeWithDisplayOutOfStockProductsEnabled(
+        array $productsConfiguration,
+        array $expected
+    ) {
+        $expectedPriceRange = [
+            'minimum_price' => [
+                'regular_price' => [
+                    'value' => $expected['regular_price'][0],
+                    'currency' => 'USD',
+                ],
+                'final_price' => [
+                    'value' => $expected['final_price'][0],
+                    'currency' => 'USD',
+                ],
+                'discount' => [
+                    'amount_off' => $expected['amount_off'][0],
+                    'percent_off' => $expected['percent_off'][0],
+                ],
+            ],
+            'maximum_price' => [
+                'regular_price' => [
+                    'value' => $expected['regular_price'][1],
+                    'currency' => 'USD',
+                ],
+                'final_price' => [
+                    'value' => $expected['final_price'][1],
+                    'currency' => 'USD',
+                ],
+                'discount' => [
+                    'amount_off' => $expected['amount_off'][1],
+                    'percent_off' => $expected['percent_off'][1],
+                ]
+            ]
+        ];
+        foreach ($productsConfiguration as $fixture => $data) {
+            $id = (int) $this->fixtures->get($fixture)->getId();
+            $product = $this->productRepository->getById($id);
+            $product->addData($data);
+            if (isset($data['is_in_stock'])) {
+                $extendedAttributes = $product->getExtensionAttributes();
+                $stockItem = $extendedAttributes->getStockItem();
+                $stockItem->setIsInStock($data['is_in_stock']);
+                $extendedAttributes->setStockItem($stockItem);
+                $product->setExtensionAttributes($extendedAttributes);
+            }
+            $this->productRepository->save($product);
+        }
+        $sku = $this->fixtures->get('conf1')->getSku();
+        $query = $this->getProductQuery([$sku]);
+        $result = $this->graphQlQuery($query);
+
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertNotEmpty($result['products']['items']);
+        $product = $result['products']['items'][0];
+        $this->assertNotEmpty($product['price_range']);
+        $this->assertEquals($expectedPriceRange, $product['price_range']);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function configurableProductPriceRangeWithDisplayOutOfStockProductsEnabledDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'p1' => [
+                        'is_in_stock' => false
+                    ]
+                ],
+                [
+                    'regular_price' => [18, 18],
+                    'final_price' => [12.6, 12.6],
+                    'amount_off' => [5.4, 5.4],
+                    'percent_off' => [30, 30],
+                ]
+            ],
+            [
+                [
+                    'p1' => [
+                        'is_in_stock' => false
+                    ],
+                    'p2' => [
+                        'status' => Status::STATUS_DISABLED
+                    ]
+                ],
+                [
+                    'regular_price' => [10, 10],
+                    'final_price' => [7, 7],
+                    'amount_off' => [3, 3],
+                    'percent_off' => [30, 30],
+                ]
+            ],
+            [
+                [
+                    'p1' => [
+                        'is_in_stock' => false
+                    ],
+                    'p2' => [
+                        'is_in_stock' => false
+                    ]
+                ],
+                [
+                    'regular_price' => [10, 18],
+                    'final_price' => [7, 12.6],
+                    'amount_off' => [3, 5.4],
+                    'percent_off' => [30, 30],
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Query for category filter price
+     *
+     * @param int $categoryId
+     * @param string $direction
+     * @return string
+     */
+    protected function getCategoryFilterPriceQuery(int $categoryId, string $direction): string
+    {
+        $query = <<<QUERY
+{
+  products(filter: {category_id: {eq: "$categoryId"}}, sort: {price: $direction}) {
+    total_count
+    items {
+      sku
+      name
+    }
+  }
+}
+QUERY;
+
+        return $query;
     }
 }

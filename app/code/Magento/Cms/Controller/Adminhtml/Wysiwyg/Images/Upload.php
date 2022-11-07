@@ -74,7 +74,7 @@ class Upload extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images implements
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
-        
+
         return $resultJson->setData($response);
     }
 }

@@ -10,6 +10,8 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="EndToEndB2CLoggedInUserTest">
         <before>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" after="loginAsAdmin" stepKey="deleteAllProducts"/>
+
             <createData entity="ApiCategory" stepKey="createCategory"/>
 
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct1">

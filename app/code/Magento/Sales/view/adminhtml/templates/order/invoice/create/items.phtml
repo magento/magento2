@@ -3,10 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Sales\Block\Adminhtml\Order\Invoice\Create\Items $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <?php $_itemsGridLabel = $block->getForcedShipmentCreate() ? 'Items to Invoice and Ship' : 'Items to Invoice'; ?>
+        <?php $_itemsGridLabel = $block->getForcedShipmentCreate() ? 'Items to Invoice and Ship' : 'Items to Invoice';?>
         <span class="title"><?= $block->escapeHtml(__('%1', $_itemsGridLabel)) ?></span>
     </div>
     <div class="admin__page-section-content grid">
@@ -24,7 +27,7 @@
                         <th class="col-total last"><span><?= $block->escapeHtml(__('Row Total')) ?></span></th>
                     </tr>
                 </thead>
-                <?php if ($block->canEditQty()) : ?>
+                <?php if ($block->canEditQty()): ?>
                     <tfoot>
                         <tr>
                             <td colspan="3">&nbsp;</td>
@@ -34,10 +37,10 @@
                     </tfoot>
                 <?php endif; ?>
                 <?php $_items = $block->getInvoice()->getAllItems() ?>
-                <?php $_i = 0; foreach ($_items as $_item) : ?>
-                    <?php if ($_item->getOrderItem()->getParentItem()) :
+                <?php $_i = 0; foreach ($_items as $_item): ?>
+                    <?php if ($_item->getOrderItem()->getParentItem()):
                         continue;
-                    else :
+                    else:
                         $_i++;
                     endif; ?>
                     <tbody class="<?= /* @noEscape */ $_i%2 ? 'even' : 'odd' ?>">
@@ -52,7 +55,7 @@
 
 <?php $orderTotalBar = $block->getChildHtml('order_totalbar'); ?>
 
-<?php if (!empty($orderTotalBar)) : ?>
+<?php if (!empty($orderTotalBar)): ?>
 <section class="admin__page-section">
     <?= /* @noEscape */ $orderTotalBar ?>
 </section>
@@ -73,8 +76,11 @@
                         <span><?= $block->escapeHtml(__('Invoice Comments')) ?></span>
                     </label>
                     <div class="admin__field-control">
-                        <textarea id="invoice_comment_text" name="invoice[comment_text]" class="admin__control-textarea"
-                                  rows="3" cols="5"><?= $block->escapeHtml($block->getInvoice()->getCommentText()) ?></textarea>
+                        <textarea id="invoice_comment_text"
+                                  name="invoice[comment_text]"
+                                  class="admin__control-textarea"
+                                  rows="3"
+                                  cols="5"><?= $block->escapeHtml($block->getInvoice()->getCommentText())?></textarea>
                     </div>
                 </div>
             </div>
@@ -86,37 +92,41 @@
             </div>
             <div class="admin__page-section-item-content order-totals-actions">
                 <?= $block->getChildHtml('invoice_totals') ?>
-                <?php if ($block->isCaptureAllowed()) : ?>
-                    <?php if ($block->canCapture()) : ?>
+                <?php if ($block->isCaptureAllowed()): ?>
+                    <?php if ($block->canCapture()): ?>
                         <div class="admin__field">
-                            <?php
-                            /*
-                            <label for="invoice_do_capture" class="normal"><?= __('Capture Amount') ?></label>
-                            <input type="checkbox" name="invoice[do_capture]" id="invoice_do_capture" value="1" checked/>
-                            */
-                            ?>
-                          <label for="invoice_do_capture" class="admin__field-label"><?= $block->escapeHtml(__('Amount')) ?></label>
+                          <label for="invoice_do_capture" class="admin__field-label">
+                              <?= $block->escapeHtml(__('Amount')) ?>
+                          </label>
                           <select class="admin__control-select" name="invoice[capture_case]">
                               <option value="online"><?= $block->escapeHtml(__('Capture Online')) ?></option>
                               <option value="offline"><?= $block->escapeHtml(__('Capture Offline')) ?></option>
                               <option value="not_capture"><?= $block->escapeHtml(__('Not Capture')) ?></option>
                           </select>
                         </div>
-                    <?php elseif ($block->isGatewayUsed()) :?>
+                    <?php elseif ($block->isGatewayUsed()):?>
                         <input type="hidden" name="invoice[capture_case]" value="offline"/>
-                        <div><?= $block->escapeHtml(__('The invoice will be created offline without the payment gateway.')) ?></div>
+                        <div>
+                            <?= $block->escapeHtml(__(
+                                'The invoice will be created offline without the payment gateway.'
+                            )) ?>
+                        </div>
                     <?php endif; ?>
                 <?php endif; ?>
                 <div class="admin__field admin__field-option field-append">
                     <input id="notify_customer" name="invoice[comment_customer_notify]" value="1" type="checkbox"
                            class="admin__control-checkbox" />
-                    <label class="admin__field-label" for="notify_customer"><?= $block->escapeHtml(__('Append Comments')) ?></label>
+                    <label class="admin__field-label" for="notify_customer">
+                        <?= $block->escapeHtml(__('Append Comments')) ?>
+                    </label>
                 </div>
-                <?php if ($block->canSendInvoiceEmail()) : ?>
+                <?php if ($block->canSendInvoiceEmail()): ?>
                 <div class="admin__field admin__field-option field-email">
                     <input id="send_email" name="invoice[send_email]" value="1" type="checkbox"
                            class="admin__control-checkbox" />
-                    <label class="admin__field-label" for="send_email"><?= $block->escapeHtml(__('Email Copy of Invoice')) ?></label>
+                    <label class="admin__field-label" for="send_email">
+                        <?= $block->escapeHtml(__('Email Copy of Invoice')) ?>
+                    </label>
                 </div>
                 <?php endif; ?>
                 <?= $block->getChildHtml('submit_before') ?>
@@ -129,13 +139,16 @@
     </div>
 </section>
 
-<script>
+<?php
+$enableSubmitButton = (int) !$block->getDisableSubmitButton();
+$scriptString = <<<script
+
 require(['jquery'], function(jQuery){
 
 //<![CDATA[
 var submitButtons = jQuery('.submit-button');
 var updateButtons = jQuery('.update-button');
-var enableSubmitButtons = <?= (int) !$block->getDisableSubmitButton() ?>;
+var enableSubmitButtons = {$enableSubmitButton};
 var fields = jQuery('.qty-input');
 
 function enableButtons(buttons) {
@@ -193,4 +206,6 @@ window.checkButtonsRelation = checkButtonsRelation;
 //]]>
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

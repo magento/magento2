@@ -1,7 +1,5 @@
 <?php
 /**
- * Validates properties of entity (\Magento\Framework\DataObject).
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,6 +8,11 @@ namespace Magento\Framework\Validator\Entity;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * Validates properties of entity (\Magento\Framework\DataObject).
+ *
+ * @api
+ */
 class Properties extends \Magento\Framework\Validator\AbstractValidator
 {
     /**
@@ -36,7 +39,6 @@ class Properties extends \Magento\Framework\Validator\AbstractValidator
      * @param AbstractModel $value
      * @return bool
      * @throws \InvalidArgumentException when $value is not instanceof \Magento\Framework\DataObject
-     * @api
      */
     public function isValid($value)
     {

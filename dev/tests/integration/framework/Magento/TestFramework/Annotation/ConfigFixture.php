@@ -11,7 +11,11 @@ namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\ScopeInterface;
+use Magento\TestFramework\Annotation\TestCaseAnnotation;
+use Magento\TestFramework\Fixture\Parser\Config as ConfigFixtureParser;
+use Magento\TestFramework\Fixture\ParserInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\TestCase;
@@ -69,9 +73,9 @@ class ConfigFixture
      * @param string $configPath
      * @param string $scopeType
      * @param string|null $scopeCode
-     * @return string|null
+     * @return mixed|null
      */
-    protected function getScopeConfigValue(string $configPath, string $scopeType, string $scopeCode = null): ?string
+    protected function getScopeConfigValue(string $configPath, string $scopeType, string $scopeCode = null)
     {
         $result = null;
         if ($scopeCode !== false) {
@@ -149,8 +153,11 @@ class ConfigFixture
     protected function _assignConfigData(TestCase $test)
     {
         $resolver = Resolver::getInstance();
-        $annotations = $test->getAnnotations();
-        $existingFixtures = $annotations['method'][self::ANNOTATION] ?? [];
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
+        $existingFixtures = array_merge(
+            $annotations['method'][self::ANNOTATION] ?? [],
+            $this->getConfigFixturesFromAttribute($test)
+        );
         /* Need to be applied even test does not have added fixtures because fixture can be added via config */
         $testAnnotations = $resolver->applyConfigFixtures(
             $test,
@@ -158,9 +165,9 @@ class ConfigFixture
             self::ANNOTATION
         );
         foreach ($testAnnotations as $configPathAndValue) {
-            if (preg_match('/^.+?(?=_store\s)/', $configPathAndValue, $matches)) {
+            if (preg_match('/^[^\/]+?(?=_store\s)/', $configPathAndValue, $matches)) {
                 $this->setStoreConfigValue($matches ?? [], $configPathAndValue);
-            } elseif (preg_match('/^.+?(?=_website\s)/', $configPathAndValue, $matches)) {
+            } elseif (preg_match('/^[^\/]+?(?=_website\s)/', $configPathAndValue, $matches)) {
                 $this->setWebsiteConfigValue($matches ?? [], $configPathAndValue);
             } else {
                 $this->setGlobalConfigValue($configPathAndValue);
@@ -214,6 +221,7 @@ class ConfigFixture
     {
         /* Global config value */
         list($configPath, $requiredValue) = preg_split('/\s+/', $configPathAndValue, 2);
+        $configPath = str_starts_with($configPath, 'default/') ? substr($configPath, 8) : $configPath;
         $originalValue = $this->_getConfigValue($configPath);
         $this->globalConfigValues[$configPath] = $originalValue;
         $this->_setConfigValue($configPath, $requiredValue);
@@ -291,5 +299,31 @@ class ConfigFixture
         if ($this->_currentTest) {
             $this->_assignConfigData($this->_currentTest);
         }
+    }
+
+    /**
+     * Returns config fixtures defined using Config attribute
+     *
+     * @param TestCase $test
+     * @return array
+     * @throws LocalizedException
+     */
+    private function getConfigFixturesFromAttribute(TestCase $test): array
+    {
+        $parser = Bootstrap::getObjectManager()->get(ConfigFixtureParser::class);
+        $configs = [];
+
+        foreach ($parser->parse($test, ParserInterface::SCOPE_METHOD) as $data) {
+            $configs[] = sprintf(
+                '%s%s %s',
+                $data['scopeType'] === ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+                    ? 'default/'
+                    : ($data['scopeValue'] ?? 'current') . '_' . $data['scopeType'] . ' ',
+                $data['path'],
+                $data['value'],
+            );
+        }
+
+        return $configs;
     }
 }

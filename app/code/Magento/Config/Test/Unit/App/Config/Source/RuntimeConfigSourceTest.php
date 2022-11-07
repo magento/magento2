@@ -17,118 +17,140 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\DB\Adapter\TableNotFoundException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test Class for retrieving runtime configuration from database.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RuntimeConfigSourceTest extends TestCase
 {
     /**
+     * @var RuntimeConfigSource
+     */
+    private $model;
+
+    /**
      * @var CollectionFactory|MockObject
      */
-    private $collectionFactory;
+    private $collectionFactoryMock;
 
     /**
      * @var ScopeCodeResolver|MockObject
      */
-    private $scopeCodeResolver;
+    private $scopeCodeResolverMock;
 
     /**
      * @var Converter|MockObject
      */
-    private $converter;
+    private $converterMock;
 
     /**
      * @var Value|MockObject
      */
-    private $configItem;
+    private $configItemMock;
 
     /**
      * @var Value|MockObject
      */
-    private $configItemTwo;
+    private $configItemMockTwo;
 
-    /**
-     * @var RuntimeConfigSource
-     */
-    private $configSource;
     /**
      * @var DeploymentConfig|MockObject
      */
-    private $deploymentConfig;
+    private $deploymentConfigMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->scopeCodeResolver = $this->getMockBuilder(ScopeCodeResolver::class)
+        $objectManager = new ObjectManager($this);
+
+        $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->converter = $this->getMockBuilder(Converter::class)
+        $this->scopeCodeResolverMock = $this->getMockBuilder(ScopeCodeResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configItem = $this->getMockBuilder(Value::class)
+        $this->converterMock = $this->getMockBuilder(Converter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getScope', 'getPath', 'getValue'])
             ->getMock();
-        $this->configItemTwo = $this->getMockBuilder(Value::class)
+        $this->configItemMock = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getScope', 'getPath', 'getValue', 'getScopeId'])
+            ->addMethods(['getScope', 'getPath', 'getValue'])
             ->getMock();
-        $this->deploymentConfig = $this->createPartialMock(DeploymentConfig::class, ['isDbAvailable']);
-        $this->configSource = new RuntimeConfigSource(
-            $this->collectionFactory,
-            $this->scopeCodeResolver,
-            $this->converter,
-            $this->deploymentConfig
+        $this->configItemMockTwo = $this->getMockBuilder(Value::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getScope', 'getPath', 'getValue', 'getScopeId'])
+            ->getMock();
+        $this->deploymentConfigMock = $this->createPartialMock(
+            DeploymentConfig::class,
+            ['isDbAvailable']
+        );
+        $this->model = $objectManager->getObject(
+            RuntimeConfigSource::class,
+            [
+                'collectionFactory' => $this->collectionFactoryMock,
+                'scopeCodeResolver' => $this->scopeCodeResolverMock,
+                'converter' => $this->converterMock,
+                'deploymentConfig' => $this->deploymentConfigMock,
+            ]
         );
     }
 
-    public function testGet()
+    /**
+     * Test get initial data.
+     *
+     * @return void
+     */
+    public function testGet(): void
     {
-        $this->deploymentConfig->method('isDbAvailable')
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isDbAvailable')
             ->willReturn(true);
         $collection = $this->createPartialMock(Collection::class, ['load', 'getIterator']);
-        $collection->method('load')
+        $collection->expects($this->once())
+            ->method('load')
             ->willReturn($collection);
-        $collection->method('getIterator')
-            ->willReturn(new ArrayIterator([$this->configItem, $this->configItemTwo]));
+        $collection->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new ArrayIterator([$this->configItemMock, $this->configItemMockTwo]));
         $scope = 'websites';
         $scopeCode = 'myWebsites';
-        $this->collectionFactory->expects($this->once())
+        $this->collectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($collection);
-        $this->configItem->expects($this->exactly(2))
+        $this->configItemMock->expects($this->exactly(2))
             ->method('getScope')
             ->willReturn(ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
-        $this->configItem->expects($this->once())
+        $this->configItemMock->expects($this->once())
             ->method('getPath')
             ->willReturn('dev/test/setting');
-        $this->configItem->expects($this->once())
+        $this->configItemMock->expects($this->once())
             ->method('getValue')
             ->willReturn(true);
 
-        $this->configItemTwo->expects($this->exactly(3))
+        $this->configItemMockTwo->expects($this->exactly(3))
             ->method('getScope')
             ->willReturn($scope);
-        $this->configItemTwo->expects($this->once())
+        $this->configItemMockTwo->expects($this->once())
             ->method('getScopeId')
             ->willReturn($scopeCode);
-        $this->configItemTwo->expects($this->once())
+        $this->configItemMockTwo->expects($this->once())
             ->method('getPath')
             ->willReturn('dev/test/setting2');
-        $this->configItemTwo->expects($this->once())
+        $this->configItemMockTwo->expects($this->once())
             ->method('getValue')
             ->willReturn(false);
-        $this->scopeCodeResolver->expects($this->once())
+        $this->scopeCodeResolverMock->expects($this->once())
             ->method('resolve')
             ->with($scope, $scopeCode)
             ->willReturnArgument(1);
-        $this->converter->expects($this->exactly(2))
+        $this->converterMock->expects($this->exactly(2))
             ->method('convert')
             ->withConsecutive(
                 [['dev/test/setting' => true]],
@@ -150,25 +172,97 @@ class RuntimeConfigSourceTest extends TestCase
                     ]
                 ]
             ],
-            $this->configSource->get()
+            $this->model->get()
         );
     }
 
-    public function testGetWhenDbIsNotAvailable()
+    /**
+     * Test get with not available db
+     *
+     * @return void
+     */
+    public function testGetWhenDbIsNotAvailable(): void
     {
-        $this->deploymentConfig->method('isDbAvailable')->willReturn(false);
-        $this->assertEquals([], $this->configSource->get());
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isDbAvailable')
+            ->willReturn(false);
+        $this->assertEquals([], $this->model->get());
     }
 
-    public function testGetWhenDbIsEmpty()
+    /**
+     * Test get with empty db
+     *
+     * @return void
+     */
+    public function testGetWhenDbIsEmpty(): void
     {
-        $this->deploymentConfig->method('isDbAvailable')
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isDbAvailable')
             ->willReturn(true);
         $collection = $this->createPartialMock(Collection::class, ['load']);
-        $collection->method('load')
+        $collection->expects($this->once())
+            ->method('load')
             ->willThrowException($this->createMock(TableNotFoundException::class));
-        $this->collectionFactory->method('create')
+        $this->collectionFactoryMock->expects($this->once())
+            ->method('create')
             ->willReturn($collection);
-        $this->assertEquals([], $this->configSource->get());
+
+        $this->assertEquals([], $this->model->get());
+    }
+
+    /**
+     * Test get value for specified config
+     *
+     * @dataProvider configDataProvider
+     *
+     * @param string $path
+     * @param array $configData
+     * @param string $expectedResult
+     * @return void
+     */
+    public function testGetConfigValue(string $path, array $configData, string $expectedResult): void
+    {
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isDbAvailable')
+            ->willReturn(true);
+
+        $collection = $this->createPartialMock(Collection::class, ['load', 'getIterator']);
+        $collection->expects($this->once())
+            ->method('load')
+            ->willReturn($collection);
+        $collection->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new ArrayIterator([$this->configItemMock]));
+
+        $this->collectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($collection);
+
+        $this->configItemMock->expects($this->exactly(2))
+            ->method('getScope')
+            ->willReturn(ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+        $this->configItemMock->expects($this->once())
+            ->method('getPath')
+            ->willReturn($path);
+
+        $this->converterMock->expects($this->once())
+            ->method('convert')
+            ->willReturn($configData);
+
+        $this->assertEquals($expectedResult, $this->model->get($path));
+    }
+
+    /**
+     * DataProvider for testGetConfigValue
+     *
+     * @return array
+     */
+    public function configDataProvider(): array
+    {
+        return [
+            'config value 0' => ['default/test/option', ['test' => ['option' => 0]], '0'],
+            'config value blank' => ['default/test/option', ['test' => ['option' => '']], ''],
+            'config value null' => ['default/test/option', ['test' => ['option' => null]], ''],
+        ];
     }
 }

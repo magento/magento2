@@ -451,7 +451,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if the parsing of URL directives is allowed for the catalog
      *
      * @return bool
-     * @deprecated
+     * @deprecated 103.0.0
      * @see \Magento\Catalog\Helper\Output::isDirectivesExists
      */
     public function isUrlDirectivesParsingAllowed()

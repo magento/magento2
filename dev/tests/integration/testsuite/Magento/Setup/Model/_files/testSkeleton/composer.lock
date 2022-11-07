@@ -556,10 +556,6 @@
                         "lib/web/ko"
                     ],
                     [
-                        "lib/web/modernizr",
-                        "lib/web/modernizr"
-                    ],
-                    [
                         "lib/web/date-format-normalizer.js",
                         "lib/web/date-format-normalizer.js"
                     ],
@@ -818,10 +814,6 @@
                     [
                         "LICENSE.txt",
                         "LICENSE.txt"
-                    ],
-                    [
-                        ".travis.yml",
-                        ".travis.yml"
                     ],
                     [
                         "app/bootstrap.php",

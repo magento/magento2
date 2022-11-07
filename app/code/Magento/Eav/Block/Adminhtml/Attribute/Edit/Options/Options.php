@@ -145,14 +145,16 @@ class Options extends \Magento\Backend\Block\Template
     ) {
         $type = $attribute->getFrontendInput();
         if ($type === 'select' || $type === 'multiselect') {
-            $defaultValues = explode(',', $attribute->getDefaultValue());
+            $defaultValues = is_string($attribute->getDefaultValue())
+                ? explode(',', $attribute->getDefaultValue())
+                : [];
             $inputType = $type === 'select' ? 'radio' : 'checkbox';
         } else {
             $defaultValues = [];
             $inputType = '';
         }
 
-        $values = [[]];
+        $values = [];
         $isSystemAttribute = is_array($optionCollection);
         if ($isSystemAttribute) {
             $values[] = $this->getPreparedValues($optionCollection, $isSystemAttribute, $inputType, $defaultValues);
@@ -168,7 +170,7 @@ class Options extends \Magento\Backend\Block\Template
             }
         }
 
-        return array_merge(...$values);
+        return array_merge([], ...$values);
     }
 
     /**

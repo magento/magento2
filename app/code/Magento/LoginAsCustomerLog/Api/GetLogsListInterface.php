@@ -14,6 +14,7 @@ use Magento\LoginAsCustomerLog\Api\Data\LogSearchResultsInterface;
  * Get login as customer log list considering search criteria.
  *
  * @api
+ * @since 100.4.0
  */
 interface GetLogsListInterface
 {
@@ -22,6 +23,7 @@ interface GetLogsListInterface
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return LogSearchResultsInterface
+     * @since 100.4.0
      */
     public function execute(SearchCriteriaInterface $searchCriteria): LogSearchResultsInterface;
 }

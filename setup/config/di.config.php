@@ -4,27 +4,39 @@
  * See COPYING.txt for license details.
  */
 
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceManager;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\DB\Logger\Quiet;
+use Magento\Framework\DB\LoggerInterface;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Locale\Config;
+use Magento\Framework\Locale\ConfigInterface;
+use Magento\Framework\Setup\Declaration\Schema\SchemaConfig;
+
 return [
-    'di' => [
-        'instance' => [
-            'preference' => [
-                \Laminas\EventManager\EventManagerInterface::class => 'EventManager',
-                \Laminas\ServiceManager\ServiceLocatorInterface::class => \Laminas\ServiceManager\ServiceManager::class,
-                \Magento\Framework\DB\LoggerInterface::class => \Magento\Framework\DB\Logger\Quiet::class,
-                \Magento\Framework\Locale\ConfigInterface::class => \Magento\Framework\Locale\Config::class,
-                \Magento\Framework\Filesystem\DriverInterface::class =>
-                    \Magento\Framework\Filesystem\Driver\File::class,
-                \Magento\Framework\Component\ComponentRegistrarInterface::class =>
-                    \Magento\Framework\Component\ComponentRegistrar::class,
+    'dependencies' => [
+        'auto' => [
+            'preferences' => [
+                EventManagerInterface::class => 'EventManager',
+                ServiceLocatorInterface::class => ServiceManager::class,
+                LoggerInterface::class => Quiet::class,
+                ConfigInterface::class => Config::class,
+                DriverInterface::class => \Magento\Framework\Filesystem\Driver\File::class,
+                ComponentRegistrarInterface::class => ComponentRegistrar::class,
             ],
-            \Magento\Framework\Setup\Declaration\Schema\SchemaConfig::class => [
-                'parameters' => [
-                    'connectionScopes' => [
-                        'default',
-                        'checkout',
-                        'sales'
+            'types' => [
+                SchemaConfig::class => [
+                    'parameters' => [
+                        'connectionScopes' => [
+                            'default',
+                            'checkout',
+                            'sales'
+                        ]
                     ]
-                ]
+                ],
             ],
         ],
     ],

@@ -7,7 +7,7 @@
 <!--@subject {{trans "Your %store_name order has shipped" store_name=$store.frontend_name}} @-->
 <!--@vars {
 "var formattedBillingAddress|raw":"Billing Address",
-"var billing.name":"Guest Customer Name",
+"var order_data.customer_name":"Guest Customer Name",
 "var order.increment_id":"Order Id",
 "var payment_html|raw":"Payment Details",
 "var comment|escape|nl2br":"Shipment Comment",
@@ -31,7 +31,7 @@
 <table>
     <tr class="email-intro">
         <td>
-            <p class="greeting">{{trans "%name," name=$billing.name}}</p>
+            <p class="greeting">{{trans "%name," name=$order_data.customer_name}}</p>
             <p>
                 {{trans "Thank you for your order from %store_name." store_name=$store.frontend_name}}
                 {{trans 'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>' store_email=$store_email |raw}}{{depend store_phone}} {{trans 'or call us at <a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}{{/depend}}.

@@ -508,8 +508,7 @@ class Multishipping extends \Magento\Framework\DataObject
     protected function _addShippingItem($quoteItemId, $data)
     {
         $qty = isset($data['qty']) ? (int)$data['qty'] : 1;
-        //$qty       = $qty > 0 ? $qty : 1;
-        $addressId = isset($data['address']) ? $data['address'] : false;
+        $addressId = isset($data['address']) ? (int)$data['address'] : false;
         $quoteItem = $this->getQuote()->getItemById($quoteItemId);
 
         if ($addressId && $quoteItem) {
@@ -695,7 +694,7 @@ class Multishipping extends \Magento\Framework\DataObject
         );
 
         $shippingMethodCode = $address->getShippingMethod();
-        if (isset($shippingMethodCode) && !empty($shippingMethodCode)) {
+        if ($shippingMethodCode) {
             $rate = $address->getShippingRateByCode($shippingMethodCode);
             $shippingPrice = $rate->getPrice();
         } else {
@@ -975,7 +974,8 @@ class Multishipping extends \Magento\Framework\DataObject
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        return $error;
+
+        return __($error);
     }
 
     /**
@@ -1118,7 +1118,7 @@ class Multishipping extends \Magento\Framework\DataObject
             $this->getCustomer()->getAddresses()
         );
 
-        return !is_numeric($addressId) || in_array($addressId, $applicableAddressIds);
+        return in_array($addressId, $applicableAddressIds);
     }
 
     /**
@@ -1184,7 +1184,9 @@ class Multishipping extends \Magento\Framework\DataObject
 
         $baseTotal = 0;
         foreach ($addresses as $address) {
-            $taxes = $taxInclude ? $address->getBaseTaxAmount() : 0;
+            $taxes = $taxInclude
+                ? $address->getBaseTaxAmount() + $address->getBaseDiscountTaxCompensationAmount()
+                : 0;
             $baseTotal += $address->getBaseSubtotalWithDiscount() + $taxes;
         }
 

@@ -32,12 +32,15 @@
             </actionGroup>
             <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessageAppears"/>
             <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) have been deleted." stepKey="seeSuccessMessage"/>
-            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFiltersAfter"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFiltersAfter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!-- Create virtual product-->
-        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId,'virtual')}}" stepKey="openVirtualProductCreatePage"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="openVirtualProductCreatePage">
+            <argument name="attributeSetId" value="{{AddToDefaultSet.attributeSetId}}"/>
+            <argument name="productType" value="virtual"/>
+        </actionGroup>
         <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillNewProductData">
             <argument name="product" value="virtualProductGeneralGroup"/>
         </actionGroup>
@@ -86,7 +89,7 @@
             <actualResult type="variable">selectedCategories</actualResult>
             <expectedResult type="array">[$categoryEntity.name$]</expectedResult>
         </assertEquals>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneOnCategorySelect"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneOnCategorySelect"/>
         <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{virtualProductGeneralGroup.visibility}}" stepKey="seeVisibility"/>
         <conditionalClick selector="{{AdminProductSEOSection.sectionHeader}}" dependentSelector="{{AdminProductSEOSection.useDefaultUrl}}" visible="false" stepKey="openSearchEngineOptimizationSection"/>
         <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="scrollToAdminProductSEOSection"/>

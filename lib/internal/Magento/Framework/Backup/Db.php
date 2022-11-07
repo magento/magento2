@@ -14,6 +14,7 @@ use Magento\Framework\Backup\Filesystem\Iterator\File;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 100.0.2
  */
 class Db extends AbstractBackup
 {

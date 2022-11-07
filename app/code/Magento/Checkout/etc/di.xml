@@ -49,4 +49,11 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Checkout\Api\PaymentProcessingRateLimiterInterface"
+                type="Magento\Checkout\Model\CaptchaPaymentProcessingRateLimiter" />
+    <preference for="Magento\Checkout\Api\PaymentSavingRateLimiterInterface"
+                type="Magento\Checkout\Model\CaptchaPaymentSavingRateLimiter" />
+    <type name="Magento\Customer\Model\ResourceModel\Customer">
+        <plugin name="recollect_quote_on_customer_group_change" type="Magento\Checkout\Model\Plugin\RecollectQuoteOnCustomerGroupChange"/>
+    </type>
 </config>

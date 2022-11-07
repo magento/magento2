@@ -13,7 +13,9 @@
             <!--Config PayPal Express Checkout-->
             <actionGroup ref="ConfigPayPalExpressCheckoutActionGroup" stepKey="ConfigPayPalExpressCheckout"/>
             <!-- Configure PayPal Express Checkout -->
-            <magentoCLI command="cache:clean" arguments="config full_page" stepKey="cleanFullPageCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
         </before>
         <after>
             <!-- Cleanup Paypal configurations -->
@@ -21,7 +23,9 @@
             <magentoCLI command="config:set {{StorefrontPaypalDisableInContextCheckoutConfigData.path}} {{StorefrontPaypalDisableInContextCheckoutConfigData.value}}" stepKey="disableInContextPayPal"/>
             <magentoCLI command="config:set {{StorefrontPaypalDisableConfigData.path}} {{StorefrontPaypalDisableConfigData.value}}" stepKey="disablePaypal"/>
             <createData entity="SamplePaypalConfig" stepKey="setDefaultPaypalConfig"/>
-            <magentoCLI command="cache:clean" arguments="config full_page" stepKey="cleanFullPageCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
         </after>
         <include>
             <group name="paypalExpress"/>

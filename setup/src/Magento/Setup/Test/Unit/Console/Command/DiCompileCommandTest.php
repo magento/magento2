@@ -22,7 +22,7 @@ use Magento\Setup\Module\Di\App\Task\Manager;
 use Magento\Setup\Module\Di\App\Task\OperationFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -62,8 +62,11 @@ class DiCompileCommandTest extends TestCase
     /** @var  OutputInterface|MockObject */
     private $outputMock;
 
-    /** @var OutputFormatterInterface|MockObject */
-    private $outputFormatterMock;
+    /** @var OutputFormatter */
+    private $outputFormatter;
+
+    /** @var Filesystem\Io\File|MockObject */
+    private $fileMock;
 
     protected function setUp(): void
     {
@@ -96,18 +99,35 @@ class DiCompileCommandTest extends TestCase
         $this->fileDriverMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->fileDriverMock->method('getParentDirectory')->willReturnMap(
+            [
+                ['/path/to/module/one', '/path/to/module'],
+                ['/path/to/module', '/path/to'],
+                ['/path (1)/to/module/two', '/path (1)/to/module'],
+                ['/path (1)/to/module', '/path (1)/to'],
+            ]
+        );
         $this->componentRegistrarMock = $this->createMock(ComponentRegistrar::class);
         $this->componentRegistrarMock->expects($this->any())->method('getPaths')->willReturnMap([
             [ComponentRegistrar::MODULE, ['/path/to/module/one', '/path (1)/to/module/two']],
             [ComponentRegistrar::LIBRARY, ['/path/to/library/one', '/path (1)/to/library/two']],
         ]);
 
-        $this->outputFormatterMock = $this->createMock(
-            OutputFormatterInterface::class
-        );
+        $this->outputFormatter = new OutputFormatter();
         $this->outputMock = $this->getMockForAbstractClass(OutputInterface::class);
         $this->outputMock->method('getFormatter')
-            ->willReturn($this->outputFormatterMock);
+            ->willReturn($this->outputFormatter);
+        $this->fileMock = $this->getMockBuilder(Filesystem\Io\File::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->fileMock->method('getPathInfo')->willReturnMap(
+            [
+                ['/path/to/module/one', ['basename' => 'one']],
+                ['/path/to/module', ['basename' => 'module']],
+                ['/path (1)/to/module/two', ['basename' => 'two']],
+                ['/path (1)/to/module', ['basename' => 'module']],
+            ]
+        );
 
         $this->command = new DiCompileCommand(
             $this->deploymentConfigMock,
@@ -116,7 +136,8 @@ class DiCompileCommandTest extends TestCase
             $objectManagerProviderMock,
             $this->filesystemMock,
             $this->fileDriverMock,
-            $this->componentRegistrarMock
+            $this->componentRegistrarMock,
+            $this->fileMock
         );
     }
 
@@ -160,7 +181,7 @@ class DiCompileCommandTest extends TestCase
             ->with(ProgressBar::class)
             ->willReturn($progressBar);
 
-        $this->managerMock->expects($this->exactly(8))->method('addOperation')
+        $this->managerMock->expects($this->exactly(9))->method('addOperation')
             ->withConsecutive(
                 [OperationFactory::PROXY_GENERATOR, []],
                 [OperationFactory::REPOSITORY_GENERATOR, $this->anything()],
@@ -178,7 +199,8 @@ class DiCompileCommandTest extends TestCase
                 [OperationFactory::INTERCEPTION, $this->anything()],
                 [OperationFactory::AREA_CONFIG_GENERATOR, $this->anything()],
                 [OperationFactory::INTERCEPTION_CACHE, $this->anything()],
-                [OperationFactory::APPLICATION_ACTION_LIST_GENERATOR, $this->anything()]
+                [OperationFactory::APPLICATION_ACTION_LIST_GENERATOR, $this->anything()],
+                [OperationFactory::PLUGIN_LIST_GENERATOR, $this->anything()]
             );
 
         $this->managerMock->expects($this->once())->method('process');

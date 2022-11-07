@@ -22,5 +22,8 @@
         <element name="FieldError" type="text" selector=".admin__field-error[data-bind='attr: {for: {{field}}}, text: error']" parameterized="true"/>
         <element name="panelFieldControl" type="input" selector="//aside//div[@data-index=&quot;{{arg1}}&quot;]/descendant::*[@name=&quot;{{arg2}}&quot;]" parameterized="true"/>
         <element name="productsInCategory" type="input" selector="div[data-index='assign_products']" timeout="30"/>
+        <element name="scheduleDesignUpdateTab" type="block" selector="div[data-index='schedule_design_update']" timeout="15"/>
+        <element name="categoryNameRequiredField" type="text" selector="//label[@class='admin__field-error' and contains(text(),'This is a required field.')]" timeout="15"/>
+        <element name="urlExistsErrorMessage" type="text" selector="//div[@class='message message-error error']//h4[contains(text(),'The value specified in the URL Key field would generate a URL that already exists.')]" timeout="30"/>
     </section>
 </sections>

@@ -204,4 +204,9 @@
             <dataSet name="first_data_set" skip="true"/>
         </method>
     </test>
+    <global>
+        <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/global_fixture_first_module.php" />
+        <magentoConfigFixture scopeType="store" scopeCode="current" path="test_section/test_group/field_4" value="4th field globally overridden value"/>
+        <magentoConfigFixture scopeType="store" scopeCode="current" path="test_section/test_group/field_5" newValue="5th field globally replaced value"/>
+    </global>
 </overrides>

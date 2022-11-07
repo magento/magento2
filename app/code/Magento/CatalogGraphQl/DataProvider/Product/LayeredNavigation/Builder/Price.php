@@ -66,13 +66,13 @@ class Price implements LayerBuilderInterface
         foreach ($bucket->getValues() as $value) {
             $metrics = $value->getMetrics();
             $result['options'][] = $this->layerFormatter->buildItem(
-                \str_replace('_', '-', $metrics['value']),
+                isset($metrics['value']) ? \str_replace('_', '-', $metrics['value']) : '',
                 $metrics['value'],
                 $metrics['count']
             );
         }
 
-        return [$result];
+        return [self::PRICE_BUCKET => $result];
     }
 
     /**

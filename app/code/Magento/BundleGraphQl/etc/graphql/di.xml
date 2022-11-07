@@ -65,4 +65,71 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\OrderItem">
+        <arguments>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="bundle" xsi:type="string">BundleOrderItem</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\InvoiceItem">
+        <arguments>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="bundle" xsi:type="string">BundleInvoiceItem</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\ShipmentItem">
+        <arguments>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="bundle" xsi:type="string">BundleShipmentItem</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\CreditMemoItem">
+        <arguments>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="bundle" xsi:type="string">BundleCreditMemoItem</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesGraphQl\Model\Shipment\ItemProvider">
+        <arguments>
+            <argument name="formatters" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\BundleGraphQl\Model\Order\Shipment\BundleShipmentItemFormatter\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\WishlistGraphQl\Model\Resolver\Type\WishlistItemType">
+        <arguments>
+            <argument name="supportedTypes" xsi:type="array">
+                <item name="bundle" xsi:type="string">BundleWishlistItem</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\UrlRewriteGraphQl\Model\RoutableInterfaceTypeResolver">
+        <arguments>
+            <argument name="productTypeNameResolvers" xsi:type="array">
+                <item name="bundle_product_type_resolver" xsi:type="object">Magento\BundleGraphQl\Model\BundleProductTypeResolver</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\BundleGraphQl\Model\Resolver\Options\Label">
+        <arguments>
+            <argument name="product" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\ChildProduct</argument>
+        </arguments>
+    </type>
+    <type name="Magento\BundleGraphQl\Model\Resolver\PriceRange">
+        <arguments>
+            <argument name="productDataProvider" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\ChildProduct</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\BundleGraphQl\Model\Resolver\Options\Product"
+                 type="Magento\CatalogGraphQl\Model\Resolver\Product">
+        <arguments>
+            <argument name="productDataProvider" xsi:type="object">
+                Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\ChildProduct
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

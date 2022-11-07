@@ -5,15 +5,16 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-checkout": "*",
         "magento/module-customer": "*",
+        "magento/module-sales": "*",
         "magento/module-store": "*",
-        "laminas/laminas-captcha": "^2.7.1",
-        "laminas/laminas-db": "^2.8.2",
-        "laminas/laminas-session": "^2.7.3"
+        "magento/module-authorization": "*",
+        "laminas/laminas-captcha": "^2.12",
+        "laminas/laminas-db": "^2.13.4"
     },
     "type": "magento2-module",
     "license": [

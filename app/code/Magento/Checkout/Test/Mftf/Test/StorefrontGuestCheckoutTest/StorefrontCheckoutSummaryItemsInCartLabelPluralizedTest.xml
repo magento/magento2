@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckoutSummaryItemsInCartLabelPluralizedTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout page order summary section 'Item in Cart' is pluralized correctly or not"/>
+            <title value="'Item in Cart' is pluralized correctly"/>
+            <description value="When adding more then 1 item and check checkout page order summary section text 'Items in Cart' is pluralized correctly or not"/>
+            <severity value="AVERAGE"/>
+            <group value="Checkout"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">100.00</field>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCart">
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <see selector="{{StorefrontMinicartSection.productCountLabel}}" userInput="Item in Cart" stepKey="seeProductCountLabel"/>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
+        <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
+        <see selector="{{CheckoutCartSummarySection.itemsInCartLabel}}" userInput="Item in Cart" stepKey="seeFirstProductInList"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPageAgain">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCartAgain">
+            <argument name="quantity" value="4"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCartAgain"/>
+        <see selector="{{StorefrontMinicartSection.productCountLabel}}" userInput="Items in Cart" stepKey="seeProductCountLabelAgain"/>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPageAgain"/>
+        <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoadAgain"/>
+        <see selector="{{CheckoutCartSummarySection.itemsInCartLabel}}" userInput="Items in Cart" stepKey="seeFirstProductInListAgain"/>
+    </test>
+</tests>

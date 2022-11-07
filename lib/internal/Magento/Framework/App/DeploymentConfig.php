@@ -19,6 +19,10 @@ use Magento\Framework\Phrase;
  */
 class DeploymentConfig
 {
+    private const MAGENTO_ENV_PREFIX = 'MAGENTO_DC_';
+    private const ENV_NAME_PATTERN = '~^#env\(\s*(?<name>\w+)\s*(,\s*"(?<default>[^"]+)")?\)$~';
+    private const OVERRIDE_KEY = self::MAGENTO_ENV_PREFIX . '_OVERRIDE';
+
     /**
      * Configuration reader
      *
@@ -141,6 +145,19 @@ class DeploymentConfig
     }
 
     /**
+     * Get additional configuration from env variable MAGENTO_DC__OVERRIDE
+     *
+     * Data should be JSON encoded
+     *
+     * @return array
+     */
+    private function getEnvOverride() : array
+    {
+        $env = getenv(self::OVERRIDE_KEY);
+        return !empty($env) ? (json_decode($env, true) ?? []) : [];
+    }
+
+    /**
      * Loads the configuration data
      *
      * @return void
@@ -150,12 +167,26 @@ class DeploymentConfig
     private function load()
     {
         if (empty($this->data)) {
-            $this->data = $this->reader->load();
-            if ($this->overrideData) {
-                $this->data = array_replace($this->data, $this->overrideData);
-            }
+            $this->data = array_replace(
+                $this->reader->load(),
+                $this->overrideData ?? [],
+                $this->getEnvOverride()
+            );
             // flatten data for config retrieval using get()
             $this->flatData = $this->flattenParams($this->data);
+
+            // allow reading values from env variables by convention
+            // MAGENTO_DC_{path}, like db/connection/default/host =>
+            // can be overwritten by MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST
+            foreach (getenv() as $key => $value) {
+                if (false !== \strpos($key, self::MAGENTO_ENV_PREFIX)
+                    && $key !== self::OVERRIDE_KEY
+                ) {
+                    // convert MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST into db/connection/default/host
+                    $flatKey = strtolower(str_replace([self::MAGENTO_ENV_PREFIX, '__'], ['', '/'], $key));
+                    $this->flatData[$flatKey] = $value;
+                }
+            }
         }
     }
 
@@ -187,9 +218,19 @@ class DeploymentConfig
                 //phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new RuntimeException(new Phrase("Key collision '%1' is already defined.", [$newPath]));
             }
-            $flattenResult[$newPath] = $param;
+
             if (is_array($param)) {
+                $flattenResult[$newPath] = $param;
                 $this->flattenParams($param, $newPath, $flattenResult);
+            } else {
+                // allow reading values from env variables
+                // value need to be specified in %env(NAME, "default value")% format
+                // like #env(DB_PASSWORD), #env(DB_NAME, "test")
+                if ($param !== null && preg_match(self::ENV_NAME_PATTERN, $param, $matches)) {
+                    $param = getenv($matches['name']) ?: ($matches['default'] ?? null);
+                }
+
+                $flattenResult[$newPath] = $param;
             }
         }
 

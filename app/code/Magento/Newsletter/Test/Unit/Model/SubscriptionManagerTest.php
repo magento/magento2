@@ -136,11 +136,8 @@ class SubscriptionManagerTest extends TestCase
             ->with(Subscriber::XML_PATH_CONFIRMATION_FLAG, ScopeInterface::SCOPE_STORE, $storeId)
             ->willReturn($isConfirmNeed);
 
-        $this->assertEquals(
-            $subscriber,
-            $this->subscriptionManager->subscribe($email, $storeId)
-        );
-        $this->assertEquals($subscriber->getData(), $expectedData);
+        $this->assertEquals($subscriber, $this->subscriptionManager->subscribe($email, $storeId));
+        $this->assertEquals($expectedData, $subscriber->getData());
     }
 
     /**
@@ -308,7 +305,7 @@ class SubscriptionManagerTest extends TestCase
             $subscriber,
             $this->subscriptionManager->subscribeCustomer($customerId, $storeId)
         );
-        $this->assertEquals($subscriber->getData(), $expectedData);
+        $this->assertEquals($expectedData, $subscriber->getData());
     }
 
     /**
@@ -457,7 +454,7 @@ class SubscriptionManagerTest extends TestCase
                     'subscriber_status' => Subscriber::STATUS_SUBSCRIBED,
                     'subscriber_confirm_code' => '',
                 ],
-                'needToSendEmail' => false,
+                'needToSendEmail' => true,
             ],
             'Update subscription data: subscription confirm required ' => [
                 'subscriber_data' => [
@@ -553,7 +550,7 @@ class SubscriptionManagerTest extends TestCase
             $subscriber,
             $this->subscriptionManager->unsubscribeCustomer($customerId, $storeId)
         );
-        $this->assertEquals($subscriber->getData(), $expectedData);
+        $this->assertEquals($expectedData, $subscriber->getData());
     }
 
     /**
@@ -621,7 +618,7 @@ class SubscriptionManagerTest extends TestCase
                     'subscriber_status' => Subscriber::STATUS_NOT_ACTIVE,
                     'subscriber_confirm_code' => '',
                 ],
-                'needToSendEmail' => false,
+                'needToSendEmail' => true,
             ],
             'Update subscription data' => [
                 'subscriber_data' => [
@@ -645,7 +642,7 @@ class SubscriptionManagerTest extends TestCase
                     'subscriber_status' => Subscriber::STATUS_UNSUBSCRIBED,
                     'subscriber_confirm_code' => '',
                 ],
-                'needToSendEmail' => false,
+                'needToSendEmail' => true,
             ],
         ];
     }

@@ -9,6 +9,7 @@ namespace Magento\Framework\View;
  * Model that finds file paths by their fileId
  *
  * @api
+ * @since 100.0.2
  */
 class FileSystem
 {
@@ -170,7 +171,7 @@ class FileSystem
      */
     public static function normalizePath($path)
     {
-        $parts = explode('/', $path);
+        $parts = $path !== null ? explode('/', $path) : [];
         $result = [];
 
         foreach ($parts as $part) {
@@ -188,10 +189,10 @@ class FileSystem
     }
 
     /**
-     * Get a relative path between $relatedPath and $path paths as if $path was to refer to $relatedPath
-     * relatively of itself
-     *
      * Returns new calculated relative path.
+     *
+     * Get a relative path between $relatedPath and $path paths,
+     * as if $path was to refer to $relatedPath relatively of itself.
      * Examples:
      *   $path: /some/directory/one/file.ext
      *   $relatedPath: /some/directory/two/another/file.ext

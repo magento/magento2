@@ -21,6 +21,7 @@ define([
         },
         dataScope: 'global',
         currentCaptcha: null,
+        subscribedFormIds: [],
 
         /**
          * @return {*}
@@ -56,7 +57,7 @@ define([
          */
         checkCustomerData: function (formId, captchaData, captcha) {
             if (!_.isEmpty(captchaData) &&
-                !_.isEmpty(captchaData)[formId] &&
+                !_.isEmpty(captchaData[formId]) &&
                 captchaData[formId].timestamp > captcha.timestamp
             ) {
                 if (!captcha.isRequired() && captchaData[formId].isRequired) {
@@ -74,9 +75,12 @@ define([
          * @param {Object} captcha
          */
         subscribeCustomerData: function (formId, captcha) {
-            customerData.get('captcha').subscribe(function (captchaData) {
-                this.checkCustomerData(formId, captchaData, captcha);
-            }.bind(this));
+            if (this.subscribedFormIds.includes(formId) === false) {
+                this.subscribedFormIds.push(formId);
+                customerData.get('captcha').subscribe(function (captchaData) {
+                    this.checkCustomerData(formId, captchaData, captcha);
+                }.bind(this));
+            }
         },
 
         /**

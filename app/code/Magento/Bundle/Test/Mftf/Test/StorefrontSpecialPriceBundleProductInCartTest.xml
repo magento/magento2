@@ -17,7 +17,8 @@
                 <testCaseId value="MC-19134"/>
                 <useCaseId value="MC-18963"/>
                 <group value="bundle"/>
-            </annotations>
+            <group value="pr_exclude"/>
+        </annotations>
             <before>
                 <!-- Create the Simple product with Special price -->
                 <createData entity="SimpleProduct2" stepKey="simpleProduct"/>
@@ -36,7 +37,9 @@
                     <requiredEntity createDataKey="simpleProduct"/>
                 </createData>
                 <!-- Run reindex stock status -->
-                <magentoCLI command="indexer:reindex" arguments="cataloginventory_stock" stepKey="reindex"/>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value="cataloginventory_stock"/>
+                </actionGroup>
             </before>
             <after>
                 <deleteData createDataKey="bundleProduct" stepKey="deleteBundleProduct"/>

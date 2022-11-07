@@ -6,6 +6,7 @@
 
 namespace Magento\TestFramework\Annotation;
 
+use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,7 +25,7 @@ class DataFixtureBeforeTransaction extends AbstractDataFixture
     {
         $fixtures = $this->_getFixtures($test);
         if ($fixtures) {
-            $this->_applyFixtures($fixtures);
+            $this->_applyFixtures($fixtures, $test);
         }
     }
 
@@ -37,7 +38,7 @@ class DataFixtureBeforeTransaction extends AbstractDataFixture
     {
         /* Isolate other tests from test-specific fixtures */
         if ($this->_appliedFixtures && $this->_getFixtures($test)) {
-            $this->_revertFixtures();
+            $this->_revertFixtures($test);
         }
     }
 
@@ -47,5 +48,23 @@ class DataFixtureBeforeTransaction extends AbstractDataFixture
     protected function getAnnotation(): string
     {
         return self::ANNOTATION;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getParsers(): array
+    {
+        $parsers = [];
+        $parsers[] = Bootstrap::getObjectManager()->create(
+            \Magento\TestFramework\Fixture\Parser\DataFixture::class,
+            [
+                'attributeClass' => \Magento\TestFramework\Fixture\DataFixtureBeforeTransaction::class
+            ]
+        );
+        return array_merge(
+            parent::getParsers(),
+            $parsers
+        );
     }
 }

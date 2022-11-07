@@ -5,9 +5,21 @@
  */
 namespace Magento\Sales\Model\Order\Shipment\Sender;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Payment\Helper\Data;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\ShipmentCommentCreationInterface;
+use Magento\Sales\Api\Data\ShipmentInterface;
+use Magento\Sales\Model\Order\Address\Renderer;
+use Magento\Sales\Model\Order\Email\Container\ShipmentIdentity;
+use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
+use Magento\Sales\Model\Order\Email\SenderBuilderFactory;
 use Magento\Sales\Model\Order\Shipment\SenderInterface;
 use Magento\Framework\DataObject;
+use Magento\Sales\Model\ResourceModel\Order\Shipment;
+use Psr\Log\LoggerInterface;
 
 /**
  * Email notification sender for Shipment.
@@ -17,46 +29,46 @@ use Magento\Framework\DataObject;
 class EmailSender extends Sender implements SenderInterface
 {
     /**
-     * @var \Magento\Payment\Helper\Data
+     * @var Data
      */
     private $paymentHelper;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment
+     * @var Shipment
      */
     private $shipmentResource;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     private $globalConfig;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     private $eventManager;
 
     /**
-     * @param \Magento\Sales\Model\Order\Email\Container\Template $templateContainer
-     * @param \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity $identityContainer
-     * @param \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
-     * @param \Magento\Payment\Helper\Data $paymentHelper
-     * @param \Magento\Sales\Model\ResourceModel\Order\Shipment $shipmentResource
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param Template $templateContainer
+     * @param ShipmentIdentity $identityContainer
+     * @param SenderBuilderFactory $senderBuilderFactory
+     * @param LoggerInterface $logger
+     * @param Renderer $addressRenderer
+     * @param Data $paymentHelper
+     * @param Shipment $shipmentResource
+     * @param ScopeConfigInterface $globalConfig
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
-        \Magento\Sales\Model\Order\Email\Container\Template $templateContainer,
-        \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity $identityContainer,
-        \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
-        \Magento\Payment\Helper\Data $paymentHelper,
-        \Magento\Sales\Model\ResourceModel\Order\Shipment $shipmentResource,
-        \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
-        \Magento\Framework\Event\ManagerInterface $eventManager
+        Template $templateContainer,
+        ShipmentIdentity $identityContainer,
+        SenderBuilderFactory $senderBuilderFactory,
+        LoggerInterface $logger,
+        Renderer $addressRenderer,
+        Data $paymentHelper,
+        Shipment $shipmentResource,
+        ScopeConfigInterface $globalConfig,
+        ManagerInterface $eventManager
     ) {
         parent::__construct(
             $templateContainer,
@@ -83,25 +95,24 @@ class EmailSender extends Sender implements SenderInterface
      * Otherwise, email will be sent later during running of
      * corresponding cron job.
      *
-     * @param \Magento\Sales\Api\Data\OrderInterface $order
-     * @param \Magento\Sales\Api\Data\ShipmentInterface $shipment
-     * @param \Magento\Sales\Api\Data\ShipmentCommentCreationInterface|null $comment
+     * @param OrderInterface $order
+     * @param ShipmentInterface $shipment
+     * @param ShipmentCommentCreationInterface|null $comment
      * @param bool $forceSyncMode
      *
      * @return bool
      * @throws \Exception
      */
     public function send(
-        \Magento\Sales\Api\Data\OrderInterface $order,
-        \Magento\Sales\Api\Data\ShipmentInterface $shipment,
-        \Magento\Sales\Api\Data\ShipmentCommentCreationInterface $comment = null,
+        OrderInterface $order,
+        ShipmentInterface $shipment,
+        ShipmentCommentCreationInterface $comment = null,
         $forceSyncMode = false
     ) {
+        $this->identityContainer->setStore($order->getStore());
         $shipment->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
-            $this->identityContainer->setStore($order->getStore());
-
             $transport = [
                 'order' => $order,
                 'order_id' => $order->getId(),
@@ -112,7 +123,13 @@ class EmailSender extends Sender implements SenderInterface
                 'payment_html' => $this->getPaymentHtml($order),
                 'store' => $order->getStore(),
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
-                'formattedBillingAddress' => $this->getFormattedBillingAddress($order)
+                'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
+                'order_data' => [
+                    'customer_name' => $order->getCustomerName(),
+                    'is_not_virtual' => $order->getIsNotVirtual(),
+                    'email_customer_note' => $order->getEmailCustomerNote(),
+                    'frontend_status_label' => $order->getFrontendStatusLabel()
+                ]
             ];
             $transportObject = new DataObject($transport);
 
@@ -147,12 +164,12 @@ class EmailSender extends Sender implements SenderInterface
     /**
      * Returns payment info block as HTML.
      *
-     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     * @param OrderInterface $order
      *
      * @return string
      * @throws \Exception
      */
-    private function getPaymentHtml(\Magento\Sales\Api\Data\OrderInterface $order)
+    private function getPaymentHtml(OrderInterface $order)
     {
         return $this->paymentHelper->getInfoBlockHtml(
             $order->getPayment(),

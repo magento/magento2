@@ -3,93 +3,134 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Translation\Model;
 
-class InlineParserTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config\MutableScopeConfigInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\Translate\Inline;
+use Magento\Framework\App\Area;
+use Magento\Store\Model\ScopeInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Translation\Model\Inline\Parser;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
+/**
+ * Test for \Magento\Translation\Model\Inline\Parser.
+ */
+class InlineParserTest extends TestCase
 {
+    private const STUB_STORE = 'default';
+    private const XML_PATH_TRANSLATE_INLINE_ACTIVE = 'dev/translate_inline/active';
+
     /**
-     * @var \Magento\Translation\Model\Inline\Parser
+     * @var Parser
      */
-    protected $_inlineParser;
+    private $model;
 
-    /** @var string */
-    protected $_storeId = 'default';
-
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        /** @var $inline \Magento\Framework\Translate\Inline */
-        $inline = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Framework\Translate\Inline::class);
-        $this->_inlineParser = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Translation\Model\Inline\Parser::class,
-            ['translateInline' => $inline]
-        );
-        /* Called getConfig as workaround for setConfig bug */
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Store\Model\StoreManagerInterface::class
-        )->getStore(
-            $this->_storeId
-        )->getConfig(
-            'dev/translate_inline/active'
-        );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\App\Config\MutableScopeConfigInterface::class
-        )->setValue(
-            'dev/translate_inline/active',
-            true,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $this->_storeId
-        );
+        $inline = Bootstrap::getObjectManager()->create(Inline::class);
+        $this->model = Bootstrap::getObjectManager()->create(Parser::class, ['translateInline' => $inline]);
+        Bootstrap::getObjectManager()->get(MutableScopeConfigInterface::class)
+            ->setValue(self::XML_PATH_TRANSLATE_INLINE_ACTIVE, true, ScopeInterface::SCOPE_STORE, self::STUB_STORE);
     }
 
     /**
+     * Process ajax post test
+     *
      * @dataProvider processAjaxPostDataProvider
+     *
+     * @param string $originalText
+     * @param string $translatedText
+     * @param string $area
+     * @param bool|null $isPerStore
+     * @return void
      */
-    public function testProcessAjaxPost($originalText, $translatedText, $isPerStore = null)
-    {
+    public function testProcessAjaxPost(
+        string $originalText,
+        string $translatedText,
+        string $area,
+        ?bool $isPerStore = null
+    ): void {
+        Bootstrap::getObjectManager()->get(State::class)
+            ->setAreaCode($area);
+
         $inputArray = [['original' => $originalText, 'custom' => $translatedText]];
         if ($isPerStore !== null) {
             $inputArray[0]['perstore'] = $isPerStore;
         }
-        $this->_inlineParser->processAjaxPost($inputArray);
+        $this->model->processAjaxPost($inputArray);
 
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Translation\Model\StringUtils::class
-        );
+        $model = Bootstrap::getObjectManager()->create(StringUtils::class);
         $model->load($originalText);
+
         try {
             $this->assertEquals($translatedText, $model->getTranslate());
             $model->delete();
         } catch (\Exception $e) {
             $model->delete();
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get(\Psr\Log\LoggerInterface::class)
+            Bootstrap::getObjectManager()->get(LoggerInterface::class)
                 ->critical($e);
         }
     }
 
     /**
+     * Data provider for testProcessAjaxPost
+     *
      * @return array
      */
-    public function processAjaxPostDataProvider()
+    public function processAjaxPostDataProvider(): array
     {
         return [
-            ['original text 1', 'translated text 1'],
-            ['original text 2', 'translated text 2', true]
+            ['original text 1', 'translated text 1', Area::AREA_ADMINHTML],
+            ['original text 1', 'translated text 1', Area::AREA_FRONTEND],
+            ['original text 2', 'translated text 2', Area::AREA_ADMINHTML, true],
+            ['original text 2', 'translated text 2', Area::AREA_FRONTEND, true],
         ];
     }
 
-    public function testSetGetIsJson()
+    /**
+     * Set get is json test
+     *
+     * @dataProvider allowedAreasDataProvider
+     *
+     * @param string $area
+     * @return void
+     */
+    public function testSetGetIsJson(string $area): void
     {
-        $isJsonProperty = new \ReflectionProperty(get_class($this->_inlineParser), '_isJson');
+        Bootstrap::getObjectManager()->get(State::class)
+            ->setAreaCode($area);
+
+        $isJsonProperty = new \ReflectionProperty(get_class($this->model), '_isJson');
         $isJsonProperty->setAccessible(true);
 
-        $this->assertFalse($isJsonProperty->getValue($this->_inlineParser));
+        $this->assertFalse($isJsonProperty->getValue($this->model));
 
-        $setIsJsonMethod = new \ReflectionMethod($this->_inlineParser, 'setIsJson');
+        $setIsJsonMethod = new \ReflectionMethod($this->model, 'setIsJson');
         $setIsJsonMethod->setAccessible(true);
-        $setIsJsonMethod->invoke($this->_inlineParser, true);
+        $setIsJsonMethod->invoke($this->model, true);
 
-        $this->assertTrue($isJsonProperty->getValue($this->_inlineParser));
+        $this->assertTrue($isJsonProperty->getValue($this->model));
+    }
+
+    /**
+     * Data provider for testSetGetIsJson
+     *
+     * @return array
+     */
+    public function allowedAreasDataProvider(): array
+    {
+        return [
+            [Area::AREA_ADMINHTML],
+            [Area::AREA_FRONTEND]
+        ];
     }
 }

@@ -2,39 +2,39 @@
 # See COPYING.txt for license details.
 
 type Mutation {
-    addDownloadableProductsToCart(input: AddDownloadableProductsToCartInput): AddDownloadableProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
+    addDownloadableProductsToCart(input: AddDownloadableProductsToCartInput @doc(description: "An input object that defines which downloadable products to add to the cart.")): AddDownloadableProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart") @doc(description: "Add one or more downloadable products to the specified cart. We recommend using `addProductsToCart` instead.")
 }
 
 input AddDownloadableProductsToCartInput {
-    cart_id: String!
-    cart_items: [DownloadableProductCartItemInput!]!
+    cart_id: String! @doc(description: "The ID of the cart.")
+    cart_items: [DownloadableProductCartItemInput!]! @doc(description: "An array of downloadable products to add.")
 }
 
-input DownloadableProductCartItemInput {
-    data: CartItemInput!
-    downloadable_product_links: [DownloadableProductLinksInput!]
-    customizable_options:[CustomizableOptionInput!]
+input DownloadableProductCartItemInput @doc(description: "Defines a single downloadable product.") {
+    data: CartItemInput! @doc(description: "The quantity and SKU of the downloadable product.")
+    downloadable_product_links: [DownloadableProductLinksInput!] @doc(description: "An array of objects containing the link_id of the downloadable product link.")
+    customizable_options:[CustomizableOptionInput!] @doc(description: "The ID and value of the option.")
 }
 
-input DownloadableProductLinksInput {
-    link_id: Int!
+input DownloadableProductLinksInput @doc(description: "Contains the link ID for the downloadable product.") {
+    link_id: Int! @doc(description: "The unique ID of the downloadable product link.")
 }
 
-type AddDownloadableProductsToCartOutput {
-    cart: Cart!
+type AddDownloadableProductsToCartOutput @doc(description: "Contains details about the cart after adding downloadable products.") {
+    cart: Cart! @doc(description: "The cart after adding products.")
 }
 
-type DownloadableCartItem implements CartItemInterface @doc(description: "Downloadable Cart Item") {
-    customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
-    links: [DownloadableProductLinks] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\DownloadableCartItem\\Links") @doc(description: "An array containing information about the links for the added to cart downloadable product")
-    samples: [DownloadableProductSamples] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\DownloadableCartItem\\Samples") @doc(description: "DownloadableProductSamples defines characteristics of a downloadable product")
+type DownloadableCartItem implements CartItemInterface @doc(description: "An implementation for downloadable product cart items.") {
+    customizable_options: [SelectedCustomizableOption]! @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions") @doc(description: "An array containing the customizable options the shopper selected.")
+    links: [DownloadableProductLinks] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\DownloadableCartItem\\Links") @doc(description: "An array containing information about the links for the downloadable product added to the cart.")
+    samples: [DownloadableProductSamples] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\DownloadableCartItem\\Samples") @doc(description: "An array containing information about samples of the selected downloadable product.")
 }
 
-type DownloadableProduct implements ProductInterface, CustomizableProductInterface @doc(description: "DownloadableProduct defines a product that the customer downloads") {
+type DownloadableProduct implements ProductInterface, RoutableInterface, CustomizableProductInterface @doc(description: "Defines a product that the shopper downloads.") {
     downloadable_product_samples: [DownloadableProductSamples] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\Samples") @doc(description: "An array containing information about samples of this downloadable product.")
-    downloadable_product_links: [DownloadableProductLinks] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\Links") @doc(description: "An array containing information about the links for this downloadable product")
-    links_purchased_separately: Int @doc(description: "A value of 1 indicates that each link in the array must be purchased separately")
-    links_title: String @doc(description: "The heading above the list of downloadable products")
+    downloadable_product_links: [DownloadableProductLinks] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\Links") @doc(description: "An array containing information about the links for this downloadable product.")
+    links_purchased_separately: Int @doc(description: "A value of 1 indicates that each link in the array must be purchased separately.")
+    links_title: String @doc(description: "The heading above the list of downloadable products.")
 }
 
 enum DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample") {
@@ -42,24 +42,48 @@ enum DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get th
     URL @deprecated(reason: "`sample_url` serves to get the downloadable sample")
 }
 
-type DownloadableProductLinks @doc(description: "DownloadableProductLinks defines characteristics of a downloadable product") {
-    id: Int @deprecated(reason: "This information should not be exposed on frontend")
-    title: String @doc(description: "The display name of the link")
-    sort_order: Int @doc(description: "A number indicating the sort order")
-    price: Float @doc(description: "The price of the downloadable product")
-    sample_url: String @doc(description: "URL to the downloadable sample")
-    is_shareable: Boolean @deprecated(reason: "This information should not be exposed on frontend")
-    number_of_downloads: Int @deprecated(reason: "This information should not be exposed on frontend")
+type DownloadableProductLinks @doc(description: "Defines characteristics of a downloadable product.") {
+    id: Int @deprecated(reason: "This information should not be exposed on frontend.")
+    title: String @doc(description: "The display name of the link.")
+    sort_order: Int @doc(description: "A number indicating the sort order.")
+    price: Float @doc(description: "The price of the downloadable product.")
+    sample_url: String @doc(description: "The full URL to the downloadable sample.")
+    is_shareable: Boolean @deprecated(reason: "This information should not be exposed on frontend.")
+    number_of_downloads: Int @deprecated(reason: "This information should not be exposed on frontend.")
     link_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+    sample_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+    sample_file: String @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+    uid: ID! @doc(description: "The unique ID for a `DownloadableProductLinks` object.") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\DownloadableLinksValueUid")
+}
+
+type DownloadableProductSamples @doc(description: "Defines characteristics of a downloadable product.") {
+    id: Int @deprecated(reason: "This information should not be exposed on frontend.")
+    title: String @doc(description: "The display name of the sample.")
+    sort_order: Int @doc(description: "A number indicating the sort order.")
+    sample_url: String @doc(description: "The full URL to the downloadable sample.")
     sample_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
     sample_file: String @deprecated(reason: "`sample_url` serves to get the downloadable sample")
 }
 
-type DownloadableProductSamples @doc(description: "DownloadableProductSamples defines characteristics of a downloadable product") {
-    id: Int @deprecated(reason: "This information should not be exposed on frontend")
-    title: String @doc(description: "The display name of the sample")
-    sort_order: Int @doc(description: "A number indicating the sort order")
-    sample_url: String @doc(description: "URL to the downloadable sample")
-    sample_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
-    sample_file: String @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+type DownloadableOrderItem implements OrderItemInterface @doc(description: "Defines downloadable product options for `OrderItemInterface`.") {
+    downloadable_links: [DownloadableItemsLinks] @doc(description: "A list of downloadable links that are ordered from the downloadable product.") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Order\\Item\\Links")
+}
+
+type DownloadableInvoiceItem implements InvoiceItemInterface @doc(description: "Defines downloadable product options for `InvoiceItemInterface`.") {
+    downloadable_links: [DownloadableItemsLinks] @doc(description: "A list of downloadable links that are invoiced from the downloadable product.") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Order\\Item\\Links")
+}
+
+type DownloadableCreditMemoItem implements CreditMemoItemInterface @doc(description: "Defines downloadable product options for `CreditMemoItemInterface`.") {
+    downloadable_links: [DownloadableItemsLinks] @doc(description: "A list of downloadable links that are refunded from the downloadable product.") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Order\\Item\\Links")
+}
+
+type DownloadableItemsLinks @doc(description: "Defines characteristics of the links for downloadable product.") {
+    title: String @doc(description: "The display name of the link.")
+    sort_order: Int @doc(description: "A number indicating the sort order.")
+    uid: ID! @doc(description: "The unique ID for a `DownloadableItemsLinks` object.") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\DownloadableLinksValueUid")
+}
+
+type DownloadableWishlistItem implements WishlistItemInterface @doc(description: "A downloadable product wish list item.") {
+    links_v2: [DownloadableProductLinks] @doc(description: "An array containing information about the selected links.") @resolver(class: "\\Magento\\DownloadableGraphQl\\Model\\Wishlist\\ItemLinks")
+    samples: [DownloadableProductSamples] @doc(description: "An array containing information about the selected samples.") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\Samples")
 }

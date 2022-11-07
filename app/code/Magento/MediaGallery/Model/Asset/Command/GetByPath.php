@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Provide media asset by path
  *
- * @deprecated use \Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface instead
+ * @deprecated 100.4.0 use \Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface instead
  * @see \Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface
  */
 class GetByPath implements GetByPathInterface

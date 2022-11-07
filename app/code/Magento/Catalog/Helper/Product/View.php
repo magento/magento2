@@ -26,29 +26,21 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     protected $messageGroups;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Helper\Product
      */
     protected $_catalogProduct = null;
 
     /**
-     * Catalog design
-     *
      * @var \Magento\Catalog\Model\Design
      */
     protected $_catalogDesign;
 
     /**
-     * Catalog session
-     *
      * @var \Magento\Catalog\Model\Session
      */
     protected $_catalogSession;
@@ -141,7 +133,9 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         if ($description) {
             $pageConfig->setDescription($description);
         } else {
-            $pageConfig->setDescription($this->string->substr(strip_tags($product->getDescription()), 0, 255));
+            $productDescription = is_string($product->getDescription()) ?
+                $this->string->substr(strip_tags($product->getDescription()), 0, 255) : '';
+            $pageConfig->setDescription($productDescription);
         }
 
         if ($this->_catalogProduct->canUseCanonicalTag()) {
@@ -193,7 +187,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
                 $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
             }
         }
-    
+
         $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], null, false);
         $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku]);
 

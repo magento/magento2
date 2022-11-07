@@ -28,7 +28,9 @@
             <!-- Enable payment method one of "Check/Money Order" and  shipping method one of "Free Shipping" -->
             <magentoCLI command="config:set {{enabledCheckMoneyOrder.label}} {{enabledCheckMoneyOrder.value}}" stepKey="enableCheckMoneyOrder"/>
             <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
-            <magentoCLI command="cache:clean config" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete data -->
@@ -49,8 +51,7 @@
         </actionGroup>
         <!-- Select Free shipping -->
         <actionGroup ref="OrderSelectFreeShippingActionGroup" stepKey="selectFreeShippingOption"/>
-        <!--Click *Submit Order* button-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="clickSubmitOrder" />
         <!-- Create Partial Shipment -->
         <actionGroup ref="AdminCreateShipmentFromOrderPage" stepKey="createNewShipment">
             <argument name="Qty" value="1"/>

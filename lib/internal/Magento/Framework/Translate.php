@@ -332,6 +332,8 @@ class Translate implements \Magento\Framework\TranslateInterface
                 continue;
             }
 
+            $key = is_array($key) ? $key : (string) $key;
+            $value = is_array($value) ? $value : (string) $value;
             $key = str_replace('""', '"', $key);
             $value = str_replace('""', '"', $value);
 
@@ -461,7 +463,7 @@ class Translate implements \Magento\Framework\TranslateInterface
      * @param string $locale
      * @return string
      *
-     * @deprecated
+     * @deprecated 102.0.1
      *
      * @see \Magento\Framework\Translate::getThemeTranslationFilesList
      */
@@ -589,7 +591,7 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getSerializer()
     {

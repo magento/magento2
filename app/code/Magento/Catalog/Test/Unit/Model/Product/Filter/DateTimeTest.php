@@ -10,6 +10,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Filter;
 use Magento\Catalog\Model\Product\Filter\DateTime;
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\Intl\DateFormatterFactory;
 use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
@@ -43,7 +44,7 @@ class DateTimeTest extends TestCase
             );
         $timezone = $objectManager->getObject(
             Timezone::class,
-            ['localeResolver' => $localeResolver]
+            ['localeResolver' => $localeResolver, 'dateFormatterFactory' => new DateFormatterFactory()]
         );
         $stdlibDateTimeFilter = $objectManager->getObject(
             \Magento\Framework\Stdlib\DateTime\Filter\DateTime::class,

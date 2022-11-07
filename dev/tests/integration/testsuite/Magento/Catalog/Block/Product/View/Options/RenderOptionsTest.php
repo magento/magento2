@@ -10,7 +10,6 @@ namespace Magento\Catalog\Block\Product\View\Options;
 /**
  * Test cases related to check that simple product custom option renders as expected.
  *
- * @magentoDbIsolation disabled
  * @magentoAppArea frontend
  */
 class RenderOptionsTest extends AbstractRenderCustomOptionsTest
@@ -88,5 +87,21 @@ class RenderOptionsTest extends AbstractRenderCustomOptionsTest
             'default',
             'catalog_product_view',
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getMaxCharactersCssClass(): string
+    {
+        return 'class="character-counter';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getOptionsBlockName(): string
+    {
+        return 'product.info.options';
     }
 }

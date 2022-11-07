@@ -9,7 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 $rootDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
     \Magento\Framework\Filesystem::class
 )->getDirectoryWrite(
-    DirectoryList::ROOT
+    DirectoryList::PUB
 );
 if ($rootDirectory->isExist('robots.txt')) {
     $rootDirectory->delete('robots.txt');

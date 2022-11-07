@@ -59,7 +59,7 @@ class CartItemProcessorTest extends TestCase
      */
     private $productOptionExtensionAttributes;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var MockObject */
     private $serializer;
 
     protected function setUp(): void
@@ -261,6 +261,27 @@ class CartItemProcessorTest extends TestCase
             ->willReturnSelf();
         $cartItemMock->expects($this->once())->method('setProductOption')->with($productOptionMock)->willReturnSelf();
 
+        $this->assertEquals($cartItemMock, $this->model->processOptions($cartItemMock));
+    }
+
+    /**
+     * Checks processOptions method with the empty custom option
+     *
+     * @return void
+     */
+    public function testProcessProductWithEmptyOption(): void
+    {
+        $customOption = $this->createMock(Option::class);
+        $productMock = $this->createMock(Product::class);
+        $productMock->method('getCustomOption')
+            ->with('attributes')
+            ->willReturn(null);
+        $customOption->expects($this->never())
+            ->method('getValue');
+        $cartItemMock = $this->createPartialMock(Item::class, ['getProduct']);
+        $cartItemMock->expects($this->once())
+            ->method('getProduct')
+            ->willReturn($productMock);
         $this->assertEquals($cartItemMock, $this->model->processOptions($cartItemMock));
     }
 }

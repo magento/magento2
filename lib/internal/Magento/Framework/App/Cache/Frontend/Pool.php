@@ -17,7 +17,7 @@ class Pool implements \Iterator
     /**
      * Frontend identifier associated with the default settings
      */
-    const DEFAULT_FRONTEND_ID = 'default';
+    public const DEFAULT_FRONTEND_ID = 'default';
 
     /**
      * @var DeploymentConfig
@@ -97,6 +97,7 @@ class Pool implements \Iterator
      *
      * @return \Magento\Framework\Cache\FrontendInterface
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         $this->_initialize();
@@ -106,6 +107,7 @@ class Pool implements \Iterator
     /**
      * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         $this->_initialize();
@@ -115,6 +117,7 @@ class Pool implements \Iterator
     /**
      * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         $this->_initialize();
@@ -124,6 +127,7 @@ class Pool implements \Iterator
     /**
      * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->_initialize();
@@ -133,6 +137,7 @@ class Pool implements \Iterator
     /**
      * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         $this->_initialize();

@@ -3,19 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
+
+use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\SalesRule\Model\Rule;
 
 class BuyXGetY extends AbstractDiscount
 {
     /**
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * Calculate discount data for BuyXGetY action.
+     *
+     * @param Rule $rule
+     * @param AbstractItem $item
      * @param float $qty
-     * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
+     * @return Data
      */
-    public function calculate($rule, $item, $qty)
+    public function calculate($rule, $item, $qty): Data
     {
-        /** @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData */
         $discountData = $this->discountFactory->create();
 
         $itemPrice = $this->validator->getItemPrice($item);

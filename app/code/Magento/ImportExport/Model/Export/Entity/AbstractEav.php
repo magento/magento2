@@ -14,6 +14,7 @@ use Magento\Store\Model\Store;
 /**
  * Export EAV entity abstract model
  *
+ * phpcs:ignore Magento2.Classes.AbstractApi
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -37,8 +38,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
     protected $attributeTypes = [];
 
     /**
-     * Entity type id.
-     *
      * @var int
      */
     protected $_entityTypeId;
@@ -158,17 +157,20 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
                             $attributeCode,
                             ['eq' => $exportFilter[$attributeCode]]
                         );
+                    } elseif (is_array($exportFilter[$attributeCode])) {
+                        $collection->addAttributeToFilter(
+                            $attributeCode,
+                            ['in' => $exportFilter[$attributeCode]]
+                        );
                     }
                 } elseif (Export::FILTER_TYPE_MULTISELECT == $attributeFilterType) {
                     if (is_array($exportFilter[$attributeCode])) {
                         array_filter($exportFilter[$attributeCode]);
-                        if (!empty($exportFilter[$attributeCode])) {
-                            foreach ($exportFilter[$attributeCode] as $val) {
-                                $collection->addAttributeToFilter(
-                                    $attributeCode,
-                                    ['finset' => $val]
-                                );
-                            }
+                        foreach ($exportFilter[$attributeCode] as $val) {
+                            $collection->addAttributeToFilter(
+                                $attributeCode,
+                                ['finset' => $val]
+                            );
                         }
                     }
                 } elseif (Export::FILTER_TYPE_INPUT == $attributeFilterType) {
@@ -184,11 +186,11 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
                         $to = array_shift($exportFilter[$attributeCode]);
 
                         if (is_scalar($from) && !empty($from)) {
-                            $date = (new \DateTime($from))->format('m/d/Y');
+                            $date = $this->_localeDate->date($from);
                             $collection->addAttributeToFilter($attributeCode, ['from' => $date, 'date' => true]);
                         }
                         if (is_scalar($to) && !empty($to)) {
-                            $date = (new \DateTime($to))->format('m/d/Y');
+                            $date = $this->_localeDate->date($to);
                             $collection->addAttributeToFilter($attributeCode, ['to' => $date, 'date' => true]);
                         }
                     }
@@ -244,12 +246,13 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
                 foreach ($attribute->getSource()->getAllOptions(false) as $option) {
                     $optionValues = is_array($option['value']) ? $option['value'] : [$option];
                     foreach ($optionValues as $innerOption) {
-                        if (strlen($innerOption['value'])) {
+                        if (isset($innerOption['value']) && strlen($innerOption['value'])) {
                             // skip ' -- Please Select -- ' option
                             $options[$innerOption['value']] = $innerOption[$index];
                         }
                     }
                 }
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (\Exception $e) {
                 // ignore exceptions connected with source models
             }

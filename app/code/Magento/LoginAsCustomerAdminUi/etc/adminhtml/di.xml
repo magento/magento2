@@ -6,7 +6,17 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Backend\Block\Widget\Button\Toolbar">
+    <type name="Magento\Backend\Block\Widget\Button\ToolbarInterface">
         <plugin name="login_as_customer_button_toolbar" type="Magento\LoginAsCustomerAdminUi\Plugin\Button\ToolbarPlugin"/>
+    </type>
+    <type name="Magento\LoginAsCustomerAdminUi\Ui\Customer\Component\Control\LoginAsCustomerButton">
+        <arguments>
+            <argument name="dataProvider" xsi:type="object">Magento\LoginAsCustomerAdminUi\Ui\Customer\Component\Control\LoginAsCustomerButton\DataProvider</argument>
+        </arguments>
+    </type>
+    <type name="Magento\LoginAsCustomerAdminUi\Plugin\Button\ToolbarPlugin">
+        <arguments>
+            <argument name="dataProvider" xsi:type="object">Magento\LoginAsCustomerAdminUi\Plugin\Button\ToolbarPlugin\DataProvider</argument>
+        </arguments>
     </type>
 </config>

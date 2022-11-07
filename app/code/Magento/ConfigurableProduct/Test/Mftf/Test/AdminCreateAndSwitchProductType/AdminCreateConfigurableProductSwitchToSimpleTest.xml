@@ -17,6 +17,7 @@
             <testCaseId value="MC-10926"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openProductFillForm">
             <argument name="productType" value="configurable"/>
@@ -24,6 +25,10 @@
         <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Type')}}" userInput="Simple Product" stepKey="seeProductTypeInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductTypeInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Type"/>
+            <argument name="value" value="Simple Product"/>
+        </actionGroup>
     </test>
 </tests>

@@ -5,14 +5,13 @@
  */
 namespace Magento\Framework\MessageQueue;
 
-use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
+use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
+use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
+use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
-use Magento\Framework\MessageQueue\ConsumerInterface;
-use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
-use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
-use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 
 /**
  * Class which creates Consumers
@@ -109,6 +108,10 @@ class ConsumerFactory
             ConsumerConfigurationInterface::QUEUE_NAME => $consumerConfigItem->getQueue(),
             ConsumerConfigurationInterface::TOPICS => $topics,
             ConsumerConfigurationInterface::MAX_MESSAGES => $consumerConfigItem->getMaxMessages(),
+            ConsumerConfigurationInterface::MAX_IDLE_TIME => $consumerConfigItem->getMaxIdleTime(),
+            ConsumerConfigurationInterface::SLEEP => $consumerConfigItem->getSleep(),
+            ConsumerConfigurationInterface::ONLY_SPAWN_WHEN_MESSAGE_AVAILABLE =>
+                $consumerConfigItem->getOnlySpawnWhenMessageAvailable()
         ];
 
         return $this->objectManager->create(
@@ -122,7 +125,7 @@ class ConsumerFactory
      *
      * @return ConsumerConfig
      *
-     * @deprecated 100.2.0
+     * @deprecated 103.0.0
      */
     private function getConsumerConfig()
     {
@@ -137,7 +140,7 @@ class ConsumerFactory
      *
      * @return CommunicationConfig
      *
-     * @deprecated 100.2.0
+     * @deprecated 103.0.0
      */
     private function getCommunicationConfig()
     {
