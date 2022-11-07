@@ -10594,16 +10594,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "3.10.3",
+            "version": "3.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "376bcf7643918615d5fdab8a2e0b93ae0a548bd7"
+                "reference": "af9708aa56ef72a580e7935a34a7bcd96d95689a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/376bcf7643918615d5fdab8a2e0b93ae0a548bd7",
-                "reference": "376bcf7643918615d5fdab8a2e0b93ae0a548bd7",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/af9708aa56ef72a580e7935a34a7bcd96d95689a",
+                "reference": "af9708aa56ef72a580e7935a34a7bcd96d95689a",
                 "shasum": ""
             },
             "require": {
@@ -10626,7 +10626,7 @@
                 "monolog/monolog": "^2.3",
                 "mustache/mustache": "~2.5",
                 "nikic/php-parser": "^4.4",
-                "php": ">7.3",
+                "php": ">7.4",
                 "php-webdriver/webdriver": "^1.9.0",
                 "spomky-labs/otphp": "^10.0",
                 "symfony/console": "^4.4||^5.4",
@@ -10680,9 +10680,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/3.10.3"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/3.11.0"
             },
-            "time": "2022-09-12T14:01:46+00:00"
+            "time": "2022-10-28T17:11:13+00:00"
         },
         {
             "name": "mustache/mustache",
