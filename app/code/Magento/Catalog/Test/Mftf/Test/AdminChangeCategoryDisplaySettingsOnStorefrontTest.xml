@@ -20,7 +20,6 @@
         <before>
             <!-- create category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
-
             <!-- create 11 simple products -->
             <createData entity="SimpleProduct" stepKey="createSimpleProduct1">
                 <field key="price">10</field>
@@ -94,7 +93,6 @@
             <field key="quantity">1000</field>
             <requiredEntity createDataKey="createCategory"/>
         </createData>
-
         </before>
         <after>
             <!-- delete created entities -->
@@ -124,7 +122,6 @@
         </actionGroup>
         <!-- Switch category view to List mode -->
         <actionGroup ref="StorefrontSwitchCategoryViewToListModeActionGroup" stepKey="switchCategoryViewToListMode"/>
-
         <!-- Sort products By Price -->
         <actionGroup ref="StorefrontCategoryPageSortProductActionGroup" stepKey="sortProductByPrice"/>
         <!-- Set Ascending Direction -->
@@ -133,7 +130,6 @@
         <selectOption selector="{{StorefrontCategoryTopToolbarSection.sortByDropdown}}" userInput="Product Name" stepKey="selectSortByProductName"/>
         <!-- Set Descending Direction -->
         <actionGroup ref="StorefrontCategoryPageSortDescendingActionGroup" stepKey="setDescendingDirection"/>
-<!--        <selectOption selector="{{StorefrontCategoryTopToolbarSection.sortDirectionDesc}}" stepKey="clickOnSortDirectionDesc"/>-->
         <selectOption selector="{{StorefrontCategoryTopToolbarSection.showDropdown}}" userInput="15" stepKey="selectShowProducts"/>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
     </test>
