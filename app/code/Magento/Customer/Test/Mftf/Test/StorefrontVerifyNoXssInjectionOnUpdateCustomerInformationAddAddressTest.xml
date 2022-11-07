@@ -20,6 +20,7 @@
             <skip>
                 <issueId value="DEPRECATED">Test outdated</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -38,6 +39,7 @@
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
                 <argument name="email" value="{{Colorado_US_Customer.email}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

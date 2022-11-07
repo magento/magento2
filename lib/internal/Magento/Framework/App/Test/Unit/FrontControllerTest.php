@@ -127,8 +127,8 @@ class FrontControllerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDispatchThrowException(): void
     {
         $this->expectException('LogicException');
@@ -210,8 +210,8 @@ class FrontControllerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDispatched(): void
     {
         $this->routerList->expects($this->any())
@@ -251,8 +251,8 @@ class FrontControllerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDispatchedNotFoundException(): void
     {
         $this->routerList->expects($this->any())

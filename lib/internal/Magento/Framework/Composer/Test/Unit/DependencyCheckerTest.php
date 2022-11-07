@@ -15,15 +15,19 @@ use PHPUnit\Framework\TestCase;
 class DependencyCheckerTest extends TestCase
 {
     /**
-    * @return void
-    */
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function testCheckDependencies(): void
     {
-        $composerApp =
-            $this->createPartialMock(Application::class, ['setAutoExit', 'resetComposer', 'run']);
+        $composerApp = $this->getMockBuilder(Application::class)
+            ->setMethods(['setAutoExit', 'resetComposer', 'run','__destruct'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $directoryList = $this->createMock(DirectoryList::class);
         $directoryList->expects($this->exactly(2))->method('getRoot');
         $composerApp->expects($this->once())->method('setAutoExit')->with(false);
+        $composerApp->expects($this->any())->method('__destruct');
 
         $composerApp
             ->method('run')
@@ -34,6 +38,7 @@ class DependencyCheckerTest extends TestCase
                             'magento/project-community-edition requires magento/package-a (1.0)' . PHP_EOL .
                             'magento/package-c requires magento/package-a (1.0)' . PHP_EOL;
                         $buffer->writeln($output);
+                        return 1;
                     }
                 ),
                 $this->returnCallback(
@@ -42,9 +47,10 @@ class DependencyCheckerTest extends TestCase
                             'magento/project-community-edition requires magento/package-a (1.0)' . PHP_EOL .
                             'magento/package-d requires magento/package-b (1.0)' . PHP_EOL;
                         $buffer->writeln($output);
+                        return 1;
                     }
                 )
-        );
+            );
 
         $dependencyChecker = new DependencyChecker($composerApp, $directoryList);
         $expected = [
@@ -58,15 +64,19 @@ class DependencyCheckerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function testCheckDependenciesExcludeSelf(): void
     {
-        $composerApp =
-            $this->createPartialMock(Application::class, ['setAutoExit', 'resetComposer', 'run']);
+        $composerApp = $this->getMockBuilder(Application::class)
+            ->setMethods(['setAutoExit', 'resetComposer', 'run','__destruct'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $directoryList = $this->createMock(DirectoryList::class);
         $directoryList->expects($this->exactly(3))->method('getRoot');
         $composerApp->expects($this->once())->method('setAutoExit')->with(false);
+        $composerApp->expects($this->any())->method('__destruct');
 
         $composerApp
             ->method('run')
@@ -77,6 +87,7 @@ class DependencyCheckerTest extends TestCase
                             'magento/project-community-edition requires magento/package-a (1.0)' . PHP_EOL .
                             'magento/package-c requires magento/package-a (1.0)' . PHP_EOL;
                         $buffer->writeln($output);
+                        return 1;
                     }
                 ),
                 $this->returnCallback(
@@ -85,6 +96,7 @@ class DependencyCheckerTest extends TestCase
                             'magento/project-community-edition requires magento/package-a (1.0)' . PHP_EOL .
                             'magento/package-d requires magento/package-b (1.0)' . PHP_EOL;
                         $buffer->writeln($output);
+                        return 1;
                     }
                 ),
                 $this->returnCallback(
@@ -92,6 +104,7 @@ class DependencyCheckerTest extends TestCase
                         $output = 'magento/package-d requires magento/package-c (1.0)' . PHP_EOL .
                             'magento/project-community-edition requires magento/package-a (1.0)' . PHP_EOL;
                         $buffer->writeln($output);
+                        return 1;
                     }
                 )
             );

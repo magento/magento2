@@ -2,7 +2,7 @@
     "name": "magento/module-login-as-customer-frontend-ui",
     "description": "",
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
         "magento/module-login-as-customer-api": "*",
         "magento/module-customer": "*",
@@ -14,7 +14,9 @@
         "AFL-3.0"
     ],
     "autoload": {
-        "files": [ "registration.php" ],
+        "files": [
+            "registration.php"
+        ],
         "psr-4": {
             "Magento\\LoginAsCustomerFrontendUi\\": ""
         }

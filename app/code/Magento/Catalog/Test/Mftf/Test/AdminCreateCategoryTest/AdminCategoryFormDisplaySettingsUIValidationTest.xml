@@ -16,7 +16,8 @@
         <severity value="BLOCKER"/>
         <testCaseId value="MAGETWO-95797"/>
         <group value="category"/>
-    </annotations>
+            <group value="pr_exclude"/>
+        </annotations>
     <before>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
     </before>

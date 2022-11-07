@@ -16,6 +16,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as Va
 use Magento\CatalogImportExport\Model\Import\Product\StatusProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\StockProcessor;
 use Magento\CatalogImportExport\Model\StockItemImporterInterface;
+use Magento\CatalogImportExport\Model\StockItemProcessorInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
@@ -23,7 +24,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
@@ -47,46 +47,47 @@ use Magento\Store\Model\Store;
  */
 class Product extends AbstractEntity
 {
+    private const DEFAULT_GLOBAL_MULTIPLE_VALUE_SEPARATOR = ',';
     public const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
     private const HASH_ALGORITHM = 'sha256';
 
     /**
      * Size of bunch - part of products to save in one step.
      */
-    const BUNCH_SIZE = 20;
+    public const BUNCH_SIZE = 20;
 
     /**
      * Size of bunch to delete attributes of products in one step.
      */
-    const ATTRIBUTE_DELETE_BUNCH = 1000;
+    public const ATTRIBUTE_DELETE_BUNCH = 1000;
 
     /**
      * Pseudo multi line separator in one cell.
      *
      * Can be used as custom option value delimiter or in configurable fields cells.
      */
-    const PSEUDO_MULTI_LINE_SEPARATOR = '|';
+    public const PSEUDO_MULTI_LINE_SEPARATOR = '|';
 
     /**
      * Symbol between Name and Value between Pairs.
      */
-    const PAIR_NAME_VALUE_SEPARATOR = '=';
+    public const PAIR_NAME_VALUE_SEPARATOR = '=';
 
     /**
      * Value that means all entities (e.g. websites, groups etc.)
      */
-    const VALUE_ALL = 'all';
+    public const VALUE_ALL = 'all';
 
     /**
      * Data row scopes.
      */
-    const SCOPE_DEFAULT = 1;
+    public const SCOPE_DEFAULT = 1;
 
-    const SCOPE_WEBSITE = 2;
+    public const SCOPE_WEBSITE = 2;
 
-    const SCOPE_STORE = 0;
+    public const SCOPE_STORE = 0;
 
-    const SCOPE_NULL = -1;
+    public const SCOPE_NULL = -1;
 
     /**
      * Permanent column names.
@@ -98,81 +99,79 @@ class Product extends AbstractEntity
     /**
      * Column product store.
      */
-    const COL_STORE = '_store';
+    public const COL_STORE = '_store';
 
     /**
      * Column product store view code.
      */
-    const COL_STORE_VIEW_CODE = 'store_view_code';
+    public const COL_STORE_VIEW_CODE = 'store_view_code';
 
     /**
      * Column website.
      */
-    const COL_WEBSITE = 'website_code';
+    public const COL_WEBSITE = 'website_code';
 
     /**
      * Column product attribute set.
      */
-    const COL_ATTR_SET = '_attribute_set';
+    public const COL_ATTR_SET = '_attribute_set';
 
     /**
      * Column product type.
      */
-    const COL_TYPE = 'product_type';
+    public const COL_TYPE = 'product_type';
 
     /**
      * Column product category.
      */
-    const COL_CATEGORY = 'categories';
+    public const COL_CATEGORY = 'categories';
 
     /**
      * Column product visibility.
      */
-    const COL_VISIBILITY = 'visibility';
+    public const COL_VISIBILITY = 'visibility';
 
     /**
      * Column product sku.
      */
-    const COL_SKU = 'sku';
+    public const COL_SKU = 'sku';
 
     /**
      * Column product name.
      */
-    const COL_NAME = 'name';
+    public const COL_NAME = 'name';
 
     /**
      * Column product website.
      */
-    const COL_PRODUCT_WEBSITES = '_product_websites';
+    public const COL_PRODUCT_WEBSITES = '_product_websites';
 
     /**
      * Attribute code for media gallery.
      */
-    const MEDIA_GALLERY_ATTRIBUTE_CODE = 'media_gallery';
+    public const MEDIA_GALLERY_ATTRIBUTE_CODE = 'media_gallery';
 
     /**
      * Column media image.
      */
-    const COL_MEDIA_IMAGE = '_media_image';
+    public const COL_MEDIA_IMAGE = '_media_image';
 
     /**
      * Inventory use config label.
      */
-    const INVENTORY_USE_CONFIG = 'Use Config';
+    public const INVENTORY_USE_CONFIG = 'Use Config';
 
     /**
      * Prefix for inventory use config.
      */
-    const INVENTORY_USE_CONFIG_PREFIX = 'use_config_';
+    public const INVENTORY_USE_CONFIG_PREFIX = 'use_config_';
 
     /**
      * Url key attribute code
      */
-    const URL_KEY = 'url_key';
+    public const URL_KEY = 'url_key';
 
     /**
-     * Attribute cache
-     *
      * @var array
      */
     protected $_attributeCache = [];
@@ -229,6 +228,7 @@ class Product extends AbstractEntity
      *
      * @deprecated 101.1.0 use DI for LinkProcessor class if you want to add additional types
      *
+     * @see Magento_CatalogImportExport::etc/di.xml
      * @var array
      */
     protected $_linkNameToId = [
@@ -238,8 +238,6 @@ class Product extends AbstractEntity
     ];
 
     /**
-     * Attributes codes which shows as date
-     *
      * @var array
      * @since 100.1.2
      */
@@ -253,8 +251,6 @@ class Product extends AbstractEntity
     ];
 
     /**
-     * Need to log in import history
-     *
      * @var bool
      */
     protected $logInHistory = true;
@@ -267,8 +263,6 @@ class Product extends AbstractEntity
     protected $_mediaGalleryAttributeId = null;
 
     /**
-     * Validation failure message template definitions
-     *
      * @var array
      * @codingStandardsIgnoreStart
      */
@@ -481,8 +475,6 @@ class Product extends AbstractEntity
     protected $_optionEntity;
 
     /**
-     * Catalog data
-     *
      * @var \Magento\Catalog\Helper\Data
      */
     protected $_catalogData = null;
@@ -557,6 +549,7 @@ class Product extends AbstractEntity
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory
      * @deprecated 101.0.0 this variable isn't used anymore.
+     * @see we don't recommend this approach anymore
      */
     protected $_stockResItemFac;
 
@@ -621,7 +614,9 @@ class Product extends AbstractEntity
     /**
      * @var array
      * @deprecated 100.0.3
+     *
      * @since 100.0.3
+     * @see we don't recommend this approach anymore
      */
     protected $productUrlKeys = [];
 
@@ -650,7 +645,7 @@ class Product extends AbstractEntity
     private $_logger;
 
     /**
-     * {@inheritdoc}
+     * @var string
      */
     protected $masterAttributeCode = 'sku';
 
@@ -691,15 +686,11 @@ class Product extends AbstractEntity
     protected $rowNumbers = [];
 
     /**
-     * Product entity link field
-     *
      * @var string
      */
     private $productEntityLinkField;
 
     /**
-     * Product entity identifier field
-     *
      * @var string
      */
     private $productEntityIdentifierField;
@@ -719,15 +710,11 @@ class Product extends AbstractEntity
     private $filesystem;
 
     /**
-     * Catalog config.
-     *
      * @var CatalogConfig
      */
     private $catalogConfig;
 
     /**
-     * Stock Item Importer
-     *
      * @var StockItemImporterInterface
      */
     private $stockItemImporter;
@@ -767,6 +754,11 @@ class Product extends AbstractEntity
      * @var LinkProcessor
      */
     private $linkProcessor;
+
+    /**
+     * @var StockItemProcessorInterface
+     */
+    private $stockItemProcessor;
 
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
@@ -817,6 +809,7 @@ class Product extends AbstractEntity
      * @param StockProcessor|null $stockProcessor
      * @param LinkProcessor|null $linkProcessor
      * @param File|null $fileDriver
+     * @param StockItemProcessorInterface|null $stockItemProcessor
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -871,7 +864,8 @@ class Product extends AbstractEntity
         StatusProcessor $statusProcessor = null,
         StockProcessor $stockProcessor = null,
         LinkProcessor $linkProcessor = null,
-        ?File $fileDriver = null
+        ?File $fileDriver = null,
+        ?StockItemProcessorInterface $stockItemProcessor = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -935,6 +929,8 @@ class Product extends AbstractEntity
         $this->dateTimeFactory = $dateTimeFactory ?? ObjectManager::getInstance()->get(DateTimeFactory::class);
         $this->productRepository = $productRepository ?? ObjectManager::getInstance()
                 ->get(ProductRepositoryInterface::class);
+        $this->stockItemProcessor = $stockItemProcessor ?? ObjectManager::getInstance()
+            ->get(StockItemProcessorInterface::class);
     }
 
     /**
@@ -1065,7 +1061,7 @@ class Product extends AbstractEntity
     {
         $productEntityTable = $this->_resourceFactory->create()->getEntityTable();
 
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $idsToDelete = [];
 
             foreach ($bunch as $rowNum => $rowData) {
@@ -1161,13 +1157,18 @@ class Product extends AbstractEntity
         foreach ($this->_productTypeModels as $productTypeModel) {
             $productTypeModel->saveData();
         }
-        $this->linkProcessor->saveLinks($this, $this->_dataSourceModel, $this->getProductEntityLinkField());
+        $this->linkProcessor->saveLinks(
+            $this,
+            $this->_dataSourceModel,
+            $this->getProductEntityLinkField(),
+            $this->getIds()
+        );
         $this->_saveStockItem();
         if ($this->_replaceFlag) {
             $this->getOptionEntity()->clearProductsSkuToId();
         }
+        $this->getOptionEntity()->setIds($this->getIds());
         $this->getOptionEntity()->importData();
-
         return $this;
     }
 
@@ -1297,12 +1298,13 @@ class Product extends AbstractEntity
      * Must be called after ALL products saving done.
      *
      * @deprecated 101.1.0 use linkProcessor Directly
+     * @see linkProcessor
      *
      * @return $this
      */
     protected function _saveLinks()
     {
-        $this->linkProcessor->saveLinks($this, $this->_dataSourceModel, $this->getProductEntityLinkField());
+        $this->linkProcessor->saveLinks($this, $this->_dataSourceModel, $this->getProductEntityLinkField(), []);
         return $this;
     }
 
@@ -1506,6 +1508,7 @@ class Product extends AbstractEntity
      * @return void
      * @since 100.0.4
      * @deprecated 100.2.3
+     * @see \Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor::initMediaGalleryResources
      */
     protected function initMediaGalleryResources()
     {
@@ -1587,7 +1590,7 @@ class Product extends AbstractEntity
         $productsQty = null;
         $entityLinkField = $this->getProductEntityLinkField();
 
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $entityRowsIn = [];
             $entityRowsUp = [];
             $attributes = [];
@@ -1848,7 +1851,6 @@ class Product extends AbstractEntity
                                 $mediaGalleryStoreData['disabled'] = 0;
                                 $mediaGallery[Store::DEFAULT_STORE_ID][$rowSku][$uploadedFile] = $mediaGalleryStoreData;
                             }
-
                         }
                     }
                 }
@@ -2337,8 +2339,9 @@ class Product extends AbstractEntity
      */
     protected function _saveStockItem()
     {
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $stockData = [];
+            $importedData = [];
             $productIdsToReindex = [];
             $stockChangedProductIds = [];
             // Format bunch to stock data rows
@@ -2364,12 +2367,13 @@ class Product extends AbstractEntity
 
                 if (!isset($stockData[$sku])) {
                     $stockData[$sku] = $row;
+                    $importedData[$sku] = $rowData;
                 }
             }
 
             // Insert rows
             if (!empty($stockData)) {
-                $this->stockItemImporter->import($stockData);
+                $this->stockItemProcessor->process($stockData, $importedData);
             }
 
             $this->reindexStockStatus($stockChangedProductIds);
@@ -2474,7 +2478,7 @@ class Product extends AbstractEntity
      */
     public function getNextBunch()
     {
-        return $this->_dataSourceModel->getNextBunch();
+        return $this->_dataSourceModel->getNextUniqueBunch($this->getIds());
     }
 
     /**
@@ -2765,7 +2769,7 @@ class Product extends AbstractEntity
         $code = '';
         foreach ($attributeNameValuePairs as $attributeData) {
             //process case when attribute has ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR inside its value
-            if (strpos($attributeData, self::PAIR_NAME_VALUE_SEPARATOR) === false) {
+            if ($attributeData === null || strpos($attributeData, self::PAIR_NAME_VALUE_SEPARATOR) === false) {
                 if (!$code) {
                     continue;
                 }
@@ -2826,7 +2830,11 @@ class Product extends AbstractEntity
     public function parseMultiselectValues($values, $delimiter = self::PSEUDO_MULTI_LINE_SEPARATOR)
     {
         if (empty($this->_parameters[Import::FIELDS_ENCLOSURE])) {
-            return explode($delimiter, $values);
+            if ($this->getMultipleValueSeparator() !== self::DEFAULT_GLOBAL_MULTIPLE_VALUE_SEPARATOR) {
+                $delimiter = $this->getMultipleValueSeparator();
+            }
+
+            return $values !== null ? explode($delimiter, $values) : [];
         }
         if (preg_match_all('~"((?:[^"]|"")*)"~', $values, $matches)) {
             return $values = array_map(
@@ -2957,7 +2965,7 @@ class Product extends AbstractEntity
                 )->joinLeft(
                     ['cpe' => $resource->getTable('catalog_product_entity')],
                     "cpe.entity_id = url_rewrite.entity_id"
-                )->where('request_path IN (?)', array_keys($urlKeys))
+                )->where('request_path IN (?)', array_map('strval', array_keys($urlKeys)))
                     ->where('store_id IN (?)', $storeId)
                     ->where('cpe.sku not in (?)', array_values($urlKeys))
             );
@@ -3130,8 +3138,11 @@ class Product extends AbstractEntity
      */
     private function isSkuExist($sku)
     {
-        $sku = strtolower($sku);
-        return isset($this->_oldSku[$sku]);
+        if ($sku !== null) {
+            $sku = strtolower($sku);
+            return isset($this->_oldSku[$sku]);
+        }
+        return false;
     }
 
     /**
@@ -3161,10 +3172,6 @@ class Product extends AbstractEntity
         $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
         $existStockData = $stockItemDo->getData();
 
-        if (isset($rowData['qty']) && $rowData['qty'] == 0 && !isset($rowData['is_in_stock'])) {
-            $rowData['is_in_stock'] = 0;
-        }
-
         $row = array_merge(
             $this->defaultStockData,
             array_intersect_key($existStockData, $this->defaultStockData),
@@ -3173,11 +3180,10 @@ class Product extends AbstractEntity
         );
 
         if ($this->stockConfiguration->isQty($this->skuProcessor->getNewSku($sku)['type_id'])) {
-            if (isset($rowData['qty']) && $rowData['qty'] == 0) {
-                $row['is_in_stock'] = 0;
-            }
             $stockItemDo->setData($row);
-            $row['is_in_stock'] = $row['is_in_stock'] ?? $this->stockStateProvider->verifyStock($stockItemDo);
+            $row['is_in_stock'] = $this->stockStateProvider->verifyStock($stockItemDo)
+                ? (int) $row['is_in_stock']
+                : 0;
             if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
                 $date = $this->dateTimeFactory->create('now', new \DateTimeZone('UTC'));
                 $row['low_stock_date'] = $date->format(DateTime::DATETIME_PHP_FORMAT);
@@ -3322,7 +3328,8 @@ class Product extends AbstractEntity
     {
         $result = '';
         if ($paths) {
-            $result = rtrim(array_shift($paths), DIRECTORY_SEPARATOR);
+            $firstPath = array_shift($paths);
+            $result = $firstPath !== null ? rtrim($firstPath, DIRECTORY_SEPARATOR) : '';
             foreach ($paths as $path) {
                 $result .= DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
             }

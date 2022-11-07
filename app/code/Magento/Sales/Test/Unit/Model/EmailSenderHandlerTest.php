@@ -26,6 +26,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test of sales emails sending observer.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailSenderHandlerTest extends TestCase
 {
@@ -152,6 +154,7 @@ class EmailSenderHandlerTest extends TestCase
      *
      * @return void
      * @dataProvider executeDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecute(
         int $configValue,

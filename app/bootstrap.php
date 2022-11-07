@@ -14,20 +14,31 @@ if (in_array('phar', \stream_get_wrappers())) {
 #ini_set('display_errors', 1);
 
 /* PHP version validation */
-if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 70300) {
+if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 70400) {
     if (PHP_SAPI == 'cli') {
-        echo 'Magento supports PHP 7.3.0 or later. ' .
+        echo 'Magento supports PHP 7.4.0 or later. ' .
             'Please read https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html';
     } else {
         echo <<<HTML
 <div style="font:12px/1.35em arial, helvetica, sans-serif;">
-    <p>Magento supports PHP 7.3.0 or later. Please read
+    <p>Magento supports PHP 7.4.0 or later. Please read
     <a target="_blank" href="https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html">
     Magento System Requirements</a>.
 </div>
 HTML;
     }
+    http_response_code(503);
     exit(1);
+}
+
+// PHP 8 compatibility. Define constants that are not present in PHP < 8.0
+if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 80000) {
+    if (!defined('T_NAME_QUALIFIED')) {
+        define('T_NAME_QUALIFIED', 24001);
+    }
+    if (!defined('T_NAME_FULLY_QUALIFIED')) {
+        define('T_NAME_FULLY_QUALIFIED', 24002);
+    }
 }
 
 require_once __DIR__ . '/autoload.php';

@@ -30,8 +30,6 @@ class Url extends \Magento\Framework\DataObject
     protected $filter;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
@@ -151,6 +149,7 @@ class Url extends \Magento\Framework\DataObject
                     UrlRewrite::ENTITY_ID => $product->getId(),
                     UrlRewrite::ENTITY_TYPE => \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::ENTITY_TYPE,
                     UrlRewrite::STORE_ID => $storeId,
+                    UrlRewrite::REDIRECT_TYPE => 0
                 ];
                 $useCategories = $this->scopeConfig->getValue(
                     \Magento\Catalog\Helper\Product::XML_PATH_PRODUCT_URL_USE_CATEGORY,

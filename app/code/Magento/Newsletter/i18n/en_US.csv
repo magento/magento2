@@ -91,7 +91,7 @@ Paused,Paused
 "You selected an invalid queue.","You selected an invalid queue."
 "We cannot mark as received subscriber.","We cannot mark as received subscriber."
 "Duplicate template code","Duplicate template code"
-"Follow this link to unsubscribe <!-- This tag is for unsubscribe link  --><a href=""{{var subscriber.getUnsubscriptionLink()}}"">{{var subscriber.getUnsubscriptionLink()}}</a>","Follow this link to unsubscribe <!-- This tag is for unsubscribe link  --><a href=""{{var subscriber.getUnsubscriptionLink()}}"">{{var subscriber.getUnsubscriptionLink()}}</a>"
+"Follow this link to unsubscribe <!-- This tag is for unsubscribe link  --><a href=""{{var subscriber_data.unsubscription_link}}"">{{var subscriber_data.unsubscription_link}}</a>","Follow this link to unsubscribe <!-- This tag is for unsubscribe link  --><a href=""{{var subscriber_data.unsubscription_link}}"">{{var subscriber_data.unsubscription_link}}</a>"
 "No such entity with %fieldName = %fieldValue","No such entity with %fieldName = %fieldValue"
 "Choose Store View:","Choose Store View:"
 "Newsletter Message Preview","Newsletter Message Preview"

@@ -7,10 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
 
-use Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency as BackendCurrency;
 use Magento\Backend\Block\Context;
+use Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency as BackendCurrency;
 use Magento\Directory\Model\Currency\DefaultLocator;
 use Magento\Directory\Model\CurrencyFactory;
+use Magento\Framework\Currency\Exception\CurrencyException;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -18,7 +19,6 @@ use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Zend_Currency_Exception;
 
 /**
  * Adminhtml grid item renderer currency
@@ -70,7 +70,7 @@ class Currency extends BackendCurrency
      * @return string
      * @throws LocalizedException
      * @throws NoSuchEntityException
-     * @throws Zend_Currency_Exception
+     * @throws CurrencyException
      */
     public function render(DataObject $row)
     {
@@ -80,13 +80,10 @@ class Currency extends BackendCurrency
         if (!$currencyCode) {
             return $data;
         }
-
         $rate = $this->getStoreCurrencyRate($currencyCode, $row);
-
-        $data = (float)$data * $rate;
-        $data = sprintf("%f", $data);
-        $data = $this->_localeCurrency->getCurrency($currencyCode)->toCurrency($data);
-        return $data;
+        $data = (float) $data * $rate;
+        $data = sprintf('%f', $data);
+        return $this->_localeCurrency->getCurrency($currencyCode)->toCurrency($data);
     }
 
     /**

@@ -373,4 +373,32 @@ class ProductValidationTest extends ProductTestBase
             $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
         );
     }
+
+    /**
+     * Test validate multiselect values with custom separator
+     *
+     * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     *
+     * @return void
+     */
+    public function testValidateMultiselectValuesWithCustomSeparator(): void
+    {
+        $pathToFile = __DIR__ . './../_files/products_with_custom_multiselect_values_separator.csv';
+        $filesystem = $this->objectManager->create(Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(Csv::class, ['file' => $pathToFile, 'directory' => $directory]);
+        $params = [
+            'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+            'entity' => 'catalog_product',
+            Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR => '|||'
+        ];
+
+        $errors = $this->_model->setParameters($params)
+            ->setSource($source)
+            ->validateData();
+
+        $this->assertEmpty($errors->getAllErrors());
+    }
 }

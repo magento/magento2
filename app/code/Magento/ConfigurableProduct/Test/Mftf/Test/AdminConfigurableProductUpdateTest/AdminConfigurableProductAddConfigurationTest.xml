@@ -49,6 +49,13 @@
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
@@ -78,11 +85,21 @@
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
 
         <!-- Verify that the added option is present in the storefront -->
-        <amOnPage url="{{StorefrontProductPage.url(_defaultProduct.urlKey)}}" stepKey="amOnStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForStorefrontPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute1.name}}" stepKey="seeInDropDown1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute2.name}}" stepKey="seeInDropDown2"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute3.name}}" stepKey="seeInDropDown3"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute4.name}}" stepKey="seeInDropDown4"/>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="amOnStorefrontPage">
+            <argument name="productUrlKey" value="{{_defaultProduct.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefrontPage"/>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeInDropDown1">
+            <argument name="productAttributeOption" value="{{colorProductAttribute1.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeInDropDown2">
+            <argument name="productAttributeOption" value="{{colorProductAttribute2.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeInDropDown3">
+            <argument name="productAttributeOption" value="{{colorProductAttribute3.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeInDropDown4">
+            <argument name="productAttributeOption" value="{{colorProductAttribute4.name}}"/>
+        </actionGroup>
     </test>
 </tests>

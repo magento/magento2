@@ -15,7 +15,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
- * Class SourceTest
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -69,7 +68,7 @@ class SourceTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attr **/
         $attr = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class)
-           ->getAttribute('catalog_product', 'test_configurable');
+            ->getAttribute('catalog_product', 'test_configurable');
         $attr->setIsFilterable(1)->save();
 
         $this->_eavIndexerProcessor->reindexAll();
@@ -133,7 +132,7 @@ class SourceTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attr **/
         $attr = $objectManager->get(\Magento\Eav\Model\Config::class)
-           ->getAttribute('catalog_product', 'multiselect_attribute');
+            ->getAttribute('catalog_product', 'multiselect_attribute');
 
         /** @var $options \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection */
         $options = $objectManager->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class);
@@ -213,7 +212,7 @@ class SourceTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attr **/
         $attr = $objectManager->get(\Magento\Eav\Model\Config::class)
-           ->getAttribute('catalog_product', 'multiselect_attr_with_source');
+            ->getAttribute('catalog_product', 'multiselect_attr_with_source');
 
         /** @var $sourceModel MultiselectSourceMock */
         $sourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -231,8 +230,8 @@ class SourceTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Catalog\Model\Product $product2 **/
         $product2 = $productRepository->getById($product2Id);
-        $product1->setSpecialFromDate(date('Y-m-d H:i:s'));
-        $product1->setNewsFromDate(date('Y-m-d H:i:s'));
+        $product2->setSpecialFromDate(date('Y-m-d H:i:s'));
+        $product2->setNewsFromDate(date('Y-m-d H:i:s'));
         $productRepository->save($product2);
 
         $this->_eavIndexerProcessor->reindexAll();

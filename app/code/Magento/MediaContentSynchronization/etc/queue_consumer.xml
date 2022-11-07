@@ -7,5 +7,5 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
     <consumer name="media.content.synchronization" queue="media.content.synchronization"
-              connection="db" handler="Magento\MediaContentSynchronization\Model\Consume::execute"/>
+              handler="Magento\MediaContentSynchronization\Model\Consume::execute"/>
 </config>

@@ -17,6 +17,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MC-16071"/>
             <group value="mtf_migrated"/>
+            <group value="cloud_smoke"/>
         </annotations>
 
         <before>
@@ -62,7 +63,8 @@
 
         <!--Verify order information-->
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
 
         <!-- Assert Simple Product Quantity in backend after order -->
         <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheProduct">
@@ -76,11 +78,12 @@
         <!-- Open Order Index Page -->
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
 
-        <!-- Filter Order using orderId -->
-        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
-            <argument name="orderId" value="$orderId"/>
+        <!-- Open Order -->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
-        <click selector="{{AdminOrdersGridSection.rowViewAction('1')}}" stepKey="clickOnViewAction"/>
+        <comment userInput="BIC workaround" stepKey="filterOrderGridById"/>
+        <comment userInput="BIC workaround" stepKey="clickOnViewAction"/>
 
         <!-- Cancel the Order -->
         <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>
@@ -97,12 +100,13 @@
         <!-- Open Order Index Page -->
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders1"/>
 
-        <!-- Filter Order using orderId -->
-        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById1">
-            <argument name="orderId" value="$orderId"/>
+        <!-- Open Order -->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder2">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
-        <click selector="{{AdminOrdersGridSection.rowViewAction('1')}}" stepKey="clickOnViewAction1"/>
-        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+        <comment userInput="BIC workaround" stepKey="filterOrderGridById1"/>
+        <comment userInput="BIC workaround" stepKey="clickOnViewAction1"/>
+        <comment userInput="BIC workaround" stepKey="waitForOrderPageToLoad"/>
 
         <!-- Reorder the product -->
         <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickOnReorderButton"/>

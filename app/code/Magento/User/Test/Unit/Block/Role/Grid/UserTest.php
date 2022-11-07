@@ -236,8 +236,8 @@ class UserTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testPrepareColumns(): void
     {
         $this->requestInterfaceMock->expects($this->any())->method('getParam')->willReturn(1);

@@ -125,8 +125,8 @@ class MassDeleteTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecute(): void
     {
         $ids = [1, 2];
