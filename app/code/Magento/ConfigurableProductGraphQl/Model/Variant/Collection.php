@@ -153,6 +153,7 @@ class Collection
             $childCollection = $this->childCollectionFactory->create();
             $childCollection->setProductFilter($product);
             $childCollection->addWebsiteFilter($context->getExtensionAttributes()->getStore()->getWebsiteId());
+            $childCollection->setFlag('product_children', true);
             $this->collectionProcessor->process(
                 $childCollection,
                 $this->searchCriteriaBuilder->create(),
