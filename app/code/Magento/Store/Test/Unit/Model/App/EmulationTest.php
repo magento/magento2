@@ -1,10 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * Tests Magento\Store\Model\App\Emulation
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\Model\App;
 
@@ -207,7 +206,6 @@ class EmulationTest extends TestCase
             [null]
         ];
     }
-
 
     public function testStop()
     {
