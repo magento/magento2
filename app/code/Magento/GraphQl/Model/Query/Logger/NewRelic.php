@@ -41,10 +41,6 @@ class NewRelic implements LoggerInterface
      */
     public function execute(array $queryDetails)
     {
-        if (!$this->config->isNewRelicEnabled()) {
-            return;
-        }
-
         foreach ($queryDetails as $key => $value) {
             $this->newRelicWrapper->addCustomParameter($key, $value);
         }
