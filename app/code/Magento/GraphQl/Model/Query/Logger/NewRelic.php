@@ -41,12 +41,16 @@ class NewRelic implements LoggerInterface
      */
     public function execute(array $queryDetails)
     {
+        $transactionName = $queryDetails[LoggerInterface::OPERATION_NAMES] ?: '';
+        $this->newRelicWrapper->setTransactionName('GraphQL-' . $transactionName);
+
+        if (!$this->config->isNewRelicEnabled()) {
+            return;
+        }
+
         foreach ($queryDetails as $key => $value) {
             $this->newRelicWrapper->addCustomParameter($key, $value);
         }
 
-        $transactionName = $queryDetails[LoggerInterface::OPERATION_NAMES] ?: '';
-
-        $this->newRelicWrapper->setTransactionName('GraphQL-' . $transactionName);
     }
 }
