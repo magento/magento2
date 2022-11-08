@@ -517,7 +517,7 @@ class ShippingTest extends TestCase
         $this->taxConfig->expects($this->any())->method('displaySalesShippingInclTax')->willReturn(true);
         $this->taxConfig->expects($this->any())
             ->method('getCalculationSequence')
-            ->willReturn(TaxCalculation::CALC_TAX_AFTER_DISCOUNT_ON_EXCL);
+            ->willReturn($calculationSequence);
 
         $orderShippingAmount = 14.55;
         $shippingTaxAmount = 0.45;
