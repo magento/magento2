@@ -310,6 +310,33 @@ class ArgumentsReaderTest extends TestCase
         $this->assertEquals($expectedResult, $actualResult);
     }
 
+    public function testGetParentCallWithNamedArguments()
+    {
+        $class = new \ReflectionClass('ClassWithNamedArgumentsForParentCall');
+        $actualResult = $this->_model->getParentCall(
+            $class,
+            [
+                'stdClassObject' => ['type' => '\stdClass'],
+                'runeTimeException' => ['type' => '\ClassExtendsDefaultPhpType']
+            ]
+        );
+        $expectedResult = [
+            [
+                'name' => 'stdClassObject',
+                'position' => 0,
+                'type' => '\stdClass',
+                'isNamedArgument' => true
+            ],
+            [
+                'name' => 'runeTimeException',
+                'position' => 1,
+                'type' => '\ClassExtendsDefaultPhpType',
+                'isNamedArgument' => true
+            ],
+        ];
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
     /**
      * @param string $requiredType
      * @param string $actualType

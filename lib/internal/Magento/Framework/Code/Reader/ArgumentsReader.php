@@ -137,8 +137,9 @@ class ArgumentsReader
      * @param \ReflectionClass $class
      * @param array $classArguments
      * @return array|null
+     * @throws \ReflectionException
      */
-    public function getParentCall(\ReflectionClass $class, array $classArguments)
+    public function getParentCall(\ReflectionClass $class, array $classArguments): ?array
     {
         /** Skip native PHP types */
         if (!$class->getFileName()) {
@@ -146,7 +147,12 @@ class ArgumentsReader
         }
 
         $trimFunction = function (&$value) {
-            $value = trim($value, PHP_EOL . ' $');
+            $position = strpos($value, ':');
+            if ($position !== false) {
+                $value = trim(substr($value, 0, $position), PHP_EOL . ' ');
+            } else {
+                $value = trim($value, PHP_EOL . ' $');
+            }
         };
 
         $method = $class->getMethod('__construct');
@@ -158,10 +164,11 @@ class ArgumentsReader
         $content = implode('', array_slice($source, $start, $length));
         $pattern = '/parent::__construct\(([ ' .
             PHP_EOL .
-            ']*[$]{1}[a-zA-Z0-9_]*,)*[ ' .
+            ']*' .
+            '([a-zA-Z0-9_]+([ ' . PHP_EOL . '])*:([ ' . PHP_EOL . '])*)*[$][a-zA-Z0-9_]*,)*[ ' .
             PHP_EOL .
             ']*' .
-            '([$]{1}[a-zA-Z0-9_]*){1}[' .
+            '([a-zA-Z0-9_]+([ ' . PHP_EOL . '])*:([ ' . PHP_EOL . '])*)*([$][a-zA-Z0-9_]*)[' .
             PHP_EOL .
             ' ]*\);/';
 
@@ -174,8 +181,13 @@ class ArgumentsReader
             return null;
         }
 
+        $isNamedArgument = false;
         $arguments = substr(trim($arguments), 20, -2);
         $arguments = explode(',', $arguments);
+        $position = strpos(current($arguments), ':');
+        if ($position !== false) {
+            $isNamedArgument = true;
+        }
         array_walk($arguments, $trimFunction);
 
         $output = [];
@@ -186,7 +198,12 @@ class ArgumentsReader
                 'position' => $argumentPosition,
                 'type' => $type,
             ];
+
+            if ($isNamedArgument) {
+                $output[$argumentPosition]['isNamedArgument'] = true;
+            }
         }
+
         return $output;
     }
 

@@ -16,6 +16,7 @@ require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/One/Test.ph
 require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Four/Test.php';
 require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Five/Test.php';
 require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Six/Test.php';
+require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/NamedArguments/ChildClassTest.php';
 require_once __DIR__ . '/_files/ClassesForConstructorIntegrity.php';
 class ConstructorIntegrityTest extends TestCase
 {
@@ -37,6 +38,11 @@ class ConstructorIntegrityTest extends TestCase
     public function testValidateIfClassHasParentConstructCall()
     {
         $this->assertTrue($this->_model->validate(\Magento\SomeModule\Model\Two\Test::class));
+    }
+
+    public function testValidateIfClassHasParentConstructCallWithNamedArguments()
+    {
+        $this->assertTrue($this->_model->validate(\Magento\SomeModule\Model\NamedArguments\ChildClassTest::class));
     }
 
     public function testValidateIfClassHasArgumentsQtyEqualToParentClass()
