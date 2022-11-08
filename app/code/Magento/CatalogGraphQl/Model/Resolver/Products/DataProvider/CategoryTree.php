@@ -82,7 +82,7 @@ class CategoryTree
         DepthCalculator $depthCalculator,
         LevelCalculator $levelCalculator,
         MetadataPool $metadata,
-        CollectionProcessorInterface $collectionProcessor,
+        CollectionProcessorInterface $collectionProcessor
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->attributesJoiner = $attributesJoiner;
