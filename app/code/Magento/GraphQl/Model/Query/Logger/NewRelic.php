@@ -51,6 +51,5 @@ class NewRelic implements LoggerInterface
         foreach ($queryDetails as $key => $value) {
             $this->newRelicWrapper->addCustomParameter($key, $value);
         }
-
     }
 }
