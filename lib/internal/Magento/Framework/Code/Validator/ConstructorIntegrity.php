@@ -89,25 +89,6 @@ class ConstructorIntegrity implements ValidatorInterface
             }
         }
 
-        /**
-         * Try to detect unused arguments
-         * Check whether count of passed parameters less or equal that count of count parent class arguments
-         */
-        if (count($callArguments) > count($parentArguments)) {
-            $extraParameters = array_slice($callArguments, count($parentArguments));
-            $names = [];
-            foreach ($extraParameters as $param) {
-                $names[] = '$' . $param['name'];
-            }
-
-            $classPath = str_replace('\\', '/', $class->getFileName());
-            throw new \Magento\Framework\Exception\ValidatorException(
-                new Phrase(
-                    'Extra parameters passed to parent construct: %1. File: %2',
-                    [implode(', ', $names), $classPath]
-                )
-            );
-        }
         return true;
     }
 
@@ -142,7 +123,7 @@ class ConstructorIntegrity implements ValidatorInterface
     }
 
     /**
-     * Check if argument argument is optional
+     * Check if required argument is optional
      *
      * @param array $requiredArgument
      * @param \ReflectionClass $class

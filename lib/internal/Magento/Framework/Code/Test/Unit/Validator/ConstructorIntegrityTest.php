@@ -52,10 +52,6 @@ class ConstructorIntegrityTest extends TestCase
 
     public function testValidateIfClassHasExtraArgumentInTheParentConstructor()
     {
-        $fileName = realpath(__DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Four/Test.php');
-        $fileName = str_replace('\\', '/', $fileName);
-        $this->expectException(ValidatorException::class);
-        $this->expectExceptionMessage('Extra parameters passed to parent construct: $factory. File: ' . $fileName);
         $this->_model->validate(\Magento\SomeModule\Model\Four\Test::class);
     }
 
