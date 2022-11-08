@@ -389,6 +389,13 @@ class DataObject implements \ArrayAccess
     {
         switch ($method[0].($method[1] ?? '').($method[2] ?? '')) {
             case 'get':
+                if (isset($args[0]) && $args[0] !== null) {
+                    return $this->getData(
+                        self::$_underscoreCache[$method] ?? $this->_underscore($method),
+                        $args[0]
+                    );
+                }            
+            
                 return $this->_data[
                     self::$_underscoreCache[$method] ?? $this->_underscore($method)
                 ] ?? $this->getData(
