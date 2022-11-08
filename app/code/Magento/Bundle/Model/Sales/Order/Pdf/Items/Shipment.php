@@ -106,7 +106,7 @@ class Shipment extends AbstractItems
                 $line[0] = [
                     'font' => 'italic',
                     'text' => $this->string->split($attributes['option_label'], 60, true, true),
-                    'feed' => 60,
+                    'feed' => 100,
                 ];
 
                 $drawItems[$optionId] = ['lines' => [$line], 'height' => 15];
@@ -134,10 +134,10 @@ class Shipment extends AbstractItems
 
             // draw Name
             if ($childItem->getParentItem()) {
-                $feed = 65;
+                $feed = 110;
                 $name = $this->getValueHtml($childItem);
             } else {
-                $feed = 60;
+                $feed = 100;
                 $name = $childItem->getName();
             }
             $text = [];
@@ -151,7 +151,7 @@ class Shipment extends AbstractItems
             foreach ($this->string->split($childItem->getSku(), 25) as $part) {
                 $text[] = $part;
             }
-            $line[] = ['text' => $text, 'feed' => 440];
+            $line[] = ['text' => $text, 'feed' => 565, 'align' => 'right'];
 
             $drawItems[$optionId]['lines'][] = $line;
         }

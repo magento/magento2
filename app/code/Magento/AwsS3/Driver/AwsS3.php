@@ -861,15 +861,21 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function fileClose($resource): bool
     {
+        if (!is_resource($resource)) {
+            return false;
+        }
         //phpcs:disable
-        $resourcePath = stream_get_meta_data($resource)['uri'];
+        $meta = stream_get_meta_data($resource);
         //phpcs:enable
 
         foreach ($this->streams as $path => $stream) {
             // phpcs:ignore
-            if (stream_get_meta_data($stream)['uri'] === $resourcePath) {
+            if (stream_get_meta_data($stream)['uri'] === $meta['uri']) {
+                if (isset($meta['seekable']) && $meta['seekable']) {
+                    // rewind the file pointer to make sure the full content of the file is saved
+                    $this->fileSeek($resource, 0);
+                }
                 $this->adapter->writeStream($path, $resource, new Config(self::CONFIG));
-
                 // Remove path from streams after
                 unset($this->streams[$path]);
 
