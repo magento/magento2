@@ -47,6 +47,13 @@
         <data key="resourceAccess">All</data>
     </entity>
 
+    <entity name="limitedAccessRole" type="role">
+        <data key="name" unique="suffix">Limited</data>
+        <data key="rolename" unique="suffix">Limited</data>
+        <data key="roleScopes">All</data>
+        <data key="resourceAccess">Custom</data>
+    </entity>
+
     <entity name="restrictedRole" type="role">
         <data key="name" unique="suffix">Restricted</data>
         <data key="rolename" unique="suffix">Restricted</data>
