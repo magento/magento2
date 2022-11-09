@@ -10,6 +10,8 @@ use Magento\Framework\Component\ComponentRegistrarInterface;
 
 /**
  * Encapsulates directories structure of a Magento module
+ *
+ * @api
  */
 class Dir
 {

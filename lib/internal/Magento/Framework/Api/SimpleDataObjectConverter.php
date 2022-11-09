@@ -148,7 +148,7 @@ class SimpleDataObjectConverter
      */
     public static function snakeCaseToUpperCamelCase($input)
     {
-        return str_replace('_', '', ucwords($input, '_'));
+        return $input !== null ? str_replace('_', '', ucwords($input, '_')) : '';
     }
 
     /**
@@ -172,6 +172,6 @@ class SimpleDataObjectConverter
      */
     public static function camelCaseToSnakeCase($name)
     {
-        return strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $name));
+        return $name !== null ? strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $name)) : '';
     }
 }

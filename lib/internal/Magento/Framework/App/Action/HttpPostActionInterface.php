@@ -12,6 +12,8 @@ use Magento\Framework\App\ActionInterface;
 
 /**
  * Marker for actions processing POST requests.
+ *
+ * @api
  */
 interface HttpPostActionInterface extends ActionInterface
 {

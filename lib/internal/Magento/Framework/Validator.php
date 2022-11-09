@@ -6,13 +6,16 @@
 
 namespace Magento\Framework;
 
+use Laminas\Validator\Translator\TranslatorInterface;
+use Magento\Framework\Validator\AbstractValidator;
+
 /**
  * Validator class that represents chain of validators.
  *
  * @api
  * @since 100.0.2
  */
-class Validator extends \Magento\Framework\Validator\AbstractValidator
+class Validator extends AbstractValidator
 {
     /**
      * Validator chain
@@ -53,7 +56,6 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
         $result = true;
         $this->_clearMessages();
 
-        /** @var $validator \Zend_Validate_Interface */
         foreach ($this->_validators as $element) {
             $validator = $element['instance'];
             if ($validator->isValid($value)) {
@@ -72,10 +74,10 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
     /**
      * Set translator to chain.
      *
-     * @param \Magento\Framework\Translate\AdapterInterface|null $translator
-     * @return \Magento\Framework\Validator\AbstractValidator
+     * @param TranslatorInterface|null $translator
+     * @return AbstractValidator
      */
-    public function setTranslator($translator = null)
+    public function setTranslator(?TranslatorInterface $translator = null)
     {
         foreach ($this->_validators as $validator) {
             $validator['instance']->setTranslator($translator);

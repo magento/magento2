@@ -11,6 +11,8 @@ use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Store associated themes resolver.
+ *
+ * @api
  */
 interface StoreThemesResolverInterface
 {

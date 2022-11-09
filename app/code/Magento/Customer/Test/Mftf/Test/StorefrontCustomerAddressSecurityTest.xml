@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerAddressSecurityTest">
+        <annotations>
+            <features value="Customer address"/>
+            <stories value="other customer can not access the address of another customer"/>
+            <title value="Customer address can't be overwritten or access by other customer"/>
+            <description value="Customer address can't be overwritten [security]"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-27518"/>
+            <group value="customer"/>
+            <group value="create"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createFirstCustomer"/>
+            <createData entity="Simple_Customer_Without_Address" stepKey="createSecondCustomer"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createFirstCustomer" stepKey="DeleteFirstCustomer"/>
+            <deleteData createDataKey="createSecondCustomer" stepKey="DeleteSecondCustomer"/>
+        </after>
+
+        <!--Log in to Storefront as First Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginFirstCustomer">
+            <argument name="Customer" value="$$createFirstCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontGoToCustomerAddressesPageActionGroup" stepKey="goToCustomerAddressBook1"/>
+        <click stepKey="ClickEditDefaultBillingAddress" selector="{{StorefrontCustomerAddressesSection.editDefaultBillingAddress}}"/>
+        <grabFromCurrentUrl  stepKey="grabCurrentAddressUrl"/>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFirstCustomer"/>
+
+        <!--Log in to Storefront as Second Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginSecondCustomer">
+            <argument name="Customer" value="$$createSecondCustomer$$"/>
+        </actionGroup>
+        <amOnPage url="$grabCurrentAddressUrl" stepKey="OpenCustomerAddNewAddress"/>
+
+        <grabAttributeFrom userInput="value" selector="{{StorefrontCustomerAddressFormSection.firstName}}" stepKey="grabFirstName"/>
+        <grabAttributeFrom userInput="value" selector="{{StorefrontCustomerAddressFormSection.lastName}}" stepKey="grabLastName"/>
+        <assertEquals message="verify first name from element value" stepKey="assertFirstName">
+            <expectedResult type="string">$$createSecondCustomer.firstname$$</expectedResult>
+            <actualResult type="string">$grabFirstName</actualResult>
+        </assertEquals>
+        <assertEquals message="verify last name from element value" stepKey="assertLastName">
+            <expectedResult type="string">$$createSecondCustomer.lastname$$</expectedResult>
+            <actualResult type="string">$grabLastName</actualResult>
+        </assertEquals>
+    </test>
+</tests>

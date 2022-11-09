@@ -69,6 +69,9 @@
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld('100')}}" stepKey="assertRegularPriceAmount_2"/>
         <!--Case: Tier Price for General Customer Group-->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex2"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct2">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct2">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
@@ -93,6 +96,9 @@
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld('100')}}" stepKey="assertRegularPriceAmount_3"/>
         <!--Case: Tier Price applied if Product quantity meets Tier Price Condition-->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex3"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct3">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct3">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
@@ -158,6 +164,9 @@
         </assertEquals>
         <!--Tier Price is changed in Shopping Cart and is changed on Product page if Tier Price parameters are changed in Admin-->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex4"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct4">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct4">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
@@ -222,15 +231,19 @@
         <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount('1', '10')}}" stepKey="assertProductTierPriceSavePercentageAmountForFirstRow2"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount('2', '25')}}" stepKey="assertProductTierPriceSavePercentageAmountForSecondRow2"/>
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex5"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct5">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct5">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <scrollToTopOfPage stepKey="scrollToTopOfPage5"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton5"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceDeleteButton}}" stepKey="waitForcustomerGroupPriceDeleteButton"/>
-        <scrollTo selector="(//*[contains(@class, 'product_form_product_form_advanced_pricing_modal')]//tr//button[@data-action='remove_row'])[1]" x="30" y="0" stepKey="scrollToDeleteFirstRowOfCustomerGroupPrice"/>
-        <click selector="(//tr//button[@data-action='remove_row'])[1]" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="deleteFirstRowOfCustomerGroupPrice"/>
-        <click selector="//tr//button[@data-action='remove_row']" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="deleteSecondRowOfCustomerGroupPrice"/>
+        <scrollTo selector="//*[contains(@class, 'product_form_product_form_advanced_pricing_modal')]//table[@class='admin__dynamic-rows admin__control-table']//button[@class='action-delete'][1]" stepKey="scrollToDeleteFirstRowOfCustomerGroupPrice"/>
+        <click selector="//*[contains(@class, 'product_form_product_form_advanced_pricing_modal')]//table[@class='admin__dynamic-rows admin__control-table']//button[@class='action-delete'][1]" stepKey="deleteFirstRowOfCustomerGroupPrice"/>
+        <waitForElementVisible selector="//*[contains(@class, 'product_form_product_form_advanced_pricing_modal')]//table[@class='admin__dynamic-rows admin__control-table']//button[@class='action-delete'][1]" stepKey="waitForSecondRowDeleteButton"/>
+        <click selector="//*[contains(@class, 'product_form_product_form_advanced_pricing_modal')]//table[@class='admin__dynamic-rows admin__control-table']//button[@class='action-delete'][1]" stepKey="deleteSecondRowOfCustomerGroupPrice"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="clickDoneButton5"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct5"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage6"/>
