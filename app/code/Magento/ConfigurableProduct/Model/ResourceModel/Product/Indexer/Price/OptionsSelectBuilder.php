@@ -85,9 +85,9 @@ class OptionsSelectBuilder implements OptionsSelectBuilderInterface
                 'le.entity_id',
                 'customer_group_id',
                 'website_id',
-                'MIN(final_price)',
-                'MAX(final_price)',
-                'MIN(tier_price)',
+                'min_price' => 'MIN(final_price)',
+                'max_price' => 'MAX(final_price)',
+                'tier_price' => 'MIN(tier_price)',
             ]
         )->group(
             ['le.entity_id', 'customer_group_id', 'website_id']

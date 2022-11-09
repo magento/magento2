@@ -6,7 +6,6 @@
 /**
  * @api
  */
-/* global WeakMap */
 define([
     'jquery',
     'underscore'

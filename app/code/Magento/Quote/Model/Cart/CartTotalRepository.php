@@ -32,8 +32,6 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     private $totalsFactory;
 
     /**
-     * Quote repository.
-     *
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     private $quoteRepository;
@@ -109,11 +107,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         $items = array_map([$this->itemConverter, 'modelToDataObject'], $quote->getAllVisibleItems());
         $calculatedTotals = $this->totalsConverter->process($addressTotals);
         $quoteTotals->setTotalSegments($calculatedTotals);
-
-        $amount = $quoteTotals->getGrandTotal() - $quoteTotals->getTaxAmount();
-        $amount = $amount > 0 ? $amount : 0;
         $quoteTotals->setCouponCode($this->couponService->get($cartId));
-        $quoteTotals->setGrandTotal($amount);
         $quoteTotals->setItems($items);
         $quoteTotals->setItemsQty($quote->getItemsQty());
         $quoteTotals->setBaseCurrencyCode($quote->getBaseCurrencyCode());

@@ -9,6 +9,7 @@ use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\HandlerInt
 
 /**
  * Items of this class represent config items declared in etc/queue_consumer.xsd
+ * @api
  */
 interface ConsumerConfigItemInterface
 {

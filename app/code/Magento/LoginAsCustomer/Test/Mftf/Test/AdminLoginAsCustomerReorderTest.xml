@@ -19,6 +19,7 @@
             <group value="login_as_customer"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
                         stepKey="enableLoginAsCustomer"/>
             <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"

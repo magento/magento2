@@ -39,9 +39,9 @@
             <argument name="keyword" value="api-simple-product"/>
         </actionGroup>
         <actionGroup ref="SortProductsByIdDescendingActionGroup" stepKey="sortProductsByIdDescending"/>
-        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="selectThirdProduct"/>
-        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="selectSecondProduct"/>
-        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('3')}}" stepKey="selectFirstProduct"/>
+        <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="selectThirdProduct"/>
+        <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="selectSecondProduct"/>
+        <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('3')}}" stepKey="selectFirstProduct"/>
         <actionGroup ref="AdminClickMassUpdateProductAttributesActionGroup" stepKey="goToUpdateProductAttributesPage"/>
         <checkOption selector="{{AdminEditProductAttributesSection.changeAttributeShortDescriptionToggle}}" stepKey="toggleToChangeShortDescription"/>
         <fillField selector="{{AdminEditProductAttributesSection.attributeShortDescription}}" userInput="Test Update" stepKey="fillShortDescriptionField"/>

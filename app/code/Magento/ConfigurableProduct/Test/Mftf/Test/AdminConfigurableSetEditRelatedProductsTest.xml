@@ -29,7 +29,8 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="_defaultProduct"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters" after="deleteProduct"/>
+            <comment userInput="BIC workaround" stepKey="clearFilters"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters" after="deleteProduct"/>
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute" after="clearProductsGridFilters">
                 <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
             </actionGroup>

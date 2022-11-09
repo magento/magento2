@@ -20,6 +20,7 @@
             <testCaseId value="MC-38039"/>
             <group value="Downloadable"/>
             <group value="remote_storage_aws_s3"/>
+            <group value="skip_in_cloud_native_s3"/>
         </annotations>
         <before>
             <comment userInput="BIC workaround" stepKey="enableRemoteStorage"/>
@@ -43,6 +44,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

@@ -40,7 +40,7 @@ class OptionTest extends AbstractImportTestCase
     /**
      * Path to csv file to import
      */
-    const PATH_TO_CSV_FILE = '/_files/product_with_custom_options.csv';
+    public const PATH_TO_CSV_FILE = '/_files/product_with_custom_options.csv';
 
     /**
      * Parameters for Test stores.
@@ -409,12 +409,12 @@ class OptionTest extends AbstractImportTestCase
     {
         $csvData = $this->_loadCsvFile();
 
-        $dataSourceModel = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextBunch'])
+        $dataSourceModel = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextUniqueBunch'])
             ->disableOriginalConstructor()
             ->getMock();
         if ($addExpectations) {
             $dataSourceModel
-                ->method('getNextBunch')
+                ->method('getNextUniqueBunch')
                 ->willReturnOnConsecutiveCalls($csvData['data'], null);
         }
 
@@ -1039,11 +1039,11 @@ class OptionTest extends AbstractImportTestCase
      */
     public function testParseRequiredData(): void
     {
-        $modelData = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextBunch'])
+        $modelData = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextUniqueBunch'])
             ->disableOriginalConstructor()
             ->getMock();
         $modelData
-            ->method('getNextBunch')
+            ->method('getNextUniqueBunch')
             ->willReturnOnConsecutiveCalls(
                 [
                     [
