@@ -10594,16 +10594,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "3.11.0",
+            "version": "3.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "af9708aa56ef72a580e7935a34a7bcd96d95689a"
+                "reference": "daf99704ea1b2be24a909a73ab70a7e218d88a1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/af9708aa56ef72a580e7935a34a7bcd96d95689a",
-                "reference": "af9708aa56ef72a580e7935a34a7bcd96d95689a",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/daf99704ea1b2be24a909a73ab70a7e218d88a1e",
+                "reference": "daf99704ea1b2be24a909a73ab70a7e218d88a1e",
                 "shasum": ""
             },
             "require": {
@@ -10680,9 +10680,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/3.11.0"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/3.11.1"
             },
-            "time": "2022-10-28T17:11:13+00:00"
+            "time": "2022-11-07T15:02:28+00:00"
         },
         {
             "name": "mustache/mustache",
