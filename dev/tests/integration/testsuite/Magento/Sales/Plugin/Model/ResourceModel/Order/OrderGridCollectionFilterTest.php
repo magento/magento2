@@ -11,6 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo;
+use Magento\Sales\Model\ResourceModel\Order\Grid\Collection as OrderCollection;
 use Magento\Sales\Model\ResourceModel\Order\Invoice;
 use Magento\Sales\Model\ResourceModel\Order\Shipment;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -130,6 +131,11 @@ class OrderGridCollectionFilterTest extends TestCase
                 'mainTable' => 'sales_creditmemo_grid',
                 'resourceModel' => Creditmemo::class,
                 'field' => 'order_created_at',
+            ],
+            'customer_orders_grid_collection_for_order_created_at' => [
+                'mainTable' => 'sales_order_grid',
+                'resourceModel' => OrderCollection::class,
+                'field' => 'created_at',
             ]
         ];
     }

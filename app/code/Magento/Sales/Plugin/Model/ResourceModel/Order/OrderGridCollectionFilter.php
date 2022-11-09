@@ -6,6 +6,8 @@
 
 namespace Magento\Sales\Plugin\Model\ResourceModel\Order;
 
+use DateTime;
+use DateTimeInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
@@ -44,11 +46,16 @@ class OrderGridCollectionFilter
         $field,
         $condition = null
     ) {
-
         if ($field === 'created_at' || $field === 'order_created_at') {
             if (is_array($condition)) {
                 foreach ($condition as $key => $value) {
-                    $condition[$key] = $this->timeZone->convertConfigTimeToUtc($value);
+                    if ($value instanceof DateTimeInterface
+                        && $value->getTimezone()->getName() !== $this->timeZone->getConfigTimezone()) {
+                        $value->setTimezone(new \DateTimeZone($this->timeZone->getConfigTimezone()));
+                    }
+                    if ($this->isValidDate($value)) {
+                        $condition[$key] = $this->timeZone->convertConfigTimeToUtc($value);
+                    }
                 }
             }
 
@@ -60,5 +67,24 @@ class OrderGridCollectionFilter
         }
 
         return $proceed($field, $condition);
+    }
+
+    /**
+     * Validate date string
+     *
+     * @param string|DateTimeInterface $datetime
+     * @return bool
+     */
+    private function isValidDate($datetime): bool
+    {
+        try {
+            $dt = is_string($datetime) ? new DateTime($datetime) : $datetime;
+            if ($dt instanceof DateTimeInterface) {
+                return true;
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
+        return false;
     }
 }
