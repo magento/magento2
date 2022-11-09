@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Validator;
 
+use Magento\SomeModule\Model\NamedArguments\ChildClassTest;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Code\Validator\ConstructorIntegrity;
-use Magento\SomeModule\Model\One\Test;
 use Magento\Framework\Exception\ValidatorException;
 
 require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Three/Test.php';
@@ -32,7 +32,7 @@ class ConstructorIntegrityTest extends TestCase
 
     public function testValidateIfParentClassExist()
     {
-        $this->assertTrue($this->_model->validate(Test::class));
+        $this->assertTrue($this->_model->validate(\Magento\SomeModule\Model\One\Test::class));
     }
 
     public function testValidateIfClassHasParentConstructCall()
@@ -42,7 +42,7 @@ class ConstructorIntegrityTest extends TestCase
 
     public function testValidateIfClassHasParentConstructCallWithNamedArguments()
     {
-        $this->assertTrue($this->_model->validate(\Magento\SomeModule\Model\NamedArguments\ChildClassTest::class));
+        $this->assertTrue($this->_model->validate(ChildClassTest::class));
     }
 
     public function testValidateIfClassHasArgumentsQtyEqualToParentClass()
