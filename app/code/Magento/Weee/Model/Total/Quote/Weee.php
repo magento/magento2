@@ -242,10 +242,10 @@ class Weee extends AbstractTotal
             ->setBaseWeeeTaxAppliedAmountInclTax($baseTotalValueInclTax)
             ->setWeeeTaxAppliedRowAmountInclTax($totalRowValueInclTax)
             ->setBaseWeeeTaxAppliedRowAmntInclTax($baseTotalRowValueInclTax);
-        $address->setBaseSubtotalTotalInclTax($address->getBaseSubtotalTotalInclTax() + $baseTotalRowValueInclTax);
 
         $this->processTotalAmount(
             $total,
+            $address,
             $totalRowValueExclTax,
             $baseTotalRowValueExclTax,
             $totalRowValueInclTax,
@@ -259,6 +259,7 @@ class Weee extends AbstractTotal
      * Process row amount based on FPT total amount configuration setting
      *
      * @param Total $total
+     * @param Address $address
      * @param float $rowValueExclTax
      * @param float $baseRowValueExclTax
      * @param float $rowValueInclTax
@@ -267,6 +268,7 @@ class Weee extends AbstractTotal
      */
     protected function processTotalAmount(
         $total,
+        $address,
         $rowValueExclTax,
         $baseRowValueExclTax,
         $rowValueInclTax,
@@ -285,6 +287,8 @@ class Weee extends AbstractTotal
         $total->setBaseSubtotalInclTax(
             $total->getBaseSubtotalInclTax() + $this->priceCurrency->round($baseRowValueInclTax)
         );
+        $address->setBaseSubtotalTotalInclTax($total->getBaseSubtotalInclTax());
+        $address->setSubtotalInclTax($total->getSubtotalInclTax());
         return $this;
     }
 
