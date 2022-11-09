@@ -172,6 +172,102 @@ class ShipmentFactoryTest extends TestCase
     }
 
     /**
+     * @param array|null $tracks
+     * @dataProvider createDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testCreateWithFloatQtyShipment(?array $tracks): void
+    {
+        $orderItem = $this->createPartialMock(
+            Item::class,
+            ['getId', 'getQtyOrdered', 'getParentItemId', 'getIsVirtual','getIsQtyDecimal']
+        );
+        $orderItem->expects($this->any())
+            ->method('getIsQtyDecimal')
+            ->willReturn(true);
+        $orderItem->expects($this->any())
+            ->method('getId')
+            ->willReturn(1);
+        $orderItem->expects($this->any())
+            ->method('getQtyOrdered')
+            ->willReturn(0.5);
+        $orderItem->expects($this->any())->method('getParentItemId')->willReturn(false);
+        $orderItem->expects($this->any())->method('getIsVirtual')->willReturn(false);
+
+        $shipmentItem = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Shipment\Item::class,
+            ['setQty', 'getOrderItem', 'getQty']
+        );
+        $shipmentItem->expects($this->once())
+            ->method('setQty')
+            ->with(0.5);
+        $shipmentItem->expects($this->once())
+            ->method('getQty')
+            ->willReturn(0.5);
+
+        $shipmentItem->expects($this->atLeastOnce())->method('getOrderItem')->willReturn($orderItem);
+
+        $order = $this->createPartialMock(\Magento\Sales\Model\Order::class, ['getAllItems']);
+        $order->expects($this->any())
+            ->method('getAllItems')
+            ->willReturn([$orderItem]);
+
+        $shipment = $this->createPartialMock(
+            Shipment::class,
+            ['addItem', 'setTotalQty', 'addTrack']
+        );
+        $shipment->expects($this->once())
+            ->method('addItem')
+            ->with($shipmentItem);
+        $shipment->expects($this->once())
+            ->method('setTotalQty')
+            ->with(0.5)
+            ->willReturn($shipment);
+
+        $this->converter->expects($this->any())
+            ->method('toShipment')
+            ->with($order)
+            ->willReturn($shipment);
+        $this->converter->expects($this->any())
+            ->method('itemToShipmentItem')
+            ->with($orderItem)
+            ->willReturn($shipmentItem);
+
+        if ($tracks) {
+            $shipmentTrack = $this->createPartialMock(Track::class, ['addData']);
+
+            if (empty($tracks[0]['number'])) {
+                $shipmentTrack->expects($this->never())
+                    ->method('addData');
+
+                $this->trackFactory->expects($this->never())
+                    ->method('create');
+
+                $shipment->expects($this->never())
+                    ->method('addTrack');
+
+                $this->expectException(
+                    LocalizedException::class
+                );
+            } else {
+                $shipmentTrack->expects($this->once())
+                    ->method('addData')
+                    ->willReturnSelf();
+
+                $this->trackFactory->expects($this->once())
+                    ->method('create')
+                    ->willReturn($shipmentTrack);
+
+                $shipment->expects($this->once())
+                    ->method('addTrack')
+                    ->with($shipmentTrack);
+            }
+        }
+
+        $this->assertEquals($shipment, $this->subject->create($order, ['1' => 0.5], $tracks));
+    }
+
+    /**
      * @return array
      */
     public function createDataProvider()
