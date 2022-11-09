@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminChangeTaxAndFptConfigActionGroup">
+        <!-- navigate to the tax configuration page -->
+        <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="goToAdminTaxPage"/>
+        <waitForPageLoad stepKey="waitForTaxConfigLoad"/>
+        <!-- change configurations on tax calculation settings-->
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationSettingsOpened}}" visible="false" stepKey="openCalculationSettingsTab"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationAlgorithmInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationAlgorithmDisabled}}" visible="true" stepKey="clickCalculationMethodBasedCheckBox"/>
+        <selectOption userInput="Total" selector="{{AdminConfigureTaxSection.taxCalculationAlgorithm}}" stepKey="fillCalculationMethodBased"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationBasedInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationBasedDisabled}}" visible="true" stepKey="clickTaxCalculationBasedCheckBox"/>
+        <selectOption userInput="Shipping Origin" selector="{{AdminConfigureTaxSection.taxCalculationBased}}" stepKey="fillTaxCalculationBased"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationPricesDisabled}}" visible="true" stepKey="clickCalculationPricesCheckBox"/>
+        <selectOption userInput="Excluding Tax" selector="{{AdminConfigureTaxSection.taxCalculationPrices}}" stepKey="clickCalculationPrices"/>
+        <!-- change the Default Tax Destination Calculation Configurations -->
+        <scrollTo selector="#tax_defaults-head" x="0" y="-80" stepKey="scrollToTaxDefaults"/>
+        <!-- conditionalClick twice to fix some flaky behavior -->
+        <conditionalClick stepKey="clickCalculationSettings" selector="{{AdminConfigureTaxSection.defaultDestination}}" dependentSelector="#tax_defaults" visible="false"/>
+        <conditionalClick stepKey="clickCalculationSettingsAgain" selector="{{AdminConfigureTaxSection.defaultDestination}}" dependentSelector="#tax_defaults" visible="false"/>
+        <uncheckOption stepKey="clickDefaultState" selector="{{AdminConfigureTaxSection.systemValueDefaultState}}"/>
+        <selectOption stepKey="selectDefaultState" selector="{{AdminConfigureTaxSection.dropdownDefaultState}}" userInput="*"/>
+        <uncheckOption stepKey="clickDefaultCountry" selector="{{AdminConfigureTaxSection.systemValueDefaultCountry}}"/>
+        <selectOption stepKey="selectDefaultCountry" selector="{{AdminConfigureTaxSection.dropdownDefaultCountry}}" userInput="Canada"/>
+        <fillField stepKey="fillDefaultPostCode" selector="{{AdminConfigureTaxSection.defaultPostCode}}" userInput="*"/>
+        <!-- change display setting configurations -->
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}" dependentSelector="{{AdminConfigureTaxSection.taxPriceDisplaySettingsOpened}}" visible="false" stepKey="openPriceDisplaySettings"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxDisplayProductPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxDisplayProductPricesDisabled}}" visible="true" stepKey="clickDisplayProductPricesCheckBox"/>
+        <selectOption userInput="Excluding Tax" selector="{{AdminConfigureTaxSection.taxDisplayProductPrices}}" stepKey="clickDisplayProductPrices"/>
+        <!-- change shopping cart display configuration -->
+        <!-- conditionalClick twice to fix some flaky behavior -->
+        <conditionalClick stepKey="clickShoppingCartDisplaySettings" selector="{{AdminConfigureTaxSection.shoppingCartDisplay}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalCart}}" visible="false"/>
+        <conditionalClick stepKey="clickShoppingCartDisplaySettingsAgain" selector="{{AdminConfigureTaxSection.shoppingCartDisplay}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalCart}}" visible="false"/>
+        <uncheckOption stepKey="clickDisplayTaxSummaryCart" selector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummaryCart}}"/>
+        <selectOption stepKey="selectDisplayTaxSummaryCart" selector="{{AdminConfigureTaxSection.dropdownDisplayTaxSummaryCart}}" userInput="Yes"/>
+        <!-- Orders, Invoices, Credit Memos Display Settings configurations -->
+        <!-- conditionalClick twice to fix some flaky behavior -->
+        <conditionalClick stepKey="clickOrdersInvoicesCreditSales" selector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" dependentSelector="#tax_sales_display" visible="false"/>
+        <conditionalClick stepKey="clickOrdersInvoicesCreditSalesAgain" selector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" dependentSelector="#tax_sales_display" visible="false"/>
+        <uncheckOption stepKey="clickDisplayTaxSummarySales" selector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummarySales}}"/>
+        <selectOption stepKey="selectDisplayTaxSummarySales" selector="{{AdminConfigureTaxSection.dropdownDisplayTaxSummarySales}}" userInput="Yes"/>
+        <!-- Enable fixed product taxes and change configurations -->
+        <!-- conditionalClick twice to fix some flaky behavior -->
+        <scrollTo selector="#tax_weee-head" x="0" y="-80" stepKey="scrollToFPT"/>
+        <conditionalClick stepKey="clickFixedProductTaxes" selector="{{AdminConfigureTaxSection.fixedProductTaxes}}" dependentSelector="{{AdminConfigureTaxSection.fixedProductTaxesOpened}}" visible="false"/>
+        <uncheckOption stepKey="clickEnableFpt" selector="{{AdminConfigureTaxSection.systemValueEnableFpt}}"/>
+        <selectOption stepKey="selectEnableFpt" selector="{{AdminConfigureTaxSection.dropdownFptYes}}" userInput="Yes"/>
+        <uncheckOption stepKey="clickDisplayPricesInProductLists" selector="{{AdminConfigureTaxSection.systemValueDisplayPricesProducts}}"/>
+        <selectOption stepKey="selectDisplayPricesInProductLists" selector="{{AdminConfigureTaxSection.dropdownIncludingFPTAndFPTDescription}}" userInput="Including FPT and FPT description"/>
+        <uncheckOption stepKey="ClickApplyTaxToFPT" selector="{{AdminConfigureTaxSection.systemValueApplyTaxToFpt}}"/>
+        <selectOption stepKey="selectApplyTaxOnFPT" selector="{{AdminConfigureTaxSection.dropdownApplyTaxToFpt}}" userInput="Yes"/>
+        <!-- Save the settings -->
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveChanges"/>
+    </actionGroup>
+</actionGroups>
