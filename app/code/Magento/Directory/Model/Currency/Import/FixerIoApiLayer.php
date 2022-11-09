@@ -18,16 +18,28 @@ use Magento\Framework\HTTP\LaminasClient;
 /**
  * Currency rate import model (https://apilayer.com/marketplace/fixer-api)
  */
-class FixerIoApiLayer extends AbstractImport
+class FixerIoApiLayer implements \Magento\Directory\Model\Currency\Import\ImportInterface
 {
     private const CURRENCY_CONVERTER_HOST = 'https://api.apilayer.com';
     private const CURRENCY_CONVERTER_URL_PATH = '/fixer/latest?'
     . 'apikey={{ACCESS_KEY}}&base={{CURRENCY_FROM}}&symbols={{CURRENCY_TO}}';
 
     /**
+     * Messages
+     *
+     * @var array
+     */
+    protected $_messages = [];
+
+    /**
      * @var HttpClientFactory
      */
     private $httpClientFactory;
+
+    /**
+     * @var CurrencyFactory
+     */
+    protected $_currencyFactory;
 
     /**
      * Core scope config
@@ -48,9 +60,21 @@ class FixerIoApiLayer extends AbstractImport
         ScopeConfigInterface $scopeConfig,
         HttpClientFactory $httpClientFactory
     ) {
-        parent::__construct($currencyFactory);
+        $this->_currencyFactory = $currencyFactory;
         $this->scopeConfig = $scopeConfig;
         $this->httpClientFactory = $httpClientFactory;
+    }
+
+    /**
+     * Import rates
+     *
+     * @return $this
+     */
+    public function importRates()
+    {
+        $data = $this->fetchRates();
+        $this->_saveRates($data);
+        return $this;
     }
 
     /**
@@ -70,6 +94,14 @@ class FixerIoApiLayer extends AbstractImport
             ksort($data[$currencyFrom]);
         }
         return $data;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMessages()
+    {
+        return $this->_messages;
     }
 
     /**
@@ -110,16 +142,14 @@ class FixerIoApiLayer extends AbstractImport
 
         foreach ($currenciesTo as $currencyTo) {
             if ($currencyFrom == $currencyTo) {
-                $data[$currencyFrom][$currencyTo] = $this->_numberFormat(1);
+                $data[$currencyFrom][$currencyTo] = 1;
             } else {
                 if (empty($response['rates'][$currencyTo])) {
                     $message = 'We can\'t retrieve a rate from %1 for %2.';
                     $this->_messages[] = __($message, self::CURRENCY_CONVERTER_HOST, $currencyTo);
                     $data[$currencyFrom][$currencyTo] = null;
                 } else {
-                    $data[$currencyFrom][$currencyTo] = $this->_numberFormat(
-                        (double)$response['rates'][$currencyTo]
-                    );
+                    $data[$currencyFrom][$currencyTo] = (double)$response['rates'][$currencyTo];
                 }
             }
         }
@@ -127,11 +157,17 @@ class FixerIoApiLayer extends AbstractImport
     }
 
     /**
-     * @inheritdoc
+     * Saving currency rates
+     *
+     * @param array $rates
+     * @return \Magento\Directory\Model\Currency\Import\FixerIoApiLayer
      */
-    protected function _convert($currencyFrom, $currencyTo)
+    protected function _saveRates(array $rates)
     {
-        return 1;
+        foreach ($rates as $currencyCode => $currencyRates) {
+            $this->_currencyFactory->create()->setId($currencyCode)->setRates($currencyRates)->save();
+        }
+        return $this;
     }
 
     /**
@@ -203,5 +239,25 @@ class FixerIoApiLayer extends AbstractImport
         $this->_messages[] = $errorCodes[$response['error']['code']] ?? __('Currency rates can\'t be retrieved.');
 
         return false;
+    }
+
+    /**
+     * Retrieve currency codes
+     *
+     * @return array
+     */
+    private function _getCurrencyCodes()
+    {
+        return $this->_currencyFactory->create()->getConfigAllowCurrencies();
+    }
+
+    /**
+     * Retrieve default currency codes
+     *
+     * @return array
+     */
+    private function _getDefaultCurrencyCodes()
+    {
+        return $this->_currencyFactory->create()->getConfigBaseCurrencies();
     }
 }
