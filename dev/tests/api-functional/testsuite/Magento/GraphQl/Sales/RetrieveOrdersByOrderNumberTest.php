@@ -16,6 +16,13 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\Bundle\Test\Fixture\OrderItem as OrderItem;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddress;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddress;
+use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethod;
+use Magento\Checkout\Test\Fixture\PlaceOrder as PlaceOrder;
 
 /**
  * Class RetrieveOrdersTest
@@ -406,10 +413,54 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/customer_orders.php
      * @return void
      * @throws AuthenticationException
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => '100000002', 'price' => 10], 'p2'),
+        DataFixture(ProductFixture::class, ['sku' => '100000003', 'price' => 10], 'p3'),
+        DataFixture(ProductFixture::class, ['sku' => '100000004', 'price' => 10], 'p4'),
+        DataFixture(ProductFixture::class, ['sku' => '100000005', 'price' => 10], 'p5'),
+        DataFixture(ProductFixture::class, ['sku' => '100000006', 'price' => 10], 'p6'),
+        DataFixture(ProductFixture::class, ['sku' => '100000007', 'price' => 10], 'p7'),
+        DataFixture(ProductFixture::class, ['sku' => '100000008', 'price' => 10], 'p8'),
+        DataFixture(OrderItem::class, ['sku' => '$p2.sku$', 'method'=> 'checkmo'], 'o2'),
+        DataFixture(OrderItem::class, ['sku' => '$p3.sku$', 'method'=> 'checkmo'], 'o3'),
+        DataFixture(OrderItem::class, ['sku' => '$p4.sku$', 'method'=> 'checkmo'], 'o4'),
+        DataFixture(OrderItem::class, ['sku' => '$p5.sku$', 'method'=> 'checkmo'], 'o5'),
+        DataFixture(OrderItem::class, ['sku' => '$p6.sku$', 'method'=> 'checkmo'], 'o6'),
+        DataFixture(OrderItem::class, ['sku' => '$p7.sku$', 'method'=> 'checkmo'], 'o7'),
+        DataFixture(OrderItem::class, ['sku' => '$p8.sku$', 'method'=> 'checkmo'], 'o8'),
+        DataFixture(SetBillingAddress::class, ['cartId' => '$o2$'], 'b2'),
+        DataFixture(SetBillingAddress::class, ['cartId' => '$o3$'], 'b3'),
+        DataFixture(SetBillingAddress::class, ['cartId' => '$o4$'], 'b4'),
+        DataFixture(SetBillingAddress::class, ['cartId' => '$o5$'], 'b5'),
+        DataFixture(SetBillingAddress::class, ['cartId' => '$o6$'], 'b6'),
+        DataFixture(SetBillingAddress::class, ['cartId' => '$o7$'], 'b7'),
+        DataFixture(SetBillingAddress::class, ['cartId' => '$o8$'], 'b8'),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$o2$'], 's2'),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$o3$'], 's3'),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$o4$'], 's4'),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$o5$'], 's5'),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$o6$'], 's6'),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$o7$'], 's7'),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$o8$'], 's8'),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$o2$', 'method'=> 'checkmo'], 'p2'),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$o3$', 'method'=> 'checkmo'], 'p3'),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$o4$', 'method'=> 'checkmo'], 'p4'),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$o5$', 'method'=> 'checkmo'], 'p5'),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$o6$', 'method'=> 'checkmo'], 'p6'),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$o7$', 'method'=> 'checkmo'], 'p7'),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$o8$', 'method'=> 'checkmo'], 'p8'),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$o2$', 'method'=> 'checkmo'], 'po2'),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$o3$', 'method'=> 'checkmo'], 'po3'),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$o4$', 'method'=> 'checkmo'], 'po4'),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$o5$', 'method'=> 'checkmo'], 'po5'),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$o6$', 'method'=> 'checkmo'], 'po6'),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$o7$', 'method'=> 'checkmo'], 'po7'),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$o8$', 'method'=> 'checkmo'], 'po8'),
+
+    ]
     public function testGetCustomerDescendingSortedOrders()
     {
         $query = <<<QUERY
