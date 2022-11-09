@@ -18,7 +18,7 @@ class WeeeTax extends Weee
      * Collect Weee taxes amount and prepare items prices for taxation and discount
      *
      * @param Quote $quote
-     * @param ShippingAssignmentInterface $shippingAssignment
+     * @param ShippingAssignmentInterface|Address $shippingAssignment
      * @param Total $total
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
