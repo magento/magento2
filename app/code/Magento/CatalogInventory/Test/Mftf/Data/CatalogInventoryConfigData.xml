@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="StockOptionsDisplayOutOfStockProductsEnable">
+        <data key="path">cataloginventory/options/show_out_of_stock</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="StockOptionsDisplayOutOfStockProductsDisable">
+        <data key="path">cataloginventory/options/show_out_of_stock</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnableCatalogInventoryConfigData">
+        <!--Default Value -->
+        <data key="path">cataloginventory/options/can_subtract</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableCatalogInventoryConfigData">
+        <data key="path">cataloginventory/options/can_subtract</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="CatalogInventoryManageStockAutoReturnEnable">
+        <!-- Magento default value -->
+        <data key="path">cataloginventory/item_options/auto_return</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="CatalogInventoryManageStockAutoReturnDisable">
+        <!-- Magento default value -->
+        <data key="path">cataloginventory/item_options/auto_return</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="CatalogInventoryManageStockEnable">
+        <!-- Magento default value -->
+        <data key="path">cataloginventory/item_options/manage_stock</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="CatalogInventoryManageStockDisable">
+        <!-- Magento default value -->
+        <data key="path">cataloginventory/item_options/manage_stock</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnableInventoryCheckOnCartLoad">
+        <data key="path">cataloginventory/options/enable_inventory_check</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableInventoryCheckOnCartLoad">
+        <data key="path">cataloginventory/options/enable_inventory_check</data>
+        <data key="value">0</data>
+    </entity>
+</entities>
