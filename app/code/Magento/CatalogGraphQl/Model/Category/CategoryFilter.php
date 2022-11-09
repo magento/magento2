@@ -14,6 +14,7 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CollectionProcessorInterface;
 use Magento\CatalogGraphQl\Model\Category\Filter\SearchCriteria;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Model\Query\ContextInterface;
@@ -98,6 +99,14 @@ class CategoryFilter
         /** @var CategorySearchResultsInterface $searchResult */
         $categories = $this->categorySearchResultsFactory->create();
         $categories->setSearchCriteria($searchCriteria);
+
+        // only fetch necessary category entity id
+        $collection
+            ->getSelect()
+            ->reset(Select::COLUMNS)
+            ->columns(
+                'e.entity_id'
+            );
         $categories->setItems($collection->getItems());
         $categories->setTotalCount($collection->getSize());
 
