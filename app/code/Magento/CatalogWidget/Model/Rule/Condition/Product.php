@@ -12,9 +12,7 @@ namespace Magento\CatalogWidget\Model\Rule\Condition;
 use Magento\Catalog\Model\ProductCategoryList;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
-use Zend_Db_Select_Exception;
 
 /**
  * Rule product condition data model
@@ -249,8 +247,11 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             $conditionCheck = $connection->quoteIdentifier($aliasStore . '.value_id') . " > 0";
             $conditionTrue = $connection->quoteIdentifier($aliasStore . '.value');
             $conditionFalse = $connection->quoteIdentifier($aliasDefault . '.value');
-            $ifSql = "IF ($conditionCheck, $conditionTrue, $conditionFalse)";
-            $joinedAttribute = new \Zend_Db_Expr($ifSql);
+            $joinedAttribute = $collection->getSelect()->getConnection()->getCheckSql(
+                $conditionCheck,
+                $conditionTrue,
+                $conditionFalse
+            );
         } else {
             $joinedAttribute = $aliasStore . '.' . 'value';
         }
