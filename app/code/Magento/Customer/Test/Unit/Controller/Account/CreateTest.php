@@ -69,6 +69,14 @@ class CreateTest extends TestCase
      */
     protected $pageFactoryMock;
 
+    /**
+     * @var Http|MockObject
+     */
+    private $request;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);

@@ -8,7 +8,9 @@ declare(strict_types=1);
 namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart;
 
 use Magento\Backend\Model\Session;
+use Magento\Bundle\Model\Product\OptionList;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Option as ProductOption;
 use Magento\Catalog\Model\Product\Option\Type\File\ValidatorInfo;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -20,6 +22,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -199,6 +202,85 @@ class UpdateTest extends AbstractBackendController
         $this->assertNotNull($quoteItem, 'Missing expected shopping cart item after update.');
         $this->assertQuoteItemOptions($quoteItem, $expectedParams);
         $this->assertRedirect($this->stringContains('catalog/product/showUpdateResult'));
+    }
+
+    /**
+     * Tests updating bundle item quantity in the customer's shopping cart.
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_bundle_product.php
+     * @dataProvider bundleOptionQuantityProvider
+     * @param string $quantity
+     * @param string|null $message
+     * @return void
+     */
+    public function testUpdateBundleOptionQuantity(string $quantity, ?string $message): void
+    {
+        $productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
+        $bundleOptionList = $this->_objectManager->get(OptionList::class);
+        $getQuoteByReservedOrderId = $this->_objectManager->get(GetQuoteByReservedOrderId::class);
+
+        $bundleProduct = $productRepository->get('bundle-product');
+        $bundleOptions = $bundleOptionList->getItems($bundleProduct);
+        $option = reset($bundleOptions);
+        $productLinks = $option->getProductLinks();
+        $this->assertNotNull($productLinks[0]);
+
+        $customer = $this->customerRepository->get('customer@example.com');
+        $quote = $getQuoteByReservedOrderId->execute('test_cart_with_bundle');
+        $quote->assignCustomer($customer);
+        $this->quoteRepository->save($quote);
+        $quoteItem = $quote->getItemsCollection()->getFirstItem();
+        $this->assertNotEmpty($quoteItem->getId());
+
+        $postValue = [
+            'bundle_option' => [
+                $option->getOptionId() => $productLinks[0]->getId(),
+            ],
+            'qty' => $quantity,
+            'id' => $quoteItem->getId(),
+            'as_js_varname' => 'iFrameResponse',
+        ];
+
+        $this->dispatchCompositeCartUpdate(
+            [
+                'customer_id' => $customer->getId(),
+                'website_id' => $customer->getWebsiteId(),
+            ],
+            $postValue
+        );
+
+        $updateResult = $this->session->getCompositeProductResult();
+        $this->assertEquals($message, $updateResult->getMessage());
+    }
+
+    /**
+     * @return array
+     */
+    public function bundleOptionQuantityProvider(): array
+    {
+        return [
+            'Quantity, less than allowed in the Shopping Cart' => [
+                '0.1',
+                'The fewest you may purchase is 1.',
+            ],
+            'Decimal quantity not allowed' => [
+                '1.1',
+                'You cannot use decimal quantity for this product.',
+            ],
+            'Quantity, greater than available' => [
+                '1000',
+                'The requested qty is not available',
+            ],
+            'Quantity, greater than allowed in the Shopping Cart' => [
+                '100000',
+                'The requested qty exceeds the maximum qty allowed in shopping cart',
+            ],
+            'Allowed quantity' => [
+                '2',
+                null,
+            ],
+        ];
     }
 
     /**

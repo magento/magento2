@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver\ShippingAddress;
 
-use Magento\Directory\Model\Currency;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Quote\Model\Cart\ShippingMethodConverter;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Rate;
 
@@ -20,6 +21,19 @@ use Magento\Quote\Model\Quote\Address\Rate;
  */
 class SelectedShippingMethod implements ResolverInterface
 {
+    /**
+     * @var ShippingMethodConverter
+     */
+    private $shippingMethodConverter;
+
+    /**
+     * @param ShippingMethodConverter $shippingMethodConverter
+     */
+    public function __construct(ShippingMethodConverter $shippingMethodConverter)
+    {
+        $this->shippingMethodConverter = $shippingMethodConverter;
+    }
+
     /**
      * @inheritdoc
      */
@@ -31,8 +45,6 @@ class SelectedShippingMethod implements ResolverInterface
         /** @var Address $address */
         $address = $value['model'];
         $rates = $address->getAllShippingRates();
-        $carrierTitle = '';
-        $methodTitle = '';
 
         if (!count($rates) || empty($address->getShippingMethod())) {
             return null;
@@ -42,26 +54,36 @@ class SelectedShippingMethod implements ResolverInterface
 
         /** @var Rate $rate */
         foreach ($rates as $rate) {
-            if ($rate->getCode() == $address->getShippingMethod()) {
-                $carrierTitle = $rate->getCarrierTitle();
-                $methodTitle = $rate->getMethodTitle();
+            if ($rate->getCode() === $address->getShippingMethod()) {
                 break;
             }
         }
 
-        $data = [
+        $cart = $address->getQuote();
+        $selectedShippingMethod = $this->shippingMethodConverter->modelToDataObject(
+            $rate,
+            $cart->getQuoteCurrencyCode()
+        );
+
+        return [
             'carrier_code' => $carrierCode,
             'method_code' => $methodCode,
-            'carrier_title' => $carrierTitle,
-            'method_title' => $methodTitle,
+            'carrier_title' => $selectedShippingMethod->getCarrierTitle() ?? '',
+            'method_title' => $selectedShippingMethod->getMethodTitle() ?? '',
             'amount' => [
                 'value' => $address->getShippingAmount(),
-                'currency' => $address->getQuote()->getQuoteCurrencyCode(),
+                'currency' => $cart->getQuoteCurrencyCode(),
+            ],
+            'price_excl_tax' => [
+                'value' => $selectedShippingMethod->getPriceExclTax(),
+                'currency' => $cart->getQuoteCurrencyCode(),
+            ],
+            'price_incl_tax' => [
+                'value' => $selectedShippingMethod->getPriceInclTax(),
+                'currency' => $cart->getQuoteCurrencyCode(),
             ],
             /** @deprecated The field should not be used on the storefront */
             'base_amount' => null,
         ];
-
-        return $data;
     }
 }

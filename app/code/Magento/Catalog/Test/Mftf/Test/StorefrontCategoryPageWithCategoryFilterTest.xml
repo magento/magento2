@@ -15,6 +15,7 @@
             <features value="Catalog"/>
             <severity value="MINOR"/>
             <group value="Catalog"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -43,10 +44,7 @@
 
             <!-- Set the category filter to be present on the category page layered navigation -->
             <magentoCLI command="config:set {{EnableCategoryFilterOnCategoryPageConfigData.path}} {{EnableCategoryFilterOnCategoryPageConfigData.value}}" stepKey="setCategoryFilterVisibleOnStorefront"/>
-
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
 
         <after>

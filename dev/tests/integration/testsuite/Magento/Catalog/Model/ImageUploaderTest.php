@@ -12,6 +12,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\MediaStorage\Model\File\Storage;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -58,11 +61,13 @@ class ImageUploaderTest extends TestCase
         $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
+        $dbStorage = $this->objectManager->create(Database::class);
         $this->imageUploader = $this->objectManager->create(
             ImageUploader::class,
             [
                 'baseTmpPath' => self::BASE_TMP_PATH,
                 'basePath' => self::BASE_PATH,
+                'coreFileStorageDatabase' => $dbStorage,
                 'allowedExtensions' => ['jpg', 'jpeg', 'gif', 'png'],
                 'allowedMimeTypes' => ['image/jpg', 'image/jpeg', 'image/gif', 'image/png']
             ]
@@ -91,7 +96,7 @@ class ImageUploaderTest extends TestCase
 
         $this->imageUploader->saveFileToTmpDir('image');
         $filePath = $this->imageUploader->getBaseTmpPath() . DIRECTORY_SEPARATOR . $expectedName;
-        $this->assertTrue(is_file($this->mediaDirectory->getAbsolutePath($filePath)));
+        $this->assertTrue($this->mediaDirectory->isFile($this->mediaDirectory->getAbsolutePath($filePath)));
     }
 
     /**
@@ -122,11 +127,55 @@ class ImageUploaderTest extends TestCase
     {
         $expectedFilePath = $this->imageUploader->getBasePath() . DIRECTORY_SEPARATOR . 'magento_small_image_1.jpg';
 
-        $this->assertFileDoesNotExist($this->mediaDirectory->getAbsolutePath($expectedFilePath));
+        $this->assertFalse($this->mediaDirectory->isExist($expectedFilePath));
 
         $this->imageUploader->moveFileFromTmp('magento_small_image.jpg');
 
-        $this->assertFileExists($this->mediaDirectory->getAbsolutePath($expectedFilePath));
+        $this->assertTrue($this->mediaDirectory->isExist($expectedFilePath));
+    }
+
+    /**
+     * Verify image path will be updated in db in case file moved from tmp dir.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/catalog_category_image.php
+     * @magentoDataFixture Magento/Catalog/_files/catalog_tmp_category_image.php
+     * @magentoConfigFixture default/system/media_storage_configuration/media_storage 1
+     * @magentoDbIsolation disabled
+     *
+     * @return void
+     */
+    public function testMoveFileFromTmpWithMediaStorageDatabase(): void
+    {
+        $fileName = 'magento_small_image.jpg';
+        $storage = $this->objectManager->get(Storage::class);
+        $databaseStorage = $this->objectManager->get(Storage\Database::class);
+        $directory = $this->objectManager->get(DatabaseFactory::class)->create();
+        // Synchronize media.
+        $storage->synchronize(
+            [
+                'type' => 1,
+                'connection' => 'default_setup'
+            ]
+        );
+        // Upload file.
+        $fixtureDir = realpath(__DIR__ . '/../_files');
+        $filePath = $this->tmpDirectory->getAbsolutePath($fileName);
+        copy($fixtureDir . DIRECTORY_SEPARATOR . $fileName, $filePath);
+        $_FILES['image'] = [
+            'name' => $fileName,
+            'type' => 'image/jpeg',
+            'tmp_name' => $filePath,
+            'error' => 0,
+            'size' => 12500,
+        ];
+        $result = $this->imageUploader->saveFileToTmpDir('image');
+        // Move file from tmp dir.
+        $moveResult = $this->imageUploader->moveFileFromTmp($result['name'], true);
+        // Verify file moved to new dir.
+        $databaseStorage->loadByFilename($moveResult);
+        $directory->loadByPath('catalog/category');
+        $this->assertEquals('catalog/category', $databaseStorage->getDirectory());
+        $this->assertEquals($directory->getId(), $databaseStorage->getDirectoryId());
     }
 
     /**

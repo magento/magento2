@@ -38,12 +38,8 @@
                 <argument name="storeGroupName" value="SecondStoreGroupUnique.name"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
         <actionGroup ref="AdminCreateStoreViewFillSortOrderActionGroup" stepKey="createFirstStoreView">
             <argument name="StoreGroup" value="customStoreGroup"/>
@@ -55,6 +51,7 @@
             <argument name="customStore" value="SecondStoreGroupUnique"/>
             <argument name="sortOrder" value="20"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
         <click stepKey="selectStoreSwitcher" selector="{{StorefrontFooterSection.switchStoreButton}}"/>

@@ -5,12 +5,12 @@
  */
 namespace Magento\Analytics\Model\Connector;
 
+use Laminas\Http\Request;
 use Magento\Analytics\Model\AnalyticsToken;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\HTTP\ZendClient;
-use Psr\Log\LoggerInterface;
-use Magento\Store\Model\Store;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\Store;
+use Psr\Log\LoggerInterface;
 
 /**
  * Command notifies MBI about that data collection was finished.
@@ -79,7 +79,7 @@ class NotifyDataChangedCommand implements CommandInterface
         $result = false;
         if ($this->analyticsToken->isTokenExist()) {
             $response = $this->httpClient->request(
-                ZendClient::POST,
+                Request::METHOD_POST,
                 $this->config->getValue($this->notifyDataChangedUrlPath),
                 [
                     "access-token" => $this->analyticsToken->getToken(),

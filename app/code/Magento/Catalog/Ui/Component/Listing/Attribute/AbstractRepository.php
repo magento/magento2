@@ -12,6 +12,11 @@ namespace Magento\Catalog\Ui\Component\Listing\Attribute;
 abstract class AbstractRepository implements RepositoryInterface
 {
     /**
+     * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     */
+    private $productAttributeRepository;
+
+    /**
      * @var null|\Magento\Catalog\Api\Data\ProductAttributeInterface[]
      */
     protected $attributes;

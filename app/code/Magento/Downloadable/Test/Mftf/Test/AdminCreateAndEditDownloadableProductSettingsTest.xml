@@ -27,6 +27,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -57,7 +58,7 @@
 
         <!-- Open product page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
-            <argument name="productUrl" value="{{DownloadableProduct.name}}"/>
+            <argument name="productUrl" value="{{DownloadableProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert product design settings "layout 1 column" -->

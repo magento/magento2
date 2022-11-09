@@ -86,19 +86,28 @@
         </after>
 
         <!-- Check to make sure that the configurable product shows up as in stock -->
-        <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage"/>
-        <waitForPageLoad stepKey="waitForStoreFrontLoad"/>
-        <see stepKey="checkForOutOfStock" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToConfigProductPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStoreFrontLoad"/>
+        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="checkForOutOfStock">
+            <argument name="productUrlKey" value="$createConfigProduct.custom_attributes[url_key]$"/>
+            <argument name="productName" value="$createConfigProduct.name$"/>
+            <argument name="stockStatus" value="IN STOCK"/>
+        </actionGroup>
 
         <!-- Delete the first simple product -->
         <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
             <argument name="sku" value="{{ApiSimpleOne.sku}}"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
         <!-- Check to make sure that the configurable product shows up as in stock -->
-        <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage2"/>
-        <waitForPageLoad stepKey="waitForStoreFrontLoad2"/>
-        <see stepKey="checkForOutOfStock2" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToConfigProductPage2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStoreFrontLoad2"/>
+        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="checkForOutOfStock2">
+            <argument name="productUrlKey" value="$createConfigProduct.custom_attributes[url_key]$"/>
+            <argument name="productName" value="$createConfigProduct.name$"/>
+            <argument name="stockStatus" value="IN STOCK"/>
+        </actionGroup>
 
         <!-- Delete the second simple product -->
         <actionGroup stepKey="deleteProduct2" ref="DeleteProductBySkuActionGroup">
@@ -106,8 +115,12 @@
         </actionGroup>
 
         <!-- Check to make sure that the configurable product shows up as out of stock -->
-        <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage3"/>
-        <waitForPageLoad stepKey="waitForStoreFrontLoad3"/>
-        <see stepKey="checkForOutOfStock3" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="OUT OF STOCK"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToConfigProductPage3"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStoreFrontLoad3"/>
+        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="checkForOutOfStock3">
+            <argument name="productUrlKey" value="$createConfigProduct.custom_attributes[url_key]$"/>
+            <argument name="productName" value="$createConfigProduct.name$"/>
+            <argument name="stockStatus" value="OUT OF STOCK"/>
+        </actionGroup>
     </test>
 </tests>

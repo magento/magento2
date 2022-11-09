@@ -8,6 +8,7 @@ namespace Magento\Setup\Console\Command;
 use Magento\Deploy\Console\DeployStaticOptions;
 use Magento\Framework\App\DeploymentConfig\FileReader;
 use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
@@ -71,6 +72,11 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
     private $storeManager;
 
     /**
+     * @var PhpFormatter
+     */
+    private $phpFormatter;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -81,7 +87,7 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
         $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
-
+        $this->phpFormatter = $this->objectManager->get(PhpFormatter::class);
         $this->config = $this->loadConfig();
         $this->envConfig = $this->loadEnvConfig();
 
@@ -129,10 +135,10 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
         );
         $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => $newData], true);
 
-        // remove application environment config for emulate work without db
+        // rewrite application environment config with only remote storage details to emulate work without db
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
-            "<?php\n return [];\n"
+            $this->phpFormatter->format(['remote_storage' => $this->envConfig['remote_storage']])
         );
         $this->storeManager->reinitStores();
 

@@ -61,6 +61,9 @@ class PopupTest extends TestCase
      */
     protected $resultLayoutMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->request = $this->getMockForAbstractClass(RequestInterface::class);
@@ -96,7 +99,10 @@ class PopupTest extends TestCase
         );
     }
 
-    public function testPopupActionNoProductId()
+    /**
+     * @return void
+     */
+    public function testPopupActionNoProductId(): void
     {
         $storeId = 12;
         $typeId = 4;
@@ -107,30 +113,23 @@ class PopupTest extends TestCase
             ['setStoreId', 'setTypeId', 'setData', '__wakeup']
         );
 
-        $this->request->expects($this->at(0))->method('getParam')->with('id')->willReturn($productId);
         $this->factory->expects($this->once())->method('create')->willReturn($product);
-        $this->request->expects(
-            $this->at(1)
-        )->method(
-            'getParam'
-        )->with(
-            'store',
-            0
-        )->willReturn(
-            $storeId
-        );
-
         $product->expects($this->once())->method('setStoreId')->with($storeId);
-        $this->request->expects($this->at(2))->method('getParam')->with('type')->willReturn($typeId);
         $product->expects($this->once())->method('setTypeId')->with($typeId);
         $product->expects($this->once())->method('setData')->with('_edit_mode', true);
-        $this->request->expects($this->at(3))->method('getParam')->with('set')->willReturn($setId);
+        $this->request
+            ->method('getParam')
+            ->withConsecutive(['id'], ['store', 0], ['type'], ['set'])
+            ->willReturnOnConsecutiveCalls($productId, $storeId, $typeId, $setId);
         $this->registry->expects($this->once())->method('register')->with('current_product', $product);
 
         $this->assertSame($this->resultLayoutMock, $this->action->execute());
     }
 
-    public function testPopupActionWithProductIdNoSetId()
+    /**
+     * @return void
+     */
+    public function testPopupActionWithProductIdNoSetId(): void
     {
         $storeId = 12;
         $typeId = 4;
@@ -141,24 +140,15 @@ class PopupTest extends TestCase
             ['setStoreId', 'setTypeId', 'setData', 'load', '__wakeup']
         );
 
-        $this->request->expects($this->at(0))->method('getParam')->with('id')->willReturn($productId);
         $this->factory->expects($this->once())->method('create')->willReturn($product);
-        $this->request->expects(
-            $this->at(1)
-        )->method(
-            'getParam'
-        )->with(
-            'store',
-            0
-        )->willReturn(
-            $storeId
-        );
         $product->expects($this->once())->method('setStoreId')->with($storeId);
-        $this->request->expects($this->at(2))->method('getParam')->with('type')->willReturn($typeId);
         $product->expects($this->never())->method('setTypeId');
         $product->expects($this->once())->method('setData')->with('_edit_mode', true);
         $product->expects($this->once())->method('load')->with($productId);
-        $this->request->expects($this->at(3))->method('getParam')->with('set')->willReturn($setId);
+        $this->request
+            ->method('getParam')
+            ->withConsecutive(['id'], ['store', 0], ['type'], ['set'])
+            ->willReturnOnConsecutiveCalls($productId, $storeId, $typeId, $setId);
         $this->registry->expects($this->once())->method('register')->with('current_product', $product);
 
         $this->assertSame($this->resultLayoutMock, $this->action->execute());

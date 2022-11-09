@@ -24,7 +24,7 @@
         <const name="TESTCODESTYLE_IS_FULL_SCAN" value="0"/>
     </php>
     <listeners>
-        <listener class="Yandex\Allure\Adapter\AllureAdapter">
+        <listener class="Yandex\Allure\PhpUnit\AllurePhpUnit">
             <arguments>
                 <string>var/allure-results</string> <!-- XML files output directory -->
                 <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->

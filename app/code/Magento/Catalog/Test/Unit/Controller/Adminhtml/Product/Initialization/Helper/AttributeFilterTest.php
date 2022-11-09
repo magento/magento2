@@ -216,6 +216,29 @@ class AttributeFilterTest extends TestCase
                     ['description', null, 'descr text'],
                 ],
             ],
+            'update_product_with_empty_string_attribute' => [
+                'requestProductData' => [
+                    'name' => 'testName3',
+                    'sku' => 'testSku3',
+                    'price' => '103',
+                    'special_price' => '100',
+                    'custom_attribute' => '',
+                ],
+                'useDefaults' => [],
+                'expectedProductData' => [
+                    'name' => 'testName3',
+                    'sku' => 'testSku3',
+                    'price' => '103',
+                    'special_price' => '100',
+                    'custom_attribute' => '',
+                ],
+                'initialProductData' => [
+                    ['name', null, 'testName2'],
+                    ['sku', null, 'testSku2'],
+                    ['price', null, '101'],
+                    ['custom_attribute', null, '0'],
+                ],
+            ],
         ];
     }
 

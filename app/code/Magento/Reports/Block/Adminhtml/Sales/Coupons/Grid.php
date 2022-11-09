@@ -21,7 +21,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     protected $_columnGroupBy = 'period';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     protected function _construct()
@@ -32,7 +32,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getResourceCollectionName()
     {
@@ -44,7 +44,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareColumns()
@@ -100,9 +100,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
             ]
         );
 
-        if ($this->getFilterData()->getStoreIds()) {
-            $this->setStoreIds(explode(',', $this->getFilterData()->getStoreIds()));
-        }
+        $this->setStoreIds($this->_getStoreIds());
         $currencyCode = $this->getCurrentCurrencyCode();
         $rate = $this->getRate($currencyCode);
 

@@ -15,13 +15,12 @@ use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Customer\Model\Metadata\Form\Image;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\WriteFactory;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Driver\File as Driver;
 use Magento\Framework\Filesystem\Io\File;
@@ -82,19 +81,14 @@ class ImageTest extends AbstractFormTestCase
     private $ioFileSystemMock;
 
     /**
-     * @var DirectoryList|\PHPUnit\Framework\MockObject\MockObject
+     * @var ReadInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    private $directoryListMock;
-
-    /**
-     * @var WriteFactory|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private $writeFactoryMock;
+    private $readDirectoryMock;
 
     /**
      * @var Write|\PHPUnit\Framework\MockObject\MockObject
      */
-    private $mediaEntityTmpDirectoryMock;
+    private $mediaWriteDirectoryMock;
 
     /**
      * @var Driver|\PHPUnit\Framework\MockObject\MockObject
@@ -140,23 +134,24 @@ class ImageTest extends AbstractFormTestCase
         $this->ioFileSystemMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->directoryListMock = $this->getMockBuilder(DirectoryList::class)
+
+        $this->readDirectoryMock = $this->getMockBuilder(ReadInterface::class)
+            ->getMockForAbstractClass();
+        $this->fileSystemMock->expects($this->once())
+            ->method('getDirectoryReadByPath')
+            ->willReturn($this->readDirectoryMock);
+
+        $this->mediaWriteDirectoryMock = $this->getMockBuilder(Write::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->writeFactoryMock = $this->getMockBuilder(WriteFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mediaEntityTmpDirectoryMock = $this->getMockBuilder(Write::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fileSystemMock->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->willReturn($this->mediaWriteDirectoryMock);
+
         $this->driverMock = $this->getMockBuilder(Driver::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->writeFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->mediaEntityTmpDirectoryMock);
-        $this->mediaEntityTmpDirectoryMock->expects($this->any())
+        $this->mediaWriteDirectoryMock->expects($this->any())
             ->method('getDriver')
             ->willReturn($this->driverMock);
     }
@@ -184,9 +179,7 @@ class ImageTest extends AbstractFormTestCase
             $this->uploaderFactoryMock,
             $this->fileProcessorFactoryMock,
             $this->imageContentFactory,
-            $this->ioFileSystemMock,
-            $this->directoryListMock,
-            $this->writeFactoryMock
+            $this->ioFileSystemMock
         );
     }
 
@@ -197,7 +190,7 @@ class ImageTest extends AbstractFormTestCase
     public function testValidateIsNotValidFile()
     {
         $value = [
-            'tmp_name' => 'tmp_file',
+            'tmp_name' => 'tmp_file.txt',
             'name' => 'realFileName',
         ];
 
@@ -470,10 +463,10 @@ class ImageTest extends AbstractFormTestCase
             ->method('getRealPathSafety')
             ->with($value['file'])
             ->willReturn($value['file']);
-        $this->mediaEntityTmpDirectoryMock->expects($this->once())
+        $this->readDirectoryMock->expects($this->once())
             ->method('getAbsolutePath')
             ->willReturn($value['file']);
-        $this->mediaEntityTmpDirectoryMock->expects($this->once())
+        $this->readDirectoryMock->expects($this->once())
             ->method('getRelativePath')
             ->willReturn($value['file']);
         $this->fileProcessorMock->expects($this->once())
@@ -505,7 +498,7 @@ class ImageTest extends AbstractFormTestCase
 
         $base64EncodedData = 'encoded_data';
 
-        $this->mediaEntityTmpDirectoryMock->expects($this->once())
+        $this->readDirectoryMock->expects($this->once())
             ->method('isExist')
             ->with($value['file'])
             ->willReturn(true);
@@ -561,7 +554,7 @@ class ImageTest extends AbstractFormTestCase
             'type' => 'image',
         ];
 
-        $this->mediaEntityTmpDirectoryMock->expects($this->once())
+        $this->readDirectoryMock->expects($this->once())
             ->method('isExist')
             ->with($value['file'])
             ->willReturn(false);

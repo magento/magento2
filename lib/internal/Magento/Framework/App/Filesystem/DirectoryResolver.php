@@ -52,7 +52,7 @@ class DirectoryResolver
     {
         $directory = $this->filesystem->getDirectoryWrite($directoryConfig);
         $realPath = $directory->getDriver()->getRealPathSafety($path);
-        $root = $directory->getAbsolutePath();
+        $root = rtrim($directory->getAbsolutePath(), DIRECTORY_SEPARATOR);
 
         return strpos($realPath, $root) === 0;
     }
