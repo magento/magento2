@@ -44,7 +44,7 @@ class MaskedCartId implements ResolverInterface
      */
     public function __construct(
         QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId,
-         QuoteIdMaskFactory $quoteIdMaskFactory,
+        QuoteIdMaskFactory $quoteIdMaskFactory,
         QuoteIdMaskResourceModel $quoteIdMaskResourceModel
     ) {
         $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
@@ -78,7 +78,6 @@ class MaskedCartId implements ResolverInterface
     {
         try {
             $maskedId =$this->ensureQuoteMaskExist($quoteId);
-            //$maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);
         } catch (NoSuchEntityException $exception) {
             throw new GraphQlNoSuchEntityException(__('Current user does not have an active cart.'));
         }
@@ -109,3 +108,4 @@ class MaskedCartId implements ResolverInterface
     }
 
 }
+
