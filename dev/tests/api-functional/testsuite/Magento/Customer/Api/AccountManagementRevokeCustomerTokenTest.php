@@ -20,9 +20,9 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class AccountManagementRevokeCustomerTokenTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/integration/customer/revoke-customer-token';
-    const INTEGRATION_SERVICE = 'integrationCustomerTokenServiceV1';
-    const SERVICE_VERSION = 'V1';
+    public const RESOURCE_PATH = '/V1/integration/customer/revoke-customer-token';
+    public const INTEGRATION_SERVICE = 'integrationCustomerTokenServiceV1';
+    public const SERVICE_VERSION = 'V1';
 
     /**
      * Test token revoking for authenticated customer
