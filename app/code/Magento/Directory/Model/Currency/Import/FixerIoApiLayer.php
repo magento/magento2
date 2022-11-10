@@ -25,11 +25,9 @@ class FixerIoApiLayer implements \Magento\Directory\Model\Currency\Import\Import
     . 'apikey={{ACCESS_KEY}}&base={{CURRENCY_FROM}}&symbols={{CURRENCY_TO}}';
 
     /**
-     * Messages
-     *
      * @var array
      */
-    protected $_messages = [];
+    private $_messages = [];
 
     /**
      * @var HttpClientFactory
@@ -39,7 +37,7 @@ class FixerIoApiLayer implements \Magento\Directory\Model\Currency\Import\Import
     /**
      * @var CurrencyFactory
      */
-    protected $_currencyFactory;
+    private $_currencyFactory;
 
     /**
      * Core scope config
@@ -97,7 +95,7 @@ class FixerIoApiLayer implements \Magento\Directory\Model\Currency\Import\Import
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function getMessages()
     {
@@ -162,7 +160,7 @@ class FixerIoApiLayer implements \Magento\Directory\Model\Currency\Import\Import
      * @param array $rates
      * @return \Magento\Directory\Model\Currency\Import\FixerIoApiLayer
      */
-    protected function _saveRates(array $rates)
+    private function _saveRates(array $rates)
     {
         foreach ($rates as $currencyCode => $currencyRates) {
             $this->_currencyFactory->create()->setId($currencyCode)->setRates($currencyRates)->save();
