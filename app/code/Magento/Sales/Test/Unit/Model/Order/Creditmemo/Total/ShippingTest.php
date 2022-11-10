@@ -14,6 +14,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\Total\Shipping;
+use Magento\Tax\Model\Calculation as TaxCalculation;
 use Magento\Tax\Model\Config;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -104,11 +105,11 @@ class ShippingTest extends TestCase
             ->with($allowedShippingAmount, null, false)
             ->willReturn($allowedShippingAmount);
 
-        $order = new DataObject(
+        $order = $this->getOrderMock(
             [
-                'base_shipping_amount' => $orderShippingAmount,
-                'base_shipping_refunded' => $orderShippingRefunded,
-                'base_currency' => $currencyMock,
+            'base_shipping_amount' => $orderShippingAmount,
+            'base_shipping_refunded' => $orderShippingRefunded,
+            'base_currency' => $currencyMock
             ]
         );
 
@@ -124,6 +125,20 @@ class ShippingTest extends TestCase
 
         //expect to have an exception thrown
         $this->shippingCollector->collect($this->creditmemoMock);
+    }
+
+    private function getOrderMock($data)
+    {
+        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        foreach ($data as $method => $returnValue) {
+            $orderMock
+                ->method('get' . str_replace('_', '', ucwords($method, '_')))
+                ->willReturn($returnValue);
+        }
+        return $orderMock;
     }
 
     /**
@@ -154,7 +169,7 @@ class ShippingTest extends TestCase
 
         $this->taxConfig->expects($this->any())->method('displaySalesShippingInclTax')->willReturn(false);
 
-        $order = new DataObject(
+        $order = $this->getOrderMock(
             [
                 'shipping_amount' => $orderShippingAmount,
                 'shipping_refunded' => $orderShippingRefunded,
@@ -241,7 +256,7 @@ class ShippingTest extends TestCase
 
         $this->taxConfig->expects($this->any())->method('displaySalesShippingInclTax')->willReturn(false);
 
-        $order = new DataObject(
+        $order = $this->getOrderMock(
             [
                 'shipping_amount' => $orderShippingAmount,
                 'shipping_refunded' => $orderShippingAmountRefunded,
@@ -346,7 +361,7 @@ class ShippingTest extends TestCase
         $expectedGrandTotal = $grandTotalBefore + $expectedShippingAmount;
         $expectedBaseGrandTtoal = $baseGrandTotalBefore + $expectedBaseShippingAmount;
 
-        $order = new DataObject(
+        $order = $this->getOrderMock(
             [
                 'shipping_amount' => $orderShippingAmount,
                 'base_shipping_amount' => $baseOrderShippingAmount,
@@ -405,6 +420,7 @@ class ShippingTest extends TestCase
 
         $this->shippingCollector->collect($this->creditmemoMock);
     }
+
     /**
      * situation: The admin user did *not* specify any desired refund amount
      *
@@ -434,7 +450,7 @@ class ShippingTest extends TestCase
 
         $this->taxConfig->expects($this->any())->method('displaySalesShippingInclTax')->willReturn(false);
 
-        $order = new DataObject(
+        $order = $this->getOrderMock(
             [
                 'shipping_amount' => $orderShippingAmount,
                 'shipping_refunded' => $orderShippingRefunded,
@@ -470,6 +486,104 @@ class ShippingTest extends TestCase
         $this->creditmemoMock->expects($this->once())
             ->method('setBaseShippingAmount')
             ->with($baseAllowedShippingAmount)
+            ->willReturnSelf();
+        $this->creditmemoMock->expects($this->once())
+            ->method('setShippingInclTax')
+            ->with($expectedShippingAmountInclTax)
+            ->willReturnSelf();
+        $this->creditmemoMock->expects($this->once())
+            ->method('setBaseShippingInclTax')
+            ->with($expectedBaseShippingAmountInclTax)
+            ->willReturnSelf();
+        $this->creditmemoMock->expects($this->once())
+            ->method('setGrandTotal')
+            ->with($expectedGrandTotal)
+            ->willReturnSelf();
+        $this->creditmemoMock->expects($this->once())
+            ->method('setBaseGrandTotal')
+            ->with($expectedBaseGrandTotal)
+            ->willReturnSelf();
+        $this->shippingCollector->collect($this->creditmemoMock);
+    }
+
+    /**
+     * situation: The admin user specified the desired refund amount that has taxes and discount embedded within it
+     *
+     * @throws LocalizedException
+     */
+    public function testCollectUsingShippingInclTaxAndDiscountOnExclBeforeTax()
+    {
+        $this->taxConfig->expects($this->any())->method('displaySalesShippingInclTax')->willReturn(true);
+        $this->taxConfig->expects($this->any())
+            ->method('getCalculationSequence')
+            ->willReturn(TaxCalculation::CALC_TAX_AFTER_DISCOUNT_ON_EXCL);
+
+        $orderShippingAmount = 14.55;
+        $shippingTaxAmount = 0.45;
+        $shippingDiscountAmount = 10;
+        $orderShippingInclTax = 15;
+        $orderShippingAmountRefunded = 7.27;
+        $orderShippingAmountInclTaxRefunded = 8;
+        $shippingTaxRefunded = 0.24;
+
+        $currencyMultiple = 2;
+        $baseOrderShippingAmount = $orderShippingAmount * $currencyMultiple;
+        $baseShippingTaxAmount = $shippingTaxAmount * $currencyMultiple;
+        $baseOrderShippingInclTax = $orderShippingInclTax * $currencyMultiple;
+        $baseOrderShippingAmountRefunded = $orderShippingAmountRefunded * $currencyMultiple;
+        $baseShippingTaxRefunded = $shippingTaxRefunded * $currencyMultiple;
+
+        //determine expected amounts
+        $expectedShippingAmount = $orderShippingAmount - $orderShippingAmountRefunded;
+        $expectedShippingAmountInclTax = $orderShippingInclTax - $orderShippingAmountInclTaxRefunded;
+
+        $expectedBaseShippingAmount = $expectedShippingAmount * $currencyMultiple;
+        $expectedBaseShippingAmountInclTax = $expectedShippingAmountInclTax * $currencyMultiple;
+
+        $grandTotalBefore = 27;
+        $baseGrandTotalBefore = $grandTotalBefore * $currencyMultiple;
+        $expectedGrandTotal = $grandTotalBefore + $expectedShippingAmount;
+        $expectedBaseGrandTotal = $baseGrandTotalBefore + $expectedBaseShippingAmount;
+
+        $order = $this->getOrderMock(
+            [
+                'shipping_amount' => $orderShippingAmount,
+                'base_shipping_amount' => $baseOrderShippingAmount,
+                'shipping_refunded' => $orderShippingAmountRefunded,
+                'base_shipping_refunded' => $baseOrderShippingAmountRefunded,
+                'shipping_incl_tax' => $orderShippingInclTax,
+                'base_shipping_incl_tax' => $baseOrderShippingInclTax,
+                'shipping_tax_amount' => $shippingTaxAmount,
+                'shipping_tax_refunded' => $shippingTaxRefunded,
+                'base_shipping_tax_amount' => $baseShippingTaxAmount,
+                'base_shipping_tax_refunded' => $baseShippingTaxRefunded,
+                'shipping_discount_amount' => $shippingDiscountAmount
+            ]
+        );
+        $orderCreditMemo = $this->createMock(Creditmemo::class);
+        $orderCreditMemo->expects($this->atLeastOnce())
+            ->method('getShippingInclTax')
+            ->willReturn($orderShippingAmountInclTaxRefunded);
+        $orderCreditMemo->expects($this->atLeastOnce())
+            ->method('getBaseShippingInclTax')
+            ->willReturn($orderShippingAmountInclTaxRefunded * $currencyMultiple);
+        $order->expects($this->atLeastOnce())
+            ->method('getCreditmemosCollection')
+            ->willReturn([$orderCreditMemo]);
+
+        $this->creditmemoMock->expects($this->once())->method('getOrder')->willReturn($order);
+        $this->creditmemoMock->expects($this->once())->method('hasBaseShippingAmount')->willReturn(false);
+        $this->creditmemoMock->expects($this->once())->method('getGrandTotal')->willReturn($grandTotalBefore);
+        $this->creditmemoMock->expects($this->once())->method('getBaseGrandTotal')->willReturn($baseGrandTotalBefore);
+
+        //verify
+        $this->creditmemoMock->expects($this->once())
+            ->method('setShippingAmount')
+            ->with($expectedShippingAmount)
+            ->willReturnSelf();
+        $this->creditmemoMock->expects($this->once())
+            ->method('setBaseShippingAmount')
+            ->with($expectedBaseShippingAmount)
             ->willReturnSelf();
         $this->creditmemoMock->expects($this->once())
             ->method('setShippingInclTax')
