@@ -55,7 +55,7 @@ class Dismiss extends Action
         $isAcknowledged = $this->notificationManagement->acknowledgeBulks($bulkUuids);
 
         /** @var \Magento\Framework\Controller\Result\Json $result */
-        $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $result = $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData(['']);
         if (!$isAcknowledged) {
             $result->setHttpResponseCode(400);
         }
