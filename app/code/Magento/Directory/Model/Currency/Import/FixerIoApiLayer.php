@@ -18,7 +18,7 @@ use Magento\Framework\HTTP\LaminasClient;
 /**
  * Currency rate import model (https://apilayer.com/marketplace/fixer-api)
  */
-class FixerIoApiLayer implements \Magento\Directory\Model\Currency\Import\ImportInterface
+class FixerIoApiLayer implements ImportInterface
 {
     private const CURRENCY_CONVERTER_HOST = 'https://api.apilayer.com';
     private const CURRENCY_CONVERTER_URL_PATH = '/fixer/latest?'
@@ -27,7 +27,7 @@ class FixerIoApiLayer implements \Magento\Directory\Model\Currency\Import\Import
     /**
      * @var array
      */
-    private $_messages = [];
+    private $messages = [];
 
     /**
      * @var HttpClientFactory
@@ -37,7 +37,7 @@ class FixerIoApiLayer implements \Magento\Directory\Model\Currency\Import\Import
     /**
      * @var CurrencyFactory
      */
-    private $_currencyFactory;
+    private $currencyFactory;
 
     /**
      * Core scope config
@@ -58,7 +58,7 @@ class FixerIoApiLayer implements \Magento\Directory\Model\Currency\Import\Import
         ScopeConfigInterface $scopeConfig,
         HttpClientFactory $httpClientFactory
     ) {
-        $this->_currencyFactory = $currencyFactory;
+        $this->currencyFactory = $currencyFactory;
         $this->scopeConfig = $scopeConfig;
         $this->httpClientFactory = $httpClientFactory;
     }
@@ -71,7 +71,7 @@ class FixerIoApiLayer implements \Magento\Directory\Model\Currency\Import\Import
     public function importRates()
     {
         $data = $this->fetchRates();
-        $this->_saveRates($data);
+        $this->saveRates($data);
         return $this;
     }
 
@@ -81,8 +81,8 @@ class FixerIoApiLayer implements \Magento\Directory\Model\Currency\Import\Import
     public function fetchRates()
     {
         $data = [];
-        $currencies = $this->_getCurrencyCodes();
-        $defaultCurrencies = $this->_getDefaultCurrencyCodes();
+        $currencies = $this->getCurrencyCodes();
+        $defaultCurrencies = $this->getDefaultCurrencyCodes();
 
         foreach ($defaultCurrencies as $currencyFrom) {
             if (!isset($data[$currencyFrom])) {
@@ -99,7 +99,7 @@ class FixerIoApiLayer implements \Magento\Directory\Model\Currency\Import\Import
      */
     public function getMessages()
     {
-        return $this->_messages;
+        return $this->messages;
     }
 
     /**
@@ -114,7 +114,7 @@ class FixerIoApiLayer implements \Magento\Directory\Model\Currency\Import\Import
     {
         $accessKey = $this->scopeConfig->getValue('currency/fixerio_apilayer/api_key', ScopeInterface::SCOPE_STORE);
         if (empty($accessKey)) {
-            $this->_messages[] = __('No API Key was specified or an invalid API Key was specified.');
+            $this->messages[] = __('No API Key was specified or an invalid API Key was specified.');
             $data[$currencyFrom] = $this->makeEmptyResponse($currenciesTo);
             return $data;
         }
@@ -144,7 +144,7 @@ class FixerIoApiLayer implements \Magento\Directory\Model\Currency\Import\Import
             } else {
                 if (empty($response['rates'][$currencyTo])) {
                     $message = 'We can\'t retrieve a rate from %1 for %2.';
-                    $this->_messages[] = __($message, self::CURRENCY_CONVERTER_HOST, $currencyTo);
+                    $this->messages[] = __($message, self::CURRENCY_CONVERTER_HOST, $currencyTo);
                     $data[$currencyFrom][$currencyTo] = null;
                 } else {
                     $data[$currencyFrom][$currencyTo] = (double)$response['rates'][$currencyTo];
@@ -160,10 +160,10 @@ class FixerIoApiLayer implements \Magento\Directory\Model\Currency\Import\Import
      * @param array $rates
      * @return \Magento\Directory\Model\Currency\Import\FixerIoApiLayer
      */
-    private function _saveRates(array $rates)
+    private function saveRates(array $rates)
     {
         foreach ($rates as $currencyCode => $currencyRates) {
-            $this->_currencyFactory->create()->setId($currencyCode)->setRates($currencyRates)->save();
+            $this->currencyFactory->create()->setId($currencyCode)->setRates($currencyRates)->save();
         }
         return $this;
     }
@@ -234,7 +234,7 @@ class FixerIoApiLayer implements \Magento\Directory\Model\Currency\Import\Import
             201 => __('An invalid base currency has been entered.'),
         ];
 
-        $this->_messages[] = $errorCodes[$response['error']['code']] ?? __('Currency rates can\'t be retrieved.');
+        $this->messages[] = $errorCodes[$response['error']['code']] ?? __('Currency rates can\'t be retrieved.');
 
         return false;
     }
@@ -244,9 +244,9 @@ class FixerIoApiLayer implements \Magento\Directory\Model\Currency\Import\Import
      *
      * @return array
      */
-    private function _getCurrencyCodes()
+    private function getCurrencyCodes()
     {
-        return $this->_currencyFactory->create()->getConfigAllowCurrencies();
+        return $this->currencyFactory->create()->getConfigAllowCurrencies();
     }
 
     /**
@@ -254,8 +254,8 @@ class FixerIoApiLayer implements \Magento\Directory\Model\Currency\Import\Import
      *
      * @return array
      */
-    private function _getDefaultCurrencyCodes()
+    private function getDefaultCurrencyCodes()
     {
-        return $this->_currencyFactory->create()->getConfigBaseCurrencies();
+        return $this->currencyFactory->create()->getConfigBaseCurrencies();
     }
 }
