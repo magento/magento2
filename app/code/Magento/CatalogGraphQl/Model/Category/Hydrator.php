@@ -57,12 +57,18 @@ class Hydrator
      */
     public function hydrateCategory(Category $category, $basicFieldsOnly = false) : array
     {
-        if (!$basicFieldsOnly) {
-            // initialize custom attributes (to be consequently included in subsequent getData call below)
-            $category->getCustomAttributes();
+        if ($basicFieldsOnly) {
+            $categoryData = $category->getData();
+        } else {
+            $categoryData = $this->dataObjectProcessor->buildOutputDataArray(
+                $category,
+                CategoryInterface::class,
+                [
+                    'getChildren',
+                    'getExtensionAttributes',
+                ]
+            );
         }
-
-        $categoryData = $category->getData();
 
         $categoryData['id'] = $category->getId();
         $categoryData['uid'] = $this->uidEncoder->encode((string) $category->getId());

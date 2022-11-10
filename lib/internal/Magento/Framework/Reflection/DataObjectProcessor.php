@@ -75,16 +75,21 @@ class DataObjectProcessor
      *
      * @param mixed $dataObject
      * @param string $dataObjectType
+     * @param array $excludedMethods - list of methods to exclude from being called
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function buildOutputDataArray($dataObject, $dataObjectType)
+    public function buildOutputDataArray($dataObject, $dataObjectType, array $excludedMethods = [])
     {
         $methods = $this->methodsMapProcessor->getMethodsMap($dataObjectType);
         $outputData = [];
 
         foreach (array_keys($methods) as $methodName) {
+            if (in_array($methodName, $excludedMethods)) {
+                continue;
+            }
+
             if (!$this->methodsMapProcessor->isMethodValidForDataField($dataObjectType, $methodName)) {
                 continue;
             }
