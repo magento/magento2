@@ -144,6 +144,7 @@ class TotalsCollector
 
         $total->setSubtotal(0);
         $total->setBaseSubtotal(0);
+        $total->setBaseSubtotalTotalInclTax(0);
 
         $total->setSubtotalWithDiscount(0);
         $total->setBaseSubtotalWithDiscount(0);
@@ -269,7 +270,7 @@ class TotalsCollector
                 'total' => $total
             ]
         );
-       // $total->setBaseSubtotalTotalInclTax($total->getBaseSubtotalInclTax());
+        $total->setBaseSubtotalTotalInclTax($total->getBaseSubtotalInclTax());
         $address->addData($total->getData());
         $address->setAppliedTaxes($total->getAppliedTaxes());
         return $total;
