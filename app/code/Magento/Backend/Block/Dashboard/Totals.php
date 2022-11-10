@@ -32,6 +32,11 @@ class Totals extends Bar
     protected $_moduleManager;
 
     /**
+     * @var Period
+     */
+    private $period;
+
+    /**
      * @param Context $context
      * @param CollectionFactory $collectionFactory
      * @param Manager $moduleManager
@@ -41,9 +46,11 @@ class Totals extends Bar
         Context $context,
         CollectionFactory $collectionFactory,
         Manager $moduleManager,
+        Period $period,
         array $data = []
     ) {
         $this->_moduleManager = $moduleManager;
+        $this->period = $period;
         parent::__construct($context, $collectionFactory, $data);
     }
 
@@ -63,7 +70,8 @@ class Totals extends Bar
         ) || $this->getRequest()->getParam(
             'group'
         );
-        $period = $this->getRequest()->getParam('period', Period::PERIOD_24_HOURS);
+        $firstPeriod = array_key_first($this->period->getDatePeriods());
+        $period = $this->getRequest()->getParam('period', $firstPeriod);
 
         /* @var $collection Collection */
         $collection = $this->_collectionFactory->create()->addCreateAtPeriodFilter(
