@@ -50,6 +50,8 @@ class AddDataForCzechia implements DataPatchInterface
             $this->moduleDataSetup->getConnection(),
             $this->getDataForCzechia()
         );
+        
+        return $this;
     }
 
     /**
