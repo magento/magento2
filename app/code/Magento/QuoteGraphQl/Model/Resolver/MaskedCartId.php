@@ -27,20 +27,22 @@ class MaskedCartId implements ResolverInterface
     /**
      * @var QuoteIdToMaskedQuoteIdInterface
      */
-    private $quoteIdToMaskedQuoteId;
+    private QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId;
 
     /**
      * @var QuoteIdMaskFactory
      */
-    private $quoteIdMaskFactory;
+    private QuoteIdMaskFactory $quoteIdMaskFactory;
 
     /**
      * @var QuoteIdMaskResourceModel
      */
-    private $quoteIdMaskResourceModel;
+    private QuoteIdMaskResourceModel $quoteIdMaskResourceModel;
 
     /**
      * @param QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
+     * @param QuoteIdMaskFactory $quoteIdMaskFactory
+     * @param QuoteIdMaskResourceModel $quoteIdMaskResourceModel
      */
     public function __construct(
         QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId,
@@ -83,6 +85,7 @@ class MaskedCartId implements ResolverInterface
         }
         return $maskedId;
     }
+
     /**
      * Create masked id for quote if it's not exists
      *
