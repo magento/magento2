@@ -20,27 +20,44 @@ use PHPUnit\Framework\TestCase;
 
 class InlineEditTest extends TestCase
 {
-    /** @var RequestInterface|MockObject */
+    /**
+     * @var RequestInterface|MockObject
+     */
     protected $request;
 
-    /** @var Block|MockObject */
+    /**
+     * @var Block|MockObject
+     */
     protected $cmsBlock;
 
-    /** @var Context|MockObject */
+    /**
+     * @var Context|MockObject
+     */
     protected $context;
 
-    /** @var BlockRepositoryInterface|MockObject */
+    /**
+     * @var BlockRepositoryInterface|MockObject
+     */
     protected $blockRepository;
 
-    /** @var JsonFactory|MockObject */
+    /**
+     * @var JsonFactory|MockObject
+     */
     protected $jsonFactory;
 
-    /** @var Json|MockObject */
+    /**
+     * @var Json|MockObject
+     */
     protected $resultJson;
 
-    /** @var InlineEdit */
+    /**
+     * @var InlineEdit
+     */
     protected $controller;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
@@ -76,7 +93,10 @@ class InlineEditTest extends TestCase
         );
     }
 
-    public function prepareMocksForTestExecute()
+    /**
+     * @return void
+     */
+    public function prepareMocksForTestExecute(): void
     {
         $postData = [
             1 => [
@@ -85,14 +105,10 @@ class InlineEditTest extends TestCase
             ]
         ];
 
-        $this->request->expects($this->at(0))
+        $this->request
             ->method('getParam')
-            ->with('isAjax')
-            ->willReturn(true);
-        $this->request->expects($this->at(1))
-            ->method('getParam')
-            ->with('items', [])
-            ->willReturn($postData);
+            ->withConsecutive(['isAjax'], ['items', []])
+            ->willReturnOnConsecutiveCalls(true, $postData);
         $this->blockRepository->expects($this->once())
             ->method('getById')
             ->with(1)
@@ -116,7 +132,10 @@ class InlineEditTest extends TestCase
             ->willReturn($this->resultJson);
     }
 
-    public function testExecuteWithException()
+    /**
+     * @return void
+     */
+    public function testExecuteWithException(): void
     {
         $this->prepareMocksForTestExecute();
         $this->blockRepository->expects($this->once())
@@ -125,38 +144,37 @@ class InlineEditTest extends TestCase
             ->willThrowException(new \Exception('Exception'));
         $this->resultJson->expects($this->once())
             ->method('setData')
-            ->with([
-                'messages' => [
-                    '[Block ID: 1] Exception'
-                ],
-                'error' => true
-            ])
+            ->with(
+                [
+                    'messages' => ['[Block ID: 1] Exception'],
+                    'error' => true
+                ]
+            )
             ->willReturnSelf();
 
         $this->controller->execute();
     }
 
-    public function testExecuteWithoutData()
+    /**
+     * @return void
+     */
+    public function testExecuteWithoutData(): void
     {
-        $this->request->expects($this->at(0))
+        $this->request
             ->method('getParam')
-            ->with('isAjax')
-            ->willReturn(true);
-        $this->request->expects($this->at(1))
-            ->method('getParam')
-            ->with('items', [])
-            ->willReturn([]);
+            ->withConsecutive(['isAjax'], ['items', []])
+            ->willReturnOnConsecutiveCalls(true, []);
         $this->jsonFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJson);
         $this->resultJson->expects($this->once())
             ->method('setData')
-            ->with([
-                'messages' => [
-                    'Please correct the data sent.'
-                ],
-                'error' => true
-            ])
+            ->with(
+                [
+                    'messages' => ['Please correct the data sent.'],
+                    'error' => true
+                ]
+            )
             ->willReturnSelf();
 
         $this->controller->execute();

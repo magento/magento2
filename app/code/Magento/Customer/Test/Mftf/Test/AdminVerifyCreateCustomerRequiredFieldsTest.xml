@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-5314"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

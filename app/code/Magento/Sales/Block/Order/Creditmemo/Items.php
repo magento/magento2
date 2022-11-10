@@ -47,6 +47,8 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
+     * Get CreditMemo Print Url
+     *
      * @param object $creditmemo
      * @return string
      */
@@ -56,6 +58,8 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
+     * Get PrintAll CreditMemos Url
+     *
      * @param object $order
      * @return string
      */
@@ -92,7 +96,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
         $html = '';
         $comments = $this->getChildBlock('creditmemo_comments');
         if ($comments) {
-            $comments->setEntity($creditmemo)->setTitle(__('About Your Refund'));
+            $comments->setEntity($creditmemo)->setTitle($this->escapeHtmlAttr(__('About Your Refund')));
             $html = $comments->toHtml();
         }
         return $html;

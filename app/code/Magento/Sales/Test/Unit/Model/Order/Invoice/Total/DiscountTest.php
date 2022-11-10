@@ -99,6 +99,43 @@ class DiscountTest extends TestCase
     }
 
     /**
+     * Test for collect invoice with negative grand total
+     *
+     * @return void
+     */
+    public function testCollectInvoiceWithNegativeGrandTotal(): void
+    {
+        $invoiceData = [
+            'order_item' => [
+                'qty_ordered' => 1,
+                'discount_amount' => 25.34,
+                'base_discount_amount' => 25.34,
+            ],
+            'is_last' => true,
+            'qty' => 1,
+        ];
+        $invoiceItem[] = $this->getInvoiceItem($invoiceData);
+        $this->invoice->method('getOrder')
+            ->willReturn($this->order);
+        $this->order->method('getInvoiceCollection')
+            ->willReturn([]);
+        $this->invoice->method('getAllItems')
+            ->willReturn($invoiceItem);
+        $this->invoice->method('getGrandTotal')
+            ->willReturn(15.6801);
+        $this->invoice->method('getBaseGrandTotal')
+            ->willReturn(15.6801);
+
+        $this->invoice->expects($this->exactly(1))
+            ->method('setGrandTotal')
+            ->with(-9.6599);
+        $this->invoice->expects($this->exactly(1))
+            ->method('setBaseGrandTotal')
+            ->with(-9.6599);
+        $this->model->collect($this->invoice);
+    }
+
+    /**
      * @return array
      */
     public function collectInvoiceData(): array

@@ -14,6 +14,8 @@ use GraphQL\Error\ClientAware;
 
 /**
  * Exception for GraphQL to be thrown when user supplies invalid input
+ *
+ * @api
  */
 class GraphQlInputException extends LocalizedException implements AggregateExceptionInterface, ClientAware
 {

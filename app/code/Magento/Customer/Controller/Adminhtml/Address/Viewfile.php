@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Customer\Controller\Adminhtml\Address;
 
 use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller\Result\RawFactory;
@@ -30,7 +31,7 @@ class Viewfile extends Action implements HttpGetActionInterface
     /**
      * Authorization level of a basic admin session
      */
-    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+    public const ADMIN_RESOURCE = 'Magento_Customer::manage';
 
     /**
      * @var RawFactory
@@ -92,7 +93,7 @@ class Viewfile extends Action implements HttpGetActionInterface
     /**
      * Customer address view file action
      *
-     * @return ResultInterface|void
+     * @return ResultInterface|ResponseInterface|void
      * @throws NotFoundException
      */
     public function execute()
@@ -142,7 +143,7 @@ class Viewfile extends Action implements HttpGetActionInterface
             return $resultRaw;
         } else {
             $name = $pathInfo['basename'];
-            $this->fileFactory->create(
+            return $this->fileFactory->create(
                 $name,
                 ['type' => 'filename', 'value' => $fileName],
                 DirectoryList::MEDIA
@@ -158,17 +159,16 @@ class Viewfile extends Action implements HttpGetActionInterface
      */
     private function getFileParams() : array
     {
-        $file = null;
         $plain = false;
-        if ($this->getRequest()->getParam('file')) {
+        if ($this->getRequest()->getParam('file', '')) {
             // download file
             $file = $this->urlDecoder->decode(
-                $this->getRequest()->getParam('file')
+                $this->getRequest()->getParam('file', '')
             );
-        } elseif ($this->getRequest()->getParam('image')) {
+        } elseif ($this->getRequest()->getParam('image', '')) {
             // show plain image
             $file = $this->urlDecoder->decode(
-                $this->getRequest()->getParam('image')
+                $this->getRequest()->getParam('image', '')
             );
             $plain = true;
         } else {

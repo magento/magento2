@@ -466,3 +466,4 @@ Pagination,Pagination
 "Theme Name","Theme Name"
 "Use URL parameter to enable template path hints for Storefront","Use URL parameter to enable template path hints for Storefront"
 "Add the following parameter to the URL to show template hints ?templatehints=[parameter_value]","Add the following parameter to the URL to show template hints ?templatehints=[parameter_value]"
+"URL key "%1" matches a reserved endpoint name (%2). Use another URL key.","URL key "%1" matches a reserved endpoint name (%2). Use another URL key."

@@ -7,32 +7,33 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Quote\Api\CartManagementInterface;
+use Magento\GraphQl\Helper\Error\AggregateExceptionMessageFormatter;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\QuoteGraphQl\Model\Cart\PlaceOrder as PlaceOrderModel;
+use Magento\QuoteGraphQl\Model\Cart\PlaceOrderMutexInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\QuoteGraphQl\Model\Cart\CheckCartCheckoutAllowance;
 
 /**
- * @inheritdoc
+ * Resolver for placing order after payment method has already been set
  */
 class PlaceOrder implements ResolverInterface
 {
     /**
-     * @var CartManagementInterface
-     */
-    private $cartManagement;
-
-    /**
      * @var GetCartForUser
      */
     private $getCartForUser;
+
+    /**
+     * @var PlaceOrderModel
+     */
+    private $placeOrder;
 
     /**
      * @var OrderRepositoryInterface
@@ -40,26 +41,34 @@ class PlaceOrder implements ResolverInterface
     private $orderRepository;
 
     /**
-     * @var CheckCartCheckoutAllowance
+     * @var AggregateExceptionMessageFormatter
      */
-    private $checkCartCheckoutAllowance;
+    private $errorMessageFormatter;
+
+    /**
+     * @var PlaceOrderMutexInterface
+     */
+    private $placeOrderMutex;
 
     /**
      * @param GetCartForUser $getCartForUser
-     * @param CartManagementInterface $cartManagement
+     * @param PlaceOrderModel $placeOrder
      * @param OrderRepositoryInterface $orderRepository
-     * @param CheckCartCheckoutAllowance $checkCartCheckoutAllowance
+     * @param AggregateExceptionMessageFormatter $errorMessageFormatter
+     * @param PlaceOrderMutexInterface|null $placeOrderMutex
      */
     public function __construct(
         GetCartForUser $getCartForUser,
-        CartManagementInterface $cartManagement,
+        PlaceOrderModel $placeOrder,
         OrderRepositoryInterface $orderRepository,
-        CheckCartCheckoutAllowance $checkCartCheckoutAllowance
+        AggregateExceptionMessageFormatter $errorMessageFormatter,
+        ?PlaceOrderMutexInterface $placeOrderMutex = null
     ) {
         $this->getCartForUser = $getCartForUser;
-        $this->cartManagement = $cartManagement;
+        $this->placeOrder = $placeOrder;
         $this->orderRepository = $orderRepository;
-        $this->checkCartCheckoutAllowance = $checkCartCheckoutAllowance;
+        $this->errorMessageFormatter = $errorMessageFormatter;
+        $this->placeOrderMutex = $placeOrderMutex ?: ObjectManager::getInstance()->get(PlaceOrderMutexInterface::class);
     }
 
     /**
@@ -70,34 +79,52 @@ class PlaceOrder implements ResolverInterface
         if (empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
+
+        return $this->placeOrderMutex->execute(
+            $args['input']['cart_id'],
+            \Closure::fromCallable([$this, 'run']),
+            [$field, $context, $info, $args]
+        );
+    }
+
+    /**
+     * Run the resolver.
+     *
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $args
+     * @return array[]
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     */
+    private function run(Field $field, ContextInterface $context, ResolveInfo $info, ?array $args): array
+    {
         $maskedCartId = $args['input']['cart_id'];
-
+        $userId = (int)$context->getUserId();
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
-        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
-        $this->checkCartCheckoutAllowance->execute($cart);
-
-        if ((int)$context->getUserId() === 0) {
-            if (!$cart->getCustomerEmail()) {
-                throw new GraphQlInputException(__("Guest email for cart is missing."));
-            }
-            $cart->setCheckoutMethod(CartManagementInterface::METHOD_GUEST);
-        }
 
         try {
-            $orderId = $this->cartManagement->placeOrder($cart->getId());
+            $cart = $this->getCartForUser->getCartForCheckout($maskedCartId, $userId, $storeId);
+            $orderId = $this->placeOrder->execute($cart, $maskedCartId, $userId);
             $order = $this->orderRepository->get($orderId);
-
-            return [
-                'order' => [
-                    'order_number' => $order->getIncrementId(),
-                    // @deprecated The order_id field is deprecated, use order_number instead
-                    'order_id' => $order->getIncrementId(),
-                ],
-            ];
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__('Unable to place order: %message', ['message' => $e->getMessage()]), $e);
+            throw $this->errorMessageFormatter->getFormatted(
+                $e,
+                __('Unable to place order: A server error stopped your order from being placed. ' .
+                    'Please try to place your order again'),
+                'Unable to place order',
+                $field,
+                $context,
+                $info
+            );
         }
+
+        return [
+            'order' => [
+                'order_number' => $order->getIncrementId(),
+                // @deprecated The order_id field is deprecated, use order_number instead
+                'order_id' => $order->getIncrementId(),
+            ],
+        ];
     }
 }

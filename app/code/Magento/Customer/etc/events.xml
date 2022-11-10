@@ -20,4 +20,10 @@
         <observer name="upgrade_quote_customer_email" instance="Magento\Customer\Observer\UpgradeQuoteCustomerEmailObserver"/>
         <observer name="clear_quote_session_after_updating_customer" instance="Magento\Customer\Observer\ClearQuoteSessionAfterChangingCustomer"/>
     </event>
+    <event name="customer_customer_authenticated">
+        <observer name="customerGroupAuthenticate" instance="Magento\Customer\Observer\CustomerGroupAuthenticate" />
+    </event>
+    <event name="catalog_rule_collection_load_after">
+        <observer name="catalogRuleCustomerGroupExcludedWebsite" instance="Magento\Customer\Observer\CatalogRule\AddCustomerGroupExcludedWebsite" />
+    </event>
 </config>

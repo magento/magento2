@@ -16,8 +16,8 @@ class CatalogMediaConfig
 {
     private const XML_PATH_CATALOG_MEDIA_URL_FORMAT = 'web/url/catalog_media_url_format';
 
-    const IMAGE_OPTIMIZATION_PARAMETERS = 'image_optimization_parameters';
-    const HASH = 'hash';
+    public const IMAGE_OPTIMIZATION_PARAMETERS = 'image_optimization_parameters';
+    public const HASH = 'hash';
 
     /**
      * @var ScopeConfigInterface
@@ -41,10 +41,16 @@ class CatalogMediaConfig
      */
     public function getMediaUrlFormat($scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null): string
     {
-        return $this->scopeConfig->getValue(
-            CatalogMediaConfig::XML_PATH_CATALOG_MEDIA_URL_FORMAT,
+        $value = $this->scopeConfig->getValue(
+            self::XML_PATH_CATALOG_MEDIA_URL_FORMAT,
             $scopeType,
             $scopeCode
         );
+
+        if ($value === null) {
+            return self::HASH;
+        }
+
+        return (string)$value;
     }
 }

@@ -11,6 +11,8 @@ use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Store switcher context interface
+ *
+ * @api
  */
 interface ContextInterface
 {

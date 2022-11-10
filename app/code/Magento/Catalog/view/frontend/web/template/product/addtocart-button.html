@@ -11,14 +11,14 @@
                       'data-post': getDataPost($row()),
                        title: getLabel()"
                 type="button">
-            <span text="getLabel()"/>
+            <span text="getLabel()"></span>
         </button>
     </if>
 
-    <ifnot args="isSalable($row())">
+    <if args="isAvailable($row()) === false">
         <div class="stock unavailable">
-            <text args="$t('Availability')"/>
-            <span translate="'Out of stock'"/>
+            <text args="$t('Availability')"></text>
+            <span translate="'Out of stock'"></span>
         </div>
-    </ifnot>
+    </if>
 </if>

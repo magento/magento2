@@ -24,9 +24,7 @@
                 <requiredEntity createDataKey="category"/>
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <!--Clean up created test data.-->
@@ -35,9 +33,7 @@
             <!--Enable required 'email' field on create order page.-->
             <magentoCLI command="config:set {{EnableEmailRequiredForOrder.path}} {{EnableEmailRequiredForOrder.value}}" stepKey="enableRequiredFieldEmailForAdminOrderCreation"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
 
         <!--Create order.-->
@@ -61,5 +57,6 @@
         <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
             <argument name="email" value="$generatedCustomerEmail"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
     </test>
 </tests>

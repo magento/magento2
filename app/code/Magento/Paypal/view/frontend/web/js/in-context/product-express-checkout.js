@@ -47,7 +47,7 @@ define([
             var $form = $(this.productFormSelector);
 
             if (!this.declinePayment && !this.productAddedToCart) {
-                $form.submit();
+                $form.trigger('submit');
                 this.formInvalid = !$form.validation('isValid');
                 this.productAddedToCart = true;
             }
