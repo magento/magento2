@@ -9,7 +9,7 @@ namespace Magento\SomeModule\Model\NamedArguments;
 
 require_once __DIR__ . '/ParentClassTest.php';
 
-class ChildClassTest extends ParentClassTest
+class MixedParametersTest extends ParentClassTest
 {
     /**
      * @param \stdClass $stdClassObject
@@ -17,6 +17,6 @@ class ChildClassTest extends ParentClassTest
      */
     public function __construct(\stdClass $stdClassObject, array $arrayVariable)
     {
-        parent::__construct(arrayVariable: $arrayVariable, stdClassObject: $stdClassObject);
+        parent::__construct($stdClassObject, arrayVariable: $arrayVariable);
     }
 }
