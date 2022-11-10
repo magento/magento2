@@ -174,8 +174,8 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $values = [
                 'selection_id' => $item->getSelectionId(),
                 'website_id' => $item->getWebsiteId(),
-                'selection_price_type' => $item->getSelectionPriceType(),
-                'selection_price_value' => $item->getSelectionPriceValue(),
+                'selection_price_type' => $item->getSelectionPriceType() ?? 0,
+                'selection_price_value' => $item->getSelectionPriceValue() ?? 0,
                 'parent_product_id' => $item->getParentProductId(),
             ];
             $connection->insertOnDuplicate(
