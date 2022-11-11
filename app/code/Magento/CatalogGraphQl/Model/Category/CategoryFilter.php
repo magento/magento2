@@ -85,7 +85,7 @@ class CategoryFilter
                 'e.entity_id'
             );
 
-        $categoryIds = $collection->getLoadedIds();
+        $categoryIds = $collection->load()->getLoadedIds();
 
         $totalPages = 0;
         if ($collection->getSize() > 0 && $searchCriteria->getPageSize() > 0) {
