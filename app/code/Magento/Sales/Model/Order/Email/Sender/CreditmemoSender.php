@@ -118,6 +118,7 @@ class CreditmemoSender extends Sender
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $creditmemo->getOrder();
+            $paymentHTML = $this->getPaymentHtml($order);
             $this->appEmulation->startEnvironmentEmulation($order->getStoreId(), Area::AREA_FRONTEND, true);
             $transport = [
                 'order' => $order,
@@ -126,7 +127,7 @@ class CreditmemoSender extends Sender
                 'creditmemo_id' => $creditmemo->getId(),
                 'comment' => $creditmemo->getCustomerNoteNotify() ? $creditmemo->getCustomerNote() : '',
                 'billing' => $order->getBillingAddress(),
-                'payment_html' => $this->getPaymentHtml($order),
+                'payment_html' => $paymentHTML,
                 'store' => $order->getStore(),
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
                 'formattedBillingAddress' => $this->getFormattedBillingAddress($order),

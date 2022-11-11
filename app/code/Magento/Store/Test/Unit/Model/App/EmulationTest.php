@@ -1,15 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 /**
+ * Tests Magento\Store\Model\App\Emulation
+ *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\Model\App;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\DataObject;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate\Inline\ConfigInterface;
@@ -136,13 +136,7 @@ class EmulationTest extends TestCase
         );
     }
 
-    /**
-     * @param DataObject|null $initialEnvironmentInfo
-     *
-     * @return void
-     * @dataProvider initialEnvironmentInfoProvider
-     */
-    public function testStartDefaults(DataObject $initialEnvironmentInfo = null): void
+    public function testStartDefaults()
     {
         // Test data
         $inlineTranslate = false;
@@ -153,11 +147,6 @@ class EmulationTest extends TestCase
         $newInlineTranslate = false;
         $newLocale = 'new locale code';
         $newArea = Area::AREA_FRONTEND;
-
-        $reflection = new \ReflectionClass(get_class($this->model));
-        $reflectionProperty = $reflection->getProperty('initialEnvironmentInfo');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->model, $initialEnvironmentInfo);
 
         // Stubs
         $this->inlineTranslationMock->expects($this->any())->method('isEnabled')->willReturn($inlineTranslate);
@@ -187,24 +176,6 @@ class EmulationTest extends TestCase
             Area::AREA_FRONTEND
         );
         $this->assertNull($result);
-
-        $initialEnvironmentData = $reflectionProperty->getValue($this->model);
-        if ($initialEnvironmentInfo === null) {
-            $this->assertIsArray($initialEnvironmentData->getInitialDesign());
-        } else {
-            $this->assertNull($initialEnvironmentData->getInitialDesign());
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public function initialEnvironmentInfoProvider(): array
-    {
-        return [
-            [new DataObject()],
-            [null]
-        ];
     }
 
     public function testStop()
