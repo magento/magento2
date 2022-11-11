@@ -30,3 +30,4 @@
         <element name="folderDeleteMessageContent" type="block" selector="//div[@class='modal-content']//div[contains(text(),'The following folder is going to be deleted: wysiwyg/{{arg}}')]" parameterized="true"/>
     </section>
 </sections>
+
