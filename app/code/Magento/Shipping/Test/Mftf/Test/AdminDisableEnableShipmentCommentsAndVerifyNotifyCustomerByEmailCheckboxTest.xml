@@ -75,3 +75,4 @@
         <seeElement selector="{{AdminShipmentMainActionsSection.notifyCustomerByEmail}}" stepKey="seeCheckbox"/>
     </test>
 </tests>
+
