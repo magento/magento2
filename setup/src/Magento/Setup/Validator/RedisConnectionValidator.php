@@ -40,6 +40,7 @@ class RedisConnectionValidator
                 $config['password']
             );
             $redisClient->setMaxConnectRetries(1);
+            $redisClient->auth($config['password']);
             $redisClient->connect();
         } catch (\CredisException $e) {
             return false;
