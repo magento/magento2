@@ -18,11 +18,13 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\TestFramework\Fixture\DataFixture;
-use Magento\Bundle\Test\Fixture\OrderItem as OrderItem;
 use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddress;
 use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddress;
 use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethod;
 use Magento\Checkout\Test\Fixture\PlaceOrder as PlaceOrder;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\CustomerCart;
 
 /**
  * Class RetrieveOrdersTest
@@ -417,6 +419,14 @@ QUERY;
      * @throws AuthenticationException
      */
     #[
+        DataFixture(Customer::class, ['email' => 'customer@search.example.com'], 'customer'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart2'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart3'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart4'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart5'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart6'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart7'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart8'),
         DataFixture(ProductFixture::class, ['sku' => '100000002', 'price' => 10], 'p2'),
         DataFixture(ProductFixture::class, ['sku' => '100000003', 'price' => 10], 'p3'),
         DataFixture(ProductFixture::class, ['sku' => '100000004', 'price' => 10], 'p4'),
@@ -424,13 +434,13 @@ QUERY;
         DataFixture(ProductFixture::class, ['sku' => '100000006', 'price' => 10], 'p6'),
         DataFixture(ProductFixture::class, ['sku' => '100000007', 'price' => 10], 'p7'),
         DataFixture(ProductFixture::class, ['sku' => '100000008', 'price' => 10], 'p8'),
-        DataFixture(OrderItem::class, ['sku' => '$p2.sku$', 'method'=> 'checkmo'], 'o2'),
-        DataFixture(OrderItem::class, ['sku' => '$p3.sku$', 'method'=> 'checkmo'], 'o3'),
-        DataFixture(OrderItem::class, ['sku' => '$p4.sku$', 'method'=> 'checkmo'], 'o4'),
-        DataFixture(OrderItem::class, ['sku' => '$p5.sku$', 'method'=> 'checkmo'], 'o5'),
-        DataFixture(OrderItem::class, ['sku' => '$p6.sku$', 'method'=> 'checkmo'], 'o6'),
-        DataFixture(OrderItem::class, ['sku' => '$p7.sku$', 'method'=> 'checkmo'], 'o7'),
-        DataFixture(OrderItem::class, ['sku' => '$p8.sku$', 'method'=> 'checkmo'], 'o8'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart2.id$', 'product_id' => 'p2.id$'], 'o2'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart3.id$', 'product_id' => 'p3.id$'], 'o3'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart4.id$', 'product_id' => 'p4.id$'], 'o4'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart5.id$', 'product_id' => 'p5.id$'], 'o5'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart6.id$', 'product_id' => 'p6.id$'], 'o6'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart7.id$', 'product_id' => 'p7.id$'], 'o7'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart8.id$', 'product_id' => 'p8.id$'], 'o8'),
         DataFixture(SetBillingAddress::class, ['cartId' => '$o2$'], 'b2'),
         DataFixture(SetBillingAddress::class, ['cartId' => '$o3$'], 'b3'),
         DataFixture(SetBillingAddress::class, ['cartId' => '$o4$'], 'b4'),
