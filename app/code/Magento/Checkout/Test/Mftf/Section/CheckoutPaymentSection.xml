@@ -22,6 +22,9 @@
         <element name="guestFirstName" type="input" selector=".payment-method._active .billing-address-form input[name='firstname']"/>
         <element name="guestLastName" type="input" selector=".payment-method._active .billing-address-form input[name*='lastname']"/>
         <element name="guestStreet" type="input" selector=".payment-method._active .billing-address-form input[name*='street[0]']"/>
+        <element name="guestStreet2" type="input" selector=".payment-method._active .billing-address-form input[name*='street[1]']"/>
+        <element name="guestStreet3" type="input" selector=".payment-method._active .billing-address-form input[name*='street[2]']"/>
+        <element name="guestStreet4" type="input" selector=".payment-method._active .billing-address-form input[name*='street[3]']"/>
         <element name="guestCity" type="input" selector=".payment-method._active .billing-address-form input[name*='city']"/>
         <element name="guestCountry" type="select" selector=".payment-method._active .billing-address-form select[name*='country_id']"/>
         <element name="guestRegion" type="select" selector=".payment-method._active .billing-address-form select[name*='region_id']"/>
@@ -67,5 +70,7 @@
         <element name="discount" type="block" selector="tr.totals.discount"/>
         <element name="discountPrice" type="text" selector=".discount .price"/>
         <element name="billingAddressSameAsShippingCashOnDeliveryCheckbox" type="checkbox" selector="#billing-address-same-as-shipping-cashondelivery"/>
+        <element name="errormessage" type="text" selector="//div[@data-ui-id='checkout-cart-validationmessages-message-error']"/>
+        <element name="productQuantityInCartBlock"  type="text" selector="//div[@class='details-qty']/span[@class='value']" />
     </section>
 </sections>
