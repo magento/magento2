@@ -22,7 +22,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     {
         parent::_addSpecialAttributes($attributes);
         $attributes['parent::quote_item_qty'] = __('Quantity in cart');
-        $attributes['quote_item_price'] = __('Price in cart');
+        $attributes['parent::quote_item_price'] = __('Price in cart');
         $attributes['quote_item_row_total'] = __('Row total in cart');
 
         $attributes['parent::category_ids'] = __('Category (Parent only)');
