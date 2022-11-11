@@ -28,6 +28,7 @@
     <preference for="Magento\Checkout\Api\AgreementsValidatorInterface" type="Magento\Checkout\Model\AgreementsValidator" />
     <preference for="Magento\Checkout\Model\Cart\RequestInfoFilterInterface"
                 type="Magento\Checkout\Model\Cart\RequestInfoFilterComposite"/>
+    <preference for="Magento\Checkout\Model\AddressComparatorInterface" type="Magento\Checkout\Model\AddressComparator" />
     <type name="Magento\Checkout\Model\Cart\RequestInfoFilter">
         <arguments>
             <argument name="filterList" xsi:type="array">
