@@ -1228,9 +1228,10 @@ class Address extends AbstractAddress implements
             ? $this->getBaseTaxAmount() + $this->getBaseDiscountTaxCompensationAmount()
             : 0;
 
+        // Note: ($x > $y - 0.0001) means ($x >= $y) for floats
         return $includeDiscount ?
-            ($this->getBaseSubtotalWithDiscount() + $taxes >= $amount) :
-            ($this->getBaseSubtotal() + $taxes >= $amount);
+            ($this->getBaseSubtotalWithDiscount() + $taxes > $amount - 0.0001) :
+            ($this->getBaseSubtotal() + $taxes > $amount - 0.0001);
     }
 
     /**
@@ -1386,7 +1387,7 @@ class Address extends AbstractAddress implements
      */
     public function getBaseSubtotalWithDiscount()
     {
-        return $this->getBaseSubtotal() + $this->getBaseDiscountAmount();
+        return $this->getBaseSubtotal() + $this->getBaseDiscountAmount() + $this->getBaseShippingDiscountAmount();
     }
 
     /**
