@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Bundle\Test\Unit\Model\ResourceModel;
 
 use Codeception\PHPUnit\TestCase;
@@ -19,7 +20,13 @@ class SelectionTest extends TestCase
     {
         $item = $this->getMockBuilder(Selection::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getSelectionId', 'getWebsiteId', 'getSelectionPriceType', 'getSelectionPriceValue', 'getParentProductId', 'getDefaultPriceScope'])
+            ->addMethods([
+                'getSelectionId',
+                'getWebsiteId',
+                'getSelectionPriceType',
+                'getSelectionPriceValue',
+                'getParentProductId',
+                'getDefaultPriceScope'])
             ->getMock();
         $values = [
             'selection_id' => 1,
