@@ -247,6 +247,13 @@ class Login extends Action implements HttpPostActionInterface
             ->getUrl('loginascustomer/login/index', ['_query' => $queryParameters, '_nosid' => true]);
 
         $defaultStore = $this->storeManager->getDefaultStoreView();
+        if (!$defaultStore) {
+            $stores = $this->storeManager->getStores();
+            if (count($stores)) {
+                $defaultStore = array_shift($stores);
+            }
+        }
+
         if ($targetStore->getBaseUrl() === $defaultStore->getBaseUrl()) {
             $redirectUrl = $this->manageStoreCookie->switch($defaultStore, $targetStore, $redirectUrl);
         }
