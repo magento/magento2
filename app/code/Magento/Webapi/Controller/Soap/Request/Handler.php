@@ -299,7 +299,11 @@ class Handler
             try {
                 $this->backpressureEnforcer->enforce($context);
             } catch (BackpressureExceededException $exception) {
-                throw new WebapiException(__('Something went wrong, please try again later'));
+                throw new WebapiException(
+                    __('Something went wrong, please try again later'),
+                    0,
+                    WebapiException::HTTP_TOO_MANY_REQUESTS
+                );
             }
         }
     }

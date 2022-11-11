@@ -60,8 +60,14 @@ class PeriodValue extends Value
     {
         if ($this->isValueChanged()) {
             $value = (string)$this->getValue();
-            if (!array_key_exists($value, $this->source->toOptionArray())) {
-                throw new LocalizedException(__('Please select a valid rate limit period'));
+            $availableValues = $this->source->toOptionArray();
+            if (!array_key_exists($value, $availableValues)) {
+                throw new LocalizedException(
+                    __(
+                        'Please select a valid speed limit period in seconds: %1',
+                        implode(', ', array_keys($availableValues))
+                    )
+                );
             }
         }
 
