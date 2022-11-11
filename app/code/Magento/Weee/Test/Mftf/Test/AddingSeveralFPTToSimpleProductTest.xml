@@ -29,28 +29,28 @@
             <!-- Store -> Configuration -> Sales -> Tax FPT Enable -->
             <createData entity="WeeeConfigEnable" stepKey="enableFPT"/>
 
-            <!-- Fixed Product Tax 1 attribute is created and added to default attribute set -->
-            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttributeOne"/>
+            <!-- Fixed Product 1 Tax attribute is created and added to default attribute set -->
+            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttributeFour"/>
             <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet1">
-                <requiredEntity createDataKey="createProductFPTAttributeOne"/>
+                <requiredEntity createDataKey="createProductFPTAttributeFour"/>
             </createData>
 
             <!-- Fixed Product Tax 2 attribute is created and added to default attribute set -->
-            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttributeTwo"/>
-            <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet2">
-                <requiredEntity createDataKey="createProductFPTAttributeTwo"/>
-            </createData>
-
-            <!-- Fixed Product Tax 3 attribute is created and added to default attribute set -->
             <createData entity="FPTProductAttribute" stepKey="createProductFPTAttributeThree"/>
-            <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet3">
+            <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet2">
                 <requiredEntity createDataKey="createProductFPTAttributeThree"/>
             </createData>
 
-            <!-- Fixed Product 4 Tax attribute is created and added to default attribute set -->
-            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttributeFour"/>
+            <!-- Fixed Product Tax 3 attribute is created and added to default attribute set -->
+            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttributeTwo"/>
+            <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet3">
+                <requiredEntity createDataKey="createProductFPTAttributeTwo"/>
+            </createData>
+
+            <!-- Fixed Product Tax 4 attribute is created and added to default attribute set -->
+            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttributeOne"/>
             <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet4">
-                <requiredEntity createDataKey="createProductFPTAttributeFour"/>
+                <requiredEntity createDataKey="createProductFPTAttributeOne"/>
             </createData>
 
             <!-- Magento cache is flushed -->
