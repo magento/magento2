@@ -62,11 +62,7 @@ class Hydrator
         } else {
             $categoryData = $this->dataObjectProcessor->buildOutputDataArray(
                 $category,
-                CategoryInterface::class,
-                [
-                    'getChildren',
-                    'getExtensionAttributes',
-                ]
+                CategoryInterface::class
             );
         }
 
