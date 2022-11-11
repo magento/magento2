@@ -7,9 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Category;
 
-use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Catalog\Api\Data\CategorySearchResultsInterface;
-use Magento\Catalog\Api\Data\CategorySearchResultsInterfaceFactory;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CollectionProcessorInterface;
 use Magento\CatalogGraphQl\Model\Category\Filter\SearchCriteria;
@@ -41,16 +38,6 @@ class CategoryFilter
     private $extensionAttributesJoinProcessor;
 
     /**
-     * @var CategorySearchResultsInterfaceFactory
-     */
-    private $categorySearchResultsFactory;
-
-    /**
-     * @var CategoryRepositoryInterface
-     */
-    private $categoryRepository;
-
-    /**
      * @var SearchCriteria
      */
     private $searchCriteria;
@@ -59,23 +46,17 @@ class CategoryFilter
      * @param CollectionFactory $categoryCollectionFactory
      * @param CollectionProcessorInterface $collectionProcessor
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param CategorySearchResultsInterfaceFactory $categorySearchResultsFactory
-     * @param CategoryRepositoryInterface $categoryRepository
      * @param SearchCriteria $searchCriteria
      */
     public function __construct(
         CollectionFactory $categoryCollectionFactory,
         CollectionProcessorInterface $collectionProcessor,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
-        CategorySearchResultsInterfaceFactory $categorySearchResultsFactory,
-        CategoryRepositoryInterface $categoryRepository,
         SearchCriteria $searchCriteria
     ) {
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
-        $this->categorySearchResultsFactory = $categorySearchResultsFactory;
-        $this->categoryRepository = $categoryRepository;
         $this->searchCriteria = $searchCriteria;
     }
 
@@ -96,27 +77,21 @@ class CategoryFilter
         $this->extensionAttributesJoinProcessor->process($collection);
         $this->collectionProcessor->process($collection, $searchCriteria, $attributeNames, $context);
 
-        /** @var CategorySearchResultsInterface $searchResult */
-        $categories = $this->categorySearchResultsFactory->create();
-        $categories->setSearchCriteria($searchCriteria);
-
         // only fetch necessary category entity id
-        $select = $collection->getSelect();
-        $select
+        $collection
+            ->getSelect()
             ->reset(Select::COLUMNS)
             ->columns(
                 'e.entity_id'
             );
-        $categoryIds = array_map('intval', $collection->getConnection()->fetchCol($select));
 
-        $categories->setItems($categoryIds);
-        $categories->setTotalCount(count($categoryIds));
+        $categoryIds = $collection->getLoadedIds();
 
         $totalPages = 0;
-        if ($categories->getTotalCount() > 0 && $searchCriteria->getPageSize() > 0) {
-            $totalPages = ceil($categories->getTotalCount() / $searchCriteria->getPageSize());
+        if ($collection->getSize() > 0 && $searchCriteria->getPageSize() > 0) {
+            $totalPages = ceil($collection->getSize() / $searchCriteria->getPageSize());
         }
-        if ($searchCriteria->getCurrentPage() > $totalPages && $categories->getTotalCount() > 0) {
+        if ($searchCriteria->getCurrentPage() > $totalPages && $collection->getSize() > 0) {
             throw new GraphQlInputException(
                 __(
                     'currentPage value %1 specified is greater than the %2 page(s) available.',
@@ -127,7 +102,7 @@ class CategoryFilter
 
         return [
             'category_ids' => $categoryIds,
-            'total_count' => $categories->getTotalCount(),
+            'total_count' => $collection->getSize(),
             'page_info' => [
                 'total_pages' => $totalPages,
                 'page_size' => $searchCriteria->getPageSize(),
