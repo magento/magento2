@@ -103,12 +103,11 @@ class MaskedCartId implements ResolverInterface
         if ($maskedId === '') {
             $quoteIdMask = $this->quoteIdMaskFactory->create();
             $quoteIdMask->setQuoteId($quoteId);
-
             $this->quoteIdMaskResourceModel->save($quoteIdMask);
             $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);
         }
         return $maskedId;
     }
-
 }
+
 
