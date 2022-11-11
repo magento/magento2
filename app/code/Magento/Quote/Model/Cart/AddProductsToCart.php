@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Quote\Model\Cart;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -48,11 +47,6 @@ class AddProductsToCart
     ];
 
     /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
      * @var CartRepositoryInterface
      */
     private $cartRepository;
@@ -68,31 +62,30 @@ class AddProductsToCart
     private $requestBuilder;
 
     /**
-     * @var SearchCriteriaBuilder
+     * @var ProductReaderInterface
      */
-    private $searchCriteriaBuilder;
+    private $productReader;
 
     /**
      * @param ProductRepositoryInterface $productRepository
      * @param CartRepositoryInterface $cartRepository
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param BuyRequestBuilder $requestBuilder
-     * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
+     * @param ProductReaderInterface|null $productReader
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         CartRepositoryInterface $cartRepository,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
         BuyRequestBuilder $requestBuilder,
-        SearchCriteriaBuilder $searchCriteriaBuilder = null
+        ProductReaderInterface $productReader = null
     ) {
-        $this->productRepository = $productRepository;
         $this->cartRepository = $cartRepository;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->requestBuilder = $requestBuilder;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()->get(
-            SearchCriteriaBuilder::class
-        );
+        $this->productReader = $productReader ?: ObjectManager::getInstance()->get(ProductReaderInterface::class);
     }
 
     /**
@@ -134,11 +127,9 @@ class AddProductsToCart
                 }
             }
         }
-
         if ($saveCart) {
             $this->cartRepository->save($cart);
         }
-
         if (count($allErrors) !== 0) {
             /* Revert changes introduced by add to cart processes in case of an error */
             $cart->getItemsCollection()->clear();
@@ -157,17 +148,14 @@ class AddProductsToCart
     public function addItemsToCart(Quote $cart, array $cartItems): array
     {
         $failedCartItems = [];
-        $cartItemSkus = \array_map(
+        // add new cart items for preload
+        $skus = \array_map(
             function ($item) {
                 return $item->getSku();
             },
             $cartItems
         );
-
-        $searchCriteria = $this->searchCriteriaBuilder->addFilter('sku', $cartItemSkus, 'in')->create();
-        // getList() call caches product models in runtime cache
-        $this->productRepository->getList($searchCriteria)->getItems();
-
+        $this->productReader->loadProducts($skus, $cart->getStoreId());
         foreach ($cartItems as $cartItemPosition => $cartItem) {
             $errors = $this->addItemToCart($cart, $cartItem, $cartItemPosition);
             if ($errors) {
@@ -191,7 +179,6 @@ class AddProductsToCart
         $sku = $cartItem->getSku();
         $errors = [];
         $result = null;
-        $product = null;
 
         if ($cartItem->getQuantity() <= 0) {
             $errors[] = $this->createError(
@@ -199,16 +186,13 @@ class AddProductsToCart
                 $cartItemPosition
             );
         } else {
-            try {
-                $product = $this->productRepository->get($sku, false, $cart->getStoreId(), false);
-            } catch (NoSuchEntityException $e) {
+            $product = $this->productReader->getProductBySku($sku);
+            if (!$product || !$product->isSaleable() || !$product->isAvailable()) {
                 $errors[] = $this->createError(
                     __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
                     $cartItemPosition
                 );
-            }
-
-            if ($product !== null) {
+            } else {
                 try {
                     $result = $cart->addProduct($product, $this->requestBuilder->build($cartItem));
                 } catch (\Throwable $e) {
@@ -217,11 +201,11 @@ class AddProductsToCart
                         $cartItemPosition
                     );
                 }
+            }
 
-                if (is_string($result)) {
-                    foreach (array_unique(explode("\n", $result)) as $error) {
-                        $errors[] = $this->createError(__($error)->render(), $cartItemPosition);
-                    }
+            if (is_string($result)) {
+                foreach (array_unique(explode("\n", $result)) as $error) {
+                    $errors[] = $this->createError(__($error)->render(), $cartItemPosition);
                 }
             }
         }
