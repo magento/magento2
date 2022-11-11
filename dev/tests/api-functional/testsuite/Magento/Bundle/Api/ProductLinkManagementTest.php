@@ -88,32 +88,6 @@ class ProductLinkManagementTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Bundle/_files/product.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
-     */
-    public function testAddChildWithoutPriceAndPriceType()
-    {
-        $productSku = 'bundle-product';
-        $children = $this->getChildren($productSku);
-
-        $optionId = $children[0]['option_id'];
-
-        $linkedProduct = [
-            'sku' => 'virtual-product',
-            'option_id' => $optionId,
-            'position' => '1',
-            'is_default' => 1,
-            'priceType' => null,
-            'price' => null,
-            'qty' => 8,
-            'can_change_quantity' => 1,
-        ];
-
-        $childId = $this->addChild($productSku, $optionId, $linkedProduct);
-        $this->assertGreaterThan(0, $childId);
-    }
-
-    /**
      * Verify empty out of stock bundle product is in stock after child has been added.
      *
      * @magentoApiDataFixture Magento/Bundle/_files/empty_bundle_product.php
