@@ -1,9 +1,11 @@
 <?php
 /**
- * Test for validation rules implemented by XSD schemas for email templates configuration
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * Test for validation rules implemented by XSD schemas for email templates configuration
  */
 declare(strict_types=1);
 
@@ -88,9 +90,7 @@ class XsdTest extends TestCase
                 '<config><template id="test" label="Test" file="test.txt" type="invalid" module="Module" area="frontend"/></config>',
                 [
                     "Element 'template', attribute 'type': " .
-                    "[facet 'enumeration'] The value 'invalid' is not an element of the set {'html', 'text'}.",
-                    "Element 'template', attribute 'type': " .
-                    "'invalid' is not a valid value of the atomic type 'emailTemplateFormatType'."
+                    "[facet 'enumeration'] The value 'invalid' is not an element of the set {'html', 'text'}."
                 ],
             ],
             'node "template" without attribute "area"' => [
@@ -102,8 +102,6 @@ class XsdTest extends TestCase
                 [
                     "Element 'template', attribute 'area': " .
                     "[facet 'enumeration'] The value 'invalid' is not an element of the set {'frontend', 'adminhtml'}.",
-                    "Element 'template', attribute 'area': " .
-                    "'invalid' is not a valid value of the atomic type 'areaType'."
                 ],
             ],
             'node "template" with unknown attribute' => [
@@ -131,6 +129,8 @@ class XsdTest extends TestCase
         $dom = new Dom($fixtureXml, $validationStateMock, [], null, null, '%message%');
         $actualResult = $dom->validate($schemaFile, $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult);
-        $this->assertEquals($expectedErrors, $actualErrors);
+        foreach ($expectedErrors as $error) {
+            $this->assertContains($error, $actualErrors);
+        }
     }
 }
