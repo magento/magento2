@@ -172,7 +172,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * @var DeploymentConfig
      */
-    protected $deploymentConfig;
+    private $deploymentConfig;
 
     /**
      * @var LockGuardedCacheLoader
