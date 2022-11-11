@@ -102,6 +102,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                 $output->write($indexer->getTitle() . ' index ');
 
                 $startTime = new \DateTimeImmutable();
+                $startTimeOriginal = microtime(true);
                 $indexerConfig = $this->getConfig()->getIndexer($indexer->getId());
                 $sharedIndex = $indexerConfig['shared_index'] ?? null;
 
@@ -112,6 +113,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                         $this->sharedIndexesComplete[] = $sharedIndex;
                     }
                 }
+                $resultTime = microtime(true) - $startTimeOriginal;
                 $endTime = new \DateTimeImmutable();
                 $interval = $startTime->diff($endTime);
                 $days = $interval->format('%d');
@@ -121,6 +123,9 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
 
                 $output->writeln(
                     __('has been rebuilt successfully in %1:%2:%3', $hours, $minutes, $seconds)
+                );
+                $output->writeln(
+                    __('%indexer index has been rebuilt successfully ORIGINALLY in %time', ['indexer' => $indexer->getTitle(), 'time' => gmdate('H:i:s', (int) $resultTime)])
                 );
             } catch (\Throwable $e) {
                 $output->writeln('process error during indexation process:');
