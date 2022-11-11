@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Review;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Registry;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -15,7 +16,10 @@ use Magento\Review\Model\ResourceModel\Review\Collection;
 use Magento\Review\Model\ResourceModel\Review\CollectionFactory as ReviewCollectionFactory;
 use Magento\Review\Model\Review;
 use Magento\Review\Model\Review\SummaryFactory;
+use Magento\Review\Test\Fixture\Review as ReviewFixture;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -153,6 +157,7 @@ QUERY;
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
+        // phpcs:ignore
         $summaryFactory = ObjectManager::getInstance()->get(SummaryFactory::class);
         $storeId = ObjectManager::getInstance()->get(StoreManagerInterface::class)->getStore()->getId();
         $summary = $summaryFactory->create()->setStoreId($storeId)->load($product->getId());
@@ -244,6 +249,54 @@ QUERY;
         self::assertArrayHasKey('items', $response['customer']['reviews']);
         self::assertNotEmpty($response['customer']['reviews']['items']);
         self::assertEquals($expectedFirstItem, $response['customer']['reviews']['items'][0]);
+    }
+
+    #[
+        DataFixture(StoreFixture::class, ['code' => 'store2'], 'store2'),
+        DataFixture(ProductFixture::class, ['sku' => 'product1'], 'product1'),
+        DataFixture(ReviewFixture::class, ['entity_pk_value' => '$product1.id$']),
+        DataFixture(ReviewFixture::class, ['entity_pk_value' => '$product1.id$', 'store_id' => '$store2.id$']),
+    ]
+    /**
+     * @dataProvider storesDataProvider
+     * @param string $storeCode
+     */
+    public function testProductReviewDifferentStores(string $storeCode): void
+    {
+        $productSku = 'product1';
+        $query = <<<QUERY
+{
+  products(filter: {sku: {eq: "$productSku"}}) {
+    items {
+      review_count
+      reviews {
+        items {
+          nickname
+          summary
+          text
+        }
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query, [], '', ['Store' => $storeCode]);
+        self::assertArrayHasKey('products', $response);
+        self::assertArrayHasKey('items', $response['products']);
+        self::assertNotEmpty($response['products']['items']);
+        self::assertEquals(1, $response['products']['items'][0]['review_count']);
+        self::assertCount(1, $response['products']['items'][0]['reviews']['items']);
+    }
+
+    /**
+     * @return array
+     */
+    public function storesDataProvider(): array
+    {
+        return [
+            ['default'],
+            ['store2'],
+        ];
     }
 
     /**
