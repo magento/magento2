@@ -1052,7 +1052,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $key[] = (string)$this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
 
         $key = implode('|', $key);
-        $key = sha1($key); // use hashing to hide potentially private data
+        $key = hash('sha256', $key); // use hashing to hide potentially private data
         return static::CACHE_KEY_PREFIX . $key;
     }
 

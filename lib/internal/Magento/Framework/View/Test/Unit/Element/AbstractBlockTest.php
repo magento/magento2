@@ -246,7 +246,7 @@ class AbstractBlockTest extends TestCase
         $nameInLayout = 'testBlock';
         $this->block->setNameInLayout($nameInLayout);
         $encryptionKey = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
-        $cacheKey = sha1($nameInLayout . '|' . $encryptionKey);
+        $cacheKey = hash('sha256', $nameInLayout . '|' . $encryptionKey);
         $this->assertEquals(AbstractBlock::CACHE_KEY_PREFIX . $cacheKey, $this->block->getCacheKey());
     }
 
