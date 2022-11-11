@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 // phpcs:disable Magento2.Templates.ThisInTemplate
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 ?>
 <?php /* @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Select */ ?>
 <?php /* @var $escaper \Magento\Framework\Escaper */ ?>
@@ -13,16 +14,17 @@
 <?php $_skipSaleableCheck = $this->helper(Magento\Catalog\Helper\Product::class)->getSkipSaleableCheck(); ?>
 <?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
 
-<div class="field admin__field option<?= $_option->getDecoratedIsLast() ? ' last' : '' ?><?= $_option->getRequired() ? ' _required' : '' ?>">
+<div class="field admin__field option<?= $_option->getDecoratedIsLast() ? ' last' : '' ?>
+     <?= $_option->getRequired() ? ' _required' : '' ?>">
     <label class="label admin__field-label"><span><?= $escaper->escapeHtml($_option->getTitle()) ?></span></label>
     <div class="control admin__field-control">
-        <?php if ($block->showSingle()) : ?>
+        <?php if ($block->showSingle()): ?>
             <?= /* @noEscape */ $block->getSelectionTitlePrice($_selections[0]) ?>
             <input type="hidden"
                    name="bundle_option[<?= $escaper->escapeHtmlAttr($_option->getId()) ?>]"
                    value="<?= $escaper->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>"
                    price="<?= $escaper->escapeHtmlAttr($block->getSelectionPrice($_selections[0])) ?>" />
-        <?php else : ?>
+        <?php else: ?>
             <select id="bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>"
                     name="bundle_option[<?= $escaper->escapeHtmlAttr($_option->getId()) ?>]"
                     class="bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>
@@ -30,7 +32,7 @@
                         select admin__control-select change-container-classname"
                     onchange="ProductConfigure.bundleControl.changeSelection(this)">
                 <option value=""><?= $escaper->escapeHtml(__('Choose a selection...')) ?></option>
-                <?php foreach ($_selections as $_selection) : ?>
+                <?php foreach ($_selections as $_selection): ?>
                     <option
                         value="<?= $escaper->escapeHtmlAttr($_selection->getSelectionId()) ?>"
                         <?= $block->isSelected($_selection) ? ' selected="selected"' : '' ?>
@@ -51,13 +53,13 @@
             <span><?= $escaper->escapeHtml(__('Quantity:')) ?></span>
         </label>
         <div class="control admin__field-control">
-            <input <?php if (!$_canChangeQty) : ?>
+            <input <?php if (!$_canChangeQty): ?>
                 <?= ' disabled="disabled"' ?>
             <?php endif; ?>
                 id="bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>-qty-input"
                 class="input-text admin__control-text qty
                         validate-greater-than-zero
-                        <?php if (!$_canChangeQty) : ?>
+                        <?php if (!$_canChangeQty): ?>
                             <?= ' qty-disabled' ?>
                         <?php endif; ?>"
                 type="text"

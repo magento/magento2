@@ -8,29 +8,33 @@ use Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Ty
 use Magento\Framework\Escaper;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 ?>
 <?php /* @var $block Multi */ ?>
 <?php /* @var $escaper Escaper */ ?>
 <?php $_option = $block->getOption(); ?>
 <?php $_selections = $_option->getSelections(); ?>
 <?php $_skipSaleableCheck = $this->helper(Magento\Catalog\Helper\Product::class)->getSkipSaleableCheck(); ?>
-<div class="field admin__field <?php if ($_option->getRequired()) { echo ' _required'; } ?><?php if ($_option->getDecoratedIsLast()) :?> last<?php endif; ?>">
+<div class="field admin__field <?php if ($_option->getRequired()) { echo ' _required'; } ?>
+     <?php if ($_option->getDecoratedIsLast()):?> last<?php endif; ?>">
     <label class="label admin__field-label"><span><?= $escaper->escapeHtml($_option->getTitle()) ?></span></label>
     <div class="control admin__field-control">
-        <?php if (count($_selections) == 1 && $_option->getRequired()) : ?>
+        <?php if (count($_selections) == 1 && $_option->getRequired()): ?>
             <?= /* @noEscape */ $block->getSelectionQtyTitlePrice($_selections[0]) ?>
             <input type="hidden" name="bundle_option[<?= $escaper->escapeHtmlAttr($_option->getId()) ?>]"
                    value="<?= $escaper->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>"
                    price="<?= $escaper->escapeHtmlAttr($block->getSelectionPrice($_selections[0])) ?>" />
-        <?php else : ?>
+        <?php else: ?>
             <select multiple="multiple" size="5" id="bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>"
                     name="bundle_option[<?= $escaper->escapeHtmlAttr($_option->getId()) ?>][]"
-                    class="admin__control-multiselect bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?><?php if ($_option->getRequired()) { echo ' required-entry'; } ?> multiselect change-container-classname"
+                    class="admin__control-multiselect bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>
+                    <?php if ($_option->getRequired()) { echo ' required-entry'; } ?>
+                    multiselect change-container-classname"
                     onchange="ProductConfigure.bundleControl.changeSelection(this)">
-            <?php if (!$_option->getRequired()) : ?>
+            <?php if (!$_option->getRequired()): ?>
                 <option value=""><?= $escaper->escapeHtml(__('None')) ?></option>
             <?php endif; ?>
-            <?php foreach ($_selections as $_selection) : ?>
+            <?php foreach ($_selections as $_selection): ?>
                 <option value="<?= $escaper->escapeHtmlAttr($_selection->getSelectionId()) ?>"
                     <?php if ($block->isSelected($_selection)) { echo ' selected="selected"'; } ?>
                     <?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) { echo ' disabled="disabled"'; } ?>
@@ -42,11 +46,14 @@ use Magento\Framework\Escaper;
     </div>
 </div>
 <fieldset id="product_composite_configure_fields_qty"
-          class="fieldset product-composite-qty-block admin__fieldset <?= $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
+          class="fieldset product-composite-qty-block admin__fieldset
+          <?= $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
     <div class="field admin__field">
         <label class="label admin__field-label"><span><?= $escaper->escapeHtml(__('Quantity')) ?></span></label>
         <div class="control admin__field-control">
-            <input id="product_composite_configure_input_qty" class="input-text admin__control-text qty" type="text" name="qty" value="<?= (int) $block->getQtyValue() ?>">
+            <input id="product_composite_configure_input_qty"
+                   class="input-text admin__control-text qty"
+                   type="text" name="qty" value="<?= (int) $block->getQtyValue() ?>">
         </div>
     </div>
 </fieldset>
