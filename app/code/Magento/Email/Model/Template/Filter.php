@@ -410,7 +410,7 @@ class Filter extends Template
         $skipParams = ['class', 'id', 'output'];
         $blockParameters = $this->getParameters($construction[2]);
 
-        if ($blockParameters['cache_key']) {
+        if (isset($blockParameters['cache_key'])) {
             $blockParameters['cache_key'] = self::CACHE_KEY_PREFIX . $blockParameters['cache_key'];
         }
 
