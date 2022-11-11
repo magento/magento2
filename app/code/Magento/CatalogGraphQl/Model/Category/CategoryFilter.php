@@ -101,19 +101,16 @@ class CategoryFilter
         $categories->setSearchCriteria($searchCriteria);
 
         // only fetch necessary category entity id
-        $collection
-            ->getSelect()
+        $select = $collection->getSelect();
+        $select
             ->reset(Select::COLUMNS)
             ->columns(
                 'e.entity_id'
             );
-        $categories->setItems($collection->getItems());
-        $categories->setTotalCount($collection->getSize());
+        $categoryIds = array_map('intval', $collection->getConnection()->fetchCol($select));
 
-        $categoryIds = [];
-        foreach ($categories->getItems() as $category) {
-            $categoryIds[] = (int)$category->getId();
-        }
+        $categories->setItems($categoryIds);
+        $categories->setTotalCount(count($categoryIds));
 
         $totalPages = 0;
         if ($categories->getTotalCount() > 0 && $searchCriteria->getPageSize() > 0) {
