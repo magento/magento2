@@ -1561,5 +1561,33 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+    
+     /**
+     * @return bool
+     */
+    public function isPartialOrWillBePartial(): bool
+    {
+        $order = $this->getOrder();
+        $orderItems = $order->getAllItems();
+        $creditItems = $this->getAllItems();
+
+        $numberOfInvoicedItems = 0;
+        $numberOfCreditItems = 0;
+        $isPartialCreditFromStart = false;
+
+        foreach ($orderItems as $item) {
+            $numberOfInvoicedItems += ($item->getQtyInvoiced() - $item->getQtyRefunded());
+            if(!$isPartialCreditFromStart)
+                $isPartialCreditFromStart = ($item->getQtyRefunded() > 0);
+        }
+
+        foreach ($creditItems as $item){
+            $numberOfCreditItems += $item->getQty();
+        }
+
+        $willBePartialCredit = $numberOfCreditItems < $numberOfInvoicedItems;
+
+        return ($willBePartialCredit || $isPartialCreditFromStart);
+    }
     //@codeCoverageIgnoreEnd
 }
