@@ -27,7 +27,9 @@
         <!-- Create subcategory with required fields -->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="fillCategoryName"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="fillCategoryName">
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton"/>
         <!-- Verify success message -->

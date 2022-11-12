@@ -32,7 +32,9 @@
 
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="OpenAdminCatergoryIndexPage"/>
         <click selector="{{AdminCategorySidebarActionSection.AddRootCategoryButton}}" stepKey="ClickOnAddRootButton"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="FillCategoryField"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="FillCategoryField">
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="EnableCheckOption"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="ClickSaveButton"/>
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="AssertSuccessMessage"/>

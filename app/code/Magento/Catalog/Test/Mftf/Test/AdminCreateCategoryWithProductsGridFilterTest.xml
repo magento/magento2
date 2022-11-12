@@ -58,7 +58,9 @@
         <!--Create sub category-->
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="fillCategoryName"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="fillCategoryName">
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
         <!--Select the default product and product with grid filter-->
         <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
         <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
