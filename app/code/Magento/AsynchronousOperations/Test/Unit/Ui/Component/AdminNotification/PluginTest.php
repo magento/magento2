@@ -21,19 +21,25 @@ class PluginTest extends TestCase
     private $plugin;
 
     /**
-     * @var MockObject
+     * @var AuthorizationInterface|MockObject
      */
     private $authorizationMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
-        $this->plugin = new Plugin(
-            $this->authorizationMock
-        );
+        $this->plugin = new Plugin($this->authorizationMock);
     }
 
-    public function testAfterGetMeta()
+    /**
+     * After getMeta test
+     *
+     * @return void
+     */
+    public function testAfterGetMeta(): void
     {
         $result = [];
         $expectedResult = [
@@ -48,7 +54,10 @@ class PluginTest extends TestCase
             ]
         ];
         $dataProviderMock = $this->createMock(DataProvider::class);
-        $this->authorizationMock->expects($this->once())->method('isAllowed')->willReturn(true);
+        $this->authorizationMock->expects($this->once())
+            ->method('isAllowed')
+            ->willReturn(true);
+
         $this->assertEquals($expectedResult, $this->plugin->afterGetMeta($dataProviderMock, $result));
     }
 }

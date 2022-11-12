@@ -5,18 +5,28 @@
  */
 namespace Magento\AsynchronousOperations\Controller\Adminhtml\Bulk;
 
+use Magento\AsynchronousOperations\Model\AccessValidator;
+use Magento\AsynchronousOperations\Model\IsAllowedForBulkUuid;
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
+
 /**
  * Class View Operation Details Controller
  */
-class Details extends \Magento\Backend\App\Action implements \Magento\Framework\App\Action\HttpGetActionInterface
+class Details extends Action implements HttpGetActionInterface
 {
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     private $resultPageFactory;
 
     /**
-     * @var \Magento\AsynchronousOperations\Model\AccessValidator
+     * @var AccessValidator
+     * @deprecated
      */
     private $accessValidator;
 
@@ -26,21 +36,29 @@ class Details extends \Magento\Backend\App\Action implements \Magento\Framework\
     private $menuId;
 
     /**
-     * Details constructor.
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\AsynchronousOperations\Model\AccessValidator $accessValidator
+     * @var IsAllowedForBulkUuid
+     */
+    private $isAllowedForBulkUuid;
+
+    /**
+     * @param Context $context
+     * @param PageFactory $resultPageFactory
+     * @param AccessValidator $accessValidator
      * @param string $menuId
+     * @param IsAllowedForBulkUuid|null $isAllowedForBulkUuid
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\AsynchronousOperations\Model\AccessValidator $accessValidator,
-        $menuId = 'Magento_AsynchronousOperations::system_magento_logging_bulk_operations'
+        Context $context,
+        PageFactory $resultPageFactory,
+        AccessValidator $accessValidator,
+        $menuId = 'Magento_AsynchronousOperations::system_magento_logging_bulk_operations',
+        ?IsAllowedForBulkUuid $isAllowedForBulkUuid = null
     ) {
         $this->resultPageFactory = $resultPageFactory;
         $this->accessValidator = $accessValidator;
         $this->menuId = $menuId;
+        $this->isAllowedForBulkUuid = $isAllowedForBulkUuid
+            ?: ObjectManager::getInstance()->get(IsAllowedForBulkUuid::class);
         parent::__construct($context);
     }
 
@@ -49,14 +67,13 @@ class Details extends \Magento\Backend\App\Action implements \Magento\Framework\
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Logging::system_magento_logging_bulk_operations')
-            && $this->accessValidator->isAllowed($this->getRequest()->getParam('uuid'));
+        return $this->isAllowedForBulkUuid->execute($this->getRequest()->getParam('uuid'));
     }
-    
+
     /**
      * Bulk details action
      *
-     * @return \Magento\Framework\View\Result\Page
+     * @return Page
      */
     public function execute()
     {
