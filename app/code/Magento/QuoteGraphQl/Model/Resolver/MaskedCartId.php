@@ -109,5 +109,3 @@ class MaskedCartId implements ResolverInterface
         return $maskedId;
     }
 }
-
-

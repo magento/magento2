@@ -140,4 +140,3 @@ class MaskedCartIdTest extends TestCase
         $this->maskedCartId->resolve($this->fieldMock, $this->contextMock, $this->resolveInfoMock, $this->valueMock);
     }
 }
-
