@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
 namespace Magento\AsyncConfig\Model;
 
@@ -19,6 +24,11 @@ class Consumer
      */
     private $serializer;
 
+    /**
+     *
+     * @param \Magento\Config\Model\Config\Factory $configFactory
+     * @param Json $json
+     */
     public function __construct(
         \Magento\Config\Model\Config\Factory $configFactory,
         Json $json
@@ -27,6 +37,8 @@ class Consumer
         $this->serializer = $json;
     }
     /**
+     * Process Consumer
+     *
      * @param AsyncConfigMessageInterface $asyncConfigMessage
      * @return void
      * @throws \Exception

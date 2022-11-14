@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
 namespace Magento\AsyncConfig\Model;
 
@@ -23,8 +28,8 @@ class AsyncConfigPublisher implements \Magento\AsyncConfig\Api\AsyncConfigPublis
      */
     private $serializer;
 
-
     /**
+     *
      * @param AsyncConfigMessageInterfaceFactory $asyncConfigFactory
      * @param PublisherInterface $publisher
      * @param Json $json
@@ -39,6 +44,9 @@ class AsyncConfigPublisher implements \Magento\AsyncConfig\Api\AsyncConfigPublis
         $this->serializer = $json;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function saveConfigData($configData)
     {
         $asyncConfig = $this->asyncConfigFactory->create();

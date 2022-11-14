@@ -10,6 +10,7 @@ use Magento\AsyncConfig\Api\AsyncConfigPublisherInterface;
 use Magento\Config\Controller\Adminhtml\System\AbstractConfig;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * System Configuration Save Controller
@@ -234,11 +235,11 @@ class Save extends AbstractConfig implements HttpPostActionInterface
             $website = $this->getRequest()->getParam('website');
             $store = $this->getRequest()->getParam('store');
             $configData = [
-            'section' => $section,
-            'website' => $website,
-            'store' => $store,
-            'groups' => $this->_getGroupsForSave(),
-        ];
+                'section' => $section,
+                'website' => $website,
+                'store' => $store,
+                'groups' => $this->_getGroupsForSave(),
+            ];
             $configData = $this->filterNodes($configData);
 
             $groups = $this->getRequest()->getParam('groups');
