@@ -17,7 +17,7 @@ class Group extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
     /**
      * @inheritDoc
      */
-    public function render(DataObject $row): ?string
+    public function render(DataObject $row)
     {
         if (!$row->getData($this->getColumn()->getIndex())) {
             return null;
