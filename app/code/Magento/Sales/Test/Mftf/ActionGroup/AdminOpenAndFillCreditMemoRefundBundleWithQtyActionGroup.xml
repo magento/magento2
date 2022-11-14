@@ -21,7 +21,7 @@
             <argument name="rowNumberItemTwo" type="string" defaultValue="5"/>
             <argument name="rowNumberItemThree" type="string" defaultValue="6"/>
         </arguments>
-        
+
         <!-- Click 'Credit Memo' button -->
         <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreateCreditMemo"/>
         <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeNewCreditMemoPage"/>
@@ -31,7 +31,6 @@
         <scrollTo selector="{{AdminCreditMemoItemsSection.header}}" stepKey="scrollToItemsToRefund"/>
         <fillField selector="{{AdminCreditMemoItemsSection.childItemQtyToRefund(rowNumberItemOne)}}" userInput="{{itemQtyToRefund}}" stepKey="fillQtyToRefundItemOne"/>
         <fillField selector="{{AdminCreditMemoItemsSection.childItemQtyToRefund(rowNumberItemTwo)}}" userInput="{{itemQtyToRefund}}" stepKey="fillQtyToRefundItemTwo"/>
-        <fillField selector="{{AdminCreditMemoItemsSection.childItemQtyToRefund(rowNumberItemThree)}}" userInput="{{itemQtyToRefund}}" stepKey="fillQtyToRefundItemThree"/>
         <waitForLoadingMaskToDisappear stepKey="waitForActivateButton"/>
         <conditionalClick selector="{{AdminCreditMemoItemsSection.updateQty}}" dependentSelector="{{AdminCreditMemoItemsSection.disabledUpdateQty}}" visible="false" stepKey="clickUpdateButton"/>
         <waitForLoadingMaskToDisappear stepKey="waitForUpdate"/>
