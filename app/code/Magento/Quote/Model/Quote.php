@@ -2018,10 +2018,15 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             return $this;
         }
 
+        // Set the flag here, before calling totalsCollector->collect(),
+        // because there are cases where collectTotals() can be legitimately
+        // called within totalsCollector->collect(), and we don't want to
+        // recurse forever.
+        $this->setTotalsCollectedFlag(true);
+
         $total = $this->totalsCollector->collect($this);
         $this->addData($total->getData());
 
-        $this->setTotalsCollectedFlag(true);
         return $this;
     }
 

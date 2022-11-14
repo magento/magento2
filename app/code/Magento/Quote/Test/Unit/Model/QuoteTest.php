@@ -37,11 +37,13 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Quote\Model\Quote\AddressFactory;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Processor;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Quote\Model\Quote\PaymentFactory;
+use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\Quote\Model\ResourceModel\Quote\Address\Collection;
 use Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory;
 use Magento\Sales\Model\OrderIncrementIdChecker;
@@ -190,6 +192,9 @@ class QuoteTest extends TestCase
      */
     private $orderIncrementIdChecker;
 
+    /** @var TotalsCollector|MockObject  */
+    private TotalsCollector $totalsCollector;
+
     /**
      * @inheritDoc
      *
@@ -222,6 +227,9 @@ class QuoteTest extends TestCase
             ExtensibleDataObjectConverter::class,
             ['toFlatArray']
         );
+
+        $this->totalsCollector = $this->createMock(TotalsCollector::class);
+
         $this->customerRepositoryMock = $this->getMockForAbstractClass(
             CustomerRepositoryInterface::class,
             [],
@@ -336,6 +344,7 @@ class QuoteTest extends TestCase
                     'customerRepository' => $this->customerRepositoryMock,
                     'objectCopyService' => $this->objectCopyServiceMock,
                     'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
+                    'totalsCollector' => $this->totalsCollector,
                     'customerDataFactory' => $this->customerDataFactoryMock,
                     'itemProcessor' => $this->itemProcessor,
                     'orderIncrementIdChecker' => $this->orderIncrementIdChecker,
@@ -344,6 +353,27 @@ class QuoteTest extends TestCase
                     ]
                 ]
             );
+    }
+
+    /**
+     * Ensure that $quote->collectTotals() correctly handles recursion
+     *
+     * @return void
+     */
+    public function testCollectTotals(): void
+    {
+        $totalObject = $this->createMock(Total::class);
+        $totalObject->expects($this->once())->method('getData')->willReturn([]);
+
+        $this->totalsCollector->expects($this->once())->method('collect')->willReturnCallback(
+            function ($quote) use ($totalObject) {
+                $quote->collectTotals();
+
+                return $totalObject;
+            }
+        );
+
+        $this->quote->collectTotals();
     }
 
     /**
