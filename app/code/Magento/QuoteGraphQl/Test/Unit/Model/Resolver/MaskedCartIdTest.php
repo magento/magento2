@@ -59,11 +59,6 @@ class MaskedCartIdTest extends TestCase
     private Context $contextMock;
 
     /**
-     * @var Cart|MockObject
-     */
-    private Cart $cartMock;
-
-    /**
      * @var Quote|MockObject
      */
     private Quote $quoteMock;
