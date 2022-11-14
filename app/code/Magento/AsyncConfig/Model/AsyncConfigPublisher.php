@@ -47,7 +47,7 @@ class AsyncConfigPublisher implements \Magento\AsyncConfig\Api\AsyncConfigPublis
     /**
      * @inheritDoc
      */
-    public function saveConfigData($configData)
+    public function saveConfigData(array $configData)
     {
         $asyncConfig = $this->asyncConfigFactory->create();
         $asyncConfig->setConfigData($this->serializer->serialize($configData));

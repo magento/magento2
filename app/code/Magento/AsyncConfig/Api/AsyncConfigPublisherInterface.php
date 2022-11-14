@@ -12,8 +12,8 @@ interface AsyncConfigPublisherInterface
     /**
      * Save Configuration Data
      *
-     * @param $configData
+     * @param array $configData
      * @return void
      */
-    public function saveConfigData($configData);
+    public function saveConfigData(array $configData);
 }

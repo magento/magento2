@@ -7,7 +7,9 @@
     "require": {
         "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
-        "magento/framework-message-queue": "*",
+        "magento/framework-message-queue": "*"
+    },
+    "suggest": {
         "magento/module-config": "*"
     },
     "type": "magento2-module",
