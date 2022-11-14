@@ -10,6 +10,7 @@ use Magento\AsyncConfig\Api\AsyncConfigPublisherInterface;
 use Magento\Config\Controller\Adminhtml\System\AbstractConfig;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -56,8 +57,8 @@ class Save extends AbstractConfig implements HttpPostActionInterface
      * @param \Magento\Config\Model\Config\Factory $configFactory
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Framework\Stdlib\StringUtils $string
-     * @param DeploymentConfig $deploymentConfig
-     * @param AsyncConfigPublisherInterface $asyncConfigPublisher
+     * @param DeploymentConfig|null $deploymentConfig
+     * @param AsyncConfigPublisherInterface|null $asyncConfigPublisher
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -66,15 +67,17 @@ class Save extends AbstractConfig implements HttpPostActionInterface
         \Magento\Config\Model\Config\Factory $configFactory,
         \Magento\Framework\Cache\FrontendInterface $cache,
         \Magento\Framework\Stdlib\StringUtils $string,
-        DeploymentConfig $deploymentConfig,
-        AsyncConfigPublisherInterface $asyncConfigPublisher
+        DeploymentConfig $deploymentConfig = null,
+        AsyncConfigPublisherInterface $asyncConfigPublisher = null
     ) {
         parent::__construct($context, $configStructure, $sectionChecker);
         $this->_configFactory = $configFactory;
         $this->_cache = $cache;
         $this->string = $string;
-        $this->deploymentConfig = $deploymentConfig;
-        $this->asyncConfigPublisher = $asyncConfigPublisher;
+        $this->deploymentConfig = $deploymentConfig
+            ?? ObjectManager::getInstance()->get(DeploymentConfig::class);
+        $this->asyncConfigPublisher = $asyncConfigPublisher
+            ?? ObjectManager::getInstance()->get(AsyncConfigPublisherInterface::class);
     }
 
     /**
