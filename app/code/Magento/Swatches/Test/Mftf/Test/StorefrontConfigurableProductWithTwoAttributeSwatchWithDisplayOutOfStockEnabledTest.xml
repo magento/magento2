@@ -10,8 +10,8 @@
     <test name="StorefrontConfigurableProductWithTwoAttributeSwatchWithDisplayOutOfStockEnabledTest">
         <annotations>
             <features value="Swatches"/>
-            <stories value="Configurable product with swatch attribute and display out of stock enabled"/>
-            <title value="Configurable product with swatch attribute and display out of stock enabled"/>
+            <stories value="Configurable product with two swatch attributes and display out of stock enabled"/>
+            <title value="Configurable product with two swatch attributes and display out of stock enabled"/>
             <description value="Storefront selection of out of stock child products of configurable products are
             disabled when display out of stock options are enabled"/>
             <severity value="MAJOR"/>
