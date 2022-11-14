@@ -15,7 +15,8 @@
             <description value="Storefront selection of out of stock child products of configurable products are
             disabled when display out of stock options are enabled"/>
             <severity value="MAJOR"/>
-            <testCaseId value="ACP2E-1342"/>
+            <testCaseId value="AC-7020"/>
+            <useCaseId value="ACP2E-1342"/>
             <group value="Swatches"/>
         </annotations>
     <before>
