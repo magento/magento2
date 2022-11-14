@@ -181,12 +181,11 @@ class ArgumentsReader
             return null;
         }
 
-        $isNamedArgument = false;
         $arguments = substr(trim($arguments), 20, -2);
         $arguments = explode(',', $arguments);
-        $position = strpos(current($arguments), ':');
-        if ($position !== false) {
-            $isNamedArgument = true;
+        $isNamedArgument = [];
+        foreach ($arguments as $argumentPosition => $argumentName) {
+            $isNamedArgument[$argumentPosition] = (bool)strpos($argumentName, ':');
         }
         array_walk($arguments, $trimFunction);
 
@@ -197,11 +196,8 @@ class ArgumentsReader
                 'name' => $argumentName,
                 'position' => $argumentPosition,
                 'type' => $type,
+                'isNamedArgument' => $isNamedArgument[$argumentPosition],
             ];
-
-            if ($isNamedArgument) {
-                $output[$argumentPosition]['isNamedArgument'] = true;
-            }
         }
 
         return $output;

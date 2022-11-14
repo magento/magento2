@@ -69,26 +69,25 @@ class ConstructorIntegrity implements ValidatorInterface
         /** Get parent class __construct arguments */
         $parentArguments = $this->_argumentsReader->getConstructorArguments($parent, true, true);
 
-        if (isset(current($callArguments)['isNamedArgument'])) {
-            $callArguments = array_column($callArguments, null, 'name');
-
-            foreach ($parentArguments as $requiredArgument) {
-                if (isset($callArguments[$requiredArgument['name']])) {
-                    $actualArgument = $callArguments[$requiredArgument['name']];
+        foreach ($parentArguments as $index => $requiredArgument) {
+            $reIndexedCallArguments = array_column($callArguments, null, 'name');
+            if (isset($reIndexedCallArguments[$requiredArgument['name']])) {
+                if ($reIndexedCallArguments[$requiredArgument['name']]['isNamedArgument'] === true) {
+                    $actualArgument = $reIndexedCallArguments[$requiredArgument['name']];
                     $this->checkCompatibleTypes($requiredArgument['type'], $actualArgument['type'], $class);
-                } else {
-                    $this->checkIfRequiredArgumentIsOptional($requiredArgument, $class);
+                    continue;
                 }
             }
-        } else {
-            // Need to separate logic for unnamed arguments as we cannot consider `argument name` for unnamed arguments
-            foreach ($parentArguments as $index => $requiredArgument) {
-                if (isset($callArguments[$index])) {
-                    $actualArgument = $callArguments[$index];
-                    $this->checkCompatibleTypes($requiredArgument['type'], $actualArgument['type'], $class);
-                } else {
-                    $this->checkIfRequiredArgumentIsOptional($requiredArgument, $class);
-                }
+
+            if (isset($callArguments[$index]) && $callArguments[$index]['isNamedArgument'] === true) {
+                $this->checkIfRequiredArgumentIsOptional($requiredArgument, $class);
+            }
+
+            if (isset($callArguments[$index])) {
+                $actualArgument = $callArguments[$index];
+                $this->checkCompatibleTypes($requiredArgument['type'], $actualArgument['type'], $class);
+            } else {
+                $this->checkIfRequiredArgumentIsOptional($requiredArgument, $class);
             }
         }
 

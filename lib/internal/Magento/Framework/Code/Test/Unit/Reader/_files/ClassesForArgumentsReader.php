@@ -280,3 +280,27 @@ class ClassWithNamedArgumentsForParentCall extends FirstClassForParentCall
         $this->_runeTimeException = $runeTimeException;
     }
 }
+
+class ClassWithMixedArgumentsForParentCall extends FirstClassForParentCall
+{
+    /**
+     * @var stdClass
+     */
+    protected $_stdClassObject;
+
+    /**
+     * @var ClassExtendsDefaultPhpType
+     */
+    protected $_runeTimeException;
+
+    /**
+     * @param stdClass $stdClassObject
+     * @param ClassExtendsDefaultPhpType $runeTimeException
+     */
+    public function __construct(\stdClass $stdClassObject, \ClassExtendsDefaultPhpType $runeTimeException)
+    {
+        parent::__construct($stdClassObject, runeTimeException: $runeTimeException);
+        $this->_stdClassObject = $stdClassObject;
+        $this->_runeTimeException = $runeTimeException;
+    }
+}
