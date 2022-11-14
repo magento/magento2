@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3f293d4d78b3671f50ef799b17f4a5b7",
+    "content-hash": "468a74fdfbf7eaa03e0aac98925109ac",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -6164,7 +6164,7 @@
         },
         {
             "name": "spomky-labs/aes-key-wrap",
-            "version": "v6.0.0",
+            "version": "v7.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Spomky-Labs/aes-key-wrap.git",
@@ -6231,71 +6231,6 @@
                 "source": "https://github.com/Spomky-Labs/aes-key-wrap/tree/v6.0.0"
             },
             "time": "2020-08-01T14:07:55+00:00"
-        },
-        {
-            "name": "spomky-labs/base64url",
-            "version": "v2.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Spomky-Labs/base64url.git",
-                "reference": "7752ce931ec285da4ed1f4c5aa27e45e097be61d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Spomky-Labs/base64url/zipball/7752ce931ec285da4ed1f4c5aa27e45e097be61d",
-                "reference": "7752ce931ec285da4ed1f4c5aa27e45e097be61d",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1"
-            },
-            "require-dev": {
-                "phpstan/extension-installer": "^1.0",
-                "phpstan/phpstan": "^0.11|^0.12",
-                "phpstan/phpstan-beberlei-assert": "^0.11|^0.12",
-                "phpstan/phpstan-deprecation-rules": "^0.11|^0.12",
-                "phpstan/phpstan-phpunit": "^0.11|^0.12",
-                "phpstan/phpstan-strict-rules": "^0.11|^0.12"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Base64Url\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Florent Morselli",
-                    "homepage": "https://github.com/Spomky-Labs/base64url/contributors"
-                }
-            ],
-            "description": "Base 64 URL Safe Encoding/Decoding PHP Library",
-            "homepage": "https://github.com/Spomky-Labs/base64url",
-            "keywords": [
-                "base64",
-                "rfc4648",
-                "safe",
-                "url"
-            ],
-            "support": {
-                "issues": "https://github.com/Spomky-Labs/base64url/issues",
-                "source": "https://github.com/Spomky-Labs/base64url/tree/v2.0.4"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/Spomky",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/FlorentMorselli",
-                    "type": "patreon"
-                }
-            ],
-            "time": "2020-11-03T09:10:25+00:00"
         },
         {
             "name": "symfony/config",
@@ -8640,36 +8575,36 @@
         },
         {
             "name": "web-token/jwt-framework",
-            "version": "v2.2.11",
+            "version": "3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/web-token/jwt-framework.git",
-                "reference": "643cced197e32471418bd89e7a44b69fd04eb9de"
+                "reference": "c8d3a304855844451d1d2d3e6087a6f287cba1d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/web-token/jwt-framework/zipball/643cced197e32471418bd89e7a44b69fd04eb9de",
-                "reference": "643cced197e32471418bd89e7a44b69fd04eb9de",
+                "url": "https://api.github.com/repos/web-token/jwt-framework/zipball/c8d3a304855844451d1d2d3e6087a6f287cba1d9",
+                "reference": "c8d3a304855844451d1d2d3e6087a6f287cba1d9",
                 "shasum": ""
             },
             "require": {
-                "brick/math": "^0.8.17|^0.9",
+                "brick/math": "^0.9|^0.10",
                 "ext-json": "*",
                 "ext-mbstring": "*",
                 "ext-openssl": "*",
                 "ext-sodium": "*",
                 "fgrosse/phpasn1": "^2.0",
-                "php": ">=7.2",
+                "paragonie/constant_time_encoding": "^2.4",
+                "php": ">=8.1",
                 "psr/event-dispatcher": "^1.0",
                 "psr/http-client": "^1.0",
                 "psr/http-factory": "^1.0",
-                "spomky-labs/aes-key-wrap": "^5.0|^6.0",
-                "spomky-labs/base64url": "^1.0|^2.0",
-                "symfony/config": "^4.2|^5.0",
-                "symfony/console": "^4.2|^5.0",
-                "symfony/dependency-injection": "^4.2|^5.0",
-                "symfony/event-dispatcher": "^4.2|^5.0",
-                "symfony/http-kernel": "^4.2|^5.0",
+                "spomky-labs/aes-key-wrap": "^7.0",
+                "symfony/config": "^5.4|^6.0",
+                "symfony/console": "^5.4|^6.0",
+                "symfony/dependency-injection": "^5.4|^6.0",
+                "symfony/event-dispatcher": "^5.4|^6.0",
+                "symfony/http-kernel": "^5.4|^6.0",
                 "symfony/polyfill-mbstring": "^1.12"
             },
             "conflict": {
@@ -8681,7 +8616,6 @@
                 "web-token/jwt-checker": "self.version",
                 "web-token/jwt-console": "self.version",
                 "web-token/jwt-core": "self.version",
-                "web-token/jwt-easy": "self.version",
                 "web-token/jwt-encryption": "self.version",
                 "web-token/jwt-encryption-algorithm-aescbc": "self.version",
                 "web-token/jwt-encryption-algorithm-aesgcm": "self.version",
@@ -8705,28 +8639,34 @@
                 "web-token/signature-pack": "self.version"
             },
             "require-dev": {
-                "bjeavons/zxcvbn-php": "^1.0",
-                "blackfire/php-sdk": "^1.14",
+                "bjeavons/zxcvbn-php": "^1.3",
+                "blackfire/php-sdk": "^1.31",
+                "ekino/phpstan-banned-code": "^1.0",
                 "ext-curl": "*",
                 "ext-gmp": "*",
-                "friendsofphp/php-cs-fixer": "^2.16",
-                "infection/infection": "^0.15|^0.16|^0.17|^0.18|^0.19|^0.20",
-                "matthiasnoback/symfony-config-test": "^3.1|^4.0",
-                "nyholm/psr7": "^1.3",
-                "php-coveralls/php-coveralls": "^2.0",
-                "php-http/mock-client": "^1.0",
-                "phpstan/phpstan": "^0.12",
-                "phpstan/phpstan-deprecation-rules": "^0.12",
-                "phpstan/phpstan-phpunit": "^0.12",
-                "phpstan/phpstan-strict-rules": "^0.12",
-                "phpunit/phpunit": "^8.0|^9.0",
-                "symfony/browser-kit": "^4.2|^5.0",
-                "symfony/finder": "^4.2|^5.0",
-                "symfony/framework-bundle": "^4.2|^5.0",
-                "symfony/http-client": "^5.2",
-                "symfony/phpunit-bridge": "^4.2|^5.0",
-                "symfony/serializer": "^4.2|^5.0",
-                "symfony/var-dumper": "^4.2|^5.0"
+                "infection/infection": "^0.26",
+                "matthiasnoback/symfony-config-test": "^4.3.0",
+                "nyholm/psr7": "^1.5",
+                "php-http/mock-client": "^1.5",
+                "php-parallel-lint/php-parallel-lint": "^1.3",
+                "phpbench/phpbench": "^1.2",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan": "^1.8",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.1",
+                "phpstan/phpstan-strict-rules": "^1.4",
+                "phpunit/phpunit": "^9.5.23",
+                "rector/rector": "^0.14",
+                "roave/security-advisories": "dev-latest",
+                "symfony/browser-kit": "^6.1.3",
+                "symfony/finder": "^5.4|^6.0",
+                "symfony/framework-bundle": "^6.1.3",
+                "symfony/http-client": "^5.4|^6.0",
+                "symfony/phpunit-bridge": "^6.1.3",
+                "symfony/serializer": "^6.1.3",
+                "symfony/var-dumper": "^6.1.3",
+                "symfony/yaml": "^6.1.3",
+                "symplify/easy-coding-standard": "^11.0"
             },
             "suggest": {
                 "bjeavons/zxcvbn-php": "Adds key quality check for oct keys.",
@@ -8805,15 +8745,19 @@
             ],
             "support": {
                 "issues": "https://github.com/web-token/jwt-framework/issues",
-                "source": "https://github.com/web-token/jwt-framework/tree/v2.2.11"
+                "source": "https://github.com/web-token/jwt-framework/tree/3.1.2"
             },
             "funding": [
                 {
                     "url": "https://github.com/Spomky",
                     "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/FlorentMorselli",
+                    "type": "patreon"
                 }
             ],
-            "time": "2021-06-25T15:59:52+00:00"
+            "time": "2022-09-01T05:50:30+00:00"
         },
         {
             "name": "webimpress/safe-writer",
