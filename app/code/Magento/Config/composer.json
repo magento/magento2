@@ -13,9 +13,7 @@
         "magento/module-directory": "*",
         "magento/module-email": "*",
         "magento/module-media-storage": "*",
-        "magento/module-store": "*"
-    },
-    "suggest": {
+        "magento/module-store": "*",
         "magento/module-async-config": "*"
     },
     "type": "magento2-module",
