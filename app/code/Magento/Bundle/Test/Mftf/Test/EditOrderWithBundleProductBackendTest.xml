@@ -164,6 +164,7 @@
         <click selector="{{AdminOrderFormItemsSection.updateItemsAndQuantities}}" stepKey="clickUpdateItemsAndQuantity"/>
         <grabTextFrom selector="{{AdminOrderFormItemsOrderedSection.itemsSKU('1')}}" stepKey="grabSKU"/>
 
+        <waitForPageLoad stepKey="waitForPageload"/>
         <!-- Check that product total is correct -->
         <assertStringContainsString stepKey="AssertSKU">
             <actualResult type="const">$grabSKU</actualResult>
