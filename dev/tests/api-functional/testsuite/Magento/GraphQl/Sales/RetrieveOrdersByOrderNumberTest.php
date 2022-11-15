@@ -462,13 +462,13 @@ QUERY;
         DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart6.id$']),
         DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart7.id$']),
         DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart8.id$']),
-        DataFixture(PlaceOrder::class, ['cart_id' => '$cart2.id$']),
-        DataFixture(PlaceOrder::class, ['cart_id' => '$cart3.id$']),
-        DataFixture(PlaceOrder::class, ['cart_id' => '$cart4.id$']),
-        DataFixture(PlaceOrder::class, ['cart_id' => '$cart5.id$']),
-        DataFixture(PlaceOrder::class, ['cart_id' => '$cart6.id$']),
-        DataFixture(PlaceOrder::class, ['cart_id' => '$cart7.id$']),
-        DataFixture(PlaceOrder::class, ['cart_id' => '$cart8.id$']),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart2.id$', 'method'=> 'checkmo']),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart3.id$', 'method'=> 'checkmo']),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart4.id$', 'method'=> 'checkmo']),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart5.id$', 'method'=> 'checkmo']),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart6.id$', 'method'=> 'checkmo']),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart7.id$', 'method'=> 'checkmo']),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart8.id$', 'method'=> 'checkmo']),
 
     ]
     public function testGetCustomerDescendingSortedOrders()
