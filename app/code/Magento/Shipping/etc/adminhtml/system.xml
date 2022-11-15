@@ -36,7 +36,7 @@
             </group>
             <group id="shipping_policy" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Shipping Policy Parameters</label>
-                <field id="enable_shipping_policy" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" canRestore="1">
+                <field id="enable_shipping_policy" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" canRestore="1"  showInStore="1">
                     <label>Apply custom Shipping Policy</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
