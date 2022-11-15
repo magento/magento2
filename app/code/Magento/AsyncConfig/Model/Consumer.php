@@ -8,6 +8,10 @@ declare(strict_types=1);
 namespace Magento\AsyncConfig\Model;
 
 use Magento\AsyncConfig\Api\Data\AsyncConfigMessageInterface;
+use Magento\Config\Controller\Adminhtml\System\Config\Save;
+use Magento\Config\Model\Config\Factory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 class Consumer
@@ -15,7 +19,7 @@ class Consumer
     /**
      * Backend Config Model Factory
      *
-     * @var \Magento\Config\Model\Config\Factory
+     * @var Factory
      */
     private $configFactory;
 
@@ -25,16 +29,31 @@ class Consumer
     private $serializer;
 
     /**
+     * @var ScopeInterface
+     */
+    private $scope;
+
+    /**
+     * @var Save
+     */
+    private $save;
+
+    /**
      *
-     * @param \Magento\Config\Model\Config\Factory $configFactory
+     * @param Factory $configFactory
      * @param Json $json
+     * @param ScopeInterface $scope
      */
     public function __construct(
-        \Magento\Config\Model\Config\Factory $configFactory,
-        Json $json
+        Factory $configFactory,
+        Json $json,
+        ScopeInterface $scope
     ) {
         $this->configFactory = $configFactory;
         $this->serializer = $json;
+        $this->scope = $scope;
+        $this->scope->setCurrentScope('adminhtml');
+        $this->save = ObjectManager::getInstance()->get(Save::class);
     }
     /**
      * Process Consumer
@@ -47,6 +66,7 @@ class Consumer
     {
         $configData = $asyncConfigMessage->getConfigData();
         $data = $this->serializer->unserialize($configData);
+        $data = $this->save->filterNodes($data);
         /** @var \Magento\Config\Model\Config $configModel */
         $configModel = $this->configFactory->create(['data' => $data]);
         $configModel->save();

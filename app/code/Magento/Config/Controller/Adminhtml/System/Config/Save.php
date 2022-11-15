@@ -243,8 +243,6 @@ class Save extends AbstractConfig implements HttpPostActionInterface
                 'store' => $store,
                 'groups' => $this->_getGroupsForSave(),
             ];
-            $configData = $this->filterNodes($configData);
-
             $groups = $this->getRequest()->getParam('groups');
 
             if (isset($groups['country']['fields'])) {
@@ -259,6 +257,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
                 }
             }
             if (!$this->deploymentConfig->get(self::ASYNC_CONFIG_OPTION_PATH)) {
+                $configData = $this->filterNodes($configData);
                 /** @var \Magento\Config\Model\Config $configModel */
                 $configModel = $this->_configFactory->create(['data' => $configData]);
                 $configModel->save();
@@ -359,7 +358,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
      * @param array $configData
      * @return array
      */
-    private function filterNodes(array $configData): array
+    public function filterNodes(array $configData): array
     {
         if (!empty($configData['groups'])) {
             $systemXmlPathsFromKeys = array_keys($this->_configStructure->getFieldPaths());
