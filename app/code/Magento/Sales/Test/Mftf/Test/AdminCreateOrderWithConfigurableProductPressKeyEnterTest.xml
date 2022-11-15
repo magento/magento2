@@ -11,6 +11,7 @@
     <test name="AdminCreateOrderWithConfigurableProductPressKeyEnterTest">
         <annotations>
             <title value="Create Order in Admin with configurable product with pressing enter key in option select modal."/>
+            <stories value="Create Order in Admin with configurable product with pressing enter key"/>
             <description value="Create order with configurable product with pressing enter key in option select modal."/>
             <features value="Sales"/>
             <severity value="MAJOR"/>
