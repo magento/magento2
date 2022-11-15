@@ -27,7 +27,7 @@ class Image extends AbstractValidator
         'jpg'  => 'image/jpeg',
         'gif'  => 'image/gif',
         'bmp'  => 'image/bmp',
-        'ico'  => 'image/vnd.microsoft.icon',
+        'ico'  => ['image/vnd.microsoft.icon', 'image/x-icon']
     ];
 
     /**
