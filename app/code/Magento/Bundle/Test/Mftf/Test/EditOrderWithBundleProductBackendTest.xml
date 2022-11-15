@@ -163,8 +163,8 @@
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkConfigurablePopover2"/>
         <click selector="{{AdminOrderFormItemsSection.updateItemsAndQuantities}}" stepKey="clickUpdateItemsAndQuantity"/>
         <grabTextFrom selector="{{AdminOrderFormItemsOrderedSection.itemsSKU('1')}}" stepKey="grabSKU"/>
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.productName}}" stepKey="grabProductName"/>
 
-        <waitForPageLoad stepKey="waitForPageload"/>
         <!-- Check that product total is correct -->
         <assertStringContainsString stepKey="AssertSKU">
             <actualResult type="const">$grabSKU</actualResult>
@@ -172,8 +172,8 @@
         </assertStringContainsString>
 
         <assertStringContainsString stepKey="AssertBundleProduct">
-            <actualResult type="const">$grabSKU</actualResult>
-            <expectedResult type="const">$$createBundleProduct.sku$$</expectedResult>
+            <actualResult type="const">$grabProductName</actualResult>
+            <expectedResult type="string">$$createBundleProduct.name$$</expectedResult>
         </assertStringContainsString>
 
         <assertStringContainsString stepKey="AssertProduct2">
