@@ -8,9 +8,12 @@ declare(strict_types=1);
 namespace Magento\MediaStorage\Model\File\Validator;
 
 use Laminas\Validator\AbstractValidator;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Image\Adapter\ConfigInterface;
 use Magento\Framework\Image\Factory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Image validator
@@ -46,18 +49,34 @@ class Image extends AbstractValidator
     private $file;
 
     /**
+     * @var ConfigInterface
+     */
+    private $config;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param Mime $fileMime
      * @param Factory $imageFactory
      * @param File $file
+     * @param ConfigInterface|null $config
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         Mime $fileMime,
         Factory $imageFactory,
-        File $file
+        File $file,
+        ConfigInterface $config = null,
+        LoggerInterface $logger = null
     ) {
         $this->fileMime = $fileMime;
         $this->imageFactory = $imageFactory;
         $this->file = $file;
+        $this->config = $config ?? ObjectManager::getInstance()->get(ConfigInterface::class);
+        $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
 
         parent::__construct();
     }
@@ -71,12 +90,20 @@ class Image extends AbstractValidator
         $isValid = false;
 
         if (stripos(serialize($this->imageMimeTypes), $fileMimeType) !== false) {
+            $defaultAdapter = $this->config->getAdapterAlias();
             try {
-                $image = $this->imageFactory->create($filePath);
+                $image = $this->imageFactory->create($filePath, $defaultAdapter);
+                $image->open();
+                $isValid = true;
+            } catch (\InvalidArgumentException $e) {
+                $adapters = $this->config->getAdapters();
+                unset($adapters[$defaultAdapter]);
+                $image = $this->imageFactory->create($filePath, array_key_first($adapters) ?? null);
                 $image->open();
                 $isValid = true;
             } catch (\Exception $e) {
                 $isValid = false;
+                $this->logger->critical($e, ['exception' => $e]);
             }
         }
 
