@@ -89,7 +89,7 @@ class Image extends AbstractValidator
         $fileMimeType = $this->fileMime->getMimeType($filePath);
         $isValid = false;
 
-        if (stripos(json_encode($this->imageMimeTypes), $fileMimeType) !== false) {
+        if (stripos(json_encode($this->imageMimeTypes), json_encode($fileMimeType)) !== false) {
             $defaultAdapter = $this->config->getAdapterAlias();
             try {
                 $image = $this->imageFactory->create($filePath, $defaultAdapter);
