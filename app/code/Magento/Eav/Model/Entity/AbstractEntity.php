@@ -1351,6 +1351,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                     ];
                 }
             } elseif (!$this->_isAttributeValueEmpty($attribute, $v)) {
+                //one of the attributes (159) ends up here, though it already exists in the table
                 $insert[$attrId] = is_array($v) ? array_shift($v) : $v;//@TODO: MAGETWO-44182
             }
         }
@@ -1590,7 +1591,30 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     {
         $connection = $this->getConnection();
         foreach ($this->_attributeValuesToSave as $table => $data) {
-            $connection->insertOnDuplicate($table, $data, array_keys($data[0]));
+            $insert = [];
+            foreach ($data as $attributeData) {
+                $select = $connection->select()->from($table, 'value_id')->where("entity_id = :entity_id AND attribute_id = :attribute_id");
+                $result = $connection->fetchOne($select, [
+                    'attribute_id' => $attributeData['attribute_id'],
+                    'entity_id' => $attributeData['entity_id']
+                ]);
+                if ($result) {
+                    $updateWhere = [];
+                    $updateWhere[] = sprintf('%s=%d', $connection->quoteIdentifier('entity_id'), $attributeData['entity_id']);
+                    $updateWhere[] = sprintf('%s=%d', $connection->quoteIdentifier('attribute_id'), $attributeData['attribute_id']);
+                    $connection->update($table, ['value' => $attributeData['value']], $updateWhere);
+                } else {
+                    $insert[] = [
+                        'attribute_id' => $attributeData['attribute_id'],
+                        'entity_id' => $attributeData['entity_id'],
+                        'value' => $attributeData['value']
+                    ];
+                }
+            }
+
+            if (!empty($insert)) {
+                $connection->insertArray($table, array_keys($insert[0]), $insert);
+            }
         }
 
         foreach ($this->_attributeValuesToDelete as $table => $valueIds) {
