@@ -27,7 +27,7 @@ class Image extends AbstractValidator
         'jpg'  => 'image/jpeg',
         'gif'  => 'image/gif',
         'bmp'  => 'image/bmp',
-        'ico'  => ['image/vnd.microsoft.icon', 'image/x-icon']
+        'ico'  => [ 'image/vnd.microsoft.icon', 'image/x-icon']
     ];
 
     /**
@@ -68,12 +68,13 @@ class Image extends AbstractValidator
     public function isValid($filePath): bool
     {
         $fileMimeType = $this->fileMime->getMimeType($filePath);
-        $isValid = true;
+        $isValid = false;
 
-        if (in_array($fileMimeType, $this->imageMimeTypes)) {
+        if (stripos(serialize($this->imageMimeTypes), $fileMimeType) !== false) {
             try {
                 $image = $this->imageFactory->create($filePath);
                 $image->open();
+                $isValid = true;
             } catch (\Exception $e) {
                 $isValid = false;
             }
