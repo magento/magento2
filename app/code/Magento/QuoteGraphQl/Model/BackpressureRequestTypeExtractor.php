@@ -12,7 +12,6 @@ use Magento\GraphQl\Model\Backpressure\RequestTypeExtractorInterface;
 use Magento\Quote\Model\Backpressure\OrderLimitConfigManager;
 use Magento\QuoteGraphQl\Model\Resolver\PlaceOrder;
 use Magento\QuoteGraphQl\Model\Resolver\SetPaymentAndPlaceOrder;
-use ReflectionException;
 
 /**
  * Identifies which quote fields need backpressure management
@@ -55,12 +54,9 @@ class BackpressureRequestTypeExtractor implements RequestTypeExtractorInterface
      *
      * @param string $class
      * @return string
-     * @throws ReflectionException
      */
     private function resolver(string $class): string
     {
-        $reflectionClass = new \ReflectionClass($class);
-
-        return $reflectionClass->getName();
+        return trim($class, '\\');
     }
 }
