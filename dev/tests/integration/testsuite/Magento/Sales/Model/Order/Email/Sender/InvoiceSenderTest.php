@@ -66,6 +66,7 @@ class InvoiceSenderTest extends TestCase
         $this->orderFactory = $this->objectManager->get(OrderInterfaceFactory::class);
         $this->invoiceFactory = $this->objectManager->get(InvoiceInterfaceFactory::class);
         $this->invoiceIdentity = $this->objectManager->get(InvoiceIdentity::class);
+        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
     }
 
     /**
@@ -84,6 +85,10 @@ class InvoiceSenderTest extends TestCase
         $invoice->setBaseShippingAmount(5);
 
         $this->assertEmpty($invoice->getEmailSent());
+
+        $this->_logger->expects($this->never())->method('error')
+            ->with('Environment emulation nesting is not allowed.');
+
         $result = $this->invoiceSender->send($invoice, true);
 
         $this->assertTrue($result);

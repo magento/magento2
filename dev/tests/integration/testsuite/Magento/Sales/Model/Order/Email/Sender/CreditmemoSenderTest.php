@@ -33,6 +33,7 @@ class CreditmemoSenderTest extends TestCase
     protected function setUp(): void
     {
         $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
+        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
     }
 
     /**
@@ -49,6 +50,9 @@ class CreditmemoSenderTest extends TestCase
         $creditmemo->setOrder($order);
 
         $this->assertEmpty($creditmemo->getEmailSent());
+
+        $this->_logger->expects($this->never())->method('error')
+            ->with('Environment emulation nesting is not allowed.');
 
         $creditmemoSender = Bootstrap::getObjectManager()->create(CreditmemoSender::class);
         $result = $creditmemoSender->send($creditmemo, true);
