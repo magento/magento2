@@ -243,7 +243,9 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      * Get config
      *
      * @return ConfigInterface
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 We don't recommend this approach anymore
+     * @see Add a new optional parameter to the constructor at the end of the arguments list instead
+     * and fetch the dependency using Magento\Framework\App\ObjectManager::getInstance() in the constructor body
      */
     private function getConfig()
     {
@@ -257,7 +259,9 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      * Get dependency info provider
      *
      * @return DependencyInfoProvider
-     * @deprecated 100.2.0
+     * @deprecated 100.2.0 We don't recommend this approach anymore
+     * @see Add a new optional parameter to the constructor at the end of the arguments list instead
+     * and fetch the dependency using Magento\Framework\App\ObjectManager::getInstance() in the constructor body
      */
     private function getDependencyInfoProvider()
     {
