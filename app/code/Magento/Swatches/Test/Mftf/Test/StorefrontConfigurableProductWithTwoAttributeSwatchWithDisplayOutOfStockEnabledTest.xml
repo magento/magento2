@@ -102,6 +102,6 @@
         </assertEquals>
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('Large')}}"
                stepKey="clickLargeAttribute"/>
-        <see selector="{{StorefrontProductInfoMainSection.selectedSwatchValue('Large')}}" userInput="Large" stepKey="seeSwatchSizeLargeRemainsSelected"/>
+        <see selector="{{StorefrontProductInfoMainSection.selectedSwatchValue('Large')}}" userInput="Large" stepKey="seeSwatchSizeLargeBecomeSelected"/>
     </test>
 </tests>
