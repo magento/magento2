@@ -415,12 +415,11 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @return void
      * @throws AuthenticationException
      */
     #[
-        DataFixture(Customer::class, ['email' => 'customer@search.example.com'], 'customer'),
+        DataFixture(Customer::class, ['email' => 'customer@example.com'], 'customer'),
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart2'),
         DataFixture(ProductFixture::class, ['sku' => '100000002', 'price' => 10], 'p2'),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart2.id$', 'product_id' => '$p2.id$']),
@@ -507,7 +506,7 @@ QUERY;
 }
 QUERY;
 
-        $currentEmail = 'customer@search.example.com';
+        $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
         $response = $this->graphQlQuery(
             $query,
