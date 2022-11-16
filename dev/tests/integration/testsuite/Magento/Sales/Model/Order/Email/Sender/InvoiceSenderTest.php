@@ -60,13 +60,30 @@ class InvoiceSenderTest extends TestCase
     {
         parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
+
         $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
-        $this->invoiceSender = $this->objectManager->get(InvoiceSender::class);
+
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $logger->expects($this->never())->method('error')
+            ->with('Environment emulation nesting is not allowed.');
+
+        $appEmulation = $this->objectManager->create(
+            \Magento\Store\Model\App\Emulation::class,
+            [
+                'logger' => $logger,
+            ]
+        );
+        $this->invoiceSender = $this->objectManager->create(
+            InvoiceSender::class,
+            [
+                'appEmulation' => $appEmulation,
+            ]
+        );
+
         $this->transportBuilderMock = $this->objectManager->get(TransportBuilderMock::class);
         $this->orderFactory = $this->objectManager->get(OrderInterfaceFactory::class);
         $this->invoiceFactory = $this->objectManager->get(InvoiceInterfaceFactory::class);
         $this->invoiceIdentity = $this->objectManager->get(InvoiceIdentity::class);
-        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
     }
 
     /**
@@ -85,9 +102,6 @@ class InvoiceSenderTest extends TestCase
         $invoice->setBaseShippingAmount(5);
 
         $this->assertEmpty($invoice->getEmailSent());
-
-        $this->_logger->expects($this->never())->method('error')
-            ->with('Environment emulation nesting is not allowed.');
 
         $result = $this->invoiceSender->send($invoice, true);
 

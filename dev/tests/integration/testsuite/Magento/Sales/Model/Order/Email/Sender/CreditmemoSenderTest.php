@@ -51,10 +51,26 @@ class CreditmemoSenderTest extends TestCase
 
         $this->assertEmpty($creditmemo->getEmailSent());
 
-        $this->_logger->expects($this->never())->method('error')
+        $this->logger->expects($this->never())->method('error')
             ->with('Environment emulation nesting is not allowed.');
 
-        $creditmemoSender = Bootstrap::getObjectManager()->create(CreditmemoSender::class);
+        //$creditmemoSender = Bootstrap::getObjectManager()->create(CreditmemoSender::class);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $logger->expects($this->never())->method('error')
+            ->with('Environment emulation nesting is not allowed.');
+
+        $appEmulation = Bootstrap::getObjectManager()->create(
+            \Magento\Store\Model\App\Emulation::class,
+            [
+                'logger' => $logger,
+            ]
+        );
+        $creditmemoSender = Bootstrap::getObjectManager()->create(
+            CreditmemoSender::class,
+            [
+                'appEmulation' => $appEmulation,
+            ]
+        );
         $result = $creditmemoSender->send($creditmemo, true);
 
         $this->assertTrue($result);

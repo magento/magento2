@@ -38,7 +38,6 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
         $this->customerRepository = Bootstrap::getObjectManager()
             ->get(CustomerRepositoryInterface::class);
-        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
     }
 
     /**
@@ -55,11 +54,24 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEmpty($shipment->getEmailSent());
 
-        $this->_logger->expects($this->never())->method('error')
+//        $orderSender = Bootstrap::getObjectManager()
+//            ->create(\Magento\Sales\Model\Order\Email\Sender\ShipmentSender::class);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $logger->expects($this->never())->method('error')
             ->with('Environment emulation nesting is not allowed.');
 
-        $orderSender = Bootstrap::getObjectManager()
-            ->create(\Magento\Sales\Model\Order\Email\Sender\ShipmentSender::class);
+        $appEmulation = Bootstrap::getObjectManager()->create(
+            \Magento\Store\Model\App\Emulation::class,
+            [
+                'logger' => $logger,
+            ]
+        );
+        $orderSender = Bootstrap::getObjectManager()->create(
+            \Magento\Sales\Model\Order\Email\Sender\ShipmentSender::class,
+            [
+                'appEmulation' => $appEmulation,
+            ]
+        );
         $result = $orderSender->send($shipment, true);
 
         $this->assertTrue($result);
