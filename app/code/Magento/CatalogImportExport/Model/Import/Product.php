@@ -24,7 +24,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
@@ -1062,7 +1061,7 @@ class Product extends AbstractEntity
     {
         $productEntityTable = $this->_resourceFactory->create()->getEntityTable();
 
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $idsToDelete = [];
 
             foreach ($bunch as $rowNum => $rowData) {
@@ -1158,13 +1157,18 @@ class Product extends AbstractEntity
         foreach ($this->_productTypeModels as $productTypeModel) {
             $productTypeModel->saveData();
         }
-        $this->linkProcessor->saveLinks($this, $this->_dataSourceModel, $this->getProductEntityLinkField());
+        $this->linkProcessor->saveLinks(
+            $this,
+            $this->_dataSourceModel,
+            $this->getProductEntityLinkField(),
+            $this->getIds()
+        );
         $this->_saveStockItem();
         if ($this->_replaceFlag) {
             $this->getOptionEntity()->clearProductsSkuToId();
         }
+        $this->getOptionEntity()->setIds($this->getIds());
         $this->getOptionEntity()->importData();
-
         return $this;
     }
 
@@ -1300,7 +1304,7 @@ class Product extends AbstractEntity
      */
     protected function _saveLinks()
     {
-        $this->linkProcessor->saveLinks($this, $this->_dataSourceModel, $this->getProductEntityLinkField());
+        $this->linkProcessor->saveLinks($this, $this->_dataSourceModel, $this->getProductEntityLinkField(), []);
         return $this;
     }
 
@@ -1586,7 +1590,7 @@ class Product extends AbstractEntity
         $productsQty = null;
         $entityLinkField = $this->getProductEntityLinkField();
 
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $entityRowsIn = [];
             $entityRowsUp = [];
             $attributes = [];
@@ -1847,7 +1851,6 @@ class Product extends AbstractEntity
                                 $mediaGalleryStoreData['disabled'] = 0;
                                 $mediaGallery[Store::DEFAULT_STORE_ID][$rowSku][$uploadedFile] = $mediaGalleryStoreData;
                             }
-
                         }
                     }
                 }
@@ -2336,7 +2339,7 @@ class Product extends AbstractEntity
      */
     protected function _saveStockItem()
     {
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $stockData = [];
             $importedData = [];
             $productIdsToReindex = [];
@@ -2475,7 +2478,7 @@ class Product extends AbstractEntity
      */
     public function getNextBunch()
     {
-        return $this->_dataSourceModel->getNextBunch();
+        return $this->_dataSourceModel->getNextUniqueBunch($this->getIds());
     }
 
     /**
