@@ -8,13 +8,13 @@ namespace Magento\AsynchronousOperations\Controller\Adminhtml\Notification;
 use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\App\Action;
-use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Bulk Notification Dismiss Controller
  */
-class Dismiss extends Action implements HttpGetActionInterface
+class Dismiss extends Action implements HttpPostActionInterface
 {
     /**
      * @var BulkNotificationManagement
