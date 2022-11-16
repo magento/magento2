@@ -1351,7 +1351,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                     ];
                 }
             } elseif (!$this->_isAttributeValueEmpty($attribute, $v)) {
-                //one of the attributes (159) ends up here, though it already exists in the table
                 $insert[$attrId] = is_array($v) ? array_shift($v) : $v;//@TODO: MAGETWO-44182
             }
         }
