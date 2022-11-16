@@ -68,10 +68,10 @@ class OrderGridCollectionFilter
     /**
      * Validate date string
      *
-     * @param DateTimeInterface|string $datetime
+     * @param mixed $datetime
      * @return mixed
      */
-    private function isValidDate($datetime): mixed
+    private function isValidDate(mixed $datetime): mixed
     {
         try {
             return $datetime instanceof DateTimeInterface
