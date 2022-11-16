@@ -5,11 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Backend\Model\Dashboard;
+namespace Magento\Backend\Block\Dashboard;
 
 use DOMDocument;
 use DOMXPath;
-use Magento\Backend\Block\Dashboard\Totals;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Checkout\Test\Fixture\PlaceOrder as PlaceOrderFixture;
 use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
@@ -32,6 +31,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use Magento\Backend\Model\Dashboard\Period;
 
 class TotalsTest extends AbstractBackendController
 {
