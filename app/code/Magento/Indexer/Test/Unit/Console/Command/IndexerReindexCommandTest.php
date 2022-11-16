@@ -8,13 +8,11 @@ declare(strict_types=1);
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Framework\Console\Cli;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\Config\DependencyInfoProvider;
 use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
-use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Indexer\Console\Command\IndexerReindexCommand;
 use Magento\Indexer\Model\Config;
@@ -27,7 +25,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
 {
-    const STUB_INDEXER_NAME = 'Indexer Name';
+    private const STUB_INDEXER_NAME = 'Indexer Name';
     /**
      * Command being tested
      *
