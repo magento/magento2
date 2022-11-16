@@ -49,12 +49,8 @@ class OrderGridCollectionFilter
         if ($field === 'created_at' || $field === 'order_created_at') {
             if (is_array($condition)) {
                 foreach ($condition as $key => $value) {
-                    if ($value instanceof DateTimeInterface
-                        && $value->getTimezone()->getName() !== $this->timeZone->getConfigTimezone()) {
-                        $value->setTimezone(new \DateTimeZone($this->timeZone->getConfigTimezone()));
-                    }
-                    if ($this->isValidDate($value)) {
-                        $condition[$key] = $this->timeZone->convertConfigTimeToUtc($value);
+                    if ($value = $this->isValidDate($value)) {
+                        $condition[$key] = $value->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s');
                     }
                 }
             }
@@ -72,19 +68,17 @@ class OrderGridCollectionFilter
     /**
      * Validate date string
      *
-     * @param string|DateTimeInterface $datetime
-     * @return bool
+     * @param DateTimeInterface|string $datetime
+     * @return mixed
      */
-    private function isValidDate($datetime): bool
+    private function isValidDate($datetime): mixed
     {
         try {
-            $dt = is_string($datetime) ? new DateTime($datetime) : $datetime;
-            if ($dt instanceof DateTimeInterface) {
-                return true;
-            }
+            return $datetime instanceof DateTimeInterface
+                ? $datetime : (is_string($datetime) ? new DateTime($datetime) : false);
+
         } catch (\Exception $e) {
             return false;
         }
-        return false;
     }
 }
