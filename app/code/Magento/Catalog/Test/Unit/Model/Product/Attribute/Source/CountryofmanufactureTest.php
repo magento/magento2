@@ -102,4 +102,46 @@ class CountryofmanufactureTest extends TestCase
                 ['cachedDataSrl' => json_encode(['key' => 'data']), 'cachedDataUnsrl' => ['key' => 'data']]
             ];
     }
+
+    /**
+     * Test for getOptionText method
+     *
+     * @param $value
+     * @param $result
+     *
+     * @dataProvider getOptionTextDataProvider
+     */
+    public function testGetOptionText($value, $result)
+    {
+        $options = [
+            ['value' => '', 'label' => ' '],
+            ['value' => 'US', 'label' => 'US'],
+            ['value' => 'UK', 'label' => 'UK'],
+        ];
+        $this->storeMock->expects($this->once())->method('getCode')->willReturn('store_code');
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
+        $this->cacheConfig->expects($this->once())
+            ->method('load')
+            ->with($this->equalTo('COUNTRYOFMANUFACTURE_SELECT_STORE_store_code'))
+            ->willReturn($options);
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->willReturn($options);
+        $this->assertEquals($result, $this->countryOfManufacture->getOptionText($value));
+    }
+
+    /**
+     * Data provider for testGetOptionText
+     *
+     * @return array
+     */
+    public function getOptionTextDataProvider()
+    {
+        return
+            [
+                ['value' => '', 'result' => ''],
+                ['value' => 'US', 'result' => 'US'],
+                ['value' => 'AU', 'result' => false],
+            ];
+    }
 }
