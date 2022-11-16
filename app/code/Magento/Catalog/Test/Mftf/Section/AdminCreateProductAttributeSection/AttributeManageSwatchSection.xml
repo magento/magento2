@@ -10,5 +10,9 @@
     <section name="AttributeManageSwatchSection">
         <element name="swatchField" type="input" selector="//th[contains(@class, 'col-swatch')]/span[contains(text(), '{{arg}}')]/ancestor::thead/following-sibling::tbody//input[@placeholder='Swatch']" parameterized="true"/>
         <element name="descriptionField" type="input" selector="//th[contains(@class, 'col-swatch')]/span[contains(text(), '{{arg}}')]/ancestor::thead/following-sibling::tbody//input[@placeholder='Description']" parameterized="true"/>
+        <element name="swatchField1" type="input" selector="(//th[contains(@class, 'col-swatch')]/span[contains(text(), '{{arg}}')]/ancestor::thead/following-sibling::tbody//input[@placeholder='Swatch'])[2]" parameterized="true"/>
+        <element name="descriptionField1" type="input" selector="(//th[contains(@class, 'col-swatch')]/span[contains(text(), '{{arg}}')]/ancestor::thead/following-sibling::tbody//input[@placeholder='Description'])[2]" parameterized="true"/>
+        <element name="swatchField2" type="input" selector="(//th[contains(@class, 'col-swatch')]/span[contains(text(), '{{arg}}')]/ancestor::thead/following-sibling::tbody//input[@placeholder='Swatch'])[3]" parameterized="true"/>
+        <element name="descriptionField2" type="input" selector="(//th[contains(@class, 'col-swatch')]/span[contains(text(), '{{arg}}')]/ancestor::thead/following-sibling::tbody//input[@placeholder='Description'])[3]" parameterized="true"/>
     </section>
 </sections>
