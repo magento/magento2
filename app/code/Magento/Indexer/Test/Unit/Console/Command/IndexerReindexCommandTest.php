@@ -130,6 +130,11 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             self::STUB_INDEXER_NAME . ' index has been rebuilt successfully in',
             $actualValue
         );
+        $this->assertMatchesRegularExpression(
+            '/' . self::STUB_INDEXER_NAME
+            . ' index has been rebuilt successfully in (?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)/m',
+            $actualValue
+        );
     }
 
     /**
