@@ -75,18 +75,15 @@ class SelectionTest extends TestCase
                 ['selection_price_type', 'selection_price_value']
             );
 
+
         $parentResources = $this->createMock(ResourceConnection::class);
         $parentResources->expects($this->once())->method('getConnection')->willReturn($connection);
         $parentResources->expects($this->once())->method('getTableName')
             ->with('catalog_product_bundle_selection_price', 'test_connection_name')
             ->willReturn('catalog_product_bundle_selection_price');
+        $this->context->expects($this->once())->method('getResources')->willReturn($parentResources);
 
         $selection = new ResourceSelection($this->context, $this->metadataPool, 'test_connection_name');
-        $reflect = new \ReflectionClass($selection);
-        $property = $reflect->getProperty('_resources');
-        $property->setAccessible(true);
-        $property->setValue($selection, $parentResources);
-
         $selection->saveSelectionPrice($item);
     }
 }
