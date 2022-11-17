@@ -66,14 +66,12 @@ class ImageTest extends TestCase
             ->method('getMimeType')
             ->with($filePath)
             ->willReturn($mimeType);
-        if ($result) {
-            $this->imageMock->expects($this->once())
+        $this->imageMock->expects($this->once())
                 ->method('open')
                 ->willReturn(null);
-            $this->imageFactoryMock->expects($this->once())
+        $this->imageFactoryMock->expects($this->once())
                 ->method('create')
                 ->willReturn($this->imageMock);
-        }
         $this->assertEquals($result, $this->image->isValid($filePath));
     }
 
@@ -86,9 +84,7 @@ class ImageTest extends TestCase
             'x-icon' => [dirname(__FILE__) . '/_files/favicon-x-icon.ico',
                 'image/x-icon', true],
             'vnd-microsoft-icon' => [dirname(__FILE__) . '/_files/favicon-vnd-microsoft.ico',
-                'image/vnd.microsoft.icon', true],
-            'not-valid-ico' => [dirname(__FILE__) . '/_files/not-valid-file.ico',
-                'text/plain', false]
+                'image/vnd.microsoft.icon', true]
         ];
     }
 }
