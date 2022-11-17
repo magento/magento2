@@ -75,7 +75,8 @@ class OrderGridCollectionFilter
     {
         try {
             return $datetime instanceof DateTimeInterface
-                ? $datetime : (is_string($datetime) ? new DateTime($datetime, new \DateTimeZone($this->timeZone->getConfigTimezone())) : false);
+                ? $datetime : (is_string($datetime)
+                    ? new DateTime($datetime, new \DateTimeZone($this->timeZone->getConfigTimezone())) : false);
         } catch (\Exception $e) {
             return false;
         }
