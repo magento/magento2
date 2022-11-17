@@ -262,7 +262,7 @@ class IndexBuilder
      * @return void
      * @throws LocalizedException
      */
-    public function reindexById(int $id)
+    public function reindexById($id)
     {
         try {
             $this->cleanProductIndex([$id]);
