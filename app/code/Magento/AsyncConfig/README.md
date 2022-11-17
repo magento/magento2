@@ -21,4 +21,3 @@ Alternatively, you can set the variable using the command-line interface:
 ```bash
 bin/magento setup:config:set --config-async 1
 ```
-

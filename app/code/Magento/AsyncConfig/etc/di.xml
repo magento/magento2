@@ -10,4 +10,5 @@
                 type="Magento\AsyncConfig\Model\AsyncConfigPublisher" />
     <preference for="Magento\AsyncConfig\Api\Data\AsyncConfigMessageInterface"
                 type="Magento\AsyncConfig\Model\Entity\AsyncConfigMessage" />
+    <preference for="Magento\Config\Model\Config\Structure\ElementVisibilityInterface" type="Magento\Config\Model\Config\Structure\ElementVisibilityComposite" />
 </config>
