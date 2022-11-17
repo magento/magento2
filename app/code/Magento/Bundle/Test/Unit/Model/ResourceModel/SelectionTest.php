@@ -40,29 +40,12 @@ class SelectionTest extends TestCase
 
     public function testSaveSelectionPrice()
     {
-        $item = $this->getMockBuilder(Selection::class)
-            ->disableOriginalConstructor()
-            ->addMethods([
-                'getSelectionId',
-                'getWebsiteId',
-                'getSelectionPriceType',
-                'getSelectionPriceValue',
-                'getParentProductId',
-                'getDefaultPriceScope'])
-            ->getMock();
-        $values = [
-            'selection_id' => 1,
-            'website_id' => 1,
-            'selection_price_type' => null,
-            'selection_price_value' => null,
-            'parent_product_id' => 1,
-        ];
-        $item->expects($this->once())->method('getDefaultPriceScope')->willReturn(false);
-        $item->expects($this->once())->method('getSelectionId')->willReturn($values['selection_id']);
-        $item->expects($this->once())->method('getWebsiteId')->willReturn($values['website_id']);
-        $item->expects($this->once())->method('getSelectionPriceType')->willReturn($values['selection_price_type']);
-        $item->expects($this->once())->method('getSelectionPriceValue')->willReturn($values['selection_price_value']);
-        $item->expects($this->once())->method('getParentProductId')->willReturn($values['parent_product_id']);
+        $item = new Selection(
+            $this->createMock(\Magento\Framework\Model\Context::class),
+            $this->createMock(\Magento\Framework\Registry::class),
+            $this->createMock(\Magento\Catalog\Helper\Data::class),
+            $this->createMock(\Magento\Bundle\Model\ResourceModel\Selection::class)
+        );
 
         $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->once())
