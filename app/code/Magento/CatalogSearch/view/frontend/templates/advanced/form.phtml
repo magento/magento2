@@ -4,11 +4,14 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Framework\Escaper;
+
 /**
  * Catalog advanced search form
  *
  * @var $block \Magento\CatalogSearch\Block\Advanced\Form
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var Escaper $escaper
  */
 ?>
 
@@ -73,7 +76,11 @@ $catalogSearchHelper = $block->getData('catalogSearchHelper'); ?>
                                    class="input-text"
                                    type="text"
                                    maxlength="<?= $block->escapeHtmlAttr($maxQueryLength) ?>"
-                                   data-validate="{number:true, 'validate-not-negative-number':true, 'less-than-equals-to':'#<?= $block->escapeHtmlAttr($_code) ?>_to'}" />
+                                   data-validate="{
+                                       number:true,
+                                       'validate-not-negative-number':true,
+                                       'less-than-equals-to':'#<?= $block->escapeHtmlAttr($_code) ?>_to'
+                                   }" />
                         </div>
                     </div>
                     <div class="field with-addon no-label">
@@ -86,11 +93,18 @@ $catalogSearchHelper = $block->getData('catalogSearchHelper'); ?>
                                        class="input-text"
                                        type="text"
                                        maxlength="<?= $block->escapeHtmlAttr($maxQueryLength) ?>"
-                                       data-validate="{number:true, 'validate-not-negative-number':true, 'greater-than-equals-to':'#<?= $block->escapeHtmlAttr($_code) ?>'}" />
+                                       data-validate="{
+                                           number:true,
+                                           'validate-not-negative-number':true,
+                                           'greater-than-equals-to':'#<?= $block->escapeHtmlAttr($_code) ?>'
+                                       }" />
                                 <label class="addafter"
                                        for="<?= $block->escapeHtmlAttr($_code) ?>_to">
                                     <?= $block->escapeHtml($block->getCurrency($_attribute)) ?>
                                 </label>
+                                <input type="hidden"
+                                       name="<?= $escaper->escapeHtmlAttr($_code)?>[currency]"
+                                       value="<?= $escaper->escapeHtml($block->getCurrency($_attribute)) ?>">
                             </div>
                         </div>
                     </div>

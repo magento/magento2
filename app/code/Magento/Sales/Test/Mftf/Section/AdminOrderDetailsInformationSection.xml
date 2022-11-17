@@ -24,5 +24,7 @@
         <element name="attributeLabel" type="text" selector="//label[contains(.,'{{attributeLabel}}')]" parameterized="true"/>
         <element name="paymentInformation" type="text" selector="//div[@class='order-payment-method-title']"/>
         <element name="orderId" type="text" selector="|Order # (\d+)|"/>
+        <element name="orderStatusUnderViewM" type="text" selector="//td//div[contains(text(),'{{product}}')]/../..//td[@class='col-status' and contains(text(),'{{status}}')]" parameterized="true" timeout="30"/>
+        <element name="orderStatusUnderViewS" type="text" selector="//tr//div[contains(text(),'{{product}}')]/../../..//td[@class='col-status' and contains(text(),'{{status}}')]" parameterized="true" timeout="30"/>
     </section>
 </sections>
