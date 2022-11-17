@@ -39,8 +39,15 @@ class ThemeControllerTest extends \Magento\TestFramework\TestCase\AbstractBacken
             $this->getRequest()->setPostValue('id', $theme->getId());
             $this->dispatch('backend/admin/design_config_fileUploader/save');
             $output = $this->getResponse()->getBody();
-            $this->assertStringContainsString('"error":"false"', $output);
-            $this->assertStringContainsString($name, $output);
+            if (in_array('imagick', get_loaded_extensions())) {
+                $this->assertStringContainsString('"error":"false"', $output);
+                $this->assertStringContainsString($name, $output);
+            } else {
+                $this->assertStringContainsString(
+                    '"error":"Required PHP extension \'Imagick\' was not loaded."',
+                    $output
+                );
+            }
         }
     }
 
