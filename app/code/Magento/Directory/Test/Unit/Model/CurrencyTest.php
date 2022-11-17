@@ -9,6 +9,8 @@ namespace Magento\Directory\Test\Unit\Model;
 
 use Magento\Directory\Model\Currency as CurrencyModel;
 use Magento\Framework\Currency;
+use Magento\Framework\Currency\Data\Currency as CurrencyData;
+use Magento\Framework\Currency\Exception\CurrencyException;
 use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Locale\ResolverInterface as LocalResolverInterface;
 use Magento\Framework\NumberFormatterFactory;
@@ -207,32 +209,32 @@ class CurrencyTest extends TestCase
             ['ar_AE', 'AED', '9', [], "\u{0669}\u{066B}\u{0660}\u{0660}\u{00A0}\u{062F}.\u{0625}.\u{200F}"],
             ['de_DE', 'USD', '9999', [], "9.999,00\u{00A0}$"],
             ['de_DE', 'EUR', '9999', [], "9.999,00\u{00A0}€"],
-            ['en_US', 'USD', '9999', ['display' => Currency::NO_SYMBOL, 'precision' => 2], '9,999.00'],
-            ['en_US', 'USD', '9999', ['display' => Currency::NO_SYMBOL], '9,999.00'],
-            ['en_US', 'PLN', '9999', ['display' => Currency::NO_SYMBOL], '9,999.00'],
-            ['en_US', 'LBP', '9999', ['display' => Currency::NO_SYMBOL], '9,999'],
+            ['en_US', 'USD', '9999', ['display' => CurrencyData::NO_SYMBOL, 'precision' => 2], '9,999.00'],
+            ['en_US', 'USD', '9999', ['display' => CurrencyData::NO_SYMBOL], '9,999.00'],
+            ['en_US', 'PLN', '9999', ['display' => CurrencyData::NO_SYMBOL], '9,999.00'],
+            ['en_US', 'LBP', '9999', ['display' => CurrencyData::NO_SYMBOL], '9,999'],
             [
                 'ar_AE',
                 'USD',
                 '9999',
-                ['display' => Currency::NO_SYMBOL],
+                ['display' => CurrencyData::NO_SYMBOL],
                 "\u{0669}\u{066C}\u{0669}\u{0669}\u{0669}\u{066B}\u{0660}\u{0660}"
             ],
             [
                 'ar_AE',
                 'AED',
                 '9999',
-                ['display' => Currency::NO_SYMBOL],
+                ['display' => CurrencyData::NO_SYMBOL],
                 "\u{0669}\u{066C}\u{0669}\u{0669}\u{0669}\u{066B}\u{0660}\u{0660}"
             ],
-            ['en_US', 'USD', ' 9999', ['display' => Currency::NO_SYMBOL], '9,999.00'],
+            ['en_US', 'USD', ' 9999', ['display' => CurrencyData::NO_SYMBOL], '9,999.00'],
             ['en_US', 'USD', '9999', ['precision' => 1], '$9,999.0'],
-            ['en_US', 'USD', '9999', ['precision' => 2, 'symbol' => '#'], '#9,999.00'],
+            ['en_US', 'USD', '9999', ['precision' => 2, 'symbol' => '#'], '# 9,999.00'],
             [
                 'en_US',
                 'USD',
                 '9999.99',
-                ['precision' => 2, 'symbol' => '#', 'display' => Currency::NO_SYMBOL],
+                ['precision' => 2, 'symbol' => '#', 'display' => CurrencyData::NO_SYMBOL],
                 '9,999.99'
             ],
         ];
@@ -243,7 +245,7 @@ class CurrencyTest extends TestCase
      * @param string $price
      * @param array $options
      * @param string $expected
-     * @throws \Zend_Currency_Exception
+     * @throws CurrencyException
      */
     public function testFormatTxtWithZendCurrency(string $price, array $options, string $expected): void
     {
@@ -251,7 +253,7 @@ class CurrencyTest extends TestCase
             ->expects(self::once())
             ->method('getCurrency')
             ->with($this->currencyCode)
-            ->willReturn(new \Zend_Currency($options, 'en_US'));
+            ->willReturn(new CurrencyData($options, 'en_US'));
         $this->serializer->method('serialize')->willReturnMap(
             [
                 [[], '[]']
@@ -273,7 +275,7 @@ class CurrencyTest extends TestCase
             ['9999', ['display' => Currency::USE_SHORTNAME, 'foo' => 'bar'], 'USD9,999.00'],
             ['9999', ['currency' => 'USD'], '$9,999.00'],
             ['9999', ['currency' => 'CNY'], 'CN¥9,999.00'],
-            ['9999', ['locale' => 'fr_FR'], "9\u{00A0}999,00\u{00A0}$"]
+            ['9999', ['locale' => 'fr_FR'], "9\u{202F}999,00\u{00A0}$"]
         ];
     }
 }
