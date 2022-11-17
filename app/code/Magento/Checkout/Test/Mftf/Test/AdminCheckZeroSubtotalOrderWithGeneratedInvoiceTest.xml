@@ -8,15 +8,15 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCheckZeroSubtotalOrderIsInProcessingStatusTest">
+    <test name="AdminCheckZeroSubtotalOrderWithGeneratedInvoiceTest">
         <annotations>
             <features value="Checkout"/>
-            <stories value="Zero Subtotal Orders have incorrect status"/>
-            <title value="Zero Subtotal Orders should have the 'Processing' status on creating"/>
-            <description value="Created order should be in Processing status"/>
-            <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-94178"/>
-            <useCaseId value="MAGETWO-71375"/>
+            <stories value="Zero Subtotal Checkout Order"/>
+            <title value="Zero Subtotal Order should have invoice generated when setting 'Automatically Invoice All Items' to Yes." />
+            <description value="Created order with automatically invoice generated."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-6722"/>
+            <useCaseId value="ENGCOM-5443"/>
             <group value="checkout"/>
         </annotations>
         <before>
@@ -38,6 +38,7 @@
             </createData>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
         </before>
 
         <after>
@@ -80,6 +81,14 @@
             <argument name="orderId" value="$grabOrderNumber"/>
             <argument name="status" value="Processing"/>
         </actionGroup>
+
+        <!-- Assert invoice in invoices grid -->
+        <actionGroup ref="FilterInvoiceGridByOrderIdWithCleanFiltersActionGroup" stepKey="filterInvoiceGridByOrderId">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <click selector="{{AdminInvoicesGridSection.firstRow}}" stepKey="opeCreatedInvoice"/>
+        <waitForPageLoad stepKey="waitForInvoiceDetailsPageToLoad"/>
+        <grabFromCurrentUrl regex="~/invoice_id/(\d+)/~" stepKey="grabInvoiceId"/>
 
     </test>
 </tests>
