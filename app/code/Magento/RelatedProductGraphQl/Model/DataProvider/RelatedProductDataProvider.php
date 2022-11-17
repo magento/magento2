@@ -118,7 +118,10 @@ class RelatedProductDataProvider
         $collection = $link->getLinkCollection();
         $collection->addFieldToFilter('product_id', ['in' => array_keys($productsByActualIds)]);
         $collection->addLinkTypeIdFilter();
-
+        // Fix for this issue https://github.com/magento/magento2/issues/36461
+        $collection->addProductIdFilter();
+        $collection->joinAttributes();
+        $collection->setOrder('position', 'ASC');
         //Prepare map
         $map = [];
         /** @var Link $item */
