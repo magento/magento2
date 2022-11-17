@@ -75,7 +75,6 @@ class SelectionTest extends TestCase
                 ['selection_price_type', 'selection_price_value']
             );
 
-
         $parentResources = $this->createMock(ResourceConnection::class);
         $parentResources->expects($this->once())->method('getConnection')->willReturn($connection);
         $parentResources->expects($this->once())->method('getTableName')
