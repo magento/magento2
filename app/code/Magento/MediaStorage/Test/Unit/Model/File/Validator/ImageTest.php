@@ -83,9 +83,12 @@ class ImageTest extends TestCase
     public function dataProviderForIsValid()
     {
         return [
-            'x-icon' => [dirname(__FILE__) . '/_files/favicon-x-icon.ico', 'image/x-icon', true],
-            'vnd-microsoft-icon' => [dirname(__FILE__) . '/_files/favicon-vnd-microsoft.ico', 'image/vnd.microsoft.icon', true],
-            'not-valid-ico' => [dirname(__FILE__) . '/_files/not-valid-file.ico', 'text/plain', false]
+            'x-icon' => [dirname(__FILE__) . '/_files/favicon-x-icon.ico',
+                'image/x-icon', true],
+            'vnd-microsoft-icon' => [dirname(__FILE__) . '/_files/favicon-vnd-microsoft.ico',
+                'image/vnd.microsoft.icon', true],
+            'not-valid-ico' => [dirname(__FILE__) . '/_files/not-valid-file.ico',
+                'text/plain', false]
         ];
     }
 }

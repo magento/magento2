@@ -87,20 +87,17 @@ class Image extends AbstractValidator
     public function isValid($filePath): bool
     {
         $fileMimeType = $this->fileMime->getMimeType($filePath);
-        $isValid = false;
+        $isValid = true;
 
         if (stripos(json_encode($this->imageMimeTypes), json_encode($fileMimeType)) !== false) {
-            $defaultAdapter = $this->config->getAdapterAlias();
             try {
-                $image = $this->imageFactory->create($filePath, $defaultAdapter);
+                $image = $this->imageFactory->create($filePath);
                 $image->open();
-                $isValid = true;
             } catch (\InvalidArgumentException $e) {
-                $adapters = $this->config->getAdapters();
-                unset($adapters[$defaultAdapter]);
-                $image = $this->imageFactory->create($filePath, array_key_first($adapters) ?? null);
-                $image->open();
-                $isValid = true;
+                if (stripos($fileMimeType, 'icon') !== false) {
+                    $image = $this->imageFactory->create($filePath, $this->getNonDefaultAdapter());
+                    $image->open();
+                }
             } catch (\Exception $e) {
                 $isValid = false;
                 $this->logger->critical($e, ['exception' => $e]);
@@ -108,5 +105,18 @@ class Image extends AbstractValidator
         }
 
         return $isValid;
+    }
+
+    /**
+     * Get non default image adapter
+     *
+     * @return string|null
+     */
+    private function getNonDefaultAdapter(): ?string
+    {
+        $defaultAdapter = $this->config->getAdapterAlias();
+        $adapters = $this->config->getAdapters();
+        unset($adapters[$defaultAdapter]);
+        return array_key_first($adapters) ?? null;
     }
 }
