@@ -16,8 +16,8 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\UrlFactory;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\UrlFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -161,15 +161,9 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
         }
 
         try {
-            // log in and send greeting email
+            //activate and send greeting email
             $customerEmail = $this->customerRepository->getById($customerId)->getEmail();
-            $customer = $this->customerAccountManagement->activate($customerEmail, $key);
-            $this->session->setCustomerDataAsLoggedIn($customer);
-            if ($this->getCookieManager()->getCookie('mage-cache-sessid')) {
-                $metadata = $this->getCookieMetadataFactory()->createCookieMetadata();
-                $metadata->setPath('/');
-                $this->getCookieManager()->deleteCookie('mage-cache-sessid', $metadata);
-            }
+            $this->customerAccountManagement->activate($customerEmail, $key);
             $this->messageManager->addSuccess($this->getSuccessMessage());
             $resultRedirect->setUrl($this->getSuccessRedirect());
             return $resultRedirect;
@@ -197,7 +191,7 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
                     'If you are a registered VAT customer, please click <a href="%1">here</a> to enter your shipping address for proper VAT calculation.',
                     $this->urlModel->getUrl('customer/address/edit')
                 );
-                // @codingStandardsIgnoreEnd
+            // @codingStandardsIgnoreEnd
             } else {
                 // @codingStandardsIgnoreStart
                 $message = __(
