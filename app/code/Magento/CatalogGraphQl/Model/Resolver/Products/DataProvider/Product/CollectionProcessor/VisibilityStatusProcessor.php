@@ -37,13 +37,6 @@ class VisibilityStatusProcessor implements CollectionProcessorInterface
     ): Collection {
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
-        if ($context) {
-            $store = $context->getExtensionAttributes()->getStore();
-            if ($store) {
-                $websiteId = $store->getWebsiteId();
-                $collection->addWebsiteFilter([$websiteId]);
-            }
-        }
 
         return $collection;
     }
