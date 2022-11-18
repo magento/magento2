@@ -85,8 +85,9 @@ class DisabledProductOptionPriceModifier implements PriceModifierInterface
         foreach ($this->getBundleIds($entityIds) as $entityId) {
             $entityId = (int) $entityId;
             foreach ($this->getWebsiteIdsOfProduct($entityId) as $websiteId) {
+                $websiteId = (int) $websiteId;
                 $productIdsDisabledRequired = $this->selectionProductsDisabledRequired
-                    ->getChildProductIds($entityId, (int)$websiteId);
+                    ->getChildProductIds($entityId, $websiteId);
                 if ($productIdsDisabledRequired) {
                     $connection = $this->resourceConnection->getConnection('indexer');
                     $select = $connection->select();
@@ -118,9 +119,8 @@ class DisabledProductOptionPriceModifier implements PriceModifierInterface
             ['product_in_websites' => $this->resourceConnection->getTableName('catalog_product_website')],
             ['website_id']
         )->where('product_in_websites.product_id = ?', $entityId);
-        foreach ($connection->fetchCol($select) as $websiteId) {
-            $this->websiteIdsOfProduct[$entityId][] = (int)$websiteId;
-        }
+        $this->websiteIdsOfProduct[$entityId] = $connection->fetchCol($select);
+
         return $this->websiteIdsOfProduct[$entityId];
     }
 
