@@ -13,6 +13,7 @@ use Magento\Framework\Module\Manager;
 use Magento\Reports\Model\ResourceModel\Order\Collection;
 use Magento\Reports\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Store\Model\Store;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Adminhtml dashboard totals bar
@@ -41,16 +42,17 @@ class Totals extends Bar
      * @param CollectionFactory $collectionFactory
      * @param Manager $moduleManager
      * @param array $data
+     * @param Period|null $period
      */
     public function __construct(
         Context $context,
         CollectionFactory $collectionFactory,
         Manager $moduleManager,
-        Period $period,
-        array $data = []
+        array $data = [],
+        ?Period $period = null
     ) {
         $this->_moduleManager = $moduleManager;
-        $this->period = $period;
+        $this->period = $period ?? ObjectManager::getInstance()->get(Period::class);
         parent::__construct($context, $collectionFactory, $data);
     }
 
