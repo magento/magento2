@@ -64,7 +64,7 @@ class PeriodValue extends Value
             if (!array_key_exists($value, $availableValues)) {
                 throw new LocalizedException(
                     __(
-                        'Please select a valid speed limit period in seconds: %1',
+                        'Please select a valid rate limit period in seconds: %1',
                         implode(', ', array_keys($availableValues))
                     )
                 );
