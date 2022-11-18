@@ -71,6 +71,11 @@ class InvoiceSenderTest extends TestCase
         $this->invoiceFactory = $this->objectManager->get(InvoiceInterfaceFactory::class);
         $this->invoiceIdentity = $this->objectManager->get(InvoiceIdentity::class);
         $this->logger = $this->objectManager->get(Logger::class);
+
+        $reflection = new \ReflectionClass(get_class($this->logger));
+        $reflectionProperty = $reflection->getProperty('minimumErrorLevel');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->logger, 400);
     }
 
     /**
@@ -241,5 +246,15 @@ class InvoiceSenderTest extends TestCase
     private function getOrder(string $incrementId): OrderInterface
     {
         return $this->orderFactory->create()->loadByIncrementId($incrementId);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        $reflectionProperty = new \ReflectionProperty(get_class($this->logger), 'minimumErrorLevel');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->logger, -1);
     }
 }

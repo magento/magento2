@@ -12,7 +12,6 @@ use Magento\Sales\Model\Order\Email\Container\ShipmentIdentity;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\ErrorLog\Logger;
 
 /**
  * @magentoAppArea frontend
@@ -31,9 +30,6 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
      */
     private $customerRepository;
 
-    /** @var Logger */
-    private $logger;
-
     /**
      * @inheritDoc
      */
@@ -42,7 +38,6 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
         $this->customerRepository = Bootstrap::getObjectManager()
             ->get(CustomerRepositoryInterface::class);
-        $this->logger = Bootstrap::getObjectManager()->get(Logger::class);
     }
 
     /**
@@ -61,9 +56,7 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
 
         $orderSender = Bootstrap::getObjectManager()
             ->create(\Magento\Sales\Model\Order\Email\Sender\ShipmentSender::class);
-        $this->logger->clearMessages();
         $result = $orderSender->send($shipment, true);
-        $this->assertEmpty($this->logger->getMessages());
 
         $this->assertTrue($result);
 
@@ -88,9 +81,7 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         $shipmentSender = $this->createShipmentSender($shipmentIdentity);
 
         $this->assertEmpty($shipment->getEmailSent());
-        $this->logger->clearMessages();
         $result = $shipmentSender->send($shipment, true);
-        $this->assertEmpty($this->logger->getMessages());
 
         $this->assertEquals(self::NEW_CUSTOMER_EMAIL, $shipmentIdentity->getCustomerEmail());
         $this->assertTrue($result);
@@ -111,9 +102,7 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         $shipmentSender = $this->createShipmentSender($shipmentIdentity);
 
         $this->assertEmpty($shipment->getEmailSent());
-        $this->logger->clearMessages();
         $result = $shipmentSender->send($shipment, true);
-        $this->assertEmpty($this->logger->getMessages());
 
         $this->assertEquals(self::OLD_CUSTOMER_EMAIL, $shipmentIdentity->getCustomerEmail());
         $this->assertTrue($result);
@@ -137,9 +126,7 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         $shipmentSender = $this->createShipmentSender($shipmentIdentity);
 
         $this->assertEmpty($shipment->getEmailSent());
-        $this->logger->clearMessages();
         $result = $shipmentSender->send($shipment, true);
-        $this->assertEmpty($this->logger->getMessages());
 
         $this->assertEquals(self::ORDER_EMAIL, $shipmentIdentity->getCustomerEmail());
         $this->assertTrue($result);

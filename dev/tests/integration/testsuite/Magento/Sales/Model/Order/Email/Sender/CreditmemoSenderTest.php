@@ -38,6 +38,11 @@ class CreditmemoSenderTest extends TestCase
     {
         $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
         $this->logger = Bootstrap::getObjectManager()->get(Logger::class);
+
+        $reflection = new \ReflectionClass(get_class($this->logger));
+        $reflectionProperty = $reflection->getProperty('minimumErrorLevel');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->logger, 400);
     }
 
     /**
@@ -196,5 +201,15 @@ class CreditmemoSenderTest extends TestCase
                     'identityContainer' => $creditmemoIdentity,
                 ]
             );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        $reflectionProperty = new \ReflectionProperty(get_class($this->logger), 'minimumErrorLevel');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->logger, -1);
     }
 }
