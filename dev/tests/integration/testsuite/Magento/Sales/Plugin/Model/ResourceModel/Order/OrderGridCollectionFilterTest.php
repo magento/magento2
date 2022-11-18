@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Plugin\Model\ResourceModel\Order;
 
+use DateTime;
+use DateTimeInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
@@ -74,6 +76,11 @@ class OrderGridCollectionFilterTest extends TestCase
     public function testAroundAddFieldToFilter($mainTable, $resourceModel, $field): void
     {
         $filterDate = "2021-12-13 00:00:00";
+        if ($mainTable == 'sales_order_grid') {
+            $filterDate = new DateTime($filterDate);
+            $filterDate->setTimezone(new \DateTimeZone($this->timeZone->getConfigTimezone()));
+            $filterDate->format('Y-m-d H:i:s');
+        }
         $convertedDate = $this->timeZone->convertConfigTimeToUtc($filterDate);
 
         $this->searchResult = $this->objectManager->create(
