@@ -1592,22 +1592,12 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         foreach ($this->_attributeValuesToSave as $table => $data) {
             $insert = [];
             foreach ($data as $attributeData) {
-                $select = $connection->select()->from($table, 'value_id')->where("entity_id = :entity_id AND attribute_id = :attribute_id");
-                $result = $connection->fetchOne($select, [
-                    'attribute_id' => $attributeData['attribute_id'],
-                    'entity_id' => $attributeData['entity_id']
-                ]);
-                if ($result) {
-                    $updateWhere = [];
-                    $updateWhere[] = sprintf('%s=%d', $connection->quoteIdentifier('entity_id'), $attributeData['entity_id']);
-                    $updateWhere[] = sprintf('%s=%d', $connection->quoteIdentifier('attribute_id'), $attributeData['attribute_id']);
-                    $connection->update($table, ['value' => $attributeData['value']], $updateWhere);
+                $whereValues = $attributeData;
+                unset($whereValues['value']);
+                if ($valueId = $this->checkExistingAttributeValue($table, $attributeData)) {
+                    $connection->update($table, ['value' => $attributeData['value']], $valueId);
                 } else {
-                    $insert[] = [
-                        'attribute_id' => $attributeData['attribute_id'],
-                        'entity_id' => $attributeData['entity_id'],
-                        'value' => $attributeData['value']
-                    ];
+                    $insert[] = $attributeData;
                 }
             }
 
@@ -1625,6 +1615,27 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $this->_attributeValuesToDelete = [];
 
         return $this;
+    }
+
+    /**
+     * Checks for existing attribute record
+     *
+     * @param string $table
+     * @param array $attributeData
+     * @return string
+     */
+    protected function checkExistingAttributeValue(string $table, array $attributeData): string
+    {
+        $connection = $this->getConnection();
+        $where = [];
+        unset($attributeData['value']);
+
+        foreach ($attributeData as $key => $val) {
+            $where[] = sprintf('%s = :%s', $key, $key);
+        }
+        $select = $connection->select()->from($table, 'value_id')->where(implode(' AND ', $where));
+
+        return $connection->fetchOne($select, $attributeData);
     }
 
     /**
