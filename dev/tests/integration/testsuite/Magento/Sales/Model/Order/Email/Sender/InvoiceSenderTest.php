@@ -57,6 +57,7 @@ class InvoiceSenderTest extends TestCase
     /** @var Logger */
     private $logger;
 
+    /** @var int */
     private $minErrorDefaultValue;
 
     /**
