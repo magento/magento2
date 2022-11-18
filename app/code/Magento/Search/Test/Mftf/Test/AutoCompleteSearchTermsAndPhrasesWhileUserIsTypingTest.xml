@@ -8,6 +8,7 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AutoCompleteSearchTermsAndPhrasesWhileUserIsTypingTest">
+
         <annotations>
             <stories value="Search Terms"/>
             <title value="In this test-case we need to verify that previously used earlier search terms are auto-complete"/>
@@ -67,5 +68,6 @@
         <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductNameSku">
             <argument name="productName" value="$$simpleProduct.name$$"/>
         </actionGroup>
+
     </test>
 </tests>
