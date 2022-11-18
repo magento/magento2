@@ -31,6 +31,8 @@ class CreditmemoSenderTest extends TestCase
     /** @var Logger */
     private $logger;
 
+    private $minErrorDefaultValue;
+
     /**
      * @inheritDoc
      */
@@ -42,7 +44,9 @@ class CreditmemoSenderTest extends TestCase
         $reflection = new \ReflectionClass(get_class($this->logger));
         $reflectionProperty = $reflection->getProperty('minimumErrorLevel');
         $reflectionProperty->setAccessible(true);
+        $this->minErrorDefaultValue = $reflectionProperty->getValue($this->logger);
         $reflectionProperty->setValue($this->logger, 400);
+        $this->logger->clearMessages();
     }
 
     /**
@@ -61,7 +65,6 @@ class CreditmemoSenderTest extends TestCase
         $this->assertEmpty($creditmemo->getEmailSent());
 
         $creditmemoSender = Bootstrap::getObjectManager()->create(CreditmemoSender::class);
-        $this->logger->clearMessages();
         $result = $creditmemoSender->send($creditmemo, true);
         $this->assertEmpty($this->logger->getMessages());
 
@@ -88,7 +91,6 @@ class CreditmemoSenderTest extends TestCase
 
         $craditmemoIdentity = $this->createCreditMemoIdentity();
         $creditmemoSender = $this->createCreditMemoSender($craditmemoIdentity);
-        $this->logger->clearMessages();
         $result = $creditmemoSender->send($creditmemo, true);
         $this->assertEmpty($this->logger->getMessages());
 
@@ -112,7 +114,6 @@ class CreditmemoSenderTest extends TestCase
 
         $craditmemoIdentity = $this->createCreditMemoIdentity();
         $creditmemoSender = $this->createCreditMemoSender($craditmemoIdentity);
-        $this->logger->clearMessages();
         $result = $creditmemoSender->send($creditmemo, true);
         $this->assertEmpty($this->logger->getMessages());
 
@@ -136,7 +137,6 @@ class CreditmemoSenderTest extends TestCase
 
         $creditmemoIdentity = $this->createCreditMemoIdentity();
         $creditmemoSender = $this->createCreditMemoSender($creditmemoIdentity);
-        $this->logger->clearMessages();
         $result = $creditmemoSender->send($creditmemo, true);
         $this->assertEmpty($this->logger->getMessages());
 
@@ -165,7 +165,6 @@ class CreditmemoSenderTest extends TestCase
         $creditmemo = Bootstrap::getObjectManager()->create(Creditmemo::class);
         $creditmemo->setOrder($order);
         $creditmemoSender = Bootstrap::getObjectManager()->create(CreditmemoSender::class);
-        $this->logger->clearMessages();
         $result = $creditmemoSender->send($creditmemo);
         $this->assertEmpty($this->logger->getMessages());
         $this->assertFalse($result);
@@ -210,6 +209,6 @@ class CreditmemoSenderTest extends TestCase
     {
         $reflectionProperty = new \ReflectionProperty(get_class($this->logger), 'minimumErrorLevel');
         $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->logger, -1);
+        $reflectionProperty->setValue($this->logger, $this->minErrorDefaultValue);
     }
 }

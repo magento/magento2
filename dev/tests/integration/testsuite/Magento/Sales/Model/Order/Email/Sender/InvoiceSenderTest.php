@@ -57,6 +57,8 @@ class InvoiceSenderTest extends TestCase
     /** @var Logger */
     private $logger;
 
+    private $minErrorDefaultValue;
+
     /**
      * @inheritdoc
      */
@@ -75,7 +77,9 @@ class InvoiceSenderTest extends TestCase
         $reflection = new \ReflectionClass(get_class($this->logger));
         $reflectionProperty = $reflection->getProperty('minimumErrorLevel');
         $reflectionProperty->setAccessible(true);
+        $this->minErrorDefaultValue = $reflectionProperty->getValue($this->logger);
         $reflectionProperty->setValue($this->logger, 400);
+        $this->logger->clearMessages();
     }
 
     /**
@@ -94,7 +98,6 @@ class InvoiceSenderTest extends TestCase
         $invoice->setBaseShippingAmount(5);
 
         $this->assertEmpty($invoice->getEmailSent());
-        $this->logger->clearMessages();
         $result = $this->invoiceSender->send($invoice, true);
         $this->assertEmpty($this->logger->getMessages());
 
@@ -121,7 +124,6 @@ class InvoiceSenderTest extends TestCase
         $invoice = $this->createInvoice($order);
 
         $this->assertEmpty($invoice->getEmailSent());
-        $this->logger->clearMessages();
         $result = $this->invoiceSender->send($invoice, true);
         $this->assertEmpty($this->logger->getMessages());
 
@@ -143,7 +145,6 @@ class InvoiceSenderTest extends TestCase
         $invoice = $this->createInvoice($order);
 
         $this->assertEmpty($invoice->getEmailSent());
-        $this->logger->clearMessages();
         $result = $this->invoiceSender->send($invoice, true);
         $this->assertEmpty($this->logger->getMessages());
 
@@ -165,7 +166,6 @@ class InvoiceSenderTest extends TestCase
         $invoice = $this->createInvoice($order);
 
         $this->assertEmpty($invoice->getEmailSent());
-        $this->logger->clearMessages();
         $result = $this->invoiceSender->send($invoice, true);
         $this->assertEmpty($this->logger->getMessages());
 
@@ -186,7 +186,6 @@ class InvoiceSenderTest extends TestCase
         $invoice = $order->getInvoiceCollection()
             ->addAttributeToFilter(InvoiceInterface::ORDER_ID, $order->getID())
             ->getFirstItem();
-        $this->logger->clearMessages();
         $result = $this->invoiceSender->send($invoice);
         $this->assertEmpty($this->logger->getMessages());
         $this->assertFalse($result);
@@ -215,7 +214,6 @@ class InvoiceSenderTest extends TestCase
         $order->loadByIncrementId('100000004');
         $order->setCustomerEmail('customer@example.com');
         $invoice = $this->createInvoice($order);
-        $this->logger->clearMessages();
         $result = $this->invoiceSender->send($invoice);
         $this->assertEmpty($this->logger->getMessages());
         $this->assertFalse($result);
@@ -255,6 +253,6 @@ class InvoiceSenderTest extends TestCase
     {
         $reflectionProperty = new \ReflectionProperty(get_class($this->logger), 'minimumErrorLevel');
         $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->logger, -1);
+        $reflectionProperty->setValue($this->logger, $this->minErrorDefaultValue);
     }
 }
