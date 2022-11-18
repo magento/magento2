@@ -19,6 +19,7 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use PHPUnit\Framework\TestCase;
+use Magento\TestFramework\ErrorLog\Logger;
 
 /**
  * Checks the sending of order invoice email to the customer.
@@ -53,6 +54,9 @@ class InvoiceSenderTest extends TestCase
     /** @var InvoiceIdentity */
     private $invoiceIdentity;
 
+    /** @var Logger */
+    private $logger;
+
     /**
      * @inheritdoc
      */
@@ -60,30 +64,13 @@ class InvoiceSenderTest extends TestCase
     {
         parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
-
         $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
-
-        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $logger->expects($this->never())->method('error')
-            ->with('Environment emulation nesting is not allowed.');
-
-        $appEmulation = $this->objectManager->create(
-            \Magento\Store\Model\App\Emulation::class,
-            [
-                'logger' => $logger,
-            ]
-        );
-        $this->invoiceSender = $this->objectManager->create(
-            InvoiceSender::class,
-            [
-                'appEmulation' => $appEmulation,
-            ]
-        );
-
+        $this->invoiceSender = $this->objectManager->get(InvoiceSender::class);
         $this->transportBuilderMock = $this->objectManager->get(TransportBuilderMock::class);
         $this->orderFactory = $this->objectManager->get(OrderInterfaceFactory::class);
         $this->invoiceFactory = $this->objectManager->get(InvoiceInterfaceFactory::class);
         $this->invoiceIdentity = $this->objectManager->get(InvoiceIdentity::class);
+        $this->logger = $this->objectManager->get(Logger::class);
     }
 
     /**
@@ -102,8 +89,9 @@ class InvoiceSenderTest extends TestCase
         $invoice->setBaseShippingAmount(5);
 
         $this->assertEmpty($invoice->getEmailSent());
-
+        $this->logger->clearMessages();
         $result = $this->invoiceSender->send($invoice, true);
+        $this->assertEmpty($this->logger->getMessages());
 
         $this->assertTrue($result);
         $this->assertNotEmpty($invoice->getEmailSent());
@@ -128,7 +116,9 @@ class InvoiceSenderTest extends TestCase
         $invoice = $this->createInvoice($order);
 
         $this->assertEmpty($invoice->getEmailSent());
+        $this->logger->clearMessages();
         $result = $this->invoiceSender->send($invoice, true);
+        $this->assertEmpty($this->logger->getMessages());
 
         $this->assertEquals(self::NEW_CUSTOMER_EMAIL, $this->invoiceIdentity->getCustomerEmail());
         $this->assertTrue($result);
@@ -148,7 +138,9 @@ class InvoiceSenderTest extends TestCase
         $invoice = $this->createInvoice($order);
 
         $this->assertEmpty($invoice->getEmailSent());
+        $this->logger->clearMessages();
         $result = $this->invoiceSender->send($invoice, true);
+        $this->assertEmpty($this->logger->getMessages());
 
         $this->assertEquals(self::OLD_CUSTOMER_EMAIL, $this->invoiceIdentity->getCustomerEmail());
         $this->assertTrue($result);
@@ -168,7 +160,9 @@ class InvoiceSenderTest extends TestCase
         $invoice = $this->createInvoice($order);
 
         $this->assertEmpty($invoice->getEmailSent());
+        $this->logger->clearMessages();
         $result = $this->invoiceSender->send($invoice, true);
+        $this->assertEmpty($this->logger->getMessages());
 
         $this->assertEquals(self::ORDER_EMAIL, $this->invoiceIdentity->getCustomerEmail());
         $this->assertTrue($result);
@@ -187,7 +181,9 @@ class InvoiceSenderTest extends TestCase
         $invoice = $order->getInvoiceCollection()
             ->addAttributeToFilter(InvoiceInterface::ORDER_ID, $order->getID())
             ->getFirstItem();
+        $this->logger->clearMessages();
         $result = $this->invoiceSender->send($invoice);
+        $this->assertEmpty($this->logger->getMessages());
         $this->assertFalse($result);
         $invoice = $order->getInvoiceCollection()->clear()->getFirstItem();
         $this->assertEmpty($invoice->getEmailSent());
@@ -214,7 +210,9 @@ class InvoiceSenderTest extends TestCase
         $order->loadByIncrementId('100000004');
         $order->setCustomerEmail('customer@example.com');
         $invoice = $this->createInvoice($order);
+        $this->logger->clearMessages();
         $result = $this->invoiceSender->send($invoice);
+        $this->assertEmpty($this->logger->getMessages());
         $this->assertFalse($result);
         $this->assertTrue($invoice->getSendEmail());
     }

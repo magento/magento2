@@ -15,6 +15,7 @@ use Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use Magento\TestFramework\ErrorLog\Logger;
 
 class CreditmemoSenderTest extends TestCase
 {
@@ -27,12 +28,16 @@ class CreditmemoSenderTest extends TestCase
      */
     private $customerRepository;
 
+    /** @var Logger */
+    private $logger;
+
     /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
         $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
+        $this->logger = Bootstrap::getObjectManager()->get(Logger::class);
     }
 
     /**
@@ -50,23 +55,10 @@ class CreditmemoSenderTest extends TestCase
 
         $this->assertEmpty($creditmemo->getEmailSent());
 
-        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $logger->expects($this->never())->method('error')
-            ->with('Environment emulation nesting is not allowed.');
-
-        $appEmulation = Bootstrap::getObjectManager()->create(
-            \Magento\Store\Model\App\Emulation::class,
-            [
-                'logger' => $logger,
-            ]
-        );
-        $creditmemoSender = Bootstrap::getObjectManager()->create(
-            CreditmemoSender::class,
-            [
-                'appEmulation' => $appEmulation,
-            ]
-        );
+        $creditmemoSender = Bootstrap::getObjectManager()->create(CreditmemoSender::class);
+        $this->logger->clearMessages();
         $result = $creditmemoSender->send($creditmemo, true);
+        $this->assertEmpty($this->logger->getMessages());
 
         $this->assertTrue($result);
         $this->assertNotEmpty($creditmemo->getEmailSent());
@@ -91,7 +83,9 @@ class CreditmemoSenderTest extends TestCase
 
         $craditmemoIdentity = $this->createCreditMemoIdentity();
         $creditmemoSender = $this->createCreditMemoSender($craditmemoIdentity);
+        $this->logger->clearMessages();
         $result = $creditmemoSender->send($creditmemo, true);
+        $this->assertEmpty($this->logger->getMessages());
 
         $this->assertEquals(self::NEW_CUSTOMER_EMAIL, $craditmemoIdentity->getCustomerEmail());
         $this->assertTrue($result);
@@ -113,7 +107,9 @@ class CreditmemoSenderTest extends TestCase
 
         $craditmemoIdentity = $this->createCreditMemoIdentity();
         $creditmemoSender = $this->createCreditMemoSender($craditmemoIdentity);
+        $this->logger->clearMessages();
         $result = $creditmemoSender->send($creditmemo, true);
+        $this->assertEmpty($this->logger->getMessages());
 
         $this->assertEquals(self::OLD_CUSTOMER_EMAIL, $craditmemoIdentity->getCustomerEmail());
         $this->assertTrue($result);
@@ -135,7 +131,9 @@ class CreditmemoSenderTest extends TestCase
 
         $creditmemoIdentity = $this->createCreditMemoIdentity();
         $creditmemoSender = $this->createCreditMemoSender($creditmemoIdentity);
+        $this->logger->clearMessages();
         $result = $creditmemoSender->send($creditmemo, true);
+        $this->assertEmpty($this->logger->getMessages());
 
         $this->assertEquals(self::ORDER_EMAIL, $creditmemoIdentity->getCustomerEmail());
         $this->assertTrue($result);
@@ -162,7 +160,9 @@ class CreditmemoSenderTest extends TestCase
         $creditmemo = Bootstrap::getObjectManager()->create(Creditmemo::class);
         $creditmemo->setOrder($order);
         $creditmemoSender = Bootstrap::getObjectManager()->create(CreditmemoSender::class);
+        $this->logger->clearMessages();
         $result = $creditmemoSender->send($creditmemo);
+        $this->assertEmpty($this->logger->getMessages());
         $this->assertFalse($result);
         $this->assertTrue($creditmemo->getSendEmail());
     }
