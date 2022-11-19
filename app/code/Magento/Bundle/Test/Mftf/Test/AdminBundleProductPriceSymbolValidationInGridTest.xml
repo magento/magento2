@@ -80,7 +80,7 @@
         </actionGroup>
         <!-- Asserting with the special price value contains the percentage value -->
         <actionGroup ref="AdminAssertSpecialPriceAttributeValueOnProductGridPageActionGroup" stepKey="assertSpecialPricePercentageSymbol">
-            <argument name="expectedValue" value="90.00%"/>
+            <argument name="expectedValue" value="90.000000%"/>
         </actionGroup>
-    </test> 
+    </test>
 </tests>
