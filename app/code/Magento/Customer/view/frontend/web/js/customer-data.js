@@ -17,9 +17,7 @@ define([
 ], function ($, _, ko, sectionConfig, url) {
     'use strict';
 
-    var options = {
-            cookieLifeTime: 86400 //1 day by default
-        },
+    var options = {},
         storage,
         storageInvalidation,
         invalidateCacheBySessionTimeOut,
@@ -33,12 +31,14 @@ define([
     options.sectionLoadUrl = url.build('customer/section/load');
 
     function initStorage() {
-        $.cookieStorage.setConf({
-            path: '/',
-            expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000)
-        });
-        storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
-        storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
+        if (options.cookieLifeTime !== 'undefined') {
+            $.cookieStorage.setConf({
+                path: '/',
+                expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000)
+            });
+            storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
+            storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
+        }
     }
 
     // Initialize storage with default parameters to prevent JS errors while component still not initialized
