@@ -191,6 +191,11 @@
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
         <plugin name="availableProductsFilter" type="Magento\CatalogGraphQl\Plugin\AvailableProductsFilter" />
     </type>
+    <type name="Magento\CatalogGraphQl\Model\Category\Hydrator">
+        <arguments>
+            <argument name="dataObjectProcessor" xsi:type="object">Magento\CatalogGraphQl\Category\DataObjectProcessor</argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ChildProduct"
                  type="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product">
         <arguments>
@@ -204,6 +209,18 @@
         <arguments>
             <argument name="productDataProvider" xsi:type="object">
                 Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ChildProduct
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType
+        name="Magento\CatalogGraphQl\Category\DataObjectProcessor"
+        type="Magento\Framework\Reflection\DataObjectProcessor"
+    >
+        <arguments>
+            <argument name="excludedMethodsClassMap" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="array">
+                    <item name="getChildren" xsi:type="string">getChildren</item>
+                </item>
             </argument>
         </arguments>
     </virtualType>
