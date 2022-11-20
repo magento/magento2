@@ -54,6 +54,7 @@ class Consumer
         $this->scope = $scope;
         $this->scope->setCurrentScope('adminhtml');
         $this->save = ObjectManager::getInstance()->get(Save::class);
+        $this->scope->setCurrentScope('global');
     }
     /**
      * Process Consumer
