@@ -19,8 +19,6 @@
         </annotations>
 
         <before>
-            <!--Enable Flat Rate-->
-            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!-- Enable Back Orders-->
             <magentoCLI command="config:set cataloginventory/item_options/backorders 1" stepKey="EnableBackorders"/>
             <!--Create Category-->
