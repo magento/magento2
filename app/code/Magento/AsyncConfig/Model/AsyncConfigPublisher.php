@@ -86,10 +86,10 @@ class AsyncConfigPublisher implements \Magento\AsyncConfig\Api\AsyncConfigPublis
         if (isset($configData['groups']['placeholder'])) {
             foreach ($configData['groups']['placeholder']['fields'] as &$data) {
                 if ($data['value']['tmp_name']) {
-                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $newPath =
-                        $this->dir->getPath(DirectoryList::TMP)
-                        . '/' . pathinfo($data['value']['tmp_name'])['filename'];
+                        $this->dir->getPath(DirectoryList::TMP) . '/' .
+                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        pathinfo($data['value']['tmp_name'])['filename'];
                     $this->file->mv(
                         $data['value']['tmp_name'],
                         $newPath

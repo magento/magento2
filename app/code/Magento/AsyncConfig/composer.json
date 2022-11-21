@@ -9,7 +9,7 @@
         "magento/framework": "*",
         "magento/framework-message-queue": "*",
         "magento/module-config": "*",
-        "magento/module-MediaGalleryIntegration": "*"
+        "magento/module-media-gallery-integration": "*"
     },
     "type": "magento2-module",
     "license": [
