@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model\Cart;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Cart\BuyRequest\BuyRequestBuilder;
@@ -23,29 +21,6 @@ use Magento\Framework\Message\MessageInterface;
  */
 class AddProductsToCart
 {
-    /**#@+
-     * Error message codes
-     */
-    private const ERROR_PRODUCT_NOT_FOUND = 'PRODUCT_NOT_FOUND';
-    private const ERROR_INSUFFICIENT_STOCK = 'INSUFFICIENT_STOCK';
-    private const ERROR_NOT_SALABLE = 'NOT_SALABLE';
-    private const ERROR_UNDEFINED = 'UNDEFINED';
-    /**#@-*/
-
-    /**
-     * List of error messages and codes.
-     */
-    private const MESSAGE_CODES = [
-        'Could not find a product with SKU' => self::ERROR_PRODUCT_NOT_FOUND,
-        'The required options you selected are not available' => self::ERROR_NOT_SALABLE,
-        'Product that you are trying to add is not available.' => self::ERROR_NOT_SALABLE,
-        'This product is out of stock' => self::ERROR_INSUFFICIENT_STOCK,
-        'There are no source items' => self::ERROR_NOT_SALABLE,
-        'The fewest you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
-        'The most you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
-        'The requested qty is not available' => self::ERROR_INSUFFICIENT_STOCK,
-    ];
-
     /**
      * @var CartRepositoryInterface
      */
@@ -67,25 +42,29 @@ class AddProductsToCart
     private $productReader;
 
     /**
-     * @param ProductRepositoryInterface $productRepository
+     * @var AddProductsToCartError
+     */
+    private $error;
+
+    /**
      * @param CartRepositoryInterface $cartRepository
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param BuyRequestBuilder $requestBuilder
-     * @param ProductReaderInterface|null $productReader
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param ProductReaderInterface $productReader
+     * @param AddProductsToCartError $addProductsToCartError
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
         CartRepositoryInterface $cartRepository,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
         BuyRequestBuilder $requestBuilder,
-        ProductReaderInterface $productReader = null
+        ProductReaderInterface $productReader,
+        AddProductsToCartError $addProductsToCartError
     ) {
         $this->cartRepository = $cartRepository;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->requestBuilder = $requestBuilder;
-        $this->productReader = $productReader ?: ObjectManager::getInstance()->get(ProductReaderInterface::class);
+        $this->productReader = $productReader;
+        $this->error = $addProductsToCartError;
     }
 
     /**
@@ -106,7 +85,7 @@ class AddProductsToCart
 
             /** @var MessageInterface $error */
             foreach ($errors as $error) {
-                $allErrors[] = $this->createError($error->getText());
+                $allErrors[] = $this->error->create($error->getText());
             }
         }
 
@@ -181,14 +160,14 @@ class AddProductsToCart
         $result = null;
 
         if ($cartItem->getQuantity() <= 0) {
-            $errors[] = $this->createError(
+            $errors[] = $this->error->create(
                 __('The product quantity should be greater than 0')->render(),
                 $cartItemPosition
             );
         } else {
             $product = $this->productReader->getProductBySku($sku);
             if (!$product || !$product->isSaleable() || !$product->isAvailable()) {
-                $errors[] = $this->createError(
+                $errors[] = $this->error->create(
                     __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
                     $cartItemPosition
                 );
@@ -196,7 +175,7 @@ class AddProductsToCart
                 try {
                     $result = $cart->addProduct($product, $this->requestBuilder->build($cartItem));
                 } catch (\Throwable $e) {
-                    $errors[] = $this->createError(
+                    $errors[] = $this->error->create(
                         __($e->getMessage())->render(),
                         $cartItemPosition
                     );
@@ -205,48 +184,12 @@ class AddProductsToCart
 
             if (is_string($result)) {
                 foreach (array_unique(explode("\n", $result)) as $error) {
-                    $errors[] = $this->createError(__($error)->render(), $cartItemPosition);
+                    $errors[] = $this->error->create(__($error)->render(), $cartItemPosition);
                 }
             }
         }
 
         return $errors;
-    }
-
-    /**
-     * Returns an error object
-     *
-     * @param string $message
-     * @param int $cartItemPosition
-     * @return Data\Error
-     */
-    private function createError(string $message, int $cartItemPosition = 0): Data\Error
-    {
-        return new Data\Error(
-            $message,
-            $this->getErrorCode($message),
-            $cartItemPosition
-        );
-    }
-
-    /**
-     * Get message error code.
-     *
-     * TODO: introduce a separate class for getting error code from a message
-     *
-     * @param string $message
-     * @return string
-     */
-    private function getErrorCode(string $message): string
-    {
-        foreach (self::MESSAGE_CODES as $codeMessage => $code) {
-            if (false !== stripos($message, $codeMessage)) {
-                return $code;
-            }
-        }
-
-        /* If no code was matched, return the default one */
-        return self::ERROR_UNDEFINED;
     }
 
     /**
