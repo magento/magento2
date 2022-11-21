@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCatalogProductFieldsAutoGenerationSection">
+        <element name="productFieldsAutoGeneration" type="select" selector="#catalog_fields_masks-link"/>
+        <element name="CheckIfTabExpand" type="button" selector="#catalog_fields_masks-link:not(.open)"/>
+        <element name="openedProductFieldsAutoGeneration" type="button" selector="#catalog_fields_masks-link.open"/>
+        <element name="metaDescriptionInput" type="text" selector="groups[fields_masks][fields][meta_description][value]"/>
+    </section>
+</sections>
