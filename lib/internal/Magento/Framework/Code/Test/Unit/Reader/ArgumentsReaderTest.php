@@ -270,8 +270,18 @@ class ArgumentsReaderTest extends TestCase
             ]
         );
         $expectedResult = [
-            ['name' => 'stdClassObject', 'position' => 0, 'type' => '\stdClass'],
-            ['name' => 'secondClass', 'position' => 1, 'type' => '\ClassExtendsDefaultPhpType'],
+            [
+                'name' => 'stdClassObject',
+                'position' => 0,
+                'type' => '\stdClass',
+                'isNamedArgument' => false
+            ],
+            [
+                'name' => 'secondClass',
+                'position' => 1,
+                'type' => '\ClassExtendsDefaultPhpType',
+                'isNamedArgument' => false
+            ],
         ];
         $this->assertEquals($expectedResult, $actualResult);
     }
@@ -287,8 +297,17 @@ class ArgumentsReaderTest extends TestCase
             ]
         );
         $expectedResult = [
-            ['name' => 'secondClass', 'position' => 0, 'type' => '\ClassExtendsDefaultPhpType'],
-            ['name' => 'stdClassObject', 'position' => 1, 'type' => '\stdClass'],
+            [
+                'name' => 'secondClass',
+                'position' => 0,
+                'type' => '\ClassExtendsDefaultPhpType',
+                'isNamedArgument' => false],
+            [
+                'name' => 'stdClassObject',
+                'position' => 1,
+                'type' => '\stdClass',
+                'isNamedArgument' => false
+            ],
         ];
         $this->assertEquals($expectedResult, $actualResult);
     }
@@ -304,8 +323,72 @@ class ArgumentsReaderTest extends TestCase
             ]
         );
         $expectedResult = [
-            ['name' => 'stdClassObject', 'position' => 0, 'type' => '\stdClass'],
-            ['name' => 'secondClass', 'position' => 1, 'type' => '\ClassExtendsDefaultPhpType'],
+            [
+                'name' => 'stdClassObject',
+                'position' => 0,
+                'type' => '\stdClass',
+                'isNamedArgument' => false
+            ],
+            [
+                'name' => 'secondClass',
+                'position' => 1,
+                'type' => '\ClassExtendsDefaultPhpType',
+                'isNamedArgument' => false
+            ],
+        ];
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    public function testGetParentCallWithNamedArguments()
+    {
+        $class = new \ReflectionClass('ClassWithNamedArgumentsForParentCall');
+        $actualResult = $this->_model->getParentCall(
+            $class,
+            [
+                'stdClassObject' => ['type' => '\stdClass'],
+                'runeTimeException' => ['type' => '\ClassExtendsDefaultPhpType']
+            ]
+        );
+        $expectedResult = [
+            [
+                'name' => 'stdClassObject',
+                'position' => 0,
+                'type' => '\stdClass',
+                'isNamedArgument' => true
+            ],
+            [
+                'name' => 'runeTimeException',
+                'position' => 1,
+                'type' => '\ClassExtendsDefaultPhpType',
+                'isNamedArgument' => true
+            ],
+        ];
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    public function testGetParentCallWithMixedArguments()
+    {
+        $class = new \ReflectionClass('ClassWithMixedArgumentsForParentCall');
+        $actualResult = $this->_model->getParentCall(
+            $class,
+            [
+                'stdClassObject' => ['type' => '\stdClass'],
+                'runeTimeException' => ['type' => '\ClassExtendsDefaultPhpType']
+            ]
+        );
+        $expectedResult = [
+            [
+                'name' => 'stdClassObject',
+                'position' => 0,
+                'type' => '\stdClass',
+                'isNamedArgument' => false
+            ],
+            [
+                'name' => 'runeTimeException',
+                'position' => 1,
+                'type' => '\ClassExtendsDefaultPhpType',
+                'isNamedArgument' => true
+            ],
         ];
         $this->assertEquals($expectedResult, $actualResult);
     }
