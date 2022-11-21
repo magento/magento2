@@ -66,16 +66,6 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
     protected $session;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     */
-    private $cookieMetadataFactory;
-
-    /**
-     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
-     */
-    private $cookieMetadataManager;
-
-    /**
      * @param Context $context
      * @param Session $customerSession
      * @param ScopeConfigInterface $scopeConfig
@@ -103,38 +93,6 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
         $this->addressHelper = $addressHelper;
         $this->urlModel = $urlFactory->create();
         parent::__construct($context);
-    }
-
-    /**
-     * Retrieve cookie manager
-     *
-     * @deprecated 101.0.0
-     * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
-     */
-    private function getCookieManager()
-    {
-        if (!$this->cookieMetadataManager) {
-            $this->cookieMetadataManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class
-            );
-        }
-        return $this->cookieMetadataManager;
-    }
-
-    /**
-     * Retrieve cookie metadata factory
-     *
-     * @deprecated 101.0.0
-     * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     */
-    private function getCookieMetadataFactory()
-    {
-        if (!$this->cookieMetadataFactory) {
-            $this->cookieMetadataFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
-            );
-        }
-        return $this->cookieMetadataFactory;
     }
 
     /**
