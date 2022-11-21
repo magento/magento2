@@ -1544,7 +1544,11 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     protected function _updateAttribute($object, $attribute, $valueId, $value)
     {
-        return $this->_saveAttribute($object, $attribute, $value);
+        $table = $attribute->getBackend()->getTable();
+        $connection = $this->getConnection();
+        $connection->update($table, ['value' => $this->_prepareValueForSave($value, $attribute)], 'value_id = ' . $valueId);
+
+        return $this;
     }
 
     /**
@@ -1590,20 +1594,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     {
         $connection = $this->getConnection();
         foreach ($this->_attributeValuesToSave as $table => $data) {
-            $insert = [];
-            foreach ($data as $attributeData) {
-                $whereValues = $attributeData;
-                unset($whereValues['value']);
-                if ($valueId = $this->checkExistingAttributeValue($table, $attributeData)) {
-                    $connection->update($table, ['value' => $attributeData['value']], $valueId);
-                } else {
-                    $insert[] = $attributeData;
-                }
-            }
-
-            if (!empty($insert)) {
-                $connection->insertArray($table, array_keys($insert[0]), $insert);
-            }
+            $connection->insertOnDuplicate($table, $data, array_keys($data[0]));
         }
 
         foreach ($this->_attributeValuesToDelete as $table => $valueIds) {
@@ -1615,27 +1606,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $this->_attributeValuesToDelete = [];
 
         return $this;
-    }
-
-    /**
-     * Checks for existing attribute record
-     *
-     * @param string $table
-     * @param array $attributeData
-     * @return string
-     */
-    protected function checkExistingAttributeValue(string $table, array $attributeData): string
-    {
-        $connection = $this->getConnection();
-        $where = [];
-        unset($attributeData['value']);
-
-        foreach ($attributeData as $key => $val) {
-            $where[] = sprintf('%s = :%s', $key, $key);
-        }
-        $select = $connection->select()->from($table, 'value_id')->where(implode(' AND ', $where));
-
-        return $connection->fetchOne($select, $attributeData);
     }
 
     /**
