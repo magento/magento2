@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderCheckCommentsHistoryTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Admin order page"/>
+            <title value="Check Comments History Tab"/>
+            <description value="Check if order comments history tab is loading"/>
+            <severity value="MINOR"/>
+            <testCaseId value="AC-7087"/>
+            <useCaseId value="ACP2E-1369"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Customer is created -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Login to Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- Delete products -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+
+            <!-- Delete Category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Delete Customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Create new customer order -->
+        <comment userInput="Create new customer order" stepKey="createNewCustomerOrderComment"/>
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Add Simple product to order -->
+        <comment userInput="Add Simple product to order" stepKey="addSimpleProductToOrderComment"/>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToTheOrder">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <!-- Select FlatRate shipping method -->
+        <comment userInput="Select FlatRate shipping method" stepKey="selectFlatRateShippingMethodComment"/>
+        <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <!-- Submit order -->
+        <comment userInput="Submit order" stepKey="submitOrderComment"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
+        <!-- Verify order information -->
+        <comment userInput="Verify order information" stepKey="verifyOrderInformationComment"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+        <comment userInput="BIC workaround" stepKey="orderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+
+        <!--Go to Comments history and switch to Information -->
+        <click selector="{{AdminOrderDetailsOrderViewSection.commentsHistory}}" stepKey="goToCommentsHistory1"/>
+        <click selector="{{AdminOrderDetailsOrderViewSection.information}}" stepKey="goToInformation"/>
+        <see userInput="A technical problem with the server created an error" stepKey="seeTechnicalErrorMessage"/>
+
+        <!--Go to Comments history and don't see the error message -->
+        <click selector="{{AdminOrderDetailsOrderViewSection.commentsHistory}}" stepKey="goToCommentsHistory2"/>
+        <waitForPageLoad stepKey="waitForCommentsHistoryPage"/>
+        <see userInput="Order Placed by Store Administrator" stepKey="seeMessageOrderCreatedByAdmin"/>
+        <dontSee userInput="A technical problem with the server created an error" stepKey="dontSeeTechnicalErrorMessage"/>
+
+    </test>
+</tests>
