@@ -95,7 +95,7 @@ class Store extends Column
         $content = '';
         $origStores = $item[$this->storeKey] ?? null;
         
-        if (is_null($origStores)) {
+        if ($origStores === null) {
             return '';
         }
         if (!is_array($origStores)) {
