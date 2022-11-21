@@ -27,6 +27,15 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
     private const OLD_CUSTOMER_EMAIL = 'customer@example.com';
     private const ORDER_EMAIL = 'customer@example.com';
 
+    /** @var ObjectManagerInterface */
+    private $objectManager;
+
+    /** @var Logger */
+    private $logger;
+
+    /** @var int */
+    private $minErrorDefaultValue;
+
     /**
      * @var CustomerRepository
      */
@@ -38,7 +47,17 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->customerRepository = Bootstrap::getObjectManager()
+
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->objectManager->get(\Magento\Framework\App\State::class)->setMode(State::MODE_PRODUCTION);
+        $this->logger = $this->objectManager->get(Logger::class);
+        $reflection = new \ReflectionClass(get_class($this->logger));
+        $reflectionProperty = $reflection->getProperty('minimumErrorLevel');
+        $reflectionProperty->setAccessible(true);
+        $this->minErrorDefaultValue = $reflectionProperty->getValue($this->logger);
+        $reflectionProperty->setValue($this->logger, 400);
+        $this->logger->clearMessages();
+        $this->customerRepository = $this->objectManager
             ->get(CustomerRepositoryInterface::class);
     }
 
@@ -47,27 +66,19 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
      */
     public function testSend()
     {
-        Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
-        $order = Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
+        $this->objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
         $order->setCustomerEmail('customer@example.com');
 
-        $shipment = Bootstrap::getObjectManager()->get(ShipmentFactory::class)->create($order);
+        $shipment = $this->objectManager->get(ShipmentFactory::class)->create($order);
 
         $this->assertEmpty($shipment->getEmailSent());
 
-        $objectManager = Bootstrap::getObjectManager();
-        $logger = $objectManager->get(Logger::class);
-        $reflection = new \ReflectionClass(get_class($logger));
-        $reflectionProperty = $reflection->getProperty('minimumErrorLevel');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($logger, 400);
-        $logger->clearMessages();
-        $orderSender = $objectManager
+        $orderSender = $this->objectManager
             ->create(\Magento\Sales\Model\Order\Email\Sender\ShipmentSender::class);
-        $objectManager->get(\Magento\Framework\App\State::class)->setMode(State::MODE_PRODUCTION);
         $result = $orderSender->send($shipment, true);
-        $this->assertEmpty($logger->getMessages());
+        $this->assertEmpty($this->logger->getMessages());
         $this->assertTrue($result);
 
         $this->assertNotEmpty($shipment->getEmailSent());
@@ -93,6 +104,7 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($shipment->getEmailSent());
         $result = $shipmentSender->send($shipment, true);
 
+        $this->assertEmpty($this->logger->getMessages());
         $this->assertEquals(self::NEW_CUSTOMER_EMAIL, $shipmentIdentity->getCustomerEmail());
         $this->assertTrue($result);
         $this->assertNotEmpty($shipment->getEmailSent());
@@ -114,6 +126,7 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($shipment->getEmailSent());
         $result = $shipmentSender->send($shipment, true);
 
+        $this->assertEmpty($this->logger->getMessages());
         $this->assertEquals(self::OLD_CUSTOMER_EMAIL, $shipmentIdentity->getCustomerEmail());
         $this->assertTrue($result);
         $this->assertNotEmpty($shipment->getEmailSent());
@@ -138,6 +151,7 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($shipment->getEmailSent());
         $result = $shipmentSender->send($shipment, true);
 
+        $this->assertEmpty($this->logger->getMessages());
         $this->assertEquals(self::ORDER_EMAIL, $shipmentIdentity->getCustomerEmail());
         $this->assertTrue($result);
         $this->assertNotEmpty($shipment->getEmailSent());
@@ -150,9 +164,8 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
      */
     public function testPackages()
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
-        $order = $objectManager->create(\Magento\Sales\Model\Order::class);
+        $this->objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
         $order->setCustomerEmail('customer@example.com');
         $items = [];
@@ -160,7 +173,7 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
             $items[$item->getId()] = $item->getQtyOrdered();
         }
         /** @var \Magento\Sales\Model\Order\Shipment $shipment */
-        $shipment = $objectManager->get(ShipmentFactory::class)->create($order, $items);
+        $shipment = $this->objectManager->get(ShipmentFactory::class)->create($order, $items);
         $packages = [['1'], ['2']];
         $shipment->setPackages($packages);
         $this->assertEquals($packages, $shipment->getPackages());
@@ -172,7 +185,7 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
 
     private function createShipment(Order $order): Shipment
     {
-        $shipment = Bootstrap::getObjectManager()->create(
+        $shipment = $this->objectManager->create(
             Shipment::class
         );
         $shipment->setOrder($order);
@@ -205,5 +218,15 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
                     'identityContainer' => $shipmentIdentity,
                 ]
             );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        $reflectionProperty = new \ReflectionProperty(get_class($this->logger), 'minimumErrorLevel');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->logger, $this->minErrorDefaultValue);
     }
 }
