@@ -41,6 +41,8 @@ class Customer extends AbstractCustomer
 
     public const COLUMN_PASSWORD = 'password';
 
+    public const COLUMN_DISABLE_AUTO_GROUP_CHANGE = 'disable_auto_group_change';
+
     /**#@-*/
 
     /**#@+
@@ -162,6 +164,7 @@ class Customer extends AbstractCustomer
         'failures_num',
         'first_failure',
         'lock_expires',
+        self::COLUMN_DISABLE_AUTO_GROUP_CHANGE,
     ];
 
     /**
@@ -488,6 +491,7 @@ class Customer extends AbstractCustomer
             } else {
                 $entityRow['store_id'] = $this->getCustomerStoreId($emailInLowercase, $rowData[self::COLUMN_WEBSITE]);
             }
+            $entityRow[self::COLUMN_DISABLE_AUTO_GROUP_CHANGE] = $rowData[self::COLUMN_DISABLE_AUTO_GROUP_CHANGE];
             $entitiesToUpdate[] = $entityRow;
         }
 
