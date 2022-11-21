@@ -30,6 +30,9 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerInterface */
     private $objectManager;
 
+    /** @var State */
+    private $state;
+
     /** @var Logger */
     private $logger;
 
@@ -52,9 +55,9 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $stateObject = $this->objectManager->get(\Magento\Framework\App\State::class);
-        $this->defaultMode = $stateObject->getMode();
-        $stateObject->setMode(State::MODE_DEFAULT);
+        $this->state = $this->objectManager->get(\Magento\Framework\App\State::class);
+        $this->defaultMode = $this->state->getMode();
+        $this->state->setMode(State::MODE_DEFAULT);
         $this->logger = $this->objectManager->get(Logger::class);
         $reflection = new \ReflectionClass(get_class($this->logger));
         $reflectionProperty = $reflection->getProperty('minimumErrorLevel');
@@ -234,7 +237,6 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->logger, $this->minErrorDefaultValue);
 
-        $stateObject = $this->objectManager->get(\Magento\Framework\App\State::class);
-        $stateObject->setMode($this->defaultMode);
+        $this->state->setMode($this->defaultMode);
     }
 }
