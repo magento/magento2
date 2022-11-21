@@ -67,6 +67,7 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
             ->create(\Magento\Sales\Model\Order\Email\Sender\ShipmentSender::class);
         $objectManager->get(\Magento\Framework\App\State::class)->setMode(State::MODE_PRODUCTION);
         $result = $orderSender->send($shipment, true);
+        $this->assertEmpty($logger->getMessages());
         $this->assertTrue($result);
 
         $this->assertNotEmpty($shipment->getEmailSent());
