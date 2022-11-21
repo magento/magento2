@@ -12,6 +12,8 @@ use Magento\Sales\Model\Order\Email\Container\ShipmentIdentity;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\App\State;
+use Magento\TestFramework\ErrorLog\Logger;
 
 /**
  * @magentoAppArea frontend
@@ -54,10 +56,17 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEmpty($shipment->getEmailSent());
 
-        $orderSender = Bootstrap::getObjectManager()
+        $objectManager = Bootstrap::getObjectManager();
+        $logger = $objectManager->get(Logger::class);
+        $reflection = new \ReflectionClass(get_class($logger));
+        $reflectionProperty = $reflection->getProperty('minimumErrorLevel');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($logger, 400);
+        $logger->clearMessages();
+        $orderSender = $objectManager
             ->create(\Magento\Sales\Model\Order\Email\Sender\ShipmentSender::class);
+        $objectManager->get(\Magento\Framework\App\State::class)->setMode(State::MODE_PRODUCTION);
         $result = $orderSender->send($shipment, true);
-
         $this->assertTrue($result);
 
         $this->assertNotEmpty($shipment->getEmailSent());
