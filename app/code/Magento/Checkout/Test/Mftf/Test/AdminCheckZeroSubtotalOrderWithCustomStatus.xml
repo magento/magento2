@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckZeroSubtotalOrderWithCustomStatus">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Zero Subtotal Checkout Order"/>
+            <title value="Zero Subtotal Checkout Order must have the new order status set in configuration." />
+            <description value="Order placed with Zero Subtotal Checkout payment must have the new order status set in configuration."/>
+            <testCaseId value="AC-6723"/>
+            <useCaseId value="ACP2E-1120"/>
+            <severity value="AVERAGE"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleproduct">
+                <requiredEntity createDataKey="simplecategory"/>
+            </createData>
+            <createData entity="PaymentMethodsSettingConfig" stepKey="paymentMethodsSettingConfig"/>
+            <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+
+            <createData entity="ApiSalesRule" stepKey="createCartPriceRule">
+                <field key="discount_amount">100</field>
+            </createData>
+            <createData entity="ApiSalesRuleCoupon" stepKey="createCartPriceRuleCoupon">
+                <requiredEntity createDataKey="createCartPriceRule"/>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleproduct" stepKey="deleteProduct"/>
+            <createData entity="DisablePaymentMethodsSettingConfig" stepKey="disablePaymentMethodsSettingConfig"/>
+            <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
+            <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteSalesRule"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Go to new order status page -->
+        <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatusPage"/>
+        <actionGroup ref="AdminClickCreateNewStatusButtonOnOrderStatusPageActionGroup" stepKey="clickCreateNewStatus"/>
+
+        <!-- Fill the form and validate message -->
+        <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
+            <argument name="status" value="{{EnableFreeOrderStatusCustom.value}}"/>
+            <argument name="label" value="{{EnableFreeOrderStatusCustom.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertOrderStatusFormSaveSuccess" stepKey="seeFormSaveSuccess"/>
+
+        <!-- Verify the order status grid page shows the order status we just created -->
+        <actionGroup ref="AssertOrderStatusExistsInGrid" stepKey="searchCreatedOrderStatus">
+            <argument name="status" value="{{EnableFreeOrderStatusCustom.value}}"/>
+            <argument name="label" value="{{EnableFreeOrderStatusCustom.label}}"/>
+        </actionGroup>
+
+        <!-- Assign status to state -->
+        <click selector="{{AdminOrderStatusGridSection.assignStatusToStateBtn}}" stepKey="clickAssignStatusBtn"/>
+        <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderStatus}}" userInput="{{EnableFreeOrderStatusCustom.value}}" stepKey="selectOrderStatus"/>
+        <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderState}}" userInput="{{OrderState.new}}" stepKey="selectOrderState"/>
+        <checkOption selector="{{AdminAssignOrderStatusToStateSection.orderStatusAsDefault}}" stepKey="orderStatusAsDefault"/>
+        <uncheckOption selector="{{AdminAssignOrderStatusToStateSection.visibleOnStorefront}}" stepKey="visibleOnStorefront"/>
+        <click selector="{{AdminAssignOrderStatusToStateSection.saveStatusAssignment}}" stepKey="clickSaveStatus"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You assigned the order status." stepKey="seeSuccess"/>
+
+        <!-- Prepare data for constraints -->
+        <magentoCLI command="config:set {{EnableFreeOrderStatusCustom.path}} {{EnableFreeOrderStatusCustom.value}}" stepKey="enableNewOrderStatus"/>
+        <magentoCLI command="config:set {{EnableFreeOrderPaymentAction.path}} {{EnableFreeOrderPaymentAction.value}}" stepKey="enableNewOrderPaymentAction"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+
+        <!-- Add product to cart and place order -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="AddProductToCard">
+            <argument name="product" value="$$simpleproduct$$"/>
+        </actionGroup>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="clickToProceedToCheckout"/>
+
+        <actionGroup ref="ShipmentFormFreeShippingActionGroup" stepKey="shipmentFormFreeShippingActionGroup"/>
+
+        <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyDiscountCoupon">
+            <argument name="discountCode" value="$createCartPriceRuleCoupon.code$"/>
+        </actionGroup>
+
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+
+        <!-- Go to admin and check order status -->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchForOrder">
+            <argument name="keyword" value="{$grabOrderNumber}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
+            <argument name="orderId" value="$grabOrderNumber"/>
+            <argument name="status" value="{{EnableFreeOrderStatusCustom.label}}"/>
+        </actionGroup>
+
+        <!-- Open order -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+
+        <!-- Assert invoice button -->
+        <seeElement selector="{{AdminOrderDetailsMainActionsSection.invoiceBtn}}" stepKey="seeInvoiceBtn"/>
+
+    </test>
+</tests>
