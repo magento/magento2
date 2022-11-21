@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\AsyncConfig\Api;
 
+use Magento\Framework\Exception\FileSystemException;
+
 interface AsyncConfigPublisherInterface
 {
     /**
@@ -14,6 +16,7 @@ interface AsyncConfigPublisherInterface
      *
      * @param array $configData
      * @return void
+     * @throws FileSystemException
      */
     public function saveConfigData(array $configData);
 }

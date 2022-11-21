@@ -64,9 +64,7 @@ class AsyncConfigPublisher implements \Magento\AsyncConfig\Api\AsyncConfigPublis
     }
 
     /**
-     *
      * @inheritDoc
-     * @throws FileSystemException
      */
     public function saveConfigData(array $configData)
     {
