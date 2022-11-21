@@ -64,6 +64,7 @@ class AsyncConfigPublisher implements \Magento\AsyncConfig\Api\AsyncConfigPublis
     }
 
     /**
+     *
      * @inheritDoc
      * @throws FileSystemException
      */
@@ -76,6 +77,7 @@ class AsyncConfigPublisher implements \Magento\AsyncConfig\Api\AsyncConfigPublis
     }
 
     /**
+     * Change Placeholder Data path if exists
      *
      * @param array $configData
      * @return void
