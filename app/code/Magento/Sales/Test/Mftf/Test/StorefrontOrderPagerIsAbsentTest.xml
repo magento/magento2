@@ -87,6 +87,7 @@
 
         </before>
         <after>
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct01" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct02" stepKey="deleteProduct2"/>
