@@ -9,6 +9,8 @@ namespace Magento\AsyncConfig\Model;
 
 use Magento\AsyncConfig\Api\Data\AsyncConfigMessageInterfaceFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
@@ -30,40 +32,65 @@ class AsyncConfigPublisher implements \Magento\AsyncConfig\Api\AsyncConfigPublis
     private $serializer;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var \Magento\Framework\Filesystem\DirectoryList
      */
-    private $varDirectory;
+    private $dir;
+
+    /**
+     * @var File
+     */
+    private $file;
 
     /**
      *
      * @param AsyncConfigMessageInterfaceFactory $asyncConfigFactory
      * @param PublisherInterface $publisher
      * @param Json $json
-     * @param \Magento\Framework\Filesystem|null $filesystem
+     * @param \Magento\Framework\Filesystem\DirectoryList $dir
+     * @param File $file
      */
     public function __construct(
         AsyncConfigMessageInterfaceFactory $asyncConfigFactory,
         PublisherInterface $publisher,
         Json $json,
-        \Magento\Framework\Filesystem $filesystem
+        \Magento\Framework\Filesystem\DirectoryList $dir,
+        File $file
     ) {
         $this->asyncConfigFactory = $asyncConfigFactory;
         $this->messagePublisher = $publisher;
         $this->serializer = $json;
-        $this->varDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->dir = $dir;
+        $this->file = $file;
     }
 
     /**
      * @inheritDoc
+     * @throws FileSystemException
      */
     public function saveConfigData(array $configData)
     {
         $asyncConfig = $this->asyncConfigFactory->create();
-        if ($configData['groups']['placeholder']) {
+        $this->savePlaceholderData($configData);
+        $asyncConfig->setConfigData($this->serializer->serialize($configData));
+        $this->messagePublisher->publish('async_config.saveConfig', $asyncConfig);
+    }
+
+    /**
+     *
+     * @param array $configData
+     * @return void
+     * @throws FileSystemException
+     */
+    private function savePlaceholderData(array &$configData)
+    {
+        if (isset($configData['groups']['placeholder'])) {
             foreach ($configData['groups']['placeholder']['fields'] as &$data) {
                 if ($data['value']['tmp_name']) {
-                    $newPath = $this->varDirectory->getAbsolutePath(DirectoryList::TMP) . '/' . pathinfo($data['value']['tmp_name'])['filename'];
-                    move_uploaded_file(
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    $newPath =
+                        $this->dir->getPath(DirectoryList::TMP)
+                        . '/' . pathinfo($data['value']['tmp_name'])['filename'];
+                    $this->file->mv(
                         $data['value']['tmp_name'],
                         $newPath
                     );
@@ -71,7 +98,5 @@ class AsyncConfigPublisher implements \Magento\AsyncConfig\Api\AsyncConfigPublis
                 }
             }
         }
-        $asyncConfig->setConfigData($this->serializer->serialize($configData));
-        $this->messagePublisher->publish('async_config.saveConfig', $asyncConfig);
     }
 }
