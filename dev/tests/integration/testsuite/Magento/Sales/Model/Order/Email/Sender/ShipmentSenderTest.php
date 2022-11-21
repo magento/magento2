@@ -20,6 +20,7 @@ use Magento\TestFramework\ErrorLog\Logger;
  *
  * @deprecated since ShipmentSender is deprecated
  * @see \Magento\Sales\Model\Order\Email\Sender\ShipmentSender
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
 {
