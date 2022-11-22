@@ -50,9 +50,9 @@ class Breadcrumbs
         $breadcrumbsData = [];
 
         $pathCategoryIds = explode('/', $categoryPath);
-        $parentCategoryIds = array_slice($pathCategoryIds, -1, 1);
+        $parentCategoryIds = array_slice($pathCategoryIds, 2, -1);
 
-        if (count($parentCategoryIds) > 0) {
+        if (count($parentCategoryIds)) {
             $collection = $this->collectionFactory->create();
             $collection->addAttributeToSelect(['name', 'url_key', 'url_path']);
             $collection->addAttributeToFilter('entity_id', $parentCategoryIds);
