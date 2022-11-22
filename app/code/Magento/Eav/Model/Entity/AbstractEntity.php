@@ -1546,7 +1546,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     {
         $table = $attribute->getBackend()->getTable();
         $connection = $this->getConnection();
-        $connection->update($table,
+        $connection->update(
+            $table,
             ['value' => $this->_prepareValueForSave($value, $attribute)],
             'value_id = ' . $valueId
         );
