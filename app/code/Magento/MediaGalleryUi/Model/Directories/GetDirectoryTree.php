@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model\Directories;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
@@ -18,6 +20,8 @@ use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
  */
 class GetDirectoryTree
 {
+    private const XML_PATH_MEDIA_GALLERY_IMAGE_FOLDERS
+        = 'system/media_storage_configuration/allowed_resources/media_gallery_image_folders';
     /**
      * @var Filesystem
      */
@@ -29,15 +33,23 @@ class GetDirectoryTree
     private $isPathExcluded;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $coreConfig;
+
+    /**
      * @param Filesystem $filesystem
      * @param IsPathExcludedInterface $isPathExcluded
+     * @param ScopeConfigInterface|null $coreConfig
      */
     public function __construct(
         Filesystem $filesystem,
-        IsPathExcludedInterface $isPathExcluded
+        IsPathExcludedInterface $isPathExcluded,
+        ?ScopeConfigInterface $coreConfig = null
     ) {
         $this->filesystem = $filesystem;
         $this->isPathExcluded = $isPathExcluded;
+        $this->coreConfig = $coreConfig ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -74,28 +86,52 @@ class GetDirectoryTree
     {
         $directories = [];
 
-        /** @var Read $directory */
-        $directory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        /** @var Read $mediaDirectory */
+        $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
 
-        if (!$directory->isDirectory()) {
-            return $directories;
-        }
+        if ($mediaDirectory->isDirectory()) {
+            $imageFolderPaths = $this->coreConfig->getValue(
+                self::XML_PATH_MEDIA_GALLERY_IMAGE_FOLDERS,
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            );
+            sort($imageFolderPaths);
 
-        foreach ($directory->readRecursively() as $path) {
-            if (!$directory->isDirectory($path) || $this->isPathExcluded->execute($path)) {
-                continue;
+            foreach ($imageFolderPaths as $imageFolderPath) {
+                $imageDirectory = $this->filesystem->getDirectoryReadByPath(
+                    $mediaDirectory->getAbsolutePath($imageFolderPath)
+                );
+                if ($imageDirectory->isDirectory()) {
+                    $directories[] = $this->getDirectoryData($imageFolderPath);
+                    foreach ($imageDirectory->readRecursively() as $path) {
+                        if ($imageDirectory->isDirectory($path)) {
+                            $directories[] = $this->getDirectoryData(
+                                $mediaDirectory->getRelativePath($imageDirectory->getAbsolutePath($path))
+                            );
+                        }
+                    }
+                }
             }
-
-            $pathArray = explode('/', $path);
-            $directories[] = [
-                'text' => count($pathArray) > 0 ? end($pathArray) : $path,
-                'id' => $path,
-                'li_attr' => ['data-id' => $path],
-                'path' => $path,
-                'path_array' => $pathArray
-            ];
         }
+
         return $directories;
+    }
+
+    /**
+     * Return jstree data for given path
+     *
+     * @param string $path
+     * @return array
+     */
+    private function getDirectoryData(string $path): array
+    {
+        $pathArray = explode('/', $path);
+        return [
+            'text' => count($pathArray) > 0 ? end($pathArray) : $path,
+            'id' => $path,
+            'li_attr' => ['data-id' => $path],
+            'path' => $path,
+            'path_array' => $pathArray
+        ];
     }
 
     /**
@@ -121,9 +157,9 @@ class GetDirectoryTree
             $tNodePathLength = count($tnode['path_array']);
             $found = false;
             while ($level < $tNodePathLength) {
-                if ($node['path_array'][$level] === $tnode['path_array'][$level]) {
+                $found = $node['path_array'][$level] === $tnode['path_array'][$level];
+                if ($found) {
                     $level ++;
-                    $found = true;
                 } else {
                     break;
                 }
