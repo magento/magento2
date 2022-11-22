@@ -19,6 +19,7 @@
                 </field>
                 <field id="maximum_page_size" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Maximum Page Size</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
                     <comment>Maximum number of items allowed in a paginated search result.</comment>
                     <config_path>graphql/validation/maximum_page_size</config_path>
                     <depends>
