@@ -1019,6 +1019,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Loads attributes metadata.
      *
      * @deprecated 101.0.0 Use self::loadAttributesForObject instead
+     * @see \Magento\Eav\Model\Entity\AbstractEntity::loadAttributesForObject
      * @param array|null $attributes
      * @return $this
      * @since 100.1.0
@@ -1933,7 +1934,9 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @return AttributeLoaderInterface
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 ObjectManager can be used instead.
+     *      ObjectManager::getInstance()->get(AttributeLoader::class)
+     * @see \Magento\Framework\App\ObjectManager::get()
      * @since 100.1.0
      */
     protected function getAttributeLoader()
