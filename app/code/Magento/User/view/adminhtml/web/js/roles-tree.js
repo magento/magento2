@@ -10,7 +10,7 @@ define([
     'jquery',
     'jquery/ui',
     'jquery/jstree/jquery.jstree',
-    'mage/translate',
+    'mage/translate'
 ], function ($) {
     'use strict';
 
@@ -44,21 +44,21 @@ define([
         },
 
         _createButtons: function () {
-            const $tree = $.jstree.reference(this.element);
+            const $tree = $.jstree.reference(this.element),
+                collapseAllButton = document.createElement('button'),
+                expandAllButton = document.createElement('button'),
+                expandUsedButton = document.createElement('button');
 
-            const collapseAllButton = document.createElement('button');
             collapseAllButton.innerText = $.mage.__('Collapse all');
             collapseAllButton.addEventListener('click', function () {
                 $tree.close_all();
             });
 
-            const expandAllButton = document.createElement('button');
             expandAllButton.innerText = $.mage.__('Expand all');
             expandAllButton.addEventListener('click', function () {
                 $tree.open_all();
             });
 
-            const expandUsedButton = document.createElement('button');
             expandUsedButton.innerText = $.mage.__('Expand selected');
             expandUsedButton.addEventListener('click', function () {
                 const hasOpened = [];
@@ -81,8 +81,9 @@ define([
                 expandUsedButton,
             ];
 
-            const parent = this.element[0];
-            const ul = this.element.find('ul')[0];
+            const parent = this.element[0],
+                ul = this.element.find('ul')[0];
+
             this.buttons.forEach(function (button) {
                 button.type = 'button';
                 parent.insertBefore(button, ul);
