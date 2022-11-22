@@ -1490,8 +1490,12 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $tmpAddress->unsAddressId()->unsAddressType();
             $data = $tmpAddress->getData();
             $data['save_in_address_book'] = 0;
+            $shippingAddressTmp = $this->getShippingAddress()->getData();
             // Do not duplicate address (billing address will do saving too)
             $this->getShippingAddress()->addData($data);
+            if (array_key_exists('weight', $shippingAddressTmp) && !empty($shippingAddressTmp['weight'])) {
+                $this->getShippingAddress()->setWeight($shippingAddressTmp['weight']);
+            }
         }
         $this->getShippingAddress()->setSameAsBilling($flag);
         $this->setRecollect(true);
@@ -1986,6 +1990,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->_prepareCustomer();
         $this->_validate();
         $quote = $this->getQuote();
+
         $this->_prepareQuoteItems();
 
         $orderData = [];
@@ -2005,7 +2010,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $quote->setReservedOrderId($orderData['increment_id']);
         }
         $order = $this->quoteManagement->submit($quote, $orderData);
-
         if ($this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
             $oldOrder->setRelationChildId($order->getId());
@@ -2014,6 +2018,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $this->orderManagement->cancel($oldOrder->getEntityId());
             $order->save();
         }
+
         if ($this->getSendConfirmation() && !$order->getEmailSent()) {
             $this->emailSender->send($order);
         }
