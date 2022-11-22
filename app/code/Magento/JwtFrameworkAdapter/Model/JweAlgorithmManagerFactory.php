@@ -31,13 +31,22 @@ class JweAlgorithmManagerFactory
     /**
      * @var AlgorithmProviderFactory
      */
-    private $algorithmProviderFactory;
+    private AlgorithmProviderFactory $algorithmProviderFactory;
 
+    /**
+     * Default constructor.
+     * @param AlgorithmProviderFactory $algorithmProviderFactory
+     */
     public function __construct(AlgorithmProviderFactory $algorithmProviderFactory)
     {
         $this->algorithmProviderFactory = $algorithmProviderFactory;
     }
 
+    /**
+     * Returns the list of names of supported algorithms.
+     *
+     * @return AlgorithmManager
+     */
     public function create(): AlgorithmManager
     {
         return new AlgorithmManager([
