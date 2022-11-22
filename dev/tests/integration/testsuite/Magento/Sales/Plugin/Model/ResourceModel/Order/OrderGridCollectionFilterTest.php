@@ -78,10 +78,8 @@ class OrderGridCollectionFilterTest extends TestCase
         $filterDate = "2021-12-13 00:00:00";
         if ($mainTable == 'sales_order_grid') {
             $filterDate = new DateTime($filterDate);
-            $filterDate->setTimezone(new \DateTimeZone($this->timeZone->getConfigTimezone()));
-            $filterDate->format('Y-m-d H:i:s');
+            $filterDate->setTimezone(new \DateTimeZone('UTC'));
         }
-        $convertedDate = $this->timeZone->convertConfigTimeToUtc($filterDate);
 
         $this->searchResult = $this->objectManager->create(
             SearchResult::class,
@@ -96,6 +94,9 @@ class OrderGridCollectionFilterTest extends TestCase
             $field,
             ['qteq' => $filterDate]
         );
+
+        $convertedDate = $filterDate instanceof DateTimeInterface
+            ? $filterDate->format('Y-m-d H:i:s') : $this->timeZone->convertConfigTimeToUtc($filterDate);
 
         $expectedSelect = "SELECT `main_table`.* FROM `{$mainTable}` AS `main_table` " .
             "WHERE (((`{$field}` = '{$convertedDate}')))";
