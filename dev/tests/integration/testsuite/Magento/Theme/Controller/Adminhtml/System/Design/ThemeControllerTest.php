@@ -5,6 +5,7 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DirectoryList;
 
@@ -13,6 +14,27 @@ use Magento\Framework\Filesystem\DirectoryList;
  */
 class ThemeControllerTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
+    /**
+     * @var ScopeConfigInterface|mixed
+     */
+    private $config;
+
+    /**
+     * @var string
+     */
+    private $imageAdapter;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->config = $this->_objectManager->get(ScopeConfigInterface::class);
+        $this->imageAdapter = $this->config->getValue('dev/image/default_adapter');
+    }
+
     public function testUploadJsAction()
     {
         $name = 'simple-js-file.js';
@@ -39,14 +61,14 @@ class ThemeControllerTest extends \Magento\TestFramework\TestCase\AbstractBacken
             $this->getRequest()->setPostValue('id', $theme->getId());
             $this->dispatch('backend/admin/design_config_fileUploader/save');
             $output = $this->getResponse()->getBody();
-            if (in_array('imagick', get_loaded_extensions())) {
-                $this->assertStringContainsString('"error":"false"', $output);
-                $this->assertStringContainsString($name, $output);
-            } else {
+            if (!in_array('imagick', get_loaded_extensions()) || $this->imageAdapter == 'GD2') {
                 $this->assertStringContainsString(
-                    '"error":"Required PHP extension \'Imagick\' was not loaded."',
+                    '{"error":"File validation failed."',
                     $output
                 );
+            } else {
+                $this->assertStringContainsString('"error":"false"', $output);
+                $this->assertStringContainsString($name, $output);
             }
         }
     }
