@@ -518,6 +518,9 @@ class EavTest extends AbstractModifierTest
         $this->arrayManagerMock->method('get')->willReturn([]);
         $this->arrayManagerMock->method('exists')->willReturn(true);
 
+        $this->productAttributeMock->method('getDefaultFrontendLabel')
+            ->willReturn('Unit test');
+
         $actual = $this->eav->setupAttributeMeta($this->productAttributeMock, $groupCode, $sortOrder);
 
         $this->assertEquals(
@@ -544,7 +547,7 @@ class EavTest extends AbstractModifierTest
                     'required' => true,
                     'notice' => null,
                     'default' => null,
-                    'label' => new Phrase(null),
+                    'label' => new Phrase('Unit test'),
                     'code' => 'code',
                     'source' => 'product-details',
                     'scopeLabel' => '',
@@ -563,7 +566,7 @@ class EavTest extends AbstractModifierTest
                     'required' => true,
                     'notice' => null,
                     'default' => null,
-                    'label' => new Phrase(null),
+                    'label' => new Phrase('Unit test'),
                     'code' => 'code',
                     'source' => 'product-details',
                     'scopeLabel' => '',
@@ -583,7 +586,7 @@ class EavTest extends AbstractModifierTest
                     'required' => false,
                     'notice' => null,
                     'default' => null,
-                    'label' => new Phrase(null),
+                    'label' => new Phrase('Unit test'),
                     'code' => 'code',
                     'source' => 'product-details',
                     'scopeLabel' => '',
@@ -602,7 +605,7 @@ class EavTest extends AbstractModifierTest
                     'required' => false,
                     'notice' => null,
                     'default' => 'required_value',
-                    'label' => new Phrase(null),
+                    'label' => new Phrase('Unit test'),
                     'code' => 'code',
                     'source' => 'product-details',
                     'scopeLabel' => '',
@@ -621,7 +624,7 @@ class EavTest extends AbstractModifierTest
                     'required' => false,
                     'notice' => null,
                     'default' => 'required_value',
-                    'label' => new Phrase(null),
+                    'label' => new Phrase('Unit test'),
                     'code' => 'code',
                     'source' => 'product-details',
                     'scopeLabel' => '',
@@ -641,7 +644,7 @@ class EavTest extends AbstractModifierTest
                     'required' => false,
                     'notice' => null,
                     'default' => 'required_value',
-                    'label' => new Phrase(null),
+                    'label' => new Phrase('Unit test'),
                     'code' => 'code',
                     'source' => 'product-details',
                     'scopeLabel' => '',
@@ -660,7 +663,7 @@ class EavTest extends AbstractModifierTest
                     'required' => true,
                     'notice' => null,
                     'default' => null,
-                    'label' => new Phrase(null),
+                    'label' => new Phrase('Unit test'),
                     'code' => 'code',
                     'source' => 'product-details',
                     'scopeLabel' => '',

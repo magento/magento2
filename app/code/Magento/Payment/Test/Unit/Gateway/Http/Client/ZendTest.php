@@ -109,7 +109,7 @@ class ZendTest extends TestCase
 
         $this->clientMock->expects($this->once())
             ->method('send')
-            ->willThrowException(new RuntimeException());
+            ->willThrowException(new RuntimeException('Unit test'));
 
         $this->converterMock->expects($this->never())->method('convert');
 
@@ -139,7 +139,7 @@ class ZendTest extends TestCase
         $this->converterMock->expects($this->once())
             ->method('convert')
             ->with($responseBody)
-            ->willThrowException(new ConverterException(__()));
+            ->willThrowException(new ConverterException(__('Unit test')));
 
         $this->clientFactoryMock->expects($this->once())
             ->method('create')
