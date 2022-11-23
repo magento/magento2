@@ -8,26 +8,26 @@ namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
-use Magento\Framework\Api\ExtensibleDataObjectConverter;
-use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\CustomerRegistry;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\SortOrderBuilder;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Customer\Model\Customer;
 
 /**
  * Checks Customer insert, update, search with repository
@@ -242,6 +242,53 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('lastname', array_keys($inAfterOnly));
         $this->assertContains('email', array_keys($inAfterOnly));
         $this->assertNotContains('password_hash', array_keys($inAfterOnly));
+    }
+
+    /**
+     * Test update customer custom attributes
+     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/attribute_user_defined_custom_attribute.php
+     * @return void
+     */
+    public function testUpdateCustomerAttributesAutoIncrement()
+    {
+        $email = 'email@example.com';
+        $storeId = 1;
+        $firstname = 'Tester';
+        $lastname = 'McTest';
+        $groupId = 1;
+        $newAttributeValue = 'test1';
+        $updateAttributeValue = 'test2';
+
+        $newCustomerEntity = $this->customerFactory->create()
+            ->setStoreId($storeId)
+            ->setEmail($email)
+            ->setFirstname($firstname)
+            ->setLastname($lastname)
+            ->setGroupId($groupId);
+        $newCustomerEntity->setCustomAttribute('custom_attribute1', $newAttributeValue);
+        $savedCustomer = $this->customerRepository->save($newCustomerEntity);
+
+        $updatedCustomer = $this->customerFactory->create();
+        $this->dataObjectHelper->mergeDataObjects(
+            CustomerInterface::class,
+            $updatedCustomer,
+            $savedCustomer
+        );
+        $updatedCustomer->setCustomAttribute('custom_attribute1', $updateAttributeValue);
+        $this->customerRepository->save($updatedCustomer);
+
+        $customerAfter = $this->customerRepository->getById($savedCustomer->getId());
+        $this->assertSame(
+            $customerAfter->getCustomAttribute('custom_attribute1')->getValue(),
+            $updateAttributeValue
+        );
+
+        $resource = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class);
+        $connection = $resource->getConnection();
+        $tableStatus = $connection->showTableStatus('customer_entity_varchar');
+        $this->assertSame($tableStatus['Auto_increment'], '2');
     }
 
     /**
