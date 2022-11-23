@@ -148,7 +148,15 @@ class AttributeMetadataResolverTest extends TestCase
         $this->attribute
             ->method('getDataUsingMethod')
             ->withConsecutive([], [], [], [], [], [], ['default_value'])
-            ->willReturnOnConsecutiveCalls('Unit test', 'Unit test', 'Unit test', 'Unit test', 'Unit test', 'Unit test', $defaultGroupId);
+            ->willReturnOnConsecutiveCalls(
+                'Unit test',
+                'Unit test',
+                'Unit test',
+                'Unit test',
+                'Unit test',
+                'Unit test',
+                $defaultGroupId
+            );
         $this->attribute->expects($this->once())
             ->method('setDataUsingMethod')
             ->willReturnSelf();
