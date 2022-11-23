@@ -30,7 +30,7 @@ class Image extends AbstractValidator
         'jpg'  => 'image/jpeg',
         'gif'  => 'image/gif',
         'bmp'  => 'image/bmp',
-        'ico'  => [ 'image/vnd.microsoft.icon', 'image/x-icon']
+        'ico'  => ['image/vnd.microsoft.icon', 'image/x-icon']
     ];
 
     /**
@@ -49,11 +49,6 @@ class Image extends AbstractValidator
     private $file;
 
     /**
-     * @var ConfigInterface
-     */
-    private $config;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -62,20 +57,17 @@ class Image extends AbstractValidator
      * @param Mime $fileMime
      * @param Factory $imageFactory
      * @param File $file
-     * @param ConfigInterface|null $config
      * @param LoggerInterface|null $logger
      */
     public function __construct(
         Mime $fileMime,
         Factory $imageFactory,
         File $file,
-        ConfigInterface $config = null,
         LoggerInterface $logger = null
     ) {
         $this->fileMime = $fileMime;
         $this->imageFactory = $imageFactory;
         $this->file = $file;
-        $this->config = $config ?? ObjectManager::getInstance()->get(ConfigInterface::class);
         $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
 
         parent::__construct();
@@ -93,11 +85,6 @@ class Image extends AbstractValidator
             try {
                 $image = $this->imageFactory->create($filePath);
                 $image->open();
-            } catch (\InvalidArgumentException $e) {
-                if (stripos($fileMimeType, 'icon') !== false) {
-                    $image = $this->imageFactory->create($filePath, $this->getNonDefaultAdapter());
-                    $image->open();
-                }
             } catch (\Exception $e) {
                 $isValid = false;
                 $this->logger->critical($e, ['exception' => $e]);
@@ -105,18 +92,5 @@ class Image extends AbstractValidator
         }
 
         return $isValid;
-    }
-
-    /**
-     * Get non default image adapter
-     *
-     * @return string|null
-     */
-    private function getNonDefaultAdapter(): ?string
-    {
-        $defaultAdapter = $this->config->getAdapterAlias();
-        $adapters = $this->config->getAdapters();
-        unset($adapters[$defaultAdapter]);
-        return array_key_first($adapters) ?? null;
     }
 }
