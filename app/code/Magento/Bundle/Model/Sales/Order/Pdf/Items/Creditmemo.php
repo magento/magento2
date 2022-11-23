@@ -137,10 +137,10 @@ class Creditmemo extends AbstractItems
                 foreach ($this->string->split($item->getSku(), 17) as $part) {
                     $text[] = $part;
                 }
-                $line[] = ['text' => $text, 'feed' => $x];
+                $line[] = ['text' => $text, 'feed' => $x, 'align' => 'right'];
             }
 
-            $x += 100;
+            $x += 30;
 
             // draw prices
             if ($this->canShowPriceInfo($childItem)) {
@@ -152,7 +152,7 @@ class Creditmemo extends AbstractItems
                 // draw Discount
                 $text = $order->formatPriceTxt(-$childItem->getDiscountAmount());
                 $line[] = ['text' => $text, 'feed' => $x, 'font' => 'bold', 'align' => 'right', 'width' => 50];
-                $x += 50;
+                $x += 85;
 
                 // draw QTY
                 $text = $childItem->getQty() * 1;
@@ -160,10 +160,10 @@ class Creditmemo extends AbstractItems
                     'text' => $text,
                     'feed' => $x,
                     'font' => 'bold',
-                    'align' => 'center',
+                    'align' => 'right',
                     'width' => 30,
                 ];
-                $x += 30;
+                $x += 35;
 
                 // draw Tax
                 $text = $order->formatPriceTxt($childItem->getTaxAmount());
