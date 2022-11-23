@@ -151,4 +151,11 @@ class PhraseTest extends TestCase
     {
         $this->assertInstanceOf(Placeholder::class, Phrase::getRenderer());
     }
+
+    public function testThrowsWhenTextIsEmpty()
+    {
+        new Phrase('No exception thrown here.');
+        $this->expectExceptionMessage('Unable to translate empty string');
+        new Phrase('');
+    }
 }
