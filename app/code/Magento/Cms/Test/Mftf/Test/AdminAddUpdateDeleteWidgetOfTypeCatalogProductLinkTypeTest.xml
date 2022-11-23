@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddUpdateDeleteWidgetOfTypeCatalogProductLinkTypeTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="MC-12209- New Widgets Creation"/>
+            <title value="Admin should be able to create  widget type of Catalog product link"/>
+            <description value="Admin should be able to create widget type of Catalog product link and shown on storefront"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-12209"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="_defaultProduct" stepKey="createPreReqProduct1">
+                <requiredEntity createDataKey="createPreReqCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createPreReqProduct2">
+                <requiredEntity createDataKey="createPreReqCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+
+        <!--Main test-->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentPagesPage">
+            <argument name="menuUiId" value="{{AdminMenuContent.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuContentElementsWidgets.dataUiId}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOpenCreateNewWidgetsOfCatalogProductLinkActionGroup" stepKey="createWidget">
+            <argument name="WidgetType" value="Catalog Product Link"/>
+            <argument name="WidgetTheme" value="Magento Luma"/>
+            <argument name="WidgetTitle" value="NewWidget"/>
+            <argument name="AssignToStoreViews" value="All Store Views"/>
+            <argument name="WidgetDisplayOn" value="All Pages"/>
+            <argument name="Container" value="Main Content Area"/>
+            <argument name="Template" value="Product Link Block Template"/>
+        </actionGroup>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($createPreReqCategory.custom_attributes[url_key]$)}}" stepKey="navigateToCategoryPage"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <click selector="{{StorefrontHeaderSection.ProductWidgetLink}}" stepKey="clickProductLinkButton"/>
+        <waitForPageLoad stepKey="wait2"/>
+        <actionGroup ref="AssertStorefrontProductDetailPageNameActionGroup" stepKey="assertProductNameText">
+            <argument name="productName" value="$createPreReqProduct1.name$"/>
+        </actionGroup>
+
+        <amOnPage url="admin" stepKey="openAdminPanelPage" />
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentPagesPage2">
+            <argument name="menuUiId" value="{{AdminMenuContent.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuContentElementsWidgets.dataUiId}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminUpdateWidgetsOfCatalogProductLinkActionGroup" stepKey="updateWidget">
+            <argument name="WidgetTitle" value="Catalog B Product Link"/>
+        </actionGroup>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($createPreReqCategory.custom_attributes[url_key]$)}}" stepKey="navigateToCategoryPage2"/>
+        <waitForPageLoad stepKey="wait3"/>
+        <click selector="{{StorefrontHeaderSection.ProductWidgetLink}}" stepKey="clickProductLinkButton2"/>
+        <waitForPageLoad stepKey="wait4"/>
+        <actionGroup ref="AssertStorefrontProductDetailPageNameActionGroup" stepKey="assertProductNameText2">
+            <argument name="productName" value="$createPreReqProduct2.name$"/>
+        </actionGroup>
+
+        <amOnPage url="admin" stepKey="openAdminPanelPage2"/>
+        <actionGroup ref="AdminMassDeleteWidgetActionGroup" stepKey="massWidgetDelete">
+            <argument name="row" value="1"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="wait5"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($createPreReqCategory.custom_attributes[url_key]$)}}" stepKey="navigateToCategoryPage3"/>
+        <waitForPageLoad stepKey="wait6"/>
+        <dontSeeElement selector="{{StorefrontHeaderSection.ProductWidgetLink}}" stepKey="doNotWidgetLink"/>
+
+        <after>
+
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog"/>
+            <deleteData createDataKey="createPreReqProduct1" stepKey="deletePreReqProduct"/>
+            <deleteData createDataKey="createPreReqProduct2" stepKey="deletePreReqProduct2"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

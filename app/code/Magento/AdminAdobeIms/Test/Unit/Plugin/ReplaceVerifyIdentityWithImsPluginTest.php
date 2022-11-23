@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Test\Unit\Plugin;
 
 use Magento\AdminAdobeIms\Model\Auth;
-use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Plugin\ReplaceVerifyIdentityWithImsPlugin;
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdobeImsApi\Api\IsTokenValidInterface;
 use Magento\Backend\Model\Auth\StorageInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
@@ -43,9 +43,9 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
     private $adminImsConfigMock;
 
     /**
-     * @var ImsConnection|MockObject
+     * @var IsTokenValidInterface|MockObject
      */
-    private $adminImsConnectionMock;
+    private $isTokenValid;
 
     /**
      * @return void
@@ -63,13 +63,13 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
             ->getMock();
 
         $this->adminImsConfigMock = $this->createMock(ImsConfig::class);
-        $this->adminImsConnectionMock = $this->createMock(ImsConnection::class);
+        $this->isTokenValid = $this->createMock(IsTokenValidInterface::class);
 
         $this->plugin = $objectManagerHelper->getObject(
             ReplaceVerifyIdentityWithImsPlugin::class,
             [
                 'adminImsConfig' => $this->adminImsConfigMock,
-                'adminImsConnection' => $this->adminImsConnectionMock,
+                'isTokenValid' => $this->isTokenValid,
                 'auth' => $this->authMock,
             ]
         );
@@ -101,7 +101,7 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
             return $expectedResult;
         };
 
-        $this->adminImsConnectionMock
+        $this->isTokenValid
             ->expects($this->never())
             ->method('validateToken');
 
@@ -139,7 +139,7 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
 
         $subject = $this->createMock(User::class);
 
-        $this->adminImsConnectionMock
+        $this->isTokenValid
             ->expects($this->once())
             ->method('validateToken')
             ->willReturn(true);
@@ -184,7 +184,7 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
 
         $subject = $this->createMock(User::class);
 
-        $this->adminImsConnectionMock
+        $this->isTokenValid
             ->expects($this->once())
             ->method('validateToken')
             ->willReturn(false);
@@ -233,7 +233,7 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
 
         $subject = $this->createMock(User::class);
 
-        $this->adminImsConnectionMock
+        $this->isTokenValid
             ->expects($this->never())
             ->method('validateToken');
 
