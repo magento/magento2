@@ -27,7 +27,6 @@ class Select extends AbstractData
     {
         $errors = [];
         $attribute = $this->getAttribute();
-        $label = __($attribute->getStoreLabel());
 
         if ($value === false) {
             // try to load original value and validate it
@@ -35,6 +34,9 @@ class Select extends AbstractData
         }
 
         if ($attribute->isRequired() && empty($value) && $value !== '0') {
+            if ($label = $attribute->getStoreLabel()) {
+                $label = __($label);
+            }
             $errors[] = __('"%1" is a required value.', $label);
         }
 
