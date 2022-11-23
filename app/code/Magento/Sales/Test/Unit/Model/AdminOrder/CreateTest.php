@@ -39,7 +39,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CreateTest extends TestCase
 {
-    const CUSTOMER_ID = 1;
+    public const CUSTOMER_ID = 1;
 
     /**
      * @var Create
@@ -460,5 +460,127 @@ class CreateTest extends TestCase
             ->method('setCustomerGroupId');
 
         $this->adminOrderCreate->initFromOrder($this->orderMock);
+    }
+
+    /**
+     *  Test case for setShippingAsBilling
+     *
+     * @dataProvider setShippingAsBillingDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testSetShippingAsBilling(bool $flag, array $billingData, array $shippingData): void
+    {
+        $billingAddress = $this->createPartialMock(Address::class, ['getData']);
+        $shippingAddress = $this->createPartialMock(
+            Address::class,
+            [
+                'addData',
+                'setSameAsBilling',
+                'getData',
+            ]
+        );
+        $billingAddress->expects($this->any())
+            ->method('getData')
+            ->willReturn($billingData);
+        $shippingAddress->expects($this->any())
+            ->method('getData')
+            ->willReturn($shippingData);
+        $shippingAddress->expects($this->any())
+            ->method('addData')
+            ->willReturnSelf();
+        $shippingAddress->expects($this->any())
+            ->method('setSameAsBilling')
+            ->with($flag)
+            ->willReturnSelf();
+        $quote = $this->getMockBuilder(Quote::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getBillingAddress',
+                    'getShippingAddress',
+                    'setRecollect'
+                ]
+            )
+            ->getMock();
+
+        $quote->expects($this->any())
+            ->method('getBillingAddress')
+            ->willReturn($billingAddress);
+        $quote->expects($this->any())
+            ->method('getShippingAddress')
+            ->willReturn($shippingAddress);
+        $quote->expects($this->any())
+            ->method('setRecollect')
+            ->willReturn(true);
+        $this->sessionQuote
+            ->method('getQuote')
+            ->willReturn($quote);
+        $this->adminOrderCreate->setShippingAsBilling($flag);
+    }
+
+    /**
+     * Data provider for setShippingAsBilling function
+     *
+     * @return array
+     */
+    public function setShippingAsBillingDataProvider(): array
+    {
+        return [
+            'testcase when sameAsBillingFlag is false' => [
+                false,
+                [
+                    'quote_id' => 1,
+                    'entity_id' => 1,
+                    'same_as_billing' => 1,
+                    'customer_address_id' => null,
+                    'weight' => '0.0000',
+                    'free_shipping' => '0'
+                ],
+                [
+                    'quote_id' => 1,
+                    'entity_id' => 1,
+                    'same_as_billing' => 1,
+                    'customer_address_id' => null,
+                    'weight' => '0.0000',
+                    'free_shipping' => '0'
+                ]
+            ],
+            'testcase when sameAsBillingFlag is true and there is no `weight` property' => [
+                true,
+                [
+                    'quote_id' => 1,
+                    'entity_id' => 1,
+                    'same_as_billing' => 1,
+                    'customer_address_id' => null,
+                    'free_shipping' => '0'
+                ],
+                [
+                    'quote_id' => 1,
+                    'entity_id' => 1,
+                    'same_as_billing' => 1,
+                    'customer_address_id' => null,
+                    'free_shipping' => '0'
+                ]
+            ],
+            'testcase when sameAsBillingFlag is true and there is `weight` property' => [
+                false,
+                [
+                    'quote_id' => 1,
+                    'entity_id' => 1,
+                    'same_as_billing' => 1,
+                    'customer_address_id' => null,
+                    'weight' => '0.0000',
+                    'free_shipping' => '1'
+                ],
+                [
+                    'quote_id' => 1,
+                    'entity_id' => 1,
+                    'same_as_billing' => 1,
+                    'customer_address_id' => null,
+                    'weight' => '8.0000',
+                    'free_shipping' => '1'
+                ]
+            ]
+        ];
     }
 }
