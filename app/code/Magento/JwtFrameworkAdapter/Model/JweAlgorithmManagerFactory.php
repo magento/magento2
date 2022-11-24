@@ -26,6 +26,9 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\PBES2HS512A256KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP256;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class JweAlgorithmManagerFactory
 {
     /**
