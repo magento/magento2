@@ -7,7 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Customer\ViewModel\Customer;
 
-use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Customer\Model\Context;
+use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\Serialize\Serializer\Json as Json;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
@@ -17,24 +18,25 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 class Data implements ArgumentInterface
 {
     /**
-     * @var CustomerSession
-     */
-    private $customerSession;
-
-    /**
      * @var Json
      */
     private $jsonEncoder;
 
     /**
-     * @param CustomerSession $customerSession
+     *
+     * @var HttpContext
+     */
+    private $httpContext;
+
+    /**
+     * @param HttpContext $httpContext
      * @param Json $jsonEncoder
      */
     public function __construct(
-        CustomerSession $customerSession,
+        HttpContext $httpContext,
         Json $jsonEncoder
     ) {
-        $this->customerSession = $customerSession;
+        $this->httpContext = $httpContext;
         $this->jsonEncoder = $jsonEncoder;
     }
 
@@ -45,7 +47,7 @@ class Data implements ArgumentInterface
      */
     public function isLoggedIn()
     {
-        return (bool) $this->customerSession->isLoggedIn();
+        return $this->httpContext->getValue(Context::CONTEXT_AUTH);
     }
 
     /**
