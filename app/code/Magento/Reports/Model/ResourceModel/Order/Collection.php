@@ -238,12 +238,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
 
         $dateRange = $this->getDateRange($range, $customStart, $customEnd);
 
-        $dateRange = [
-            'from' => $this->_localeDate->convertConfigTimeToUtc($dateRange['from']),
-            'to' => $this->_localeDate->convertConfigTimeToUtc($dateRange['to']),
-            'datetime' => true
-        ];
-
         $tzRangeOffsetExpression = $this->_getTZRangeOffsetExpression(
             $range,
             'created_at',
@@ -429,9 +423,11 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
         $dateStart->setTime(0, 0, 0);
 
         switch ($range) {
+            case 'today':
+                $dateEnd = new \DateTime('now', new \DateTimeZone($timezoneLocal));
+                break;
             case '24h':
-                $dateEnd = new \DateTime();
-                $dateEnd->setTimezone(new DateTimeZone($timezoneLocal));
+                $dateEnd = new \DateTime('now', new \DateTimeZone($timezoneLocal));
                 $dateEnd->modify('+1 hour');
                 $dateStart = clone $dateEnd;
                 $dateStart->modify('-1 day');
@@ -476,7 +472,8 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
                 }
                 break;
         }
-
+        $dateStart->setTimezone(new DateTimeZone('UTC'));
+        $dateEnd->setTimezone(new DateTimeZone('UTC'));
         if ($returnObjects) {
             return [$dateStart, $dateEnd];
         } else {

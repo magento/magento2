@@ -9,19 +9,12 @@ namespace Magento\Backend\Model\Dashboard;
 
 use Magento\Backend\Helper\Dashboard\Order as OrderHelper;
 use Magento\Backend\Model\Dashboard\Chart\Date;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Dashboard chart data retriever
  */
 class Chart
 {
-    /**
-     * @var TimezoneInterface
-     */
-    private $timeZone;
-
     /**
      * @var Date
      */
@@ -42,18 +35,15 @@ class Chart
      * @param Date $dateRetriever
      * @param OrderHelper $orderHelper
      * @param Period $period
-     * @param TimezoneInterface|null $timeZone
      */
     public function __construct(
         Date $dateRetriever,
         OrderHelper $orderHelper,
-        Period $period,
-        TimezoneInterface $timeZone = null
+        Period $period
     ) {
         $this->dateRetriever = $dateRetriever;
         $this->orderHelper = $orderHelper;
         $this->period = $period;
-        $this->timeZone = $timeZone ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
     }
 
     /**
@@ -91,8 +81,7 @@ class Chart
 
         if ($collection->count() > 0) {
             foreach ($dates as $date) {
-                $utcDate = $this->getUTCDatetimeByPeriod($period, $date);
-                $item = $collection->getItemByColumnValue('range', $utcDate);
+                $item = $collection->getItemByColumnValue('range', $date);
 
                 $data[] = [
                     'x' => $date,
@@ -102,29 +91,5 @@ class Chart
         }
 
         return $data;
-    }
-
-    /**
-     * Get UTC date and time by period.
-     *
-     * @param string $period
-     * @param string $date
-     * @return string
-     */
-    private function getUTCDatetimeByPeriod(string $period, string $date)
-    {
-        switch ($period) {
-            case Period::PERIOD_7_DAYS:
-            case Period::PERIOD_1_MONTH:
-                $utcDate = $this->timeZone->convertConfigTimeToUtc($date, 'Y-m-d');
-                break;
-            case Period::PERIOD_1_YEAR:
-            case Period::PERIOD_2_YEARS:
-                $utcDate = $this->timeZone->convertConfigTimeToUtc($date, 'Y-m');
-                break;
-            default:
-                $utcDate = $this->timeZone->convertConfigTimeToUtc($date, 'Y-m-d H:00');
-        }
-        return $utcDate;
     }
 }
