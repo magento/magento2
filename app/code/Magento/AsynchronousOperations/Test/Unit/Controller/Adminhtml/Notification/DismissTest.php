@@ -11,6 +11,7 @@ use Magento\AsynchronousOperations\Controller\Adminhtml\Notification\Dismiss;
 use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -42,6 +43,11 @@ class DismissTest extends TestCase
      * @var MockObject
      */
     private $jsonResultMock;
+
+    /**
+     * @var MockObject
+     */
+    private $rawResultMock;
 
     protected function setUp(): void
     {
@@ -78,10 +84,10 @@ class DismissTest extends TestCase
 
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
-            ->with(ResultFactory::TYPE_JSON, [])
-            ->willReturn($this->jsonResultMock);
+            ->with(ResultFactory::TYPE_RAW, [])
+            ->willReturn($this->rawResultMock);
 
-        $this->assertEquals($this->jsonResultMock, $this->model->execute());
+        $this->assertEquals($this->rawResultMock, $this->model->execute());
     }
 
     public function testExecuteSetsBadRequestResponseStatusIfBulkWasNotAcknowledgedCorrectly()
@@ -95,7 +101,7 @@ class DismissTest extends TestCase
 
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
-            ->with(ResultFactory::TYPE_JSON, [])
+            ->with(ResultFactory::TYPE_RAW, [])
             ->willReturn($this->jsonResultMock);
 
         $this->notificationManagementMock->expects($this->once())

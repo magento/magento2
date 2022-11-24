@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRenameCategoryOnStoreViewLevelTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Rename Category on Store View level"/>
+            <title value="Admin Rename Category on Store View level"/>
+            <description value="Admin Rename Category on Store View level"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4284"/>
+        </annotations>
+        <before>
+            <!-- log in as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!--Custom Store View -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="customStore" value="NewStoreViewData"/>
+            </actionGroup>
+
+            <!-- create Category and SubCategory -->
+            <createData entity="SimpleSubCategory" stepKey="simpleSubCategoryOne"/>
+            <createData entity="SubCategoryWithParent" stepKey="simpleSubCategoryWithParent">
+                <requiredEntity createDataKey="simpleSubCategoryOne"/>
+            </createData>
+
+            <!-- create product and assiging Category and SubCategory -->
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="simpleSubCategoryOne"/>
+                <requiredEntity createDataKey="simpleSubCategoryWithParent"/>
+            </createData>
+        </before>
+
+        <!-- Goto Parent catagory page and select Catagory and store scope-->
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="SwitchStoreView">
+            <argument name="Store" value="NewStoreViewData.name"/>
+            <argument name="CatName" value="SimpleSubCategory.name"/>
+        </actionGroup>
+
+        <!--See "Use Default Value" checkboxes-->
+        <seeElement selector="{{AdminCategoryBasicFieldSection.enableUseDefault}}" stepKey="seeUseDefaultEnable"/>
+        <seeElement selector="{{AdminCategoryBasicFieldSection.includeInMenuUseDefault}}" stepKey="seeUseDefaultMenu"/>
+        <seeElement selector="{{AdminCategoryBasicFieldSection.categoryNameUseDefault}}" stepKey="seeUseDefaultName"/>
+
+        <!--Update Parent Category name and URL and save it -->
+        <actionGroup ref="AdminChangeCategoryAndURLNameActionGroup" stepKey="updateCategory1Name"/>
+
+        <!--Update Sub Category name and URL and save it -->
+        <click selector="{{SubCategoryWithParent.name}}" stepKey="clickOnCreateCategory1"/>
+        <waitForPageLoad stepKey="waitForCategory1PageLoad"/>
+        <actionGroup ref="AdminChangeCategoryAndURLNameActionGroup" stepKey="updateCategory2Name"/>
+
+        <!--Go to storefront sub catagory -->
+        <amOnPage url="" stepKey="goToStorefront"/>
+        <waitForPageLoad stepKey="waitForFrontendLoad"/>
+        <seeElement selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryOne.name$)}}" stepKey="seeCategory"/>
+        <moveMouseOver selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryOne.name$)}}" stepKey="mouseOverSubCategoryOne"/>
+        <waitForAjaxLoad stepKey="waitForAjaxOnMouseOverSubCategoryOne"/>
+        <seeElement selector="{{StorefrontNavigationSection.subCategory($simpleSubCategoryWithParent.name$)}}" stepKey="seeSubCategoryWithParent1"/>
+        <click selector="{{StorefrontNavigationSection.subCategory($simpleSubCategoryWithParent.name$)}}" stepKey="clicksubCategory"/>
+        <waitForPageLoad time="40" stepKey="waitForStorefrontPageLoad"/>
+
+        <!-- change the custom store view and validate the sub catagory -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStoreViewActionGroup">
+            <argument name="storeView" value="NewStoreViewData"/>
+        </actionGroup>
+        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{_defaultCategory.name_lwr}}-hattest" stepKey="assertSubCategoryOnStorefront"/>
+        <seeElement stepKey="seeSubCategory" selector="{{StorefrontCategoryMainSection.CategoryTitle($_defaultCategory.name_lwr$-hattest)}}"/>
+        <seeInTitle userInput="{{_defaultCategory.name_lwr}}-hattest" stepKey="seeSubCategoryNameInTitle"/>
+
+        <!-- change the default store view and validate the sub catagory -->
+        <actionGroup ref="StorefrontSwitchDefaultStoreViewActionGroup" stepKey="switchToDefualtStoreView"/>
+        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="$$simpleSubCategoryWithParent.name$$" stepKey="assertParentCategoryOnStorefront"/>
+        <seeElement stepKey="seeParentCategory" selector="{{StorefrontCategoryMainSection.CategoryTitle($$simpleSubCategoryOne.name$$)}}"/>
+        <seeInTitle userInput="$$simpleSubCategoryWithParent.name$$" stepKey="seeParentCategoryNameInTitle"/>
+
+        <after>
+            <deleteData createDataKey="simpleSubCategoryWithParent" stepKey="deleteSubcategoryWithParent"/>
+            <deleteData createDataKey="simpleSubCategoryOne" stepKey="deleteSubcategoryOne"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProductOne"/>
+           <actionGroup ref="DeleteCustomStoreViewWithoutBackupActionGroup" stepKey="deleteCustomStoreView">
+                <argument name="storeViewName" value="{{NewStoreViewData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdminUserAfterTest"/>
+        </after>
+    </test>
+</tests>
