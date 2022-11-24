@@ -9,10 +9,23 @@ declare(strict_types = 1);
 namespace Magento\CatalogImportExport\Model\Export;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as ProductAttributeCollection;
 use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogImportExport\Model\Export\Product\Type\Simple as SimpleProductType;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
+use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 
 /**
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
@@ -42,6 +55,21 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @var ProductRepositoryInterface
      */
     private $productRepository;
+
+    /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
 
     /**
      * @var array
@@ -79,6 +107,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\CatalogImportExport\Model\Export\Product::class
         );
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->categoryRepository = $this->objectManager->create(CategoryRepositoryInterface::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -106,6 +137,41 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString('text_attribute=!@#$%^&*()_+1234567890-=|\\:;""\'<,>.?/', $exportData);
         $occurrencesCount = substr_count($exportData, 'Hello "" &"" Bring the water bottle when you can!');
         $this->assertEquals(1, $occurrencesCount);
+    }
+
+    /**
+     * Verify successful export of product with stock data with 'use config max sale quantity is enabled
+     *
+     * @magentoDataFixture /Magento/Catalog/_files/product_without_options_with_stock_data.php
+     * @magentoDbIsolation enabled
+     * @return void
+     */
+    public function testExportWithStock(): void
+    {
+        $maxSaleQty = '19187';
+        $minSaleQty = '179';
+        /** @var StockItemRepositoryInterface $stockRepository */
+        $stockRepository = $this->objectManager->get(StockItemRepositoryInterface::class);
+        /** @var StockConfigurationInterface $stockConfiguration */
+        $stockConfiguration = $this->objectManager->get(StockConfigurationInterface::class);
+
+        $product = $this->productRepository->get('simple');
+        /** @var Item $stockItem */
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $stockItem->setMaxSaleQty($maxSaleQty);
+        $stockItem->setMinSaleQty($minSaleQty);
+        $stockRepository->save($stockItem);
+
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+        $exportData = $this->model->export();
+        $this->assertStringContainsString((string)$stockConfiguration->getMaxSaleQty(), $exportData);
+        $this->assertStringNotContainsString($maxSaleQty, $exportData);
+        $this->assertStringNotContainsString($minSaleQty, $exportData);
+        $this->assertStringContainsString('Simple Product Without Custom Options', $exportData);
     }
 
     /**
@@ -750,5 +816,31 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ]
         );
         return $this->model->export();
+    }
+
+    #[
+        AppArea('adminhtml'),
+        DbIsolation(false),
+        DataFixture(StoreFixture::class, as: 'store2'),
+        DataFixture(CategoryFixture::class, as: 'c1'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$c1.id$']], 'p1'),
+    ]
+    public function testExportCategoryPathHasAdminScopeNames(): void
+    {
+        $secondStoreId = $this->fixtures->get('store2')->getId();
+        $categoryId = $this->fixtures->get('c1')->getId();
+        $oldStoreId = $this->storeManager->getStore()->getId();
+        $this->storeManager->setCurrentStore($secondStoreId);
+        $category = $this->categoryRepository->get($categoryId, $secondStoreId);
+        $category->setName('NewCategoryName');
+        $this->categoryRepository->save($category);
+        $this->storeManager->setCurrentStore($oldStoreId);
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+        $exportData = $this->model->export();
+        $this->assertStringNotContainsString('NewCategoryName', $exportData);
     }
 }

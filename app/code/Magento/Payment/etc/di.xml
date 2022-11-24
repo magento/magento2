@@ -81,4 +81,12 @@
             <argument name="logger" xsi:type="object">Magento\Payment\Model\Method\VirtualLogger</argument>
         </arguments>
     </type>
+    <type name="Magento\Payment\Block\Form\Container">
+        <plugin name="PaymentMethodProcess" type="Magento\Payment\Plugin\PaymentMethodProcess"/>
+    </type>
+    <type name="Magento\Payment\Plugin\PaymentMethodProcess">
+        <arguments>
+            <argument name="braintreeCCVault" xsi:type="string">braintree_cc_vault</argument>
+        </arguments>
+    </type>
 </config>

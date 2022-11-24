@@ -224,7 +224,7 @@
         </arguments>
     </type>
 
-    <virtualType name="Magento\Elasticsearch7\Setup\InstallConfig" type="Magento\Elasticsearch\Setup\InstallConfig">
+    <virtualType name="Magento\Elasticsearch7\Setup\InstallConfig" type="Magento\Search\Setup\InstallConfig">
         <arguments>
             <argument name="searchConfigMapping" xsi:type="array">
                 <item name="elasticsearch-host" xsi:type="string">elasticsearch7_server_hostname</item>

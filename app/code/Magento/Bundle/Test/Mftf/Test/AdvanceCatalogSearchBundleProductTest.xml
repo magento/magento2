@@ -17,7 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-25342"/>
             <group value="bundle"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>

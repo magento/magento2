@@ -21,6 +21,8 @@
         </annotations>
 
         <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -72,6 +74,8 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- Disable shipping method for customer with default address -->
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
         </after>
 
         <actionGroup ref="AdminGoToOrdersReportPageActionGroup" stepKey="goToOrdersReportPage1"/>
