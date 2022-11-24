@@ -629,9 +629,14 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function getNewEmptyItem()
     {
-        if (!isset($this->newEmptyItem)) {
-            $this->newEmptyItem = $this->_entityFactory->create($this->_itemObjectClass);
+        if ($this->newEmptyItem === null) {
+            $newEmptyItem = $this->_entityFactory->create($this->_itemObjectClass);
+            if (!($newEmptyItem instanceof \Magento\Framework\Model\AbstractModel)) {
+                return $newEmptyItem;
+            }
+            $this->newEmptyItem = $newEmptyItem;
         }
+
         return clone $this->newEmptyItem;
     }
 
