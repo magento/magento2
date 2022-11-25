@@ -47,7 +47,9 @@ define([
             const $tree = $.jstree.reference(this.element),
                 collapseAllButton = document.createElement('button'),
                 expandAllButton = document.createElement('button'),
-                expandUsedButton = document.createElement('button');
+                expandUsedButton = document.createElement('button'),
+                parent = this.element[0],
+                ul = this.element.find('ul')[0];
 
             collapseAllButton.innerText = $.mage.__('Collapse all');
             collapseAllButton.addEventListener('click', function () {
@@ -62,11 +64,13 @@ define([
             expandUsedButton.innerText = $.mage.__('Expand selected');
             expandUsedButton.addEventListener('click', function () {
                 const hasOpened = [];
+
                 $tree.get_checked(true).forEach(function (node) {
                     $tree.open_node(node);
                     hasOpened.push(node.id);
                     for (let i = 0; i < node.parents.length - 1; i++) {
                         const id = node.parents[i];
+
                         if (!hasOpened.includes(id)) {
                             $tree.open_node($tree.get_node(id));
                             hasOpened.push(id);
@@ -78,11 +82,8 @@ define([
             this.buttons = [
                 collapseAllButton,
                 expandAllButton,
-                expandUsedButton,
+                expandUsedButton
             ];
-
-            const parent = this.element[0],
-                ul = this.element.find('ul')[0];
 
             this.buttons.forEach(function (button) {
                 button.type = 'button';
