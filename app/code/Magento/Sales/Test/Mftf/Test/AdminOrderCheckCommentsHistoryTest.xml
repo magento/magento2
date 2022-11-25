@@ -69,13 +69,13 @@
         <!--Go to Comments history and switch to Information -->
         <click selector="{{AdminOrderDetailsOrderViewSection.commentsHistory}}" stepKey="goToCommentsHistory1"/>
         <click selector="{{AdminOrderDetailsOrderViewSection.information}}" stepKey="goToInformation"/>
-        <see userInput="A technical problem with the server created an error" stepKey="seeTechnicalErrorMessage"/>
+        <dontSee userInput="A technical problem with the server created an error" stepKey="dontSeeTechnicalErrorMessageOne"/>
 
         <!--Go to Comments history and don't see the error message -->
         <click selector="{{AdminOrderDetailsOrderViewSection.commentsHistory}}" stepKey="goToCommentsHistory2"/>
         <waitForPageLoad stepKey="waitForCommentsHistoryPage"/>
         <see userInput="Order Placed by Store Administrator" stepKey="seeMessageOrderCreatedByAdmin"/>
-        <dontSee userInput="A technical problem with the server created an error" stepKey="dontSeeTechnicalErrorMessage"/>
+        <dontSee userInput="A technical problem with the server created an error" stepKey="dontSeeTechnicalErrorMessageTwo"/>
 
     </test>
 </tests>
