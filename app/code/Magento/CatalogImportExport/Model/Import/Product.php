@@ -1631,6 +1631,9 @@ class Product extends AbstractEntity
                     $bunch[$rowNum][self::URL_KEY] = $rowData[self::URL_KEY] = $urlKey;
                 }
 
+                // remove null byte character
+                $rowData[self::COL_NAME] = preg_replace('/[\x00-\x1F\x7F]/', '', $rowData[self::COL_NAME]);
+
                 $rowSku = $rowData[self::COL_SKU];
                 $rowSkuNormalized = mb_strtolower($rowSku);
 
