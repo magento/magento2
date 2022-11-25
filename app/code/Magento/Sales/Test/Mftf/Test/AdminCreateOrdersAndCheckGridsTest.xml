@@ -115,6 +115,8 @@
         </createData>
 
         <magentoCLI command="cron:run" stepKey="runCronFive"/>
+        <magentoCLI command="cron:run" stepKey="runCronSix"/>
+        <magentoCLI command="cron:run" stepKey="runCronSeven"/>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
