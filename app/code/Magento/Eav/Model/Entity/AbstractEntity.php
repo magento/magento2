@@ -1550,7 +1550,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $connection->update(
             $table,
             ['value' => $this->_prepareValueForSave($value, $attribute)],
-            'value_id = ' . $valueId
+            sprintf('%s=%d', $connection->quoteIdentifier('value_id'), $valueId)
         );
 
         return $this;
@@ -1934,9 +1934,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @return AttributeLoaderInterface
      *
-     * @deprecated 100.1.0 ObjectManager can be used instead.
-     *      ObjectManager::getInstance()->get(AttributeLoader::class)
-     * @see \Magento\Framework\App\ObjectManager::get()
+     * @deprecated 100.1.0
+     * @see $attributeLoader
      * @since 100.1.0
      */
     protected function getAttributeLoader()

@@ -28,6 +28,10 @@ use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Fixture\Config as ConfigFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 
 /**
  * Checks Customer insert, update, search with repository
@@ -247,44 +251,28 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Test update customer custom attributes
      *
-     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Customer/_files/attribute_user_defined_custom_attribute.php
      * @return void
      */
+    #[
+        DataFixture(\Magento\Customer\Test\Fixture\Customer::class, ['email' => 'customer@mail.com'])
+    ]
+
     public function testUpdateCustomerAttributesAutoIncrement()
     {
-        $email = 'email@example.com';
-        $storeId = 1;
-        $firstname = 'Tester';
-        $lastname = 'McTest';
-        $groupId = 1;
-        $newAttributeValue = 'test1';
-        $updateAttributeValue = 'test2';
+        $newAttributeValue = 'value1';
+        $updateAttributeValue = 'value2';
+        $customer = $this->customerRepository->get('customer@mail.com');
+        $customer->setCustomAttribute('custom_attribute1', $newAttributeValue);
+        $savedCustomer = $this->customerRepository->save($customer);
+        $savedCustomer->setCustomAttribute('custom_attribute1', $updateAttributeValue);
+        $this->customerRepository->save($savedCustomer);
+        $customer = $this->customerRepository->get('customer@mail.com');
 
-        $newCustomerEntity = $this->customerFactory->create()
-            ->setStoreId($storeId)
-            ->setEmail($email)
-            ->setFirstname($firstname)
-            ->setLastname($lastname)
-            ->setGroupId($groupId);
-        $newCustomerEntity->setCustomAttribute('custom_attribute1', $newAttributeValue);
-        $savedCustomer = $this->customerRepository->save($newCustomerEntity);
-
-        $updatedCustomer = $this->customerFactory->create();
-        $this->dataObjectHelper->mergeDataObjects(
-            CustomerInterface::class,
-            $updatedCustomer,
-            $savedCustomer
-        );
-        $updatedCustomer->setCustomAttribute('custom_attribute1', $updateAttributeValue);
-        $this->customerRepository->save($updatedCustomer);
-
-        $customerAfter = $this->customerRepository->getById($savedCustomer->getId());
         $this->assertSame(
-            $customerAfter->getCustomAttribute('custom_attribute1')->getValue(),
+            $customer->getCustomAttribute('custom_attribute1')->getValue(),
             $updateAttributeValue
         );
-
         $resource = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class);
         $connection = $resource->getConnection();
         $tableStatus = $connection->showTableStatus('customer_entity_varchar');
