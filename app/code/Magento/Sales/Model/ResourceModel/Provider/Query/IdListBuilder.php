@@ -105,7 +105,7 @@ class IdListBuilder
                 [$table => $table],
                 sprintf(
                     '%s.%s = %s.%s',
-                    $mainTableName,
+                    'main_table',
                     'entity_id',
                     $table,
                     'entity_id'
