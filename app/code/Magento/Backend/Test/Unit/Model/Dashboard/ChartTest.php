@@ -121,7 +121,6 @@ class ChartTest extends TestCase
                 $dataObjectMock
             ];
         }
-
         $this->collectionMock->method('getItemByColumnValue')
             ->willReturnMap($valueMap);
 
