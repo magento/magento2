@@ -42,6 +42,7 @@
 
         <!-- Set Update Product Preview Image to Yes-->
         <selectOption selector="{{AttributePropertiesSection.UpdateProductPreviewImage}}" userInput="Yes" stepKey="setUpdateProductPreviewImage"/>
+        <scrollTo selector="{{AdminManageSwatchSection.manageSwatchSection}}" stepKey="scrollToAddSwatchSection"/>
 
         <!-- This hack is because the same <input type="file"> is re-purposed used for all uploads. -->
         <executeJS function="HTMLInputElement.prototype.click = function() { if(this.type !== 'file') HTMLElement.prototype.click.call(this); };" stepKey="disableClick"/>
@@ -57,7 +58,7 @@
         <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('0')}}" userInput="adobe-thumb" stepKey="fillAdmin1"/>
 
         <!-- Set swatch #2 image using the file upload -->
-        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch2"/>
+        <executeJS function="jQuery('#add_new_swatch_visual_option_button').click()" stepKey="clickAddSwatch2"/>
         <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch2">
             <argument name="index" value="1"/>
         </actionGroup>
@@ -103,13 +104,10 @@
             <argument name="image" value="TestImageAdobe"/>
         </actionGroup>
 
-        <!-- Run re-index task-->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <!-- Go to the category page -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPage"/>
 
         <!-- Verify swatches are present in the layered navigation -->

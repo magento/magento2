@@ -75,10 +75,16 @@
         </after>
 
         <!--check storefront for both options-->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="amOnStorefront1"/>
-        <waitForPageLoad stepKey="wait1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option1" stepKey="seeOption1Storefront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option2" stepKey="seeOption2Storefront"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="amOnStorefront1">
+            <argument name="product" value="$createConfigProduct$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait1"/>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeOption1Storefront">
+            <argument name="productAttributeOption" value="option1"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeOption2Storefront">
+            <argument name="productAttributeOption" value="option2"/>
+        </actionGroup>
 
         <!--go to admin and disable an option-->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -91,9 +97,15 @@
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
 
         <!--check storefront for one option-->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="amOnStorefront2"/>
-        <waitForPageLoad stepKey="wait4"/>
-        <dontSee selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option1" stepKey="dontSeeOption1InStorefront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option2" stepKey="seeOption2Again"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="amOnStorefront2">
+            <argument name="product" value="$createConfigProduct$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait4"/>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionNotVisibleActionGroup" stepKey="dontSeeOption1InStorefront">
+            <argument name="productAttributeOption" value="option1"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeOption2Again">
+            <argument name="productAttributeOption" value="option2"/>
+        </actionGroup>
     </test>
 </tests>

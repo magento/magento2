@@ -26,12 +26,12 @@ class DbStorage extends AbstractStorage
     /**
      * DB Storage table name
      */
-    const TABLE_NAME = 'url_rewrite';
+    public const TABLE_NAME = 'url_rewrite';
 
     /**
      * Code of "Integrity constraint violation: 1062 Duplicate entry" error
      */
-    const ERROR_CODE_DUPLICATE_ENTRY = 1062;
+    public const ERROR_CODE_DUPLICATE_ENTRY = 1062;
 
     /**
      * @var AdapterInterface
@@ -139,9 +139,10 @@ class DbStorage extends AbstractStorage
         $prioritizedUrlRewrites = [];
         foreach ($urlRewrites as $urlRewrite) {
             $urlRewriteRequestPath = $urlRewrite[UrlRewrite::REQUEST_PATH];
-            $urlRewriteTargetPath = $urlRewrite[UrlRewrite::TARGET_PATH];
+            $urlRewriteTargetPath = $urlRewrite[UrlRewrite::TARGET_PATH] ?? '';
+            $trimmedUrlRewriteRequestPath = rtrim($urlRewriteRequestPath ?? '', '/');
             switch (true) {
-                case rtrim($urlRewriteRequestPath, '/') === rtrim($urlRewriteTargetPath, '/'):
+                case $trimmedUrlRewriteRequestPath === rtrim($urlRewriteTargetPath, '/'):
                     $priority = 99;
                     break;
                 case $urlRewriteRequestPath === $requestPath:
@@ -150,10 +151,10 @@ class DbStorage extends AbstractStorage
                 case $urlRewriteRequestPath === urldecode($requestPath):
                     $priority = 2;
                     break;
-                case rtrim($urlRewriteRequestPath, '/') === rtrim($requestPath, '/'):
+                case $trimmedUrlRewriteRequestPath === rtrim($requestPath, '/'):
                     $priority = 3;
                     break;
-                case rtrim($urlRewriteRequestPath, '/') === rtrim(urldecode($requestPath), '/'):
+                case $trimmedUrlRewriteRequestPath === rtrim(urldecode($requestPath), '/'):
                     $priority = 4;
                     break;
                 default:

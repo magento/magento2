@@ -12,6 +12,8 @@ use Magento\Framework\App\ActionInterface;
 
 /**
  * Marker for actions processing CONNECT requests.
+ *
+ * @api
  */
 interface HttpConnectActionInterface extends ActionInterface
 {

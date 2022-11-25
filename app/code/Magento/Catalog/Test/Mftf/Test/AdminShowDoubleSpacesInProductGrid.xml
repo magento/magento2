@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminShowDoubleSpacesInProductGrid">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Edit products"/>
+            <title value="Show double spaces in the product grid"/>
+            <description value="Admin should be able to see double spaces in the Name and Sku fields in the product grid"/>
+            <testCaseId value="MC-40725"/>
+            <useCaseId value="MC-40122"/>
+            <severity value="AVERAGE"/>
+            <group value="Catalog"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProductWithDoubleSpaces" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <magentoCLI command="cron:run --group=index" stepKey="cronRun"/>
+            <magentoCLI command="cron:run --group=index" stepKey="cronRunSecondTime"/>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminDeleteAllProductsFromGridActionGroup" stepKey="deleteProduct"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPage"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="searchForProduct">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="assertProductName">
+            <argument name="column" value="Name"/>
+            <argument name="value" value="$createProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="assertProductSku">
+            <argument name="column" value="SKU"/>
+            <argument name="value" value="$createProduct.sku$"/>
+        </actionGroup>
+    </test>
+</tests>

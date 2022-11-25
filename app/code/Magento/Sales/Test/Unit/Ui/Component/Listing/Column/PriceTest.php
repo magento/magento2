@@ -17,6 +17,9 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Contains tests for Price class
+ */
 class PriceTest extends TestCase
 {
     /**
@@ -34,6 +37,9 @@ class PriceTest extends TestCase
      */
     private $storeManagerMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -57,13 +63,20 @@ class PriceTest extends TestCase
     }
 
     /**
-     * @param $hasCurrency
-     * @param $dataSource
-     * @param $currencyCode
+     * Test for prepareDataSource method
+     *
+     * @param bool $hasCurrency
+     * @param array $dataSource
+     * @param string $currencyCode
+     * @param int|null $expectedStoreId
      * @dataProvider testPrepareDataSourceDataProvider
      */
-    public function testPrepareDataSource($hasCurrency, $dataSource, $currencyCode)
-    {
+    public function testPrepareDataSource(
+        bool $hasCurrency,
+        array $dataSource,
+        string $currencyCode,
+        ?int $expectedStoreId = null
+    ): void {
         $itemName = 'itemName';
         $oldItemValue = 'oldItemValue';
         $newItemValue = 'newItemValue';
@@ -79,6 +92,7 @@ class PriceTest extends TestCase
             ->willReturn($currencyCode);
         $this->storeManagerMock->expects($hasCurrency ? $this->never() : $this->once())
             ->method('getStore')
+            ->with($expectedStoreId)
             ->willReturn($store);
         $store->expects($hasCurrency ? $this->never() : $this->once())
             ->method('getBaseCurrency')
@@ -98,7 +112,12 @@ class PriceTest extends TestCase
         $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
     }
 
-    public function testPrepareDataSourceDataProvider()
+    /**
+     * Provider for testPrepareDataSource
+     *
+     * @return array
+     */
+    public function testPrepareDataSourceDataProvider(): array
     {
         $dataSource1 = [
             'data' => [
@@ -119,9 +138,44 @@ class PriceTest extends TestCase
                 ]
             ]
         ];
+        $dataSource3 = [
+            'data' => [
+                'items' => [
+                    [
+                        'itemName' => 'oldItemValue',
+                        'store_id' => '2'
+                    ]
+                ]
+            ]
+        ];
+        $dataSource4 = [
+            'data' => [
+                'items' => [
+                    [
+                        'itemName' => 'oldItemValue',
+                        'store_id' => 'abc'
+                    ]
+                ]
+            ]
+        ];
+        $dataSource5 = [
+            'data' => [
+                'items' => [
+                    [
+                        'itemName' => 'oldItemValue',
+                        'store_id' => '123Test',
+                        'base_currency_code' => '',
+                    ]
+                ]
+            ]
+        ];
+
         return [
             [true, $dataSource1, 'US'],
             [false, $dataSource2, 'SAR'],
+            [false, $dataSource3, 'SAR', 2],
+            [false, $dataSource4, 'SAR'],
+            [false, $dataSource5, 'INR'],
         ];
     }
 }

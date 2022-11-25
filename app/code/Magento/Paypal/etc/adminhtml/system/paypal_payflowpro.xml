@@ -14,7 +14,7 @@
         <attribute type="activity_path">payment/payflowpro/active</attribute>
         <attribute type="paypal_ec_separate">1</attribute>
         <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
-            <comment>https://docs.magento.com/m2/ce/user_guide/payment/paypal-payflow-pro.html</comment>
+            <comment>https://docs.magento.com/user-guide/payment/paypal-payflow-pro.html</comment>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
         </group>
         <group id="paypal_payflow_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
@@ -50,6 +50,16 @@
                     <config_path>payment/payflowpro/sandbox_flag</config_path>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <attribute type="shared">1</attribute>
+                </field>
+                <field id="buyer_country" translate="label" type="select" sortOrder="65" showInDefault="1" showInWebsite="1">
+                    <label>Buyer Country</label>
+                    <config_path>payment/payflowpro/buyer_country</config_path>
+                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                    <tooltip>The buyer country determines which funding sources are eligible for a given buyer during testing.</tooltip>
+                    <attribute type="shared">1</attribute>
+                    <depends>
+                        <field id="sandbox_flag">1</field>
+                    </depends>
                 </field>
                 <field id="use_proxy" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1">
                     <label>Use Proxy</label>
@@ -94,6 +104,89 @@
                     <group id="paypal_payflow_api_settings"/>
                 </requires>
             </field>
+            <field id="enable_paypal_paylater_experience" sortOrder="35" extends="payment_all_paypal/express_checkout/express_checkout_required/enable_paypal_paylater_experience"/>
+            <group id="paypal_payflow_advertise_paylater"  translate="label" showInDefault="1" showInWebsite="1" sortOrder="60">
+                <label>Advertise PayPal PayLater</label>
+                <field id="paylater_enabled" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/paylater_enabled" />
+                <depends>
+                    <field id="enable_paypal_paylater_experience">1</field>
+                </depends>
+                <group id="paypal_payflow_settings_paylater_homepage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
+                    <label>Home Page</label>
+                    <depends>
+                        <field id="paylater_enabled">1</field>
+                    </depends>
+                    <field id="paylater_homepage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_homepage/paylater_homepage_display"/>
+                    <field id="paylater_homepage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_homepage/paylater_homepage_position"/>
+                    <field id="paylater_homepage_stylelayout" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_homepage/paylater_homepage_stylelayout"/>
+                    <field id="paylater_homepage_logotype" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_homepage/paylater_homepage_logotype"/>
+                    <field id="paylater_homepage_logoposition" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_homepage/paylater_homepage_logoposition"/>
+                    <field id="paylater_homepage_textcolor" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_homepage/paylater_homepage_textcolor"/>
+                    <field id="paylater_homepage_textsize" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_homepage/paylater_homepage_textsize"/>
+                    <field id="paylater_homepage_ratio" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_homepage/paylater_homepage_ratio"/>
+                    <field id="paylater_homepage_color" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_homepage/paylater_homepage_color"/>
+                </group>
+                <group id="paypal_payflow_settings_paylater_productpage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="30">
+                    <label>Catalog Product Page</label>
+                    <depends>
+                        <field id="paylater_enabled">1</field>
+                    </depends>
+                    <field id="paylater_productpage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_productpage/paylater_productpage_display"/>
+                    <field id="paylater_productpage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_productpage/paylater_productpage_position"/>
+                    <field id="paylater_productpage_stylelayout" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_productpage/paylater_productpage_stylelayout"/>
+                    <field id="paylater_productpage_logotype" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_productpage/paylater_productpage_logotype"/>
+                    <field id="paylater_productpage_logoposition" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_productpage/paylater_productpage_logoposition"/>
+                    <field id="paylater_productpage_textcolor" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_productpage/paylater_productpage_textcolor"/>
+                    <field id="paylater_productpage_textsize" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_productpage/paylater_productpage_textsize"/>
+                    <field id="paylater_productpage_ratio" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_productpage/paylater_productpage_ratio"/>
+                    <field id="paylater_productpage_color" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_productpage/paylater_productpage_color"/>
+                </group>
+                <group id="paypal_payflow_settings_paylater_cartpage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
+                    <label>Checkout Cart Page</label>
+                    <depends>
+                        <field id="paylater_enabled">1</field>
+                    </depends>
+                    <field id="paylater_cartpage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_cartpage/paylater_cartpage_display"/>
+                    <field id="paylater_cartpage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_cartpage/paylater_cartpage_position"/>
+                    <field id="paylater_cartpage_stylelayout" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_cartpage/paylater_cartpage_stylelayout"/>
+                    <field id="paylater_cartpage_logotype" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_cartpage/paylater_cartpage_logotype"/>
+                    <field id="paylater_cartpage_logoposition" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_cartpage/paylater_cartpage_logoposition"/>
+                    <field id="paylater_cartpage_textcolor" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_cartpage/paylater_cartpage_textcolor"/>
+                    <field id="paylater_cartpage_textsize" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_cartpage/paylater_cartpage_textsize"/>
+                    <field id="paylater_cartpage_ratio" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_cartpage/paylater_cartpage_ratio"/>
+                    <field id="paylater_cartpage_color" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_cartpage/paylater_cartpage_color"/>
+                </group>
+                <group id="paypal_payflow_settings_paylater_checkout_payment" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="50">
+                    <label>Checkout Payment Step</label>
+                    <depends>
+                        <field id="paylater_enabled">1</field>
+                    </depends>
+                    <field id="paylater_checkout_payment_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_checkout_payment/paylater_checkout_payment_display"/>
+                    <field id="paylater_checkout_payment_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_checkout_payment/paylater_checkout_payment_position"/>
+                    <field id="paylater_checkout_payment_stylelayout" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_checkout_payment/paylater_checkout_payment_stylelayout"/>
+                    <field id="paylater_checkout_payment_logotype" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_checkout_payment/paylater_checkout_payment_logotype"/>
+                    <field id="paylater_checkout_payment_logoposition" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_checkout_payment/paylater_checkout_payment_logoposition"/>
+                    <field id="paylater_checkout_payment_textcolor" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_checkout_payment/paylater_checkout_payment_textcolor"/>
+                    <field id="paylater_checkout_payment_textsize" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_checkout_payment/paylater_checkout_payment_textsize"/>
+                    <field id="paylater_checkout_payment_ratio" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_checkout_payment/paylater_checkout_payment_ratio"/>
+                    <field id="paylater_checkout_payment_color" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_checkout_payment/paylater_checkout_payment_color"/>
+                </group>
+                <group id="paypal_payflow_settings_paylater_categorypage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="60">
+                    <label>Catalog Category Page</label>
+                    <depends>
+                        <field id="paylater_enabled">1</field>
+                    </depends>
+                    <field id="paylater_categorypage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_categorypage/paylater_categorypage_display"/>
+                    <field id="paylater_categorypage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_categorypage/paylater_categorypage_position"/>
+                    <field id="paylater_categorypage_stylelayout" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_categorypage/paylater_categorypage_stylelayout"/>
+                    <field id="paylater_categorypage_logotype" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_categorypage/paylater_categorypage_logotype"/>
+                    <field id="paylater_categorypage_logoposition" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_categorypage/paylater_categorypage_logoposition"/>
+                    <field id="paylater_categorypage_textcolor" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_categorypage/paylater_categorypage_textcolor"/>
+                    <field id="paylater_categorypage_textsize" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_categorypage/paylater_categorypage_textsize"/>
+                    <field id="paylater_categorypage_ratio" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_categorypage/paylater_categorypage_ratio"/>
+                    <field id="paylater_categorypage_color" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_categorypage/paylater_categorypage_color"/>
+                </group>
+            </group>
         </group>
         <group id="settings_paypal_payflow" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
             <label>Basic Settings - PayPal Payflow Pro</label>

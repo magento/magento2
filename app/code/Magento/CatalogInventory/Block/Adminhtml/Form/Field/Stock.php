@@ -16,8 +16,8 @@ use Magento\Framework\Data\Form;
  * @since 100.0.2
  *
  * @deprecated 100.3.0 Replaced with Multi Source Inventory
- * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
- * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
+ * @link https://devdocs.magento.com/guides/v2.4/inventory/index.html
+ * @link https://devdocs.magento.com/guides/v2.4/inventory/inventory-api-reference.html
  */
 class Stock extends \Magento\Framework\Data\Form\Element\Select
 {
@@ -223,7 +223,7 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
                                     !(event && event.type == 'keyup')
                                 ) {
                                     if (useConfigManageStockField.val() == 1) {
-                                        useConfigManageStockField.removeAttr('checked').val(0);
+                                        useConfigManageStockField.prop('checked', false).val(0);
                                     }
                                     manageStockField.toggleClass('disabled', false).prop('disabled', false);
                                     manageStockField.val(manageStockValue);
@@ -256,8 +256,8 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
                         };
                         $.each(fieldsAssociations, function(generalTabField, advancedTabField) {
                             $('#' + generalTabField + ', #' + advancedTabField)
-                                .bind('focus blur change keyup click', filler)
-                                .bind('keyup change blur', disabler)
+                                .on('focus blur change keyup click', filler)
+                                .on('keyup change blur', disabler)
                                 .trigger('change');
                         });
 

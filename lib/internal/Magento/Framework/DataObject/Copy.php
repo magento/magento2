@@ -16,6 +16,8 @@ use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Utility class for copying data sets between objects
+ *
+ * @api
  */
 class Copy
 {
@@ -25,8 +27,6 @@ class Copy
     protected $fieldsetConfig;
 
     /**
-     * Core event manager proxy
-     *
      * @var ManagerInterface
      */
     protected $eventManager = null;
@@ -65,8 +65,6 @@ class Copy
      *
      * @return array|DataObject|null the value of $target
      * @throws \InvalidArgumentException
-     *
-     * @api
      */
     public function copyFieldsetToTarget($fieldset, $aspect, $source, $target, $root = 'global')
     {
@@ -134,8 +132,6 @@ class Copy
      * @param string $root
      *
      * @return array
-     *
-     * @api
      */
     public function getDataFromFieldset($fieldset, $aspect, $source, $root = 'global')
     {

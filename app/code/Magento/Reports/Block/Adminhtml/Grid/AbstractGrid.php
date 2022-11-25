@@ -53,6 +53,11 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_resourceFactory;
 
     /**
+     * @var string
+     */
+    protected $_columnGroupBy;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Reports\Model\ResourceModel\Report\Collection\Factory $resourceFactory

@@ -65,18 +65,21 @@ class StoreTest extends TestCase
      */
     private $storeSource;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->collectionFactory = $this->getMockBuilder(ScopedFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->converter = $this->getMockBuilder(Converter::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->websiteFactory = $this->getMockBuilder(WebsiteFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->website = $this->getMockBuilder(\Magento\Store\Model\Website::class)
             ->disableOriginalConstructor()
@@ -99,7 +102,10 @@ class StoreTest extends TestCase
         );
     }
 
-    public function testGet()
+    /**
+     * @return void
+     */
+    public function testGet(): void
     {
         $scopeCode = 'myStore';
         $expectedResult = [
@@ -128,17 +134,9 @@ class StoreTest extends TestCase
             ->with(1)
             ->willReturn([]);
 
-        $this->converter->expects($this->at(0))
+        $this->converter
             ->method('convert')
-            ->with([
-                'config/key1' => 'default_db_value1',
-                'config/key3' => 'default_db_value3'
-            ])
-            ->willReturnArgument(0);
-
-        $this->converter->expects($this->at(1))
-            ->method('convert')
-            ->with($expectedResult)
+            ->withConsecutive([$expectedResult], [$expectedResult])
             ->willReturnArgument(0);
 
         $this->assertEquals($expectedResult, $this->storeSource->get($scopeCode));

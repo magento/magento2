@@ -24,6 +24,9 @@ class NamedParamsTest extends TestCase
      */
     protected $_model;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->_interpreter = $this->getMockForAbstractClass(
@@ -32,30 +35,19 @@ class NamedParamsTest extends TestCase
         $this->_model = new NamedParams($this->_interpreter);
     }
 
-    public function testEvaluate()
+    /**
+     * @return void
+     */
+    public function testEvaluate(): void
     {
         $input = [
             'param' => ['param1' => ['value' => 'value 1'], 'param2' => ['value' => 'value 2']],
         ];
 
-        $this->_interpreter->expects(
-            $this->at(0)
-        )->method(
-            'evaluate'
-        )->with(
-            ['value' => 'value 1']
-        )->willReturn(
-            'value 1 (evaluated)'
-        );
-        $this->_interpreter->expects(
-            $this->at(1)
-        )->method(
-            'evaluate'
-        )->with(
-            ['value' => 'value 2']
-        )->willReturn(
-            'value 2 (evaluated)'
-        );
+        $this->_interpreter
+            ->method('evaluate')
+            ->withConsecutive([['value' => 'value 1']], [['value' => 'value 2']])
+            ->willReturnOnConsecutiveCalls('value 1 (evaluated)', 'value 2 (evaluated)');
         $expected = ['param1' => 'value 1 (evaluated)', 'param2' => 'value 2 (evaluated)'];
 
         $actual = $this->_model->evaluate($input);
@@ -63,9 +55,11 @@ class NamedParamsTest extends TestCase
     }
 
     /**
+     * @return void
+     *
      * @dataProvider evaluateWrongParamDataProvider
      */
-    public function testEvaluateWrongParam($input, $expectedExceptionMessage)
+    public function testEvaluateWrongParam($input, $expectedExceptionMessage): void
     {
         $this->expectException('\InvalidArgumentException');
         $this->expectExceptionMessage($expectedExceptionMessage);
@@ -75,16 +69,16 @@ class NamedParamsTest extends TestCase
     /**
      * @return array
      */
-    public function evaluateWrongParamDataProvider()
+    public function evaluateWrongParamDataProvider(): array
     {
         return [
             'root param is non-array' => [
                 ['param' => 'non-array'],
-                'Layout argument parameters are expected to be an array',
+                'Layout argument parameters are expected to be an array'
             ],
             'individual param is non-array' => [
                 ['param' => ['sub-param' => 'non-array']],
-                'Parameter data of layout argument is expected to be an array',
+                'Parameter data of layout argument is expected to be an array'
             ]
         ];
     }

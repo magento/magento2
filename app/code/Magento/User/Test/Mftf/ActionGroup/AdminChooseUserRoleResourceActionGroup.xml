@@ -18,6 +18,6 @@
 
         <waitForElementVisible selector="{{AdminEditRoleResourcesSection.resourceCheckboxLink(resourceId, resourceName)}}" stepKey="waitForResourceCheckboxVisible"/>
         <click selector="{{AdminEditRoleResourcesSection.resourceCheckboxLink(resourceId, resourceName)}}" stepKey="checkResource"/>
-        <seeCheckboxIsChecked selector="{{AdminEditRoleResourcesSection.resourceCheckbox(resourceId)}}" stepKey="seeCheckedResource"/>
+        <seeElement selector="{{AdminEditRoleResourcesSection.resourceCheckbox(resourceId)}}" stepKey="seeCheckedResource"/>
     </actionGroup>
 </actionGroups>
