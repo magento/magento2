@@ -132,40 +132,37 @@
 
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageOne"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask1" after="openInvoicesTabOrdersPageOne"/>
-        <see selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" stepKey="seeOrderInvoiceInTabGridOne" />
-        <actionGroup ref="AdminOpenShipmentFromOrderPageActionGroup" stepKey="openShipmentsTabOrdersPageOne"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForShipmentGridLoadingMask2" after="openShipmentsTabOrdersPageOne"/>
-        <see selector="{{AdminOrderShipmentsTabSection.gridRow('1')}}" stepKey="seeOrderShipmentInTabGridOne" />
-        <actionGroup ref="AdminOpenCreditMemoFromOrderPageActionGroup" stepKey="openCreditMemosTabOrdersPageOne"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForCreditMemoGridLoadingMask3" after="openCreditMemosTabOrdersPageOne"/>
-        <see selector="{{AdminOrderCreditMemosTabSection.gridRow('1')}}" stepKey="seeOrderCreditMemoInTabGridOne" />
+        <waitForElementVisible selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvoicesTabOpenedOne"/>
+        <seeElement selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="seeForInvoicesTabOpenedOne"/>
+        <actionGroup ref="AdminGoToShipmentTabActionGroup" stepKey="goToShipmentTabOne"/>
+        <seeElement selector="{{AdminOrderShipmentsTabSection.viewShipment}}" stepKey="seeForShipmentTabOpenedOne"/>
+        <actionGroup ref="AdminGoToCreditMemoTabActionGroup" stepKey="goToCreditMemoTabOne"/>
+        <see selector="{{AdminOrderCreditMemosTabSection.gridRowCell('1', 'Status')}}" userInput="Refunded" stepKey="seeCreditMemoStatusInGridOne"/>
 
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderTwo">
             <argument name="entityId" value="$createGuestCartTwo.return$"/>
         </actionGroup>
 
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageTwo"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask4" after="openInvoicesTabOrdersPageTwo"/>
-        <see selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" stepKey="seeOrderInvoiceInTabGridTwo" />
-        <actionGroup ref="AdminOpenShipmentFromOrderPageActionGroup" stepKey="openShipmentsTabOrdersPageTwo"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForShipmentGridLoadingMask5" after="openShipmentsTabOrdersPageTwo"/>
-        <see selector="{{AdminOrderShipmentsTabSection.gridRow('1')}}" stepKey="seeOrderShipmentInTabGridTwo" />
-        <actionGroup ref="AdminOpenCreditMemoFromOrderPageActionGroup" stepKey="openCreditMemosTabOrdersPageTwo"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForCreditMemoGridLoadingMask6" after="openCreditMemosTabOrdersPageTwo"/>
-        <see selector="{{AdminOrderCreditMemosTabSection.gridRow('1')}}" stepKey="seeOrderCreditMemoInTabGridTwo" />
+        <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask2" after="openInvoicesTabOrdersPageTwo"/>
+        <waitForElementVisible selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvoicesTabOpenedTwo"/>
+        <seeElement selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="seeForInvoicesTabOpenedTwo"/>
+        <actionGroup ref="AdminGoToShipmentTabActionGroup" stepKey="goToShipmentTabTwo"/>
+        <seeElement selector="{{AdminOrderShipmentsTabSection.viewShipment}}" stepKey="seeForShipmentTabOpenedTwo"/>
+        <actionGroup ref="AdminGoToCreditMemoTabActionGroup" stepKey="goToCreditMemoTabTwo"/>
+        <see selector="{{AdminOrderCreditMemosTabSection.gridRowCell('1', 'Status')}}" userInput="Refunded" stepKey="seeCreditMemoStatusInGridTwo"/>
 
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderThree">
             <argument name="entityId" value="$createGuestCartThree.return$"/>
         </actionGroup>
 
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageThree"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask7" after="openInvoicesTabOrdersPageThree"/>
-        <see selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" stepKey="seeOrderInvoiceInTabGridThree" />
-        <actionGroup ref="AdminOpenShipmentFromOrderPageActionGroup" stepKey="openShipmentsTabOrdersPageThree"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForShipmentGridLoadingMask8" after="openShipmentsTabOrdersPageThree"/>
-        <see selector="{{AdminOrderShipmentsTabSection.gridRow('1')}}" stepKey="seeOrderShipmentInTabGridThree" />
-        <actionGroup ref="AdminOpenCreditMemoFromOrderPageActionGroup" stepKey="openCreditMemosTabOrdersPageThree"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForCreditMemoGridLoadingMask9" after="openCreditMemosTabOrdersPageThree"/>
-        <see selector="{{AdminOrderCreditMemosTabSection.gridRow('1')}}" stepKey="seeOrderCreditMemoInTabGridThree" />
+        <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask3" after="openInvoicesTabOrdersPageThree"/>
+        <waitForElementVisible selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvoicesTabOpenedThree"/>
+        <seeElement selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="seeForInvoicesTabOpenedThree"/>
+        <actionGroup ref="AdminGoToShipmentTabActionGroup" stepKey="goToShipmentTabThree"/>
+        <seeElement selector="{{AdminOrderShipmentsTabSection.viewShipment}}" stepKey="seeForShipmentTabOpenedThree"/>
+        <actionGroup ref="AdminGoToCreditMemoTabActionGroup" stepKey="goToCreditMemoTabThree"/>
+        <see selector="{{AdminOrderCreditMemosTabSection.gridRowCell('1', 'Status')}}" userInput="Refunded" stepKey="seeCreditMemoStatusInGridThree"/>
     </test>
 </tests>
