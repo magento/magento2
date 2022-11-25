@@ -20,97 +20,10 @@
         <before>
             <magentoCLI command="config:set dev/grid/async_indexing 1" stepKey="enableAsyncIndexing"/>
             <magentoCLI command="cache:clean" stepKey="cacheCleanBefore"/>
-
-            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
-
             <createData entity="ApiCategory" stepKey="createCategory"/>
-
             <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-
-            <createData entity="GuestCart" stepKey="createGuestCartOne"/>
-            <createData entity="SimpleCartItem" stepKey="addCartItemOne">
-                <requiredEntity createDataKey="createGuestCartOne"/>
-                <requiredEntity createDataKey="createSimpleProduct"/>
-            </createData>
-            <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddressOne">
-                <requiredEntity createDataKey="createGuestCartOne"/>
-            </createData>
-            <updateData createDataKey="createGuestCartOne" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformationOne">
-                <requiredEntity createDataKey="createGuestCartOne"/>
-            </updateData>
-
-            <magentoCLI command="cron:run" stepKey="runCronOne"/>
-
-            <createData entity="Invoice" stepKey="invoiceOrderOne">
-                <requiredEntity createDataKey="createGuestCartOne"/>
-            </createData>
-
-            <createData entity="GuestCart" stepKey="createGuestCartTwo"/>
-            <createData entity="SimpleCartItem" stepKey="addCartItemTwo">
-                <requiredEntity createDataKey="createGuestCartTwo"/>
-                <requiredEntity createDataKey="createSimpleProduct"/>
-            </createData>
-            <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddressTwo">
-                <requiredEntity createDataKey="createGuestCartTwo"/>
-            </createData>
-            <updateData createDataKey="createGuestCartTwo" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformationTwo">
-                <requiredEntity createDataKey="createGuestCartTwo"/>
-            </updateData>
-
-            <createData entity="Shipment" stepKey="shipOrderOne">
-                <requiredEntity createDataKey="createGuestCartOne"/>
-            </createData>
-
-            <magentoCLI command="cron:run" stepKey="runCronTwo"/>
-
-            <createData entity="GuestCart" stepKey="createGuestCartThree"/>
-            <createData entity="SimpleCartItem" stepKey="addCartItemThree">
-                <requiredEntity createDataKey="createGuestCartThree"/>
-                <requiredEntity createDataKey="createSimpleProduct"/>
-            </createData>
-            <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddressThree">
-                <requiredEntity createDataKey="createGuestCartThree"/>
-            </createData>
-            <updateData createDataKey="createGuestCartThree" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformationThree">
-                <requiredEntity createDataKey="createGuestCartThree"/>
-            </updateData>
-
-            <createData entity="CreditMemo" stepKey="refundOrderOne">
-                <requiredEntity createDataKey="createGuestCartOne"/>
-            </createData>
-
-            <createData entity="Invoice" stepKey="invoiceOrderThree">
-                <requiredEntity createDataKey="createGuestCartThree"/>
-            </createData>
-
-            <createData entity="Shipment" stepKey="shipOrderTwo">
-                <requiredEntity createDataKey="createGuestCartTwo"/>
-            </createData>
-
-            <magentoCLI command="cron:run" stepKey="runCronThree"/>
-
-            <createData entity="Invoice" stepKey="invoiceOrderTwo">
-                <requiredEntity createDataKey="createGuestCartTwo"/>
-            </createData>
-
-            <createData entity="Shipment" stepKey="shipOrderThree">
-                <requiredEntity createDataKey="createGuestCartThree"/>
-            </createData>
-
-            <createData entity="CreditMemo" stepKey="refundOrderTwo">
-                <requiredEntity createDataKey="createGuestCartTwo"/>
-            </createData>
-
-            <magentoCLI command="cron:run" stepKey="runCronFour"/>
-
-            <createData entity="CreditMemo" stepKey="refundOrderThree">
-                <requiredEntity createDataKey="createGuestCartThree"/>
-            </createData>
-
-            <magentoCLI command="cron:run" stepKey="runCronFive"/>
-
         </before>
 
         <after>
@@ -120,6 +33,90 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
+
+        <createData entity="GuestCart" stepKey="createGuestCartOne"/>
+        <createData entity="SimpleCartItem" stepKey="addCartItemOne">
+            <requiredEntity createDataKey="createGuestCartOne"/>
+            <requiredEntity createDataKey="createSimpleProduct"/>
+        </createData>
+        <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddressOne">
+            <requiredEntity createDataKey="createGuestCartOne"/>
+        </createData>
+        <updateData createDataKey="createGuestCartOne" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformationOne">
+            <requiredEntity createDataKey="createGuestCartOne"/>
+        </updateData>
+
+        <magentoCLI command="cron:run" stepKey="runCronOne"/>
+
+        <createData entity="Invoice" stepKey="invoiceOrderOne">
+            <requiredEntity createDataKey="createGuestCartOne"/>
+        </createData>
+
+        <createData entity="GuestCart" stepKey="createGuestCartTwo"/>
+        <createData entity="SimpleCartItem" stepKey="addCartItemTwo">
+            <requiredEntity createDataKey="createGuestCartTwo"/>
+            <requiredEntity createDataKey="createSimpleProduct"/>
+        </createData>
+        <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddressTwo">
+            <requiredEntity createDataKey="createGuestCartTwo"/>
+        </createData>
+        <updateData createDataKey="createGuestCartTwo" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformationTwo">
+            <requiredEntity createDataKey="createGuestCartTwo"/>
+        </updateData>
+
+        <createData entity="Shipment" stepKey="shipOrderOne">
+            <requiredEntity createDataKey="createGuestCartOne"/>
+        </createData>
+
+        <magentoCLI command="cron:run" stepKey="runCronTwo"/>
+
+        <createData entity="GuestCart" stepKey="createGuestCartThree"/>
+        <createData entity="SimpleCartItem" stepKey="addCartItemThree">
+            <requiredEntity createDataKey="createGuestCartThree"/>
+            <requiredEntity createDataKey="createSimpleProduct"/>
+        </createData>
+        <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddressThree">
+            <requiredEntity createDataKey="createGuestCartThree"/>
+        </createData>
+        <updateData createDataKey="createGuestCartThree" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformationThree">
+            <requiredEntity createDataKey="createGuestCartThree"/>
+        </updateData>
+
+        <createData entity="CreditMemo" stepKey="refundOrderOne">
+            <requiredEntity createDataKey="createGuestCartOne"/>
+        </createData>
+
+        <createData entity="Invoice" stepKey="invoiceOrderThree">
+            <requiredEntity createDataKey="createGuestCartThree"/>
+        </createData>
+
+        <createData entity="Shipment" stepKey="shipOrderTwo">
+            <requiredEntity createDataKey="createGuestCartTwo"/>
+        </createData>
+
+        <magentoCLI command="cron:run" stepKey="runCronThree"/>
+
+        <createData entity="Invoice" stepKey="invoiceOrderTwo">
+            <requiredEntity createDataKey="createGuestCartTwo"/>
+        </createData>
+
+        <createData entity="Shipment" stepKey="shipOrderThree">
+            <requiredEntity createDataKey="createGuestCartThree"/>
+        </createData>
+
+        <createData entity="CreditMemo" stepKey="refundOrderTwo">
+            <requiredEntity createDataKey="createGuestCartTwo"/>
+        </createData>
+
+        <magentoCLI command="cron:run" stepKey="runCronFour"/>
+
+        <createData entity="CreditMemo" stepKey="refundOrderThree">
+            <requiredEntity createDataKey="createGuestCartThree"/>
+        </createData>
+
+        <magentoCLI command="cron:run" stepKey="runCronFive"/>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
         <waitForPageLoad time="60" stepKey="waitForGrid"/>
