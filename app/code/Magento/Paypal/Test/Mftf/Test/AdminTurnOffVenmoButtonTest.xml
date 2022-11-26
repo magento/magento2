@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminTurnOffVenmoButtonTest">
+        <annotations>
+            <features value="Paypal"/>
+            <stories value="Button Configuration"/>
+            <title value="Check that Admin can turn off Venmo button"/>
+            <description value="Venmo button can be turned off by Admin"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="ACP2E-1303"/>
+            <group value="paypal"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+
+            <!-- Create Product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+
+        </before>
+        <after>
+
+            <!-- Cleanup Paypal configurations -->
+
+            <!-- Delete Product -->
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+
+            <!-- Log out Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage1"/>
+        <actionGroup ref="AdminOpenPayPalAdvancedFrontendExperienceFeaturesPageActionGroup" stepKey= "openFeaturesPage1"/>
+        <actionGroup ref="AdminSelectDisableFundingActionGroup" stepKey= "selectVenmo"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig1"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage1">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontSwitchToPayPalButtonIframeActionGroup" stepKey="switchToIframe1"/>
+
+        <dontSeeElement selector="{{StorefrontPayPalSmartButtonVenmoSection.venmoButton}}" stepKey="dontSeeVenmoButton"/>
+
+
+
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage2"/>
+        <actionGroup ref="AdminOpenPayPalAdvancedFrontendExperienceFeaturesPageActionGroup" stepKey= "openFeaturesPage2"/>
+        <actionGroup ref="AdminUnselectDisableFundingActionGroup" stepKey= "unselectVenmo"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig2"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCache2"/>
+
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage2">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontSwitchToPayPalButtonIframeActionGroup" stepKey="switchToIframe2"/>
+
+        <seeElement selector="{{StorefrontPayPalSmartButtonVenmoSection.venmoButton}}" stepKey="seeVenmoButton"/>
+
+
+<!--        <seeOptionIsSelected selector="{{ButtonCustomization.customizeDrpDown}}" userInput="No" stepKey="seeNoIsDefaultValue"/>
+        <selectOption selector="{{ButtonCustomization.customizeDrpDown}}" userInput="Yes" stepKey="enableButtonCustomization"/>
+        <pause stepKey="pause"/>
+
+-->
+    </test>
+</tests>
