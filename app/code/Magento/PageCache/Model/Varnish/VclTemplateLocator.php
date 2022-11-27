@@ -9,6 +9,7 @@ namespace Magento\PageCache\Model\Varnish;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\Dir\Reader;
+use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\PageCache\Model\VclTemplateLocatorInterface;
 use Magento\PageCache\Exception\UnsupportedVarnishVersion;
@@ -73,29 +74,42 @@ class VclTemplateLocator implements VclTemplateLocatorInterface
     private $scopeConfig;
 
     /**
+     * @var DirectoryList
+     */
+    private $directoryList;
+
+    /**
      * VclTemplateLocator constructor.
      *
      * @param Reader $reader
      * @param ReadFactory $readFactory
      * @param ScopeConfigInterface $scopeConfig
+     * @param DirectoryList $directoryList
      */
-    public function __construct(Reader $reader, ReadFactory $readFactory, ScopeConfigInterface $scopeConfig)
+    public function __construct(Reader $reader, ReadFactory $readFactory, ScopeConfigInterface $scopeConfig, DirectoryList $directoryList)
     {
         $this->reader = $reader;
         $this->readFactory = $readFactory;
         $this->scopeConfig = $scopeConfig;
+        $this->directoryList = $directoryList;
     }
 
     /**
      * @inheritdoc
      */
-    public function getTemplate($version)
+    public function getTemplate($version, $inputFile = null)
     {
-        $moduleEtcPath = $this->reader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_PageCache');
-        $configFilePath = $moduleEtcPath . '/' . $this->scopeConfig->getValue($this->getVclTemplatePath($version));
-        $directoryRead = $this->readFactory->create($moduleEtcPath);
-        $configFilePath = $directoryRead->getRelativePath($configFilePath);
-        $template = $directoryRead->readFile($configFilePath);
+        if (is_null($inputFile)) {
+            $moduleEtcPath  = $this->reader->getModuleDir(Dir::MODULE_ETC_DIR,
+                'Magento_PageCache');
+            $configFilePath = $moduleEtcPath . '/' . $this->scopeConfig->getValue($this->getVclTemplatePath($version));
+            $directoryRead  = $this->readFactory->create($moduleEtcPath);
+            $configFilePath = $directoryRead->getRelativePath($configFilePath);
+            $template       = $directoryRead->readFile($configFilePath);
+        } else {
+            $reader     = $this->readFactory->create($this->directoryList->getRoot());
+            $template   = $reader->readFile($inputFile);
+        }
         return $template;
     }
 
