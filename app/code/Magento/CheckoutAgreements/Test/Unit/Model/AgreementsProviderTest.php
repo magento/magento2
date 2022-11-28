@@ -66,8 +66,8 @@ class AgreementsProviderTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetRequiredAgreementIdsIfAgreementsEnabled(): void
     {
         $storeId = 100;
@@ -97,8 +97,8 @@ class AgreementsProviderTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetRequiredAgreementIdsIfAgreementsDisabled(): void
     {
         $expectedResult = [];

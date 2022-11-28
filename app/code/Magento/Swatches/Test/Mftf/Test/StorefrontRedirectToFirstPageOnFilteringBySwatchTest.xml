@@ -43,6 +43,9 @@
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteSwatchAttribute">
                 <argument name="ProductAttribute" value="textSwatchAttribute"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
 
             <magentoCLI command="config:set catalog/frontend/grid_per_page 12" stepKey="setDefaultProductsPerPage"/>

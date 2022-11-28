@@ -70,8 +70,6 @@ class ThemeUninstallCommandTest extends TestCase
     private $backupRollbackFactory;
 
     /**
-     * Theme Validator
-     *
      * @var ThemeValidator|MockObject
      */
     private $themeValidator;

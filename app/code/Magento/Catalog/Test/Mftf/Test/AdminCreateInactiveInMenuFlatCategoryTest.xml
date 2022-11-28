@@ -55,13 +55,19 @@
         <!-- Select created category and disable Include In Menu option-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="selectCreatedCategory"/>
-        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
-        <click selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}" stepKey="disableIcludeInMenuOption"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCreatedCategory">
+            <argument name="category" value="$$category$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategoryPageToLoad"/>
+        <actionGroup ref="AdminDisableIncludeInMenuConfigActionGroup" stepKey="disableIcludeInMenuOption"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory"/>
         <!--Verify category is saved and Include In Menu Option is disabled in Category Page -->
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
-        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{SimpleSubCategory.name}}" stepKey="seeUpdatedCategoryTitle"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessage">
+            <argument name="message" value="You saved the category."/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCategoryPageTitleActionGroup" stepKey="seeUpdatedCategoryTitle">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
         <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}"  stepKey="verifyInactiveIncludeInMenu"/>
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
             <argument name="indices" value="catalog_category_flat"/>
@@ -70,17 +76,27 @@
         <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="openIndexManagementPage"/>
         <see stepKey="seeIndexStatus"  selector="{{AdminIndexManagementSection.indexerStatus('Category Flat Data')}}" userInput="Ready"/>
         <!--Verify Category In Store Front-->
-        <amOnPage url="/$$category.custom_attributes[url_key]$$.html"  stepKey="openCategoryPage1"/>
-        <waitForPageLoad stepKey="waitForCategoryStoreFrontPageToLoad"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategoryPage1">
+            <argument name="category" value="$category$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategoryStoreFrontPageToLoad"/>
         <!--Verify category is not displayed in navigation menu in First Store View -->
-        <click stepKey="selectStoreSwitcher" selector="{{StorefrontHeaderSection.storeViewSwitcher}}"/>
-        <click stepKey="selectForstStoreView" selector="{{StorefrontHeaderSection.storeViewList(customStoreEN.name)}}"/>
-        <waitForPageLoad stepKey="waitForFirstStoreView"/>
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$category.name$$)}}" stepKey="seeCategoryOnNavigation"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectStoreSwitcher"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="selectForstStoreView">
+            <argument name="storeView" value="customStoreEN"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForFirstStoreView"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="seeCategoryOnNavigation">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
         <!--Verify category is not displayed in navigation menu in Second Store View -->
-        <click stepKey="selectStoreSwitcher1" selector="{{StorefrontHeaderSection.storeViewSwitcher}}"/>
-        <click stepKey="selectSecondStoreView" selector="{{StorefrontHeaderSection.storeViewList(customStoreFR.name)}}"/>
-        <waitForPageLoad stepKey="waitForSecondstoreView"/>
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$category.name$$)}}" stepKey="seeCategoryOnNavigation1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectStoreSwitcher1"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="selectSecondStoreView">
+            <argument name="storeView" value="customStoreFR"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSecondstoreView"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="seeCategoryOnNavigation1">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
     </test>
 </tests>

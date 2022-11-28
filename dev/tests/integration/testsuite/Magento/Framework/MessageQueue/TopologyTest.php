@@ -55,7 +55,8 @@ class TopologyTest extends TestCase
         $this->assertArrayHasKey($name, $this->declaredExchanges);
         unset(
             $this->declaredExchanges[$name]['message_stats'],
-            $this->declaredExchanges[$name]['user_who_performed_action']
+            $this->declaredExchanges[$name]['user_who_performed_action'],
+            $this->declaredExchanges[$name]['policy']
         );
 
         $this->assertEquals(

@@ -6,38 +6,35 @@
 
 namespace Magento\Developer\Console\Command;
 
+use InvalidArgumentException;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Filesystem\Io\File;
+use Magento\Framework\Profiler\Driver\Standard\Output\Csvfile;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 
 class ProfilerEnableCommand extends Command
 {
     /**
-     * Profiler flag file
+     * Profiler flag file path
      */
-    const PROFILER_FLAG_FILE = 'var/profiler.flag';
+    public const PROFILER_FLAG_FILE = 'var/profiler.flag';
 
     /**
      * Profiler type default setting
      */
-    const TYPE_DEFAULT = 'html';
+    public const TYPE_DEFAULT = 'html';
 
     /**
      * Built in profiler types
      */
-    const BUILT_IN_TYPES = ['html', 'csvfile'];
+    public const BUILT_IN_TYPES = ['html', 'csvfile'];
 
-    /**
-     * Command name
-     */
-    const COMMAND_NAME = 'dev:profiler:enable';
+    public const COMMAND_NAME = 'dev:profiler:enable';
 
-    /**
-     * Success message
-     */
-    const SUCCESS_MESSAGE = 'Profiler enabled with %s output.';
+    public const SUCCESS_MESSAGE = 'Profiler enabled with %s output.';
 
     /**
      * @var File
@@ -57,7 +54,7 @@ class ProfilerEnableCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -69,8 +66,9 @@ class ProfilerEnableCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
-     * @throws \InvalidArgumentException
+     * @inheritdoc
+     *
+     * @throws InvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -95,15 +93,17 @@ class ProfilerEnableCommand extends Command
                 $output->write(
                     '<info> ' . sprintf(
                         'Output will be saved in %s',
-                        \Magento\Framework\Profiler\Driver\Standard\Output\Csvfile::DEFAULT_FILEPATH
+                        Csvfile::DEFAULT_FILEPATH
                     )
                     . '</info>'
                 );
             }
             $output->write(PHP_EOL);
 
-            return;
+            return Cli::RETURN_SUCCESS;
         }
         $output->writeln('<error>Something went wrong while enabling the profiler.</error>');
+
+        return Cli::RETURN_FAILURE;
     }
 }

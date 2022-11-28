@@ -20,7 +20,7 @@
         <element name="productImageInFotorama" type="file" selector=".fotorama__nav__shaft img[src*='{{imageName}}']" parameterized="true" timeout="30"/>
         <element name="fotoramaPrevButton" type="button" selector="//*[@data-gallery-role='gallery']//*[@data-gallery-role='nav-wrap']//*[@data-gallery-role='arrow' and contains(@class, 'fotorama__thumb__arr--left')]" timeout="30"/>
         <element name="fotoramaNextButton" type="button" selector="//*[@data-gallery-role='gallery']//*[@data-gallery-role='nav-wrap']//*[@data-gallery-role='arrow' and contains(@class, 'fotorama__thumb__arr--right')]" timeout="30"/>
-        <element name="fotoramaNextButtonVideo" type="button" selector="div.fotorama__arr.fotorama__arr--next.fotorama__arr--shown" timeout="30"/>
+        <element name="fotoramaNextButtonVideo" type="button" selector="div.fotorama__arr.fotorama__arr--next.fotorama__arr--next" timeout="30"/>
         <element name="fotoramaAnyMedia" type="text" selector=".fotorama__nav__shaft img"/>
         <element name="fotoramaImageThumbnail" type="block" selector="//div[contains(@class, 'fotorama__nav__shaft')]//div[contains(@class, 'fotorama__nav__frame--thumb')][{{imageNumber}}]" parameterized="true" timeout="30"/>
         <element name="fotoramaImageThumbnailImgByNumber" type="block" selector="//div[contains(@class, 'fotorama__nav__shaft')]//div[contains(@class, 'fotorama__nav__frame--thumb')][{{imageNumber}}]//img" parameterized="true" timeout="30"/>

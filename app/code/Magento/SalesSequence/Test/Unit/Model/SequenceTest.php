@@ -78,16 +78,16 @@ class SequenceTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSequenceInitialNull(): void
     {
         $this->assertNull($this->sequence->getCurrentValue());
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSequenceNextValue(): void
     {
         $step = 777;

@@ -68,6 +68,9 @@ class PriceTest extends TestCase
      */
     protected $websiteMock;
 
+    /**
+     * @var ProductTierPriceExtensionFactory|MockObject
+     */
     private $tierPriceExtensionFactoryMock;
 
     /**

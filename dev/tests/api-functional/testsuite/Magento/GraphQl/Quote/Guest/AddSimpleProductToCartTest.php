@@ -196,8 +196,7 @@ QUERY;
 
         $this->expectException(ResponseContainsErrorsException::class);
         $this->expectExceptionMessage(
-            'Could not add the product with SKU ' . $sku . ' to the shopping cart: ' .
-            'Product that you are trying to add is not available.'
+            'GraphQL response contains errors: Could not find a product with SKU "' . $sku . '"'
         );
 
         $this->graphQlMutation($query);
@@ -210,7 +209,6 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
      * @return void
      * @throws NoSuchEntityException
@@ -218,16 +216,18 @@ QUERY;
     public function testAddOutOfStockProductToCart(): void
     {
         $sku = 'simple1';
+        $skuOutOfStock = 'simple_product';
         $quantity = 1;
 
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
+        $this->graphQlMutation($query);
 
         $this->expectException(ResponseContainsErrorsException::class);
         $this->expectExceptionMessage(
-            'Some of the products are out of stock.'
+            'Product that you are trying to add is not available'
         );
-
+        $query = $this->getQuery($maskedQuoteId, $skuOutOfStock, $quantity);
         $this->graphQlMutation($query);
     }
 

@@ -128,16 +128,16 @@ class ExternalVideoEntryConverterTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetMediaEntryType(): void
     {
         $this->assertEquals($this->modelObject->getMediaEntryType(), 'external-video');
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testConvertTo(): void
     {
         /** @var  MockObject|Product $product */
@@ -176,8 +176,8 @@ class ExternalVideoEntryConverterTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testConvertFrom(): void
     {
         $this->mediaGalleryEntryMock->expects($this->once())->method('getId')->willReturn('4');

@@ -6,13 +6,15 @@
 namespace Magento\Cookie\Model\Config\Backend;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test \Magento\Cookie\Model\Config\Backend\Domain
  *
  * @magentoAppArea adminhtml
  */
-class DomainTest extends \PHPUnit\Framework\TestCase
+class DomainTest extends TestCase
 {
     /**
      * @param string $value
@@ -22,10 +24,8 @@ class DomainTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSave($value, $exceptionMessage = null)
     {
-        /** @var $domain \Magento\Cookie\Model\Config\Backend\Domain */
-        $domain = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Cookie\Model\Config\Backend\Domain::class
-        );
+        /** @var $domain Domain */
+        $domain = Bootstrap::getObjectManager()->create(Domain::class);
         $domain->setValue($value);
         $domain->setPath('path');
         try {
@@ -45,18 +45,19 @@ class DomainTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function beforeSaveDataProvider()
+    public function beforeSaveDataProvider(): array
     {
         return [
-            'not string' => [['array'], 'Invalid domain name: must be a string'],
-            'invalid hostname' => [
+            'notString' => [['array'], 'Invalid domain name: must be a string'],
+            'invalidHostname' => [
                 'http://',
                 'Invalid domain name: The input does not match the expected structure for a DNS hostname; '
                 . 'The input does not appear to be a valid URI hostname; '
                 . 'The input does not appear to be a valid local network name',
             ],
-            'valid hostname' => ['hostname.com'],
-            'empty string' => [''],
+            'validHostname' => ['hostname.com'],
+            'emptyString' => [''],
+            'invalidCharacter' => ['hostname,com', 'Invalid domain name: invalid character in cookie domain'],
         ];
     }
 }

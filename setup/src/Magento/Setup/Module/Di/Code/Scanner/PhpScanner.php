@@ -62,7 +62,7 @@ class PhpScanner implements ScannerInterface
         $parameters = $constructor->getParameters();
         /** @var $parameter \ReflectionParameter */
         foreach ($parameters as $parameter) {
-            preg_match('/\[\s\<\w+?>\s([\w\\\\]+)/s', $parameter->__toString(), $matches);
+            preg_match('/\[\s\<\w+?>\s\??([\w\\\\]+)/s', $parameter->__toString(), $matches);
             if (isset($matches[1]) && substr($matches[1], -strlen($entityType)) == $entityType) {
                 $missingClassName = $matches[1];
                 if ($this->shouldGenerateClass($missingClassName, $entityType, $file)) {

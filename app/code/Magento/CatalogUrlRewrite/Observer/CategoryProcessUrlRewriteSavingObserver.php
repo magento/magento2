@@ -17,7 +17,6 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\ResourceModel\Group\CollectionFactory;
 use Magento\Store\Model\ResourceModel\Group\Collection as StoreGroupCollection;
 use Magento\Framework\App\ObjectManager;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Generates Category Url Rewrites after save and Products Url Rewrites assigned to the category that's being saved
@@ -183,7 +182,7 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
 
         foreach ($storeGroupCollection as $storeGroup) {
             /** @var \Magento\Store\Model\Group $storeGroup */
-            if (in_array($storeGroup->getRootCategoryId(), explode('/', $category->getPath()))) {
+            if (in_array($storeGroup->getRootCategoryId(), explode('/', $category->getPath() ?? ''))) {
                 $category->setStoreId($storeGroup->getDefaultStoreId());
             }
         }
