@@ -37,61 +37,63 @@ class CommonTaxCollector extends AbstractTotal
     /**#@+
      * Constants defined for type of items
      */
-    const ITEM_TYPE_SHIPPING = 'shipping';
-    const ITEM_TYPE_PRODUCT = 'product';
+    public const ITEM_TYPE_SHIPPING = 'shipping';
+    public const ITEM_TYPE_PRODUCT = 'product';
     /**#@-*/
 
     /**
      * Constant for shipping item code
      */
-    const ITEM_CODE_SHIPPING = 'shipping';
+    public const ITEM_CODE_SHIPPING = 'shipping';
 
     /**#@+
      * Constants for array keys
      */
-    const KEY_ITEM = 'item';
-    const KEY_BASE_ITEM = 'base_item';
+    public const KEY_ITEM = 'item';
+    public const KEY_BASE_ITEM = 'base_item';
     /**#@-*/
 
     /**#@+
      * Constants for fields in associated taxables array
      */
-    const KEY_ASSOCIATED_TAXABLE_TYPE = 'type';
-    const KEY_ASSOCIATED_TAXABLE_CODE = 'code';
-    const KEY_ASSOCIATED_TAXABLE_UNIT_PRICE = 'unit_price';
-    const KEY_ASSOCIATED_TAXABLE_BASE_UNIT_PRICE = 'base_unit_price';
-    const KEY_ASSOCIATED_TAXABLE_QUANTITY = 'quantity';
-    const KEY_ASSOCIATED_TAXABLE_TAX_CLASS_ID = 'tax_class_id';
-    const KEY_ASSOCIATED_TAXABLE_PRICE_INCLUDES_TAX = 'price_includes_tax';
-    const KEY_ASSOCIATED_TAXABLE_ASSOCIATION_ITEM_CODE = 'associated_item_code';
+    public const KEY_ASSOCIATED_TAXABLE_TYPE = 'type';
+    public const KEY_ASSOCIATED_TAXABLE_CODE = 'code';
+    public const KEY_ASSOCIATED_TAXABLE_UNIT_PRICE = 'unit_price';
+    public const KEY_ASSOCIATED_TAXABLE_BASE_UNIT_PRICE = 'base_unit_price';
+    public const KEY_ASSOCIATED_TAXABLE_QUANTITY = 'quantity';
+    public const KEY_ASSOCIATED_TAXABLE_TAX_CLASS_ID = 'tax_class_id';
+    public const KEY_ASSOCIATED_TAXABLE_PRICE_INCLUDES_TAX = 'price_includes_tax';
+    public const KEY_ASSOCIATED_TAXABLE_ASSOCIATION_ITEM_CODE = 'associated_item_code';
     /**#@-*/
 
     /**
      * When an extra taxable item is associated with quote and not with an item, this value
      * is used as associated item code
      */
-    const ASSOCIATION_ITEM_CODE_FOR_QUOTE = 'quote';
+    public const ASSOCIATION_ITEM_CODE_FOR_QUOTE = 'quote';
 
     /**#@+
      * Constants for fields in tax details for associated taxable items
      */
-    const KEY_TAX_DETAILS_TYPE = 'type';
-    const KEY_TAX_DETAILS_CODE = 'code';
-    const KEY_TAX_DETAILS_PRICE_EXCL_TAX = 'price_excl_tax';
-    const KEY_TAX_DETAILS_BASE_PRICE_EXCL_TAX = 'base_price_excl_tax';
-    const KEY_TAX_DETAILS_PRICE_INCL_TAX = 'price_incl_tax';
-    const KEY_TAX_DETAILS_BASE_PRICE_INCL_TAX = 'base_price_incl_tax';
-    const KEY_TAX_DETAILS_ROW_TOTAL = 'row_total_excl_tax';
-    const KEY_TAX_DETAILS_BASE_ROW_TOTAL = 'base_row_total_excl_tax';
-    const KEY_TAX_DETAILS_ROW_TOTAL_INCL_TAX = 'row_total_incl_tax';
-    const KEY_TAX_DETAILS_BASE_ROW_TOTAL_INCL_TAX = 'base_row_total_incl_tax';
-    const KEY_TAX_DETAILS_TAX_PERCENT = 'tax_percent';
-    const KEY_TAX_DETAILS_ROW_TAX = 'row_tax';
-    const KEY_TAX_DETAILS_BASE_ROW_TAX = 'base_row_tax';
-    const KEY_TAX_DETAILS_APPLIED_TAXES = 'applied_taxes';
+    public const KEY_TAX_DETAILS_TYPE = 'type';
+    public const KEY_TAX_DETAILS_CODE = 'code';
+    public const KEY_TAX_DETAILS_PRICE_EXCL_TAX = 'price_excl_tax';
+    public const KEY_TAX_DETAILS_BASE_PRICE_EXCL_TAX = 'base_price_excl_tax';
+    public const KEY_TAX_DETAILS_PRICE_INCL_TAX = 'price_incl_tax';
+    public const KEY_TAX_DETAILS_BASE_PRICE_INCL_TAX = 'base_price_incl_tax';
+    public const KEY_TAX_DETAILS_ROW_TOTAL = 'row_total_excl_tax';
+    public const KEY_TAX_DETAILS_BASE_ROW_TOTAL = 'base_row_total_excl_tax';
+    public const KEY_TAX_DETAILS_ROW_TOTAL_INCL_TAX = 'row_total_incl_tax';
+    public const KEY_TAX_DETAILS_BASE_ROW_TOTAL_INCL_TAX = 'base_row_total_incl_tax';
+    public const KEY_TAX_DETAILS_TAX_PERCENT = 'tax_percent';
+    public const KEY_TAX_DETAILS_ROW_TAX = 'row_tax';
+    public const KEY_TAX_DETAILS_BASE_ROW_TAX = 'base_row_tax';
+    public const KEY_TAX_DETAILS_APPLIED_TAXES = 'applied_taxes';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var \Magento\Tax\Model\Config
+     */
     protected $_config;
 
     /**
@@ -667,7 +669,7 @@ class CommonTaxCollector extends AbstractTotal
                 $associatedItemId = null;
                 if ($itemType == self::ITEM_TYPE_PRODUCT) {
                     //Use item id instead of tax calculation id
-                    $itemId = $keyedAddressItems[$itemTaxCalculationId]->getId();
+                    $itemId = $this->getQuoteItemId($keyedAddressItems, $itemTaxCalculationId);
                 } else {
                     if ($taxDetails->getAssociatedItemCode()
                         && $taxDetails->getAssociatedItemCode() != self::ASSOCIATION_ITEM_CODE_FOR_QUOTE) {
@@ -952,5 +954,22 @@ class CommonTaxCollector extends AbstractTotal
     protected function getNextIncrement()
     {
         return ++$this->counter;
+    }
+
+    /**
+     * Returns quote_item_id, as structure differs for usual shipping and multishipping approaches
+     *
+     * @param AbstractItem[] $keyedAddressItems
+     * @param string $itemTaxCalculationId
+     *
+     * @return mixed
+     */
+    private function getQuoteItemId(array $keyedAddressItems, string $itemTaxCalculationId)
+    {
+        if (isset($keyedAddressItems[$itemTaxCalculationId]["quote_item"])) {
+            return $keyedAddressItems[$itemTaxCalculationId]["quote_item"]->getId();
+        } else {
+            return $keyedAddressItems[$itemTaxCalculationId]->getId();
+        }
     }
 }
