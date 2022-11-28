@@ -9,7 +9,6 @@
     <default>
         <catalog>
             <search>
-                <engine>opensearch</engine>
                 <opensearch_server_hostname>localhost</opensearch_server_hostname>
                 <opensearch_server_port>9200</opensearch_server_port>
                 <opensearch_index_prefix>magento2</opensearch_index_prefix>
