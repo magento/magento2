@@ -11,6 +11,7 @@
     <test name="AdminTurnOffVenmoButtonTest">
         <annotations>
             <features value="Paypal"/>
+            <stories value="Payment methods configuration"/>
             <title value="Check that Admin can turn off Venmo button"/>
             <description value="Venmo button can be turned off by Admin"/>
             <severity value="AVERAGE"/>
