@@ -94,7 +94,7 @@ class CategoryList implements ResolverInterface
         } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
-        $result = $this->fetchCategories($topLevelCategoryIds, $info, $processedArgs, $store, [], $context);
+//        $result = $this->fetchCategories($topLevelCategoryIds, $info, $processedArgs, $store, [], $context);
         $result = $this->fetchCategoriesByTopLevelIds($topLevelCategoryIds, $info, $processedArgs, $store, [], $context);
 
         return $result;

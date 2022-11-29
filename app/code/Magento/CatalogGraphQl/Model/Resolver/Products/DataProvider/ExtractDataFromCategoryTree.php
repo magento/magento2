@@ -45,13 +45,14 @@ class ExtractDataFromCategoryTree
     public function execute(\Iterator $iterator, CategoryInterface $rootCategory = null): array
     {
         $tree = [];
+        $iteratorData = (array)$iterator;
         /** @var CategoryInterface $rootCategory */
         $rootCategory = $rootCategory ?: $iterator->current();
         while ($iterator->valid()) {
             /** @var CategoryInterface $currentCategory */
             $currentCategory = $iterator->current();
             $iterator->next();
-            if ($this->areParentsActive($currentCategory, $rootCategory, (array)$iterator)) {
+            if ($this->areParentsActive($currentCategory, $rootCategory, $iteratorData)) {
                 $pathElements = $currentCategory->getPath() !== null ?
                     explode("/", $currentCategory->getPath()) : [''];
                 if (empty($tree)) {
@@ -83,7 +84,7 @@ class ExtractDataFromCategoryTree
     private function areParentsActive(
         CategoryInterface $currentCategory,
         CategoryInterface $rootCategory,
-        array $categoriesArray
+        array &$categoriesArray
     ): bool {
         if ($currentCategory === $rootCategory) {
             return true;
