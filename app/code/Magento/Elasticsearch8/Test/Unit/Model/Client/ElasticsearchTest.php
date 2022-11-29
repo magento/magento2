@@ -26,6 +26,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class ElasticsearchTest to test Elasticsearch 8
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ElasticsearchTest extends TestCase
 {

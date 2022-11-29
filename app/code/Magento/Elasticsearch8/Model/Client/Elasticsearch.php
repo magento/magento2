@@ -292,6 +292,7 @@ class Elasticsearch implements ClientInterface
      * @param string $index
      * @param string $entityType
      * @return void
+     * @SuppressWarnings("unused")
      */
     public function addFieldsMapping(array $fields, string $index, string $entityType)
     {
