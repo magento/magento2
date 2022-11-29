@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\CatalogGraphQl\Model\Category\Filter\SearchCriteria;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
@@ -89,17 +90,20 @@ class CategoryList implements ResolverInterface
             $processedArgs = $this->argsSelection->process($info->fieldName, $args);
             $filterResults = $this->categoryFilter->getResult($processedArgs, $store, [], $context);
 
-            $rootCategoryIds = $filterResults['category_ids'];
+            $topLevelCategoryIds = $filterResults['category_ids'];
         } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
-        return $this->fetchCategories($rootCategoryIds, $info, $processedArgs, $store, [], $context);
+        $result = $this->fetchCategories($topLevelCategoryIds, $info, $processedArgs, $store, [], $context);
+        $result = $this->fetchCategoriesByTopLevelIds($topLevelCategoryIds, $info, $processedArgs, $store, [], $context);
+
+        return $result;
     }
 
     /**
      * Fetch category tree data
      *
-     * @param array $categoryIds
+     * @param array $topLevelCategoryIds
      * @param ResolveInfo $info
      * @param array $criteria
      * @param StoreInterface $store
@@ -109,16 +113,18 @@ class CategoryList implements ResolverInterface
      * @throws LocalizedException
      */
     private function fetchCategories(
-        array $categoryIds,
-        ResolveInfo $info,
-        array $criteria,
-        StoreInterface $store,
-        array $attributeNames,
+        array            $topLevelCategoryIds,
+        ResolveInfo      $info,
+        array            $criteria,
+        StoreInterface   $store,
+        array            $attributeNames,
         ContextInterface $context
     ) : array {
         $fetchedCategories = [];
-        foreach ($categoryIds as $categoryId) {
-            $searchCriteria = $this->searchCriteria->buildCriteria($criteria, $store);
+        $criteria['pageSize'] = 0;
+        $searchCriteria = $this->searchCriteria->buildCriteria($criteria, $store);
+
+        foreach ($topLevelCategoryIds as $categoryId) {
             $categoryTree = $this->categoryTree->getFilteredTree(
                 $info,
                 $categoryId,
@@ -127,9 +133,56 @@ class CategoryList implements ResolverInterface
                 $attributeNames,
                 $context
             );
+            if (empty($categoryTree)) {
+                continue;
+            }
+            \Profiler::start('build-result-tree');
             $fetchedCategories[] = current($this->extractDataFromCategoryTree->execute($categoryTree));
+            \Profiler::stop('build-result-tree');
         }
 
         return $fetchedCategories;
+    }
+
+    /**
+     * Fetch category tree data
+     *
+     * @param array $topLevelCategoryIds
+     * @param ResolveInfo $info
+     * @param array $criteria
+     * @param StoreInterface $store
+     * @param array $attributeNames
+     * @param ContextInterface $context
+     * @return array
+     * @throws LocalizedException
+     */
+    private function fetchCategoriesByTopLevelIds(
+        array          $topLevelCategoryIds,
+        ResolveInfo    $info,
+        array          $criteria,
+        StoreInterface $store,
+        array          $attributeNames,
+                       $context
+    ) : array {
+        $criteria['pageSize'] = 0;
+        $searchCriteria = $this->searchCriteria->buildCriteria($criteria, $store);
+        $categoryCollection = $this->categoryTree->getFlatCategoriesByRootIds(
+            $info,
+            $topLevelCategoryIds,
+            $searchCriteria,
+            $store,
+            $attributeNames,
+            $context
+        );
+        foreach ($topLevelCategoryIds as $parentCategoryId) {
+            /** @var CategoryInterface $topLevelCategory */
+            $topLevelCategory = $categoryCollection->getItemById($parentCategoryId);
+            \Profiler::start('build-result-tree-new');
+            $categoryListWithChildren[] = current(
+                $this->extractDataFromCategoryTree->execute($categoryCollection->getIterator(), $topLevelCategory)
+            );
+            \Profiler::stop('build-result-tree-new');
+        }
+        return $categoryListWithChildren;
     }
 }

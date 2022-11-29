@@ -19,6 +19,8 @@ use Magento\CatalogGraphQl\Model\AttributesJoiner;
 use Magento\CatalogGraphQl\Model\Category\DepthCalculator;
 use Magento\CatalogGraphQl\Model\Category\LevelCalculator;
 use Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CollectionProcessorInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\Api\Search\SearchCriteria;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
@@ -213,5 +215,84 @@ class CategoryTree
         $collection = $this->getCollection($resolveInfo, $rootCategoryId);
         $this->collectionProcessor->process($collection, $searchCriteria, $attributeNames, $context);
         return $collection->getIterator();
+    }
+
+    /**
+     * Returns categories tree starting from parent $rootCategoryId with filtration
+     *
+     * @param ResolveInfo $resolveInfo
+     * @param int $rootCategoryId
+     * @param array $criteria
+     * @param StoreInterface $store
+     * @param array $attributeNames
+     * @param ContextInterface $context
+     * @return Collection
+     * @throws LocalizedException
+     * @throws Exception
+     */
+    public function getFlatCategoriesByRootIds(
+        ResolveInfo $resolveInfo,
+        array $topLevelCategoryIds,
+        SearchCriteria $searchCriteria,
+        StoreInterface $store,
+        array $attributeNames,
+        ContextInterface $context
+    ): Collection {
+        $collection = $this->getRawCollection($resolveInfo, $topLevelCategoryIds);
+        $this->collectionProcessor->process($collection, $searchCriteria, $attributeNames, $context);
+        return $collection;
+    }
+
+    /**
+     * Return prepared collection
+     *
+     * @param ResolveInfo $resolveInfo
+     * @param int $rootCategoryId
+     * @return Collection
+     * @throws LocalizedException
+     * @throws Exception
+     */
+    private function getRawCollection(ResolveInfo $resolveInfo, array $topLevelCategoryIds) : Collection
+    {
+        $categoryQuery = $resolveInfo->fieldNodes[0];
+        $collection = $this->collectionFactory->create();
+        $this->joinAttributesRecursively($collection, $categoryQuery, $resolveInfo);
+        $depth = $this->depthCalculator->calculate($resolveInfo, $categoryQuery);
+        $collection->getSelect()->distinct()->joinInner(
+            ['base' => $collection->getTable('catalog_category_entity')],
+            $collection->getConnection()->quoteInto('base.entity_id in (?)', $topLevelCategoryIds),
+            ''
+        );
+        $collection->addFieldToFilter(
+            'level',
+            ['lteq' => new Expression(
+                $collection->getConnection()->quoteInto('base.level + ?', $depth - 1)
+            )]
+        );
+        $collection->addFieldToFilter(
+            'path',
+            [
+                ['eq' => new Expression('base.path')],
+                ['like' => new Expression('concat(base.path, \'/%\')')]
+            ]
+        );
+
+        //Add `is_anchor` attribute to selected field
+        $collection->addAttributeToSelect('is_anchor');
+        $collection->addAttributeToFilter('is_active', 1, "left");
+        $collection->setOrder('level');
+        $collection->setOrder(
+            'position',
+            $collection::SORT_ORDER_DESC
+        );
+        $collection->getSelect()->orWhere(
+            $collection->getSelect()
+                ->getConnection()
+                ->quoteIdentifier(
+                    'e.' . $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField()
+                ) . ' IN (?)',
+            $topLevelCategoryIds
+        );
+        return $collection;
     }
 }

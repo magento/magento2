@@ -42,11 +42,11 @@ class ExtractDataFromCategoryTree
      * @param \Iterator $iterator
      * @return array
      */
-    public function execute(\Iterator $iterator): array
+    public function execute(\Iterator $iterator, CategoryInterface $rootCategory = null): array
     {
         $tree = [];
         /** @var CategoryInterface $rootCategory */
-        $rootCategory = $iterator->current();
+        $rootCategory = $rootCategory ?: $iterator->current();
         while ($iterator->valid()) {
             /** @var CategoryInterface $currentCategory */
             $currentCategory = $iterator->current();
