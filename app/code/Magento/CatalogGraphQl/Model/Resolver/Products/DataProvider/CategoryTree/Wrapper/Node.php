@@ -105,10 +105,11 @@ class Node
      */
     public function renderArray(): array
     {
-        return array_merge($this->forgery->getHydrator()->hydrateCategory($this->model),
+        return array_merge(
+            $this->forgery->getHydrator()->hydrateCategory($this->model),
             [
                 'children' => array_map(
-                    function($node) {
+                    function ($node) {
                         return $node->renderArray();
                     },
                     $this->children

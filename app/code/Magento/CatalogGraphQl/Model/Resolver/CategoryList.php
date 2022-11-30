@@ -95,9 +95,7 @@ class CategoryList implements ResolverInterface
             throw new GraphQlInputException(__($e->getMessage()));
         }
 
-        $result = $this->fetchCategoriesByTopLevelIds($topLevelCategoryIds, $info, $processedArgs, $store, [], $context);
-
-        return $result;
+        return $this->fetchCategoriesByTopLevelIds($topLevelCategoryIds, $info, $processedArgs, $store, [], $context);
     }
 
     /**
@@ -113,12 +111,12 @@ class CategoryList implements ResolverInterface
      * @throws LocalizedException
      */
     private function fetchCategoriesByTopLevelIds(
-        array          $topLevelCategoryIds,
-        ResolveInfo    $info,
-        array          $criteria,
+        array $topLevelCategoryIds,
+        ResolveInfo $info,
+        array $criteria,
         StoreInterface $store,
-        array          $attributeNames,
-                       $context
+        array $attributeNames,
+        $context
     ) : array {
         $criteria['pageSize'] = 0;
         $searchCriteria = $this->searchCriteria->buildCriteria($criteria, $store);
