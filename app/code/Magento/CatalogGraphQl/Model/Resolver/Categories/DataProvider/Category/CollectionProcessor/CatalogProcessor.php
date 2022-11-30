@@ -23,8 +23,8 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface as SearchC
  */
 class CatalogProcessor implements CollectionProcessorInterface
 {
-    /** @var
-     * SearchCriteriaCollectionProcessor
+    /**
+     * @var SearchCriteriaCollectionProcessor
      */
     private $collectionProcessor;
 
@@ -35,6 +35,7 @@ class CatalogProcessor implements CollectionProcessorInterface
 
     /**
      * @param SearchCriteriaCollectionProcessor $collectionProcessor
+     * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
         SearchCriteriaCollectionProcessor $collectionProcessor,
