@@ -15,7 +15,8 @@
             <title value="Check that Admin can turn off Venmo button"/>
             <description value="Venmo button can be turned off by Admin"/>
             <severity value="AVERAGE"/>
-            <testCaseId value="ACP2E-1303"/>
+            <testCaseId value="AC-7121"/>
+            <useCaseId value="ACP2E-1303"/>
             <group value="paypal"/>
         </annotations>
         <before>
