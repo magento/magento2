@@ -117,21 +117,15 @@ class CategoriesQuery implements ResolverInterface
         StoreInterface $store,
         ContextInterface $context
     ) {
-        $fetchedCategories = [];
-        foreach ($categoryIds as $categoryId) {
-            /* Search Criteria is created for compatibility */
-            $searchCriteria = $this->searchCriteriaFactory->create();
-            $categoryTree = $this->categoryTree->getFilteredTree(
-                $info,
-                $categoryId,
-                $searchCriteria,
-                $store,
-                [],
-                $context
-            );
-            $fetchedCategories[] = current($this->extractDataFromCategoryTree->execute($categoryTree));
-        }
-
-        return $fetchedCategories;
+        $searchCriteria = $this->searchCriteriaFactory->create();
+        $categoryCollection = $this->categoryTree->getFlatCategoriesByRootIds(
+            $info,
+            $categoryIds,
+            $searchCriteria,
+            $store,
+            [],
+            $context
+        );
+        return $this->extractDataFromCategoryTree->buildTree($categoryCollection, $categoryIds);
     }
 }

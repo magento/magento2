@@ -112,6 +112,22 @@ class CategoryTree
     }
 
     /**
+     * Returns categories collection for tree starting from parent $rootCategoryId
+     *
+     * @param ResolveInfo $resolveInfo
+     * @param int $rootCategoryId
+     * @param int $storeId
+     * @return Iterator
+     * @throws LocalizedException
+     * @throws Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getTreeCollection(ResolveInfo $resolveInfo, int $rootCategoryId, int $storeId): Collection
+    {
+        return $this->getRawCollection($resolveInfo, [$rootCategoryId]);
+    }
+
+    /**
      * Return prepared collection
      *
      * @param ResolveInfo $resolveInfo
