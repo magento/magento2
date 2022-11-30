@@ -6,6 +6,7 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 
 /**
@@ -44,7 +45,9 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
                     );
                 }
 
-                $order->setStatus($data['status']);
+                $orderStatus = ($order->getDataByKey('status') == Order::STATE_PROCESSING) ? $data['status']
+                    : $order->getDataByKey('status');
+                $order->setStatus($orderStatus);
                 $notify = $data['is_customer_notified'] ?? false;
                 $visible = $data['is_visible_on_front'] ?? false;
 
@@ -53,7 +56,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
                 }
 
                 $comment = trim(strip_tags($data['comment']));
-                $history = $order->addStatusHistoryComment($comment, $data['status']);
+                $history = $order->addStatusHistoryComment($comment, $orderStatus);
                 $history->setIsVisibleOnFront($visible);
                 $history->setIsCustomerNotified($notify);
                 $history->save();
