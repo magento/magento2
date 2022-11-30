@@ -122,7 +122,8 @@ class AddCommentTest extends TestCase
     ) {
         $orderId = 30;
         $this->requestMock->expects($this->once())->method('getParam')->with('order_id')->willReturn($orderId);
-        $this->orderMock->expects($this->atLeastOnce())->method('getDataByKey')->with('status')->willReturn($orderStatus);
+        $this->orderMock->expects($this->atLeastOnce())->method('getDataByKey')
+            ->with('status')->willReturn($orderStatus);
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->willReturn($this->orderMock);
