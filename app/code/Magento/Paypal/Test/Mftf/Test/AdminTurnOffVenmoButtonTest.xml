@@ -35,6 +35,7 @@
         <actionGroup ref="AdminSelectDisableFundingActionGroup" stepKey="selectVenmoOption"/>
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig1"/>
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
 
         <!-- Open PayPal Advanced->Frontend Experience->Features configuration page again -->
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage2"/>
@@ -45,6 +46,7 @@
         <actionGroup ref="AdminUnselectDisableFundingActionGroup" stepKey="unselectVenmoOption"/>
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig2"/>
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage2"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
 
     </test>
 </tests>
