@@ -63,10 +63,7 @@ class CatalogProcessor implements CollectionProcessorInterface
     ): Collection {
         $this->collectionProcessor->process($searchCriteria, $collection);
         $store = $context->getExtensionAttributes()->getStore();
-        $category = $collection->getItemById($store->getRootCategoryId());
-        if (!$category instanceof Category) {
-            $category = $this->categoryRepository->get($store->getRootCategoryId());
-        }
+        $category = $this->categoryRepository->get($store->getRootCategoryId());
         $this->addRootCategoryFilterForStoreByPath($collection, $category->getPath());
         return $collection;
     }
