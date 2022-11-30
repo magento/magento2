@@ -47,6 +47,7 @@ use Magento\Store\Model\Store;
  */
 class Product extends AbstractEntity
 {
+    private const COL_NAME_FORMAT = '/[\x00-\x1F\x7F]/';
     private const DEFAULT_GLOBAL_MULTIPLE_VALUE_SEPARATOR = ',';
     public const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
     private const HASH_ALGORITHM = 'sha256';
@@ -1632,7 +1633,7 @@ class Product extends AbstractEntity
                 }
 
                 // remove null byte character
-                $rowData[self::COL_NAME] = preg_replace('/[\x00-\x1F\x7F]/', '', $rowData[self::COL_NAME]);
+                $rowData[self::COL_NAME] = preg_replace(self::COL_NAME_FORMAT, '', $rowData[self::COL_NAME]);
 
                 $rowSku = $rowData[self::COL_SKU];
                 $rowSkuNormalized = mb_strtolower($rowSku);
