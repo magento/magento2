@@ -29,6 +29,14 @@ class Forgery
     private $hydrator;
 
     /**
+     * @param Hydrator $hydrator
+     */
+    public function __construct(Hydrator $hydrator)
+    {
+        $this->hydrator = $hydrator;
+    }
+
+    /**
      * Forge the node and put it into index.
      *
      * @param Category $category
@@ -79,13 +87,10 @@ class Forgery
     /**
      * Get category hydrator.
      *
-     * @return Hydrator|mixed
+     * @return Hydrator
      */
     public function getHydrator()
     {
-        if (!$this->hydrator instanceof Hydrator) {
-            $this->hydrator = ObjectManager::getInstance()->get(Hydrator::class);
-        }
         return $this->hydrator;
     }
 }
