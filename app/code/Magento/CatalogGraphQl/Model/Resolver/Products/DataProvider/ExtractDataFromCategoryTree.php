@@ -10,9 +10,26 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree\Wrapper\Forgery;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree\Wrapper\ForgeryFactory;
 
+/**
+ * Data extractor for category tree processing in GraphQL resolvers.
+ */
 class ExtractDataFromCategoryTree
 {
+    /**
+     * @var ForgeryFactory
+     */
+    private $resultTreeForgeryFactory;
+
+    /**
+     * @param ForgeryFactory $resultTreeForgeryFactory
+     */
+    public function __construct(ForgeryFactory $resultTreeForgeryFactory)
+    {
+        $this->resultTreeForgeryFactory = $resultTreeForgeryFactory;
+    }
+
     /**
      * Build result tree from collection
      *
@@ -22,7 +39,8 @@ class ExtractDataFromCategoryTree
      */
     public function buildTree(Collection $collection, array $topLevelCategories) : array
     {
-        $forgery = new Forgery();
+        /** @var Forgery $forgery */
+        $forgery = $this->resultTreeForgeryFactory->create();
         /** @var Category $item */
         foreach ($collection->getItems() as $item) {
             $forgery->forge($item);

@@ -100,19 +100,25 @@ class Node
 
     /**
      * Render node and its children as an array recursively.
+     * Returns null is node model is not set.
      *
-     * @return array
+     * @return array|null
      */
-    public function renderArray(): array
+    public function renderArray(): ?array
     {
+        if (!$this->model) {
+            return null;
+        }
         return array_merge(
             $this->forgery->getHydrator()->hydrateCategory($this->model),
             [
-                'children' => array_map(
-                    function ($node) {
-                        return $node->renderArray();
-                    },
-                    $this->children
+                'children' => array_filter(
+                    array_map(
+                        function ($node) {
+                            return $node->renderArray();
+                        },
+                        $this->children
+                    )
                 )
             ]
         );
