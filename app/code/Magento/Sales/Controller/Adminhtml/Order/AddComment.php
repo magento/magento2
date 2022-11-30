@@ -83,7 +83,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
     }
 
     /**
-     * adjust order status to set
+     * Adjust order status to set
      *
      * @param string $orderStatus
      * @param string $historyStatus
