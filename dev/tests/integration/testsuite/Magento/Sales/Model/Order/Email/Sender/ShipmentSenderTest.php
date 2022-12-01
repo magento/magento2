@@ -79,7 +79,10 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
             ->create(\Magento\Sales\Model\Order\Email\Sender\ShipmentSender::class);
         $result = $orderSender->send($shipment, true);
         $this->assertFalse(
-            array_search('Environment emulation nesting is not allowed.', array_column($this->logger->getMessages(), 'message'))
+            array_search(
+                'Environment emulation nesting is not allowed.',
+                array_column($this->logger->getMessages(), 'message')
+            )
         );
         $this->assertTrue($result);
 
@@ -107,7 +110,10 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         $result = $shipmentSender->send($shipment, true);
 
         $this->assertFalse(
-            array_search('Environment emulation nesting is not allowed.', array_column($this->logger->getMessages(), 'message'))
+            array_search(
+                'Environment emulation nesting is not allowed.',
+                array_column($this->logger->getMessages(), 'message')
+            )
         );
         $this->assertEquals(self::NEW_CUSTOMER_EMAIL, $shipmentIdentity->getCustomerEmail());
         $this->assertTrue($result);
@@ -131,7 +137,10 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         $result = $shipmentSender->send($shipment, true);
 
         $this->assertFalse(
-            array_search('Environment emulation nesting is not allowed.', array_column($this->logger->getMessages(), 'message'))
+            array_search(
+                'Environment emulation nesting is not allowed.',
+                array_column($this->logger->getMessages(), 'message')
+            )
         );
         $this->assertEquals(self::OLD_CUSTOMER_EMAIL, $shipmentIdentity->getCustomerEmail());
         $this->assertTrue($result);
@@ -158,8 +167,10 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         $result = $shipmentSender->send($shipment, true);
 
         $this->assertFalse(
-            array_search('Environment emulation nesting is not allowed.',
-                array_column($this->logger->getMessages(), 'message'))
+            array_search(
+                'Environment emulation nesting is not allowed.',
+                array_column($this->logger->getMessages(), 'message')
+            )
         );
         $this->assertEquals(self::ORDER_EMAIL, $shipmentIdentity->getCustomerEmail());
         $this->assertTrue($result);
