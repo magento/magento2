@@ -185,7 +185,7 @@ class Shipment extends AbstractItems
                     $lines[][] = ['text' => $text, 'feed' => 65];
                 }
 
-                $drawItems[] = ['lines' => $lines, 'height' => 15];
+                $drawItems[] = ['lines' => $lines, 'height' => 15, 'shift' => 5];
             }
         }
 

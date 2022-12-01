@@ -209,7 +209,7 @@ class Creditmemo extends AbstractItems
                     $lines[][] = ['text' => $text, 'feed' => $leftBound + 5];
                 }
 
-                $drawItems[] = ['lines' => $lines, 'height' => 15];
+                $drawItems[] = ['lines' => $lines, 'height' => 15, 'shift' => 5];
             }
         }
 
