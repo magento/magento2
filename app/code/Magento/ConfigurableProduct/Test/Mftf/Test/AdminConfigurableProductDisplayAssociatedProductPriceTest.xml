@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableProductDisplayAssociatedProductPriceTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create/Update Configurable Product"/>
+            <title value="Configurable Product Display the Associated Product Price if Lowest Price Product is Disabled"/>
+            <description value="Configurable Product Display the Associated Product Price if Lowest Price Product is Disabled"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4289"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+        <before>
+            <!-- create category -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!-- login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Delete Configurable Product -->
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersConfigurable"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterConfigurable">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterFillSelectFieldActionGroup" stepKey="addTypeFilterConfigurable">
+                <argument name="filterName" value="type_id"/>
+                <argument name="filterValue" value="Configurable Product"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyGridFilterConfigurable"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteConfigurableProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+
+            <!-- Delete 3 Child Products -->
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersVirtual"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterVirtual">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyGridFilterVirtual"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteVirtualProducts">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Create a configurable product via the UI -->
+        <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+
+        <!--Go to admin and open product edit page to disable product all store view -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateBackToAdminProductGrid"/>
+        <waitForPageLoad time="30" stepKey="waitForProductGridPageIsLoaded"/>
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterWhiteConfigurableVariation">
+            <argument name="product" value="colorProductAttribute1"/>
+        </actionGroup>
+
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="editWhiteConfigurableVariation"/>
+        <actionGroup ref="ToggleProductEnabledActionGroup" stepKey="disableProduct"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+
+        <!-- Open Storefront -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="clickOnCategoryName">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+
+        <!-- Assert that Configurable Product is present in category page -->
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProductPresent">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
+
+        <!-- Assert that Configurable Product price in category page  -->
+        <see userInput="2.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName(_defaultProduct.name)}}" stepKey="seeProductPriceOnCategory"/>
+
+        <!--Open product display page-->
+        <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="clickProductToGoProductPage">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
+
+        <!-- Assert that Configurable Product price in product page -->
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="assertProductPrice">
+            <argument name="productPrice" value="{{colorProductAttribute2.price}}"/>
+        </actionGroup>
+    </test>
+</tests>

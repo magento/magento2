@@ -19,6 +19,7 @@
             <group value="Theme"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct"/>
             <createData entity="SalesRuleSpecificCouponAndByPercent" stepKey="createSalesRule"/>
             <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
@@ -28,6 +29,7 @@
         <after>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
         </after>
 
         <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
