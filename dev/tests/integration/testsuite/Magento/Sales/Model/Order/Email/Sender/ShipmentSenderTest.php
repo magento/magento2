@@ -31,17 +31,11 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerInterface */
     private $objectManager;
 
-    /** @var State */
-    private $state;
-
     /** @var Logger */
     private $logger;
 
     /** @var int */
     private $minErrorDefaultValue;
-
-    /** @var string */
-    private $defaultMode;
 
     /**
      * @var CustomerRepository
@@ -56,9 +50,6 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->state = $this->objectManager->get(\Magento\Framework\App\State::class);
-        $this->defaultMode = $this->state->getMode();
-        $this->state->setMode(State::MODE_DEFAULT);
         $this->logger = $this->objectManager->get(Logger::class);
         $reflection = new \ReflectionClass(get_class($this->logger));
         $reflectionProperty = $reflection->getProperty('minimumErrorLevel');
@@ -75,7 +66,7 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
      */
     public function testSend()
     {
-        $this->objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
+        $this->objectManager->get(State::class)->setAreaCode('frontend');
         $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
         $order->setCustomerEmail('customer@example.com');
@@ -87,7 +78,11 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         $orderSender = $this->objectManager
             ->create(\Magento\Sales\Model\Order\Email\Sender\ShipmentSender::class);
         $result = $orderSender->send($shipment, true);
-        $this->assertEmpty($this->logger->getMessages());
+        $this->assertFalse(
+            array_search(
+                'Environment emulation nesting is not allowed.',
+                array_column($this->logger->getMessages(), 'message')
+            ));
         $this->assertTrue($result);
 
         $this->assertNotEmpty($shipment->getEmailSent());
@@ -113,7 +108,11 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($shipment->getEmailSent());
         $result = $shipmentSender->send($shipment, true);
 
-        $this->assertEmpty($this->logger->getMessages());
+        $this->assertFalse(
+            array_search(
+                'Environment emulation nesting is not allowed.',
+                array_column($this->logger->getMessages(), 'message')
+            ));
         $this->assertEquals(self::NEW_CUSTOMER_EMAIL, $shipmentIdentity->getCustomerEmail());
         $this->assertTrue($result);
         $this->assertNotEmpty($shipment->getEmailSent());
@@ -135,7 +134,11 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($shipment->getEmailSent());
         $result = $shipmentSender->send($shipment, true);
 
-        $this->assertEmpty($this->logger->getMessages());
+        $this->assertFalse(
+            array_search(
+                'Environment emulation nesting is not allowed.',
+                array_column($this->logger->getMessages(), 'message')
+            ));
         $this->assertEquals(self::OLD_CUSTOMER_EMAIL, $shipmentIdentity->getCustomerEmail());
         $this->assertTrue($result);
         $this->assertNotEmpty($shipment->getEmailSent());
@@ -160,7 +163,11 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($shipment->getEmailSent());
         $result = $shipmentSender->send($shipment, true);
 
-        $this->assertEmpty($this->logger->getMessages());
+        $this->assertFalse(
+            array_search(
+                'Environment emulation nesting is not allowed.',
+                array_column($this->logger->getMessages(), 'message')
+            ));
         $this->assertEquals(self::ORDER_EMAIL, $shipmentIdentity->getCustomerEmail());
         $this->assertTrue($result);
         $this->assertNotEmpty($shipment->getEmailSent());
@@ -173,7 +180,7 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
      */
     public function testPackages()
     {
-        $this->objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
+        $this->objectManager->get(State::class)->setAreaCode('frontend');
         $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
         $order->setCustomerEmail('customer@example.com');
@@ -237,7 +244,5 @@ class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
         $reflectionProperty = new \ReflectionProperty(get_class($this->logger), 'minimumErrorLevel');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->logger, $this->minErrorDefaultValue);
-
-        $this->state->setMode($this->defaultMode);
     }
 }
