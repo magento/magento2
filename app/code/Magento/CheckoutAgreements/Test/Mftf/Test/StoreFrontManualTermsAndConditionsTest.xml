@@ -114,7 +114,7 @@
         <seeElement selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" stepKey="seeTermInCheckoutagain"/>
         <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementButton}}" userInput="{{newHtmlTerm.checkboxText}}" stepKey="seeTermtextInCheckoutagain"/>
         <!-- Verify Checkbox is not checked-->
-        <dontSeeCheckboxIsChecked selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" stepKey="checkboxNotChecked"/>
+        <dontSeeCheckboxIsChecked selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckboxcheck($$newHtmlTerm.checkboxText$$)}}" stepKey="checkboxNotChecked"/>
         <!-- Click PLace Order Again-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="PlaceOrder"/>
         <!--This is a required field." message is appeared under check-box -->
