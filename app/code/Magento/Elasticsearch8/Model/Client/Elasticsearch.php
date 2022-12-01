@@ -121,67 +121,6 @@ class Elasticsearch implements ClientInterface
     }
 
     /**
-     * Build config for Elasticsearch 8
-     *
-     * @param array $options
-     * @return array
-     */
-    private function buildESConfig(array $options = []): array
-    {
-        $hostname = preg_replace('/http[s]?:\/\//i', '', $options['hostname']);
-        // @codingStandardsIgnoreStart
-        $protocol = parse_url($options['hostname'], PHP_URL_SCHEME);
-        // @codingStandardsIgnoreEnd
-        if (!$protocol) {
-            $protocol = 'http';
-        }
-
-        $authString = '';
-        if (!empty($options['enableAuth']) && (int)$options['enableAuth'] === 1) {
-            $authString = "{$options['username']}:{$options['password']}@";
-        }
-
-        $portString = '';
-        if (!empty($options['port'])) {
-            $portString = ':' . $options['port'];
-        }
-
-        $host = $protocol . '://' . $authString . $hostname . $portString;
-
-        $options['hosts'] = [$host];
-
-        return $options;
-    }
-
-    /**
-     * Performs bulk query over Elasticsearch 8 index
-     *
-     * @param array $query
-     * @return void
-     */
-    public function bulkQuery(array $query)
-    {
-        $this->getElasticsearchClient()->bulk($query);
-    }
-
-    /**
-     * Creates an Elasticsearch 8 index.
-     *
-     * @param string $index
-     * @param array $settings
-     * @return void
-     */
-    public function createIndex(string $index, array $settings)
-    {
-        $this->getElasticsearchClient()->indices()->create(
-            [
-                'index' => $index,
-                'body' => $settings,
-            ]
-        );
-    }
-
-    /**
      * Add/update an Elasticsearch index settings.
      *
      * @param string $index
@@ -196,33 +135,6 @@ class Elasticsearch implements ClientInterface
                 'body' => $settings,
             ]
         );
-    }
-
-    /**
-     * Delete an Elasticsearch 8 index.
-     *
-     * @param string $index
-     * @return void
-     */
-    public function deleteIndex(string $index)
-    {
-        $this->getElasticsearchClient()->indices()->delete(['index' => $index]);
-    }
-
-    /**
-     * Check if index is empty.
-     *
-     * @param string $index
-     * @return bool
-     */
-    public function isEmptyIndex(string $index): bool
-    {
-        $stats = $this->getElasticsearchClient()->indices()->stats(['index' => $index, 'metric' => 'docs']);
-        if ($stats['indices'][$index]['primaries']['docs']['count'] === 0) {
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -259,6 +171,39 @@ class Elasticsearch implements ClientInterface
     }
 
     /**
+     * Build config for Elasticsearch 8
+     *
+     * @param array $options
+     * @return array
+     */
+    private function buildESConfig(array $options = []): array
+    {
+        $hostname = preg_replace('/http[s]?:\/\//i', '', $options['hostname']);
+        // @codingStandardsIgnoreStart
+        $protocol = parse_url($options['hostname'], PHP_URL_SCHEME);
+        // @codingStandardsIgnoreEnd
+        if (!$protocol) {
+            $protocol = 'http';
+        }
+
+        $authString = '';
+        if (!empty($options['enableAuth']) && (int)$options['enableAuth'] === 1) {
+            $authString = "{$options['username']}:{$options['password']}@";
+        }
+
+        $portString = '';
+        if (!empty($options['port'])) {
+            $portString = ':' . $options['port'];
+        }
+
+        $host = $protocol . '://' . $authString . $hostname . $portString;
+
+        $options['hosts'] = [$host];
+
+        return $options;
+    }
+
+    /**
      * Exists alias.
      *
      * @param string $alias
@@ -272,6 +217,34 @@ class Elasticsearch implements ClientInterface
         }
 
         return $this->getElasticsearchClient()->indices()->existsAlias($params)->asBool();
+    }
+
+    /**
+     * Performs bulk query over Elasticsearch 8 index
+     *
+     * @param array $query
+     * @return void
+     */
+    public function bulkQuery(array $query)
+    {
+        $this->getElasticsearchClient()->bulk($query);
+    }
+
+    /**
+     * Creates an Elasticsearch 8 index.
+     *
+     * @param string $index
+     * @param array $settings
+     * @return void
+     */
+    public function createIndex(string $index, array $settings)
+    {
+        $this->getElasticsearchClient()->indices()->create(
+            [
+                'index' => $index,
+                'body' => $settings,
+            ]
+        );
     }
 
     /**
@@ -309,6 +282,33 @@ class Elasticsearch implements ClientInterface
         }
 
         $this->getElasticsearchClient()->indices()->putMapping($params);
+    }
+
+    /**
+     * Delete an Elasticsearch 8 index.
+     *
+     * @param string $index
+     * @return void
+     */
+    public function deleteIndex(string $index)
+    {
+        $this->getElasticsearchClient()->indices()->delete(['index' => $index]);
+    }
+
+    /**
+     * Check if index is empty.
+     *
+     * @param string $index
+     * @return bool
+     */
+    public function isEmptyIndex(string $index): bool
+    {
+        $stats = $this->getElasticsearchClient()->indices()->stats(['index' => $index, 'metric' => 'docs']);
+        if ($stats['indices'][$index]['primaries']['docs']['count'] === 0) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
