@@ -169,12 +169,13 @@ class Shipment extends AbstractItems
                         true
                     ),
                     'font' => 'italic',
-                    'feed' => 60,
+                    'feed' => 110,
                 ];
 
                 if ($option['value']) {
                     $text = [];
                     $printValue = $option['print_value'] ?? $this->filterManager->stripTags($option['value']);
+                    $printValue = str_replace(PHP_EOL, ', ', $printValue);
                     $values = explode(', ', $printValue);
                     foreach ($values as $value) {
                         foreach ($this->string->split($value, 50, true, true) as $subValue) {
@@ -182,7 +183,7 @@ class Shipment extends AbstractItems
                         }
                     }
 
-                    $lines[][] = ['text' => $text, 'feed' => 65];
+                    $lines[][] = ['text' => $text, 'feed' => 115];
                 }
 
                 $drawItems[] = ['lines' => $lines, 'height' => 15, 'shift' => 5];
