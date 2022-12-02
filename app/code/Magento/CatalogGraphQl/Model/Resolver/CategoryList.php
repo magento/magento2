@@ -95,7 +95,7 @@ class CategoryList implements ResolverInterface
             throw new GraphQlInputException(__($e->getMessage()));
         }
 
-        return $this->fetchCategoriesByTopLevelIds($topLevelCategoryIds, $info, $processedArgs, $store, [], $context);
+        return $this->fetchCategoriesByTopLevelIds($topLevelCategoryIds, $info, $processedArgs, [], $context);
     }
 
     /**
@@ -104,7 +104,6 @@ class CategoryList implements ResolverInterface
      * @param array $topLevelCategoryIds
      * @param ResolveInfo $info
      * @param array $criteria
-     * @param StoreInterface $store
      * @param array $attributeNames
      * @param ContextInterface $context
      * @return array
@@ -114,17 +113,18 @@ class CategoryList implements ResolverInterface
         array $topLevelCategoryIds,
         ResolveInfo $info,
         array $criteria,
-        StoreInterface $store,
         array $attributeNames,
-        $context
+        ContextInterface $context
     ) : array {
         $criteria['pageSize'] = 0;
-        $searchCriteria = $this->searchCriteria->buildCriteria($criteria, $store);
+        $searchCriteria = $this->searchCriteria->buildCriteria(
+            $criteria,
+            $context->getExtensionAttributes()->getStore()
+        );
         $categoryCollection = $this->categoryTree->getFlatCategoriesByRootIds(
             $info,
             $topLevelCategoryIds,
             $searchCriteria,
-            $store,
             $attributeNames,
             $context
         );

@@ -98,7 +98,7 @@ class CategoriesQuery implements ResolverInterface
 
         $rootCategoryIds = $filterResult['category_ids'] ?? [];
 
-        $filterResult['items'] = $this->fetchCategories($rootCategoryIds, $info, $store, $context);
+        $filterResult['items'] = $this->fetchCategories($rootCategoryIds, $info, $context);
         return $filterResult;
     }
 
@@ -107,14 +107,12 @@ class CategoriesQuery implements ResolverInterface
      *
      * @param array $categoryIds
      * @param ResolveInfo $info
-     * @param StoreInterface $store
      * @param ContextInterface $context
      * @return array
      */
     private function fetchCategories(
         array $categoryIds,
         ResolveInfo $info,
-        StoreInterface $store,
         ContextInterface $context
     ) {
         $searchCriteria = $this->searchCriteriaFactory->create();
@@ -122,7 +120,6 @@ class CategoriesQuery implements ResolverInterface
             $info,
             $categoryIds,
             $searchCriteria,
-            $store,
             [],
             $context
         );

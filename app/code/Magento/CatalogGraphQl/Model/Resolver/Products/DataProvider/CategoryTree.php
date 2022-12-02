@@ -154,7 +154,6 @@ class CategoryTree
         ResolveInfo $resolveInfo,
         array $topLevelCategoryIds,
         SearchCriteria $searchCriteria,
-        StoreInterface $store,
         array $attributeNames,
         ContextInterface $context
     ): Collection {
