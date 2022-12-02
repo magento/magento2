@@ -63,7 +63,7 @@ class CatalogTreeDataProvider implements EntityDataProviderInterface
         int $storeId = null
     ): array {
         $categoryId = (int)$id;
-        $categoriesTree = $this->categoryTree->getTreeCollection($info, $categoryId);
+        $categoriesTree = $this->categoryTree->getTreeCollection($info, $categoryId, $storeId);
         if ($categoriesTree->count() == 0) {
             throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
         }

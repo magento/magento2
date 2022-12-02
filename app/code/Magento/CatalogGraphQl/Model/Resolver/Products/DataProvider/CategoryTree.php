@@ -95,85 +95,18 @@ class CategoryTree
     }
 
     /**
-     * Returns categories tree starting from parent $rootCategoryId
-     *
-     * @param ResolveInfo $resolveInfo
-     * @param int $rootCategoryId
-     * @param int $storeId
-     * @return Iterator
-     * @throws LocalizedException
-     * @throws Exception
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getTree(ResolveInfo $resolveInfo, int $rootCategoryId, int $storeId): Iterator
-    {
-        $collection = $this->getCollection($resolveInfo, $rootCategoryId);
-        return $collection->getIterator();
-    }
-
-    /**
      * Returns categories collection for tree starting from parent $rootCategoryId
      *
      * @param ResolveInfo $resolveInfo
      * @param int $rootCategoryId
+     * @param int $storeId
      * @return Collection
      * @throws LocalizedException
-     * @throws Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getTreeCollection(ResolveInfo $resolveInfo, int $rootCategoryId): Collection
+    public function getTreeCollection(ResolveInfo $resolveInfo, int $rootCategoryId, int $storeId): Collection
     {
-        return $this->getRawCollection($resolveInfo, [$rootCategoryId]);
-    }
-
-    /**
-     * Return prepared collection
-     *
-     * @param ResolveInfo $resolveInfo
-     * @param int $rootCategoryId
-     * @return Collection
-     * @throws LocalizedException
-     * @throws Exception
-     */
-    private function getCollection(ResolveInfo $resolveInfo, int $rootCategoryId) : Collection
-    {
-        $categoryQuery = $resolveInfo->fieldNodes[0];
-        $collection = $this->collectionFactory->create();
-        $this->joinAttributesRecursively($collection, $categoryQuery, $resolveInfo);
-        $depth = $this->depthCalculator->calculate($resolveInfo, $categoryQuery);
-        $level = $this->levelCalculator->calculate($rootCategoryId);
-
-        // If root category is being filter, we've to remove first slash
-        if ($rootCategoryId == Category::TREE_ROOT_ID) {
-            $regExpPathFilter = sprintf('.*%s/[/0-9]*$', $rootCategoryId);
-        } else {
-            $regExpPathFilter = sprintf('.*/%s/[/0-9]*$', $rootCategoryId);
-        }
-
-        //Add `is_anchor` attribute to selected field
-        $collection->addAttributeToSelect('is_anchor');
-
-        //Search for desired part of category tree
-        $collection->addPathFilter($regExpPathFilter);
-
-        $collection->addFieldToFilter('level', ['gt' => $level]);
-        $collection->addFieldToFilter('level', ['lteq' => $level + $depth - self::DEPTH_OFFSET]);
-        $collection->addAttributeToFilter('is_active', 1, "left");
-        $collection->setOrder('level');
-        $collection->setOrder(
-            'position',
-            $collection::SORT_ORDER_DESC
-        );
-        $collection->getSelect()->orWhere(
-            $collection->getSelect()
-                ->getConnection()
-                ->quoteIdentifier(
-                    'e.' . $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField()
-                ) . ' = ?',
-            $rootCategoryId
-        );
-
-        return $collection;
+        return $this->getRawTreeCollection($resolveInfo, [$rootCategoryId]);
     }
 
     /**
@@ -209,33 +142,6 @@ class CategoryTree
      * Returns categories tree starting from parent $rootCategoryId with filtration
      *
      * @param ResolveInfo $resolveInfo
-     * @param int $rootCategoryId
-     * @param SearchCriteria $searchCriteria
-     * @param StoreInterface $store
-     * @param array $attributeNames
-     * @param ContextInterface $context
-     * @return Iterator
-     * @throws LocalizedException
-     * @throws Exception
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getFilteredTree(
-        ResolveInfo $resolveInfo,
-        int $rootCategoryId,
-        SearchCriteria $searchCriteria,
-        StoreInterface $store,
-        array $attributeNames,
-        ContextInterface $context
-    ): Iterator {
-        $collection = $this->getCollection($resolveInfo, $rootCategoryId);
-        $this->collectionProcessor->process($collection, $searchCriteria, $attributeNames, $context);
-        return $collection->getIterator();
-    }
-
-    /**
-     * Returns categories tree starting from parent $rootCategoryId with filtration
-     *
-     * @param ResolveInfo $resolveInfo
      * @param array $topLevelCategoryIds
      * @param SearchCriteria $searchCriteria
      * @param StoreInterface $store
@@ -252,7 +158,7 @@ class CategoryTree
         array $attributeNames,
         ContextInterface $context
     ): Collection {
-        $collection = $this->getRawCollection($resolveInfo, $topLevelCategoryIds);
+        $collection = $this->getRawTreeCollection($resolveInfo, $topLevelCategoryIds);
         $this->collectionProcessor->process($collection, $searchCriteria, $attributeNames, $context);
         return $collection;
     }
@@ -261,12 +167,11 @@ class CategoryTree
      * Return prepared collection
      *
      * @param ResolveInfo $resolveInfo
-     * @param int $rootCategoryId
+     * @param array $topLevelCategoryIds
      * @return Collection
      * @throws LocalizedException
-     * @throws Exception
      */
-    private function getRawCollection(ResolveInfo $resolveInfo, array $topLevelCategoryIds) : Collection
+    private function getRawTreeCollection(ResolveInfo $resolveInfo, array $topLevelCategoryIds) : Collection
     {
         $categoryQuery = $resolveInfo->fieldNodes[0];
         $collection = $this->collectionFactory->create();

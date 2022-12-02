@@ -72,7 +72,7 @@ class CategoryTree implements ResolverInterface
             $this->checkCategoryIsActive->execute($rootCategoryId);
         }
         $store = $context->getExtensionAttributes()->getStore();
-        $categoriesTree = $this->categoryTree->getTreeCollection($info, $rootCategoryId);
+        $categoriesTree = $this->categoryTree->getTreeCollection($info, $rootCategoryId, (int)$store->getId());
 
         if ($categoriesTree->count() == 0) {
             throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
