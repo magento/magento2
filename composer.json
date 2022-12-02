@@ -98,7 +98,6 @@
         "phpstan/phpstan": "^1.7",
         "phpunit/phpunit": "^9.5",
         "sebastian/phpcpd": "^6.0",
-        "squizlabs/php_codesniffer": "^3.6",
         "symfony/finder": "^5.4"
     },
     "suggest": {
