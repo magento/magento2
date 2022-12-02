@@ -69,7 +69,7 @@ class AsyncConfigPublisher implements \Magento\AsyncConfig\Api\AsyncConfigPublis
     public function saveConfigData(array $configData)
     {
         $asyncConfig = $this->asyncConfigFactory->create();
-        $this->savePlaceholderData($configData);
+        $this->saveImages($configData);
         $asyncConfig->setConfigData($this->serializer->serialize($configData));
         $this->messagePublisher->publish('async_config.saveConfig', $asyncConfig);
     }
@@ -81,21 +81,35 @@ class AsyncConfigPublisher implements \Magento\AsyncConfig\Api\AsyncConfigPublis
      * @return void
      * @throws FileSystemException
      */
-    private function savePlaceholderData(array &$configData)
+    private function saveImages(array &$configData)
     {
         if (isset($configData['groups']['placeholder'])) {
-            foreach ($configData['groups']['placeholder']['fields'] as &$data) {
-                if ($data['value']['tmp_name']) {
-                    $newPath =
-                        $this->dir->getPath(DirectoryList::TMP) . '/' .
-                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                        pathinfo($data['value']['tmp_name'])['filename'];
-                    $this->file->mv(
-                        $data['value']['tmp_name'],
-                        $newPath
-                    );
-                    $data['value']['tmp_name'] = $newPath;
-                }
+            $this->changeImagePath($configData['groups']['placeholder']['fields']);
+        } elseif (isset($configData['groups']['identity'])) {
+            $this->changeImagePath($configData['groups']['identity']['fields']);
+        }
+    }
+
+    /**
+     * Change Placeholder Data path if exists
+     *
+     * @param array $configData
+     * @return void
+     * @throws FileSystemException
+     */
+    private function changeImagePath(array &$fields)
+    {
+        foreach ($fields as &$data) {
+            if (!empty($data['value']['tmp_name'])) {
+                $newPath =
+                    $this->dir->getPath(DirectoryList::MEDIA) . '/' .
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    pathinfo($data['value']['tmp_name'])['filename'];
+                $this->file->mv(
+                    $data['value']['tmp_name'],
+                    $newPath
+                );
+                $data['value']['tmp_name'] = $newPath;
             }
         }
     }
