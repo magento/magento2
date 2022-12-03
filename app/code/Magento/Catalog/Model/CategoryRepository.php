@@ -229,7 +229,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      * Lazy loader for the converter.
      *
      * @return ExtensibleDataObjectConverter
-     *
+     * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
      * @deprecated 101.0.0
      */
     private function getExtensibleDataObjectConverter()
