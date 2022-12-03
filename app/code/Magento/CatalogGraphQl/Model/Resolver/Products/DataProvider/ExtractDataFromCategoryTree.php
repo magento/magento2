@@ -58,10 +58,10 @@ class ExtractDataFromCategoryTree
      * @param array $tree
      * @return array
      */
-    private function sortTree(array $tree): array
+    private function sortTree(array &$tree): array
     {
         foreach ($tree as &$node) {
-            if ($node['children']) {
+            if (!empty($node['children'])) {
                 uasort($node['children'], function ($element1, $element2) {
                     return ($element1['position'] <=> $element2['position']);
                 });
