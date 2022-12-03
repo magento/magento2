@@ -144,7 +144,6 @@ class CategoryTree
      * @param ResolveInfo $resolveInfo
      * @param array $topLevelCategoryIds
      * @param SearchCriteria $searchCriteria
-     * @param StoreInterface $store
      * @param array $attributeNames
      * @param ContextInterface $context
      * @return Collection
