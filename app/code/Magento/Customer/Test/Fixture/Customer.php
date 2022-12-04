@@ -8,11 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Fixture;
 
+use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Model\Customer as CustomerModel;
-use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
@@ -28,7 +27,7 @@ use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 class Customer implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
-        'password' => null,
+        'password' => 'password',
         CustomerInterface::ID => null,
         CustomerInterface::CONFIRMATION => null,
         CustomerInterface::CREATED_AT => null,
@@ -36,10 +35,10 @@ class Customer implements RevertibleDataFixtureInterface
         CustomerInterface::CREATED_IN => null,
         CustomerInterface::DOB => null,
         CustomerInterface::EMAIL => 'customer%uniqid%@mail.com',
-        CustomerInterface::FIRSTNAME => 'Firstname %uniqid%',
+        CustomerInterface::FIRSTNAME => 'Firstname%uniqid%',
         CustomerInterface::GENDER => null,
         CustomerInterface::GROUP_ID => null,
-        CustomerInterface::LASTNAME => 'Lastname %uniqid%',
+        CustomerInterface::LASTNAME => 'Lastname%uniqid%',
         CustomerInterface::MIDDLENAME => null,
         CustomerInterface::PREFIX => null,
         CustomerInterface::STORE_ID => null,
@@ -49,7 +48,9 @@ class Customer implements RevertibleDataFixtureInterface
         CustomerInterface::DEFAULT_BILLING => null,
         CustomerInterface::DEFAULT_SHIPPING => null,
         CustomerInterface::KEY_ADDRESSES => [],
-        CustomerInterface::DISABLE_AUTO_GROUP_CHANGE => null
+        CustomerInterface::DISABLE_AUTO_GROUP_CHANGE => null,
+        CustomerInterface::CUSTOM_ATTRIBUTES => [],
+        CustomerInterface::EXTENSION_ATTRIBUTES_KEY => [],
     ];
 
     private const DEFAULT_DATA_ADDRESS = [
@@ -58,80 +59,68 @@ class Customer implements RevertibleDataFixtureInterface
         AddressInterface::REGION => 'Massachusetts',
         AddressInterface::REGION_ID => '32',
         AddressInterface::COUNTRY_ID => 'US',
-        AddressInterface::STREET => '123 Test Street',
+        AddressInterface::STREET => ['%street_number% Test Street%uniqid%'],
         AddressInterface::COMPANY => null,
         AddressInterface::TELEPHONE => '1234567890',
         AddressInterface::FAX => null,
         AddressInterface::POSTCODE => '02108',
         AddressInterface::CITY => 'Boston',
-        AddressInterface::FIRSTNAME => 'Firstname %uniqid%',
-        AddressInterface::LASTNAME => 'Lastname %uniqid%',
+        AddressInterface::FIRSTNAME => 'Firstname%uniqid%',
+        AddressInterface::LASTNAME => 'Lastname%uniqid%',
         AddressInterface::MIDDLENAME => null,
         AddressInterface::PREFIX => null,
         AddressInterface::SUFFIX => null,
         AddressInterface::VAT_ID => null,
         AddressInterface::DEFAULT_BILLING => true,
-        AddressInterface::DEFAULT_SHIPPING => true
+        AddressInterface::DEFAULT_SHIPPING => true,
+        AddressInterface::CUSTOM_ATTRIBUTES => [],
+        AddressInterface::EXTENSION_ATTRIBUTES_KEY => [],
     ];
 
     /**
      * @var ServiceFactory
      */
-    private $serviceFactory;
+    private ServiceFactory $serviceFactory;
 
     /**
-     * @var CustomerRepositoryInterface
+     * @var AccountManagementInterface
      */
-    private $customerRepository;
-
-    /**
-     * @var CustomerFactory
-     */
-    private $customerFactory;
+    private AccountManagementInterface $accountManagement;
 
     /**
      * @var CustomerRegistry
      */
-    private $customerRegistry;
+    private CustomerRegistry $customerRegistry;
 
     /**
      * @var ProcessorInterface
      */
-    private $dataProcessor;
+    private ProcessorInterface $dataProcessor;
 
     /**
      * @var DataMerger
      */
-    private $dataMerger;
-
-    /**
-     * @var CustomerModel|null
-     */
-    private $customer;
+    private DataMerger $dataMerger;
 
     /**
      * @param ServiceFactory $serviceFactory
-     * @param CustomerRepositoryInterface $customerRepository
-     * @param CustomerFactory $customerFactory
+     * @param AccountManagementInterface $accountManagement
      * @param CustomerRegistry $customerRegistry
      * @param ProcessorInterface $dataProcessor
      * @param DataMerger $dataMerger
      */
     public function __construct(
         ServiceFactory $serviceFactory,
-        CustomerRepositoryInterface $customerRepository,
-        CustomerFactory $customerFactory,
+        AccountManagementInterface $accountManagement,
         CustomerRegistry $customerRegistry,
         ProcessorInterface $dataProcessor,
-        DataMerger $dataMerger,
+        DataMerger $dataMerger
     ) {
         $this->serviceFactory = $serviceFactory;
-        $this->customerRepository = $customerRepository;
-        $this->customerFactory = $customerFactory;
+        $this->accountManagement = $accountManagement;
         $this->customerRegistry = $customerRegistry;
         $this->dataProcessor = $dataProcessor;
         $this->dataMerger = $dataMerger;
-        $this->customer = null;
     }
 
     /**
@@ -145,14 +134,12 @@ class Customer implements RevertibleDataFixtureInterface
     {
         $customerSaveService = $this->serviceFactory->create(CustomerRepositoryInterface::class, 'save');
         $data = $this->prepareData($data);
-        if (count($data[CustomerInterface::KEY_ADDRESSES])) {
-            $addresses = $this->prepareCustomerAddress($data[CustomerInterface::KEY_ADDRESSES]);
-            $data[CustomerInterface::KEY_ADDRESSES] = $addresses;
-        }
+        $passwordHash = $this->accountManagement->getPasswordHash($data['password']);
+        unset($data['password']);
         $customerSaveService->execute(
             [
                 'customer' => $data,
-                'passwordHash' => $this->customer->getPasswordHash()
+                'passwordHash' => $passwordHash
             ]
         );
         return $this->customerRegistry->retrieveByEmail($data['email'], $data['website_id']);
@@ -180,29 +167,33 @@ class Customer implements RevertibleDataFixtureInterface
      */
     private function prepareData(array $data): array
     {
-        $data = $this->dataMerger->merge(self::DEFAULT_DATA, $data, false);
-
-        $this->customer = $this->customerFactory->create(['data' => $data]);
-        $this->customer->setPassword($data['password']);
-        if (isset($data['password'])) {
-            unset($data['password']);
-        }
+        $data = $this->dataMerger->merge(self::DEFAULT_DATA, $data);
+        $data[CustomerInterface::KEY_ADDRESSES] = $this->prepareAddresses($data[CustomerInterface::KEY_ADDRESSES]);
 
         return $this->dataProcessor->process($this, $data);
     }
 
     /**
-     * Prepare customer address
+     * Prepare customer addresses
      *
      * @param array $data
      * @return array
      */
-    private function prepareCustomerAddress(array $data): array
+    private function prepareAddresses(array $data): array
     {
         $addresses = [];
+        $default = self::DEFAULT_DATA_ADDRESS;
+        $streetNumber = 123;
         foreach ($data as $dataAddress) {
-            $dataAddress = $this->dataMerger->merge(self::DEFAULT_DATA_ADDRESS, $dataAddress, false);
-            $addresses[] = $this->dataProcessor->process($this, $dataAddress);
+            $dataAddress = $this->dataMerger->merge($default, $dataAddress);
+            $placeholders = ['%street_number%' => $streetNumber++];
+            $dataAddress[AddressInterface::STREET] = array_map(
+                fn ($str) => strtr($str, $placeholders),
+                $dataAddress[AddressInterface::STREET]
+            );
+            $addresses[] = $dataAddress;
+            $default[AddressInterface::DEFAULT_BILLING] = false;
+            $default[AddressInterface::DEFAULT_SHIPPING] = false;
         }
 
         return $addresses;
