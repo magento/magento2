@@ -9,7 +9,6 @@
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "laminas/laminas-dependency-plugin": true,
             "magento/*": true
         },
         "preferred-install": "dist",
@@ -45,7 +44,6 @@
         "laminas/laminas-captcha": "^2.12",
         "laminas/laminas-code": "^4.5",
         "laminas/laminas-db": "^2.15",
-        "laminas/laminas-dependency-plugin": "^2.5",
         "laminas/laminas-di": "^3.7",
         "laminas/laminas-escaper": "^2.10",
         "laminas/laminas-eventmanager": "^3.5",
@@ -100,7 +98,6 @@
         "phpstan/phpstan": "^1.7",
         "phpunit/phpunit": "^9.5",
         "sebastian/phpcpd": "^6.0",
-        "squizlabs/php_codesniffer": "^3.6",
         "symfony/finder": "^5.4"
     },
     "suggest": {
