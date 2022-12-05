@@ -21,26 +21,27 @@ use Magento\Framework\Math\Random;
 class ConfigOptionsList implements ConfigOptionsListInterface
 {
     /**
-     * Input key for the option
-     */
-    private const INPUT_KEY_SALT ='id_salt';
-
-    /**
-     * Path to the values in the deployment config
-     */
-    private const CONFIG_PATH_SALT = 'cache/graphql/id_salt';
-
-    /**
      * @var Random
      */
     private $random;
 
     /**
-     * @param Random $random
+     * Deployment configuration
+     *
+     * @var DeploymentConfig
      */
-    public function __construct(Random $random)
-    {
+    private $deploymentConfig;
+
+    /**
+     * @param Random $random
+     * @param DeploymentConfig $deploymentConfig
+     */
+    public function __construct(
+        Random $random,
+        DeploymentConfig $deploymentConfig
+    ) {
         $this->random = $random;
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -50,9 +51,9 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     {
         return [
             new TextConfigOption(
-                self::INPUT_KEY_SALT,
+                ConfigOptionsListConstants::INPUT_KEY_SALT,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_SALT,
+                ConfigOptionsListConstants::CONFIG_PATH_SALT,
                 'GraphQl Salt'
             ),
         ];
@@ -64,11 +65,18 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     public function createConfig(array $data, DeploymentConfig $deploymentConfig)
     {
+        $currentIdSalt = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_SALT);
+
         $configData = new ConfigData(ConfigFilePool::APP_ENV);
 
-        if (!$this->isDataEmpty($data, self::INPUT_KEY_SALT)) {
-            $salt = $this->random->getRandomString(ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE);
-            $configData->set(self::CONFIG_PATH_SALT, $salt);
+        // Use given salt if set, else use current
+        $id_salt = $data[ConfigOptionsListConstants::INPUT_KEY_SALT] ?? $currentIdSalt;
+
+        // If there is no id_salt given or currently set, generate a new one
+        $id_salt = $id_salt ?? $this->random->getRandomString(ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE);
+
+        if (!$this->isDataEmpty($data, ConfigOptionsListConstants::INPUT_KEY_SALT)) {
+            $configData->set(ConfigOptionsListConstants::CONFIG_PATH_SALT, $id_salt);
         }
 
         return [$configData];
