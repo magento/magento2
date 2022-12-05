@@ -125,9 +125,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     {
         $this->getConnection()->delete(
             $this->getMainTable(),
-            [
-                'is_processed' => '1'
-            ]
+            'is_processed = 1 OR TIMESTAMPADD(DAY, 1, updated_at) < CURRENT_TIMESTAMP() '
         );
     }
 
