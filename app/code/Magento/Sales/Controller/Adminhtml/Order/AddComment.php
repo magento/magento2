@@ -45,7 +45,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
                     );
                 }
 
-                $orderStatus = $this->adjustOrderStatus($order->getDataByKey('status'), $data['status']);
+                $orderStatus = $this->getOrderStatus($order->getDataByKey('status'), $data['status']);
                 $order->setStatus($orderStatus);
                 $notify = $data['is_customer_notified'] ?? false;
                 $visible = $data['is_visible_on_front'] ?? false;
@@ -83,15 +83,15 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
     }
 
     /**
-     * Adjust order status to set
+     * Get order status to set
      *
      * @param string $orderStatus
      * @param string $historyStatus
      * @return string
      */
-    private function adjustOrderStatus(string $orderStatus, string $historyStatus): string
+    private function getOrderStatus(string $orderStatus, string $historyStatus): string
     {
-        return ($orderStatus == Order::STATE_PROCESSING) ? $historyStatus
+        return ($orderStatus === Order::STATE_PROCESSING) ? $historyStatus
             : $orderStatus;
     }
 }
