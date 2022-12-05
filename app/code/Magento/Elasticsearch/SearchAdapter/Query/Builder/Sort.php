@@ -1,15 +1,21 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Elasticsearch\SearchAdapter\Query\Builder;
 
+use Magento\Elasticsearch\Model\Adapter\BatchDataMapper\InventoryFieldsProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
     as FieldNameResolver;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection;
 use Magento\Framework\Search\RequestInterface;
 
 /**
@@ -42,6 +48,11 @@ class Sort
     private $fieldNameResolver;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @var array
      */
     private $skippedFields;
@@ -56,17 +67,20 @@ class Sort
      * @param FieldNameResolver $fieldNameResolver
      * @param array $skippedFields
      * @param array $map
+     * @param ScopeConfigInterface|null $scopeConfig
      */
     public function __construct(
         AttributeProvider $attributeAdapterProvider,
         FieldNameResolver $fieldNameResolver,
         array $skippedFields = [],
-        array $map = []
+        array $map = [],
+        ScopeConfigInterface  $scopeConfig = null
     ) {
         $this->attributeAdapterProvider = $attributeAdapterProvider;
         $this->fieldNameResolver = $fieldNameResolver;
         $this->skippedFields = array_merge(self::DEFAULT_SKIPPED_FIELDS, $skippedFields);
         $this->map = array_merge(self::DEFAULT_MAP, $map);
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -80,7 +94,8 @@ class Sort
      */
     public function getSort(RequestInterface $request)
     {
-        $sorts = [];
+        $sorts = $this->getSortBySaleability();
+
         /**
          * Temporary solution for an existing interface of a fulltext search request in Backward compatibility purposes.
          * Scope to split Search request interface on two different 'Search' and 'Fulltext Search' contains in MC-16461.
@@ -123,5 +138,40 @@ class Sort
         }
 
         return $sorts;
+    }
+
+    /**
+     * Prepare sort by saleability.
+     *
+     * @return array
+     */
+    private function getSortBySaleability()
+    {
+        $sorts = [];
+
+        if ($this->hasShowOutOfStockStatus()) {
+            $attribute = $this->attributeAdapterProvider->getByAttributeCode(InventoryFieldsProvider::IS_SALABLE);
+            $fieldName = $this->fieldNameResolver->getFieldName($attribute);
+            $sorts[] = [
+                $fieldName => [
+                    'order' => Collection::SORT_ORDER_DESC
+                ]
+            ];
+        }
+
+        return $sorts;
+    }
+
+    /**
+     * Returns if display out of stock status set or not in catalog inventory
+     *
+     * @return bool
+     */
+    private function hasShowOutOfStockStatus(): bool
+    {
+        return (bool) $this->scopeConfig->getValue(
+            \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

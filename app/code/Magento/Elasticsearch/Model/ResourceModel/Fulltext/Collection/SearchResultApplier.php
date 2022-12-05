@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\CatalogInventory\Model\StockStatusApplierInterface;
 use Magento\CatalogInventory\Model\ResourceModel\StockStatusFilterInterface;
+use Magento\CatalogInventory\Model\StockStatusApplierInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -105,14 +106,12 @@ class SearchResultApplier implements SearchResultApplierInterface
             return;
         }
 
-        $ids = $this->getProductIdsBySaleability();
-
-        if (count($ids) == 0) {
-            $items = $this->sliceItems($this->searchResult->getItems(), $this->size, $this->currentPage);
-            foreach ($items as $item) {
-                $ids[] = (int)$item->getId();
-            }
+        $ids = [];
+        $items = $this->sliceItems($this->searchResult->getItems(), $this->size, $this->currentPage);
+        foreach ($items as $item) {
+            $ids[] = (int)$item->getId();
         }
+
         $orderList = implode(',', $ids);
         $this->collection->getSelect()
             ->where('e.entity_id IN (?)', $ids)
@@ -139,7 +138,7 @@ class SearchResultApplier implements SearchResultApplierInterface
                 $currentPage = 1;
             }
             if ($currentPage > $maxAllowedPageNumber) {
-                $currentPage = $maxAllowedPageNumber;
+                $currentPage = (int) $maxAllowedPageNumber;
             }
 
             $offset = $this->getOffset($currentPage, $size);
@@ -164,6 +163,9 @@ class SearchResultApplier implements SearchResultApplierInterface
      * Fetch filtered product ids sorted by the saleability and other applied sort orders
      *
      * @return array
+     * @deprecated
+     * @see Not use anymore
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function getProductIdsBySaleability(): array
     {
@@ -204,6 +206,8 @@ class SearchResultApplier implements SearchResultApplierInterface
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Exception
+     * @deprecated
+     * @see Not use anymore
      */
     private function categoryProductByCustomSortOrder(int $categoryId): array
     {
@@ -282,6 +286,8 @@ class SearchResultApplier implements SearchResultApplierInterface
      * Returns if display out of stock status set or not in catalog inventory
      *
      * @return bool
+     * @deprecated
+     * @see Not use anymore
      */
     private function hasShowOutOfStockStatus(): bool
     {
