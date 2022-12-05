@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0ad4c199ce2f8eff1b17f2a05a682c3a",
+    "content-hash": "7ff961b0e7ebdbf0884b827145413744",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2077,59 +2077,6 @@
                 }
             ],
             "time": "2022-04-11T13:26:20+00:00"
-        },
-        {
-            "name": "laminas/laminas-dependency-plugin",
-            "version": "2.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-dependency-plugin.git",
-                "reference": "8f2d10199381cdc7d0843bfadad55f8485df9e38"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-dependency-plugin/zipball/8f2d10199381cdc7d0843bfadad55f8485df9e38",
-                "reference": "8f2d10199381cdc7d0843bfadad55f8485df9e38",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": ">=1.1.0 <2.3.0",
-                "php": "~8.0.0 || ~8.1.0 || ~8.2.0"
-            },
-            "require-dev": {
-                "composer/composer": ">=1.9.0 <2.3.0",
-                "laminas/laminas-coding-standard": "~2.4.0",
-                "mikey179/vfsstream": "^1.6.11",
-                "phpunit/phpunit": "^9.5.5",
-                "psalm/plugin-phpunit": "^0.17.0",
-                "roave/security-advisories": "dev-master",
-                "vimeo/psalm": "^4.5"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "Laminas\\DependencyPlugin\\DependencyRewriterPluginDelegator"
-            },
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\DependencyPlugin\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Replace zendframework and zfcampus packages with their Laminas Project equivalents.",
-            "support": {
-                "issues": "https://github.com/laminas/laminas-dependency-plugin/issues",
-                "source": "https://github.com/laminas/laminas-dependency-plugin/tree/2.5.0"
-            },
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
-            "time": "2022-10-16T14:45:47+00:00"
         },
         {
             "name": "laminas/laminas-di",
@@ -13720,5 +13667,5 @@
         "lib-libxml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
