@@ -101,7 +101,7 @@ class Creditmemo extends AbstractItems
             }
 
             if (!isset($drawItems[$optionId])) {
-                $drawItems[$optionId] = ['lines' => [], 'height' => 15];
+                $drawItems[$optionId] = ['lines' => [], 'height' => 20];
             }
 
             // draw selection attributes
@@ -112,7 +112,7 @@ class Creditmemo extends AbstractItems
                     'feed' => $x,
                 ];
 
-                $drawItems[$optionId] = ['lines' => [$line], 'height' => 15];
+                $drawItems[$optionId] = ['lines' => [$line], 'height' => 20];
 
                 $line = [];
                 $prevOptionId = $attributes['option_id'];
@@ -210,7 +210,7 @@ class Creditmemo extends AbstractItems
                     $lines[][] = ['text' => $text, 'feed' => $leftBound + 5];
                 }
 
-                $drawItems[] = ['lines' => $lines, 'height' => 15, 'shift' => 5];
+                $drawItems[] = ['lines' => $lines, 'height' => 20, 'shift' => 5];
             }
         }
 

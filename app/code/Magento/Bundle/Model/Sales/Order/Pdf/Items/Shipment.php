@@ -99,7 +99,7 @@ class Shipment extends AbstractItems
             }
 
             if (!isset($drawItems[$optionId])) {
-                $drawItems[$optionId] = ['lines' => [], 'height' => 15];
+                $drawItems[$optionId] = ['lines' => [], 'height' => 20];
             }
 
             if ($childItem->getParentItem() && $prevOptionId != $attributes['option_id']) {
@@ -109,7 +109,7 @@ class Shipment extends AbstractItems
                     'feed' => 100,
                 ];
 
-                $drawItems[$optionId] = ['lines' => [$line], 'height' => 15];
+                $drawItems[$optionId] = ['lines' => [$line], 'height' => 20];
 
                 $line = [];
 
@@ -186,7 +186,7 @@ class Shipment extends AbstractItems
                     $lines[][] = ['text' => $text, 'feed' => 115];
                 }
 
-                $drawItems[] = ['lines' => $lines, 'height' => 15, 'shift' => 5];
+                $drawItems[] = ['lines' => $lines, 'height' => 20, 'shift' => 5];
             }
         }
 
