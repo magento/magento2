@@ -78,13 +78,10 @@ class ProductPriceIndexFilterTest extends TestCase
         $entityIds = [1, 2, 3];
         $indexTableStructure = $this->createMock(IndexTableStructure::class);
         $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
-        $this->resourceConnection->expects($this->once())->method('getConnection')->willReturn($connectionMock);
+        $this->resourceConnection->expects($this->exactly(6))->method('getConnection')->willReturn($connectionMock);
         $selectMock = $this->createMock(Select::class);
-        $connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
-        $selectMock
-            ->method('where')
-            ->withConsecutive([], [], ['stock_item.product_id IN (?)', $entityIds])
-            ->willReturnOnConsecutiveCalls(null, null, $selectMock);
+        $connectionMock->expects($this->exactly(6))->method('select')->willReturn($selectMock);
+
         $this->generator->expects($this->once())
             ->method('generate')
             ->willReturnCallback(
