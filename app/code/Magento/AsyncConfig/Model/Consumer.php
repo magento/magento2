@@ -46,10 +46,10 @@ class Consumer
     private $output;
 
     /**
-     *
      * @param Factory $configFactory
      * @param Json $json
      * @param ScopeInterface $scope
+     * @param ConsoleOutput $output
      */
     public function __construct(
         Factory $configFactory,
