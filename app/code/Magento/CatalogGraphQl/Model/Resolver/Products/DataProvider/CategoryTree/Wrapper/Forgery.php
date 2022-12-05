@@ -44,21 +44,26 @@ class Forgery
      */
     public function forge(Category $category): void
     {
-        $pathElements = explode('/', $category->getPath());
+        $pathElements = array_map(
+            function($element) {
+                return (int)$element;
+            },
+            explode('/', $category->getPath())
+        );
         $parentId = null;
-        foreach ($pathElements as $pathElement) {
+        foreach ($pathElements as $id) {
             if ($parentId && $this->hasNodeById($parentId)) {
-                if (!$this->hasNodeById((int)$pathElement)) {
-                    $this->indexById[(int)$pathElement] = new Node((int)$pathElement, $this);
-                    $this->getNodeById($parentId)->addChild($this->indexById[(int)$pathElement]);
-                    if ($category->getId() == $pathElement) {
-                        $this->indexById[(int)$pathElement]->setModel($category);
+                if (!$this->hasNodeById($id)) {
+                    $this->indexById[$id] = new Node($id, $this);
+                    $this->getNodeById($parentId)->addChild($this->indexById[$id]);
+                    if ($category->getId() == $id) {
+                        $this->indexById[$id]->setModel($category);
                     }
                 }
-            } elseif (!$this->hasNodeById((int)$pathElement)) {
-                $this->indexById[(int)$pathElement] = new Node((int)$pathElement, $this);
+            } elseif (!$this->hasNodeById($id)) {
+                $this->indexById[$id] = new Node($id, $this);
             }
-            $parentId = (int) $pathElement;
+            $parentId = $id;
         }
     }
 
