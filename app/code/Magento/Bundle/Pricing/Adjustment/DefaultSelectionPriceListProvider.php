@@ -86,7 +86,6 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
             );
             $selectionsCollection->setFlag('has_stock_status_filter', true);
             $selectionsCollection->removeAttributeToSelect();
-            //$selectionsCollection->addQuantityFilter();
 
             if (!$useRegularPrice) {
                 $selectionsCollection->addAttributeToSelect('special_price');

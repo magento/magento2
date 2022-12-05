@@ -121,12 +121,35 @@ class ProductPriceIndexFilter implements PriceModifierInterface
         foreach ($batchSelectIterator as $select) {
             $productIds = null;
             foreach ($connection->query($select)->fetchAll() as $row) {
-                $productIds[] = (int) $row['product_id'];
+                if ($row['product_id'] && $this->isWithinDynamicPriceBundle($priceTable->getTableName(), (int) $row['product_id'])) {
+                    $productIds[] = (int) $row['product_id'];
+                }
             }
             if ($productIds !== null) {
                 $where = [$priceTable->getEntityField() .' IN (?)' => $productIds];
                 $connection->delete($priceTable->getTableName(), $where);
             }
         }
+    }
+
+    /**
+     * Check if the product is used within a dynamic price bundle configuration
+     *
+     * @param string $priceTableName
+     * @param int $productId
+     * @return bool
+     */
+    private function isWithinDynamicPriceBundle(string $priceTableName, int $productId): bool
+    {
+        $connection = $this->resourceConnection->getConnection($this->connectionName);
+        $select = $connection->select();
+        $select->from(['selection' => 'catalog_product_bundle_selection'], 'selection_id');
+        $select->joinInner(['entity' => 'catalog_product_entity'], implode(' AND ', ['selection.parent_product_id = entity.entity_id']), null);
+        $select->joinInner(['price' => $priceTableName], implode(' AND ', ['price.entity_id = selection.product_id']), null);
+        $select->where('selection.product_id = ?', $productId);
+        $select->where('entity.type_id = ?', \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE);
+        $select->where('price.tax_class_id = ?', \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC);
+
+        return intval($connection->fetchOne($select)) != 0;
     }
 }

@@ -411,7 +411,7 @@ abstract class AbstractAction
                     $indexer->executeByDimensions($dimensions, \SplFixedArray::fromArray($entityIds, false));
                     $mainTable = $this->tableMaintainer->getMainTableByDimensions($dimensions);
                     $this->_insertFromTable($temporaryTable, $mainTable);
-                    //$this->deleteOutdatedData($entityIds, $temporaryTable, $mainTable); //here be the problem
+                    $this->deleteOutdatedData($entityIds, $temporaryTable, $mainTable);
                 }
             } else {
                 // handle 3d-party indexers for backward compatibility
