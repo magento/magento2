@@ -85,12 +85,12 @@ class Elasticsearch implements ClientInterface
      *
      * @return Client
      */
-    private function getElasticsearchClient(): Client
+    private function getElasticsearchClient(): Client /** @phpstan-ignore-line */
     {
         $pid = getmypid();
         if (!isset($this->client[$pid])) {
             $config = $this->buildESConfig($this->clientOptions);
-            $this->client[$pid] = ClientBuilder::fromConfig($config, true);
+            $this->client[$pid] = ClientBuilder::fromConfig($config, true); /** @phpstan-ignore-line */
         }
         return $this->client[$pid];
     }
