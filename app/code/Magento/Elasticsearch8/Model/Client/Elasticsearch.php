@@ -83,10 +83,16 @@ class Elasticsearch implements ClientInterface
     /**
      * Get Elasticsearch 8 Client
      *
-     * @return Client
+     * @return Client|null
      */
-    private function getElasticsearchClient(): Client /** @phpstan-ignore-line */
+    private function getElasticsearchClient(): ?Client /** @phpstan-ignore-line */
     {
+        // Intentionally added condition as there are BC changes from ES7 to ES8
+        // and by default ES7 is configured.
+        if (!class_exists(\Elastic\Elasticsearch\Client::class)) {
+            return null;
+        }
+
         $pid = getmypid();
         if (!isset($this->client[$pid])) {
             $config = $this->buildESConfig($this->clientOptions);
@@ -94,6 +100,7 @@ class Elasticsearch implements ClientInterface
                 $this->client[$pid] = ClientBuilder::fromConfig($config, true); /** @phpstan-ignore-line */
             }
         }
+
         return $this->client[$pid];
     }
 
