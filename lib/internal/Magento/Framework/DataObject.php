@@ -57,7 +57,7 @@ class DataObject implements \ArrayAccess
         }
 
         foreach ($arr as $index => $value) {
-            $this->_data[$index] = $value;
+            $this->setData($index, $value);
         }
         return $this;
     }
