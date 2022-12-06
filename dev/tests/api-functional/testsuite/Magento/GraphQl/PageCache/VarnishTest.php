@@ -8,12 +8,11 @@ declare(strict_types=1);
 namespace Magento\GraphQl\PageCache;
 
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
-use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Test that caching works properly for Varnish when using the X-Magento-Cache-Id
  */
-class VarnishTest extends GraphQlAbstract
+class VarnishTest extends GraphQLPageCacheAbstract
 {
     /**
      * Test that we obtain cache MISS/HIT when expected for a guest.
@@ -54,7 +53,10 @@ class VarnishTest extends GraphQlAbstract
         $response = $this->graphQlQueryWithResponseHeaders($query);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $defaultStoreCacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+
+        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMiss($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]);
+        // Verify we obtain a cache HIT the second time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheHit($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]);
 
         // Obtain a new X-Magento-Cache-Id using after updating the Store header
@@ -101,7 +103,10 @@ class VarnishTest extends GraphQlAbstract
         $response = $this->graphQlQueryWithResponseHeaders($query);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $defaultCurrencyCacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+
+        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMiss($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultCurrencyCacheId]);
+        // Verify we obtain a cache HIT the second time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheHit($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultCurrencyCacheId]);
 
         // Obtain a new X-Magento-Cache-Id using after updating the Content-Currency header
@@ -234,32 +239,6 @@ class VarnishTest extends GraphQlAbstract
         //Verify that omitting the Auth token doesn't send cached content for a logged-in customer
         $this->assertCacheMiss($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdCustomer]);
         $this->assertCacheMiss($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdCustomer]);
-    }
-
-    /**
-     * Assert that we obtain a cache MISS when sending the provided query & headers.
-     *
-     * @param string $query
-     * @param array $headers
-     */
-    private function assertCacheMiss(string $query, array $headers)
-    {
-        $responseMiss = $this->graphQlQueryWithResponseHeaders($query, [], '', $headers);
-        $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseMiss['headers']);
-        $this->assertEquals('MISS', $responseMiss['headers']['X-Magento-Cache-Debug']);
-    }
-
-    /**
-     * Assert that we obtain a cache HIT when sending the provided query & headers.
-     *
-     * @param string $query
-     * @param array $headers
-     */
-    private function assertCacheHit(string $query, array $headers)
-    {
-        $responseHit = $this->graphQlQueryWithResponseHeaders($query, [], '', $headers);
-        $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseHit['headers']);
-        $this->assertEquals('HIT', $responseHit['headers']['X-Magento-Cache-Debug']);
     }
 
     /**
