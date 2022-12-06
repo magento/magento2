@@ -20,7 +20,7 @@ class Elasticsearch extends \Magento\Elasticsearch\Model\Adapter\Elasticsearch
      * @param string $action
      * @return array
      */
-    protected function getDocsArrayInBulkIndexFormat(
+    public function getDocsArrayInBulkIndexFormat(
         $documents,
         $indexName,
         $action = self::BULK_ACTION_INDEX

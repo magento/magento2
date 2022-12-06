@@ -32,7 +32,6 @@ class Elasticsearch implements ClientInterface
      */
     private array $client;
 
-
     /**
      * @var bool|null
      */
@@ -91,7 +90,9 @@ class Elasticsearch implements ClientInterface
         $pid = getmypid();
         if (!isset($this->client[$pid])) {
             $config = $this->buildESConfig($this->clientOptions);
-            $this->client[$pid] = ClientBuilder::fromConfig($config, true); /** @phpstan-ignore-line */
+            if (class_exists(\Elastic\Elasticsearch\ClientBuilder::class)) {
+                $this->client[$pid] = ClientBuilder::fromConfig($config, true); /** @phpstan-ignore-line */
+            }
         }
         return $this->client[$pid];
     }
