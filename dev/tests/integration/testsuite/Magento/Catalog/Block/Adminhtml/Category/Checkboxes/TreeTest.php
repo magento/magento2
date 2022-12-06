@@ -21,7 +21,6 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
- * @magentoAppIsolation enabled
  */
 class TreeTest extends TestCase
 {
