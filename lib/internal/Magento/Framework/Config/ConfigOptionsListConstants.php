@@ -40,7 +40,6 @@ class ConfigOptionsListConstants
     public const CONFIG_PATH_DB_LOGGER_LOG_EVERYTHING = 'db_logger/log_everything';
     public const CONFIG_PATH_DB_LOGGER_QUERY_TIME_THRESHOLD = 'db_logger/query_time_threshold';
     public const CONFIG_PATH_DB_LOGGER_INCLUDE_STACKTRACE = 'db_logger/include_stacktrace';
-    public const CONFIG_PATH_SALT = 'cache/graphql/id_salt';
     /**#@-*/
 
     /**
@@ -86,7 +85,6 @@ class ConfigOptionsListConstants
     public const INPUT_KEY_RESOURCE = 'resource';
     public const INPUT_KEY_SKIP_DB_VALIDATION = 'skip-db-validation';
     public const INPUT_KEY_CACHE_HOSTS = 'http-cache-hosts';
-    public const INPUT_KEY_SALT = 'id_salt';
     /**#@-*/
 
     /**#@+
