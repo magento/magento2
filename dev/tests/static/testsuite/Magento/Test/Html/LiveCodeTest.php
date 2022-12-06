@@ -19,10 +19,9 @@ class LiveCodeTest extends TestCase
 {
     private const FILE_EXTENSION = 'html';
 
-    /**
-     * @var string
-     */
-    private static $reportDir = '';
+    protected static string $reportDir = '';
+
+    protected string $rulesetDir = 'Magento';
 
     /**
      * Setup basics for all tests
@@ -45,7 +44,7 @@ class LiveCodeTest extends TestCase
     public function testCodeStyle(): void
     {
         $reportFile = self::$reportDir . '/html_report.txt';
-        $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
+        $codeSniffer = new CodeSniffer($this->rulesetDir, $reportFile, new Wrapper());
         $codeSniffer->setExtensions([self::FILE_EXTENSION]);
         $fileList =  $this->isFullScan() ? array_column(Files::init()->getStaticHtmlFiles(), '0')
             : PHPCodeTest::getWhitelist([self::FILE_EXTENSION], __DIR__, __DIR__);
