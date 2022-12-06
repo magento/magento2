@@ -124,7 +124,8 @@ class ReindexRuleProduct
                 : $toTimeInAdminTz;
 
             foreach ($productIds as $productId => $validationByWebsite) {
-                if (!isset($validationByWebsite[$websiteId]) || $validationByWebsite[$websiteId] === null) {
+                if (!isset($validationByWebsite[$websiteId]) || $validationByWebsite[$websiteId] === null
+                        || $validationByWebsite[$websiteId] === false) {
                     continue;
                 }
 
