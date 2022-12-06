@@ -8,12 +8,9 @@ declare(strict_types=1);
 namespace Magento\MediaStorage\Model\File\Validator;
 
 use Laminas\Validator\AbstractValidator;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\Image\Adapter\ConfigInterface;
 use Magento\Framework\Image\Factory;
-use Psr\Log\LoggerInterface;
 
 /**
  * Image validator
@@ -49,26 +46,18 @@ class Image extends AbstractValidator
     private $file;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @param Mime $fileMime
      * @param Factory $imageFactory
      * @param File $file
-     * @param LoggerInterface|null $logger
      */
     public function __construct(
         Mime $fileMime,
         Factory $imageFactory,
-        File $file,
-        LoggerInterface $logger = null
+        File $file
     ) {
         $this->fileMime = $fileMime;
         $this->imageFactory = $imageFactory;
         $this->file = $file;
-        $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
 
         parent::__construct();
     }
@@ -87,7 +76,6 @@ class Image extends AbstractValidator
                 $image->open();
             } catch (\Exception $e) {
                 $isValid = false;
-                $this->logger->critical($e, ['exception' => $e]);
             }
         }
 
