@@ -25,7 +25,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
 
-            <createData entity="VirtualProduct" stepKey="createFirstSimpleProduct"/>
+            <createData entity="VirtualProduct" stepKey="createFirtsSimpleProduct"/>
             <createData entity="SimpleProductWithCustomSku24MB06" stepKey="createSecondSimpleProduct"/>
             <createData entity="SimpleProductWithCustomSku24MB04" stepKey="createThirdSimpleProduct"/>
             <createData entity="SimpleProductWithCustomSku24MB02" stepKey="createFourthSimpleProduct"/>
@@ -37,8 +37,7 @@
             <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
-            <magentoCLI command="config:set catalog/search/engine elasticsearch7" stepKey="setSearchEngine"/>
-            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteProductOne"/>
+            <deleteData createDataKey="createFirtsSimpleProduct" stepKey="deleteProductOne"/>
 
             <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProductsAfterTest"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdminPanel"/>

@@ -62,7 +62,7 @@ class ElasticsearchTest extends TestCase
     protected function setUp(): void
     {
         BypassFinals::enable();
-        $this->elasticsearchClientMock = $this->getMockBuilder(Client::class)
+        $this->elasticsearchClientMock = $this->getMockBuilder(Client::class) /** @phpstan-ignore-line */
             ->setMethods(
                 [
                     'indices',
@@ -75,7 +75,7 @@ class ElasticsearchTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->indicesMock = $this->getMockBuilder(Indices::class)
+        $this->indicesMock = $this->getMockBuilder(Indices::class) /** @phpstan-ignore-line */
             ->setMethods(
                 [
                     'exists',
@@ -93,7 +93,7 @@ class ElasticsearchTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->elasticsearchResponse = $this->getMockBuilder(ElasticsearchResponse::class)
+        $this->elasticsearchResponse = $this->getMockBuilder(ElasticsearchResponse::class) /** @phpstan-ignore-line */
             ->setMethods([
                 'asBool',
                 'asArray',
