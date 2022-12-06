@@ -72,12 +72,10 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         // Use given salt if set, else use current
         $id_salt = $data[ConfigOptionsListConstants::INPUT_KEY_SALT] ?? $currentIdSalt;
 
-        // If there is no id_salt given or currently set, generate a new one
+        // If there is no salt given or currently set, generate a new one
         $id_salt = $id_salt ?? $this->random->getRandomString(ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE);
 
-        if (!$this->isDataEmpty($data, ConfigOptionsListConstants::INPUT_KEY_SALT)) {
-            $configData->set(ConfigOptionsListConstants::CONFIG_PATH_SALT, $id_salt);
-        }
+        $configData->set(ConfigOptionsListConstants::CONFIG_PATH_SALT, $id_salt);
 
         return [$configData];
     }
@@ -88,21 +86,5 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {
         return [];
-    }
-
-    /**
-     * Check if data ($data) with key ($key) is empty
-     *
-     * @param array $data
-     * @param string $key
-     * @return bool
-     */
-    private function isDataEmpty(array $data, $key)
-    {
-        if (isset($data[$key]) && $data[$key] !== '') {
-            return false;
-        }
-
-        return true;
     }
 }
