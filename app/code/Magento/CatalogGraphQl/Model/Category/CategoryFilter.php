@@ -84,6 +84,7 @@ class CategoryFilter
             ->columns(
                 'e.entity_id'
             );
+        $collection->setOrder('entity_id');
 
         $categoryIds = $collection->load()->getLoadedIds();
 

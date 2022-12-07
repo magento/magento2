@@ -36,11 +36,6 @@ use Magento\Store\Api\Data\StoreInterface;
 class CategoryTree
 {
     /**
-     * In depth we need to calculate only children nodes, so the first wrapped node should be ignored
-     */
-    private const DEPTH_OFFSET = 1;
-
-    /**
      * @var CollectionFactory
      */
     private $collectionFactory;
@@ -56,11 +51,6 @@ class CategoryTree
     private $depthCalculator;
 
     /**
-     * @var LevelCalculator
-     */
-    private $levelCalculator;
-
-    /**
      * @var MetadataPool
      */
     private $metadata;
@@ -74,7 +64,6 @@ class CategoryTree
      * @param CollectionFactory $collectionFactory
      * @param AttributesJoiner $attributesJoiner
      * @param DepthCalculator $depthCalculator
-     * @param LevelCalculator $levelCalculator
      * @param MetadataPool $metadata
      * @param CollectionProcessorInterface $collectionProcessor
      */
@@ -82,14 +71,12 @@ class CategoryTree
         CollectionFactory $collectionFactory,
         AttributesJoiner $attributesJoiner,
         DepthCalculator $depthCalculator,
-        LevelCalculator $levelCalculator,
         MetadataPool $metadata,
         CollectionProcessorInterface $collectionProcessor
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->attributesJoiner = $attributesJoiner;
         $this->depthCalculator = $depthCalculator;
-        $this->levelCalculator = $levelCalculator;
         $this->metadata = $metadata;
         $this->collectionProcessor = $collectionProcessor;
     }
