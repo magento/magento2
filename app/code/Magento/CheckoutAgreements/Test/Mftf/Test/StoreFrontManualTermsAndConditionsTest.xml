@@ -118,6 +118,6 @@
         <!-- Click PLace Order Again-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="PlaceOrder"/>
         <!--This is a required field." message is appeared under check-box -->
-        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementErrorMessage}}" userInput="This is a required field." stepKey="seeagainErrortextInCheckoutBox"/>
+        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementErrorMessage}}" userInput="This is a required field." stepKey="seeAgainErrortextInCheckoutBox"/>
     </test>
 </tests>
