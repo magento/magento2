@@ -17,6 +17,11 @@ use Magento\Framework\App\ObjectManager;
 class Forgery
 {
     /**
+     * Most top node id in the tree structure.
+     */
+    private const DUMMY_ROOT_ID = 0;
+
+    /**
      * Flat index of the tree.
      *
      * @var array
@@ -50,9 +55,12 @@ class Forgery
             },
             explode('/', $category->getPath())
         );
-        $parentId = null;
+        if (!$this->hasNodeById(self::DUMMY_ROOT_ID)) {
+            $this->indexById[self::DUMMY_ROOT_ID] = new Node(self::DUMMY_ROOT_ID, $this);
+        }
+        $parentId = self::DUMMY_ROOT_ID;
         foreach ($pathElements as $id) {
-            if ($parentId && $this->hasNodeById($parentId)) {
+            if ($this->hasNodeById($parentId)) {
                 if (!$this->hasNodeById($id)) {
                     $this->indexById[$id] = new Node($id, $this);
                     $this->getNodeById($parentId)->addChild($this->indexById[$id]);
