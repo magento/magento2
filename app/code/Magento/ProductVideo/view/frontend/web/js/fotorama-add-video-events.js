@@ -558,7 +558,7 @@ define([
             }
 
             if (this.isFullscreen && this.fotoramaItem.data('fotorama').activeFrame.i === number) {
-                this.fotoramaItem.data('fotorama').activeFrame.$stageFrame[0].trigger('click');
+                this.fotoramaItem.data('fotorama').activeFrame.$stageFrame.trigger('click');
             }
         },
 
