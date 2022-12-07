@@ -53,7 +53,7 @@
             <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
             <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
             <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openTermToDelete">
-                <argument name="termName" value="{{newHtmlTerm.name}}"/>
+                <argument name="termName" value="{{newHtmlTerm.checkboxText}}"/>
             </actionGroup>
             <actionGroup ref="AdminTermsConditionsDeleteTermByNameActionGroup" stepKey="deleteOpenedTerm"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
