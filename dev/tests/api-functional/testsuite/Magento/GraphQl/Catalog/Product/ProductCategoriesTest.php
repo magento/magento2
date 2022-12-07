@@ -8,10 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog\Product;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Store\Api\WebsiteRepositoryInterface;
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Store\Test\Fixture\Group as GroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -19,35 +23,26 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class ProductCategoriesTest extends GraphQlAbstract
 {
-    /**
-     * phpcs:disable Generic.Files.LineLength.TooLong
-     * @magentoDataFixture Magento/Catalog/_files/category.php
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category with:{"name":"Second Root Category","parent_id":"1","position":"2"} as:c1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category with:{"name":"Second Root Subcategory","parent_id":"$c1.id$","level":"2"} as:c2
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category with:{"name":"Second Root Subsubcategory","parent_id":"$c2.id$","level":"2"} as:c3
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"name":"Simple Product In Stock","sku":"in-stock-product","category_ids":["2","333","$c1.id$","$c2.id$","$c3.id$"]}
-     * @magentoDataFixture Magento\Store\Test\Fixture\Website with:{"code":"test","name":"Test Website","default_group_id":"1"} as:w2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Group with:{"code":"test_store_group_1","name":"Test Store Group","website_id":"$w2.id$","root_category_id":"$c1.id$"} as:s2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Store with:{"code":"test_store_1","name":"Test Store","website_id":"$w2.id$","store_group_id":"$s2.id$"}
-     * @magentoDbIsolation disabled
-     * @magentoAppArea adminhtml
-     * phpcs:enable Generic.Files.LineLength.TooLong
-     */
+    #[
+        AppArea('adminhtml'),
+        DataFixture(CategoryFixture::class, ['name' => 'Category 1', 'parent_id' => '2'], 'c11'),
+        DataFixture(CategoryFixture::class, ['name' => 'Category 2', 'parent_id' => '1'], 'c2'),
+        DataFixture(CategoryFixture::class, ['name' => 'Category 2.1', 'parent_id' => '$c2.id$'], 'c21'),
+        DataFixture(CategoryFixture::class, ['name' => 'Category 2.1.1', 'parent_id' => '$c21.id$'], 'c211'),
+        DataFixture(WebsiteFixture::class, as: 'w2'),
+        DataFixture(GroupFixture::class, ['website_id' => '$w2.id$', 'root_category_id' => '$c2.id$'], 's2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$s2.id$']),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'sku' => 'in-stock-product',
+                'category_ids' => ['2', '$c11.id$', '$c2.id$', '$c21.id$', '$c211.id$'],
+                'website_ids' => ['1', '$w2.id$']
+            ],
+        ),
+    ]
     public function testProductCategoriesInDefaultStore(): void
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
-        $defaultWebsiteId = $websiteRepository->get('base')->getId();
-        $secondWebsiteId = $websiteRepository->get('test')->getId();
-
-        $productRepository = $objectManager->get(ProductRepositoryInterface::class);
-        /** @var $product ProductInterface */
-        $product = $productRepository->get('in-stock-product');
-        $product
-            ->setUrlKey('in-stock-product')
-            ->setWebsiteIds([$defaultWebsiteId, $secondWebsiteId]);
-        $productRepository->save($product);
-
         $response = $this->graphQlQuery(
             $this->getQuery('in-stock-product'),
             [],
@@ -64,78 +59,77 @@ class ProductCategoriesTest extends GraphQlAbstract
         self::assertNull($categories[0]['breadcrumbs']);
     }
 
-    /**
-     * phpcs:disable Generic.Files.LineLength.TooLong
-     * @magentoDataFixture Magento/Catalog/_files/category.php
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category with:{"name":"Second Root Category","parent_id":"1","position":"2"} as:c1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category with:{"name":"Second Root Subcategory","parent_id":"$c1.id$","level":"2"} as:c2
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category with:{"name":"Second Root Subsubcategory","parent_id":"$c2.id$","level":"2"} as:c3
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"name":"Simple Product In Stock","sku":"in-stock-product","category_ids":["2","333","$c1.id$","$c2.id$","$c3.id$"]}
-     * @magentoDataFixture Magento\Store\Test\Fixture\Website with:{"code":"test","name":"Test Website","default_group_id":"1"} as:w2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Group with:{"code":"test_store_group_1","name":"Test Store Group","website_id":"$w2.id$","root_category_id":"$c1.id$"} as:s2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Store with:{"code":"test_store_1","name":"Test Store","website_id":"$w2.id$","store_group_id":"$s2.id$"}
-     * @magentoDbIsolation disabled
-     * @magentoAppArea adminhtml
-     * phpcs:enable Generic.Files.LineLength.TooLong
-     */
+    #[
+        AppArea('adminhtml'),
+        DataFixture(CategoryFixture::class, ['name' => 'Category 1', 'parent_id' => '2'], 'c11'),
+        DataFixture(CategoryFixture::class, ['name' => 'Category 2', 'parent_id' => '1'], 'c2'),
+        DataFixture(CategoryFixture::class, ['name' => 'Category 2.1', 'parent_id' => '$c2.id$'], 'c21'),
+        DataFixture(CategoryFixture::class, ['name' => 'Category 2.1.1', 'parent_id' => '$c21.id$'], 'c211'),
+        DataFixture(WebsiteFixture::class, as: 'w2'),
+        DataFixture(GroupFixture::class, ['website_id' => '$w2.id$', 'root_category_id' => '$c2.id$'], 's2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$s2.id$'], as: 'store2'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'sku' => 'in-stock-product',
+                'category_ids' => ['2', '$c11.id$', '$c2.id$', '$c21.id$', '$c211.id$'],
+                'website_ids' => ['1', '$w2.id$']
+            ],
+        ),
+    ]
     public function testProductCategoriesInNonDefaultStore(): void
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
-        $defaultWebsiteId = $websiteRepository->get('base')->getId();
-        $secondWebsiteId = $websiteRepository->get('test')->getId();
-
-        $productRepository = $objectManager->get(ProductRepositoryInterface::class);
-        /** @var $product ProductInterface */
-        $product = $productRepository->get('in-stock-product');
-        $product
-            ->setUrlKey('in-stock-product')
-            ->setWebsiteIds([$defaultWebsiteId, $secondWebsiteId]);
-        $productRepository->save($product);
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $storeCode = $fixtures->get('store2')->getCode();
 
         $response = $this->graphQlQuery(
             $this->getQuery('in-stock-product'),
             [],
             '',
-            ['Store' => 'test_store_1']
+            ['Store' => $storeCode]
         );
 
         $product = current($response['products']['items']);
         $categories = $product['categories'];
 
         self::assertCount(2, $categories);
-        self::assertEquals('Second Root Subcategory', $categories[0]['name']);
-        self::assertEquals('second-root-subcategory', $categories[0]['url_path']);
+        self::assertEquals('Category 2.1', $categories[0]['name']);
+        self::assertEquals('category-2-1', $categories[0]['url_path']);
         self::assertNull($categories[0]['breadcrumbs']);
-        self::assertEquals('Second Root Subsubcategory', $categories[1]['name']);
-        self::assertEquals('second-root-subcategory/second-root-subsubcategory', $categories[1]['url_path']);
+        self::assertEquals('Category 2.1.1', $categories[1]['name']);
+        self::assertEquals('category-2-1/category-2-1-1', $categories[1]['url_path']);
         self::assertCount(1, $categories[1]['breadcrumbs']);
-        self::assertEquals('Second Root Subcategory', $categories[1]['breadcrumbs'][0]['category_name']);
+        self::assertEquals('Category 2.1', $categories[1]['breadcrumbs'][0]['category_name']);
         self::assertEquals(2, $categories[1]['breadcrumbs'][0]['category_level']);
     }
 
-    /**
-     * phpcs:disable Generic.Files.LineLength.TooLong
-     * @magentoDataFixture Magento/Catalog/_files/category.php
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category with:{"name":"Second Root Category","parent_id":"1","position":"2"} as:c1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category with:{"name":"Second Root Subcategory","parent_id":"$c1.id$","level":"2"} as:c2
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category with:{"name":"Second Root Subsubcategory","parent_id":"$c2.id$","level":"2"} as:c3
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"name":"Simple Product In Stock","sku":"in-stock-product","category_ids":["2","333","$c1.id$","$c2.id$","$c3.id$"]}
-     * @magentoDataFixture Magento\Store\Test\Fixture\Website with:{"code":"test","name":"Test Website","default_group_id":"1"} as:w2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Group with:{"code":"test_store_group_1","name":"Test Store Group","website_id":"$w2.id$","root_category_id":"$c1.id$"} as:s2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Store with:{"code":"test_store_1","name":"Test Store","website_id":"$w2.id$","store_group_id":"$s2.id$"}
-     * @magentoApiDataFixture Magento/Store/_files/second_store.php
-     * @magentoDbIsolation disabled
-     * @magentoAppArea adminhtml
-     * phpcs:enable Generic.Files.LineLength.TooLong
-     */
+    #[
+        AppArea('adminhtml'),
+        DataFixture(CategoryFixture::class, ['name' => 'Category 1', 'parent_id' => '2'], 'c11'),
+        DataFixture(CategoryFixture::class, ['name' => 'Category 2', 'parent_id' => '1'], 'c2'),
+        DataFixture(CategoryFixture::class, ['name' => 'Category 2.1', 'parent_id' => '$c2.id$'], 'c21'),
+        DataFixture(CategoryFixture::class, ['name' => 'Category 2.1.1', 'parent_id' => '$c21.id$'], 'c211'),
+        DataFixture(WebsiteFixture::class, as: 'w2'),
+        DataFixture(GroupFixture::class, ['website_id' => '$w2.id$', 'root_category_id' => '$c2.id$'], 's2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$s2.id$'], as: 'store2'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'sku' => 'in-stock-product',
+                'category_ids' => ['2', '$c11.id$', '$c2.id$', '$c21.id$', '$c211.id$']
+            ],
+        ),
+    ]
     public function testProductCategoriesInNotRelevantStore(): void
     {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $storeCode = $fixtures->get('store2')->getCode();
+
         $response = $this->graphQlQuery(
             $this->getQuery('in-stock-product'),
             [],
             '',
-            ['Store' => 'fixture_second_store']
+            ['Store' => $storeCode]
         );
 
         self::assertEmpty($response['products']['items']);
