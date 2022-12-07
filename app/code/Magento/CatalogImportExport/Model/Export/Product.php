@@ -1306,7 +1306,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 foreach ($multiRawData['mediaGalery'][$productLinkId] as $mediaItem) {
                     if ((int)$mediaItem['_media_store_id'] === Store::DEFAULT_STORE_ID) {
                         $additionalImages[] = $mediaItem['_media_image'];
-                        $additionalImageLabels[] = $mediaItem['_media_label'];
+                        if (isset($mediaItem['_media_label']) && $mediaItem['_media_label']) {
+                            $additionalImageLabels[] = $mediaItem['_media_label'];
+                        }
 
                         if ($mediaItem['_media_is_disabled'] == true) {
                             $additionalImageIsDisabled[] = $mediaItem['_media_image'];
