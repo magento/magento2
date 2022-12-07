@@ -45,7 +45,7 @@ class Forgery
     public function forge(Category $category): void
     {
         $pathElements = array_map(
-            function($element) {
+            function ($element) {
                 return (int)$element;
             },
             explode('/', $category->getPath())
