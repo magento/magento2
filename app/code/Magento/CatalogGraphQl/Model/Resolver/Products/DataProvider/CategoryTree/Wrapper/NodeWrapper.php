@@ -49,21 +49,21 @@ class NodeWrapper
      */
     public function wrap(Category $category): void
     {
-        if (!$this->hasNode(self::TOP_NODE_ID)) {
+        if (!isset($this->index[self::TOP_NODE_ID])) {
             $this->index[self::TOP_NODE_ID] = new Node(self::TOP_NODE_ID);
         }
         $parentId = self::TOP_NODE_ID;
         array_map(
             function ($id) use (&$parentId, $category) {
                 $id = (int)$id;
-                if (!$this->hasNode($id)) {
+                if (!isset($this->index[$id])) {
                     $this->index[$id] = new Node($id);
-                }
-                $this->index[$parentId]->addChild($this->index[$id]);
-                if ($category->getId() == $id) {
-                    $this->index[$id]->setModelData(
-                        $this->hydrator->hydrateCategory($category)
-                    );
+                    if ($category->getId() == $id) {
+                        $this->index[$id]->setModelData(
+                            $this->hydrator->hydrateCategory($category)
+                        );
+                    }
+                    $this->index[$parentId]->addChild($this->index[$id]);
                 }
                 $parentId = $id;
             },
@@ -80,16 +80,5 @@ class NodeWrapper
     public function getNode(int $id) : ?Node
     {
         return $this->index[$id] ?? null;
-    }
-
-    /**
-     * Check whether the node is indexed.
-     *
-     * @param int $id
-     * @return bool
-     */
-    public function hasNode(int $id) : bool
-    {
-        return isset($this->index[$id]);
     }
 }
