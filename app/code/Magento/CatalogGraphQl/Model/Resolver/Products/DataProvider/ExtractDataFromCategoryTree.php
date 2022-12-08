@@ -9,8 +9,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree\Wrapper\Forgery;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree\Wrapper\ForgeryFactory;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree\Wrapper\NodeWrapperFactory;
 
 /**
  * Data extractor for category tree processing in GraphQL resolvers.
@@ -18,16 +17,16 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree\Wra
 class ExtractDataFromCategoryTree
 {
     /**
-     * @var ForgeryFactory
+     * @var NodeWrapperFactory
      */
-    private $resultTreeForgeryFactory;
+    private $nodeWrapperFactory;
 
     /**
-     * @param ForgeryFactory $resultTreeForgeryFactory
+     * @param NodeWrapperFactory $nodeWrapperFactory
      */
-    public function __construct(ForgeryFactory $resultTreeForgeryFactory)
+    public function __construct(NodeWrapperFactory $nodeWrapperFactory)
     {
-        $this->resultTreeForgeryFactory = $resultTreeForgeryFactory;
+        $this->nodeWrapperFactory = $nodeWrapperFactory;
     }
 
     /**
@@ -39,15 +38,14 @@ class ExtractDataFromCategoryTree
      */
     public function buildTree(Collection $collection, array $topLevelCategories) : array
     {
-        /** @var Forgery $forgery */
-        $forgery = $this->resultTreeForgeryFactory->create();
+        $wrapper = $this->nodeWrapperFactory->create();
         /** @var Category $item */
         foreach ($collection->getItems() as $item) {
-            $forgery->forge($item);
+            $wrapper->wrap($item);
         }
         $tree = [];
         foreach ($topLevelCategories as $topLevelCategory) {
-            $tree[] = $forgery->getNodeById($topLevelCategory)->renderArray();
+            $tree[] = $wrapper->getNode($topLevelCategory)->renderArray();
         }
         return $this->sortTree($tree);
     }

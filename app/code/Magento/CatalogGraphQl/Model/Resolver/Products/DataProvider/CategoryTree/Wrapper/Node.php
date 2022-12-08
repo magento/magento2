@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree\Wrapper;
 
-use Magento\Catalog\Model\Category;
-
 /**
  * Category tree node wrapper.
  */
@@ -39,7 +37,7 @@ class Node
 
     /**
      * Set category model data for node.
-     * 
+     *
      * @param array|null $modelData
      *
      * @return $this
