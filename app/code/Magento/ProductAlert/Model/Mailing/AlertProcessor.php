@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ProductAlert\Model\Mailing;
 
+use Magento\Framework\App\Area;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Data;
@@ -24,6 +25,8 @@ use Magento\ProductAlert\Model\Stock;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\DesignInterface;
 
 /**
  * Class for mailing Product Alerts
@@ -79,6 +82,11 @@ class AlertProcessor
     private $errorEmailSender;
 
     /**
+     * @var DesignInterface
+     */
+    private $design;
+
+    /**
      * @param EmailFactory $emailFactory
      * @param PriceCollectionFactory $priceCollectionFactory
      * @param StockCollectionFactory $stockCollectionFactory
@@ -88,6 +96,7 @@ class AlertProcessor
      * @param ProductSalability $productSalability
      * @param StoreManagerInterface $storeManager
      * @param ErrorEmailSender $errorEmailSender
+     * @param DesignInterface|null $design
      */
     public function __construct(
         EmailFactory $emailFactory,
@@ -98,7 +107,8 @@ class AlertProcessor
         Data $catalogData,
         ProductSalability $productSalability,
         StoreManagerInterface $storeManager,
-        ErrorEmailSender $errorEmailSender
+        ErrorEmailSender $errorEmailSender,
+        DesignInterface $design = null
     ) {
         $this->emailFactory = $emailFactory;
         $this->priceCollectionFactory = $priceCollectionFactory;
@@ -109,6 +119,8 @@ class AlertProcessor
         $this->productSalability = $productSalability;
         $this->storeManager = $storeManager;
         $this->errorEmailSender = $errorEmailSender;
+        $this->design = $design ?: ObjectManager::getInstance()
+            ->get(DesignInterface::class);
     }
 
     /**
@@ -142,6 +154,12 @@ class AlertProcessor
      */
     private function processAlerts(string $alertType, array $customerIds, int $websiteId): array
     {
+        //Set the current design theme
+        $this->design->setDesignTheme(
+            $this->design->getConfigurationDesignTheme(Area::AREA_FRONTEND),
+            Area::AREA_FRONTEND
+        );
+
         /** @var Email $email */
         $email = $this->emailFactory->create();
         $email->setType($alertType);
