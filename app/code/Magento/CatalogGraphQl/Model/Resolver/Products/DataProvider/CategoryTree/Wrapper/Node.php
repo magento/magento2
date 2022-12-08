@@ -25,34 +25,26 @@ class Node
     private $children = [];
 
     /**
-     * @var Category
+     * @var array
      */
-    private $model;
-
-    /**
-     * @var Forgery
-     */
-    private $forgery;
+    private $modelData;
 
     /**
      * @param int $id
-     * @param Forgery $forgery
      */
-    public function __construct(int $id, Forgery $forgery)
+    public function __construct(int $id)
     {
         $this->id = $id;
-        $this->forgery = $forgery;
     }
 
     /**
-     * Set category model for node.
+     * Set category model data for node.
      *
-     * @param Category $category
      * @return $this
      */
-    public function setModel(Category $category): self
+    public function setModelData(?array $modelData): self
     {
-        $this->model = $category;
+        $this->modelData = $modelData;
         return $this;
     }
 
@@ -79,16 +71,6 @@ class Node
     }
 
     /**
-     * Get category model for node.
-     *
-     * @return Category
-     */
-    public function getModel(): Category
-    {
-        return $this->model;
-    }
-
-    /**
      * Get node id.
      *
      * @return int
@@ -105,11 +87,11 @@ class Node
      */
     public function renderArray(): ?array
     {
-        if (!$this->model) {
+        if (!$this->modelData) {
             return null;
         }
         return array_merge(
-            $this->forgery->getHydrator()->hydrateCategory($this->model),
+            $this->modelData,
             [
                 'children' => array_filter(
                     array_map(

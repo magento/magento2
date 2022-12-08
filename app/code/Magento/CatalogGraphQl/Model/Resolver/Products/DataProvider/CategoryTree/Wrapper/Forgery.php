@@ -19,7 +19,7 @@ class Forgery
     /**
      * Most top node id in the tree structure.
      */
-    private const DUMMY_ROOT_ID = 0;
+    private const TOP_NODE_ID = 0;
 
     /**
      * Flat index of the tree.
@@ -49,30 +49,28 @@ class Forgery
      */
     public function forge(Category $category): void
     {
-        $pathElements = array_map(
-            function ($element) {
-                return (int)$element;
+        if (!$this->hasNodeById(self::TOP_NODE_ID)) {
+            $this->indexById[self::TOP_NODE_ID] = new Node(self::TOP_NODE_ID);
+        }
+        $parentId = self::TOP_NODE_ID;
+        array_map(
+            function ($id) use (&$parentId, $category) {
+                $id = (int)$id;
+                if (!$this->hasNodeById($id)) {
+                    $this->indexById[$id] = new Node($id);
+                }
+                if ($this->hasNodeById($parentId)) {
+                    $this->getNodeById($parentId)->addChild($this->indexById[$id]);
+                    if ($category->getId() == $id) {
+                        $this->indexById[$id]->setModelData(
+                            $this->hydrator->hydrateCategory($category)
+                        );
+                    }
+                }
+                $parentId = $id;
             },
             explode('/', $category->getPath())
         );
-        if (!$this->hasNodeById(self::DUMMY_ROOT_ID)) {
-            $this->indexById[self::DUMMY_ROOT_ID] = new Node(self::DUMMY_ROOT_ID, $this);
-        }
-        $parentId = self::DUMMY_ROOT_ID;
-        foreach ($pathElements as $id) {
-            if ($this->hasNodeById($parentId)) {
-                if (!$this->hasNodeById($id)) {
-                    $this->indexById[$id] = new Node($id, $this);
-                    $this->getNodeById($parentId)->addChild($this->indexById[$id]);
-                    if ($category->getId() == $id) {
-                        $this->indexById[$id]->setModel($category);
-                    }
-                }
-            } elseif (!$this->hasNodeById($id)) {
-                $this->indexById[$id] = new Node($id, $this);
-            }
-            $parentId = $id;
-        }
     }
 
     /**
@@ -95,15 +93,5 @@ class Forgery
     public function hasNodeById(int $id) : bool
     {
         return isset($this->indexById[$id]);
-    }
-
-    /**
-     * Get category hydrator.
-     *
-     * @return Hydrator
-     */
-    public function getHydrator()
-    {
-        return $this->hydrator;
     }
 }
