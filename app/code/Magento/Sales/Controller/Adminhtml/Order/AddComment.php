@@ -91,7 +91,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
      */
     private function getOrderStatus(string $orderStatus, string $historyStatus): string
     {
-        return ($orderStatus === Order::STATE_PROCESSING) ? $historyStatus
+        return ($orderStatus === Order::STATE_PROCESSING || $orderStatus === Order::STATUS_FRAUD) ? $historyStatus
             : $orderStatus;
     }
 }

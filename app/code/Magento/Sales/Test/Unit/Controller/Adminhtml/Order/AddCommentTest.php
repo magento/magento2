@@ -170,7 +170,7 @@ class AddCommentTest extends TestCase
                     'comment' => 'Great Product!',
                     'status' => 'processing'
                 ],
-                'orderStatus' =>'processing',
+                'orderStatus' =>'fraud',
                 'userHasResource' => true,
                 'expectedNotify' => false
             ],
