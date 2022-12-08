@@ -1097,7 +1097,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                                 $additionalAttributes[$fieldName] = $fieldName .
                                     ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $this->wrapValue($attrValue);
                             }
-                            $data[$itemId][$storeId][$fieldName] = htmlspecialchars_decode($attrValue);
+                            $data[$itemId][$storeId][$fieldName] = $attrValue;
                         }
                     } else {
                         $this->collectMultiselectValues($item, $code, $storeId);
