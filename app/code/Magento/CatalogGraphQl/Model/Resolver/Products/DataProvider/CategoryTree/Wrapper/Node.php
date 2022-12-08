@@ -39,6 +39,8 @@ class Node
 
     /**
      * Set category model data for node.
+     * 
+     * @param array|null $modelData
      *
      * @return $this
      */
