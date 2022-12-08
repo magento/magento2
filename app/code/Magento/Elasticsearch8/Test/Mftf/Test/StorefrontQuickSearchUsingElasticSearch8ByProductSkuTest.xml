@@ -18,7 +18,7 @@
             <testCaseId value="AC-6597"/>
             <useCaseId value="AC-6665"/>
             <group value="SearchEngine"/>
-<!--            <group value="pr_exclude"/>-->
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set catalog/search/engine elasticsearch8" stepKey="setSearchEngine"/>
