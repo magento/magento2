@@ -60,7 +60,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
         $filter = $this->getParam($this->getVarNameFilter(), []);
         if ($filter) {
             $filter = base64_decode($filter);
-            parse_str(urldecode($filter), $data);
+            parse_str(($filter), $data);
         }
 
         if (!empty($data)) {
