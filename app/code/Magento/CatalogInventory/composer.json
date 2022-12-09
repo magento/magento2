@@ -13,8 +13,7 @@
         "magento/module-eav": "*",
         "magento/module-quote": "*",
         "magento/module-store": "*",
-        "magento/module-ui": "*",
-        "magento/module-bundle": "*"
+        "magento/module-ui": "*"
     },
     "type": "magento2-module",
     "license": [
