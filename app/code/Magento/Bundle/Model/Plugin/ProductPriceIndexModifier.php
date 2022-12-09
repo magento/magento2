@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
 namespace Magento\Bundle\Model\Plugin;
 
@@ -32,6 +37,7 @@ class ProductPriceIndexModifier
      * @param callable $proceed
      * @param IndexTableStructure $priceTable
      * @param array $entityIds
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundModifyPrice(ProductPriceIndexFilter $subject, callable $proceed, IndexTableStructure $priceTable, array $entityIds = [])
     {
