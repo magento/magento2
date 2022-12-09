@@ -30,6 +30,8 @@ use Magento\Framework\View\DesignInterface;
 
 /**
  * Class for mailing Product Alerts
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AlertProcessor
 {
