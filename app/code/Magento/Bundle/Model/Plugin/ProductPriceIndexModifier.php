@@ -36,7 +36,6 @@ class ProductPriceIndexModifier
         $this->connectionName = $connectionName;
     }
 
-
     /**
      * Skip entity price index that are part of a dynamic price bundle
      *
