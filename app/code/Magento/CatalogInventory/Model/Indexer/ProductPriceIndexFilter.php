@@ -121,9 +121,7 @@ class ProductPriceIndexFilter implements PriceModifierInterface
         foreach ($batchSelectIterator as $select) {
             $productIds = null;
             foreach ($connection->query($select)->fetchAll() as $row) {
-                if ($row['product_id']) {
-                    $productIds[] = (int) $row['product_id'];
-                }
+                $productIds[] = (int) $row['product_id'];
             }
             if ($productIds !== null) {
                 $where = [$priceTable->getEntityField() .' IN (?)' => $productIds];
