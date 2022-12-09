@@ -103,9 +103,7 @@ class SaveHandler implements ExtensionInterface
         $existingOptionsIds = !empty($existingBundleProductOptions)
             ? $this->getOptionIds($existingBundleProductOptions)
             : [];
-        $optionIds = !empty($bundleProductOptions)
-            ? $this->getOptionIds($bundleProductOptions)
-            : [];
+        $optionIds = $this->getOptionIds($bundleProductOptions);
 
         if (!$entity->getCopyFromView()) {
             $this->processRemovedOptions($entity, $existingOptionsIds, $optionIds);
@@ -161,12 +159,11 @@ class SaveHandler implements ExtensionInterface
     private function saveOptions($entity, array $options, array $newOptionsIds = []): void
     {
         foreach ($options as $option) {
-            if (in_array($option->getOptionId(), $newOptionsIds, true)) {
+            if (in_array($option->getOptionId(), $newOptionsIds)) {
                 $option->setOptionId(null);
             }
-
-            $this->optionSave->save($entity, $option);
         }
+        $this->optionSave->saveBulk($entity, $options);
     }
 
     /**
@@ -184,7 +181,7 @@ class SaveHandler implements ExtensionInterface
             /** @var OptionInterface $option */
             foreach ($options as $option) {
                 if ($option->getOptionId()) {
-                    $optionIds[] = $option->getOptionId();
+                    $optionIds[] = (int)$option->getOptionId();
                 }
             }
         }

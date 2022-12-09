@@ -118,6 +118,7 @@ class SaveAction
         foreach ($linksToAdd as $linkedProduct) {
             $this->linkManagement->addChild($bundleProduct, $option->getOptionId(), $linkedProduct);
         }
+    }
 
         $bundleProduct->setIsRelationsChanged(true);
 
@@ -149,6 +150,7 @@ class SaveAction
             }
             /** @var LinkInterface[] $linksToDelete */
             $linksToDelete = $this->compareLinks($existingLinks, $linksToUpdate);
+            $linksToUpdate = $this->verifyLinksToUpdate($existingLinks, $linksToUpdate);
         }
         foreach ($linksToUpdate as $linkedProduct) {
             $this->linkManagement->saveChild($product->getSku(), $linkedProduct);
