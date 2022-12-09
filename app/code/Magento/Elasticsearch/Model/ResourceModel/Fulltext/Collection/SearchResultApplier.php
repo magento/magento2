@@ -207,6 +207,7 @@ class SearchResultApplier implements SearchResultApplierInterface
      */
     private function categoryProductByCustomSortOrder(int $categoryId): array
     {
+        $defaultStoreId = $this->collection->getDefaultStoreId();
         $storeId = $this->collection->getStoreId();
         $searchCriteria = $this->searchResult->getSearchCriteria();
         $sortOrders = $searchCriteria->getSortOrders() ?? [];
@@ -243,11 +244,24 @@ class SearchResultApplier implements SearchResultApplierInterface
                 $entityTypeId = $this->collection->getEntity()->getTypeId();
                 $entityMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
                 $linkField = $entityMetadata->getLinkField();
+                $attribute_id = "(SELECT attribute_id FROM eav_attribute WHERE entity_type_id={$entityTypeId} AND attribute_code='name')";
+
+                $product_name_by_store_id = $connection->select()
+                    ->from(['name_by_store' => $this->collection->getTable('catalog_product_entity_varchar')],
+                        [$linkField, 'MAX(store_id) AS store_id'])
+                    ->where("store_id IN ({$defaultStoreId},{$storeId}) AND attribute_id = {$attribute_id}")
+                    ->group($linkField);
+
                 $query->joinLeft(
                     ['product_var' => $this->collection->getTable('catalog_product_entity_varchar')],
-                    "product_var.{$linkField} = e.{$linkField} AND product_var.attribute_id =
-                    (SELECT attribute_id FROM eav_attribute WHERE entity_type_id={$entityTypeId}
-                    AND attribute_code='name')",
+                    "product_var.{$linkField} = e.{$linkField}"
+                    . " AND product_var.attribute_id = {$attribute_id}",
+                    ['']
+                );
+                $query->join(
+                    ['name_filter' => $product_name_by_store_id],
+                    "product_var.{$linkField} = name_filter.{$linkField}"
+                    . ' AND product_var.store_id = name_filter.store_id',
                     ['product_var.value AS name']
                 );
             } elseif ($field === 'price') {
