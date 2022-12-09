@@ -526,14 +526,6 @@ QUERY;
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
 
-        $o2 = 'o2';
-        $o3 = 'o3';
-        $o4 = 'o4';
-        $o5 = 'o5';
-        $o6 = 'o6';
-        $o7 = 'o7';
-        $o8 = 'o8';
-
          $order2 = $this->fixtures->get('o2')->getIncrementId();
          $order3 = $this->fixtures->get('o3')->getIncrementId();
          $order4 = $this->fixtures->get('o4')->getIncrementId();
