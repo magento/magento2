@@ -78,10 +78,13 @@ class ProductPriceIndexFilterTest extends TestCase
         $entityIds = [1, 2, 3];
         $indexTableStructure = $this->createMock(IndexTableStructure::class);
         $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
-        $this->resourceConnection->expects($this->exactly(6))->method('getConnection')->willReturn($connectionMock);
+        $this->resourceConnection->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $selectMock = $this->createMock(Select::class);
-        $connectionMock->expects($this->exactly(6))->method('select')->willReturn($selectMock);
-
+        $connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
+        $selectMock
+            ->method('where')
+            ->withConsecutive([], [], ['stock_item.product_id IN (?)', $entityIds])
+            ->willReturnOnConsecutiveCalls(null, null, $selectMock);
         $this->generator->expects($this->once())
             ->method('generate')
             ->willReturnCallback(
@@ -94,33 +97,6 @@ class ProductPriceIndexFilterTest extends TestCase
             ->willReturn([['product_id' => 1]]);
         $connectionMock->expects($this->any())->method('query')->willReturn($fetchStmtMock);
         $this->productPriceIndexFilter->modifyPrice($indexTableStructure, $entityIds);
-    }
-
-    public function testModifyPriceDynamicPriceBundle(): void
-    {
-        $indexTableStructure = $this->createMock(IndexTableStructure::class);
-        $indexTableStructure->expects($this->any())->method('getTableName')
-            ->willReturn('price_table');
-        $this->stockConfiguration->expects($this->once())->method('isShowOutOfStock')->willReturn(false);
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
-        $this->resourceConnection->expects($this->exactly(2))->method('getConnection')->willReturn($connectionMock);
-
-        $selectMock = $this->createMock(Select::class);
-        $connectionMock->expects($this->exactly(2))->method('select')->willReturn($selectMock);
-        $this->generator->expects($this->once())
-            ->method('generate')
-            ->willReturnCallback(
-                $this->getBatchIteratorCallback($selectMock, 1)
-            );
-        $fetchStmtMock = $this->createPartialMock(\Zend_Db_Statement_Pdo::class, ['fetchAll']);
-        $fetchStmtMock->expects($this->any())
-            ->method('fetchAll')
-            ->willReturn([['product_id' => 1]]);
-        $connectionMock->expects($this->any())->method('query')->willReturn($fetchStmtMock);
-        $connectionMock->expects($this->once())->method('fetchOne')->willReturn(1);
-        $connectionMock->expects($this->once())->method('delete')->with('price_table', [' IN (?)' => [1]]);
-
-        $this->productPriceIndexFilter->modifyPrice($indexTableStructure);
     }
 
     /**
