@@ -99,6 +99,7 @@ class AlertProcessor
      * @param StoreManagerInterface $storeManager
      * @param ErrorEmailSender $errorEmailSender
      * @param DesignInterface|null $design
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __construct(
         EmailFactory $emailFactory,
