@@ -99,7 +99,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
                 } else {
                     $customerGroup = $this->groupDataFactory->create();
                 }
-                $customerGroup->setCode(!empty($customerGroupCode) ? $customerGroupCode : null);
+                $customerGroup->setCode(!empty($customerGroupCode) ? trim($customerGroupCode) : null);
                 $customerGroup->setTaxClassId($taxClass);
 
                 if ($websitesToExclude !== null) {

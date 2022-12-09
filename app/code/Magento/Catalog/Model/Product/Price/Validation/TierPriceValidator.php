@@ -481,7 +481,7 @@ class TierPriceValidator
             $this->customerGroupsByCode[strtolower($item->getCode())] = $item->getId();
         }
 
-        return $this->customerGroupsByCode[$code];
+        return $this->customerGroupsByCode[$code] ?? false;
     }
 
     /**
