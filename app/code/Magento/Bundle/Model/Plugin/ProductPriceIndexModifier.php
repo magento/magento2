@@ -11,6 +11,9 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructur
 use Magento\CatalogInventory\Model\Indexer\ProductPriceIndexFilter;
 use Magento\Framework\App\ResourceConnection;
 
+/**
+ * Checks if product is part of dynamic price bundle and skips price reindex
+ */
 class ProductPriceIndexModifier
 {
     /**
@@ -23,6 +26,10 @@ class ProductPriceIndexModifier
      */
     private ?string $connectionName;
 
+    /**
+     * @param ResourceConnection $resourceConnection
+     * @param string $connectionName
+     */
     public function __construct(ResourceConnection $resourceConnection, string $connectionName = 'indexer')
     {
         $this->resourceConnection = $resourceConnection;
@@ -39,8 +46,12 @@ class ProductPriceIndexModifier
      * @param array $entityIds
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundModifyPrice(ProductPriceIndexFilter $subject, callable $proceed, IndexTableStructure $priceTable, array $entityIds = [])
-    {
+    public function aroundModifyPrice(
+        ProductPriceIndexFilter $subject,
+        callable                $proceed,
+        IndexTableStructure     $priceTable,
+        array                   $entityIds = []
+    ) {
         if (empty($entityIds)) {
             $proceed($priceTable, []);
         }
@@ -78,6 +89,6 @@ class ProductPriceIndexModifier
         $select->where('entity.type_id = ?', \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE);
         $select->where('price.tax_class_id = ?', \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC);
 
-        return (int) $connection->fetchOne($select) != 0;
+        return (int)$connection->fetchOne($select) != 0;
     }
 }
