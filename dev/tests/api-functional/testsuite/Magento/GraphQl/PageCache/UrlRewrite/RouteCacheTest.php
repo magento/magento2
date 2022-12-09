@@ -46,7 +46,7 @@ class RouteCacheTest extends GraphQLPageCacheAbstract
         $productSku = 'p002';
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get($productSku, false, null, true);
+        $productRepository->get($productSku, false, null, true);
 
         $routeQuery = $this->getRouteQuery($this->getProductUrlKey($productSku));
         $response = $this->graphQlQueryWithResponseHeaders($routeQuery);
@@ -71,7 +71,7 @@ class RouteCacheTest extends GraphQLPageCacheAbstract
         $productSku = 'p002';
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get($productSku, false, null, true);
+        $productRepository->get($productSku, false, null, true);
 
         $actualUrls = $this->getProductUrlRewriteData($productSku);
         $nonSeoFriendlyPath = $actualUrls->getTargetPath();
@@ -100,7 +100,7 @@ class RouteCacheTest extends GraphQLPageCacheAbstract
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
-        $initialUrlPath = $this->getProductUrlKey($productSku);
+        $this->getProductUrlKey($productSku);
         $renamedKey = 'simple-product-in-stock-new';
         $suffix = '.html';
         $product->setUrlKey($renamedKey)->setData('save_rewrites_history', true)->save();
@@ -471,10 +471,10 @@ QUERY;
             $cacheId = $apiResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
             // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-            $this->assertCacheMiss($query($customRequestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+            $this->assertCacheMiss($query($customSecondRequestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
             // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-            $this->assertCacheHit($query($customRequestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+            $this->assertCacheHit($query($customSecondRequestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
         }
 
         $urlRewriteResourceModel->delete($secondUrlRewriteModel);
@@ -485,7 +485,7 @@ QUERY;
             $query($customRequestPath),
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
         );
-        $this->assertNull($apiResponse['route']);
+        $this->assertNull($apiResponse['body']['route']);
     }
 
     /**
