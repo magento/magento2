@@ -21,6 +21,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteService;
 
 /**
  * Test caching works for url route.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RouteCacheTest extends GraphQLPageCacheAbstract
 {
@@ -131,7 +132,7 @@ class RouteCacheTest extends GraphQLPageCacheAbstract
 
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get($productSku, false, null, true);
+        $productRepository->get($productSku, false, null, true);
 
         /** @var UrlRewriteModel $urlRewriteModel */
         $urlRewriteModel = $this->objectManager->create(UrlRewriteModel::class);
@@ -147,7 +148,6 @@ class RouteCacheTest extends GraphQLPageCacheAbstract
 
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
         $this->assertCacheHit($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
-
     }
 
     /**
@@ -175,7 +175,7 @@ class RouteCacheTest extends GraphQLPageCacheAbstract
         );
         $categoryId = $actualUrls->getEntityId();
         $categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
-        $category = $categoryRepository->get($categoryId);
+        $categoryRepository->get($categoryId);
 
         $query
             = <<<QUERY
@@ -195,7 +195,6 @@ QUERY;
 
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
         $this->assertCacheHit($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
-
     }
 
     /**
@@ -207,7 +206,7 @@ QUERY;
         /** @var \Magento\Cms\Model\Page $page */
         $page = $this->objectManager->get(\Magento\Cms\Model\Page::class);
         $page->load('page100');
-        $cmsPageData = $page->getData();
+        $page->getData();
 
         /** @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator $urlPathGenerator */
         $urlPathGenerator = $this->objectManager->get(\Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator::class);
@@ -225,7 +224,6 @@ QUERY;
 
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
         $this->assertCacheHit($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
-
     }
 
     /**
