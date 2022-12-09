@@ -103,7 +103,7 @@ class CategoryList implements ResolverInterface
      *
      * @param array $topLevelCategoryIds
      * @param ResolveInfo $info
-     * @param array $criteria
+     * @param array $processedArgs
      * @param array $attributeNames
      * @param ContextInterface $context
      * @return array
@@ -112,13 +112,14 @@ class CategoryList implements ResolverInterface
     private function fetchCategoriesByTopLevelIds(
         array $topLevelCategoryIds,
         ResolveInfo $info,
-        array $criteria,
+        array $processedArgs,
         array $attributeNames,
         ContextInterface $context
     ) : array {
-        $criteria['pageSize'] = 0;
+        // pagination must be applied to top level category results, children categories are not paginated
+        $processedArgs['pageSize'] = 0;
         $searchCriteria = $this->searchCriteria->buildCriteria(
-            $criteria,
+            $processedArgs,
             $context->getExtensionAttributes()->getStore()
         );
         $categoryCollection = $this->categoryTree->getFlatCategoriesByRootIds(

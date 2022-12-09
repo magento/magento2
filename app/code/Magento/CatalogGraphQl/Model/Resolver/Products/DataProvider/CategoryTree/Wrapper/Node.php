@@ -81,7 +81,7 @@ class Node
     }
 
     /**
-     * Render node and its children as an array recursively, returns null is node model is not set.
+     * Render node and its children as an array recursively, returns null if node data is not set.
      *
      * @return array|null
      */

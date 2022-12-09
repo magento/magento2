@@ -45,7 +45,7 @@ class ExtractDataFromCategoryTree
         }
         $tree = [];
         foreach ($topLevelCategories as $topLevelCategory) {
-            $tree[] = $wrapper->getNode($topLevelCategory)->renderArray();
+            $tree[] = $wrapper->getNodeById($topLevelCategory)->renderArray();
         }
         return $this->sortTree($tree);
     }

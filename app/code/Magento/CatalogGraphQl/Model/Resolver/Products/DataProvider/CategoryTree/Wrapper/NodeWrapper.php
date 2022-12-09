@@ -22,11 +22,11 @@ class NodeWrapper
     private const TOP_NODE_ID = 0;
 
     /**
-     * Flat index of the tree.
+     * Flat index of the tree that stores nodes by entity identifier.
      *
      * @var array
      */
-    private array $index = [];
+    private array $nodesById = [];
 
     /**
      * @var Hydrator
@@ -49,21 +49,21 @@ class NodeWrapper
      */
     public function wrap(Category $category): void
     {
-        if (!isset($this->index[self::TOP_NODE_ID])) {
-            $this->index[self::TOP_NODE_ID] = new Node(self::TOP_NODE_ID);
+        if (!isset($this->nodesById[self::TOP_NODE_ID])) {
+            $this->nodesById[self::TOP_NODE_ID] = new Node(self::TOP_NODE_ID);
         }
         $parentId = self::TOP_NODE_ID;
         array_map(
             function ($id) use (&$parentId, $category) {
                 $id = (int)$id;
-                if (!isset($this->index[$id])) {
-                    $this->index[$id] = new Node($id);
+                if (!isset($this->nodesById[$id])) {
+                    $this->nodesById[$id] = new Node($id);
                     if ($category->getId() == $id) {
-                        $this->index[$id]->setModelData(
+                        $this->nodesById[$id]->setModelData(
                             $this->hydrator->hydrateCategory($category)
                         );
                     }
-                    $this->index[$parentId]->addChild($this->index[$id]);
+                    $this->nodesById[$parentId]->addChild($this->nodesById[$id]);
                 }
                 $parentId = $id;
             },
@@ -77,8 +77,8 @@ class NodeWrapper
      * @param int $id
      * @return Node|null
      */
-    public function getNode(int $id) : ?Node
+    public function getNodeById(int $id) : ?Node
     {
-        return $this->index[$id] ?? null;
+        return $this->nodesById[$id] ?? null;
     }
 }
