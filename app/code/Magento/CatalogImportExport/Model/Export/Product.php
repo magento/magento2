@@ -1086,7 +1086,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
                     if ($storeId != Store::DEFAULT_STORE_ID
                         && isset($data[$itemId][Store::DEFAULT_STORE_ID][$fieldName])
-                        && $data[$itemId][Store::DEFAULT_STORE_ID][$fieldName] == htmlspecialchars_decode($attrValue)
+                        && $data[$itemId][Store::DEFAULT_STORE_ID][$fieldName] == $attrValue
                     ) {
                         continue;
                     }
@@ -1112,7 +1112,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 }
 
                 if (!empty($additionalAttributes)) {
-                    $additionalAttributes = array_map('htmlspecialchars_decode', $additionalAttributes);
                     $data[$itemId][$storeId][self::COL_ADDITIONAL_ATTRIBUTES] =
                         implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalAttributes);
                 } else {
