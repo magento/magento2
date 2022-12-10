@@ -7,20 +7,24 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Model\Option;
 
+use Exception;
 use Magento\Bundle\Api\Data\LinkInterface;
 use Magento\Bundle\Api\Data\OptionInterface;
+use Magento\Bundle\Api\ProductLinkManagementInterface;
+use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Model\ResourceModel\Option;
+use Magento\Bundle\Model\ResourceModel\Option\Collection;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Bundle\Model\Product\Type;
-use Magento\Bundle\Api\ProductLinkManagementInterface;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Encapsulates logic for saving a bundle option, including coalescing the parent product's data.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveAction
 {
@@ -66,32 +70,56 @@ class SaveAction
     }
 
     /**
-     * Manage the logic of saving a bundle option, including the coalescence of its parent product data.
+     * Bulk options save
+     *
+     * @param ProductInterface $bundleProduct
+     * @param OptionInterface[] $options
+     * @return void
+     * @throws CouldNotSaveException
+     * @throws NoSuchEntityException
+     * @throws InputException
+     */
+    public function saveBulk(ProductInterface $bundleProduct, array $options): void
+    {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $optionCollection = $this->type->getOptionsCollection($bundleProduct);
+
+        foreach ($options as $option) {
+            $this->saveOptionItem($bundleProduct, $option, $optionCollection, $metadata);
+        }
+
+        $bundleProduct->setIsRelationsChanged(true);
+    }
+
+    /**
+     * Process option save
      *
      * @param ProductInterface $bundleProduct
      * @param OptionInterface $option
-     * @return OptionInterface
+     * @param Collection $optionCollection
+     * @param EntityMetadataInterface $metadata
+     * @return void
      * @throws CouldNotSaveException
-     * @throws \Exception
+     * @throws NoSuchEntityException
+     * @throws InputException
      */
-    public function save(ProductInterface $bundleProduct, OptionInterface $option)
-    {
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+    private function saveOptionItem(
+        ProductInterface $bundleProduct,
+        OptionInterface $option,
+        Collection $optionCollection,
+        EntityMetadataInterface $metadata
+    ) : void {
+        $linksToAdd = [];
 
         $option->setStoreId($bundleProduct->getStoreId());
         $parentId = $bundleProduct->getData($metadata->getLinkField());
         $option->setParentId($parentId);
-
         $optionId = $option->getOptionId();
-        $linksToAdd = [];
-        $optionCollection = $this->type->getOptionsCollection($bundleProduct);
 
         /** @var \Magento\Bundle\Model\Option $existingOption */
         $existingOption = $optionCollection->getItemById($option->getOptionId())
             ?? $optionCollection->getNewEmptyItem();
         if (!$optionId || $existingOption->getParentId() != $parentId) {
-            //If option ID is empty or existing option's parent ID is different
-            //we'd need a new ID for the option.
             $option->setOptionId(null);
             $option->setDefaultTitle($option->getTitle());
             if (is_array($option->getProductLinks())) {
@@ -110,7 +138,7 @@ class SaveAction
 
         try {
             $this->optionResource->save($option);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new CouldNotSaveException(__("The option couldn't be saved."), $e);
         }
 
@@ -120,7 +148,21 @@ class SaveAction
         }
     }
 
-        $bundleProduct->setIsRelationsChanged(true);
+    /**
+     * Manage the logic of saving a bundle option, including the coalescence of its parent product data.
+     *
+     * @param ProductInterface $bundleProduct
+     * @param OptionInterface $option
+     * @return OptionInterface
+     * @throws CouldNotSaveException
+     * @throws Exception
+     */
+    public function save(ProductInterface $bundleProduct, OptionInterface $option)
+    {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $optionCollection = $this->type->getOptionsCollection($bundleProduct);
+
+        $this->saveOptionItem($bundleProduct, $option, $optionCollection, $metadata);
 
         return $option;
     }
@@ -165,6 +207,55 @@ class SaveAction
         foreach ($linksToAdd as $linkedProduct) {
             $this->linkManagement->addChild($product, $option->getOptionId(), $linkedProduct);
         }
+    }
+
+    /**
+     * Verify that updated data actually changed
+     *
+     * @param LinkInterface[] $existing
+     * @param LinkInterface[] $updates
+     * @return array
+     */
+    private function verifyLinksToUpdate(array $existing, array $updates) : array
+    {
+        $linksToUpdate = [];
+        $beforeLinksMap = [];
+
+        foreach ($existing as $beforeLink) {
+            $beforeLinksMap[$beforeLink->getId()] = $beforeLink;
+        }
+
+        foreach ($updates as $updatedLink) {
+            if (array_key_exists($updatedLink->getId(), $beforeLinksMap)) {
+                $beforeLink = $beforeLinksMap[$updatedLink->getId()];
+                if ($this->isLinkChanged($beforeLink, $updatedLink)) {
+                    $linksToUpdate[] = $updatedLink;
+                }
+            } else {
+                $linksToUpdate[] = $updatedLink;
+            }
+        }
+        return $linksToUpdate;
+    }
+
+    /**
+     * Check is updated link actually updated
+     *
+     * @param LinkInterface $beforeLink
+     * @param LinkInterface $updatedLink
+     * @return bool
+     */
+    private function isLinkChanged(LinkInterface $beforeLink, LinkInterface $updatedLink) : bool
+    {
+        return (int)$beforeLink->getOptionId() !== (int)$updatedLink->getOptionId()
+            || $beforeLink->getIsDefault() !== $updatedLink->getIsDefault()
+            || (float)$beforeLink->getQty() !== (float)$updatedLink->getQty()
+            || $beforeLink->getPrice() !== $updatedLink->getPrice()
+            || $beforeLink->getCanChangeQuantity() !== $updatedLink->getCanChangeQuantity()
+            || (array)$beforeLink->getExtensionAttributes() !== (array)$updatedLink->getExtensionAttributes()
+            || (int)$beforeLink->getPosition() !== (int)$updatedLink->getPosition()
+            || $beforeLink->getSku() !== $updatedLink->getSku()
+            || $beforeLink->getPriceType() !== $updatedLink->getPriceType();
     }
 
     /**
