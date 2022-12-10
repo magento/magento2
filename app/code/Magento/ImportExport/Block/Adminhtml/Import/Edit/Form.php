@@ -209,7 +209,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             );
             $fieldsets[$behaviorCode] = $fieldset;
         }
-
         // fieldset for file uploading
         $fieldset = $form->addFieldset(
             'upload_file_fieldset',
@@ -255,11 +254,19 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ),
             ]
         );
+        $fieldset->addField(
+            Import::FIELD_IMPORT_IDS,
+            'hidden',
+            [
+                'name' => Import::FIELD_IMPORT_IDS,
+                'label' => __('Import id'),
+                'title' => __('Import id'),
+                'value' => '',
+            ]
+        );
         $fieldsets['upload'] = $fieldset;
-
         $form->setUseContainer(true);
         $this->setForm($form);
-
         return parent::_prepareForm();
     }
 
