@@ -745,7 +745,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             'limitDefault' => $this->_productListHelper->getDefaultLimitPerPageValue($defaultMode),
             'url' => $this->getPagerUrl(),
             'formKey' => $this->formKey->getFormKey(),
-            'post' => $this->toolbarMemorizer->isMemorizingAllowed() ? true : false
+            'post' => false,
+            'memorizingAllowed' => $this->toolbarMemorizer->isMemorizingAllowed() ? true : false
         ];
         $options = array_replace_recursive($options, $customOptions);
         return json_encode(['productListToolbarForm' => $options]);
