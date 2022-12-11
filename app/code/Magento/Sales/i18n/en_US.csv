@@ -458,6 +458,7 @@ State/Province,State/Province
 "Order # %1 Notification(s)","Order # %1 Notification(s)"
 "You can not cancel Credit Memo","You can not cancel Credit Memo"
 "Could not cancel creditmemo","Could not cancel creditmemo"
+"We found an invalid order to refund.","We found an invalid order to refund."
 "We cannot register an existing credit memo.","We cannot register an existing credit memo."
 "We found an invalid quantity to invoice item ""%1"".","We found an invalid quantity to invoice item ""%1""."
 "The Order State ""%1"" must not be set manually.","The Order State ""%1"" must not be set manually."
@@ -816,3 +817,4 @@ If set YES Email field will be required during Admin order creation for new Cust
 "The credit memo confirmation email is not sent","The credit memo confirmation email is not sent"
 "Memo # %1","Memo # %1"
 "Credit Memo Date","Credit Memo Date"
+"Logo for PDF Print-outs","Logo for PDF Print-outs"
