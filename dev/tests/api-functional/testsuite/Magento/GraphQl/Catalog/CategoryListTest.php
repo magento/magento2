@@ -963,16 +963,19 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * Get categoryList query for page.
+     *
+     * @param int $page
+     * @return string
      */
-    public function testCategoryListPaginationLimitsNotAppliedToChildren()
+    private function getQueryForPage(int $page)
     {
-        $query = <<<QUERY
+        return <<<QUERY
 {
     categoryList(
         filters: {parent_id: {in: ["2"]}}
         pageSize: 1
-        currentPage: 1
+        currentPage: {$page}
     ){
         id
         name
@@ -996,7 +999,14 @@ QUERY;
     }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testCategoryListPaginationLimitsNotAppliedToChildren()
+    {
+        $response = $this->graphQlQuery($this->getQueryForPage(1));
         $this->assertArrayNotHasKey('errors', $response);
         $this->assertArrayHasKey('categoryList', $response);
         $baseCategory = $response['categoryList'][0];
@@ -1006,72 +1016,14 @@ QUERY;
         $this->assertEquals('Category 1.2', $baseCategory['children'][1]['name']);
         $this->assertEquals('Category 1.1.1', $baseCategory['children'][0]['children'][0]['name']);
 
-        $query2 = <<<QUERY
-{
-    categoryList(
-        filters: {parent_id: {in: ["2"]}}
-        pageSize: 1
-        currentPage: 2
-    ){
-        id
-        name
-        level
-        children{
-          name
-          level
-          children{
-            name
-            level
-            children{
-                name
-                level
-                children {
-                    name
-                    level
-                }
-            }
-          }
-        }
-    }
-}
-QUERY;
-        $response = $this->graphQlQuery($query2);
+        $response = $this->graphQlQuery($this->getQueryForPage(2));
         $this->assertArrayNotHasKey('errors', $response);
         $this->assertArrayHasKey('categoryList', $response);
         $baseCategory = $response['categoryList'][0];
         $this->assertEquals('Category 2', $baseCategory['name']);
         $this->assertCount(0, $baseCategory['children']);
 
-        $query3 = <<<QUERY
-{
-    categoryList(
-        filters: {parent_id: {in: ["2"]}}
-        pageSize: 1
-        currentPage: 3
-    ){
-        id
-        name
-        level
-        children{
-          name
-          level
-          children{
-            name
-            level
-            children{
-                name
-                level
-                children {
-                    name
-                    level
-                }
-            }
-          }
-        }
-    }
-}
-QUERY;
-        $response = $this->graphQlQuery($query3);
+        $response = $this->graphQlQuery($this->getQueryForPage(3));
         $this->assertArrayNotHasKey('errors', $response);
         $this->assertArrayHasKey('categoryList', $response);
         $baseCategory = $response['categoryList'][0];
