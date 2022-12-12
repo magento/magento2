@@ -42,6 +42,11 @@ class SaveActionTest extends TestCase
     private $linkManagement;
 
     /**
+     * @var ProductInterface|MockObject
+     */
+    private $product;
+
+    /**
      * @var SaveAction
      */
     private $saveAction;

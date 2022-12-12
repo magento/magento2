@@ -21,6 +21,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+
 class SaveHandlerTest extends TestCase
 {
     /**
