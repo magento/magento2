@@ -13,6 +13,10 @@
             <resource>Magento_Checkout::checkout</resource>
             <group id="options" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Checkout Options</label>
+                <field id="disable_guest_checkout_login" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Disable Guest Checkout Login</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
                 <field id="onepage_checkout_enabled" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enable Onepage Checkout</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
