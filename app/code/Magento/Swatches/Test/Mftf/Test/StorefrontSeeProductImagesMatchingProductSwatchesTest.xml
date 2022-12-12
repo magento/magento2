@@ -29,11 +29,14 @@
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="VisualSwatchProductAttribute"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductAttributeGridFilter"/>
             <actionGroup ref="DeleteAllDuplicateProductUsingProductGridActionGroup" stepKey="deleteAllChildrenProducts">
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductGridFilter"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

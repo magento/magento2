@@ -181,7 +181,9 @@
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStorefrontPage">
             <argument name="productUrl" value="{{ImportProduct_Downloadable_UrlLinks.urlKey}}"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Downloadable_UrlLinks.name}}" stepKey="seeProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
+            <argument name="value" value="{{ImportProduct_Downloadable_UrlLinks.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Downloadable_UrlLinks.sku}}" stepKey="seeSku"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProduct_Downloadable_UrlLinks.price}}" stepKey="seePrice"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProduct_Downloadable_UrlLinks.baseImageName)}}" stepKey="seeBaseImage"/>

@@ -65,4 +65,19 @@ class ConfirmCustomerByToken
 
         $this->customerRepository->save($customer);
     }
+
+    /**
+     * Check if customer confirmation needs to be reset
+     *
+     * @param int $customerId
+     * @return void
+     */
+    public function resetCustomerConfirmation(int $customerId): void
+    {
+        $customer = $this->customerRepository->getById($customerId);
+
+        if ($customer) {
+            $this->resetConfirmation($customer);
+        }
+    }
 }

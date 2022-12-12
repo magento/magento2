@@ -11,5 +11,8 @@
     <section name="AdminSystemAccountSection">
         <element name="interfaceLocale" type="select" selector="#interface_locale"/>
         <element name="currentPassword" type="text" selector="#current_password"/>
+        <element name="username" type="text" selector="#username"/>
+        <element name="newPassword" type="text" selector="#password"/>
+        <element name="passwordConfirmation" type="text" selector="#confirmation"/>
     </section>
 </sections>

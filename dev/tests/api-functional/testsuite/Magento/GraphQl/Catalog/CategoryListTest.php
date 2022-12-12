@@ -887,4 +887,78 @@ QUERY;
         $this->assertArrayHasKey('id', $result['categoryList'][0]['children'][0]);
         $this->assertEquals($result['categoryList'][0]['children'][0]['id'], '3');
     }
+
+    /**
+     * Test category list is filtered based on store in header
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @magentoApiDataFixture Magento/Store/_files/store_with_second_root_category.php
+     */
+    public function testFilterStoreRootCategory() : void
+    {
+        $query = <<<'QUERY'
+{
+categoryList(filters: {name: {match: "Category"}}) {
+    uid
+    level
+    name
+    breadcrumbs {
+        category_uid
+        category_name
+        category_level
+        category_url_key
+    }
+}
+}
+QUERY;
+        $result = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertCount(7, $result['categoryList']);
+
+        $result = $this->graphQlQuery($query, [], '', ['store' => 'test_store_1']);
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertCount(1, $result['categoryList']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testQueryParentCategoriesProductCount()
+    {
+        $query = <<<QUERY
+{
+    categoryList(filters: {ids: {eq: "3"}}){
+        id
+        name
+        product_count
+        level
+        children{
+          name
+          product_count
+          level
+          children{
+            name
+            product_count
+            level
+            children{
+                name
+                product_count
+                level
+                children {
+                    name
+                    product_count
+                    level
+                }
+            }
+          }
+        }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertArrayHasKey('categoryList', $response);
+        $baseCategory = $response['categoryList'][0];
+        $this->assertEquals(3, $baseCategory['product_count']);
+    }
 }

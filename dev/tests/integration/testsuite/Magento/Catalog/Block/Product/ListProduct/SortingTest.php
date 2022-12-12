@@ -9,11 +9,13 @@ namespace Magento\Catalog\Block\Product\ListProduct;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Block\Product\ListProduct;
 use Magento\Catalog\Block\Product\ProductList\Toolbar;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\CatalogInventory\Model\Configuration;
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\LayoutInterface;
@@ -68,6 +70,11 @@ class SortingTest extends TestCase
     private $scopeConfig;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -80,6 +87,7 @@ class SortingTest extends TestCase
         $this->categoryCollectionFactory = $this->objectManager->get(CollectionFactory::class);
         $this->categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
         $this->scopeConfig = $this->objectManager->get(MutableScopeConfigInterface::class);
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         parent::setUp();
     }
 
@@ -387,7 +395,6 @@ class SortingTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_out-of-stock_child.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch7
      * @dataProvider productListWithOutOfStockSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction
@@ -399,7 +406,6 @@ class SortingTest extends TestCase
         string $direction,
         array $expected
     ): void {
-        $this->markTestSkipped('MC-40449: ListProduct\SortingTest failure on 2.4-develop');
         $this->assertProductListSortOrderWithConfig($sortBy, $direction, $expected);
     }
 
@@ -409,7 +415,6 @@ class SortingTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_out-of-stock_child.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
-     * @magentoConfigFixture default/catalog/search/engine mysql
      * @dataProvider productListWithOutOfStockSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction
@@ -421,7 +426,6 @@ class SortingTest extends TestCase
         string $direction,
         array $expected
     ): void {
-        $this->markTestSkipped('MC-40449: ListProduct\SortingTest failure on 2.4-develop');
         $this->assertProductListSortOrderWithConfig($sortBy, $direction, $expected);
     }
 
@@ -441,7 +445,7 @@ class SortingTest extends TestCase
             'default_order_price_desc' => [
                 'sort' => 'price',
                 'direction' => Collection::SORT_ORDER_DESC,
-                'expectation' => ['configurable', 'simple3', 'simple2', 'simple1'],
+                'expectation' => ['simple3', 'simple2', 'simple1', 'configurable'],
             ],
         ];
     }
@@ -466,5 +470,92 @@ class SortingTest extends TestCase
         $category = $this->updateCategorySortBy('Category 1', Store::DEFAULT_STORE_ID, null);
         $this->renderBlock($category, $direction);
         $this->assertBlockSorting($sortBy, $expected);
+    }
+
+    /**
+     * Test product list ordered by product name with out-of-stock configurable product options.
+     *
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_show_out_of_stock.php
+     * @dataProvider productListWithShowOutOfStockSortOrderDataProvider
+     * @param string $sortBy
+     * @param string $direction
+     * @param array $expected
+     * @return void
+     */
+    public function testProductListOutOfStockSortOrderBySaleability(
+        string $sortBy,
+        string $direction,
+        array $expected
+    ): void {
+        $this->scopeConfig->setValue(
+            Config::XML_PATH_LIST_DEFAULT_SORT_BY,
+            $sortBy,
+            ScopeInterface::SCOPE_STORE,
+            Store::DEFAULT_STORE_ID
+        );
+        $this->scopeConfig->setValue(
+            Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+            1,
+            ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+        );
+
+        /** @var CategoryInterface $category */
+        $category = $this->categoryRepository->get(333);
+        if ($category->getId()) {
+            $category->setAvailableSortBy(['position', 'name', 'price']);
+            $category->addData(['available_sort_by' => 'position,name,price']);
+            $category->setDefaultSortBy($sortBy);
+            $this->categoryRepository->save($category);
+        }
+
+        foreach (['simple_41', 'simple_42', 'configurable_12345'] as $sku) {
+            $product = $this->productRepository->get($sku);
+            $product->setStockData(['is_in_stock' => 0]);
+            $this->productRepository->save($product);
+        }
+        $this->renderBlock($category, $direction);
+        $this->assertBlockSorting($sortBy, $expected);
+    }
+
+    /**
+     * Product list with out-of-stock sort order data provider
+     *
+     * @return array
+     */
+    public function productListWithShowOutOfStockSortOrderDataProvider(): array
+    {
+        return [
+            'default_order_position_asc' => [
+                'sort' => 'position',
+                'direction' => 'ASC',
+                'expectation' => ['simple2', 'simple1', 'configurable', 'configurable_12345'],
+            ],
+            'default_order_position_desc' => [
+                'sort' => 'position',
+                'direction' => 'DESC',
+                'expectation' => ['simple2', 'simple1', 'configurable', 'configurable_12345'],
+            ],
+            'default_order_price_asc' => [
+                'sort' => 'price',
+                'direction' => 'ASC',
+                'expectation' => ['simple1', 'simple2', 'configurable', 'configurable_12345'],
+            ],
+            'default_order_price_desc' => [
+                'sort' => 'price',
+                'direction' => 'DESC',
+                'expectation' => ['configurable', 'simple2', 'simple1', 'configurable_12345'],
+            ],
+            'default_order_name_asc' => [
+                'sort' => 'name',
+                'direction' => 'ASC',
+                'expectation' => ['configurable', 'simple1', 'simple2', 'configurable_12345'],
+            ],
+            'default_order_name_desc' => [
+                'sort' => 'name',
+                'direction' => 'DESC',
+                'expectation' => ['simple2', 'simple1', 'configurable', 'configurable_12345'],
+            ],
+        ];
     }
 }

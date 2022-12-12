@@ -9,6 +9,7 @@
        attr="href: $row().url">
         <img if="imageExists($row())"
              class="product-image-photo"
+             loading="lazy"
              attr="src: getImageUrl($row()),
                alt: getLabel($row()),
                title: getLabel($row()),

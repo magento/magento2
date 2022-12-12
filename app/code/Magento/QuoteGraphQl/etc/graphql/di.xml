@@ -49,4 +49,15 @@
             <argument name="errorMessageFormatter" xsi:type="object">Magento\QuoteGraphQl\Helper\Error\PlaceOrderMessageFormatter</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper">
+        <arguments>
+            <argument name="map" xsi:type="array">
+                <item name="CartItemErrorType" xsi:type="array">
+                    <item name="undefined" xsi:type="string">0</item>
+                    <item name="item_qty" xsi:type="string">1</item>
+                    <item name="item_increment" xsi:type="string">2</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
