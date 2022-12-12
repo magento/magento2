@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7ff961b0e7ebdbf0884b827145413744",
+    "content-hash": "8f3d3ad2dd15ab8daf6a884515eff4b8",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -4491,55 +4491,369 @@
             "time": "2022-06-27T21:45:22+00:00"
         },
         {
-            "name": "magento/zendframework1",
-            "version": "1.15.0",
+            "name": "magento/zend-cache",
+            "version": "1.16.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/magento/zf1.git",
-                "reference": "f241f5be1820784e7f54a36115e1324b5bb8a4ab"
+                "url": "https://github.com/magento/magento-zend-cache.git",
+                "reference": "75e6a43f198b17ea4b0c3f46b700b7a757eba84d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/zf1/zipball/f241f5be1820784e7f54a36115e1324b5bb8a4ab",
-                "reference": "f241f5be1820784e7f54a36115e1324b5bb8a4ab",
+                "url": "https://api.github.com/repos/magento/magento-zend-cache/zipball/75e6a43f198b17ea4b0c3f46b700b7a757eba84d",
+                "reference": "75e6a43f198b17ea4b0c3f46b700b7a757eba84d",
+                "shasum": ""
+            },
+            "require": {
+                "magento/zend-exception": "^1.16",
+                "magento/zend-log": "^1.16",
+                "php": ">=7.0.0"
+            },
+            "replace": {
+                "zf1/zend-cache": "^1.12",
+                "zfs1/zend-cache": "^1.12"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.16.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Zend_Cache": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Zend Framework 1 Cache package",
+            "homepage": "http://framework.zend.com/",
+            "keywords": [
+                "ZF1",
+                "cache",
+                "framework",
+                "zend"
+            ],
+            "support": {
+                "issues": "https://github.com/magento/magento-zend-cache/issues",
+                "source": "https://github.com/magento/magento-zend-cache/tree/1.16.0"
+            },
+            "time": "2022-09-22T19:09:32+00:00"
+        },
+        {
+            "name": "magento/zend-db",
+            "version": "1.16.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/magento-zend-db.git",
+                "reference": "def36bc00e49cf0056a59192e52f2e83077b933c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/magento/magento-zend-db/zipball/def36bc00e49cf0056a59192e52f2e83077b933c",
+                "reference": "def36bc00e49cf0056a59192e52f2e83077b933c",
+                "shasum": ""
+            },
+            "require": {
+                "magento/zend-exception": "^1.16",
+                "magento/zend-loader": "^1.16",
+                "php": ">=7.0.0"
+            },
+            "replace": {
+                "zf1/zend-db": "^1.12",
+                "zfs1/zend-db": "^1.12"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.16.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Zend_Db": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Zend Framework 1 Db package",
+            "homepage": "http://framework.zend.com/",
+            "keywords": [
+                "ZF1",
+                "db",
+                "framework",
+                "zend"
+            ],
+            "support": {
+                "issues": "https://github.com/magento/magento-zend-db/issues",
+                "source": "https://github.com/magento/magento-zend-db/tree/1.16.0"
+            },
+            "time": "2022-09-22T18:19:14+00:00"
+        },
+        {
+            "name": "magento/zend-exception",
+            "version": "1.16.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/magento-zend-exception.git",
+                "reference": "5219ba961e36dc1a713da3ad4f1594a87c71f758"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/magento/magento-zend-exception/zipball/5219ba961e36dc1a713da3ad4f1594a87c71f758",
+                "reference": "5219ba961e36dc1a713da3ad4f1594a87c71f758",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.0.0"
             },
-            "require-dev": {
-                "phpunit/dbunit": "1.3.*",
-                "phpunit/phpunit": "3.7.*"
+            "replace": {
+                "zf1/zend-exception": "^1.12",
+                "zfs1/zend-exception": "^1.12"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12.x-dev"
+                    "dev-main": "1.16.x-dev"
                 }
             },
             "autoload": {
                 "psr-0": {
-                    "Zend_": "library/"
+                    "Zend_Exception": "library/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "include-path": [
-                "library/"
-            ],
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "Magento Zend Framework 1",
+            "description": "Zend Framework 1 Exception package",
             "homepage": "http://framework.zend.com/",
             "keywords": [
                 "ZF1",
-                "framework"
+                "exception",
+                "framework",
+                "zend"
             ],
             "support": {
-                "issues": "https://github.com/magento/zf1/issues",
-                "source": "https://github.com/magento/zf1/tree/1.15.0"
+                "issues": "https://github.com/magento/magento-zend-exception/issues",
+                "source": "https://github.com/magento/magento-zend-exception/tree/1.16.0"
             },
-            "time": "2022-01-18T21:55:54+00:00"
+            "time": "2022-09-22T19:06:06+00:00"
+        },
+        {
+            "name": "magento/zend-loader",
+            "version": "1.16.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/magento-zend-loader.git",
+                "reference": "200786c8009d668917a42250ed72ebf8c4c958d2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/magento/magento-zend-loader/zipball/200786c8009d668917a42250ed72ebf8c4c958d2",
+                "reference": "200786c8009d668917a42250ed72ebf8c4c958d2",
+                "shasum": ""
+            },
+            "require": {
+                "magento/zend-exception": "^1.16.0",
+                "php": ">=7.0.0"
+            },
+            "replace": {
+                "zf1/zend-loader": "^1.12",
+                "zf1s/zend-loader": "^1.12"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.16.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Zend_Loader": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Zend Framework 1 Loader package",
+            "homepage": "http://framework.zend.com/",
+            "keywords": [
+                "ZF1",
+                "framework",
+                "loader",
+                "zend"
+            ],
+            "support": {
+                "issues": "https://github.com/magento/magento-zend-loader/issues",
+                "source": "https://github.com/magento/magento-zend-loader/tree/1.16.0"
+            },
+            "time": "2022-09-22T19:00:04+00:00"
+        },
+        {
+            "name": "magento/zend-log",
+            "version": "1.16.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/magento-zend-log.git",
+                "reference": "c03b9febe92c501288cf441d41b49cd01f1e8a50"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/magento/magento-zend-log/zipball/c03b9febe92c501288cf441d41b49cd01f1e8a50",
+                "reference": "c03b9febe92c501288cf441d41b49cd01f1e8a50",
+                "shasum": ""
+            },
+            "require": {
+                "magento/zend-exception": "^1.16",
+                "php": ">=7.0.0"
+            },
+            "replace": {
+                "zf1/zend-log": "^1.12",
+                "zfs1/zend-log": "^1.12"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.16.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Zend_Log": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Zend Framework 1 Log package",
+            "homepage": "http://framework.zend.com/",
+            "keywords": [
+                "ZF1",
+                "framework",
+                "log",
+                "zend"
+            ],
+            "support": {
+                "issues": "https://github.com/magento/magento-zend-log/issues",
+                "source": "https://github.com/magento/magento-zend-log/tree/1.16.0"
+            },
+            "time": "2022-09-22T19:03:03+00:00"
+        },
+        {
+            "name": "magento/zend-memory",
+            "version": "1.16.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/magento-zend-memory.git",
+                "reference": "0d48804c6718cc9f15e5c356e6192fd6fff8932b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/magento/magento-zend-memory/zipball/0d48804c6718cc9f15e5c356e6192fd6fff8932b",
+                "reference": "0d48804c6718cc9f15e5c356e6192fd6fff8932b",
+                "shasum": ""
+            },
+            "require": {
+                "magento/zend-cache": "^1.16",
+                "magento/zend-exception": "^1.16",
+                "php": ">=7.0.0"
+            },
+            "replace": {
+                "zf1/zend-memory": "^1.12",
+                "zfs1/zend-memory": "^1.12"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.16.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Zend_Memory": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Zend Framework 1 Memory package",
+            "homepage": "http://framework.zend.com/",
+            "keywords": [
+                "ZF1",
+                "framework",
+                "memory",
+                "zend"
+            ],
+            "support": {
+                "issues": "https://github.com/magento/magento-zend-memory/issues",
+                "source": "https://github.com/magento/magento-zend-memory/tree/1.16.0"
+            },
+            "time": "2022-09-22T18:17:46+00:00"
+        },
+        {
+            "name": "magento/zend-pdf",
+            "version": "1.16.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/magento-zend-pdf.git",
+                "reference": "cb5179d708fb9c39d753d556f49471d3d0037aac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/magento/magento-zend-pdf/zipball/cb5179d708fb9c39d753d556f49471d3d0037aac",
+                "reference": "cb5179d708fb9c39d753d556f49471d3d0037aac",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-gd": "*",
+                "ext-iconv": "*",
+                "ext-zlib": "*",
+                "magento/zend-exception": "^1.16",
+                "magento/zend-log": "^1.16",
+                "magento/zend-memory": "^1.16",
+                "php": ">=7.0.0"
+            },
+            "replace": {
+                "zf1/zend-pdf": "^1.12",
+                "zfs1/zend-pdf": "^1.12"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.16.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Zend_Pdf": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Zend Framework 1 Pdf package",
+            "homepage": "http://framework.zend.com/",
+            "keywords": [
+                "ZF1",
+                "framework",
+                "pdf",
+                "zend"
+            ],
+            "support": {
+                "issues": "https://github.com/magento/magento-zend-pdf/issues",
+                "source": "https://github.com/magento/magento-zend-pdf/tree/1.16.0"
+            },
+            "time": "2022-09-22T18:56:44+00:00"
         },
         {
             "name": "monolog/monolog",
