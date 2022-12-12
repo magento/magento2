@@ -7,14 +7,7 @@
 
 namespace Magento\Customer\Api;
 
-use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Api\Data\ValidationResultsInterface;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\State\ExpiredException;
-use Magento\Framework\Exception\State\InputMismatchException;
 
 /**
  * Interface for managing customers accounts.
@@ -35,84 +28,84 @@ interface AccountManagementInterface
     /**
      * Create customer account. Perform necessary business operations like sending email.
      *
-     * @param CustomerInterface $customer
-     * @param string|null $password
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @param string $password
      * @param string $redirectUrl
-     * @return CustomerInterface
-     * @throws LocalizedException
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function createAccount(
         \Magento\Customer\Api\Data\CustomerInterface $customer,
-        $password = null,
-        $redirectUrl = ''
+                                                     $password = null,
+                                                     $redirectUrl = ''
     );
 
     /**
      * Create customer account using provided hashed password. Should not be exposed as a webapi.
      *
-     * @param CustomerInterface $customer
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $hash Password hash that we can save directly
      * @param string $redirectUrl URL fed to welcome email templates. Can be used by templates to, for example, direct
      *                            the customer to a product they were looking at after pressing confirmation link.
-     * @return CustomerInterface
-     * @throws InputException If bad input is provided
-     * @throws InputMismatchException If the provided email is already used
-     * @throws LocalizedException
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws \Magento\Framework\Exception\InputException If bad input is provided
+     * @throws \Magento\Framework\Exception\State\InputMismatchException If the provided email is already used
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function createAccountWithPasswordHash(
-        CustomerInterface $customer,
-        string            $hash,
-        string $redirectUrl = ''
-    ): CustomerInterface;
+        \Magento\Customer\Api\Data\CustomerInterface $customer,
+                                                     $hash,
+                                                     $redirectUrl = ''
+    );
 
     /**
      * Validate customer data.
      *
-     * @param CustomerInterface $customer
-     * @return ValidationResultsInterface
-     * @throws LocalizedException
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @return \Magento\Customer\Api\Data\ValidationResultsInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function validate(CustomerInterface $customer): ValidationResultsInterface;
+    public function validate(\Magento\Customer\Api\Data\CustomerInterface $customer);
 
     /**
      * Check if customer can be deleted.
      *
      * @param int $customerId
      * @return bool
-     * @throws NoSuchEntityException If group is not found
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If group is not found
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function isReadonly(int $customerId): bool;
+    public function isReadonly($customerId);
 
     /**
      * Activate a customer account using a key that was sent in a confirmation email.
      *
      * @param string $email
      * @param string $confirmationKey
-     * @return CustomerInterface
-     * @throws LocalizedException
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function activate(string $email, string $confirmationKey): CustomerInterface;
+    public function activate($email, $confirmationKey);
 
     /**
      * Activate a customer account using a key that was sent in a confirmation email.
      *
      * @param int $customerId
      * @param string $confirmationKey
-     * @return CustomerInterface
-     * @throws LocalizedException
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function activateById(int $customerId, string $confirmationKey): CustomerInterface;
+    public function activateById($customerId, $confirmationKey);
 
     /**
      * Authenticate a customer by username and password
      *
      * @param string $email
      * @param string $password
-     * @return CustomerInterface
-     * @throws LocalizedException
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function authenticate(string $email, string $password): CustomerInterface;
+    public function authenticate($email, $password);
 
     /**
      * Change customer password.
@@ -121,9 +114,9 @@ interface AccountManagementInterface
      * @param string $currentPassword
      * @param string $newPassword
      * @return bool true on success
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function changePassword(string $email, string $currentPassword, string $newPassword): bool;
+    public function changePassword($email, $currentPassword, $newPassword);
 
     /**
      * Change customer password.
@@ -132,20 +125,20 @@ interface AccountManagementInterface
      * @param string $currentPassword
      * @param string $newPassword
      * @return bool true on success
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function changePasswordById(int $customerId, string $currentPassword, string $newPassword): bool;
+    public function changePasswordById($customerId, $currentPassword, $newPassword);
 
     /**
      * Send an email to the customer with a password reset link.
      *
      * @param string $email
      * @param string $template
-     * @param int|null $websiteId
+     * @param int $websiteId
      * @return bool true on success
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function initiatePasswordReset(string $email, string $template, int $websiteId = null): bool;
+    public function initiatePasswordReset($email, $template, $websiteId = null);
 
     /**
      * Reset customer password.
@@ -156,10 +149,10 @@ interface AccountManagementInterface
      * @param string $newPassword
      *
      * @return bool true on success
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws InputException
      */
-    public function resetPassword(string $email, string $resetToken, string $newPassword): bool;
+    public function resetPassword($email, $resetToken, $newPassword);
 
     /**
      * Check if password reset token is valid.
@@ -169,22 +162,22 @@ interface AccountManagementInterface
      * @param string $resetPasswordLinkToken
      *
      * @return bool True if the token is valid
-     * @throws InputMismatchException If token is mismatched
-     * @throws ExpiredException If token is expired
-     * @throws InputException If token or customer id is invalid
-     * @throws NoSuchEntityException If customer doesn't exist
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\State\InputMismatchException If token is mismatched
+     * @throws \Magento\Framework\Exception\State\ExpiredException If token is expired
+     * @throws \Magento\Framework\Exception\InputException If token or customer id is invalid
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If customer doesn't exist
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function validateResetPasswordLinkToken(int $customerId, string $resetPasswordLinkToken): bool;
+    public function validateResetPasswordLinkToken($customerId, $resetPasswordLinkToken);
 
     /**
      * Gets the account confirmation status.
      *
      * @param int $customerId
      * @return string
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getConfirmationStatus(int $customerId): string;
+    public function getConfirmationStatus($customerId);
 
     /**
      * Resend confirmation email.
@@ -193,19 +186,19 @@ interface AccountManagementInterface
      * @param int $websiteId
      * @param string $redirectUrl
      * @return bool true on success
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function resendConfirmation(string $email, int $websiteId, string $redirectUrl = ''): bool;
+    public function resendConfirmation($email, $websiteId, $redirectUrl = '');
 
     /**
      * Check if given email is associated with a customer account in given website.
      *
      * @param string $customerEmail
-     * @param int|null $websiteId If not set, will use the current websiteId
+     * @param int $websiteId If not set, will use the current websiteId
      * @return bool
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function isEmailAvailable(string $customerEmail, int $websiteId = null): bool;
+    public function isEmailAvailable($customerEmail, $websiteId = null);
 
     /**
      * Check store availability for customer given the customerId.
@@ -213,29 +206,29 @@ interface AccountManagementInterface
      * @param int $customerWebsiteId
      * @param int $storeId
      * @return bool
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function isCustomerInStore(int $customerWebsiteId, int $storeId): bool;
+    public function isCustomerInStore($customerWebsiteId, $storeId);
 
     /**
      * Retrieve default billing address for the given customerId.
      *
      * @param int $customerId
-     * @return AddressInterface
-     * @throws NoSuchEntityException If the customer Id is invalid
-     * @throws LocalizedException
+     * @return \Magento\Customer\Api\Data\AddressInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If the customer Id is invalid
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getDefaultBillingAddress(int $customerId): Data\AddressInterface;
+    public function getDefaultBillingAddress($customerId);
 
     /**
      * Retrieve default shipping address for the given customerId.
      *
      * @param int $customerId
-     * @return AddressInterface
-     * @throws NoSuchEntityException If the customer Id is invalid
-     * @throws LocalizedException
+     * @return \Magento\Customer\Api\Data\AddressInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If the customer Id is invalid
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getDefaultShippingAddress(int $customerId): AddressInterface;
+    public function getDefaultShippingAddress($customerId);
 
     /**
      * Return hashed password, which can be directly saved to database.
@@ -243,5 +236,5 @@ interface AccountManagementInterface
      * @param string $password
      * @return string
      */
-    public function getPasswordHash(string $password): string;
+    public function getPasswordHash($password);
 }
