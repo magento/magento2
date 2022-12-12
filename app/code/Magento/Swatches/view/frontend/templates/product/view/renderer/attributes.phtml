@@ -13,7 +13,7 @@ $sizeConfig = $block->getSizeConfig();
 $classes = $block->getClasses();
 ?>
 
-<?php foreach ($config['attributes'] as $attributeId => $attribute): ?>
+<?php foreach ($config['attributes'] as $attributeId => $attribute) : ?>
     <?php
     $attributeCode = $attribute['code'];
     $attributeLabel = $attribute['label'];
@@ -55,6 +55,7 @@ $classes = $block->getClasses();
                 $swatchOption = $block
                     ->getChildBlock('swatch_option')
                     ->setSizeConfig($sizeConfig)
+                    ->setData('attribute', $attribute)
                     ->setAttributeLabelId($attributeLabelId)
                     ->setClasses($classes);
 

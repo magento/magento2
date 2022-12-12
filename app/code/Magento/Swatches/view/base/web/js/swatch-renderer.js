@@ -168,6 +168,36 @@ define([
         },
 
         /**
+         * Get selected salable product list
+         * Compatible with Magento 2.4.5, base on $widget.options.jsonConfig.salable data
+         *
+         * @returns {Array}
+         * @private
+         */
+        _GetSalableSelectedProducts: function () {
+            var $widget = this,
+                selectedOptions = '.' + $widget.options.classes.attributeClass + '[data-option-selected]',
+                products = [];
+
+            // Generate intersection of products
+            $widget.element.find(selectedOptions).each(function () {
+                var id = $(this).data('attribute-id'),
+                    option = $(this).attr('data-option-selected');
+
+                if (!$widget.options.jsonConfig.salable[id] || !$widget.options.jsonConfig.salable[id][option]) {
+                    return;
+                }
+
+                if (products.length === 0) {
+                    products = $widget.options.jsonConfig.salable[id][option];
+                } else {
+                    products = _.intersection(products, $widget.options.jsonConfig.salable[id][option]);
+                }
+            });
+            return products;
+        },
+
+        /**
          * Get chosen product id
          *
          * @returns int|null
@@ -336,25 +366,29 @@ define([
             $widget._EmulateSelected($widget._getSelectedAttributes());
         },
 
+        /**
+         * disable options that do not have any salable product assign
+         */
         disableSwatchForOutOfStockProducts: function () {
-            let $widget = this, container = this.element;
+            const $widget = this;
+            const container = this.element;
 
-            $.each(this.options.jsonConfig.attributes, function () {
-                let item = this;
+            if ($widget.options.jsonConfig.canDisplayShowOutOfStockStatus && $widget.options.jsonConfig.salable) {
+                let salableProducts = {};
+                const swatchOptions = container.find('.swatch-option');
 
-                if ($widget.options.jsonConfig.canDisplayShowOutOfStockStatus) {
-                    let salableProducts = $widget.options.jsonConfig.salable[item.id],
-                        swatchOptions = $(container).find(`[data-attribute-id='${item.id}']`).find('.swatch-option');
+                $.each(this.options.jsonConfig.attributes, function () {
+                    const item = this;
+                    salableProducts = {...salableProducts, ...$widget.options.jsonConfig.salable[item.id]};
+                });
 
-                    swatchOptions.each(function (key, value) {
-                        let optionId = $(value).data('option-id');
-
-                        if (!salableProducts.hasOwnProperty(optionId)) {
-                            $(value).attr('disabled', true).addClass('disabled');
-                        }
-                    });
-                }
-            });
+                swatchOptions.each(function (key, value) {
+                    const optionId = $(value).data('option-id');
+                    if (!salableProducts.hasOwnProperty(optionId)) {
+                        $(value).attr('disabled', true).addClass('disabled');
+                    }
+                });
+            }
         },
 
         /**
@@ -591,6 +625,7 @@ define([
                 .attr('disabled', true)
                 .addClass('disabled')
                 .attr('tabindex', '-1');
+
             this.disableSwatchForOutOfStockProducts();
         },
 
@@ -617,6 +652,11 @@ define([
                 var $this = $(this),
                     id = $this.data('attribute-id'),
                     products = $widget._CalcProducts(id);
+
+                // Compability with Magento 2.4.5
+                if ($widget.options.jsonConfig.salable) {
+                    products = $widget._GetSalableSelectedProducts(id);
+                }
 
                 if (selected.length === 1 && selected.first().data('attribute-id') === id) {
                     return;
