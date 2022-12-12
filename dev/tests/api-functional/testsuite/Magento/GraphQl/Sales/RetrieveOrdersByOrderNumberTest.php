@@ -536,14 +536,14 @@ QUERY;
 
         $expectedOrderNumbers = [$order8, $order7, $order6, $order5, $order4, $order3, $order2 ];
 
-        foreach ($expectedOrderNumbers as $key => $data) {
-            $orderItemInResponse = $customerOrderItemsInResponse[$key];
+        foreach ($customerOrderItemsInResponse as $key => $data) {
             $this->assertEquals(
-                $data,
-                $orderItemInResponse['number'],
-                "The order number is different than the expected for order - {$data}"
+                $expectedOrderNumbers[$key],
+                $data['number'],
+                "The order number is different than the expected for order - {$expectedOrderNumbers[$key]}"
             );
         }
+
     }
 
     /**
