@@ -514,6 +514,15 @@ QUERY;
 }
 QUERY;
 
+        $o2 = $this->fixtures->get('or2')->getIncrementId();
+        $o3 = $this->fixtures->get('or3')->getIncrementId();
+        $o4 = $this->fixtures->get('or4')->getIncrementId();
+        $o5 = $this->fixtures->get('or5')->getIncrementId();
+        $o6 = $this->fixtures->get('or6')->getIncrementId();
+        $o7 = $this->fixtures->get('or7')->getIncrementId();
+        $o8 = $this->fixtures->get('or8')->getIncrementId();
+        echo "<br/> order 8 to 2 before query ".$o8.','.$o7.','.$o6.','.$o5.','.$o4.','.$o3.','.$o2;
+
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
         $response = $this->graphQlQuery(
@@ -525,7 +534,8 @@ QUERY;
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
-
+        echo '<br/> query';
+        print_r($customerOrderItemsInResponse);
          $order2 = $this->fixtures->get('or2')->getIncrementId();
          $order3 = $this->fixtures->get('or3')->getIncrementId();
          $order4 = $this->fixtures->get('or4')->getIncrementId();
@@ -535,14 +545,16 @@ QUERY;
          $order8 = $this->fixtures->get('or8')->getIncrementId();
 
         $expectedOrderNumbers = [$order8, $order7, $order6, $order5, $order4, $order3, $order2 ];
-
-        foreach ($customerOrderItemsInResponse as $key => $data) {
+        echo '<br/> exp';
+        print_r($expectedOrderNumbers);
+        foreach ($expectedOrderNumbers as $key => $data) {
+            $orderItemInResponse = $customerOrderItemsInResponse[$key];
             $this->assertEquals(
-                $expectedOrderNumbers[$key],
-                $data['number'],
-                "The order number is different than the expected for order - {$expectedOrderNumbers[$key]}"
+                $data,
+                $orderItemInResponse['number'],
+                "The order number is different than the expected for order - {$data}"
             );
-        }
+        }die;
 
     }
 
