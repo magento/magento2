@@ -36,8 +36,8 @@ interface AccountManagementInterface
      */
     public function createAccount(
         \Magento\Customer\Api\Data\CustomerInterface $customer,
-                                                     $password = null,
-                                                     $redirectUrl = ''
+        $password = null,
+        $redirectUrl = ''
     );
 
     /**
@@ -54,8 +54,8 @@ interface AccountManagementInterface
      */
     public function createAccountWithPasswordHash(
         \Magento\Customer\Api\Data\CustomerInterface $customer,
-                                                     $hash,
-                                                     $redirectUrl = ''
+        $hash,
+        $redirectUrl = ''
     );
 
     /**
