@@ -482,15 +482,6 @@ QUERY;
         DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart7.id$']),
         DataFixture(PlaceOrder::class, ['cart_id' => '$cart7.id$'], 'or7'),
 
-        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart8'),
-        DataFixture(ProductFixture::class, ['sku' => '100000008', 'price' => 10], 'p8'),
-        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart8.id$', 'product_id' => '$p8.id$']),
-        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart8.id$']),
-        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart8.id$']),
-        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart8.id$']),
-        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart8.id$']),
-        DataFixture(PlaceOrder::class, ['cart_id' => '$cart8.id$'], 'or8'),
-
     ]
     public function testGetCustomerDescendingSortedOrders()
     {
@@ -520,8 +511,8 @@ QUERY;
         $o5 = $this->fixtures->get('or5')->getIncrementId();
         $o6 = $this->fixtures->get('or6')->getIncrementId();
         $o7 = $this->fixtures->get('or7')->getIncrementId();
-        $o8 = $this->fixtures->get('or8')->getIncrementId();
-        echo "<br/> order 8 to 2 before query ".$o8.','.$o7.','.$o6.','.$o5.','.$o4.','.$o3.','.$o2;
+      //  $o8 = $this->fixtures->get('or8')->getIncrementId();
+        echo "<br/> order 7 to 2 before query ".$o7.','.$o6.','.$o5.','.$o4.','.$o3.','.$o2;
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
@@ -542,9 +533,9 @@ QUERY;
          $order5 = $this->fixtures->get('or5')->getIncrementId();
          $order6 = $this->fixtures->get('or6')->getIncrementId();
          $order7 = $this->fixtures->get('or7')->getIncrementId();
-         $order8 = $this->fixtures->get('or8')->getIncrementId();
+        // $order8 = $this->fixtures->get('or8')->getIncrementId();
 
-        $expectedOrderNumbers = [$order8, $order7, $order6, $order5, $order4, $order3, $order2 ];
+        $expectedOrderNumbers = [$order7, $order6, $order5, $order4, $order3, $order2 ];
         echo '<br/> exp';
         print_r($expectedOrderNumbers);
         foreach ($expectedOrderNumbers as $key => $data) {
@@ -554,8 +545,7 @@ QUERY;
                 $orderItemInResponse['number'],
                 "The order number is different than the expected for order - {$data}"
             );
-        }die;
-
+        }//die;
     }
 
     /**
