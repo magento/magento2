@@ -9,7 +9,6 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTr
 
 use Magento\Catalog\Model\Category;
 use Magento\CatalogGraphQl\Model\Category\Hydrator;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Tree node forgery for category tree wrapper.

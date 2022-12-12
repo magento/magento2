@@ -33,10 +33,10 @@ class ExtractDataFromCategoryTree
      * Build result tree from collection
      *
      * @param Collection $collection
-     * @param array $topLevelCategories
+     * @param array $topLevelCategoryIds
      * @return array
      */
-    public function buildTree(Collection $collection, array $topLevelCategories) : array
+    public function buildTree(Collection $collection, array $topLevelCategoryIds) : array
     {
         $wrapper = $this->nodeWrapperFactory->create();
         /** @var Category $item */
@@ -44,7 +44,7 @@ class ExtractDataFromCategoryTree
             $wrapper->wrap($item);
         }
         $tree = [];
-        foreach ($topLevelCategories as $topLevelCategory) {
+        foreach ($topLevelCategoryIds as $topLevelCategory) {
             $tree[] = $wrapper->getNodeById($topLevelCategory)->renderArray();
         }
         return $this->sortTree($tree);
