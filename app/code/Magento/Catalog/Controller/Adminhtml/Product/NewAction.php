@@ -35,7 +35,7 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product implements
     /**
      * @var RegexValidator
      */
-    public RegexValidator $regexValidator;
+    private RegexValidator $regexValidator;
 
     /**
      * @param Context $context

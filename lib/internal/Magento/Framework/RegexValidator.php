@@ -40,7 +40,7 @@ class RegexValidator extends RegexFactory
      * @param string $pattern
      * @return bool
      */
-    public function validateParamRegex($params, $pattern = self::VALIDATION_RULE_PATTERN)
+    public function validateParamRegex(string $params, string $pattern = self::VALIDATION_RULE_PATTERN): bool
     {
         $validator = $this->regexValidatorFactory->create(['pattern' => $pattern]);
 

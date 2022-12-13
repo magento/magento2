@@ -144,7 +144,7 @@ class NewActionTest extends ProductTest
                 ->with($value)
                 ->willReturn(true);
 
-            $this->assertEquals(true, $this->action->regexValidator->validateParamRegex($value));
+            $this->assertEquals(true, $this->regexValidator->validateParamRegex($value));
         }
     }
 
