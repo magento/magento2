@@ -29,6 +29,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoAppIsolation enabled
  * @magentoAppArea frontend
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AlertProcessorTest extends TestCase
 {
