@@ -29,7 +29,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoAppIsolation enabled
  * @magentoAppArea frontend
-*/
+ */
 class AlertProcessorTest extends TestCase
 {
     /**
