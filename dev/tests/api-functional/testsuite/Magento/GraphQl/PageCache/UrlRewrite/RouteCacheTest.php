@@ -365,7 +365,10 @@ QUERY;
         // renaming entity request path and validating that API will not return cached response
         $urlRewrite->setRequestPath('test' . $requestPath);
         $urlRewriteResourceModel->save($urlRewrite);
-        $apiResponse = $this->assertCacheMissAndReturnResponse($query($requestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $apiResponse = $this->assertCacheMissAndReturnResponse(
+            $query($requestPath),
+            [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
+        );
         $this->assertNull($apiResponse['body']['route']);
 
         // rolling back changes
@@ -399,7 +402,6 @@ QUERY;
      */
     public function testUrlRewriteCleansCacheForCustomRewrites()
     {
-
         /** @var UrlRewriteResourceModel $urlRewriteResourceModel */
         $urlRewriteResourceModel = $this->objectManager->create(UrlRewriteResourceModel::class);
         $storeId = 1;
@@ -457,10 +459,16 @@ QUERY;
             $cacheId = $apiResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
             // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-            $this->assertCacheMissAndReturnResponse($query($customRequestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+            $this->assertCacheMissAndReturnResponse(
+                $query($customRequestPath),
+                [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
+            );
 
             // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-            $this->assertCacheHitAndReturnResponse($query($customRequestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+            $this->assertCacheHitAndReturnResponse(
+                $query($customRequestPath),
+                [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
+            );
 
             // confirm that API returns non-cached response for the second custom rewrite
             $apiResponse = $this->graphQlQueryWithResponseHeaders($query($customSecondRequestPath));
@@ -469,10 +477,16 @@ QUERY;
             $cacheId = $apiResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
             // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-            $this->assertCacheMissAndReturnResponse($query($customSecondRequestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+            $this->assertCacheMissAndReturnResponse(
+                $query($customSecondRequestPath),
+                [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
+            );
 
             // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-            $this->assertCacheHitAndReturnResponse($query($customSecondRequestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+            $this->assertCacheHitAndReturnResponse(
+                $query($customSecondRequestPath),
+                [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
+            );
         }
 
         $urlRewriteResourceModel->delete($secondUrlRewriteModel);
