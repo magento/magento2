@@ -10,8 +10,7 @@ define([
     'ko',
     'jquery',
     'uiComponent',
-    '../model/messageList',
-    'jquery-ui-modules/effect-blind'
+    '../model/messageList'
 ], function (ko, $, Component, globalMessages) {
     'use strict';
 
@@ -68,7 +67,7 @@ define([
             // Hide message block if needed
             if (isHidden) {
                 setTimeout(function () {
-                    $(this.selector).hide('blind', {}, this.hideSpeed);
+                    $(this.selector).slideUp(this.hideSpeed);
                 }.bind(this), this.hideTimeout);
             }
         }
