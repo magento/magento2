@@ -66,8 +66,8 @@ class DefaultStore
         \Magento\Framework\App\FrontController $subject,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        $reader = $this->readerList->getReader($this->runMode);
+/*        $reader = $this->readerList->getReader($this->runMode);
         $defaultStoreId = $reader->getDefaultStoreId($this->scopeCode);
-        $this->storeManager->setCurrentStore($defaultStoreId);
+        $this->storeManager->setCurrentStore($defaultStoreId);*/
     }
 }
