@@ -25,10 +25,10 @@ use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
-* Test for Product Alert observer
-*
-* @magentoAppIsolation enabled
-* @magentoAppArea frontend
+ * Test for Product Alert observer
+ *
+ * @magentoAppIsolation enabled
+ * @magentoAppArea frontend
 */
 class AlertProcessorTest extends TestCase
 {
