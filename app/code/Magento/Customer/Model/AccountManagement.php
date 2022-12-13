@@ -69,6 +69,9 @@ use Magento\Customer\Model\Logger as CustomerLogger;
  */
 class AccountManagement implements AccountManagementInterface
 {
+    /**
+     * System Configuration Path for Enable/Disable Login at Guest Checkout
+     */
     private const GUEST_CHECKOUT_LOGIN_OPTION_SYS_CONFIG = 'checkout/options/disable_guest_checkout_login';
 
     /**
