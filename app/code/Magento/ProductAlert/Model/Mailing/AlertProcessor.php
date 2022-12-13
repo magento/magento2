@@ -31,7 +31,9 @@ use Magento\Framework\View\DesignInterface;
 /**
  * Class for mailing Product Alerts
  *
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class AlertProcessor
 {
@@ -99,7 +101,6 @@ class AlertProcessor
      * @param StoreManagerInterface $storeManager
      * @param ErrorEmailSender $errorEmailSender
      * @param DesignInterface|null $design
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __construct(
         EmailFactory $emailFactory,
