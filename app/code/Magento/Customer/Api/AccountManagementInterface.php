@@ -8,6 +8,7 @@
 namespace Magento\Customer\Api;
 
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Interface for managing customers accounts.
@@ -32,7 +33,7 @@ interface AccountManagementInterface
      * @param string $password
      * @param string $redirectUrl
      * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function createAccount(
         \Magento\Customer\Api\Data\CustomerInterface $customer,
@@ -50,7 +51,7 @@ interface AccountManagementInterface
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Magento\Framework\Exception\InputException If bad input is provided
      * @throws \Magento\Framework\Exception\State\InputMismatchException If the provided email is already used
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function createAccountWithPasswordHash(
         \Magento\Customer\Api\Data\CustomerInterface $customer,
@@ -63,7 +64,7 @@ interface AccountManagementInterface
      *
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return \Magento\Customer\Api\Data\ValidationResultsInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function validate(\Magento\Customer\Api\Data\CustomerInterface $customer);
 
@@ -73,7 +74,7 @@ interface AccountManagementInterface
      * @param int $customerId
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException If group is not found
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function isReadonly($customerId);
 
@@ -83,7 +84,7 @@ interface AccountManagementInterface
      * @param string $email
      * @param string $confirmationKey
      * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function activate($email, $confirmationKey);
 
@@ -93,7 +94,7 @@ interface AccountManagementInterface
      * @param int $customerId
      * @param string $confirmationKey
      * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function activateById($customerId, $confirmationKey);
 
@@ -103,7 +104,7 @@ interface AccountManagementInterface
      * @param string $email
      * @param string $password
      * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function authenticate($email, $password);
 
@@ -114,7 +115,7 @@ interface AccountManagementInterface
      * @param string $currentPassword
      * @param string $newPassword
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function changePassword($email, $currentPassword, $newPassword);
 
@@ -125,7 +126,7 @@ interface AccountManagementInterface
      * @param string $currentPassword
      * @param string $newPassword
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function changePasswordById($customerId, $currentPassword, $newPassword);
 
@@ -136,7 +137,7 @@ interface AccountManagementInterface
      * @param string $template
      * @param int $websiteId
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function initiatePasswordReset($email, $template, $websiteId = null);
 
@@ -149,7 +150,7 @@ interface AccountManagementInterface
      * @param string $newPassword
      *
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @throws InputException
      */
     public function resetPassword($email, $resetToken, $newPassword);
@@ -166,7 +167,7 @@ interface AccountManagementInterface
      * @throws \Magento\Framework\Exception\State\ExpiredException If token is expired
      * @throws \Magento\Framework\Exception\InputException If token or customer id is invalid
      * @throws \Magento\Framework\Exception\NoSuchEntityException If customer doesn't exist
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function validateResetPasswordLinkToken($customerId, $resetPasswordLinkToken);
 
@@ -175,7 +176,7 @@ interface AccountManagementInterface
      *
      * @param int $customerId
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getConfirmationStatus($customerId);
 
@@ -186,7 +187,7 @@ interface AccountManagementInterface
      * @param int $websiteId
      * @param string $redirectUrl
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function resendConfirmation($email, $websiteId, $redirectUrl = '');
 
@@ -194,11 +195,11 @@ interface AccountManagementInterface
      * Check if given email is associated with a customer account in given website.
      *
      * @param string $customerEmail
-     * @param int $websiteId If not set, will use the current websiteId
+     * @param int|null $websiteId If not set, will use the current websiteId
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    public function isEmailAvailable($customerEmail, $websiteId = null);
+    public function isEmailAvailable(string $customerEmail, int $websiteId = null): bool;
 
     /**
      * Check store availability for customer given the customerId.
@@ -206,7 +207,7 @@ interface AccountManagementInterface
      * @param int $customerWebsiteId
      * @param int $storeId
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function isCustomerInStore($customerWebsiteId, $storeId);
 
@@ -216,7 +217,7 @@ interface AccountManagementInterface
      * @param int $customerId
      * @return \Magento\Customer\Api\Data\AddressInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If the customer Id is invalid
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getDefaultBillingAddress($customerId);
 
@@ -226,7 +227,7 @@ interface AccountManagementInterface
      * @param int $customerId
      * @return \Magento\Customer\Api\Data\AddressInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If the customer Id is invalid
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getDefaultShippingAddress($customerId);
 
