@@ -117,7 +117,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             || ($indexer->isScheduled() && !$useTempTable)
             || ($indexer->isScheduled() && $useTempTable && !$workingState)) {
             if ($useTempTable && !$workingState && $indexer->isScheduled()) {
-                foreach ($this->storeManager->getStores() as $store) {
+                foreach ($this->storeManager->getStores(true) as $store) {
                     $this->connection->truncateTable($this->getIndexTable($store->getId()));
                 }
             } else {
@@ -130,7 +130,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             $workingState = $this->isWorkingState();
 
             if ($useTempTable && !$workingState && $indexer->isScheduled()) {
-                foreach ($this->storeManager->getStores() as $store) {
+                foreach ($this->storeManager->getStores(true) as $store) {
                     $removalCategoryIds = array_diff($this->limitationByCategories, [$this->getRootCategoryId($store)]);
                     $this->connection->delete(
                         $this->tableMaintainer->getMainTable($store->getId()),
@@ -204,7 +204,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     private function removeEntries()
     {
-        foreach ($this->storeManager->getStores() as $store) {
+        foreach ($this->storeManager->getStores(true) as $store) {
             $removalCategoryIds = array_diff($this->limitationByCategories, [$this->getRootCategoryId($store)]);
             $this->connection->delete(
                 $this->getIndexTable($store->getId()),
