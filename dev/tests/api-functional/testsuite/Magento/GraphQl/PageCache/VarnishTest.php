@@ -31,10 +31,10 @@ class VarnishTest extends GraphQLPageCacheAbstract
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheMiss($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-        $this->assertCacheHit($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheHitAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
     }
 
     /**
@@ -55,9 +55,9 @@ class VarnishTest extends GraphQLPageCacheAbstract
         $defaultStoreCacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheMiss($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]);
+        $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]);
         // Verify we obtain a cache HIT the second time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheHit($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]);
+        $this->assertCacheHitAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]);
 
         // Obtain a new X-Magento-Cache-Id using after updating the Store header
         $secondStoreResponse = $this->graphQlQueryWithResponseHeaders(
@@ -72,19 +72,19 @@ class VarnishTest extends GraphQLPageCacheAbstract
         $secondStoreCacheId = $secondStoreResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
         // Verify we obtain a cache MISS the first time we search by this X-Magento-Cache-Id
-        $this->assertCacheMiss($query, [
+        $this->assertCacheMissAndReturnResponse($query, [
             CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
             'Store' => 'fixture_second_store'
         ]);
 
         // Verify we obtain a cache HIT the second time around with the Store header
-        $this->assertCacheHit($query, [
+        $this->assertCacheHitAndReturnResponse($query, [
             CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
             'Store' => 'fixture_second_store'
         ]);
 
         // Verify we still obtain a cache HIT for the default store
-        $this->assertCacheHit($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]);
+        $this->assertCacheHitAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]);
     }
 
     /**
@@ -105,9 +105,9 @@ class VarnishTest extends GraphQLPageCacheAbstract
         $defaultCurrencyCacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheMiss($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultCurrencyCacheId]);
+        $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultCurrencyCacheId]);
         // Verify we obtain a cache HIT the second time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheHit($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultCurrencyCacheId]);
+        $this->assertCacheHitAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultCurrencyCacheId]);
 
         // Obtain a new X-Magento-Cache-Id using after updating the Content-Currency header
         $secondCurrencyResponse = $this->graphQlQueryWithResponseHeaders(
@@ -122,19 +122,19 @@ class VarnishTest extends GraphQLPageCacheAbstract
         $secondCurrencyCacheId = $secondCurrencyResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
         // Verify we obtain a cache MISS the first time we search by this X-Magento-Cache-Id
-        $this->assertCacheMiss($query, [
+        $this->assertCacheMissAndReturnResponse($query, [
             CacheIdCalculator::CACHE_ID_HEADER => $secondCurrencyCacheId,
             'Content-Currency' => 'EUR'
         ]);
 
         // Verify we obtain a cache HIT the second time around with the changed currency header
-        $this->assertCacheHit($query, [
+        $this->assertCacheHitAndReturnResponse($query, [
             CacheIdCalculator::CACHE_ID_HEADER => $secondCurrencyCacheId,
             'Content-Currency' => 'EUR'
         ]);
 
         // Verify we still obtain a cache HIT for the default currency ( no Content-Currency header)
-        $this->assertCacheHit($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultCurrencyCacheId]);
+        $this->assertCacheHitAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultCurrencyCacheId]);
     }
 
     /**
@@ -153,8 +153,8 @@ class VarnishTest extends GraphQLPageCacheAbstract
         $response = $this->graphQlQueryWithResponseHeaders($query);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $defaultCacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        $this->assertCacheMiss($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultCacheId]);
-        $this->assertCacheHit($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultCacheId]);
+        $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultCacheId]);
+        $this->assertCacheHitAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultCacheId]);
 
         // Obtain a new X-Magento-Cache-Id using after updating the request with Store header
         $responseWithStore = $this->graphQlQueryWithResponseHeaders(
@@ -169,19 +169,19 @@ class VarnishTest extends GraphQLPageCacheAbstract
         $storeCacheId = $responseWithStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
         // Verify we still get a cache MISS since the cache id in the request doesn't match the cache id from response
-        $this->assertCacheMiss($query, [
+        $this->assertCacheMissAndReturnResponse($query, [
             CacheIdCalculator::CACHE_ID_HEADER => $defaultCacheId,
             'Store' => 'fixture_second_store'
         ]);
 
         // Verify we get a cache MISS first time with the updated cache id
-        $this->assertCacheMiss($query, [
+        $this->assertCacheMissAndReturnResponse($query, [
             CacheIdCalculator::CACHE_ID_HEADER => $storeCacheId,
             'Store' => 'fixture_second_store'
         ]);
 
         // Verify we obtain a cache HIT second time around with the updated cache id
-        $this->assertCacheHit($query, [
+        $this->assertCacheHitAndReturnResponse($query, [
             CacheIdCalculator::CACHE_ID_HEADER => $storeCacheId,
             'Store' => 'fixture_second_store'
         ]);
@@ -210,13 +210,13 @@ class VarnishTest extends GraphQLPageCacheAbstract
         $customerToken = $tokenResponse['body']['generateCustomerToken']['token'];
 
         // Verify we obtain cache MISS the first time we search by this X-Magento-Cache-Id
-        $this->assertCacheMiss($query, [
+        $this->assertCacheMissAndReturnResponse($query, [
             CacheIdCalculator::CACHE_ID_HEADER => $cacheIdCustomer,
             'Authorization' => 'Bearer ' . $customerToken
         ]);
 
         // Verify we obtain cache HIT second time using the same X-Magento-Cache-Id
-        $this->assertCacheHit($query, [
+        $this->assertCacheHitAndReturnResponse($query, [
             CacheIdCalculator::CACHE_ID_HEADER => $cacheIdCustomer,
             'Authorization' => 'Bearer ' . $customerToken
         ]);
@@ -237,8 +237,8 @@ class VarnishTest extends GraphQLPageCacheAbstract
         $this->assertNotEquals($cacheIdCustomer, $cacheIdGuest);
 
         //Verify that omitting the Auth token doesn't send cached content for a logged-in customer
-        $this->assertCacheMiss($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdCustomer]);
-        $this->assertCacheMiss($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdCustomer]);
+        $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdCustomer]);
+        $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdCustomer]);
     }
 
     /**

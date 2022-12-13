@@ -55,10 +55,10 @@ class RouteCacheTest extends GraphQLPageCacheAbstract
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheMiss($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheMissAndReturnResponse($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-        $this->assertCacheHit($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheHitAndReturnResponse($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
     }
 
     /**
@@ -83,10 +83,10 @@ class RouteCacheTest extends GraphQLPageCacheAbstract
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheMiss($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheMissAndReturnResponse($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-        $this->assertCacheHit($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheHitAndReturnResponse($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
     }
 
     /**
@@ -113,10 +113,10 @@ class RouteCacheTest extends GraphQLPageCacheAbstract
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheMiss($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheMissAndReturnResponse($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-        $this->assertCacheHit($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheHitAndReturnResponse($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
     }
 
     /**
@@ -144,10 +144,10 @@ class RouteCacheTest extends GraphQLPageCacheAbstract
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheMiss($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheMissAndReturnResponse($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-        $this->assertCacheHit($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheHitAndReturnResponse($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
     }
 
     /**
@@ -191,10 +191,10 @@ QUERY;
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheMiss($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-        $this->assertCacheHit($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheHitAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
     }
 
     /**
@@ -220,10 +220,10 @@ QUERY;
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheMiss($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheMissAndReturnResponse($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-        $this->assertCacheHit($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheHitAndReturnResponse($routeQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
     }
 
     /**
@@ -353,10 +353,10 @@ QUERY;
         $cacheId = $apiResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheMiss($query($requestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheMissAndReturnResponse($query($requestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-        $this->assertCacheHit($query($requestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheHitAndReturnResponse($query($requestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         $this->assertEquals($requestPath, $apiResponse['body']['route']['relative_url']);
 
@@ -365,7 +365,7 @@ QUERY;
         // renaming entity request path and validating that API will not return cached response
         $urlRewrite->setRequestPath('test' . $requestPath);
         $urlRewriteResourceModel->save($urlRewrite);
-        $apiResponse = $this->assertCacheMiss($query($requestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $apiResponse = $this->assertCacheMissAndReturnResponse($query($requestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
         $this->assertNull($apiResponse['body']['route']);
 
         // rolling back changes
@@ -457,10 +457,10 @@ QUERY;
             $cacheId = $apiResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
             // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-            $this->assertCacheMiss($query($customRequestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+            $this->assertCacheMissAndReturnResponse($query($customRequestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
             // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-            $this->assertCacheHit($query($customRequestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+            $this->assertCacheHitAndReturnResponse($query($customRequestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
             // confirm that API returns non-cached response for the second custom rewrite
             $apiResponse = $this->graphQlQueryWithResponseHeaders($query($customSecondRequestPath));
@@ -469,17 +469,17 @@ QUERY;
             $cacheId = $apiResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
             // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-            $this->assertCacheMiss($query($customSecondRequestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+            $this->assertCacheMissAndReturnResponse($query($customSecondRequestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
             // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-            $this->assertCacheHit($query($customSecondRequestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+            $this->assertCacheHitAndReturnResponse($query($customSecondRequestPath), [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
         }
 
         $urlRewriteResourceModel->delete($secondUrlRewriteModel);
 
         // delete custom rewrite and validate that API will not return cached response
         $urlRewriteResourceModel->delete($urlRewriteModel);
-        $apiResponse = $this->assertCacheMiss(
+        $apiResponse = $this->assertCacheMissAndReturnResponse(
             $query($customRequestPath),
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
         );
