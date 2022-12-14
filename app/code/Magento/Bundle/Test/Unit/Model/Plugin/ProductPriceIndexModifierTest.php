@@ -72,9 +72,11 @@ class ProductPriceIndexModifierTest extends TestCase
             ->with(['selection' => 'catalog_product_bundle_selection'], 'selection_id');
         $select->expects($this->exactly(2))
             ->method('joinInner')
-            ->with(['price' => $priceTableName],
+            ->with(
+                ['price' => $priceTableName],
                 implode(' AND ', ['price.entity_id = selection.product_id']),
-                null);
+                null
+            );
         $select->expects($this->exactly(4))
             ->method('where')
             ->withConsecutive(
