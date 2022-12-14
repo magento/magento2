@@ -24,6 +24,7 @@ class Load extends \Magento\Framework\App\Action\Action implements HttpGetAction
     /**
      * @var Identifier
      * @deprecated 101.0.0
+     * @see Used only for backward compatibility for do not break current class implementation with its dependencies
      */
     protected $sectionIdentifier;
 
