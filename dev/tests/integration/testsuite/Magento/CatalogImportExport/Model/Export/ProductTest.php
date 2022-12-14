@@ -142,13 +142,16 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * Verify successful export of product
      *
-     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data_with_html_tag.php
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data_special_chars.php
      * @magentoDbIsolation enabled
      *
      * @return void
      */
     public function testExportBehaviour(): void
     {
+        $product = $this->productRepository->get('simple &quot;1&quot;');
+        $product->setDescription('Description with &lt;h2&gt;this is test page&lt;/h2&gt;');
+        $product->save();
         $this->model->setWriter(
             $this->objectManager->create(
                 \Magento\ImportExport\Model\Export\Adapter\Csv::class
@@ -157,9 +160,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $exportData = $this->model->export();
         $this->assertStringContainsString('New Product', $exportData);
         $this->assertStringContainsString('Description with &lt;h2&gt;this is test page&lt;/h2&gt;', $exportData);
-
-        $occurrencesCount = substr_count($exportData, 'Description with &lt;h2&gt;this is test page&lt;/h2&gt;');
-        $this->assertEquals(1, $occurrencesCount);
     }
 
     /**
