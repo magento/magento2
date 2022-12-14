@@ -135,8 +135,31 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString('test_option_code_2', $exportData);
         $this->assertStringContainsString('max_characters=10', $exportData);
         $this->assertStringContainsString('text_attribute=!@#$%^&*()_+1234567890-=|\\:;""\'<,>.?/', $exportData);
-        $occurrencesCount = substr_count($exportData, 'Hello "" &"" Bring the water bottle when you can!');
-        $this->assertEquals(0, $occurrencesCount);
+        $occurrencesCount = substr_count($exportData, 'Hello "" &amp;"" Bring the water bottle when you can!');
+        $this->assertEquals(1, $occurrencesCount);
+    }
+
+    /**
+     * Verify successful export of product
+     *
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data_special_chars.php
+     * @magentoDbIsolation enabled
+     *
+     * @return void
+     */
+    public function testExportBehaviour(): void
+    {
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+        $exportData = $this->model->export();
+        $this->assertStringContainsString('New Product', $exportData);
+        $this->assertStringContainsString('Description with &lt;h2&gt;this is my page14454&lt;/h2&gt;', $exportData);
+
+        $occurrencesCount = substr_count($exportData, 'Description with &lt;h2&gt;this is my page14454&lt;/h2&gt;');
+        $this->assertEquals(1, $occurrencesCount);
     }
 
     /**
