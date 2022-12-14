@@ -20,8 +20,6 @@
             <group value="catalog"/>
         </annotations>
         <before>
-             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
-
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createProduct1">
                 <requiredEntity createDataKey="createCategory"/>
@@ -49,8 +47,6 @@
             <magentoCron groups="index" stepKey="fixInvalidatedIndicesBeforeTest"/>
         </before>
         <after>
-              <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
-
             <!-- Delete products and category -->
             <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
