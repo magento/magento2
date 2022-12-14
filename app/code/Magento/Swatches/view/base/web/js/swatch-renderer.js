@@ -370,8 +370,8 @@ define([
          * disable options that do not have any salable product assign
          */
         disableSwatchForOutOfStockProducts: function () {
-            const $widget = this;
-            const container = this.element;
+            const $widget = this,
+                  container = this.element;
 
             if ($widget.options.jsonConfig.canDisplayShowOutOfStockStatus && $widget.options.jsonConfig.salable) {
                 let salableProducts = {};
@@ -379,11 +379,13 @@ define([
 
                 $.each(this.options.jsonConfig.attributes, function () {
                     const item = this;
+
                     salableProducts = {...salableProducts, ...$widget.options.jsonConfig.salable[item.id]};
                 });
 
                 swatchOptions.each(function (key, value) {
                     const optionId = $(value).data('option-id');
+
                     if (!salableProducts.hasOwnProperty(optionId)) {
                         $(value).attr('disabled', true).addClass('disabled');
                     }
