@@ -74,7 +74,8 @@ class GuestShippingInformationManagementTest extends TestCase
         $this->shippingInformationManagementMock->expects($this->once())
             ->method('saveAddressInformation')
             ->with(
-                self::callback(fn($actualQuoteId): bool => (int) $quoteId === $actualQuoteId), $addressInformationMock
+                self::callback(fn($actualQuoteId): bool => (int) $quoteId === $actualQuoteId),
+                $addressInformationMock
             )
             ->willReturn($paymentInformationMock);
 
