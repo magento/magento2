@@ -7,8 +7,8 @@
 namespace Magento\Framework\Setup\Declaration\Schema\Dto\Factories;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\DB\Adapter\SqlVersionProvider;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Table DTO element factory.
@@ -43,8 +43,8 @@ class Table implements FactoryInterface
      * @var array|string[]
      */
     private static array $defaultCharset = [
-        '10.4' => 'utf8',
-        '10.6' => 'utf8mb3',
+        '10.4.' => 'utf8',
+        '10.6.' => 'utf8mb3',
         'default' => 'utf8',
     ];
 
@@ -52,8 +52,8 @@ class Table implements FactoryInterface
      * @var array|string[]
      */
     private static array $defaultCollation = [
-        '10.4' => 'utf8_general_ci',
-        '10.6' => 'utf8mb3_general_ci',
+        '10.4.' => 'utf8_general_ci',
+        '10.6.' => 'utf8mb3_general_ci',
         'default' => 'utf8_general_ci',
     ];
 
@@ -63,12 +63,13 @@ class Table implements FactoryInterface
      * @param ObjectManagerInterface $objectManager
      * @param ResourceConnection $resourceConnection
      * @param string $className
+     * @param SqlVersionProvider|null $sqlVersionProvider
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         ResourceConnection $resourceConnection,
-        $className = \Magento\Framework\Setup\Declaration\Schema\Dto\Table::class,
-        $sqlVersionProvider = null
+        string $className = \Magento\Framework\Setup\Declaration\Schema\Dto\Table::class,
+        ?SqlVersionProvider $sqlVersionProvider = null
     ) {
         $this->objectManager = $objectManager;
         $this->className = $className;
@@ -110,6 +111,8 @@ class Table implements FactoryInterface
     }
 
     /**
+     * Get default charset based on sql version
+     *
      * @return string
      */
     private function getDefaultCharset(): string
@@ -118,6 +121,8 @@ class Table implements FactoryInterface
     }
 
     /**
+     * Get default collation based on sql version
+     *
      * @return string
      */
     private function getDefaultCollation(): string
