@@ -48,7 +48,7 @@ class NewActionTest extends ProductTest
     /**
      * @var RegexValidator|MockObject
      */
-    protected $regexValidator;
+    private $regexValidator;
 
     /**
      * @var RegexFactory
