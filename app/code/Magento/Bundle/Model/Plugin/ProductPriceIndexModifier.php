@@ -55,10 +55,15 @@ class ProductPriceIndexModifier
             $proceed($priceTable, []);
         }
 
+        $filteredEntities = [];
         foreach ($entityIds as $id) {
             if (!$this->isWithinDynamicPriceBundle($priceTable->getTableName(), (int) $id)) {
-                $proceed($priceTable, [$id]);
+                $filteredEntities[] = $id;
             }
+        }
+
+        if (!empty($filteredEntities)) {
+            $proceed($priceTable, $filteredEntities);
         }
     }
 
