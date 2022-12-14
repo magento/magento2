@@ -140,7 +140,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Verify successful export of product
+     * Verify successful export of product with HTML tag
      *
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data_special_chars.php
      * @magentoDbIsolation enabled
