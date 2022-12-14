@@ -156,9 +156,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
         $exportData = $this->model->export();
         $this->assertStringContainsString('New Product', $exportData);
-        $this->assertStringContainsString('Description with &lt;h2&gt;this is my page14454&lt;/h2&gt;', $exportData);
+        $this->assertStringContainsString('Description with &lt;h2&gt;this is test page&lt;/h2&gt;', $exportData);
 
-        $occurrencesCount = substr_count($exportData, 'Description with &lt;h2&gt;this is my page14454&lt;/h2&gt;');
+        $occurrencesCount = substr_count($exportData, 'Description with &lt;h2&gt;this is test page&lt;/h2&gt;');
         $this->assertEquals(1, $occurrencesCount);
     }
 
