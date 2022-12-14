@@ -20,6 +20,8 @@
             <group value="login_as_customer"/>
         </annotations>
         <before>
+             <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+
             <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
@@ -47,6 +49,8 @@
             <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
+             <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStore">
                 <argument name="storeGroupName" value="customStoreGroup.name"/>
             </actionGroup>
