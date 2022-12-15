@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminReportsAbandonedCartsSearchEmailWithPlusTest">
+        <annotations>
+            <features value="Reports"/>
+            <stories value="Search in Grid"/>
+            <title value="Admin Reports Abandoned Carts Search Email With Plus"/>
+            <description value="Admin should be able to search for email that contains plus > Abandoned Carts"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="ACP2E-1435"/>
+            <group value="reports"/>
+        </annotations>
+        <before>
+            <!-- Create Category and Product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct" />
+
+            <!-- Create Customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer">
+                <field key="email">John+Doe@example.com</field>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete created Product, Category and Customer -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Login as a Customer on Storefront -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomerToStorefront">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+
+        <!-- Open product and add product to cart-->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductFromCategory">
+            <argument name="productUrlKey" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$createProduct$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <!-- Open Abandoned carts report in Admin -->
+        <amOnPage url="{{AdminDashboardPage.url}}" stepKey="amOnDashboardPage"/>
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToAbandonedCartsPage">
+            <argument name="menuUiId" value="{{AdminMenuReports.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuReportsMarketingAbandonedCarts.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
+            <argument name="title" value="{{AdminMenuReportsMarketingAbandonedCarts.pageTitle}}"/>
+        </actionGroup>
+    </test>
+</tests>
