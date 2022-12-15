@@ -546,7 +546,7 @@ QUERY;
          $order8 = $this->fixtures->get('or8')->getIncrementId();
 
         $expectedOrderNumbersOptions = [$order8, $order7, $order6, $order5, $order4, $order3, $order2 ];
-        //$expectedOrderNumbers = [];
+        $expectedOrderNumbers = array();
         $compDate = '';
         foreach ($expectedOrderNumbersOptions as $comKey => $comData) {
             if ($compDate == $customerOrderItemsInResponse[$comKey]['order_date']) {
