@@ -41,7 +41,7 @@ class InvoiceTest extends TestCase
     private $taxDataMock;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -71,7 +71,7 @@ class InvoiceTest extends TestCase
                     $serializerMock,
                     $resourceMock,
                     $collectionMock,
-                    [],
+                    []
                 ]
             )
             ->onlyMethods(
@@ -81,16 +81,18 @@ class InvoiceTest extends TestCase
                     'isShipmentSeparately',
                     'isChildCalculated',
                     'getValueHtml',
-                    'getSelectionAttributes',
+                    'getSelectionAttributes'
                 ]
             )
             ->getMock();
     }
 
     /**
-     * @dataProvider \Magento\Bundle\Test\Unit\Model\Sales\Order\Pdf\Items\InvoiceTestProvider::getData
      * @param array $expected
      * @param string $method
+     *
+     * @return void
+     * @dataProvider \Magento\Bundle\Test\Unit\Model\Sales\Order\Pdf\Items\InvoiceTestProvider::getData
      */
     public function testDrawPrice(array $expected, string $method): void
     {
@@ -122,9 +124,9 @@ class InvoiceTest extends TestCase
                 'name' => 'Bundle',
                 'order_item' => new DataObject(
                     [
-                        'product_options' => [],
+                        'product_options' => []
                     ]
-                ),
+                )
             ]
         );
         $items = [
@@ -140,9 +142,9 @@ class InvoiceTest extends TestCase
                     'tax_amount' => '1.66',
                     'order_item' => new DataObject(
                         [
-                            'parent_item' => $parentItem,
+                            'parent_item' => $parentItem
                         ]
-                    ),
+                    )
                 ]
             ),
             new DataObject(
@@ -157,25 +159,29 @@ class InvoiceTest extends TestCase
                     'tax_amount' => '0.83',
                     'order_item' => new DataObject(
                         [
-                            'parent_item' => $parentItem,
+                            'parent_item' => $parentItem
                         ]
-                    ),
+                    )
                 ]
-            ),
+            )
         ];
         $orderMock = $this->createMock(Order::class);
 
         $this->model->expects($this->any())->method('getChildren')->willReturn($items);
         $this->model->expects($this->any())->method('isShipmentSeparately')->willReturn(false);
         $this->model->expects($this->any())->method('isChildCalculated')->willReturn(true);
-        $this->model->expects($this->at(2))->method('getSelectionAttributes')->willReturn(
-            ['option_id' => 1, 'option_label' => 'test option']
-        );
-        $this->model->expects($this->at(3))->method('getValueHtml')->willReturn($items[0]->getName());
-        $this->model->expects($this->at(5))->method('getSelectionAttributes')->willReturn(
-            ['option_id' => 1, 'option_label' => 'second option']
-        );
-        $this->model->expects($this->at(6))->method('getValueHtml')->willReturn($items[1]->getName());
+        $this->model
+            ->method('getSelectionAttributes')
+            ->willReturnOnConsecutiveCalls(
+                ['option_id' => 1, 'option_label' => 'test option'],
+                ['option_id' => 1, 'option_label' => 'second option']
+            );
+        $this->model
+            ->method('getValueHtml')
+            ->willReturnOnConsecutiveCalls(
+                $items[0]->getName(),
+                $items[1]->getName()
+            );
 
         $orderMock->expects($this->any())->method('formatPriceTxt')->willReturnArgument(0);
         $this->model->setOrder($orderMock);

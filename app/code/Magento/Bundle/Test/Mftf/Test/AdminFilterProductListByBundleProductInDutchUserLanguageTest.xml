@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+        <test name="AdminFilterProductListByBundleProductInDutchUserLanguageTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Admin list bundle products when user language is set as Dutch"/>
+            <title value="Admin should be able to filter product list by type = Bundle Product, when user language is set as Dutch"/>
+            <description value="Admin should be able to filter product list by type = Bundle Product
+            wherein the tier price for the bundle product should be set and user language set as Dutch"/>
+            <severity value="CRITICAL"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createProductForBundleItem1">
+                <field key="price">100.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createProductForBundleItem2">
+                <field key="price">100.00</field>
+            </createData>
+            <!-- Enable Changing Locale to Dutch -->
+            <magentoCLI command="setup:static-content:deploy" arguments="-f nl_NL" stepKey="staticDeployAfterChangeLocaleToNL"/>
+            <magentoCron groups="index" stepKey="runCronIndex"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProductForBundleItem1" stepKey="deleteProductForBundleItem1"/>
+            <deleteData createDataKey="createProductForBundleItem2" stepKey="deleteProductForBundleItem2"/>
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteBundle">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters"/>
+            <comment userInput="BIC workaround" stepKey="waitForClearProductsGridFilters"/>
+            <!-- Change Admin locale to default -->
+            <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminAccountToDefault">
+                <argument name="InterfaceLocaleByValue" value="en_US" />
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Change Admin locale to Nederlands (Nederland) / Nederlands (Nederland) -->
+        <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminAccountToDutch">
+            <argument name="InterfaceLocaleByValue" value="nl_NL" />
+        </actionGroup>
+
+        <!--Create bundle product-->
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToBundleProductCreationPage">
+            <argument name="attributeSetId" value="{{BundleProduct.set}}"/>
+            <argument name="productType" value="{{BundleProduct.type}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
+        <click selector="{{AdminProductFormBundleSection.dynamicSkuToggle}}" stepKey="disableDynamicSku"/>
+        <click selector="{{AdminProductFormBundleSection.dynamicPrice}}" stepKey="clickDynamicPriceSwitcher"/>
+        <fillField selector="{{AdminProductFormBundleSection.priceField}}" userInput="100" stepKey="fillBundlePrice"/>
+        <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillMainFieldsForBundle"/>
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOption1">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$createProductForBundleItem1.sku$"/>
+            <argument name="prodTwoSku" value=""/>
+            <argument name="optionTitle" value="Option1"/>
+            <argument name="inputType" value="checkbox"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYPrice('0', '0')}}" userInput="100" stepKey="fillBundleOption1Price"/>
+        <selectOption selector="{{AdminProductFormBundleSection.bundlePriceType}}" userInput="Percent" stepKey="selectPercentPrice"/>
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOption2">
+            <argument name="x" value="1"/>
+            <argument name="n" value="2"/>
+            <argument name="prodOneSku" value="$createProductForBundleItem2.sku$"/>
+            <argument name="prodTwoSku" value=""/>
+            <argument name="optionTitle" value="Option2"/>
+            <argument name="inputType" value="checkbox"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYPrice('1', '0')}}" userInput="100" stepKey="fillBundleOption2Price"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfTheProductPage"/>
+        <actionGroup ref="AdminBundleProductSetAdvancedPricingActionGroup" stepKey="addProductTierPrice">
+            <argument name="quantity" value="1"/>
+            <argument name="price" value="Discount"/>
+            <argument name="amount" value="50"/>
+            <argument name="priceView" value="As Low as"/>
+        </actionGroup>
+
+        <!--Save the product-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
+
+        <!--Apply Bundle Product Filter-->
+        <!--Clear Filters-->
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFilters"/>
+
+        <!--Setting filter-->
+        <actionGroup ref="BundleProductFilter" stepKey="FilterForOnlyBundleProducts"/>
+
+        <!--Testing application of filter-->
+        <see selector="{{AdminProductFiltersSection.productType('0')}}" userInput="Bundle Product" stepKey="correcType0"/>
+        <dontSeeElement selector="{{AdminProductFiltersSection.AllProductsNotOfBundleType}}" stepKey="checkingRowsForIncorrectType"/>
+    </test>
+</tests>

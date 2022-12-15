@@ -8,10 +8,10 @@ namespace Magento\RemoteStorage\Test\Unit\Setup;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\RemoteStorage\Driver\DriverFactoryInterface;
 use Magento\RemoteStorage\Driver\DriverFactoryPool;
 use Magento\RemoteStorage\Driver\RemoteDriverInterface;
 use Magento\RemoteStorage\Setup\ConfigOptionsList;
-use Magento\RemoteStorage\Driver\DriverFactoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -184,6 +184,117 @@ class ConfigOptionsListTest extends TestCase
                 true,
                 [
                     'Adapter error: [Message from LocalizedException]',
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @param array $options
+     * @param array $deploymentConfig
+     * @param array $expectedConfigArr
+     * @dataProvider createConfigProvider
+     */
+    public function testCreateConfig(array $options, array $deploymentConfig, array $expectedConfigArr)
+    {
+        $deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $deploymentConfigMock
+            ->expects(static::once())
+            ->method('getConfigData')
+            ->willReturn($deploymentConfig);
+
+        $configDataListArr = $this->configOptionsList->createConfig($options, $deploymentConfigMock);
+
+        if (count($configDataListArr)) {
+            $this->assertCount(1, $configDataListArr);
+            $configDataArr = $configDataListArr[0]->getData();
+        } else {
+            $configDataArr = [];
+        }
+
+        $this->assertEquals(
+            $expectedConfigArr,
+            $configDataArr
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function createConfigProvider()
+    {
+        return [
+            'Remote Storage Options Missing and Remote Storage Deployment Config Present' => [
+                [
+                    'backend-frontname' => 'admin2022',
+                ],
+                [
+                    'remote_storage' => [
+                        'driver' => 'aws-s3',
+                    ]
+                ],
+                // no config data will be passed to write to deployment config
+                []
+            ],
+            'Remote Storage Options Missing and Remote Storage Deployment Config Missing' => [
+                [
+                    'backend-frontname' => 'admin2022',
+                ],
+                [],
+                [
+                    // will create default config with file driver
+                    'remote_storage' => [
+                        'driver' => 'file',
+                    ]
+                ]
+            ],
+            'Remote Storage Options Present and Remote Storage Deployment Config Missing' => [
+                [
+                    'remote-storage-driver' => 'aws-s3',
+                    'remote-storage-region' => 'us-east-1',
+                    'remote-storage-bucket' => 'bucket1',
+                    'remote-storage-prefix' => 'pre_',
+                ],
+                [],
+                [
+                    'remote_storage' => [
+                        'driver' => 'aws-s3',
+                        'prefix' => 'pre_',
+                        'config' => [
+                            'bucket' => 'bucket1',
+                            'region' => 'us-east-1',
+                        ],
+                    ]
+                ]
+            ],
+            'Remote Storage Options Present and Remote Storage Deployment Config Present' => [
+                [
+                    'remote-storage-driver' => 'aws-s3',
+                    'remote-storage-region' => 'us-east-1_NEW',
+                    'remote-storage-bucket' => 'bucket_NEW',
+                ],
+                [
+                    'remote_storage' => [
+                        'driver' => 'aws-s3',
+                        'prefix' => 'pre_OLD',
+                        'config' => [
+                            'bucket' => 'bucket_OLD',
+                            'region' => 'us-east-1_OLD',
+                        ],
+                    ]
+                ],
+                [
+                    'remote_storage' => [
+                        'driver' => 'aws-s3',
+                        // prefix should be removed as it was not passed in options
+                        'config' => [
+                            'bucket' => 'bucket_NEW',
+                            'region' => 'us-east-1_NEW',
+                        ],
+                    ]
                 ]
             ],
         ];

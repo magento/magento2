@@ -25,7 +25,9 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\DataObject;
 
 /**
- * Class ConfigureProductToAddTest
+ * Tests for \Magento\Sales\Controller\Adminhtml\Order\Create\ConfigureProductToAdd
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigureProductToAddTest extends TestCase
 {
@@ -95,7 +97,7 @@ class ConfigureProductToAddTest extends TestCase
     private $configureProductToAdd;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -181,14 +183,10 @@ class ConfigureProductToAddTest extends TestCase
             ->method('getParam')
             ->with('id')
             ->willReturn($productId);
-        $this->objectManagerMock->expects($this->at(0))
+        $this->objectManagerMock
             ->method('get')
-            ->with(Quote::class)
-            ->willReturn($this->quoteSessionMock);
-        $this->objectManagerMock->expects($this->at(1))
-            ->method('get')
-            ->with(Composite::class)
-            ->willReturn($this->compositeHelperMock);
+            ->withConsecutive([Quote::class], [Composite::class])
+            ->willReturnOnConsecutiveCalls($this->quoteSessionMock, $this->compositeHelperMock);
         $this->quoteSessionMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
@@ -208,6 +206,7 @@ class ConfigureProductToAddTest extends TestCase
         $this->compositeHelperMock->expects($this->once())
             ->method('renderConfigureResult')
             ->with($configureResult)->willReturn($this->layoutMock);
+
         $this->assertInstanceOf(Layout::class, $this->configureProductToAdd->execute());
     }
 }

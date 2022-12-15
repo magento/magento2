@@ -45,7 +45,7 @@ class ExtensionAttributesGenerator implements GeneratorInterface
     private function isExtension($className)
     {
         $suffix = "Extension";
-        $sourceName = rtrim(substr($className, 0, -strlen($suffix)), '\\');
+        $sourceName = $className !== null ? rtrim(substr($className, 0, -strlen($suffix)), '\\') : '';
         return $sourceName . $suffix == $className;
     }
 }

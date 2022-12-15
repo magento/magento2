@@ -1,0 +1,123 @@
+namespace Magento\Framework\Interception\Code\Generator\SampleBackendMenu;
+
+/**
+ * Interceptor class for @see \Magento\Framework\Interception\Code\Generator\SampleBackendMenu
+ */
+class Interceptor extends \Magento\Framework\Interception\Code\Generator\SampleBackendMenu implements \Magento\Framework\Interception\InterceptorInterface
+{
+    use \Magento\Framework\Interception\Interceptor;
+
+    public function __construct(\Psr\Log\LoggerInterface $logger, $pathInMenuStructure = '', ?\Magento\Backend\Model\Menu\Item\Factory $menuItemFactory = null, ?\Magento\Framework\Serialize\SerializerInterface $serializer = null)
+    {
+        $this->___init();
+        parent::__construct($logger, $pathInMenuStructure, $menuItemFactory, $serializer);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add(\Magento\Backend\Model\Menu\Item $item, $parentId = null, $index = null)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'add');
+        return $pluginInfo ? $this->___callPlugins('add', func_get_args(), $pluginInfo) : parent::add($item, $parentId, $index);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function get($itemId)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'get');
+        return $pluginInfo ? $this->___callPlugins('get', func_get_args(), $pluginInfo) : parent::get($itemId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function move($itemId, $toItemId, $sortIndex = null)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'move');
+        return $pluginInfo ? $this->___callPlugins('move', func_get_args(), $pluginInfo) : parent::move($itemId, $toItemId, $sortIndex);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove($itemId)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'remove');
+        return $pluginInfo ? $this->___callPlugins('remove', func_get_args(), $pluginInfo) : parent::remove($itemId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function reorder($itemId, $position)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'reorder');
+        return $pluginInfo ? $this->___callPlugins('reorder', func_get_args(), $pluginInfo) : parent::reorder($itemId, $position);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isLast(\Magento\Backend\Model\Menu\Item $item)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'isLast');
+        return $pluginInfo ? $this->___callPlugins('isLast', func_get_args(), $pluginInfo) : parent::isLast($item);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFirstAvailable()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getFirstAvailable');
+        return $pluginInfo ? $this->___callPlugins('getFirstAvailable', func_get_args(), $pluginInfo) : parent::getFirstAvailable();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParentItems($itemId)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getParentItems');
+        return $pluginInfo ? $this->___callPlugins('getParentItems', func_get_args(), $pluginInfo) : parent::getParentItems($itemId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'serialize');
+        return $pluginInfo ? $this->___callPlugins('serialize', func_get_args(), $pluginInfo) : parent::serialize();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'toArray');
+        return $pluginInfo ? $this->___callPlugins('toArray', func_get_args(), $pluginInfo) : parent::toArray();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'unserialize');
+        return $pluginInfo ? $this->___callPlugins('unserialize', func_get_args(), $pluginInfo) : parent::unserialize($serialized);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function populateFromArray(array $data)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'populateFromArray');
+        return $pluginInfo ? $this->___callPlugins('populateFromArray', func_get_args(), $pluginInfo) : parent::populateFromArray($data);
+    }
+}

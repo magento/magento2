@@ -17,6 +17,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionPostProcessor;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
  * Collection for fetching configurable child product data.
@@ -152,6 +153,7 @@ class Collection
             $childCollection = $this->childCollectionFactory->create();
             $childCollection->setProductFilter($product);
             $childCollection->addWebsiteFilter($context->getExtensionAttributes()->getStore()->getWebsiteId());
+            $childCollection->setFlag('product_children', true);
             $this->collectionProcessor->process(
                 $childCollection,
                 $this->searchCriteriaBuilder->create(),
@@ -163,6 +165,9 @@ class Collection
 
             /** @var Product $childProduct */
             foreach ($childCollection as $childProduct) {
+                if ((int)$childProduct->getStatus() !== Status::STATUS_ENABLED) {
+                    continue;
+                }
                 $formattedChild = ['model' => $childProduct, 'sku' => $childProduct->getSku()];
                 $parentId = (int)$childProduct->getParentId();
                 if (!isset($this->childrenMap[$parentId])) {

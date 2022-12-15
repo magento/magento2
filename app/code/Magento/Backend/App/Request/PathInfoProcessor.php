@@ -1,35 +1,40 @@
 <?php
 /**
- * Prevents path info processing for admin store
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\App\Request;
 
+use Magento\Framework\App\Request\PathInfoProcessorInterface;
+use Magento\Backend\Helper\Data as HelperData;
+use Magento\Store\App\Request\PathInfoProcessor as AppPathInfoProcessor;
+use Magento\Framework\App\RequestInterface;
+
 /**
+ * Prevents path info processing for admin store
+ *
  * @api
  * @since 100.0.2
  */
-class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProcessorInterface
+class PathInfoProcessor implements PathInfoProcessorInterface
 {
     /**
-     * @var \Magento\Backend\Helper\Data
+     * @var HelperData
      */
     private $_helper;
 
     /**
-     * @var \Magento\Store\App\Request\PathInfoProcessor
+     * @var AppPathInfoProcessor
      */
     private $_subject;
 
     /**
-     * @param \Magento\Store\App\Request\PathInfoProcessor $subject
-     * @param \Magento\Backend\Helper\Data $helper
+     * @param AppPathInfoProcessor $subject
+     * @param HelperData $helper
      */
     public function __construct(
-        \Magento\Store\App\Request\PathInfoProcessor $subject,
-        \Magento\Backend\Helper\Data $helper
+        AppPathInfoProcessor $subject,
+        HelperData $helper
     ) {
         $this->_helper = $helper;
         $this->_subject = $subject;
@@ -38,15 +43,14 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
     /**
      * Process path info
      *
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      * @param string $pathInfo
      * @return string
      */
-    public function process(\Magento\Framework\App\RequestInterface $request, $pathInfo)
+    public function process(RequestInterface $request, $pathInfo)
     {
-        $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
-        $firstPart = $pathParts[0];
-
+        $firstPart = $pathInfo === null ? '' :
+            explode('/', ltrim($pathInfo, '/'), 2)[0];
         if ($firstPart != $this->_helper->getAreaFrontName()) {
             return $this->_subject->process($request, $pathInfo);
         }

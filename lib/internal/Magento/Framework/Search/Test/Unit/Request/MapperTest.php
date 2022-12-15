@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Search\Test\Unit\Request;
 
+use Exception;
+use InvalidArgumentException;
+use Magento\Framework\Exception\StateException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Search\Request\Aggregation\Metric;
 use Magento\Framework\Search\Request\Aggregation\RangeBucket;
@@ -18,7 +21,7 @@ use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\Mapper;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\Query\Filter;
-use Magento\Framework\Search\Request\Query\Match;
+use Magento\Framework\Search\Request\Query\MatchQuery;
 use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -42,7 +45,7 @@ class MapperTest extends TestCase
     private $objectManager;
 
     /**
-     * @var Match|MockObject
+     * @var MatchQuery|MockObject
      */
     private $queryMatch;
 
@@ -62,27 +65,25 @@ class MapperTest extends TestCase
     private $filterTerm;
 
     /**
-     * @var Wildcard|MockObject
-     */
-    private $filterWildcard;
-
-    /**
      * @var Range|MockObject
      */
     private $filterRange;
 
     /**
-     * @var \Magento\Framework\Search\Request\Filter\Bool|MockObject
+     * @var BoolExpression|MockObject
      */
     private $filterBool;
 
+    /**
+     * @ingeritdoc
+     */
     protected function setUp(): void
     {
         $this->helper = new ObjectManager($this);
 
         $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
-        $this->queryMatch = $this->getMockBuilder(Match::class)
+        $this->queryMatch = $this->getMockBuilder(MatchQuery::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -102,33 +103,31 @@ class MapperTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->filterBool = $this->getMockBuilder(\Magento\Framework\Search\Request\Filter\BoolExpression::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->filterWildcard = $this->getMockBuilder(Wildcard::class)
+        $this->filterBool = $this->getMockBuilder(BoolExpression::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     /**
      * @param $queries
+     *
+     * @return void
      * @dataProvider getQueryMatchProvider
      */
-    public function testGetQueryMatch($queries)
+    public function testGetQueryMatch($queries): void
     {
         $query = $queries[self::ROOT_QUERY];
-        $this->objectManager->expects($this->once())->method('create')
+        $this->objectManager->expects($this->once())
+            ->method('create')
             ->with(
-                Match::class,
+                MatchQuery::class,
                 [
                     'name' => $query['name'],
                     'value' => $query['value'],
-                    'boost' => isset($query['boost']) ? $query['boost'] : 1,
+                    'boost' => $query['boost'] ?? 1,
                     'matches' => $query['match'],
                 ]
-            )
-            ->willReturn($this->queryMatch);
+            )->willReturn($this->queryMatch);
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -145,33 +144,36 @@ class MapperTest extends TestCase
         $this->assertEquals($this->queryMatch, $mapper->getRootQuery());
     }
 
-    public function testGetQueryNotUsedStateException()
+    /**
+     * @return void
+     */
+    public function testGetQueryNotUsedStateException(): void
     {
-        $this->expectException('Magento\Framework\Exception\StateException');
+        $this->expectException(StateException::class);
         $queries = [
             self::ROOT_QUERY => [
                 'type' => QueryInterface::TYPE_MATCH,
                 'name' => 'someName',
                 'value' => 'someValue',
                 'boost' => 3,
-                'match' => 'someMatches',
+                'match' => 'someMatches'
             ],
             'notUsedQuery' => [
                 'type' => QueryInterface::TYPE_MATCH,
                 'name' => 'someName',
                 'value' => 'someValue',
                 'boost' => 3,
-                'match' => 'someMatches',
-            ],
+                'match' => 'someMatches'
+            ]
         ];
         $query = $queries['someQuery'];
         $this->objectManager->expects($this->once())->method('create')
             ->with(
-                Match::class,
+                MatchQuery::class,
                 [
                     'name' => $query['name'],
                     'value' => $query['value'],
-                    'boost' => isset($query['boost']) ? $query['boost'] : 1,
+                    'boost' => $query['boost'] ?? 1,
                     'matches' => $query['match'],
                 ]
             )
@@ -192,9 +194,12 @@ class MapperTest extends TestCase
         $this->assertEquals($this->queryMatch, $mapper->getRootQuery());
     }
 
-    public function testGetQueryUsedStateException()
+    /**
+     * @return void
+     */
+    public function testGetQueryUsedStateException(): void
     {
-        $this->expectException('Magento\Framework\Exception\StateException');
+        $this->expectException(StateException::class);
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
             Mapper::class,
@@ -207,7 +212,7 @@ class MapperTest extends TestCase
                         'queryReference' => [
                             [
                                 'clause' => 'someClause',
-                                'ref' => 'someQuery',
+                                'ref' => 'someQuery'
                             ],
                         ],
                     ],
@@ -223,34 +228,37 @@ class MapperTest extends TestCase
 
     /**
      * @param $queries
+     *
+     * @return void
      * @dataProvider getQueryFilterQueryReferenceProvider
      */
-    public function testGetQueryFilterQueryReference($queries)
+    public function testGetQueryFilterQueryReference($queries): void
     {
         $query = $queries['someQueryMatch'];
-        $this->objectManager->expects($this->at(0))->method('create')
-            ->with(
-                Match::class,
+        $queryRoot = $queries[self::ROOT_QUERY];
+        $this->objectManager
+            ->method('create')
+            ->withConsecutive(
                 [
-                    'name' => $query['name'],
-                    'value' => $query['value'],
-                    'boost' => 1,
-                    'matches' => 'someMatches',
+                    MatchQuery::class,
+                    [
+                        'name' => $query['name'],
+                        'value' => $query['value'],
+                        'boost' => 1,
+                        'matches' => 'someMatches'
+                    ]
+                ],
+                [
+                    Filter::class,
+                    [
+                        'name' => $queryRoot['name'],
+                        'boost' => $queryRoot['boost'] ?? 1,
+                        'reference' => $this->queryMatch,
+                        'referenceType' => Filter::REFERENCE_QUERY
+                    ]
                 ]
             )
-            ->willReturn($this->queryMatch);
-        $query = $queries[self::ROOT_QUERY];
-        $this->objectManager->expects($this->at(1))->method('create')
-            ->with(
-                Filter::class,
-                [
-                    'name' => $query['name'],
-                    'boost' => isset($query['boost']) ? $query['boost'] : 1,
-                    'reference' => $this->queryMatch,
-                    'referenceType' => Filter::REFERENCE_QUERY,
-                ]
-            )
-            ->willReturn($this->queryFilter);
+            ->willReturnOnConsecutiveCalls($this->queryMatch, $this->queryFilter);
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -267,9 +275,9 @@ class MapperTest extends TestCase
         $this->assertEquals($this->queryFilter, $mapper->getRootQuery());
     }
 
-    public function testGetQueryFilterReferenceException()
+    public function testGetQueryFilterReferenceException(): void
     {
-        $this->expectException('Exception');
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Reference is not provided');
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -279,7 +287,7 @@ class MapperTest extends TestCase
                 'queries' => [
                     'someQuery' => [
                         'type' => QueryInterface::TYPE_FILTER,
-                    ],
+                    ]
                 ],
                 'rootQueryName' => self::ROOT_QUERY,
                 'aggregation' => [],
@@ -294,31 +302,32 @@ class MapperTest extends TestCase
      * @param $queries
      * @dataProvider getQueryBoolProvider
      */
-    public function testGetQueryBool($queries)
+    public function testGetQueryBool($queries): void
     {
         $query = $queries['someQueryMatch'];
-        $this->objectManager->expects($this->at(0))->method('create')
-            ->with(
-                Match::class,
+        $rootQueries = $queries[self::ROOT_QUERY];
+        $this->objectManager
+            ->method('create')
+            ->withConsecutive(
                 [
-                    'name' => $query['name'],
-                    'value' => $query['value'],
-                    'boost' => 1,
-                    'matches' => 'someMatches',
+                    MatchQuery::class,
+                    [
+                        'name' => $query['name'],
+                        'value' => $query['value'],
+                        'boost' => 1,
+                        'matches' => 'someMatches'
+                    ]
+                ],
+                [
+                    BoolExpression::class,
+                    [
+                        'name' => $rootQueries['name'],
+                        'boost' => $rootQueries['boost'] ?? 1,
+                        'someClause' => ['someQueryMatch' => $this->queryMatch]
+                    ]
                 ]
             )
-            ->willReturn($this->queryMatch);
-        $query = $queries[self::ROOT_QUERY];
-        $this->objectManager->expects($this->at(1))->method('create')
-            ->with(
-                BoolExpression::class,
-                [
-                    'name' => $query['name'],
-                    'boost' => isset($query['boost']) ? $query['boost'] : 1,
-                    'someClause' => ['someQueryMatch' => $this->queryMatch],
-                ]
-            )
-            ->willReturn($this->queryBool);
+            ->willReturnOnConsecutiveCalls($this->queryMatch, $this->queryBool);
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -335,9 +344,12 @@ class MapperTest extends TestCase
         $this->assertEquals($this->queryBool, $mapper->getRootQuery());
     }
 
-    public function testGetQueryInvalidArgumentException()
+    /**
+     * @return void
+     */
+    public function testGetQueryInvalidArgumentException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
             Mapper::class,
@@ -345,8 +357,8 @@ class MapperTest extends TestCase
                 'objectManager' => $this->objectManager,
                 'queries' => [
                     self::ROOT_QUERY => [
-                        'type' => 'invalid_type',
-                    ],
+                        'type' => 'invalid_type'
+                    ]
                 ],
                 'rootQueryName' => self::ROOT_QUERY,
                 'aggregation' => [],
@@ -357,9 +369,12 @@ class MapperTest extends TestCase
         $mapper->getRootQuery();
     }
 
-    public function testGetQueryException()
+    /**
+     * @return void
+     */
+    public function testGetQueryException(): void
     {
-        $this->expectException('Exception');
+        $this->expectException(Exception::class);
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
             Mapper::class,
@@ -374,7 +389,10 @@ class MapperTest extends TestCase
         $mapper->getRootQuery();
     }
 
-    public function testGetFilterTerm()
+    /**
+     * @return void
+     */
+    public function testGetFilterTerm(): void
     {
         $queries = [
             self::ROOT_QUERY => [
@@ -382,43 +400,44 @@ class MapperTest extends TestCase
                 'name' => 'someName',
                 'filterReference' => [
                     [
-                        'ref' => 'someFilter',
-                    ],
-                ],
-            ],
+                        'ref' => 'someFilter'
+                    ]
+                ]
+            ]
         ];
         $filters = [
             'someFilter' => [
                 'type' => FilterInterface::TYPE_TERM,
                 'name' => 'someName',
                 'field' => 'someField',
-                'value' => 'someValue',
-            ],
+                'value' => 'someValue'
+            ]
         ];
 
         $filter = $filters['someFilter'];
-        $this->objectManager->expects($this->at(0))->method('create')
-            ->with(
-                Term::class,
-                [
-                    'name' => $filter['name'],
-                    'field' => $filter['field'],
-                    'value' => $filter['value'],
-                ]
-            )
-            ->willReturn($this->filterTerm);
         $query = $queries[self::ROOT_QUERY];
-        $this->objectManager->expects($this->at(1))->method('create')
-            ->with(
-                Filter::class,
+        $this->objectManager
+            ->method('create')
+            ->withConsecutive(
                 [
-                    'name' => $query['name'],
-                    'boost' => 1,
-                    'reference' => $this->filterTerm,
-                    'referenceType' => Filter::REFERENCE_FILTER,
+                    Term::class,
+                    [
+                        'name' => $filter['name'],
+                        'field' => $filter['field'],
+                        'value' => $filter['value']
+                    ]
+                ],
+                [
+                    Filter::class,
+                    [
+                        'name' => $query['name'],
+                        'boost' => 1,
+                        'reference' => $this->filterTerm,
+                        'referenceType' => Filter::REFERENCE_FILTER
+                    ]
                 ]
             )
-            ->willReturn($this->queryFilter);
+            ->willReturnOnConsecutiveCalls($this->filterTerm, $this->queryFilter);
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -435,7 +454,10 @@ class MapperTest extends TestCase
         $this->assertEquals($this->queryFilter, $mapper->getRootQuery());
     }
 
-    public function testGetFilterWildcard()
+    /**
+     * @return void
+     */
+    public function testGetFilterWildcard(): void
     {
         $queries = [
             self::ROOT_QUERY => [
@@ -443,43 +465,44 @@ class MapperTest extends TestCase
                 'name' => 'someName',
                 'filterReference' => [
                     [
-                        'ref' => 'someFilter',
-                    ],
-                ],
-            ],
+                        'ref' => 'someFilter'
+                    ]
+                ]
+            ]
         ];
         $filters = [
             'someFilter' => [
                 'type' => FilterInterface::TYPE_WILDCARD,
                 'name' => 'someName',
                 'field' => 'someField',
-                'value' => 'someValue',
-            ],
+                'value' => 'someValue'
+            ]
         ];
 
         $filter = $filters['someFilter'];
-        $this->objectManager->expects($this->at(0))->method('create')
-            ->with(
-                Wildcard::class,
-                [
-                    'name' => $filter['name'],
-                    'field' => $filter['field'],
-                    'value' => $filter['value'],
-                ]
-            )
-            ->willReturn($this->filterTerm);
         $query = $queries[self::ROOT_QUERY];
-        $this->objectManager->expects($this->at(1))->method('create')
-            ->with(
-                Filter::class,
+        $this->objectManager
+            ->method('create')
+            ->withConsecutive(
                 [
-                    'name' => $query['name'],
-                    'boost' => 1,
-                    'reference' => $this->filterTerm,
-                    'referenceType' => Filter::REFERENCE_FILTER,
+                    Wildcard::class,
+                    [
+                        'name' => $filter['name'],
+                        'field' => $filter['field'],
+                        'value' => $filter['value']
+                    ]
+                ],
+                [
+                    Filter::class,
+                    [
+                        'name' => $query['name'],
+                        'boost' => 1,
+                        'reference' => $this->filterTerm,
+                        'referenceType' => Filter::REFERENCE_FILTER
+                    ]
                 ]
             )
-            ->willReturn($this->queryFilter);
+            ->willReturnOnConsecutiveCalls($this->filterTerm, $this->queryFilter);
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -496,7 +519,10 @@ class MapperTest extends TestCase
         $this->assertEquals($this->queryFilter, $mapper->getRootQuery());
     }
 
-    public function testGetFilterRange()
+    /**
+     * @return void
+     */
+    public function testGetFilterRange(): void
     {
         $queries = [
             self::ROOT_QUERY => [
@@ -504,10 +530,10 @@ class MapperTest extends TestCase
                 'name' => 'someName',
                 'filterReference' => [
                     [
-                        'ref' => 'someFilter',
-                    ],
-                ],
-            ],
+                        'ref' => 'someFilter'
+                    ]
+                ]
+            ]
         ];
         $filters = [
             'someFilter' => [
@@ -515,34 +541,35 @@ class MapperTest extends TestCase
                 'name' => 'someName',
                 'field' => 'someField',
                 'from' => 'from',
-                'to' => 'to',
-            ],
+                'to' => 'to'
+            ]
         ];
 
         $filter = $filters['someFilter'];
-        $this->objectManager->expects($this->at(0))->method('create')
-            ->with(
-                Range::class,
-                [
-                    'name' => $filter['name'],
-                    'field' => $filter['field'],
-                    'from' => $filter['from'],
-                    'to' => $filter['to'],
-                ]
-            )
-            ->willReturn($this->filterRange);
         $query = $queries[self::ROOT_QUERY];
-        $this->objectManager->expects($this->at(1))->method('create')
-            ->with(
-                Filter::class,
+        $this->objectManager
+            ->method('create')
+            ->withConsecutive(
                 [
-                    'name' => $query['name'],
-                    'boost' => 1,
-                    'reference' => $this->filterRange,
-                    'referenceType' => Filter::REFERENCE_FILTER,
+                    Range::class,
+                    [
+                        'name' => $filter['name'],
+                        'field' => $filter['field'],
+                        'from' => $filter['from'],
+                        'to' => $filter['to']
+                    ]
+                ],
+                [
+                    Filter::class,
+                    [
+                        'name' => $query['name'],
+                        'boost' => 1,
+                        'reference' => $this->filterRange,
+                        'referenceType' => Filter::REFERENCE_FILTER
+                    ]
                 ]
             )
-            ->willReturn($this->queryFilter);
+            ->willReturnOnConsecutiveCalls($this->filterRange, $this->queryFilter);
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -559,7 +586,10 @@ class MapperTest extends TestCase
         $this->assertEquals($this->queryFilter, $mapper->getRootQuery());
     }
 
-    public function testGetFilterBool()
+    /**
+     * @return void
+     */
+    public function testGetFilterBool(): void
     {
         $queries = [
             self::ROOT_QUERY => [
@@ -567,10 +597,10 @@ class MapperTest extends TestCase
                 'name' => 'someName',
                 'filterReference' => [
                     [
-                        'ref' => 'someFilter',
-                    ],
-                ],
-            ],
+                        'ref' => 'someFilter'
+                    ]
+                ]
+            ]
         ];
         $filters = [
             'someFilter' => [
@@ -579,51 +609,50 @@ class MapperTest extends TestCase
                 'filterReference' => [
                     [
                         'ref' => 'someFilterTerm',
-                        'clause' => 'someClause',
-                    ],
-                ],
+                        'clause' => 'someClause'
+                    ]
+                ]
             ],
             'someFilterTerm' => [
                 'type' => FilterInterface::TYPE_TERM,
                 'name' => 'someName',
                 'field' => 'someField',
-                'value' => 'someValue',
-            ],
+                'value' => 'someValue'
+            ]
         ];
 
-        $filter = $filters['someFilterTerm'];
-        $this->objectManager->expects($this->at(0))->method('create')
-            ->with(
-                Term::class,
-                [
-                    'name' => $filter['name'],
-                    'field' => $filter['field'],
-                    'value' => $filter['value'],
-                ]
-            )
-            ->willReturn($this->filterTerm);
-        $filter = $filters['someFilter'];
-        $this->objectManager->expects($this->at(1))->method('create')
-            ->with(
-                \Magento\Framework\Search\Request\Filter\BoolExpression::class,
-                [
-                    'name' => $filter['name'],
-                    'someClause' => ['someFilterTerm' => $this->filterTerm],
-                ]
-            )
-            ->willReturn($this->filterBool);
+        $someFilterTerm = $filters['someFilterTerm'];
+        $someFilter = $filters['someFilter'];
         $query = $queries[self::ROOT_QUERY];
-        $this->objectManager->expects($this->at(2))->method('create')
-            ->with(
-                Filter::class,
+
+        $this->objectManager
+            ->method('create')
+            ->withConsecutive(
                 [
-                    'name' => $query['name'],
-                    'boost' => 1,
-                    'reference' => $this->filterBool,
-                    'referenceType' => Filter::REFERENCE_FILTER,
+                    Term::class,
+                    [
+                        'name' => $someFilterTerm['name'],
+                        'field' => $someFilterTerm['field'],
+                        'value' => $someFilterTerm['value']
+                    ]
+                ],
+                [
+                    \Magento\Framework\Search\Request\Filter\BoolExpression::class,
+                    [
+                        'name' => $someFilter['name'],
+                        'someClause' => ['someFilterTerm' => $this->filterTerm]
+                    ]
+                ],
+                [
+                    Filter::class,
+                    [
+                        'name' => $query['name'],
+                        'boost' => 1,
+                        'reference' => $this->filterBool,
+                        'referenceType' => Filter::REFERENCE_FILTER
+                    ]
                 ]
-            )
-            ->willReturn($this->queryFilter);
+            )->willReturnOnConsecutiveCalls($this->filterTerm, $this->filterBool, $this->queryFilter);
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -640,58 +669,62 @@ class MapperTest extends TestCase
         $this->assertEquals($this->queryFilter, $mapper->getRootQuery());
     }
 
-    public function testGetFilterNotUsedStateException()
+    /**
+     * @return void
+     */
+    public function testGetFilterNotUsedStateException(): void
     {
-        $this->expectException('Magento\Framework\Exception\StateException');
+        $this->expectException(StateException::class);
         $queries = [
             self::ROOT_QUERY => [
                 'type' => QueryInterface::TYPE_FILTER,
                 'name' => 'someName',
                 'filterReference' => [
                     [
-                        'ref' => 'someFilter',
-                    ],
-                ],
-            ],
+                        'ref' => 'someFilter'
+                    ]
+                ]
+            ]
         ];
         $filters = [
             'someFilter' => [
                 'type' => FilterInterface::TYPE_TERM,
                 'name' => 'someName',
                 'field' => 'someField',
-                'value' => 'someValue',
+                'value' => 'someValue'
             ],
             'notUsedFilter' => [
                 'type' => FilterInterface::TYPE_TERM,
                 'name' => 'someName',
                 'field' => 'someField',
-                'value' => 'someValue',
-            ],
+                'value' => 'someValue'
+            ]
         ];
 
         $filter = $filters['someFilter'];
-        $this->objectManager->expects($this->at(0))->method('create')
-            ->with(
-                Term::class,
-                [
-                    'name' => $filter['name'],
-                    'field' => $filter['field'],
-                    'value' => $filter['value'],
-                ]
-            )
-            ->willReturn($this->filterTerm);
         $query = $queries[self::ROOT_QUERY];
-        $this->objectManager->expects($this->at(1))->method('create')
-            ->with(
-                Filter::class,
+        $this->objectManager
+            ->method('create')
+            ->withConsecutive(
                 [
-                    'name' => $query['name'],
-                    'boost' => 1,
-                    'reference' => $this->filterTerm,
-                    'referenceType' => Filter::REFERENCE_FILTER,
+                    Term::class,
+                    [
+                        'name' => $filter['name'],
+                        'field' => $filter['field'],
+                        'value' => $filter['value']
+                    ]
+                ],
+                [
+                    Filter::class,
+                    [
+                        'name' => $query['name'],
+                        'boost' => 1,
+                        'reference' => $this->filterTerm,
+                        'referenceType' => Filter::REFERENCE_FILTER
+                    ]
                 ]
             )
-            ->willReturn($this->queryFilter);
+            ->willReturnOnConsecutiveCalls($this->filterTerm, $this->queryFilter);
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -708,9 +741,12 @@ class MapperTest extends TestCase
         $this->assertEquals($this->queryFilter, $mapper->getRootQuery());
     }
 
-    public function testGetFilterUsedStateException()
+    /**
+     * @return void
+     */
+    public function testGetFilterUsedStateException(): void
     {
-        $this->expectException('Magento\Framework\Exception\StateException');
+        $this->expectException(StateException::class);
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
             Mapper::class,
@@ -722,10 +758,10 @@ class MapperTest extends TestCase
                         'name' => 'someName',
                         'filterReference' => [
                             [
-                                'ref' => 'someFilter',
-                            ],
-                        ],
-                    ],
+                                'ref' => 'someFilter'
+                            ]
+                        ]
+                    ]
                 ],
                 'rootQueryName' => self::ROOT_QUERY,
                 'filters' => [
@@ -735,21 +771,24 @@ class MapperTest extends TestCase
                         'filterReference' => [
                             [
                                 'ref' => 'someFilter',
-                                'clause' => 'someClause',
-                            ],
-                        ],
-                    ],
+                                'clause' => 'someClause'
+                            ]
+                        ]
+                    ]
                 ],
-                'aggregation' => [],
+                'aggregation' => []
             ]
         );
 
         $this->assertEquals($this->queryMatch, $mapper->getRootQuery());
     }
 
-    public function testGetFilterInvalidArgumentException()
+    /**
+     * @return void
+     */
+    public function testGetFilterInvalidArgumentException(): void
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid filter type');
         $queries = [
             self::ROOT_QUERY => [
@@ -757,15 +796,15 @@ class MapperTest extends TestCase
                 'name' => 'someName',
                 'filterReference' => [
                     [
-                        'ref' => 'someFilter',
-                    ],
-                ],
-            ],
+                        'ref' => 'someFilter'
+                    ]
+                ]
+            ]
         ];
         $filters = [
             'someFilter' => [
-                'type' => 'invalid_type',
-            ],
+                'type' => 'invalid_type'
+            ]
         ];
 
         /** @var Mapper $mapper */
@@ -783,9 +822,12 @@ class MapperTest extends TestCase
         $this->assertEquals($this->queryFilter, $mapper->getRootQuery());
     }
 
-    public function testGetFilterException()
+    /**
+     * @return void
+     */
+    public function testGetFilterException(): void
     {
-        $this->expectException('Exception');
+        $this->expectException(Exception::class);
         $queries = [
             self::ROOT_QUERY => [
                 'type' => QueryInterface::TYPE_FILTER,
@@ -794,10 +836,10 @@ class MapperTest extends TestCase
                 'filterReference' => [
                     [
                         'ref' => 'someQueryMatch',
-                        'clause' => 'someClause',
-                    ],
-                ],
-            ],
+                        'clause' => 'someClause'
+                    ]
+                ]
+            ]
         ];
 
         /** @var Mapper $mapper */
@@ -817,7 +859,7 @@ class MapperTest extends TestCase
     /**
      * @return array
      */
-    public function getQueryMatchProvider()
+    public function getQueryMatchProvider(): array
     {
         return [
             [
@@ -827,9 +869,9 @@ class MapperTest extends TestCase
                         'name' => 'someName',
                         'value' => 'someValue',
                         'boost' => 3,
-                        'match' => 'someMatches',
-                    ],
-                ],
+                        'match' => 'someMatches'
+                    ]
+                ]
             ],
             [
                 [
@@ -837,8 +879,8 @@ class MapperTest extends TestCase
                         'type' => QueryInterface::TYPE_MATCH,
                         'name' => 'someName',
                         'value' => 'someValue',
-                        'match' => 'someMatches',
-                    ],
+                        'match' => 'someMatches'
+                    ]
                 ]
             ]
         ];
@@ -847,7 +889,7 @@ class MapperTest extends TestCase
     /**
      * @return array
      */
-    public function getQueryFilterQueryReferenceProvider()
+    public function getQueryFilterQueryReferenceProvider(): array
     {
         return [
             [
@@ -859,17 +901,17 @@ class MapperTest extends TestCase
                         'queryReference' => [
                             [
                                 'ref' => 'someQueryMatch',
-                                'clause' => 'someClause',
-                            ],
-                        ],
+                                'clause' => 'someClause'
+                            ]
+                        ]
                     ],
                     'someQueryMatch' => [
                         'type' => QueryInterface::TYPE_MATCH,
                         'value' => 'someValue',
                         'name' => 'someName',
-                        'match' => 'someMatches',
-                    ],
-                ],
+                        'match' => 'someMatches'
+                    ]
+                ]
             ],
             [
                 [
@@ -879,16 +921,16 @@ class MapperTest extends TestCase
                         'queryReference' => [
                             [
                                 'ref' => 'someQueryMatch',
-                                'clause' => 'someClause',
-                            ],
-                        ],
+                                'clause' => 'someClause'
+                            ]
+                        ]
                     ],
                     'someQueryMatch' => [
                         'type' => QueryInterface::TYPE_MATCH,
                         'value' => 'someValue',
                         'name' => 'someName',
-                        'match' => 'someMatches',
-                    ],
+                        'match' => 'someMatches'
+                    ]
                 ]
             ]
         ];
@@ -897,7 +939,7 @@ class MapperTest extends TestCase
     /**
      * @return array
      */
-    public function getQueryBoolProvider()
+    public function getQueryBoolProvider(): array
     {
         return [
             [
@@ -909,17 +951,17 @@ class MapperTest extends TestCase
                         'queryReference' => [
                             [
                                 'ref' => 'someQueryMatch',
-                                'clause' => 'someClause',
-                            ],
-                        ],
+                                'clause' => 'someClause'
+                            ]
+                        ]
                     ],
                     'someQueryMatch' => [
                         'type' => QueryInterface::TYPE_MATCH,
                         'value' => 'someValue',
                         'name' => 'someName',
-                        'match' => 'someMatches',
-                    ],
-                ],
+                        'match' => 'someMatches'
+                    ]
+                ]
             ],
             [
                 [
@@ -929,149 +971,40 @@ class MapperTest extends TestCase
                         'queryReference' => [
                             [
                                 'ref' => 'someQueryMatch',
-                                'clause' => 'someClause',
-                            ],
-                        ],
+                                'clause' => 'someClause'
+                            ]
+                        ]
                     ],
                     'someQueryMatch' => [
                         'type' => QueryInterface::TYPE_MATCH,
                         'value' => 'someValue',
                         'name' => 'someName',
-                        'match' => 'someMatches',
-                    ],
+                        'match' => 'someMatches'
+                    ]
                 ]
             ]
         ];
     }
 
-    public function testGetBucketsTermBucket()
+    /**
+     * @return void
+     */
+    public function testGetBucketsInvalidBucket(): void
     {
         $queries = [
             self::ROOT_QUERY => [
                 'type' => QueryInterface::TYPE_MATCH,
                 'value' => 'someValue',
                 'name' => 'someName',
-                'match' => 'someMatches',
-            ],
-        ];
-
-        $bucket = [
-            "name" => "category_bucket",
-            "field" => "category",
-            "metric" => [
-                ["type" => "sum"],
-                ["type" => "count"],
-                ["type" => "min"],
-                ["type" => "max"],
-            ],
-            "type" => "termBucket",
-        ];
-        $metricClass = Metric::class;
-        $bucketClass = TermBucket::class;
-        $queryClass = Match::class;
-        $queryArguments = [
-            'name' => $queries[self::ROOT_QUERY]['name'],
-            'value' => $queries[self::ROOT_QUERY]['value'],
-            'boost' => 1,
-            'matches' => $queries[self::ROOT_QUERY]['match'],
-        ];
-        $arguments = [
-            'name' => $bucket['name'],
-            'field' => $bucket['field'],
-            'metrics' => [null, null, null, null],
-        ];
-        $this->objectManager->expects($this->any())->method('create')
-            ->withConsecutive(
-                [$this->equalTo($queryClass), $this->equalTo($queryArguments)],
-                [$this->equalTo($metricClass), $this->equalTo(['type' => $bucket['metric'][0]['type']])],
-                [$this->equalTo($metricClass), $this->equalTo(['type' => $bucket['metric'][1]['type']])],
-                [$this->equalTo($metricClass), $this->equalTo(['type' => $bucket['metric'][2]['type']])],
-                [$this->equalTo($metricClass), $this->equalTo(['type' => $bucket['metric'][3]['type']])],
-                [$this->equalTo($bucketClass), $this->equalTo($arguments)]
-            )
-            ->willReturn(null);
-
-        /** @var Mapper $mapper */
-        $mapper = $this->helper->getObject(
-            Mapper::class,
-            [
-                'objectManager' => $this->objectManager,
-                'queries' => $queries,
-                'rootQueryName' => self::ROOT_QUERY,
-                'aggregation' => [$bucket]
+                'match' => 'someMatches'
             ]
-        );
-        $mapper->getBuckets();
-    }
-
-    public function testGetBucketsRangeBucket()
-    {
-        $queries = [
-            self::ROOT_QUERY => [
-                'type' => QueryInterface::TYPE_MATCH,
-                'value' => 'someValue',
-                'name' => 'someName',
-                'match' => 'someMatches',
-            ],
         ];
-
         $bucket = [
             "name" => "price_bucket",
             "field" => "price",
-            "metric" => [
-                ["type" => "sum"],
-                ["type" => "count"],
-                ["type" => "min"],
-                ["type" => "max"],
-            ],
-            "range" => [
-                ["from" => "", "to" => "50"],
-                ["from" => "50", "to" => "100"],
-                ["from" => "100", "to" => ""],
-            ],
-            "type" => "rangeBucket",
+            "method" => "test",
+            "type" => "invalidBucket"
         ];
-        $metricClass = Metric::class;
-        $bucketClass = RangeBucket::class;
-        $rangeClass = \Magento\Framework\Search\Request\Aggregation\Range::class;
-        $queryClass = Match::class;
-        $queryArguments = [
-            'name' => $queries[self::ROOT_QUERY]['name'],
-            'value' => $queries[self::ROOT_QUERY]['value'],
-            'boost' => 1,
-            'matches' => $queries[self::ROOT_QUERY]['match'],
-        ];
-        $arguments = [
-            'name' => $bucket['name'],
-            'field' => $bucket['field'],
-            'metrics' => [null, null, null, null],
-            'ranges' => [null, null, null],
-        ];
-        $this->objectManager->expects($this->any())->method('create')
-            ->withConsecutive(
-                [$this->equalTo($queryClass), $this->equalTo($queryArguments)],
-                [$this->equalTo($metricClass), $this->equalTo(['type' => $bucket['metric'][0]['type']])],
-                [$this->equalTo($metricClass), $this->equalTo(['type' => $bucket['metric'][1]['type']])],
-                [$this->equalTo($metricClass), $this->equalTo(['type' => $bucket['metric'][2]['type']])],
-                [$this->equalTo($metricClass), $this->equalTo(['type' => $bucket['metric'][3]['type']])],
-                [
-                    $this->equalTo($rangeClass),
-                    $this->equalTo(['from' => $bucket['range'][0]['from'], 'to' => $bucket['range'][0]['to']])
-                ],
-                [
-                    $this->equalTo($rangeClass),
-                    $this->equalTo(['from' => $bucket['range'][1]['from'], 'to' => $bucket['range'][1]['to']])
-                ],
-                [
-                    $this->equalTo($rangeClass),
-                    $this->equalTo(['from' => $bucket['range'][2]['from'], 'to' => $bucket['range'][2]['to']])
-                ],
-                [
-                    $this->equalTo($bucketClass),
-                    $this->equalTo($arguments)
-                ]
-            )
-            ->willReturn(null);
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -1080,9 +1013,12 @@ class MapperTest extends TestCase
                 'objectManager' => $this->objectManager,
                 'queries' => $queries,
                 'rootQueryName' => self::ROOT_QUERY,
-                'aggregation' => [$bucket]
+                'aggregations' => [$bucket]
             ]
         );
+
+        $this->expectException(StateException::class);
+        $this->expectExceptionMessage('The bucket type is invalid. Verify and try again.');
         $mapper->getBuckets();
     }
 }

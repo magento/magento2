@@ -55,13 +55,13 @@
             <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearAttributeGridFiltersToFindDropdownAttribute"/>
             <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersPaneForDropdownAttribute"/>
             <fillField selector="{{AdminDataGridHeaderSection.attributeCodeFilterInput}}" userInput="$createDropdownAttribute.attribute_code$" stepKey="fillAttributeCodeFilterFieldForDropdownAttribute"/>
-            <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButtonForDropdownAttribute"/>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickApplyFiltersButtonForDropdownAttribute"/>
             <click selector="{{AdminDataGridTableSection.rowCheckbox('1')}}" stepKey="selectDropdownAttribute"/>
             <!-- Find Swatch attribute in grid and select it -->
             <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearAttributeGridFiltersToFindSwatchAttribute"/>
             <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersPaneForSwatchAttribute"/>
             <fillField selector="{{AdminDataGridHeaderSection.attributeCodeFilterInput}}" userInput="$createVisualSwatchAttribute.attribute_code$" stepKey="fillAttributeCodeFilterFieldForSwatchAttribute"/>
-            <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButtonForSwatchAttribute"/>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickApplyFiltersButtonForSwatchAttribute"/>
             <click selector="{{AdminDataGridTableSection.rowCheckbox('1')}}" stepKey="selectSwatchAttribute"/>
 
             <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextToSelectOptions"/>
@@ -150,7 +150,7 @@
             </actionGroup>
             <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForDeleteSuccessMessage"/>
             <see selector="{{AdminMessagesSection.success}}" userInput="A total of 5 record(s) have been deleted." stepKey="seeDeleteSuccessMessage"/>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductGridFilters"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearProductGridFilters"/>
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteProductAttributeB">
                 <argument name="ProductAttribute" value="$createDropdownAttribute$"/>
             </actionGroup>
@@ -168,7 +168,10 @@
         </actionGroup>
 
         <!--CASE 0: Selected options = none; Expected media : C1, C2, C3-->
-        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase0"/>
+        <comment userInput="BIC workaround" stepKey="waitForThumbnailsAppearCase0"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase0"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase0"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase0"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase0"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case0">
 			<actualResult type="variable">getListOfThumbnailsCase0[0]</actualResult>
@@ -192,7 +195,13 @@
 
         <!--CASE 1: Selected options = F2; Expected media : E1, E2, E3, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeSecondOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF2Case1"/>
-        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase1"/>
+        <waitForPageLoad stepKey="waitForThumbnailsAppearCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('4')}}" stepKey="waitForFourthThumbnailCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('5')}}" stepKey="waitForFifthThumbnailCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('6')}}" stepKey="waitForSixthThumbnailCase1"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase1"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case1">
 			<actualResult type="variable">getListOfThumbnailsCase1[0]</actualResult>
@@ -228,7 +237,13 @@
 
         <!--CASE 2: Selected options = F1; Expected media : D1, D2, D3, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeFirstOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF1Case2"/>
-        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase2"/>
+        <waitForPageLoad stepKey="waitForThumbnailsAppearCase2"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase2"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase2"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase2"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('4')}}" stepKey="waitForFourthThumbnailCase2"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('5')}}" stepKey="waitForFifthThumbnailCase2"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('6')}}" stepKey="waitForSixthThumbnailCase2"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase2"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case2">
 			<actualResult type="variable">getListOfThumbnailsCase2[0]</actualResult>
@@ -264,7 +279,10 @@
 
         <!--CASE 3: Selected options = B2,F1; Expected media : C1, C2, C3-->
         <selectOption userInput="$dropdownAttributeSecondOption.option[store_labels][0][label]$" selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID($createDropdownAttribute.default_frontend_label$)}}" stepKey="chooseOptionB2Case3"/>
-        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase3"/>
+        <waitForPageLoad stepKey="waitForThumbnailsAppearCase3"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase3"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase3"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase3"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase3"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case3">
 			<actualResult type="variable">getListOfThumbnailsCase3[0]</actualResult>
@@ -288,7 +306,11 @@
 
         <!--CASE 4: Selected options = B2,F2, Expected media : G1, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeSecondOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF2Case4"/>
-        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase4"/>
+        <waitForPageLoad stepKey="waitForThumbnailsAppearCase4"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase4"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase4"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase4"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('4')}}" stepKey="waitForFourthThumbnailCase4"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase4"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case4">
 			<actualResult type="variable">getListOfThumbnailsCase4[0]</actualResult>
@@ -316,7 +338,10 @@
 
         <!--CASE 5: Selected options = B2, Expected media : C1, C2, C3-->
         <conditionalClick selector="{{StorefrontProductInfoMainSection.swatchAttributeSelectedOption}}" dependentSelector="{{StorefrontProductInfoMainSection.swatchAttributeSelectedOption}}" visible="true" stepKey="unchooseF2Case5"/>
-        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase5"/>
+        <waitForPageLoad stepKey="waitForThumbnailsAppearCase5"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase5"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase5"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase5"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase5"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case5">
 			<actualResult type="variable">getListOfThumbnailsCase5[0]</actualResult>
@@ -340,7 +365,13 @@
 
         <!--CASE 6: Selected options = B1, Expected media : D1, D2, D3, C1, C2, C3-->
         <selectOption userInput="$dropdownAttributeFirstOption.option[store_labels][0][label]$" selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID($createDropdownAttribute.default_frontend_label$)}}" stepKey="chooseOptionB1Case6"/>
-        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase6"/>
+        <waitForPageLoad stepKey="waitForThumbnailsAppearCase6"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase6"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase6"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase6"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('4')}}" stepKey="waitForFourthThumbnailCase6"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('5')}}" stepKey="waitForFifthThumbnailCase6"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('6')}}" stepKey="waitForSixthThumbnailCase6"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase6"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case6">
 			<actualResult type="variable">getListOfThumbnailsCase6[0]</actualResult>
@@ -376,7 +407,13 @@
 
         <!--CASE 7: Selected options = B1,F2, Expected media : E1, E2, E3, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeSecondOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF2Case7"/>
-        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase7"/>
+        <waitForPageLoad stepKey="waitForThumbnailsAppearCase7"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase7"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase7"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase7"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('4')}}" stepKey="waitForFourthThumbnailCase7"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('5')}}" stepKey="waitForFifthThumbnailCase7"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('6')}}" stepKey="waitForSixthThumbnailCase7"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase7"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case7">
 			<actualResult type="variable">getListOfThumbnailsCase7[0]</actualResult>
@@ -412,7 +449,13 @@
 
         <!--CASE 8: Selected options = B1,F1, Expected media : D1, D2, D3, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeFirstOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF1Case8"/>
-        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase8"/>
+        <waitForPageLoad stepKey="waitForThumbnailsAppearCase8"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase8"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase8"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase8"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('4')}}" stepKey="waitForFourthThumbnailCase8"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('5')}}" stepKey="waitForFifthThumbnailCase8"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('6')}}" stepKey="waitForSixthThumbnailCase8"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase8"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case8">
 			<actualResult type="variable">getListOfThumbnailsCase8[0]</actualResult>
@@ -449,7 +492,10 @@
         <!--CASE 9: Selected options = none, Expected media : C1, C2, C3-->
         <selectOption userInput="Choose an Option..." selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID($createDropdownAttribute.default_frontend_label$)}}" stepKey="unselectB1Case9"/>
         <conditionalClick selector="{{StorefrontProductInfoMainSection.swatchAttributeSelectedOption}}" dependentSelector="{{StorefrontProductInfoMainSection.swatchAttributeSelectedOption}}" visible="true" stepKey="unchooseF1Case9"/>
-        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase9"/>
+        <waitForPageLoad stepKey="waitForThumbnailsAppearCase9"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase9"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase9"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase9"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase9"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case9">
 			<actualResult type="variable">getListOfThumbnailsCase9[0]</actualResult>

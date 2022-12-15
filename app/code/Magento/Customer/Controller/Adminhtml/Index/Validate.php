@@ -5,22 +5,128 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Customer\Model\Address\Mapper;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObjectFactory as ObjectFactory;
 use Magento\Framework\Message\Error;
 use Magento\Customer\Controller\Adminhtml\Index as CustomerAction;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class for validation of customer
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Validate extends CustomerAction implements HttpPostActionInterface, HttpGetActionInterface
 {
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param \Magento\Customer\Model\AddressFactory $addressFactory
+     * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
+     * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
+     * @param \Magento\Customer\Helper\View $viewHelper
+     * @param \Magento\Framework\Math\Random $random
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param Mapper $addressMapper
+     * @param AccountManagementInterface $customerAccountManagement
+     * @param AddressRepositoryInterface $addressRepository
+     * @param CustomerInterfaceFactory $customerDataFactory
+     * @param AddressInterfaceFactory $addressDataFactory
+     * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
+     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param DataObjectHelper $dataObjectHelper
+     * @param ObjectFactory $objectFactory
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param StoreManagerInterface|null $storeManager
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Customer\Model\CustomerFactory $customerFactory,
+        \Magento\Customer\Model\AddressFactory $addressFactory,
+        \Magento\Customer\Model\Metadata\FormFactory $formFactory,
+        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
+        \Magento\Customer\Helper\View $viewHelper,
+        \Magento\Framework\Math\Random $random,
+        CustomerRepositoryInterface $customerRepository,
+        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        Mapper $addressMapper,
+        AccountManagementInterface $customerAccountManagement,
+        AddressRepositoryInterface $addressRepository,
+        CustomerInterfaceFactory $customerDataFactory,
+        AddressInterfaceFactory $addressDataFactory,
+        \Magento\Customer\Model\Customer\Mapper $customerMapper,
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        DataObjectHelper $dataObjectHelper,
+        ObjectFactory $objectFactory,
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        ?StoreManagerInterface $storeManager = null
+    ) {
+        parent::__construct(
+            $context,
+            $coreRegistry,
+            $fileFactory,
+            $customerFactory,
+            $addressFactory,
+            $formFactory,
+            $subscriberFactory,
+            $viewHelper,
+            $random,
+            $customerRepository,
+            $extensibleDataObjectConverter,
+            $addressMapper,
+            $customerAccountManagement,
+            $addressRepository,
+            $customerDataFactory,
+            $addressDataFactory,
+            $customerMapper,
+            $dataObjectProcessor,
+            $dataObjectHelper,
+            $objectFactory,
+            $layoutFactory,
+            $resultLayoutFactory,
+            $resultPageFactory,
+            $resultForwardFactory,
+            $resultJsonFactory
+        );
+
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+    }
+
     /**
      * Customer validation
      *
      * @param \Magento\Framework\DataObject $response
      * @return CustomerInterface|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _validateCustomer($response)
     {
@@ -54,6 +160,11 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
             if (isset($submittedData['entity_id'])) {
                 $entity_id = $submittedData['entity_id'];
                 $customer->setId($entity_id);
+            }
+            if (isset($data['website_id']) && is_numeric($data['website_id'])) {
+                $website = $this->storeManager->getWebsite($data['website_id']);
+                $storeId = current($website->getStoreIds());
+                $this->storeManager->setCurrentStore($storeId);
             }
             $errors = $this->customerAccountManagement->validate($customer)->getMessages();
         } catch (\Magento\Framework\Validator\Exception $exception) {
