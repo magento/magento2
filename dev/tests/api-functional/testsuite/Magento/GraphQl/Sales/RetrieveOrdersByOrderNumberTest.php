@@ -545,7 +545,17 @@ QUERY;
          $order7 = $this->fixtures->get('or7')->getIncrementId();
          $order8 = $this->fixtures->get('or8')->getIncrementId();
 
-        $expectedOrderNumbers = [$order8, $order7, $order6, $order5, $order4, $order3, $order2 ];
+        $expectedOrderNumbersOptions = [$order8, $order7, $order6, $order5, $order4, $order3, $order2 ];
+        $expectedOrderNumbers = [];
+        $compDate = '';
+        foreach ($expectedOrderNumbersOptions as $comKey => $comData) {
+            if ($compDate == $customerOrderItemsInResponse[$comKey]['order_date']) {
+                $expectedOrderNumbers = array_unshift($expectedOrderNumbers, $comData);
+            } else {
+                $expectedOrderNumbers[] = $comData;
+            }
+                $compDate = $customerOrderItemsInResponse[$comKey]['order_date'];
+        }
 
         foreach ($expectedOrderNumbers as $key => $data) {
             $orderItemInResponse = $customerOrderItemsInResponse[$key];
