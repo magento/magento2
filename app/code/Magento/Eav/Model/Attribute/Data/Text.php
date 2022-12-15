@@ -79,6 +79,9 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
             return $errors;
         }
 
+        // if string with diacritics encode it.
+        $value = $this->encodeDiacritics($value);
+
         $validateLengthResult = $this->validateLength($attribute, $value);
         $errors = array_merge($errors, $validateLengthResult);
 
@@ -172,5 +175,20 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
     {
         $result = $this->_validateInputRule($value);
         return \is_array($result) ? $result : [];
+    }
+
+    /**
+     * Encode strings with diacritics for validate.
+     *
+     * @param array|string $value
+     * @return array|string
+     */
+    private function encodeDiacritics($value): array|string
+    {
+        $encoded = $value;
+        if (is_string($value)) {
+            $encoded = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $value);
+        }
+        return $encoded;
     }
 }
