@@ -134,7 +134,7 @@ class SaveTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->groupExtensionMock = $this->getMockBuilder(GroupExtension::class)
-            ->onlyMethods(['setExcludeWebsiteIds'])
+            ->addMethods(['setExcludeWebsiteIds'])
             ->disableOriginalConstructor()
             ->getMock();
 
