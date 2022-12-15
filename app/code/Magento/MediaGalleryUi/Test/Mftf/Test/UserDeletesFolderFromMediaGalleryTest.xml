@@ -89,3 +89,4 @@
         <waitForPageLoad stepKey="waitForMediaGalleryPageLoadPostFinalFolderDelete"/>
     </test>
 </tests>
+
