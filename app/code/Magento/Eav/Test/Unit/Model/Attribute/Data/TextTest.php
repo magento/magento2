@@ -200,6 +200,16 @@ class TextTest extends TestCase
     }
 
     /**
+     * Test for string with diacritics validation
+     */
+    public function testValidateValueStringWithDiacritics(): void
+    {
+        $inputValue = "á â à å ä ð é ê è ë í î ì ï ó ô ò ø õ ö ú û ù ü æ œ ç ß a ĝ ń ŕ ý ð ñ";
+        $expectedResult = true;
+        self::assertEquals($expectedResult, $this->model->validateValue($inputValue));
+    }
+
+    /**
      * @param array $attributeData
      * @return Attribute
      */
