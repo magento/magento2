@@ -28,6 +28,9 @@ use Magento\Framework\Indexer\MultiDimensionProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RowDefaultPriceIndexerTest extends TestCase
 {
     /**
