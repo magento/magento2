@@ -1151,7 +1151,7 @@ class AccountManagement implements AccountManagementInterface
             $websiteId
         );
 
-        if ($guestLoginConfig) {
+        if (!$guestLoginConfig) {
             return true;
         }
 
