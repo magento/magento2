@@ -83,7 +83,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
             $filter = $this->urlDecoder->decode($filter);
 
             // this is a replacement for parse_str()
-            // does not need urldecode() as double decoding will occur and '+' will be lost
             $this->parameters->fromString($filter);
             $data = $this->parameters->toArray();
         }
