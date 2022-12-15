@@ -17,131 +17,106 @@
             <testCaseId value="MC-15868"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
-            <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
-
-            <!-- Create customer -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-
-            <!-- Create simple product -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
                 <field key="price">100</field>
             </createData>
-
-            <!-- Enable payment method -->
             <magentoCLI command="config:set {{BankTransferEnableConfigData.path}} {{BankTransferEnableConfigData.value}}" stepKey="enableBankTransfer"/>
         </before>
         <after>
-            <!-- Disable payment method -->
             <magentoCLI command="config:set {{BankTransferDisabledConfigData.path}} {{BankTransferDisabledConfigData.value}}" stepKey="enableBankTransfer"/>
-
-            <!-- Logout customer -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
-
-            <!-- Delete customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-
-            <!-- Delete product -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-
-            <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <!-- Create order -->
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrderPage">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
-
-        <!-- Add product to order -->
         <actionGroup ref="AddSimpleProductWithQtyToOrderActionGroup" stepKey="addProductToOrder">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="productQty" value="2"/>
         </actionGroup>
-
-        <!-- Select bank transfer payment method -->
         <actionGroup ref="SelectBankTransferPaymentMethodActionGroup" stepKey="selectPaymentMethod"/>
-
-        <!-- Select shipping method -->
-        <click selector="{{AdminInvoicePaymentShippingSection.getShippingMethodAndRates}}" stepKey="openShippingMethod"/>
-        <waitForPageLoad stepKey="waitForShippingMethods"/>
-        <click selector="{{AdminInvoicePaymentShippingSection.shippingMethod}}" stepKey="chooseShippingMethod"/>
-        <waitForPageLoad stepKey="waitForShippingMethodLoad"/>
-
-        <!-- Submit order -->
+        <actionGroup ref="AdminClickGetShippingMethodsAndRatesActionGroup" stepKey="openShippingMethod"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForShippingMethods"/>
+        <actionGroup ref="AdminSelectFixedShippingMethodActionGroup" stepKey="chooseShippingMethod"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForShippingMethodLoad"/>
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
 
-        <!-- Grab order id -->
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
+        <comment userInput="BIC workaround" stepKey="getOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
 
-        <!-- Open created order -->
-        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrdersPage"/>
-        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridById">
-            <argument name="orderId" value="$getOrderId"/>
+        <comment userInput="BIC workaround" stepKey="goToOrdersPage"/>
+        <comment userInput="BIC workaround" stepKey="filterOrdersGridById"/>
+        <comment userInput="BIC workaround" stepKey="clickCreatedOrderInGrid"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder1">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
-        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickCreatedOrderInGrid"/>
 
-        <!-- Go to invoice tab and fill data -->
         <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceAction"/>
-        <fillField selector="{{AdminOrderInvoiceViewSection.invoiceQty}}" userInput="1" stepKey="fillInvoiceQuantity"/>
-        <click selector="{{AdminOrderInvoiceViewSection.updateInvoiceBtn}}" stepKey="clickUpdateQtyInvoiceBtn"/>
-        <fillField selector="{{AdminInvoiceTotalSection.invoiceComment}}" userInput="comment" stepKey="writeComment"/>
+        <actionGroup ref="AdminFillQtyToInvoiceOnCreateInvoicePageActionGroup" stepKey="fillInvoiceQuantity"/>
+        <actionGroup ref="AdminClickUpdateQtysButtonOnCreateInvoicePageActionGroup" stepKey="clickUpdateQtyInvoiceBtn"/>
+        <actionGroup ref="AdminFillInvoiceCommentsFieldOnCreateInvoicePageActionGroup" stepKey="writeComment"/>
         <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
-
-        <!-- Assert invoice with shipment success message -->
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
 
-        <!-- Assert invoice in invoices grid -->
         <actionGroup ref="FilterInvoiceGridByOrderIdWithCleanFiltersActionGroup" stepKey="filterInvoiceGridByOrderId">
-            <argument name="orderId" value="$getOrderId"/>
+            <argument name="orderId" value="$orderNumber"/>
         </actionGroup>
-        <click selector="{{AdminInvoicesGridSection.firstRow}}" stepKey="opeCreatedInvoice"/>
-        <waitForPageLoad stepKey="waitForInvoiceDetailsPageToLoad"/>
+        <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="opeCreatedInvoice"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForInvoiceDetailsPageToLoad"/>
         <grabFromCurrentUrl regex="~/invoice_id/(\d+)/~" stepKey="grabInvoiceId"/>
-
-        <!-- Assert invoice in invoices tab -->
-        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
-        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdForAssertingInvoiceBtn">
-            <argument name="orderId" value="$getOrderId"/>
+        <comment userInput="BIC workaround" stepKey="goToOrders"/>
+        <comment userInput="BIC workaround" stepKey="filterOrderGridByIdForAssertingInvoiceBtn"/>
+        <comment userInput="BIC workaround" stepKey="clickOrderInGrid"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder2">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
-        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickOrderInGrid"/>
-        <click selector="{{AdminOrderDetailsMainActionsSection.invoiceTab}}" stepKey="clickInvoicesTabOrdersPage"/>
-        <conditionalClick selector="{{AdminOrderInvoicesTabSection.clearFilters}}" dependentSelector="{{AdminOrderInvoicesTabSection.clearFilters}}" visible="true" stepKey="clearInvoiceFilters"/>
-        <click selector="{{AdminOrderInvoicesTabSection.filters}}" stepKey="openOrderInvoicesGridFilters"/>
-        <fillField selector="{{AdminOrderInvoicesTabSection.invoiceId}}" userInput="$grabInvoiceId" stepKey="fillInvoiceIdFilter"/>
-        <fillField selector="{{AdminOrderInvoicesTabSection.amountFrom}}" userInput="110.00" stepKey="fillAmountFromFilter"/>
-        <fillField selector="{{AdminOrderInvoicesTabSection.amountTo}}" userInput="110.00" stepKey="fillAmountToFilter"/>
-        <click selector="{{AdminOrderInvoicesTabSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+        <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="clickInvoicesTabOrdersPage"/>
+        <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearInvoiceFilters"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="openOrderInvoicesGridFilters"/>
+        <actionGroup ref="AdminGridFilterFillFieldBySelectorActionGroup" stepKey="fillInvoiceIdFilter">
+            <argument name="selector" value="{{AdminOrderInvoicesTabSection.invoiceId}}"/>
+            <argument name="filterValue" value="$grabInvoiceId"/>
+        </actionGroup>
+        <actionGroup ref="AdminGridFilterFillFieldBySelectorActionGroup" stepKey="fillAmountFromFilter">
+            <argument name="selector" value="{{AdminOrderInvoicesTabSection.amountFrom}}"/>
+            <argument name="filterValue" value="110.00"/>
+        </actionGroup>
+        <actionGroup ref="AdminGridFilterFillFieldBySelectorActionGroup" stepKey="fillAmountToFilter">
+            <argument name="selector" value="{{AdminOrderInvoicesTabSection.amountTo}}"/>
+            <argument name="filterValue" value="110.00"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickOrderApplyFilters"/>
         <dontSeeElement selector="{{AdminDataGridTableSection.dataGridEmpty}}" stepKey="assertThatInvoiceGridNotEmpty"/>
-
-        <!-- Assert invoice items -->
+       
         <actionGroup ref="FilterInvoiceGridByOrderIdWithCleanFiltersActionGroup" stepKey="filterInvoiceByOrderId">
-            <argument name="orderId" value="$getOrderId"/>
+            <argument name="orderId" value="$orderNumber"/>
         </actionGroup>
-        <click selector="{{AdminInvoicesGridSection.firstRow}}" stepKey="openInvoice"/>
+        <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="openInvoice"/>
         <waitForPageLoad stepKey="waitForInvoicePageToLoad"/>
         <see selector="{{AdminInvoiceTotalSection.itemName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductNameInInvoiceItems"/>
         <see selector="{{AdminInvoiceTotalSection.itemQty}}" userInput="1" stepKey="seeProductQtyInInvoiceItems"/>
         <see selector="{{AdminInvoiceTotalSection.itemTotalPrice}}" userInput="$$createSimpleProduct.price$$" stepKey="seeProductTotalPriceInInvoiceItems"/>
 
-        <!-- Login as customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForCustomerLogin"/>
-
-        <!-- Open My Account > My Orders -->
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForCustomerLogin"/>
         <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
         <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToSidebarMenu">
             <argument name="menu" value="My Orders"/>
         </actionGroup>
-
-        <!-- Assert invoiced amount on frontend -->
-        <click selector="{{StorefrontCustomerOrderSection.viewOrder}}" stepKey="clickViewOrder"/>
+        <actionGroup ref="StorefrontClickViewOrderLinkOnMyOrdersPageActionGroup" stepKey="clickViewOrder"/>
         <dontSeeElement selector="{{StorefrontOrderDetailsSection.orderDateTagElement}}" stepKey="dontSeeDateTag"/>
-        <click selector="{{StorefrontOrderInvoicesSection.invoiceTab}}" stepKey="clickInvoiceTabOnStorefront"/>
+        <actionGroup ref="StorefrontOpenInvoiceTabActionGroup" stepKey="clickInvoiceTabOnStorefront"/>
         <see selector="{{StorefrontOrderInvoicesSection.grandTotalPrice}}" userInput="$110.00" stepKey="seePrice"/>
     </test>
 </tests>

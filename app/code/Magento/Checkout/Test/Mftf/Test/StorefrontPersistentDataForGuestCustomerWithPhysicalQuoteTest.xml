@@ -57,7 +57,7 @@
             <argument name="methodCode" value="flatrate"/>
         </actionGroup>
         <!-- 6. Go to Checkout -->
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
         <actionGroup ref="StorefrontAssertCheckoutEstimateShippingInformationActionGroup" stepKey="assertCheckoutEstimateShippingInformationAfterGoingToCheckout"/>
         <actionGroup ref="StorefrontAssertCheckoutShippingMethodSelectedActionGroup" stepKey="assertFlatRateShippingMethodIsCheckedAfterGoingToCheckout">
             <argument name="shippingMethod" value="Flat Rate"/>

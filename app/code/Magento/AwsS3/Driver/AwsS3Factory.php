@@ -8,11 +8,12 @@ declare(strict_types=1);
 namespace Magento\AwsS3\Driver;
 
 use Aws\S3\S3Client;
-use League\Flysystem\AwsS3v3\AwsS3Adapter;
-use League\Flysystem\Cached\CachedAdapter;
+use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\RemoteStorage\Driver\Cache\CacheFactory;
+use Magento\RemoteStorage\Driver\Adapter\Cache\CacheInterfaceFactory;
+use Magento\RemoteStorage\Driver\Adapter\CachedAdapterInterfaceFactory;
+use Magento\RemoteStorage\Driver\Adapter\MetadataProviderInterfaceFactory;
 use Magento\RemoteStorage\Driver\DriverException;
 use Magento\RemoteStorage\Driver\DriverFactoryInterface;
 use Magento\RemoteStorage\Driver\RemoteDriverInterface;
@@ -29,25 +30,52 @@ class AwsS3Factory implements DriverFactoryInterface
     private $objectManager;
 
     /**
-     * @var CacheFactory
-     */
-    private $cacheFactory;
-
-    /**
      * @var Config
      */
     private $config;
 
     /**
-     * @param ObjectManagerInterface $objectManager
-     * @param CacheFactory $cacheFactory
-     * @param Config $config
+     * @var MetadataProviderInterfaceFactory
      */
-    public function __construct(ObjectManagerInterface $objectManager, CacheFactory $cacheFactory, Config $config)
-    {
+    private $metadataProviderFactory;
+
+    /**
+     * @var CacheInterfaceFactory
+     */
+    private $cacheInterfaceFactory;
+
+    /**
+     * @var CachedAdapterInterfaceFactory
+     */
+    private $cachedAdapterInterfaceFactory;
+
+    /**
+     * @var string|null
+     */
+    private $cachePrefix;
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     * @param Config $config
+     * @param MetadataProviderInterfaceFactory $metadataProviderFactory
+     * @param CacheInterfaceFactory $cacheInterfaceFactory
+     * @param CachedAdapterInterfaceFactory $cachedAdapterInterfaceFactory
+     * @param string|null $cachePrefix
+     */
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        Config $config,
+        MetadataProviderInterfaceFactory $metadataProviderFactory,
+        CacheInterfaceFactory $cacheInterfaceFactory,
+        CachedAdapterInterfaceFactory $cachedAdapterInterfaceFactory,
+        string $cachePrefix = null
+    ) {
         $this->objectManager = $objectManager;
-        $this->cacheFactory = $cacheFactory;
         $this->config = $config;
+        $this->metadataProviderFactory = $metadataProviderFactory;
+        $this->cacheInterfaceFactory = $cacheInterfaceFactory;
+        $this->cachedAdapterInterfaceFactory = $cachedAdapterInterfaceFactory;
+        $this->cachePrefix = $cachePrefix;
     }
 
     /**
@@ -58,9 +86,7 @@ class AwsS3Factory implements DriverFactoryInterface
         try {
             return $this->createConfigured(
                 $this->config->getConfig(),
-                $this->config->getPrefix(),
-                $this->config->getCacheAdapter(),
-                $this->config->getCacheConfig()
+                $this->config->getPrefix()
             );
         } catch (LocalizedException $exception) {
             throw new DriverException(__($exception->getMessage()), $exception);
@@ -73,8 +99,8 @@ class AwsS3Factory implements DriverFactoryInterface
     public function createConfigured(
         array $config,
         string $prefix,
-        string $cacheAdapter,
-        array $cacheConfig
+        string $cacheAdapter = '',
+        array $cacheConfig = []
     ): RemoteDriverInterface {
         $config['version'] = 'latest';
 
@@ -86,17 +112,40 @@ class AwsS3Factory implements DriverFactoryInterface
             throw new DriverException(__('Bucket and region are required values'));
         }
 
-        $client = new S3Client($config);
-        $adapter = new AwsS3Adapter($client, $config['bucket'], $prefix);
+        if (!empty($config['http_handler'])) {
+            $config['http_handler'] = $this->objectManager->create($config['http_handler'])($config);
+        }
 
+        if (!empty($config['path_style'])) {
+            $config['use_path_style_endpoint'] = boolval($config['path_style']);
+        }
+
+        $client = new S3Client($config);
+        $adapter = new AwsS3V3Adapter($client, $config['bucket'], $prefix);
+        $cache = $this->cacheInterfaceFactory->create(
+            // Custom cache prefix required to distinguish cache records for different sources.
+            // phpcs:ignore Magento2.Security.InsecureFunction
+            $this->cachePrefix ? ['prefix' => $this->cachePrefix] : ['prefix' => md5($config['bucket'] . $prefix)]
+        );
+        $metadataProvider = $this->metadataProviderFactory->create(
+            [
+                'adapter' => $adapter,
+                'cache' => $cache
+            ]
+        );
+        $objectUrl = rtrim($client->getObjectUrl($config['bucket'], './'), '/') . trim($prefix, '\\/') . '/';
         return $this->objectManager->create(
             AwsS3::class,
             [
-                'adapter' => $this->objectManager->create(CachedAdapter::class, [
-                    'adapter' => $adapter,
-                    'cache' => $this->cacheFactory->create($cacheAdapter, $cacheConfig)
-                ]),
-                'objectUrl' => $client->getObjectUrl($adapter->getBucket(), $adapter->applyPathPrefix('.'))
+                'adapter' => $this->cachedAdapterInterfaceFactory->create(
+                    [
+                        'adapter' => $adapter,
+                        'cache' => $cache,
+                        'metadataProvider' => $metadataProvider
+                    ]
+                ),
+                'objectUrl' => $objectUrl,
+                'metadataProvider' => $metadataProvider,
             ]
         );
     }

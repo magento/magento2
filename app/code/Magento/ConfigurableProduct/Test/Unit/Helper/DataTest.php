@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\ConfigurableProduct\Helper\Data;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -41,19 +42,26 @@ class DataTest extends TestCase
      */
     protected $imageUrlBuilder;
 
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $scopeConfigMock;
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->imageUrlBuilder = $this->getMockBuilder(UrlBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->_imageHelperMock = $this->createMock(Image::class);
         $this->_productMock = $this->createMock(Product::class);
         $this->_productMock->setTypeId(Configurable::TYPE_CODE);
         $this->_model = $objectManager->getObject(
             Data::class,
             [
-                '_imageHelper' => $this->_imageHelperMock
+                '_imageHelper' => $this->_imageHelperMock,
+                'scopeConfig' => $this->scopeConfigMock
             ]
         );
         $objectManager->setBackwardCompatibleProperty($this->_model, 'imageUrlBuilder', $this->imageUrlBuilder);
@@ -131,7 +139,9 @@ class DataTest extends TestCase
         );
         $provider = [];
         $provider[] = [
-            [],
+            [
+                'canDisplayShowOutOfStockStatus' => false
+            ],
             [
                 'allowed_products' => [],
                 'current_product_mock' => $currentProductMock,
@@ -213,6 +223,7 @@ class DataTest extends TestCase
                 'attribute_id_2' => [
                     'attribute_code_value_2' => ['product_id_1', 'product_id_2'],
                 ],
+                'canDisplayShowOutOfStockStatus' => false
             ],
             [
                 'allowed_products' => $allowedProducts,

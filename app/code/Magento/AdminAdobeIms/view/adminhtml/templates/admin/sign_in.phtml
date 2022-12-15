@@ -1,0 +1,49 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var $block \Magento\Backend\Block\Template
+ * @var $escaper \Magento\Framework\Escaper
+ * @var $viewModel \Magento\AdminAdobeIms\ViewModel\LinkViewModel
+ */
+$viewModel = $block->getLinkViewModel();
+?>
+<?php if ($viewModel->isActive()): ?>
+<div class="adobe-ims-sign-in-modal spectrum-Modal is-open spectrum-Typography">
+    <div class="spectrum-Dialog spectrum-Dialog--medium spectrum-Dialog--noDivider"
+         role="dialog"
+         tabindex="-1"
+         aria-modal="true">
+        <div class="spectrum-Dialog-grid">
+            <h1 class="spectrum-Dialog-heading spectrum-Heading spectrum-Heading--sizeXL">
+                <?= $escaper->escapeHtml(__('Sign In')) ?>
+            </h1>
+
+            <section class="adobe-ims-sign-in-dialog spectrum-Dialog-content">
+                <?= $block->getChildHtml('messages') ?>
+
+                <p class="spectrum-Body spectrum-Body--sizeM adobe-ims-organization-note">
+                    <?= $escaper->escapeHtml(
+                        __(
+                            'This Commerce instance is managed by an organization. ' .
+                            'Contact your organization administrator to request access.'
+                        )
+                    ) ?>
+                </p>
+
+                <div class="adobe-ims-button">
+                    <button class="spectrum-Button spectrum-Button--fill spectrum-Button--accent spectrum-Button--sizeL"
+                            onclick="location.href='<?= $escaper->escapeUrl($viewModel->getButtonLink()) ?>'">
+                        <span class="spectrum-Button-label">
+                            <?= $escaper->escapeHtml(__('Sign in with Adobe ID')) ?>
+                        </span>
+                    </button>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+<?php endif; ?>

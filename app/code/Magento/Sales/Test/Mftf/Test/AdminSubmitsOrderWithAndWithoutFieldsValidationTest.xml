@@ -15,6 +15,7 @@
             <description value="Admin should not be able to submit orders without invalid address fields"/>
             <severity value="AVERAGE"/>
             <group value="sales"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -32,10 +33,14 @@
         <comment userInput="Admin creates order" stepKey="adminCreateOrderComment"/>
         <!--<actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage"/>-->
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToOrderIndexPage"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeIndexPageTitle">
+            <argument name="value" value="Orders"/>
+        </actionGroup>
         <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
         <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeNewOrderPageTitle">
+            <argument name="value" value="Create New Order"/>
+        </actionGroup>
 
         <!--Check if order can be submitted without the required fields including email address-->
         <actionGroup ref="CheckRequiredFieldsNewOrderFormActionGroup" stepKey="checkRequiredFieldsNewOrder" after="seeNewOrderPageTitle"/>
@@ -45,8 +50,10 @@
         </actionGroup>
 
         <!--Fill customer group and customer email-->
-        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="{{GeneralCustomerGroup.code}}" stepKey="selectCustomerGroup" after="addSimpleProductToOrder"/>
-        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail" after="selectCustomerGroup"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectCustomerGroup" after="addSimpleProductToOrder"/>
+        <actionGroup ref="AdminFillAccountInformationOnCreateOrderPageActionGroup" stepKey="fillCustomerEmail" after="selectCustomerGroup">
+            <argument name="email" value="{{Simple_US_Customer.email}}"/>
+        </actionGroup>
 
         <!--Fill wrong customer address information-->
         <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillWrongCustomerAddress" after="fillCustomerEmail">

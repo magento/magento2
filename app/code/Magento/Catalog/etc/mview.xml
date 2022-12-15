@@ -49,6 +49,8 @@
             <table name="catalog_product_entity_decimal" entity_column="entity_id" />
             <table name="catalog_product_entity_int" entity_column="entity_id" />
             <table name="catalog_product_entity_tier_price" entity_column="entity_id" />
+            <table name="catalog_product_link" entity_column="product_id" />
+            <table name="catalog_product_website" entity_column="product_id" />
         </subscriptions>
     </view>
     <view id="catalog_product_attribute" class="Magento\Catalog\Model\Indexer\Product\Eav" group="indexer">
@@ -56,6 +58,7 @@
             <table name="catalog_product_entity_decimal" entity_column="entity_id" />
             <table name="catalog_product_entity_int" entity_column="entity_id" />
             <table name="catalog_product_entity_varchar" entity_column="entity_id" />
+            <table name="catalog_product_link" entity_column="product_id" />
         </subscriptions>
     </view>
 </config>

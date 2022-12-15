@@ -19,5 +19,7 @@
         <element name="viewDropdown" type="button" selector=".admin__data-grid-action-bookmarks button.admin__action-dropdown"/>
         <element name="viewBookmark" type="button" selector="//div[contains(@class, 'admin__data-grid-action-bookmarks')]/ul/li/div/a[text() = '{{label}}']" parameterized="true" timeout="30"/>
         <element name="countryOptions" type="button" selector=".admin__data-grid-filters select[name=billing_country_id] option"/>
+        <element name="websiteOptions" type="button" selector=".admin__data-grid-filters select[name=website_id] option"/>
+        <element name="genericInput" type="input" selector="input[name={{name}}]" parameterized="true"/>
     </section>
 </sections>

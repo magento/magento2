@@ -9,6 +9,8 @@ use Magento\Deploy\Package\Package;
 
 /**
  * Deployment strategy interface
+ *
+ * @api
  */
 interface StrategyInterface
 {

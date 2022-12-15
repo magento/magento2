@@ -57,7 +57,7 @@ class ReadmeTest extends \PHPUnit\Framework\TestCase
         $directories = [];
         foreach ($this->scanList as $dir) {
             if (!$this->isInBlacklist($dir)) {
-                $directories[][$dir] = $dir;
+                $directories[][] = $dir;
             }
         }
 

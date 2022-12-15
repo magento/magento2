@@ -4,11 +4,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Bundle\Api;
 
+use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 
-class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
+class ProductLinkManagementTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'bundleProductLinkManagementV1';
     const SERVICE_VERSION = 'V1';
@@ -85,6 +88,59 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
     }
 
     /**
+     * Verify empty out of stock bundle product is in stock after child has been added.
+     *
+     * @magentoApiDataFixture Magento/Bundle/_files/empty_bundle_product.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
+     *
+     * @return void
+     */
+    public function testBundleProductIsInStockAfterAddChild(): void
+    {
+        $productSku = 'bundle-product';
+        $option = [
+            'required' => 1,
+            'position' => 0,
+            'type' => 'select',
+            'title' => 'option 1',
+            'sku' => $productSku,
+        ];
+        self::assertFalse($this->isProductInStock($productSku));
+        $optionId = $this->addOption($option);
+        $linkedProduct = [
+            'sku' => 'virtual-product',
+            'option_id' => $optionId,
+            'position' => '1',
+            'is_default' => 1,
+            'priceType' => 2,
+            'price' => 151.34,
+            'qty' => 8,
+            'can_change_quantity' => 1,
+        ];
+
+        $this->addChild($productSku, $optionId, $linkedProduct);
+        self::assertTrue($this->isProductInStock($productSku));
+    }
+
+    /**
+     * Verify in stock bundle product is out stock after child has been removed.
+     *
+     * @magentoApiDataFixture Magento/Bundle/_files/product.php
+     *
+     * @return void
+     */
+    public function testBundleProductIsOutOfStockAfterRemoveChild(): void
+    {
+        $productSku = 'bundle-product';
+        $childSku = 'simple';
+        $optionIds = $this->getProductOptions(3);
+        $optionId = array_shift($optionIds);
+        self::assertTrue($this->isProductInStock($productSku));
+        $this->removeChild($productSku, $optionId, $childSku);
+        self::assertFalse($this->isProductInStock($productSku));
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Bundle/_files/product.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
      */
@@ -119,7 +175,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
                     [$productSku, $linkedProduct['id']],
                     $resourcePath
                 ),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'httpMethod' => Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -149,7 +205,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
                     [$productSku, $optionId],
                     $resourcePath
                 ),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+                'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -179,7 +235,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => sprintf($resourcePath, $productSku, $optionId, $childSku),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
+                'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -200,7 +256,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $productSku . '/children',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -209,5 +265,51 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
             ],
         ];
         return $this->_webApiCall($serviceInfo, ['productSku' => $productSku]);
+    }
+
+    /**
+     * Check product stock status.
+     *
+     * @param string $productSku
+     * @return bool
+     */
+    private function isProductInStock(string $productSku): bool
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/stockStatuses/' . $productSku,
+                'httpMethod' => Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => 'catalogInventoryStockRegistryV1',
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => 'catalogInventoryStockRegistryV1getStockStatusBySku',
+            ],
+        ];
+        $result = $this->_webApiCall($serviceInfo, ['productSku' => $productSku]);
+
+        return (bool)$result['stock_status'];
+    }
+
+    /**
+     * Add option to bundle product.
+     *
+     * @param array $option
+     * @return int
+     */
+    private function addOption(array $option): int
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/bundle-products/options/add',
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => 'bundleProductOptionManagementV1',
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => 'bundleProductOptionManagementV1Save',
+            ],
+        ];
+        return $this->_webApiCall($serviceInfo, ['option' => $option]);
     }
 }

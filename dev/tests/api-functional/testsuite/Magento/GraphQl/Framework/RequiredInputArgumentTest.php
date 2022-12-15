@@ -26,15 +26,16 @@ class RequiredInputArgumentTest extends GraphQlAbstract
     {
         $query = <<<QUERY
     {
-        urlResolver{
-            id
-            type
+        testQueryWithTopLevelMandatoryInputArguments{
+            item_id
+            name
         }
     }
 QUERY;
 
         $expectedExceptionsMessage = 'GraphQL response contains errors:'
-            . ' Field "urlResolver" argument "url" of type "String!" is required but not provided.';
+            . ' Field "testQueryWithTopLevelMandatoryInputArguments" argument "topLevelArgument"'
+            . ' of type "String!" is required but not provided.';
         $this->expectException(ResponseContainsErrorsException::class);
         $this->expectExceptionMessage($expectedExceptionsMessage);
 
@@ -44,31 +45,30 @@ QUERY;
     /**
      * Test that a more complex required argument is handled properly
      *
-     * updateCartItems mutation has required parameter input.cart_items.cart_item_id
+     * testInputQueryWithMandatoryArguments mutation has required parameter input.query_items.query_item_id
      */
     public function testInputObjectArgumentRequired()
     {
         $query = <<<QUERY
-    mutation {
-        updateCartItems(
+    query {
+        testQueryWithNestedMandatoryInputArguments(
             input: {
-                cart_id: "foobar"
-                cart_items: [
+                query_id: "foobar"
+                query_items: [
                     {
                         quantity: 2
                     }
                 ]
             }
         ) {
-            cart {
-                total_quantity
-            }
+            item_id
+            name
         }
     }
 QUERY;
 
         $expectedExceptionsMessage = 'GraphQL response contains errors:'
-            . ' Field CartItemUpdateInput.cart_item_id of required type Int! was not provided.';
+            . ' Field QueryWithMandatoryArgumentsInput.query_item_id of required type Int! was not provided.';
         $this->expectException(ResponseContainsErrorsException::class);
         $this->expectExceptionMessage($expectedExceptionsMessage);
 

@@ -15,6 +15,7 @@
         <element name="editAddressButton" type="button" selector=".action-edit-address" timeout="30"/>
         <element name="addressDropdown" type="select" selector="[name=billing_address_id]"/>
         <element name="newAddressButton" type="button" selector=".action-show-popup" timeout="30"/>
+        <element name="newAddressForm" type="text" selector="#co-shipping-form"/>
         <element name="email" type="input" selector="input[id*=customer-email]"/>
         <element name="password" type="input" selector="#customer-password"/>
         <element name="firstName" type="input" selector="input[name=firstname]"/>
@@ -22,6 +23,8 @@
         <element name="company" type="input" selector="input[name=company]"/>
         <element name="street" type="input" selector="input[name='street[0]']"/>
         <element name="street2" type="input" selector="input[name='street[1]']"/>
+        <element name="street3" type="input" selector="input[name='street[2]']"/>
+        <element name="street4" type="input" selector="input[name='street[3]']"/>
         <element name="city" type="input" selector="input[name=city]"/>
         <element name="region" type="select" selector="select[name=region_id]"/>
         <element name="postcode" type="input" selector="input[name=postcode]"/>
@@ -44,5 +47,9 @@
         <element name="addressFieldValidationError" type="text" selector="div.address div.field .field-error"/>
         <element name="textFieldAttrRequireMessage" type="text" selector="//input[@name='custom_attributes[{{attribute}}]']/ancestor::div[contains(@class, 'control')]/div/span" parameterized="true" timeout="30"/>
         <element name="textFieldAttribute" type="input" selector="[name*='custom_attributes[{{attribute}}]']" parameterized="true" timeout="30"/>
+        <element name="shippingAddressRequiredField" type="text" selector="//div[@id='shipping-new-address-form']//div[contains(@class, 'field _required') and contains(@name, 'shippingAddress.{{fieldName}}')]" parameterized="true" timeout="30"/>
+        <element name="stateProvince" type="text" selector="//div[@name='shippingAddress.region_id']//span[contains(text(),'State/Province')]" timeout="30"/>
+        <element name="stateProvinceWithoutAsterisk" type="text" selector="//div[@class='field' and @name='shippingAddress.region_id']" timeout="30"/>
+        <element name="stateProvinceWithAsterisk" type="text" selector="//div[@class='field _required' and @name='shippingAddress.region_id']" timeout="30"/>
     </section>
 </sections>

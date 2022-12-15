@@ -31,6 +31,9 @@ class RouterListTest extends TestCase
      */
     protected $routerList;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->routerList = [
@@ -38,17 +41,20 @@ class RouterListTest extends TestCase
             'frontendRouter' => ['class' => 'FrontClass', 'disable' => false, 'sortOrder' => 10],
             'default' => ['class' => 'DefaultClass', 'disable' => false, 'sortOrder' => 5],
             'someRouter' => ['class' => 'SomeClass', 'disable' => false, 'sortOrder' => 10],
-            'anotherRouter' => ['class' => 'AnotherClass', 'disable' => false, 'sortOrder' => 15],
+            'anotherRouter' => ['class' => 'AnotherClass', 'disable' => false, 'sortOrder' => 15]
         ];
 
         $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->model = new RouterList($this->objectManagerMock, $this->routerList);
     }
 
-    public function testCurrent()
+    /**
+     * @return void
+     */
+    public function testCurrent(): void
     {
         $expectedClass = new DefaultClass();
-        $this->objectManagerMock->expects($this->at(0))
+        $this->objectManagerMock
             ->method('create')
             ->with('DefaultClass')
             ->willReturn($expectedClass);
@@ -56,10 +62,13 @@ class RouterListTest extends TestCase
         $this->assertEquals($expectedClass, $this->model->current());
     }
 
-    public function testNext()
+    /**
+     * @return void
+     */
+    public function testNext(): void
     {
         $expectedClass = new FrontClass();
-        $this->objectManagerMock->expects($this->at(0))
+        $this->objectManagerMock
             ->method('create')
             ->with('FrontClass')
             ->willReturn($expectedClass);
@@ -68,7 +77,10 @@ class RouterListTest extends TestCase
         $this->assertEquals($expectedClass, $this->model->current());
     }
 
-    public function testValid()
+    /**
+     * @return void
+     */
+    public function testValid(): void
     {
         $this->assertTrue($this->model->valid());
         $this->model->next();
@@ -81,20 +93,18 @@ class RouterListTest extends TestCase
         $this->assertFalse($this->model->valid());
     }
 
-    public function testRewind()
+    /**
+     * @return void
+     */
+    public function testRewind(): void
     {
         $frontClass = new FrontClass();
         $defaultClass = new DefaultClass();
 
-        $this->objectManagerMock->expects($this->at(0))
+        $this->objectManagerMock
             ->method('create')
-            ->with('DefaultClass')
-            ->willReturn($defaultClass);
-
-        $this->objectManagerMock->expects($this->at(1))
-            ->method('create')
-            ->with('FrontClass')
-            ->willReturn($frontClass);
+            ->withConsecutive(['DefaultClass'], ['FrontClass'])
+            ->willReturnOnConsecutiveCalls($defaultClass, $frontClass);
 
         $this->assertEquals($defaultClass, $this->model->current());
         $this->model->next();

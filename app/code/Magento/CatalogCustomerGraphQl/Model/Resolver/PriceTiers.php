@@ -19,7 +19,6 @@ use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Resolver for price_tiers
@@ -125,6 +124,10 @@ class PriceTiers implements ResolverInterface
             return [];
         }
 
+        if (!$product->getTierPrices()) {
+            return [];
+        }
+
         $productId = (int)$product->getId();
         $this->tiers->addProductFilter($productId);
 
@@ -152,7 +155,8 @@ class PriceTiers implements ResolverInterface
         array $tierPrices,
         string $currencyCode
     ): array {
-
+        $this->formatAndFilterTierPrices = [];
+        $this->tierPricesQty = [];
         foreach ($tierPrices as $key => $tierPrice) {
             $tierPrice->setValue($this->priceCurrency->convertAndRound($tierPrice->getValue()));
             $this->formatTierPrices($productPrice, $currencyCode, $tierPrice);

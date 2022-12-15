@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportBundleProductTest">
+        <annotations>
+            <features value="BundleImportExport"/>
+            <stories value="Import Products"/>
+            <title value="Import Bundle Product"/>
+            <description value="Imports a .csv file containing a bundle product. Verifies that product is imported
+            successfully and can be purchased."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-38432"/>
+            <group value="importExport"/>
+            <group value="Bundle"/>
+        </annotations>
+
+        <before>
+            <!-- Create Product, Upload Images & Create Customer -->
+            <createData entity="ImportCategory_Bundle" stepKey="createImportCategory"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Copy Images to Import Directory for Product Images -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+                <argument name="path">var/import/images/{{ImportProduct_Bundle.name}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct1BaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple1_Bundle.baseImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Bundle.name}}/{{ImportProductSimple1_Bundle.baseImage}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct2BaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple2_Bundle.smallImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Bundle.name}}/{{ImportProductSimple2_Bundle.smallImage}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct3BaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple3_Bundle.thumbnailImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Bundle.name}}/{{ImportProductSimple3_Bundle.thumbnailImage}}</argument>
+            </helper>
+
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <!-- Delete Data -->
+            <deleteData createDataKey="createImportCategory" stepKey="deleteImportCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
+                <argument name="path">var/import/images/{{ImportProduct_Bundle.name}}</argument>
+            </helper>
+            <deleteData url="/V1/products/{{ImportProductSimple1_Bundle.urlKey}}" stepKey="deleteImportedSimpleProduct1"/>
+            <deleteData url="/V1/products/{{ImportProductSimple2_Bundle.urlKey}}" stepKey="deleteImportedSimpleProduct2"/>
+            <deleteData url="/V1/products/{{ImportProductSimple3_Bundle.urlKey}}" stepKey="deleteImportedSimpleProduct3"/>
+            <deleteData url="/V1/products/{{ImportProduct_Bundle.urlKey}}" stepKey="deleteImportedBundleProduct"/>
+            <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="navigateToAndResetProductGridToDefaultView"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Import Bundle Product & Assert No Errors -->
+        <actionGroup ref="AdminNavigateToImportPageActionGroup" stepKey="navigateToImportPage"/>
+        <actionGroup ref="AdminFillImportFormActionGroup" stepKey="fillImportForm">
+            <argument name="importFile" value="{{ImportProduct_Bundle.fileName}}"/>
+            <argument name="imagesFileDirectory" value="{{ImportProduct_Bundle.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickCheckDataImportActionGroup" stepKey="clickCheckData"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="{{ImportCommonMessages.validFile}}" stepKey="seeCheckDataResultMessage"/>
+        <dontSeeElementInDOM selector="{{AdminImportValidationMessagesSection.importErrorList}}" stepKey="dontSeeErrorMessage"/>
+        <actionGroup ref="AdminClickImportActionGroup" stepKey="clickImport"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="{{ImportProduct_Bundle.importSummary}}" stepKey="seeNoticeMessage"/>
+        <see selector="{{AdminImportValidationMessagesSection.messageByType('success')}}" userInput="{{ImportCommonMessages.success}}" stepKey="seeImportMessage"/>
+        <dontSeeElementInDOM selector="{{AdminImportValidationMessagesSection.importErrorList}}" stepKey="dontSeeErrorMessage2"/>
+
+        <!-- Reindex -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <!-- Admin: Verify Data on Import History Page -->
+        <actionGroup ref="AdminNavigateToImportHistoryPageActionGroup" stepKey="navigateToImportHistoryPage"/>
+        <actionGroup ref="AdminGridSortColumnDescendingActionGroup" stepKey="sortColumnByIdDescending">
+            <argument name="columnLabel" value="history_id"/>
+        </actionGroup>
+        <see userInput="{{ImportProduct_Bundle.fileName}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeImportedFile"/>
+        <see userInput="{{ImportProduct_Bundle.importSummary}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeSummary"/>
+
+        <!-- Admin: Verify Simple Product 1 on Edit Product Page -->
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToSimpleProduct1EditPage">
+            <argument name="product" value="ImportProductSimple1_Bundle"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInfoOnEditPageActionGroup" stepKey="assertSimpleProduct1OnEditPage">
+            <argument name="productStatus" value="{{ImportProductSimple1_Bundle.status}}"/>
+            <argument name="productAttributeSet" value="{{ImportProductSimple1_Bundle.attributeSetText}}"/>
+            <argument name="productName" value="{{ImportProductSimple1_Bundle.name}}"/>
+            <argument name="productSku" value="{{ImportProductSimple1_Bundle.sku}}"/>
+            <argument name="productPrice" value="{{ImportProductSimple1_Bundle.price}}"/>
+            <argument name="productQuantity" value="{{ImportProductSimple1_Bundle.quantity}}"/>
+            <argument name="productWeight" value="{{ImportProductSimple1_Bundle.weight}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Bundle.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSimpleProduct1ImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple1_Bundle.baseImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple1_Bundle.baseImageName, 'image')}}" stepKey="seeBaseImageRoleSimple1"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSimpleProduct1SmallImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple1_Bundle.smallImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple1_Bundle.smallImageName, 'small_image')}}" stepKey="seeSmallImageRoleSimple1"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSimpleProduct1ThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple1_Bundle.thumbnailImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple1_Bundle.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRoleSimple1"/>
+
+        <!-- Admin: Verify Simple Product 2 on Edit Product Page -->
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToSimpleProduct2EditPage">
+            <argument name="product" value="ImportProductSimple2_Bundle"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInfoOnEditPageActionGroup" stepKey="assertSimpleProduct2OnEditPage">
+            <argument name="productStatus" value="{{ImportProductSimple2_Bundle.status}}"/>
+            <argument name="productAttributeSet" value="{{ImportProductSimple2_Bundle.attributeSetText}}"/>
+            <argument name="productName" value="{{ImportProductSimple2_Bundle.name}}"/>
+            <argument name="productSku" value="{{ImportProductSimple2_Bundle.sku}}"/>
+            <argument name="productPrice" value="{{ImportProductSimple2_Bundle.price}}"/>
+            <argument name="productQuantity" value="{{ImportProductSimple2_Bundle.quantity}}"/>
+            <argument name="productWeight" value="{{ImportProductSimple2_Bundle.weight}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Bundle.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSimpleProduct2ImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple2_Bundle.baseImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple2_Bundle.baseImageName, 'image')}}" stepKey="seeBaseImageRoleSimple2"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSimpleProduct2SmallImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple2_Bundle.smallImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple2_Bundle.smallImageName, 'small_image')}}" stepKey="seeSmallImageRoleSimple2"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSimpleProduct2ThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple2_Bundle.thumbnailImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple2_Bundle.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRoleSimple2"/>
+
+        <!-- Admin: Verify Simple Product 3 on Edit Product Page -->
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToSimpleProduct3EditPage">
+            <argument name="product" value="ImportProductSimple3_Bundle"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInfoOnEditPageActionGroup" stepKey="assertSimpleProduct3OnEditPage">
+            <argument name="productStatus" value="{{ImportProductSimple3_Bundle.status}}"/>
+            <argument name="productAttributeSet" value="{{ImportProductSimple3_Bundle.attributeSetText}}"/>
+            <argument name="productName" value="{{ImportProductSimple3_Bundle.name}}"/>
+            <argument name="productSku" value="{{ImportProductSimple3_Bundle.sku}}"/>
+            <argument name="productPrice" value="{{ImportProductSimple3_Bundle.price}}"/>
+            <argument name="productQuantity" value="{{ImportProductSimple3_Bundle.quantity}}"/>
+            <argument name="productWeight" value="{{ImportProductSimple3_Bundle.weight}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Bundle.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSimpleProduct3ImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple3_Bundle.baseImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple3_Bundle.baseImageName, 'image')}}" stepKey="seeBaseImageRoleSimple3"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSimpleProduct3SmallImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple3_Bundle.smallImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple3_Bundle.smallImageName, 'small_image')}}" stepKey="seeSmallImageRoleSimple3"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSimpleProduct3ThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple3_Bundle.thumbnailImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple3_Bundle.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRoleSimple3"/>
+
+        <!-- Admin: Verify Bundle Product Common Data on Edit Product Page -->
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToBundleProductEditPage">
+            <argument name="product" value="ImportProduct_Bundle"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertBundleProductGeneralInfoOnEditPageActionGroup" stepKey="assertBundleProductOnEditPage">
+            <argument name="productStatus" value="{{ImportProduct_Bundle.status}}"/>
+            <argument name="productAttributeSet" value="{{ImportProduct_Bundle.attributeSetText}}"/>
+            <argument name="productName" value="{{ImportProduct_Bundle.name}}"/>
+            <argument name="productSku" value="{{ImportProduct_Bundle.sku}}"/>
+            <argument name="dynamicSku" value="{{ImportProduct_Bundle.dynamicSkuCheckedValue}}"/>
+            <argument name="productPrice" value="{{ImportProduct_Bundle.price}}"/>
+            <argument name="dynamicPrice" value="{{ImportProduct_Bundle.dynamicPriceCheckedValue}}"/>
+            <argument name="productQuantity" value="{{ImportProduct_Bundle.quantity}}"/>
+            <argument name="productWeight" value="{{ImportProduct_Bundle.weight}}"/>
+            <argument name="dynamicWeight" value="{{ImportProduct_Bundle.dynamicWeightCheckedValue}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Bundle.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertBundleProductBaseImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Bundle.baseImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Bundle.baseImageName, 'image')}}" stepKey="seeBaseImageRoleBundle"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertBundleProductSmallImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Bundle.smallImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Bundle.smallImageName, 'small_image')}}" stepKey="seeSmallImageRoleBundle"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertBundleProductThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Bundle.thumbnailImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Bundle.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRoleBundle"/>
+
+        <!-- Admin: Verify Bundle Product Information on Edit Product Page -->
+        <seeOptionIsSelected userInput="{{ImportProduct_Bundle.bundleOptionShipmentType}}" selector="{{AdminProductFormBundleSection.shipmentType}}" stepKey="seeShipBundleItemsTogether"/>
+        <seeNumberOfElements userInput="{{ImportProduct_Bundle.totalBundleOptions}}" selector="{{AdminProductFormBundleSection.allBundleOptions}}" stepKey="see2BundleOptionsAdmin"/>
+        <actionGroup ref="AdminVerifyBundleProductOptionActionGroup" stepKey="verifyBundleProductOption1">
+            <argument name="optionTitle" value="{{ImportProduct_Bundle.bundleOption1Title}}"/>
+            <argument name="inputType" value="{{ImportProduct_Bundle.bundleOption1InputType}}"/>
+            <argument name="required" value="{{ImportProduct_Bundle.bundleOption1Required}}"/>
+            <argument name="numberOfProducts" value="{{ImportProduct_Bundle.bundleOption1NumberOfProducts}}"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminVerifyProductInBundleProductOptionActionGroup" stepKey="verifyBundleProductOption1Product1">
+            <argument name="isDefault" value="{{ImportProductSimple1_Bundle.bundleIsDefault}}"/>
+            <argument name="name" value="{{ImportProductSimple1_Bundle.name}}"/>
+            <argument name="sku" value="{{ImportProductSimple1_Bundle.sku}}"/>
+            <argument name="defaultQuantity" value="{{ImportProductSimple1_Bundle.bundleDefaultQuantity}}"/>
+            <argument name="userDefined" value="{{ImportProductSimple1_Bundle.bundleUserDefined}}"/>
+            <argument name="optionIndex" value="1"/>
+            <argument name="productIndex" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminVerifyProductInBundleProductOptionActionGroup" stepKey="verifyBundleProductOption1Product2">
+            <argument name="isDefault" value="{{ImportProductSimple2_Bundle.bundleIsDefault}}"/>
+            <argument name="name" value="{{ImportProductSimple2_Bundle.name}}"/>
+            <argument name="sku" value="{{ImportProductSimple2_Bundle.sku}}"/>
+            <argument name="defaultQuantity" value="{{ImportProductSimple2_Bundle.bundleDefaultQuantity}}"/>
+            <argument name="userDefined" value="{{ImportProductSimple2_Bundle.bundleUserDefined}}"/>
+            <argument name="optionIndex" value="1"/>
+            <argument name="productIndex" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminVerifyBundleProductOptionActionGroup" stepKey="verifyBundleProductOption2">
+            <argument name="optionTitle" value="{{ImportProduct_Bundle.bundleOption2Title}}"/>
+            <argument name="inputType" value="{{ImportProduct_Bundle.bundleOption2InputType}}"/>
+            <argument name="required" value="{{ImportProduct_Bundle.bundleOption2Required}}"/>
+            <argument name="numberOfProducts" value="{{ImportProduct_Bundle.bundleOption2NumberOfProducts}}"/>
+            <argument name="index" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminVerifyProductInBundleProductOptionActionGroup" stepKey="verifyBundleProductOption2Product1">
+            <argument name="isDefault" value="{{ImportProductSimple3_Bundle.bundleIsDefault}}"/>
+            <argument name="name" value="{{ImportProductSimple3_Bundle.name}}"/>
+            <argument name="sku" value="{{ImportProductSimple3_Bundle.sku}}"/>
+            <argument name="defaultQuantity" value="{{ImportProductSimple3_Bundle.bundleDefaultQuantity}}"/>
+            <argument name="userDefined" value="{{ImportProductSimple3_Bundle.bundleUserDefined}}"/>
+            <argument name="optionIndex" value="2"/>
+            <argument name="productIndex" value="1"/>
+        </actionGroup>
+
+        <!-- Storefront: Verify Bundle Product In Category -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginStorefront">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToCategoryPage">
+            <argument name="categoryUrl" value="{{ImportCategory_Bundle.name}}"/>
+        </actionGroup>
+        <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productName}}" userInput="4" stepKey="see4Products"/>
+        <see userInput="{{ImportProductSimple1_Bundle.name}}" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="seeSimpleProduct1"/>
+        <see userInput="{{ImportProductSimple2_Bundle.name}}" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="seeSimpleProduct2"/>
+        <see userInput="{{ImportProductSimple3_Bundle.name}}" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="seeSimpleProduct3"/>
+        <see userInput="{{ImportProduct_Bundle.name}}" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="seeBundleProduct"/>
+
+        <!-- Storefront: Verify Bundle Product Info & Images -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStorefrontPage">
+            <argument name="productUrl" value="{{ImportProduct_Bundle.urlKey}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
+            <argument name="value" value="{{ImportProduct_Bundle.name}}"/>
+        </actionGroup>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Bundle.sku}}" stepKey="seeSku"/>
+        <see userInput="From $20.00 To $170.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seePrice"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple1_Bundle.baseImageName)}}" stepKey="seeProduct1BaseImage"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple2_Bundle.baseImageName)}}" stepKey="seeProduct2BaseImage"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple3_Bundle.baseImageName)}}" stepKey="seeProduct3BaseImage"/>
+
+        <!-- Storefront: Verify Default Customization Summary -->
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeAndAddToCartButton"/>
+        <see userInput="$80.00" selector="{{StorefrontBundledSection.bundleProductsPrice}}" stepKey="seeCustomizationPrice"/>
+        <see userInput="{{ImportProduct_Bundle.bundleOption1Title}}: {{ImportProductSimple2_Bundle.bundleDefaultQuantity}} x {{ImportProductSimple2_Bundle.name}}" selector="{{StorefrontBundledSection.bundleSummary}}" stepKey="seeCustomizationSummary"/>
+
+        <!-- Storefront: Verify Default Bundle Option 1 -->
+        <seeNumberOfElements userInput="2" selector="{{StorefrontBundledSection.allBundleOptions}}" stepKey="see2TotalBundleOptions"/>
+        <see userInput="{{ImportProduct_Bundle.bundleOption1Title}}" selector="{{StorefrontBundledSection.nthOptionDiv('1')}}" stepKey="seeOption1Title"/>
+        <seeElement selector="{{StorefrontBundledSection.bundleOptionRequired('1')}}" stepKey="seeOption1Required"/>
+        <seeNumberOfElements userInput="2" selector="{{StorefrontBundledSection.allBundleOptionProducts('1')}}" stepKey="see2TotalProductsInBundleOption1"/>
+        <dontSeeCheckboxIsChecked selector="{{StorefrontBundledSection.bundleOptionInput('1', '1')}}" stepKey="dontSeeOption1Product1Checked"/>
+        <see userInput="{{ImportProductSimple1_Bundle.name}}" selector="{{StorefrontBundledSection.bundleOptionProductName('1', '1')}}" stepKey="seeOption1Product1Name"/>
+        <see userInput="+ ${{ImportProductSimple1_Bundle.price}}" selector="{{StorefrontBundledSection.bundleOptionProductPrice('1', '1')}}" stepKey="seeOption1Product1Price"/>
+        <seeCheckboxIsChecked selector="{{StorefrontBundledSection.bundleOptionInput('1', '2')}}" stepKey="seeOption1Product2Checked"/>
+        <see userInput="{{ImportProductSimple2_Bundle.name}}" selector="{{StorefrontBundledSection.bundleOptionProductName('1', '2')}}" stepKey="seeOption1Product2Name"/>
+        <see userInput="+ ${{ImportProductSimple2_Bundle.price}}" selector="{{StorefrontBundledSection.bundleOptionProductPrice('1', '2')}}" stepKey="seeOption1Product2Price"/>
+        <seeInField userInput="{{ImportProductSimple2_Bundle.bundleDefaultQuantity}}" selector="{{StorefrontBundledSection.bundleOptionQuantity('1')}}" stepKey="seeOption1DefaultQuantity"/>
+        <seeElement selector="{{StorefrontBundledSection.bundleOptionQuantityDisabled('1')}}" stepKey="seeOption1QuantityDisabled"/>
+
+        <!-- Storefront: Verify Default Bundle Option 2 -->
+        <see userInput="{{ImportProduct_Bundle.bundleOption2Title}}" selector="{{StorefrontBundledSection.nthOptionDiv('2')}}" stepKey="seeOption2Title"/>
+        <dontSeeElement selector="{{StorefrontBundledSection.bundleOptionRequired('2')}}" stepKey="seeOption2NotRequired"/>
+        <seeNumberOfElements userInput="2" selector="{{StorefrontBundledSection.allBundleOptionProducts('1')}}" stepKey="see1TotalProductsInBundleOption2"/>
+        <dontSeeCheckboxIsChecked selector="{{StorefrontBundledSection.bundleOptionInput('2', '1')}}" stepKey="dontSeeOption2Product1Checked"/>
+        <see userInput="{{ImportProductSimple3_Bundle.bundleDefaultQuantity}} x {{ImportProductSimple3_Bundle.name}}" selector="{{StorefrontBundledSection.bundleOptionProductName('2', '1')}}" stepKey="seeOption2Product1Name"/>
+        <see userInput="+ ${{ImportProductSimple3_Bundle.price}}" selector="{{StorefrontBundledSection.bundleOptionProductPrice('2', '1')}}" stepKey="seeOption2Product1Price"/>
+        <dontSeeElement selector="{{StorefrontBundledSection.bundleOptionQuantity('2')}}" stepKey="dontSeeOption2QuantityInput"/>
+
+        <!-- Storefront: Select Product 1 in Option 1 & Select Option 2 -->
+        <checkOption selector="{{StorefrontBundledSection.bundleOptionInput('1', '1')}}" stepKey="checkProduct1InOption1"/>
+        <seeInField userInput="{{ImportProductSimple1_Bundle.bundleDefaultQuantity}}" selector="{{StorefrontBundledSection.bundleOptionQuantity('1')}}" stepKey="seeOption1UpdatedQuantity"/>
+        <dontSeeElement selector="{{StorefrontBundledSection.bundleOptionQuantityDisabled('1')}}" stepKey="seeOption1QuantityEnabled"/>
+        <checkOption selector="{{StorefrontBundledSection.bundleOptionInput('2', '1')}}" stepKey="checkOption2"/>
+
+        <!-- Storefront: Verify Updated Customization Summary -->
+        <see userInput="$110.00" selector="{{StorefrontBundledSection.bundleProductsPrice}}" stepKey="seeCustomizationPrice2"/>
+        <see userInput="{{ImportProduct_Bundle.bundleOption1Title}}: {{ImportProductSimple1_Bundle.bundleDefaultQuantity}} x {{ImportProductSimple1_Bundle.name}}" selector="{{StorefrontBundledSection.bundleSummary}}" stepKey="seeUpdatedCustomizationSummary"/>
+        <see userInput="{{ImportProduct_Bundle.bundleOption2Title}}: {{ImportProductSimple3_Bundle.bundleDefaultQuantity}} x {{ImportProductSimple3_Bundle.name}}" selector="{{StorefrontBundledSection.bundleSummary}}" stepKey="seeUpdatedCustomizationSummary2"/>
+
+        <!-- Purchase Bundle Product -->
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProductToCart"/>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="navigateToCheckoutPage"/>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextOnShippingStep"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlacePurchaseOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+
+        <!-- Confirm Purchased Bundle Product -->
+        <actionGroup ref="StorefrontOpenOrderFromSuccessPageActionGroup" stepKey="openOrderFromSuccessPage">
+            <argument name="orderNumber" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontVerifyCustomerOrderProductRowDataActionGroup" stepKey="verifyProductRow1InOrder">
+            <argument name="name" value="{{ImportProduct_Bundle.name}}"/>
+            <argument name="sku" value="{{ImportProduct_Bundle.sku}}-import-product-simple1- bundle-{{ImportProductSimple3_Bundle.sku}}"/>
+            <argument name="price" value="$110.00"/>
+            <argument name="quantity" value="1"/>
+            <argument name="subtotal" value="$110.00"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <seeNumberOfElements userInput="2" selector="{{StorefrontCustomerOrderViewSection.allProductOptionLabels('1')}}" stepKey="see2ProductOptions"/>
+        <seeNumberOfElements userInput="2" selector="{{StorefrontCustomerOrderViewSection.allProductOptionProducts('1')}}" stepKey="see2ProductOptionProducts"/>
+        <actionGroup ref="StorefrontVerifyBundleProductOptionOnOrderActionGroup" stepKey="verifyOrderedOption1">
+            <argument name="optionTitle" value="{{ImportProduct_Bundle.bundleOption1Title}}"/>
+            <argument name="optionProductName" value="{{ImportProductSimple1_Bundle.bundleDefaultQuantity}} x {{ImportProductSimple1_Bundle.name}} ${{ImportProductSimple1_Bundle.price}}"/>
+            <argument name="optionProductSku" value="{{ImportProductSimple1_Bundle.sku}}"/>
+            <argument name="optionProductQuantityDescription" value="Ordered {{ImportProductSimple1_Bundle.bundleDefaultQuantity}}"/>
+            <argument name="productIndex" value="1"/>
+            <argument name="optionIndex" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontVerifyBundleProductOptionOnOrderActionGroup" stepKey="verifyOrderedOption2">
+            <argument name="optionTitle" value="{{ImportProduct_Bundle.bundleOption2Title}}"/>
+            <argument name="optionProductName" value="{{ImportProductSimple3_Bundle.bundleDefaultQuantity}} x {{ImportProductSimple3_Bundle.name}} ${{ImportProductSimple3_Bundle.price}}"/>
+            <argument name="optionProductSku" value="{{ImportProductSimple3_Bundle.sku}}"/>
+            <argument name="optionProductQuantityDescription" value="Ordered {{ImportProductSimple3_Bundle.bundleDefaultQuantity}}"/>
+            <argument name="productIndex" value="1"/>
+            <argument name="optionIndex" value="2"/>
+        </actionGroup>
+    </test>
+</tests>

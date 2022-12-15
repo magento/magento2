@@ -8,8 +8,9 @@ define([
     'underscore',
     'ko',
     'uiComponent',
-    'Magento_Checkout/js/model/step-navigator'
-], function ($, _, ko, Component, stepNavigator) {
+    'Magento_Checkout/js/model/step-navigator',
+    'Magento_Checkout/js/view/billing-address'
+], function ($, _, ko, Component, stepNavigator, billingAddress) {
     'use strict';
 
     var steps = stepNavigator.steps;
@@ -52,6 +53,9 @@ define([
          * @param {Object} step
          */
         navigateTo: function (step) {
+            if (step.code === 'shipping') {
+                billingAddress().needCancelBillingAddressChanges();
+            }
             stepNavigator.navigateTo(step.code);
         },
 

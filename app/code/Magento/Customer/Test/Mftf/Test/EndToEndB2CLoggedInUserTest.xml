@@ -17,14 +17,15 @@
             <description value="New user signup and browses catalog, searches for product, adds product to cart, adds product to wishlist, compares products, uses coupon code and checks out."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-25681"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
         </annotations>
         <before>
             <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
+            <actionGroup ref="AdminLoginActionGroup" after="resetCookieForCart" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <comment userInput="No need this since it done in before section" stepKey="loginAsAdmin"/>
             <actionGroup ref="DeleteCustomerFromAdminActionGroup" stepKey="deleteCustomerFromAdmin"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>

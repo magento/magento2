@@ -7,14 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
+use Magento\CatalogGraphQl\Model\Category\Filter\SearchCriteria;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\GraphQl\Model\Query\ContextInterface;
+use Magento\CatalogGraphQl\Model\Category\CategoryFilter;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree;
-use Magento\CatalogGraphQl\Model\Category\CategoryFilter;
 
 /**
  * Category List resolver, used for GraphQL category data request processing.
@@ -37,18 +42,34 @@ class CategoryList implements ResolverInterface
     private $extractDataFromCategoryTree;
 
     /**
+     * @var ArgumentsProcessorInterface
+     */
+    private $argsSelection;
+
+    /**
+     * @var SearchCriteria
+     */
+    private $searchCriteria;
+
+    /**
      * @param CategoryTree $categoryTree
      * @param ExtractDataFromCategoryTree $extractDataFromCategoryTree
      * @param CategoryFilter $categoryFilter
+     * @param ArgumentsProcessorInterface $argsSelection
+     * @param SearchCriteria $searchCriteria
      */
     public function __construct(
         CategoryTree $categoryTree,
         ExtractDataFromCategoryTree $extractDataFromCategoryTree,
-        CategoryFilter $categoryFilter
+        CategoryFilter $categoryFilter,
+        ArgumentsProcessorInterface $argsSelection,
+        SearchCriteria $searchCriteria
     ) {
         $this->categoryTree = $categoryTree;
         $this->extractDataFromCategoryTree = $extractDataFromCategoryTree;
         $this->categoryFilter = $categoryFilter;
+        $this->argsSelection = $argsSelection;
+        $this->searchCriteria = $searchCriteria;
     }
 
     /**
@@ -65,13 +86,14 @@ class CategoryList implements ResolverInterface
             $args['filters']['ids'] = ['eq' => $store->getRootCategoryId()];
         }
         try {
-            $filterResults = $this->categoryFilter->getResult($args, $store, [], $context);
+            $processedArgs = $this->argsSelection->process($info->fieldName, $args);
+            $filterResults = $this->categoryFilter->getResult($processedArgs, $store, [], $context);
+
             $rootCategoryIds = $filterResults['category_ids'];
         } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
-
-        return $this->fetchCategories($rootCategoryIds, $info);
+        return $this->fetchCategories($rootCategoryIds, $info, $processedArgs, $store, [], $context);
     }
 
     /**
@@ -79,16 +101,32 @@ class CategoryList implements ResolverInterface
      *
      * @param array $categoryIds
      * @param ResolveInfo $info
+     * @param array $criteria
+     * @param StoreInterface $store
+     * @param array $attributeNames
+     * @param ContextInterface $context
      * @return array
+     * @throws LocalizedException
      */
-    private function fetchCategories(array $categoryIds, ResolveInfo $info)
-    {
+    private function fetchCategories(
+        array $categoryIds,
+        ResolveInfo $info,
+        array $criteria,
+        StoreInterface $store,
+        array $attributeNames,
+        ContextInterface $context
+    ) : array {
         $fetchedCategories = [];
         foreach ($categoryIds as $categoryId) {
-            $categoryTree = $this->categoryTree->getTree($info, $categoryId);
-            if (empty($categoryTree)) {
-                continue;
-            }
+            $searchCriteria = $this->searchCriteria->buildCriteria($criteria, $store);
+            $categoryTree = $this->categoryTree->getFilteredTree(
+                $info,
+                $categoryId,
+                $searchCriteria,
+                $store,
+                $attributeNames,
+                $context
+            );
             $fetchedCategories[] = current($this->extractDataFromCategoryTree->execute($categoryTree));
         }
 

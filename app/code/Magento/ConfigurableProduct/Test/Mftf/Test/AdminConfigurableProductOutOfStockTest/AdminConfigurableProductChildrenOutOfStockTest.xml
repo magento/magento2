@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-181"/>
             <group value="ConfigurableProduct"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
@@ -88,9 +89,12 @@
         </after>
 
         <!-- Check to make sure that the configurable product shows up as in stock -->
-        <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage"/>
-        <waitForPageLoad stepKey="waitForStoreFrontLoad"/>
-        <see stepKey="checkForOutOfStock" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToConfigProductPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStoreFrontLoad"/>
+        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="checkForOutOfStock">
+            <argument name="productUrlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
 
         <!-- Find the first simple product that we just created using the product grid and go to its page-->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
@@ -102,13 +106,18 @@
         <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage"/>
 
         <!-- Edit the quantity of the simple first product as 0 -->
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="0" stepKey="fillProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQuantity">
+            <argument name="productQty" value="0"/>
+        </actionGroup>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveProduct"/>
 
         <!-- Check to make sure that the configurable product shows up as in stock -->
-        <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage2"/>
-        <waitForPageLoad stepKey="waitForStoreFrontLoad2"/>
-        <see stepKey="checkForOutOfStock2" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToConfigProductPage2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStoreFrontLoad2"/>
+        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="checkForOutOfStock2">
+            <argument name="productUrlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
 
         <!-- Find the second simple product that we just created using the product grid and go to its page-->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage2"/>
@@ -120,12 +129,18 @@
         <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage2"/>
 
         <!-- Edit the quantity of the second simple product as 0 -->
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="0" stepKey="fillProductQuantity2"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQuantity2">
+            <argument name="productQty" value="0"/>
+        </actionGroup>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveProduct2"/>
 
         <!-- Check to make sure that the configurable product shows up as out of stock -->
-        <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage3"/>
-        <waitForPageLoad stepKey="waitForStoreFrontLoad3"/>
-        <see stepKey="checkForOutOfStock3" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="OUT OF STOCK"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToConfigProductPage3"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStoreFrontLoad3"/>
+        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="checkForOutOfStock3">
+            <argument name="productUrlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
+            <argument name="stockStatus" value="OUT OF STOCK"/>
+        </actionGroup>
     </test>
 </tests>

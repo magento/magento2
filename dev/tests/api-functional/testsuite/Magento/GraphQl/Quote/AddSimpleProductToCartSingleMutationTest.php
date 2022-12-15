@@ -7,6 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -31,6 +41,16 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     private $getCartItemOptionsFromUID;
 
     /**
+     * @var QuoteIdToMaskedQuoteIdInterface
+     */
+    private $quoteIdToMaskedQuoteIdInterface;
+
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -41,6 +61,8 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
         $this->getCustomOptionsWithIDV2ForQueryBySku = $objectManager->get(
             GetCustomOptionsWithUIDForQueryBySku::class
         );
+        $this->quoteIdToMaskedQuoteIdInterface = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->fixtures = $objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -85,6 +107,27 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
             $customizableOptionOutputValues = [];
             foreach ($customizableOptionOutput['values'] as $customizableOptionOutputValue) {
                 $customizableOptionOutputValues[] =  $customizableOptionOutputValue['value'];
+
+                $decodedOptionValue = base64_decode($customizableOptionOutputValue['customizable_option_value_uid']);
+                $decodedArray = explode('/', $decodedOptionValue);
+                if (count($decodedArray) === 2) {
+                    self::assertEquals(
+                        base64_encode('custom-option/' . $customizableOptionOutput['id']),
+                        $customizableOptionOutputValue['customizable_option_value_uid']
+                    );
+                } elseif (count($decodedArray) === 3) {
+                    self::assertEquals(
+                        base64_encode(
+                            'custom-option/'
+                            . $customizableOptionOutput['id']
+                            . '/'
+                            . $customizableOptionOutputValue['value']
+                        ),
+                        $customizableOptionOutputValue['customizable_option_value_uid']
+                    );
+                } else {
+                    self::fail('customizable_option_value_uid ');
+                }
             }
             if (count($customizableOptionOutputValues) === 1) {
                 $customizableOptionOutputValues = $customizableOptionOutputValues[0];
@@ -93,6 +136,11 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
             self::assertEquals(
                 $decodedItemOptions[$customizableOptionOutput['id']],
                 $customizableOptionOutputValues
+            );
+
+            self::assertEquals(
+                base64_encode((string) 'custom-option/' . $customizableOptionOutput['id']),
+                $customizableOptionOutput['customizable_option_uid']
             );
         }
     }
@@ -174,6 +222,189 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     }
 
     /**
+     * @dataProvider addProductNotAssignedToWebsiteDataProvider
+     * @param string $cart
+     * @param string $product
+     * @param array $headerMap
+     */
+    #[
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),
+        DataFixture(ProductFixture::class, ['website_ids' => [1]], as: 'product1'),
+        DataFixture(ProductFixture::class, ['website_ids' => ['$website2.id$']], as: 'product2'),
+        DataFixture(GuestCartFixture::class, as: 'cart1'),
+        DataFixture(GuestCartFixture::class, as: 'cart2', scope: 'store2'),
+    ]
+    public function testAddProductNotAssignedToWebsite(string $cart, string $product, array $headerMap)
+    {
+        $sku = $this->fixtures->get($product)->getSku();
+        $cartId = (int) $this->fixtures->get($cart)->getId();
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute($cartId);
+        $query = $this->getAddToCartMutation($maskedQuoteId, 1, $sku);
+        $headerMap = array_map(fn ($store) => $this->fixtures->get($store)?->getCode() ?? $store, $headerMap);
+        $response = $this->graphQlMutation($query, [], '', $headerMap);
+        self::assertEmpty($response['addProductsToCart']['cart']['items']);
+        self::assertArrayHasKey('user_errors', $response['addProductsToCart']);
+        self::assertCount(1, $response['addProductsToCart']['user_errors']);
+        self::assertStringContainsString($sku, $response['addProductsToCart']['user_errors'][0]['message']);
+        self::assertEquals('PRODUCT_NOT_FOUND', $response['addProductsToCart']['user_errors'][0]['code']);
+    }
+
+    #[
+        DataFixture(ProductFixture::class, as: 'product1'),
+        DataFixture(ProductFixture::class, as: 'product2'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+    ]
+    public function testAddMultipleProductsToEmptyCart(): void
+    {
+        $product1 = $this->fixtures->get('product1');
+        $product2 = $this->fixtures->get('product2');
+        $cart = $this->fixtures->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
+        $query = $this->getAddMultipleProductsToCartAndReturnCartTotalsMutation(
+            $maskedQuoteId,
+            [
+                [
+                    'sku' => $product1->getSku(),
+                    'quantity' => 2
+                ],
+                [
+                    'sku' => $product2->getSku(),
+                    'quantity' => 3
+                ]
+            ]
+        );
+        $response = $this->graphQlMutation($query);
+        $result = $response['addProductsToCart'];
+        self::assertEmpty($result['user_errors']);
+        self::assertCount(2, $result['cart']['items']);
+
+        $cartItem = $result['cart']['items'][0];
+        self::assertEquals($product1->getSku(), $cartItem['product']['sku']);
+        self::assertEquals(2, $cartItem['quantity']);
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(20, $cartItem['prices']['row_total']['value']);
+
+        $cartItem = $result['cart']['items'][1];
+        self::assertEquals($product2->getSku(), $cartItem['product']['sku']);
+        self::assertEquals(3, $cartItem['quantity']);
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(30, $cartItem['prices']['row_total']['value']);
+
+        $cartTotals = $result['cart']['prices'];
+        self::assertEquals(50, $cartTotals['grand_total']['value']);
+    }
+
+    #[
+        DataFixture(ProductFixture::class, as: 'p1'),
+        DataFixture(ProductFixture::class, as: 'p2'),
+        DataFixture(ProductFixture::class, as: 'p3'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$', 'qty' => 1]),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p2.id$', 'qty' => 1]),
+    ]
+    public function testAddMultipleProductsToNotEmptyCart(): void
+    {
+        $product1 = $this->fixtures->get('p1');
+        $product2 = $this->fixtures->get('p2');
+        $product3 = $this->fixtures->get('p3');
+        $cart = $this->fixtures->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
+        $query = $this->getAddMultipleProductsToCartAndReturnCartTotalsMutation(
+            $maskedQuoteId,
+            [
+                [
+                    'sku' => $product1->getSku(),
+                    'quantity' => 1
+                ],
+                [
+                    'sku' => $product3->getSku(),
+                    'quantity' => 1
+                ]
+            ]
+        );
+        $response = $this->graphQlMutation($query);
+        $result = $response['addProductsToCart'];
+        self::assertEmpty($result['user_errors']);
+        self::assertCount(3, $result['cart']['items']);
+
+        $cartItem = $result['cart']['items'][0];
+        self::assertEquals($product1->getSku(), $cartItem['product']['sku']);
+        self::assertEquals(2, $cartItem['quantity']);
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(20, $cartItem['prices']['row_total']['value']);
+
+        $cartItem = $result['cart']['items'][1];
+        self::assertEquals($product2->getSku(), $cartItem['product']['sku']);
+        self::assertEquals(1, $cartItem['quantity']);
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(10, $cartItem['prices']['row_total']['value']);
+
+        $cartItem = $result['cart']['items'][2];
+        self::assertEquals($product3->getSku(), $cartItem['product']['sku']);
+        self::assertEquals(1, $cartItem['quantity']);
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(10, $cartItem['prices']['row_total']['value']);
+
+        $cartTotals = $result['cart']['prices'];
+        self::assertEquals(40, $cartTotals['grand_total']['value']);
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['stock_item' => ['qty' => 1]], 'product1'),
+        DataFixture(ProductFixture::class, as: 'product2'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+    ]
+    public function testAddMultipleProductsWithInsufficientStockToEmptyCart(): void
+    {
+        $product1 = $this->fixtures->get('product1');
+        $product2 = $this->fixtures->get('product2');
+        $cart = $this->fixtures->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
+        $query = $this->getAddMultipleProductsToCartAndReturnCartTotalsMutation(
+            $maskedQuoteId,
+            [
+                [
+                    'sku' => $product1->getSku(),
+                    'quantity' => 2
+                ],
+                [
+                    'sku' => $product2->getSku(),
+                    'quantity' => 3
+                ]
+            ]
+        );
+        $response = $this->graphQlMutation($query);
+        $result = $response['addProductsToCart'];
+        self::assertCount(1, $result['user_errors']);
+        self::assertEquals('INSUFFICIENT_STOCK', $result['user_errors'][0]['code']);
+
+        self::assertCount(1, $result['cart']['items']);
+
+        $cartItem = $result['cart']['items'][0];
+        self::assertEquals($product2->getSku(), $cartItem['product']['sku']);
+        self::assertEquals(3, $cartItem['quantity']);
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(30, $cartItem['prices']['row_total']['value']);
+
+        $cartTotals = $result['cart']['prices'];
+        self::assertEquals(30, $cartTotals['grand_total']['value']);
+    }
+
+    /**
+     * @return array
+     */
+    public function addProductNotAssignedToWebsiteDataProvider(): array
+    {
+        return [
+            ['cart1', 'product2', []],
+            ['cart1', 'product2', ['Store' => 'default']],
+            ['cart2', 'product1', ['Store' => 'store2']],
+        ];
+    }
+
+    /**
      * @return array
      */
     public function wrongSkuDataProvider(): array
@@ -220,7 +451,7 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
         string $maskedQuoteId,
         int $qty,
         string $sku,
-        string $customizableOptions
+        string $customizableOptions = ''
     ): string {
         return <<<MUTATION
 mutation {
@@ -242,14 +473,73 @@ mutation {
                     customizable_options {
                         label
                         id
+                        customizable_option_uid
                           values {
                             value
+                            customizable_option_value_uid
+                            id
                         }
                     }
                 }
             }
         },
         user_errors {
+            code
+            message
+        }
+    }
+}
+MUTATION;
+    }
+
+    /**
+     * Returns GraphQl mutation for addProductsToCart with cart totals
+     *
+     * @param string $maskedQuoteId
+     * @param array $cartItems
+     * @return string
+     */
+    private function getAddMultipleProductsToCartAndReturnCartTotalsMutation(
+        string $maskedQuoteId,
+        array $cartItems
+    ): string {
+        $cartItemsQuery = preg_replace(
+            '/"([^"]+)"\s*:\s*/',
+            '$1:',
+            json_encode($cartItems)
+        );
+        return  <<<MUTATION
+mutation {
+    addProductsToCart(
+        cartId: "{$maskedQuoteId}",
+        cartItems: $cartItemsQuery
+    ) {
+        cart {
+            items {
+              product {
+                sku
+              }
+              quantity
+              prices {
+                price {
+                  value
+                  currency
+                }
+                row_total {
+                  value
+                  currency
+                }
+              }
+            }
+            prices {
+              grand_total {
+                value
+                currency
+              }
+            }
+        },
+        user_errors {
+            code
             message
         }
     }

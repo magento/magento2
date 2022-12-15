@@ -34,7 +34,7 @@ class AfterAddressSaveObserver implements ObserverInterface
     /**
      * VAT ID validation processed flag code
      */
-    const VIV_PROCESSED_FLAG = 'viv_after_address_save_processed';
+    public const VIV_PROCESSED_FLAG = 'viv_after_address_save_processed';
 
     /**
      * @var HelperAddress
@@ -216,8 +216,8 @@ class AfterAddressSaveObserver implements ObserverInterface
     protected function _isDefaultBilling($address)
     {
         return $address->getId() && $address->getId() == $address->getCustomer()->getDefaultBilling()
-        || $address->getIsPrimaryBilling()
-        || $address->getIsDefaultBilling();
+            || $address->getIsPrimaryBilling()
+            || $address->getIsDefaultBilling();
     }
 
     /**
@@ -229,8 +229,8 @@ class AfterAddressSaveObserver implements ObserverInterface
     protected function _isDefaultShipping($address)
     {
         return $address->getId() && $address->getId() == $address->getCustomer()->getDefaultShipping()
-        || $address->getIsPrimaryShipping()
-        || $address->getIsDefaultShipping();
+            || $address->getIsPrimaryShipping()
+            || $address->getIsDefaultShipping();
     }
 
     /**

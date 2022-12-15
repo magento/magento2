@@ -80,8 +80,8 @@
         <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startInvoice"/>
         <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
-            <argument name="orderId" value="$grabOrderId"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="{$grabOrderId}"/>
         </actionGroup>
         <actionGroup ref="AdminOpenAndFillCreditMemoRefundBundleWithQtyActionGroup" stepKey="fillCreditMemoRefund">
             <argument name="itemQtyToRefund" value="0"/>

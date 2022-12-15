@@ -38,9 +38,32 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
-            <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToCatalogRuleGridPage"/>
-            <waitForPageLoad stepKey="waitForCatalogRuleGridPageLoaded"/>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersVirtual"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterVirtual">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyGridFilterVirtual"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteVirtualProducts">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToCatalogRuleGridPage"/>
+            <helper class="Magento\CatalogRule\Test\Mftf\Helper\CatalogPriceRuleHelper" method="deleteAllCatalogPriceRules" stepKey="deleteAllCatalogPriceRules">
+                <argument name="firstNotEmptyRow">{{AdminCatalogPriceRuleGrid.firstNotEmptyRow}}</argument>
+                <argument name="modalAcceptButton">{{AdminConfirmationModalSection.ok}}</argument>
+                <argument name="deleteButton">{{AdminNewCatalogPriceRule.delete}}</argument>
+                <argument name="successMessageContainer">{{AdminMessagesSection.success}}</argument>
+                <argument name="successMessage">You deleted the rule.</argument>
+            </helper>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="BIC workaround" stepKey="waitForCatalogRuleGridPageLoaded"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCatalogRuleGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
@@ -52,7 +75,7 @@
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccess"/>
 
         <!-- Verify that category page shows the discount -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryPage1"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToCategoryPage1"/>
         <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(ApiSimpleProduct.name)}}" userInput="$$createSimpleProduct.name$$" stepKey="seeSimpleProduct1"/>
         <see selector="{{StorefrontCategoryProductSection.ProductPriceByName(ApiSimpleProduct.name)}}" userInput="$110.70" stepKey="seeSimpleProductDiscount1"/>
         <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(_defaultProduct.name)}}" userInput="{{_defaultProduct.name}}" stepKey="seeConfigurableProduct1"/>
@@ -60,7 +83,9 @@
 
         <!-- Verify that the simple product page shows the discount -->
         <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="goToSimpleProductPage1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeCorrectName1"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeCorrectName1">
+            <argument name="value" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku1">
             <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
@@ -68,7 +93,9 @@
 
         <!-- Verify that the configurable product page the catalog price rule discount -->
         <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToConfigurableProductPage1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="seeCorrectName2"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeCorrectName2">
+            <argument name="value" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku2">
             <argument name="productSku" value="{{_defaultProduct.sku}}"/>
         </actionGroup>
@@ -84,14 +111,12 @@
         <!-- Apply and flush the cache -->
         <click selector="{{AdminCatalogPriceRuleGrid.applyRules}}" stepKey="clickApplyRules"/>
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
+            <argument name="indices" value="catalog_product_price"/>
         </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Verify that category page shows the original prices -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryPage2"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToCategoryPage2"/>
         <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(ApiSimpleProduct.name)}}" userInput="$$createSimpleProduct.name$$" stepKey="seeSimpleProduct2"/>
         <see selector="{{StorefrontCategoryProductSection.ProductPriceByName(ApiSimpleProduct.name)}}" userInput="$123.00" stepKey="seeSimpleProductDiscount2"/>
         <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(_defaultProduct.name)}}" userInput="{{_defaultProduct.name}}" stepKey="seeConfigurableProduct2"/>
@@ -99,7 +124,9 @@
 
         <!-- Verify that the simple product page shows the original price -->
         <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="goToSimpleProductPage2"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeCorrectName3"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeCorrectName3">
+            <argument name="value" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku3">
             <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
@@ -107,7 +134,9 @@
 
         <!-- Verify that the configurable product page shows the original price -->
         <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToConfigurableProductPage2"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="seeCorrectName4"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeCorrectName4">
+            <argument name="value" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku4">
             <argument name="productSku" value="{{_defaultProduct.sku}}"/>
         </actionGroup>

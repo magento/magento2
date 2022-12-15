@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontProductPageGalleryImageDimensionsActionGroup">
+        <annotations>
+            <description>On the product page grab dimensions of the displayed product image, and image section. Assert that image is less or equals</description>
+        </annotations>
+        <arguments>
+            <argument name="imageSource" defaultValue="{{StorefrontProductMediaSection.mainImageForJsActions}}" type="string"/>
+        </arguments>
+        <executeJS function="var img=document.querySelector('{{imageSource}}');
+                             return img.clientHeight;" stepKey="getImageHeight"/>
+        <executeJS function="var img=document.querySelector('{{imageSource}}');
+                             return img.clientWidth;" stepKey="getImageWidth"/>
+        <executeJS function="var img=document.querySelector('{{StorefrontProductMediaSection.imageSectionForJsActions}}');
+                             return img.clientHeight;" stepKey="getSectionHeight"/>
+        <executeJS function="var img=document.querySelector('{{StorefrontProductMediaSection.imageSectionForJsActions}}');
+                             return img.clientWidth;" stepKey="getSectionWidth"/>
+        <assertLessThanOrEqual stepKey="checkHeightIsCorrect">
+            <actualResult type="variable">getImageHeight</actualResult>
+            <expectedResult type="variable">getSectionHeight</expectedResult>
+        </assertLessThanOrEqual>
+        <assertLessThanOrEqual stepKey="checkWidthIsCorrect">
+            <actualResult type="variable">getImageWidth</actualResult>
+            <expectedResult type="variable">getSectionWidth</expectedResult>
+        </assertLessThanOrEqual>
+    </actionGroup>
+</actionGroups>

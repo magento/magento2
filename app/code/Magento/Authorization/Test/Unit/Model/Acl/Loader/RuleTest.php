@@ -91,10 +91,17 @@ class RuleTest extends TestCase
     }
 
     /**
-     * Test populating acl rule from cache
+     * Test populating acl rule from cache.
+     *
+     * @return void
      */
-    public function testPopulateAclFromCache()
+    public function testPopulateAclFromCache(): void
     {
+        $rules = [
+            ['role_id' => 1, 'resource_id' => 'Magento_Backend::all', 'permission' => 'allow'],
+            ['role_id' => 2, 'resource_id' => 1, 'permission' => 'allow'],
+            ['role_id' => 3, 'resource_id' => 1, 'permission' => 'deny']
+        ];
         $this->resourceMock->expects($this->never())->method('getTable');
         $this->resourceMock->expects($this->never())
             ->method('getConnection');
@@ -103,21 +110,33 @@ class RuleTest extends TestCase
             ->method('load')
             ->with(Rule::ACL_RULE_CACHE_KEY)
             ->willReturn(
-                json_encode(
-                    [
-                        ['role_id' => 1, 'resource_id' => 'Magento_Backend::all', 'permission' => 'allow'],
-                        ['role_id' => 2, 'resource_id' => 1, 'permission' => 'allow'],
-                        ['role_id' => 3, 'resource_id' => 1, 'permission' => 'deny'],
-                    ]
-                )
+                json_encode($rules)
             );
 
         $aclMock = $this->createMock(Acl::class);
-        $aclMock->method('has')->willReturn(true);
-        $aclMock->expects($this->at(1))->method('allow')->with('1', null, null);
-        $aclMock->expects($this->at(2))->method('allow')->with('1', 'Magento_Backend::all', null);
-        $aclMock->expects($this->at(4))->method('allow')->with('2', 1, null);
-        $aclMock->expects($this->at(6))->method('deny')->with('3', 1, null);
+        $aclMock->method('hasResource')->willReturn(true);
+        $aclMock
+            ->method('allow')
+            ->withConsecutive(
+                ['1', null, null],
+                ['1', 'Magento_Backend::all', null],
+                ['2', 1, null]
+            );
+
+        $aclMock
+            ->method('deny')
+            ->withConsecutive(
+                ['3', 1, null]
+            );
+
+        $aclMock
+            ->method('getResources')
+            ->willReturn([
+                'Magento_Backend::all',
+                'Magento_Backend::admin',
+                'Vendor_MyModule::menu',
+                'Vendor_MyModule::index'
+            ]);
 
         $this->model->populateAcl($aclMock);
     }

@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
@@ -21,6 +20,8 @@ use PHPUnit\Framework\TestCase;
 
 class ReindexRuleProductTest extends TestCase
 {
+    private const ADMIN_WEBSITE_ID = 0;
+
     /**
      * @var ReindexRuleProduct
      */
@@ -32,11 +33,6 @@ class ReindexRuleProductTest extends TestCase
     private $resourceMock;
 
     /**
-     * @var ActiveTableSwitcher|MockObject
-     */
-    private $activeTableSwitcherMock;
-
-    /**
      * @var IndexerTableSwapperInterface|MockObject
      */
     private $tableSwapperMock;
@@ -46,87 +42,97 @@ class ReindexRuleProductTest extends TestCase
      */
     private $localeDateMock;
 
+    /**
+     * @var AdapterInterface|MockObject
+     */
+    private $connectionMock;
+
+    /**
+     * @var Rule|MockObject
+     */
+    private $ruleMock;
+
+    /**
+     * @var string
+     */
+    private $adminTimeZone;
+
+    /**
+     * @var string
+     */
+    private $websiteTz;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(ResourceConnection::class);
-        $this->activeTableSwitcherMock = $this->createMock(ActiveTableSwitcher::class);
+        $activeTableSwitcherMock = $this->createMock(ActiveTableSwitcher::class);
         $this->tableSwapperMock = $this->getMockForAbstractClass(IndexerTableSwapperInterface::class);
         $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->ruleMock = $this->createMock(Rule::class);
 
         $this->model = new ReindexRuleProduct(
             $this->resourceMock,
-            $this->activeTableSwitcherMock,
+            $activeTableSwitcherMock,
             $this->tableSwapperMock,
-            $this->localeDateMock
+            $this->localeDateMock,
+            true
         );
+
+        $this->adminTimeZone = 'America/Chicago';
+        $this->websiteTz = 'America/Los_Angeles';
     }
 
-    public function testExecuteIfRuleInactive()
+    /**
+     * @return void
+     */
+    public function testExecuteIfRuleInactive(): void
     {
         $ruleMock = $this->createMock(Rule::class);
-        $ruleMock->expects($this->once())
+        $ruleMock->expects(self::once())
             ->method('getIsActive')
             ->willReturn(false);
-        $this->assertFalse($this->model->execute($ruleMock, 100, true));
+        self::assertFalse($this->model->execute($ruleMock, 100, true));
     }
 
-    public function testExecuteIfRuleWithoutWebsiteIds()
+    /**
+     * @return void
+     */
+    public function testExecuteIfRuleWithoutWebsiteIds(): void
     {
         $ruleMock = $this->createMock(Rule::class);
-        $ruleMock->expects($this->once())
+        $ruleMock->expects(self::once())
             ->method('getIsActive')
             ->willReturn(true);
-        $ruleMock->expects($this->once())
+        $ruleMock->expects(self::once())
             ->method('getWebsiteIds')
             ->willReturn(null);
-        $this->assertFalse($this->model->execute($ruleMock, 100, true));
+        self::assertFalse($this->model->execute($ruleMock, 100, true));
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         $websiteId = 3;
-        $websiteTz = 'America/Los_Angeles';
         $productIds = [
             4 => [$websiteId => 1],
             5 => [$websiteId => 1],
-            6 => [$websiteId => 1],
+            6 => [$websiteId => 1]
         ];
 
-        $this->tableSwapperMock->expects($this->once())
-            ->method('getWorkingTableName')
-            ->with('catalogrule_product')
-            ->willReturn('catalogrule_product_replica');
+        $this->prepareResourceMock();
+        $this->prepareRuleMock([3], $productIds, [10]);
 
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
-        $this->resourceMock->expects($this->at(0))
-            ->method('getConnection')
-            ->willReturn($connectionMock);
-        $this->resourceMock->expects($this->at(1))
-            ->method('getTableName')
-            ->with('catalogrule_product')
-            ->willReturn('catalogrule_product');
-        $this->resourceMock->expects($this->at(2))
-            ->method('getTableName')
-            ->with('catalogrule_product_replica')
-            ->willReturn('catalogrule_product_replica');
-
-        $ruleMock = $this->createMock(Rule::class);
-        $ruleMock->expects($this->once())->method('getIsActive')->willReturn(true);
-        $ruleMock->expects($this->exactly(2))->method('getWebsiteIds')->willReturn([$websiteId]);
-        $ruleMock->expects($this->once())->method('getMatchingProductIds')->willReturn($productIds);
-        $ruleMock->expects($this->once())->method('getId')->willReturn(100);
-        $ruleMock->expects($this->once())->method('getCustomerGroupIds')->willReturn([10]);
-        $ruleMock->expects($this->atLeastOnce())->method('getFromDate')->willReturn('2017-06-21');
-        $ruleMock->expects($this->atLeastOnce())->method('getToDate')->willReturn('2017-06-30');
-        $ruleMock->expects($this->once())->method('getSortOrder')->willReturn(1);
-        $ruleMock->expects($this->once())->method('getSimpleAction')->willReturn('simple_action');
-        $ruleMock->expects($this->once())->method('getDiscountAmount')->willReturn(43);
-        $ruleMock->expects($this->once())->method('getStopRulesProcessing')->willReturn(true);
-
-        $this->localeDateMock->expects($this->once())
-            ->method('getConfigTimezone')
-            ->with(ScopeInterface::SCOPE_WEBSITE, $websiteId)
-            ->willReturn($websiteTz);
+        $this->localeDateMock->method('getConfigTimezone')
+            ->willReturnMap([
+                [ScopeInterface::SCOPE_WEBSITE, self::ADMIN_WEBSITE_ID, $this->adminTimeZone],
+                [ScopeInterface::SCOPE_WEBSITE, $websiteId, $this->websiteTz]
+            ]);
 
         $batchRows = [
             [
@@ -139,7 +145,7 @@ class ReindexRuleProductTest extends TestCase
                 'action_operator' => 'simple_action',
                 'action_amount' => 43,
                 'action_stop' => true,
-                'sort_order' => 1,
+                'sort_order' => 1
             ],
             [
                 'rule_id' => 100,
@@ -151,7 +157,7 @@ class ReindexRuleProductTest extends TestCase
                 'action_operator' => 'simple_action',
                 'action_amount' => 43,
                 'action_stop' => true,
-                'sort_order' => 1,
+                'sort_order' => 1
             ]
         ];
 
@@ -166,17 +172,287 @@ class ReindexRuleProductTest extends TestCase
                 'action_operator' => 'simple_action',
                 'action_amount' => 43,
                 'action_stop' => true,
-                'sort_order' => 1,
+                'sort_order' => 1
             ]
         ];
 
-        $connectionMock->expects($this->at(0))
+        $this->connectionMock
+            ->method('insertMultiple')
+            ->withConsecutive(
+                ['catalogrule_product_replica', $batchRows],
+                ['catalogrule_product_replica', $rowsNotInBatch]
+            );
+
+        self::assertTrue($this->model->execute($this->ruleMock, 2, true));
+    }
+
+    /**
+     * @param array $websitesIds
+     * @param array $productIds
+     * @param array $batchRows
+     * @return void
+     * @dataProvider executeDataProvider
+     */
+    public function testExecuteWithExcludedWebsites(array $websitesIds, array $productIds, array $batchRows): void
+    {
+        $this->prepareResourceMock();
+        $this->prepareRuleMock($websitesIds, $productIds, [10, 20]);
+
+        $extensionAttributes = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
+            ->addMethods(['getExtensionAttributes', 'getExcludeWebsiteIds'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->ruleMock->expects(self::once())->method('getExtensionAttributes')
+            ->willReturn($extensionAttributes);
+        $extensionAttributes->expects(self::exactly(2))->method('getExcludeWebsiteIds')
+            ->willReturn([10 => [1, 2]]);
+
+        $this->localeDateMock->method('getConfigTimezone')
+            ->willReturnMap([
+                [ScopeInterface::SCOPE_WEBSITE, self::ADMIN_WEBSITE_ID, $this->adminTimeZone],
+                [ScopeInterface::SCOPE_WEBSITE, 1, $this->websiteTz],
+                [ScopeInterface::SCOPE_WEBSITE, 2, $this->websiteTz],
+                [ScopeInterface::SCOPE_WEBSITE, 3, $this->websiteTz]
+            ]);
+
+        $this->connectionMock
             ->method('insertMultiple')
             ->with('catalogrule_product_replica', $batchRows);
-        $connectionMock->expects($this->at(1))
-            ->method('insertMultiple')
-            ->with('catalogrule_product_replica', $rowsNotInBatch);
 
-        $this->assertTrue($this->model->execute($ruleMock, 2, true));
+        self::assertTrue($this->model->execute($this->ruleMock, 100, true));
+    }
+
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function executeDataProvider(): array
+    {
+        return [
+            [
+                [1, 2, 3],
+                [
+                    1 => [1 => 1],
+                    2 => [2 => 1],
+                    3 => [3 => 1]
+                ],
+                [
+                    [
+                        'rule_id' => 100,
+                        'from_time' => 1498028400,
+                        'to_time' => 1498892399,
+                        'website_id' => 1,
+                        'customer_group_id' => 20,
+                        'product_id' => 1,
+                        'action_operator' => 'simple_action',
+                        'action_amount' => 43,
+                        'action_stop' => true,
+                        'sort_order' => 1
+                    ],
+                    [
+                        'rule_id' => 100,
+                        'from_time' => 1498028400,
+                        'to_time' => 1498892399,
+                        'website_id' => 2,
+                        'customer_group_id' => 20,
+                        'product_id' => 2,
+                        'action_operator' => 'simple_action',
+                        'action_amount' => 43,
+                        'action_stop' => true,
+                        'sort_order' => 1
+                    ],
+                    [
+                        'rule_id' => 100,
+                        'from_time' => 1498028400,
+                        'to_time' => 1498892399,
+                        'website_id' => 3,
+                        'customer_group_id' => 10,
+                        'product_id' => 3,
+                        'action_operator' => 'simple_action',
+                        'action_amount' => 43,
+                        'action_stop' => true,
+                        'sort_order' => 1
+                    ],
+                    [
+                        'rule_id' => 100,
+                        'from_time' => 1498028400,
+                        'to_time' => 1498892399,
+                        'website_id' => 3,
+                        'customer_group_id' => 20,
+                        'product_id' => 3,
+                        'action_operator' => 'simple_action',
+                        'action_amount' => 43,
+                        'action_stop' => true,
+                        'sort_order' => 1
+                    ]
+                ]
+            ],
+            [
+                [1, 2, 3],
+                [
+                    1 => [1 => true],
+                    2 => [2 => 'true'],
+                    3 => [3 => 0]
+                ],
+                [
+                    [
+                        'rule_id' => 100,
+                        'from_time' => 1498028400,
+                        'to_time' => 1498892399,
+                        'website_id' => 1,
+                        'customer_group_id' => 20,
+                        'product_id' => 1,
+                        'action_operator' => 'simple_action',
+                        'action_amount' => 43,
+                        'action_stop' => true,
+                        'sort_order' => 1
+                    ],
+                    [
+                        'rule_id' => 100,
+                        'from_time' => 1498028400,
+                        'to_time' => 1498892399,
+                        'website_id' => 2,
+                        'customer_group_id' => 20,
+                        'product_id' => 2,
+                        'action_operator' => 'simple_action',
+                        'action_amount' => 43,
+                        'action_stop' => true,
+                        'sort_order' => 1
+                    ],
+                    [
+                        'rule_id' => 100,
+                        'from_time' => 1498028400,
+                        'to_time' => 1498892399,
+                        'website_id' => 3,
+                        'customer_group_id' => 10,
+                        'product_id' => 3,
+                        'action_operator' => 'simple_action',
+                        'action_amount' => 43,
+                        'action_stop' => true,
+                        'sort_order' => 1
+                    ],
+                    [
+                        'rule_id' => 100,
+                        'from_time' => 1498028400,
+                        'to_time' => 1498892399,
+                        'website_id' => 3,
+                        'customer_group_id' => 20,
+                        'product_id' => 3,
+                        'action_operator' => 'simple_action',
+                        'action_amount' => 43,
+                        'action_stop' => true,
+                        'sort_order' => 1
+                    ]
+                ]
+            ],
+            [
+                [1, 2, 3],
+                [
+                    1 => [1 => true],
+                    2 => [2 => true],
+                    3 => [3 => null]
+                ],
+                [
+                    [
+                        'rule_id' => 100,
+                        'from_time' => 1498028400,
+                        'to_time' => 1498892399,
+                        'website_id' => 1,
+                        'customer_group_id' => 20,
+                        'product_id' => 1,
+                        'action_operator' => 'simple_action',
+                        'action_amount' => 43,
+                        'action_stop' => true,
+                        'sort_order' => 1
+                    ],
+                    [
+                        'rule_id' => 100,
+                        'from_time' => 1498028400,
+                        'to_time' => 1498892399,
+                        'website_id' => 2,
+                        'customer_group_id' => 20,
+                        'product_id' => 2,
+                        'action_operator' => 'simple_action',
+                        'action_amount' => 43,
+                        'action_stop' => true,
+                        'sort_order' => 1
+                    ]
+                ]
+            ],
+            [
+                [1, 2, 3],
+                [
+                    1 => [1 => true],
+                    2 => [2 => true],
+                    3 => []
+                ],
+                [
+                    [
+                        'rule_id' => 100,
+                        'from_time' => 1498028400,
+                        'to_time' => 1498892399,
+                        'website_id' => 1,
+                        'customer_group_id' => 20,
+                        'product_id' => 1,
+                        'action_operator' => 'simple_action',
+                        'action_amount' => 43,
+                        'action_stop' => true,
+                        'sort_order' => 1
+                    ],
+                    [
+                        'rule_id' => 100,
+                        'from_time' => 1498028400,
+                        'to_time' => 1498892399,
+                        'website_id' => 2,
+                        'customer_group_id' => 20,
+                        'product_id' => 2,
+                        'action_operator' => 'simple_action',
+                        'action_amount' => 43,
+                        'action_stop' => true,
+                        'sort_order' => 1
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    private function prepareResourceMock(): void
+    {
+        $this->tableSwapperMock->expects(self::once())
+            ->method('getWorkingTableName')
+            ->with('catalogrule_product')
+            ->willReturn('catalogrule_product_replica');
+        $this->resourceMock
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
+        $this->resourceMock
+            ->method('getTableName')
+            ->withConsecutive(['catalogrule_product'], ['catalogrule_product_replica'])
+            ->willReturnOnConsecutiveCalls('catalogrule_product', 'catalogrule_product_replica');
+    }
+
+    /**
+     * @param array $websiteId
+     * @param array $productIds
+     * @param array $customerGroupIds
+     *
+     * @return void
+     */
+    private function prepareRuleMock(array $websiteId, array $productIds, array $customerGroupIds): void
+    {
+        $this->ruleMock->expects(self::once())->method('getIsActive')->willReturn(true);
+        $this->ruleMock->expects(self::exactly(2))->method('getWebsiteIds')->willReturn($websiteId);
+        $this->ruleMock->expects(self::once())->method('getMatchingProductIds')->willReturn($productIds);
+        $this->ruleMock->expects(self::once())->method('getId')->willReturn(100);
+        $this->ruleMock->expects(self::once())->method('getCustomerGroupIds')->willReturn($customerGroupIds);
+        $this->ruleMock->expects(self::atLeastOnce())->method('getFromDate')->willReturn('2017-06-21');
+        $this->ruleMock->expects(self::atLeastOnce())->method('getToDate')->willReturn('2017-06-30');
+        $this->ruleMock->expects(self::once())->method('getSortOrder')->willReturn(1);
+        $this->ruleMock->expects(self::once())->method('getSimpleAction')->willReturn('simple_action');
+        $this->ruleMock->expects(self::once())->method('getDiscountAmount')->willReturn(43);
+        $this->ruleMock->expects(self::once())->method('getStopRulesProcessing')->willReturn(true);
     }
 }

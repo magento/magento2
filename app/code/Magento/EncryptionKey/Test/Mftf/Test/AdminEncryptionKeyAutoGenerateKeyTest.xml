@@ -16,6 +16,7 @@
             <description value="Change Encryption Key by Auto Generate Key"/>
             <severity value="CRITICAL"/>
             <group value="encryption_key"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

@@ -29,15 +29,17 @@ class SearchConfigOptionsListTest extends TestCase
     public function testGetOptionsList()
     {
         $optionsList = $this->searchConfigOptionsList->getOptionsList();
-        $this->assertCount(8, $optionsList);
+        $this->assertCount(15, $optionsList);
 
         $this->assertArrayHasKey(0, $optionsList);
         $this->assertInstanceOf(SelectConfigOption::class, $optionsList[0]);
         $this->assertEquals('search-engine', $optionsList[0]->getName());
-        $this->assertCount(3, $optionsList[0]->getSelectOptions());
-        $this->assertContains('elasticsearch5', $optionsList[0]->getSelectOptions());
-        $this->assertContains('elasticsearch6', $optionsList[0]->getSelectOptions());
-        $this->assertContains('elasticsearch7', $optionsList[0]->getSelectOptions());
+
+        $selectOptions = $optionsList[0]->getSelectOptions();
+        $this->assertCount(3, $selectOptions);
+        $this->assertContains('elasticsearch5', $selectOptions);
+        $this->assertContains('elasticsearch7', $selectOptions);
+        $this->assertContains('opensearch', $selectOptions);
 
         $this->assertArrayHasKey(1, $optionsList);
         $this->assertInstanceOf(TextConfigOption::class, $optionsList[1]);
@@ -66,5 +68,33 @@ class SearchConfigOptionsListTest extends TestCase
         $this->assertArrayHasKey(7, $optionsList);
         $this->assertInstanceOf(TextConfigOption::class, $optionsList[7]);
         $this->assertEquals('elasticsearch-timeout', $optionsList[7]->getName());
+
+        $this->assertArrayHasKey(8, $optionsList);
+        $this->assertInstanceOf(TextConfigOption::class, $optionsList[8]);
+        $this->assertEquals('opensearch-host', $optionsList[8]->getName());
+
+        $this->assertArrayHasKey(9, $optionsList);
+        $this->assertInstanceOf(TextConfigOption::class, $optionsList[9]);
+        $this->assertEquals('opensearch-port', $optionsList[9]->getName());
+
+        $this->assertArrayHasKey(10, $optionsList);
+        $this->assertInstanceOf(TextConfigOption::class, $optionsList[10]);
+        $this->assertEquals('opensearch-enable-auth', $optionsList[10]->getName());
+
+        $this->assertArrayHasKey(11, $optionsList);
+        $this->assertInstanceOf(TextConfigOption::class, $optionsList[11]);
+        $this->assertEquals('opensearch-username', $optionsList[11]->getName());
+
+        $this->assertArrayHasKey(12, $optionsList);
+        $this->assertInstanceOf(TextConfigOption::class, $optionsList[12]);
+        $this->assertEquals('opensearch-password', $optionsList[12]->getName());
+
+        $this->assertArrayHasKey(13, $optionsList);
+        $this->assertInstanceOf(TextConfigOption::class, $optionsList[13]);
+        $this->assertEquals('opensearch-index-prefix', $optionsList[13]->getName());
+
+        $this->assertArrayHasKey(14, $optionsList);
+        $this->assertInstanceOf(TextConfigOption::class, $optionsList[14]);
+        $this->assertEquals('opensearch-timeout', $optionsList[14]->getName());
     }
 }

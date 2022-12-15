@@ -1,0 +1,41 @@
+{
+  "name": "magento_adminadobeims",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@adobe/spectrum-css-workflow-icons": "^1.2.1",
+    "@spectrum-css/actionbutton": "^1.1.5",
+    "@spectrum-css/asset": "^3.0.13",
+    "@spectrum-css/button": "^6.0.3",
+    "@spectrum-css/buttongroup": "^5.0.3",
+    "@spectrum-css/card": "^4.0.12",
+    "@spectrum-css/checkbox": "^3.0.14",
+    "@spectrum-css/closebutton": "^1.2.2",
+    "@spectrum-css/dialog": "^6.0.2",
+    "@spectrum-css/divider": "^1.0.16",
+    "@spectrum-css/icon": "^3.0.14",
+    "@spectrum-css/inlinealert": "^4.0.3",
+    "@spectrum-css/link": "^3.1.17",
+    "@spectrum-css/modal": "^3.0.13",
+    "@spectrum-css/page": "^5.0.2",
+    "@spectrum-css/quickaction": "^3.0.16",
+    "@spectrum-css/typography": "^4.0.11",
+    "@spectrum-css/underlay": "^2.0.22",
+    "@spectrum-css/vars": "^6.1.1",
+    "loadicons": "^1.0.0"
+  },
+  "devDependencies": {
+    "cssnano": "^5.0.17",
+    "postcss": "^8.4.7",
+    "postcss-cli": "^9.1.0",
+    "postcss-dropunusedvars": "^1.2.1",
+    "postcss-import": "^14.0.2",
+    "postcss-varfallback": "^1.1.1"
+  }
+}

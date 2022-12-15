@@ -6,6 +6,7 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute;
 
+use Laminas\Validator\Regex;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\Exception\InputException;
@@ -126,6 +127,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             $attribute->setAttributeId($existingModel->getAttributeId());
             $attribute->setIsUserDefined($existingModel->getIsUserDefined());
             $attribute->setFrontendInput($existingModel->getFrontendInput());
+            $attribute->setBackendModel($existingModel->getBackendModel());
 
             $this->updateDefaultFrontendLabel($attribute, $existingModel);
         } else {
@@ -224,7 +226,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             0,
             Attribute::ATTRIBUTE_CODE_MAX_LENGTH
         );
-        $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-z][a-z_0-9]{0,29}[a-z0-9]$/']);
+        $validatorAttrCode = new Regex(['pattern' => '/^[a-z][a-z_0-9]{0,29}[a-z0-9]$/']);
         if (!$validatorAttrCode->isValid($code)) {
             $code = 'attr_' . ($code ?: substr(hash('sha256', time()), 0, 8));
         }
@@ -237,11 +239,11 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      *
      * @param string $code
      * @return void
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws InputException
      */
     protected function validateCode($code)
     {
-        $validatorAttrCode = new \Zend_Validate_Regex(
+        $validatorAttrCode = new Regex(
             ['pattern' => '/^[a-z][a-z_0-9]{0,' . Attribute::ATTRIBUTE_CODE_MAX_LENGTH . '}$/']
         );
         if (!$validatorAttrCode->isValid($code)) {
@@ -254,7 +256,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      *
      * @param  string $frontendInput
      * @return void
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws InputException
      */
     protected function validateFrontendInput($frontendInput)
     {

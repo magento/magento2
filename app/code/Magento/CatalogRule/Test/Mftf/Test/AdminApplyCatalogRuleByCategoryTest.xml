@@ -26,7 +26,9 @@
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProductTwo">
                 <requiredEntity createDataKey="createCategoryTwo"/>
             </createData>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -40,6 +42,9 @@
             <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
@@ -77,19 +82,15 @@
 
         <!-- 3. Save and apply the new catalog price rule -->
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- 4. Verify the storefront -->
-        <amOnPage url="$$createCategoryOne.name$$.html" stepKey="goToCategoryOne"/>
+        <amOnPage url="$$createCategoryOne.custom_attributes[url_key]$$.html" stepKey="goToCategoryOne"/>
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$$createSimpleProductOne.name$$" stepKey="seeProductOne"/>
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$61.50" stepKey="seeProductOnePrice"/>
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="Regular Price $123.00" stepKey="seeProductOneRegularPrice"/>
-        <amOnPage url="$$createCategoryTwo.name$$.html" stepKey="goToCategoryTwo"/>
+        <amOnPage url="$$createCategoryTwo.custom_attributes[url_key]$$.html" stepKey="goToCategoryTwo"/>
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$$createSimpleProductTwo.name$$" stepKey="seeProductTwo"/>
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$123.00" stepKey="seeProductTwoPrice"/>
         <dontSee selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$61.50" stepKey="dontSeeDiscount"/>

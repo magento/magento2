@@ -15,7 +15,7 @@ define([
     'Magento_Checkout/js/action/get-totals',
     'Magento_Checkout/js/model/full-screen-loader',
     'underscore',
-    'Magento_Checkout/js/model/payment/set-payment-hooks'
+    'Magento_Checkout/js/model/payment/place-order-hooks'
 ], function (quote, urlBuilder, storage, errorProcessor, customer, getTotalsAction, fullScreenLoader, _, hooks) {
     'use strict';
 
@@ -30,7 +30,7 @@ define([
                 list[key] = filterTemplateData(value);
             }
 
-            if (key === '__disableTmpl') {
+            if (key === '__disableTmpl' || key === 'title') {
                 delete list[key];
             }
         });

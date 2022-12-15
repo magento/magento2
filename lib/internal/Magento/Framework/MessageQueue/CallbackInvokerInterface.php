@@ -9,6 +9,7 @@ namespace Magento\Framework\MessageQueue;
 
 /**
  * Callback invoker interface. Invoke callbacks for consumer classes.
+ * @api
  */
 interface CallbackInvokerInterface
 {

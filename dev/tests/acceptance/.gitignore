@@ -4,7 +4,7 @@
 codeception.yml
 tests/_output/*
 tests/functional.suite.yml
-tests/functional/Magento/FunctionalTest/_generated
+tests/functional/Magento/_generated
 vendor/*
 mftf.log
 /.credentials.example

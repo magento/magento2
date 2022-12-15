@@ -12,6 +12,7 @@ use Magento\Checkout\Model\TotalsInformationManagement;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\CartTotalRepositoryInterface;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 
 class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
@@ -67,7 +68,7 @@ class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
     {
         $cartId = 1;
         $cartMock = $this->createMock(
-            \Magento\Quote\Model\Quote::class
+            Quote::class
         );
         $cartMock->expects($this->once())->method('getItemsCount')->willReturn(1);
         $cartMock->expects($this->once())->method('getIsVirtual')->willReturn(false);
@@ -97,6 +98,72 @@ class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
         $addressMock->expects($this->exactly($methodSetCount))
             ->method('setShippingMethod')->with($carrierCode . '_' . $carrierMethod);
         $cartMock->expects($this->once())->method('collectTotals');
+
+        $this->totalsInformationManagement->calculate($cartId, $addressInformationMock);
+    }
+
+    /**
+     * Test case when shipping amount must be reset to 0 because of changed shipping method.
+     */
+    public function testResetShippingAmount()
+    {
+        $cartId = 1;
+        $carrierCode = 'carrier_code';
+        $carrierMethod = 'carrier_method';
+
+        $cartMock = $this->createMock(Quote::class);
+        $cartMock->method('getItemsCount')
+            ->willReturn(1);
+        $cartMock->method('getIsVirtual')
+            ->willReturn(false);
+        $this->cartRepositoryMock->method('get')->with($cartId)->willReturn($cartMock);
+        $this->cartTotalRepositoryMock->method('get')->with($cartId);
+
+        $addressInformationMock = $this->createMock(TotalsInformationInterface::class);
+        $addressMock = $this->getMockBuilder(Address::class)
+            ->addMethods(
+                [
+                    'setShippingMethod',
+                    'setCollectShippingRates'
+                ]
+            )->onlyMethods(
+                [
+                    'getShippingMethod',
+                    'setShippingAmount',
+                    'setBaseShippingAmount',
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $addressMock->method('getShippingMethod')
+            ->willReturn('flatrate_flatrate');
+        $addressInformationMock->method('getAddress')
+            ->willReturn($addressMock);
+        $addressInformationMock->method('getShippingCarrierCode')
+            ->willReturn($carrierCode);
+        $addressInformationMock->method('getShippingMethodCode')
+            ->willReturn($carrierMethod);
+        $cartMock->method('setShippingAddress')
+            ->with($addressMock);
+        $cartMock->method('getShippingAddress')
+            ->willReturn($addressMock);
+        $addressMock->expects($this->once())
+            ->method('setCollectShippingRates')
+            ->with(true)
+            ->willReturn($addressMock);
+        $addressMock->expects($this->once())
+            ->method('setShippingAmount')
+            ->with(0)
+            ->willReturn($addressMock);
+        $addressMock->expects($this->once())
+            ->method('setBaseShippingAmount')
+            ->with(0)
+            ->willReturn($addressMock);
+        $addressMock->expects($this->once())
+            ->method('setShippingMethod')
+            ->with($carrierCode . '_' . $carrierMethod);
+        $cartMock->expects($this->once())
+            ->method('collectTotals');
 
         $this->totalsInformationManagement->calculate($cartId, $addressInformationMock);
     }

@@ -84,19 +84,20 @@
         </actionGroup>
 
         <!-- Select shipping method -->
-        <click selector="{{AdminInvoicePaymentShippingSection.getShippingMethodAndRates}}" stepKey="openShippingMethod"/>
-        <waitForPageLoad stepKey="waitForShippingMethods"/>
-        <click selector="{{AdminInvoicePaymentShippingSection.shippingMethod}}" stepKey="chooseShippingMethod"/>
-        <waitForPageLoad stepKey="waitForShippingMethodLoad"/>
+        <actionGroup ref="AdminClickGetShippingMethodsAndRatesActionGroup" stepKey="openShippingMethod"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForShippingMethods"/>
+        <actionGroup ref="AdminSelectFixedShippingMethodActionGroup" stepKey="chooseShippingMethod"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForShippingMethodLoad"/>
 
         <!-- Submit order -->
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
 
         <!-- Search and open customer -->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCreatedCustomer">
-            <argument name="email" value="$$createCustomer.email$$"/>
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$createCustomer.id$"/>
         </actionGroup>
-        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickEditButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterCreatedCustomer"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickEditButton"/>
 
         <!-- Click create order -->
         <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickCreateOrder"/>
@@ -105,10 +106,18 @@
         <click selector="{{AdminCustomerActivitiesLastOrderedSection.addProductToOrder($$createConfigProduct.name$$)}}" stepKey="addProductToOrder"/>
 
         <!-- Click Update Changes -->
-        <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickUpdateChangesBtn"/>
+        <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickUpdateChangesBtn"/>
 
         <!-- Assert product in items ordered grid -->
-        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Product')}}" userInput="$$createConfigProduct.name$$" stepKey="seeProductName"/>
-        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Price')}}" userInput="$123.00" stepKey="seeProductPrice"/>
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeProductName">
+            <argument name="index" value="1"/>
+            <argument name="attribute" value="Product"/>
+            <argument name="value" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeProductPrice">
+            <argument name="index" value="1"/>
+            <argument name="attribute" value="Price"/>
+            <argument name="value" value="$123.00"/>
+        </actionGroup>
     </test>
 </tests>
