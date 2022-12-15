@@ -13,7 +13,7 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * StockItemValidator
+ *  Validate Stock item
  */
 class StockItemValidator
 {
