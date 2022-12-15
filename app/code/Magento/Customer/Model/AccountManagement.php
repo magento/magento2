@@ -1144,7 +1144,7 @@ class AccountManagement implements AccountManagementInterface
      * @inheritdoc
      *
      * @param string $customerEmail
-     * @param int $websiteId
+     * @param int|null $websiteId
      * @return bool
      */
     public function isEmailAvailable(string $customerEmail, int $websiteId = null): bool
