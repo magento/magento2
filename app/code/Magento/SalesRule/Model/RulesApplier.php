@@ -115,6 +115,9 @@ class RulesApplier
             if (!$this->validatorUtility->canProcessRule($rule, $address)) {
                 continue;
             }
+            if (!$rule->getConditions()->validate($item)) {
+                continue;
+            }
             if (!$skipValidation && !$rule->getActions()->validate($item)) {
                 if (!$this->childrenValidationLocator->isChildrenValidationRequired($item)) {
                     continue;
