@@ -20,6 +20,7 @@ use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Customer\CredentialsValidator;
 use Magento\Customer\Model\ForgotPasswordToken\GetCustomerByToken;
+use Magento\Customer\Model\Logger as CustomerLogger;
 use Magento\Customer\Model\Metadata\Validator;
 use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory;
 use Magento\Directory\Model\AllowedCountries;
@@ -57,7 +58,6 @@ use Magento\Framework\Stdlib\StringUtils as StringHelper;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as PsrLogger;
-use Magento\Customer\Model\Logger as CustomerLogger;
 
 /**
  * Handle various customer account actions
@@ -72,7 +72,7 @@ class AccountManagement implements AccountManagementInterface
     /**
      * System Configuration Path for Enable/Disable Login at Guest Checkout
      */
-    private const GUEST_CHECKOUT_LOGIN_OPTION_SYS_CONFIG = 'checkout/options/disable_guest_checkout_login';
+    private const GUEST_CHECKOUT_LOGIN_OPTION_SYS_CONFIG = 'checkout/options/enable_guest_checkout_login';
 
     /**
      * Configuration paths for create account email template
@@ -223,177 +223,177 @@ class AccountManagement implements AccountManagementInterface
     /**
      * @var CustomerFactory
      */
-    private $customerFactory;
+    private CustomerFactory $customerFactory;
 
     /**
      * @var ValidationResultsInterfaceFactory
      */
-    private $validationResultsDataFactory;
+    private ValidationResultsInterfaceFactory $validationResultsDataFactory;
 
     /**
      * @var ManagerInterface
      */
-    private $eventManager;
+    private ManagerInterface $eventManager;
 
     /**
      * @var StoreManagerInterface
      */
-    private $storeManager;
+    private StoreManagerInterface $storeManager;
 
     /**
      * @var Random
      */
-    private $mathRandom;
+    private Random $mathRandom;
 
     /**
      * @var Validator
      */
-    private $validator;
+    private Validator $validator;
 
     /**
      * @var AddressRepositoryInterface
      */
-    private $addressRepository;
+    private AddressRepositoryInterface $addressRepository;
 
     /**
      * @var CustomerMetadataInterface
      */
-    private $customerMetadataService;
+    private CustomerMetadataInterface $customerMetadataService;
 
     /**
      * @var PsrLogger
      */
-    protected $logger;
+    protected PsrLogger $logger;
 
     /**
      * @var Encryptor
      */
-    private $encryptor;
+    private Encryptor $encryptor;
 
     /**
      * @var CustomerRegistry
      */
-    private $customerRegistry;
+    private CustomerRegistry $customerRegistry;
 
     /**
      * @var ConfigShare
      */
-    private $configShare;
+    private ConfigShare $configShare;
 
     /**
      * @var StringHelper
      */
-    protected $stringHelper;
+    protected StringHelper $stringHelper;
 
     /**
      * @var CustomerRepositoryInterface
      */
-    private $customerRepository;
+    private CustomerRepositoryInterface $customerRepository;
 
     /**
      * @var ScopeConfigInterface
      */
-    private $scopeConfig;
+    private ScopeConfigInterface $scopeConfig;
 
     /**
      * @var TransportBuilder
      */
-    private $transportBuilder;
+    private TransportBuilder $transportBuilder;
 
     /**
      * @var DataObjectProcessor
      */
-    protected $dataProcessor;
+    protected DataObjectProcessor $dataProcessor;
 
     /**
      * @var Registry
      */
-    protected $registry;
+    protected Registry $registry;
 
     /**
      * @var CustomerViewHelper
      */
-    protected $customerViewHelper;
+    protected CustomerViewHelper $customerViewHelper;
 
     /**
      * @var DateTime
      */
-    protected $dateTime;
+    protected DateTime $dateTime;
 
     /**
      * @var ObjectFactory
      */
-    protected $objectFactory;
+    protected ObjectFactory $objectFactory;
 
     /**
      * @var ExtensibleDataObjectConverter
      */
-    protected $extensibleDataObjectConverter;
+    protected ExtensibleDataObjectConverter $extensibleDataObjectConverter;
 
     /**
      * @var CustomerModel
      */
-    protected $customerModel;
+    protected CustomerModel $customerModel;
 
     /**
      * @var AuthenticationInterface
      */
-    protected $authentication;
+    protected AuthenticationInterface $authentication;
 
     /**
      * @var EmailNotificationInterface
      */
-    private $emailNotification;
+    private EmailNotificationInterface $emailNotification;
 
     /**
      * @var Backend
      */
-    private $eavValidator;
+    private Backend $eavValidator;
 
     /**
      * @var CredentialsValidator
      */
-    private $credentialsValidator;
+    private CredentialsValidator $credentialsValidator;
 
     /**
      * @var DateTimeFactory
      */
-    private $dateTimeFactory;
+    private DateTimeFactory $dateTimeFactory;
 
     /**
      * @var AccountConfirmation
      */
-    private $accountConfirmation;
+    private AccountConfirmation $accountConfirmation;
 
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchCriteriaBuilder;
+    private SearchCriteriaBuilder $searchCriteriaBuilder;
 
     /**
      * @var AddressRegistry
      */
-    private $addressRegistry;
+    private AddressRegistry $addressRegistry;
 
     /**
      * @var AllowedCountries
      */
-    private $allowedCountriesReader;
+    private AllowedCountries $allowedCountriesReader;
 
     /**
      * @var GetCustomerByToken
      */
-    private $getByToken;
+    private GetCustomerByToken $getByToken;
 
     /**
      * @var SessionCleanerInterface
      */
-    private $sessionCleaner;
+    private SessionCleanerInterface $sessionCleaner;
 
     /**
      * @var AuthorizationInterface
      */
-    private $authorization;
+    private AuthorizationInterface $authorization;
 
     /**
      * @var CustomerLogger
@@ -1142,6 +1142,10 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * @inheritdoc
+     *
+     * @param string $customerEmail
+     * @param int $websiteId
+     * @return bool
      */
     public function isEmailAvailable(string $customerEmail, int $websiteId = null): bool
     {
@@ -1151,7 +1155,7 @@ class AccountManagement implements AccountManagementInterface
             $websiteId
         );
 
-        if (!$guestLoginConfig) {
+        if ($guestLoginConfig === null || $guestLoginConfig === false) {
             return true;
         }
 
