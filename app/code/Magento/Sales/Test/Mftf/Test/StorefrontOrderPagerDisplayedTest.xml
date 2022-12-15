@@ -19,7 +19,6 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="LoginAsAdmin"/>
 
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -118,7 +117,6 @@
             <deleteData createDataKey="createProduct21" stepKey="deleteProduct21"/>
 
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="logout"/>
         </after>
 
