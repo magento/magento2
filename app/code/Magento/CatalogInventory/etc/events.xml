@@ -43,7 +43,4 @@
     <event name="sales_quote_item_collection_products_after_load">
         <observer name="add_stock_items" instance="Magento\CatalogInventory\Observer\AddStockItemsObserver"/>
     </event>
-    <event name="catalog_product_collection_load_after">
-        <observer name="inventory" instance="Magento\CatalogInventory\Observer\AddInventoryItemObserver"/>
-    </event>
 </config>
