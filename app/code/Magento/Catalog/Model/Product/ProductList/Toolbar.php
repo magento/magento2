@@ -39,6 +39,17 @@ class Toolbar
     const LIMIT_PARAM_NAME = 'product_list_limit';
 
     /**
+     * Toolbar parameter list
+     */
+    const TOOLBAR_PARAM_LIST = [
+        self::PAGE_PARM_NAME,
+        self::ORDER_PARAM_NAME,
+        self::DIRECTION_PARAM_NAME,
+        self::MODE_PARAM_NAME,
+        self::LIMIT_PARAM_NAME
+    ];
+
+    /**
      * Request
      *
      * @var \Magento\Framework\App\Request\Http

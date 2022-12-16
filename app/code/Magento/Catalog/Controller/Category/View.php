@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager;
 use Magento\Catalog\Model\Design;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
+use Magento\Catalog\Model\Product\ProductList\Toolbar;
 use Magento\Catalog\Model\Session;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\Framework\App\Action\Action;
@@ -22,7 +23,6 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\ForwardFactory;
-use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -182,7 +182,10 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         }
         $this->_catalogSession->setLastVisitedCategoryId($category->getId());
         $this->_coreRegistry->register('current_category', $category);
-        $this->toolbarMemorizer->memorizeParams();
+        if ($this->isToolbarAction()) {
+            $this->toolbarMemorizer->memorizeParams();
+            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+        }
         try {
             $this->_eventManager->dispatch(
                 'catalog_controller_category_init_after',
@@ -293,5 +296,15 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         if ($settings->getPageLayoutHandles()) {
             $page->addPageLayoutHandles($settings->getPageLayoutHandles());
         }
+    }
+
+    /**
+     * @return bool
+     */
+    private function isToolbarAction(): bool
+    {
+        $params = $this->getRequest()->getParams();
+
+        return empty(array_intersect(Toolbar::TOOLBAR_PARAM_LIST, array_keys($params))) === false;
     }
 }
