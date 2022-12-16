@@ -31,30 +31,24 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Cache group Tag
      */
-    const CACHE_GROUP = \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER;
+    public const CACHE_GROUP = \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER;
 
     /**
      * Prefix for cache key of block
      */
-    const CACHE_KEY_PREFIX = 'BLOCK_';
+    public const CACHE_KEY_PREFIX = 'BLOCK_';
 
     /**
-     * Design
-     *
      * @var \Magento\Framework\View\DesignInterface
      */
     protected $_design;
 
     /**
-     * Session
-     *
      * @var \Magento\Framework\Session\SessionManagerInterface
      */
     protected $_session;
 
     /**
-     * SID Resolver
-     *
      * @var \Magento\Framework\Session\SidResolverInterface
      * @deprecated 102.0.5 Not used anymore.
      */
@@ -82,15 +76,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     protected $jsLayout = [];
 
     /**
-     * Request
-     *
      * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
     /**
-     * Url Builder
-     *
      * @var \Magento\Framework\UrlInterface
      */
     protected $_urlBuilder;
@@ -125,29 +115,21 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     protected $_viewConfig;
 
     /**
-     * Cache State
-     *
      * @var \Magento\Framework\App\Cache\StateInterface
      */
     protected $_cacheState;
 
     /**
-     * Logger
-     *
      * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
     /**
-     * Escaper
-     *
      * @var \Magento\Framework\Escaper
      */
     protected $_escaper;
 
     /**
-     * Filter manager
-     *
      * @var \Magento\Framework\Filter\FilterManager
      */
     protected $filterManager;
@@ -954,10 +936,9 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public function stripTags($data, $allowableTags = null, $allowHtmlEntities = false)
     {
-        return $this->filterManager->stripTags(
-            $data,
-            ['allowableTags' => $allowableTags, 'escape' => $allowHtmlEntities]
-        );
+        $params = ['allowableTags' => $allowableTags, 'escape' => $allowHtmlEntities];
+
+        return $data ? $this->filterManager->stripTags($data, $params) : '';
     }
 
     /**

@@ -96,8 +96,8 @@ class ShippingAddressAssignmentTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSetAddressUseForShippingTrue(): void
     {
         $addressId = 1;
@@ -111,8 +111,8 @@ class ShippingAddressAssignmentTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSetAddressUseForShippingFalse(): void
     {
         $addressMock = $this->getMockForAbstractClass(AddressInterface::class);

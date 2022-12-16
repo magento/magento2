@@ -10,9 +10,6 @@ namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader;
 use Magento\Setup\Module\Di\Code\Reader\FileScanner;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class FileScannerTest
- */
 class FileScannerTest extends TestCase
 {
     /**

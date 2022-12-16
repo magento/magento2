@@ -42,6 +42,7 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStoreEN"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <magentoCLI command="config:set system/backup/functionality_enabled 0" stepKey="setEnableBackupToNo"/>
@@ -71,6 +72,7 @@
         <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
             <argument name="websiteName" value="{{customWebsite.name}}"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Go to grid page and verify AssertErrorMessage-->
         <actionGroup ref="AssertErrorMessageAfterDeletingWebsiteActionGroup" stepKey="verifyErrorMessage">

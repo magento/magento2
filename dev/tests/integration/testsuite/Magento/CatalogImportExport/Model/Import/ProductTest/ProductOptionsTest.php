@@ -7,10 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Model\Import\ProductTest;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Helper\Data as CatalogConfig;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogImportExport\Model\Import\ProductTestBase;
+use Magento\ImportExport\Helper\Data as ImportExportConfig;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
 
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
@@ -125,7 +134,9 @@ class ProductOptionsTest extends ProductTestBase
 
         // Make sure that after importing existing options again, option IDs and option value IDs are not changed
         $customOptionValues = $this->getCustomOptionValues($sku);
-        $this->createImportModel($pathToFile)->importData();
+        $importModel = $this->createImportModel($pathToFile);
+        $importModel->validateData();
+        $importModel->importData();
         $this->assertEquals($customOptionValues, $this->getCustomOptionValues($sku));
 
         // Cleanup imported products
@@ -138,97 +149,142 @@ class ProductOptionsTest extends ProductTestBase
     /**
      * Tests adding of custom options with multiple store views
      *
-     * @magentoConfigFixture current_store catalog/price/scope 1
-     * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
+     * @dataProvider saveCustomOptionsWithMultipleStoreViewsDataProvider
+     * @param string $importFile
+     * @param array $expected
      */
-    public function testSaveCustomOptionsWithMultipleStoreViews()
-    {
+    #[
+        AppIsolation(true),
+        Config(CatalogConfig::XML_PATH_PRICE_SCOPE, CatalogConfig::PRICE_SCOPE_WEBSITE, ScopeInterface::SCOPE_STORE),
+        DataFixture(StoreFixture::class, ['code' => 'secondstore']),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'sku' => 'simple2',
+                'options' => [
+                    [
+                        'type' => ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN,
+                        'title' => 'Option 1',
+                        'values' => [
+                            [
+                                'title'         => 'Option 1 Value 1',
+                                'price'         => 2.5,
+                                'sku'           => 'option1value1',
+                            ],
+                            [
+                                'title'         => 'Option 1 Value 2',
+                                'price'         => 3,
+                                'sku'           => 'option1value2',
+                            ],
+                        ]
+                    ]
+                ]
+            ]
+        ),
+    ]
+    public function testSaveCustomOptionsWithMultipleStoreViews(
+        string $importFile,
+        array $expected
+    ) {
+        $expected = $this->getFullExpectedOptions($expected);
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var StoreManagerInterface $storeManager */
         $storeManager = $objectManager->get(StoreManagerInterface::class);
-        $storeCodes = [
-            'admin',
-            'default',
-            'secondstore',
-        ];
-        /** @var StoreManagerInterface $storeManager */
-        $importFile = 'product_with_custom_options_and_multiple_store_views.csv';
-        $sku = 'simple';
         $pathToFile = __DIR__ . '/../_files/' . $importFile;
         $importModel = $this->createImportModel($pathToFile);
         $errors = $importModel->validateData();
         $this->assertTrue($errors->getErrorsCount() == 0, 'Import File Validation Failed');
         $importModel->importData();
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $productRepository = $objectManager->get(
             \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
-        foreach ($storeCodes as $storeCode) {
-            $storeManager->setCurrentStore($storeCode);
-            $product = $productRepository->get($sku);
-            $options = $product->getOptionInstance()->getProductOptions($product);
-            $expectedData = $this->getExpectedOptionsData($pathToFile, $storeCode);
-            $expectedData = $this->mergeWithExistingData($expectedData, $options);
-            $actualData = $this->getActualOptionsData($options);
-            // assert of equal type+titles
-            $expectedOptions = $expectedData['options'];
-            // we need to save key values
-            $actualOptions = $actualData['options'];
-            sort($expectedOptions);
-            sort($actualOptions);
-            $this->assertEquals(
-                $expectedOptions,
-                $actualOptions,
-                'Expected and actual options arrays does not match'
-            );
-
-            // assert of options data
-            $this->assertCount(
-                count($expectedData['data']),
-                $actualData['data'],
-                'Expected and actual data count does not match'
-            );
-            $this->assertCount(
-                count($expectedData['values']),
-                $actualData['values'],
-                'Expected and actual values count does not match'
-            );
-
-            foreach ($expectedData['options'] as $expectedId => $expectedOption) {
-                $elementExist = false;
-                // find value in actual options and values
-                foreach ($actualData['options'] as $actualId => $actualOption) {
-                    if ($actualOption == $expectedOption) {
-                        $elementExist = true;
-                        $this->assertEquals(
-                            $expectedData['data'][$expectedId],
-                            $actualData['data'][$actualId],
-                            'Expected data does not match actual data'
-                        );
-                        if (array_key_exists($expectedId, $expectedData['values'])) {
-                            $this->assertEquals(
-                                $expectedData['values'][$expectedId],
-                                $actualData['values'][$actualId],
-                                'Expected values does not match actual data'
-                            );
-                        }
-                        unset($actualData['options'][$actualId]);
-                        // remove value in case of duplicating key values
-                        break;
+        $actual = [];
+        foreach ($expected as $sku => $storesData) {
+            foreach (array_keys($storesData) as $storeCode) {
+                $product = $productRepository->get($sku, false, $storeManager->getStore($storeCode)->getId(), true);
+                $options = $product->getOptionInstance()->getProductOptions($product);
+                $actual[$sku][$storeCode] = [];
+                /** @var $option \Magento\Catalog\Model\Product\Option */
+                foreach ($options as $option) {
+                    $optionData = [
+                        'type' => $option->getType(),
+                        'title' => $option->getTitle()
+                    ];
+                    $optionData += $this->getOptionData($option);
+                    if (in_array($option->getType(), $this->specificTypes)) {
+                        $optionData['values'] = $this->getOptionValues($option);
                     }
+                    $actual[$sku][$storeCode][] = $optionData;
                 }
-                $this->assertTrue($elementExist, 'Element must exist.');
             }
-
-            // Make sure that after importing existing options again, option IDs and option value IDs are not changed
-            $customOptionValues = $this->getCustomOptionValues($sku);
-            $this->createImportModel($pathToFile)->importData();
-            $this->assertEquals(
-                $customOptionValues,
-                $this->getCustomOptionValues($sku),
-                'Option IDs changed after second import'
-            );
         }
+
+        $this->assertEquals($expected, $actual);
+
+        // Make sure that after importing existing options again, option IDs and option value IDs are not changed
+        $expectedIds = [];
+        $actualIds = [];
+        foreach (array_keys($expected) as $sku) {
+            $expectedIds[$sku] = $this->getCustomOptionValues($sku);
+        }
+        $importModel = $this->createImportModel($pathToFile);
+        $importModel->validateData();
+        $importModel->importData();
+        foreach (array_keys($expected) as $sku) {
+            $actualIds[$sku] = $this->getCustomOptionValues($sku);
+
+        }
+
+        $this->assertEquals(
+            $expectedIds,
+            $actualIds,
+            'Option IDs changed after second import'
+        );
+    }
+
+    /**
+     * Tests adding of custom options with multiple store views across bunches
+     *
+     * @dataProvider saveCustomOptionsWithMultipleStoreViewsDataProvider
+     * @param string $importFile
+     * @param array $expected
+     */
+    #[
+        AppIsolation(true),
+        Config(CatalogConfig::XML_PATH_PRICE_SCOPE, CatalogConfig::PRICE_SCOPE_WEBSITE, ScopeInterface::SCOPE_STORE),
+        Config(ImportExportConfig::XML_PATH_BUNCH_SIZE, 2, ScopeInterface::SCOPE_STORE),
+        DataFixture(StoreFixture::class, ['code' => 'secondstore']),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'sku' => 'simple2',
+                'options' => [
+                    [
+                        'type' => ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN,
+                        'title' => 'Option 1',
+                        'values' => [
+                            [
+                                'title'         => 'Option 1 Value 1',
+                                'price'         => 2.5,
+                                'sku'           => 'option1value1',
+                            ],
+                            [
+                                'title'         => 'Option 1 Value 2',
+                                'price'         => 3,
+                                'sku'           => 'option1value2',
+                            ],
+                        ]
+                    ]
+                ]
+            ]
+        ),
+    ]
+    public function testSaveCustomOptionsWithMultipleStoreViewsAcrossMultipleBunches(
+        string $importFile,
+        array $expected
+    ) {
+        $this->testSaveCustomOptionsWithMultipleStoreViews($importFile, $expected);
     }
 
     /**
@@ -252,6 +308,401 @@ class ProductOptionsTest extends ProductTestBase
                 'sku' => 'simple_new',
                 'expectedOptionsQty' => 5,
             ],
+        ];
+    }
+
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function saveCustomOptionsWithMultipleStoreViewsDataProvider(): array
+    {
+        return [
+            [
+                'product_with_custom_options_and_multiple_store_views.csv',
+                [
+                    'simple' => [
+                        'admin' => [
+                            [
+                                'title' => 'Test Field Title',
+                                'type' => 'field',
+                                'is_require' => '1',
+                                'sku' => '1-text',
+                                'price' => '100.000000',
+                                'max_characters' => '0',
+                                'sort_order' => '1',
+                            ],
+                            [
+                                'title' => 'Test Date and Time Title',
+                                'type' => 'date_time',
+                                'is_require' => '1',
+                                'sku' => '2-date',
+                                'price' => '200.000000',
+                                'max_characters' => '0',
+                                'sort_order' => '2',
+                            ],
+                            [
+                                'title' => 'Test Select',
+                                'type' => 'drop_down',
+                                'is_require' => '1',
+                                'sku' => '',
+                                'price' => null,
+                                'max_characters' => '0',
+                                'sort_order' => '3',
+                                'values' => [
+                                    [
+                                        'title' => 'Select Option 1',
+                                        'sku' => '3-1-select',
+                                        'price' => '310.000000',
+                                    ],
+                                    [
+                                        'title' => 'Select Option 2',
+                                        'sku' => '3-2-select',
+                                        'price' => '320.000000',
+                                    ]
+                                ]
+                            ],
+                            [
+                                'title' => 'Test Checkbox',
+                                'type' => 'checkbox',
+                                'is_require' => '1',
+                                'sku' => '',
+                                'price' => null,
+                                'max_characters' => '0',
+                                'sort_order' => '4',
+                                'values' => [
+                                    [
+                                        'title' => 'Checkbox Option 1',
+                                        'sku' => '4-1-select',
+                                        'price' => '410.000000',
+                                    ],
+                                    [
+                                        'title' => 'Checkbox Option 2',
+                                        'sku' => '4-2-select',
+                                        'price' => '420.000000',
+                                    ]
+                                ]
+                            ],
+                            [
+                                'title' => 'Test Radio',
+                                'type' => 'radio',
+                                'is_require' => '1',
+                                'sku' => '',
+                                'price' => null,
+                                'max_characters' => '0',
+                                'sort_order' => '5',
+                                'values' => [
+                                    [
+                                        'title' => 'Radio Option 1',
+                                        'sku' => '5-1-radio',
+                                        'price' => '510.000000',
+                                    ],
+                                    [
+                                        'title' => 'Radio Option 2',
+                                        'sku' => '5-2-radio',
+                                        'price' => '520.000000',
+                                    ]
+                                ]
+                            ]
+                        ],
+                        'default' => [
+                            [
+                                'title' => 'Test Field Title_default',
+                            ],
+                            [
+                                'title' => 'Test Date and Time Title_default',
+                            ],
+                            [
+                                'title' => 'Test Select_default',
+                                'values' => [
+                                    [
+                                        'title' => 'Select Option 1_default',
+                                    ],
+                                    [
+                                        'title' => 'Select Option 2_default',
+                                    ]
+                                ]
+                            ],
+                            [
+                                'title' => 'Test Checkbox_default',
+                                'values' => [
+                                    [
+                                        'title' => 'Checkbox Option 1_default',
+                                    ],
+                                    [
+                                        'title' => 'Checkbox Option 2_default',
+                                    ]
+                                ]
+                            ],
+                            [
+                                'title' => 'Test Radio_default',
+                                'values' => [
+                                    [
+                                        'title' => 'Radio Option 1_default',
+                                    ],
+                                    [
+                                        'title' => 'Radio Option 2_default',
+                                    ]
+                                ]
+                            ]
+                        ],
+                        'secondstore' => [
+                            [
+                                'title' => 'Test Field Title_fixture_second_store',
+                                'price' => '101.000000'
+                            ],
+                            [
+                                'title' => 'Test Date and Time Title_fixture_second_store',
+                                'price' => '201.000000'
+                            ],
+                            [
+                                'title' => 'Test Select_fixture_second_store',
+                                'values' => [
+                                    [
+                                        'title' => 'Select Option 1_fixture_second_store',
+                                        'price' => '311.000000'
+                                    ],
+                                    [
+                                        'title' => 'Select Option 2_fixture_second_store',
+                                        'price' => '321.000000'
+                                    ]
+                                ]
+                            ],
+                            [
+                                'title' => 'Test Checkbox_second_store',
+                                'values' => [
+                                    [
+                                        'title' => 'Checkbox Option 1_second_store',
+                                        'price' => '411.000000'
+                                    ],
+                                    [
+                                        'title' => 'Checkbox Option 2_second_store',
+                                        'price' => '421.000000'
+                                    ]
+                                ]
+                            ],
+                            [
+                                'title' => 'Test Radio_fixture_second_store',
+                                'values' => [
+                                    [
+                                        'title' => 'Radio Option 1_fixture_second_store',
+                                        'price' => '511.000000'
+                                    ],
+                                    [
+                                        'title' => 'Radio Option 2_fixture_second_store',
+                                        'price' => '521.000000'
+                                    ]
+                                ]
+                            ]
+                        ],
+                    ],
+                    'newprod2' => [
+                        'admin' => [],
+                        'default' => [],
+                        'secondstore' => [],
+                    ],
+                    'newprod3' => [
+                        'admin' => [
+                            [
+                                'title' => 'Line 1',
+                                'type' => 'field',
+                                'is_require' => '1',
+                                'sku' => '',
+                                'price' => null,
+                                'max_characters' => '30',
+                                'sort_order' => '1',
+                            ],
+                            [
+                                'title' => 'Line 2',
+                                'type' => 'field',
+                                'is_require' => '0',
+                                'sku' => '',
+                                'price' => null,
+                                'max_characters' => '30',
+                                'sort_order' => '2',
+                            ],
+                        ],
+                        'default' => [
+                            [
+                                'title' => 'Line 1',
+                                'type' => 'field',
+                                'is_require' => '1',
+                                'sku' => '',
+                                'price' => null,
+                                'max_characters' => '30',
+                                'sort_order' => '1',
+                            ],
+                            [
+                                'title' => 'Line 2',
+                                'type' => 'field',
+                                'is_require' => '0',
+                                'sku' => '',
+                                'price' => null,
+                                'max_characters' => '30',
+                                'sort_order' => '2',
+                            ],
+                        ],
+                        'secondstore' => [
+                            [
+                                'title' => 'Line 1',
+                                'type' => 'field',
+                                'is_require' => '1',
+                                'sku' => '',
+                                'price' => null,
+                                'max_characters' => '30',
+                                'sort_order' => '1',
+                            ],
+                            [
+                                'title' => 'Line 2',
+                                'type' => 'field',
+                                'is_require' => '0',
+                                'sku' => '',
+                                'price' => null,
+                                'max_characters' => '30',
+                                'sort_order' => '2',
+                            ],
+                        ],
+                    ],
+                    'newprod4' => [
+                        'admin' => [],
+                        'default' => [],
+                        'secondstore' => [],
+                    ],
+                    'newprod5' => [
+                        'admin' => [
+                            [
+                                'title' => 'Line 3',
+                                'type' => 'field',
+                                'is_require' => '1',
+                                'sku' => '',
+                                'price' => null,
+                                'max_characters' => '30',
+                                'sort_order' => '1',
+                            ],
+                            [
+                                'title' => 'Line 4',
+                                'type' => 'field',
+                                'is_require' => '0',
+                                'sku' => '',
+                                'price' => null,
+                                'max_characters' => '30',
+                                'sort_order' => '2',
+                            ],
+                        ],
+                        'default' => [
+                            [
+                                'title' => 'Line 3',
+                                'type' => 'field',
+                                'is_require' => '1',
+                                'sku' => '',
+                                'price' => null,
+                                'max_characters' => '30',
+                                'sort_order' => '1',
+                            ],
+                            [
+                                'title' => 'Line 4',
+                                'type' => 'field',
+                                'is_require' => '0',
+                                'sku' => '',
+                                'price' => null,
+                                'max_characters' => '30',
+                                'sort_order' => '2',
+                            ],
+                        ],
+                        'secondstore' => [
+                            [
+                                'title' => 'Line 3',
+                                'type' => 'field',
+                                'is_require' => '1',
+                                'sku' => '',
+                                'price' => null,
+                                'max_characters' => '30',
+                                'sort_order' => '1',
+                            ],
+                            [
+                                'title' => 'Line 4',
+                                'type' => 'field',
+                                'is_require' => '0',
+                                'sku' => '',
+                                'price' => null,
+                                'max_characters' => '30',
+                                'sort_order' => '2',
+                            ],
+                        ],
+                    ],
+                    'simple2' => [
+                        'admin' => [
+                            [
+                                'title' => 'Option 1',
+                                'type' => 'drop_down',
+                                'is_require' => '1',
+                                'sku' => '',
+                                'price' => null,
+                                'max_characters' => '0',
+                                'sort_order' => '1',
+                                'values' => [
+                                    [
+                                        'title' => 'Option 1 Value 1',
+                                        'sku' => 'option1value1',
+                                        'price' => '1.200000',
+                                    ],
+                                    [
+                                        'title' => 'Option 1 Value 2',
+                                        'sku' => 'option1value2',
+                                        'price' => '1.400000',
+                                    ]
+                                ]
+                            ]
+                        ],
+                        'default' => [
+                            [
+                                'title' => 'Option 1 Store1',
+                                'type' => 'drop_down',
+                                'is_require' => '1',
+                                'sku' => '',
+                                'price' => null,
+                                'max_characters' => '0',
+                                'sort_order' => '1',
+                                'values' => [
+                                    [
+                                        'title' => 'Option 1 Value 1 Store1',
+                                        'sku' => 'option1value1',
+                                        'price' => '1.100000',
+                                    ],
+                                    [
+                                        'title' => 'Option 1 Value 2 Store1',
+                                        'sku' => 'option1value2',
+                                        'price' => '1.300000',
+                                    ]
+                                ]
+                            ]
+                        ],
+                        'secondstore' => [
+                            [
+                                'title' => 'Option 1 Store2',
+                                'type' => 'drop_down',
+                                'is_require' => '1',
+                                'sku' => '',
+                                'price' => null,
+                                'max_characters' => '0',
+                                'sort_order' => '1',
+                                'values' => [
+                                    [
+                                        'title' => 'Option 1 Value 1 Store2',
+                                        'sku' => 'option1value1',
+                                        'price' => '1.000000',
+                                    ],
+                                    [
+                                        'title' => 'Option 1 Value 2 Store2',
+                                        'sku' => 'option1value2',
+                                        'price' => '1.200000',
+                                    ]
+                                ]
+                            ]
+                        ],
+                    ]
+                ]
+            ]
         ];
     }
 
@@ -483,5 +934,28 @@ class ProductOptionsTest extends ProductTestBase
         }
 
         return false;
+    }
+
+    /**
+     * @param array $expected
+     * @return array
+     */
+    private function getFullExpectedOptions(array $expected): array
+    {
+        foreach ($expected as &$data) {
+            foreach ($data as $store => &$options) {
+                if ($store !== 'admin') {
+                    foreach ($options as $optKey => &$option) {
+                        $option += $data['admin'][$optKey];
+                        if (isset($option['values'])) {
+                            foreach ($option['values'] as $valKey => &$value) {
+                                $value += $data['admin'][$optKey]['values'][$valKey];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $expected;
     }
 }

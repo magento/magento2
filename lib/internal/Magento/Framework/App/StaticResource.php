@@ -222,7 +222,8 @@ class StaticResource implements \Magento\Framework\AppInterface
      */
     protected function parsePath($path)
     {
-        $safePath = $this->driver->getRealPathSafety(ltrim($path, '/'));
+        $path = $path !== null ? ltrim($path, '/') : '';
+        $safePath = $this->driver->getRealPathSafety($path);
         $parts = explode('/', $safePath, 6);
         if (count($parts) < 5) {
             //Checking that path contains all required parts and is not above static folder.
@@ -276,6 +277,12 @@ class StaticResource implements \Magento\Framework\AppInterface
         return $this->logger;
     }
 
+    /**
+     * Method to check if theme allowed.
+     *
+     * @param string $theme
+     * @return bool
+     */
     private function isThemeAllowed(string $theme): bool
     {
         return in_array($theme, array_keys($this->themePackageList->getThemes()));

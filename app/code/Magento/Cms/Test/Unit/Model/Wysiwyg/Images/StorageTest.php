@@ -141,6 +141,9 @@ class StorageTest extends TestCase
      */
     private $fileMock;
 
+    /**
+     * @var array
+     */
     private $allowedImageExtensions = [
         'jpg' => 'image/jpg',
         'jpeg' => 'image/jpeg',
@@ -366,13 +369,13 @@ class StorageTest extends TestCase
     }
 
     /**
-     * @param array $exclude
-     * @param array $include
-     * @param array $fileNames
-     * @param array $expectedRemoveKeys
+     * @param $path
+     * @param $callNum
+     * @param string $dirsFilter
+     * @throws \Exception
      * @dataProvider dirsCollectionDataProvider
      */
-    public function testGetDirsCollection($path, $callNum, $dirsFilter='')
+    public function testGetDirsCollection($path, $callNum, $dirsFilter = '')
     {
         $this->generalTestGetDirsCollection($path, $callNum, $dirsFilter);
     }
@@ -517,6 +520,9 @@ class StorageTest extends TestCase
                     [$thumbnailTargetPath, true],
                 ]
             );
+        $this->driverMock->expects(self::once())
+            ->method('fileGetContents')
+            ->willReturn('some content');
 
         $image = $this->getMockBuilder(Image::class)
             ->disableOriginalConstructor()

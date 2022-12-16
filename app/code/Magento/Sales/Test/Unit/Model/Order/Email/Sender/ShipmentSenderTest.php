@@ -89,7 +89,8 @@ class ShipmentSenderTest extends AbstractSenderTest
             $this->paymentHelper,
             $this->shipmentResourceMock,
             $this->globalConfig,
-            $this->eventManagerMock
+            $this->eventManagerMock,
+            $this->appEmulator
         );
     }
 
@@ -188,6 +189,8 @@ class ShipmentSenderTest extends AbstractSenderTest
                     ]
                 );
 
+            $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+            $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
             $this->identityContainerMock->expects($this->exactly(2))
                 ->method('isEnabled')
                 ->willReturn($emailSendingResult);
@@ -335,6 +338,8 @@ class ShipmentSenderTest extends AbstractSenderTest
                 ]
             );
 
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->identityContainerMock->expects($this->exactly(2))
             ->method('isEnabled')
             ->willReturn(false);

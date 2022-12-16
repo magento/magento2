@@ -17,6 +17,7 @@
             <group value="backend"/>
             <severity value="MINOR"></severity>
             <testCaseId value="MC-35895"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

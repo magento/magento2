@@ -58,8 +58,8 @@ class FileIteratorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testIterator(): void
     {
         $contents = ['content1', 'content2'];
@@ -86,8 +86,8 @@ class FileIteratorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testToArray(): void
     {
         $contents = ['content1', 'content2'];

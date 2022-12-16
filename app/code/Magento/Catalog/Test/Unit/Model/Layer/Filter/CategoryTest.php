@@ -76,6 +76,7 @@ class CategoryTest extends TestCase
 
     /**
      * @inheritDoc
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
     {
@@ -105,8 +106,7 @@ class CategoryTest extends TestCase
                     'getChildrenCategories',
                     'getIsActive'
                 ]
-            )
-            ->getMock();
+            )->getMock();
 
         $this->dataProvider
             ->method('getCategory')
@@ -153,8 +153,7 @@ class CategoryTest extends TestCase
                     'setValue',
                     'setCount'
                 ]
-            )
-            ->getMock();
+            )->getMock();
         $filterItem->expects($this->any())
             ->method($this->anything())->willReturnSelf();
         $this->filterItemFactory->expects($this->any())
@@ -192,12 +191,23 @@ class CategoryTest extends TestCase
     public function testApplyWithEmptyRequest($requestValue, $idValue): void
     {
         $requestField = 'test_request_var';
+        $idField = 'id';
 
         $this->target->setRequestVar($requestField);
 
         $this->request
             ->method('getParam')
-            ->with($requestField);
+            ->with($requestField)
+            ->willReturnCallback(
+                function ($field) use ($requestField, $idField, $requestValue, $idValue) {
+                    switch ($field) {
+                        case $requestField:
+                            return $requestValue;
+                        case $idField:
+                            return $idValue;
+                    }
+                }
+            );
 
         $result = $this->target->apply($this->request);
         $this->assertSame($this->target, $result);

@@ -47,8 +47,8 @@ class TemporaryTableStrategyTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetUseIdxTable(): void
     {
         $this->tableStrategyMock->expects($this->once())->method('getUseIdxTable')->willReturn(true);
@@ -56,8 +56,8 @@ class TemporaryTableStrategyTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSetUseIdxTable(): void
     {
         $this->tableStrategyMock->expects($this->once())->method('setUseIdxTable')->with(true)->willReturnSelf();
@@ -65,8 +65,8 @@ class TemporaryTableStrategyTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetTableName(): void
     {
         $tablePrefix = 'prefix';
@@ -80,8 +80,8 @@ class TemporaryTableStrategyTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testPrepareTableName(): void
     {
         $tablePrefix = 'prefix';

@@ -248,7 +248,7 @@ class PriceTest extends TestCase
         // final price is the lowest price of configurable variations
         $this->assertEquals(
             round($expectedPrice, 2),
-            round($this->priceModel->getFinalPrice(1, $product), 2)
+            round((float) $this->priceModel->getFinalPrice(1, $product), 2)
         );
     }
 

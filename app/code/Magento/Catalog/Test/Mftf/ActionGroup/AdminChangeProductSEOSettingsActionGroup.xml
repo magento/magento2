@@ -12,6 +12,11 @@
         <arguments>
             <argument name="productName" defaultValue="_defaultProduct.name"/>
         </arguments>
+        <!--Scroll to element to avoid test order flakiness-->
+        <waitForElement selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="waitForSection"/>
+        <executeJS function="return document.querySelector(&quot;{{AdminProductSEOSection.sectionHeader}}&quot;).getBoundingClientRect().y" stepKey="sectionPosition"/>
+        <executeJS function="return document.querySelector(&quot;{{AdminHeaderSection.pageMainActions}}&quot;).getBoundingClientRect().height" stepKey="floatingHeaderHeight"/>
+        <executeJS function="window.scrollTo({top: {$sectionPosition}-{$floatingHeaderHeight}})" stepKey="scrollToSEOTab"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickSearchEngineOptimizationTab"/>
         <waitForPageLoad stepKey="waitForTabOpen"/>
         <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{productName}}" stepKey="setUrlKeyInput"/>

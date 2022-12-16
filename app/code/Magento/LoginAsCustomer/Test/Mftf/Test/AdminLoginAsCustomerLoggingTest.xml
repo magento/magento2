@@ -18,6 +18,7 @@
                 value="Verify that 'Login as customer Log' record information about using 'Login as Customer' functionality properly"/>
             <severity value="MAJOR"/>
             <group value="login_as_customer"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"

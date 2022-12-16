@@ -7,8 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
-    <exchange name="magento-db" type="topic" connection="db">
-        <binding id="MediaGalleryRenditions" topic="media.gallery.renditions.update"
-                 destinationType="queue" destination="media.gallery.renditions.update"/>
+    <exchange name="magento">
+        <binding id="MediaGalleryRenditions" topic="media.gallery.renditions.update" destination="media.gallery.renditions.update"/>
     </exchange>
 </config>

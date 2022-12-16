@@ -48,7 +48,7 @@
             <!--Delete customer-->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Reset admin order filter -->
-            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clearOrderFilters"/>
             <!-- Go to the tax rule page and delete the row we created-->
             <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
