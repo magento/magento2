@@ -550,16 +550,19 @@ QUERY;
         echo var_dump($order8);
         print_r($expectedOrderNumbersOptions);
         $expectedOrderNumbers = $scalarTemp = [];
-        $compDate = '';
+        $compDate = $prevComKey = '';
         foreach ($expectedOrderNumbersOptions as $comKey => $comData) {
             if ($compDate == $customerOrderItemsInResponse[$comKey]['order_date']) {
                 echo 'in same time';
-                $expectedOrderNumbers[] = array_unshift($expectedOrderNumbers, $comData);
+                $expectedOrderNumbers[] = $expectedOrderNumbers[$prevComKey];
+                $scalarTemp = (array)$comData;
+                $expectedOrderNumbers[$prevComKey] = $scalarTemp[0];
             } else {
                 echo 'not same time';
                 $scalarTemp = (array)$comData;
                 $expectedOrderNumbers[] = $scalarTemp[0];
             }
+            $prevComKey = $comKey;
             print_r($expectedOrderNumbers);
                 $compDate = $customerOrderItemsInResponse[$comKey]['order_date'];
                 echo 'com >>'.$compDate;
