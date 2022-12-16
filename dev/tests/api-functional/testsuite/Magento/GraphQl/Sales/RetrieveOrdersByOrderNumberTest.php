@@ -537,35 +537,27 @@ QUERY;
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
 
-         $order2 = $this->fixtures->get('or2')->getIncrementId();
-         $order3 = $this->fixtures->get('or3')->getIncrementId();
-         $order4 = $this->fixtures->get('or4')->getIncrementId();
-         $order5 = $this->fixtures->get('or5')->getIncrementId();
-         $order6 = $this->fixtures->get('or6')->getIncrementId();
-         $order7 = $this->fixtures->get('or7')->getIncrementId();
-         $order8 = $this->fixtures->get('or8')->getIncrementId();
-        echo 'printing fixture array here';
-        print_r($customerOrderItemsInResponse);
+        $order2 = $this->fixtures->get('or2')->getIncrementId();
+        $order3 = $this->fixtures->get('or3')->getIncrementId();
+        $order4 = $this->fixtures->get('or4')->getIncrementId();
+        $order5 = $this->fixtures->get('or5')->getIncrementId();
+        $order6 = $this->fixtures->get('or6')->getIncrementId();
+        $order7 = $this->fixtures->get('or7')->getIncrementId();
+        $order8 = $this->fixtures->get('or8')->getIncrementId();
         $expectedOrderNumbersOptions = [$order8, $order7, $order6, $order5, $order4, $order3, $order2 ];
-        echo var_dump($order8);
-        print_r($expectedOrderNumbersOptions);
         $expectedOrderNumbers = $scalarTemp = [];
         $compDate = $prevComKey = '';
         foreach ($expectedOrderNumbersOptions as $comKey => $comData) {
             if ($compDate == $customerOrderItemsInResponse[$comKey]['order_date']) {
-                echo 'in same time';
                 $expectedOrderNumbers[] = $expectedOrderNumbers[$prevComKey];
                 $scalarTemp = (array)$comData;
                 $expectedOrderNumbers[$prevComKey] = $scalarTemp[0];
             } else {
-                echo 'not same time';
                 $scalarTemp = (array)$comData;
                 $expectedOrderNumbers[] = $scalarTemp[0];
             }
             $prevComKey = $comKey;
-            print_r($expectedOrderNumbers);
-                $compDate = $customerOrderItemsInResponse[$comKey]['order_date'];
-                echo 'com >>'.$compDate;
+            $compDate = $customerOrderItemsInResponse[$comKey]['order_date'];
         }
 
         foreach ($expectedOrderNumbers as $key => $data) {
