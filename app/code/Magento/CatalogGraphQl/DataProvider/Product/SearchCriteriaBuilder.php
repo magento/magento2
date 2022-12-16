@@ -98,7 +98,7 @@ class SearchCriteriaBuilder
     public function build(array $args, bool $includeAggregation): SearchCriteriaInterface
     {
         $searchCriteria = $this->builder->build('products', $args);
-        $isSearch = !empty($args['search']);
+        $isSearch = isset($args['search']);
         $this->updateRangeFilters($searchCriteria);
         if ($includeAggregation) {
             $attributeData = $this->eavConfig->getAttribute(Product::ENTITY, 'price');
@@ -122,7 +122,7 @@ class SearchCriteriaBuilder
         }
 
         $this->addEntityIdSort($searchCriteria);
-        $this->addVisibilityFilter($searchCriteria, $isSearch, !empty($args['filter']));
+        $this->addVisibilityFilter($searchCriteria, $isSearch, !empty($args['filter']['category_id']));
 
         $searchCriteria->setCurrentPage($args['currentPage']);
         $searchCriteria->setPageSize($args['pageSize']);
