@@ -299,12 +299,20 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
     }
 
     /**
+     * Checks for toolbar actions
+     *
      * @return bool
      */
     private function isToolbarAction(): bool
     {
         $params = $this->getRequest()->getParams();
 
-        return empty(array_intersect(Toolbar::TOOLBAR_PARAM_LIST, array_keys($params))) === false;
+        return empty(array_intersect([
+                Toolbar::PAGE_PARM_NAME,
+                Toolbar::ORDER_PARAM_NAME,
+                Toolbar::DIRECTION_PARAM_NAME,
+                Toolbar::MODE_PARAM_NAME,
+                Toolbar::LIMIT_PARAM_NAME
+            ], array_keys($params))) === false;
     }
 }
