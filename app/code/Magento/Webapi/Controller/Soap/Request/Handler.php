@@ -300,7 +300,7 @@ class Handler
                 $this->backpressureEnforcer->enforce($context);
             } catch (BackpressureExceededException $exception) {
                 throw new WebapiException(
-                    __('Something went wrong, please try again later'),
+                    __('Too Many Requests'),
                     0,
                     WebapiException::HTTP_TOO_MANY_REQUESTS
                 );

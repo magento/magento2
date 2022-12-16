@@ -68,7 +68,7 @@ class BackpressureValidator implements ValidatorInterface
                 try {
                     $this->enforcer->enforce($context);
                 } catch (BackpressureExceededException $exception) {
-                    throw new LocalizedException(__('Something went wrong, please try again later'), $exception);
+                    throw new LocalizedException(__('Too Many Requests'), $exception);
                 }
             }
         }
