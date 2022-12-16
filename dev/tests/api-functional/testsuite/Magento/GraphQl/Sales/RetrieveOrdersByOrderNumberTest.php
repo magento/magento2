@@ -547,14 +547,17 @@ QUERY;
 
         $expectedOrderNumbersOptions = [$order8, $order7, $order6, $order5, $order4, $order3, $order2 ];
         $expectedOrderNumbers = $scalarTemp = [];
-        $compDate = '';
+        $compDate = $prevComKey = '';
         foreach ($expectedOrderNumbersOptions as $comKey => $comData) {
             if ($compDate == $customerOrderItemsInResponse[$comKey]['order_date']) {
-                $expectedOrderNumbers = array_unshift($expectedOrderNumbers, $comData);
+                $expectedOrderNumbers[] = $expectedOrderNumbers[$prevComKey];
+                $scalarTemp = (array)$comData;
+                $expectedOrderNumbers[$prevComKey] = $scalarTemp[0];
             } else {
                 $scalarTemp = (array)$comData;
-                $expectedOrderNumbers[$comKey] = $scalarTemp[0];
+                $expectedOrderNumbers[] = $scalarTemp[0];
             }
+            $prevComKey = $comKey;
             $compDate = $customerOrderItemsInResponse[$comKey]['order_date'];
         }
 
