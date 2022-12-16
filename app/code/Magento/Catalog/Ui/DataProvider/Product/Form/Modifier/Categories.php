@@ -442,7 +442,8 @@ class Categories extends AbstractModifier
 
         $collection->addAttributeToFilter('entity_id', ['in' => array_keys($shownCategoriesIds)])
             ->addAttributeToSelect(['name', 'is_active', 'parent_id'])
-            ->setStoreId($storeId);
+            ->setStoreId($storeId)
+            ->addAttributeToSort('position', 'ASC');
 
         $categoryById = [
             CategoryModel::TREE_ROOT_ID => [
