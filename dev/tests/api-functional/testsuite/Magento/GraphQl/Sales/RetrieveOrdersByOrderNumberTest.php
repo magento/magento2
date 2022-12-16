@@ -553,7 +553,7 @@ QUERY;
                 $expectedOrderNumbers = array_unshift($expectedOrderNumbers, $comData);
             } else {
                 if ($comKey > 0) {
-                    $expectedOrderNumbers[] = $comData;
+                    $expectedOrderNumbers[$comKey] = $comData;
                 }
             }
                 $compDate = $customerOrderItemsInResponse[$comKey]['order_date'];
