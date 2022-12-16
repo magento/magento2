@@ -544,7 +544,8 @@ QUERY;
          $order6 = $this->fixtures->get('or6')->getIncrementId();
          $order7 = $this->fixtures->get('or7')->getIncrementId();
          $order8 = $this->fixtures->get('or8')->getIncrementId();
-
+        echo 'printing fixture array here';
+        print_r($customerOrderItemsInResponse);
         $expectedOrderNumbersOptions = [$order8, $order7, $order6, $order5, $order4, $order3, $order2 ];
         echo var_dump($order8);
         print_r($expectedOrderNumbersOptions);
@@ -552,10 +553,12 @@ QUERY;
         $compDate = '';
         foreach ($expectedOrderNumbersOptions as $comKey => $comData) {
             if ($compDate == $customerOrderItemsInResponse[$comKey]['order_date']) {
-                $expectedOrderNumbers = array_unshift($expectedOrderNumbers, $comData);
+                echo 'in same time';
+                $expectedOrderNumbers[] = array_unshift($expectedOrderNumbers, $comData);
             } else {
+                echo 'not same time';
                 $scalarTemp = (array)$comData;
-                $expectedOrderNumbers[$comKey] = $scalarTemp[0];
+                $expectedOrderNumbers[] = $scalarTemp[0];
             }
             print_r($expectedOrderNumbers);
                 $compDate = $customerOrderItemsInResponse[$comKey]['order_date'];
