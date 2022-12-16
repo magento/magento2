@@ -25,7 +25,7 @@
 
             <!-- Create Customer -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer">
-                <field key="email">John+Doe@example.com</field>
+                <field key="email">John+@example.com</field>
             </createData>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -61,5 +61,14 @@
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
             <argument name="title" value="{{AdminMenuReportsMarketingAbandonedCarts.pageTitle}}"/>
         </actionGroup>
+
+        <!-- Search for email containing '+' sign -->
+        <actionGroup ref="AdminAbandonedCartsReportFilterEmailActionGroup" stepKey="searchForEmailWithPlus">
+            <argument name="email" value="John+"/>
+        </actionGroup>
+
+        <!-- Check record is present -->
+
+
     </test>
 </tests>
