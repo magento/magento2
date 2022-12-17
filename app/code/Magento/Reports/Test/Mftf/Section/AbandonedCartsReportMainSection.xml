@@ -13,5 +13,6 @@
         <element name="email" type="input" selector="#gridAbandoned_filter_email"/>
         <element name="searchButton" type="button" selector="//button/span[text()='Search']"/>
         <element name="resetButton" type="button" selector="//button/span[text()='Reset Filter']"/>
+        <element name="recordsFound" type="text" selector="#gridAbandoned-total-count"/>
     </section>
 </sections>

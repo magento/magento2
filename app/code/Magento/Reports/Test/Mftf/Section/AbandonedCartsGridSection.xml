@@ -9,6 +9,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AbandonedCartsGridSection">
-        <element name="email" type="input" selector="//tr[@class='data-grid-filters']/td[@data-column='email']"/>
+        <element name="email" type="input" selector="//tr/td[contains(@class, 'col-email')][contains(text(), '{{email1}}')]" parameterized="true"/>
     </section>
 </sections>
