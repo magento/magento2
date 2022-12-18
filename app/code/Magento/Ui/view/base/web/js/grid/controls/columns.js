@@ -81,7 +81,7 @@ define([
         /**
          * Helper, checks
          *  - if less than one item chosen
-         *  - if more then viewportMaxSize chosen
+         *  - if more than viewportMaxSize chosen
          *
          * @param {Object} elem
          * @returns {Boolean}
