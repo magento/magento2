@@ -58,8 +58,17 @@ class Dismiss extends Action
         $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         if (!$isAcknowledged) {
             $result->setHttpResponseCode(400);
+            $response = [
+                'errors' => true,
+                'message' => __('Notification dismiss failed')
+            ];
+        } else {
+            $response = [
+                'errors' => false,
+                'message' => __('Notification dismiss successfull')
+            ];
         }
-
+        $result->addData($response);
         return $result;
     }
 }
