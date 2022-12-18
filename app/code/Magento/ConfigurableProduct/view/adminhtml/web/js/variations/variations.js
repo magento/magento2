@@ -130,9 +130,14 @@ define([
          * @return {String|Number|Array}
          */
         getProductValue: function (name) {
-            name = name.split('/').join('][');
+            var value;
 
-            return $('[name="product[' + name + ']"]:enabled:not(.ignore-validate)', this.productForm).val();
+            name = name.split('/').join('][');
+            value = $('[name="product[' + name + ']"]:enabled:not(.ignore-validate)', this.productForm).val();
+            if (value === undefined) {
+                value = this.source.get('data.product.' + name);
+            }
+            return value;
         },
 
         /**

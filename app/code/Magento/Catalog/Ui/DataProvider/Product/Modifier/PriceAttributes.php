@@ -7,12 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Ui\DataProvider\Product\Modifier;
 
-use Magento\Framework\Currency;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Locale\CurrencyInterface;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\Store;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 
@@ -32,39 +30,40 @@ class PriceAttributes implements ModifierInterface
     private $storeManager;
 
     /**
-     * @var CurrencyInterface
+     * @var array
      */
-    private $localeCurrency;
+    private $excludeProductTypes;
 
     /**
-     * @var ContextInterface
+     * @var PriceCurrencyInterface
      */
-    private ContextInterface $context;
+    private $priceCurrency;
 
     /**
      * PriceAttributes constructor.
      *
-     * @param ContextInterface $context
      * @param StoreManagerInterface $storeManager
      * @param CurrencyInterface $localeCurrency
      * @param array $priceAttributeList
+     * @param array $excludeProductTypes
+     * @param PriceCurrencyInterface|null $priceCurrency
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        ContextInterface $context,
         StoreManagerInterface $storeManager,
         CurrencyInterface $localeCurrency,
-        array $priceAttributeList = []
+        array $priceAttributeList = [],
+        array $excludeProductTypes = [],
+        ?PriceCurrencyInterface $priceCurrency = null
     ) {
         $this->storeManager = $storeManager;
-        $this->localeCurrency = $localeCurrency;
         $this->priceAttributeList = $priceAttributeList;
-        $this->context = $context;
+        $this->excludeProductTypes = $excludeProductTypes;
+        $this->priceCurrency = $priceCurrency ?? ObjectManager::getInstance()->get(PriceCurrencyInterface::class);
     }
 
     /**
      * @inheritdoc
-     * @throws NoSuchEntityException
-     * @throws \Zend_Currency_Exception
      */
     public function modifyData(array $data): array
     {
@@ -73,9 +72,18 @@ class PriceAttributes implements ModifierInterface
         }
 
         foreach ($data['items'] as &$item) {
-            foreach ($this->priceAttributeList as $priceAttribute) {
-                if (isset($item[$priceAttribute])) {
-                    $item[$priceAttribute] = $this->getCurrency()->toCurrency(sprintf("%f", $item[$priceAttribute]));
+            if (!isset($item[ProductInterface::TYPE_ID])
+                || !in_array($item[ProductInterface::TYPE_ID], $this->excludeProductTypes, true)
+            ) {
+                foreach ($this->priceAttributeList as $priceAttribute) {
+                    if (isset($item[$priceAttribute])) {
+                        $item[$priceAttribute] = $this->priceCurrency->format(
+                            sprintf("%F", $item[$priceAttribute]),
+                            false,
+                            PriceCurrencyInterface::DEFAULT_PRECISION,
+                            $this->storeManager->getStore($item['store_id'] ?? null)
+                        );
+                    }
                 }
             }
         }
@@ -89,31 +97,5 @@ class PriceAttributes implements ModifierInterface
     public function modifyMeta(array $meta): array
     {
         return $meta;
-    }
-
-    /**
-     * Retrieve store
-     *
-     * @return StoreInterface
-     * @throws NoSuchEntityException
-     */
-    private function getStore(): StoreInterface
-    {
-        return $this->storeManager->getStore(
-            $this->context->getFilterParam('store_id', Store::DEFAULT_STORE_ID)
-        );
-    }
-
-    /**
-     * Retrieve currency
-     *
-     * @return Currency
-     * @throws NoSuchEntityException
-     */
-    private function getCurrency(): Currency
-    {
-        $baseCurrencyCode = $this->getStore()->getBaseCurrencyCode();
-
-        return $this->localeCurrency->getCurrency($baseCurrencyCode);
     }
 }

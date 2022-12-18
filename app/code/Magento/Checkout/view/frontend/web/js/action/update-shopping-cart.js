@@ -154,7 +154,12 @@ define([
         onError: function (response) {
             var that = this,
                 elm,
+                responseData = [];
+
+            try {
                 responseData = JSON.parse(response['error_message']);
+            } catch (error) {
+            }
 
             if (response['error_message']) {
                 try {
