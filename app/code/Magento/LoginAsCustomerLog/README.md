@@ -6,14 +6,14 @@ This module provides log for Login as Customer functionality
 
 The Magento_LoginAsCustomerLog module creates the `magento_login_as_customer_log` table in the database.
 
-For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+For information about a module installation in Magento 2, see [Enable or disable modules](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/tutorials/manage-modules.html).
 
 ### Layouts
 
 This module introduces the following layouts in the `view/adminhtml/layout` directory:
 - `loginascustomer_log_log_index`
 
-For more information about a layout in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
+For more information about a layout in Magento 2, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
 
 ### UI components
 
