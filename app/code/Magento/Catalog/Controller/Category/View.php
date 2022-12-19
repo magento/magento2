@@ -23,6 +23,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -182,10 +183,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         }
         $this->_catalogSession->setLastVisitedCategoryId($category->getId());
         $this->_coreRegistry->register('current_category', $category);
-        if ($this->isToolbarAction()) {
-            $this->toolbarMemorizer->memorizeParams();
-            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
-        }
+        $this->toolbarMemorizer->memorizeParams();
         try {
             $this->_eventManager->dispatch(
                 'catalog_controller_category_init_after',
@@ -212,6 +210,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
             //phpcs:ignore Magento2.Legacy.ObsoleteResponse
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl());
         }
+
         $category = $this->_initCategory();
         if ($category) {
             $this->layerResolver->create(Resolver::CATALOG_LAYER_CATEGORY);
@@ -250,6 +249,9 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
                 ->addBodyClass('categorypath-' . $this->categoryUrlPathGenerator->getUrlPath($category))
                 ->addBodyClass('category-' . $category->getUrlKey());
 
+            if ($this->isToolbarAction()) {
+                $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+            }
             return $page;
         } elseif (!$this->getResponse()->isRedirect()) {
             $result = $this->resultForwardFactory->create()->forward('noroute');
