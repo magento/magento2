@@ -110,7 +110,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
 
         return [
             'no flags runs all groups' => [
-                ['consumers', 'index', 'default']    // groups to run
+                ['index', 'consumers', 'default']    // groups to run
             ],
             '--group=default should run'  => [
                 ['default'],                        // groups to run
