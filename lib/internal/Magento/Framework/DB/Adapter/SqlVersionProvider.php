@@ -120,4 +120,12 @@ class SqlVersionProvider
 
         return $versionOutput[self::VERSION_VAR_NAME];
     }
+
+    /**
+     * @return string
+     */
+    public function getExactSQLVersion(): string
+    {
+        return $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
+    }
 }

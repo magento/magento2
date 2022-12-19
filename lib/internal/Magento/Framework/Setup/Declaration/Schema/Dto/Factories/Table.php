@@ -45,7 +45,8 @@ class Table implements FactoryInterface
     private static array $defaultCharset = [
         '10.4.' => 'utf8',
         '10.6.' => 'utf8mb3',
-        'default' => 'utf8',
+        'mysql_8_29' => 'utf8mb3',
+        'default' => 'utf8'
     ];
 
     /**
@@ -54,7 +55,8 @@ class Table implements FactoryInterface
     private static array $defaultCollation = [
         '10.4.' => 'utf8_general_ci',
         '10.6.' => 'utf8mb3_general_ci',
-        'default' => 'utf8_general_ci',
+        'mysql_8_29' => 'utf8mb3_general_ci',
+        'default' => 'utf8_general_ci'
     ];
 
     /**
@@ -117,7 +119,16 @@ class Table implements FactoryInterface
      */
     private function getDefaultCharset(): string
     {
-        return self::$defaultCharset[$this->sqlVersionProvider->getSqlVersion()] ?? self::$defaultCharset['default'];
+        $sqlVersion = $this->sqlVersionProvider->getSqlVersion();
+        $sqlExactVersion = $this->sqlVersionProvider->getExactSQLVersion();
+        $isMariaDB = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_VERSION);
+
+        if (!$isMariaDB && isset($sqlExactVersion) && version_compare($sqlExactVersion, "8.0.29", ">=")) {
+            return self::$defaultCharset['mysql_8_29'];
+        }
+
+        return self::$defaultCharset[$sqlVersion] ??
+            self::$defaultCharset['default'];
     }
 
     /**
@@ -127,7 +138,15 @@ class Table implements FactoryInterface
      */
     private function getDefaultCollation(): string
     {
-        return self::$defaultCollation[$this->sqlVersionProvider->getSqlVersion()] ??
+        $sqlVersion = $this->sqlVersionProvider->getSqlVersion();
+        $isMariaDB = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_VERSION);
+        $sqlExactVersion = $this->sqlVersionProvider->getExactSQLVersion();
+
+        if (!$isMariaDB && isset($sqlExactVersion) && version_compare($sqlExactVersion, "8.0.29", ">=")) {
+            return self::$defaultCollation['mysql_8_29'];
+        }
+
+        return self::$defaultCollation[$sqlVersion] ??
             self::$defaultCollation['default'];
     }
 }
