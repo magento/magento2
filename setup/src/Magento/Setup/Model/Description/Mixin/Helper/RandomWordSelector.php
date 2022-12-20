@@ -27,6 +27,8 @@ class RandomWordSelector
         $randWords = [];
         $wordsSize = count($words);
         while ($count) {
+            // mt_rand() here is not for cryptographic use.
+            // phpcs:ignore Magento2.Security.InsecureFunction
             $randWords[] = $words[mt_rand(0, $wordsSize - 1)];
             $count--;
         }

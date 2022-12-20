@@ -13,5 +13,7 @@
         <element name="filter" type="button" selector="#container > div > div.admin__data-grid-header > div:nth-child(1) > div.data-grid-filters-actions-wrap > div > button"/>
         <element name="firstRow" type="button" selector="tr.data-row:nth-of-type(1)"/>
         <element name="clearFilters" type="button" selector="button.action-clear" timeout="30"/>
+        <element name="selectActions" type="button" selector=".action-select-wrap > .action-select" timeout="30"/>
+        <element name="dropdownActionItem" type="button" selector="(//div[contains(@class, 'action-select-wrap')]//span[text()='{{action}}'])[1]" timeout="30" parameterized="true"/>
     </section>
 </sections>

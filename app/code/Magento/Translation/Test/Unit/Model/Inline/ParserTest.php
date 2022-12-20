@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Translation\Test\Unit\Model\Inline;
 
+use Laminas\Filter\FilterInterface;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate\InlineInterface;
 use Magento\Store\Api\Data\StoreInterface;
@@ -20,6 +22,9 @@ use Magento\Translation\Model\ResourceModel\StringUtilsFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ParserTest extends TestCase
 {
     /**
@@ -53,7 +58,7 @@ class ParserTest extends TestCase
     private $storeMock;
 
     /**
-     * @var \Zend_Filter_Interface|MockObject
+     * @var FilterInterface|MockObject
      */
     private $inputFilterMock;
 
@@ -98,7 +103,7 @@ class ParserTest extends TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->inputFilterMock = $this->getMockForAbstractClass('Zend_Filter_Interface');
+        $this->inputFilterMock = $this->getMockForAbstractClass(FilterInterface::class);
 
         $this->resourceFactoryMock->method('create')
             ->willReturn($this->resourceMock);
@@ -122,6 +127,7 @@ class ParserTest extends TestCase
                 'appCache' => $this->appCacheMock,
                 'translateInline' => $this->translateInlineMock,
                 'cacheManager' => $this->cacheManagerMock,
+                'escaper' => $this->getMockEscaper()
             ]
         );
     }
@@ -143,26 +149,27 @@ class ParserTest extends TestCase
         $this->model->processAjaxPost([]);
     }
 
-    public function testProcessResponseBodyStringProcessingAttributesCorrectly()
+    /**
+     * @return void
+     */
+    public function testProcessResponseBodyString(): void
     {
-        $testContent = file_get_contents(__DIR__ . '/_files/datatranslate_fixture.html');
-        $processedAttributes = [
-            "data-translate=\"[{'shown':'* Required Fields','translated':'* Required Fields',"
-            . "'original':'* Required Fields','location':'Tag attribute (ALT, TITLE, etc.)'}]\"",
-            "data-translate=\"[{'shown':'Email','translated':'Email','original':'Email',"
-            . "'location':'Tag attribute (ALT, TITLE, etc.)'}]\"",
-            "data-translate=\"[{'shown':'Password','translated':'Password','original':'Password',"
-            . "'location':'Tag attribute (ALT, TITLE, etc.)'}]\""
-        ];
-        $this->translateInlineMock->method('getAdditionalHtmlAttribute')->willReturn(null);
+        $html = file_get_contents(__DIR__ . '/_files/input.html');
+        $expectedOutput = file_get_contents(__DIR__ . '/_files/output.html');
+        $actualOutput = $this->model->processResponseBodyString($html);
+        $this->assertEquals($expectedOutput, $actualOutput);
+    }
 
-        $processedContent = $this->model->processResponseBodyString($testContent);
-        foreach ($processedAttributes as $attribute) {
-            $this->assertStringContainsString(
-                $attribute,
-                $processedContent,
-                'data-translate attribute not processed correctly'
-            );
-        }
+    /**
+     * @return Escaper
+     */
+    private function getMockEscaper(): Escaper
+    {
+        $escaper = new Escaper();
+        $reflection = new \ReflectionClass($escaper);
+        $reflectionProperty = $reflection->getProperty('escaper');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($escaper, new \Magento\Framework\ZendEscaper());
+        return $escaper;
     }
 }

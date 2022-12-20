@@ -29,16 +29,13 @@
         <fillField selector="{{AdminManageSwatchSection.swatchTextByIndex('3')}}" userInput="123456789012345678901" stepKey="fillSwatch3" after="clickAddSwatch3"/>
         <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('3')}}" userInput="123456789012345678901BrownD" stepKey="fillDescription3" after="fillSwatch3"/>
 
-        <!--Run re-index task-->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <see selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '3')}}" userInput="123456789012345678901" stepKey="seeGreen" after="seeBlue"/>
         <see selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '4')}}" userInput="123456789012345678901" stepKey="seeBrown" after="seeGreen"/>
 
         <!-- Go to the category page -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage2"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage2"/>
         <waitForPageLoad stepKey="waitForCategoryPage2"/>
 
         <!-- Verify swatch2 is present and shown in full display text characters on storefront in the layered navigation -->
@@ -47,7 +44,7 @@
         <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '2')}}" stepKey="filterBySwatch2"/>
 
         <!-- Go to the category page -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage3"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage3"/>
         <waitForPageLoad stepKey="waitForCategoryPage3"/>
 
         <!-- Verify swatch3 is present and shown in full display text characters on storefront in the layered navigation -->
@@ -56,7 +53,7 @@
         <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '3')}}" stepKey="filterBySwatch3"/>
 
         <!-- Go to the category page -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage4"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage4"/>
         <waitForPageLoad stepKey="waitForCategoryPage4"/>
 
         <!-- Verify swatch4 is present and shown in full display text characters on storefront in the layered navigation -->
@@ -68,6 +65,7 @@
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProduct">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
     </test>
 

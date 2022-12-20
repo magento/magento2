@@ -20,14 +20,18 @@
             <group value="checkout"/>
             <group value="tax"/>
             <group value="weee"/>
+            <group value="cloud_smoke"/>
         </annotations>
 
         <before>
             <!-- Preconditions  -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
             <!--  Tax Rule is created based on default tax rates (Stores>Tax Rule) US-CA-*-Rate 1 = 8.2500 US-NY-*-Rate 1 = 8.3750 -->
             <createData entity="SimpleTaxRule" stepKey="createTaxRule"/>
             <!--  Fixed Product Tax attribute is created and added to default attribute set -->
-            <createData entity="productFPTAttribute" stepKey="createProductFPTAttribute"/>
+            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttribute"/>
             <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet">
                 <requiredEntity createDataKey="createProductFPTAttribute"/>
             </createData>
@@ -38,7 +42,6 @@
                 <field key="price">40.00</field>
             </createData>
 
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
         </before>
 

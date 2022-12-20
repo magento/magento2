@@ -91,27 +91,26 @@ class MoveTest extends TestCase
     public function testAfterChangeParent()
     {
         $urlPath = 'test/path';
-        $storeIds = [1];
+        $storeIds = [0, 1];
         $originalCategory = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->categoryFactory->method('create')
             ->willReturn($originalCategory);
-
         $this->categoryMock->method('getResource')
             ->willReturn($this->subjectMock);
         $this->categoryMock->expects($this->once())
             ->method('getStoreIds')
             ->willReturn($storeIds);
-        $this->childrenCategoriesProviderMock->expects($this->once())
+        $this->childrenCategoriesProviderMock->expects($this->exactly(2))
             ->method('getChildren')
             ->with($this->categoryMock, true)
             ->willReturn([]);
-        $this->categoryUrlPathGeneratorMock->expects($this->once())
+        $this->categoryUrlPathGeneratorMock->expects($this->exactly(2))
             ->method('getUrlPath')
             ->with($this->categoryMock)
             ->willReturn($urlPath);
-        $this->categoryMock->expects($this->once())
+        $this->categoryMock->expects($this->exactly(2))
             ->method('setUrlPath')
             ->with($urlPath);
         $this->assertSame(

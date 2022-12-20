@@ -10,6 +10,16 @@ use Magento\Framework\App\Area;
 class ConfigurationScanner
 {
     /**
+     * @var \Magento\Framework\App\Config\FileResolver
+     */
+    private $fileResolver;
+
+    /**
+     * @var \Magento\Framework\App\AreaList
+     */
+    private $areaList;
+
+    /**
      * ConfigurationScanner constructor.
      *
      * @param \Magento\Framework\App\Config\FileResolver $fileResolver

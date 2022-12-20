@@ -316,25 +316,6 @@ class Layout extends Template implements RendererInterface
     }
 
     /**
-     * Retrieve remove layout button html
-     *
-     * @return string
-     */
-    public function getRemoveLayoutButtonHtml()
-    {
-        $button = $this->getLayout()->createBlock(
-            \Magento\Backend\Block\Widget\Button::class
-        )->setData(
-            [
-                'label' => $this->escapeHtmlAttr(__('Remove Layout Update')),
-                'onclick' => 'WidgetInstance.removePageGroup(this)',
-                'class' => 'action-delete',
-            ]
-        );
-        return $button->toHtml();
-    }
-
-    /**
      * Prepare and retrieve page groups data of widget instance
      *
      * @return array

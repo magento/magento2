@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminGridGoToCustomPageNumberActionGroup">
+        <annotations>
+            <description>Go to custom page of the admin grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="pageNumber"  defaultValue="15"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminDataGridPaginationSection.currentPage}}" stepKey="waitForInputVisible"/>
+        <clearField selector="{{AdminDataGridPaginationSection.currentPage}}" stepKey="clearInput"/>
+        <fillField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="{{pageNumber}}"  stepKey="fillPageNumber"/>
+        <pressKey selector="{{AdminDataGridPaginationSection.currentPage}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::TAB]" stepKey="unFocusField"/>
+        <waitForPageLoad stepKey="waitForPageLoad" />
+    </actionGroup>
+</actionGroups>

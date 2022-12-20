@@ -1,7 +1,5 @@
 <?php
 /**
- * Console request
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -19,7 +17,7 @@ class Request implements \Magento\Framework\App\RequestInterface
      */
     public function __construct(array $parameters = [])
     {
-        $data = getopt(null, $parameters);
+        $data = getopt('', $parameters);
         // It can happen that request comes from http (e.g. pub/cron.php), but it runs the console
         if ($data) {
             $this->setParams($data);
@@ -35,6 +33,7 @@ class Request implements \Magento\Framework\App\RequestInterface
      */
     public function getModuleName()
     {
+        // phpcs:ignore Squiz.PHP.NonExecutableCode.ReturnNotRequired
         return;
     }
 
@@ -42,10 +41,11 @@ class Request implements \Magento\Framework\App\RequestInterface
      * Set Module name
      *
      * @param string $name
+     *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setModuleName($name)
+    public function setModuleName($name) // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
     }
 
@@ -56,6 +56,7 @@ class Request implements \Magento\Framework\App\RequestInterface
      */
     public function getActionName()
     {
+        // phpcs:ignore Squiz.PHP.NonExecutableCode.ReturnNotRequired
         return;
     }
 
@@ -66,7 +67,7 @@ class Request implements \Magento\Framework\App\RequestInterface
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setActionName($name)
+    public function setActionName($name)  // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
     }
 
@@ -112,10 +113,11 @@ class Request implements \Magento\Framework\App\RequestInterface
      *
      * @param null|string $name
      * @param null|string $default
+     *
      * @return null|string|void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getCookie($name, $default)
+    public function getCookie($name, $default)  // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
     }
 

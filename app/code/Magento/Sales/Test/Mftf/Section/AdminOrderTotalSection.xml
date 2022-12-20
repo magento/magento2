@@ -10,9 +10,14 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderTotalSection">
         <element name="subTotal" type="text" selector=".order-subtotal-table tbody tr.col-0>td span.price"/>
+        <element name="discount" type="text" selector=".order-subtotal-table tbody tr.col-1>td span.price"/>
         <element name="grandTotal" type="text" selector=".order-subtotal-table tfoot tr.col-0>td span.price"/>
         <element name="shippingDescription" type="text" selector="//table[contains(@class, 'order-subtotal-table')]//td[contains(text(), 'Shipping &amp; Handling')]"/>
         <element name="shippingAndHandling" type="text" selector="//table[contains(@class, 'order-subtotal-table')]//td[normalize-space(.)='Shipping &amp; Handling']/following-sibling::td//span[@class='price']"/>
         <element name="total" type="text" selector="//table[contains(@class,'order-subtotal-table')]/tbody/tr/td[contains(text(), '{{total}}')]/following-sibling::td/span/span[contains(@class, 'price')]" parameterized="true"/>
+        <element name="totalTax" type="text" selector="//table[contains(@class, 'order-subtotal-table')]//td[normalize-space(.)='Total Tax']/following-sibling::td//span[@class='price']"/>
+        <element name="fpt" type="text" selector="//table[contains(@class, 'order-subtotal-table')]//td[normalize-space(.)='FPT']/following-sibling::td//span[@class='price']"/>
+        <element name="taxRule1" type="text" selector="//table[contains(@class, 'order-subtotal-table')]//td[normalize-space(.)='Canada-GST-5% (5%)']/following-sibling::td//span[@class='price']"/>
+        <element name="taxRule2" type="text" selector="//table[contains(@class, 'order-subtotal-table')]//td[normalize-space(.)='Canada-GST-PST-5% (5%)']/following-sibling::td//span[@class='price']"/>
     </section>
 </sections>

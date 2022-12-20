@@ -59,11 +59,12 @@
                           dependentSelector="{{AdminOrderFormPaymentSection.bankTransferOption}}" visible="true"
                           stepKey="checkBankTransferOption"/>
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage"/>
-        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
+        <comment userInput="BIC workaround" stepKey="getOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrdersPage"/>
+        <comment userInput="BIC workaround" stepKey="waitForOrdersPageLoad"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridById">
-            <argument name="orderId" value="$getOrderId"/>
+            <argument name="orderId" value="{$orderNumber}"/>
         </actionGroup>
         <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickCreatedOrderInGrid"/>
     </test>

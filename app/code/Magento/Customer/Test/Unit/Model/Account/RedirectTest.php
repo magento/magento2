@@ -398,6 +398,10 @@ class RedirectTest extends TestCase
             ->method('setPath')
             ->with('storePath')
             ->willReturnSelf();
+        $publicMetadataMock->expects($this->once())
+            ->method('setSameSite')
+            ->with('Lax')
+            ->willReturnSelf();
         $coockieManagerMock->expects($this->once())
             ->method('setPublicCookie')
             ->with(

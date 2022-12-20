@@ -37,6 +37,9 @@ class FileIteratorTest extends TestCase
      */
     protected $fileReadFactory;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->filePaths = ['/file1', '/file2'];
@@ -45,46 +48,66 @@ class FileIteratorTest extends TestCase
         $this->fileIterator = new FileIterator($this->fileReadFactory, $this->filePaths);
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown(): void
     {
         $this->fileIterator = null;
         $this->filePaths = null;
     }
 
-    public function testIterator()
+    /**
+     * @return void
+     */
+    public function testIterator(): void
     {
         $contents = ['content1', 'content2'];
+        $createWithArgs = $createWillReturnArgs = $readAllWillReturnArgs = [];
         $index = 0;
+
         foreach ($this->filePaths as $filePath) {
-            $this->fileReadFactory->expects($this->at($index))
-                ->method('create')
-                ->with($filePath)
-                ->willReturn($this->fileRead);
-            $this->fileRead->expects($this->at($index))
-                ->method('readAll')
-                ->willReturn($contents[$index++]);
+            $createWithArgs[] = [$filePath];
+            $createWillReturnArgs[] = $this->fileRead;
+            $readAllWillReturnArgs[] = $contents[$index++];
         }
+        $this->fileReadFactory
+            ->method('create')
+            ->withConsecutive(...$createWithArgs)
+            ->willReturnOnConsecutiveCalls(...$createWillReturnArgs);
+        $this->fileRead
+            ->method('readAll')
+            ->willReturnOnConsecutiveCalls(...$readAllWillReturnArgs);
         $index = 0;
+
         foreach ($this->fileIterator as $fileContent) {
             $this->assertEquals($contents[$index++], $fileContent);
         }
     }
 
-    public function testToArray()
+    /**
+     * @return void
+     */
+    public function testToArray(): void
     {
         $contents = ['content1', 'content2'];
         $expectedArray = [];
+        $createWithArgs = $createWillReturnArgs = $readAllWillReturnArgs = [];
         $index = 0;
         foreach ($this->filePaths as $filePath) {
             $expectedArray[$filePath] = $contents[$index];
-            $this->fileReadFactory->expects($this->at($index))
-                ->method('create')
-                ->with($filePath)
-                ->willReturn($this->fileRead);
-            $this->fileRead->expects($this->at($index))
-                ->method('readAll')
-                ->willReturn($contents[$index++]);
+            $createWithArgs[] = [$filePath];
+            $createWillReturnArgs[] = $this->fileRead;
+            $readAllWillReturnArgs[] = $contents[$index++];
         }
+        $this->fileReadFactory
+            ->method('create')
+            ->withConsecutive(...$createWithArgs)
+            ->willReturnOnConsecutiveCalls(...$createWillReturnArgs);
+        $this->fileRead
+            ->method('readAll')
+            ->willReturnOnConsecutiveCalls(...$readAllWillReturnArgs);
+
         $this->assertEquals($expectedArray, $this->fileIterator->toArray());
     }
 }

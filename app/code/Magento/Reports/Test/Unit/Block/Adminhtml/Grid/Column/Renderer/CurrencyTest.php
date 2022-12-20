@@ -12,6 +12,8 @@ use Magento\Directory\Model\Currency as CurrencyModel;
 use Magento\Directory\Model\Currency\DefaultLocator;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Currency\Data\Currency as CurrencyData;
+use Magento\Framework\Currency\Exception\CurrencyException;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -23,8 +25,6 @@ use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Zend_Currency;
-use Zend_Currency_Exception;
 
 /**
  * Test for class Currency.
@@ -154,7 +154,7 @@ class CurrencyTest extends TestCase
         );
 
         $this->gridColumnMock = $this->getMockBuilder(Column::class)
-            ->addMethods(['getIndex'])
+            ->addMethods(['getIndex', 'getRateField', 'getCurrency'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $objectManager->getObject(
@@ -179,11 +179,11 @@ class CurrencyTest extends TestCase
      * @param int $adminWebsiteId
      * @param string $adminCurrencyCode
      * @param string $storeCurrencyCode
-     * @param float $adminOrderAmount
-     * @param float $convertedAmount
+     * @param string $adminOrderAmount
+     * @param string $convertedAmount
      * @throws LocalizedException
      * @throws NoSuchEntityException
-     * @throws Zend_Currency_Exception
+     * @throws CurrencyException
      * @dataProvider getCurrencyDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -194,8 +194,8 @@ class CurrencyTest extends TestCase
         int $adminWebsiteId,
         string $adminCurrencyCode,
         string $storeCurrencyCode,
-        float $adminOrderAmount,
-        float $convertedAmount
+        string $adminOrderAmount,
+        string $convertedAmount
     ): void {
         $this->row = new DataObject(
             [
@@ -240,7 +240,7 @@ class CurrencyTest extends TestCase
             ->expects($this->any())
             ->method('getDefaultCurrency')
             ->willReturn($storeCurrencyCode);
-        $currLocaleMock = $this->createMock(Zend_Currency::class);
+        $currLocaleMock = $this->createMock(CurrencyData::class);
         $currLocaleMock
             ->expects($this->any())
             ->method('toCurrency')
@@ -250,6 +250,8 @@ class CurrencyTest extends TestCase
             ->method('getCurrency')
             ->with($storeCurrencyCode)
             ->willReturn($currLocaleMock);
+        $this->gridColumnMock->method('getCurrency')->willReturn('USD');
+        $this->gridColumnMock->method('getRateField')->willReturn('test_rate_field');
         $actualAmount = $this->model->render($this->row);
         $this->assertEquals($convertedAmount, $actualAmount);
     }
@@ -269,8 +271,8 @@ class CurrencyTest extends TestCase
                 'adminWebsiteId' => 1,
                 'adminCurrencyCode' => 'EUR',
                 'storeCurrencyCode' => 'EUR',
-                'adminOrderAmount' => 105.00,
-                'convertedAmount' => 105.00
+                'adminOrderAmount' => '105.00',
+                'convertedAmount' => '105.00'
             ],
             'rate conversion with different admin and storefront rate' => [
                 'rate' => 1.4150,
@@ -279,8 +281,8 @@ class CurrencyTest extends TestCase
                 'adminWebsiteId' => 1,
                 'adminCurrencyCode' => 'USD',
                 'storeCurrencyCode' => 'EUR',
-                'adminOrderAmount' => 105.00,
-                'convertedAmount' => 148.575
+                'adminOrderAmount' => '105.00',
+                'convertedAmount' => '148.575'
             ]
         ];
     }

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckBundleProductTwoWebsiteDifferentPriceOptionTest">
+        <annotations>
+            <title value="Verify bundle item price different websites."/>
+            <stories value="Github issue: #12584 Bundle Item price cannot differ per website"/>
+            <description value="Verify bundle item price different websites. Change bundle item price on second website."/>
+            <features value="Bundle"/>
+            <severity value="MAJOR"/>
+            <group value="bundle"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{WebsiteCatalogPriceScopeConfigData.path}} {{WebsiteCatalogPriceScopeConfigData.value}}" stepKey="setPriceScopeWebsite"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="logInAsAdmin"/>
+
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStoreGroup">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="store" value="{{customStoreGroup.name}}"/>
+                <argument name="rootCategory" value="Default Category"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+
+            <createData entity="SimpleProduct2" stepKey="simpleProduct"/>
+            <createData entity="ApiFixedBundleProduct" stepKey="createBundleProduct"/>
+            <createData entity="CheckboxOption" stepKey="createBundleOption">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLinkFixed" stepKey="linkOptionToProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption"/>
+                <requiredEntity createDataKey="simpleProduct"/>
+            </createData>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{GlobalCatalogPriceScopeConfigData.path}} {{GlobalCatalogPriceScopeConfigData.value}}" stepKey="setPriceScopeGlobal"/>
+
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="openEditBundleProduct">
+            <argument name="product" value="$$createBundleProduct$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminAssignProductInWebsiteActionGroup" stepKey="selectProductInWebsites">
+            <argument name="website" value="{{customWebsite.name}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchNewStoreView">
+            <argument name="storeViewName" value="{{customStore.name}}"/>
+        </actionGroup>
+
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYPrice('0', '0')}}" userInput="100" stepKey="fillBundleOption1Price"/>
+
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveNewPrice"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$$createBundleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomizeAndAddToCart"/>
+
+        <grabTextFrom selector="{{StorefrontBundledSection.bundleProductsPrice}}" stepKey="grabPriceText"/>
+        <assertEquals stepKey="assertPriceText">
+            <expectedResult type="string">$31.23</expectedResult>
+            <actualResult type="variable">$grabPriceText</actualResult>
+        </assertEquals>
+
+    </test>
+</tests>

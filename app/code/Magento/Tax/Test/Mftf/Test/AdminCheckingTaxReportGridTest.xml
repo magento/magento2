@@ -154,8 +154,10 @@
         </actionGroup>
 
         <!--Fill customer group and customer email-->
-        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="{{GeneralCustomerGroup.code}}" stepKey="selectCustomerGroup"/>
-        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectCustomerGroup"/>
+        <actionGroup ref="AdminFillAccountInformationOnCreateOrderPageActionGroup" stepKey="fillCustomerEmail">
+            <argument name="email" value="{{Simple_US_Customer.email}}"/>
+        </actionGroup>
 
         <!--Fill customer address information-->
         <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress">
@@ -202,6 +204,21 @@
         <!--Tax Report Grid displays Tax amount in rows. "Total" and "Subtotal" is a sum of all tax amounts-->
         <see selector="{{AdminTaxReportsSection.taxRuleAmount(TaxRateTexas.code)}}" userInput="$amountOfTaxOnFirstProduct" stepKey="assertSubtotalFirstField"/>
         <see selector="{{AdminTaxReportsSection.taxRuleAmount(SecondTaxRateTexas.code)}}" userInput="$amountOfTaxOnSecondProduct" stepKey="assertSubtotalSecondField"/>
-        <see selector="{{AdminTaxReportsSection.taxRuleAmount('Subtotal')}}" userInput="$amountOfTotalTax" stepKey="assertSubtotalField"/>
+        <!-- Return sum of all amounts on report except subtotal -->
+        <!-- Cannot simply add totals generated in this test above because tests that run before this test will appear in the generated report -->
+        <executeJS function="
+        return (
+            function() {
+                var elements = document.querySelectorAll('{{AdminTaxReportsSection.allTaxRuleAmounts}}');
+
+                var amounts = [];
+                for (let i = 0; i &lt; elements.length; i++) {
+                    amounts.push(Number(elements[i].innerText.replace(/[^0-9.-]+/g,&quot;&quot;)));
+                };
+
+                return Math.round(amounts.reduce((a, b) =&gt; a + b, 0) * 100) / 100;
+            }()
+        )" stepKey="sumOfEachAmount"/>
+        <see selector="{{AdminTaxReportsSection.taxRuleAmount('Subtotal')}}" userInput="{$sumOfEachAmount}" stepKey="assertSubtotalField"/>
     </test>
 </tests>

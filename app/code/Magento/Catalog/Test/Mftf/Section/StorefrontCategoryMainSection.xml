@@ -39,5 +39,10 @@
         <element name="productName" type="text" selector=".product-item-name"/>
         <element name="productOptionList" type="text" selector="#narrow-by-list"/>
         <element name="productNameByPosition" type="text" selector=".products-grid li:nth-of-type({{position}}) .product-item-name a" parameterized="true"/>
+        <element name="sidebarAdditional" type="block" selector="#maincontent .sidebar.sidebar-additional"/>
+        <element name="searchStore" type="input" selector="//div/input[@id='search']" />
+        <element name="productAttributeName" type="button" selector="//div[@class='filter-options-title' and contains(text(),'{{var1}}')]" parameterized="true"/>
+        <element name="productAttributeOptionValue" type="button" selector="//div[@id='narrow-by-list']//a[contains(text(), '{{var1}}')]" parameterized="true"/>
+        <element name="outOfStockProductCategoryPage" type="text" selector="//div[@class='stock unavailable']//span[text()='Out of stock']"/>
     </section>
 </sections>

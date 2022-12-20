@@ -19,8 +19,8 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
-            <!-- 21 products created and category -->
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="LoginAsAdmin"/>
+
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct01">
                 <requiredEntity createDataKey="createCategory"/>
@@ -86,19 +86,13 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
 
-            <!-- Customer is created -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
-            <!-- Reindex and flush the cache to display products on the category page -->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
-            <!-- Delete category and products -->
+
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct01" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct02" stepKey="deleteProduct2"/>
@@ -122,106 +116,150 @@
             <deleteData createDataKey="createProduct20" stepKey="deleteProduct20"/>
             <deleteData createDataKey="createProduct21" stepKey="deleteProduct21"/>
 
-            <!-- Delete Customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="logout"/>
         </after>
 
-        <!-- Login to Storefront as Customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
             <argument name="Customer" value="$$createCustomer$$" />
         </actionGroup>
 
-        <!-- Customer placed the order with 20 products -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <scrollTo selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="scrollToLimiter"/>
-        <selectOption userInput="36" selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="selectLimitOnPage"/>
-        <waitForPageLoad stepKey="waitForLoadProducts"/>
-        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onCategoryPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToLimiter"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectLimitOnPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoadProducts"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToTopOfPage"/>
 
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct1">
-            <argument name="productName" value="$$createProduct01.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct2">
-            <argument name="productName" value="$$createProduct02.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct3">
-            <argument name="productName" value="$$createProduct03.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct4">
-            <argument name="productName" value="$$createProduct04.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct5">
-            <argument name="productName" value="$$createProduct05.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct6">
-            <argument name="productName" value="$$createProduct06.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct7">
-            <argument name="productName" value="$$createProduct07.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct8">
-            <argument name="productName" value="$$createProduct08.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct9">
-            <argument name="productName" value="$$createProduct09.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct10">
-            <argument name="productName" value="$$createProduct10.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct11">
-            <argument name="productName" value="$$createProduct11.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct12">
-            <argument name="productName" value="$$createProduct12.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct13">
-            <argument name="productName" value="$$createProduct13.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct14">
-            <argument name="productName" value="$$createProduct14.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct15">
-            <argument name="productName" value="$$createProduct15.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct16">
-            <argument name="productName" value="$$createProduct16.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct17">
-            <argument name="productName" value="$$createProduct17.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct18">
-            <argument name="productName" value="$$createProduct18.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct19">
-            <argument name="productName" value="$$createProduct19.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct20">
-            <argument name="productName" value="$$createProduct20.name$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProduct21">
-            <argument name="productName" value="$$createProduct21.name$$"/>
+        <createData entity="CustomerCart" stepKey="createCustomerCart">
+            <requiredEntity createDataKey="createCustomer"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct1">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct01"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct2">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct02"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct3">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct03"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct4">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct04"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct5">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct05"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct6">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct06"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct7">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct07"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct8">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct08"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct9">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct09"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct10">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct10"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct11">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct11"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct12">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct12"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct13">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct13"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct14">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct14"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct15">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct15"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct16">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct16"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct17">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct17"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct18">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct18"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct19">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct19"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct20">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct20"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addProduct21">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct21"/>
+        </createData>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onCheckout"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="see21Products"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickNextButton"/>
+
+        <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </createData>
+
+        <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="placeOrder">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </updateData>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSuccess"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabOrderNumber"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onMyAccount"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnMyOrders"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrdersLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOrderView"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderPageLoad"/>
+
+        <getData entity="GetOrderData" stepKey="getOrderData">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </getData>
+
+        <actionGroup ref="StorefrontGoToCustomerOrderDetailsPageActionGroup" stepKey="openOrderDetailPage">
+            <argument name="orderId" value="$createCustomerCart.return$"/>
+            <argument name="orderNumber" value="$getOrderData.increment_id$"/>
         </actionGroup>
 
-        <!-- Place Order -->
-        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="onCheckout"/>
-        <see userInput="21" selector="{{CheckoutOrderSummarySection.itemsQtyInCart}}" stepKey="see21Products"/>
-        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextButton"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
-        <waitForPageLoad stepKey="waitForSuccess"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
-
-        <!-- Go to My Account > My Orders page -->
-        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="onMyAccount"/>
-        <click selector="{{StorefrontCustomerSidebarSection.sidebarTab('My Orders')}}" stepKey="clickOnMyOrders"/>
-        <waitForPageLoad stepKey="waitForOrdersLoad"/>
-
-        <!-- Click 'View Order' link on order from preconditions -->
-        <click selector="{{StorefrontCustomerOrdersGridSection.orderView({$grabOrderNumber})}}" stepKey="clickOrderView"/>
-        <waitForPageLoad stepKey="waitForOrderPageLoad"/>
-
-        <!-- Assert: Pager is displayed for 21 order items -->
         <seeElement selector="{{StorefrontCustomerOrderViewSection.pager}}" stepKey="assertPagerIsDisplayed"/>
+        <executeJS function="var len = document.querySelectorAll('{{StorefrontCustomerOrderViewSection.itemCountOnPage}}').length; return len;" stepKey="orderItemsCountOnFirstPage"/>
+        <assertEquals stepKey="assertOrderItemsOnFirstPage">
+            <actualResult type="const">($orderItemsCountOnFirstPage)</actualResult>
+            <expectedResult type="const">20</expectedResult>
+        </assertEquals>
+        <click selector="{{StorefrontCustomerOrderViewSection.pagerLink($createCustomerCart.return$, '2')}}" stepKey="assertPagerLink" />
+        <waitForPageLoad stepKey="waitForPageLoading"/>
+        <executeJS function="var len = document.querySelectorAll('{{StorefrontCustomerOrderViewSection.itemCountOnPage}}').length; return len;" stepKey="orderItemsCountOnSecondPage"/>
+        <assertEquals stepKey="assertOrderItemsOnSecondPage">
+            <actualResult type="const">($orderItemsCountOnSecondPage)</actualResult>
+            <expectedResult type="const">1</expectedResult>
+        </assertEquals>
     </test>
 </tests>

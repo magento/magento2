@@ -25,6 +25,11 @@ use Magento\Framework\Serialize\SerializerInterface;
 class UsedProductsCache
 {
     /**
+     * Default cache life time: 1 year
+     */
+    private const DEFAULT_CACHE_LIFE_TIME = 31536000;
+
+    /**
      * @var MetadataPool
      */
     private $metadataPool;
@@ -50,24 +55,32 @@ class UsedProductsCache
     private $customerSession;
 
     /**
+     * @var int
+     */
+    private $cacheLifeTime;
+
+    /**
      * @param MetadataPool $metadataPool
      * @param FrontendInterface $cache
      * @param SerializerInterface $serializer
      * @param ProductInterfaceFactory $productFactory
      * @param Session $customerSession
+     * @param int $cacheLifeTime
      */
     public function __construct(
         MetadataPool $metadataPool,
         FrontendInterface $cache,
         SerializerInterface $serializer,
         ProductInterfaceFactory $productFactory,
-        Session $customerSession
+        Session $customerSession,
+        int $cacheLifeTime = self::DEFAULT_CACHE_LIFE_TIME
     ) {
         $this->metadataPool = $metadataPool;
         $this->cache = $cache;
         $this->serializer = $serializer;
         $this->productFactory = $productFactory;
         $this->customerSession = $customerSession;
+        $this->cacheLifeTime = $cacheLifeTime;
     }
 
     /**
@@ -183,7 +196,7 @@ class UsedProductsCache
                 Configurable::TYPE_CODE . '_' . $product->getData($metadata->getLinkField()),
             ]
         );
-        $result = $this->cache->save($data, $cacheKey, $tags);
+        $result = $this->cache->save($data, $cacheKey, $tags, $this->cacheLifeTime);
 
         return (bool) $result;
     }

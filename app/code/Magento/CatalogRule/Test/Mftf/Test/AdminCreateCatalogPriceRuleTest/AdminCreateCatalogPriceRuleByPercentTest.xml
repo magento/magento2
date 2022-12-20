@@ -24,13 +24,8 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
 
-            <!-- Perform reindex and flush cache -->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
             <!-- log in and create the price rule -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -41,7 +36,7 @@
         </before>
         <after>
             <!-- delete the simple product and catalog price rule and logout -->
-            <amOnPage stepKey="goToPriceRulePage" url="admin/catalog_rule/promo_catalog/"/>
+            <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
             <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
@@ -52,13 +47,13 @@
         </after>
 
         <!-- Go to category page and make sure that all of the prices are correct -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryPage"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategory"/>
         <see stepKey="seeOldPrice" selector="{{StorefrontCategoryProductSection.ProductOldPriceByNumber('1')}}" userInput="$$createProduct.price$$"/>
         <see stepKey="seeNewPrice" selector="{{StorefrontCategoryProductSection.ProductSpecialPriceByNumber('1')}}" userInput="$110.70"/>
 
         <!-- Go to the simple product page and check that the prices are correct -->
-        <amOnPage stepKey="goToProductPage" url="$$createProduct.sku$$.html"/>
+        <amOnPage stepKey="goToProductPage" url="$$createProduct.custom_attributes[url_key]$$.html"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <see stepKey="seeOldPriceTag" selector="{{StorefrontProductInfoMainSection.oldPriceTag}}" userInput="Regular Price"/>
         <see stepKey="seeOldPrice2" selector="{{StorefrontProductInfoMainSection.oldPriceAmount}}" userInput="$$createProduct.price$$"/>

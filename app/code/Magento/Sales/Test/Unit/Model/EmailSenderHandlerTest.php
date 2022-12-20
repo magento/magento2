@@ -26,6 +26,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test of sales emails sending observer.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailSenderHandlerTest extends TestCase
 {
@@ -84,6 +86,9 @@ class EmailSenderHandlerTest extends TestCase
      */
     private $modifyStartFromDate = '-1 day';
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -100,7 +105,7 @@ class EmailSenderHandlerTest extends TestCase
             false,
             false,
             true,
-            ['save']
+            ['saveAttribute']
         );
 
         $this->entityCollection = $this->getMockForAbstractClass(
@@ -146,36 +151,33 @@ class EmailSenderHandlerTest extends TestCase
      * @param int $configValue
      * @param array|null $collectionItems
      * @param bool|null $emailSendingResult
-     * @dataProvider executeDataProvider
+     *
      * @return void
+     * @dataProvider executeDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testExecute($configValue, $collectionItems, $emailSendingResult)
-    {
+    public function testExecute(
+        int $configValue,
+        ?array $collectionItems,
+        ?bool $emailSendingResult
+    ): void {
         $path = 'sales_email/general/async_sending';
 
         $this->globalConfig
-            ->expects($this->at(0))
             ->method('getValue')
-            ->with($path)
-            ->willReturn($configValue);
+            ->withConsecutive([$path])
+            ->willReturnOnConsecutiveCalls($configValue);
 
         if ($configValue) {
-            $this->entityCollection
-                ->expects($this->at(0))
-                ->method('addFieldToFilter')
-                ->with('send_email', ['eq' => 1]);
-
-            $this->entityCollection
-                ->expects($this->at(1))
-                ->method('addFieldToFilter')
-                ->with('email_sent', ['null' => true]);
-
             $nowDate = date('Y-m-d H:i:s');
             $fromDate = date('Y-m-d H:i:s', strtotime($nowDate . ' ' . $this->modifyStartFromDate));
             $this->entityCollection
-                ->expects($this->at(2))
                 ->method('addFieldToFilter')
-                ->with('created_at', ['from' => $fromDate]);
+                ->withConsecutive(
+                    ['send_email', ['eq' => 1]],
+                    ['email_sent', ['null' => true]],
+                    ['created_at', ['from' => $fromDate]]
+                );
 
             $this->entityCollection
                 ->expects($this->any())
@@ -252,7 +254,7 @@ class EmailSenderHandlerTest extends TestCase
 
                     $this->entityResource
                         ->expects($this->once())
-                        ->method('save')
+                        ->method('saveAttribute')
                         ->with($collectionItem);
                 }
             }
@@ -264,7 +266,7 @@ class EmailSenderHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public function executeDataProvider(): array
     {
         $entityModel = $this->getMockForAbstractClass(
             AbstractModel::class,
@@ -280,22 +282,22 @@ class EmailSenderHandlerTest extends TestCase
             [
                 'configValue' => 1,
                 'collectionItems' => [clone $entityModel],
-                'emailSendingResult' => true,
+                'emailSendingResult' => true
             ],
             [
                 'configValue' => 1,
                 'collectionItems' => [clone $entityModel],
-                'emailSendingResult' => false,
+                'emailSendingResult' => false
             ],
             [
                 'configValue' => 1,
                 'collectionItems' => [],
-                'emailSendingResult' => null,
+                'emailSendingResult' => null
             ],
             [
                 'configValue' => 0,
                 'collectionItems' => null,
-                'emailSendingResult' => null,
+                'emailSendingResult' => null
             ]
         ];
     }

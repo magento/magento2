@@ -39,55 +39,90 @@
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
         <!-- Update product Advanced Inventory setting -->
-        <click stepKey="openSelectedProduct" selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}"/>
-        <waitForPageLoad stepKey="waitForProductToLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="openSelectedProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductToLoad"/>
         <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
-        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" stepKey="uncheckConfigSetting"/>
-        <selectOption selector="{{AdminProductFormAdvancedInventorySection.manageStock}}"  userInput="Yes" stepKey="clickOnManageStock"/>
-        <fillField selector="{{AdminProductFormAdvancedInventorySection.advancedInventoryQty}}" userInput="5" stepKey="fillProductQty"/>
-        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.miniQtyConfigSetting}}" stepKey="uncheckMiniQtyCheckBox"/>
-        <fillField selector="{{AdminProductFormAdvancedInventorySection.miniQtyAllowedInCart}}" userInput="1" stepKey="fillMiniAllowedQty"/>
-        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.maxiQtyConfigSetting}}" stepKey="uncheckMaxQtyCheckBox"/>
-        <fillField selector="{{AdminProductFormAdvancedInventorySection.maxiQtyAllowedInCart}}" userInput="10000" stepKey="fillMaxAllowedQty"/>
-        <selectOption  selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimals}}" userInput="Yes" stepKey="selectQuatityUsesDecimal"/>
-        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.notifyBelowQtyConfigSetting}}" stepKey="uncheckNotifyBelowQtyheckBox"/>
-        <fillField selector="{{AdminProductFormAdvancedInventorySection.notifyBelowQty}}" userInput="1" stepKey="fillNotifyBelowQty"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="uncheckConfigSetting"/>
+        <actionGroup ref="AdminSetManageStockConfigActionGroup" stepKey="clickOnManageStock">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillAdvancedInventoryQtyActionGroup" stepKey="fillProductQty">
+            <argument name="qty" value="5"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="uncheckMiniQtyCheckBox"/>
+        <actionGroup ref="AdminSetMinAllowedQtyForProductActionGroup" stepKey="fillMiniAllowedQty">
+            <argument name="qty" value="4"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="uncheckMaxQtyCheckBox"/>
+        <actionGroup ref="AdminSetMaxAllowedQtyForProductActionGroup" stepKey="fillMaxAllowedQty">
+            <argument name="qty" value="1000"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetQtyUsesDecimalsConfigActionGroup" stepKey="selectQuatityUsesDecimal">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="uncheckNotifyBelowQtyheckBox"/>
+        <actionGroup ref="AdminSetNotifyBelowQtyValueActionGroup" stepKey="fillNotifyBelowQty">
+            <argument name="qty" value="1"/>
+        </actionGroup>
         <actionGroup ref="AdminSetStockStatusConfigActionGroup" stepKey="selectOutOfStock">
             <argument name="stockStatus" value="In Stock"/>
         </actionGroup>
         <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneButton"/>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
-        <!--Clear cache and reindex-->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
         </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         <!--Verify product is visible in category front page -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="openCategoryStoreFrontPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="seeCategoryInFrontPage"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategoryStoreFrontPage">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategoryPageToLoad"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCategoryInFrontPage">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="clickOnCategory"/>
-        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductNameInCategoryPage"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeProductNameInCategoryPage">
+            <argument name="productName" value="{{SimpleProduct.name}}"/>
+        </actionGroup>
         <!--Verify Product In Store Front-->
-        <amOnPage url="$$createSimpleProduct.name$$.html" stepKey="goToStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForProductFrontPageToLoad"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductNameInStoreFront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{SimpleProduct.price}}" stepKey="seeProductPriceInStoreFront"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToStorefrontPage">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductFrontPageToLoad"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeProductNameInStoreFront">
+            <argument name="productName" value="{{SimpleProduct.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeProductPriceInStoreFront">
+            <argument name="productPrice" value="{{SimpleProduct.price}}"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSkuInStoreFront">
             <argument name="productSku" value="{{SimpleProduct.sku}}"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStatusInStoreFront"/>
+        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="seeProductStatusInStoreFront">
+            <argument name="productUrlKey" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+            <argument name="productName" value="$createSimpleProduct.name$"/>
+        </actionGroup>
         <!--Add Product to the cart-->
-        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="1" stepKey="fillProductQuantity"/>
-        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
-        <seeElement selector="{{StorefrontProductPageSection.successMsg}}" stepKey="seeSuccessSaveMessage"/>
-        <seeElement selector="{{StorefrontMinicartSection.quantity(1)}}" stepKey="seeAddedProductQuantityInCart"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductQuantity"/>
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productQty" value="4"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addAdditionalProductToCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSuccessSaveMessage"/>
+        <seeElement selector="{{StorefrontMinicartSection.quantity(6)}}" stepKey="seeAddedProductQuantityInCart"/>
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
-        <see selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{SimpleProduct.name}}"  stepKey="seeProductNameInMiniCart"/>
-        <see selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{SimpleProduct.price}}" stepKey="seeProductPriceInMiniCart"/>
-        <seeElement selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="seeCheckOutButtonInMiniCart"/>
+        <executeJS function="return {{SimpleProduct.price}} * 5" stepKey="expectedCartSubtotal"/>
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="seeProductNameInMiniCart">
+            <argument name="productName" value="{{SimpleProduct.name}}"/>
+            <argument name="productPrice" value="{{SimpleProduct.price}}"/>
+            <argument name="cartSubtotal" value="{$expectedCartSubtotal}" />
+            <argument name="qty" value="5"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeProductPriceInMiniCart"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeCheckOutButtonInMiniCart"/>
     </test>
 </tests>

@@ -208,6 +208,7 @@ class AbstractProductTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $product->setAtribute('attribute');
+        $product->setData('someAttribute', '');
         $product->setId(12);
 
         $this->_configProperty->setValue(

@@ -6,6 +6,10 @@
 
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Model\Indexer\Product\Price\Processor;
+
 /**
  * Ensure that size of index MEMORY table is enough for configured rows count in batch.
  */
@@ -27,16 +31,33 @@ class BatchSizeCalculator
     private $batchSizeAdjusters;
 
     /**
-     * BatchSizeCalculator constructor.
+     * @var DeploymentConfig|null
+     */
+    private $deploymentConfig;
+
+    /**
+     * Deployment config path
+     *
+     * @var string
+     */
+    private const DEPLOYMENT_CONFIG_INDEXER_BATCHES = 'indexer/batch_size/';
+
+    /**
      * @param array $batchRowsCount
      * @param array $estimators
      * @param array $batchSizeAdjusters
+     * @param DeploymentConfig|null $deploymentConfig
      */
-    public function __construct(array $batchRowsCount, array $estimators, array $batchSizeAdjusters)
-    {
+    public function __construct(
+        array $batchRowsCount,
+        array $estimators,
+        array $batchSizeAdjusters,
+        ?DeploymentConfig $deploymentConfig = null
+    ) {
         $this->batchRowsCount = $batchRowsCount;
         $this->estimators = $estimators;
         $this->batchSizeAdjusters = $batchSizeAdjusters;
+        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**
@@ -50,9 +71,18 @@ class BatchSizeCalculator
      */
     public function estimateBatchSize(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $indexerTypeId)
     {
-        $batchRowsCount = isset($this->batchRowsCount[$indexerTypeId])
-            ? $this->batchRowsCount[$indexerTypeId]
-            : $this->batchRowsCount['default'];
+        $batchRowsCount = $this->deploymentConfig->get(
+            self::DEPLOYMENT_CONFIG_INDEXER_BATCHES . Processor::INDEXER_ID . '/' . $indexerTypeId,
+            $batchRowsCount = $this->deploymentConfig->get(
+                self::DEPLOYMENT_CONFIG_INDEXER_BATCHES . Processor::INDEXER_ID . '/' . 'default'
+            )
+        );
+
+        if (is_null($batchRowsCount)) {
+            $batchRowsCount = isset($this->batchRowsCount[$indexerTypeId])
+                ? $this->batchRowsCount[$indexerTypeId]
+                : $this->batchRowsCount['default'];
+        }
 
         /** @var \Magento\Framework\Indexer\BatchSizeManagementInterface $calculator */
         $calculator = isset($this->estimators[$indexerTypeId])

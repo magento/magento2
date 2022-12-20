@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Module\Test\Unit\Plugin;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\FrontController;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Cache\FrontendInterface;
@@ -50,6 +51,11 @@ class DbStatusValidatorTest extends TestCase
      */
     private $dbVersionInfoMock;
 
+    /**
+     * @var DeploymentConfig|mixed|MockObject
+     */
+    private $deploymentConfig;
+
     protected function setUp(): void
     {
         $this->_cacheMock = $this->getMockBuilder(FrontendInterface::class)
@@ -67,9 +73,15 @@ class DbStatusValidatorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->dbVersionInfoMock = $this->createMock(DbVersionInfo::class);
+
+        $this->deploymentConfig =$this->getMockBuilder(DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->_model = new DbStatusValidator(
             $this->_cacheMock,
-            $this->dbVersionInfoMock
+            $this->dbVersionInfoMock,
+            $this->deploymentConfig
         );
     }
 
@@ -187,5 +199,21 @@ class DbStatusValidatorTest extends TestCase
                 ],
             ],
         ];
+    }
+
+    public function testAroundDispatchBlueGreen()
+    {
+        $this->deploymentConfig->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('deployment/blue_green/enabled')
+            ->willReturn(1);
+
+        $this->_cacheMock->expects($this->never())
+            ->method('load');
+
+        $this->dbVersionInfoMock->expects($this->never())
+            ->method('getDbVersionErrors');
+
+        $this->_model->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 }
