@@ -41,8 +41,10 @@ class BackpressureFieldValidator implements ValidatorInterface
     }
 
     /**
+     * Validate resolver args
+     *
      * @param Field $field
-     * @param $args
+     * @param array $args
      * @return void
      * @throws GraphQlTooManyRequestsException
      */

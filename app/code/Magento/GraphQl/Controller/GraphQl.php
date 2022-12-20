@@ -24,10 +24,8 @@ use Magento\Framework\GraphQl\Query\QueryProcessor;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Response;
 use Magento\GraphQl\Helper\Query\Logger\LogData;
-use Magento\GraphQl\Model\Backpressure\GraphQlTooManyRequestsException;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
 use Magento\GraphQl\Model\Query\Logger\LoggerPool;
 
@@ -196,19 +194,6 @@ class GraphQl implements FrontControllerInterface
                 $this->contextFactory->create(),
                 $data['variables'] ?? []
             );
-
-            if (isset($result['errors']) && is_array($result['errors'])) {
-                foreach ($result['errors'] as $error) {
-                    if (isset($error['extensions']) && is_array($error['extensions'])) {
-                        foreach ($error['extensions'] as $key => $value) {
-                            if (GraphQlTooManyRequestsException::EXCEPTION_CATEGORY === $value
-                                && 'category' === $key) {
-                                $statusCode = Exception::HTTP_TOO_MANY_REQUESTS;
-                            }
-                        }
-                    }
-                }
-            }
         } catch (\Exception $error) {
             $result['errors'] = isset($result['errors']) ? $result['errors'] : [];
             $result['errors'][] = $this->graphQlError->create($error);

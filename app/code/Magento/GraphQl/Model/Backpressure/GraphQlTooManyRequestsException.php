@@ -17,7 +17,7 @@ use Magento\Framework\Phrase;
  */
 class GraphQlTooManyRequestsException extends LocalizedException implements ClientAware
 {
-    const EXCEPTION_CATEGORY = 'graphql-too-many-requests';
+    public const EXCEPTION_CATEGORY = 'graphql-too-many-requests';
 
     /**
      * @var boolean
@@ -27,10 +27,10 @@ class GraphQlTooManyRequestsException extends LocalizedException implements Clie
     /**
      * @param Phrase $phrase
      * @param Exception|null $cause
-     * @param $code
-     * @param $isSafe
+     * @param int $code
+     * @param bool $isSafe
      */
-    public function __construct(Phrase $phrase, Exception $cause = null, $code = 0, $isSafe = true)
+    public function __construct(Phrase $phrase, Exception $cause = null, int $code = 0, bool $isSafe = true)
     {
         $this->isSafe = $isSafe;
         parent::__construct($phrase, $cause, $code);
