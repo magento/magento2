@@ -271,7 +271,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             )
         );
         $exportData = $this->model->export();
-        $this->assertStringContainsString('simple ""1""', $exportData);
+        $this->assertStringContainsString('simple &quot;1&quot;', $exportData);
         $this->assertStringContainsString('Category with slash\/ symbol', $exportData);
     }
 
