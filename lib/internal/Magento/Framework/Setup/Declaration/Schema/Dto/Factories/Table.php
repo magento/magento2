@@ -7,6 +7,7 @@
 namespace Magento\Framework\Setup\Declaration\Schema\Dto\Factories;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\SqlVersionProvider;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -21,29 +22,40 @@ class Table implements FactoryInterface
     public const DEFAULT_ENGINE = 'innodb';
 
     /**
-     * Default charset for SQL
-     */
-    public const DEFAULT_CHARSET = 'utf8';
-
-    /**
-     * Default collation
-     */
-    public const DEFAULT_COLLATION = 'utf8_general_ci';
-
-    /**
      * @var ObjectManagerInterface
      */
-    private $objectManager;
+    private ObjectManagerInterface $objectManager;
 
     /**
      * @var string
      */
-    private $className;
+    private string $className;
 
     /**
      * @var ResourceConnection
      */
-    private $resourceConnection;
+    private ResourceConnection $resourceConnection;
+
+    /** @var SqlVersionProvider|null */
+    private ?SqlVersionProvider $sqlVersionProvider = null;
+
+    /**
+     * @var array|string[]
+     */
+    private static array $defaultCharset = [
+        '10.4.' => 'utf8',
+        '10.6.' => 'utf8mb3',
+        'default' => 'utf8',
+    ];
+
+    /**
+     * @var array|string[]
+     */
+    private static array $defaultCollation = [
+        '10.4.' => 'utf8_general_ci',
+        '10.6.' => 'utf8mb3_general_ci',
+        'default' => 'utf8_general_ci',
+    ];
 
     /**
      * Constructor.
@@ -51,15 +63,18 @@ class Table implements FactoryInterface
      * @param ObjectManagerInterface $objectManager
      * @param ResourceConnection $resourceConnection
      * @param string $className
+     * @param SqlVersionProvider|null $sqlVersionProvider
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         ResourceConnection $resourceConnection,
-        $className = \Magento\Framework\Setup\Declaration\Schema\Dto\Table::class
+        string $className = \Magento\Framework\Setup\Declaration\Schema\Dto\Table::class,
+        ?SqlVersionProvider $sqlVersionProvider = null
     ) {
         $this->objectManager = $objectManager;
         $this->className = $className;
         $this->resourceConnection = $resourceConnection;
+        $this->sqlVersionProvider = $sqlVersionProvider ?? $this->objectManager->get(SqlVersionProvider::class);
     }
 
     /**
@@ -72,11 +87,11 @@ class Table implements FactoryInterface
         }
         //Prepare charset
         if (!isset($data['charset'])) {
-            $data['charset'] = self::DEFAULT_CHARSET;
+            $data['charset'] = $this->getDefaultCharset();
         }
         //Prepare collation
         if (!isset($data['collation'])) {
-            $data['collation'] = self::DEFAULT_COLLATION;
+            $data['collation'] = $this->getDefaultCollation();
         }
         //Prepare triggers
         if (!isset($data['onCreate'])) {
@@ -93,5 +108,26 @@ class Table implements FactoryInterface
         }
 
         return $this->objectManager->create($this->className, $data);
+    }
+
+    /**
+     * Get default charset based on sql version
+     *
+     * @return string
+     */
+    private function getDefaultCharset(): string
+    {
+        return self::$defaultCharset[$this->sqlVersionProvider->getSqlVersion()] ?? self::$defaultCharset['default'];
+    }
+
+    /**
+     * Get default collation based on sql version
+     *
+     * @return string
+     */
+    private function getDefaultCollation(): string
+    {
+        return self::$defaultCollation[$this->sqlVersionProvider->getSqlVersion()] ??
+            self::$defaultCollation['default'];
     }
 }
