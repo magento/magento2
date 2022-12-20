@@ -53,7 +53,7 @@ Extension developers can interact with the Magento_MediaGalleryApi module. For m
 - `\Magento\MediaGalleryApi\Api\SearchAssetsInterface`:
     - search media gallery assets
 
-For information about a public API in Magento 2, see [Public interfaces & APIs](http://devdocs.magento.com/guides/v2./extension-dev-guide/api-concepts.html).
+For information about a public API in Magento 2, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
 
 ## Additional information
 

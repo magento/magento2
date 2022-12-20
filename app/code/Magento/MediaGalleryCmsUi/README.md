@@ -20,7 +20,7 @@ This module extends ui components:
 - `media_gallery_listing`
 - `standalone_media_gallery_listing`
 
-For information about a UI component in Magento 2, see [Overview of UI components](http://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
+For information about a UI component in Magento 2, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).
 
 ## Additional information
 

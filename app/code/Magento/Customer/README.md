@@ -129,7 +129,7 @@ The module dispatches the following events:
 - `visitor_activity_save` event in the `\Magento\Customer\Model\Visitor::saveByRequest` method. Parameters:
     - `visitor` is a `$this` object (`\Magento\Customer\Model\Visitor` class)
 
-For information about an event in Magento 2, see [Events and observers](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
+For information about an event in Magento 2, see [Events and observers](https://developer.adobe.com/commerce/php/development/components/events-and-observers/#events).
 
 ### Layouts
 
@@ -320,7 +320,7 @@ For more information about a layout in Magento 2, see the [Layout documentation]
 - `\Magento\Customer\Model\Customer\Source\GroupSourceLoggedInOnlyInterface`
     - get customer group attribute source
     
-For information about a public API in Magento 2, see [Public interfaces & APIs](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
+For information about a public API in Magento 2, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
 
 ### UI components
 
@@ -335,7 +335,7 @@ You can extend customer and customer address updates using the configuration fil
 - `view/base/ui_component`:
     - `customer_form`
     
-For information about a UI component in Magento 2, see [Overview of UI components](http://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
+For information about a UI component in Magento 2, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).
 
 ## Additional information
 
@@ -356,7 +356,7 @@ Magento_Customer provides console commands:
 Cron group configuration can be set at `etc/crontab.xml`:
 - `visitor_clean` - clean visitor's outdated records
 
-[Learn how to configure and run cron in Magento.](http://devdocs.magento.com/guides/v2.4/config-guide/cli/config-cli-subcommands-cron.html).
+[Learn how to configure and run cron in Magento.](https://experienceleague.adobe.com/docs/commerce-operations/configuration-guide/cli/configure-cron-jobs.html).
 
 ### Indexers
 

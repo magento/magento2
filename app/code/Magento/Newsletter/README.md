@@ -67,7 +67,7 @@ For more information about a layout in Magento 2, see the [Layout documentation]
 This module extends customer form ui component the configuration file located in the `view/base/ui_component` directory:
 - `customer_form`
 
-For information about a UI component in Magento 2, see [Overview of UI components](http://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
+For information about a UI component in Magento 2, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).
 
 ## Additional information
 
@@ -78,5 +78,5 @@ For information about a UI component in Magento 2, see [Overview of UI component
 Cron group configuration can be set at `etc/crontab.xml`:
 - `newsletter_send_all` - schedules newsletter sending
 
-[Learn how to configure and run cron in Magento.](http://devdocs.magento.com/guides/v2.4/config-guide/cli/config-cli-subcommands-cron.html).
+[Learn how to configure and run cron in Magento.](https://experienceleague.adobe.com/docs/commerce-operations/configuration-guide/cli/configure-cron-jobs.html).
 

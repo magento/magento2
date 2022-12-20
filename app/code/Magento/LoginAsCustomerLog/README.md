@@ -21,7 +21,7 @@ You can extend log listing updates using the configuration files located in the 
 - `view/adminhtml/ui_component`:
     - `login_as_customer_log_listing`
 
-For information about a UI component in Magento 2, see [Overview of UI components](http://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
+For information about a UI component in Magento 2, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).
 
 ### Public APIs
 
@@ -37,7 +37,7 @@ For information about a UI component in Magento 2, see [Overview of UI component
 - `\Magento\LoginAsCustomerLog\Api\SaveLogsInterface`:
     - save login as custom logs entities
 
-For information about a public API in Magento 2, see [Public interfaces & APIs](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
+For information about a public API in Magento 2, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
 
 ## Additional information
 

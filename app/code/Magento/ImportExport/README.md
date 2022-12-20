@@ -17,7 +17,7 @@ For information about a module installation in Magento 2, see [Enable or disable
 
 `Files/` - the directory that contains sample import files.
 
-For information about a typical file structure of a module in Magento 2, see [Module file structure](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
+For information about a typical file structure of a module in Magento 2, see [Module file structure](https://developer.adobe.com/commerce/php/development/build/component-file-structure/#module-file-structure).
 
 ## Extensibility
 
@@ -38,7 +38,7 @@ This module introduces the following layout handles in the `view/frontend/layout
 - `adminhtml_import_start`
 - `adminhtml_import_validate`
 
-For more information about a layout in Magento 2, see the [Layout documentation](http://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
+For more information about a layout in Magento 2, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
 
 ### UI components
 
@@ -46,7 +46,7 @@ You can extend an export updates using the configuration files located in the `v
 
 - `export_grid` 
 
-For information about a UI component in Magento 2, see [Overview of UI components](http://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
+For information about a UI component in Magento 2, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).
 
 ### Public APIs
 
@@ -59,7 +59,7 @@ For information about a UI component in Magento 2, see [Overview of UI component
 - `\Magento\ImportExport\Api\ExportManagementInterface`
     - Executing actual export and returns export data
 
-For information about a public API in Magento 2, see [Public interfaces & APIs](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
+For information about a public API in Magento 2, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
 
 ## Additional information
 

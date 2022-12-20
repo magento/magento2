@@ -43,4 +43,4 @@ The Magento_NewRelicReporting provides console commands:
 Cron group configuration can be set at `etc/crontab.xml`:
 - `magento_newrelicreporting_cron` - runs collecting all new relic reports
 
-[Learn how to configure and run cron in Magento.](http://devdocs.magento.com/guides/v2.4/config-guide/cli/config-cli-subcommands-cron.html).
+[Learn how to configure and run cron in Magento.](https://experienceleague.adobe.com/docs/commerce-operations/configuration-guide/cli/configure-cron-jobs.html).

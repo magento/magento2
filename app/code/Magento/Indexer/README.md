@@ -28,7 +28,7 @@ For information about a module installation in Magento 2, see [Enable or disable
 
 `App/` - the directory that contains launch application entry point.
 
-For information about a typical file structure of a module in Magento 2, see [Module file structure](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
+For information about a typical file structure of a module in Magento 2, see [Module file structure](https://developer.adobe.com/commerce/php/development/build/component-file-structure/#module-file-structure).
 
 ## Extensibility
 
@@ -91,7 +91,7 @@ Cron group configuration can be set at `etc/crontab.xml`:
 - `indexer_update_all_views` - update indexer views
 - `indexer_clean_all_changelogs` - clean indexer view changelogs
 
-[Learn how to configure and run cron in Magento.](http://devdocs.magento.com/guides/v2.4/config-guide/cli/config-cli-subcommands-cron.html).
+[Learn how to configure and run cron in Magento.](https://experienceleague.adobe.com/docs/commerce-operations/configuration-guide/cli/configure-cron-jobs.html).
 
 More information can get at articles:
 - [Learn more about indexing](https://developer.adobe.com/commerce/php/development/components/indexing/)
