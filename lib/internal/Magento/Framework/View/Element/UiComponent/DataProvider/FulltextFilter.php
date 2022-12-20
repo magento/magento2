@@ -6,9 +6,9 @@
 
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
+use Magento\Framework\Api\Filter;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Framework\Api\Filter;
 
 /**
  * Class Fulltext
@@ -17,6 +17,8 @@ class FulltextFilter implements FilterApplierInterface
 {
     /**
      * Patterns using for escaping special characters
+     *
+     * @var array
      */
     private $escapePatterns = [
         '/[@\.]/' => '\_',
@@ -104,8 +106,8 @@ class FulltextFilter implements FilterApplierInterface
         $columns = $this->addTableAliasToColumns($columns, $collection, $mainTable);
         $collection->getSelect()
             ->where(
-                'MATCH(' . implode(',', $columns) . ') AGAINST(?)',
-                $this->escapeAgainstValue($filter->getValue())
+                'CONCAT_WS(" ", ' . implode(',', $columns) . ') LIKE ?',
+                '%' . $this->escapeAgainstValue($filter->getValue()) . '%'
             );
     }
 }
