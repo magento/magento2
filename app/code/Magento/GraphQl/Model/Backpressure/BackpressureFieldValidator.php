@@ -11,7 +11,6 @@ namespace Magento\GraphQl\Model\Backpressure;
 use Magento\Framework\App\Backpressure\BackpressureExceededException;
 use Magento\Framework\App\BackpressureEnforcerInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\ValidatorInterface;
 
 /**
@@ -42,7 +41,10 @@ class BackpressureFieldValidator implements ValidatorInterface
     }
 
     /**
-     * @inheritDoc
+     * @param Field $field
+     * @param $args
+     * @return void
+     * @throws GraphQlTooManyRequestsException
      */
     public function validate(Field $field, $args): void
     {
@@ -54,9 +56,7 @@ class BackpressureFieldValidator implements ValidatorInterface
         try {
             $this->backpressureEnforcer->enforce($context);
         } catch (BackpressureExceededException $exception) {
-            throw new GraphQlInputException(
-                __('Something went wrong while processing the request. Try again later')
-            );
+            throw new GraphQlTooManyRequestsException(__('Too Many Requests'));
         }
     }
 }
