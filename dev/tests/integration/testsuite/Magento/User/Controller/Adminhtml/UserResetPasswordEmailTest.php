@@ -3,10 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\User\Controller\Adminhtml;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\EmailMessage;
+use Magento\Store\Model\Store;
 use Magento\TestFramework\Fixture\Config as Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
@@ -63,11 +66,12 @@ class UserResetPasswordEmailTest extends AbstractBackendController
 
     private function getResetPasswordUri(EmailMessage $message): string
     {
+        $store = $this->_objectManager->get(Store::class);
         $emailParts = $message->getBody()->getParts();
         $messageContent = current($emailParts)->getRawContent();
         $pattern = '#\bhttps?://[^,\s()<>]+(?:\([\w\d]+\)|([^,[:punct:]\s]|/))#';
         preg_match_all($pattern, $messageContent, $match);
-        $urlString = strstr($match[0][0], 'backend');
+        $urlString = trim($match[0][0], $store->getBaseUrl('web'));
         return substr($urlString, 0, strpos($urlString, "/key"));
     }
 }
