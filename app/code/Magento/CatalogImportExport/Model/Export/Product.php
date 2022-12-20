@@ -1122,7 +1122,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $data[$itemId][$storeId][self::COL_STORE] = $storeCode;
                 $data[$itemId][$storeId][self::COL_ATTR_SET] = $this->_attrSetIdToName[$attrSetId];
                 $data[$itemId][$storeId][self::COL_TYPE] = $item->getTypeId();
-                $data[$itemId][$storeId][self::COL_SKU] = htmlspecialchars_decode($item->getSku());
+                $data[$itemId][$storeId][self::COL_SKU] = $item->getSku();
                 $data[$itemId][$storeId]['store_id'] = $storeId;
                 $data[$itemId][$storeId]['product_id'] = $itemId;
                 $data[$itemId][$storeId]['product_link_id'] = $productLinkId;
