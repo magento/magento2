@@ -243,6 +243,7 @@ class ViewTest extends TestCase
             ->willReturn($this->category);
         $this->categoryHelper->expects($this->once())->method('canShow')->with($this->category)->willReturn(true);
         $this->toolbarMemorizer->expects($this->once())->method('memorizeParams');
+        $this->toolbarMemorizer->expects($this->once())->method('isMemorizingAllowed')->willReturn(true);
         $this->response->expects($this->once())->method('setRedirect');
         $settings = $this->getMockBuilder(DataObject::class)
             ->addMethods(['getPageLayout', 'getLayoutUpdates'])

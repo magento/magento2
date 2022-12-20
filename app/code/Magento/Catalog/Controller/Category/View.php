@@ -249,7 +249,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
                 ->addBodyClass('categorypath-' . $this->categoryUrlPathGenerator->getUrlPath($category))
                 ->addBodyClass('category-' . $category->getUrlKey());
 
-            if ($this->isToolbarAction()) {
+            if ($this->isToolbarAction() && $this->toolbarMemorizer->isMemorizingAllowed()) {
                 $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
             }
             return $page;
