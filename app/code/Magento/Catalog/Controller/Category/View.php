@@ -249,7 +249,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
                 ->addBodyClass('categorypath-' . $this->categoryUrlPathGenerator->getUrlPath($category))
                 ->addBodyClass('category-' . $category->getUrlKey());
 
-            if ($this->isToolbarAction() && $this->toolbarMemorizer->isMemorizingAllowed()) {
+            if ($this->shouldRedirectOnToolbarAction()) {
                 $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
             }
             return $page;
@@ -305,11 +305,11 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      *
      * @return bool
      */
-    private function isToolbarAction(): bool
+    private function shouldRedirectOnToolbarAction(): bool
     {
         $params = $this->getRequest()->getParams();
 
-        return empty(array_intersect([
+        return $this->toolbarMemorizer->isMemorizingAllowed() && empty(array_intersect([
                 Toolbar::PAGE_PARM_NAME,
                 Toolbar::ORDER_PARAM_NAME,
                 Toolbar::DIRECTION_PARAM_NAME,
