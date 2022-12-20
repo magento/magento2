@@ -238,7 +238,7 @@ class CompareTest extends TestCase
     }
 
     /**
-     * test compare when configurable products has assigned its selected variant sku
+     * test compare two items- when configurable products has assigned sku of its selected variant
      */
     public function testCompareConfigurableProductAndItsVariant()
     {
