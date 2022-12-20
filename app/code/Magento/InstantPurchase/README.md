@@ -10,7 +10,7 @@ For information about a module installation in Magento 2, see [Enable or disable
 
 `PaymentMethodsIntegration` - directory contains interfaces and basic implementation of integration vault payment method to the instant purchase.
 
-For information about a typical file structure of a module in Magento 2, see [Module file structure](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
+For information about a typical file structure of a module in Magento 2, see [Module file structure](https://developer.adobe.com/commerce/php/development/build/component-file-structure/#module-file-structure).
 
 ## Extensibility
 
@@ -47,7 +47,7 @@ Extension developers can interact with the Magento_InstantPurchase module. For m
 - `\Magento\InstantPurchase\PaymentMethodIntegration\PaymentTokenFormatterInterface`
     - provides mechanism to create string presentation of token for payment method
 
-For information about a public API in Magento 2, see [Public interfaces & APIs](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
+For information about a public API in Magento 2, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
 
 ## Additional information
 

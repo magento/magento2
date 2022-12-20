@@ -42,7 +42,7 @@ The module dispatches the following events:
 - `gift_options_prepare` event in the `\Magento\GiftMessage\Block\Message\Inline::isMessagesOrderAvailable` method. Parameters:
     - `entity` is an entity object
 
-For information about an event in Magento 2, see [Events and observers](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
+For information about an event in Magento 2, see [Events and observers](https://developer.adobe.com/commerce/php/development/components/events-and-observers/#events).
 
 ### Layout
 
@@ -97,7 +97,7 @@ For more information about a layout in Magento 2, see the [Layout documentation]
     - get the gift message for a specified item in a specified order
     - set the gift message for a specified item in a specified order
     
-For information about a public API in Magento 2, see [Public interfaces & APIs](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
+For information about a public API in Magento 2, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
 
 ## Additional information
 

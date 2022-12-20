@@ -69,7 +69,7 @@ The module dispatches the following events:
   class `\Magento\Multishipping\Model\Checkout\Type\Multishipping::createOrders()` method. Parameters:
     - `orders` is order object array `\Magento\Sales\Model\Order`  that was created.
 
-For information about an event in Magento 2, see [Events and observers](http://devdocs.magento.com/guides/v2.3/extension-dev-guide/events-and-observers.html#events).
+For information about an event in Magento 2, see [Events and observers](https://developer.adobe.com/commerce/php/development/components/events-and-observers/#events).
 
 ### Layouts
 
@@ -136,4 +136,4 @@ Module introduces the new pages:
 More information about [layout types](https://developer.adobe.com/commerce/frontend-core/guide/layouts/types/).
 
 
-For information about significant changes in patch releases, see [2.3.x Release information](http://devdocs.magento.com/guides/v2.3/release-notes/bk-release-notes.html).
+For information about significant changes in patch releases, see [2.3.x Release information](https://experienceleague.adobe.com/docs/commerce-operations/release/notes/overview.html).

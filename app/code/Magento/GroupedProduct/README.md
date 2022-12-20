@@ -27,7 +27,7 @@ For information about a module installation in Magento 2, see [Enable or disable
 
 `Pricing/` - the directory that contains solutions for grouped product price.
 
-For information about a typical file structure of a module in Magento 2, see [Module file structure](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
+For information about a typical file structure of a module in Magento 2, see [Module file structure](https://developer.adobe.com/commerce/php/development/build/component-file-structure/#module-file-structure).
 
 ## Extensibility
 
@@ -79,14 +79,14 @@ This module extends widgets ui components the configuration files located in the
 - `widget_recently_compared`
 - `widget_recently_viewed`
 
-For information about a UI component in Magento 2, see [Overview of UI components](http://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
+For information about a UI component in Magento 2, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).
 
 ### Public APIs
 
 - `\Magento\GroupedProduct\Api\Data\GroupedOptionsInterface`
     - represents `product item id with qty` of a grouped product
     
-For information about a public API in Magento 2, see [Public interfaces & APIs](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
+For information about a public API in Magento 2, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
 
 ## Additional information
 

@@ -19,7 +19,7 @@ For information about a module installation in Magento 2, see [Enable or disable
 
 ## Additional information
 
-For information about significant changes in patch releases, see [2.3.x Release information](http://devdocs.magento.com/guides/v2.3/release-notes/bk-release-notes.html).
+For information about significant changes in patch releases, see [2.3.x Release information](https://experienceleague.adobe.com/docs/commerce-operations/release/notes/overview.html).
 
 ### cron options
 

@@ -108,7 +108,7 @@ The module dispatches the following events:
 - `sales_quote_item_collection_products_after_load` event in the `\Magento\Quote\Model\QuoteManagement::_assignProducts` method. Parameters:
     - `collection` is a product collection object (`\Magento\Catalog\Model\ResourceModel\Product\Collection` class)
 
-For information about an event in Magento 2, see [Events and observers](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).   
+For information about an event in Magento 2, see [Events and observers](https://developer.adobe.com/commerce/php/development/components/events-and-observers/#events).   
 
 ### Public APIs
 
@@ -293,5 +293,5 @@ For information about an event in Magento 2, see [Events and observers](http://d
 - `\Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface`
     - converts quote ID to the masked quote ID
     
-For information about a public API in Magento 2, see [Public interfaces & APIs](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
+For information about a public API in Magento 2, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
 

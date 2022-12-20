@@ -37,7 +37,7 @@ For more information about a layout in Magento 2, see the [Layout documentation]
 This module extends following ui components located in the `view/adminhtml/ui_component` directory:
 - `product_form`
 
-For information about a UI component in Magento 2, see [Overview of UI components](http://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
+For information about a UI component in Magento 2, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).
 
 ## Additional information
 

@@ -23,11 +23,11 @@ For information about a typical file structure of a module in Magento 2,
 
 ### Layouts
 
-For more information about a layout in Magento 2, see the [Layout documentation](http://devdocs.magento.com/guides/v2.3/frontend-dev-guide/layouts/layout-overview.html).
+For more information about a layout in Magento 2, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
 
 ### UI components
 
-For information about a UI component in Magento 2, see [Overview of UI components](http://devdocs.magento.com/guides/v2.3/ui_comp_guide/bk-ui_comps.html).
+For information about a UI component in Magento 2, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).
 
 ## Additional information
 

@@ -41,7 +41,7 @@ The module dispatches the following events:
 
 - `persistent_session_expired` event in the `\Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver::execute` method
 
-For information about an event in Magento 2, see [Events and observers](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
+For information about an event in Magento 2, see [Events and observers](https://developer.adobe.com/commerce/php/development/components/events-and-observers/#events).
 
 ### Layouts
 
@@ -58,4 +58,4 @@ More information can get at articles:
 Cron group configuration can be set at `etc/crontab.xml`:
 - `persistent_clear_expired` - clear expired persistent sessions
 
-[Learn how to configure and run cron in Magento.](http://devdocs.magento.com/guides/v2.4/config-guide/cli/config-cli-subcommands-cron.html).
+[Learn how to configure and run cron in Magento.](https://experienceleague.adobe.com/docs/commerce-operations/configuration-guide/cli/configure-cron-jobs.html).
