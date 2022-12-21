@@ -40,6 +40,16 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- set shipping as default            -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+            <conditionalClick selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTab}}" dependentSelector="{{AdminShippingMethodFlatRateSection.carriersFlatRateActive}}" visible="false" stepKey="expandFlatRateTab"/>
+            <click selector="{{AdminShippingMethodFlatRateSection.carriersEnableFlatRateActive}}" stepKey="useDefaultValue"/>
+            <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfigs"/>
+            <waitForPageLoad stepKey="waitForPageLoad"/>
+            <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- set shipping as default            -->
             <comment userInput="BIC workaround" stepKey="logoutCustomer"/>
         </after>
         <!-- Add simple product to cart and go to checkout-->
