@@ -29,7 +29,6 @@ class SqlVersionProvider
 
     public const MARIA_DB_10_6_VERSION = '10.6.';
 
-    public const MYSQL_8_0_29_VERSION = '8.0.29';
     /**#@-*/
 
     /**
