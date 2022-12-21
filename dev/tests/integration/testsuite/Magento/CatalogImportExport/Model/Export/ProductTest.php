@@ -238,17 +238,18 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data_special_chars.php
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      *
      * @return void
      * @throws NoSuchEntityException
      */
     public function testExportSpecialChars(): void
     {
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productRepository->get('simple &quot;1&quot;');
         $product->setStoreId(Store::DEFAULT_STORE_ID);
         $product->setDescription('Description with &lt;h2&gt;this is test page&lt;/h2&gt;');
-        $product->save();
+        $this->productRepository->save($product);
 
         $this->model->setWriter(
             $this->objectManager->create(
@@ -256,28 +257,48 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             )
         );
         $exportData = $this->model->export();
+        $rows = $this->csvToArray($exportData);
 
-        $this->assertStringContainsString('simple &quot;1&quot;', $exportData);
+        $this->assertCount(4, $rows);
+        $this->assertEquals('simple &quot;1&quot;', $rows[0]['sku']);
+        $this->assertEquals('Description with &lt;h2&gt;this is test page&lt;/h2&gt;', $rows[0]['description']);
         $this->assertStringContainsString('Category with slash\/ symbol', $exportData);
-        $this->assertStringContainsString('New Product', $exportData);
-        $this->assertStringContainsString('Description with &lt;h2&gt;this is test page&lt;/h2&gt;', $exportData);
-        $this->assertFalse($this->hasDuplicateRowsForProducts($exportData));
+        $this->assertFalse($this->hasDuplicateRowsForProducts($rows));
     }
 
     /**
      * Verify exported data does not contain duplicate rows for product
      *
-     * @param $exportData
+     * @param $rows
      * @return bool
      */
-    private function hasDuplicateRowsForProducts($exportData): bool
+    private function hasDuplicateRowsForProducts($rows): bool
     {
         $skus = [];
-        foreach (explode("\n", $exportData, -1) as $line) {
-            $skus[] = current(explode(',', $line));
+        foreach ($rows as $product) {
+            $skus[] = $product['sku'];
         }
-        array_shift($skus);
         return count($skus) !== count(array_flip($skus));
+    }
+
+    /**
+     * Converts comma separated csv data to array
+     *
+     * @param $exportData
+     * @return array
+     */
+    private function csvToArray($exportData): array
+    {
+        $rows = [];
+        $headers = [];
+        foreach (str_getcsv($exportData, "\n") as $row) {
+            if (!$headers) {
+                $headers = str_getcsv($row);
+            } else {
+                $rows[] = array_combine($headers, str_getcsv($row));
+            }
+        }
+        return $rows;
     }
 
     /**
