@@ -22,9 +22,9 @@ class ProductPriceIndexModifier
     private ResourceConnection $resourceConnection;
 
     /**
-     * @var string|null
+     * @var string
      */
-    private ?string $connectionName;
+    private string $connectionName;
 
     /**
      * @param ResourceConnection $resourceConnection
