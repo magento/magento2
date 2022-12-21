@@ -261,24 +261,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $this->assertCount(4, $rows);
         $this->assertEquals('simple &quot;1&quot;', $rows[0]['sku']);
+        $this->assertEquals('simple_ms_1', $rows[1]['sku']);
+        $this->assertEquals('simple_ms_2', $rows[2]['sku']);
+        $this->assertEquals('simple_ms_3', $rows[3]['sku']);
         $this->assertEquals('Description with &lt;h2&gt;this is test page&lt;/h2&gt;', $rows[0]['description']);
         $this->assertStringContainsString('Category with slash\/ symbol', $exportData);
-        $this->assertFalse($this->hasDuplicateRowsForProducts($rows));
-    }
-
-    /**
-     * Verify exported data does not contain duplicate rows for product
-     *
-     * @param $rows
-     * @return bool
-     */
-    private function hasDuplicateRowsForProducts($rows): bool
-    {
-        $skus = [];
-        foreach ($rows as $product) {
-            $skus[] = $product['sku'];
-        }
-        return count($skus) !== count(array_flip($skus));
     }
 
     /**
