@@ -183,7 +183,6 @@ class TransportBuilderTest extends TestCase
      */
     public function testGetTransportWithAttachment($templateType, $bodyText, $templateNamespace): void
     {
-
         $this->builder->setTemplateModel($templateNamespace);
 
         $vars = ['reason' => 'Reason', 'customer' => 'Customer'];
