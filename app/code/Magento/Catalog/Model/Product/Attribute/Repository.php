@@ -115,13 +115,15 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
         if (in_array($attribute->getFrontendInput(), self::FILTERABLE_ALLOWED_INPUT_TYPES)) {
             if ($attribute->getIsFilterable()) {
                 throw InputException::invalidFieldValue(
-                    EavAttributeInterface::IS_FILTERABLE, $attribute->getIsFilterable()
+                    EavAttributeInterface::IS_FILTERABLE,
+                    $attribute->getIsFilterable()
                 );
             }
 
             if ($attribute->getIsFilterableInSearch()) {
                 throw InputException::invalidFieldValue(
-                    EavAttributeInterface::IS_FILTERABLE_IN_SEARCH, $attribute->getIsFilterableInSearch()
+                    EavAttributeInterface::IS_FILTERABLE_IN_SEARCH,
+                    $attribute->getIsFilterableInSearch()
                 );
             }
         }
