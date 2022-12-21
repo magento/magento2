@@ -35,6 +35,7 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$defaultCategory1.custom_attributes[url_key]$$)}}" stepKey="GoToStorefrontCategory1Page"/>
         <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="24" stepKey="selectPerPageCategory1" />
         <waitForPageLoad stepKey="waitForCategory1PageToLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="verifyCategory1PageParameters"/>
 
         <amOnPage url="{{StorefrontCategoryPage.url($$defaultCategory2.custom_attributes[url_key]$$)}}" stepKey="navigateToCategory2Page"/>
         <waitForPageLoad stepKey="waitForCategory2PageToLoad"/>
