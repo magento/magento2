@@ -89,7 +89,6 @@ class AttributeReader implements ReaderInterface
                         'name' => $attributeCode,
                         'type' => $locatedType,
                         'arguments' => [],
-                        'deprecated' => ['reason' => 'Use the `custom_attributes` field instead.'],
                     ];
                 }
             }
