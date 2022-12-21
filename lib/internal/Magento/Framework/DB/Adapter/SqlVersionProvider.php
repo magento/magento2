@@ -123,16 +123,6 @@ class SqlVersionProvider
     }
 
     /**
-     * Get exact version
-     *
-     * @return string
-     */
-    public function getExactSQLVersion(): string
-    {
-        return $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
-    }
-
-    /**
      * Check if MySQL version is greater than equal to 8.0.29
      *
      * @return void
