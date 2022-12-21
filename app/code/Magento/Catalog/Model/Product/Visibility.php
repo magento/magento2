@@ -86,9 +86,8 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      * Retrieve option array
      *
      * @return array
-     * phpcs:disable Magento2.Functions.StaticFunction
      */
-    public static function getOptionArray()
+    public function getOptionArray()
     {
         return [
             self::VISIBILITY_NOT_VISIBLE => __('Not Visible Individually'),
@@ -103,9 +102,9 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      *
      * @return array
      */
-    public static function getAllOption()
+    public function getAllOption()
     {
-        $options = self::getOptionArray();
+        $options = $this->getOptionArray();
         array_unshift($options, ['value' => '', 'label' => '']);
         return $options;
     }
@@ -115,10 +114,10 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      *
      * @return array
      */
-    public static function getAllOptions()
+    public function getAllOptions()
     {
         $res = [];
-        foreach (self::getOptionArray() as $index => $value) {
+        foreach ($this->getOptionArray() as $index => $value) {
             $res[] = ['value' => $index, 'label' => $value];
         }
         return $res;
@@ -130,12 +129,11 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      * @param int $optionId
      * @return string
      */
-    public static function getOptionText($optionId)
+    public function getOptionText($optionId)
     {
-        $options = self::getOptionArray();
+        $options = $this->getOptionArray();
         return $options[$optionId] ?? null;
     }
-    //phpcs:enable Magento2.Functions.StaticFunction
 
     /**
      * Retrieve flat column definition

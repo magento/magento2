@@ -601,6 +601,11 @@ class Product extends AbstractEntity
     protected $productUrl;
 
     /**
+     * @var Visibility
+     */
+    protected $visibility;
+
+    /**
      * @var array
      */
     protected $websitesCache = [];
@@ -802,6 +807,7 @@ class Product extends AbstractEntity
      * @param Product\TaxClassProcessor $taxClassProcessor
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Product\Url $productUrl
+     * @param Visibility $visibility
      * @param array $data
      * @param array $dateAttrCodes
      * @param CatalogConfig $catalogConfig
@@ -858,6 +864,7 @@ class Product extends AbstractEntity
         Product\TaxClassProcessor $taxClassProcessor,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\Url $productUrl,
+        Visibility $visibility,
         array $data = [],
         array $dateAttrCodes = [],
         CatalogConfig $catalogConfig = null,
@@ -900,6 +907,7 @@ class Product extends AbstractEntity
         $this->taxClassProcessor = $taxClassProcessor;
         $this->scopeConfig = $scopeConfig;
         $this->productUrl = $productUrl;
+        $this->visibility = $visibility;
         $this->dateAttrCodes = array_merge($this->dateAttrCodes, $dateAttrCodes);
         $this->catalogConfig = $catalogConfig ?: ObjectManager::getInstance()->get(CatalogConfig::class);
         $this->imageTypeProcessor = $imageTypeProcessor ?: ObjectManager::getInstance()->get(ImageTypeProcessor::class);
@@ -1400,7 +1408,7 @@ class Product extends AbstractEntity
             $tableName = $this->_resourceFactory->create()->getProductCategoryTable();
         }
         if ($categoriesData) {
-            list($delProductId, $categoriesIn) = $this->getProductCategoriesDataSave($categoriesData, $tableName);
+            [$delProductId, $categoriesIn] = $this->getProductCategoriesDataSave($categoriesData, $tableName);
 
             if (Import::BEHAVIOR_APPEND != $this->getBehavior()) {
                 $this->_connection->delete(
@@ -1844,7 +1852,7 @@ class Product extends AbstractEntity
         $rowExistingImages = $existingImages[$storeId][$rowSkuNormalized] ?? [];
         $rowStoreMediaGalleryValues = $rowExistingImages;
         $rowExistingImages += $existingImages[Store::DEFAULT_STORE_ID][$rowSkuNormalized] ?? [];
-        list($rowImages, $rowLabels) = $this->getImagesFromRow($rowData);
+        [$rowImages, $rowLabels] = $this->getImagesFromRow($rowData);
         $imageHiddenStates = $this->getImagesHiddenStates($rowData);
         foreach (array_keys($imageHiddenStates) as $image) {
             //Mark image as uploaded if it exists
@@ -1859,7 +1867,7 @@ class Product extends AbstractEntity
             }
         }
         $rowData[self::COL_MEDIA_IMAGE] = [];
-        list($rowImages, $rowData) = $this->clearNoSelectionImages($rowImages, $rowData);
+        [$rowImages, $rowData] = $this->clearNoSelectionImages($rowImages, $rowData);
         /*
          * Note: to avoid problems with undefined sorting, the value of media gallery items positions
          * must be unique in scope of one product.
@@ -2836,7 +2844,7 @@ class Product extends AbstractEntity
                 $preparedAttributes[$code] .= $this->getMultipleValueSeparator() . $attributeData;
                 continue;
             }
-            list($code, $value) = explode(self::PAIR_NAME_VALUE_SEPARATOR, $attributeData, 2);
+            [$code, $value] = explode(self::PAIR_NAME_VALUE_SEPARATOR, $attributeData, 2);
             $code = mb_strtolower($code);
             $preparedAttributes[$code] = $value;
         }

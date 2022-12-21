@@ -92,6 +92,11 @@ class AfterImportDataObserver implements ObserverInterface
     protected $urlFinder;
 
     /**
+     * @var Visibility
+     */
+    protected $visibility;
+
+    /**
      * @var StoreManagerInterface
      */
     protected $storeManager;
@@ -196,6 +201,7 @@ class AfterImportDataObserver implements ObserverInterface
      * @param UrlPersistInterface $urlPersist
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param UrlFinderInterface $urlFinder
+     * @param Visibility $visibility
      * @param MergeDataProviderFactory|null $mergeDataProviderFactory
      * @param CategoryCollectionFactory|null $categoryCollectionFactory
      * @param ScopeConfigInterface|null $scopeConfig
@@ -212,6 +218,7 @@ class AfterImportDataObserver implements ObserverInterface
         UrlPersistInterface $urlPersist,
         UrlRewriteFactory $urlRewriteFactory,
         UrlFinderInterface $urlFinder,
+        Visibility $visibility,
         MergeDataProviderFactory $mergeDataProviderFactory = null,
         CategoryCollectionFactory $categoryCollectionFactory = null,
         ScopeConfigInterface $scopeConfig = null,
@@ -224,6 +231,7 @@ class AfterImportDataObserver implements ObserverInterface
         $this->storeManager = $storeManager;
         $this->urlRewriteFactory = $urlRewriteFactory;
         $this->urlFinder = $urlFinder;
+        $this->visibility = $visibility;
         $mergeDataProviderFactory = $mergeDataProviderFactory ?: ObjectManager::getInstance()->get(
             MergeDataProviderFactory::class
         );
@@ -379,7 +387,7 @@ class AfterImportDataObserver implements ObserverInterface
      */
     private function addProductToImport(Product $product, string $storeId, array &$products) : void
     {
-        if ($product->getVisibility() == (string)Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]) {
+        if ($product->getVisibility() == (string)$this->visibility->getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]) {
             return;
         }
         $products[$product->getId()][$storeId] = $product;
