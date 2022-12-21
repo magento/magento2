@@ -21,9 +21,35 @@
             <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
             <createData entity="_defaultBlock" stepKey="createPreReqBlock" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="enableOldMediaGallery">
+                <argument name="enabled" value="0"/>
+            </actionGroup>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
         </before>
+        <after>
+            <actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandStorageRootFolder">
+                <argument name="FolderName" value="Storage Root"/>
+            </actionGroup>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+                <argument name="FolderName" value="wysiwyg"/>
+            </actionGroup>
+            <actionGroup ref="DeleteFolderActionGroup" stepKey="DeleteCreatedFolder">
+                <argument name="ImageFolder" value="ImageFolder"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="amOnEditPage"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad"/>
+            <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+            <waitForPageLoad stepKey="waitForGridReload"/>
+            <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
+            <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableOldMediaGallery">
+                <argument name="enabled" value="1"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
         <actionGroup ref="AssignBlockToCMSPage" stepKey="assignBlockToCMSPage">
             <argument name="Block" value="$$createPreReqBlock$$"/>
             <argument name="CmsPage" value="$$createCMSPage$$"/>
@@ -62,25 +88,5 @@
         <!--see image on Storefront-->
         <seeElement selector="{{StorefrontBlockSection.mediaDescription}}" stepKey="assertMediaDescription"/>
         <seeElementInDOM selector="{{StorefrontBlockSection.imageSource(ImageUpload.fileName)}}" stepKey="assertMediaSource"/>
-        <after>
-            <actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
-            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandStorageRootFolder">
-                <argument name="FolderName" value="Storage Root"/>
-            </actionGroup>
-            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
-                <argument name="FolderName" value="wysiwyg"/>
-            </actionGroup>
-            <actionGroup ref="DeleteFolderActionGroup" stepKey="DeleteCreatedFolder">
-                <argument name="ImageFolder" value="ImageFolder"/>
-            </actionGroup>
-            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="amOnEditPage"/>
-            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad"/>
-            <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
-            <waitForPageLoad stepKey="waitForGridReload"/>
-            <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
-            <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
-            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-        </after>
     </test>
 </tests>
