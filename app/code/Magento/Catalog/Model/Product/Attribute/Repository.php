@@ -19,7 +19,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  */
 class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInterface
 {
-    private const FILTERABLE_ALLOWED_INPUT_TYPES = ['date', 'datetime', 'price', 'text', 'textarea', 'texteditor'];
+    private const FILTERABLE_ALLOWED_INPUT_TYPES = ['date', 'datetime', 'text', 'textarea', 'texteditor'];
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Attribute
