@@ -16,4 +16,8 @@
         <data key="filename" unique="prefix">sitemap.xml</data>
         <data key="path">/</data>
     </entity>
+    <entity name="UniqueSitemapNameMediaPath">
+        <data key="filename" unique="prefix">sitemap.xml</data>
+        <data key="path">/media/sitemap/</data>
+    </entity>
 </entities>

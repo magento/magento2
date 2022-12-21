@@ -9,6 +9,8 @@ namespace Magento\Framework\GraphQl\Query\Resolver;
 
 /**
  * IdentityInterface is responsible for generating the proper tags from a cache tag and resolved data.
+ *
+ * @api
  */
 interface IdentityInterface
 {
@@ -21,5 +23,5 @@ interface IdentityInterface
      * @param array $resolvedData
      * @return string[]
      */
-    public function getIdentities(array $resolvedData) : array;
+    public function getIdentities(array $resolvedData): array;
 }

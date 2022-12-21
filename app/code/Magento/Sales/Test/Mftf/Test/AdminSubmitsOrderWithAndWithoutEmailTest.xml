@@ -18,12 +18,16 @@
             <group value="sales"/>
         </annotations>
         <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
         </before>
         <after>
+            <!-- Disable shipping method for customer with default address -->
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
@@ -33,15 +37,14 @@
         <comment userInput="Admin creates order" stepKey="adminCreateOrderComment"/>
         <!--<actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage"/>-->
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToOrderIndexPage"/>
-        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeIndexPageTitle">
-            <argument name="selector" value="{{AdminHeaderSection.pageTitle}}"/>
-            <argument name="userInput" value="Orders"/>
+
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeIndexPageTitle">
+            <argument name="value" value="Orders"/>
         </actionGroup>
-        <actionGroup ref="AdminClickCreateNewOrderOnOrderGridPageActionGroup" stepKey="clickCreateNewOrder"/>
-        <actionGroup ref="AdminClickCreateNewCustomerForOrderActionGroup" stepKey="clickCreateCustomer"/>
-        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeNewOrderPageTitle">
-            <argument name="selector" value="{{AdminHeaderSection.pageTitle}}"/>
-            <argument name="userInput" value="Create New Order"/>
+        <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
+        <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeNewOrderPageTitle">
+            <argument name="value" value="Create New Order"/>
         </actionGroup>
 
         <!--Check if order can be submitted without the required fields including email address-->
@@ -52,8 +55,10 @@
         </actionGroup>
 
         <!--Fill customer group and customer email-->
-        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="{{GeneralCustomerGroup.code}}" stepKey="selectCustomerGroup" after="addSimpleProductToOrder"/>
-        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail" after="selectCustomerGroup"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectCustomerGroup" after="addSimpleProductToOrder"/>
+        <actionGroup ref="AdminFillAccountInformationOnCreateOrderPageActionGroup" stepKey="fillCustomerEmail" after="selectCustomerGroup">
+            <argument name="email" value="{{Simple_US_Customer.email}}"/>
+        </actionGroup>
 
         <!--Fill customer address information-->
         <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress" after="fillCustomerEmail">

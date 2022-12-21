@@ -4245,6 +4245,9 @@ return [
     ['Zend_Feed', 'Laminas\Feed'],
     ['Zend_Uri', 'Laminas\Uri\Uri'],
     ['Zend_Mime', 'Magento\Framework\HTTP\Mime'],
+    ['Zend_Mail'],
+    ['Zend_Json'],
+    ['Zend_Currency', 'Magento\Framework\Currency'],
     ['Magento\Framework\Encryption\Crypt', 'Magento\Framework\Encryption\EncryptionAdapterInterface'],
     ['Magento\Wishlist\Setup\Patch\Schema\AddProductIdConstraint'],
     ['Magento\Elasticsearch\Block\Adminhtml\System\Config\TestConnection'],
@@ -4314,4 +4317,33 @@ return [
     ['Magento\Setup\Validator\AdminCredentialsValidator'],
     ['Magento\Setup\Model\Updater'],
     ['Magento\Setup\Console\Command\CronRunCommand'],
+    [
+        'Magento\Elasticsearch\SearchAdapter\Query\Builder\Match',
+        'Magento\Elasticsearch\SearchAdapter\Query\Builder\MatchQuery'
+    ],
+    [
+        'Magento\Framework\Search\Request\Query\Match',
+        'Magento\Framework\Search\Request\Query\MatchQuery'
+    ],
+    [
+        'Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder\MatchTest',
+        'Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder\MatchQueryTest'
+    ],
+    [
+        'Magento\Elasticsearch6\Block\Adminhtml\System\Config\TestConnection',
+        'Magento\Elasticsearch7\Block\Adminhtml\System\Config\TestConnection'
+    ],
+    [
+        'Magento\Elasticsearch6\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver',
+        'Magento\Elasticsearch7\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver'
+    ],
+    [
+        'Magento\Elasticsearch6\Model\Client\Elasticsearch',
+        'Magento\Elasticsearch7\Model\Client\Elasticsearch'
+    ],
+    ['Magento\Elasticsearch\Test\Unit\Model\DataProvider\Base\SuggestionsTest'],
+    ['Magento\Elasticsearch6\Test\Unit\Model\Client\ElasticsearchTest'],
+    ['Magento\Elasticsearch6\Test\Unit\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolverTest'],
+    ['Zend_Measure_Length', 'Magento\Framework\Measure\Length'],
+    ['Zend_Measure_Weight', 'Magento\Framework\Measure\Weight'],
 ];

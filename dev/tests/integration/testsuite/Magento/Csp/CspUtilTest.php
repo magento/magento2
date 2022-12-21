@@ -30,7 +30,7 @@ class CspUtilTest extends AbstractController
         $content = $this->getResponse()->getContent();
 
         $this->assertStringContainsString(
-            '<script src="http&#x3A;&#x2F;&#x2F;my.magento.com&#x2F;static&#x2F;script.js"/>',
+            '<script src="http&#x3A;&#x2F;&#x2F;my.magento.com&#x2F;static&#x2F;script.js"></script>',
             $content
         );
         $this->assertStringContainsString("<script>\n    let myVar = 1;\n</script>", $content);

@@ -55,6 +55,9 @@ class OnepageTest extends TestCase
      */
     protected $eventManager;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -70,14 +73,10 @@ class OnepageTest extends TestCase
             ->willReturn($this->quote);
 
         $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
-        $objectManagerMock->expects($this->at(0))
+        $objectManagerMock
             ->method('get')
-            ->with(Session::class)
-            ->willReturn($this->checkoutSession);
-        $objectManagerMock->expects($this->at(1))
-            ->method('get')
-            ->with(\Magento\Customer\Model\Session::class)
-            ->willReturn($this->customerSession);
+            ->withConsecutive([Session::class], [\Magento\Customer\Model\Session::class])
+            ->willReturnOnConsecutiveCalls($this->checkoutSession, $this->customerSession);
 
         $context = $this->createMock(Context::class);
         $context->expects($this->once())
@@ -101,7 +100,10 @@ class OnepageTest extends TestCase
         );
     }
 
-    public function testDispatch()
+    /**
+     * @return void
+     */
+    public function testDispatch(): void
     {
         $this->request->expects($this->once())
             ->method('getActionName')

@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductWithMediaThumbGallerySliderTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Storefront Gallery behaviour for Product with media"/>
+            <title value="Assert media behaviour for product with different media on storefront"/>
+            <description value="Assert media behaviour for product with different media on storefront"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-2076"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+            <!-- Reindex all indexers -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+        <!--Add images to product-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminProductEditPage">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addBaseImage">
+            <argument name="image" value="TestImageAdobe"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage1">
+            <argument name="image" value="AdobeSmallImage"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage2">
+            <argument name="image" value="AdobeThumbImage"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage3">
+            <argument name="image" value="JpgImage"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage4">
+            <argument name="image" value="Magento2"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage5">
+            <argument name="image" value="JpgImage"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage6">
+            <argument name="image" value="LargeImage"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage7">
+            <argument name="image" value="Magento2"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage8">
+            <argument name="image" value="MagentoImage"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage9">
+            <argument name="image" value="Magento3"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage10">
+            <argument name="image" value="TestImageNew"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage11">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage12">
+            <argument name="image" value="MediumImage"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage13">
+            <argument name="image" value="MediumImage"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage14">
+            <argument name="image" value="PngImage"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage15">
+            <argument name="image" value="Magento2"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage16">
+            <argument name="image" value="Magento3"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToStorefrontProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <!--Assert positioning images in the ribbon-->
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppear"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImagePosition1">
+            <argument name="image" value="{{TestImageAdobe.filename}}"/>
+            <argument name="extension" value="{{TestImageAdobe.file_extension}}"/>
+            <argument name="position" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImagePosition2">
+            <argument name="image" value="{{AdobeSmallImage.filename}}"/>
+            <argument name="extension" value="{{AdobeSmallImage.file_extension}}"/>
+            <argument name="position" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImagePosition3">
+            <argument name="image" value="{{AdobeThumbImage.filename}}"/>
+            <argument name="extension" value="{{AdobeThumbImage.file_extension}}"/>
+            <argument name="position" value="3"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImagePosition4">
+            <argument name="image" value="{{JpgImage.filename}}"/>
+            <argument name="extension" value="{{JpgImage.file_extension}}"/>
+            <argument name="position" value="4"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImagePosition5">
+            <argument name="image" value="{{Magento2.filename}}"/>
+            <argument name="extension" value="{{Magento2.file_extension}}"/>
+            <argument name="position" value="5"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImagePosition6">
+            <argument name="image" value="{{JpgImage.filename}}"/>
+            <argument name="extension" value="{{JpgImage.file_extension}}"/>
+            <argument name="position" value="6"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImagePosition7">
+            <argument name="image" value="{{LargeImage.filename}}"/>
+            <argument name="extension" value="{{LargeImage.file_extension}}"/>
+            <argument name="position" value="7"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImagePosition8">
+            <argument name="image" value="{{Magento2.filename}}"/>
+            <argument name="extension" value="{{Magento2.file_extension}}"/>
+            <argument name="position" value="8"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImagePosition9">
+            <argument name="image" value="{{MagentoImage.filename}}"/>
+            <argument name="extension" value="{{MagentoImage.file_extension}}"/>
+            <argument name="position" value="9"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImagePosition10">
+            <argument name="image" value="{{Magento3.filename}}"/>
+            <argument name="extension" value="{{Magento3.file_extension}}"/>
+            <argument name="position" value="10"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImagePosition11">
+            <argument name="image" value="{{TestImageNew.filename}}"/>
+            <argument name="extension" value="{{TestImageNew.file_extension}}"/>
+            <argument name="position" value="11"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImagePosition12">
+            <argument name="image" value="{{ProductImage.filename}}"/>
+            <argument name="extension" value="{{ProductImage.file_extension}}"/>
+            <argument name="position" value="12"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImagePosition13">
+            <argument name="image" value="{{MediumImage.filename}}"/>
+            <argument name="extension" value="{{MediumImage.file_extension}}"/>
+            <argument name="position" value="13"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImagePosition14">
+            <argument name="image" value="{{MediumImage.filename}}"/>
+            <argument name="extension" value="{{MediumImage.file_extension}}"/>
+            <argument name="position" value="14"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImagePosition15">
+            <argument name="image" value="{{PngImage.filename}}"/>
+            <argument name="extension" value="{{PngImage.file_extension}}"/>
+            <argument name="position" value="15"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImagePosition16">
+            <argument name="image" value="{{Magento2.filename}}"/>
+            <argument name="extension" value="{{Magento2.file_extension}}"/>
+            <argument name="position" value="16"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImagePosition17">
+            <argument name="image" value="{{Magento3.filename}}"/>
+            <argument name="extension" value="{{Magento3.file_extension}}"/>
+            <argument name="position" value="17"/>
+        </actionGroup>
+        <!--Assert fullscreen image isn't displayed-->
+        <actionGroup ref="StorefrontAssertActiveProductImageActionGroup" stepKey="seeActiveBaseImage">
+            <argument name="fileName" value="{{TestImageAdobe.filename}}"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}" stepKey="dontSeeFullscreenProductImage"/>
+        <!--Verify if looping is unavailable-->
+        <dontSeeElement selector="{{StorefrontProductMediaSection.fotoramaPrevButton}}" stepKey="dontSeePrevButton"/>
+        <seeElement selector="{{StorefrontProductMediaSection.fotoramaNextButton}}" stepKey="seeNextButton"/>
+        <click selector="{{StorefrontProductMediaSection.fotoramaNextButton}}" stepKey="firstClickNextFotorama"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(MagentoImage.filename)}}" stepKey="see9thImageInRibbon"/>
+        <click selector="{{StorefrontProductMediaSection.fotoramaNextButton}}" stepKey="secondClickNextFotorama"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(MagentoImage.filename)}}" stepKey="seeLastImageInRibbon"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImage(TestImageAdobe.filename)}}" stepKey="seeActiveImageDontChangeAfterClickNext"/>
+        <dontSeeElement selector="{{StorefrontProductMediaSection.fotoramaNextButton}}" stepKey="dontSeeNextButtonAfterClickNext"/>
+        <click selector="{{StorefrontProductMediaSection.fotoramaPrevButton}}" stepKey="firstClickPrevFotorama"/>
+        <click selector="{{StorefrontProductMediaSection.fotoramaPrevButton}}" stepKey="secondClickPrevFotorama"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImage(TestImageAdobe.filename)}}" stepKey="seeActiveImageDefaultStay2"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(TestImageAdobe.filename)}}" stepKey="seeFirstImageInRibbon"/>
+        <dontSeeElement selector="{{StorefrontProductMediaSection.fotoramaPrevButton}}" stepKey="dontSeePrevButtonAfterClick"/>
+        <!--Change image by thumbnail ribbon-->
+        <actionGroup ref="AssertStorefrontProductPageGalleryChangingMainImageByRibbonActionGroup" stepKey="assertThumbnailClicking">
+            <argument name="startImage" value="{{TestImageAdobe.filename}}"/>
+            <argument name="expectedImage" value="{{AdobeSmallImage.filename}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductImageAppearsOnProductPagePreviewActionGroup" stepKey="seeImageOnPreview">
+            <argument name="productImage" value="{{TestImageAdobe.filename}}"/>
+        </actionGroup>
+        <!--Change image by image buttons-->
+        <actionGroup ref="AssertStorefrontProductPageGalleryMainImageButtonsActionGroup" stepKey="assertButtonActions">
+            <argument name="startImage" value="{{TestImageAdobe.filename}}"/>
+            <argument name="expectedImage" value="{{AdobeSmallImage.filename}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductImageAppearsOnProductPagePreviewActionGroup" stepKey="seeImageAfterButtonActions">
+            <argument name="productImage" value="{{TestImageAdobe.filename}}"/>
+        </actionGroup>
+        <!--Check that images <= that image section-->
+        <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions0"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert0"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions1"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert1"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions2"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert2"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions3"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert3"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions4"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert4"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions5"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert5"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions6"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert6"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions7"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert7"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions8"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert8"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions9"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert9"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions10"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert10"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions11"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert11"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions12"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert12"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions13"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert13"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions14"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert14"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions15"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert15"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions16"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert16"/>
+        <actionGroup ref="AssertStorefrontProductImageAppearsOnProductPagePreviewActionGroup" stepKey="seeImageAfterLoop">
+            <argument name="productImage" value="{{TestImageAdobe.filename}}"/>
+        </actionGroup>
+        <!--Change image using the drag actions-->
+        <actionGroup ref="StorefrontProductPageGalleryDragMainImageBackActionGroup" stepKey="dragBack"/>
+        <actionGroup ref="AssertStorefrontProductImageAppearsOnProductPagePreviewActionGroup" stepKey="seeImageAfterDragBack">
+            <argument name="productImage" value="{{Magento3.filename}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageGalleryDragMainImageForwardActionGroup" stepKey="dragForward"/>
+        <moveMouseOver selector="{{StorefrontProductMediaSection.mainImageForJsActions}}" stepKey="hoverOnImageAfterDragActions"/>
+        <actionGroup ref="AssertStorefrontProductImageAppearsOnProductPagePreviewActionGroup" stepKey="seeImageAfterDragForward">
+            <argument name="productImage" value="{{TestImageAdobe.filename}}"/>
+        </actionGroup>
+        <!--Assert the image looping by image buttons-->
+        <click selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="loopBack"/>
+        <actionGroup ref="AssertStorefrontProductImageAppearsOnProductPagePreviewActionGroup" stepKey="seeImageAfterLoopBack">
+            <argument name="productImage" value="{{Magento3.filename}}"/>
+        </actionGroup>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="loopForward"/>
+        <actionGroup ref="AssertStorefrontProductImageAppearsOnProductPagePreviewActionGroup" stepKey="seeImageAfterLoopForward">
+            <argument name="productImage" value="{{TestImageAdobe.filename}}"/>
+        </actionGroup>
+    </test>
+</tests>

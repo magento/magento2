@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <group value="customer"/>
             <group value="ui"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="setup:static-content:deploy fr_FR" stepKey="deployStaticContentWithFrenchLocale"/>

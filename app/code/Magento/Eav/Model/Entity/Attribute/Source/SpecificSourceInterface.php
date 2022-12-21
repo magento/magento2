@@ -12,6 +12,8 @@ use Magento\Framework\Api\CustomAttributesDataInterface;
 
 /**
  * Can provide entity-specific options for an attribute.
+ *
+ * @api
  */
 interface SpecificSourceInterface extends SourceInterface
 {

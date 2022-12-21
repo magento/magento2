@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCanceledOrdersInOrderSalesReportTest">
+        <annotations>
+            <features value="Reports"/>
+            <stories value="Order Sales Report includes canceled orders"/>
+            <group value="reports"/>
+            <title value="Canceled orders in order sales report"/>
+            <description value="Verify canceling of orders in order sales report"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-95960"/>
+            <useCaseId value="MAGETWO-95823"/>
+        </annotations>
+
+        <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <createData entity="CustomerCart" stepKey="createCustomerCartOne">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItemOne">
+                <requiredEntity createDataKey="createCustomerCartOne"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCartOne"/>
+            </createData>
+            <updateData createDataKey="createCustomerCartOne" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformationOne">
+                <requiredEntity createDataKey="createCustomerCartOne"/>
+            </updateData>
+            <createData entity="Invoice" stepKey="invoiceOrderOne">
+                <requiredEntity createDataKey="createCustomerCartOne"/>
+            </createData>
+            <createData entity="Shipment" stepKey="shipOrderOne">
+                <requiredEntity createDataKey="createCustomerCartOne"/>
+            </createData>
+
+            <createData entity="CustomerCart" stepKey="createCustomerCartTwo">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItemTwo">
+                <requiredEntity createDataKey="createCustomerCartTwo"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddressTwo">
+                <requiredEntity createDataKey="createCustomerCartTwo"/>
+            </createData>
+            <updateData createDataKey="createCustomerCartTwo" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformationTwo">
+                <requiredEntity createDataKey="createCustomerCartTwo"/>
+            </updateData>
+            <createData entity="CancelOrder" stepKey="cancelOrderTwo">
+                <requiredEntity createDataKey="createCustomerCartTwo"/>
+            </createData>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- Disable shipping method for customer with default address -->
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+        </after>
+
+        <actionGroup ref="AdminGoToOrdersReportPageActionGroup" stepKey="goToOrdersReportPage1"/>
+        <generateDate stepKey="generateEndDate" date="+0 day" format="m/d/Y"/>
+        <generateDate stepKey="generateStartDate" date="-1 day" format="m/d/Y"/>
+        <actionGroup ref="GenerateOrderReportForNotCancelActionGroup" stepKey="generateReportAfterCancelOrderBefore">
+            <argument name="orderFromDate" value="$generateStartDate"/>
+            <argument name="orderToDate" value="$generateEndDate"/>
+            <argument name="statuses" value="['closed', 'complete', 'fraud', 'holded', 'payment_review', 'paypal_canceled_reversal', 'paypal_reversed', 'processing']"/>
+        </actionGroup>
+        <waitForElement selector="{{GeneratedReportSection.ordersCount}}" stepKey="waitForOrdersCountBefore"/>
+        <grabTextFrom selector="{{GeneratedReportSection.ordersCount}}" stepKey="grabCanceledOrdersSpecified"/>
+
+        <actionGroup ref="AdminGoToOrdersReportPageActionGroup" stepKey="goToOrdersReportPage2"/>
+        <actionGroup ref="GenerateOrderReportActionGroup" stepKey="generateReportAfterCancelOrder">
+            <argument name="orderFromDate" value="$generateStartDate"/>
+            <argument name="orderToDate" value="$generateEndDate"/>
+        </actionGroup>
+        <waitForElement selector="{{GeneratedReportSection.ordersCount}}" stepKey="waitForOrdersCount"/>
+        <grabTextFrom selector="{{GeneratedReportSection.ordersCount}}" stepKey="grabCanceledOrdersAny"/>
+
+        <assertEquals stepKey="assertEquals">
+            <actualResult type="string">{$grabCanceledOrdersAny}</actualResult>
+            <expectedResult type="string">{$grabCanceledOrdersSpecified}</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

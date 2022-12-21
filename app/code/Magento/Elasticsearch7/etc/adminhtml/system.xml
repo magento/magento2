@@ -84,7 +84,7 @@
                     <depends>
                         <field id="engine">elasticsearch7</field>
                     </depends>
-                    <comment><![CDATA[<a href="https://docs.magento.com/m2/ce/user_guide/catalog/search-elasticsearch.html">Learn more</a> about valid syntax.]]></comment>
+                    <comment><![CDATA[<a href="https://docs.magento.com/user-guide/catalog/search-elasticsearch.html">Learn more</a> about valid syntax.]]></comment>
                     <backend_model>Magento\Elasticsearch\Model\Config\Backend\MinimumShouldMatch</backend_model>
                 </field>
             </group>

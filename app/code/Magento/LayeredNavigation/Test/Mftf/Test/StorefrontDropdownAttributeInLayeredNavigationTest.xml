@@ -18,7 +18,8 @@
             <testCaseId value="MC-36326"/>
             <group value="layeredNavigation"/>
             <group value="catalog"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -55,7 +56,9 @@
             <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="createDropdownProductAttribute" stepKey="deleteDropdownProductAttribute"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategory">
             <argument name="category" value="$createCategory$"/>

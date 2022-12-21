@@ -22,7 +22,8 @@
         <fillField stepKey="fillTemplateSubjectField" selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{subject}}"/>
         <fillField stepKey="fillSenderNameField" selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{senderName}}"/>
         <fillField stepKey="fillSenderEmailField" selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{senderEmail}}"/>
-        <fillField stepKey="fillTemplateContentField" selector="{{NewsletterWYSIWYGSection.TextArea}}" userInput="{{templateContent}}"/>
+        <waitForElementVisible stepKey="waitForTemplateContentField" selector="{{TinyMCESection.Content}}"/>
+        <fillField stepKey="fillTemplateContentField" selector="{{TinyMCESection.Content}}" userInput="{{templateContent}}"/>
         <!--Saving Created Template-->
         <click stepKey="clickSaveTemplateButton" selector="{{AdminNewsletterMainActionsSection.saveTemplateButton}}"/>
     </actionGroup>

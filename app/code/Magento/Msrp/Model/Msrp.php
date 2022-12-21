@@ -8,6 +8,9 @@ namespace Magento\Msrp\Model;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 
+/**
+ * @api
+ */
 class Msrp
 {
     /**
@@ -34,7 +37,6 @@ class Msrp
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
-     * @api
      */
     public function canApplyToProduct($product)
     {

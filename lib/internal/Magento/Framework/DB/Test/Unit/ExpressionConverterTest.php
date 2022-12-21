@@ -39,11 +39,16 @@ class ExpressionConverterTest extends TestCase
                 'pre_',
                 'pre_'
             ],
+            'Hashed identifer with long prefix' => [
+                $length64 . '_cannotBeAbbreviated',
+                'pre_' . $length40,
+                '8d703c761bf8a322a999'
+            ],
             'Abbreviated identifier' => [
                 $length40 . 'downloadable_notification_index',
                 'pre_',
                 $length40 . 'dl_ntfc_idx'
-            ],
+            ]
         ];
     }
 

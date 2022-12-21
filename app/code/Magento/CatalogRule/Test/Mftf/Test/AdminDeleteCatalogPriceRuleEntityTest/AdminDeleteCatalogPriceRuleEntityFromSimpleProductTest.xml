@@ -59,22 +59,17 @@
         <!-- Assert that the Success message is present after the delete -->
         <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the rule." stepKey="seeDeletedRuleMessage1"/>
 
-        <!-- Reindex -->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Assert that the rule isn't present on the Category page -->
-        <amOnPage url="$$createCategory1.name$$.html" stepKey="goToStorefrontCategoryPage1"/>
+        <amOnPage url="$$createCategory1.custom_attributes[url_key]$$.html" stepKey="goToStorefrontCategoryPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <dontSee selector="{{StorefrontCategoryProductSection.ProductCatalogRulePriceTitleByName($$createProduct1.name$$)}}" userInput="Regular Price" stepKey="dontSeeRegularPriceText1"/>
         <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductCatalogRuleSpecialPriceTitleByName($$createProduct1.name$$)}}" stepKey="dontSeeSpecialPrice1"/>
 
         <!-- Assert that the rule isn't present on the Product page -->
-        <amOnPage url="$$createProduct1.name$$.html" stepKey="goToStorefrontProductPage1"/>
+        <amOnPage url="$$createProduct1.custom_attributes[url_key]$$.html" stepKey="goToStorefrontProductPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad4"/>
         <dontSee selector="{{StorefrontProductInfoMainSection.oldPriceTag}}" userInput="Regular Price" stepKey="dontSeeRegularPRiceText2"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createProduct1.price$$" stepKey="seeTrueProductPrice1"/>

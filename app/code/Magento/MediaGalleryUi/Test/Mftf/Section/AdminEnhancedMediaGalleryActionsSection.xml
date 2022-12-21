@@ -9,7 +9,7 @@
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminEnhancedMediaGalleryActionsSection">
         <element name="editViewButtonPartial" type="button" selector="/following-sibling::div/button[@class='action-edit']"/>
-        <element name="deleteViewButton" type="button" selector="//div[@data-bind='afterRender: \$data.setToolbarNode']//input/following-sibling::div/button[@class='action-delete']"/>
+        <element name="deleteViewButton" type="button" selector="//div[@data-bind='afterRender: \$data.setToolbarNode']//li[contains(@class,'_edit')]//input/following-sibling::div/button[@class='action-delete']"/>
         <element name="upload" type="input" selector="#image-uploader-input"/>
         <element name="cancel" type="button" selector="[data-ui-id='cancel-button']"/>
         <element name="notDisabledButtons" type="button" selector="//div[@class='page-actions floating-header']/button[not(@disabled='disabled') and not(@id='cancel')]"/>

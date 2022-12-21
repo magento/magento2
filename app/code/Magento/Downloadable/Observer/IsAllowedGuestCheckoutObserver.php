@@ -104,7 +104,7 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
         $option = $item->getOptionByCode('downloadable_link_ids');
 
         if (!empty($option)) {
-            $downloadableLinkIds = explode(',', $option->getValue());
+            $downloadableLinkIds = explode(',', $option->getValue() ?? '');
 
             $linkCollection = $this->linkCollectionFactory->create();
             $linkCollection->addFieldToFilter('link_id', ['in' => $downloadableLinkIds]);

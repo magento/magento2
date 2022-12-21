@@ -7,29 +7,26 @@
 namespace Magento\Integration\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Integration\Model\CredentialsValidator;
-use Magento\Integration\Model\Oauth\Token as Token;
+use Magento\Integration\Model\UserToken\UserTokenParametersFactory;
+use Magento\Integration\Api\Exception\UserTokenException;
+use Magento\Integration\Api\UserTokenIssuerInterface;
+use Magento\Integration\Api\UserTokenRevokerInterface;
 use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory as TokenCollectionFactory;
 use Magento\Integration\Model\Oauth\Token\RequestThrottler;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 
 /**
  * @inheritdoc
  */
-class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServiceInterface
+class CustomerTokenService implements CustomerTokenServiceInterface
 {
     /**
-     * Token Model
-     *
-     * @var TokenModelFactory
-     */
-    private $tokenModelFactory;
-
-    /**
-     * @var Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     private $eventManager;
 
@@ -41,16 +38,9 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
     private $accountManagement;
 
     /**
-     * @var \Magento\Integration\Model\CredentialsValidator
+     * @var CredentialsValidator
      */
     private $validatorHelper;
-
-    /**
-     * Token Collection Factory
-     *
-     * @var TokenCollectionFactory
-     */
-    private $tokenModelCollectionFactory;
 
     /**
      * @var RequestThrottler
@@ -58,27 +48,49 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
     private $requestThrottler;
 
     /**
+     * @var UserTokenParametersFactory
+     */
+    private $tokenParametersFactory;
+
+    /**
+     * @var UserTokenIssuerInterface
+     */
+    private $tokenIssuer;
+
+    /**
+     * @var UserTokenRevokerInterface
+     */
+    private $tokenRevoker;
+
+    /**
      * Initialize service
      *
      * @param TokenModelFactory $tokenModelFactory
      * @param AccountManagementInterface $accountManagement
      * @param TokenCollectionFactory $tokenModelCollectionFactory
-     * @param \Magento\Integration\Model\CredentialsValidator $validatorHelper
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param CredentialsValidator $validatorHelper
+     * @param ManagerInterface|null $eventManager
+     * @param UserTokenParametersFactory|null $tokenParamsFactory
+     * @param UserTokenIssuerInterface|null $tokenIssuer
+     * @param UserTokenRevokerInterface|null $tokenRevoker
      */
     public function __construct(
         TokenModelFactory $tokenModelFactory,
         AccountManagementInterface $accountManagement,
         TokenCollectionFactory $tokenModelCollectionFactory,
         CredentialsValidator $validatorHelper,
-        ManagerInterface $eventManager = null
+        ManagerInterface $eventManager = null,
+        ?UserTokenParametersFactory $tokenParamsFactory = null,
+        ?UserTokenIssuerInterface $tokenIssuer = null,
+        ?UserTokenRevokerInterface $tokenRevoker = null
     ) {
-        $this->tokenModelFactory = $tokenModelFactory;
         $this->accountManagement = $accountManagement;
-        $this->tokenModelCollectionFactory = $tokenModelCollectionFactory;
         $this->validatorHelper = $validatorHelper;
-        $this->eventManager = $eventManager ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(ManagerInterface::class);
+        $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(ManagerInterface::class);
+        $this->tokenParametersFactory = $tokenParamsFactory
+            ?? ObjectManager::getInstance()->get(UserTokenParametersFactory::class);
+        $this->tokenIssuer = $tokenIssuer ?? ObjectManager::getInstance()->get(UserTokenIssuerInterface::class);
+        $this->tokenRevoker = $tokenRevoker ?? ObjectManager::getInstance()->get(UserTokenRevokerInterface::class);
     }
 
     /**
@@ -101,13 +113,17 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
         }
         $this->eventManager->dispatch('customer_login', ['customer' => $customerDataObject]);
         $this->getRequestThrottler()->resetAuthenticationFailuresCount($username, RequestThrottler::USER_TYPE_CUSTOMER);
-        return $this->tokenModelFactory->create()->createCustomerToken($customerDataObject->getId())->getToken();
+        $context = new CustomUserContext(
+            (int)$customerDataObject->getId(),
+            CustomUserContext::USER_TYPE_CUSTOMER
+        );
+        $params = $this->tokenParametersFactory->create();
+
+        return $this->tokenIssuer->create($context, $params);
     }
 
     /**
      * Revoke token by customer id.
-     *
-     * The function will delete the token from the oauth_token table.
      *
      * @param int $customerId
      * @return bool
@@ -115,16 +131,10 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
      */
     public function revokeCustomerAccessToken($customerId)
     {
-        $tokenCollection = $this->tokenModelCollectionFactory->create()->addFilterByCustomerId($customerId);
-        if ($tokenCollection->getSize() == 0) {
-            throw new LocalizedException(__('This customer has no tokens.'));
-        }
         try {
-            foreach ($tokenCollection as $token) {
-                $token->delete();
-            }
-        } catch (\Exception $e) {
-            throw new LocalizedException(__("The tokens couldn't be revoked."));
+            $this->tokenRevoker->revokeFor(new CustomUserContext((int)$customerId, CustomUserContext::USER_TYPE_CUSTOMER));
+        } catch (UserTokenException $exception) {
+            throw new LocalizedException(__('Failed to revoke customer\'s access tokens'), $exception);
         }
         return true;
     }
@@ -138,7 +148,7 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
     private function getRequestThrottler()
     {
         if (!$this->requestThrottler instanceof RequestThrottler) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(RequestThrottler::class);
+            return ObjectManager::getInstance()->get(RequestThrottler::class);
         }
         return $this->requestThrottler;
     }

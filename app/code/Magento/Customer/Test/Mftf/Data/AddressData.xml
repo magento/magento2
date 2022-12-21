@@ -47,6 +47,7 @@
         <data key="country">United States</data>
         <data key="postcode">78729</data>
         <data key="telephone">512-345-6789</data>
+        <data key="vat_id">47458714</data>
         <data key="default_billing">Yes</data>
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionTX</requiredEntity>
@@ -66,12 +67,32 @@
         <data key="telephone">512-345-6789</data>
         <requiredEntity type="region">RegionTX</requiredEntity>
     </entity>
+    <entity name="US_Address_TX_Without_Default_And_Telephone" extends="US_Address_TX_Without_Default">
+        <data key="telephone"></data>
+    </entity>
     <entity name="US_Address_TX_Default_Billing" type="address">
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
         <data key="company">Magento</data>
         <array key="street">
             <item>7700 West Parmer Lane</item>
+        </array>
+        <data key="city">Austin</data>
+        <data key="state">Texas</data>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="postcode">78729</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <requiredEntity type="region">RegionTX</requiredEntity>
+    </entity>
+    <entity name="US_Address_TX_Default_Billing_With_Long_Line_Apartment" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>7700 West</item>
+            <item>Parmer Lane Apt</item>
         </array>
         <data key="city">Austin</data>
         <data key="state">Texas</data>
@@ -159,6 +180,7 @@
         </array>
         <data key="city">London</data>
         <data key="country_id">GB</data>
+        <data key="country">United Kingdom</data>
         <data key="telephone">512-345-6789</data>
         <data key="province">JS</data>
     </entity>
@@ -197,6 +219,9 @@
             <item>7700 xyz street</item>
         </array>
         <data key="state">California</data>
+    </entity>
+    <entity name="US_With_Vat_Number" type="address" extends="US_Address_CA">
+        <data key="vat_id">U1234567891</data>
     </entity>
     <entity name="US_Default_Billing_Address_TX" type="address" extends="US_Address_TX">
         <data key="default_billing">false</data>
@@ -240,7 +265,7 @@
         <data key="postcode">12345</data>
     </entity>
     <entity name="updateCustomerFranceAddress" type="address">
-        <data key="firstname">Jaen</data>
+        <data key="firstname">Jean</data>
         <data key="lastname">Reno</data>
         <data key="company">Magento</data>
         <data key="telephone">555-888-111-999</data>
@@ -328,6 +353,7 @@
         <data key="telephone">333-33-333-33</data>
         <data key="country">Germany</data>
         <data key="state">Berlin</data>
+        <data key="vatNumber">111607872</data>
     </entity>
     <entity name="US_Address_California">
         <data key="firstname">John</data>
@@ -375,5 +401,81 @@
         <data key="country">Belgium</data>
         <data key="postcode">6690</data>
         <data key="telephone">0477-58-77867</data>
+    </entity>
+    <entity name="UK_With_State_Default_Billing" extends="UK_Not_Default_Address">
+        <requiredEntity type="region">RegionUKGL</requiredEntity>
+        <data key="country">United Kingdom</data>
+        <data key="state">Greater London</data>
+        <data key="default_billing">Yes</data>
+        <data key="vatNumber">GB571903731</data>
+    </entity>
+    <entity name="USACustomerAddress" type="address">
+        <data key="id">0</data>
+        <data key="customer_id">15</data>
+        <requiredEntity type="region">CustomerRegionOne</requiredEntity>
+        <data key="region_id">0</data>
+        <data key="country_id">US</data>
+        <array key="street">
+            <item>2718 Pinchelone Street</item>
+            <item>Bld D</item>
+        </array>
+        <data key="company">Magento</data>
+        <data key="telephone">1234568910</data>
+        <data key="fax">1234568910</data>
+        <data key="postcode">23464</data>
+        <data key="city">Virginia</data>
+        <data key="state">Virginia</data>
+        <data key="firstname">Lasonya G </data>
+        <data key="lastname">Butler</data>
+        <data key="middlename">string</data>
+        <data key="prefix">Mr</data>
+        <data key="suffix">Sr</data>
+        <data key="vat_id">vatData</data>
+        <data key="default_shipping">true</data>
+        <data key="default_billing">true</data>
+        <data key="region_qty">66</data>
+    </entity>
+    <entity name="France_Address" type="address">
+        <array key="street">
+            <item>1234 Some France address</item>
+            <item>113</item>
+        </array>
+        <data key="city">City</data>
+        <data key="country_id">FR</data>
+        <data key="country">France</data>
+        <data key="postcode">12345</data>
+        <data key="telephone">512-345-6789</data>
+    </entity>
+    <entity name="US_Address_Empty_Street_Lines" type="address">
+        <array key="street">
+            <item>123 Street Line</item>
+            <item>empty</item>
+            <item>empty</item>
+            <item>Region Line</item>
+        </array>
+        <data key="city">New York</data>
+        <data key="state">New York</data>
+        <data key="postcode">10001</data>
+        <data key="telephone">512-345-6789</data>
+        <requiredEntity type="region">RegionNY</requiredEntity>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+    </entity>
+    <entity name="Canada_Address" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <array key="street">
+            <item>4423  St. John Street</item>
+            <item>113</item>
+        </array>
+        <data key="company">Magento</data>
+        <data key="city">Alameda</data>
+        <data key="state">Saskatchewan</data>
+        <data key="country_id">CA</data>
+        <data key="country">Canada</data>
+        <data key="postcode">S4P3Y2</data>
+        <data key="default_shipping">true</data>
+        <data key="default_billing">true</data>
+        <data key="telephone">613-582-4782</data>
     </entity>
 </entities>
