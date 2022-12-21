@@ -25,6 +25,10 @@ class SqlVersionProvider
 
     public const MARIA_DB_10_VERSION = '10.';
 
+    public const MARIA_DB_10_4_VERSION = '10.4.';
+
+    public const MARIA_DB_10_6_VERSION = '10.6.';
+
     /**#@-*/
 
     /**
