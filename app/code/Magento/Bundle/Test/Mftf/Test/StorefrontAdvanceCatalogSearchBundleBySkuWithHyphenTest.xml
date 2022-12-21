@@ -15,16 +15,14 @@
             <title value="Guest customer should be able to advance search Bundle product with product sku that contains hyphen"/>
             <description value="Guest customer should be able to advance search Bundle product with product sku that contains hyphen"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-20359"/>
+            <testCaseId value="MC-28812"/>
             <group value="Bundle"/>
-            <group value="SearchEngineElasticsearch"/>
-            <skip>
-                <issueId value="MC-34217"/>
-            </skip>
+            <group value="SearchEngine"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
-            <createData entity="ApiProductWithDescription" stepKey="simple2" before="product"/>
+            <createData entity="ApiProductWithDescription" before="simple2" stepKey="simple1"/>
+            <createData entity="ApiProductWithDescription" before="product" stepKey="simple2"/>
             <createData entity="ApiBundleProduct" stepKey="product"/>
             <createData entity="DropDownBundleOption" stepKey="bundleOption">
                 <requiredEntity createDataKey="product"/>
@@ -42,8 +40,8 @@
             <magentoCron stepKey="runCronReindex" groups="index"/>
         </before>
         <after>
-            <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>
-            <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="delete"/>
+            <deleteData createDataKey="simple1" before="deleteSimple2" stepKey="deleteSimple1"/>
+            <deleteData createDataKey="simple2" before="delete" stepKey="deleteSimple2"/>
         </after>
     </test>
 </tests>

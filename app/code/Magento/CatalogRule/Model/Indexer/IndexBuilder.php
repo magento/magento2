@@ -7,13 +7,23 @@
 namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
+use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
 use Magento\CatalogRule\Model\ResourceModel\Rule\Collection as RuleCollection;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
 use Magento\CatalogRule\Model\Rule;
+use Magento\Eav\Model\Config;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
-use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Catalog rule index builder
@@ -26,11 +36,12 @@ use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapp
  */
 class IndexBuilder
 {
-    const SECONDS_IN_DAY = 86400;
+    public const SECONDS_IN_DAY = 86400;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
      * @deprecated 101.0.0
+     * @see MAGETWO-64518
      * @since 100.1.0
      */
     protected $metadataPool;
@@ -42,16 +53,17 @@ class IndexBuilder
      *
      * @var array
      * @deprecated 101.0.0
+     * @see MAGETWO-38167
      */
     protected $_catalogRuleGroupWebsiteColumnsList = ['rule_id', 'customer_group_id', 'website_id'];
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     protected $resource;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
@@ -61,7 +73,7 @@ class IndexBuilder
     protected $ruleCollectionFactory;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -71,22 +83,22 @@ class IndexBuilder
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var Config
      */
     protected $eavConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var DateTime
      */
     protected $dateFormat;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime\DateTime
      */
     protected $dateTime;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var ProductFactory
      */
     protected $productFactory;
 
@@ -136,7 +148,12 @@ class IndexBuilder
     private $pricesPersistor;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
+     * @var TimezoneInterface|mixed
+     */
+    private $localeDate;
+
+    /**
+     * @var ActiveTableSwitcher|mixed
      */
     private $activeTableSwitcher;
 
@@ -146,20 +163,20 @@ class IndexBuilder
     private $tableSwapper;
 
     /**
-     * @var ProductLoader
+     * @var ProductLoader|mixed
      */
     private $productLoader;
 
     /**
      * @param RuleCollectionFactory $ruleCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\Stdlib\DateTime $dateFormat
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param ResourceConnection $resource
+     * @param StoreManagerInterface $storeManager
+     * @param LoggerInterface $logger
+     * @param Config $eavConfig
+     * @param DateTime $dateFormat
+     * @param DateTime\DateTime $dateTime
+     * @param ProductFactory $productFactory
      * @param int $batchCount
      * @param ProductPriceCalculator|null $productPriceCalculator
      * @param ReindexRuleProduct|null $reindexRuleProduct
@@ -167,21 +184,23 @@ class IndexBuilder
      * @param RuleProductsSelectBuilder|null $ruleProductsSelectBuilder
      * @param ReindexRuleProductPrice|null $reindexRuleProductPrice
      * @param RuleProductPricesPersistor|null $pricesPersistor
-     * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
+     * @param ActiveTableSwitcher|null $activeTableSwitcher
      * @param ProductLoader|null $productLoader
      * @param TableSwapper|null $tableSwapper
+     * @param TimezoneInterface|null $localeDate
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         RuleCollectionFactory $ruleCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\Stdlib\DateTime $dateFormat,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
+        ResourceConnection $resource,
+        StoreManagerInterface $storeManager,
+        LoggerInterface $logger,
+        Config $eavConfig,
+        DateTime $dateFormat,
+        DateTime\DateTime $dateTime,
+        ProductFactory $productFactory,
         $batchCount = 1000,
         ProductPriceCalculator $productPriceCalculator = null,
         ReindexRuleProduct $reindexRuleProduct = null,
@@ -189,9 +208,10 @@ class IndexBuilder
         RuleProductsSelectBuilder $ruleProductsSelectBuilder = null,
         ReindexRuleProductPrice $reindexRuleProductPrice = null,
         RuleProductPricesPersistor $pricesPersistor = null,
-        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null,
+        ActiveTableSwitcher $activeTableSwitcher = null,
         ProductLoader $productLoader = null,
-        TableSwapper $tableSwapper = null
+        TableSwapper $tableSwapper = null,
+        TimezoneInterface $localeDate = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -224,13 +244,15 @@ class IndexBuilder
             RuleProductPricesPersistor::class
         );
         $this->activeTableSwitcher = $activeTableSwitcher ?? ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
+            ActiveTableSwitcher::class
         );
         $this->productLoader = $productLoader ?? ObjectManager::getInstance()->get(
             ProductLoader::class
         );
         $this->tableSwapper = $tableSwapper ??
             ObjectManager::getInstance()->get(TableSwapper::class);
+        $this->localeDate = $localeDate ??
+            ObjectManager::getInstance()->get(TimezoneInterface::class);
     }
 
     /**
@@ -238,7 +260,7 @@ class IndexBuilder
      *
      * @param int $id
      * @return void
-     * @api
+     * @throws LocalizedException
      */
     public function reindexById($id)
     {
@@ -254,7 +276,7 @@ class IndexBuilder
             $this->reindexRuleGroupWebsite->execute();
         } catch (\Exception $e) {
             $this->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('Catalog rule indexing failed. See details in exception log.')
             );
         }
@@ -264,9 +286,8 @@ class IndexBuilder
      * Reindex by ids
      *
      * @param array $ids
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return void
-     * @api
      */
     public function reindexByIds(array $ids)
     {
@@ -274,7 +295,7 @@ class IndexBuilder
             $this->doReindexByIds($ids);
         } catch (\Exception $e) {
             $this->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __("Catalog rule indexing failed. See details in exception log.")
             );
         }
@@ -308,9 +329,8 @@ class IndexBuilder
     /**
      * Full reindex
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return void
-     * @api
      */
     public function reindexFull()
     {
@@ -318,7 +338,7 @@ class IndexBuilder
             $this->doReindexFull();
         } catch (\Exception $e) {
             $this->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __("Catalog rule indexing failed. See details in exception log.")
             );
         }
@@ -404,9 +424,6 @@ class IndexBuilder
         );
 
         $customerGroupIds = $rule->getCustomerGroupIds();
-        $fromTime = strtotime($rule->getFromDate());
-        $toTime = strtotime($rule->getToDate());
-        $toTime = $toTime ? $toTime + self::SECONDS_IN_DAY - 1 : 0;
         $sortOrder = (int)$rule->getSortOrder();
         $actionOperator = $rule->getSimpleAction();
         $actionAmount = $rule->getDiscountAmount();
@@ -414,6 +431,15 @@ class IndexBuilder
 
         $rows = [];
         foreach ($websiteIds as $websiteId) {
+            $scopeTz = new \DateTimeZone(
+                $this->localeDate->getConfigTimezone(ScopeInterface::SCOPE_WEBSITE, $websiteId)
+            );
+            $fromTime = $rule->getFromDate()
+                ? (new \DateTime($rule->getFromDate(), $scopeTz))->getTimestamp()
+                : 0;
+            $toTime = $rule->getToDate()
+                ? (new \DateTime($rule->getToDate(), $scopeTz))->getTimestamp() + IndexBuilder::SECONDS_IN_DAY - 1
+                : 0;
             foreach ($customerGroupIds as $customerGroupId) {
                 $rows[] = [
                     'rule_id' => $ruleId,

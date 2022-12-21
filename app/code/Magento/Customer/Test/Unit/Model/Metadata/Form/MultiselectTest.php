@@ -1,10 +1,11 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * test Magento\Customer\Model\Metadata\Form\Multiselect
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
 use Magento\Customer\Api\Data\OptionInterface;
@@ -143,7 +144,7 @@ class MultiselectTest extends AbstractFormTestCase
     {
         return [
             'empty' => ['', ''],
-            'null' => [null, ''],
+            'null' => [false, ''],
             'number' => [14, 'fourteen'],
             'string' => ['some key', 'some string'],
             'array' => [[14, 'some key'], 'fourteen, some string'],
@@ -174,7 +175,7 @@ class MultiselectTest extends AbstractFormTestCase
     {
         return [
             'empty' => ['', ['']],
-            'null' => [null, ['']],
+            'null' => [false, ['']],
             'number' => [14, ['14']],
             'string' => ['some key', ['some key']],
             'array' => [[14, 'some key'], ['14', 'some key']],
@@ -195,27 +196,21 @@ class MultiselectTest extends AbstractFormTestCase
             ->disableOriginalConstructor()
             ->setMethods(['getLabel', 'getValue'])
             ->getMockForAbstractClass();
-        $option1->expects($this->any())
-            ->method('getLabel')
+        $option1->method('getLabel')
             ->willReturn('fourteen');
-        $option1->expects($this->any())
-            ->method('getValue')
+        $option1->method('getValue')
             ->willReturn('14');
 
         $option2 = $this->getMockBuilder(OptionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLabel', 'getValue'])
             ->getMockForAbstractClass();
-        $option2->expects($this->any())
-            ->method('getLabel')
+        $option2->method('getLabel')
             ->willReturn('some string');
-        $option2->expects($this->any())
-            ->method('getValue')
+        $option2->method('getValue')
             ->willReturn('some key');
 
-        $this->attributeMetadataMock->expects(
-            $this->any()
-        )->method(
+        $this->attributeMetadataMock->method(
             'getOptions'
         )->willReturn(
             [

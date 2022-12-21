@@ -28,6 +28,7 @@
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStore">
                 <argument name="storeGroupName" value="customStore.name"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -47,6 +48,7 @@
             <argument name="StoreGroup" value="customStore"/>
             <argument name="customStore" value="customStore"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Update Category-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
@@ -62,7 +64,7 @@
         <waitForPageLoad stepKey="waitForPageToLoad2"/>
         <seeInField selector="{{AdminCategorySEOSection.UrlKeyInput}}" stepKey="seeCategoryUrlKey" userInput="{{SimpleRootSubCategory.name_lwr}}2" />
         <!--Open Category in Store Front  Page-->
-        <amOnPage url="/{{NewRootCategory.name}}/{{_defaultCategory.name}}.html" stepKey="seeTheCategoryInStoreFront"/>
+        <amOnPage url="/{{NewRootCategory.urlKey}}/{{_defaultCategory.urlKey}}.html" stepKey="seeTheCategoryInStoreFront"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButtonOnDefaultStore"/>
         <click selector="{{StorefrontFooterSection.storeLink(customStore.name)}}" stepKey="selectSecondStoreToSwitchOn"/>

@@ -62,6 +62,7 @@ class RtlTextHandlerTest extends TestCase
             ['Herr Prof. Dr. Gerald Schüler B.A.', false],//German
             ['نديم مقداد نعمان القحطاني', true],//Arabic
             ['شهاب الفرحان', true],//Arabic
+            ['مرحبا ماجنت اثنان', true],//Arabic
             ['צבר קרליבך', true],//Hebrew
             ['גורי מייזליש', true],//Hebrew
             ['اتابک بهشتی', true],//Persian

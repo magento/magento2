@@ -16,8 +16,11 @@
             <argument name="productName"/>
         </arguments>
 
+        <waitForElementVisible selector="{{StorefrontMinicartSection.nonEmptyCartCounter}}" stepKey="waitForNonEmptyCartCounter" />
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
+        <waitForPageLoad stepKey="waitForCartToAppear"/>
         <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.miniCartItemsText}}" stepKey="waitForMiniCartTextVisible" />
         <see selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{productName}}" stepKey="seeInMiniCart"/>
     </actionGroup>
 </actionGroups>

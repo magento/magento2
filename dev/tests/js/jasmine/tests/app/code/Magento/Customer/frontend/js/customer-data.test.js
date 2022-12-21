@@ -3,17 +3,17 @@
  * See COPYING.txt for license details.
  */
 
-/* global _ */
 /* eslint max-nested-callbacks: 0 */
 /* jscs:disable jsDoc*/
 
 define([
+    'underscore',
     'squire',
     'jquery',
     'Magento_Customer/js/section-config',
     'Magento_Customer/js/customer-data',
     'jquery/jquery-storageapi'
-], function (Squire, $, sectionConfig, customerData) {
+], function (_, Squire, $, sectionConfig, customerData) {
     'use strict';
 
     var injector = new Squire(),
@@ -98,9 +98,6 @@ define([
     }
 
     describe('Magento_Customer/js/customer-data', function () {
-
-        var _;
-
         beforeAll(function () {
             clearLocalStorage();
         });
@@ -204,6 +201,7 @@ define([
             });
 
             it('Check it requests sections from the server if there are expired sections', function () {
+                clearLocalStorage();
                 setupLocalStorage({
                     'customer': {
                         'data_id': Math.floor(Date.now() / 1000) + 60 // invalidated,
@@ -282,6 +280,7 @@ define([
             });
 
             it('Check that result contains invalidated section names', function () {
+                clearLocalStorage();
                 setupLocalStorage({
                     'cart': { // without storage content
                         'data_id': Math.floor(Date.now() / 1000) + 60 // in 1 minute
@@ -401,7 +400,6 @@ define([
                             }
                         };
                     };
-
                     expect(parameters).toEqual(jasmine.objectContaining({
                         sections: 'section'
                     }));
@@ -410,7 +408,6 @@ define([
                 });
 
                 result = obj.reload(['section'], true);
-
                 expect(result).toEqual(jasmine.objectContaining({
                     responseJSON: {
                         section: {}
@@ -422,7 +419,6 @@ define([
                 var result;
 
                 spyOn(sectionConfig, 'filterClientSideSections').and.returnValue(['cart,customer,messages']);
-
                 $.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
                     var deferred = $.Deferred();
 
@@ -448,7 +444,6 @@ define([
                 });
 
                 result = obj.reload(['cart', 'customer', 'messages'], true);
-
                 expect(result).toEqual(jasmine.objectContaining({
                     responseJSON: {
                         cart: {},
@@ -457,7 +452,7 @@ define([
                     }
                 }));
             });
-            //
+
             it('Check it returns all sections when passed wildcard string', function () {
                 var result;
 
@@ -486,7 +481,6 @@ define([
                 });
 
                 result = obj.reload('*', true);
-
                 expect($.getJSON).toHaveBeenCalled();
                 expect(result).toEqual(jasmine.objectContaining({
                     responseJSON: {
@@ -507,6 +501,22 @@ define([
                 expect(function () {
                     obj.invalidate();
                 }).not.toThrow();
+            });
+        });
+
+        describe('"onAjaxComplete" method', function () {
+            it('Should not trigger reload if sections is empty', function () {
+                var jsonResponse, settings;
+
+                jsonResponse = jasmine.createSpy();
+                spyOn(sectionConfig, 'getAffectedSections').and.returnValue([]);
+                spyOn(obj, 'reload');
+                settings = {
+                    type: 'POST',
+                    url: 'http://test.local'
+                };
+                obj.onAjaxComplete(jsonResponse, settings);
+                expect(obj.reload).not.toHaveBeenCalled();
             });
         });
 

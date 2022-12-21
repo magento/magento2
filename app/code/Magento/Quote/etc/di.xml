@@ -44,6 +44,9 @@
     <preference for="Magento\Quote\Api\Data\EstimateAddressInterface" type="Magento\Quote\Model\EstimateAddress" />
     <preference for="Magento\Quote\Api\Data\ProductOptionInterface" type="Magento\Quote\Model\Quote\ProductOption" />
     <preference for="Magento\Quote\Model\ValidationRules\QuoteValidationRuleInterface" type="Magento\Quote\Model\ValidationRules\QuoteValidationComposite\Proxy"/>
+    <preference for="Magento\Quote\Model\QuoteMutexInterface" type="Magento\Quote\Model\QuoteMutex"/>
+    <preference for="Magento\Quote\Model\Quote\Item\Option\ComparatorInterface" type="Magento\Quote\Model\Quote\Item\Option\Comparator"/>
+    <preference for="Magento\Quote\Model\Cart\ProductReaderInterface" type="Magento\Quote\Model\Cart\ProductReader"/>
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
         <arguments>
             <argument name="paramOverriders" xsi:type="array">
@@ -97,6 +100,9 @@
     <type name="Magento\Catalog\Model\ResourceModel\Product">
         <plugin name="clean_quote_items_after_product_delete" type="Magento\Quote\Model\Product\Plugin\RemoveQuoteItems"/>
         <plugin name="update_quote_items_after_product_save" type="Magento\Quote\Model\Product\Plugin\UpdateQuoteItems"/>
+    </type>
+    <type name="Magento\Catalog\Api\TierPriceStorageInterface">
+        <plugin name="update_quote_items_after_tier_prices_update" type="Magento\Quote\Model\Product\Plugin\UpdateQuote"/>
     </type>
     <type name="Magento\Catalog\Model\Product\Action">
         <plugin name="quoteProductMassChange" type="Magento\Quote\Model\Product\Plugin\MarkQuotesRecollectMassDisabled"/>

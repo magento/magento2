@@ -119,7 +119,6 @@ class Reorder extends Create implements HttpGetActionInterface
                 $this->_getOrderCreateModel()->initFromOrder($order);
                 $resultRedirect->setPath('sales/*');
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->logger->critical($e);
                 $this->messageManager->addErrorMessage($e->getMessage());
                 return $resultRedirect->setPath('sales/*');
             } catch (\Exception $e) {

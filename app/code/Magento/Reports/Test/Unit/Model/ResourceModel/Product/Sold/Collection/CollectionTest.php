@@ -44,11 +44,7 @@ class CollectionTest extends TestCase
         $this->selectMock = $this->createMock(Select::class);
         $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->collection = $this->getMockBuilder(Collection::class)
-            ->setMethods([
-                'getSelect',
-                'getConnection',
-                'getTable'
-            ])
+            ->onlyMethods(['getSelect', 'getConnection', 'getTable'])
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -69,15 +65,15 @@ class CollectionTest extends TestCase
         $this->selectMock->expects($this->exactly(2))
             ->method('columns')
             ->willReturnSelf();
-        $this->selectMock->expects($this->at(6))
+        $this->selectMock
             ->method('columns')
-            ->with('COUNT(DISTINCT main_table.entity_id)');
-        $this->selectMock->expects($this->at(7))
+            ->withConsecutive(
+                ['COUNT(DISTINCT main_table.entity_id)'],
+                ['COUNT(DISTINCT order_items.item_id)']
+            );
+        $this->selectMock
             ->method('reset')
-            ->with(Select::COLUMNS);
-        $this->selectMock->expects($this->at(8))
-            ->method('columns')
-            ->with('COUNT(DISTINCT order_items.item_id)');
+            ->withConsecutive([], [], [], [Select::COLUMNS]);
 
         $this->assertEquals($this->selectMock, $this->collection->getSelectCountSql());
     }

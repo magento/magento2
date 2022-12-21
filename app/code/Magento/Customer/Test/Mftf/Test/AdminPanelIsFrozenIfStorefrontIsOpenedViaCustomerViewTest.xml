@@ -6,7 +6,8 @@
   */
 -->
 
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminPanelIsFrozenIfStorefrontIsOpenedViaCustomerViewTest">
         <annotations>
             <features value="Customer"/>
@@ -18,42 +19,50 @@
             <group value="customer"/>
         </annotations>
         <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="Simple_US_Customer" stepKey="simpleCustomer"/>
             <createData entity="SimpleSubCategory" stepKey="createSimpleCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createSimpleCategory"/>
             </createData>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="login"/>
         </before>
         <after>
+            <!-- Disable shipping method for customer with default address -->
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <deleteData createDataKey="createSimpleCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPage">
-            <argument name="customer" value="$simpleCustomer$"/>
-        </actionGroup>
-        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSecondProduct">
-            <argument name="product" value="$createSimpleProduct$"/>
-        </actionGroup>
-        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerInfo">
-            <argument name="customer" value="$simpleCustomer$"/>
-            <argument name="address" value="US_Address_TX"/>
-        </actionGroup>
-        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRate"/>
-        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
-
-        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startCreateInvoice"/>
-        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
-        <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="goToShipment"/>
-        <actionGroup ref="SubmitShipmentIntoOrderActionGroup" stepKey="submitShipment"/>
-
-        <!--Create Credit Memo-->
-        <actionGroup ref="StartToCreateCreditMemoActionGroup" stepKey="startToCreateCreditMemo">
-            <argument name="orderId" value="{$getOrderId}"/>
-        </actionGroup>
-        <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemo"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="navigateToNewOrderPage"/>
+        <createData entity="CustomerCart" stepKey="createCustomerCart">
+            <requiredEntity createDataKey="simpleCustomer"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addSecondProduct">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createSimpleProduct"/>
+        </createData>
+        <createData entity="CustomerAddressInformation" stepKey="fillCustomerInfo">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </createData>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectFlatRate"/>
+        <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="submitOrder">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </updateData>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="getOrderId"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="startCreateInvoice"/>
+        <createData entity="Invoice" stepKey="submitInvoice">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </createData>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToShipment"/>
+        <createData entity="Shipment" stepKey="submitShipment">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </createData>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="startToCreateCreditMemo"/>
+        <createData entity="CreditMemo" stepKey="submitCreditMemo">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </createData>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="logInCustomer">
             <argument name="Customer" value="$$simpleCustomer$$"/>
@@ -61,12 +70,11 @@
         <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToMyOrdersPage">
             <argument name="menu" value="My Orders"/>
         </actionGroup>
-        <click selector="{{StorefrontCustomerOrderSection.viewOrder}}" stepKey="clickViewOrder"/>
-        <click selector="{{StorefrontCustomerOrderViewSection.printOrderLink}}" stepKey="clickPrintOrderLink"/>
-        <waitForPageLoad stepKey="waitPageReload"/>
+        <actionGroup ref="StorefrontClickViewOrderLinkOnMyOrdersPageActionGroup" stepKey="clickViewOrder"/>
+        <actionGroup ref="StorefrontClickPrintOrderLinkOnViewOrderPageActionGroup" stepKey="clickPrintOrderLink"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitPageReload"/>
         <switchToWindow stepKey="switchToWindow"/>
         <switchToPreviousTab stepKey="switchToPreviousTab"/>
-
         <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAddressBook">
             <argument name="menu" value="Address Book"/>
         </actionGroup>

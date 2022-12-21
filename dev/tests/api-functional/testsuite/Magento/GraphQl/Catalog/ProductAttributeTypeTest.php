@@ -73,6 +73,7 @@ QUERY;
         ];
         $attributeTypes = ['String', 'Int', 'Float','Boolean', 'Float'];
         $inputTypes = ['textarea', 'select', 'price', 'boolean', 'price'];
+
         $this->assertAttributeType($attributeTypes, $expectedAttributeCodes, $entityType, $inputTypes, $response);
     }
 
@@ -125,6 +126,12 @@ QUERY;
       attribute_type
       entity_type
       input_type
+      storefront_properties {
+         use_in_product_listing
+         use_in_layered_navigation
+         use_in_search_results_layered_navigation
+         visible_on_catalog_pages
+      }
     }
   }
  }
@@ -166,7 +173,13 @@ QUERY;
             'text',
             'gallery'
         ];
-        $this->assertAttributeType($attributeTypes, $expectedAttributeCodes, $entityTypes, $inputTypes, $response);
+        $this->assertComplexAttributeType(
+            $attributeTypes,
+            $expectedAttributeCodes,
+            $entityTypes,
+            $inputTypes,
+            $response
+        );
     }
 
     /**
@@ -229,6 +242,61 @@ QUERY;
      * @param array $actualResponse
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
+    private function assertComplexAttributeType(
+        $attributeTypes,
+        $expectedAttributeCodes,
+        $entityTypes,
+        $inputTypes,
+        $actualResponse
+    ) {
+        $attributeMetaDataItems = array_map(null, $actualResponse['customAttributeMetadata']['items'], $attributeTypes);
+
+        foreach ($attributeMetaDataItems as $itemIndex => $itemArray) {
+            if ($itemArray[0]['entity_type'] === 'catalog_category'
+                || $itemArray[0]['entity_type'] ==='catalog_product') {
+                $this->assertResponseFields(
+                    $attributeMetaDataItems[$itemIndex][0],
+                    [
+                        "attribute_code" => $expectedAttributeCodes[$itemIndex],
+                        "attribute_type" => $attributeTypes[$itemIndex],
+                        "entity_type" => $entityTypes[$itemIndex],
+                        "input_type" => $inputTypes[$itemIndex],
+                        "storefront_properties" => [
+                            'use_in_product_listing' => false,
+                            'use_in_layered_navigation' => 'NO',
+                            'use_in_search_results_layered_navigation' => false,
+                            'visible_on_catalog_pages' => false,
+                        ]
+                    ]
+                );
+            } else {
+                $this->assertNotEmpty($attributeMetaDataItems[$itemIndex][0]['storefront_properties']);
+                // 5 fields are present
+                $this->assertCount(4, $attributeMetaDataItems[$itemIndex][0]['storefront_properties']);
+                unset($attributeMetaDataItems[$itemIndex][0]['storefront_properties']);
+                $this->assertResponseFields(
+                    $attributeMetaDataItems[$itemIndex][0],
+                    [
+                        "attribute_code" => $expectedAttributeCodes[$itemIndex],
+                        "attribute_type" => $attributeTypes[$itemIndex],
+                        "entity_type" => $entityTypes[$itemIndex],
+                        "input_type" => $inputTypes[$itemIndex]
+                    ]
+                );
+
+            }
+
+        }
+    }
+
+    /**
+     * @param array $attributeTypes
+     * @param array $expectedAttributeCodes
+     * @param array $entityTypes
+     * @param array $inputTypes
+     * @param array $actualResponse
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     private function assertAttributeType(
         $attributeTypes,
         $expectedAttributeCodes,
@@ -239,15 +307,15 @@ QUERY;
         $attributeMetaDataItems = array_map(null, $actualResponse['customAttributeMetadata']['items'], $attributeTypes);
 
         foreach ($attributeMetaDataItems as $itemIndex => $itemArray) {
-            $this->assertResponseFields(
-                $attributeMetaDataItems[$itemIndex][0],
-                [
-                    "attribute_code" => $expectedAttributeCodes[$itemIndex],
-                    "attribute_type" => $attributeTypes[$itemIndex],
-                    "entity_type" => $entityTypes[$itemIndex],
-                    "input_type" => $inputTypes[$itemIndex]
-                ]
-            );
+                $this->assertResponseFields(
+                    $attributeMetaDataItems[$itemIndex][0],
+                    [
+                        "attribute_code" => $expectedAttributeCodes[$itemIndex],
+                        "attribute_type" => $attributeTypes[$itemIndex],
+                        "entity_type" => $entityTypes[$itemIndex],
+                        "input_type" => $inputTypes[$itemIndex]
+                    ]
+                );
         }
     }
 }

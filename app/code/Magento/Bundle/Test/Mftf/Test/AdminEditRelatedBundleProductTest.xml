@@ -30,6 +30,7 @@
             <actionGroup stepKey="deleteBundle" ref="DeleteProductUsingProductGridActionGroup">
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <!--Logging out-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct0" stepKey="deleteSimpleProduct0"/>
@@ -52,7 +53,9 @@
 
         <!--Save the product-->
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
         <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct1">
             <argument name="sku" value="$$simpleProduct1.sku$$"/>
@@ -63,18 +66,27 @@
 
         <!--Save the product-->
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButtonAfterEdit"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShownAgain"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShownAgain">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
         <!--See related product in admin-->
-        <scrollTo selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" stepKey="scrollTo"/>
-        <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDependent}}" visible="false" stepKey="openDropDownIfClosedRelatedSee"/>
-        <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct1.sku$$" stepKey="seeRelatedProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollTo"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openDropDownIfClosedRelatedSee"/>
+        <actionGroup ref="AssertTextInAdminProductRelatedUpSellCrossSellSectionActionGroup" stepKey="seeRelatedProduct">
+            <argument name="element" value="AdminProductFormRelatedUpSellCrossSellSection.relatedProductSectionText"/>
+            <argument name="expectedText" value="$$simpleProduct1.name$$"/>
+        </actionGroup>
 
         <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
 
         <!--See related product in storefront-->
-        <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
-        <waitForPageLoad stepKey="waitForStorefront"/>
-        <see userInput="$$simpleProduct1.sku$$" stepKey="seeRelatedProductInStorefront"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToStorefront">
+            <argument name="productUrl" value="{{BundleProduct.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefront"/>
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="seeRelatedProductInStorefront">
+            <argument name="productName" value="$$simpleProduct1.name$$"/>
+        </actionGroup>
     </test>
 </tests>

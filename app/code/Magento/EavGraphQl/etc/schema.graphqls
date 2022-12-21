@@ -2,27 +2,42 @@
 # See COPYING.txt for license details.
 
 type Query {
-    customAttributeMetadata(attributes: [AttributeInput!]!): CustomAttributeMetadata @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata") @doc(description: "The customAttributeMetadata query returns the attribute type, given an attribute code and entity type") @cache(cacheable: false)
+    customAttributeMetadata(attributes: [AttributeInput!]! @doc(description: "An input object that specifies the attribute code and entity type to search.")): CustomAttributeMetadata @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata") @doc(description: "Return the attribute type, given an attribute code and entity type.") @cache(cacheable: false)
 }
 
-type CustomAttributeMetadata @doc(description: "CustomAttributeMetadata defines an array of attribute_codes and entity_types") {
-    items: [Attribute] @doc(description: "An array of attributes")
+type CustomAttributeMetadata @doc(description: "Defines an array of custom attributes.") {
+    items: [Attribute] @doc(description: "An array of attributes.")
 }
 
-type Attribute @doc(description: "Attribute contains the attribute_type of the specified attribute_code and entity_type") {
+type Attribute @doc(description: "Contains details about the attribute, including the code and type.") {
     attribute_code: String @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
-    entity_type: String @doc(description: "The type of entity that defines the attribute")
-    attribute_type: String @doc(description: "The data type of the attribute")
-    input_type: String @doc(description: "The frontend input type of the attribute")
+    entity_type: String @doc(description: "The type of entity that defines the attribute.")
+    attribute_type: String @doc(description: "The data type of the attribute.")
+    input_type: String @doc(description: "The frontend input type of the attribute.")
     attribute_options: [AttributeOption] @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributeOptions") @doc(description: "Attribute options list.")
+    storefront_properties: StorefrontProperties @doc(description: "Details about the storefront properties configured for the attribute.")
 }
 
-type AttributeOption @doc(description: "Attribute option.") {
-    label: String @doc(description: "Attribute option label.")
-    value: String @doc(description: "Attribute option value.")
+type StorefrontProperties @doc(description: "Indicates where an attribute can be displayed.") {
+    use_in_product_listing: Boolean @doc(description: "Indicates whether the attribute is displayed in product listings.")
+    position: Int @doc(description: "The relative position of the attribute in the layered navigation block.")
+    visible_on_catalog_pages: Boolean @doc(description: "Indicates whether the attribute is displayed on product pages.")
+    use_in_layered_navigation: UseInLayeredNavigationOptions @doc(description: "Indicates whether the attribute is filterable with results, without results, or not at all.")
+    use_in_search_results_layered_navigation: Boolean @doc(description: "Indicates whether the attribute can be used in layered navigation on search results pages.")
 }
 
-input AttributeInput @doc(description: "AttributeInput specifies the attribute_code and entity_type to search") {
+enum UseInLayeredNavigationOptions @doc(description: "Defines whether the attribute is filterable in layered navigation.") {
+    NO
+    FILTERABLE_WITH_RESULTS
+    FILTERABLE_NO_RESULT
+}
+
+type AttributeOption @doc(description: "Defines an attribute option.") {
+    label: String @doc(description: "The label assigned to the attribute option.")
+    value: String @doc(description: "The attribute option value.")
+}
+
+input AttributeInput @doc(description: "Defines the attribute characteristics to search for the `attribute_code` and `entity_type` to search.") {
     attribute_code: String @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
-    entity_type: String @doc(description: "The type of entity that defines the attribute")
+    entity_type: String @doc(description: "The type of entity that defines the attribute.")
 }

@@ -29,15 +29,18 @@
             <deleteData stepKey="deleteSimpleProduct" createDataKey="simpleProduct"/>
         </after>
         <!--Create  SubCategory-->
-        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
-        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="fillCategoryName"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openAdminCategoryIndexPage"/>
+        <actionGroup ref="GoToCreateCategoryPageActionGroup" stepKey="clickOnAddSubCategoryButton"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="fillCategoryName"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
         <!--Select Content and fill the options-->
-        <scrollTo  selector="{{AdminCategoryContentSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToContent"/>
-        <click selector="{{AdminCategoryContentSection.sectionHeader}}"  stepKey="selectContent"/>
-        <scrollTo selector="{{AdminCategoryContentSection.AddCMSBlock}}" x="0" y="-80" stepKey="scrollToAddCMSBlock"/>
-        <selectOption selector="{{AdminCategoryContentSection.AddCMSBlock}}" userInput="$$createDefaultCMSBlock.title$$" stepKey="selectCMSBlock"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToContent"/>
+        <actionGroup ref="AdminCategoriesOpenContentSectionActionGroup" stepKey="selectContent"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToAddCMSBlock"/>
+        <actionGroup ref="AdminCategoriesSetStaticBlockActionGroup" stepKey="selectCMSBlock">
+            <argument name="block" value="$$createDefaultCMSBlock$$"/>
+        </actionGroup>
+
         <!--Select Display Setting and fill the options-->
         <scrollTo selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" x="0" y="-80" stepKey="scrollToDisplaySetting"/>
         <click selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" stepKey="selectDisplaySetting"/>
@@ -52,16 +55,20 @@
         <click selector="{{CategoryDisplaySettingsSection.layeredNavigationPriceCheckBox}}" stepKey="enableLayeredNavigationPrice"/>
         <fillField selector="{{CategoryDisplaySettingsSection.layeredNavigationPriceInput}}" userInput="5.5" stepKey="fillThePrice"/>
         <!--Search the products and select the category products-->
-        <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
-        <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
-        <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="$$simpleProduct.name$$"  stepKey="selectProduct"/>
-        <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
-        <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromTableRow"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToProductInCategory"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnProductInCategory"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchButton"/>
+        <actionGroup ref="AdminAddProductToCategoryActionGroup" stepKey="selectProductFromTableRow">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton"/>
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>
         <!--Verify the Category Title-->
-        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
+        <actionGroup ref="AssertAdminCategoryPageTitleActionGroup" stepKey="seePageTitle">
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
         <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#"/>
         <!-- Assert Redirect path, Target Path and Redirect type in grid -->
         <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
@@ -70,19 +77,18 @@
             <argument name="targetPath" value="catalog/category/view/id/{$categoryId}"/>
         </actionGroup>
 
-        <!--Clear cache and reindex-->
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
             <argument name="indices" value=""/>
         </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         <!--Verify Product in store front page-->
-        <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name_lwr)}}"  stepKey="amOnCategoryPage"/>
-        <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
-        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seeCategoryPageTitle"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeCategoryOnNavigation"/>
+        <actionGroup ref="CheckCategoryOnStorefrontActionGroup" stepKey="amOnCategoryPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToBeLoaded"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeCategoryPageTitle"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCategoryOnNavigation">
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
-        <seeElement selector="{{StorefrontCategoryMainSection.productLinkByHref($$simpleProduct.urlKey$$)}}" stepKey="seeProductInCategory"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.productLinkByHref($$simpleProduct.custom_attributes[url_key]$$)}}" stepKey="seeProductInCategory"/>
     </test>
 </tests>

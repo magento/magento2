@@ -182,5 +182,30 @@
     Please use "AdminDeleteUserViaCurlActionGroup".
     See how it works: app/code/Magento/User/Test/Mftf/ActionGroup/AdminDeleteUserViaCurlActionGroup.xml
 -->
-    <entity name="deleteUser" type="deleteUser" />
+    <entity name="deleteUser" type="deleteUser"/>
+    <entity name="AdminConstantUserName" type="user">
+        <data key="username">admin_constant</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="email" unique="prefix">admin@example.com</data>
+        <data key="password">123123QA</data>
+        <data key="password_confirmation">123123QA</data>
+        <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
+        <data key="role">Administrators</data>
+        <array key="roles">
+            <item>1</item>
+        </array>
+    </entity>
+    <entity name="AdminConstantUserNameUpdatedPassword" type="user">
+        <data key="username">admin_constant</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="email" unique="prefix">admin@example.com</data>
+        <data key="password">123123UPD</data>
+        <data key="password_confirmation">123123UPD</data>
+        <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
+        <array key="roles">
+            <item>1</item>
+        </array>
+    </entity>
 </entities>
