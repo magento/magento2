@@ -122,6 +122,8 @@ class SqlVersionProvider
     }
 
     /**
+     * Get exact version
+     *
      * @return string
      */
     public function getExactSQLVersion(): string

@@ -123,7 +123,7 @@ class Table implements FactoryInterface
         $sqlExactVersion = $this->sqlVersionProvider->getExactSQLVersion();
         $isMariaDB = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_VERSION);
 
-        if (!$isMariaDB && isset($sqlExactVersion) && version_compare($sqlExactVersion, "8.0.29", ">=")) {
+        if (!$isMariaDB && version_compare($sqlExactVersion, "8.0.29", ">=")) {
             return self::$defaultCharset['mysql_8_29'];
         }
 
@@ -142,7 +142,7 @@ class Table implements FactoryInterface
         $isMariaDB = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_VERSION);
         $sqlExactVersion = $this->sqlVersionProvider->getExactSQLVersion();
 
-        if (!$isMariaDB && isset($sqlExactVersion) && version_compare($sqlExactVersion, "8.0.29", ">=")) {
+        if (!$isMariaDB && version_compare($sqlExactVersion, "8.0.29", ">=")) {
             return self::$defaultCollation['mysql_8_29'];
         }
 
