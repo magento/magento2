@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace Magento\CatalogImportExport\Model\Export;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as ProductAttributeCollection;
 use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
@@ -19,6 +19,8 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\TestFramework\Fixture\AppArea;
@@ -140,29 +142,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Verify successful export of product with HTML tag
-     *
-     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data_special_chars.php
-     * @magentoDbIsolation enabled
-     *
-     * @return void
-     */
-    public function testExportBehaviour(): void
-    {
-        $product = $this->productRepository->get('simple &quot;1&quot;');
-        $product->setDescription('Description with &lt;h2&gt;this is test page&lt;/h2&gt;');
-        $product->save();
-        $this->model->setWriter(
-            $this->objectManager->create(
-                \Magento\ImportExport\Model\Export\Adapter\Csv::class
-            )
-        );
-        $exportData = $this->model->export();
-        $this->assertStringContainsString('New Product', $exportData);
-        $this->assertStringContainsString('Description with &lt;h2&gt;this is test page&lt;/h2&gt;', $exportData);
-    }
-
-    /**
      * Verify successful export of product with stock data with 'use config max sale quantity is enabled
      *
      * @magentoDataFixture /Magento/Catalog/_files/product_without_options_with_stock_data.php
@@ -259,20 +238,46 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data_special_chars.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      *
      * @return void
+     * @throws NoSuchEntityException
      */
     public function testExportSpecialChars(): void
     {
+        $product = $this->productRepository->get('simple &quot;1&quot;');
+        $product->setStoreId(Store::DEFAULT_STORE_ID);
+        $product->setDescription('Description with &lt;h2&gt;this is test page&lt;/h2&gt;');
+        $product->save();
+
         $this->model->setWriter(
             $this->objectManager->create(
                 \Magento\ImportExport\Model\Export\Adapter\Csv::class
             )
         );
         $exportData = $this->model->export();
+
         $this->assertStringContainsString('simple &quot;1&quot;', $exportData);
         $this->assertStringContainsString('Category with slash\/ symbol', $exportData);
+        $this->assertStringContainsString('New Product', $exportData);
+        $this->assertStringContainsString('Description with &lt;h2&gt;this is test page&lt;/h2&gt;', $exportData);
+        $this->assertFalse($this->hasDuplicateRowsForProducts($exportData));
+    }
+
+    /**
+     * Verify exported data does not contain duplicate rows for product
+     *
+     * @param $exportData
+     * @return bool
+     */
+    private function hasDuplicateRowsForProducts($exportData): bool
+    {
+        $skus = [];
+        foreach (explode("\n", $exportData, -1) as $line) {
+            $skus[] = current(explode(',', $line));
+        }
+        array_shift($skus);
+        return count($skus) !== count(array_flip($skus));
     }
 
     /**
