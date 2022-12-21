@@ -196,22 +196,6 @@
             <argument name="dataObjectProcessor" xsi:type="object">Magento\CatalogGraphQl\Category\DataObjectProcessor</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ChildProduct"
-                 type="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product">
-        <arguments>
-            <argument name="collectionFactory" xsi:type="object">
-                Magento\Catalog\Model\ResourceModel\Product\ChildCollectionFactory
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\ChildProduct"
-                 type="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product">
-        <arguments>
-            <argument name="productDataProvider" xsi:type="object">
-                Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ChildProduct
-            </argument>
-        </arguments>
-    </virtualType>
     <virtualType
         name="Magento\CatalogGraphQl\Category\DataObjectProcessor"
         type="Magento\Framework\Reflection\DataObjectProcessor"
