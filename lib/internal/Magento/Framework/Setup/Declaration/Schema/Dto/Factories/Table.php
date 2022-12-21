@@ -119,15 +119,10 @@ class Table implements FactoryInterface
      */
     private function getDefaultCharset(): string
     {
-        $sqlVersion = $this->sqlVersionProvider->getSqlVersion();
-        $sqlExactVersion = $this->sqlVersionProvider->getExactSQLVersion();
-        $isMariaDB = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_VERSION);
-
-        if (!$isMariaDB && version_compare($sqlExactVersion, "8.0.29", ">=")) {
+        if ($this->sqlVersionProvider->isMySQL_GTE_8029()) {
             return self::$defaultCharset['mysql_8_29'];
         }
-
-        return self::$defaultCharset[$sqlVersion] ??
+        return self::$defaultCharset[$this->sqlVersionProvider->getSqlVersion()] ??
             self::$defaultCharset['default'];
     }
 
@@ -138,15 +133,11 @@ class Table implements FactoryInterface
      */
     private function getDefaultCollation(): string
     {
-        $sqlVersion = $this->sqlVersionProvider->getSqlVersion();
-        $isMariaDB = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_VERSION);
-        $sqlExactVersion = $this->sqlVersionProvider->getExactSQLVersion();
-
-        if (!$isMariaDB && version_compare($sqlExactVersion, "8.0.29", ">=")) {
+        if ($this->sqlVersionProvider->isMySQL_GTE_8029()) {
             return self::$defaultCollation['mysql_8_29'];
         }
 
-        return self::$defaultCollation[$sqlVersion] ??
+        return self::$defaultCollation[$this->sqlVersionProvider->getSqlVersion()] ??
             self::$defaultCollation['default'];
     }
 }

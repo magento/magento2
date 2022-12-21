@@ -29,6 +29,7 @@ class SqlVersionProvider
 
     public const MARIA_DB_10_6_VERSION = '10.6.';
 
+    public const MYSQL_8_0_29_VERSION = '8.0.29';
     /**#@-*/
 
     /**
@@ -129,5 +130,22 @@ class SqlVersionProvider
     public function getExactSQLVersion(): string
     {
         return $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
+    }
+
+    /**
+     * Check if MySQL version is greater than equal to 8.0.29
+     *
+     * @return void
+     * @throws ConnectionException
+     */
+    public function isMySQL_GTE_8029()
+    {
+        $sqlVersion = $this->getSqlVersion();
+        $isMariaDB = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_VERSION);
+        $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
+        if (!$isMariaDB && version_compare($sqlExactVersion, "8.0.29", ">=")) {
+            return true;
+        }
+        return false;
     }
 }
