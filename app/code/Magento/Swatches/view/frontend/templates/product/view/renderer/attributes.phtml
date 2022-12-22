@@ -13,13 +13,14 @@ $sizeConfig = $block->getSizeConfig();
 $classes = $block->getClasses();
 ?>
 
-<?php foreach ($config['attributes'] as $attributeId => $attribute) : ?>
+<?php foreach ($config['attributes'] as $attributeId => $attribute): ?>
     <?php
     $attributeCode = $attribute['code'];
     $attributeLabel = $attribute['label'];
     $attributeLabelId = "option-label-$attributeCode-$attributeId";
     $attributeLabelClass = $classes['attribute_label'];
     $attributeSelectedClass = $classes['attribute_selected_option'];
+    $labelMessageRequired = $escaper->escapeHtmlAttr(__('Please select %1', $attributeLabel)) ?>;
 
     if (!$block->getEnableControlLabel()) {
         $attributeLabelClass .= ' visually-hidden';
@@ -96,7 +97,9 @@ $classes = $block->getClasses();
             value=""
             type="text"
             data-selector="super_attribute[<?= $escaper->escapeHtmlAttr($attributeId) ?>]"
-            data-validate="{required: true, messages: {required: '<?= $escaper->escapeHtmlAttr(__('Please select %1', $attributeLabel)) ?>'}}"
+            data-validate="{
+            required: true,
+            messages: {required: '<?= $labelMessageRequired ?>'}}"
             aria-required="true"
             aria-invalid="false"
         />

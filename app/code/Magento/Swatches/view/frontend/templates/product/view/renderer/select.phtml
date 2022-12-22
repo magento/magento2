@@ -13,14 +13,17 @@ $classes = $block->getClasses();
 $attribute = $block->getData('attribute');
 $attributeCode = $attribute['code'];
 
-$selectHtml = '<select class="' . $escaper->escapeHtmlAttr($classes['select']) . ' ' . $escaper->escapeHtmlAttr($attributeCode) . '">' .
+$selectHtml = '<select class="' . $escaper->escapeHtmlAttr($classes['select']) . ' ' .
+    $escaper->escapeHtmlAttr($attributeCode) . '">' .
     '<option value="0" option-id="0" data-option-id="0">' . $chooseText . '</option>';
 
 foreach ($attribute['options'] as $option) {
     $optionId = $escaper->escapeHtmlAttr($option['id']);
     $optionLabel = $escaper->escapeHtml($option['label'] ?? '');
 
-    $optionAttributes = ' value="' . $optionId . '" option-id="' . $optionId . '"' . '" data-option-id="' . $optionId . '"';
+    $optionAttributes = ' value="' . $optionId .
+    '" option-id="' . $optionId . '"' .
+    '" data-option-id="' . $optionId . '"';
 
     if (empty($option['products'])) {
         $optionAttributes .= ' data-option-empty="true"';

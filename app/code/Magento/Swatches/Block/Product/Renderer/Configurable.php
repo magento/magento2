@@ -37,27 +37,27 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * Path to template file with Swatch renderer.
      */
-    const SWATCH_RENDERER_TEMPLATE = 'Magento_Swatches::product/view/renderer.phtml';
+    public const SWATCH_RENDERER_TEMPLATE = 'Magento_Swatches::product/view/renderer.phtml';
 
     /**
      * Path to default template file with standard Configurable renderer.
      */
-    const CONFIGURABLE_RENDERER_TEMPLATE = 'Magento_ConfigurableProduct::product/view/type/options/configurable.phtml';
+    public const CONFIGURABLE_RENDERER_TEMPLATE = 'Magento_ConfigurableProduct::product/view/type/options/configurable.phtml';
 
     /**
      * Action name for ajax request
      */
-    const MEDIA_CALLBACK_ACTION = 'swatches/ajax/media';
+    private const MEDIA_CALLBACK_ACTION = 'swatches/ajax/media';
 
     /**
      * Name of swatch image for json config
      */
-    const SWATCH_IMAGE_NAME = 'swatchImage';
+    public const SWATCH_IMAGE_NAME = 'swatchImage';
 
     /**
      * Name of swatch thumbnail for json config
      */
-    const SWATCH_THUMBNAIL_NAME = 'swatchThumb';
+    public const SWATCH_THUMBNAIL_NAME = 'swatchThumb';
 
     /**
      * Config path which contains number of swatches per product
@@ -83,7 +83,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * Indicate if product has one or more Swatch attributes
      *
      * @deprecated 100.1.0 unused
-     *
+     * @see unused should plan to grooming this property
      * @var boolean
      */
     protected $isProductHasSwatchAttribute;
@@ -252,7 +252,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * Init isProductHasSwatchAttribute.
      *
      * @deprecated 100.2.0 Method isProductHasSwatchAttribute() is used instead of this.
-     *
+     * @see should use isProductHasSwatchAttribute()
      * @codeCoverageIgnore
      * @return void
      */
@@ -476,6 +476,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * @inheritDoc
      * @deprecated 100.1.5 Now is used _toHtml() directly
+     * @see use _toHtml()
      */
     protected function getHtmlOutput()
     {
