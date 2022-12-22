@@ -17,6 +17,8 @@
         <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
         <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="viewAndEditCart"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.orderSummaryTotal}}" stepKey="waitForOrderTotal"/>
+        <waitForPageLoad stepKey="waitForOrderTotalCalculation"/>
         <seeInCurrentUrl url="checkout/cart" stepKey="seeInCurrentUrl"/>
     </actionGroup>
 </actionGroups>

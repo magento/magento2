@@ -142,8 +142,8 @@ class LoaderTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testLoadExclude(): void
     {
         $fixture = [
@@ -182,8 +182,8 @@ class LoaderTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testLoadCircular(): void
     {
         $this->expectException('Exception');

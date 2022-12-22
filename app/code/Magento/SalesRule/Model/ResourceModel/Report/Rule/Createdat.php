@@ -89,10 +89,13 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
                     0
                 ),
                 'total_amount' => $connection->getIfNullSql(
-                    'SUM((base_subtotal - ' . $connection->getIfNullSql(
+                    'SUM(((base_subtotal - ' . $connection->getIfNullSql(
                         'base_subtotal_canceled',
                         0
-                    ) . ' - ' . $connection->getIfNullSql(
+                    ) . ' + ' . $connection->getIfNullSql(
+                        'base_shipping_amount - ' . $connection->getIfNullSql('base_shipping_canceled', 0),
+                        0
+                    ) . ') - ' . $connection->getIfNullSql(
                         'ABS(base_discount_amount) - ABS('
                         . $connection->getIfNullSql('base_discount_canceled', 0) . ')',
                         0
@@ -119,17 +122,20 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
                     0
                 ),
                 'total_amount_actual' => $connection->getIfNullSql(
-                    'SUM((base_subtotal_invoiced - ' . $connection->getIfNullSql(
+                    'SUM(((base_subtotal_invoiced - ' . $connection->getIfNullSql(
                         'base_subtotal_refunded',
                         0
-                    ) . ' - ' . $connection->getIfNullSql(
+                    ) . ' + ' . $connection->getIfNullSql(
+                        'base_shipping_invoiced - ' . $connection->getIfNullSql('base_shipping_refunded', 0),
+                        0
+                    ) . ') - ' . $connection->getIfNullSql(
                         'ABS(base_discount_invoiced) - ABS('
                         . $connection->getIfNullSql('base_discount_refunded', 0) . ')',
                         0
                     ) . ' + ' . $connection->getIfNullSql(
                         'base_tax_invoiced - ' . $connection->getIfNullSql('base_tax_refunded', 0),
                         0
-                    )   . ') * base_to_global_rate)',
+                    ) . ') * base_to_global_rate)',
                     0
                 ),
             ];

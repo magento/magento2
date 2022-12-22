@@ -17,6 +17,6 @@
         </arguments>
 
         <waitForElementVisible selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="waitForWelcomeMessage"/>
-        <see userInput="{{customMessage}}" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="verifyCustomMessage"/>
+        <waitForText userInput="{{customMessage}}" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="verifyCustomMessage"/>
     </actionGroup>
 </actionGroups>

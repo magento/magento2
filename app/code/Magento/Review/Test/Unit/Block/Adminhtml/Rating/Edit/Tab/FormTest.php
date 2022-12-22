@@ -186,8 +186,8 @@ class FormTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testToHtmlSessionRatingData(): void
     {
         $this->registry->expects($this->any())->method('registry')->willReturn($this->rating);
@@ -209,8 +209,8 @@ class FormTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testToHtmlCoreRegistryRatingData(): void
     {
         $this->registry->expects($this->any())->method('registry')->willReturn($this->rating);
@@ -232,8 +232,8 @@ class FormTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testToHtmlWithoutRatingData(): void
     {
         $this->registry->expects($this->any())->method('registry')->willReturn(false);

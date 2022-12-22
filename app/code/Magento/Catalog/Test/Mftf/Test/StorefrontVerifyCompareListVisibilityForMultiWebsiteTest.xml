@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyCompareListVisibilityForMultiWebsiteTest">
+        <annotations>
+            <stories value="Compare list behave incorrectly in multi-website setup."/>
+            <title value="Customer add product to compare list and verify visibility in other store"/>
+            <description value="Test compare products link visibility for other store view"/>
+            <testCaseId value="AC-6406"/>
+            <useCaseId value="ACP2E-1007"/>
+            <severity value="MAJOR"/>
+            <group value="Catalog"/>
+            
+            <skip>
+                <issueId value="ACQE-4083"/>
+            </skip>
+        </annotations>
+        <before>
+            <!-- Create simple products -->
+            <createData entity="SimpleProduct2" stepKey="createFirstSimpleProduct">
+                <field key="price">560</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct">
+                <field key="price">560</field>
+            </createData>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
+            <!-- Create website, store group, store view -->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createNewStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Reset web url option-->
+            <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
+            <!-- Delete website-->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!-- Delete product-->
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Add first product to compare list -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openFirstProductPage">
+            <argument name="productUrl" value="$$createFirstSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <scrollTo selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="scrollToCompareProductButton"/>
+        <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="addFirstProductToCompare">
+            <argument name="productVar" value="$$createFirstSimpleProduct$$"/>
+        </actionGroup>
+        <!--Add second product to compare list -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSecondProductPage">
+            <argument name="productUrl" value="$$createSecondSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <scrollTo selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="scrollToCompareButton"/>
+        <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="addSecondProductToCompare">
+            <argument name="productVar" value="$$createSecondSimpleProduct$$"/>
+        </actionGroup>
+        <see userInput="Compare Products" selector="{{StorefrontProductCompareMainSection.compareProducts}}" stepKey="assertCompareProductLinkName"/>
+        <!-- Open storefront on second store  -->
+        <amOnPage url="{{StorefrontStoreHomePage.url(customStore.code)}}" stepKey="openStorefrontPage"/>
+        <waitForPageLoad time="30" stepKey="waitStorefrontPage"/>
+        <dontSee userInput="Compare Products" selector="{{StorefrontProductCompareMainSection.compareProducts}}" stepKey="assertCompareProductLinkNameNotVisible"/>
+    </test>
+</tests>

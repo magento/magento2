@@ -35,8 +35,8 @@ class BooleanTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetFlatColumns(): void
     {
         $abstractAttributeMock = $this->createPartialMock(

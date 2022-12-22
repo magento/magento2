@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminFilterOrderByPurchaseDateReset">
+        <annotations>
+            <title value="Create Order in Admin with simple product"/>
+            <stories value="ACP2E-188: Date picker filters are not cleared after deleting the filter in Sales Order grid"/>
+            <description value="Search order by purchase date and clear date filter"/>
+            <features value="Sales"/>
+            <testCaseId value="ACP2E-188"/>
+            <severity value="MAJOR"/>
+            <group value="Sales"/>
+        </annotations>
+        <before>
+             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
+        <waitForPageLoad stepKey="waitForIndexPageLoad"/>
+        <actionGroup ref="FilterOrderGridByPurchaseDateActionGroup" stepKey="filterOrderByPurchaseDate">
+            <argument name="from" value="01/18/2021" />
+            <argument name="to" value="01/18/2021" />
+        </actionGroup>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilter"/>
+        <grabValueFrom selector="{{AdminDataGridHeaderSection.filterFieldInput('created_at[from]')}}" stepKey="grabPurchasedDateFrom"/>
+        <grabValueFrom selector="{{AdminDataGridHeaderSection.filterFieldInput('created_at[to]')}}" stepKey="grabPurchasedDateTo"/>
+        <assertEmpty stepKey="checkPurchaseDateFromReset">
+            <actualResult type="string">$grabPurchasedDateFrom</actualResult>
+        </assertEmpty>
+        <assertEmpty stepKey="checkPurchaseDateToReset">
+            <actualResult type="string">$grabPurchasedDateTo</actualResult>
+        </assertEmpty>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

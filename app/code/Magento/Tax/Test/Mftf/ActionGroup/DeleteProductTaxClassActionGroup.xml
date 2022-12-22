@@ -24,6 +24,7 @@
         <moveMouseOver stepKey="hoverDeleteElement" selector="{{AdminTaxRulesSection.deleteTaxClassName(taxClassName)}}"/>
         <click stepKey="deleteFirstTaxClass" selector="{{AdminTaxRulesSection.deleteTaxClass(taxClassName)}}"/>
         <waitForElementVisible selector="{{AdminTaxRulesSection.popUpDialogOK}}" stepKey="waitForElementBecomeVisible"/>
+        <waitForElementClickable stepKey="waitForPopUpDialog" selector="{{AdminTaxRulesSection.popUpDialogOK}}"/>
         <click stepKey="acceptPopUpDialog" selector="{{AdminTaxRulesSection.popUpDialogOK}}"/>
         <waitForPageLoad stepKey="waitForProductTaxClassDeleted"/>
     </actionGroup>

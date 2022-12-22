@@ -110,9 +110,6 @@ class AddCommentTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $titleMock = $this->getMockBuilder(\Magento\Framework\App\Action\Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -145,7 +142,7 @@ class AddCommentTest extends TestCase
                     'getResultRedirectFactory',
                     'getView'
                 ]
-            )->addMethods(['getTitle'])
+            )
             ->getMock();
         $contextMock->expects($this->any())
             ->method('getRequest')
@@ -153,9 +150,6 @@ class AddCommentTest extends TestCase
         $contextMock->expects($this->any())
             ->method('getResponse')
             ->willReturn($this->responseMock);
-        $contextMock->expects($this->any())
-            ->method('getTitle')
-            ->willReturn($titleMock);
         $contextMock->expects($this->any())
             ->method('getView')
             ->willReturn($this->viewMock);

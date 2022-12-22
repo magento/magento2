@@ -64,6 +64,11 @@ class Search implements ProductQueryInterface
     private $searchCriteriaBuilder;
 
     /**
+     * @var Suggestions
+     */
+    private $suggestions;
+
+    /**
      * @var QueryPopularity
      */
     private $queryPopularity;
@@ -76,6 +81,7 @@ class Search implements ProductQueryInterface
      * @param ProductSearch $productsProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ArgumentsProcessorInterface|null $argsSelection
+     * @param Suggestions|null $suggestions
      * @param QueryPopularity|null $queryPopularity
      */
     public function __construct(
@@ -86,6 +92,7 @@ class Search implements ProductQueryInterface
         ProductSearch $productsProvider,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         ArgumentsProcessorInterface $argsSelection = null,
+        Suggestions $suggestions = null,
         QueryPopularity $queryPopularity = null
     ) {
         $this->search = $search;
@@ -94,7 +101,10 @@ class Search implements ProductQueryInterface
         $this->fieldSelection = $fieldSelection;
         $this->productsProvider = $productsProvider;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->argsSelection = $argsSelection ?: ObjectManager::getInstance()->get(ArgumentsProcessorInterface::class);
+        $this->argsSelection = $argsSelection ?: ObjectManager::getInstance()
+            ->get(ArgumentsProcessorInterface::class);
+        $this->suggestions = $suggestions ?: ObjectManager::getInstance()
+            ->get(Suggestions::class);
         $this->queryPopularity = $queryPopularity ?: ObjectManager::getInstance()->get(QueryPopularity::class);
     }
 
@@ -146,14 +156,21 @@ class Search implements ProductQueryInterface
             $productArray[$product->getId()]['model'] = $product;
         }
 
+        $suggestions = [];
+        $totalCount = (int) $searchResults->getTotalCount();
+        if ($totalCount === 0 && !empty($args['search'])) {
+            $suggestions = $this->suggestions->execute($context, $args['search']);
+        }
+
         return $this->searchResultFactory->create(
             [
-                'totalCount' => $searchResults->getTotalCount(),
+                'totalCount' => $totalCount,
                 'productsSearchResult' => $productArray,
                 'searchAggregation' => $itemsResults->getAggregations(),
                 'pageSize' => $realPageSize,
                 'currentPage' => $realCurrentPage,
                 'totalPages' => $totalPages,
+                'suggestions' => $suggestions,
             ]
         );
     }

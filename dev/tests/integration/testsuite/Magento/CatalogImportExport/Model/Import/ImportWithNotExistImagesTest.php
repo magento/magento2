@@ -7,23 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Model\Import;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\ProductImport;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\File\Csv;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write;
-use Magento\Framework\MessageQueue\MessageEncoder;
+use Magento\Framework\MessageQueue\ConsumerFactory;
+use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\ImportExport\Model\Export\Consumer;
+use Magento\ImportExport\Model\Export\Entity\ExportInfo;
+use Magento\ImportExport\Model\Export\Entity\ExportInfoFactory;
 use Magento\ImportExport\Model\Import as ImportModel;
 use Magento\ImportExport\Model\Import\Source\Csv as CsvSource;
 use Magento\ImportExport\Model\Import\Source\CsvFactory;
-use Magento\MysqlMq\Model\Driver\Queue;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\MysqlMq\DeleteTopicRelatedMessages;
+use Magento\TestFramework\MessageQueue\ClearQueueProcessor;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,6 +34,7 @@ use PHPUnit\Framework\TestCase;
  * @see \Magento\CatalogImportExport\Model\Import\Product
  *
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ImportWithNotExistImagesTest extends TestCase
 {
@@ -41,17 +44,8 @@ class ImportWithNotExistImagesTest extends TestCase
     /** @var ObjectManagerInterface */
     private $objectManager;
 
-    /** @var MessageEncoder */
-    private $messageEncoder;
-
-    /** @var Consumer */
-    private $consumer;
-
-    /** @var Queue */
-    private $queue;
-
-    /** @var Csv */
-    private $csvReader;
+    /** @var ConsumerFactory */
+    private $consumerFactory;
 
     /** @var Write */
     private $directory;
@@ -79,9 +73,9 @@ class ImportWithNotExistImagesTest extends TestCase
         parent::setUpBeforeClass();
 
         $objectManager = Bootstrap::getObjectManager();
-        /** @var  DeleteTopicRelatedMessages $deleteMessages */
-        $deleteMessages = $objectManager->get(DeleteTopicRelatedMessages::class);
-        $deleteMessages->execute(self::TOPIC);
+        /** @var  ClearQueueProcessor $clearQueueProcessor */
+        $clearQueueProcessor = $objectManager->get(ClearQueueProcessor::class);
+        $clearQueueProcessor->execute('exportProcessor');
     }
 
     /**
@@ -92,14 +86,11 @@ class ImportWithNotExistImagesTest extends TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->queue = $this->objectManager->create(Queue::class, ['queueName' => 'export']);
-        $this->messageEncoder = $this->objectManager->get(MessageEncoder::class);
-        $this->consumer = $this->objectManager->get(Consumer::class);
-        $this->directory = $this->objectManager->get(Filesystem::class)->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->csvReader = $this->objectManager->get(Csv::class);
+        $this->consumerFactory = $this->objectManager->get(ConsumerFactory::class);
         $this->import = $this->objectManager->get(ProductFactory::class)->create();
         $this->csvFactory = $this->objectManager->get(CsvFactory::class);
         $this->fileSystem = $this->objectManager->get(Filesystem::class);
+        $this->directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
     }
@@ -117,20 +108,37 @@ class ImportWithNotExistImagesTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/CatalogImportExport/_files/export_queue_product_with_images.php
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
      *
      * @return void
      */
     public function testImportWithUnexistingImages(): void
     {
+        $cache = $this->objectManager->get(\Magento\Framework\App\Cache::class);
+        $cache->clean();
+        /** @var ExportInfoFactory $exportInfoFactory */
+        $exportInfoFactory = $this->objectManager->get(ExportInfoFactory::class);
+        $messagePublisher = $this->objectManager->get(PublisherInterface::class);
+        /** @var ExportInfo $dataObject */
+        $dataObject = $exportInfoFactory->create(
+            'csv',
+            ProductAttributeInterface::ENTITY_TYPE_CODE,
+            [ProductInterface::SKU => 'simple'],
+            []
+        );
+        $messagePublisher->publish(self::TOPIC, $dataObject);
         $this->exportProducts();
+        $this->filePath = 'export/' . $dataObject->getFileName();
         $this->assertTrue($this->directory->isExist($this->filePath), 'Products were not imported to file');
-        $fileContent = $this->csvReader->getData($this->directory->getAbsolutePath($this->filePath));
+        $fileContent = $this->getCsvData($this->directory->getAbsolutePath($this->filePath));
         $this->assertCount(2, $fileContent);
         $this->updateFileImagesToInvalidValues();
+        $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $mediaDirectory->create('import');
         $this->import->setParameters([
             'entity' => Product::ENTITY,
             'behavior' => ImportModel::BEHAVIOR_ADD_UPDATE,
+            ImportModel::FIELD_NAME_IMG_FILE_DIR => $mediaDirectory->getAbsolutePath('import')
         ]);
         $this->assertImportErrors();
         $this->assertProductImages('/m/a/magento_image.jpg', 'simple');
@@ -143,10 +151,8 @@ class ImportWithNotExistImagesTest extends TestCase
      */
     private function exportProducts(): void
     {
-        $envelope = $this->queue->dequeue();
-        $decodedMessage = $this->messageEncoder->decode(self::TOPIC, $envelope->getBody());
-        $this->consumer->process($decodedMessage);
-        $this->filePath = 'export/' . $decodedMessage->getFileName();
+        $consumer = $this->consumerFactory->get('exportProcessor');
+        $consumer->process(1);
     }
 
     /**
@@ -157,7 +163,7 @@ class ImportWithNotExistImagesTest extends TestCase
     private function updateFileImagesToInvalidValues(): void
     {
         $absolutePath = $this->directory->getAbsolutePath($this->filePath);
-        $csv = $this->csvReader->getData($absolutePath);
+        $csv = $this->getCsvData($absolutePath);
         $imagesKeys = ['base_image', 'small_image', 'thumbnail_image'];
         $imagesPositions = [];
         foreach ($imagesKeys as $key) {
@@ -168,7 +174,7 @@ class ImportWithNotExistImagesTest extends TestCase
             $csv[1][$imagesPosition] = '/m/a/invalid_image.jpg';
         }
 
-        $this->csvReader->appendData($absolutePath, $csv);
+        $this->appendCsvData($absolutePath, $csv);
     }
 
     /**
@@ -181,7 +187,7 @@ class ImportWithNotExistImagesTest extends TestCase
     {
         return $this->csvFactory->create([
             'file' => $file,
-            'directory' => $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR),
+            'directory' => $this->directory,
         ]);
     }
 
@@ -221,5 +227,44 @@ class ImportWithNotExistImagesTest extends TestCase
         $this->assertEquals($imageName, $product->getImage());
         $this->assertEquals($imageName, $product->getSmallImage());
         $this->assertEquals($imageName, $product->getThumbnail());
+    }
+
+    /**
+     * Parse csv file and return csv data as array
+     *
+     * @param string $filePath
+     * @return array
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    private function getCsvData(string $filePath): array
+    {
+        $driver = $this->directory->getDriver();
+        $fileResource = $driver->fileOpen($filePath, 'r');
+
+        $data = [];
+        while ($rowData = $driver->fileGetCsv($fileResource, 100000)) {
+            $data[] = $rowData;
+        }
+        $driver->fileClose($fileResource);
+
+        return $data;
+    }
+
+    /**
+     * Appends csv data to the file
+     *
+     * @param string $filePath
+     * @param array $csv
+     * @return void
+     */
+    private function appendCsvData(string $filePath, array $csv): void
+    {
+        $driver = $this->directory->getDriver();
+        $fileResource = $driver->fileOpen($filePath, 'w');
+
+        foreach ($csv as $dataRow) {
+            $driver->filePutCsv($fileResource, $dataRow);
+        }
+        $driver->fileClose($fileResource);
     }
 }
