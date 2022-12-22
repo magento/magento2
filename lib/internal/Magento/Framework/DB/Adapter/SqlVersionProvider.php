@@ -129,7 +129,7 @@ class SqlVersionProvider
      * @return bool
      * @throws ConnectionException
      */
-    public function isMysqlGte8029()
+    public function isMysqlGte8029(): bool
     {
         $sqlVersion = $this->getSqlVersion();
         $isMariaDB = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_VERSION);
