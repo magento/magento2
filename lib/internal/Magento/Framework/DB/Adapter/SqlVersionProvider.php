@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Framework\DB\Adapter;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Tests\NamingConvention\true\bool;
 
 /**
  * Class GetDbVersion provides sql engine version requesting version variable
@@ -130,7 +129,7 @@ class SqlVersionProvider
      * @return bool
      * @throws ConnectionException
      */
-    public function isMysqlGte8029(): bool
+    public function isMysqlGte8029()
     {
         $sqlVersion = $this->getSqlVersion();
         $isMariaDB = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_VERSION);
