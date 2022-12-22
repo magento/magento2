@@ -113,6 +113,10 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
             }
         }
 
+        if(!$this->sqlVersionProvider->isMysqlGte8029()){
+            return DataProviderFromFile::FALLBACK_VALUE;
+        }
+
         return $this->dbKey;
     }
 
