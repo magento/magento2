@@ -30,8 +30,7 @@ define([
             limitDefault: '9',
             url: '',
             formKey: '',
-            post: false,
-            memorizingAllowed: false
+            post: false
         },
 
         /** @inheritdoc */
@@ -188,7 +187,7 @@ define([
                 document.body.appendChild(form);
                 form.submit();
             } else {
-                if (!this.options.memorizingAllowed && paramValue == defaultValue) { //eslint-disable-line eqeqeq
+                if (paramValue == defaultValue) { //eslint-disable-line eqeqeq
                     delete paramData[paramName];
                 }
 
