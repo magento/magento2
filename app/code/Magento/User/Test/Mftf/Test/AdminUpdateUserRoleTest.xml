@@ -18,9 +18,6 @@
             <testCaseId value="MC-27895"/>
             <group value="user"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="AC-7467"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -28,10 +25,15 @@
             <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="goToNewUserPage"/>
             <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillNewUserForm"/>
             <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="saveNewUser"/>
+            
             <!--Create New Role-->
-            <actionGroup ref="AdminStartCreateUserRoleActionGroup" stepKey="startCreateUserRole">
-                <argument name="roleName" value="{{roleSales.name}}"/>
-            </actionGroup>
+            <amOnPage url="{{AdminEditRolePage.url}}" stepKey="openNewAdminRolePage"/>
+            <waitForElementVisible  selector="{{AdminCreateRoleSection.name}}" stepKey="waitForName"/>
+            <fillField selector="{{AdminCreateRoleSection.name}}" userInput="{{roleSales.name}}" stepKey="setTheRoleName"/>
+            <fillField selector="{{AdminCreateRoleSection.password}}" userInput="123123q" stepKey="setPassword"/>
+            <click selector="{{AdminCreateRoleSection.roleResources}}" stepKey="clickToOpenRoleResources"/>
+            <selectOption selector="{{AdminEditRoleResourcesSection.resourceAccess}}" userInput="Custom" stepKey="chooseResourceAccess"/>
+
             <actionGroup ref="AdminSaveUserRoleActionGroup" stepKey="saveNewRole"/>
         </before>
         <after>
