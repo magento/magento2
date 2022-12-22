@@ -40,6 +40,11 @@ class Table implements FactoryInterface
     private ?SqlVersionProvider $sqlVersionProvider = null;
 
     /**
+     * @var string|null
+     */
+    private ?string $sqlVersion = null;
+
+    /**
      * @var array|string[]
      */
     private static array $defaultCharset = [
@@ -122,7 +127,8 @@ class Table implements FactoryInterface
         if ($this->sqlVersionProvider->isMysqlGte8029()) {
             return self::$defaultCharset['mysql_8_29'];
         }
-        return self::$defaultCharset[$this->sqlVersionProvider->getSqlVersion()] ??
+
+        return self::$defaultCharset[$this->getSqlVersion()] ??
             self::$defaultCharset['default'];
     }
 
@@ -137,7 +143,21 @@ class Table implements FactoryInterface
             return self::$defaultCollation['mysql_8_29'];
         }
 
-        return self::$defaultCollation[$this->sqlVersionProvider->getSqlVersion()] ??
+        return self::$defaultCollation[$this->getSqlVersion()] ??
             self::$defaultCollation['default'];
+    }
+
+    /**
+     * Get sql version
+     *
+     * @return string
+     */
+    private function getSqlVersion(): string
+    {
+        if ($this->sqlVersion === null) {
+            $this->sqlVersion = $this->sqlVersionProvider->getSqlVersion();
+        }
+
+        return $this->sqlVersion;
     }
 }
