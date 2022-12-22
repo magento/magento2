@@ -36,7 +36,7 @@ class Header extends Template
         Escaper $escaper = null
     ) {
         parent::__construct($context, $data);
-        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);;
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
     }
 
     /**
