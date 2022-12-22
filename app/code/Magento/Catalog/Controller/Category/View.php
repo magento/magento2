@@ -22,7 +22,6 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\ForwardFactory;
-use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -39,6 +38,8 @@ use Psr\Log\LoggerInterface;
  */
 class View extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
+    protected const PARAM_NAME_REDIRECT_URL = 'redirect_url';
+
     /**
      * @var Registry
      */
@@ -211,6 +212,11 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         }
         $category = $this->_initCategory();
         if ($category) {
+            $redirectUrl = $this->applyMemorizingRedirect();
+            if ($redirectUrl) {
+                return $this->resultRedirectFactory->create()->setUrl($redirectUrl);
+            }
+
             $this->layerResolver->create(Resolver::CATALOG_LAYER_CATEGORY);
             $settings = $this->_catalogDesign->getDesignSettings($category);
 
@@ -293,5 +299,21 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         if ($settings->getPageLayoutHandles()) {
             $page->addPageLayoutHandles($settings->getPageLayoutHandles());
         }
+    }
+
+    /**
+     * Apply redirect for Memorizing
+     *
+     * @return false|mixed
+     */
+    private function applyMemorizingRedirect()
+    {
+        if ($this->toolbarMemorizer->isMemorizingAllowed()) {
+            $url = $this->_request->getParam(self::PARAM_NAME_REDIRECT_URL);
+            if ($url) {
+                return $url;
+            }
+        }
+        return false;
     }
 }
