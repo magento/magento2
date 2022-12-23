@@ -17,6 +17,9 @@
             <severity value="AVERAGE"/>
             <testCaseId value="AC-3635"/>
             <group value="customer"/>
+            <skip>
+            <issueId value="ACQE-4352"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
