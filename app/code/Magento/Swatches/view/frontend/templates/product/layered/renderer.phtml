@@ -43,13 +43,13 @@
                             case '2':
                                 ?>
                                 <?php $swatchThumbPath = $block->getSwatchPath(
-                                'swatch_thumb',
-                                $swatchOption['value']
-                            ); ?>
+                                    'swatch_thumb',
+                                    $swatchOption['value']
+                                ); ?>
                                 <?php $swatchImagePath = $block->getSwatchPath(
-                                'swatch_image',
-                                $swatchOption['value']
-                            );
+                                    'swatch_image',
+                                    $swatchOption['value']
+                                );
                                 $escapedUrl = $escaper->escapeUrl($swatchImagePath);
                                 ?>
                                 <div class="swatch-option image <?= $escaper->escapeHtmlAttr($label['custom_style']) ?>"

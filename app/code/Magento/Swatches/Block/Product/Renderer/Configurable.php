@@ -41,8 +41,10 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
 
     /**
      * Path to default template file with standard Configurable renderer.
+     * phpcs:disable
      */
     public const CONFIGURABLE_RENDERER_TEMPLATE = 'Magento_ConfigurableProduct::product/view/type/options/configurable.phtml';
+    /** phpcs:enable */
 
     /**
      * Action name for ajax request
@@ -384,6 +386,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * @param Product $childProduct
      * @param string $imageType
      * @return string
+     * @phpstan-return never
      */
     protected function getSwatchProductImage(Product $childProduct, $imageType)
     {
