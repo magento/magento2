@@ -257,6 +257,9 @@ class ProcessCronQueueObserver implements ObserverInterface
             if (!$this->isGroupInFilter($groupId)) {
                 continue;
             }
+            if ($this->isGroupInExcludeFilter($groupId)) {
+                continue;
+            }
             if ($this->_request->getParam(self::STANDALONE_PROCESS_STARTED) !== '1'
                 && $this->getCronGroupConfigurationValue($groupId, 'use_separate_process') == 1
             ) {
@@ -807,6 +810,18 @@ class ProcessCronQueueObserver implements ObserverInterface
     {
         return !($this->_request->getParam('group') !== null
             && trim($this->_request->getParam('group'), "'") !== $groupId);
+    }
+
+    /**
+     * Is Group In Exclude Filter.
+     *
+     * @param string $groupId
+     * @return bool
+     */
+    private function isGroupInExcludeFilter($groupId): bool
+    {
+        $excludeGroup = $this->_request->getParam('exclude-group', []);
+        return is_array($excludeGroup) && in_array($groupId, $excludeGroup);
     }
 
     /**
