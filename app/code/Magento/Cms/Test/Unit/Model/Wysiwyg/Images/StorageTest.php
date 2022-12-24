@@ -148,7 +148,7 @@ class StorageTest extends TestCase
         'jpg' => 'image/jpg',
         'jpeg' => 'image/jpeg',
         'png' => 'image/png',
-        'gif' => 'image/png',
+        'gif' => 'image/gif',
     ];
 
     /**
