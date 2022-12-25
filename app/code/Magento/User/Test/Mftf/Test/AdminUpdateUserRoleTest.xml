@@ -25,15 +25,11 @@
             <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="goToNewUserPage"/>
             <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillNewUserForm"/>
             <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="saveNewUser"/>
-            
-            <!--Create New Role-->
-            <amOnPage url="{{AdminEditRolePage.url}}" stepKey="openNewAdminRolePage"/>
-            <waitForElementVisible  selector="{{AdminCreateRoleSection.name}}" stepKey="waitForName"/>
-            <fillField selector="{{AdminCreateRoleSection.name}}" userInput="{{roleSales.name}}" stepKey="setTheRoleName"/>
-            <fillField selector="{{AdminCreateRoleSection.password}}" userInput="123123q" stepKey="setPassword"/>
-            <click selector="{{AdminCreateRoleSection.roleResources}}" stepKey="clickToOpenRoleResources"/>
-            <selectOption selector="{{AdminEditRoleResourcesSection.resourceAccess}}" userInput="Custom" stepKey="chooseResourceAccess"/>
 
+            <actionGroup ref="AdminStartCreateUserRoleActionGroup" stepKey="startCreateUserRole">
+                <argument name="roleName" value="{{roleSales.name}}"/>
+                <argument name="userPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+            </actionGroup>
             <actionGroup ref="AdminSaveUserRoleActionGroup" stepKey="saveNewRole"/>
         </before>
         <after>
