@@ -13,6 +13,7 @@ $sizeConfig = $block->getSizeConfig();
 $classes = $block->getClasses();
 ?>
 
+/** phpcs:disable Generic.Files.LineLength */
 <?php foreach ($config['attributes'] as $attributeId => $attribute): ?>
     <?php
     $attributeCode = $attribute['code'];
@@ -20,7 +21,6 @@ $classes = $block->getClasses();
     $attributeLabelId = "option-label-$attributeCode-$attributeId";
     $attributeLabelClass = $classes['attribute_label'];
     $attributeSelectedClass = $classes['attribute_selected_option'];
-    $labelAttributeRequired = $escaper->escapeHtmlAttr(__('Please select %1', $attributeLabel));
 
     if (!$block->getEnableControlLabel()) {
         $attributeLabelClass .= ' visually-hidden';
@@ -97,9 +97,10 @@ $classes = $block->getClasses();
             value=""
             type="text"
             data-selector="super_attribute[<?= $escaper->escapeHtmlAttr($attributeId) ?>]"
-            data-validate="{required: true,messages: {required: '<?= $labelAttributeRequired ?>'}}"
+            data-validate="{required: true,messages: {required: '<?= $escaper->escapeHtmlAttr(__('Please select %1', $attributeLabel)) ?>'}}"
             aria-required="true"
             aria-invalid="false"
         />
     </div>
 <?php endforeach; ?>
+/** phpcs:enable */
