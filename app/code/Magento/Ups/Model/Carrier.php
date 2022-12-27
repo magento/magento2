@@ -49,6 +49,7 @@ use Magento\Ups\Helper\Config;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Throwable;
+use Exception;
 
 /**
  * UPS shipping implementation.
@@ -838,9 +839,15 @@ XMLRequest;
 
         $xmlRequest .= $xmlParams;
 
-        $httpResponse = $this->asyncHttpClient->request(
-            new Request($url, Request::METHOD_POST, ['Content-Type' => 'application/xml'], $xmlRequest)
-        );
+        try {
+            $httpResponse = $this->asyncHttpClient->request(
+                new Request($url, Request::METHOD_POST, ['Content-Type' => 'application/xml'], $xmlRequest)
+            );
+        } catch (Exception $e) {
+            $this->_logger->critical("UPS API ERRROR: {$e->getMessage()} \n {$e->getTraceAsString()} \n", ['request_url' => $url, 'request_method' => Request::METHOD_POST, 'headers' => ['Content-Type' => 'application/xml'],  'xmlRequest' => $xmlRequest]);
+            return $this->_getErrorResponse();
+        }
+
         $debugData['request'] = $xmlParams;
         return $this->deferredProxyFactory->create(
             [
@@ -865,6 +872,27 @@ XMLRequest;
                 )
             ]
         );
+    }
+
+    /**
+     * @return Result
+     */
+    protected function _getErrorResponse(): Result
+    {
+        $result = $this->_rateFactory->create();
+        $error = $this->_rateErrorFactory->create();
+        $error->setCarrier('ups');
+        $error->setCarrierTitle($this->getConfigData('title'));
+        if ($this->getConfigData('specificerrmsg') !== '') {
+            $errorTitle = $this->getConfigData('specificerrmsg');
+        }
+        if (!isset($errorTitle)) {
+            $errorTitle = __('Cannot retrieve shipping rates');
+        }
+        $error->setErrorMessage($errorTitle);
+        $result->append($error);
+
+        return $result;
     }
 
     /**
