@@ -295,6 +295,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
      *
      * @return DataPersistorInterface|mixed
      * @deprecated 101.0.0
+     * @see we don't recommend this approach anymore
      */
     protected function getDataPersistor()
     {
