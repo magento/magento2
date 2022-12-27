@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0f03831c231ae08f16cf64b1aea0727c",
+    "content-hash": "d81efc84c481cdc95ff549b5c58238f2",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1257,6 +1257,7 @@
                 "issues": "https://github.com/fgrosse/PHPASN1/issues",
                 "source": "https://github.com/fgrosse/PHPASN1/tree/v2.4.0"
             },
+            "abandoned": true,
             "time": "2021-12-11T12:41:06+00:00"
         },
         {
