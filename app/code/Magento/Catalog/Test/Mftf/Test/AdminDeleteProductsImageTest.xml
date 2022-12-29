@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteProductsImageTest">
+        <annotations>
+            <stories value="Product with any custom option causes an error when deleting product images"/>
+            <features value="Catalog"/>
+            <title value="Error occurred while delete products image any custom option"/>
+            <description value="When a product is created with custom option and added images, then save the product after deleting the image, Magento shows a warming message."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-7556"/>
+            <useCaseId value="ACP2E-1479"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!--Login as admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <createData entity="SubCategory" stepKey="createSubCategory"/>
+            <createData entity="NewRootCategory" stepKey="createRootCategory"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="visitAdminProductPage">
+                <argument name="productId" value="$$createProduct.id$$"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForProductPageLoad0"/>
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="['Default Category', $$createRootCategory.name$$, $$createSubCategory.name$$]" stepKey="fillCategory"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+            <!--Add images to the product-->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="visitAdminProductPage2">
+                <argument name="productId" value="$$createProduct.id$$"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForProductPageLoad1"/>
+            <actionGroup ref="AddProductImageActionGroup" stepKey="addImageToProduct">
+                <argument name="image" value="ProductImage"/>
+            </actionGroup>
+            <actionGroup ref="AddProductImageActionGroup" stepKey="addImage1ToProduct">
+                <argument name="image" value="TestImageNew"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
+        </before>
+        <after>
+           <deleteData createDataKey="createSubCategory" stepKey="deleteSubCategory"/>
+            <deleteData createDataKey="createRootCategory" stepKey="deleteRootCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Open product page on admin-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+        <!--Remove product image and save-->
+        <actionGroup ref="RemoveProductImageByNameActionGroup" stepKey="removeProductImage">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct5"/>
+        <!--Assert notification and success messages-->
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="{{ProductFormMessages.save_success}}" stepKey="seeSuccessMessage"/>
+        <dontSee selector="{{StorefrontMessagesSection.noticeMessage}}" userInput="{{ProductFormMessages.remove_image_notice}}" stepKey="seeNotification"/>
+        <!--Reopen image tab and see the image is not deleted-->
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesTab"/>
+        <waitForPageLoad stepKey="waitForImagesLoad"/>
+        <dontSeeElement selector="{{AdminProductImagesSection.imageFile(ProductImage.fileName)}}" stepKey="seeImageIsNotDeleted"/>
+    </test>
+</tests>
