@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminDeleteProductsImageTest">
+    <test name="AdminDeleteProductsImageWithCustomOptionTest">
         <annotations>
             <stories value="Product with any custom option causes an error when deleting product images"/>
             <features value="Catalog"/>
@@ -29,8 +29,6 @@
                 <argument name="productId" value="$$createProduct.id$$"/>
             </actionGroup>
             <waitForPageLoad stepKey="waitForProductPageLoad0"/>
-            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="['Default Category', $$createRootCategory.name$$, $$createSubCategory.name$$]" stepKey="fillCategory"/>
-            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
             <!--Add images to the product-->
             <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="visitAdminProductPage2">
                 <argument name="productId" value="$$createProduct.id$$"/>
@@ -39,9 +37,17 @@
             <actionGroup ref="AddProductImageActionGroup" stepKey="addImageToProduct">
                 <argument name="image" value="ProductImage"/>
             </actionGroup>
-            <actionGroup ref="AddProductImageActionGroup" stepKey="addImage1ToProduct">
-                <argument name="image" value="TestImageNew"/>
+            <!-- opens the custom option panel and clicks add options -->
+            <click stepKey="openCustomizableOptions" selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}"/>
+            <waitForPageLoad stepKey="waitForCustomOptionsOpen"/>
+
+            <!-- Create a custom option with 2 values -->
+            <actionGroup ref="CreateCustomRadioOptionsActionGroup" stepKey="createCustomOption1">
+                <argument name="customOptionName" value="ProductOptionRadiobutton.title"/>
+                <argument name="productOption" value="ProductOptionField"/>
+                <argument name="productOption2" value="ProductOptionField2"/>
             </actionGroup>
+            <waitForPageLoad stepKey="waitForProductPageLoad2"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
         </before>
         <after>
@@ -54,7 +60,6 @@
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
             <argument name="productId" value="$$createProduct.id$$"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
         <!--Remove product image and save-->
         <actionGroup ref="RemoveProductImageByNameActionGroup" stepKey="removeProductImage">
             <argument name="image" value="ProductImage"/>
