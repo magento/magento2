@@ -127,7 +127,7 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct5"/>
         <!--Assert notification and success messages-->
         <see selector="{{StorefrontMessagesSection.success}}" userInput="{{ProductFormMessages.save_success}}" stepKey="seeSuccessMessage"/>
-        <see selector="{{StorefrontMessagesSection.noticeMessage}}" userInput="{{ProductFormMessages.remove_image_notice}}" stepKey="seeNotification"/>
+        <dontSee selector="{{StorefrontMessagesSection.noticeMessage}}" userInput="{{ProductFormMessages.remove_image_notice}}" stepKey="seeNotification"/>
         <!--Reopen image tab and see the image is not deleted-->
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesTab"/>
         <waitForPageLoad stepKey="waitForImagesLoad"/>
