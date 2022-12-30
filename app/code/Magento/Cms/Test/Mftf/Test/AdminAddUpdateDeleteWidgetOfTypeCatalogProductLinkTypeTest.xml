@@ -47,6 +47,7 @@
 
         <amOnPage url="{{StorefrontCategoryPage.url($createPreReqCategory.custom_attributes[url_key]$)}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="wait1"/>
+        <waitForElementVisible selector="{{StorefrontHeaderSection.ProductWidgetLink}}" stepKey="waitForProductLinkButton"/>
         <click selector="{{StorefrontHeaderSection.ProductWidgetLink}}" stepKey="clickProductLinkButton"/>
         <waitForPageLoad stepKey="wait2"/>
         <actionGroup ref="AssertStorefrontProductDetailPageNameActionGroup" stepKey="assertProductNameText">
