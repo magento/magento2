@@ -18,6 +18,9 @@
             <testCaseId value="MC-27895"/>
             <group value="user"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="AC-7467"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
