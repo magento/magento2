@@ -16,7 +16,7 @@ namespace Magento\Framework;
 class Escaper
 {
     /**
-     * HTML special characters flag
+     * @var ENT_QUOTES | ENT_SUBSTITUTE
      */
     private $htmlSpecialCharsFlag = ENT_QUOTES | ENT_SUBSTITUTE;
 
@@ -96,7 +96,7 @@ class Escaper
                     }
                 );
                 $data = $this->prepareUnescapedCharacters($data);
-                $string = mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8');
+                $string = html_entity_decode($data, ENT_QUOTES, 'UTF-8');
                 try {
                     $domDocument->loadHTML(
                         '<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>'
