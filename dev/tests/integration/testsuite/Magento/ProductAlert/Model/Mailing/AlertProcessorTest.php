@@ -9,13 +9,15 @@ namespace Magento\ProductAlert\Model\Mailing;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\Area;
 use Magento\Framework\Locale\Resolver;
+use Magento\Framework\Mail\EmailMessage;
 use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\Renderer\Translate as PhraseRendererTranslate;
 use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\Translate;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\StoreRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
@@ -23,11 +25,12 @@ use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
-* Test for Product Alert observer
-*
-* @magentoAppIsolation enabled
-* @magentoAppArea frontend
-*/
+ * Test for Product Alert observer
+ *
+ * @magentoAppIsolation enabled
+ * @magentoAppArea frontend
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AlertProcessorTest extends TestCase
 {
     /**
@@ -51,6 +54,11 @@ class AlertProcessorTest extends TestCase
     private $transportBuilder;
 
     /**
+     * @var DesignInterface
+     */
+    private $design;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -64,6 +72,7 @@ class AlertProcessorTest extends TestCase
         $customer = $service->authenticate('customer@example.com', 'password');
         $customerSession = $this->objectManager->get(Session::class);
         $customerSession->setCustomerDataAsLoggedIn($customer);
+        $this->design = $this->objectManager->get(DesignInterface::class);
     }
 
     /**
@@ -138,5 +147,45 @@ class AlertProcessorTest extends TestCase
 
         $this->publisher->execute($alertType, [$customerId], $websiteId);
         $this->alertProcessor->process($alertType, [$customerId], $websiteId);
+    }
+
+    /**
+     * Validate the current theme
+     *
+     * @magentoConfigFixture current_store catalog/productalert/allow_price 1
+     * @magentoDataFixture Magento/ProductAlert/_files/product_alert.php
+     */
+    public function testValidateCurrentTheme()
+    {
+        $this->design->setDesignTheme(
+            $this->objectManager->get(ThemeInterface::class)
+        );
+
+        $this->processAlerts();
+
+        $message = $this->transportBuilder->getSentMessage();
+        $messageContent = $this->getMessageRawContent($message);
+        $emailDom = new \DOMDocument();
+        $emailDom->loadHTML($messageContent);
+
+        $emailXpath = new \DOMXPath($emailDom);
+        $greeting = $emailXpath->query('//img[@class="photo image"]');
+        $this->assertStringContainsString(
+            'thumbnail.jpg',
+            $greeting->item(0)->getAttribute('src')
+        );
+        $this->assertEquals('Magento/luma', $this->design->getDesignTheme()->getCode());
+    }
+
+    /**
+     * Returns raw content of provided message
+     *
+     * @param EmailMessage $message
+     * @return string
+     */
+    private function getMessageRawContent(EmailMessage $message): string
+    {
+        $emailParts = $message->getBody()->getParts();
+        return current($emailParts)->getRawContent();
     }
 }
