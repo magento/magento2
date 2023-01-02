@@ -343,7 +343,7 @@ class Gd2 extends AbstractAdapter
         // fill image with indexed non-alpha transparency
         $transparentColor = false;
 
-        if ($transparentIndex >= 0 && $transparentIndex <= imagecolorstotal($this->_imageHandler)) {
+        if ($transparentIndex >= 0 && $transparentIndex < imagecolorstotal($this->_imageHandler)) {
             list($red, $green, $blue) = array_values(imagecolorsforindex($this->_imageHandler, $transparentIndex));
             $transparentColor = imagecolorallocate($imageResourceTo, (int) $red, (int) $green, (int) $blue);
         }
