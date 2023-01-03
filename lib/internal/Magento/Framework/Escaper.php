@@ -113,7 +113,7 @@ class Escaper
                 $this->escapeText($domDocument);
                 $this->escapeAttributeValues($domDocument);
 
-                $result = mb_convert_encoding($domDocument->saveHTML(), 'UTF-8', 'HTML-ENTITIES');
+                $result = html_entity_decode($domDocument->saveHTML(), ENT_QUOTES, 'UTF-8');
                 preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
                 return !empty($matches) ? $matches[1] : '';
             } else {
@@ -346,6 +346,7 @@ class Escaper
      * @param string $quote
      * @return string|array
      * @deprecated 101.0.0
+     * @see 6729b6e01368248abc33300208eb292c95050203
      */
     public function escapeJsQuote($data, $quote = '\'')
     {
@@ -366,6 +367,7 @@ class Escaper
      * @param string $data
      * @return string
      * @deprecated 101.0.0
+     * @see 6729b6e01368248abc33300208eb292c95050203
      */
     public function escapeXssInUrl($data)
     {
@@ -414,6 +416,7 @@ class Escaper
      * @param bool $addSlashes
      * @return string
      * @deprecated 101.0.0
+     * @see 6729b6e01368248abc33300208eb292c95050203
      */
     public function escapeQuote($data, $addSlashes = false)
     {
@@ -428,6 +431,7 @@ class Escaper
      *
      * @return \Magento\Framework\ZendEscaper
      * @deprecated 101.0.0
+     * @see 6729b6e01368248abc33300208eb292c95050203
      */
     private function getEscaper()
     {
@@ -443,6 +447,7 @@ class Escaper
      *
      * @return \Psr\Log\LoggerInterface
      * @deprecated 101.0.0
+     * @see 6729b6e01368248abc33300208eb292c95050203
      */
     private function getLogger()
     {
