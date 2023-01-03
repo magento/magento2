@@ -232,7 +232,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
                 $expectedImagesAmount = count($postData['product']['media_gallery']['images']) - $removedImagesAmount;
                 $product = $this->productRepository->getById($productId);
                 $images = $product->getMediaGallery('images');
-                if (is_array($images) && $expectedImagesAmount >= count(array_map('count', $images))) {
+                if (is_array($images) && $expectedImagesAmount >= count($images)) {
                     $this->messageManager->addNoticeMessage(
                         __('The image cannot be removed as it has been assigned to the other image role')
                     );
