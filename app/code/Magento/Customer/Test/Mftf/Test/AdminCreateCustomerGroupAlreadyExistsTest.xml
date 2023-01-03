@@ -18,6 +18,7 @@
             <testCaseId value="MC-5302"/>
             <group value="customer"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

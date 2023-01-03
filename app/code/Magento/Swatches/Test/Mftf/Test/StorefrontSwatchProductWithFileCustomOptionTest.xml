@@ -86,5 +86,6 @@
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
             <argument name="sku" value="{{BaseConfigurableProduct.sku}}"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

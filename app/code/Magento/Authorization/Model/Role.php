@@ -12,7 +12,6 @@ use Magento\Framework\Model\AbstractModel;
 /**
  * Admin Role Model
  *
- * @api
  * @method int getParentId()
  * @method Role setParentId(int $value)
  * @method int getTreeLevel()

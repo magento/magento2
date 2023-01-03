@@ -28,4 +28,8 @@
         <data key="path">customer/create_account/email_required_create_order</data>
         <data key="value">1</data>
     </entity>
+    <entity name="ChangeDefaultCheckMoneyOrderTitle">
+        <data key="path">payment/checkmo/title</data>
+        <data key="value">Test</data>
+    </entity>
 </entities>

@@ -61,7 +61,7 @@ This module introduces the following layout handles in the `view/adminhtml/layou
 - `indexer_indexer_list`
 - `indexer_indexer_list_grid`
 
-For more information about layouts in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.3/frontend-dev-guide/layouts/layout-overview.html).
+For more information about layouts in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
 
 ## Additional information
 

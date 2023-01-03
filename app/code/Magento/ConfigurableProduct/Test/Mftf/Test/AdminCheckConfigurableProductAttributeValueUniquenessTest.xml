@@ -29,7 +29,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProductAndOptions">
                 <argument name="product" value="$$createConfigProduct$$"/>
             </actionGroup>
-            <waitForPageLoad stepKey="waitForProductIndexPage"/>
+            <comment userInput="BIC workaround" stepKey="waitForProductIndexPage"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProductAttribute" stepKey="deleteAttribute"/>

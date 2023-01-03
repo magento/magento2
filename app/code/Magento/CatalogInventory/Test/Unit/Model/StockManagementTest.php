@@ -203,7 +203,7 @@ class StockManagementTest extends TestCase
      */
     public function testRegisterProductsSaleException(array $items, array $lockedItems)
     {
-        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectException('Magento\CatalogInventory\Model\StockStateException');
         $this->expectExceptionMessage('Some of the products are out of stock.');
         $this->stockResourceMock
             ->expects($this->once())

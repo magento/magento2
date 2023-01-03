@@ -37,8 +37,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
                 <argument name="sku" value="{{ApiConfigurableProduct.name}}-thisIsShortName"/>
             </actionGroup>
-            <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
-                              dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clickClearFilters"/>
             <!-- Remove attribute -->
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="productDropDownAttribute"/>
@@ -84,7 +83,7 @@
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="clickOnFilters"/>
         <fillField selector="{{AdminDataGridHeaderSection.attributeCodeFilterInput}}" userInput="{{productDropDownAttribute.attribute_code}}" stepKey="fillFilterAttributeCodeField"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickApplyFiltersButton"/>
         <click selector="{{AdminDataGridTableSection.rowCheckbox('1')}}" stepKey="clickOnFirstCheckbox"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextStep1"/>
         <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(productDropDownAttribute.attribute_code)}}" stepKey="waitForNextPageOpened"/>

@@ -16,6 +16,7 @@ use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Model\Config;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use Magento\Framework\Indexer\IndexerRegistry;
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
 
@@ -118,6 +119,10 @@ try {
         $itemResource->getMainTable(),
         'product_id = ' . $productToDelete->getId()
     );
+
+    \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(IndexerRegistry::class)
+        ->get(Magento\CatalogInventory\Model\Indexer\Stock\Processor::INDEXER_ID)
+        ->reindexAll();
 } catch (\Exception $e) {
     // Nothing to remove
 }

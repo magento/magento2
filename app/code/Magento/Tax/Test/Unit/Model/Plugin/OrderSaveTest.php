@@ -50,17 +50,19 @@ class OrderSaveTest extends TestCase
      */
     protected $model;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->orderTaxFactoryMock = $this->getMockBuilder(
-            TaxFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
+        $this->orderTaxFactoryMock = $this->getMockBuilder(TaxFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->taxItemFactoryMock = $this->getMockBuilder(ItemFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->subjectMock = $this->getMockForAbstractClass(OrderRepositoryInterface::class);
 
@@ -69,7 +71,7 @@ class OrderSaveTest extends TestCase
             OrderSave::class,
             [
                 'orderTaxFactory' => $this->orderTaxFactoryMock,
-                'taxItemFactory' => $this->taxItemFactoryMock,
+                'taxItemFactory' => $this->taxItemFactoryMock
             ]
         );
     }
@@ -77,19 +79,24 @@ class OrderSaveTest extends TestCase
     /**
      * @return MockObject
      */
-    protected function setupOrderMock()
+    protected function setupOrderMock(): MockObject
     {
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getExtensionAttributes',
-                    'getAppliedTaxIsSaved',
                     'getItemByQuoteItemId',
-                    'setAppliedTaxIsSaved',
-                    'getEntityId',
+                    'getEntityId'
                 ]
-            )->getMock();
+            )
+            ->addMethods(
+                [
+                    'getAppliedTaxIsSaved',
+                    'setAppliedTaxIsSaved'
+                ]
+            )
+            ->getMock();
 
         return $orderMock;
     }
@@ -97,37 +104,36 @@ class OrderSaveTest extends TestCase
     /**
      * @return MockObject
      */
-    protected function setupExtensionAttributeMock()
+    protected function setupExtensionAttributeMock(): MockObject
     {
         $orderExtensionAttributeMock = $this->getMockBuilder(OrderExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 [
                     'getAppliedTaxes',
                     'getConvertingFromQuote',
-                    'getItemAppliedTaxes',
+                    'getItemAppliedTaxes'
                 ]
-            )->getMockForAbstractClass();
+            )
+            ->getMockForAbstractClass();
 
         return $orderExtensionAttributeMock;
     }
 
     /**
      * @param $expectedTaxes
+     *
+     * @return void
      */
-    protected function verifyOrderTaxes($expectedTaxes)
+    protected function verifyOrderTaxes($expectedTaxes): void
     {
-        $index = 0;
+        $willReturnArgs = [];
+
         foreach ($expectedTaxes as $orderTaxId => $orderTaxData) {
             $orderTaxMock = $this->getMockBuilder(Tax::class)
                 ->disableOriginalConstructor()
-                ->setMethods(
-                    [
-                        'getTaxId',
-                        'setData',
-                        'save',
-                    ]
-                )->getMock();
+                ->onlyMethods(['setData', 'save'])
+                ->addMethods(['getTaxId'])->getMock();
             $orderTaxMock->expects($this->once())
                 ->method('setData')
                 ->with($orderTaxData)
@@ -138,28 +144,26 @@ class OrderSaveTest extends TestCase
             $orderTaxMock->expects($this->atLeastOnce())
                 ->method('getTaxId')
                 ->willReturn($orderTaxId);
-            $this->orderTaxFactoryMock->expects($this->at($index))
-                ->method('create')
-                ->willReturn($orderTaxMock);
-            $index++;
+            $willReturnArgs[] = $orderTaxMock;
         }
+        $this->orderTaxFactoryMock
+            ->method('create')
+            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
     }
 
     /**
      * @param $expectedItemTaxes
+     *
+     * @return void
      */
-    public function verifyItemTaxes($expectedItemTaxes)
+    public function verifyItemTaxes($expectedItemTaxes): void
     {
-        $index = 0;
+        $willReturnArgs = [];
+
         foreach ($expectedItemTaxes as $itemTax) {
             $itemTaxMock = $this->getMockBuilder(Item::class)
                 ->disableOriginalConstructor()
-                ->setMethods(
-                    [
-                        'setData',
-                        'save',
-                    ]
-                )->getMock();
+                ->onlyMethods(['setData', 'save'])->getMock();
             $itemTaxMock->expects($this->once())
                 ->method('setData')
                 ->with($itemTax)
@@ -167,23 +171,24 @@ class OrderSaveTest extends TestCase
             $itemTaxMock->expects($this->once())
                 ->method('save')
                 ->willReturnSelf();
-            $this->taxItemFactoryMock->expects($this->at($index))
-                ->method('create')
-                ->willReturn($itemTaxMock);
-            $index++;
+            $willReturnArgs[] = $itemTaxMock;
         }
+        $this->taxItemFactoryMock
+            ->method('create')
+            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
     }
 
     /**
-     * Test for order afterSave
+     * Test for order afterSave.
      *
-     * @dataProvider afterSaveDataProvider
      * @param array $appliedTaxes
      * @param array $itemAppliedTaxes
      * @param array $expectedTaxes
      * @param array $expectedItemTaxes
      * @param int|null $itemId
+     *
      * @return void
+     * @dataProvider afterSaveDataProvider
      */
     public function testAfterSave(
         array $appliedTaxes,
@@ -204,7 +209,7 @@ class OrderSaveTest extends TestCase
 
         $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMock();
         $orderItemMock->method('getId')
             ->willReturn($itemId);
@@ -229,7 +234,7 @@ class OrderSaveTest extends TestCase
     }
 
     /**
-     * After save data provider
+     * After save data provider.
      *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -252,15 +257,15 @@ class OrderSaveTest extends TestCase
                                 [
                                     'percent' => 6,
                                     'code' => 'IL',
-                                    'title' => 'IL',
+                                    'title' => 'IL'
                                 ],
                                 [
                                     'percent' => 5,
                                     'code' => 'US',
-                                    'title' => 'US',
-                                ],
+                                    'title' => 'US'
+                                ]
                             ]
-                        ],
+                        ]
                     ],
                     [
                         'amount' => 0.2,
@@ -272,11 +277,11 @@ class OrderSaveTest extends TestCase
                                 [
                                     'percent' => 3,
                                     'code' => 'CityTax',
-                                    'title' => 'CityTax',
-                                ],
+                                    'title' => 'CityTax'
+                                ]
                             ]
-                        ],
-                    ],
+                        ]
+                    ]
                 ],
                 'item_applied_taxes' => [
                     //item tax, three tax rates
@@ -296,15 +301,15 @@ class OrderSaveTest extends TestCase
                                         [
                                             'percent' => 6,
                                             'code' => 'IL',
-                                            'title' => 'IL',
+                                            'title' => 'IL'
                                         ],
                                         [
                                             'percent' => 5,
                                             'code' => 'US',
-                                            'title' => 'US',
-                                        ],
+                                            'title' => 'US'
+                                        ]
                                     ]
-                                ],
+                                ]
                             ],
                             //city tax
                             [
@@ -317,12 +322,12 @@ class OrderSaveTest extends TestCase
                                         [
                                             'percent' => 3,
                                             'code' => 'CityTax',
-                                            'title' => 'CityTax',
-                                        ],
+                                            'title' => 'CityTax'
+                                        ]
                                     ]
-                                ],
-                            ],
-                        ],
+                                ]
+                            ]
+                        ]
                     ],
                     //shipping tax
                     [
@@ -341,15 +346,15 @@ class OrderSaveTest extends TestCase
                                         [
                                             'percent' => 6,
                                             'code' => 'IL',
-                                            'title' => 'IL',
+                                            'title' => 'IL'
                                         ],
                                         [
                                             'percent' => 5,
                                             'code' => 'US',
-                                            'title' => 'US',
-                                        ],
+                                            'title' => 'US'
+                                        ]
                                     ]
-                                ],
+                                ]
                             ],
                             //city tax
                             [
@@ -362,13 +367,13 @@ class OrderSaveTest extends TestCase
                                         [
                                             'percent' => 3,
                                             'code' => 'CityTax',
-                                            'title' => 'CityTax',
-                                        ],
+                                            'title' => 'CityTax'
+                                        ]
                                     ]
-                                ],
-                            ],
-                        ],
-                    ],
+                                ]
+                            ]
+                        ]
+                    ]
                 ],
                 'expected_order_taxes' => [
                     //state tax
@@ -383,7 +388,7 @@ class OrderSaveTest extends TestCase
                         'amount' => 0.66,
                         'base_amount' => 0.66,
                         'process' => 0,
-                        'base_real_amount' => 0.36,
+                        'base_real_amount' => 0.36
                     ],
                     //federal tax
                     '36' => [
@@ -397,7 +402,7 @@ class OrderSaveTest extends TestCase
                         'amount' => 0.66, //combined amount
                         'base_amount' => 0.66,
                         'process' => 0,
-                        'base_real_amount' => 0.3, //portion for specific rate
+                        'base_real_amount' => 0.3 //portion for specific rate
                     ],
                     //city tax
                     '37' => [
@@ -411,8 +416,8 @@ class OrderSaveTest extends TestCase
                         'amount' => 0.2, //combined amount
                         'base_amount' => 0.2,
                         'process' => 0,
-                        'base_real_amount' => 0.18018018018018, //this number is meaningless since this is single rate
-                    ],
+                        'base_real_amount' => 0.18018018018018 //this number is meaningless since this is single rate
+                    ]
                 ],
                 'expected_item_taxes' => [
                     [
@@ -425,7 +430,7 @@ class OrderSaveTest extends TestCase
                         'base_amount' => 0.11,
                         'real_amount' => 0.06,
                         'real_base_amount' => 0.06,
-                        'taxable_item_type' => 'product',
+                        'taxable_item_type' => 'product'
                     ],
                     [
                         //state tax for shipping
@@ -437,7 +442,7 @@ class OrderSaveTest extends TestCase
                         'base_amount' => 0.55,
                         'real_amount' => 0.3,
                         'real_base_amount' => 0.3,
-                        'taxable_item_type' => 'shipping',
+                        'taxable_item_type' => 'shipping'
                     ],
                     [
                         //federal tax for item
@@ -449,7 +454,7 @@ class OrderSaveTest extends TestCase
                         'base_amount' => 0.11,
                         'real_amount' => 0.05,
                         'real_base_amount' => 0.05,
-                        'taxable_item_type' => 'product',
+                        'taxable_item_type' => 'product'
                     ],
                     [
                         //federal tax for shipping
@@ -461,7 +466,7 @@ class OrderSaveTest extends TestCase
                         'base_amount' => 0.55,
                         'real_amount' => 0.25,
                         'real_base_amount' => 0.25,
-                        'taxable_item_type' => 'shipping',
+                        'taxable_item_type' => 'shipping'
                     ],
                     [
                         //city tax for item
@@ -473,7 +478,7 @@ class OrderSaveTest extends TestCase
                         'base_amount' => 0.03,
                         'real_amount' => 0.03,
                         'real_base_amount' => 0.03,
-                        'taxable_item_type' => 'product',
+                        'taxable_item_type' => 'product'
                     ],
                     [
                         //city tax for shipping
@@ -485,10 +490,10 @@ class OrderSaveTest extends TestCase
                         'base_amount' => 0.17,
                         'real_amount' => 0.17,
                         'real_base_amount' => 0.17,
-                        'taxable_item_type' => 'shipping',
-                    ],
+                        'taxable_item_type' => 'shipping'
+                    ]
                 ],
-                'item_id' => self::ORDER_ITEM_ID,
+                'item_id' => self::ORDER_ITEM_ID
             ],
             'associated_item_with_empty_order_quote_item' => [
                 'applied_taxes' => [
@@ -502,15 +507,15 @@ class OrderSaveTest extends TestCase
                                 [
                                     'percent' => 6,
                                     'code' => 'IL',
-                                    'title' => 'IL',
+                                    'title' => 'IL'
                                 ],
                                 [
                                     'percent' => 5,
                                     'code' => 'US',
-                                    'title' => 'US',
-                                ],
+                                    'title' => 'US'
+                                ]
                             ]
-                        ],
+                        ]
                     ],
                     [
                         'amount' => 0.2,
@@ -522,11 +527,11 @@ class OrderSaveTest extends TestCase
                                 [
                                     'percent' => 3,
                                     'code' => 'CityTax',
-                                    'title' => 'CityTax',
-                                ],
+                                    'title' => 'CityTax'
+                                ]
                             ]
-                        ],
-                    ],
+                        ]
+                    ]
                 ],
                 'item_applied_taxes' => [
                     //item tax, three tax rates
@@ -546,15 +551,15 @@ class OrderSaveTest extends TestCase
                                         [
                                             'percent' => 6,
                                             'code' => 'IL',
-                                            'title' => 'IL',
+                                            'title' => 'IL'
                                         ],
                                         [
                                             'percent' => 5,
                                             'code' => 'US',
-                                            'title' => 'US',
-                                        ],
+                                            'title' => 'US'
+                                        ]
                                     ]
-                                ],
+                                ]
                             ],
                             //city tax
                             [
@@ -567,12 +572,12 @@ class OrderSaveTest extends TestCase
                                         [
                                             'percent' => 3,
                                             'code' => 'CityTax',
-                                            'title' => 'CityTax',
-                                        ],
+                                            'title' => 'CityTax'
+                                        ]
                                     ]
-                                ],
-                            ],
-                        ],
+                                ]
+                            ]
+                        ]
                     ],
                     //shipping tax
                     [
@@ -591,15 +596,15 @@ class OrderSaveTest extends TestCase
                                         [
                                             'percent' => 6,
                                             'code' => 'IL',
-                                            'title' => 'IL',
+                                            'title' => 'IL'
                                         ],
                                         [
                                             'percent' => 5,
                                             'code' => 'US',
-                                            'title' => 'US',
-                                        ],
+                                            'title' => 'US'
+                                        ]
                                     ]
-                                ],
+                                ]
                             ],
                             //city tax
                             [
@@ -612,13 +617,13 @@ class OrderSaveTest extends TestCase
                                         [
                                             'percent' => 3,
                                             'code' => 'CityTax',
-                                            'title' => 'CityTax',
-                                        ],
+                                            'title' => 'CityTax'
+                                        ]
                                     ]
-                                ],
-                            ],
-                        ],
-                    ],
+                                ]
+                            ]
+                        ]
+                    ]
                 ],
                 'expected_order_taxes' => [
                     //state tax
@@ -633,7 +638,7 @@ class OrderSaveTest extends TestCase
                         'amount' => 0.66,
                         'base_amount' => 0.66,
                         'process' => 0,
-                        'base_real_amount' => 0.36,
+                        'base_real_amount' => 0.36
                     ],
                     //federal tax
                     '36' => [
@@ -647,7 +652,7 @@ class OrderSaveTest extends TestCase
                         'amount' => 0.66, //combined amount
                         'base_amount' => 0.66,
                         'process' => 0,
-                        'base_real_amount' => 0.3, //portion for specific rate
+                        'base_real_amount' => 0.3 //portion for specific rate
                     ],
                     //city tax
                     '37' => [
@@ -661,8 +666,8 @@ class OrderSaveTest extends TestCase
                         'amount' => 0.2, //combined amount
                         'base_amount' => 0.2,
                         'process' => 0,
-                        'base_real_amount' => 0.18018018018018, //this number is meaningless since this is single rate
-                    ],
+                        'base_real_amount' => 0.18018018018018 //this number is meaningless since this is single rate
+                    ]
                 ],
                 'expected_item_taxes' => [
                     [
@@ -675,7 +680,7 @@ class OrderSaveTest extends TestCase
                         'base_amount' => 0.11,
                         'real_amount' => 0.06,
                         'real_base_amount' => 0.06,
-                        'taxable_item_type' => 'product',
+                        'taxable_item_type' => 'product'
                     ],
                     [
                         //state tax for shipping
@@ -687,7 +692,7 @@ class OrderSaveTest extends TestCase
                         'base_amount' => 0.55,
                         'real_amount' => 0.3,
                         'real_base_amount' => 0.3,
-                        'taxable_item_type' => 'shipping',
+                        'taxable_item_type' => 'shipping'
                     ],
                     [
                         //federal tax for item
@@ -699,7 +704,7 @@ class OrderSaveTest extends TestCase
                         'base_amount' => 0.11,
                         'real_amount' => 0.05,
                         'real_base_amount' => 0.05,
-                        'taxable_item_type' => 'product',
+                        'taxable_item_type' => 'product'
                     ],
                     [
                         //federal tax for shipping
@@ -711,7 +716,7 @@ class OrderSaveTest extends TestCase
                         'base_amount' => 0.55,
                         'real_amount' => 0.25,
                         'real_base_amount' => 0.25,
-                        'taxable_item_type' => 'shipping',
+                        'taxable_item_type' => 'shipping'
                     ],
                     [
                         //city tax for item
@@ -723,7 +728,7 @@ class OrderSaveTest extends TestCase
                         'base_amount' => 0.03,
                         'real_amount' => 0.03,
                         'real_base_amount' => 0.03,
-                        'taxable_item_type' => 'product',
+                        'taxable_item_type' => 'product'
                     ],
                     [
                         //city tax for shipping
@@ -735,11 +740,11 @@ class OrderSaveTest extends TestCase
                         'base_amount' => 0.17,
                         'real_amount' => 0.17,
                         'real_base_amount' => 0.17,
-                        'taxable_item_type' => 'shipping',
-                    ],
+                        'taxable_item_type' => 'shipping'
+                    ]
                 ],
-                'item_id' => null,
-            ],
+                'item_id' => null
+            ]
         ];
     }
 }

@@ -36,11 +36,12 @@ use Psr\Log\LoggerInterface;
  */
 class IndexBuilder
 {
-    const SECONDS_IN_DAY = 86400;
+    public const SECONDS_IN_DAY = 86400;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
      * @deprecated 101.0.0
+     * @see MAGETWO-64518
      * @since 100.1.0
      */
     protected $metadataPool;
@@ -52,6 +53,7 @@ class IndexBuilder
      *
      * @var array
      * @deprecated 101.0.0
+     * @see MAGETWO-38167
      */
     protected $_catalogRuleGroupWebsiteColumnsList = ['rule_id', 'customer_group_id', 'website_id'];
 
@@ -257,9 +259,8 @@ class IndexBuilder
      * Reindex by id
      *
      * @param int $id
-     * @throws LocalizedException
      * @return void
-     * @api
+     * @throws LocalizedException
      */
     public function reindexById($id)
     {
@@ -287,7 +288,6 @@ class IndexBuilder
      * @param array $ids
      * @throws LocalizedException
      * @return void
-     * @api
      */
     public function reindexByIds(array $ids)
     {
@@ -331,7 +331,6 @@ class IndexBuilder
      *
      * @throws LocalizedException
      * @return void
-     * @api
      */
     public function reindexFull()
     {

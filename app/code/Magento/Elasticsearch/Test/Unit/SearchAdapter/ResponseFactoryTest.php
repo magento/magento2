@@ -39,21 +39,17 @@ class ResponseFactoryTest extends TestCase
     private $objectManager;
 
     /**
-     * Set up test environment.
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->documentFactory = $this->getMockBuilder(DocumentFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->aggregationFactory = $this->getMockBuilder(
-            AggregationFactory::class
-        )
-            ->setMethods(['create'])
+        $this->aggregationFactory = $this->getMockBuilder(AggregationFactory::class)
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -70,20 +66,47 @@ class ResponseFactoryTest extends TestCase
         );
     }
 
-    public function testCreate()
+    /**
+     * @return void
+     */
+    public function testCreate(): void
     {
         $documents = [
-            ['title' => 'oneTitle', 'description' => 'oneDescription'],
-            ['title' => 'twoTitle', 'description' => 'twoDescription'],
+            [
+                'title' => 'oneTitle',
+                'description' => 'oneDescription',
+                'fields' => [
+                    '_id' => ['1']
+                ]
+            ],
+            [
+                'title' => 'twoTitle',
+                'description' => 'twoDescription',
+                'fields' => [
+                    '_id' => ['2']
+                ]
+            ]
+        ];
+        $modifiedDocuments = [
+            [
+                'title' => 'oneTitle',
+                'description' => 'oneDescription',
+                '_id' => '1'
+            ],
+            [
+                'title' => 'twoTitle',
+                'description' => 'twoDescription',
+                '_id' => '2'
+            ]
         ];
         $aggregations = [
             'aggregation1' => [
                 'itemOne' => 10,
-                'itemTwo' => 20,
+                'itemTwo' => 20
             ],
             'aggregation2' => [
                 'itemOne' => 5,
-                'itemTwo' => 45,
+                'itemTwo' => 45
             ]
         ];
         $rawResponse = ['documents' => $documents, 'aggregations' => $aggregations, 'total' => 2];
@@ -92,11 +115,11 @@ class ResponseFactoryTest extends TestCase
             'documents' => [
                 [
                     ['name' => 'title', 'value' => 'oneTitle'],
-                    ['name' => 'description', 'value' => 'oneDescription'],
+                    ['name' => 'description', 'value' => 'oneDescription']
                 ],
                 [
                     ['name' => 'title', 'value' => 'twoTitle'],
-                    ['name' => 'description', 'value' => 'twoDescription'],
+                    ['name' => 'description', 'value' => 'twoDescription']
                 ],
             ],
             'aggregations' => [
@@ -109,17 +132,16 @@ class ResponseFactoryTest extends TestCase
                     'itemTwo' => 45
                 ],
             ],
-            'total' => 2,
+            'total' => 2
         ];
 
-        $this->documentFactory->expects($this->at(0))->method('create')
-            ->with($documents[0])
-            ->willReturn('document1');
-        $this->documentFactory->expects($this->at(1))->method('create')
-            ->with($documents[1])
-            ->willReturn('document2');
+        $this->documentFactory
+            ->method('create')
+            ->withConsecutive([$modifiedDocuments[0]], [$modifiedDocuments[1]])
+            ->willReturnOnConsecutiveCalls('document1', 'document2');
 
-        $this->aggregationFactory->expects($this->at(0))->method('create')
+        $this->aggregationFactory
+            ->method('create')
             ->with($exceptedResponse['aggregations'])
             ->willReturn('aggregationsData');
 

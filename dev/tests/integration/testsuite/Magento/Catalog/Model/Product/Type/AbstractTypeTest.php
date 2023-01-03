@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Type;
 
+use Laminas\File\Transfer\Adapter\Http;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
@@ -650,29 +651,26 @@ class AbstractTypeTest extends TestCase
         $uploaderMock = $this->getPreparedUploader();
         /** @var FileTransferFactory $httpFactory */
         $httpFactoryMock = $this->createPartialMock(FileTransferFactory::class, ['create']);
-        $httpFactoryMock->expects($this->at(0))
+        $httpFactoryMock
             ->method('create')
-            ->willReturn($uploaderMock);
-        $httpFactoryMock->expects($this->at(1))
-            ->method('create')
-            ->willReturn(clone $uploaderMock);
+            ->willReturnOnConsecutiveCalls($uploaderMock, clone $uploaderMock);
         $this->objectManager->addSharedInstance($httpFactoryMock, FileTransferFactory::class);
     }
 
     /**
      * Create prepared uploader instance for test
      *
-     * @return \Zend_File_Transfer_Adapter_Http
+     * @return Http
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    private function getPreparedUploader(): \Zend_File_Transfer_Adapter_Http
+    private function getPreparedUploader(): Http
     {
-        $uploader = new \Zend_File_Transfer_Adapter_Http();
+        $uploader = new Http();
         $refObject = new \ReflectionObject($uploader);
-        $validators = $refObject->getProperty('_validators');
+        $validators = $refObject->getProperty('validators');
         $validators->setAccessible(true);
         $validators->setValue($uploader, []);
-        $files = $refObject->getProperty('_files');
+        $files = $refObject->getProperty('files');
         $files->setAccessible(true);
         $filesValues = $files->getValue($uploader);
         foreach (array_keys($filesValues) as $value) {

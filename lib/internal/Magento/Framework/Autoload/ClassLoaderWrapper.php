@@ -28,7 +28,7 @@ class ClassLoaderWrapper implements AutoloaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addPsr4($nsPrefix, $paths, $prepend = false)
     {
@@ -36,7 +36,7 @@ class ClassLoaderWrapper implements AutoloaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addPsr0($nsPrefix, $paths, $prepend = false)
     {
@@ -44,7 +44,7 @@ class ClassLoaderWrapper implements AutoloaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPsr0($nsPrefix, $paths)
     {
@@ -52,7 +52,7 @@ class ClassLoaderWrapper implements AutoloaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPsr4($nsPrefix, $paths)
     {
@@ -60,7 +60,8 @@ class ClassLoaderWrapper implements AutoloaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @codeCoverageIgnore
      */
     public function loadClass($className)
@@ -69,7 +70,8 @@ class ClassLoaderWrapper implements AutoloaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @codeCoverageIgnore
      */
     public function findFile($className)
@@ -78,7 +80,7 @@ class ClassLoaderWrapper implements AutoloaderInterface
          * Composer remembers that files don't exist even after they are generated. This clears the entry for
          * $className so we can check the filesystem again for class existence.
          */
-        if ($className[0] === '\\') {
+        if ($className && $className[0] === '\\') {
             $className = substr($className, 1);
         }
         $this->autoloader->addClassMap([$className => null]);
