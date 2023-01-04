@@ -6,17 +6,14 @@
 
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
-use Magento\AsyncConfig\Api\AsyncConfigPublisherInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Config\Controller\Adminhtml\System\AbstractConfig;
-use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
  * System Configuration Save Controller
  *
- * @author Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends AbstractConfig implements HttpPostActionInterface
@@ -39,26 +36,12 @@ class Save extends AbstractConfig implements HttpPostActionInterface
     protected $string;
 
     /**
-     * @var DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
-     * @var AsyncConfigPublisherInterface
-     */
-    private $asyncConfigPublisher;
-
-    public const ASYNC_CONFIG_OPTION_PATH = 'config/async';
-
-    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Config\Model\Config\Structure $configStructure
      * @param \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker
      * @param \Magento\Config\Model\Config\Factory $configFactory
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Framework\Stdlib\StringUtils $string
-     * @param DeploymentConfig|null $deploymentConfig
-     * @param AsyncConfigPublisherInterface|null $asyncConfigPublisher
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -66,18 +49,12 @@ class Save extends AbstractConfig implements HttpPostActionInterface
         \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker,
         \Magento\Config\Model\Config\Factory $configFactory,
         \Magento\Framework\Cache\FrontendInterface $cache,
-        \Magento\Framework\Stdlib\StringUtils $string,
-        DeploymentConfig $deploymentConfig = null,
-        AsyncConfigPublisherInterface $asyncConfigPublisher = null
+        \Magento\Framework\Stdlib\StringUtils $string
     ) {
         parent::__construct($context, $configStructure, $sectionChecker);
         $this->_configFactory = $configFactory;
         $this->_cache = $cache;
         $this->string = $string;
-        $this->deploymentConfig = $deploymentConfig
-            ?? ObjectManager::getInstance()->get(DeploymentConfig::class);
-        $this->asyncConfigPublisher = $asyncConfigPublisher
-            ?? ObjectManager::getInstance()->get(AsyncConfigPublisherInterface::class);
     }
 
     /**
@@ -243,33 +220,30 @@ class Save extends AbstractConfig implements HttpPostActionInterface
                 'store' => $store,
                 'groups' => $this->_getGroupsForSave(),
             ];
+            $configData = $this->filterNodes($configData);
+
             $groups = $this->getRequest()->getParam('groups');
 
             if (isset($groups['country']['fields'])) {
                 if (isset($groups['country']['fields']['eu_countries'])) {
                     $countries = $groups['country']['fields']['eu_countries'];
                     if (empty($countries['value']) &&
-                    !isset($countries['inherit'])) {
+                        !isset($countries['inherit'])) {
                         throw new LocalizedException(
                             __('Something went wrong while saving this configuration.')
                         );
                     }
                 }
             }
-            if (!$this->deploymentConfig->get(self::ASYNC_CONFIG_OPTION_PATH)) {
-                $configData = $this->filterNodes($configData);
-                /** @var \Magento\Config\Model\Config $configModel */
-                $configModel = $this->_configFactory->create(['data' => $configData]);
-                $configModel->save();
-                $this->messageManager->addSuccess(__('You saved the configuration.'));
-            } else {
-                $this->asyncConfigPublisher->saveConfigData($configData);
-                $this->messageManager->addSuccess(__('Configuration changes will be applied by consumer soon.'));
-            }
+
+            /** @var \Magento\Config\Model\Config $configModel */
+            $configModel = $this->_configFactory->create(['data' => $configData]);
+            $configModel->save();
             $this->_eventManager->dispatch(
                 'admin_system_config_save',
                 ['configData' => $configData, 'request' => $this->getRequest()]
             );
+            $this->messageManager->addSuccess(__('You saved the configuration.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $messages = explode("\n", $e->getMessage());
             foreach ($messages as $message) {
@@ -285,7 +259,6 @@ class Save extends AbstractConfig implements HttpPostActionInterface
         $this->_saveState($this->getRequest()->getPost('config_state'));
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-
         return $resultRedirect->setPath(
             'adminhtml/system_config/edit',
             [

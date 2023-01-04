@@ -13,8 +13,7 @@
         "magento/module-directory": "*",
         "magento/module-email": "*",
         "magento/module-media-storage": "*",
-        "magento/module-store": "*",
-        "magento/module-async-config": "*"
+        "magento/module-store": "*"
     },
     "type": "magento2-module",
     "license": [
