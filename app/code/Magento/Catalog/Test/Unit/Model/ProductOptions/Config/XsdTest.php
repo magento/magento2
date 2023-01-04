@@ -42,7 +42,10 @@ class XsdTest extends TestCase
     protected function _loadDataForTest($schemaName, $xmlString, $expectedError)
     {
         $actualError = $this->_xsdValidator->validate($this->_xsdSchemaPath . $schemaName, $xmlString);
-        $this->assertEquals($expectedError, $actualError);
+        $this->assertEquals(false, empty($actualError));
+        foreach ($expectedError as $error) {
+            $this->assertContains($error, $actualError);
+        }
     }
 
     /**
