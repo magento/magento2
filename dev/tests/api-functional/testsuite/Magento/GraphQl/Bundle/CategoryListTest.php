@@ -20,7 +20,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class CategoryListTest extends GraphQlAbstract
 {
     #[
-        ConfigFixture(CatalogInventoryConfiguration::XML_PATH_SHOW_OUT_OF_STOCK, '1'),
+        ConfigFixture(CatalogInventoryConfiguration::XML_PATH_SHOW_OUT_OF_STOCK, '1', 'store', 'default'),
         DataFixture(CategoryFixture::class, ['url_path' => 'cat1'], 'cat1'),
         DataFixture(ProductFixture::class, ['sku' => 's1', 'stock_item' => ['is_in_stock' => false]], 's1'),
         DataFixture(ProductFixture::class, ['sku' => 's2'], 's2'),
