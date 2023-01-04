@@ -77,9 +77,6 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="catalogInventoryAfterLoad" type="Magento\CatalogInventory\Model\Plugin\AfterProductLoad"/>
     </type>
-    <type name="Magento\Catalog\Model\ResourceModel\Product\Collection">
-        <plugin name="add_stock_items" type="Magento\CatalogInventory\Model\Plugin\AddStockItemsProducts"/>
-    </type>
     <type name="Magento\Catalog\Model\Product\Action">
         <plugin name="ReindexUpdatedProducts" type="Magento\CatalogInventory\Model\Plugin\ReindexUpdatedProducts"/>
     </type>
