@@ -143,7 +143,7 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                     }
                 }
             }
-            $this->links->saveLinksData($linksData);
+            $this->links->saveLinksData($linksData, $this->_entityModel);
         }
         return $this;
     }

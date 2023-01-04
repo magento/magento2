@@ -18,6 +18,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-25681"/>
             <group value="SearchEngine"/>
+           <skip>
+            <issueId value="ACQE-4352"/>
+        </skip>
         </annotations>
         <before>
             <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
