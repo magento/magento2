@@ -36,8 +36,8 @@
         </after>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
-        <click selector="{{AdminProductAttributeSetGridSection.AttributeSetName('Default')}}" stepKey="chooseDefaultAttributeSet"/>
-        <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
+        <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="chooseDefaultAttributeSet"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAttributeSetPageLoad"/>
         <dragAndDrop selector1="{{UnassignedAttributes.ProductAttributeName('testattribute')}}" selector2="{{Group.FolderName('Product Details')}}" stepKey="moveProductAttributeToGroup"/>
         <click selector="{{AttributeSetSection.Save}}" stepKey="saveAttributeSet"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />

@@ -41,8 +41,10 @@
         <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="$$createAttributeSet.attribute_set_name$$" stepKey="fillAttributeSetName"/>
         <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickOnSearchButton"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <click selector="{{AdminProductAttributeSetGridSection.AttributeSetName($$createAttributeSet.attribute_set_name$$)}}" stepKey="clickOnAttributeSet"/>
-        <waitForPageLoad stepKey="waitForAttributeSetEditPageToLoad"/>
+        <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="clickOnAttributeSet">
+            <argument name="attributeSetName" value="$$createAttributeSet.attribute_set_name$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAttributeSetEditPageToLoad"/>
         <!--Assign Attribute to the Group and save the attribute set -->
         <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttribute">
             <argument name="group" value="Product Details"/>
@@ -71,8 +73,10 @@
         <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="$$createAttributeSet.attribute_set_name$$" stepKey="fillAttributeSetName1"/>
         <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickOnSearchButton1"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
-        <click selector="{{AdminProductAttributeSetGridSection.AttributeSetName($$createAttributeSet.attribute_set_name$$)}}" stepKey="clickOnAttributeSet1"/>
-        <waitForPageLoad stepKey="waitForAttributeSetEditPageToLoad1"/>
+        <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="clickOnAttributeSet1">
+            <argument name="attributeSetName" value="$$createAttributeSet.attribute_set_name$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAttributeSetEditPageToLoad1"/>
         <dontSee userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="dontSeeAttributeInAttributeGroupTree"/>
         <dontSee userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="dontSeeAttributeInUnassignedAttributeTree"/>
     </test>
