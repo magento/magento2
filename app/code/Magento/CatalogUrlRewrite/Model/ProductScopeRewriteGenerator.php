@@ -166,7 +166,7 @@ class ProductScopeRewriteGenerator
                 } else {
                     $scopedProduct = $this->productRepository->getById($productId, false, $id);
                     $mergeDataProvider->merge(
-                        $this->generateForSpecificStoreView($id, $productCategories, $scopedProduct, $rootCategoryId, true)
+                        $this->generateForSpecificStoreView($id, $productCategories, $scopedProduct, $rootCategoryId)
                     );
                 }
             }
