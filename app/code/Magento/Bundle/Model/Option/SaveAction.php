@@ -11,6 +11,7 @@ use Exception;
 use Magento\Bundle\Api\Data\LinkInterface;
 use Magento\Bundle\Api\Data\OptionInterface;
 use Magento\Bundle\Api\ProductLinkManagementInterface;
+use Magento\Bundle\Api\ProductAddChildrenInterface;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Model\ResourceModel\Option;
 use Magento\Bundle\Model\ResourceModel\Option\Collection;
@@ -49,11 +50,17 @@ class SaveAction
     private $linkManagement;
 
     /**
+     * @var ProductAddChildrenInterface
+     */
+    private $addChildren;
+
+    /**
      * @param Option $optionResource
      * @param MetadataPool $metadataPool
      * @param Type $type
      * @param ProductLinkManagementInterface $linkManagement
      * @param StoreManagerInterface|null $storeManager
+     * @param ProductAddChildrenInterface|null $addChildren
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -61,12 +68,14 @@ class SaveAction
         MetadataPool $metadataPool,
         Type $type,
         ProductLinkManagementInterface $linkManagement,
-        ?StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null,
+        ?ProductAddChildrenInterface $addChildren = null
     ) {
         $this->optionResource = $optionResource;
         $this->metadataPool = $metadataPool;
         $this->type = $type;
         $this->linkManagement = $linkManagement;
+        $this->addChildren = $addChildren;
     }
 
     /**
@@ -204,9 +213,7 @@ class SaveAction
                 $linkedProduct->getSku()
             );
         }
-        foreach ($linksToAdd as $linkedProduct) {
-            $this->linkManagement->addChild($product, $option->getOptionId(), $linkedProduct);
-        }
+        $this->addChildren->addChildren($product, $option->getOptionId(), $linksToAdd);
     }
 
     /**

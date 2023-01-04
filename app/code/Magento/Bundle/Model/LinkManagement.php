@@ -10,6 +10,7 @@ namespace Magento\Bundle\Model;
 use Magento\Bundle\Api\Data\LinkInterface;
 use Magento\Bundle\Api\Data\LinkInterfaceFactory;
 use Magento\Bundle\Api\Data\OptionInterface;
+use Magento\Bundle\Api\ProductAddChildrenInterface;
 use Magento\Bundle\Api\ProductLinkManagementInterface;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Model\ResourceModel\Bundle;
@@ -30,7 +31,7 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LinkManagement implements ProductLinkManagementInterface
+class LinkManagement implements ProductLinkManagementInterface, ProductAddChildrenInterface
 {
     /**
      * @var ProductRepositoryInterface
@@ -368,6 +369,81 @@ class LinkManagement implements ProductLinkManagementInterface
         }
 
         return (int)$selectionModel->getId();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function addChildren(
+        ProductInterface $product,
+        int $optionId,
+        array $linkedProducts
+    ) : void {
+        if ($product->getTypeId() != Product\Type::TYPE_BUNDLE) {
+            throw new InputException(
+                __('The product with the "%1" SKU isn\'t a bundle product.', $product->getSku())
+            );
+        }
+
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $options = $this->optionCollection->create();
+        $options->setIdFilter($optionId);
+        $options->setProductLinkFilter($product->getData($linkField));
+        $existingOption = $options->getFirstItem();
+
+        if (!$existingOption->getId()) {
+            throw new InputException(
+                __(
+                    'Product with specified sku: "%1" does not contain option: "%2"',
+                    [$product->getSku(), $optionId]
+                )
+            );
+        }
+
+        /* @var $resource Bundle */
+        $resource = $this->bundleFactory->create();
+        $selections = $resource->getSelectionsData($product->getData($linkField));
+
+        foreach ($linkedProducts as $linkedProduct) {
+            $linkProductModel = $this->productRepository->get($linkedProduct->getSku());
+            if ($linkProductModel->isComposite()) {
+                throw new InputException(__('The bundle product can\'t contain another composite product.'));
+            }
+
+            if ($selections) {
+                foreach ($selections as $selection) {
+                    if ($selection['option_id'] == $optionId &&
+                        $selection['product_id'] == $linkProductModel->getEntityId() &&
+                        $selection['parent_product_id'] == $product->getData($linkField)) {
+                        if (!$product->getCopyFromView()) {
+                            throw new CouldNotSaveException(
+                                __(
+                                    'Child with specified sku: "%1" already assigned to product: "%2"',
+                                    [$linkedProduct->getSku(), $product->getSku()]
+                                )
+                            );
+                        }
+                    }
+                }
+            }
+
+            $selectionModel = $this->bundleSelection->create();
+            $selectionModel = $this->mapProductLinkToBundleSelectionModel(
+                $selectionModel,
+                $linkedProduct,
+                $product,
+                (int)$linkProductModel->getEntityId()
+            );
+
+            $selectionModel->setOptionId($optionId);
+
+            try {
+                $selectionModel->save();
+                $resource->addProductRelation($product->getData($linkField), $linkProductModel->getEntityId());
+            } catch (\Exception $e) {
+                throw new CouldNotSaveException(__('Could not save child: "%1"', $e->getMessage()), $e);
+            }
+        }
     }
 
     /**
