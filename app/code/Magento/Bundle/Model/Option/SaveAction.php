@@ -16,6 +16,7 @@ use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Model\ResourceModel\Option;
 use Magento\Bundle\Model\ResourceModel\Option\Collection;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -75,7 +76,8 @@ class SaveAction
         $this->metadataPool = $metadataPool;
         $this->type = $type;
         $this->linkManagement = $linkManagement;
-        $this->addChildren = $addChildren;
+        $this->addChildren = $addChildren ?:
+            ObjectManager::getInstance()->get(ProductAddChildrenInterface::class);
     }
 
     /**
@@ -213,7 +215,7 @@ class SaveAction
                 $linkedProduct->getSku()
             );
         }
-        $this->addChildren->addChildren($product, $option->getOptionId(), $linksToAdd);
+        $this->addChildren->addChildren($product, (int)$option->getOptionId(), $linksToAdd);
     }
 
     /**
