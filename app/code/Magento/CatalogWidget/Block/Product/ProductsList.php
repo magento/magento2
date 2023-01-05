@@ -579,7 +579,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     }
 
     /**
-     * Decode encoded html special characters and unserialize the conditions into array
+     * Decode encoded special characters and unserialize conditions into array
      *
      * @param string $encodedConditions
      * @return array
