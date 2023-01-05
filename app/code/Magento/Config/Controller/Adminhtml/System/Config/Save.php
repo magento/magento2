@@ -308,7 +308,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
      * @param array $configData
      * @return array
      */
-    protected function filterNodes(array $configData): array
+    public function filterNodes(array $configData): array
     {
         if (!empty($configData['groups'])) {
             $systemXmlPathsFromKeys = array_keys($this->_configStructure->getFieldPaths());
@@ -327,6 +327,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
     }
 
     /**
+     * Get Config data from Request
      *
      * @return array
      * @throws LocalizedException

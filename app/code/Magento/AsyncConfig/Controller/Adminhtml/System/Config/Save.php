@@ -66,8 +66,8 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
     }
 
     /**
-     *
      * Execute Save action
+     *
      * @throws LocalizedException
      * @throws FileSystemException
      * @throws RuntimeException
