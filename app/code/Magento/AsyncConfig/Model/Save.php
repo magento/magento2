@@ -7,15 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\AsyncConfig\Model;
 
-
 use Magento\AsyncConfig\Api\AsyncConfigPublisherInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\RuntimeException;
 
-class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
+class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save implements HttpPostActionInterface
 {
     /**
      * @var DeploymentConfig
@@ -52,12 +52,15 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
         DeploymentConfig $deploymentConfig = null,
         AsyncConfigPublisherInterface $asyncConfigPublisher = null
     ) {
-        parent::__construct($context,
+        parent::__construct
+        (
+            $context,
             $configStructure,
             $sectionChecker,
             $configFactory,
             $cache,
-            $string);
+            $string
+        );
         $this->deploymentConfig = $deploymentConfig
             ?? ObjectManager::getInstance()->get(DeploymentConfig::class);
         $this->asyncConfigPublisher = $asyncConfigPublisher
@@ -65,6 +68,7 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
     }
 
     /**
+     *
      * @throws LocalizedException
      * @throws FileSystemException
      * @throws RuntimeException
@@ -74,29 +78,7 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
         if (!$this->deploymentConfig->get(self::ASYNC_CONFIG_OPTION_PATH)) {
             return parent::execute();
         } else {
-            $this->_saveSection();
-            $section = $this->getRequest()->getParam('section');
-            $website = $this->getRequest()->getParam('website');
-            $store = $this->getRequest()->getParam('store');
-            $configData = [
-                'section' => $section,
-                'website' => $website,
-                'store' => $store,
-                'groups' => $this->_getGroupsForSave(),
-            ];
-            $configData = $this->filterNodes($configData);
-            $groups = $this->getRequest()->getParam('groups');
-            if (isset($groups['country']['fields'])) {
-                if (isset($groups['country']['fields']['eu_countries'])) {
-                    $countries = $groups['country']['fields']['eu_countries'];
-                    if (empty($countries['value']) &&
-                        !isset($countries['inherit'])) {
-                        throw new LocalizedException(
-                            __('Something went wrong while saving this configuration.')
-                        );
-                    }
-                }
-            }
+            $configData = $this->getConfigData();
             $this->asyncConfigPublisher->saveConfigData($configData);
             $this->messageManager->addSuccess(__('Configuration changes will be applied by consumer soon.'));
             $this->_saveState($this->getRequest()->getPost('config_state'));

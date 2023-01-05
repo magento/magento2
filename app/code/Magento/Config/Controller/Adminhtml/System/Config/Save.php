@@ -210,31 +210,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
     {
         try {
             // custom save logic
-            $this->_saveSection();
-            $section = $this->getRequest()->getParam('section');
-            $website = $this->getRequest()->getParam('website');
-            $store = $this->getRequest()->getParam('store');
-            $configData = [
-                'section' => $section,
-                'website' => $website,
-                'store' => $store,
-                'groups' => $this->_getGroupsForSave(),
-            ];
-            $configData = $this->filterNodes($configData);
-
-            $groups = $this->getRequest()->getParam('groups');
-
-            if (isset($groups['country']['fields'])) {
-                if (isset($groups['country']['fields']['eu_countries'])) {
-                    $countries = $groups['country']['fields']['eu_countries'];
-                    if (empty($countries['value']) &&
-                        !isset($countries['inherit'])) {
-                        throw new LocalizedException(
-                            __('Something went wrong while saving this configuration.')
-                        );
-                    }
-                }
-            }
+            $configData = $this->getConfigData();
 
             /** @var \Magento\Config\Model\Config $configModel */
             $configModel = $this->_configFactory->create(['data' => $configData]);
@@ -332,7 +308,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
      * @param array $configData
      * @return array
      */
-    public function filterNodes(array $configData): array
+    protected function filterNodes(array $configData): array
     {
         if (!empty($configData['groups'])) {
             $systemXmlPathsFromKeys = array_keys($this->_configStructure->getFieldPaths());
@@ -347,6 +323,41 @@ class Save extends AbstractConfig implements HttpPostActionInterface
             $configData['groups'] = $this->filterPaths($configData['section'], $configData['groups'], $systemXmlConfig);
         }
 
+        return $configData;
+    }
+
+    /**
+     *
+     * @return array
+     * @throws LocalizedException
+     */
+    protected function getConfigData()
+    {
+        $this->_saveSection();
+        $section = $this->getRequest()->getParam('section');
+        $website = $this->getRequest()->getParam('website');
+        $store = $this->getRequest()->getParam('store');
+        $configData = [
+            'section' => $section,
+            'website' => $website,
+            'store' => $store,
+            'groups' => $this->_getGroupsForSave(),
+        ];
+        $configData = $this->filterNodes($configData);
+
+        $groups = $this->getRequest()->getParam('groups');
+
+        if (isset($groups['country']['fields'])) {
+            if (isset($groups['country']['fields']['eu_countries'])) {
+                $countries = $groups['country']['fields']['eu_countries'];
+                if (empty($countries['value']) &&
+                    !isset($countries['inherit'])) {
+                    throw new LocalizedException(
+                        __('Something went wrong while saving this configuration.')
+                    );
+                }
+            }
+        }
         return $configData;
     }
 }
