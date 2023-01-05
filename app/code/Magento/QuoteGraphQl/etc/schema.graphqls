@@ -266,7 +266,7 @@ type CartAddressCountry @doc(description: "Contains details the country in a bil
 type SelectedShippingMethod @doc(description: "Contains details about the selected shipping method and carrier.") {
     carrier_code: String! @doc(description: "A string that identifies a commercial carrier or an offline shipping method.")
     method_code: String! @doc(description: "A shipping method code associated with a carrier.")
-    carrier_title: String! @doc(description: "The label for the carrier code.")
+    carrier_title: String @doc(description: "The label for the carrier code.")
     method_title: String! @doc(description: "The label for the method code.")
     amount: Money! @doc(description: "The cost of shipping using this shipping method.")
     base_amount: Money @deprecated(reason: "The field should not be used on the storefront.")
@@ -276,7 +276,7 @@ type SelectedShippingMethod @doc(description: "Contains details about the select
 
 type AvailableShippingMethod @doc(description: "Contains details about the possible shipping methods and carriers.") {
     carrier_code: String! @doc(description: "A string that identifies a commercial carrier or an offline shipping method.")
-    carrier_title: String! @doc(description: "The label for the carrier code.")
+    carrier_title: String @doc(description: "The label for the carrier code.")
     method_code: String @doc(description: "A shipping method code associated with a carrier. The value could be null if no method is available.")
     method_title: String @doc(description: "The label for the shipping method code. The value could be null if no method is available.")
     error_message: String @doc(description: "Describes an error condition.")
