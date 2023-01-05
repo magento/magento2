@@ -21,7 +21,10 @@
             <group value="pr_exclude"/>
         </annotations>
         <before>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="setSearchEngine"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="deleteAllProducts"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="createFirtsSimpleProduct"/>
             <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProductsAfterTest"/>
             <createData entity="VirtualProduct" stepKey="createVirtualProduct"/>
             <createData entity="SimpleProductWithCustomSku24MB06" stepKey="createSecondSimpleProduct"/>
