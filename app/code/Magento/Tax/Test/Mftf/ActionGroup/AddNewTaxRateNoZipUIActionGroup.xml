@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AddNewTaxRateNoZipActionGroup">
+    <actionGroup name="AddNewTaxRateNoZipUIActionGroup">
         <annotations>
             <description>Goes to the Admin Tax Rules grid page. Adds the provided Tax Code.</description>
         </annotations>
@@ -20,7 +20,7 @@
         <click stepKey="addNewTaxRate" selector="{{AdminTaxRulesSection.addNewTaxRate}}"/>
 
         <!-- Fill out a new tax rate -->
-        <fillField stepKey="fillTaxIdentifier" selector="{{AdminTaxRulesSection.taxIdentifier}}" userInput="{{taxCode.state}}-{{taxCode.rate}}"/>
+        <fillField stepKey="fillTaxIdentifier" selector="{{AdminTaxRulesSection.taxIdentifier}}" userInput="{{taxCode.identifier}}-{{taxCode.rate}}"/>
         <fillField stepKey="fillZipCode" selector="{{AdminTaxRulesSection.zipCode}}" userInput="{{taxCode.zip}}"/>
         <selectOption stepKey="selectState" selector="{{AdminTaxRulesSection.state}}" userInput="{{taxCode.state}}"/>
         <selectOption stepKey="selectCountry" selector="{{AdminTaxRulesSection.country}}" userInput="{{taxCode.country}}"/>
