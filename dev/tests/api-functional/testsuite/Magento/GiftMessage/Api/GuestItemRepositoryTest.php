@@ -9,9 +9,9 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class GuestItemRepositoryTest extends WebapiAbstract
 {
-    const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'giftMessageGuestItemRepositoryV1';
-    const RESOURCE_PATH = '/V1/guest-carts/';
+    public const SERVICE_VERSION = 'V1';
+    public const SERVICE_NAME = 'giftMessageGuestItemRepositoryV1';
+    public const RESOURCE_PATH = '/V1/guest-carts/';
 
     /**
      * @var \Magento\TestFramework\ObjectManager

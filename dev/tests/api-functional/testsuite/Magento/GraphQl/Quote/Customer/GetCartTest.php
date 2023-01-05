@@ -202,8 +202,8 @@ QUERY;
     public function testGetCartWithWrongStore()
     {
         $this->expectException(\Exception::class);
-        $message = 'The account sign-in was incorrect or your account is disabled       temporarily. Please wait and try again later.';
-        $this->expectExceptionMessage($message);
+        $message = 'The account sign-in was incorrect or your account is disabled temporarily.'; 
+        $this->expectExceptionMessage($message.' Please wait and try again later.');
 
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
         $query = $this->getQuery($maskedQuoteId);
