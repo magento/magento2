@@ -5,17 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AsyncConfig\Model;
+namespace Magento\AsyncConfig\Controller\Adminhtml\System\Config;
 
 use Magento\AsyncConfig\Api\AsyncConfigPublisherInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\RuntimeException;
 
-class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save implements HttpPostActionInterface
+class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
 {
     /**
      * @var DeploymentConfig
