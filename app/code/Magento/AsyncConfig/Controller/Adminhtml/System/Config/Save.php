@@ -51,8 +51,7 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
         DeploymentConfig $deploymentConfig = null,
         AsyncConfigPublisherInterface $asyncConfigPublisher = null
     ) {
-        parent::__construct
-        (
+        parent::__construct(
             $context,
             $configStructure,
             $sectionChecker,
@@ -68,6 +67,7 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
 
     /**
      *
+     * Execute Save action
      * @throws LocalizedException
      * @throws FileSystemException
      * @throws RuntimeException
