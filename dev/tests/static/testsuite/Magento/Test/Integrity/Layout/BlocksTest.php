@@ -1,7 +1,5 @@
 <?php
 /**
- * Test layout declaration and usage of block elements
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */

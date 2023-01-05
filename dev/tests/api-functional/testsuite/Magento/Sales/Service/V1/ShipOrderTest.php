@@ -19,8 +19,8 @@ use Magento\Sales\Model\Order;
  */
 class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
-    const SERVICE_READ_NAME = 'salesShipOrderV1';
-    const SERVICE_VERSION = 'V1';
+    public const SERVICE_READ_NAME = 'salesShipOrderV1';
+    public const SERVICE_VERSION = 'V1';
 
     /**
      * @var ObjectManagerInterface

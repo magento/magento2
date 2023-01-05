@@ -48,7 +48,7 @@ use PHPUnit\Framework\TestCase;
  */
 class TaxTest extends TestCase
 {
-    const TAX = 0.2;
+    public const TAX = 0.2;
 
     /**
      * Tests the specific method

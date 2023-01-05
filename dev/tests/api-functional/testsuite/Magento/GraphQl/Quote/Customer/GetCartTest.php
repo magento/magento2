@@ -131,7 +131,8 @@ class GetCartTest extends GraphQlAbstract
     public function testGetCartIfCartIdIsMissed()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Field "cart" argument "cart_id" of type "String!" is required but not provided.');
+        $message = 'Field "cart" argument "cart_id" of type "String!" is required but not provided.';
+        $this->expectExceptionMessage($message);
 
         $query = <<<QUERY
 {
@@ -201,7 +202,8 @@ QUERY;
     public function testGetCartWithWrongStore()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.');
+        $message = 'The account sign-in was incorrect or your account is disabled       temporarily. Please wait and try again later.';
+        $this->expectExceptionMessage($message);
 
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
         $query = $this->getQuery($maskedQuoteId);
