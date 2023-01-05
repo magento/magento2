@@ -14,6 +14,8 @@ namespace Magento\Bundle\Api;
 interface ProductAddChildrenInterface
 {
     /**
+     * Bulk add children operation
+     *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param int $optionId
      * @param \Magento\Bundle\Api\Data\LinkInterface[] $linkedProducts
