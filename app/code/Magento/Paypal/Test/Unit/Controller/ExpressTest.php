@@ -75,7 +75,7 @@ abstract class ExpressTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->markTestIncomplete();
+        $this->markTestSkipped();
         $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->config = $this->createMock(Config::class);
         $this->request = $this->createMock(Http::class);

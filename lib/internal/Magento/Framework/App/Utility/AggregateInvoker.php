@@ -127,7 +127,7 @@ class AggregateInvoker
             $results[\PHPUnit\Framework\SkippedTestError::class]
         );
         if ($results[\PHPUnit\Framework\IncompleteTestError::class]) {
-            $this->_testCase->markTestIncomplete($message);
+            $this->_testCase->markTestSkipped($message);
         } elseif ($results[\PHPUnit\Framework\SkippedTestError::class]) {
             $this->_testCase->markTestSkipped($message);
         }

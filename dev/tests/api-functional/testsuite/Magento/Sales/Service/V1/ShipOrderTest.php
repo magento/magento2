@@ -52,7 +52,7 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
      */
     public function testConfigurableShipOrder()
     {
-        $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/1335');
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/1335');
         $productsQuantity = 1;
 
         /** @var Order $existingOrder */

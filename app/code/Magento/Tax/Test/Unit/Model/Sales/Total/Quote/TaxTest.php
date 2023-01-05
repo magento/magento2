@@ -72,7 +72,7 @@ class TaxTest extends TestCase
         $addressData,
         $verifyData
     ) {
-        $this->markTestIncomplete('Source code is not testable. Need to be refactored before unit testing');
+        $this->markTestSkipped('Source code is not testable. Need to be refactored before unit testing');
         $shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
         $totalsMock = $this->createMock(Total::class);
         $objectManager = new ObjectManager($this);
