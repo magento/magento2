@@ -20,7 +20,7 @@
         <click stepKey="addNewTaxRate" selector="{{AdminTaxRulesSection.addNewTaxRate}}"/>
 
         <!-- Fill out a new tax rate -->
-        <fillField stepKey="fillTaxIdentifier" selector="{{AdminTaxRulesSection.taxIdentifier}}" userInput="{{taxCode.state}}-{{taxCode.rate}}"/>
+        <fillField stepKey="fillTaxIdentifier" selector="{{AdminTaxRulesSection.taxIdentifier}}" userInput="{{taxCode.identifier}}-{{taxCode.rate}}"/>
         <fillField stepKey="fillZipCode" selector="{{AdminTaxRulesSection.zipCode}}" userInput="{{taxCode.zip}}"/>
         <selectOption stepKey="selectState" selector="{{AdminTaxRulesSection.state}}" userInput="{{taxCode.state}}"/>
         <selectOption stepKey="selectCountry" selector="{{AdminTaxRulesSection.country}}" userInput="{{taxCode.country}}"/>
