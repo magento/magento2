@@ -61,8 +61,7 @@ class ProductPriceIndexModifier
         MetadataPool $metadataPool,
         ?ProductRepositoryInterface $productRepository = null,
         string $connectionName = 'indexer'
-    )
-    {
+    ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->resourceConnection = $resourceConnection;
         $this->metadataPool = $metadataPool;
@@ -130,7 +129,7 @@ class ProductPriceIndexModifier
         }
 
         $filteredProducts = [];
-        foreach($bundleProducts as $bundle) {
+        foreach ($bundleProducts as $bundle) {
             $bundleProduct = $this->productRepository->getById($bundle['bundle_id']);
             if ($bundleProduct->getPriceType() != Price::PRICE_TYPE_DYNAMIC) {
                 $filteredProducts[] = $bundle['child_product_id'];
