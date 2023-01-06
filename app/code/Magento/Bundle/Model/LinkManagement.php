@@ -387,7 +387,14 @@ class LinkManagement implements ProductLinkManagementInterface, ProductLinkManag
         /* @var $resource Bundle */
         $resource = $this->bundleFactory->create();
         $selections = $resource->getSelectionsData($product->getData($linkField));
-        return $this->processLinkedProduct($linkedProduct, $selections, $optionId, $product, $linkField, $resource);
+        return $this->processLinkedProduct(
+            $linkedProduct,
+            $selections,
+            (int)$optionId,
+            $product,
+            $linkField,
+            $resource
+        );
     }
 
     /**
