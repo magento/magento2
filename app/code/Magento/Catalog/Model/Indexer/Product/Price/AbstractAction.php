@@ -441,7 +441,6 @@ abstract class AbstractAction
             'tmp_table.customer_group_id = main_table.customer_group_id',
             'tmp_table.website_id = main_table.website_id',
         ];
-
         $select = $this->getConnection()->select()
             ->from(['main_table' => $mainTable], null)
             ->joinLeft(['tmp_table' => $temporaryTable], implode(' AND ', $joinCondition), null)
