@@ -97,7 +97,7 @@ class Escaper
                     }
                 );
                 $data = $this->prepareUnescapedCharacters($data);
-                $string = @iconv("UTF-8","ISO-8859-1//IGNORE", $data);
+                $string = @iconv("UTF-8", "ISO-8859-1//IGNORE", $data);
                 try {
                     $domDocument->loadHTML(
                         '<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>'
