@@ -165,8 +165,8 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
             $domDocument = $this->domDocumentFactory->create();
 
             $internalErrors = libxml_use_internal_errors(true);
-
-            $data = html_entity_decode(htmlentities($data, ENT_QUOTES, 'UTF-8'), ENT_QUOTES , 'ISO-8859-1');
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $data = html_entity_decode(htmlentities($data, ENT_QUOTES, 'UTF-8'), ENT_QUOTES, 'ISO-8859-1');
 
             $domDocument->loadHTML(
                 '<html><body id="' . $wrapperElementId . '">' . $data . '</body></html>'
