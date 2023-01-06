@@ -10,7 +10,7 @@ namespace Magento\Bundle\Model;
 use Magento\Bundle\Api\Data\LinkInterface;
 use Magento\Bundle\Api\Data\LinkInterfaceFactory;
 use Magento\Bundle\Api\Data\OptionInterface;
-use Magento\Bundle\Api\ProductAddChildrenInterface;
+use Magento\Bundle\Api\ProductLinkManagementAddChildrenInterface;
 use Magento\Bundle\Api\ProductLinkManagementInterface;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Model\ResourceModel\Bundle;
@@ -31,7 +31,7 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LinkManagement implements ProductLinkManagementInterface, ProductAddChildrenInterface
+class LinkManagement implements ProductLinkManagementInterface, ProductLinkManagementAddChildrenInterface
 {
     /**
      * @var ProductRepositoryInterface

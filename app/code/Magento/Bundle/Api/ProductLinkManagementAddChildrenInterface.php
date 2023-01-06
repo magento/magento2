@@ -11,7 +11,7 @@ namespace Magento\Bundle\Api;
 /**
  * Interface for Bulk children addition
  */
-interface ProductAddChildrenInterface
+interface ProductLinkManagementAddChildrenInterface
 {
     /**
      * Bulk add children operation
