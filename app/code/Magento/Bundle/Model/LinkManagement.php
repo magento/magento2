@@ -191,6 +191,70 @@ class LinkManagement implements ProductLinkManagementInterface, ProductLinkManag
     }
 
     /**
+     * Linked product processing
+     *
+     * @param LinkInterface $linkedProduct
+     * @param array $selections
+     * @param int $optionId
+     * @param ProductInterface $product
+     * @param string $linkField
+     * @param Bundle $resource
+     * @return int
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
+    private function processLinkedProduct(
+        LinkInterface $linkedProduct,
+        array $selections,
+        int $optionId,
+        ProductInterface $product,
+        string $linkField,
+        Bundle $resource
+    ): int {
+        $linkProductModel = $this->productRepository->get($linkedProduct->getSku());
+        if ($linkProductModel->isComposite()) {
+            throw new InputException(__('The bundle product can\'t contain another composite product.'));
+        }
+
+        if ($selections) {
+            foreach ($selections as $selection) {
+                if ($selection['option_id'] == $optionId &&
+                    $selection['product_id'] == $linkProductModel->getEntityId() &&
+                    $selection['parent_product_id'] == $product->getData($linkField)) {
+                    if (!$product->getCopyFromView()) {
+                        throw new CouldNotSaveException(
+                            __(
+                                'Child with specified sku: "%1" already assigned to product: "%2"',
+                                [$linkedProduct->getSku(), $product->getSku()]
+                            )
+                        );
+                    }
+                }
+            }
+        }
+
+        $selectionModel = $this->bundleSelection->create();
+        $selectionModel = $this->mapProductLinkToBundleSelectionModel(
+            $selectionModel,
+            $linkedProduct,
+            $product,
+            (int)$linkProductModel->getEntityId()
+        );
+
+        $selectionModel->setOptionId($optionId);
+
+        try {
+            $selectionModel->save();
+            $resource->addProductRelation($product->getData($linkField), $linkProductModel->getEntityId());
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException(__('Could not save child: "%1"', $e->getMessage()), $e);
+        }
+
+        return (int)$selectionModel->getId();
+    }
+
+    /**
      * Fill selection model with product link data
      *
      * @param Selection $selectionModel
@@ -291,8 +355,6 @@ class LinkManagement implements ProductLinkManagementInterface, ProductLinkManag
 
     /**
      * @inheritDoc
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addChild(
         ProductInterface $product,
@@ -326,49 +388,7 @@ class LinkManagement implements ProductLinkManagementInterface, ProductLinkManag
         /* @var $resource Bundle */
         $resource = $this->bundleFactory->create();
         $selections = $resource->getSelectionsData($product->getData($linkField));
-        /** @var Product $linkProductModel */
-        $linkProductModel = $this->productRepository->get($linkedProduct->getSku());
-        if ($linkProductModel->isComposite()) {
-            throw new InputException(__('The bundle product can\'t contain another composite product.'));
-        }
-
-        if ($selections) {
-            foreach ($selections as $selection) {
-                if ($selection['option_id'] == $optionId &&
-                    $selection['product_id'] == $linkProductModel->getEntityId() &&
-                    $selection['parent_product_id'] == $product->getData($linkField)) {
-                    if (!$product->getCopyFromView()) {
-                        throw new CouldNotSaveException(
-                            __(
-                                'Child with specified sku: "%1" already assigned to product: "%2"',
-                                [$linkedProduct->getSku(), $product->getSku()]
-                            )
-                        );
-                    }
-
-                    return $this->bundleSelection->create()->load($linkProductModel->getEntityId());
-                }
-            }
-        }
-
-        $selectionModel = $this->bundleSelection->create();
-        $selectionModel = $this->mapProductLinkToBundleSelectionModel(
-            $selectionModel,
-            $linkedProduct,
-            $product,
-            (int)$linkProductModel->getEntityId()
-        );
-
-        $selectionModel->setOptionId($optionId);
-
-        try {
-            $selectionModel->save();
-            $resource->addProductRelation($product->getData($linkField), $linkProductModel->getEntityId());
-        } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not save child: "%1"', $e->getMessage()), $e);
-        }
-
-        return (int)$selectionModel->getId();
+        return $this->processLinkedProduct($linkedProduct, $selections, $optionId, $product, $linkField, $resource);
     }
 
     /**
@@ -405,44 +425,7 @@ class LinkManagement implements ProductLinkManagementInterface, ProductLinkManag
         $selections = $resource->getSelectionsData($product->getData($linkField));
 
         foreach ($linkedProducts as $linkedProduct) {
-            $linkProductModel = $this->productRepository->get($linkedProduct->getSku());
-            if ($linkProductModel->isComposite()) {
-                throw new InputException(__('The bundle product can\'t contain another composite product.'));
-            }
-
-            if ($selections) {
-                foreach ($selections as $selection) {
-                    if ($selection['option_id'] == $optionId &&
-                        $selection['product_id'] == $linkProductModel->getEntityId() &&
-                        $selection['parent_product_id'] == $product->getData($linkField)) {
-                        if (!$product->getCopyFromView()) {
-                            throw new CouldNotSaveException(
-                                __(
-                                    'Child with specified sku: "%1" already assigned to product: "%2"',
-                                    [$linkedProduct->getSku(), $product->getSku()]
-                                )
-                            );
-                        }
-                    }
-                }
-            }
-
-            $selectionModel = $this->bundleSelection->create();
-            $selectionModel = $this->mapProductLinkToBundleSelectionModel(
-                $selectionModel,
-                $linkedProduct,
-                $product,
-                (int)$linkProductModel->getEntityId()
-            );
-
-            $selectionModel->setOptionId($optionId);
-
-            try {
-                $selectionModel->save();
-                $resource->addProductRelation($product->getData($linkField), $linkProductModel->getEntityId());
-            } catch (\Exception $e) {
-                throw new CouldNotSaveException(__('Could not save child: "%1"', $e->getMessage()), $e);
-            }
+            $this->processLinkedProduct($linkedProduct, $selections, $optionId, $product, $linkField, $resource);
         }
     }
 
