@@ -17,10 +17,6 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/magento/composer"
-        },
-        {
-            "type": "vcs",
             "url": "https://github.com/wikimedia/less.php"
         }
     ],
@@ -75,7 +71,7 @@
         "laminas/laminas-validator": "^2.23",
         "league/flysystem": "^2.4",
         "league/flysystem-aws-s3-v3": "^2.4",
-        "magento/composer": "dev-develop",
+        "magento/composer": "^1.9.0-beta2",
         "magento/composer-dependency-version-audit-plugin": "^0.1",
         "magento/magento-composer-installer": ">=0.4.0-beta1",
         "magento/zend-cache": "^1.16",
