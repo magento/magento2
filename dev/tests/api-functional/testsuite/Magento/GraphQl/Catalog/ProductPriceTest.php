@@ -772,7 +772,7 @@ class ProductPriceTest extends GraphQlAbstract
                         "value" => round((float) $configurableProductVariants[$key]->getSpecialPrice(), 2)
                     ],
                     "discount" => [
-                        "amount_off" => ($regularPrice[$key] - $finalPrice[$key]),
+                        "amount_off" => round($regularPrice[$key] - $finalPrice[$key], 2),
                         "percent_off" => round(($regularPrice[$key] - $finalPrice[$key])*100/$regularPrice[$key], 2)
                     ]
                 ],
@@ -784,7 +784,7 @@ class ProductPriceTest extends GraphQlAbstract
                         "value" => round((float) $configurableProductVariants[$key]->getSpecialPrice(), 2)
                     ],
                     "discount" => [
-                        "amount_off" => $regularPrice[$key] - $finalPrice[$key],
+                        "amount_off" => round($regularPrice[$key] - $finalPrice[$key], 2),
                         "percent_off" => round(($regularPrice[$key] - $finalPrice[$key])*100/$regularPrice[$key], 2)
                     ]
                 ]

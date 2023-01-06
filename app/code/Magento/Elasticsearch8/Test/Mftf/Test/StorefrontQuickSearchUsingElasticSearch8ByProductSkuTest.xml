@@ -21,24 +21,22 @@
             <group value="pr_exclude"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set catalog/search/engine elasticsearch8" stepKey="setSearchEngine"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="setSearchEngine"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
-
-            <createData entity="VirtualProduct" stepKey="createFirtsSimpleProduct"/>
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="createFirtsSimpleProduct"/>
             <createData entity="SimpleProductWithCustomSku24MB06" stepKey="createSecondSimpleProduct"/>
             <createData entity="SimpleProductWithCustomSku24MB04" stepKey="createThirdSimpleProduct"/>
             <createData entity="SimpleProductWithCustomSku24MB02" stepKey="createFourthSimpleProduct"/>
             <createData entity="SimpleProductWithCustomSku24MB01" stepKey="createFifthSimpleProduct"/>
-
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
-                <argument name="tags" value=""/>
+                <argument name="tags" value="config full_page"/>
             </actionGroup>
             <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
-            <deleteData createDataKey="createFirtsSimpleProduct" stepKey="deleteProductOne"/>
-
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="deleteProductOne"/>
             <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProductsAfterTest"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdminPanel"/>
         </after>

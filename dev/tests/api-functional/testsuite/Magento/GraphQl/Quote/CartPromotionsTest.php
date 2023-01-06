@@ -29,6 +29,12 @@ class CartPromotionsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoApiDataFixture Magento/SalesRule/_files/rules_category.php
      */
+
+    /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
     public function testCartPromotionSingleCartRule()
     {
         $skus =['simple1', 'simple2'];
@@ -151,16 +157,18 @@ class CartPromotionsTest extends GraphQlAbstract
             $lineItemDiscount = $productsInResponse[$itemIndex][0]['prices']['discounts'];
             $expectedTotalDiscountValue = ($productsInCart[$itemIndex]->getSpecialPrice()*$qty*0.5) +
                 ($productsInCart[$itemIndex]->getSpecialPrice()*$qty*0.5*0.1);
-            $this->assertEquals(
+            $this->assertEqualsWithDelta(
                 $productsInCart[$itemIndex]->getSpecialPrice()*$qty*0.5,
-                current($lineItemDiscount)['amount']['value']
+                current($lineItemDiscount)['amount']['value'],
+                self::EPSILON
             );
             $this->assertEquals('TestRule_Label', current($lineItemDiscount)['label']);
 
             $lineItemDiscountValue = next($lineItemDiscount)['amount']['value'];
-            $this->assertEquals(
+            $this->assertEqualsWithDelta(
                 round($productsInCart[$itemIndex]->getSpecialPrice()*$qty*0.5)*0.1,
-                $lineItemDiscountValue
+                $lineItemDiscountValue,
+                self::EPSILON
             );
             $this->assertEquals('10% off with two items_Label', end($lineItemDiscount)['label']);
             $actualTotalDiscountValue = $lineItemDiscount[0]['amount']['value']+$lineItemDiscount[1]['amount']['value'];
