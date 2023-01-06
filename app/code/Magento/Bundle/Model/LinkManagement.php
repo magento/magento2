@@ -261,12 +261,11 @@ class LinkManagement implements ProductLinkManagementInterface, ProductLinkManag
      * @param LinkInterface $productLink
      * @param string $linkedProductId
      * @param string $parentProductId
-     *
      * @return Selection
-     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @deprecated use mapProductLinkToBundleSelectionModel
+     * @deprecated
+     * @see mapProductLinkToBundleSelectionModel
      */
     protected function mapProductLinkToSelectionModel(
         Selection $selectionModel,
@@ -311,9 +310,9 @@ class LinkManagement implements ProductLinkManagementInterface, ProductLinkManag
      * @param LinkInterface $productLink
      * @param ProductInterface $parentProduct
      * @param int $linkedProductId
-     * @param string $linkField
      * @return Selection
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function mapProductLinkToBundleSelectionModel(
         Selection $selectionModel,
