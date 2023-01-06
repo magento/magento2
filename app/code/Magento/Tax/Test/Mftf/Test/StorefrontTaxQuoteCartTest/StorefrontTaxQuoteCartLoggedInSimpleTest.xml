@@ -68,7 +68,7 @@
             <!-- Go to the tax rate page -->
             <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
 
-            <!-- Delete the two tax rates that were created -->
+            <!-- Delete the two created tax rates -->
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
                 <argument name="name" value="{{SimpleTaxNY.identifier}}-{{SimpleTaxNY.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
