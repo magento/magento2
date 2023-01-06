@@ -153,7 +153,10 @@ class SaveAction
             throw new CouldNotSaveException(__("The option couldn't be saved."), $e);
         }
 
-        $this->addChildren->addChildren($bundleProduct, (int)$option->getOptionId(), $linksToAdd);
+        /** @var LinkInterface $linkedProduct */
+        foreach ($linksToAdd as $linkedProduct) {
+            $this->linkManagement->addChild($bundleProduct, $option->getOptionId(), $linkedProduct);
+        }
     }
 
     /**
