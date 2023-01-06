@@ -201,7 +201,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     $this->_cachedOptions[$entityId][$option['name']] = $option;
                     $this->_cachedOptions[$entityId][$option['name']]['selections'] = [];
                 }
-                $this->_cachedOptions[$entityId][$option['name']]['selections'][] = $option;
+                $this->_cachedOptions[$entityId][$option['name']]['selections'][$option['sku']] = $option;
                 $this->_cachedOptionSelectQuery[] = [(int)$entityId, $option['name']];
             }
         }
@@ -670,7 +670,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     }
                 }
 
-                $this->relationsDataSaver->saveProductRelations($productId, $childIds);
+                $this->relationsDataSaver->saveProductRelations($productId, array_unique($childIds));
             }
         }
 
