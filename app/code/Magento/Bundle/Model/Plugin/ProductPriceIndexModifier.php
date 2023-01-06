@@ -78,8 +78,9 @@ class ProductPriceIndexModifier
      * @param callable $proceed
      * @param IndexTableStructure $priceTable
      * @param array $entityIds
+     * @return void
+     * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @throws \Exception
      */
     public function aroundModifyPrice(
         ProductPriceIndexFilter $subject,
@@ -88,7 +89,7 @@ class ProductPriceIndexModifier
         array                   $entityIds = []
     ) {
         if (empty($entityIds) || $this->stockConfiguration->isShowOutOfStock()) {
-            $proceed($priceTable, $entityIds);
+            return $proceed($priceTable, $entityIds);
         }
         $filteredEntities = $this->filterProductsFromDynamicPriceBundle($priceTable->getTableName(), $entityIds);
 

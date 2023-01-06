@@ -8,11 +8,16 @@ declare(strict_types=1);
 namespace Magento\Bundle\Test\Unit\Model\Plugin;
 
 use Magento\Bundle\Model\Plugin\ProductPriceIndexModifier;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Indexer\ProductPriceIndexFilter;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,9 +26,19 @@ class ProductPriceIndexModifierTest extends TestCase
     private const CONNECTION_NAME = 'indexer';
 
     /**
+     * @var StockConfigurationInterface|StockConfigurationInterface&MockObject|MockObject
+     */
+    private StockConfigurationInterface $stockConfiguration;
+
+    /**
      * @var ResourceConnection|MockObject
      */
     private ResourceConnection $resourceConnection;
+
+    /**
+     * @var MetadataPool|MetadataPool&MockObject|MockObject
+     */
+    private MetadataPool $metadataPool;
 
     /**
      * @var ProductPriceIndexModifier
@@ -36,16 +51,30 @@ class ProductPriceIndexModifierTest extends TestCase
     private IndexTableStructure $table;
 
     /**
+     * @var ProductRepositoryInterface|ProductRepositoryInterface&MockObject|MockObject
+     */
+    private ProductRepositoryInterface $productRepository;
+
+    /**
      * @var ProductPriceIndexFilter|MockObject
      */
     private ProductPriceIndexFilter $subject;
 
     protected function setUp(): void
     {
+        $this->stockConfiguration = $this->createMock(StockConfigurationInterface::class);
         $this->table = $this->createMock(IndexTableStructure::class);
         $this->subject = $this->createMock(ProductPriceIndexFilter::class);
         $this->resourceConnection = $this->createMock(ResourceConnection::class);
-        $this->plugin = new ProductPriceIndexModifier($this->resourceConnection, self::CONNECTION_NAME);
+        $this->metadataPool = $this->createMock(MetadataPool::class);
+        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
+        $this->plugin = new ProductPriceIndexModifier(
+            $this->stockConfiguration,
+            $this->resourceConnection,
+            $this->metadataPool,
+            $this->productRepository,
+            self::CONNECTION_NAME
+        );
     }
 
     public function testAroundModifyPriceNoEntities(): void
@@ -63,40 +92,57 @@ class ProductPriceIndexModifierTest extends TestCase
     {
         $priceTableName = 'catalog_product_index_price_temp';
         $entities = [1, 2];
-        $this->table->expects($this->exactly(2))
-            ->method('getTableName')
-            ->willReturn($priceTableName);
+        $link = $this->createMock(EntityMetadataInterface::class);
+        $link->expects($this->once())->method('getLinkField')->willReturn('id');
+        $this->metadataPool->expects($this->once())
+            ->method('getMetadata')
+            ->with(ProductInterface::class)
+            ->willReturn($link);
         $select = $this->createMock(Select::class);
+        $select->expects($this->once())
+            ->method('from');
         $select->expects($this->exactly(2))
-            ->method('from')
-            ->with(['selection' => 'catalog_product_bundle_selection'], 'selection_id');
+            ->method('joinInner');
         $select->expects($this->exactly(2))
-            ->method('joinInner')
-            ->with(
-                ['price' => $priceTableName],
-                implode(' AND ', ['price.entity_id = selection.product_id']),
-                null
-            );
-        $select->expects($this->exactly(4))
-            ->method('where')
-            ->withConsecutive(
-                ['selection.product_id = ?', $entities[0]],
-                ['price.tax_class_id = ?', \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC],
-                ['selection.product_id = ?', $entities[1]],
-                ['price.tax_class_id = ?', \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC]
-            );
+            ->method('where');
         $connection = $this->createMock(AdapterInterface::class);
-        $connection->expects($this->exactly(2))
+        $connection->expects($this->once())
             ->method('select')
             ->willReturn($select);
-        $connection->expects($this->exactly(2))
-            ->method('fetchOne')
+        $connection->expects($this->exactly(1))
+            ->method('fetchAll')
             ->with($select)
-            ->willReturn(null);
-        $this->resourceConnection->expects($this->exactly(2))
+            ->willReturn([
+                [
+                    'bundle_id' => 1,
+                    'child_product_id' => 1
+                ],
+                [
+                    'bundle_id' => 1,
+                    'child_product_id' => 2
+                ]
+            ]);
+        $this->resourceConnection->expects($this->once())
             ->method('getConnection')
             ->with(self::CONNECTION_NAME)
             ->willReturn($connection);
+
+        $bundleProduct1 = $this->getMockBuilder(ProductInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getPriceType'])
+            ->getMockForAbstractClass();
+        $bundleProduct1->expects($this->once())->method('getPriceType')
+            ->willReturn(1);
+        $bundleProduct2 = $this->getMockBuilder(ProductInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getPriceType'])
+            ->getMockForAbstractClass();
+        $bundleProduct2->expects($this->once())->method('getPriceType')
+            ->willReturn(1);
+
+        $this->productRepository->expects($this->exactly(2))
+            ->method('getById')
+            ->willReturnOnConsecutiveCalls($bundleProduct1, $bundleProduct2);
 
         $calledPriceTable = '';
         $calledEntities = [];
