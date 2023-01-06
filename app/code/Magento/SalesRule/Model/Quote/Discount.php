@@ -20,11 +20,11 @@ use Magento\SalesRule\Api\Data\DiscountDataInterface;
 use Magento\SalesRule\Api\Data\DiscountDataInterfaceFactory;
 use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
 use Magento\SalesRule\Model\Data\RuleDiscount;
-use Magento\SalesRule\Model\Discount\PostProcessorFactory;
 use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Model\Rule\Condition\Product\Found;
+use Magento\SalesRule\Model\RulesApplier;
 use Magento\SalesRule\Model\Validator;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\SalesRule\Model\RulesApplier;
 
 /**
  * Discount totals calculation model.
@@ -34,6 +34,8 @@ use Magento\SalesRule\Model\RulesApplier;
 class Discount extends AbstractTotal
 {
     public const COLLECTOR_TYPE_CODE = 'discount';
+    public const RULE_ACTION_CONDITION_TAB = 'getActions';
+    public const RULE_CONDITION_TAB = 'getConditions';
 
     /**
      * Discount calculation object
@@ -178,8 +180,43 @@ class Discount extends AbstractTotal
         $this->calculator->initTotals($items, $address);
         $items = $this->calculator->sortItemsByPriority($items, $address);
         $rules = $this->calculator->getRules($address);
+
+        $itemWithDiscount = [];
+        $isDiscardRulePresent = $anyConditionInDiscard = $activateDiscardRule = false;
+        $isProductObject = true;
+
         /** @var Rule $rule */
         foreach ($rules as $rule) {
+            if ($rule->getStopRulesProcessing()) {
+                $isDiscardRulePresent = true;
+                $anyConditionInDiscard = true;
+                break;
+            }
+        }
+
+        /** @var Rule $rule */
+        foreach ($rules as $rule) {
+            $discardConditionMethod = self::RULE_ACTION_CONDITION_TAB;
+            if ($isDiscardRulePresent) {
+                if (($rule->getActions() == null || empty($rule->getActions()->getConditions()))
+                    || ($rule->getConditions() == null || empty($rule->getConditions()->getConditions()))) {
+                    $anyConditionInDiscard = false;
+                }
+                if ($rule->getConditions() !== null && !empty($rule->getConditions()->getConditions())) {
+                    foreach ($rule->getConditions()->getConditions() as $class) {
+                        if ($class->getType() === Found::class) {
+                            $discardConditionMethod = self::RULE_CONDITION_TAB;
+                            $anyConditionInDiscard = true;
+                        } else {
+                            $isProductObject = false;
+                        }
+                        break;
+                    }
+                }
+                if ($rule->getActions() != null && !empty($rule->getActions()->getConditions())) {
+                    $anyConditionInDiscard = true;
+                }
+            }
             /** @var Item $item */
             foreach ($items as $item) {
                 if ($quote->getIsMultiShipping() && $item->getAddress()->getId() !== $address->getId()) {
@@ -188,13 +225,38 @@ class Discount extends AbstractTotal
                 if ($item->getNoDiscount() || !$this->calculator->canApplyDiscount($item) || $item->getParentItem()) {
                     continue;
                 }
+                if ($activateDiscardRule && isset($itemWithDiscount[$item->getProduct()->getId()])) {
+                    continue;
+                }
+                if ($isDiscardRulePresent && $anyConditionInDiscard) {
+                    if ($discardConditionMethod == self::RULE_ACTION_CONDITION_TAB) {
+                        $itemToValidate = $item;
+                    } else {
+                        $itemToValidate = clone $item;
+                    }
+                    if ($rule->$discardConditionMethod()->validate($itemToValidate)) {
+                        $itemWithDiscount[$item->getProduct()->getId()] = $item->getProduct()->getId();
+                    } elseif (!isset($itemWithDiscount[$item->getProduct()->getId()])) {
+                        continue;
+                    } elseif (!$activateDiscardRule && isset($itemWithDiscount[$item->getProduct()->getId()])) {
+                        continue;
+                    }
+                }
+                if ($isDiscardRulePresent && $discardConditionMethod == self::RULE_ACTION_CONDITION_TAB) {
+                    $this->calculator->setSkipActionsValidation(true);
+                } elseif ($isDiscardRulePresent) {
+                    $this->calculator->setSkipActionsValidation(false);
+                }
                 $eventArgs['item'] = $item;
                 $this->eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
                 $this->calculator->process($item, $rule);
             }
-            $appliedRuleIds = $quote->getAppliedRuleIds() ? explode(',', $quote->getAppliedRuleIds()) : [];
-            if ($rule->getStopRulesProcessing() && in_array($rule->getId(), $appliedRuleIds)) {
-                break;
+            if ($rule->getStopRulesProcessing()) {
+                //PAT condition
+                if (!$isProductObject) {
+                    break;
+                }
+                $activateDiscardRule = true;
             }
             $this->calculator->initTotals($items, $address);
         }
