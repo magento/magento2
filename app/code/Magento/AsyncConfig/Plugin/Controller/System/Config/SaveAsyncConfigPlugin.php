@@ -5,17 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AsyncConfig\Controller\Adminhtml\System\Config;
+namespace Magento\AsyncConfig\Plugin\Controller\System\Config;
 
 use Magento\AsyncConfig\Api\AsyncConfigPublisherInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Config\Controller\Adminhtml\System\Config\Save;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\RuntimeException;
+use Magento\Framework\Message\ManagerInterface;
 
-class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save implements HttpPostActionInterface
+class SaveAsyncConfigPlugin
 {
     /**
      * @var DeploymentConfig
@@ -28,60 +30,55 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save imple
     private $asyncConfigPublisher;
 
     /**
+     * @var RedirectFactory
+     */
+    private RedirectFactory $resultRedirectFactory;
+
+    /**
+     * @var ManagerInterface
+     */
+    private $messageManager;
+
+    /**
      * @var const
      */
     public const ASYNC_CONFIG_OPTION_PATH = 'config/async';
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Config\Model\Config\Structure $configStructure
-     * @param \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker
-     * @param \Magento\Config\Model\Config\Factory $configFactory
-     * @param \Magento\Framework\Cache\FrontendInterface $cache
-     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param DeploymentConfig|null $deploymentConfig
      * @param AsyncConfigPublisherInterface|null $asyncConfigPublisher
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Config\Model\Config\Structure $configStructure,
-        \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker,
-        \Magento\Config\Model\Config\Factory $configFactory,
-        \Magento\Framework\Cache\FrontendInterface $cache,
-        \Magento\Framework\Stdlib\StringUtils $string,
         DeploymentConfig $deploymentConfig = null,
-        AsyncConfigPublisherInterface $asyncConfigPublisher = null
+        AsyncConfigPublisherInterface $asyncConfigPublisher = null,
+        RedirectFactory $resultRedirectFactory,
+        ManagerInterface $messageManager
     ) {
-        parent::__construct(
-            $context,
-            $configStructure,
-            $sectionChecker,
-            $configFactory,
-            $cache,
-            $string
-        );
         $this->deploymentConfig = $deploymentConfig
             ?? ObjectManager::getInstance()->get(DeploymentConfig::class);
         $this->asyncConfigPublisher = $asyncConfigPublisher
             ?? ObjectManager::getInstance()->get(AsyncConfigPublisherInterface::class);
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->messageManager = $messageManager;
     }
 
     /**
      * Execute Save action
      *
+     * @param Save $subject
      * @throws LocalizedException
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    public function execute()
+    public function aroundExecute(Save $subject, callable $proceed)
     {
         if (!$this->deploymentConfig->get(self::ASYNC_CONFIG_OPTION_PATH)) {
-            return parent::execute();
+            return $proceed();
         } else {
-            $configData = $this->getConfigData();
+            $configData = $subject->getConfigData();
             $this->asyncConfigPublisher->saveConfigData($configData);
             $this->messageManager->addSuccess(__('Configuration changes will be applied by consumer soon.'));
-            $this->_saveState($this->getRequest()->getPost('config_state'));
+            $subject->_saveState($subject->getRequest()->getPost('config_state'));
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             return $resultRedirect->setPath(

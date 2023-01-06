@@ -332,7 +332,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
      * @return array
      * @throws LocalizedException
      */
-    protected function getConfigData()
+    public function getConfigData()
     {
         $this->_saveSection();
         $section = $this->getRequest()->getParam('section');

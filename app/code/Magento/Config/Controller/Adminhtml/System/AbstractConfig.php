@@ -87,7 +87,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
      * @param array $configState
      * @return bool
      */
-    protected function _saveState($configState = [])
+    public function _saveState($configState = [])
     {
         if (is_array($configState)) {
             $configState = $this->sanitizeConfigState($configState);
