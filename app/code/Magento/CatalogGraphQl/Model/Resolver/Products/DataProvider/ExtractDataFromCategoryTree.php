@@ -71,7 +71,7 @@ class ExtractDataFromCategoryTree
                 $node['children_count'] = 0;
             }
             // redirect_code null will not return , so it will be 0 when there is no redirect error.
-            if (empty($node['redirect_code'])) {
+            if (!isset($node['redirect_code'])) {
                 $node['redirect_code'] = 0;
             }
         }
