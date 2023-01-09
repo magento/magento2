@@ -179,11 +179,6 @@ define([
                 formKey.value = this.options.formKey;
                 form.appendChild(formKey);
 
-                input = document.createElement('input');
-                input.name = 'redirect_url';
-                input.value = this.options.url;
-                form.appendChild(input);
-
                 paramData = $.param(paramData);
                 baseUrl += paramData.length ? '?' + paramData : '';
 

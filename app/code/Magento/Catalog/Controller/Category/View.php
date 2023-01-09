@@ -211,12 +211,10 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl());
         }
         $category = $this->_initCategory();
+        if ($this->toolbarMemorizer->hasMemorizingParam()) {
+            return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl());
+        }
         if ($category) {
-            $redirectUrl = $this->applyMemorizingRedirect();
-            if ($redirectUrl) {
-                return $this->resultRedirectFactory->create()->setUrl($redirectUrl);
-            }
-
             $this->layerResolver->create(Resolver::CATALOG_LAYER_CATEGORY);
             $settings = $this->_catalogDesign->getDesignSettings($category);
 
@@ -299,21 +297,5 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         if ($settings->getPageLayoutHandles()) {
             $page->addPageLayoutHandles($settings->getPageLayoutHandles());
         }
-    }
-
-    /**
-     * Apply redirect for Memorizing
-     *
-     * @return false|mixed
-     */
-    private function applyMemorizingRedirect()
-    {
-        if ($this->toolbarMemorizer->isMemorizingAllowed()) {
-            $url = $this->_request->getParam(self::PARAM_NAME_REDIRECT_URL);
-            if ($url) {
-                return $url;
-            }
-        }
-        return false;
     }
 }
