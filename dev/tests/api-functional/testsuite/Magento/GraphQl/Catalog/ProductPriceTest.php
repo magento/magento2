@@ -1230,7 +1230,7 @@ QUERY;
             $this->assertEqualsWithDelta(
                 $expected['discount']['percent_off'],
                 $actual['discount']['percent_off'],
-                self::EPSILON);
+                self::EPSILON); 
         }
     }
 
