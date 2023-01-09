@@ -38,8 +38,6 @@ use Psr\Log\LoggerInterface;
  */
 class View extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
-    protected const PARAM_NAME_REDIRECT_URL = 'redirect_url';
-
     /**
      * @var Registry
      */
