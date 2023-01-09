@@ -3311,16 +3311,16 @@
         },
         {
             "name": "laminas/laminas-server",
-            "version": "2.14.0",
+            "version": "2.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-server.git",
-                "reference": "11fe2af8dd3c2a350f903b2f2d0536ec3842a7f4"
+                "reference": "7f4862913ab95ea5decd08e6c3717edbb398fde8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-server/zipball/11fe2af8dd3c2a350f903b2f2d0536ec3842a7f4",
-                "reference": "11fe2af8dd3c2a350f903b2f2d0536ec3842a7f4",
+                "url": "https://api.github.com/repos/laminas/laminas-server/zipball/7f4862913ab95ea5decd08e6c3717edbb398fde8",
+                "reference": "7f4862913ab95ea5decd08e6c3717edbb398fde8",
                 "shasum": ""
             },
             "require": {
@@ -3368,7 +3368,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-12-09T09:56:49+00:00"
+            "time": "2022-12-27T17:14:59+00:00"
         },
         {
             "name": "laminas/laminas-servicemanager",
@@ -3543,24 +3543,24 @@
         },
         {
             "name": "laminas/laminas-soap",
-            "version": "2.11.1",
+            "version": "2.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-soap.git",
-                "reference": "1d3a45071b098062b97ff05b68523fb2fe322f9b"
+                "reference": "127de3d876b992a6327c274b15df6de26d7aa712"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-soap/zipball/1d3a45071b098062b97ff05b68523fb2fe322f9b",
-                "reference": "1d3a45071b098062b97ff05b68523fb2fe322f9b",
+                "url": "https://api.github.com/repos/laminas/laminas-soap/zipball/127de3d876b992a6327c274b15df6de26d7aa712",
+                "reference": "127de3d876b992a6327c274b15df6de26d7aa712",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-soap": "*",
-                "laminas/laminas-server": "^2.11",
-                "laminas/laminas-stdlib": "^3.6",
-                "laminas/laminas-uri": "^2.9.1",
+                "laminas/laminas-server": "^2.15",
+                "laminas/laminas-stdlib": "^3.16",
+                "laminas/laminas-uri": "^2.10",
                 "php": "~8.0.0 || ~8.1.0 || ~8.2.0"
             },
             "conflict": {
@@ -3568,12 +3568,12 @@
                 "zendframework/zend-soap": "*"
             },
             "require-dev": {
-                "laminas/laminas-coding-standard": "~2.4",
-                "laminas/laminas-config": "^3.7",
-                "laminas/laminas-http": "^2.15",
+                "laminas/laminas-coding-standard": "^2.5",
+                "laminas/laminas-config": "^3.8",
+                "laminas/laminas-http": "^2.18",
                 "phpspec/prophecy-phpunit": "^2.0.1",
-                "phpunit/phpunit": "^9.5.5",
-                "psalm/plugin-phpunit": "^0.18.3",
+                "phpunit/phpunit": "^9.5.27",
+                "psalm/plugin-phpunit": "^0.18.4",
                 "vimeo/psalm": "^4.30"
             },
             "suggest": {
@@ -3609,7 +3609,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-11-18T13:09:56+00:00"
+            "time": "2023-01-09T13:58:49+00:00"
         },
         {
             "name": "laminas/laminas-stdlib",
