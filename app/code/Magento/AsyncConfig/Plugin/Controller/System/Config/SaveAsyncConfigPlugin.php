@@ -45,8 +45,11 @@ class SaveAsyncConfigPlugin
     public const ASYNC_CONFIG_OPTION_PATH = 'config/async';
 
     /**
+     *
      * @param DeploymentConfig|null $deploymentConfig
      * @param AsyncConfigPublisherInterface|null $asyncConfigPublisher
+     * @param RedirectFactory $resultRedirectFactory
+     * @param ManagerInterface $messageManager
      */
     public function __construct(
         DeploymentConfig $deploymentConfig = null,
@@ -63,11 +66,12 @@ class SaveAsyncConfigPlugin
     }
 
     /**
-     * Execute Save action
      *
      * @param Save $subject
-     * @throws LocalizedException
+     * @param callable $proceed
+     * @return \Magento\Backend\Model\View\Result\Redirect
      * @throws FileSystemException
+     * @throws LocalizedException
      * @throws RuntimeException
      */
     public function aroundExecute(Save $subject, callable $proceed)
