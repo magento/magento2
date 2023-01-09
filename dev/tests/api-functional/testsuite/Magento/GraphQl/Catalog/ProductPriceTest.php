@@ -1226,11 +1226,13 @@ QUERY;
             $this->assertEqualsWithDelta(
                 $expected['discount']['amount_off'],
                 $actual['discount']['amount_off'],
-                self::EPSILON);
+                self::EPSILON
+            );
             $this->assertEqualsWithDelta(
                 $expected['discount']['percent_off'],
                 $actual['discount']['percent_off'],
-                self::EPSILON); 
+                self::EPSILON
+            );
         }
     }
 
