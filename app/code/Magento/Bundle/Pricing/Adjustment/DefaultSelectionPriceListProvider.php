@@ -140,6 +140,9 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
     private function addMiniMaxPriceList(Product $bundleProduct, $selectionsCollection, $searchMin, $useRegularPrice)
     {
         $selectionsCollection->addPriceFilter($bundleProduct, $searchMin, $useRegularPrice);
+        if ($bundleProduct->isSalable()) {
+            $selectionsCollection->addQuantityFilter();
+        }
         $selectionsCollection->setPage(0, 1);
 
         $selection = $selectionsCollection->getFirstItem();
