@@ -141,7 +141,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
                 $originalSku = $product->getSku();
                 $canSaveCustomOptions = $product->getCanSaveCustomOptions();
                 $product->save();
-
                 $this->handleImageRemoveError($data, $product->getId());
                 $productId = $product->getEntityId();
                 $productAttributeSetId = $product->getAttributeSetId();
@@ -214,7 +213,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
     /**
      * Notify customer when image was not deleted in specific case.
      *
-     * TODO: temporary workaround must be eliminated in MAGETNO-45306
+     * TODO: temporary workaround must be eliminated in MAGETWO-45306
      *
      * @param array $postData
      * @param int $productId
