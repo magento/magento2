@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Amqp;
 class PublisherConsumerController
 {
     /**
-     * @var string[]
+     * @var string
      */
     private $consumers = [];
 
