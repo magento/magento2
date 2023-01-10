@@ -74,12 +74,13 @@ class GuestItemRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/GiftMessage/_files/quote_with_item_message.php
+     * @magentoConfigFixture default_store sales/gift_options/allow_items 1
      */
     public function testSave()
     {
-        // sales/gift_options/allow_items must be set to 1 in system configuration
-        // @todo remove next statement when \Magento\TestFramework\TestCase\WebapiAbstract::_updateAppConfig is fixed
+        
         $this->markTestSkipped('This test relies on system configuration state.');
+       
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_message', 'reserved_order_id');
