@@ -32,12 +32,12 @@ class SaveAsyncConfigPlugin
     /**
      * @var RedirectFactory
      */
-    private RedirectFactory $resultRedirectFactory;
+    private $resultRedirectFactory;
 
     /**
      * @var ManagerInterface
      */
-    private ManagerInterface $messageManager;
+    private $messageManager;
 
     /**
      * @var const
@@ -66,7 +66,7 @@ class SaveAsyncConfigPlugin
     }
 
     /**
-     * around Config save controller
+     * Around Config save controller
      *
      * @param Save $subject
      * @param callable $proceed

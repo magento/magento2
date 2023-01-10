@@ -31,6 +31,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
     protected $_configStructure;
 
     /**
+     * @var mixed
      * @deprecated 101.0.0
      * @see Nothing
      */
