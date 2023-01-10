@@ -175,7 +175,7 @@ define([
                          * @param {String} message
                          */
                         insertMethod: function (message) {
-                            $wrapper = jQuery('<div/>').html(message);
+                            $wrapper = jQuery('<div></div>').html(message);
 
                             jQuery('.modal-header .page-main-actions').after($wrapper);
                         }
@@ -301,7 +301,7 @@ define([
                 updateElementAtCursor(textareaElm, value);
                 textareaElm.focus();
                 textareaElm.scrollTop = scrollPos;
-                jQuery(textareaElm).change();
+                jQuery(textareaElm).trigger('change');
                 textareaElm = null;
             }
 

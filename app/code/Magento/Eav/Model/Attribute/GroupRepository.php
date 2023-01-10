@@ -181,7 +181,7 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return null|string
-     * @deprecated
+     * @deprecated 101.0.3
      */
     protected function retrieveAttributeSetIdFromSearchCriteria(
         \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
@@ -199,7 +199,7 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
     /**
      * Retrieve collection processor
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

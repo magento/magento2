@@ -15,14 +15,18 @@ define([
         blockContentLoadingClass = '_block-content-loading',
         blockLoader,
         blockLoaderClass,
-        loaderImageHref;
+        blockLoaderElement = $.Deferred(),
+        loaderImageHref = $.Deferred();
 
     templateLoader.loadTemplate(blockLoaderTemplatePath).done(function (blockLoaderTemplate) {
-        blockLoader = template($.trim(blockLoaderTemplate), {
-            loaderImageHref: loaderImageHref
+        loaderImageHref.done(function (loaderHref) {
+            blockLoader = template(blockLoaderTemplate.trim(), {
+                loaderImageHref: loaderHref
+            });
+            blockLoader = $(blockLoader);
+            blockLoaderClass = '.' + blockLoader.attr('class');
+            blockLoaderElement.resolve();
         });
-        blockLoader = $(blockLoader);
-        blockLoaderClass = '.' + blockLoader.attr('class');
     });
 
     /**
@@ -45,7 +49,7 @@ define([
      * @param {Object} element
      */
     function addBlockLoader(element) {
-        element.find(':focus').blur();
+        element.find(':focus').trigger('blur');
         element.find('input:disabled, select:disabled').addClass('_disabled');
         element.find('input, select').prop('disabled', true);
 
@@ -70,7 +74,7 @@ define([
     }
 
     return function (loaderHref) {
-        loaderImageHref = loaderHref;
+        loaderImageHref.resolve(loaderHref);
         ko.bindingHandlers.blockLoader = {
             /**
              * Process loader for block
@@ -81,9 +85,9 @@ define([
                 element = $(element);
 
                 if (ko.unwrap(displayBlockLoader())) {
-                    addBlockLoader(element);
+                    blockLoaderElement.done(addBlockLoader(element));
                 } else {
-                    removeBlockLoader(element);
+                    blockLoaderElement.done(removeBlockLoader(element));
                 }
             }
         };

@@ -12,5 +12,6 @@
         <element name="success" type="text" selector="div.message-success.success.message"/>
         <element name="error" type="text" selector="div.message-error.error.message"/>
         <element name="noticeMessage" type="text" selector="div.message.notice div"/>
+        <element name="messageByType" type="text" selector=".messages .message-{{messageType}}" parameterized="true" />
     </section>
 </sections>

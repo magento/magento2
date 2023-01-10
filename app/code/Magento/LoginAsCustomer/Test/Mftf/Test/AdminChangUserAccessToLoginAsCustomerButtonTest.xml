@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminChangUserAccessToLoginAsCustomerButtonTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="Permissions and ACl"/>
+            <title value="Change admin user's access to 'Login as Customer Button'"/>
+            <description
+                value="Verify admin user's access to 'Login as Customer Button' can be changed"/>
+            <severity value="CRITICAL"/>
+            <group value="login_as_customer"/>
+            <skip>
+                <issueId value="MQE-1964"/>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultAdminUserBefore"/>
+
+            <!--Create New Role-->
+            <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="goToNewRolePage"/>
+            <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillNewRoleForm">
+                <argument name="role" value="CustomRoleAllResources"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveNewRole"/>
+
+            <!--Create New User-->
+            <actionGroup ref="AdminCreateUserWithApiRoleActionGroup" stepKey="adminCreateUser">
+                <argument name="user" value="NewAdminUser"/>
+                <argument name="role" value="CustomRoleAllResources"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!--Delete new User-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutNewUserAfter"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultAdminUserAfter"/>
+            <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteNewUser">
+                <argument name="user" value="NewAdminUser"/>
+            </actionGroup>
+
+            <!--Delete new Role-->
+            <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteCustomRoleAllResources">
+                <argument name="roleName" value="{{CustomRoleAllResources.rolename}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
+
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
+                        stepKey="disableLoginAsCustomer"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+        </after>
+
+        <!-- Login as new User -->
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logOutFromAdminPanel"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUser">
+            <argument name="username" value="{{NewAdminUser.username}}"/>
+            <argument name="password" value="{{NewAdminUser.password}}"/>
+        </actionGroup>
+
+        <!-- Verify new User has access to 'Login as Customer Button' -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                     stepKey="verifyLoginAsCustomerWorksOnCustomerPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSignOutAndCloseTabActionGroup" stepKey="customerSignOutAndCloseTab"/>
+
+        <!-- Revoke 'Login as Customer Button' access for new User -->
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutNewUser"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultAdminUser"/>
+
+        <actionGroup ref="AdminEditUserRoleActionGroup" stepKey="openEditUserRole">
+            <argument name="roleName" value="{{CustomRoleAllResources.rolename}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminRevokeRoleResourceActionGroup" stepKey="revokeLoginAsCustomerAccess">
+            <argument name="resourceName" value="Allow Login as Customer Button"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveEditedRole"/>
+
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutDefaultAdminUserAfterRevoke"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUserAfterRevoke">
+            <argument name="username" value="{{NewAdminUser.username}}"/>
+            <argument name="password" value="{{NewAdminUser.password}}"/>
+        </actionGroup>
+
+        <!-- Verify new User no longer has access to 'Login as Customer Button' -->
+        <actionGroup ref="AdminLoginAsCustomerAbsentOnCustomerPageActionGroup" stepKey="verifyLoginAsCustomerAbsentOnCustomerPage">
+            <argument name="customerId" value="$createCustomer.id$"/>
+        </actionGroup>
+    </test>
+</tests>

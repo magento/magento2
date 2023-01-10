@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerManualChooseFromOrderPageTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="Select Store based on 'Store View To Login In' setting"/>
+            <title
+                value="Admin user directly login into customer account with store View To Login In = Manual Choose on Order Page"/>
+            <description
+                value="Verify admin user can directly login into customer account to Custom store view when Store View To Login In = Manual Choose on Order Page"/>
+            <severity value="CRITICAL"/>
+            <group value="login_as_customer"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 1"
+                        stepKey="enableLoginAsCustomerManualChoose"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createCustomStore">
+                <argument name="website" value="{{_defaultWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createFirstCustomStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondCustomStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStore">
+                <argument name="storeGroupName" value="customStoreGroup.name"/>
+            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
+                        stepKey="disableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheAfterTestRun"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- Create order -->
+        <actionGroup ref="CreateOrderInStoreActionGroup" stepKey="createOrder">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="customer" value="$$createCustomer$$"/>
+            <argument name="storeView" value="customStoreFR"/>
+        </actionGroup>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+
+        <!-- Login as Customer from Order page -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromOrderPageManualChooseActionGroup"
+                     stepKey="loginAsCustomerFromOrderPage">
+            <argument name="orderId" value="{$grabOrderId}"/>
+            <argument name="storeName" value="{{customStoreGroup.name}}"/>
+        </actionGroup>
+
+        <!-- Assert Customer logged on on custom store view -->
+        <actionGroup ref="StorefrontAssertLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromCustomerGird">
+            <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
+            <argument name="customerEmail" value="$$createCustomer.email$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCustomerOnStoreViewActionGroup" stepKey="assertCustomStoreView">
+            <argument name="storeViewName" value="{{customStoreEN.name}}"/>
+        </actionGroup>
+
+        <!-- Log out Customer and close tab -->
+        <actionGroup ref="StorefrontSignOutAndCloseTabActionGroup" stepKey="signOutAndCloseTab"/>
+    </test>
+</tests>

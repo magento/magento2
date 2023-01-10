@@ -53,19 +53,19 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class Subscriber extends AbstractModel
 {
-    const STATUS_SUBSCRIBED = 1;
-    const STATUS_NOT_ACTIVE = 2;
-    const STATUS_UNSUBSCRIBED = 3;
-    const STATUS_UNCONFIRMED = 4;
+    public const STATUS_SUBSCRIBED = 1;
+    public const STATUS_NOT_ACTIVE = 2;
+    public const STATUS_UNSUBSCRIBED = 3;
+    public const STATUS_UNCONFIRMED = 4;
 
-    const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'newsletter/subscription/confirm_email_template';
-    const XML_PATH_CONFIRM_EMAIL_IDENTITY = 'newsletter/subscription/confirm_email_identity';
-    const XML_PATH_SUCCESS_EMAIL_TEMPLATE = 'newsletter/subscription/success_email_template';
-    const XML_PATH_SUCCESS_EMAIL_IDENTITY = 'newsletter/subscription/success_email_identity';
-    const XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE = 'newsletter/subscription/un_email_template';
-    const XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY = 'newsletter/subscription/un_email_identity';
-    const XML_PATH_CONFIRMATION_FLAG = 'newsletter/subscription/confirm';
-    const XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG = 'newsletter/subscription/allow_guest_subscribe';
+    public const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'newsletter/subscription/confirm_email_template';
+    public const XML_PATH_CONFIRM_EMAIL_IDENTITY = 'newsletter/subscription/confirm_email_identity';
+    public const XML_PATH_SUCCESS_EMAIL_TEMPLATE = 'newsletter/subscription/success_email_template';
+    public const XML_PATH_SUCCESS_EMAIL_IDENTITY = 'newsletter/subscription/success_email_identity';
+    public const XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE = 'newsletter/subscription/un_email_template';
+    public const XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY = 'newsletter/subscription/un_email_identity';
+    public const XML_PATH_CONFIRMATION_FLAG = 'newsletter/subscription/confirm';
+    public const XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG = 'newsletter/subscription/allow_guest_subscribe';
 
     /**
      * Prefix of model events names
@@ -91,7 +91,6 @@ class Subscriber extends AbstractModel
     protected $_isStatusChanged = false;
 
     /**
-     * Newsletter data
      *
      * @var Data
      */
@@ -105,7 +104,6 @@ class Subscriber extends AbstractModel
     protected $_scopeConfig;
 
     /**
-     * Customer session
      *
      * @var \Magento\Customer\Model\Session
      */
@@ -118,7 +116,6 @@ class Subscriber extends AbstractModel
     private $dateTime;
 
     /**
-     * Store manager
      *
      * @var StoreManagerInterface
      */
@@ -308,6 +305,10 @@ class Subscriber extends AbstractModel
      */
     public function setStatus($value)
     {
+        if ($this->getSubscriberStatus() !== $value) {
+            $this->setStatusChanged(true);
+        }
+
         return $this->setSubscriberStatus($value);
     }
 
@@ -382,6 +383,7 @@ class Subscriber extends AbstractModel
      * @param string $email
      * @param int $websiteId
      * @return $this
+     * @since 100.4.0
      */
     public function loadBySubscriberEmail(string $email, int $websiteId): Subscriber
     {
@@ -400,6 +402,7 @@ class Subscriber extends AbstractModel
      * @param int $customerId
      * @param int $websiteId
      * @return $this
+     * @since 100.4.0
      */
     public function loadByCustomer(int $customerId, int $websiteId): Subscriber
     {
@@ -447,7 +450,8 @@ class Subscriber extends AbstractModel
         }
 
         if ($this->getSubscriberStatus() != self::STATUS_UNSUBSCRIBED) {
-            $this->setSubscriberStatus(self::STATUS_UNSUBSCRIBED)->save();
+            $this->setStatus(self::STATUS_UNSUBSCRIBED);
+            $this->save();
             $this->sendUnsubscriptionEmail();
         }
         return $this;
@@ -558,8 +562,9 @@ class Subscriber extends AbstractModel
             ]
         )->setTemplateVars(
             $templateVars
-        )->setFrom(
-            $identity
+        )->setFromByScope(
+            $identity,
+            $this->getStoreId()
         )->addTo(
             $this->getEmail(),
             $this->getName()
@@ -588,6 +593,7 @@ class Subscriber extends AbstractModel
      * Set date of last changed status
      *
      * @return $this
+     * @since 100.2.1
      */
     public function beforeSave()
     {
@@ -603,7 +609,7 @@ class Subscriber extends AbstractModel
      *
      * @param string $subscriberEmail
      * @return $this
-     * @deprecated The subscription should be loaded by website id
+     * @deprecated 100.4.0 The subscription should be loaded by website id
      * @see loadBySubscriberEmail
      */
     public function loadByEmail($subscriberEmail)
@@ -619,7 +625,7 @@ class Subscriber extends AbstractModel
      *
      * @param int $customerId
      * @return $this
-     * @deprecated The subscription should be loaded by website id
+     * @deprecated 100.4.0 The subscription should be loaded by website id
      * @see loadByCustomer
      */
     public function loadByCustomerId($customerId)
@@ -644,7 +650,7 @@ class Subscriber extends AbstractModel
      *
      * @param string $email
      * @return int
-     * @deprecated The subscription should be updated by store id
+     * @deprecated 100.4.0 The subscription should be updated by store id
      * @see \Magento\Newsletter\Model\SubscriptionManager::subscribe
      */
     public function subscribe($email)
@@ -661,7 +667,7 @@ class Subscriber extends AbstractModel
      *
      * @param int $customerId
      * @return $this
-     * @deprecated The subscription should be updated by store id
+     * @deprecated 100.4.0 The subscription should be updated by store id
      * @see \Magento\Newsletter\Model\SubscriptionManager::subscribeCustomer
      */
     public function subscribeCustomerById($customerId)
@@ -674,7 +680,7 @@ class Subscriber extends AbstractModel
      *
      * @param int $customerId
      * @return $this
-     * @deprecated The subscription should be updated by store id
+     * @deprecated 100.4.0 The subscription should be updated by store id
      * @see \Magento\Newsletter\Model\SubscriptionManager::unsubscribeCustomer
      */
     public function unsubscribeCustomerById($customerId)
@@ -687,7 +693,7 @@ class Subscriber extends AbstractModel
      *
      * @param int $customerId
      * @return $this
-     * @deprecated The subscription should be updated by store id
+     * @deprecated 100.4.0 The subscription should be updated by store id
      * @see \Magento\Newsletter\Model\SubscriptionManager::subscribeCustomer
      */
     public function updateSubscription($customerId)
@@ -703,7 +709,7 @@ class Subscriber extends AbstractModel
      * @param int $customerId
      * @param bool $subscribe indicates whether the customer should be subscribed or unsubscribed
      * @return $this
-     * @deprecated The subscription should be updated by store id
+     * @deprecated 100.4.0 The subscription should be updated by store id
      * @see \Magento\Newsletter\Model\SubscriptionManager::subscribeCustomer
      */
     protected function _updateCustomerSubscription($customerId, $subscribe)

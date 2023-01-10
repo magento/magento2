@@ -1,0 +1,32 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Mutation {
+    generateCustomerTokenAsAdmin(
+        input: GenerateCustomerTokenAsAdminInput! @doc(description: "An input object that defines the customer email address.")
+    ): GenerateCustomerTokenAsAdminOutput
+    @resolver(class: "Magento\\LoginAsCustomerGraphQl\\Model\\Resolver\\RequestCustomerToken")
+    @doc(description: "Request a customer token so that an administrator can perform remote shopping assistance.")
+}
+
+input GenerateCustomerTokenAsAdminInput @doc(description: "Identifies which customer requires remote shopping assistance.") {
+    customer_email: String! @doc(description: "The email address of the customer requesting remote shopping assistance.")
+}
+
+type GenerateCustomerTokenAsAdminOutput @doc(description: "Contains the generated customer token.") {
+    customer_token: String! @doc(description: "The generated customer token.")
+}
+
+type Customer {
+    allow_remote_shopping_assistance: Boolean!
+    @resolver(class: "Magento\\LoginAsCustomerGraphQl\\Model\\Resolver\\isRemoteShoppingAssistanceAllowed")
+    @doc(description: "Indicates whether the customer has enabled remote shopping assistance.")
+}
+
+input CustomerCreateInput {
+    allow_remote_shopping_assistance: Boolean @doc(description: "Indicates whether the customer has enabled remote shopping assistance.")
+}
+
+input CustomerUpdateInput {
+    allow_remote_shopping_assistance: Boolean @doc(description: "Indicates whether the customer has enabled remote shopping assistance.")
+}

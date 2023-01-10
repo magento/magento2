@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace %moduleName%\Setup\Patch\%patchType%;
 
@@ -36,7 +37,7 @@ class %class% implements %implementsInterfaces%
     }
 %revertFunction%
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
@@ -44,12 +45,10 @@ class %class% implements %implementsInterfaces%
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
-        return [
-
-        ];
+        return [];
     }
 }

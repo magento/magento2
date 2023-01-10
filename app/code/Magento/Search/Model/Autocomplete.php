@@ -30,11 +30,11 @@ class Autocomplete implements AutocompleteInterface
      */
     public function getItems()
     {
-        $data = [[]];
+        $data = [];
         foreach ($this->dataProviders as $dataProvider) {
             $data[] = $dataProvider->getItems();
         }
 
-        return array_merge(...$data);
+        return array_merge([], ...$data);
     }
 }

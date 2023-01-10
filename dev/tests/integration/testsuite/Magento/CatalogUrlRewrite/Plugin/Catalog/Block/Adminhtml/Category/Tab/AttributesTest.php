@@ -9,6 +9,9 @@ use Magento\Catalog\Model\Category\DataProvider;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * @magentoAppArea adminhtml
+ */
 class AttributesTest extends \PHPUnit\Framework\TestCase
 {
     /**

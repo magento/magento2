@@ -16,10 +16,17 @@
         <element name="firstInputType" type="select" selector="[name='bundle_options[bundle_options][0][type]']"/>
         <element name="firstRequired" type="checkbox" selector="[name='bundle_options[bundle_options][0][required]']"/>
         <element name="firstProductQuantity" type="input" selector="[name='bundle_options[bundle_options][0][bundle_selections][0][selection_qty]']"/>
+        <element name="allBundleOptions" type="text" selector="[data-index=bundle_options]>tbody>tr"/>
         <element name="bundleOptionXTitle" type="input" selector="[name='bundle_options[bundle_options][{{x}}][title]']" parameterized="true"/>
         <element name="bundleOptionXInputType" type="select" selector="[name='bundle_options[bundle_options][{{x}}][type]']" parameterized="true"/>
         <element name="bundleOptionXRequired" type="checkbox" selector="[name='bundle_options[bundle_options][{{x}}][required]']" parameterized="true"/>
+        <element name="bundleOptionXAllProductRows" type="text" parameterized="true" selector="[data-index=bundle_options]>tbody>tr:nth-of-type({{optionIndex}}) table[data-index=bundle_selections]>tbody>tr"/>
+        <element name="bundleOptionXProductYIsDefault" type="input" parameterized="true" selector="[name='bundle_options[bundle_options][{{optionIndex}}][bundle_selections][{{productIndex}}][is_default]']"/>
+        <element name="bundleOptionXProductYName" type="text" parameterized="true" selector="[data-index=bundle_options]>tbody>tr:nth-of-type({{optionIndex}}) table[data-index=bundle_selections]>tbody>tr:nth-of-type({{productIndex}}) div[data-index=name]"/>
+        <element name="bundleOptionXProductYSku" type="text" parameterized="true" selector="[data-index=bundle_options]>tbody>tr:nth-of-type({{optionIndex}}) table[data-index=bundle_selections]>tbody>tr:nth-of-type({{productIndex}}) div[data-index=sku]"/>
         <element name="bundleOptionXProductYQuantity" type="input" selector="[name='bundle_options[bundle_options][{{x}}][bundle_selections][{{y}}][selection_qty]']" parameterized="true"/>
+        <element name="bundleOptionXProductYUserDefined" type="checkbox" parameterized="true" selector="[name='bundle_options[bundle_options][{{optionIndex}}][bundle_selections][{{productIndex}}][selection_can_change_qty]']"/>
+        <element name="bundleOptionXProductYPrice" type="input" selector="[name='bundle_options[bundle_options][{{x}}][bundle_selections][{{y}}][selection_price_value]']" parameterized="true"/>
         <element name="addProductsToOption" type="button" selector="[data-index='modal_set']" timeout="30"/>
         <element name="nthAddProductsToOption" type="button" selector="//tr[{{var}}]//button[@data-index='modal_set']" timeout="30" parameterized="true"/>
         <element name="bundlePriceType" type="select" selector="bundle_options[bundle_options][0][bundle_selections][0][selection_price_type]"/>
@@ -68,10 +75,12 @@
         <element name="priceField" type="input" selector="//div[@data-index='price']//input"/>
         <element name="listedBundleItem" type="text" selector="//tr[@data-repeat-index='0']//div"/>
         <element name="listedBundleItem2" type="text" selector="//tr[@data-repeat-index='2']//div"/>
+        <element name="bundleItem" type="text" selector="//span[@data-index='sku']"/>
         <!--FirstProductOption-->
         <element name="firstProductOption" type="checkbox" selector="//div[@class='admin__data-grid-outer-wrap']//tr[@data-repeat-index='0']//input[@type='checkbox']"/>
         <element name="dynamicSkuToggle" type="checkbox" selector="div[data-index='sku_type'] .admin__actions-switch-label" timeout="30"/>
         <element name="dynamicPriceToggle" type="checkbox" selector="//div[@data-index='price_type']//div[@data-role='switcher']"/>
+        <element name="dynamicPriceInput" type="input" selector="[name='product[price_type]']"/>
         <element name="taxClassDropDown" type="select" selector="//select[@name='product[tax_class_id]']" timeout="30"/>
         <element name="taxableGoodsOption" type="text" selector="//select[@name='product[tax_class_id]']//option[@data-title='Taxable Goods']"/>
         <element name="stockStatusField" type="select" selector="//select[@name='product[quantity_and_stock_status][is_in_stock]']"/>
@@ -89,8 +98,10 @@
         <element name="selectCountryOfManufacture" type="text" selector="//select[@name='product[country_of_manufacture]']//option[@data-title='{{country}}']" parameterized="true"/>
         <element name="dynamicSkuToggleOn" type="checkbox" selector="//div[@data-index='sku_type']//div[@data-role='switcher']//input[@value='0']"/>
         <element name="dynamicSkuToggleOff" type="checkbox" selector="//div[@data-index='sku_type']//div[@data-role='switcher']//input[@value='1']"/>
+        <element name="dynamicSkuInput" type="input" selector="[name='product[sku_type]']"/>
         <element name="dynamicWeightToggleOn" type="checkbox" selector="//div[@data-index='weight_type']//div[@data-role='switcher']//input[@value='0']"/>
         <element name="dynamicWeightToggleOff" type="checkbox" selector="//div[@data-index='weight_type']//div[@data-role='switcher']//input[@value='1']"/>
+        <element name="dynamicWeightInput" type="input" selector="[name='product[weight_type]']"/>
         <element name="categoryFieldName" type="text" selector="//fieldset[@data-index='container_category_ids']//label//span" timeout="30"/>
         <element name="categoryDone" type="button" selector=".admin__action-multiselect-actions-wrap [type='button'] span" timeout="30"/>
         <element name="dynamicPriceToggleOff" type="checkbox" selector="//div[@data-index='price_type']//div[@data-role='switcher']//input[@value='1']"/>
@@ -100,5 +111,19 @@
         <element name="selectCategory" type="multiselect" selector="//div[@class='action-menu _active']//label[@class='admin__action-multiselect-label']" timeout="30"/>
         <element name="categoriesLabel" type="text" selector="//div[@class='action-menu _active']//button[@data-action='close-advanced-select']"/>
         <element name="userDefinedQuantity" type="checkbox" selector="[name='bundle_options[bundle_options][{{option}}][bundle_selections][{{product}}][selection_can_change_qty]'][type='checkbox']" parameterized="true"/>
+        <element name="bundleItemsOptionTableRows" type="button" selector=".admin__dynamic-rows[data-index='bundle_selections'] tr.data-row" timeout="30"/>
+        <element name="isDefault" type="button" selector="//table[@class='admin__dynamic-rows admin__control-table']//span[contains(text(),'{{var1}}')]/../../../../..//input[@type='radio']" parameterized="true"/>
+        <!--Customizable Options -->
+        <element name="customizableOptionsToggle" type="button" selector="//span[text()='Customizable Options']"/>
+        <element name="addButtonOption" type="button" selector="button[data-index='button_add']"/>
+        <element name="customOptionXTitle" type="input" selector="[name='product[options][0][title]']"/>
+        <element name="customOptionSelectType" type="select" selector="[data-index='container_common'] .admin__action-multiselect-text"/>
+        <element name="customOptionSelectField" type="select" selector="//label[contains(text(),'Field')]" />
+        <element name="uncheckRequired" type="checkbox" selector="//span[contains(text(),'Required')]"/>
+        <element name="addButton" type="button" selector="//span[contains(text(),'Add Value')]"/>
+        <element name="customizableOptionPrice" type="input" selector=".//*[@name='product[options][0][price]']" />
+        <element name="priceType" type="select" selector="[name='product[options][0][price_type]']" />
+        <element name="priceTypeSelectPercent" type="select" selector="//*[@name='product[options][0][price_type]']/option[2]" />
+        <element name="weightFieldLabel" type="input" selector="//div[@data-index='weight']/div/label/span"/>
     </section>
 </sections>

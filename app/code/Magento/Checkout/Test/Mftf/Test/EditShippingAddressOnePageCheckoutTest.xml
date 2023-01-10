@@ -25,9 +25,8 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <createData entity="Simple_US_Customer_NY" stepKey="createCustomer"/>
-            <!--Clear cache and reindex-->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -41,7 +40,7 @@
          </actionGroup>
 
         <!-- Add product to cart -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage"/>
         <actionGroup ref="StorefrontAddSimpleProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
@@ -56,7 +55,7 @@
         <actionGroup ref="FillShippingAddressOneStreetActionGroup" stepKey="changeAddress">
             <argument name="address" value="UK_Not_Default_Address"/>
         </actionGroup>
-        <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="saveNewAddress"/>
+        <actionGroup ref="StorefrontCheckoutClickSaveAddressButtonActionGroup" stepKey="saveNewAddress"/>
 
         <!--Select Shipping Rate-->
         <scrollTo selector="{{CheckoutShippingMethodsSection.next}}" stepKey="scrollToShippingRate"/>
@@ -71,7 +70,7 @@
 
         <!-- Go to *Next* -->
         <scrollTo selector="{{CheckoutShippingMethodsSection.next}}" stepKey="scrollToButtonNext"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="goNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="goNext"/>
 
         <!-- Select payment solution -->
         <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution" />

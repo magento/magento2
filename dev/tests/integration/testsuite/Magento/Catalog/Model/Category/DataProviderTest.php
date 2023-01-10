@@ -3,42 +3,54 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Category;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate;
+use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Registry;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\Registry;
 use PHPUnit\Framework\TestCase;
-use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\CategoryFactory;
-use Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate;
 
 /**
+ * Testing category form data provider.
+ *
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProviderTest extends TestCase
 {
-    /**
-     * @var DataProvider
-     */
+    /** @var DataProvider */
     private $dataProvider;
 
-    /**
-     * @var Registry
-     */
+    /** @var Registry */
     private $registry;
 
-    /**
-     * @var CategoryFactory
-     */
+    /** @var CategoryFactory */
     private $categoryFactory;
 
-    /**
-     * @var CategoryLayoutUpdateManager
-     */
+    /** @var CategoryLayoutUpdateManager */
     private $fakeFiles;
+
+    /** @var ScopeConfigInterface */
+    private $scopeConfig;
+
+    /** @var StoreManagerInterface */
+    private $storeManager;
+
+    /** @var CategoryRepositoryInterface */
+    private $categoryRepository;
 
     /**
      * Create subject instance.
@@ -58,22 +70,38 @@ class DataProviderTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected function setUp(): void
     {
-        parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
+        $objectManager->configure([
+            'preferences' => [
+                LayoutUpdateManager::class => CategoryLayoutUpdateManager::class
+            ]
+        ]);
+        parent::setUp();
         $this->dataProvider = $this->createDataProvider();
         $this->registry = $objectManager->get(Registry::class);
         $this->categoryFactory = $objectManager->get(CategoryFactory::class);
         $this->fakeFiles = $objectManager->get(CategoryLayoutUpdateManager::class);
+        $this->scopeConfig = $objectManager->get(ScopeConfigInterface::class);
+        $this->storeManager = $objectManager->get(StoreManagerInterface::class);
+        $this->categoryRepository = $objectManager->get(CategoryRepositoryInterface::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        $this->registry->unregister('category');
     }
 
     /**
      * @return void
      */
-    public function testGetMetaRequiredAttributes()
+    public function testGetMetaRequiredAttributes(): void
     {
         $requiredAttributes = [
             'general' => ['name'],
@@ -220,5 +248,77 @@ class DataProviderTest extends TestCase
         sort($expectedList);
         sort($list);
         $this->assertEquals($expectedList, $list);
+    }
+
+    /**
+     * Check if existing category page layout will remain unaffected by category page layout default value setting
+     *
+     * @return void
+     */
+    public function testExistingCategoryLayoutUnaffectedByDefaults(): void
+    {
+        /** @var Category $category */
+        $category = $this->categoryFactory->create();
+        $category->load(2);
+
+        $this->registry->register('category', $category);
+        $meta = $this->dataProvider->getMeta();
+        $categoryPageLayout = $meta["design"]["children"]["page_layout"]["arguments"]["data"]["config"]["default"];
+        $this->registry->unregister('category');
+
+        $this->assertNull($categoryPageLayout);
+    }
+
+    /**
+     * Check if category page layout default value setting will apply to the new category during it's creation
+     *
+     * @return void
+     */
+    public function testNewCategoryLayoutMatchesDefault(): void
+    {
+        $categoryDefaultPageLayout = $this->scopeConfig->getValue(
+            'web/default_layouts/default_category_layout',
+            ScopeInterface::SCOPE_STORE,
+            $this->storeManager->getStore()->getId()
+        );
+
+        /** @var Category $category */
+        $category = $this->categoryFactory->create();
+        $category->setName('Net Test Category');
+
+        $this->registry->register('category', $category);
+        $meta = $this->dataProvider->getMeta();
+        $categoryPageLayout = $meta["design"]["children"]["page_layout"]["arguments"]["data"]["config"]["default"];
+        $this->registry->unregister('category');
+
+        $this->assertEquals($categoryDefaultPageLayout, $categoryPageLayout);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/category_on_second_store.php
+     * @return void
+     */
+    public function testCategoryStoreView(): void
+    {
+        $id = 333;
+        $secondStore = $this->storeManager->getStore('test');
+        $category = $this->categoryRepository->get($id, $secondStore->getId());
+        $this->registerCategory($category);
+        $data = $this->dataProvider->getData();
+        $this->assertNotEmpty($data);
+        $this->assertEquals('Category 1 Second', $data[$id]['name']);
+        $this->assertEquals('category-1-second-url-key', $data[$id]['url_key']);
+    }
+
+    /**
+     * Register category in registry
+     *
+     * @param CategoryInterface $category
+     * @return void
+     */
+    private function registerCategory(CategoryInterface $category): void
+    {
+        $this->registry->unregister('category');
+        $this->registry->register('category', $category);
     }
 }

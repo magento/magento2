@@ -32,7 +32,7 @@ class MemoryUsageTest extends \PHPUnit\Framework\TestCase
      */
     public function testAppReinitializationNoMemoryLeak()
     {
-        $this->markTestSkipped('Test fails at Travis. Skipped until MAGETWO-47111');
+        $this->markTestSkipped('Skipped until MAGETWO-47111');
 
         $this->_deallocateUnusedMemory();
         $actualMemoryUsage = $this->_helper->getRealMemoryUsage();

@@ -21,11 +21,7 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     public function publicChildMethod(\Laminas\Code\Generator\ClassGenerator $classGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = [])
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicChildMethod');
-        if (!$pluginInfo) {
-            return parent::publicChildMethod($classGenerator, $param1, $param2, $param3, $array);
-        } else {
-            return $this->___callPlugins('publicChildMethod', func_get_args(), $pluginInfo);
-        }
+        return $pluginInfo ? $this->___callPlugins('publicChildMethod', func_get_args(), $pluginInfo) : parent::publicChildMethod($classGenerator, $param1, $param2, $param3, $array);
     }
 
     /**
@@ -34,11 +30,7 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     public function publicMethodWithReference(\Laminas\Code\Generator\ClassGenerator &$classGenerator, &$param1, array &$array)
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicMethodWithReference');
-        if (!$pluginInfo) {
-            return parent::publicMethodWithReference($classGenerator, $param1, $array);
-        } else {
-            return $this->___callPlugins('publicMethodWithReference', func_get_args(), $pluginInfo);
-        }
+        return $pluginInfo ? $this->___callPlugins('publicMethodWithReference', func_get_args(), $pluginInfo) : parent::publicMethodWithReference($classGenerator, $param1, $array);
     }
 
     /**
@@ -47,11 +39,7 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     public function publicChildWithoutParameters()
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicChildWithoutParameters');
-        if (!$pluginInfo) {
-            return parent::publicChildWithoutParameters();
-        } else {
-            return $this->___callPlugins('publicChildWithoutParameters', func_get_args(), $pluginInfo);
-        }
+        return $pluginInfo ? $this->___callPlugins('publicChildWithoutParameters', func_get_args(), $pluginInfo) : parent::publicChildWithoutParameters();
     }
 
     /**
@@ -60,11 +48,7 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     public function public71($arg1, string $arg2, ?int $arg3, ?int $arg4 = null) : void
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'public71');
-        if (!$pluginInfo) {
-            parent::public71($arg1, $arg2, $arg3, $arg4);
-        } else {
-            $this->___callPlugins('public71', func_get_args(), $pluginInfo);
-        }
+        $pluginInfo ? $this->___callPlugins('public71', func_get_args(), $pluginInfo) : parent::public71($arg1, $arg2, $arg3, $arg4);
     }
 
     /**
@@ -73,11 +57,7 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     public function public71Another(?\DateTime $arg1, $arg2 = false) : ?string
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'public71Another');
-        if (!$pluginInfo) {
-            return parent::public71Another($arg1, $arg2);
-        } else {
-            return $this->___callPlugins('public71Another', func_get_args(), $pluginInfo);
-        }
+        return $pluginInfo ? $this->___callPlugins('public71Another', func_get_args(), $pluginInfo) : parent::public71Another($arg1, $arg2);
     }
 
     /**
@@ -86,11 +66,7 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     public function publicWithSelf($arg = false) : \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicWithSelf');
-        if (!$pluginInfo) {
-            return parent::publicWithSelf($arg);
-        } else {
-            return $this->___callPlugins('publicWithSelf', func_get_args(), $pluginInfo);
-        }
+        return $pluginInfo ? $this->___callPlugins('publicWithSelf', func_get_args(), $pluginInfo) : parent::publicWithSelf($arg);
     }
 
     /**
@@ -99,11 +75,7 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     public function publicParentMethod(\Laminas\Code\Generator\DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = [])
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicParentMethod');
-        if (!$pluginInfo) {
-            return parent::publicParentMethod($docBlockGenerator, $param1, $param2, $param3, $array);
-        } else {
-            return $this->___callPlugins('publicParentMethod', func_get_args(), $pluginInfo);
-        }
+        return $pluginInfo ? $this->___callPlugins('publicParentMethod', func_get_args(), $pluginInfo) : parent::publicParentMethod($docBlockGenerator, $param1, $param2, $param3, $array);
     }
 
     /**
@@ -112,10 +84,6 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     public function publicParentWithoutParameters()
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicParentWithoutParameters');
-        if (!$pluginInfo) {
-            return parent::publicParentWithoutParameters();
-        } else {
-            return $this->___callPlugins('publicParentWithoutParameters', func_get_args(), $pluginInfo);
-        }
+        return $pluginInfo ? $this->___callPlugins('publicParentWithoutParameters', func_get_args(), $pluginInfo) : parent::publicParentWithoutParameters();
     }
 }

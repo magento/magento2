@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontGuestCustomerProductsMerged">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Products in cart are merged if Guest with cart logging in as Customer"/>
+            <title value="Products are merged when Guest Customer Login"/>
+            <description value="Products in cart are merged if Guest with cart logging in as Customer "/>
+            <stories value="Guest Checkout"/>
+            <testCaseId value="AC-4604"/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <!--PRECONDITIONS-->
+            <!-- create category -->
+            <createData entity="_defaultCategory" stepKey="testCategory"/>
+            <!-- create SimpleProduct1 -->
+            <createData entity="SimpleProduct" stepKey="simpleProductOne">
+                <requiredEntity createDataKey="testCategory"/>
+            </createData>
+            <!-- create SimpleProduct2 -->
+            <createData entity="SimpleProduct" stepKey="simpleProductTwo">
+                <requiredEntity createDataKey="testCategory"/>
+            </createData>
+            <!-- Assign SimpleProductOne to Category -->
+            <createData entity="AssignProductToCategory" stepKey="assignTestCategoryToSimpleProductOne">
+                <requiredEntity createDataKey="testCategory"/>
+                <requiredEntity createDataKey="simpleProductOne"/>
+            </createData>
+            <!-- Assign SimpleProductTwo to Category -->
+            <createData entity="AssignProductToCategory" stepKey="assignCategoryToSimpleProductTwo">
+                <requiredEntity createDataKey="testCategory"/>
+                <requiredEntity createDataKey="simpleProductTwo"/>
+            </createData>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
+            <!--Goto Admin Configuration page and Allow Guest Checkout is No-->
+            <createData entity="DisableAllowGuestCheckout" stepKey="storeConfigurationAllowGuestCheckoutNo">
+            </createData>
+        </before>
+        <after>
+            <!-- delete category,product,customer -->
+            <deleteData createDataKey="simpleProductOne" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProductTwo" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="testCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Goto Admin Configuration page and Allow Guest Checkout is Yes-->
+            <createData entity="EnableAllowGuestCheckout" stepKey="storeConfigurationAllowGuestCheckoutYes"/>
+        </after>
+        <!-- Go to Storefront as Customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Customer added Simple Product1 to ShoppingCart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductOneToCart">
+            <argument name="product" value="$$simpleProductOne$$"/>
+        </actionGroup>
+        <!-- Open MiniCart -->
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniCart"/>
+        <!-- Check MiniCart displays with number = 1 -->
+        <see userInput="1" selector="{{StorefrontMinicartSection.quantity}}" stepKey="assertQuantity"/>
+        <!-- Check MiniCart contains simple1 product -->
+        <seeElement selector="{{StorefrontMinicartSection.productName($$simpleProductOne.name$$)}}" stepKey="AssertSimpleProductOne"/>
+        <!--SignOut Customer-->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+        <!-- Add simple2 product to shopping cart as Guest -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductTwoToCart">
+            <argument name="product" value="$$simpleProductTwo$$"/>
+        </actionGroup>
+        <!-- Open MiniCart Again-->
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniCartAgain"/>
+      <!-- MiniCart displays with number = 1 -->
+        <see userInput="1" selector="{{StorefrontMinicartSection.quantity}}" stepKey="checkQuantity"/>
+        <!-- Check MiniCart contains simple2 product -->
+        <seeElement selector="{{StorefrontMinicartSection.productName($$simpleProductTwo.name$$)}}" stepKey="AssertSimpleProductTwo"/>
+        <!-- Open MiniCart Again and Click Proceed to Checkout-->
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <!--  Pop-Up window with *Create an Account* OR *Sign In* is presented-->
+        <seeElement selector="{{StorefrontCustomerSignInPopupFormSection.signIn}}" stepKey="checkSignInButton"/>
+        <seeElement selector="{{StorefrontCustomerSignInPopupFormSection.createAnAccount}}" stepKey="checkCreateAccountButton"/>
+        <!--Go to Storefront and Sign In as Customer from preconditions-->
+        <actionGroup ref="StorefrontGuestSignInActionGroup" stepKey="singInForPlaceOrder">
+            <argument name="email" value="$$createCustomer.email$$"/>
+            <argument name="password" value="$$createCustomer.password$$"/>
+        </actionGroup>
+        <!--Redirect to HomePage-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
+        <!-- Open MiniCart -->
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openCart"/>
+        <!-- Check MiniCart displays with number = 2 -->
+        <see userInput="2" selector="{{StorefrontMinicartSection.quantity}}" stepKey="checkMiniCartDisplaysQuantity"/>
+        <!-- Verify Two Products are added Product A and B-->
+        <!--MiniCart contains simple1 and simple2 products-->
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertSimpleProductOneNameInMiniCart">
+            <argument name="productName" value="$$simpleProductOne.name$$"/>
+        </actionGroup>
+        <!--Check Simple Product Two is there -->
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertSimpleProductTwoNameInMiniCart">
+            <argument name="productName" value="$$simpleProductTwo.name$$"/>
+        </actionGroup>
+        <!--Go To ShoppingCart-->
+        <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="viewAndEditCart"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+       <!--Check Simple1 and Simple2 product are presented on the Shopping Cart page -->
+        <seeElement selector="{{StorefrontMinicartSection.productCartName($$simpleProductOne.name$$)}}" stepKey="AssertSimpleProductOnenn"/>
+        <seeElement selector="{{StorefrontMinicartSection.productCartName($$simpleProductTwo.name$$)}}" stepKey="AssertSimpleProductTwbbo"/>
+    </test>
+</tests>

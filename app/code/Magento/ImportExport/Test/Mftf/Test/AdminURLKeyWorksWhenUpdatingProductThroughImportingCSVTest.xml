@@ -43,7 +43,11 @@
         <amOnPage url="{{StorefrontProductPage.url('simpleprod')}}" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <seeInCurrentUrl url="{{StorefrontProductPage.url('simpleprod')}}" stepKey="seeUpdatedUrl"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createProduct.name$$" stepKey="assertProductName"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="$$createProduct.sku$$" stepKey="assertProductSku"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="assertProductName">
+            <argument name="value" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="assertProductSku">
+            <argument name="productSku" value="$$createProduct.sku$$"/>
+        </actionGroup>
     </test>
 </tests>

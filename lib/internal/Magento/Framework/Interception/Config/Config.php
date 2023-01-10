@@ -37,7 +37,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
 
     /**
      * Cache
-     * @deprecated
+     * @deprecated 102.0.1
      * @var \Magento\Framework\Cache\FrontendInterface
      */
     protected $_cache;
@@ -144,7 +144,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      */
     protected function _inheritInterception($type)
     {
-        $type = ltrim($type, '\\');
+        $type = ltrim((string)$type, '\\');
         if (!isset($this->_intercepted[$type])) {
             $realType = $this->_omConfig->getOriginalInstanceType($type);
             if ($type !== $realType) {

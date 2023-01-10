@@ -57,4 +57,12 @@
     <operation name="DeleteCategory" dataType="category" type="delete" auth="adminOauth" url="/V1/categories/{id}" method="DELETE">
         <contentType>application/json</contentType>
     </operation>
+
+    <operation name="AssignProductToCategory" dataType="category_product_link" type="create" auth="adminOauth" url="/V1/categories/{id}/products" method="POST">
+        <contentType>application/json</contentType>
+        <object key="productLink" dataType="category_product_link">
+            <field key="sku">string</field>
+            <field key="category_id">string</field>
+        </object>
+    </operation>
 </operations>

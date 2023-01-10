@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Collection;
 
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Catalog EAV collection resource abstract model
  *
@@ -25,7 +28,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
     protected $_storeId;
 
     /**
-     * Store manager
+     * Manager of store
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
@@ -155,6 +158,18 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
         $entityIdField = $indexList[$connection->getPrimaryKeyName($entityTable)]['COLUMNS_LIST'][0];
 
         if ($storeId) {
+
+            foreach ($attributeIds as $id) {
+                $attribute = $this->_eavConfig->getAttribute(
+                    $this->getEntity()->getType(),
+                    $id
+                );
+
+                if ($attribute->getAttributeCode() === 'price' && (int)$attribute->getIsGlobal() === 1) {
+                    $storeId = $this->getDefaultStoreId();
+                }
+            }
+
             $joinCondition = [
                 't_s.attribute_id = t_d.attribute_id',
                 "t_s.{$entityIdField} = t_d.{$entityIdField}",
@@ -170,10 +185,12 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
                 ['e.entity_id']
             )->where(
                 "e.entity_id IN (?)",
-                array_keys($this->_itemsById)
+                array_keys($this->_itemsById),
+                \Zend_Db::INT_TYPE
             )->where(
                 't_d.attribute_id IN (?)',
-                $attributeIds
+                $attributeIds,
+                \Zend_Db::INT_TYPE
             )->joinLeft(
                 ['t_s' => $table],
                 implode(' AND ', $joinCondition),
@@ -192,10 +209,12 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
                 ['e.entity_id']
             )->where(
                 "e.entity_id IN (?)",
-                array_keys($this->_itemsById)
+                array_keys($this->_itemsById),
+                \Zend_Db::INT_TYPE
             )->where(
                 'attribute_id IN (?)',
-                $attributeIds
+                $attributeIds,
+                \Zend_Db::INT_TYPE
             )->where(
                 'store_id = ?',
                 $this->getDefaultStoreId()

@@ -57,6 +57,7 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView10">
                 <argument name="customStore" value="storeViewData7"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -92,10 +93,10 @@
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView10">
             <argument name="customStore" value="storeViewData7"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Navigate to Product attribute page-->
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="navigateToNewProductAttributePage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="navigateToNewProductAttributePage"/>
         <fillField userInput="test_label" selector="{{AttributePropertiesSection.DefaultLabel}}" stepKey="fillDefaultLabel"/>
         <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="Text Swatch" stepKey="selectInputType"/>
         <click selector="{{AttributePropertiesSection.addSwatch}}" stepKey="clickAddSwatch"/>

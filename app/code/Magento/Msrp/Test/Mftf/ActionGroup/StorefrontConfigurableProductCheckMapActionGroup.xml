@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontConfigurableProductCheckMapActionGroup">
+        <annotations>
+            <description>Check MAP of configurable product options on store-front.</description>
+        </annotations>
+        <arguments>
+            <argument name="productMap" type="string"/>
+            <argument name="productAttributeOptionValue" type="string"/>
+        </arguments>
+
+        <!--Check msrp for configurable product option -->
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="{{productAttributeOptionValue}}" stepKey="selectOption"/>
+        <waitForElement selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="waitForLoad"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="grabProductMapPrice"/>
+        <assertEquals stepKey="assertProductMapPrice">
+            <actualResult type="const">($grabProductMapPrice)</actualResult>
+            <expectedResult type="string">${{productMap}}</expectedResult>
+        </assertEquals>
+        <seeElement selector="{{StorefrontProductInfoMainSection.clickForPriceLink}}" stepKey="checkClickForPriceLinkForProduct"/>
+    </actionGroup>
+</actionGroups>

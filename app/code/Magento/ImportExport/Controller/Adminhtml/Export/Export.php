@@ -9,9 +9,12 @@ namespace Magento\ImportExport\Controller\Adminhtml\Export;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\MessageQueue\PublisherInterface;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\ImportExport\Model\Export as ExportModel;
 use Magento\ImportExport\Model\Export\Entity\ExportInfoFactory;
@@ -27,7 +30,7 @@ class Export extends ExportController implements HttpPostActionInterface
     protected $fileFactory;
 
     /**
-     * @var \Magento\Framework\Session\SessionManagerInterface
+     * @var SessionManagerInterface
      */
     private $sessionManager;
 
@@ -42,28 +45,36 @@ class Export extends ExportController implements HttpPostActionInterface
     private $exportInfoFactory;
 
     /**
+     * @var ResolverInterface
+     */
+    private $localeResolver;
+
+    /**
      * @param Context $context
      * @param FileFactory $fileFactory
-     * @param \Magento\Framework\Session\SessionManagerInterface|null $sessionManager
+     * @param SessionManagerInterface|null $sessionManager
      * @param PublisherInterface|null $publisher
      * @param ExportInfoFactory|null $exportInfoFactory
+     * @param ResolverInterface|null $localeResolver
      */
     public function __construct(
         Context $context,
         FileFactory $fileFactory,
-        \Magento\Framework\Session\SessionManagerInterface $sessionManager = null,
+        SessionManagerInterface $sessionManager = null,
         PublisherInterface $publisher = null,
-        ExportInfoFactory $exportInfoFactory = null
+        ExportInfoFactory $exportInfoFactory = null,
+        ResolverInterface $localeResolver = null
     ) {
         $this->fileFactory = $fileFactory;
-        $this->sessionManager = $sessionManager ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Session\SessionManagerInterface::class);
-        $this->messagePublisher = $publisher ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(PublisherInterface::class);
-        $this->exportInfoFactory = $exportInfoFactory ?:
-            \Magento\Framework\App\ObjectManager::getInstance()->get(
-                ExportInfoFactory::class
-            );
+        $this->sessionManager = $sessionManager
+            ?? ObjectManager::getInstance()->get(SessionManagerInterface::class);
+        $this->messagePublisher = $publisher
+            ?? ObjectManager::getInstance()->get(PublisherInterface::class);
+        $this->exportInfoFactory = $exportInfoFactory
+            ?? ObjectManager::getInstance()->get(ExportInfoFactory::class);
+        $this->localeResolver = $localeResolver
+            ?? ObjectManager::getInstance()->get(ResolverInterface::class);
+
         parent::__construct($context);
     }
 
@@ -76,7 +87,7 @@ class Export extends ExportController implements HttpPostActionInterface
     {
         if ($this->getRequest()->getPost(ExportModel::FILTER_ELEMENT_GROUP)) {
             try {
-                $params = $this->getRequest()->getParams();
+                $params = $this->getRequestParameters();
 
                 if (!array_key_exists('skip_attr', $params)) {
                     $params['skip_attr'] = [];
@@ -87,7 +98,8 @@ class Export extends ExportController implements HttpPostActionInterface
                     $params['file_format'],
                     $params['entity'],
                     $params['export_filter'],
-                    $params['skip_attr']
+                    $params['skip_attr'],
+                    $this->localeResolver->getLocale()
                 );
 
                 $this->messagePublisher->publish('import_export.export', $dataObject);
@@ -99,14 +111,24 @@ class Export extends ExportController implements HttpPostActionInterface
                 );
             } catch (\Exception $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                $this->messageManager->addError(__('Please correct the data sent value.'));
+                $this->messageManager->addErrorMessage(__('Please correct the data sent value.'));
             }
         } else {
-            $this->messageManager->addError(__('Please correct the data sent value.'));
+            $this->messageManager->addErrorMessage(__('Please correct the data sent value.'));
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('adminhtml/*/index');
         return $resultRedirect;
+    }
+
+    /**
+     * Retrieve all params as array
+     *
+     * @return array
+     */
+    public function getRequestParameters(): array
+    {
+        return $this->getRequest()->getParams();
     }
 }

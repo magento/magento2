@@ -15,6 +15,8 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write as DirectoryWrite;
 use Magento\Framework\Filesystem\File\Write;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\ZendEscaper;
 use Magento\Sitemap\Helper\Data;
 use Magento\Sitemap\Model\ItemProvider\ConfigReaderInterface;
 use Magento\Sitemap\Model\ItemProvider\ItemProviderInterface;
@@ -137,16 +139,14 @@ class SitemapTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resourceMock->expects($this->any())
-            ->method('addCommitCallback')
+        $this->resourceMock->method('addCommitCallback')
             ->willReturnSelf();
 
         $this->fileMock = $this->createMock(Write::class);
 
         $this->directoryMock = $this->createMock(DirectoryWrite::class);
 
-        $this->directoryMock->expects($this->any())
-            ->method('openFile')
+        $this->directoryMock->method('openFile')
             ->willReturn($this->fileMock);
 
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
@@ -154,8 +154,7 @@ class SitemapTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->filesystemMock->expects($this->any())
-            ->method('getDirectoryWrite')
+        $this->filesystemMock->method('getDirectoryWrite')
             ->willReturn($this->directoryMock);
 
         $this->configReaderMock = $this->getMockForAbstractClass(SitemapConfigReaderInterface::class);
@@ -163,8 +162,7 @@ class SitemapTest extends TestCase
         $this->request = $this->createMock(Http::class);
         $this->store = $this->createPartialMock(Store::class, ['isFrontUrlSecure', 'getBaseUrl']);
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->storeManagerMock->expects($this->any())
-            ->method('getStore')
+        $this->storeManagerMock->method('getStore')
             ->willReturn($this->store);
     }
 
@@ -465,12 +463,10 @@ class SitemapTest extends TestCase
         if (isset($robotsInfo['robotsFinish'])) {
             $robotsFinish = $robotsInfo['robotsFinish'];
         }
-        $this->directoryMock->expects($this->any())
-            ->method('readFile')
+        $this->directoryMock->method('readFile')
             ->willReturn($robotsStart);
 
-        $this->directoryMock->expects($this->any())
-            ->method('writeFile')
+        $this->directoryMock->method('writeFile')
             ->with(
                 $this->equalTo('robots.txt'),
                 $this->equalTo($robotsFinish)
@@ -481,16 +477,13 @@ class SitemapTest extends TestCase
         if (isset($robotsInfo['pushToRobots'])) {
             $pushToRobots = (int)$robotsInfo['pushToRobots'];
         }
-        $this->configReaderMock->expects($this->any())
-            ->method('getMaximumLinesNumber')
+        $this->configReaderMock->method('getMaximumLinesNumber')
             ->willReturn($maxLines);
 
-        $this->configReaderMock->expects($this->any())
-            ->method('getMaximumFileSize')
+        $this->configReaderMock->method('getMaximumFileSize')
             ->willReturn($maxFileSize);
 
-        $this->configReaderMock->expects($this->any())
-            ->method('getEnableSubmissionRobots')
+        $this->configReaderMock->method('getEnableSubmissionRobots')
             ->willReturn($pushToRobots);
 
         $model = $this->getModelMock(true);
@@ -531,10 +524,9 @@ class SitemapTest extends TestCase
             $methods[] = 'beforeSave';
         }
 
-        $storeBaseMediaUrl = 'http://store.com/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/';
+        $storeBaseMediaUrl = 'http://store.com/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/';
 
-        $this->itemProviderMock->expects($this->any())
-            ->method('getItems')
+        $this->itemProviderMock->method('getItems')
             ->willReturn(
                 [
                     new SitemapItem('category.html', '1.0', 'daily', '2012-12-21 00:00:00'),
@@ -551,7 +543,7 @@ class SitemapTest extends TestCase
                                     new DataObject(
                                         [
                                             'url' => $storeBaseMediaUrl . 'i/m/image1.png',
-                                            'caption' => 'caption & > title < "'
+                                            'caption' => 'Copyright © caption &trade; & > title < "'
                                         ]
                                     ),
                                     new DataObject(
@@ -572,16 +564,16 @@ class SitemapTest extends TestCase
             ->setConstructorArgs($this->getModelConstructorArgs())
             ->getMock();
 
-        $model->expects($this->any())
-            ->method('_getResource')
+        $model->method('_getResource')
             ->willReturn($this->resourceMock);
 
-        $model->expects($this->any())
-            ->method('_getCurrentDateTime')
+        $model->method('_getCurrentDateTime')
             ->willReturn('2012-12-21T00:00:00-08:00');
 
-        $model->expects($this->any())
-            ->method('_getDocumentRoot')
+        $model->method('_getBaseDir')
+            ->willReturn('');
+
+        $model->method('_getDocumentRoot')
             ->willReturn('/project');
 
         $model->setSitemapFilename('sitemap.xml');
@@ -610,7 +602,8 @@ class SitemapTest extends TestCase
 
         $objectManager = new ObjectManager($this);
         $escaper = $objectManager->getObject(Escaper::class);
-
+        $this->setPrivatePropertyValue($escaper, 'escaper', $objectManager->getObject(ZendEscaper::class));
+        $this->setPrivatePropertyValue($escaper, 'translateInline', $this->createMock(InlineInterface::class));
         $constructArguments = $objectManager->getConstructArguments(
             Sitemap::class,
             [
@@ -656,16 +649,13 @@ class SitemapTest extends TestCase
             ->setConstructorArgs($this->getModelConstructorArgs())
             ->getMock();
 
-        $model->expects($this->any())
-            ->method('_getStoreBaseUrl')
+        $model->method('_getStoreBaseUrl')
             ->willReturn($storeBaseUrl);
 
-        $model->expects($this->any())
-            ->method('_getDocumentRoot')
+        $model->method('_getDocumentRoot')
             ->willReturn($documentRoot);
 
-        $model->expects($this->any())
-            ->method('_getBaseDir')
+        $model->method('_getBaseDir')
             ->willReturn($baseDir);
 
         $this->assertEquals($result, $model->getSitemapUrl($sitemapPath, $sitemapFileName));
@@ -795,5 +785,22 @@ class SitemapTest extends TestCase
                 null,
             ],
         ];
+    }
+
+    /**
+     * @param mixed $object
+     * @param string $attributeName
+     * @param string $value
+     */
+    private function setPrivatePropertyValue($object, $attributeName, $value): void
+    {
+        $attribute = new \ReflectionProperty($object, $attributeName);
+        if ($attribute->isPublic()) {
+            $object->$attributeName = $value;
+        } else {
+            $attribute->setAccessible(true);
+            $attribute->setValue($object, $value);
+            $attribute->setAccessible(false);
+        }
     }
 }

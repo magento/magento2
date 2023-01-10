@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Remove asset(s) that correspond the provided directory path
- * @deprecated use \Magento\MediaGalleryApi\Api\DeleteAssetsByPathInterface instead
+ * @deprecated 100.4.0 use \Magento\MediaGalleryApi\Api\DeleteAssetsByPathInterface instead
  * @see \Magento\MediaGalleryApi\Api\DeleteAssetsByPathInterfac
  */
 class DeleteByDirectoryPath implements DeleteByDirectoryPathInterface

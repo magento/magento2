@@ -183,21 +183,19 @@ class ConfigTest extends TestCase
     {
         $this->backendUrlMock->expects($this->atLeastOnce())
             ->method('getUrl')
-            ->withConsecutive(
-                ['cms/wysiwyg/directive'],
-                ['cms/wysiwyg_images/index']
-            );
+            ->with('cms/wysiwyg/directive')
+            ->willReturn('some_link');
         $this->backendUrlMock->expects($this->once())
             ->method('getBaseUrl')
             ->willReturn('localhost/index.php/');
         $this->filesystemMock->expects($this->once())
             ->method('getUri')
-            ->willReturn('pub/static');
+            ->willReturn('static');
         /** @var ContextInterface|MockObject $contextMock */
         $contextMock = $this->getMockForAbstractClass(ContextInterface::class);
         $contextMock->expects($this->once())
             ->method('getBaseUrl')
-            ->willReturn('localhost/pub/static/');
+            ->willReturn('localhost/static/');
         $this->assetRepoMock->expects($this->once())
             ->method('getStaticViewFileContext')
             ->willReturn($contextMock);
@@ -217,8 +215,8 @@ class ConfigTest extends TestCase
         $config = $this->wysiwygConfig->getConfig($data);
         $this->assertInstanceOf(DataObject::class, $config);
         $this->assertEquals($expectedResults[0], $config->getData('someData'));
-        $this->assertEquals('localhost/pub/static/', $config->getData('baseStaticUrl'));
-        $this->assertEquals('localhost/pub/static/', $config->getData('baseStaticDefaultUrl'));
+        $this->assertEquals('localhost/static/', $config->getData('baseStaticUrl'));
+        $this->assertEquals('localhost/static/', $config->getData('baseStaticDefaultUrl'));
     }
 
     /**

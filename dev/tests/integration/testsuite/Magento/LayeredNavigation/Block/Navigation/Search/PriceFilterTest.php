@@ -42,6 +42,21 @@ class PriceFilterTest extends CategoryPriceFilterTest
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/category_with_three_products.php
+     * @dataProvider getActiveFiltersDataProvider
+     * @param array $config
+     * @param array $products
+     * @param array $expectation
+     * @param string $filterValue
+     * @return void
+     */
+    public function testGetActiveFilters(array $config, array $products, array $expectation, string $filterValue): void
+    {
+        $this->applyCatalogConfig($config);
+        $this->getSearchActiveFiltersAndAssert($products, $expectation, $filterValue, 1);
+    }
+
+    /**
      * @inheritdoc
      */
     protected function getLayerType(): string

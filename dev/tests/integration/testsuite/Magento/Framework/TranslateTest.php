@@ -94,7 +94,6 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
     public function testLoadData()
     {
         $data = $this->translate->loadData(null, true)->getData();
-        CacheCleaner::cleanAll();
         $this->translate->loadData()->getData();
         $dataCached = $this->translate->loadData()->getData();
         $this->assertEquals($data, $dataCached);

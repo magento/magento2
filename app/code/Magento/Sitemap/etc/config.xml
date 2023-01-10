@@ -57,5 +57,12 @@
                 </jobs>
             </default>
         </crontab>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <sitemap_folder>sitemap</sitemap_folder>
+                </allowed_resources>
+            </media_storage_configuration>
+        </system>
     </default>
 </config>

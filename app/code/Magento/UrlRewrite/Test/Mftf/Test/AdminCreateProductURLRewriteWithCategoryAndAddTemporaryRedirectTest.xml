@@ -47,7 +47,7 @@
         <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
             <argument name="redirectPath" value="{{FirstLevelSubCat.name_lwr}}/{{_defaultProduct.urlKey}}.html" />
             <argument name="redirectType" value="Temporary (302)" />
-            <argument name="targetPath" value="$$createSimpleProduct.name$$.html"/>
+            <argument name="targetPath" value="$$createSimpleProduct.custom_attributes[url_key]$$.html"/>
         </actionGroup>
 
         <!--Filter Product in product page and get the Product ID -->
@@ -58,7 +58,7 @@
 
         <!-- Assert Redirect path, Target Path and Redirect type in grid -->
         <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath1">
-            <argument name="redirectPath" value="$$createSimpleProduct.name$$.html" />
+            <argument name="redirectPath" value="$$createSimpleProduct.custom_attributes[url_key]$$.html" />
             <argument name="redirectType" value="No" />
             <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>
         </actionGroup>

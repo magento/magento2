@@ -35,6 +35,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Test for TokensConfigProvider
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TokensConfigProviderTest extends TestCase
@@ -132,7 +134,7 @@ class TokensConfigProviderTest extends TestCase
             ->getMock();
         $this->session = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', 'getReordered'])
+            ->setMethods(['getCustomerId', 'getReordered', 'getStoreId'])
             ->getMock();
         $this->dateTimeFactory = $this->getMockBuilder(DateTimeFactory::class)
             ->disableOriginalConstructor()
@@ -189,10 +191,18 @@ class TokensConfigProviderTest extends TestCase
     public function testGetTokensComponentsRegisteredCustomer()
     {
         $customerId = 1;
+        $storeId = 1;
 
         $this->session->expects(static::once())
             ->method('getCustomerId')
             ->willReturn($customerId);
+
+        $this->session->expects(static::once())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+
+        $this->storeManager->expects(static::never())
+            ->method('getStore');
 
         $this->paymentDataHelper->expects(static::once())
             ->method('getMethodInstance')
@@ -248,7 +258,12 @@ class TokensConfigProviderTest extends TestCase
     {
         $customerId = null;
 
-        $this->initStoreMock();
+        $this->session->expects(static::once())
+            ->method('getStoreId')
+            ->willReturn(null);
+
+        $this->storeManager->expects(static::once())
+            ->method('getStore');
 
         $this->session->expects(static::once())
             ->method('getCustomerId')
@@ -578,12 +593,15 @@ class TokensConfigProviderTest extends TestCase
             '2015-01-01 00:00:00',
             3
         );
+
+        $isVisibleFilter = $this->createExpectedFilter(PaymentTokenInterface::IS_VISIBLE, 1, 4);
+
         $this->filterBuilder->expects(static::once())
             ->method('setConditionType')
             ->with('gt')
             ->willReturnSelf();
 
-        $this->searchCriteriaBuilder->expects(self::exactly(4))
+        $this->searchCriteriaBuilder->expects(self::exactly(5))
             ->method('addFilters')
             ->willReturnMap(
                 [
@@ -591,6 +609,7 @@ class TokensConfigProviderTest extends TestCase
                     [$codeFilter, $this->searchCriteriaBuilder],
                     [$expiresAtFilter, $this->searchCriteriaBuilder],
                     [$isActiveFilter, $this->searchCriteriaBuilder],
+                    [$isVisibleFilter, $this->searchCriteriaBuilder],
                 ]
             );
 

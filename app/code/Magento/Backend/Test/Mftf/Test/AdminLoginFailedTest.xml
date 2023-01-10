@@ -18,6 +18,7 @@
             <testCaseId value="MAGETWO-71572"/>
             <group value="example"/>
             <group value="login"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin">

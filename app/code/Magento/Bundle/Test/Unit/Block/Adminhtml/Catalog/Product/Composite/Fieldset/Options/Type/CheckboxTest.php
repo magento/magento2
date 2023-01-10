@@ -8,8 +8,10 @@ declare(strict_types=1);
 namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type;
 
 use Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Checkbox;
+use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 class CheckboxTest extends TestCase
 {
@@ -20,9 +22,20 @@ class CheckboxTest extends TestCase
 
     protected function setUp(): void
     {
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderTag')
+            ->willReturnCallback(
+                function (string $tag, array $attributes, string $content): string {
+                    $attributes = new DataObject($attributes);
+
+                    return "<$tag {$attributes->serialize()}>$content</$tag>";
+                }
+            );
+
         $this->block = (new ObjectManager($this))
             ->getObject(
-                Checkbox::class
+                Checkbox::class,
+                ['htmlRenderer' => $secureRendererMock]
             );
     }
 

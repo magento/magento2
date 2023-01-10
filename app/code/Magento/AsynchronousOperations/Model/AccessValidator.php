@@ -55,6 +55,6 @@ class AccessValidator
             $this->bulkSummaryFactory->create(),
             $bulkUuid
         );
-        return $bulkSummary->getUserId() === $this->userContext->getUserId();
+        return ((int) $bulkSummary->getUserId()) === ((int) $this->userContext->getUserId());
     }
 }

@@ -344,6 +344,8 @@ abstract class Create extends \Magento\Backend\App\Action
                     $this->messageManager->addSuccessMessage(__('The coupon code has been accepted.'));
                 }
             }
+        } elseif (isset($data['coupon']['code']) && empty($couponCode)) {
+            $this->messageManager->addSuccessMessage(__('The coupon code has been removed.'));
         }
 
         return $this;
@@ -399,7 +401,7 @@ abstract class Create extends \Magento\Backend\App\Action
      */
     protected function _getAclResource()
     {
-        $action = strtolower($this->getRequest()->getActionName());
+        $action = strtolower($this->getRequest()->getActionName() ?? '');
         if (in_array($action, ['index', 'save', 'cancel']) && $this->_getSession()->getReordered()) {
             $action = 'reorder';
         }

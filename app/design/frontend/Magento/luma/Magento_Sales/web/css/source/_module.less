@@ -210,6 +210,7 @@
 
         .items-qty {
             &:extend(.abs-reset-list all);
+            
             .item {
                 white-space: nowrap;
             }
@@ -347,13 +348,15 @@
 
         .product-item-name {
             float: left;
-            width: calc(100% - 20px);
+            width: calc(~'100% - 20px');
         }
+
         .product-item::after {
             clear: both;
             content: '';
             display: table;
         }
+
         .product-item {
             .label {
                 &:extend(.abs-visually-hidden all);
@@ -491,6 +494,7 @@
 
         .data.table .col.options {
             padding: 0 10px 15px;
+
             &:before {
                 display: none;
             }

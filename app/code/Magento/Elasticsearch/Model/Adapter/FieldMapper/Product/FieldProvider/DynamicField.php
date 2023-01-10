@@ -18,6 +18,8 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Provide dynamic fields for product.
@@ -66,6 +68,11 @@ class DynamicField implements FieldProviderInterface
     private $fieldNameResolver;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param FieldTypeConverterInterface $fieldTypeConverter
      * @param IndexTypeConverterInterface $indexTypeConverter
      * @param GroupRepositoryInterface $groupRepository
@@ -73,6 +80,7 @@ class DynamicField implements FieldProviderInterface
      * @param FieldNameResolver $fieldNameResolver
      * @param AttributeProvider $attributeAdapterProvider
      * @param Collection $categoryCollection
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         FieldTypeConverterInterface $fieldTypeConverter,
@@ -81,7 +89,8 @@ class DynamicField implements FieldProviderInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FieldNameResolver $fieldNameResolver,
         AttributeProvider $attributeAdapterProvider,
-        Collection $categoryCollection
+        Collection $categoryCollection,
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->groupRepository = $groupRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -90,6 +99,7 @@ class DynamicField implements FieldProviderInterface
         $this->fieldNameResolver = $fieldNameResolver;
         $this->attributeAdapterProvider = $attributeAdapterProvider;
         $this->categoryCollection = $categoryCollection;
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -123,7 +133,17 @@ class DynamicField implements FieldProviderInterface
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $groups = $this->groupRepository->getList($searchCriteria)->getItems();
         $priceAttribute = $this->attributeAdapterProvider->getByAttributeCode('price');
-        $ctx = isset($context['websiteId']) ? ['websiteId' => $context['websiteId']] : [];
+        /**
+         * For backword compatibility, we use 'websiteId' if the 'storeId' parameter is missing,
+         * although the 'websiteId' may contain the store ID instead of website ID
+         * @see \Magento\Elasticsearch\Model\Adapter\Elasticsearch:494
+         */
+        $ctx = [];
+        if (isset($context['storeId'])) {
+            $ctx['websiteId'] = $this->storeManager->getStore($context['storeId'])->getWebsiteId();
+        } elseif (isset($context['websiteId'])) {
+            $ctx['websiteId'] = $context['websiteId'];
+        }
         foreach ($groups as $group) {
             $ctx['customerGroupId'] = $group->getId();
             $groupPriceKey = $this->fieldNameResolver->getFieldName(

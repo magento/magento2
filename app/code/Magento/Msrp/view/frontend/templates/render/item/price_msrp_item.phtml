@@ -10,8 +10,10 @@
  * Template for displaying product price at product view page, gift registry and wishlist
  *
  * @var $block \Magento\Catalog\Block\Product\Price
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
+
 <?php
     //phpcs:disable
     /** @var $pricingHelper \Magento\Framework\Pricing\Helper\Data */
@@ -26,31 +28,47 @@
     $_msrpPrice = '';
 ?>
 <div class="price-box msrp">
-    <?php if ($_product->getMsrp()) : ?>
+    <?php if ($_product->getMsrp()): ?>
         <?php $_msrpPrice = $pricingHelper->currency($_product->getMsrp(), true, false) ?>
         <span class="old-price"><?= /* @noEscape */ $_msrpPrice ?></span>
     <?php endif; ?>
-    <?php if ($_catalogHelper->isShowPriceOnGesture($_product)) : ?>
+    <?php if ($_catalogHelper->isShowPriceOnGesture($_product)): ?>
         <?php $priceElementId = 'product-price-' . $_id . $block->getIdSuffix(); ?>
-        <span id="<?= /* @noEscape */ $priceElementId ?>" style="display: none"></span>
+        <span id="<?= /* @noEscape */ $priceElementId ?>"></span>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display: none", '#'. $priceElementId) ?>
+
         <?php $popupId = 'msrp-popup-' . $_id . $block->getRandomString(20); ?>
-        <a href="javascript:void(0);"
+        <a href="#"
            id="<?= /* @noEscape */ ($popupId) ?>"
            data-mage-init='{"addToCart":{"popupId": "#<?= /* @noEscape */ ($popupId) ?>",
-                                         "productName": "<?= /* @noEscape */ $block->escapeJs($block->escapeHtml($_product->getName())) ?>",
+                                         "productName": "<?= /* @noEscape */ $block->escapeJs($_product->getName()) ?>",
                                          "realPrice": <?= /* @noEscape */ $block->getRealPriceJs($_product) ?>,
                                          "msrpPrice": "<?= /* @noEscape */ $_msrpPrice ?>",
                                          "priceElementId":"<?= /* @noEscape */ $priceElementId ?>",
                                          "popupCartButtonId": "#map-popup-button",
-                                         "cartForm": "#wishlist-view-form"}}'><?= $block->escapeHtml(__('Click for price')) ?>
+                                         "cartForm": "#wishlist-view-form"}}'>
+            <?= $block->escapeHtml(__('Click for price')) ?>
         </a>
-    <?php else : ?>
+        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            'event.preventDefault()',
+            'a#' . /* @noEscape */ ($popupId)
+        ) ?>
+    <?php else: ?>
         <span class="msrp-message">
             <?= $block->escapeHtml($_catalogHelper->getMsrpPriceMessage($_product)) ?>
         </span>
     <?php endif; ?>
     <?php $helpLinkId = 'msrp-help-' . $_id . $block->getRandomString(20); ?>
-    <a href="javascript:void(0);" id="<?= /* @noEscape */ ($helpLinkId) ?>" data-mage-init='{"addToCart":{"helpLinkId": "#<?= /* @noEscape */ ($helpLinkId) ?>", "productName": "<?= /* @noEscape */$block->escapeJs($block->escapeHtml($_product->getName())) ?>"}}' class="link tip">
+    <a href="#" id="<?= /* @noEscape */ ($helpLinkId) ?>"
+       data-mage-init='{"addToCart":{"helpLinkId": "#<?= /* @noEscape */ ($helpLinkId) ?>",
+                                     "productName": "<?= /* @noEscape */$block->escapeJs($_product->getName()) ?>"}}'
+       class="link tip">
         <?= $block->escapeHtml(__("What's this?")) ?>
     </a>
+    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+        'onclick',
+        'event.preventDefault()',
+        'a#' . /* @noEscape */ ($helpLinkId)
+    ) ?>
 </div>

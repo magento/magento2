@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontCheckNotificationMessageContainerTest">
+        <annotations>
+            <features value="Message container"/>
+            <stories value="Message container selector"/>
+            <title value="Check notification message container"/>
+            <description value="Check aria-atomic property on notification container message"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-37339"/>
+            <group value="Theme"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct"/>
+            <createData entity="SalesRuleSpecificCouponAndByPercent" stepKey="createSalesRule"/>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createSalesRule"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+        </after>
+
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addProductToTheCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+
+        <waitForElementVisible selector="{{StorefrontProductPageSection.alertMessage}}[aria-atomic=true]" stepKey="checkAddedToCartMessage"/>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
+            <argument name="shippingMethod" value="Flat Rate"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyCoupon">
+            <argument name="discountCode" value="$createCouponForCartPriceRule.code$"/>
+        </actionGroup>
+
+        <waitForElementVisible selector="{{DiscountSection.DiscountVerificationMsgWithAriaAtomicProperty}}" stepKey="checkCouponCodeApply"/>
+    </test>
+</tests>

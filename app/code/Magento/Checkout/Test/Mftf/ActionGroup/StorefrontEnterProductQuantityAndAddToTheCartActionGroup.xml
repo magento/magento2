@@ -15,10 +15,11 @@
         <arguments>
             <argument name="quantity" type="string"/>
         </arguments>
-        
+
         <clearField selector="{{StorefrontBundleProductActionSection.quantityField}}" stepKey="clearTheQuantityField"/>
         <fillField selector="{{StorefrontBundleProductActionSection.quantityField}}" userInput="{{quantity}}" stepKey="fillTheProductQuantity"/>
         <click selector="{{StorefrontBundleProductActionSection.addToCartButton}}" stepKey="clickOnAddToButton"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
     </actionGroup>
 </actionGroups>

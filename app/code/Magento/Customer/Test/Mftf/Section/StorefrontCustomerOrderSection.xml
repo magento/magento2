@@ -15,7 +15,13 @@
         <element name="productCustomOptionsLink" type="text" selector="//strong[contains(@class, 'product-item-name') and normalize-space(.)='{{var1}}']/following-sibling::*[contains(@class, 'item-options')]/dt[normalize-space(.)='{{var2}}']/following-sibling::dd//a[text() = '{{var3}}']" parameterized="true"/>
         <element name="status" type="text" selector="//td[contains(concat(' ',normalize-space(@class),' '),' col status ')]"/>
         <element name="viewOrder" type="button" selector="//td[contains(concat(' ',normalize-space(@class),' '),' col actions ')]/a[contains(concat(' ',normalize-space(@class),' '),' action view ')]"/>
+        <element name="viewOrderByOrderNumber" type="button" parameterized="true" selector="//td[.='{{orderNumber}}']/ancestor::tr//a[contains(concat(' ',normalize-space(@class),' '),' action view ')]"/>
+        <element name="reorderByOrderNumber" type="button" parameterized="true" selector="//td[.='{{orderNumber}}']/ancestor::tr//a[contains(concat(' ',normalize-space(@class),' '),' action order ')]"/>
         <element name="tabRefund" type="button" selector="//a[text()='Refunds']"/>
         <element name="grandTotalRefund" type="text" selector="td[data-th='Grand Total'] > strong > span.price"/>
+        <element name="currentPage" type="text" selector=".order-products-toolbar .pages .current span:nth-of-type(2)"/>
+        <element name="pageNumber" type="text" selector="//*[@class='order-products-toolbar toolbar bottom']//a[contains(@class, 'page')]//span[2][contains(text() ,'{{var1}}')]" parameterized="true"/>
+        <element name="perPage" type="select" selector="//*[@class='order-products-toolbar toolbar bottom']//select[@id='limiter']"/>
+        <element name="rowsInColumn" type="text" selector="//tbody/tr/td[contains(@class, '{{column}}')]" parameterized="true"/>
     </section>
 </sections>

@@ -72,7 +72,7 @@ class Publisher implements PublisherInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function publish($topicName, $data)
     {
@@ -83,7 +83,9 @@ class Publisher implements PublisherInterface
                 'body' => $data,
                 'properties' => [
                     'delivery_mode' => 2,
-                    'message_id' => md5(uniqid($topicName))
+                    // md5() here is not for cryptographic use.
+                    // phpcs:ignore Magento2.Security.InsecureFunction
+                    'message_id' => md5(gethostname() . microtime(true) . uniqid($topicName, true))
                 ]
             ]
         );
@@ -109,7 +111,7 @@ class Publisher implements PublisherInterface
      *
      * @return PublisherConfig
      *
-     * @deprecated 100.2.0
+     * @deprecated 103.0.0
      */
     private function getPublisherConfig()
     {
@@ -124,7 +126,7 @@ class Publisher implements PublisherInterface
      *
      * @return AmqpConfig
      *
-     * @deprecated
+     * @deprecated 100.2.0 103.0.0
      */
     private function getAmqpConfig()
     {

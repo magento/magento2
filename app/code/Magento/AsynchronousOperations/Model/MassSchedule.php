@@ -11,7 +11,6 @@ use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterface;
 use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterfaceFactory;
 use Magento\AsynchronousOperations\Api\Data\ItemStatusInterface;
 use Magento\AsynchronousOperations\Api\Data\ItemStatusInterfaceFactory;
-use Magento\AsynchronousOperations\Model\ResourceModel\Operation\OperationRepository;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Bulk\BulkManagementInterface;
 use Magento\Framework\DataObject\IdentityGeneratorInterface;
@@ -144,7 +143,6 @@ class MassSchedule
         foreach ($entitiesArray as $key => $entityParams) {
             /** @var \Magento\AsynchronousOperations\Api\Data\ItemStatusInterface $requestItem */
             $requestItem = $this->itemStatusInterfaceFactory->create();
-
             try {
                 $operation = $this->operationRepository->create($topicName, $entityParams, $groupId, $key);
                 $operations[] = $operation;
@@ -168,12 +166,17 @@ class MassSchedule
             }
         }
 
-        $this->saveMultipleOperations->execute($operations);
         if (!$this->bulkManagement->scheduleBulk($groupId, $operations, $bulkDescription, $userId)) {
-            throw new LocalizedException(
-                __('Something went wrong while processing the request.')
-            );
+            try {
+                $this->bulkManagement->deleteBulk($groupId);
+            } finally {
+                throw new LocalizedException(
+                    __('Something went wrong while processing the request.')
+                );
+            }
         }
+        $this->saveMultipleOperations->execute($operations);
+
         /** @var AsyncResponseInterface $asyncResponse */
         $asyncResponse = $this->asyncResponseFactory->create();
         $asyncResponse->setBulkUuid($groupId);

@@ -40,8 +40,7 @@
             <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForThirdPriceRule"/>
             <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="clickSaveAndApplyRule"/>
 
-            <!-- Perform reindex -->
-            <magentoCLI command="indexer:reindex" arguments="catalogrule_rule" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
         </before>
         <after>
             <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>

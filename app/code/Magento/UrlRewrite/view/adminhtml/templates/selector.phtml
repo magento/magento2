@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\UrlRewrite\Block\Selector $block */
+/**
+ * @var \Magento\UrlRewrite\Block\Selector $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
 <div class="form-inline">
     <fieldset class="admin__fieldset fieldset" data-container-for="entity-type-selector">
@@ -13,11 +16,18 @@
                 <span><?= $block->escapeHtml($block->getSelectorLabel()) ?></span>
             </label>
             <div class="admin__field-control control">
-                <select data-role="entity-type-selector" class="admin__control-select select" onchange="window.location = this.value;" id="entity-type-selector">
-                <?php foreach ($block->getModes() as $mode => $label) : ?>
-                    <option <?= /* @noEscape */ $block->isMode($mode) ? 'selected="selected" ' : '' ?>value="<?= $block->escapeUrl($block->getModeUrl($mode)) ?>"><?= $block->escapeHtml($label) ?></option>
+                <select data-role="entity-type-selector" class="admin__control-select select" id="entity-type-selector">
+                <?php foreach ($block->getModes() as $mode => $label): ?>
+                    <option <?= /* @noEscape */ $block->isMode($mode) ? 'selected="selected" ' : '' ?>
+                        value="<?= $block->escapeUrl($block->getModeUrl($mode)) ?>"><?= $block->escapeHtml($label) ?>
+                    </option>
                 <?php endforeach; ?>
                 </select>
+                <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                    'onchange',
+                    'window.location = this.value;',
+                    'select#entity-type-selector'
+                ) ?>
             </div>
         </div>
     </fieldset>

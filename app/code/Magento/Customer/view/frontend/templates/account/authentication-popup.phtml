@@ -5,19 +5,28 @@
  */
 
 /** @var \Magento\Customer\Block\Account\AuthenticationPopup $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var Magento\Customer\ViewModel\Customer\StoreConfig $viewModel */
+$viewModel = $block->getViewModel();
 ?>
-<div id="authenticationPopup" data-bind="scope:'authenticationPopup'" style="display: none;">
-    <script>
-        window.authenticationPopup = <?= /* @noEscape */ $block->getSerializedConfig() ?>;
-    </script>
+<div id="authenticationPopup" data-bind="scope:'authenticationPopup', style: {display: 'none'}">
+    <?php $scriptString = 'window.authenticationPopup = ' . /* @noEscape */ $block->getSerializedConfig(); ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
     <!-- ko template: getTemplate() --><!-- /ko -->
+    <?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
     <script type="text/x-magento-init">
         {
             "#authenticationPopup": {
                 "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
             },
             "*": {
-                "Magento_Ui/js/block-loader": "<?= $block->escapeJs($block->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))) ?>"
+                "Magento_Ui/js/block-loader": "<?= $block->escapeJs($block->escapeUrl($block->getViewFileUrl(
+                    'images/loader-1.gif'
+                ))) ?>"
+                <?php if ($viewModel->isGlobalScopeEnabled()): ?>
+                ,
+                "Magento_Customer/js/customer-global-session-loader": {}
+                <?php endif; ?>
             }
         }
     </script>

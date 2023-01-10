@@ -18,17 +18,25 @@
             <testCaseId value="MC-14010" />
             <group value="captcha"/>
             <group value="mtf_migrated"/>
+            <group value="storefront_captcha_enabled"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set {{StorefrontCaptchaOnCustomerLoginConfigData.path}} {{StorefrontCaptchaOnCustomerLoginConfigData.value}}" stepKey="enableCaptchaOnCustomerLogin"/>
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaLength3ConfigData.path}} {{StorefrontCustomerCaptchaLength3ConfigData.value}}" stepKey="setCaptchaLength" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaSymbols1ConfigData.path}} {{StorefrontCustomerCaptchaSymbols1ConfigData.value}}" stepKey="setCaptchaSymbols" />
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+            <magentoCLI command="config:set customer/captcha/failed_attempts_login 3" stepKey="setLoginAttempt"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
             <createData entity="Simple_US_Customer" stepKey="customer"/>
         </before>
         <after>
+            <magentoCLI command="config:set {{StorefrontCaptchaOnCustomerLoginConfigData.path}} {{StorefrontCaptchaOnCustomerLoginConfigData.value}},{{StorefrontCaptchaOnCustomerForgotPasswordConfigData.value}}" stepKey="enableCaptchaOnDefaultForms"/>
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultLengthConfigData.path}} {{StorefrontCustomerCaptchaDefaultLengthConfigData.value}}" stepKey="setDefaultCaptchaLength" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.path}} {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.value}}" stepKey="setDefaultCaptchaSymbols" />
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
         </after>
 

@@ -11,6 +11,7 @@ define([
         defaults: {
             bodyTmpl: 'ui/grid/columns/image',
             modules: {
+                masonry: '${ $.parentName }',
                 previewComponent: '${ $.parentName }.preview'
             },
             previewRowId: null,
@@ -33,6 +34,15 @@ define([
                 ]);
 
             return this;
+        },
+
+        /**
+         * Updates styles when image loaded.
+         *
+         * @param {Object} record
+         */
+        updateStyles: function (record) {
+            !record.lastInRow || this.masonry().updateStyles();
         },
 
         /**

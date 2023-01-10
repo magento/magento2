@@ -46,9 +46,7 @@
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         <!--Navigate to storefront and do a quick search for the product -->
         <comment userInput="Navigate to Storefront to check if quick search works" stepKey="commentCheckQuickSearch" />
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
-
-        <waitForPageLoad stepKey="waitForHomePageToLoad" time="30"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
         <fillField userInput="Simple" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="fillSearchBar"/>
         <waitForPageLoad stepKey="wait2" time="30"/>
         <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>

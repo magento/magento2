@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    /**
+    * Copyright © Magento, Inc. All rights reserved.
+    * See COPYING.txt for license details.
+    */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminNewSearchSynonymsFormResetTest">
+        <annotations>
+            <features value="Search"/>
+            <stories value="Reset new search synonyms group form"/>
+            <title value="Admin reset new search synonyms group form"/>
+            <description value="When admin users reset button on new search synonyms form all fields should be set to default values"/>
+            <testCaseId value="MC-36382"/>
+            <severity value="AVERAGE"/>
+            <group value="Search"/>
+            <group value="cloud_smoke"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSearchSynonymsPage">
+            <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminSearchSynonyms.dataUiId}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminNavigateToNewSearchSynonymsPageActionGroup" stepKey="navigateToNewSearchSynonymsPage"/>
+
+        <actionGroup ref="AdminFillNewSearchSynonymsActionGroup" stepKey="fillNewSearchSynonyms">
+            <argument name="scope_id" value="1:1"/>
+            <argument name="synonyms" value="Test Synonyms"/>
+        </actionGroup>
+
+        <click selector="{{AdminSearchSynonymsNewSection.resetButton}}" stepKey="clickResetButton"/>
+
+        <grabValueFrom selector="{{AdminSearchSynonymsNewSection.scope}}" stepKey="grabScopeValue"/>
+        <assertEquals stepKey="assertScopeDefaultValue">
+            <expectedResult type="string">0:0</expectedResult>
+            <actualResult type="string">$grabScopeValue</actualResult>
+        </assertEquals>
+
+        <grabValueFrom selector="{{AdminSearchSynonymsNewSection.synonyms}}" stepKey="grabSynonymsValue"/>
+        <assertEmpty stepKey="assertSynonymsDefaultValue">
+            <actualResult type="string">$grabSynonymsValue</actualResult>
+        </assertEmpty>
+
+        <grabValueFrom selector="{{AdminSearchSynonymsNewSection.merge}}" stepKey="grabMergeValue"/>
+        <assertEquals stepKey="assertMergeDefaultValue">
+            <expectedResult type="string">false</expectedResult>
+            <actualResult type="string">$grabMergeValue</actualResult>
+        </assertEquals>
+    </test>
+</tests>

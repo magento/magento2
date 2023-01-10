@@ -20,18 +20,29 @@ use PHPUnit\Framework\TestCase;
 
 class PurgeCacheTest extends TestCase
 {
-    /** @var PurgeCache */
+    /**
+     * @var PurgeCache
+     */
     protected $model;
 
-    /** @var MockObject|Socket */
+    /**
+     * @var MockObject|Socket
+     */
     protected $socketAdapterMock;
 
-    /** @var MockObject|InvalidateLogger */
+    /**
+     * @var MockObject|InvalidateLogger
+     */
     protected $loggerMock;
 
-    /** @var MockObject|Server */
+    /**
+     * @var MockObject|Server
+     */
     protected $cacheServer;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $socketFactoryMock = $this->createMock(SocketFactory::class);
@@ -53,19 +64,23 @@ class PurgeCacheTest extends TestCase
                 'cacheServer' => $this->cacheServer,
                 'socketAdapterFactory' => $socketFactoryMock,
                 'logger' => $this->loggerMock,
+                'maxHeaderSize' => 256
             ]
         );
     }
 
     /**
      * @param string[] $hosts
+     *
+     * @return void
      * @dataProvider sendPurgeRequestDataProvider
      */
-    public function testSendPurgeRequest($hosts)
+    public function testSendPurgeRequest(array $hosts): void
     {
         $uris = [];
+        /** @var array $host */
         foreach ($hosts as $host) {
-            $port = isset($host['port']) ? $host['port'] : Server::DEFAULT_PORT;
+            $port = $host['port'] ?? Server::DEFAULT_PORT;
             $uris[] = UriFactory::factory('')->setHost($host['host'])
                 ->setPort($port)
                 ->setScheme('http');
@@ -73,32 +88,79 @@ class PurgeCacheTest extends TestCase
         $this->cacheServer->expects($this->once())
             ->method('getUris')
             ->willReturn($uris);
+        $connectWithArgs = $writeWithArgs = [];
 
-        $i = 1;
         foreach ($uris as $uri) {
-            $this->socketAdapterMock->expects($this->at($i++))
-                ->method('connect')
-                ->with($uri->getHost(), $uri->getPort());
-            $this->socketAdapterMock->expects($this->at($i++))
-                ->method('write')
-                ->with('PURGE', $uri, '1.1', ['X-Magento-Tags-Pattern' => 'tags', 'Host' => $uri->getHost()]);
-            $this->socketAdapterMock->expects($this->at($i++))
-                ->method('read');
-            $i++;
+            $writeWithArgs[] = ['PURGE', $uri, '1.1', ['X-Magento-Tags-Pattern' => 'tags', 'Host' => $uri->getHost()]];
         }
+        $this->socketAdapterMock
+            ->method('connect')
+            ->withConsecutive(...$connectWithArgs);
+        $this->socketAdapterMock
+            ->method('write')
+            ->withConsecutive(...$writeWithArgs);
+        $this->socketAdapterMock
+            ->method('read');
+
         $this->socketAdapterMock->expects($this->exactly(count($uris)))
             ->method('close');
 
         $this->loggerMock->expects($this->once())
             ->method('execute');
 
-        $this->assertTrue($this->model->sendPurgeRequest('tags'));
+        $this->assertTrue($this->model->sendPurgeRequest(['tags']));
+    }
+
+    /**
+     * @return void
+     */
+    public function testSendMultiPurgeRequest(): void
+    {
+        $tags = [
+            '(^|,)cat_p_95(,|$)', '(^|,)cat_p_96(,|$)', '(^|,)cat_p_97(,|$)', '(^|,)cat_p_98(,|$)',
+            '(^|,)cat_p_99(,|$)', '(^|,)cat_p_100(,|$)', '(^|,)cat_p_10038(,|$)', '(^|,)cat_p_142985(,|$)',
+            '(^|,)cat_p_199(,|$)', '(^|,)cat_p_300(,|$)', '(^|,)cat_p_12038(,|$)', '(^|,)cat_p_152985(,|$)',
+            '(^|,)cat_p_299(,|$)', '(^|,)cat_p_400(,|$)', '(^|,)cat_p_13038(,|$)', '(^|,)cat_p_162985(,|$)'
+        ];
+
+        $tagsSplitA = array_slice($tags, 0, 12);
+        $tagsSplitB = array_slice($tags, 12, 4);
+
+        $uri =  UriFactory::factory('')->setHost('localhost')
+            ->setPort(80)
+            ->setScheme('http');
+
+        $this->cacheServer->expects($this->once())
+            ->method('getUris')
+            ->willReturn([$uri]);
+
+        $this->socketAdapterMock->expects($this->exactly(2))
+            ->method('connect')
+            ->with($uri->getHost(), $uri->getPort());
+
+        $this->socketAdapterMock->expects($this->exactly(2))
+            ->method('write')
+            ->withConsecutive(
+                [
+                    'PURGE', $uri, '1.1',
+                    ['X-Magento-Tags-Pattern' => implode('|', $tagsSplitA), 'Host' => $uri->getHost()]
+                ],
+                [
+                    'PURGE', $uri, '1.1',
+                    ['X-Magento-Tags-Pattern' => implode('|', $tagsSplitB), 'Host' => $uri->getHost()]
+                ]
+            );
+
+        $this->socketAdapterMock->expects($this->exactly(2))
+            ->method('close');
+
+        $this->assertTrue($this->model->sendPurgeRequest($tags));
     }
 
     /**
      * @return array
      */
-    public function sendPurgeRequestDataProvider()
+    public function sendPurgeRequestDataProvider(): array
     {
         return [
             [
@@ -114,7 +176,10 @@ class PurgeCacheTest extends TestCase
         ];
     }
 
-    public function testSendPurgeRequestWithException()
+    /**
+     * @return void
+     */
+    public function testSendPurgeRequestWithException(): void
     {
         $uris[] = UriFactory::factory('')->setHost('127.0.0.1')
             ->setPort(8080)
@@ -130,6 +195,6 @@ class PurgeCacheTest extends TestCase
         $this->loggerMock->expects($this->once())
             ->method('critical');
 
-        $this->assertFalse($this->model->sendPurgeRequest('tags'));
+        $this->assertFalse($this->model->sendPurgeRequest(['tags']));
     }
 }

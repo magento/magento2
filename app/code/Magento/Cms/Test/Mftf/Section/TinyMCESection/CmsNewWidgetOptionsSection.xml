@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CmsNewWidgetOptionsSection">
+        <element name="WidgetOptions" type="text" selector="//*[@id='widget_instace_tabs_properties_section']/span[1]"/>
+        <element name="SelectCategory" type="button" selector="//span[contains(text(),'Select Category...')]"/>
+        <element name="SelectProduct" type="button" selector="//span[contains(text(),'Select Product...')]"/>
+        <element name="FirstProduct" type="text" selector="//div[@class='admin__data-grid-wrap admin__data-grid-wrap-static']//tbody/tr[1]"/>
+        <element name="SecondProduct" type="text" selector="//div[@class='admin__data-grid-wrap admin__data-grid-wrap-static']//tbody/tr[2]"/>
+        <element name="SaveWidget" type="button" selector="//button[@id='save']"/>
+        <element name="FirstWidget" type="text" selector="//tbody/tr[1]/td[3]"/>
+        <element name="ExpandRootCategory" type="button" selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']"/>
+        <element name="FirstCategory" type="text" selector="//Span[contains(text(),'simpleCategory')]"/>
+        <element name="SecondCategory" type="text" selector="//Span[contains(text(),'CategoryB')]"/>
+    </section>
+</sections>
+

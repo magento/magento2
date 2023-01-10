@@ -124,7 +124,7 @@ define([
          * @param {String} actions
          */
         renderActions: function (actions) {
-            var $container = $('<div/>');
+            var $container = $('<div></div>');
 
             $container
                 .addClass(this.actionsContainerClass)

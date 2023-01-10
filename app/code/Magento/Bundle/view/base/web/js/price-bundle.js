@@ -22,9 +22,9 @@ define([
         priceBoxSelector: '.price-box',
         optionHandlers: {},
         optionTemplate: '<%- data.label %>' +
-        '<% if (data.finalPrice.value) { %>' +
-        ' +<%- data.finalPrice.formatted %>' +
-        '<% } %>',
+            '<% if (data.finalPrice.value) { %>' +
+            ' +<%- data.finalPrice.formatted %>' +
+            '<% } %>',
         controlContainer: 'dd', // should be eliminated
         priceFormat: {},
         isFixedPrice: false,
@@ -107,12 +107,15 @@ define([
                 changes = defaultGetOptionValue(bundleOption, this.options.optionConfig);//eslint-disable-line
             }
 
-            if (changes) {
-                priceBox.trigger('updatePrice', changes);
-            }
+            // eslint-disable-next-line no-use-before-define
+            if (isValidQty(bundleOption)) {
+                if (changes) {
+                    priceBox.trigger('updatePrice', changes);
+                }
 
-            this._displayTierPriceBlock(bundleOption);
-            this.updateProductSummary();
+                this._displayTierPriceBlock(bundleOption);
+                this.updateProductSummary();
+            }
         },
 
         /**
@@ -132,7 +135,10 @@ define([
                     .selections[field.data('optionValueId')];
                 optionConfig.qty = field.val();
 
-                optionInstance.trigger('change');
+                // eslint-disable-next-line no-use-before-define
+                if (isValidQty(optionInstance)) {
+                    optionInstance.trigger('change');
+                }
             }
         },
 
@@ -205,7 +211,7 @@ define([
                         }, 0);
                         toTemplate.data[type] = {
                             value: value,
-                            formatted: utils.formatPrice(value, format)
+                            formatted: utils.formatPriceLocale(value, format)
                         };
                     });
 
@@ -371,6 +377,23 @@ define([
         }
 
         return changes;
+    }
+
+    /**
+     * Check the quantity field if negative value occurs.
+     *
+     * @param {Object} bundleOption
+     */
+    function isValidQty(bundleOption) {
+        var isValid = true,
+            qtyElem = bundleOption.data('qtyField'),
+            bundleOptionType = bundleOption.prop('type');
+
+        if (['radio', 'select-one'].includes(bundleOptionType) && qtyElem.val() < 0) {
+            isValid = false;
+        }
+
+        return isValid;
     }
 
     /**

@@ -12,6 +12,7 @@ namespace Magento\Framework\Acl;
  * with data (roles/rules/resources) persisted in external storage.
  *
  * @api
+ * @since 100.0.2
  */
 interface LoaderInterface
 {

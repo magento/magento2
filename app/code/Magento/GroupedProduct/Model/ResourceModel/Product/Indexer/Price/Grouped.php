@@ -1,7 +1,5 @@
 <?php
 /**
- * Grouped Products Price Indexer Resource model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -20,6 +18,7 @@ use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedType;
 
 /**
  * Calculate minimal and maximal prices for Grouped products
+ *
  * Use calculated price for relation products
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -85,10 +84,7 @@ class Grouped implements DimensionalIndexerInterface
     }
 
     /**
-     * {@inheritdoc}
-     * @param array $dimensions
-     * @param \Traversable $entityIds
-     * @throws \Exception
+     * @inheritDoc
      */
     public function executeByDimensions(array $dimensions, \Traversable $entityIds)
     {
@@ -105,9 +101,22 @@ class Grouped implements DimensionalIndexerInterface
             'maxPriceField' => 'max_price',
             'tierPriceField' => 'tier_price',
         ]);
-        $query = $this->prepareGroupedProductPriceDataSelect($dimensions, iterator_to_array($entityIds))
-            ->insertFromSelect($temporaryPriceTable->getTableName());
-        $this->getConnection()->query($query);
+        $select = $this->prepareGroupedProductPriceDataSelect($dimensions, iterator_to_array($entityIds));
+        $this->tableMaintainer->insertFromSelect(
+            $select,
+            $temporaryPriceTable->getTableName(),
+            [
+            "entity_id",
+            "customer_group_id",
+            "website_id",
+            "tax_class_id",
+            "price",
+            "final_price",
+            "min_price",
+            "max_price",
+            "tier_price",
+            ]
+        );
     }
 
     /**
@@ -160,6 +169,12 @@ class Grouped implements DimensionalIndexerInterface
                 'tier_price' => new \Zend_Db_Expr('NULL'),
             ]
         );
+        // customer group website limitations
+        $select->joinLeft(
+            ['cgw' => $this->getTable('customer_group_excluded_website')],
+            'i.customer_group_id = cgw.customer_group_id AND i.website_id = cgw.website_id',
+            []
+        );
         $select->group(
             ['e.entity_id', 'i.customer_group_id', 'i.website_id']
         );
@@ -169,8 +184,11 @@ class Grouped implements DimensionalIndexerInterface
         );
 
         if ($entityIds !== null) {
-            $select->where('e.entity_id IN(?)', $entityIds);
+            $select->where('e.entity_id IN(?)', $entityIds, \Zend_Db::INT_TYPE);
         }
+
+        // exclude websites that are limited for customer group
+        $select->where('cgw.website_id IS NULL');
 
         return $select;
     }
@@ -186,13 +204,13 @@ class Grouped implements DimensionalIndexerInterface
         if ($this->fullReindexAction) {
             return $this->tableMaintainer->getMainReplicaTable($dimensions);
         }
-        return $this->tableMaintainer->getMainTable($dimensions);
+        return $this->tableMaintainer->getMainTableByDimensions($dimensions);
     }
 
     /**
      * Get connection
      *
-     * return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
      * @throws \DomainException
      */
     private function getConnection(): \Magento\Framework\DB\Adapter\AdapterInterface

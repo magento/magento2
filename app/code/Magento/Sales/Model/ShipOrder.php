@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\ShipmentRepositoryInterface;
@@ -19,6 +20,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class ShipOrder
+ *
+ * Save shipment and order data
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipOrder implements ShipOrderInterface
@@ -74,6 +77,11 @@ class ShipOrder implements ShipOrderInterface
     private $orderRegistrar;
 
     /**
+     * @var OrderMutexInterface
+     */
+    private $orderMutex;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param OrderRepositoryInterface $orderRepository
      * @param ShipmentDocumentFactory $shipmentDocumentFactory
@@ -84,6 +92,7 @@ class ShipOrder implements ShipOrderInterface
      * @param NotifierInterface $notifierInterface
      * @param OrderRegistrarInterface $orderRegistrar
      * @param LoggerInterface $logger
+     * @param OrderMutex|null $orderMutex
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -96,7 +105,8 @@ class ShipOrder implements ShipOrderInterface
         ShipOrderValidator $shipOrderValidator,
         NotifierInterface $notifierInterface,
         OrderRegistrarInterface $orderRegistrar,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ?OrderMutexInterface $orderMutex = null
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->orderRepository = $orderRepository;
@@ -108,9 +118,12 @@ class ShipOrder implements ShipOrderInterface
         $this->notifierInterface = $notifierInterface;
         $this->logger = $logger;
         $this->orderRegistrar = $orderRegistrar;
+        $this->orderMutex = $orderMutex ?: ObjectManager::getInstance()->get(OrderMutexInterface::class);
     }
 
     /**
+     * Process the shipment and save shipment and order data
+     *
      * @param int $orderId
      * @param \Magento\Sales\Api\Data\ShipmentItemCreationInterface[] $items
      * @param bool $notify
@@ -136,7 +149,51 @@ class ShipOrder implements ShipOrderInterface
         array $packages = [],
         \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface $arguments = null
     ) {
-        $connection = $this->resourceConnection->getConnection('sales');
+        return $this->orderMutex->execute(
+            (int)$orderId,
+            \Closure::fromCallable([$this, 'createShipment']),
+            [
+                $orderId,
+                $items,
+                $notify,
+                $appendComment,
+                $comment,
+                $tracks,
+                $packages,
+                $arguments
+            ]
+        );
+    }
+
+    /**
+     * Creates shipment for provided order ID
+     *
+     * @param int $orderId
+     * @param \Magento\Sales\Api\Data\ShipmentItemCreationInterface[] $items
+     * @param bool $notify
+     * @param bool $appendComment
+     * @param \Magento\Sales\Api\Data\ShipmentCommentCreationInterface|null $comment
+     * @param \Magento\Sales\Api\Data\ShipmentTrackCreationInterface[] $tracks
+     * @param \Magento\Sales\Api\Data\ShipmentPackageCreationInterface[] $packages
+     * @param \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface|null $arguments
+     * @return int
+     * @throws \Magento\Sales\Api\Exception\DocumentValidationExceptionInterface
+     * @throws \Magento\Sales\Api\Exception\CouldNotShipExceptionInterface
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \DomainException
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     */
+    private function createShipment(
+        $orderId,
+        array $items = [],
+        $notify = false,
+        $appendComment = false,
+        \Magento\Sales\Api\Data\ShipmentCommentCreationInterface $comment = null,
+        array $tracks = [],
+        array $packages = [],
+        \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface $arguments = null
+    ) {
         $order = $this->orderRepository->get($orderId);
         $shipment = $this->shipmentDocumentFactory->create(
             $order,
@@ -162,23 +219,23 @@ class ShipOrder implements ShipOrderInterface
                 __("Shipment Document Validation Error(s):\n" . implode("\n", $validationMessages->getMessages()))
             );
         }
-        $connection->beginTransaction();
         try {
             $this->orderRegistrar->register($order, $shipment);
-            $order->setState(
-                $this->orderStateResolver->getStateForOrder($order, [OrderStateResolverInterface::IN_PROGRESS])
-            );
-            $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
-            $this->shipmentRepository->save($shipment);
+            $shipment = $this->shipmentRepository->save($shipment);
+            if ($order->getState() === Order::STATE_NEW) {
+                $order->setState(
+                    $this->orderStateResolver->getStateForOrder($order, [OrderStateResolverInterface::IN_PROGRESS])
+                );
+                $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
+            }
             $this->orderRepository->save($order);
-            $connection->commit();
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            $connection->rollBack();
             throw new \Magento\Sales\Exception\CouldNotShipException(
                 __('Could not save a shipment, see error log for details')
             );
         }
+
         if ($notify) {
             if (!$appendComment) {
                 $comment = null;

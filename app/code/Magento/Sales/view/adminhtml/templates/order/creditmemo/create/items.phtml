@@ -5,6 +5,7 @@
  */
 
 /* @var \Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Items $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?php
 /** @var Magento\Sales\ViewModel\CreditMemo\Create\UpdateTotalsButton $viewModel */
@@ -142,7 +143,8 @@ $commentText = $block->getCreditmemo()->getCommentText();
     </div>
 </section>
 
-<script>
+<?php $scriptString = <<<script
+
 require(['jquery'], function(jQuery){
 
 //<![CDATA[
@@ -220,4 +222,6 @@ window.checkButtonsRelation = checkButtonsRelation;
 //]]>
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

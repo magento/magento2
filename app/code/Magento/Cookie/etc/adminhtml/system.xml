@@ -29,7 +29,7 @@
                 <field id="cookie_httponly" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Use HTTP Only</label>
                     <comment>
-                        <![CDATA[<strong style="color:red">Warning</strong>:  Do not set to "No". User security could be compromised.]]>
+                        <![CDATA[<strong class="colorRed">Warning</strong>:  Do not set to "No". User security could be compromised.]]>
                     </comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>

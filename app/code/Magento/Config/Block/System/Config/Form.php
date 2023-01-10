@@ -24,11 +24,11 @@ use Magento\Framework\DataObject;
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
-    const SCOPE_DEFAULT = 'default';
+    public const SCOPE_DEFAULT = 'default';
 
-    const SCOPE_WEBSITES = 'websites';
+    public const SCOPE_WEBSITES = 'websites';
 
-    const SCOPE_STORES = 'stores';
+    public const SCOPE_STORES = 'stores';
 
     /**
      * Config data array
@@ -520,7 +520,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _generateElementId($path)
     {
-        return str_replace('/', '_', $path);
+        return $path !== null ? str_replace('/', '_', $path) : '';
     }
 
     /**
@@ -838,10 +838,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Gets instance of ElementVisibilityInterface.
      *
      * @return ElementVisibilityInterface
-     * @deprecated 100.2.0 Added to not break backward compatibility of the constructor signature
+     * @deprecated 101.0.0 Added to not break backward compatibility of the constructor signature
      *             by injecting the new dependency directly.
      *             The method can be removed in a future major release, when constructor signature can be changed.
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getElementVisibility()
     {

@@ -3,15 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\TestFramework\Helper\CacheCleaner;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
-class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
+/**
+ * Checks customer metadata
+ *
+ * @magentoDbIsolation enabled
+ */
+class CustomerMetadataTest extends TestCase
 {
     /** @var CustomerRepositoryInterface */
     private $customerRepository;
@@ -22,17 +30,18 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
     /** @var CustomerMetadataInterface */
     private $serviceTwo;
 
-    /**
-     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
-     */
+    /** @var ExtensibleDataObjectConverter */
     private $extensibleDataObjectConverter;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        CacheCleaner::cleanAll();
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
         $objectManager->configure(
-            [\Magento\Framework\Api\ExtensionAttribute\Config\Reader::class => [
+            [
+                \Magento\Framework\Api\ExtensionAttribute\Config\Reader::class => [
                     'arguments' => [
                         'fileResolver' => ['instance' => \Magento\Customer\Model\FileResolverStub::class],
                     ],
@@ -45,13 +54,73 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
         $this->service = $objectManager->create(\Magento\Customer\Api\CustomerMetadataInterface::class);
         $this->serviceTwo = $objectManager->create(\Magento\Customer\Api\CustomerMetadataInterface::class);
         $this->extensibleDataObjectConverter = $objectManager->get(
-            \Magento\Framework\Api\ExtensibleDataObjectConverter::class
+            ExtensibleDataObjectConverter::class
         );
     }
 
-    public function testGetCustomAttributesMetadata()
+    /**
+     * @magentoDataFixture Magento/Customer/_files/attribute_user_defined_custom_attribute.php
+     *
+     * @return void
+     */
+    public function testGetCustomAttributesMetadataWithCustomAttributes(): void
     {
-        $customAttributesMetadataQty = count($this->service->getCustomAttributesMetadata()) ;
+        $customAttributesMetadata = $this->service->getCustomAttributesMetadata();
+        // Verify the consistency of getCustomAttributesMetadata() function from the 2nd call of the same service
+        $customAttributesMetadata1 = $this->service->getCustomAttributesMetadata();
+        $this->assertEquals(
+            $customAttributesMetadata,
+            $customAttributesMetadata1,
+            'Different custom attribute metadata returned from the 2nd call of the same service'
+        );
+        // Verify the consistency of getCustomAttributesMetadata() function from the 2nd service
+        $customAttributesMetadata2 = $this->serviceTwo->getCustomAttributesMetadata();
+        $this->assertEquals(
+            $customAttributesMetadata,
+            $customAttributesMetadata2,
+            'Different custom attribute metadata returned from the 2nd service'
+        );
+
+        $expectedCustomAttributeCodeArray = ['custom_attribute1', 'custom_attribute2', 'customer_image'];
+        $actual = [];
+        foreach ($customAttributesMetadata as $attribute) {
+            $actual[] = $attribute->getAttributeCode();
+        }
+        $this->assertEquals(
+            $expectedCustomAttributeCodeArray,
+            array_intersect($expectedCustomAttributeCodeArray, $actual),
+            "Expected attributes not returned from the service."
+        );
+
+        // Verify the consistency of custom attribute metadata from two calls of the same service
+        // after getAttributeCode was called
+        foreach ($customAttributesMetadata1 as $attribute) {
+            $attribute->getAttributeCode();
+        }
+        $this->assertEquals(
+            $customAttributesMetadata,
+            $customAttributesMetadata1,
+            'Custom attribute metadata from the same service became different after getAttributeCode was called'
+        );
+
+        // Verify the consistency of custom attribute metadata from two services
+        // after getAttributeCode was called
+        foreach ($customAttributesMetadata2 as $attribute) {
+            $attribute->getAttributeCode();
+        }
+        $this->assertEquals(
+            $customAttributesMetadata,
+            $customAttributesMetadata2,
+            'Custom attribute metadata from two services are different after getAttributeCode was called'
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetCustomAttributesMetadata(): void
+    {
+        $customAttributesMetadataQty = count($this->service->getCustomAttributesMetadata());
 
         // Verify the consistency of getCustomerAttributeMetadata() function from the 2nd call of the same service
         $customAttributesMetadata1Qty = count($this->service->getCustomAttributesMetadata());
@@ -72,8 +141,10 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
+     *
+     * @return void
      */
-    public function testGetNestedOptionsCustomerAttributesMetadata()
+    public function testGetNestedOptionsCustomerAttributesMetadata(): void
     {
         $nestedOptionsAttribute = 'store_id';
         $customAttributesMetadata = $this->service->getAttributeMetadata($nestedOptionsAttribute);
@@ -127,63 +198,10 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/attribute_user_defined_custom_attribute.php
+     *
+     * @return void
      */
-    public function testGetCustomAttributesMetadataWithCustomAttributes()
-    {
-        $customAttributesMetadata = $this->service->getCustomAttributesMetadata();
-        // Verify the consistency of getCustomAttributesMetadata() function from the 2nd call of the same service
-        $customAttributesMetadata1 = $this->service->getCustomAttributesMetadata();
-        $this->assertEquals(
-            $customAttributesMetadata,
-            $customAttributesMetadata1,
-            'Different custom attribute metadata returned from the 2nd call of the same service'
-        );
-        // Verify the consistency of getCustomAttributesMetadata() function from the 2nd service
-        $customAttributesMetadata2 = $this->serviceTwo->getCustomAttributesMetadata();
-        $this->assertEquals(
-            $customAttributesMetadata,
-            $customAttributesMetadata2,
-            'Different custom attribute metadata returned from the 2nd service'
-        );
-
-        $expectedCustomAttributeCodeArray = ['custom_attribute1', 'custom_attribute2', 'customer_image'];
-        $actual = [];
-        foreach ($customAttributesMetadata as $attribute) {
-            $actual[] = $attribute->getAttributeCode();
-        }
-        $this->assertEquals(
-            $expectedCustomAttributeCodeArray,
-            array_intersect($expectedCustomAttributeCodeArray, $actual),
-            "Expected attributes not returned from the service."
-        );
-
-        // Verify the consistency of custom attribute metadata from two calls of the same service
-        // after getAttributeCode was called
-        foreach ($customAttributesMetadata1 as $attribute) {
-            $attribute->getAttributeCode();
-        }
-        $this->assertEquals(
-            $customAttributesMetadata,
-            $customAttributesMetadata1,
-            'Custom attribute metadata from the same service became different after getAttributeCode was called'
-        );
-
-        // Verify the consistency of custom attribute metadata from two services
-        // after getAttributeCode was called
-        foreach ($customAttributesMetadata2 as $attribute) {
-            $attribute->getAttributeCode();
-        }
-        $this->assertEquals(
-            $customAttributesMetadata,
-            $customAttributesMetadata2,
-            'Custom attribute metadata from two services are different after getAttributeCode was called'
-        );
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/attribute_user_defined_custom_attribute.php
-     */
-    public function testGetAllAttributesMetadataWithCustomAttribute()
+    public function testGetAllAttributesMetadataWithCustomAttribute(): void
     {
         $allAttributesMetadata = $this->service->getAllAttributesMetadata();
 
@@ -206,8 +224,10 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     *
+     * @return void
      */
-    public function testGetCustomerAttributeMetadata()
+    public function testGetCustomerAttributeMetadata(): void
     {
         // Expect these attributes to exist but do not check the value
         $expectAttrsWOutVals = ['created_at', 'updated_at'];
@@ -299,7 +319,10 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($expectAttrsWithVals);
     }
 
-    public function testGetCustomerAttributeMetadataNoSuchEntity()
+    /**
+     * @return void
+     */
+    public function testGetCustomerAttributeMetadataNoSuchEntity(): void
     {
         try {
             $this->service->getAttributeMetadata('wrong_attribute_code');
@@ -334,7 +357,10 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testGetAttributes()
+    /**
+     * @return void
+     */
+    public function testGetAttributes(): void
     {
         $formAttributesMetadata = $this->service->getAttributes('adminhtml_customer');
         $this->assertCount(14, $formAttributesMetadata, "Invalid number of attributes for the specified form.");
@@ -384,9 +410,12 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown(): void
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
 
         /* @var \Magento\Framework\Config\CacheInterface $cache */
         $cache = $objectManager->create(\Magento\Framework\Config\CacheInterface::class);

@@ -9,6 +9,7 @@ namespace Magento\Framework\Config\Composer;
 /**
  * A model that represents composer package
  * @api
+ * @since 100.0.2
  */
 class Package
 {
@@ -64,7 +65,7 @@ class Package
      */
     public function get($propertyPath, $filter = null)
     {
-        $result = $this->traverseGet($this->json, explode('->', $propertyPath));
+        $result = $this->traverseGet($this->json, explode('->', $propertyPath ?: ''));
         if ($result && $filter) {
             foreach ($result as $key => $value) {
                 if (!preg_match($filter, $key)) {

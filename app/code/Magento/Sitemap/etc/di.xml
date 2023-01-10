@@ -52,4 +52,16 @@
             <argument name="configReader" xsi:type="object">Magento\Sitemap\Model\ItemProvider\CmsPageConfigReader</argument>
         </arguments>
     </type>
+    <type name="Magento\Cms\Model\Wysiwyg\Images\Storage">
+        <arguments>
+            <argument name="dirs" xsi:type="array">
+                <item name="exclude" xsi:type="array">
+                    <item name="sitemap" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">media[/\\]+sitemap[/\\]*$</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

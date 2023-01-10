@@ -96,4 +96,27 @@ class SnapshotTest extends TestCase
         $this->entitySnapshot->registerSnapshot($this->model);
         $this->assertFalse($this->entitySnapshot->isModified($this->model));
     }
+
+    public function testClear()
+    {
+        $entityId = 1;
+        $data = [
+            'id' => $entityId,
+            'name' => 'test',
+            'description' => '',
+            'custom_not_present_attribute' => ''
+        ];
+        $fields = [
+            'id' => [],
+            'name' => [],
+            'description' => []
+        ];
+        $this->assertTrue($this->entitySnapshot->isModified($this->model));
+        $this->model->setData($data);
+        $this->model->expects($this->any())->method('getId')->willReturn($entityId);
+        $this->entityMetadata->expects($this->any())->method('getFields')->with($this->model)->willReturn($fields);
+        $this->entitySnapshot->registerSnapshot($this->model);
+        $this->entitySnapshot->clear($this->model);
+        $this->assertTrue($this->entitySnapshot->isModified($this->model));
+    }
 }

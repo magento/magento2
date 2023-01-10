@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Model\Auth;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\Message\ManagerInterface;
 
 /**
  * Backend Auth session model
@@ -14,15 +18,12 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
  * @api
  * @method \Magento\User\Model\User|null getUser()
  * @method \Magento\Backend\Model\Auth\Session setUser(\Magento\User\Model\User $value)
- * @method \Magento\Framework\Acl|null getAcl()
- * @method \Magento\Backend\Model\Auth\Session setAcl(\Magento\Framework\Acl $value)
  * @method int getUpdatedAt()
  * @method \Magento\Backend\Model\Auth\Session setUpdatedAt(int $value)
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @todo implement solution that keeps is_first_visit flag in session during redirects
- * @api
  * @since 100.0.2
  */
 class Session extends \Magento\Framework\Session\SessionManager implements \Magento\Backend\Model\Auth\StorageInterface
@@ -30,11 +31,9 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
     /**
      * Admin session lifetime config path
      */
-    const XML_PATH_SESSION_LIFETIME = 'admin/security/session_lifetime';
+    public const XML_PATH_SESSION_LIFETIME = 'admin/security/session_lifetime';
 
     /**
-     * Whether it is the first page after successful login
-     *
      * @var boolean
      */
     protected $_isFirstAfterLogin;
@@ -57,6 +56,16 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
     protected $_config;
 
     /**
+     * @var ManagerInterface
+     */
+    private $messageManager;
+
+    /**
+     * @var \Magento\Framework\Acl|null
+     */
+    private $acl = null;
+
+    /**
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
@@ -69,6 +78,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      * @param \Magento\Framework\Acl\Builder $aclBuilder
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Backend\App\ConfigInterface $config
+     * @param ManagerInterface $messageManager
      * @throws \Magento\Framework\Exception\SessionException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -84,11 +94,13 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Acl\Builder $aclBuilder,
         \Magento\Backend\Model\UrlInterface $backendUrl,
-        \Magento\Backend\App\ConfigInterface $config
+        \Magento\Backend\App\ConfigInterface $config,
+        ManagerInterface $messageManager = null
     ) {
         $this->_config = $config;
         $this->_aclBuilder = $aclBuilder;
         $this->_backendUrl = $backendUrl;
+        $this->messageManager = $messageManager ?? ObjectManager::getInstance()->get(ManagerInterface::class);
         parent::__construct(
             $request,
             $sidResolver,
@@ -121,7 +133,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
         }
         if ($user->getReloadAclFlag()) {
             $user->unsetData('password');
-            $user->setReloadAclFlag('0')->save();
+            $user->setReloadAclFlag(0)->save();
         }
         return $this;
     }
@@ -143,7 +155,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
                 return $acl->isAllowed($user->getAclRole(), $resource, $privilege);
             } catch (\Exception $e) {
                 try {
-                    if (!$acl->has($resource)) {
+                    if (!$acl->hasResource($resource)) {
                         return $acl->isAllowed($user->getAclRole(), null, $privilege);
                     }
                 } catch (\Exception $e) {
@@ -171,6 +183,25 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      */
     public function prolong()
     {
+        $sessionUser = $this->getUser();
+        $errorMessage = '';
+        if ($sessionUser !== null) {
+            if ((int)$sessionUser->getIsActive() !== 1) {
+                $errorMessage = 'The account sign-in was incorrect or your account is disabled temporarily. '
+                    . 'Please wait and try again later.';
+            }
+            if (!$sessionUser->hasAssigned2Role($sessionUser->getId())) {
+                $errorMessage = 'More permissions are needed to access this.';
+            }
+
+            if (!empty($errorMessage)) {
+                $this->destroy();
+                $this->messageManager->addErrorMessage(__($errorMessage));
+
+                return;
+            }
+        }
+
         $lifetime = $this->_config->getValue(self::XML_PATH_SESSION_LIFETIME);
         $cookieValue = $this->cookieManager->getCookie($this->getName());
 
@@ -181,7 +212,8 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
                 ->setPath($this->sessionConfig->getCookiePath())
                 ->setDomain($this->sessionConfig->getCookieDomain())
                 ->setSecure($this->sessionConfig->getCookieSecure())
-                ->setHttpOnly($this->sessionConfig->getCookieHttpOnly());
+                ->setHttpOnly($this->sessionConfig->getCookieHttpOnly())
+                ->setSameSite($this->sessionConfig->getCookieSameSite());
             $this->cookieManager->setPublicCookie($this->getName(), $cookieValue, $cookieMetadata);
         }
     }
@@ -254,5 +286,34 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
     public function isValidForPath($path)
     {
         return true;
+    }
+
+    /**
+     * Set Acl model
+     *
+     * @return \Magento\Framework\Acl
+     */
+    public function getAcl()
+    {
+        return $this->acl;
+    }
+
+    /**
+     * Retrieve Acl
+     *
+     * @param \Magento\Framework\Acl $acl
+     * @return void
+     */
+    public function setAcl(\Magento\Framework\Acl $acl)
+    {
+        $this->acl = $acl;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getData($key = '', $clear = false)
+    {
+        return $key === 'acl' ? $this->getAcl() : parent::getData($key, $clear);
     }
 }

@@ -11,14 +11,18 @@
     <test name="AdminAddNewDefaultBillingShippingCustomerAddressTest">
         <annotations>
             <stories value="Add new default billing/shipping customer address"/>
-            <title value="Add new default billing/shipping customer address"/>
+            <title value="DEPRECATED. Add new default billing/shipping customer address"/>
             <description value="Add new default billing/shipping customer address on customer addresses tab"/>
             <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-94814"/>
             <group value="customer"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminAddNewDefaultBillingAndShippingCustomerAddressTest instead</issueId>
+            </skip>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer_Multiple_Addresses_No_Default_Address" stepKey="customer"/>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
@@ -30,7 +34,7 @@
         Step2. On *Customers* page choose customer from preconditions and open it to edit
         Step3. Open *Addresses* tab on edit customer page and press *Add New Address* button
         <!- -->
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPage">
             <argument name="customer" value="Simple_US_Customer_Multiple_Addresses_No_Default_Address"/>
         </actionGroup>

@@ -117,21 +117,26 @@ class CategoryTest extends TestCase
         'entries' => [
             [
                 'title' => 'Product Name',
-                'link' => 'http://magento.com/product.html',
-            ],
-        ],
+                'link' => 'http://magento.com/product.html'
+            ]
+        ]
     ];
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->request = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->request->expects($this->at(0))->method('getParam')->with('cid')->willReturn(1);
-        $this->request->expects($this->at(1))->method('getParam')->with('store_id')->willReturn(null);
+        $this->request
+            ->method('getParam')
+            ->withConsecutive(['cid'], ['store_id'])
+            ->willReturnOnConsecutiveCalls(1, null);
 
         $this->httpContext = $this->createMock(Context::class);
         $this->catalogHelper = $this->createMock(Data::class);
         $this->categoryFactory = $this->getMockBuilder(CategoryFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->rssModel = $this->createPartialMock(
@@ -144,7 +149,8 @@ class CategoryTest extends TestCase
         $this->customerSession->expects($this->any())->method('getId')->willReturn(1);
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $store = $this->getMockBuilder(Store::class)
-            ->setMethods(['getId'])->disableOriginalConstructor()
+            ->onlyMethods(['getId'])
+            ->disableOriginalConstructor()
             ->getMock();
         $store->expects($this->any())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
@@ -167,15 +173,18 @@ class CategoryTest extends TestCase
                 'customerSession' => $this->customerSession,
                 'storeManager' => $this->storeManager,
                 'categoryRepository' => $this->categoryRepository,
-                'viewConfig' => $this->viewConfig,
+                'viewConfig' => $this->viewConfig
             ]
         );
     }
 
-    public function testGetRssData()
+    /**
+     * @return void
+     */
+    public function testGetRssData(): void
     {
         $category = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
-            ->setMethods(['__sleep', 'load', 'getId', 'getUrl', 'getName'])
+            ->onlyMethods(['__sleep', 'load', 'getId', 'getUrl', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
         $category->expects($this->once())->method('getName')->willReturn('Category Name');
@@ -193,16 +202,9 @@ class CategoryTest extends TestCase
             ->willReturn($configViewMock);
 
         $product = $this->getMockBuilder(Product::class)
-            ->setMethods(
-                [
-                    '__sleep',
-                    'getName',
-                    'getAllowedInRss',
-                    'getProductUrl',
-                    'getDescription',
-                    'getAllowedPriceInRss'
-                ]
-            )->disableOriginalConstructor()
+            ->onlyMethods(['__sleep', 'getName', 'getProductUrl'])
+            ->addMethods(['getAllowedInRss', 'getDescription', 'getAllowedPriceInRss'])
+            ->disableOriginalConstructor()
             ->getMock();
         $product->expects($this->once())->method('getName')->willReturn('Product Name');
         $product->expects($this->once())->method('getAllowedInRss')->willReturn(true);
@@ -240,12 +242,18 @@ class CategoryTest extends TestCase
         );
     }
 
-    public function testGetCacheLifetime()
+    /**
+     * @return void
+     */
+    public function testGetCacheLifetime(): void
     {
         $this->assertEquals(600, $this->block->getCacheLifetime());
     }
 
-    public function testIsAllowed()
+    /**
+     * @return void
+     */
+    public function testIsAllowed(): void
     {
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
             ->with('rss/catalog/category', ScopeInterface::SCOPE_STORE)
@@ -253,19 +261,22 @@ class CategoryTest extends TestCase
         $this->assertTrue($this->block->isAllowed());
     }
 
-    public function testGetFeeds()
+    /**
+     * @return void
+     */
+    public function testGetFeeds(): void
     {
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
             ->with('rss/catalog/category', ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
 
         $category = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
-            ->setMethods(['__sleep', 'getTreeModel', 'getResourceCollection', 'getId', 'getName'])
+            ->onlyMethods(['__sleep', 'getTreeModel', 'getResourceCollection', 'getId', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $collection = $this->getMockBuilder(Collection::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'addIdFilter',
                     'addAttributeToSelect',
@@ -274,7 +285,8 @@ class CategoryTest extends TestCase
                     'addAttributeToFilter',
                     'getIterator'
                 ]
-            )->disableOriginalConstructor()
+            )
+            ->disableOriginalConstructor()
             ->getMock();
         $collection->expects($this->once())->method('addIdFilter')->willReturnSelf();
         $collection->expects($this->exactly(3))->method('addAttributeToSelect')->willReturnSelf();
@@ -290,12 +302,15 @@ class CategoryTest extends TestCase
 
         $node = new DataObject(['id' => 1]);
         $nodes = $this->getMockBuilder(Node::class)
-            ->setMethods(['getChildren'])->disableOriginalConstructor()
+            ->onlyMethods(['getChildren'])
+            ->disableOriginalConstructor()
             ->getMock();
         $nodes->expects($this->once())->method('getChildren')->willReturn([$node]);
 
         $tree = $this->getMockBuilder(Tree::class)
-            ->setMethods(['loadChildren', 'loadNode'])->disableOriginalConstructor()
+            ->onlyMethods(['loadNode'])
+            ->addMethods(['loadChildren'])
+            ->disableOriginalConstructor()
             ->getMock();
         $tree->expects($this->once())->method('loadNode')->willReturnSelf();
         $tree->expects($this->once())->method('loadChildren')->willReturn($nodes);

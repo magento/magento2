@@ -33,7 +33,7 @@
             </createData>
             <!-- Create simple product -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
-            <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext" stepKey="reindexCatalogSearch"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexCatalogSearch"/>
             <!-- Login to Admin page -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>

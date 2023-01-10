@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCmsPageGridUrlFilterApplierTest">
+        <annotations>
+            <features value="CmsPage"/>
+            <stories value="Filter CMS page using GET URL parameter"/>
+            <title value="Verify that filter is applied on page grid when filters parameter is set on url"/>
+            <description value="Accessing page grid url with filters parameter"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4931106"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCmsPage" stepKey="createPage"/>
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="goToCMSPages"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+            <actionGroup ref="AdminOpenDashboardPageActionGroup" stepKey="goToAdminDashboard"/>
+        </before>
+        <after>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilter"/>
+            <deleteData createDataKey="createPage" stepKey="deletePage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+        <amOnPage url="{{CmsPagesPage.url}}?filters[title]=$$createPage.title$$" stepKey="navigateToPageGridWithFilters"/>
+        <waitForPageLoad stepKey="waitForPageGrid"/>
+        <waitForText selector="{{CmsPagesPageActionsSection.pagesGridRowByTitle($$createPage.title$$)}}" userInput="$$createPage.title$$" stepKey="seePage"/>
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.activeFilter}}" stepKey="seeEnabledFilters"/>
+        <waitForText selector="{{CmsPagesPageActionsSection.activeFilter}}" userInput="Title: $$createPage.title$$" stepKey="seePageTitleFilter"/>
+    </test>
+</tests>

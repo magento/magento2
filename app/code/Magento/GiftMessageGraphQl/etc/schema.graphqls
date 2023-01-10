@@ -1,0 +1,51 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type StoreConfig {
+    allow_order : String @doc(description: "The value of the Allow Gift Messages on Order Level option")
+    allow_items : String @doc(description: "The value of the Allow Gift Messages for Order Items option")
+}
+
+type Cart {
+    gift_message: GiftMessage @resolver (class: "\\Magento\\GiftMessageGraphQl\\Model\\Resolver\\Cart\\GiftMessage") @doc(description: "The entered gift message for the cart")
+}
+
+type SimpleCartItem {
+    gift_message: GiftMessage @resolver (class: "\\Magento\\GiftMessageGraphQl\\Model\\Resolver\\Cart\\Item\\GiftMessage") @doc(description: "The entered gift message for the cart item")
+}
+
+type ConfigurableCartItem {
+    gift_message: GiftMessage @resolver (class: "\\Magento\\GiftMessageGraphQl\\Model\\Resolver\\Cart\\Item\\GiftMessage") @doc(description: "The entered gift message for the cart item")
+}
+
+type BundleCartItem {
+    gift_message: GiftMessage @resolver (class: "\\Magento\\GiftMessageGraphQl\\Model\\Resolver\\Cart\\Item\\GiftMessage") @doc(description: "The entered gift message for the cart item")
+}
+
+type GiftMessage @doc(description: "Contains the text of a gift message, its sender, and recipient") {
+    to: String! @doc(description: "Recipient name")
+    from: String! @doc(description: "Sender name")
+    message: String! @doc(description: "Gift message text")
+}
+
+input CartItemUpdateInput {
+    gift_message: GiftMessageInput @doc(description: "Gift message details for the cart item")
+}
+
+input GiftMessageInput @doc(description: "Contains the text of a gift message, its sender, and recipient") {
+    to: String! @doc(description: "Recipient name")
+    from: String! @doc(description: "Sender name")
+    message: String! @doc(description: "Gift message text")
+}
+
+type SalesItemInterface {
+    gift_message: GiftMessage @doc(description: "The entered gift message for the order item")
+}
+
+type CustomerOrder {
+    gift_message: GiftMessage @resolver (class: "\\Magento\\GiftMessageGraphQl\\Model\\Resolver\\Order\\GiftMessage")  @doc(description: "The entered gift message for the order")
+}
+
+interface OrderItemInterface {
+    gift_message: GiftMessage @resolver(class: "\\Magento\\GiftMessageGraphQl\\Model\\Resolver\\Order\\Item\\GiftMessage") @doc(description: "The selected gift message for the order item")
+}

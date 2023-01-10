@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Save media asset keywords to database
- * @deprecated use \Magento\MediaGalleryApi\Api\SaveAssetKeywordsInterface instead
+ * @deprecated 100.4.0 use \Magento\MediaGalleryApi\Api\SaveAssetKeywordsInterface instead
  */
 class SaveAssetKeywords implements SaveAssetKeywordsInterface
 {

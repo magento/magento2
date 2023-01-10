@@ -1,0 +1,24 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="admin__field admin__media-gallery-image-checkbox" visible="visible" css="$data.additionalClasses">
+    <div class="admin__field-control">
+        <label class="admin__form-field-label" if="$data.label" attr="for: uid">
+            <span translate="label" attr="'data-config-scope': $data.scopeLabel"></span>
+        </label>
+    </div>
+    <div class="admin__field admin__field-option">
+        <input type="checkbox"
+               class="admin__control-checkbox"
+               ko-checked="$data.checked"
+               disable="disabled"
+               ko-value="value"
+               hasFocus="focused"
+               attr="id: uid, name: inputName"/>
+
+        <label class="admin__field-label" text="description" attr="for: uid"></label>
+    </div>
+</div>

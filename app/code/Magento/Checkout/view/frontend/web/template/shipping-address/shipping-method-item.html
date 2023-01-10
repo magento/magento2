@@ -15,15 +15,17 @@
                attr="'aria-labelledby': 'label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code,
                     'checked': element.rates().length == 1 || element.isSelected" />
     </td>
+    <!-- ko ifnot: (method.error_message) -->
     <td class="col col-price">
-        <each args="element.getRegion('price')" render="" />
+        <each args="element.getRegion('price')" render=""></each>
     </td>
+    <!-- /ko -->
     <td class="col col-method"
         attr="'id': 'label_method_' + method.method_code + '_' + method.carrier_code"
-        text="method.method_title" />
+        text="method.method_title"></td>
     <td class="col col-carrier"
         attr="'id': 'label_carrier_' + method.method_code + '_' + method.carrier_code"
-        text="method.carrier_title" />
+        text="method.carrier_title"></td>
 </tr>
 <tr class="row row-error"
     if="method.error_message">
@@ -33,7 +35,7 @@
         </div>
         <span class="no-display">
             <input type="radio"
-                   attr="'value' : method.method_code, 'id': 's_method_' + method.method_code" />
+                   attr="'value' : method.method_code, 'id': 's_method_' + method.method_code">
         </span>
     </td>
 </tr>

@@ -11,6 +11,7 @@ namespace Magento\MediaGalleryApi\Api;
 /**
  * Save media gallery assets to the database
  * @api
+ * @since 101.0.0
  */
 interface SaveAssetsInterface
 {
@@ -20,6 +21,7 @@ interface SaveAssetsInterface
      * @param \Magento\MediaGalleryApi\Api\Data\AssetInterface[] $assets
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @since 101.0.0
      */
     public function execute(array $assets): void;
 }

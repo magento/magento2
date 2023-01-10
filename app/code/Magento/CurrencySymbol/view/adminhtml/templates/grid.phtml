@@ -6,6 +6,7 @@
 
 /**
  * @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currencysymbol
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
 
@@ -31,9 +32,6 @@
                     ?>
                     <input id="custom_currency_symbol_inherit<?= $block->escapeHtmlAttr($code) ?>"
                            class="admin__control-checkbox" type="checkbox"
-                           <?php //@codingStandardsIgnoreStart ?>
-                           onclick="toggleUseDefault(<?= '\'' . $escapedCode . '\',\'' . $escapedSymbol . '\'' ?>)"
-                            <?php //@codingStandardsIgnoreEnd ?>
                             <?= $data['inherited'] ? ' checked="checked"' : '' ?>
                            value="1"
                            name="inherit_custom_currency_symbol[<?= $block->escapeHtmlAttr($code) ?>]">
@@ -43,6 +41,11 @@
                             <?= $block->escapeHtml($block->getInheritText()) ?>
                         </span>
                     </label>
+                    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                        'onclick',
+                        "toggleUseDefault('" . $escapedCode . "','" . $escapedSymbol . "')",
+                        '#custom_currency_symbol_inherit' . $block->escapeJs($code)
+                    ) ?>
                 </div>
             </div>
         </div>

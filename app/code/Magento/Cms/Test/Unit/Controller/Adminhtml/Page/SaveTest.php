@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Cms\Api\PageRepositoryInterface;
@@ -18,7 +20,6 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -82,13 +83,14 @@ class SaveTest extends TestCase
      */
     private $pageId = 1;
 
+    /**
+     * @inheirtDoc
+     */
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
-
         $this->resultRedirectFactory = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRedirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
@@ -98,7 +100,7 @@ class SaveTest extends TestCase
             ->willReturn($this->resultRedirect);
         $this->dataProcessorMock = $this->getMockBuilder(
             PostDataProcessor::class
-        )->setMethods(['filter'])->disableOriginalConstructor()
+        )->onlyMethods(['filter'])->disableOriginalConstructor()
             ->getMock();
         $this->dataPersistorMock = $this->getMockBuilder(DataPersistorInterface::class)
             ->getMock();
@@ -108,27 +110,28 @@ class SaveTest extends TestCase
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
         $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
-            ->setMethods(['dispatch'])
+            ->onlyMethods(['dispatch'])
             ->getMockForAbstractClass();
         $this->pageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->pageRepository = $this->getMockBuilder(PageRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->saveController = $objectManager->getObject(
-            Save::class,
-            [
-                'request' => $this->requestMock,
-                'messageManager' => $this->messageManagerMock,
-                'eventManager' => $this->eventManagerMock,
-                'resultRedirectFactory' => $this->resultRedirectFactory,
-                'dataProcessor' => $this->dataProcessorMock,
-                'dataPersistor' => $this->dataPersistorMock,
-                'pageFactory' => $this->pageFactory,
-                'pageRepository' => $this->pageRepository
-            ]
+        $context = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $context->method('getRequest')->willReturn($this->requestMock);
+        $context->method('getMessageManager')->willReturn($this->messageManagerMock);
+        $context->method('getEventManager')->willReturn($this->eventManagerMock);
+        $context->method('getResultRedirectFactory')->willReturn($this->resultRedirectFactory);
+        $this->saveController = new Save(
+            $context,
+            $this->dataProcessorMock,
+            $this->dataPersistorMock,
+            $this->pageFactory,
+            $this->pageRepository
         );
     }
 
@@ -140,7 +143,7 @@ class SaveTest extends TestCase
             'stores' => ['0'],
             'is_active' => true,
             'content' => '"><script>alert("cookie: "+document.cookie)</script>',
-            'back' => 'close'
+            'back' => 'close',
         ];
 
         $filteredPostData = [
@@ -149,7 +152,7 @@ class SaveTest extends TestCase
             'stores' => ['0'],
             'is_active' => true,
             'content' => '&quot;&gt;&lt;script&gt;alert(&quot;cookie: &quot;+document.cookie)&lt;/script&gt;',
-            'back' => 'close'
+            'back' => 'close',
         ];
 
         $this->dataProcessorMock->expects($this->any())
@@ -236,7 +239,7 @@ class SaveTest extends TestCase
             'stores' => ['0'],
             'is_active' => true,
             'content' => '"><script>alert("cookie: "+document.cookie)</script>',
-            'back' => 'continue'
+            'back' => 'continue',
         ];
         $this->requestMock->expects($this->any())->method('getPostValue')->willReturn($postData);
         $this->requestMock->expects($this->atLeastOnce())
@@ -304,12 +307,13 @@ class SaveTest extends TestCase
         $this->pageRepository->expects($this->once())->method('getById')->with($this->pageId)->willReturn($page);
         $page->expects($this->once())->method('setData');
         $this->pageRepository->expects($this->once())->method('save')->with($page)
-            ->willThrowException(new \Exception('Error message.'));
+            ->willThrowException(new \Error('Error message.'));
 
         $this->messageManagerMock->expects($this->never())
             ->method('addSuccessMessage');
         $this->messageManagerMock->expects($this->once())
-            ->method('addExceptionMessage');
+            ->method('addErrorMessage')
+            ->with('Something went wrong while saving the page.');
 
         $this->dataPersistorMock->expects($this->any())
             ->method('set')
@@ -318,7 +322,7 @@ class SaveTest extends TestCase
                 [
                     'page_id' => $this->pageId,
                     'layout_update_xml' => null,
-                    'custom_layout_update_xml' => null
+                    'custom_layout_update_xml' => null,
                 ]
             );
 

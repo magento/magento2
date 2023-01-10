@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="customFilters" xsi:type="array">
+                <item name="page_id" xsi:type="object">Magento\MediaGalleryCmsUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Page</item>
+                <item name="block_id" xsi:type="object">Magento\MediaGalleryCmsUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Block</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaGalleryCmsUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Page" type="Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Entity">
+        <arguments>
+            <argument name="entityType" xsi:type="string">cms_page</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaGalleryCmsUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Block" type="Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Entity">
+        <arguments>
+            <argument name="entityType" xsi:type="string">cms_block</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\MediaGalleryUi\Model\GetAssetUsageDetails">
+        <arguments>
+            <argument name="contentTypes" xsi:type="array">
+                <item name="cms_block" xsi:type="array">
+                    <item name="name" xsi:type="string">Blocks</item>
+                    <item name="link" xsi:type="string">cms/block/index</item>
+                </item>
+                <item name="cms_page" xsi:type="array">
+                    <item name="name" xsi:type="string">Pages</item>
+                    <item name="link" xsi:type="string">cms/page/index</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

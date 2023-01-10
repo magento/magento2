@@ -12,6 +12,7 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class RemoveAction
 {

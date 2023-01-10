@@ -27,6 +27,7 @@
 
             <!-- Create website -->
             <createData entity="secondCustomWebsite" stepKey="createWebsite"/>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -36,11 +37,13 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="defaultVirtualProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Delete website -->
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="$createWebsite.website[name]$"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <!-- Delete related products -->
             <deleteData createDataKey="createFirstRelatedProduct" stepKey="deleteFirstRelatedProduct"/>
@@ -97,7 +100,7 @@
 
         <!-- Open product page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
-            <argument name="productUrl" value="{{defaultVirtualProduct.name}}"/>
+            <argument name="productUrl" value="{{defaultVirtualProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert two related products at the storefront -->
@@ -128,10 +131,15 @@
         </actionGroup>
 
         <!-- Edit Content to the product -->
-        <scrollTo selector="{{AdminProductContentSection.sectionHeader}}" x="0" y="-100" stepKey="scrollToContentTab"/>
-        <click selector="{{AdminProductContentSection.sectionHeader}}" stepKey="openContentTab"/>
-        <fillField selector="{{AdminProductContentSection.descriptionTextArea}}" userInput="EDIT ~ {{ApiProductDescription.value}} ~ EDIT" stepKey="editLongDescription"/>
-        <fillField selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="EDIT ~ {{ApiProductShortDescription.value}} ~ EDIT" stepKey="editShortDescription"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToContentTab"/>
+        <actionGroup ref="AdminOpenContentSectionOnProductPageActionGroup" stepKey="openContentTab"/>
+        <actionGroup ref="AdminFillInProductDescriptionActionGroup" stepKey="editLongDescription">
+            <argument name="description" value="EDIT ~ {{ApiProductDescription.value}} ~ EDIT"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillInProductShortDescriptionActionGroup" stepKey="editShortDescription">
+            <argument name="shortDescription" value="EDIT ~ {{ApiProductShortDescription.value}} ~ EDIT"/>
+        </actionGroup>
+
 
         <!-- Edit product Search Engine Optimization settings -->
         <actionGroup ref="AdminChangeProductSEOSettingsActionGroup" stepKey="editProductSEOSettings">
@@ -166,17 +174,27 @@
 
         <!-- Verify Url Key after changing -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
-            <argument name="productUrl" value="{{SimpleProduct.name}}"/>
+            <argument name="productUrl" value="{{SimpleProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert three related products at the storefront -->
-        <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$createThirdRelatedProduct.name$$)}}" stepKey="seeFirstRelatedProduct"/>
-        <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$createSecondRelatedProduct.name$$)}}" stepKey="seeSecondRelatedProduct"/>
-        <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$createThirdRelatedProduct.name$$)}}" stepKey="seeThirdRelatedProduct"/>
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="seeFirstRelatedProduct">
+            <argument name="productName" value="$$createThirdRelatedProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="seeSecondRelatedProduct">
+            <argument name="productName" value="$$createSecondRelatedProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="seeThirdRelatedProduct">
+            <argument name="productName" value="$$createThirdRelatedProduct.name$$"/>
+        </actionGroup>
 
         <!-- Assert product content -->
-        <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="EDIT ~ {{ApiProductDescription.value}} ~ EDIT" stepKey="seeEditedLongDescriptionStorefront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productShortDescription}}" userInput="EDIT ~ {{ApiProductShortDescription.value}} ~ EDIT" stepKey="seeEditedShortDescriptionStorefront"/>
+        <actionGroup ref="AssertStorefrontProductDescriptionActionGroup" stepKey="seeEditedLongDescriptionStorefront">
+            <argument name="productDescription" value="EDIT ~ {{ApiProductDescription.value}} ~ EDIT"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontShortProductDescriptionActionGroup" stepKey="seeEditedShortDescriptionStorefront">
+            <argument name="productShortDescription" value="EDIT ~ {{ApiProductShortDescription.value}} ~ EDIT"/>
+        </actionGroup>
 
         <!-- Assert product design settings "right bar is present at product page with 2 columns" -->
         <seeElement selector="{{StorefrontProductPageDesignSection.layoutTwoColumnsRight}}" stepKey="seeNewDesignChanges"/>

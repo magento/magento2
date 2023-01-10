@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminEmailTemplatePreviewAsDraftWithDirectivesTest">
+        <annotations>
+            <features value="Email"/>
+            <stories value="Create email template with directives and preview as draft"/>
+            <title value="Check email template preview with directives and preview as draft"/>
+            <description value="Check if email template preview works correctly with directives in draft mode"/>
+            <severity value="CRITICAL"/>
+            <useCaseId value="MC-23058"/>
+            <group value="email"/>
+            <group value="WYSIWYGDisabled"/>
+            <stories value="Email Template Preview"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <actionGroup ref="PrepareDraftCustomTemplateActionGroup" stepKey="createDraftTemplate">
+            <argument name="template" value="EmailTemplateWithDirectives"/>
+        </actionGroup>
+
+        <click selector="{{AdminEmailTemplateEditSection.previewTemplateButton}}" stepKey="clickPreviewTemplate"/>
+        <switchToNextTab stepKey="switchToPreviewTab"/>
+        <seeInCurrentUrl url="{{AdminEmailTemplatePreviewPage.url}}" stepKey="seePreviewInUrl"/>
+        <seeElement selector="{{AdminEmailTemplatePreviewSection.iframe}}" stepKey="seeIframeOnPage"/>
+        <switchToIFrame userInput="preview_iframe" stepKey="switchToIframe"/>
+        <waitForPageLoad stepKey="waitForPreviewLoaded"/>
+
+        <actionGroup ref="AssertEmailTemplateContentActionGroup" stepKey="assertContent">
+            <argument name="expectedContent" value="{{EmailTemplateWithDirectives.expectedTemplate}}"/>
+        </actionGroup>
+    </test>
+</tests>

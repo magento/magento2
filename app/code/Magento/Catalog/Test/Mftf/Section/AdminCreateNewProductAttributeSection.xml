@@ -9,7 +9,8 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCreateNewProductAttributeSection">
-        <element name="saveAttribute" type="button" selector="#save"/>
+        <element name="saveAttribute" type="button" selector="#save" timeout="30"/>
+        <element name="closeAttribute" type="button" selector="#cancel" timeout="30"/>
         <element name="defaultLabel" type="input" selector="input[name='frontend_label[0]']"/>
         <element name="inputType" type="select" selector="select[name='frontend_input']" timeout="30"/>
         <element name="addValue" type="button" selector="//button[contains(@data-action,'add_new_row')]" timeout="30"/>
@@ -29,5 +30,22 @@
         <element name="allowHtmlTags" type="checkbox" selector="//input[contains(@name, 'is_html_allowed_on_front')]/..//label"/>
         <element name="visibleOnStorefront" type="checkbox" selector="//input[contains(@name, 'is_visible_on_front')]/..//label"/>
         <element name="sortProductListing" type="checkbox" selector="//input[contains(@name, 'is_visible_on_front')]/..//label"/>
+        <element name="visualSwatchAdmin" type="input" selector="input[name='optionvisual[value][option_{{var}}][1]']" parameterized="true"/>
+        <element name="visualSwatchStore" type="input" selector="input[name='optionvisual[value][option_{{var}}][0]']" parameterized="true"/>
+        <element name="adminOptionTextOption" type="input" selector="input[name='swatchtext[value][option_{{var}}][0]']" parameterized="true"/>
+        <element name="adminOptionTextSwatch" type="input" selector="input[name='optiontext[value][option_{{var}}][0]']" parameterized="true"/>
+        <element name="defaultStoreViewTextSwatch" type="input" selector="input[name='swatchtext[value][option_{{var}}][1]']" parameterized="true"/>
+        <element name="defaultStoreViewTextOption" type="input" selector="input[name='optiontext[value][option_{{var}}][1]']" parameterized="true"/>
+
+        <!-- Enable/disable Storefront Properties -->
+        <element name="isVisibleEnabled" type="select" selector="//select[contains(@id, 'is_visible') and not(contains(@disabled, 'disabled'))]"/>
+        <element name="isVisibleDisabled" type="select" selector="//select[contains(@id, 'is_visible') and contains(@disabled, 'disabled')]"/>
+        <element name="sortOrderEnabled" type="input" selector="//input[contains(@id, 'sort_order') and not(contains(@disabled, 'disabled'))]"/>
+        <element name="sortOrderDisabled" type="input" selector="//input[contains(@id, 'sort_order') and contains(@disabled, 'disabled')]"/>
+        <element name="usedInFormsEnabled" type="select" selector="//select[contains(@id, 'used_in_forms') and not(contains(@disabled, 'disabled'))]"/>
+        <element name="usedInFormsDisabled" type="select" selector="//select[contains(@id, 'used_in_forms') and contains(@disabled, 'disabled')]"/>
+        <element name="usedIsDefaultAdminDisabled" type="select" selector="//input[@name='option[value][][0]' and @disabled='disabled']"/>
+        <element name="usedIsDefaultStoreViewDisabled" type="select" selector="//input[@name='option[value][][1]' and @disabled='disabled']"/>
+        <element name="usedIsAttributeCodeDisabled" type="select" selector="//*[@id='attribute_code' and @disabled='disabled']"/>
     </section>
 </sections>

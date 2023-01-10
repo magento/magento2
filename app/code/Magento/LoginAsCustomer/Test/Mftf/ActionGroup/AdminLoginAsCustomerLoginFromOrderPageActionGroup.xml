@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminLoginAsCustomerLoginFromOrderPageActionGroup">
+        <annotations>
+            <description>Verify Login as Customer Login action is works properly from Order grid page.</description>
+        </annotations>
+        <arguments>
+            <argument name="orderId" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminOrderPage.url(orderId)}}" stepKey="gotoOrderPage"/>
+        <waitForPageLoad stepKey="waitForOrderPageLoad"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.loginAsCustomer}}" stepKey="clickLoginAsCustomerLink"/>
+        <see selector="{{AdminConfirmationModalSection.title}}" userInput="You are about to Login as Customer"
+             stepKey="seeModal"/>
+        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Actions taken while in &quot;Login as Customer&quot; will affect actual customer data." stepKey="seeModalMessage"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickLogin"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear" />
+        <switchToNextTab stepKey="switchToNewTab"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+</actionGroups>

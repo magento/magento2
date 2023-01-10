@@ -4,4 +4,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<img class="admin__control-thumbnail" attr="src: $col.getSrc($row()), alt: $col.getAlt($row())"/>
+<span class="thumbnail-container">
+    <span class="thumbnail-wrapper">
+        <img class="admin__control-thumbnail" attr="src: $col.getSrc($row()), alt: $col.getAlt($row())" loading="lazy"/>
+    </span>
+</span>

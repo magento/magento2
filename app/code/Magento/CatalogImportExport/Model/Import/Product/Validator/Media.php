@@ -114,8 +114,8 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
                         ]
                     );
                     $valid = false;
+                    break;
                 }
-                break;
             }
         }
         return $valid;

@@ -150,13 +150,13 @@ class BundleTest extends TestCase
         $this->productMock->expects($this->once())
             ->method('getBundleOptionsData')
             ->willReturn(['option_1' => ['delete' => 1]]);
-        $extentionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
+        $extensionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setBundleProductOptions'])
             ->getMockForAbstractClass();
-        $extentionAttribute->expects($this->once())->method('setBundleProductOptions')->with([]);
-        $this->productMock->expects($this->once())->method('getExtensionAttributes')->willReturn($extentionAttribute);
-        $this->productMock->expects($this->once())->method('setExtensionAttributes')->with($extentionAttribute);
+        $extensionAttribute->expects($this->once())->method('setBundleProductOptions')->with([]);
+        $this->productMock->expects($this->once())->method('getExtensionAttributes')->willReturn($extensionAttribute);
+        $this->productMock->expects($this->once())->method('setExtensionAttributes')->with($extensionAttribute);
 
         $this->model->afterInitialize($this->subjectMock, $this->productMock);
     }
@@ -191,14 +191,14 @@ class BundleTest extends TestCase
             ['affect_bundle_product_selections', null, false],
         ];
         $this->requestMock->expects($this->any())->method('getPost')->willReturnMap($valueMap);
-        $extentionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
+        $extensionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setBundleProductOptions'])
             ->getMockForAbstractClass();
-        $extentionAttribute->expects($this->once())->method('setBundleProductOptions')->with([]);
+        $extensionAttribute->expects($this->once())->method('setBundleProductOptions')->with([]);
         $this->productMock->expects($this->any())->method('getCompositeReadonly')->willReturn(false);
-        $this->productMock->expects($this->once())->method('getExtensionAttributes')->willReturn($extentionAttribute);
-        $this->productMock->expects($this->once())->method('setExtensionAttributes')->with($extentionAttribute);
+        $this->productMock->expects($this->once())->method('getExtensionAttributes')->willReturn($extensionAttribute);
+        $this->productMock->expects($this->once())->method('setExtensionAttributes')->with($extensionAttribute);
         $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(false);
 
         $this->model->afterInitialize($this->subjectMock, $this->productMock);

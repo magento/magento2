@@ -122,7 +122,9 @@ class SendFriendTest extends GraphQlAbstract
     public function testSendWithoutExistProduct()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The product that was requested doesn\'t exist. Verify the product and try again.');
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
 
         $productId = 2018;
         $recipients = '{
@@ -290,81 +292,124 @@ QUERY;
     /**
      * @return array
      */
-    public function sendFriendsErrorsDataProvider()
+    public function sendFriendsErrorsDataProvider(): array
+    {
+        return array_merge(
+            $this->getRecipientErrors(),
+            $this->getSenderErrors()
+        );
+    }
+
+    /**
+     * @return array
+     */
+    private function getRecipientErrors(): array
     {
         return [
             [
-          'product_id: 1
-         sender: {
-            name: "Name"
-            email: "e@mail.com"
-            message: "Lorem Ipsum"
-        }
-          recipients: [
-              {
-                  name: ""
-                  email:"recipient1@mail.com"
-               },
-              {
-                  name: ""
-                  email:"recipient2@mail.com"
-              }
-          ]', 'Please provide Name for all of recipients.'
+                'product_id: 1
+                sender: {
+                    name: "Name"
+                    email: "e@mail.com"
+                    message: "Lorem Ipsum"
+                }
+                recipients: [
+                    {
+                        name: ""
+                        email:"recipient1@mail.com"
+                    },
+                    {
+                        name: ""
+                        email:"recipient2@mail.com"
+                    }
+                ]',
+                'Please provide Name for all of recipients.'
             ],
             [
                 'product_id: 1
-          sender: {
-            name: "Name"
-            email: "e@mail.com"
-            message: "Lorem Ipsum"
-        }
-          recipients: [
-              {
-                  name: "Recipient Name 1"
-                  email:""
-               },
-              {
-                  name: "Recipient Name 2"
-                  email:""
-              }
-          ]', 'Please provide Email for all of recipients.'
+                sender: {
+                    name: "Name"
+                    email: "e@mail.com"
+                    message: "Lorem Ipsum"
+                }
+                recipients: [
+                    {
+                        name: "Recipient Name 1"
+                        email:""
+                    },
+                    {
+                       name: "Recipient Name 2"
+                       email:""
+                    }
+                ]',
+                'Please provide Email for all of recipients.'
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getSenderErrors(): array
+    {
+        return [
+            [
+                'product_id: 1
+                sender: {
+                    name: ""
+                    email: "e@mail.com"
+                    message: "Lorem Ipsum"
+                }
+                recipients: [
+                    {
+                        name: "Recipient Name 1"
+                        email:"recipient1@mail.com"
+                    },
+                    {
+                        name: "Recipient Name 2"
+                        email:"recipient2@mail.com"
+                    }
+                ]',
+                'Please provide Name of sender.'
             ],
             [
                 'product_id: 1
-          sender: {
-            name: ""
-            email: "e@mail.com"
-            message: "Lorem Ipsum"
-        }
-          recipients: [
-              {
-                  name: "Recipient Name 1"
-                  email:"recipient1@mail.com"
-               },
-              {
-                  name: "Recipient Name 2"
-                  email:"recipient2@mail.com"
-              }
-          ]', 'Please provide Name of sender.'
+                sender: {
+                    name: "Name"
+                    email: ""
+                    message: "Lorem Ipsum"
+                }
+                recipients: [
+                    {
+                        name: "Recipient Name 1"
+                        email:"recipient1@mail.com"
+                    },
+                    {
+                        name: "Recipient Name 2"
+                        email:"recipient2@mail.com"
+                    }
+                ]',
+                'Please provide Email of sender.'
             ],
             [
                 'product_id: 1
-          sender: {
-            name: "Name"
-            email: "e@mail.com"
-            message: ""
-        }
-          recipients: [
-              {
-                  name: "Recipient Name 1"
-                  email:"recipient1@mail.com"
-               },
-              {
-                  name: "Recipient Name 2"
-                  email:"recipient2@mail.com"
-              }
-          ]', 'Please provide Message.'
-            ]
+                sender: {
+                    name: "Name"
+                    email: "e@mail.com"
+                    message: ""
+                }
+                recipients: [
+                    {
+                        name: "Recipient Name 1"
+                        email:"recipient1@mail.com"
+                    },
+                    {
+                        name: "Recipient Name 2"
+                        email:"recipient2@mail.com"
+                    }
+                ]',
+                'Please provide Message.'
+            ],
         ];
     }
 

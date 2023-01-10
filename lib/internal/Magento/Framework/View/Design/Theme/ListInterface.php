@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Design\Theme;
  * Theme list interface
  *
  * @api
+ * @since 100.0.2
  */
 interface ListInterface
 {

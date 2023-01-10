@@ -19,6 +19,8 @@
         </annotations>
 
         <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!-- Create Simple Product -->
             <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct"/>
             <!-- Create Cart Price Rule without discount but with free shipping -->
@@ -35,6 +37,8 @@
         </before>
 
         <after>
+            <!-- Disable shipping method for customer with default address -->
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromStorefront"/>
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteSalesRule"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
@@ -89,8 +93,10 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Go to created Order -->
-        <amOnPage url="{{AdminOrderPage.url({$grabOrderId})}}" stepKey="goToAdminViewOrder"/>
-        <waitForPageLoad stepKey="waitForOrderPage"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="goToAdminViewOrder">
+            <argument name="entityId" value="{$grabOrderId}"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForOrderPage"/>
 
         <!-- Assert Coupon Code will shown in Shipping total description -->
         <actionGroup ref="AssertAdminShippingDescriptionInOrderViewActionGroup" stepKey="seeCouponInShippingDescription">

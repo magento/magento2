@@ -47,14 +47,6 @@
             </settings>
         </dataProvider>
     </dataSource>
-    <fieldset name="general">
-        <settings>
-            <additionalClasses>
-                <class name="fieldset-schedule">true</class>
-            </additionalClasses>
-            <label translate="true">Currently Active</label>
-        </settings>
-    </fieldset>
     <fieldset name="rule_information" sortOrder="10">
         <settings>
             <collapsible>true</collapsible>
@@ -128,7 +120,7 @@
                 </validation>
                 <dataType>number</dataType>
                 <tooltip>
-                    <link>https://docs.magento.com/m2/ce/user_guide/configuration/scope.html</link>
+                    <link>https://docs.magento.com/user-guide/configuration/scope.html</link>
                     <description>What is this?</description>
                 </tooltip>
                 <label translate="true">Websites</label>
@@ -501,7 +493,7 @@
         <field name="stop_rules_processing" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="default" xsi:type="number">0</item>
+                    <item name="default" xsi:type="number">1</item>
                     <item name="source" xsi:type="string">sales_rule</item>
                 </item>
             </argument>
@@ -546,7 +538,11 @@
         </field>
         <container name="store_view_labels" sortOrder="40">
             <htmlContent name="html_content">
-                <block name="store_view_labels" class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels"/>
+                <block name="store_view_labels" class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels">
+                    <arguments>
+                        <argument name="target_form" xsi:type="string">sales_rule_form</argument>
+                    </arguments>
+                </block>
             </htmlContent>
         </container>
     </fieldset>

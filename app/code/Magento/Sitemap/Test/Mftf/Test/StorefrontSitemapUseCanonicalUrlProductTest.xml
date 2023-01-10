@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSitemapUseCanonicalUrlProductTest">
+        <annotations>
+            <group value="Rss"/>
+            <stories value="Sitemap use canonical product url"/>
+            <title value="Sitemap use canonical for product url"/>
+            <description value="RSS Feed always use canonical url for product"/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set catalog/seo/product_use_categories 1" stepKey="enableUseCategoryPathForProductUrl"/>
+            <magentoCLI command="config:set catalog/seo/product_canonical_tag 1" stepKey="enableUseCanonicalForProduct"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProductApi">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingSiteMapPage">
+                <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+                <argument name="submenuUiId" value="{{AdminMenuSEOAndSearchSiteMap.dataUiId}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminMarketingSiteMapNavigateNewActionGroup" stepKey="navigateToNewSitemapPage"/>
+            <actionGroup ref="AdminMarketingSiteMapFillFormSaveAndGenerateActionGroup" stepKey="createAndGenerateSitemap">
+                <argument name="sitemap" value="UniqueSitemapNameMediaPath"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProductApi" stepKey="deleteSimple"/>
+            <magentoCLI command="config:set catalog/seo/product_use_categories 0" stepKey="disableUseCategoryPathForProductUrl"/>
+            <magentoCLI command="config:set catalog/seo/product_canonical_tag 0" stepKey="disableUseCanonicalForProduct"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="AdminSiteMapGridClickFirstRowLinkActionGroup" stepKey="clickFirstLinkGrid"/>
+        <see userInput="{{_ENV.MAGENTO_BASE_URL}}$$createSimpleProductApi.custom_attributes[url_key]$$" stepKey="seeCanonicalUrl" />
+    </test>
+</tests>

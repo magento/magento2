@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckCustomerInfoOnOrderPageCreatedByGuestTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Check customer information created by guest"/>
+            <title value="Check Customer Information Created By Guest"/>
+            <description value="Check customer information after placing the order as the guest who created an account"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-28550"/>
+            <useCaseId value="MAGETWO-95820"/>
+            <group value="checkout"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="fillShippingSectionAsGuest">
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+        <grabTextFrom selector="{{CheckoutSuccessRegisterSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontRegisterCustomerFromOrderSuccessPage" stepKey="createCustomerAfterPlaceOrder">
+            <argument name="customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrdersGridById">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <see userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminShipmentOrderInformationSection.customerName}}" stepKey="seeCustomerName"/>
+    </test>
+</tests>

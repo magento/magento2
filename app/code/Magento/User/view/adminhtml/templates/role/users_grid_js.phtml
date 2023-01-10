@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<script>
+<?php $scriptString = <<<script
+
 require([
     'jquery',
     'Magento_Ui/js/modal/confirm',
@@ -12,9 +15,14 @@ require([
     'mage/adminhtml/grid',
     'prototype'
 ], function(jQuery, confirm, _){
-<?php $myBlock = $block->getLayout()->getBlock('roleUsersGrid'); ?>
-<?php if (is_object($myBlock) && $myBlock->getJsObjectName()) : ?>
-    var checkBoxes = $H(<?= /* @noEscape */ $myBlock->getUsers(true) ?>);
+
+script;
+
+$myBlock = $block->getLayout()->getBlock('roleUsersGrid');
+if (is_object($myBlock) && $myBlock->getJsObjectName()):
+    $scriptString .= <<<script
+
+    var checkBoxes = \$H({$myBlock->getUsers(true)});
     var warning = false;
     if (checkBoxes.size() > 0) {
         warning = true;
@@ -43,7 +51,8 @@ require([
 
                 if (checked) {
                     confirm({
-                        content: "<?= $myBlock->escapeHtml(__('Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?')) ?>",
+                        content: "{$myBlock->escapeJs(__('Warning!<br>This action will remove this user from already ' .
+                                                         'assigned role.<br>Are you sure?'))}",
                         actions: {
                             confirm: function () {
                                 checkbox[0].checked = false;
@@ -92,7 +101,9 @@ require([
         if (!allCheckbox.checked && _.size(checkBoxes._object) > 0) {
             allCheckbox.checked = true;
             confirm({
-                content: "<?= $myBlock->escapeHtml(__('Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?')) ?>",
+                content: "{$myBlock->escapeJs(
+                    __('Warning!<br>This action will remove those users from already assigned roles.<br>Are you sure?')
+                    )}",
                 actions: {
                     confirm: function () {
                         allCheckbox.checked = false;
@@ -105,25 +116,25 @@ require([
         }
     }
     function markCheckboxes(value) {
-        <?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.rows.each(function(row)
+        {$myBlock->escapeJs($myBlock->getJsObjectName())}.rows.each(function(row)
         {
             $(row).getElementsByClassName('checkbox')[0].checked = value;
-            roleUsersRowInit(<?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>, row);
+            roleUsersRowInit({$myBlock->escapeJs($myBlock->getJsObjectName())}, row);
         });
     }
     function onLoad() {
-        if (typeof <?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?> !== 'undefined') {
-            <?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.
+        if (typeof {$myBlock->escapeJs($myBlock->getJsObjectName())} !== 'undefined') {
+            {$myBlock->escapeJs($myBlock->getJsObjectName())}.
             rowClickCallback = roleUsersRowClick;
-            <?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.
+            {$myBlock->escapeJs($myBlock->getJsObjectName())}.
             initRowCallback = roleUsersRowInit;
-            <?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.
+            {$myBlock->escapeJs($myBlock->getJsObjectName())}.
             checkboxCheckCallback = registerUserRole;
-            <?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.
+            {$myBlock->escapeJs($myBlock->getJsObjectName())}.
             checkCheckboxes = massSelectUsers;
-            <?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.
+            {$myBlock->escapeJs($myBlock->getJsObjectName())}.
             rows.each(function (row) {
-                roleUsersRowInit(<?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>, row)
+                roleUsersRowInit({$myBlock->escapeJs($myBlock->getJsObjectName())}, row)
             });
             $('in_role_user_old').value = $('in_role_user').value;
         } else {
@@ -131,7 +142,13 @@ require([
         }
     }
     onLoad();
-<?php endif; ?>
+
+script;
+endif;
+$scriptString .= <<<script
 
 });
-</script>
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

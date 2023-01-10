@@ -12,7 +12,7 @@
                 <resource id="Magento_Catalog::catalog" title="Catalog" translate="title" sortOrder="30">
                     <resource id="Magento_Catalog::catalog_inventory" title="Inventory" translate="title" sortOrder="10">
                         <resource id="Magento_Catalog::products" title="Products" translate="title" sortOrder="10">
-                            <resource id="Magento_Catalog::update_attributes" title="Update Attributes" translate="title" sortOrder="10" />
+                            <resource id="Magento_Catalog::update_attributes" title="Mass Update Attributes" translate="title" sortOrder="10" />
                             <resource id="Magento_Catalog::edit_product_design" title="Edit Product Design" translate="title" sortOrder="20" />
                         </resource>
                         <resource id="Magento_Catalog::categories" title="Categories" translate="title" sortOrder="20">
@@ -27,7 +27,7 @@
                         </resource>
                     </resource>
                     <resource id="Magento_Backend::stores_attributes">
-                        <resource id="Magento_Catalog::attributes_attributes" title="Product" translate="title" sortOrder="30" />
+                        <resource id="Magento_Catalog::attributes_attributes" title="Product" translate="title" sortOrder="30"/>
                         <resource id="Magento_Catalog::sets" title="Attribute Set" translate="title" sortOrder="40"/>
                     </resource>
                 </resource>

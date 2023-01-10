@@ -6,7 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\MessageQueue\ConfigInterface" type="Magento\Framework\MessageQueue\Config\Proxy" />
     <preference for="Magento\Framework\MessageQueue\LockInterface" type="Magento\Framework\MessageQueue\Lock" />
     <preference for="Magento\Framework\MessageQueue\Lock\WriterInterface" type="Magento\MessageQueue\Model\ResourceModel\Lock" />
     <preference for="Magento\Framework\MessageQueue\Lock\ReaderInterface" type="Magento\MessageQueue\Model\ResourceModel\Lock" />
@@ -21,6 +20,7 @@
             <argument name="commands" xsi:type="array">
                 <item name="startConsumerCommand" xsi:type="object">Magento\MessageQueue\Console\StartConsumerCommand\Proxy</item>
                 <item name="consumerListCommand" xsi:type="object">Magento\MessageQueue\Console\ConsumerListCommand\Proxy</item>
+                <item name="restartConsumerCommand" xsi:type="object">Magento\MessageQueue\Console\RestartConsumerCommand\Proxy</item>
             </argument>
         </arguments>
     </type>

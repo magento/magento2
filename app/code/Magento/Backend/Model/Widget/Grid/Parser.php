@@ -27,12 +27,13 @@ class Parser
     public function parseExpression($expression)
     {
         $stack = [];
-        $expression = trim($expression);
+        $expression = $expression ? trim($expression) : '';
         foreach ($this->_operations as $operation) {
             $splittedExpr = preg_split('/\\' . $operation . '/', $expression, -1, PREG_SPLIT_DELIM_CAPTURE);
             $count = count($splittedExpr);
             if ($count > 1) {
                 for ($i = 0; $i < $count; $i++) {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $stack = array_merge($stack, $this->parseExpression($splittedExpr[$i]));
                     if ($i > 0) {
                         $stack[] = $operation;

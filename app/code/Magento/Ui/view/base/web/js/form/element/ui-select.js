@@ -292,6 +292,13 @@ define([
         },
 
         /**
+         * Return empty options html
+         */
+        getEmptyOptionsUnsanitizedHtml: function () {
+            return this.emptyOptionsHtml;
+        },
+
+        /**
          * Check options length and set to cache
          * if some options is added
          *
@@ -661,7 +668,7 @@ define([
          * @returns {Object} Chainable
          */
         toggleListVisible: function () {
-            this.listVisible(!this.listVisible());
+            this.listVisible(!this.disabled() && !this.listVisible());
 
             return this;
         },
@@ -749,16 +756,11 @@ define([
         },
 
         /**
-         * @deprecated
-         */
-        onMousemove: function () {},
-
-        /**
          * Handles hover on list items.
          *
          * @param {Object} event - mousemove event
          */
-        onDelegatedMouseMouve: function (event) {
+        onDelegatedMouseMove: function (event) {
             var target = $(event.currentTarget).closest(this.visibleOptionSelector)[0];
 
             if (this.isCursorPositionChange(event) || this.hoveredElement === target) {
@@ -951,7 +953,7 @@ define([
 
             if (this.isTabKey(event)) {
                 if (!this.filterOptionsFocus() && this.listVisible() && this.filterOptions) {
-                    this.cacheUiSelect.blur();
+                    this.cacheUiSelect.trigger('blur');
                     this.filterOptionsFocus(true);
                     this.cleanHoveredElement();
 
@@ -1143,7 +1145,7 @@ define([
             $(this.rootList).on(
                 'mousemove',
                 targetSelector,
-                this.onDelegatedMouseMouve.bind(this)
+                this.onDelegatedMouseMove.bind(this)
             );
         },
 
@@ -1167,7 +1169,7 @@ define([
                 return;
             }
 
-            if (searchKey !== this.lastSearchKey) {
+            if (currentPage === 1) {
                 this.options([]);
             }
             this.processRequest(searchKey, currentPage);

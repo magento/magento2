@@ -37,22 +37,33 @@ class CompositePolicyCollector implements PolicyCollectorInterface
     }
 
     /**
-     * Merge 2 policies with the same ID.
+     * Merge policies with same IDs and return a list of policies with 1 DTO per policy ID.
      *
-     * @param PolicyInterface $policy1
-     * @param PolicyInterface $policy2
-     * @return PolicyInterface
+     * @param PolicyInterface[] $collected
+     * @return PolicyInterface[]
      * @throws \RuntimeException When failed to merge.
      */
-    private function merge(PolicyInterface $policy1, PolicyInterface $policy2): PolicyInterface
+    private function merge(array $collected): array
     {
-        foreach ($this->mergers as $merger) {
-            if ($merger->canMerge($policy1, $policy2)) {
-                return $merger->merge($policy1, $policy2);
+        /** @var PolicyInterface[] $merged */
+        $merged = [];
+
+        foreach ($collected as $policy) {
+            if (array_key_exists($policy->getId(), $merged)) {
+                foreach ($this->mergers as $merger) {
+                    if ($merger->canMerge($merged[$policy->getId()], $policy)) {
+                        $merged[$policy->getId()] = $merger->merge($merged[$policy->getId()], $policy);
+                        continue 2;
+                    }
+                }
+
+                throw new \RuntimeException(sprintf('Merge for policies #%s was not found', $policy->getId()));
+            } else {
+                $merged[$policy->getId()] = $policy;
             }
         }
 
-        throw new \RuntimeException(sprintf('Merge for policies #%s was not found', $policy1->getId()));
+        return $merged;
     }
 
     /**
@@ -62,19 +73,9 @@ class CompositePolicyCollector implements PolicyCollectorInterface
     {
         $collected = $defaultPolicies;
         foreach ($this->collectors as $collector) {
-            $collected = $collector->collect($collected);
-        }
-        //Merging policies.
-        /** @var PolicyInterface[] $result */
-        $result = [];
-        foreach ($collected as $policy) {
-            if (array_key_exists($policy->getId(), $result)) {
-                $result[$policy->getId()] = $this->merge($result[$policy->getId()], $policy);
-            } else {
-                $result[$policy->getId()] = $policy;
-            }
+            $collected = $this->merge($collector->collect($collected));
         }
 
-        return array_values($result);
+        return array_values($collected);
     }
 }

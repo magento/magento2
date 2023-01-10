@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Template\Html;
 
@@ -114,6 +115,19 @@ class Minifier implements MinifierInterface
     {
         $dir = dirname($file);
         $fileName = basename($file);
+        $content = $this->readFactory->create($dir)->readFile($fileName);
+        //Storing Heredocs
+        $heredocs = [];
+        $content = preg_replace_callback(
+            '/<<<([A-z]+).*?\1;/ims',
+            function ($match) use (&$heredocs) {
+                $heredocs[] = $match[0];
+
+                return '__MINIFIED_HEREDOC__' .(count($heredocs) - 1);
+            },
+            // phpstan:ignore
+            ($content ?? '')
+        );
         $content = preg_replace(
             '#(?<!]]>)\s+</#',
             '</',
@@ -128,15 +142,15 @@ class Minifier implements MinifierInterface
                         . '(?:<(?>textarea|pre|script)\b|\z))#',
                         ' ',
                         preg_replace(
-                            '#(?<!:|\\\\|\'|")//(?!\s*\<\!\[)(?!\s*]]\>)[^\n\r]*#',
+                            '#(?<!:|\\\\|\'|"|/)//(?!/)(?!\s*\<\!\[)(?!\s*]]\>)[^\n\r]*#',
                             '',
                             preg_replace(
-                                '#(?<!:|\'|")//[^\n\r]*(\?\>)#',
+                                '#(?<!:|\'|")//[^\n\r<]*(\?\>)#',
                                 ' $1',
                                 preg_replace(
-                                    '#(?<!:)//[^\n\r]*(\<\?php)[^\n\r]*(\s\?\>)[^\n\r]*#',
+                                    '#(?<!:)//[^\n\r(\?\>)]*(\<\?php)[^\n\r]*(\s\?\>)[^\n\r]*#',
                                     '',
-                                    $this->readFactory->create($dir)->readFile($fileName)
+                                    ($content ?? '')
                                 )
                             )
                         )
@@ -145,10 +159,22 @@ class Minifier implements MinifierInterface
             )
         );
 
+        //Restoring Heredocs
+        $content = preg_replace_callback(
+            '/__MINIFIED_HEREDOC__(\d+)/ims',
+            function ($match) use ($heredocs) {
+                return $heredocs[(int)$match[1]];
+            },
+            ($content ?? '')
+        );
+
         if (!$this->htmlDirectory->isExist()) {
             $this->htmlDirectory->create();
         }
-        $this->htmlDirectory->writeFile($this->getRelativeGeneratedPath($file), rtrim($content));
+        $this->htmlDirectory->writeFile(
+            $this->getRelativeGeneratedPath($file),
+            $content !== null ? rtrim($content) : ''
+        );
     }
 
     /**

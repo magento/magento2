@@ -25,17 +25,20 @@
 
         <!-- Create a Virtual Product to appear in the widget -->
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductList"/>
-        <waitForPageLoad stepKey="waitForProductList"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="toggleAddProductButton"/>
-        <click selector="{{AdminProductGridActionSection.addVirtualProduct}}" stepKey="clickAddVirtualProduct"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="toggleAddProductButton"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickAddVirtualProduct">
+            <argument name="productType" value="virtual"/>
+        </actionGroup>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="fillProductName"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{_defaultProduct.sku}}" stepKey="fillProductSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="123.45" stepKey="fillProductPrice"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="fillProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQuantity">
+            <argument name="productQty" value="100"/>
+        </actionGroup>
         <fillField selector="{{AdminProductFormSection.setProductAsNewFrom}}" userInput="01/1/2000" stepKey="fillProductNewFrom"/>
         <fillField selector="{{AdminProductFormSection.setProductAsNewTo}}" userInput="01/1/2099" stepKey="fillProductNewTo"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveProduct"/>
 
         <!-- If PageCache is enabled, Cache clearing happens here, via merge -->
 
