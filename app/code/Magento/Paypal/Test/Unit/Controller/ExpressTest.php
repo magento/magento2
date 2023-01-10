@@ -32,8 +32,8 @@ abstract class ExpressTest extends TestCase
     /** @var Express */
     protected $model;
 
- /** @var string */
-  protected $name = '';
+    /** @var string */
+    protected $name = '';
 
     /** @var Session|MockObject */
     protected $customerSession;

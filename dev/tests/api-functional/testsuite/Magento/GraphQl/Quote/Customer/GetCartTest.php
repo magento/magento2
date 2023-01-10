@@ -202,7 +202,7 @@ QUERY;
     public function testGetCartWithWrongStore()
     {
         $this->expectException(\Exception::class);
-        $message = 'The account sign-in was incorrect or your account is disabled temporarily.'; 
+        $message = 'The account sign-in was incorrect or your account is disabled temporarily.';
         $this->expectExceptionMessage($message.' Please wait and try again later.');
 
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
@@ -240,7 +240,7 @@ QUERY;
      */
     public function testGetCartForLockedCustomer()
     {
-        $this->markTestSkipped('https://github.com/magento/graphql-ce/issues/750');
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/750');
 
         /* lock customer */
         $customerSecure = $this->customerRegistry->retrieveSecureData(1);
