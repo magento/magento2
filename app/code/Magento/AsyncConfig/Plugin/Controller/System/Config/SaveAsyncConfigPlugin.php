@@ -37,7 +37,7 @@ class SaveAsyncConfigPlugin
     /**
      * @var ManagerInterface
      */
-    private $messageManager;
+    private ManagerInterface $messageManager;
 
     /**
      * @var const
@@ -66,6 +66,7 @@ class SaveAsyncConfigPlugin
     }
 
     /**
+     * around Config save controller
      *
      * @param Save $subject
      * @param callable $proceed
