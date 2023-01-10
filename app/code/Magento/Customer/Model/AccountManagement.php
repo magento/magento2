@@ -72,7 +72,7 @@ class AccountManagement implements AccountManagementInterface
     /**
      * System Configuration Path for Enable/Disable Login at Guest Checkout
      */
-    private const GUEST_CHECKOUT_LOGIN_OPTION_SYS_CONFIG = 'checkout/options/enable_guest_checkout_login';
+    public const GUEST_CHECKOUT_LOGIN_OPTION_SYS_CONFIG = 'checkout/options/enable_guest_checkout_login';
 
     /**
      * Configuration paths for create account email template
