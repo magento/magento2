@@ -65,8 +65,10 @@ class CheckoutAgreementsRepositoryTest extends WebapiAbstract
      */
     public function testGetListReturnsTheListOfActiveCheckoutAgreements()
     {
-       
-        $this->markTestSkipped('This test relies on system configuration state..');
+        $this->markTestSkipped('This test relies on system configuration state.');
+        // checkout/options/enable_agreements must be set to 1 in system configuration
+        // @todo remove above statement when \Magento\TestFramework\TestCase\WebapiAbstract::_updateAppConfig is fixed
+
         $agreementModel = $this->getAgreementByName('Checkout Agreement (active)');
 
         $agreements = $this->_webApiCall($this->listServiceInfo, []);
