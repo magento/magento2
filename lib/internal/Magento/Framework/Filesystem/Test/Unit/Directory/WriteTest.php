@@ -93,7 +93,6 @@ class WriteTest extends TestCase
     public function testCreateSymlinkTargetDirectoryExists()
     {
         $targetDir = $this->getMockForAbstractClass(WriteInterface::class);
-        //$targetDir->driver = $this->driver;
         $sourcePath = 'source/path/file';
         $destinationDirectory = 'destination/path';
         $destinationFile = $destinationDirectory . '/' . 'file';
