@@ -12,6 +12,7 @@ namespace Magento\Framework;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 100.0.2
  */
+#[\AllowDynamicProperties]
 class DataObject implements \ArrayAccess
 {
     /**

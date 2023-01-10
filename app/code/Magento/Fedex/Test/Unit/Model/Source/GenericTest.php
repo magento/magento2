@@ -57,7 +57,6 @@ class GenericTest extends TestCase
      */
     public function testToOptionArray($code, $methods, $result): void
     {
-        $this->model->code = $code;
         $this->shippingFedexMock->expects($this->once())
             ->method('getCode')
             ->willReturn($methods);
