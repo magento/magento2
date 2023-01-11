@@ -272,7 +272,6 @@ class DiscountTest extends TestCase
      * @throws NoSuchEntityException
      */
     #[
-        DbIsolation(true),
         DataFixture(CategoryFixture::class, as: 'c1'),
         DataFixture(CategoryFixture::class, as: 'c2'),
         DataFixture(CategoryFixture::class, as: 'c3'),
