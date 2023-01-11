@@ -23,7 +23,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
      *
      * @see _isAllowed()
      */
-    public const ADMIN_RESOURCE = 'Magento_Config::config';
+    const ADMIN_RESOURCE = 'Magento_Config::config';
 
     /**
      * @var \Magento\Config\Model\Config\Structure
@@ -31,9 +31,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
     protected $_configStructure;
 
     /**
-     * @var mixed
      * @deprecated 101.0.0
-     * @see Nothing
      */
     protected $_sectionChecker;
 

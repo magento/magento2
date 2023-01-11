@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\AsyncConfig\Plugin\Controller\System\Config;
 
 use Magento\AsyncConfig\Api\AsyncConfigPublisherInterface;
+use Magento\AsyncConfig\Setup\ConfigOptionsList;
 use Magento\Config\Controller\Adminhtml\System\Config\Save;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
@@ -38,11 +39,6 @@ class SaveAsyncConfigPlugin
      * @var ManagerInterface
      */
     private $messageManager;
-
-    /**
-     * @var const
-     */
-    public const ASYNC_CONFIG_OPTION_PATH = 'config/async';
 
     /**
      *
@@ -77,12 +73,12 @@ class SaveAsyncConfigPlugin
      */
     public function aroundExecute(Save $subject, callable $proceed)
     {
-        if (!$this->deploymentConfig->get(self::ASYNC_CONFIG_OPTION_PATH)) {
+        if (!$this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_ASYNC_CONFIG_SAVE)) {
             return $proceed();
         } else {
             $configData = $subject->getConfigData();
             $this->asyncConfigPublisher->saveConfigData($configData);
-            $this->messageManager->addSuccess(__('Configuration changes will be applied by consumer soon.'));
+            $this->messageManager->addSuccessMessage(__('Configuration changes will be applied by consumer soon.'));
             $subject->_saveState($subject->getRequest()->getPost('config_state'));
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();

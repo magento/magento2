@@ -75,7 +75,7 @@ class AsyncConfigPublisher implements \Magento\AsyncConfig\Api\AsyncConfigPublis
     }
 
     /**
-     * Change Placeholder Data path if exists
+     * Save Images to temporary Path
      *
      * @param array $configData
      * @return void
