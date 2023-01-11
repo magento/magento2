@@ -58,14 +58,11 @@ class Save extends AbstractConfig implements HttpPostActionInterface
     }
 
     /**
-     * Save state of configuration field sets
-     *
-     * @param array $configState
-     * @return bool
+     * @inheritDoc
      */
-    public function saveState($configState)
+    public function _saveState($configState = []): bool
     {
-        return $this->_saveState($configState);
+        return parent::_saveState($configState);
     }
 
     /**

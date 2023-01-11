@@ -83,7 +83,7 @@ class SaveAsyncConfigPlugin
             $configData = $subject->getConfigData();
             $this->asyncConfigPublisher->saveConfigData($configData);
             $this->messageManager->addSuccess(__('Configuration changes will be applied by consumer soon.'));
-            $subject->saveState($subject->getRequest()->getPost('config_state'));
+            $subject->_saveState($subject->getRequest()->getPost('config_state'));
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             return $resultRedirect->setPath(
