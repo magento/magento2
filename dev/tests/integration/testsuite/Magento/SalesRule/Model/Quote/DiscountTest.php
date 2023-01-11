@@ -264,13 +264,15 @@ class DiscountTest extends TestCase
     }
 
     /**
+     *
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @magentoDataFixture Magento/Customer/_files/customer_group.php
-     * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     #[
-        DbIsolation(false),
+        DbIsolation(true),
         DataFixture(CategoryFixture::class, as: 'c1'),
         DataFixture(CategoryFixture::class, as: 'c2'),
         DataFixture(CategoryFixture::class, as: 'c3'),
@@ -400,7 +402,7 @@ class DiscountTest extends TestCase
     ]
     public function testDiscountOnSimpleProductWithDiscardSubsequentRule(): void
     {
-        $this->quote([
+        $total = $this->quote([
             [
                 'product'=> $this->fixtures->get('p1'),
                 'qty'=>1
@@ -418,17 +420,18 @@ class DiscountTest extends TestCase
                 'qty'=>1
             ]
         ]);
+        $this->assertEquals(-32, $total->getDiscountAmount());
     }
 
     /**
      * Create quote and assert totals values
      *
      * @param array $quoteItems
-     * @return void
+     * @return Total
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    private function quote(array $quoteItems): void
+    private function quote(array $quoteItems): Total
     {
         $customerTaxClassId = $this->getCustomerTaxClassId();
         $fixtureCustomerId = 1;
@@ -466,7 +469,7 @@ class DiscountTest extends TestCase
         $total = $this->objectManager->create(Total::class);
         $this->subtotalCollector->collect($this->quote, $this->shippingAssignment, $total);
         $this->discountCollector->collect($this->quote, $this->shippingAssignment, $total);
-        $this->assertEquals(-32, $total->getDiscountAmount());
+        return $total;
     }
 
     /**
