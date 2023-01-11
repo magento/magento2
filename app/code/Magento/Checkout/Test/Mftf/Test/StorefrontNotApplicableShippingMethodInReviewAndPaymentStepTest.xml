@@ -17,8 +17,6 @@
             <testCaseId value="MC-22625"/>
             <useCaseId value="MC-21926"/>
             <group value="checkout"/>
-
-
         </annotations>
 
         <before>
