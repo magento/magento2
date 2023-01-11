@@ -1,7 +1,5 @@
 <?php declare(strict_types=1);
 /**
- * Unit Test for \Magento\Framework\Filesystem\Directory\Write
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -15,6 +13,9 @@ use Magento\Framework\Filesystem\File\WriteFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Unit Test for \Magento\Framework\Filesystem\Directory\Write
+ */
 class WriteTest extends TestCase
 {
     /**
