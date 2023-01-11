@@ -20,6 +20,7 @@
             <group value="customer"/>
         </annotations>
         <before>
+            <magentoCLI stepKey="enablePersistentShoppingCart" command="config:set persistent/options/enabled 0"/>
             <!-- Create customer -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
