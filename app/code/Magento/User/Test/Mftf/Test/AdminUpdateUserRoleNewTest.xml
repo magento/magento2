@@ -8,19 +8,16 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminUpdateUserRoleTest">
+    <test name="AdminUpdateUserRoleNewTest">
         <annotations>
             <features value="User"/>
-            <stories value="Update User"/>
-            <title value="Update admin user entity by changing user role"/>
+            <stories value="Update User Test"/>
+            <title value="Update admin user entity by changing user role, new test to fix AC-7467"/>
             <description value="Change full access role for admin user to custom one with restricted permission (Sales)"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-27895"/>
+            <testCaseId value="MC-27895_AC-7467"/>
             <group value="user"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="DEPRECATED">Use AdminUpdateUserRoleNewTest instead</issueId>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -28,9 +25,10 @@
             <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="goToNewUserPage"/>
             <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillNewUserForm"/>
             <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="saveNewUser"/>
-            <!--Create New Role-->
+
             <actionGroup ref="AdminStartCreateUserRoleActionGroup" stepKey="startCreateUserRole">
                 <argument name="roleName" value="{{roleSales.name}}"/>
+                <argument name="userPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
             </actionGroup>
             <actionGroup ref="AdminSaveUserRoleActionGroup" stepKey="saveNewRole"/>
         </before>
