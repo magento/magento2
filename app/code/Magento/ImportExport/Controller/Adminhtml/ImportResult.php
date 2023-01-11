@@ -5,24 +5,27 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml;
 
-use Magento\Backend\App\Action;
+use Magento\Backend\Model\Locale\Manager as LocaleManager;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\ImportExport\Model\History as ModelHistory;
 use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\ImportExport\Model\History as ModelHistory;
-use Magento\Framework\Escaper;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Import controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class ImportResult extends Import
 {
-    const IMPORT_HISTORY_FILE_DOWNLOAD_ROUTE = '*/history/download';
+    private const IMPORT_HISTORY_FILE_DOWNLOAD_ROUTE = '*/history/download';
 
     /**
      * Limit view errors
      */
-    const LIMIT_ERRORS_MESSAGE = 100;
+    private const LIMIT_ERRORS_MESSAGE = 100;
 
     /**
      * @var \Magento\ImportExport\Model\Report\ReportProcessorInterface
@@ -45,18 +48,32 @@ abstract class ImportResult extends Import
     protected $escaper;
 
     /**
+     * @var LocaleManager
+     */
+    protected $localeManager;
+
+    /**
+     * @var ResolverInterface
+     */
+    protected $localeResolver;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor
      * @param \Magento\ImportExport\Model\History $historyModel
      * @param \Magento\ImportExport\Helper\Report $reportHelper
      * @param Escaper|null $escaper
+     * @param LocaleManager|null $localeManager
+     * @param ResolverInterface|null $localeResolver
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor,
         \Magento\ImportExport\Model\History $historyModel,
         \Magento\ImportExport\Helper\Report $reportHelper,
-        Escaper $escaper = null
+        Escaper $escaper = null,
+        LocaleManager $localeManager = null,
+        ResolverInterface $localeResolver = null
     ) {
         parent::__construct($context);
         $this->reportProcessor = $reportProcessor;
@@ -64,6 +81,10 @@ abstract class ImportResult extends Import
         $this->reportHelper = $reportHelper;
         $this->escaper = $escaper
             ?? ObjectManager::getInstance()->get(Escaper::class);
+        $this->localeManager = $localeManager
+            ?: ObjectManager::getInstance()->get(LocaleManager::class);
+        $this->localeResolver = $localeResolver
+            ?: ObjectManager::getInstance()->get(ResolverInterface::class);
     }
 
     /**

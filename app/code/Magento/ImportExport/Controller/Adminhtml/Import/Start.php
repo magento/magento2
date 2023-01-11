@@ -5,10 +5,13 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
+use Magento\Backend\Model\Locale\Manager as LocaleManager;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Escaper;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\ImportExport\Model\Import;
 
 /**
@@ -41,6 +44,11 @@ class Start extends ImportResultController implements HttpPostActionInterface
      * @param Import $importModel
      * @param \Magento\Framework\Message\ExceptionMessageFactoryInterface $exceptionMessageFactory
      * @param Import\ImageDirectoryBaseProvider|null $imageDirectoryBaseProvider
+     * @param Escaper|null $escaper
+     * @param LocaleManager|null $localeManager
+     * @param ResolverInterface|null $localeResolver
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -49,9 +57,20 @@ class Start extends ImportResultController implements HttpPostActionInterface
         \Magento\ImportExport\Helper\Report $reportHelper,
         Import $importModel,
         \Magento\Framework\Message\ExceptionMessageFactoryInterface $exceptionMessageFactory,
-        ?Import\ImageDirectoryBaseProvider $imageDirectoryBaseProvider = null
+        ?Import\ImageDirectoryBaseProvider $imageDirectoryBaseProvider = null,
+        Escaper $escaper = null,
+        LocaleManager $localeManager = null,
+        ResolverInterface $localeResolver = null
     ) {
-        parent::__construct($context, $reportProcessor, $historyModel, $reportHelper);
+        parent::__construct(
+            $context,
+            $reportProcessor,
+            $historyModel,
+            $reportHelper,
+            $escaper,
+            $localeManager,
+            $localeResolver
+        );
 
         $this->importModel = $importModel;
         $this->exceptionMessageFactory = $exceptionMessageFactory;
@@ -66,6 +85,8 @@ class Start extends ImportResultController implements HttpPostActionInterface
      */
     public function execute()
     {
+        $currentLocale = $this->localeResolver->getLocale();
+        $this->localeManager->switchBackendInterfaceLocale('');
         $data = $this->getRequest()->getPostValue();
         if ($data) {
             /** @var \Magento\Framework\View\Result\Layout $resultLayout */
@@ -125,12 +146,13 @@ class Start extends ImportResultController implements HttpPostActionInterface
                 $this->addErrorMessages($resultBlock, $errorAggregator);
                 $resultBlock->addSuccess(__('Import successfully done'));
             }
-
+            $this->localeManager->switchBackendInterfaceLocale($currentLocale);
             return $resultLayout;
         }
 
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('adminhtml/*/index');
+        $this->localeManager->switchBackendInterfaceLocale($currentLocale);
         return $resultRedirect;
     }
 }
