@@ -57,12 +57,11 @@ class Save extends AbstractConfig implements HttpPostActionInterface
         $this->string = $string;
     }
 
-
     /**
      * Save configuration state
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      *
-     * @param $configState
+     * @param array $configState
      * @return bool
      */
     public function _saveState($configState = []): bool
