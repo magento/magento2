@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="UserDeletesFolderFromMediaGalleryTest">
+    <test name="UserDeletesFolderFromMediaGalleryNewTest">
         <annotations>
             <features value="MediaGallery"/>
             <stories value="User deletes folder from Media Gallery"/>
@@ -16,22 +16,16 @@
             <description value="User deletes folder from Media Gallery"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
-            <skip>
-                <issueId value="DEPRECATED">Use UserDeletesFolderFromMediaGalleryNewTest instead.</issueId>
-            </skip>
         </annotations>
         <before>
             <!-- Step1 Login as Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-
             <!-- Step2 Disabled Old Media Gallery and Page Builder -->
             <magentoCLI command="config:set {{MediaGalleryConfigDataEnabled.path}} {{MediaGalleryConfigDataEnabled.value}}" stepKey="disabledOldMediaGallery"/>
-            <magentoCLI command="config:set cms/pagebuilder/enabled 0" stepKey="disablePageBuilder"/>
             <magentoCLI command="cache:clean config" stepKey="flushCache"/>
         </before>
         <after>
             <magentoCLI command="config:set {{MediaGalleryConfigDataDisabled.path}} {{MediaGalleryConfigDataDisabled.value}}" stepKey="enableOldMediaGallery"/>
-            <magentoCLI command="config:set cms/pagebuilder/enabled 1" stepKey="enablePageBuilder"/>
             <magentoCLI command="cache:clean config" stepKey="flushCache"/>
         </after>
 
