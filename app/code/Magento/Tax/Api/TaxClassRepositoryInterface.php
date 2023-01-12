@@ -27,7 +27,7 @@ interface TaxClassRepositoryInterface
      * Retrieve tax classes which match a specific criteria.
      *
      * This call returns an array of objects, but detailed information about each object’s attributes might not be
-     * included. See https://devdocs.magento.com/codelinks/attributes.html#TaxClassRepositoryInterface to
+     * included. See https://developer.adobe.com/commerce/webapi/rest/attributes#TaxClassRepositoryInterface to
      * determine which call to use to get detailed information about all attributes for an object.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
