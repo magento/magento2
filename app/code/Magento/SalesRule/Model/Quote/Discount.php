@@ -181,9 +181,9 @@ class Discount extends AbstractTotal
 
         $itemsToApplyDiscount = [];
         $discardRule = false;
-        $conditionFoundInRule = false; //rule condition defined either in condition or action or both tab
+        $conditionFoundInRule = false; //criteria defined in condition or action or both tab of rule
         $activateDiscardRule = false;
-        $exitDiscardRule = false; //false if rule condition not belongs to Product/Found class
+        $exitDiscardRule = false; //false if rule condition object not belongs to Product/Found class
 
         /** @var Rule $rule */
         foreach ($rules as $rule) {
@@ -252,7 +252,7 @@ class Discount extends AbstractTotal
                 $this->calculator->process($item, $rule);
             }
             if ($rule->getStopRulesProcessing()) {
-                //Break for performance acceptance test
+                //break for performance acceptance test
                 if ($exitDiscardRule) {
                     break;
                 }
