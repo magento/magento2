@@ -34,8 +34,6 @@ use Magento\Store\Model\StoreManagerInterface;
 class Discount extends AbstractTotal
 {
     public const COLLECTOR_TYPE_CODE = 'discount';
-    public const RULE_ACTION_CONDITION_TAB = 'getActions';
-    public const RULE_CONDITION_TAB = 'getConditions';
 
     /**
      * Discount calculation object
@@ -181,40 +179,47 @@ class Discount extends AbstractTotal
         $items = $this->calculator->sortItemsByPriority($items, $address);
         $rules = $this->calculator->getRules($address);
 
-        $itemWithDiscount = [];
-        $isDiscardRulePresent = $anyConditionInDiscard = $activateDiscardRule = false;
-        $isProductObject = true;
+        $itemsToApplyDiscount = [];
+
+        //Rule present with discard subsequent rule enabled
+        $discardRule = false;
+        //Rule condition that were defined either in condition or action tab or both
+        $conditionFoundInRule = false;
+        //Activate discard rule logic based on priority after current discard rule
+        $activateDiscardRule = false;
+        //False if rule condition not belongs to Product/Found class
+        $exitDiscardRule = false;
 
         /** @var Rule $rule */
         foreach ($rules as $rule) {
             if ($rule->getStopRulesProcessing()) {
-                $isDiscardRulePresent = true;
-                $anyConditionInDiscard = true;
+                $discardRule = true;
                 break;
             }
         }
 
         /** @var Rule $rule */
         foreach ($rules as $rule) {
-            $discardConditionMethod = self::RULE_ACTION_CONDITION_TAB;
-            if ($isDiscardRulePresent) {
-                if (($rule->getActions() == null || empty($rule->getActions()->getConditions()))
-                    || ($rule->getConditions() == null || empty($rule->getConditions()->getConditions()))) {
-                    $anyConditionInDiscard = false;
+            $ruleConditionMethod = "getActions";
+            if ($discardRule) {
+                if (($rule->getActions() === null || empty($rule->getActions()->getConditions()))
+                    || ($rule->getConditions() === null || empty($rule->getConditions()->getConditions()))) {
+                    $conditionFoundInRule = false;
                 }
                 if ($rule->getConditions() !== null && !empty($rule->getConditions()->getConditions())) {
-                    foreach ($rule->getConditions()->getConditions() as $class) {
-                        if ($class->getType() === Found::class) {
-                            $discardConditionMethod = self::RULE_CONDITION_TAB;
-                            $anyConditionInDiscard = true;
+                    $classSetInRuleCondition = current($rule->getConditions()->getConditions());
+
+                    if (!empty($classSetInRuleCondition)) {
+                        if ($classSetInRuleCondition->getType() === Found::class) {
+                            $ruleConditionMethod = "getConditions";
+                            $conditionFoundInRule = true;
                         } else {
-                            $isProductObject = false;
+                            $exitDiscardRule = true;
                         }
-                        break;
                     }
                 }
                 if ($rule->getActions() != null && !empty($rule->getActions()->getConditions())) {
-                    $anyConditionInDiscard = true;
+                    $conditionFoundInRule = true;
                 }
             }
             /** @var Item $item */
@@ -225,26 +230,26 @@ class Discount extends AbstractTotal
                 if ($item->getNoDiscount() || !$this->calculator->canApplyDiscount($item) || $item->getParentItem()) {
                     continue;
                 }
-                if ($activateDiscardRule && isset($itemWithDiscount[$item->getProduct()->getId()])) {
+                if ($activateDiscardRule && isset($itemsToApplyDiscount[$item->getProduct()->getId()])) {
                     continue;
                 }
-                if ($isDiscardRulePresent && $anyConditionInDiscard) {
-                    if ($discardConditionMethod == self::RULE_ACTION_CONDITION_TAB) {
+                if ($discardRule && $conditionFoundInRule) {
+                    if ("getActions" == $ruleConditionMethod) {
                         $itemToValidate = $item;
                     } else {
                         $itemToValidate = clone $item;
                     }
-                    if ($rule->$discardConditionMethod()->validate($itemToValidate)) {
-                        $itemWithDiscount[$item->getProduct()->getId()] = $item->getProduct()->getId();
-                    } elseif (!isset($itemWithDiscount[$item->getProduct()->getId()])) {
+                    if ($rule->$ruleConditionMethod()->validate($itemToValidate)) {
+                        $itemsToApplyDiscount[$item->getProduct()->getId()] = $item->getProduct()->getId();
+                    } elseif (!isset($itemsToApplyDiscount[$item->getProduct()->getId()])) {
                         continue;
-                    } elseif (!$activateDiscardRule && isset($itemWithDiscount[$item->getProduct()->getId()])) {
+                    } elseif (!$activateDiscardRule && isset($itemsToApplyDiscount[$item->getProduct()->getId()])) {
                         continue;
                     }
                 }
-                if ($isDiscardRulePresent && $discardConditionMethod == self::RULE_ACTION_CONDITION_TAB) {
+                if ($discardRule && ("getActions" == $ruleConditionMethod)) {
                     $this->calculator->setSkipActionsValidation(true);
-                } elseif ($isDiscardRulePresent) {
+                } elseif ($discardRule) {
                     $this->calculator->setSkipActionsValidation(false);
                 }
                 $eventArgs['item'] = $item;
@@ -252,8 +257,8 @@ class Discount extends AbstractTotal
                 $this->calculator->process($item, $rule);
             }
             if ($rule->getStopRulesProcessing()) {
-                //PAT condition
-                if (!$isProductObject) {
+                //Break for performance acceptance test
+                if ($exitDiscardRule) {
                     break;
                 }
                 $activateDiscardRule = true;
