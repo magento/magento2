@@ -17,6 +17,7 @@ class Escaper
 {
     /**
      * HTML special characters flag
+     * @var int
      */
     private $htmlSpecialCharsFlag = ENT_QUOTES | ENT_SUBSTITUTE;
 

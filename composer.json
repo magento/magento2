@@ -14,12 +14,6 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/wikimedia/less.php"
-        }
-    ],
     "require": {
         "php": "~8.1.0||~8.2.0",
         "ext-bcmath": "*",
@@ -92,7 +86,7 @@
         "tubalmartin/cssmin": "^4.1",
         "web-token/jwt-framework": "^3.1",
         "webonyx/graphql-php": "^14.11",
-        "wikimedia/less.php": "dev-main"
+        "wikimedia/less.php": "^3.2"
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "^2",
