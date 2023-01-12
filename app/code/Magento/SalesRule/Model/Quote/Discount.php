@@ -180,15 +180,10 @@ class Discount extends AbstractTotal
         $rules = $this->calculator->getRules($address);
 
         $itemsToApplyDiscount = [];
-
-        //Rule present with discard subsequent rule enabled
         $discardRule = false;
-        //Rule condition that were defined either in condition or action tab or both
-        $conditionFoundInRule = false;
-        //Activate discard rule logic based on priority after current discard rule
+        $conditionFoundInRule = false; //rule condition defined either in condition or action or both tab
         $activateDiscardRule = false;
-        //False if rule condition not belongs to Product/Found class
-        $exitDiscardRule = false;
+        $exitDiscardRule = false; //false if rule condition not belongs to Product/Found class
 
         /** @var Rule $rule */
         foreach ($rules as $rule) {
