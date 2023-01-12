@@ -14,6 +14,16 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/magento-gl/magento-coding-standard"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/magento-gl/magento2-functional-testing-framework"
+        }
+    ],
     "require": {
         "php": "~8.1.0||~8.2.0",
         "ext-bcmath": "*",
@@ -40,7 +50,7 @@
         "composer/composer": "^2.0, !=2.2.16",
         "elasticsearch/elasticsearch": "^7.17||^8.5",
         "ezyang/htmlpurifier": "^4.14",
-        "guzzlehttp/guzzle": "^7.4",
+        "guzzlehttp/guzzle": "^7.5",
         "laminas/laminas-captcha": "^2.12",
         "laminas/laminas-code": "^4.5",
         "laminas/laminas-db": "^2.15",
@@ -85,7 +95,7 @@
         "tedivm/jshrink": "^1.4",
         "tubalmartin/cssmin": "^4.1",
         "web-token/jwt-framework": "^3.1",
-        "webonyx/graphql-php": "^14.11",
+        "webonyx/graphql-php": "^15",
         "wikimedia/less.php": "^3.2"
     },
     "require-dev": {
@@ -94,8 +104,8 @@
         "dg/bypass-finals": "^1.4",
         "friendsofphp/php-cs-fixer": "^3.8",
         "lusitanian/oauth": "^0.8",
-        "magento/magento-coding-standard": "*",
-        "magento/magento2-functional-testing-framework": "^4.0",
+        "magento/magento-coding-standard": "dev-Hammer_246_PHP82_Fixes",
+        "magento/magento2-functional-testing-framework": "dev-Hammer_246_PHP82_Fixes",
         "pdepend/pdepend": "^2.10",
         "phpmd/phpmd": "^2.12",
         "phpstan/phpstan": "^1.7",
