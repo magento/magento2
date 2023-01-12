@@ -100,7 +100,6 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         );
         $product = $repository->get('simple');
         $this->assertStringEndsWith('simple-product.html', $this->_model->getProductUrl($product));
-
     }
 
     /**
