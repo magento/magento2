@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1e7e090bd82ee708a8c5284c018874d5",
+    "content-hash": "989939469e4660b4d6550a12976d07ca",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -8915,16 +8915,16 @@
         },
         {
             "name": "wikimedia/less.php",
-            "version": "dev-main",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wikimedia/less.php.git",
-                "reference": "a93b0827b650a347f7c694e1e234f8c86efa8812"
+                "reference": "47c4714c68c9006c87676d76c172a18e1d180f60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/less.php/zipball/a93b0827b650a347f7c694e1e234f8c86efa8812",
-                "reference": "a93b0827b650a347f7c694e1e234f8c86efa8812",
+                "url": "https://api.github.com/repos/wikimedia/less.php/zipball/47c4714c68c9006c87676d76c172a18e1d180f60",
+                "reference": "47c4714c68c9006c87676d76c172a18e1d180f60",
                 "shasum": ""
             },
             "require": {
@@ -8932,13 +8932,12 @@
             },
             "require-dev": {
                 "mediawiki/mediawiki-codesniffer": "39.0.0",
-                "mediawiki/mediawiki-phan-config": "0.11.1",
+                "mediawiki/mediawiki-phan-config": "0.11.1 || 0.12.0",
                 "mediawiki/minus-x": "1.1.1",
                 "php-parallel-lint/php-console-highlighter": "1.0.0",
                 "php-parallel-lint/php-parallel-lint": "1.3.2",
                 "phpunit/phpunit": "^8.5"
             },
-            "default-branch": true,
             "bin": [
                 "bin/lessc"
             ],
@@ -8951,24 +8950,7 @@
                     "lessc.inc.php"
                 ]
             },
-            "scripts": {
-                "test": [
-                    "parallel-lint . --exclude vendor",
-                    "phpcs -sp",
-                    "phpunit",
-                    "minus-x check ."
-                ],
-                "cover": [
-                    "phpunit --coverage-text --coverage-html coverage/ --coverage-clover coverage/clover.xml"
-                ],
-                "fix": [
-                    "minus-x fix .",
-                    "phpcbf"
-                ],
-                "phan": [
-                    "phan --allow-polyfill-parser --no-progress-bar"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -8996,10 +8978,10 @@
                 "stylesheet"
             ],
             "support": {
-                "source": "https://github.com/wikimedia/less.php/tree/main",
-                "issues": "https://github.com/wikimedia/less.php/issues"
+                "issues": "https://github.com/wikimedia/less.php/issues",
+                "source": "https://github.com/wikimedia/less.php/tree/v3.2.0"
             },
-            "time": "2022-12-22T18:23:54+00:00"
+            "time": "2023-01-09T18:45:54+00:00"
         }
     ],
     "packages-dev": [
@@ -13899,8 +13881,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "magento/composer": 10,
-        "magento/magento-composer-installer": 10,
-        "wikimedia/less.php": 20
+        "magento/magento-composer-installer": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,
