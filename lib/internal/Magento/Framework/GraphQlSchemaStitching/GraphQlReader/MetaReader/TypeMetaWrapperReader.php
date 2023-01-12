@@ -7,16 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader;
 
+use GraphQL\Type\Definition\NonNull;
+
 /**
  * Common cases for types that need extra formatting like wrapping or additional properties added to their definition
  */
 class TypeMetaWrapperReader
 {
-    const ARGUMENT_PARAMETER = 'Argument';
+    public const ARGUMENT_PARAMETER = 'Argument';
 
-    const OUTPUT_FIELD_PARAMETER = 'OutputField';
+    public const OUTPUT_FIELD_PARAMETER = 'OutputField';
 
-    const INPUT_FIELD_PARAMETER = 'InputField';
+    public const INPUT_FIELD_PARAMETER = 'InputField';
 
     /**
      * Read from type meta data and determine wrapping types that are needed and extra properties that need to be added
@@ -28,15 +30,15 @@ class TypeMetaWrapperReader
     public function read(\GraphQL\Type\Definition\Type $meta, string $parameterType) : array
     {
         $result = [];
-        if ($meta instanceof \GraphQL\Type\Definition\NonNull) {
+        if ($meta instanceof NonNull) {
             $result['required'] = true;
             $meta = $meta->getWrappedType();
         } else {
             $result['required'] = false;
         }
         if ($meta instanceof \GraphQL\Type\Definition\ListOfType) {
-            $itemTypeMeta = $meta->ofType;
-            if ($itemTypeMeta instanceof \GraphQL\Type\Definition\NonNull) {
+            $itemTypeMeta = $meta->getInnermostType();
+            if ($itemTypeMeta instanceof NonNull) {
                 $result['itemsRequired'] = true;
                 $itemTypeMeta = $itemTypeMeta->getWrappedType();
             } else {
