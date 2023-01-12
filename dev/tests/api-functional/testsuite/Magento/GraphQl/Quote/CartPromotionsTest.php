@@ -24,16 +24,16 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class CartPromotionsTest extends GraphQlAbstract
 {
     /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
+    /**
      * Test adding single cart rule to multiple products in a cart
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoApiDataFixture Magento/SalesRule/_files/rules_category.php
      */
-
-    /**
-     * @var float
-     */
-    private const EPSILON = 0.0000000001;
 
     public function testCartPromotionSingleCartRule()
     {

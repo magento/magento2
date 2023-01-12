@@ -9,12 +9,6 @@
     "config": {
         "sort-packages": true
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/wikimedia/less.php"
-        }
-    ],
     "require": {
         "php": "~8.1.0||~8.2.0",
         "ext-bcmath": "*",
@@ -32,7 +26,7 @@
         "colinmollenhour/php-redis-session-abstract": "^1.5",
         "composer/composer": "^2.0, !=2.2.16",
         "ezyang/htmlpurifier": "^4.14",
-        "guzzlehttp/guzzle": "^7.4",
+        "guzzlehttp/guzzle": "^7.5",
         "laminas/laminas-code": "^4.5",
         "laminas/laminas-escaper": "^2.10",
         "laminas/laminas-file": "^2.11",
@@ -56,8 +50,8 @@
         "symfony/intl": "^5.4",
         "symfony/process": "^5.4",
         "tedivm/jshrink": "^1.4",
-        "webonyx/graphql-php": "^14.11",
-        "wikimedia/less.php": "dev-main"
+        "webonyx/graphql-php": "^15",
+        "wikimedia/less.php": "^3.2"
     },
     "archive": {
         "exclude": [
