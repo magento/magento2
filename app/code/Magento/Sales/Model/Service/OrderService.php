@@ -5,7 +5,9 @@
  */
 namespace Magento\Sales\Model\Service;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Sales\Model\OrderMutexInterface;
 use Magento\Payment\Gateway\Command\CommandException;
 use Psr\Log\LoggerInterface;
 
@@ -60,6 +62,11 @@ class OrderService implements OrderManagementInterface
     private $logger;
 
     /**
+     * @var OrderMutexInterface
+     */
+    private $orderMutex;
+
+    /**
      * Constructor
      *
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
@@ -71,6 +78,7 @@ class OrderService implements OrderManagementInterface
      * @param \Magento\Sales\Model\Order\Email\Sender\OrderCommentSender $orderCommentSender
      * @param \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures
      * @param LoggerInterface $logger
+     * @param OrderMutexInterface|null $orderMutex
      */
     public function __construct(
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
@@ -81,7 +89,8 @@ class OrderService implements OrderManagementInterface
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\Order\Email\Sender\OrderCommentSender $orderCommentSender,
         \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ?OrderMutexInterface $orderMutex = null
     ) {
         $this->orderRepository = $orderRepository;
         $this->historyRepository = $historyRepository;
@@ -92,6 +101,7 @@ class OrderService implements OrderManagementInterface
         $this->orderCommentSender = $orderCommentSender;
         $this->paymentFailures = $paymentFailures;
         $this->logger = $logger;
+        $this->orderMutex = $orderMutex ?: ObjectManager::getInstance()->get(OrderMutexInterface::class);
     }
 
     /**
@@ -101,6 +111,19 @@ class OrderService implements OrderManagementInterface
      * @return bool
      */
     public function cancel($id)
+    {
+        return $this->orderMutex->execute(
+            (int) $id,
+            \Closure::fromCallable([$this, 'cancelOrder']),
+            [$id]
+        );
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     */
+    private function cancelOrder($id): bool
     {
         $order = $this->orderRepository->get($id);
         if ($order->canCancel()) {
