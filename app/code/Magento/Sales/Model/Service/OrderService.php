@@ -123,7 +123,7 @@ class OrderService implements OrderManagementInterface
     /**
      * Order cancel
      *
-     * @param mixed $id
+     * @param int $id
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
