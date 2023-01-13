@@ -24,7 +24,6 @@ use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 use Magento\Sales\Model\Order\Status\History;
 use Magento\Sales\Model\OrderMutex;
 use Magento\Sales\Model\OrderNotifier;
-use Magento\Sales\Model\OrderMutexInterface;
 use Magento\Sales\Model\Service\OrderService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -77,7 +76,7 @@ class OrderServiceTest extends TestCase
     protected $orderNotifierMock;
 
     /**
-     * @var MockObject|\Magento\Sales\Model\Order
+     * @var MockObject|Order
      */
     protected $orderMock;
 
@@ -100,11 +99,6 @@ class OrderServiceTest extends TestCase
      * @var MockObject|OrderCommentSender
      */
     protected $orderCommentSender;
-
-    /**
-     * @var MockObject|OrderMutexInterface
-     */
-    private $orderMutexMock;
 
     /**
      * @var MockObject|AdapterInterface
@@ -184,8 +178,6 @@ class OrderServiceTest extends TestCase
 
         /** @var LoggerInterface|MockObject $logger */
         $logger = $this->getMockForAbstractClass(LoggerInterface::class);
-
-        $this->orderMutexMock = $this->getMockForAbstractClass(OrderMutexInterface::class);
 
         $this->adapterInterfaceMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
