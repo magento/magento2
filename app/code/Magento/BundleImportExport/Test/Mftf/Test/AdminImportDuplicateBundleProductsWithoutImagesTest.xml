@@ -13,8 +13,8 @@
             <title value="Bundle product import issue"/>
             <stories value="Asserting bundle product import functionality and verify data in product option "/>
             <description value="The merchant is having issues with importing Bundled Products via CSV. When they import a CSV where the same SKU is duplicated, duplicated records are created for the product option."/>
-            <testCaseId value="ACP2E-1478"/>
-            <useCaseId value="ACSD-48739"/>
+            <testCaseId value="AC-7646"/>
+            <useCaseId value="ACP2E-1478"/>
             <features value="Sales"/>
             <severity value="AVERAGE"/>
             <group value="importExport"/>

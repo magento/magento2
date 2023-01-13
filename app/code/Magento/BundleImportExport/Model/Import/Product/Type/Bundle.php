@@ -670,7 +670,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     }
                 }
 
-                $this->relationsDataSaver->saveProductRelations($productId, array_unique($childIds));
+                $this->relationsDataSaver->saveProductRelations($productId, $childIds);
             }
         }
 
