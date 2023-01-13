@@ -123,11 +123,11 @@ class OrderService implements OrderManagementInterface
     /**
      * Order cancel
      *
-     * @param int $id
+     * @param mixed $id
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function cancelOrder(int $id): bool
+    private function cancelOrder($id): bool
     {
         $order = $this->orderRepository->get($id);
         if ($order->canCancel()) {
