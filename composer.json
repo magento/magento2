@@ -17,10 +17,6 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/magento-gl/magento-coding-standard"
-        },
-        {
-            "type": "vcs",
             "url": "https://github.com/magento-gl/magento2-functional-testing-framework"
         }
     ],
@@ -104,7 +100,7 @@
         "dg/bypass-finals": "^1.4",
         "friendsofphp/php-cs-fixer": "^3.8",
         "lusitanian/oauth": "^0.8",
-        "magento/magento-coding-standard": "dev-Hammer_246_PHP82_Fixes",
+        "magento/magento-coding-standard": "*",
         "magento/magento2-functional-testing-framework": "dev-Hammer_246_PHP82_Fixes",
         "pdepend/pdepend": "^2.10",
         "phpmd/phpmd": "^2.12",
