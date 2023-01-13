@@ -55,7 +55,7 @@ class AdminTest extends \PHPUnit\Framework\TestCase
             [
                 // @codingStandardsIgnoreStart
                 'Authorized amount of €30.00. Transaction ID: "<a target="_blank" href="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_view-a-trans&id=123456789QWERTY">123456789QWERTY</a>"',
-                'Authorized amount of €30.00. Transaction ID: &quot;<a href="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_view-a-trans&amp;id=123456789QWERTY">123456789QWERTY</a>&quot;',
+                'Authorized amount of &euro;30.00. Transaction ID: &quot;<a href="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_view-a-trans&amp;id=123456789QWERTY">123456789QWERTY</a>&quot;',
                 // @codingStandardsIgnoreEnd
                 'allowedTags' => ['b', 'br', 'strong', 'i', 'u', 'a'],
             ],
