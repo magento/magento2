@@ -11,7 +11,6 @@ use Magento\AsyncConfig\Api\AsyncConfigPublisherInterface;
 use Magento\AsyncConfig\Setup\ConfigOptionsList;
 use Magento\Config\Controller\Adminhtml\System\Config\Save;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
@@ -42,21 +41,19 @@ class SaveAsyncConfigPlugin
 
     /**
      *
-     * @param DeploymentConfig|null $deploymentConfig
-     * @param AsyncConfigPublisherInterface|null $asyncConfigPublisher
+     * @param DeploymentConfig $deploymentConfig
+     * @param AsyncConfigPublisherInterface $asyncConfigPublisher
      * @param RedirectFactory $resultRedirectFactory
      * @param ManagerInterface $messageManager
      */
     public function __construct(
-        DeploymentConfig $deploymentConfig = null,
-        AsyncConfigPublisherInterface $asyncConfigPublisher = null,
+        DeploymentConfig $deploymentConfig,
+        AsyncConfigPublisherInterface $asyncConfigPublisher,
         RedirectFactory $resultRedirectFactory,
         ManagerInterface $messageManager
     ) {
-        $this->deploymentConfig = $deploymentConfig
-            ?? ObjectManager::getInstance()->get(DeploymentConfig::class);
-        $this->asyncConfigPublisher = $asyncConfigPublisher
-            ?? ObjectManager::getInstance()->get(AsyncConfigPublisherInterface::class);
+        $this->deploymentConfig = $deploymentConfig;
+        $this->asyncConfigPublisher = $asyncConfigPublisher;
         $this->resultRedirectFactory = $resultRedirectFactory;
         $this->messageManager = $messageManager;
     }

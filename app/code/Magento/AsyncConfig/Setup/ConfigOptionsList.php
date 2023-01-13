@@ -8,7 +8,8 @@ declare(strict_types=1);
 namespace Magento\AsyncConfig\Setup;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\Data\ConfigData;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\Data\ConfigDataFactory;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\SelectConfigOption;
@@ -41,6 +42,20 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private $selectOptions = [0, 1];
 
     /**
+     * @var ConfigDataFactory
+     */
+    private $configDataFactory;
+
+    /**
+     * @param ConfigDataFactory $configDataFactory
+     */
+    public function __construct(
+        ConfigDataFactory $configDataFactory
+    ) {
+        $this->configDataFactory = $configDataFactory;
+    }
+
+    /**
      * @inheritdoc
      */
     public function getOptions()
@@ -62,7 +77,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     public function createConfig(array $data, DeploymentConfig $deploymentConfig)
     {
-        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
 
         if (!$this->isDataEmpty($data, self::INPUT_KEY_ASYNC_CONFIG_SAVE)) {
             $configData->set(
