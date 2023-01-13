@@ -79,6 +79,7 @@ class OrderService implements OrderManagementInterface
      * @param \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures
      * @param LoggerInterface $logger
      * @param OrderMutexInterface|null $orderMutex
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
@@ -120,8 +121,11 @@ class OrderService implements OrderManagementInterface
     }
 
     /**
+     * Order cancel
+     *
      * @param $id
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function cancelOrder($id): bool
     {
