@@ -223,4 +223,12 @@ class CachedAdapter implements CachedAdapterInterface
         $result = $this->metadataProvider->getMetadata($path);
         return new FileAttributes($path, null, $result['visibility']);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function directoryExists(string $path): bool
+    {
+        // TODO: Implement directoryExists() method.
+    }
 }
