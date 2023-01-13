@@ -7,18 +7,15 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="UserDeletesFolderFromMediaGalleryTest">
+    <test name="UserDeletesFolderFromMediaGalleryNewTest">
         <annotations>
             <features value="MediaGallery"/>
             <stories value="User deletes folder from Media Gallery"/>
-            <title value="User deletes folder from Media Gallery"/>
-            <testCaseId value="AC-6377"/>
+            <title value="User deletes folder from Media Gallery New"/>
+            <testCaseId value="AC-7600"/>
             <description value="User deletes folder from Media Gallery"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
-            <skip>
-                <issueId value="DEPRECATED">Use UserDeletesFolderFromMediaGalleryNewTest instead.</issueId>
-            </skip>
         </annotations>
         <before>
             <!-- Step1 Login as Admin -->
