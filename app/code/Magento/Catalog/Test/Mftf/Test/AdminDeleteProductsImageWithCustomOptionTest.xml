@@ -20,57 +20,43 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <!--Login as admin-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <createData entity="SimpleProduct2" stepKey="createProduct"/>
-            <createData entity="SubCategory" stepKey="createSubCategory"/>
-            <createData entity="NewRootCategory" stepKey="createRootCategory"/>
-            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="visitAdminProductPage">
-                <argument name="productId" value="$$createProduct.id$$"/>
-            </actionGroup>
-            <waitForPageLoad stepKey="waitForProductPageLoad0"/>
+            <createData entity="ApiCategory" stepKey="category"/>
+            <!--Create product with small, base, and thumbnail image-->
+            <createData entity="ApiSimpleProduct" stepKey="productWithImages">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <updateData createDataKey="productWithImages" entity="productWithOptions2" stepKey="updateProductWithCustomOption"/>
             <!--Add images to the product-->
             <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="visitAdminProductPage2">
-                <argument name="productId" value="$$createProduct.id$$"/>
+                <argument name="productId" value="$$productWithImages.id$$"/>
             </actionGroup>
             <waitForPageLoad stepKey="waitForProductPageLoad1"/>
             <actionGroup ref="AddProductImageActionGroup" stepKey="addImageToProduct">
                 <argument name="image" value="ProductImage"/>
             </actionGroup>
-            <!-- opens the custom option panel and clicks add options -->
-            <click stepKey="openCustomizableOptions" selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}"/>
-            <waitForPageLoad stepKey="waitForCustomOptionsOpen"/>
-
-            <!-- Create a custom option with 2 values -->
-            <actionGroup ref="CreateCustomRadioOptionsActionGroup" stepKey="createCustomOption1">
-                <argument name="customOptionName" value="ProductOptionRadiobutton.title"/>
-                <argument name="productOption" value="ProductOptionField"/>
-                <argument name="productOption2" value="ProductOptionField2"/>
-            </actionGroup>
             <waitForPageLoad stepKey="waitForProductPageLoad2"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
         </before>
         <after>
-           <deleteData createDataKey="createSubCategory" stepKey="deleteSubCategory"/>
-            <deleteData createDataKey="createRootCategory" stepKey="deleteRootCategory"/>
-            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!--Delete prerequisite entities-->
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="productWithImages" stepKey="deleteProductWithImages"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open product page on admin-->
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
-            <argument name="productId" value="$$createProduct.id$$"/>
+            <argument name="productId" value="$$productWithImages.id$$"/>
         </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad1"/>
         <!--Remove product image and save-->
-        <actionGroup ref="RemoveProductImageByNameActionGroup" stepKey="removeProductImage">
+        <actionGroup ref="RemoveProductImageByNameActionGroup" stepKey="removeProductFromCart2">
             <argument name="image" value="ProductImage"/>
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct5"/>
-        <!--Assert notification and success messages-->
-        <see selector="{{StorefrontMessagesSection.success}}" userInput="{{ProductFormMessages.save_success}}" stepKey="seeSuccessMessage"/>
-        <dontSee selector="{{StorefrontMessagesSection.noticeMessage}}" userInput="{{ProductFormMessages.remove_image_notice}}" stepKey="seeNotification"/>
-        <!--Reopen image tab and see the image is not deleted-->
-        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesTab"/>
-        <waitForPageLoad stepKey="waitForImagesLoad"/>
-        <dontSeeElement selector="{{AdminProductImagesSection.imageFile(ProductImage.fileName)}}" stepKey="seeImageIsNotDeleted"/>
+        <!--Verify the success messages without notification-->
+        <actionGroup ref="VerifySuccessMessagesWithoutNotificationActionGroup" stepKey="verifySuccessMessages">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
     </test>
 </tests>
