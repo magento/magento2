@@ -7,8 +7,6 @@ namespace Magento\SalesRule\Model\Rule\Condition\Product;
 
 class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
 {
-    public const EVENT_PREFIX_SALES_QUOTE_ITEM = 'sales_quote_item';
-
     /**
      * @param \Magento\Rule\Model\Condition\Context $context
      * @param \Magento\SalesRule\Model\Rule\Condition\Product $ruleConditionProduct
@@ -62,19 +60,14 @@ class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
         $isValid = false;
-        if ($model->getEventPrefix() === self::EVENT_PREFIX_SALES_QUOTE_ITEM) {
-            $item = $model->load($model->getId());
+
+        foreach ($model->getAllItems() as $item) {
             if (parent::validate($item)) {
                 $isValid = true;
-            }
-        } else {
-            foreach ($model->getAllItems() as $item) {
-                if (parent::validate($item)) {
-                    $isValid = true;
-                    break;
-                }
+                break;
             }
         }
+
         return $isValid;
     }
 }

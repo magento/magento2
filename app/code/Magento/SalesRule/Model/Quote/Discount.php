@@ -21,7 +21,6 @@ use Magento\SalesRule\Api\Data\DiscountDataInterfaceFactory;
 use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
 use Magento\SalesRule\Model\Data\RuleDiscount;
 use Magento\SalesRule\Model\Rule;
-use Magento\SalesRule\Model\Rule\Condition\Product\Found;
 use Magento\SalesRule\Model\RulesApplier;
 use Magento\SalesRule\Model\Validator;
 use Magento\Store\Model\StoreManagerInterface;
@@ -178,88 +177,27 @@ class Discount extends AbstractTotal
         $this->calculator->initTotals($items, $address);
         $items = $this->calculator->sortItemsByPriority($items, $address);
         $rules = $this->calculator->getRules($address);
-
-        $itemsToApplyDiscount = [];
-        $discardRule = false;
-        $conditionFoundInRule = false; //criteria defined in condition or action or both tab of rule
-        $activateDiscardRule = false;
-        $exitDiscardRule = false; //false if rule condition object not belongs to Product/Found class
-
-        /** @var Rule $rule */
-        foreach ($rules as $rule) {
-            if ($rule->getStopRulesProcessing()) {
-                $discardRule = true;
-                break;
-            }
-        }
-
-        /** @var Rule $rule */
-        foreach ($rules as $rule) {
-            $ruleConditionMethod = "getActions";
-            if ($discardRule) {
-                if (($rule->getActions() === null || empty($rule->getActions()->getConditions()))
-                    || ($rule->getConditions() === null || empty($rule->getConditions()->getConditions()))) {
-                    $conditionFoundInRule = false;
-                }
-                if ($rule->getConditions() !== null && !empty($rule->getConditions()->getConditions())) {
-                    $classSetInRuleCondition = current($rule->getConditions()->getConditions());
-
-                    if (!empty($classSetInRuleCondition)) {
-                        if ($classSetInRuleCondition->getType() === Found::class) {
-                            $ruleConditionMethod = "getConditions";
-                            $conditionFoundInRule = true;
-                        } else {
-                            $exitDiscardRule = true;
-                        }
-                    }
-                }
-                if ($rule->getActions() != null && !empty($rule->getActions()->getConditions())) {
-                    $conditionFoundInRule = true;
-                }
-            }
-            /** @var Item $item */
-            foreach ($items as $item) {
+        /** @var Item $item */
+        foreach ($items as $item) {
+            /** @var Rule $rule */
+            foreach ($rules as $rule) {
                 if ($quote->getIsMultiShipping() && $item->getAddress()->getId() !== $address->getId()) {
                     continue;
                 }
                 if ($item->getNoDiscount() || !$this->calculator->canApplyDiscount($item) || $item->getParentItem()) {
                     continue;
                 }
-                if ($activateDiscardRule && isset($itemsToApplyDiscount[$item->getProduct()->getId()])) {
-                    continue;
-                }
-                if ($discardRule && $conditionFoundInRule) {
-                    if ("getActions" == $ruleConditionMethod) {
-                        $itemToValidate = $item;
-                    } else {
-                        $itemToValidate = clone $item;
-                    }
-                    if ($rule->$ruleConditionMethod()->validate($itemToValidate)) {
-                        $itemsToApplyDiscount[$item->getProduct()->getId()] = $item->getProduct()->getId();
-                    } elseif (!isset($itemsToApplyDiscount[$item->getProduct()->getId()])) {
-                        continue;
-                    } elseif (!$activateDiscardRule && isset($itemsToApplyDiscount[$item->getProduct()->getId()])) {
-                        continue;
-                    }
-                }
-                if ($discardRule && ("getActions" == $ruleConditionMethod)) {
-                    $this->calculator->setSkipActionsValidation(true);
-                } elseif ($discardRule) {
-                    $this->calculator->setSkipActionsValidation(false);
-                }
                 $eventArgs['item'] = $item;
                 $this->eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
                 $this->calculator->process($item, $rule);
-            }
-            if ($rule->getStopRulesProcessing()) {
-                //break for performance acceptance test
-                if ($exitDiscardRule) {
+                $appliedRuleIds = $quote->getAppliedRuleIds() ? explode(',', $quote->getAppliedRuleIds()) : [];
+                if ($rule->getStopRulesProcessing() && in_array($rule->getId(), $appliedRuleIds)) {
+                    $quote->setAppliedRuleIds("");
                     break;
                 }
-                $activateDiscardRule = true;
             }
-            $this->calculator->initTotals($items, $address);
         }
+        $this->calculator->initTotals($items, $address);
         foreach ($items as $item) {
             if (!isset($itemsAggregate[$item->getId()])) {
                 continue;

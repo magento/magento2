@@ -33,14 +33,12 @@ use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\Rule\Condition\Combine as CombineCondition;
 use Magento\SalesRule\Model\Rule\Condition\Product as ProductCondition;
 use Magento\SalesRule\Test\Fixture\ProductCondition as ProductConditionFixture;
-use Magento\SalesRule\Test\Fixture\ProductFoundInCartConditions as ProductFoundInCartConditionsFixture;
 use Magento\SalesRule\Test\Fixture\Rule as RuleFixture;
 use Magento\Tax\Model\ClassModel;
 use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
-use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -297,7 +295,7 @@ class DiscountTest extends TestCase
         ], 'p4'),
 
         DataFixture(
-            ProductFoundInCartConditionsFixture::class,
+            ProductConditionFixture::class,
             [
                 'attribute' => 'category_ids',
                 'value' => '$c1.id$',
@@ -320,7 +318,7 @@ class DiscountTest extends TestCase
             'cond1'
         ),
         DataFixture(
-            ProductFoundInCartConditionsFixture::class,
+            ProductConditionFixture::class,
             [
                 'attribute' => 'category_ids',
                 'value' => '$c2.id$',
@@ -343,7 +341,7 @@ class DiscountTest extends TestCase
             'cond2'
         ),
         DataFixture(
-            ProductFoundInCartConditionsFixture::class,
+            ProductConditionFixture::class,
             [
                 'attribute' => 'category_ids',
                 'value' => '$c3.id$',
@@ -371,7 +369,7 @@ class DiscountTest extends TestCase
                 'stop_rules_processing'=> 0,
                 'coupon_code' => 'test',
                 'discount_amount' => 10,
-                'conditions' => ['$cond1$'],
+                'actions' => ['$cond1$'],
                 'simple_action' => Rule::BY_FIXED_ACTION,
                 'sort_order' => 0
             ],
@@ -381,7 +379,7 @@ class DiscountTest extends TestCase
             RuleFixture::class,
             [
                 'discount_amount' => 5,
-                'conditions' => ['$cond2$'],
+                'actions' => ['$cond2$'],
                 'simple_action' => Rule::BY_FIXED_ACTION,
                 'sort_order' => 1
             ],
@@ -392,7 +390,7 @@ class DiscountTest extends TestCase
             [
                 'stop_rules_processing'=> 0,
                 'discount_amount' => 2,
-                'conditions' => ['$cond3$'],
+                'actions' => ['$cond3$'],
                 'simple_action' => Rule::BY_FIXED_ACTION,
                 'sort_order' => 2
             ],
