@@ -177,10 +177,11 @@ class Discount extends AbstractTotal
         $this->calculator->initTotals($items, $address);
         $items = $this->calculator->sortItemsByPriority($items, $address);
         $rules = $this->calculator->getRules($address);
-        /** @var Item $item */
-        foreach ($items as $item) {
-            /** @var Rule $rule */
-            foreach ($rules as $rule) {
+        $applyDiscardRule = false;
+        /** @var Rule $rule */
+        foreach ($rules as $rule) {
+            /** @var Item $item */
+            foreach ($items as $item) {
                 if ($quote->getIsMultiShipping() && $item->getAddress()->getId() !== $address->getId()) {
                     continue;
                 }
@@ -190,13 +191,17 @@ class Discount extends AbstractTotal
                 $eventArgs['item'] = $item;
                 $this->eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
                 $this->calculator->process($item, $rule);
-                $appliedRuleIds = $quote->getAppliedRuleIds() ? explode(',', $quote->getAppliedRuleIds()) : [];
-                if ($rule->getStopRulesProcessing() && in_array($rule->getId(), $appliedRuleIds)) {
-                    $quote->setAppliedRuleIds("");
-                    break;
+                if ($applyDiscardRule) {
+                    $appliedRuleIds = $item->getAppliedRuleIds() ? explode(',', $item->getAppliedRuleIds()) : [];
+                    if (in_array($rule->getId(), $appliedRuleIds)) {
+                        break;
+                    }
                 }
-                $this->calculator->initTotals($items, $address);
             }
+            if ($rule->getStopRulesProcessing()) {
+                $applyDiscardRule = true;
+            }
+            $this->calculator->initTotals($items, $address);
         }
         foreach ($items as $item) {
             if (!isset($itemsAggregate[$item->getId()])) {
