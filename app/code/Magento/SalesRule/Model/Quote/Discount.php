@@ -195,9 +195,9 @@ class Discount extends AbstractTotal
                     $quote->setAppliedRuleIds("");
                     break;
                 }
+                $this->calculator->initTotals($items, $address);
             }
         }
-        $this->calculator->initTotals($items, $address);
         foreach ($items as $item) {
             if (!isset($itemsAggregate[$item->getId()])) {
                 continue;

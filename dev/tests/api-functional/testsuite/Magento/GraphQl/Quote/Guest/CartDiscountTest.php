@@ -57,7 +57,7 @@ class CartDiscountTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query);
         $discountResponse = $response['cart']['prices']['discount'];
-        self::assertEquals(-12.5, $discountResponse['amount']['value']);
+        self::assertEquals(-15, $discountResponse['amount']['value']);
         self::assertEquals(['50% Off for all orders', '5$ fixed discount on whole cart'], $discountResponse['label']);
     }
 
