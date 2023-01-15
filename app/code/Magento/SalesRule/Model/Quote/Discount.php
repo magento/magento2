@@ -188,15 +188,15 @@ class Discount extends AbstractTotal
                 if ($item->getNoDiscount() || !$this->calculator->canApplyDiscount($item) || $item->getParentItem()) {
                     continue;
                 }
+                if ($applyDiscardRule) {
+                    $appliedRuleIds = $item->getAppliedRuleIds() ? explode(',', $item->getAppliedRuleIds()) : [];
+                    if (count($appliedRuleIds) > 1 && in_array($rule->getId(), $appliedRuleIds)) {
+                        continue;
+                    }
+                }
                 $eventArgs['item'] = $item;
                 $this->eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
                 $this->calculator->process($item, $rule);
-                if ($applyDiscardRule) {
-                    $appliedRuleIds = $item->getAppliedRuleIds() ? explode(',', $item->getAppliedRuleIds()) : [];
-                    if (in_array($rule->getId(), $appliedRuleIds)) {
-                        break;
-                    }
-                }
             }
             if ($rule->getStopRulesProcessing()) {
                 $applyDiscardRule = true;
