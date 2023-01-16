@@ -101,7 +101,8 @@ class ProductPriceIndexModifier
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $connection = $this->resourceConnection->getConnection($this->connectionName);
         $select = $connection->select();
-        $select->from(['selection' => $this->resourceConnection->getTableName('catalog_product_bundle_selection')],
+        $select->from(
+            ['selection' => $this->resourceConnection->getTableName('catalog_product_bundle_selection')],
             [
                 'product.entity_id AS bundle_id',
                 'selection.product_id AS child_product_id',
@@ -137,7 +138,7 @@ class ProductPriceIndexModifier
         }
 
         $filteredProducts = [];
-        foreach($bundleProducts as $bundle) {
+        foreach ($bundleProducts as $bundle) {
             if ($bundle['bundle_price_type'] != Price::PRICE_TYPE_DYNAMIC) {
                 $filteredProducts[] = $bundle['child_product_id'];
             }
