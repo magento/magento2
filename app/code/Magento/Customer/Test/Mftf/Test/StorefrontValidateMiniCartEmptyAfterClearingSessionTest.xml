@@ -41,8 +41,15 @@
             <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
-        <!--Reset cookies and refresh the page-->
-        <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteLocalCacheDirectory">
+            <argument name="path">var/session/*</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertDirectoryExists" stepKey="assertVarSessionFolderExists">
+            <argument name="path">var/session</argument>
+        </helper>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
         <actionGroup ref="StorefrontCheckThatCartIsEmptyActionGroup" stepKey="checkThatCartIsEmpty"/>
     </test>
