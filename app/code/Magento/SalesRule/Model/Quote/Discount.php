@@ -24,6 +24,7 @@ use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\RulesApplier;
 use Magento\SalesRule\Model\Validator;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\SalesRule\Model\Rule\Condition\Product;
 
 /**
  * Discount totals calculation model.
@@ -178,8 +179,15 @@ class Discount extends AbstractTotal
         $items = $this->calculator->sortItemsByPriority($items, $address);
         $rules = $this->calculator->getRules($address);
         $applyDiscardRule = false;
+        $breakDiscardRule = false;
         /** @var Rule $rule */
         foreach ($rules as $rule) {
+            if ($rule->getStopRulesProcessing()) {
+                $condition = current($rule->getActions()->getConditions());
+                if ($condition && $condition->getType() !== Product::class) {
+                    $breakDiscardRule = true;
+                }
+            }
             /** @var Item $item */
             foreach ($items as $item) {
                 if ($quote->getIsMultiShipping() && $item->getAddress()->getId() !== $address->getId()) {
@@ -199,6 +207,9 @@ class Discount extends AbstractTotal
                 $this->calculator->process($item, $rule);
             }
             if ($rule->getStopRulesProcessing()) {
+                if ($breakDiscardRule) {
+                    break;
+                }
                 $applyDiscardRule = true;
             }
             $this->calculator->initTotals($items, $address);
