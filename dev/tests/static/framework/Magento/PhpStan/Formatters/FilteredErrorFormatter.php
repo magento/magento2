@@ -66,6 +66,7 @@ class FilteredErrorFormatter implements ErrorFormatter
             return self::NO_ERRORS;
         }
 
+        // @phpstan-ignore-next-line
         $clearedAnalysisResult = new AnalysisResult(
             $this->clearIgnoredErrors($analysisResult->getFileSpecificErrors()),
             $analysisResult->getNotFileSpecificErrors(),
