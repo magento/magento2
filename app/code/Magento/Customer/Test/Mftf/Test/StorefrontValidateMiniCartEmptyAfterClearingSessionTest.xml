@@ -42,10 +42,10 @@
         </actionGroup>
         <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteLocalCacheDirectory">
-            <argument name="path">var/session/*</argument>
+            <argument name="path">/tmp/*</argument>
         </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertDirectoryExists" stepKey="assertVarSessionFolderExists">
-            <argument name="path">var/session</argument>
+            <argument name="path">/tmp</argument>
         </helper>
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
             <argument name="tags" value=""/>
