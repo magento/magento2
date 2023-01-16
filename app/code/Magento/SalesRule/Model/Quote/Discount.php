@@ -24,7 +24,7 @@ use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\RulesApplier;
 use Magento\SalesRule\Model\Validator;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\SalesRule\Model\Rule\Condition\Product;
+use Magento\SalesRule\Model\Rule\Condition\Address as ConditionAddress;
 
 /**
  * Discount totals calculation model.
@@ -184,7 +184,7 @@ class Discount extends AbstractTotal
         foreach ($rules as $rule) {
             if ($rule->getStopRulesProcessing()) {
                 $condition = current($rule->getActions()->getConditions());
-                if ($condition && $condition->getType() !== Product::class) {
+                if ($condition && $condition->getType() === ConditionAddress::class) {
                     $breakDiscardRule = true;
                 }
             }
