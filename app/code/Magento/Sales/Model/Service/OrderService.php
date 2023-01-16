@@ -113,6 +113,7 @@ class OrderService implements OrderManagementInterface
      */
     public function cancel($id)
     {
+        // phpstan:ignore "File has calls static method. (phpStaticMethodCalls)"
         return $this->orderMutex->execute(
             (int) $id,
             \Closure::fromCallable([$this, 'cancelOrder']),
