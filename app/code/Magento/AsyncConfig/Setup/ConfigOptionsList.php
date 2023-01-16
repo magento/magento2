@@ -13,6 +13,7 @@ use Magento\Framework\Config\Data\ConfigDataFactory;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\SelectConfigOption;
+use Magento\Framework\Setup\Option\SelectConfigOptionFactory;
 
 /**
  * Deployment configuration options required for the Config module.
@@ -47,12 +48,20 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private $configDataFactory;
 
     /**
+     * @var SelectConfigOptionFactory
+     */
+    private $selectConfigOptionFactory;
+
+    /**
      * @param ConfigDataFactory $configDataFactory
+     * @param SelectConfigOptionFactory $selectConfigOptionFactory
      */
     public function __construct(
-        ConfigDataFactory $configDataFactory
+        ConfigDataFactory $configDataFactory,
+        SelectConfigOptionFactory $selectConfigOptionFactory
     ) {
         $this->configDataFactory = $configDataFactory;
+        $this->selectConfigOptionFactory = $selectConfigOptionFactory;
     }
 
     /**
@@ -61,7 +70,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     public function getOptions()
     {
         return [
-            ObjectManager::getInstance()->create(SelectConfigOption::class,
+            $this->selectConfigOptionFactory->create(
                 [
                     'name' => self::INPUT_KEY_ASYNC_CONFIG_SAVE,
                     'frontendType' => SelectConfigOption::FRONTEND_WIZARD_SELECT,
