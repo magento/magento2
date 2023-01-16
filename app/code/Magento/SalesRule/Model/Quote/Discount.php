@@ -177,27 +177,32 @@ class Discount extends AbstractTotal
         $this->calculator->initTotals($items, $address);
         $items = $this->calculator->sortItemsByPriority($items, $address);
         $rules = $this->calculator->getRules($address);
-        /** @var Item $item */
-        foreach ($items as $item) {
-            /** @var Rule $rule */
-            foreach ($rules as $rule) {
+        $applyDiscardRule = false;
+        /** @var Rule $rule */
+        foreach ($rules as $rule) {
+            /** @var Item $item */
+            foreach ($items as $item) {
                 if ($quote->getIsMultiShipping() && $item->getAddress()->getId() !== $address->getId()) {
                     continue;
                 }
                 if ($item->getNoDiscount() || !$this->calculator->canApplyDiscount($item) || $item->getParentItem()) {
                     continue;
                 }
+                if ($applyDiscardRule) {
+                    $appliedRuleIds = $item->getAppliedRuleIds() ? explode(',', $item->getAppliedRuleIds()) : [];
+                    if (count($appliedRuleIds) > 1 && in_array($rule->getId(), $appliedRuleIds)) {
+                        continue;
+                    }
+                }
                 $eventArgs['item'] = $item;
                 $this->eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
                 $this->calculator->process($item, $rule);
-                $appliedRuleIds = $quote->getAppliedRuleIds() ? explode(',', $quote->getAppliedRuleIds()) : [];
-                if ($rule->getStopRulesProcessing() && in_array($rule->getId(), $appliedRuleIds)) {
-                    $quote->setAppliedRuleIds("");
-                    break;
-                }
             }
+            if ($rule->getStopRulesProcessing()) {
+                $applyDiscardRule = true;
+            }
+            $this->calculator->initTotals($items, $address);
         }
-        $this->calculator->initTotals($items, $address);
         foreach ($items as $item) {
             if (!isset($itemsAggregate[$item->getId()])) {
                 continue;
