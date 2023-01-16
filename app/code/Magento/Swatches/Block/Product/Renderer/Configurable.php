@@ -400,8 +400,12 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
 
         $swatchProductImage = '';
         if (!empty($swatchImageId) && !empty($imageAttributes['type'])) {
-            $swatchProductImage = $this->imageUrlBuilder->getUrl($childProduct->getData($imageAttributes['type']), $swatchImageId);
+            $swatchProductImage = $this->imageUrlBuilder->getUrl(
+                $childProduct->getData($imageAttributes['type']),
+                $swatchImageId
+            );
         }
+
         return $swatchProductImage;
     }
 
