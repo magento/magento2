@@ -15,5 +15,5 @@ class StringType extends \GraphQL\Type\Definition\StringType implements InputTyp
     /**
      * @var string
      */
-    public string $name = "Magento_String";
+    public $name = "Magento_String";
 }

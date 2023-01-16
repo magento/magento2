@@ -15,5 +15,5 @@ class IntType extends \GraphQL\Type\Definition\IntType implements InputTypeInter
     /**
      * @var string
      */
-    public string $name = "Magento_Int";
+    public $name = "Magento_Int";
 }
