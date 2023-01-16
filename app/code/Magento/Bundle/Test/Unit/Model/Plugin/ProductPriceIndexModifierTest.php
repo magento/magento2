@@ -98,7 +98,6 @@ class ProductPriceIndexModifierTest extends TestCase
             ->method('joinInner');
         $select->expects($this->exactly(2))
             ->method('where');
-        $select->expects($this->once())->method('group')->with('selection.product_id');
         $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->once())
             ->method('select')

@@ -130,7 +130,6 @@ class ProductPriceIndexModifier
         );
         $select->where('selection.product_id IN (?)', $productIds);
         $select->where('product.type_id = ?', Type::TYPE_BUNDLE);
-        $select->group('selection.product_id');
         $bundleProducts = $connection->fetchAll($select);
 
         if (empty($bundleProducts)) {
@@ -139,7 +138,7 @@ class ProductPriceIndexModifier
 
         $filteredProducts = [];
         foreach($bundleProducts as $bundle) {
-            if ($bundle['bundle_price_type'] !== Price::PRICE_TYPE_DYNAMIC) {
+            if ($bundle['bundle_price_type'] != Price::PRICE_TYPE_DYNAMIC) {
                 $filteredProducts[] = $bundle['child_product_id'];
             }
         }
