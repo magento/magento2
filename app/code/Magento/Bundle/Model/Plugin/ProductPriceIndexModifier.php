@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Model\Plugin;
 
+use Magento\Bundle\Model\Link;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
@@ -39,11 +39,6 @@ class ProductPriceIndexModifier
     private MetadataPool $metadataPool;
 
     /**
-     * @var ProductRepositoryInterface
-     */
-    private ProductRepositoryInterface $productRepository;
-
-    /**
      * @var string
      */
     private string $connectionName;
@@ -52,22 +47,18 @@ class ProductPriceIndexModifier
      * @param StockConfigurationInterface $stockConfiguration
      * @param ResourceConnection $resourceConnection
      * @param MetadataPool $metadataPool
-     * @param ProductRepositoryInterface|null $productRepository
      * @param string $connectionName
      */
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
         ResourceConnection $resourceConnection,
         MetadataPool $metadataPool,
-        ?ProductRepositoryInterface $productRepository = null,
         string $connectionName = 'indexer'
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->resourceConnection = $resourceConnection;
         $this->metadataPool = $metadataPool;
         $this->connectionName = $connectionName;
-        $this->productRepository = $productRepository ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(ProductRepositoryInterface::class);
     }
 
     /**
@@ -110,28 +101,45 @@ class ProductPriceIndexModifier
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $connection = $this->resourceConnection->getConnection($this->connectionName);
         $select = $connection->select();
-        $select->from(['selection' => $this->resourceConnection->getTableName('catalog_product_bundle_selection')]);
-        $select->columns(['product.entity_id AS bundle_id', 'selection.product_id AS child_product_id']);
+        $select->from(['selection' => $this->resourceConnection->getTableName('catalog_product_bundle_selection')],
+            [
+                'product.entity_id AS bundle_id',
+                'selection.product_id AS child_product_id',
+                'pei.value AS bundle_price_type'
+            ]
+        );
         $select->joinInner(
             ['price' => $this->resourceConnection->getTableName($priceTableName)],
-            implode(' AND ', ['price.entity_id = selection.product_id'])
+            implode(' AND ', ['price.entity_id = selection.product_id']),
+            null
         );
         $select->joinInner(
             ['product' => $this->resourceConnection->getTableName('catalog_product_entity')],
-            "product.$linkField = selection.parent_product_id"
+            "product.$linkField = selection.parent_product_id",
+            null
+        );
+        $select->joinInner(
+            ['pei' => $this->resourceConnection->getTableName('catalog_product_entity_int')],
+            "product.$linkField = pei.$linkField",
+            null
+        );
+        $select->joinInner(
+            ['ea' => $this->resourceConnection->getTableName('eav_attribute')],
+            "pei.attribute_id = ea.attribute_id AND ea.attribute_code = '" . Link::KEY_PRICE_TYPE . "'",
+            null
         );
         $select->where('selection.product_id IN (?)', $productIds);
         $select->where('product.type_id = ?', Type::TYPE_BUNDLE);
+        $select->group('selection.product_id');
         $bundleProducts = $connection->fetchAll($select);
 
         if (empty($bundleProducts)) {
-            return [];
+            return $productIds;
         }
 
         $filteredProducts = [];
-        foreach ($bundleProducts as $bundle) {
-            $bundleProduct = $this->productRepository->getById($bundle['bundle_id']);
-            if ($bundleProduct->getPriceType() != Price::PRICE_TYPE_DYNAMIC) {
+        foreach($bundleProducts as $bundle) {
+            if ($bundle['bundle_price_type'] !== Price::PRICE_TYPE_DYNAMIC) {
                 $filteredProducts[] = $bundle['child_product_id'];
             }
         }

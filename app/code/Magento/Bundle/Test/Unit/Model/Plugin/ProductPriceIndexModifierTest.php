@@ -51,11 +51,6 @@ class ProductPriceIndexModifierTest extends TestCase
     private IndexTableStructure $table;
 
     /**
-     * @var ProductRepositoryInterface|ProductRepositoryInterface&MockObject|MockObject
-     */
-    private ProductRepositoryInterface $productRepository;
-
-    /**
      * @var ProductPriceIndexFilter|MockObject
      */
     private ProductPriceIndexFilter $subject;
@@ -67,12 +62,10 @@ class ProductPriceIndexModifierTest extends TestCase
         $this->subject = $this->createMock(ProductPriceIndexFilter::class);
         $this->resourceConnection = $this->createMock(ResourceConnection::class);
         $this->metadataPool = $this->createMock(MetadataPool::class);
-        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
         $this->plugin = new ProductPriceIndexModifier(
             $this->stockConfiguration,
             $this->resourceConnection,
             $this->metadataPool,
-            $this->productRepository,
             self::CONNECTION_NAME
         );
     }
@@ -101,10 +94,11 @@ class ProductPriceIndexModifierTest extends TestCase
         $select = $this->createMock(Select::class);
         $select->expects($this->once())
             ->method('from');
-        $select->expects($this->exactly(2))
+        $select->expects($this->exactly(4))
             ->method('joinInner');
         $select->expects($this->exactly(2))
             ->method('where');
+        $select->expects($this->once())->method('group')->with('selection.product_id');
         $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->once())
             ->method('select')
@@ -115,11 +109,13 @@ class ProductPriceIndexModifierTest extends TestCase
             ->willReturn([
                 [
                     'bundle_id' => 1,
-                    'child_product_id' => 1
+                    'child_product_id' => 1,
+                    'bundle_price_type' => 0
                 ],
                 [
                     'bundle_id' => 1,
-                    'child_product_id' => 2
+                    'child_product_id' => 2,
+                    'bundle_price_type' => 1
                 ]
             ]);
         $this->resourceConnection->expects($this->once())
@@ -127,30 +123,13 @@ class ProductPriceIndexModifierTest extends TestCase
             ->with(self::CONNECTION_NAME)
             ->willReturn($connection);
 
-        $bundleProduct1 = $this->getMockBuilder(ProductInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getPriceType'])
-            ->getMockForAbstractClass();
-        $bundleProduct1->expects($this->once())->method('getPriceType')
-            ->willReturn(1);
-        $bundleProduct2 = $this->getMockBuilder(ProductInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getPriceType'])
-            ->getMockForAbstractClass();
-        $bundleProduct2->expects($this->once())->method('getPriceType')
-            ->willReturn(1);
-
-        $this->productRepository->expects($this->exactly(2))
-            ->method('getById')
-            ->willReturnOnConsecutiveCalls($bundleProduct1, $bundleProduct2);
-
         $calledPriceTable = '';
         $calledEntities = [];
         $callable = function () use (&$calledPriceTable, &$calledEntities, $priceTableName, $entities) {
             $calledPriceTable = $priceTableName;
             $calledEntities = $entities;
         };
-        $this->plugin->aroundModifyPrice($this->subject, $callable, $this->table, [1, 2]);
+        $this->plugin->aroundModifyPrice($this->subject, $callable, $this->table, $entities);
         $this->assertSame($calledPriceTable, $priceTableName);
         $this->assertSame($calledEntities, $entities);
     }
