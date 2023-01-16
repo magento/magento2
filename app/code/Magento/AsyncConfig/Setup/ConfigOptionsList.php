@@ -61,13 +61,15 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     public function getOptions()
     {
         return [
-            new SelectConfigOption(
-                self::INPUT_KEY_ASYNC_CONFIG_SAVE,
-                SelectConfigOption::FRONTEND_WIZARD_SELECT,
-                $this->selectOptions,
-                self::CONFIG_PATH_ASYNC_CONFIG_SAVE,
-                'Enable async Admin Config Save? 1 - Yes, 0 - No',
-                self::DEFAULT_ASYNC_CONFIG
+            ObjectManager::getInstance()->create(SelectConfigOption::class,
+                [
+                    'name' => self::INPUT_KEY_ASYNC_CONFIG_SAVE,
+                    'frontendType' => SelectConfigOption::FRONTEND_WIZARD_SELECT,
+                    'selectOptions' => $this->selectOptions,
+                    'configPath' => self::CONFIG_PATH_ASYNC_CONFIG_SAVE,
+                    'description' => 'Enable async Admin Config Save? 1 - Yes, 0 - No',
+                    'defaultValue' => self::DEFAULT_ASYNC_CONFIG
+                ]
             ),
         ];
     }
