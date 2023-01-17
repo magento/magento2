@@ -175,7 +175,7 @@ query GetProducts(\$filterInput:ProductAttributeFilterInput){
             id
             name
             sku
-        }
+        }  
     }
 }
 QUERY;
@@ -223,12 +223,12 @@ QUERY;
     }
   ])
     {
-      items{
+      items{        
       attribute_code
       attribute_type
       entity_type
-    }
-    }
+    }      
+    }  
   }
 QUERY;
 
@@ -249,6 +249,10 @@ QUERY;
         if (isset($outputResponse['errors'][0])) {
             if (is_array($outputResponse['errors'][0])) {
                 foreach ($outputResponse['errors'] as $error) {
+                    $this->assertEquals(
+                        \Magento\Framework\GraphQl\Exception\GraphQlInputException::EXCEPTION_CATEGORY,
+                        $error['extensions']['category']
+                    );
                     if (isset($error['message'])) {
                         $this->assertEquals($error['message'], 'Invalid entity_type specified: invalid');
                     }
