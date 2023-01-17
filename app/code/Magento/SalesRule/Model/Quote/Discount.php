@@ -208,9 +208,8 @@ class Discount extends AbstractTotal
                     continue;
                 }
                 if ($applyDiscardRule) {
-                    $appliedRuleIds = $item->getAppliedRuleIds() ? explode(',', $item->getAppliedRuleIds()) : [];
+                    $appliedRuleIds = $quote->getAppliedRuleIds() ? explode(',', $quote->getAppliedRuleIds()) : [];
                     if (count($appliedRuleIds) > 1 && in_array($rule->getId(), $appliedRuleIds)) {
-                        $quote->setAppliedRuleIds('');
                         continue;
                     }
                 }
