@@ -56,7 +56,7 @@ class AddStockItemsObserver implements ObserverInterface
         $productIds = array_keys($productCollection->getItems());
         $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItems = [];
-        if ($productIds) {
+        if ($productIds !== []) {
             $stockItems = $this->stockRegistryPreloader->preloadStockItems($productIds, $scopeId);
             $this->stockRegistryPreloader->preloadStockStatuses($productIds, $scopeId);
         }
