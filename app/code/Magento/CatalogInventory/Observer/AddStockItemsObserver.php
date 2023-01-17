@@ -15,22 +15,23 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
- * Add Stock items to product collection.
+ * @deprecated 100.2.0 Stock Item as a part of ExtensionAttributes is deprecated
+ * @see StockItemInterface when you want to change the stock data
+ * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
+ * @see StockItemRepositoryInterface::save as extension point for customization of saving process
  */
 class AddStockItemsObserver implements ObserverInterface
 {
     /**
      * @var StockConfigurationInterface
      */
-    private $stockConfiguration;
+    private StockConfigurationInterface $stockConfiguration;
     /**
      * @var StockRegistryPreloader
      */
-    private $stockRegistryPreloader;
+    private StockRegistryPreloader $stockRegistryPreloader;
 
     /**
-     * AddStockItemsObserver constructor.
-     *
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockRegistryPreloader $stockRegistryPreloader
      */
