@@ -18,10 +18,10 @@ use GraphQL\Error\ClientAware;
  *
  * @api
  */
-class GraphQlInputException extends LocalizedException
-    implements AggregateExceptionInterface, ClientAware, ProvidesExtensions
+// phpcs:disable Generic.Files.LineLength.TooLong
+class GraphQlInputException extends LocalizedException implements AggregateExceptionInterface, ClientAware, ProvidesExtensions
 {
-    const EXCEPTION_CATEGORY = 'graphql-input';
+    public const EXCEPTION_CATEGORY = 'graphql-input';
 
     /**
      * @var boolean
