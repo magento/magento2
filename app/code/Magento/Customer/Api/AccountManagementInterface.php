@@ -197,9 +197,9 @@ interface AccountManagementInterface
      * @param string $customerEmail
      * @param int|null $websiteId If not set, will use the current websiteId
      * @return bool
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function isEmailAvailable(string $customerEmail, int $websiteId = null): bool;
+    public function isEmailAvailable($customerEmail, $websiteId = null);
 
     /**
      * Check store availability for customer given the customerId.

@@ -223,177 +223,177 @@ class AccountManagement implements AccountManagementInterface
     /**
      * @var CustomerFactory
      */
-    private CustomerFactory $customerFactory;
+    private $customerFactory;
 
     /**
      * @var ValidationResultsInterfaceFactory
      */
-    private ValidationResultsInterfaceFactory $validationResultsDataFactory;
+    private $validationResultsDataFactory;
 
     /**
      * @var ManagerInterface
      */
-    private ManagerInterface $eventManager;
+    private $eventManager;
 
     /**
      * @var StoreManagerInterface
      */
-    private StoreManagerInterface $storeManager;
+    private $storeManager;
 
     /**
      * @var Random
      */
-    private Random $mathRandom;
+    private $mathRandom;
 
     /**
      * @var Validator
      */
-    private Validator $validator;
+    private $validator;
 
     /**
      * @var AddressRepositoryInterface
      */
-    private AddressRepositoryInterface $addressRepository;
+    private $addressRepository;
 
     /**
      * @var CustomerMetadataInterface
      */
-    private CustomerMetadataInterface $customerMetadataService;
+    private $customerMetadataService;
 
     /**
      * @var PsrLogger
      */
-    protected PsrLogger $logger;
+    protected $logger;
 
     /**
      * @var Encryptor
      */
-    private Encryptor $encryptor;
+    private $encryptor;
 
     /**
      * @var CustomerRegistry
      */
-    private CustomerRegistry $customerRegistry;
+    private $customerRegistry;
 
     /**
      * @var ConfigShare
      */
-    private ConfigShare $configShare;
+    private $configShare;
 
     /**
      * @var StringHelper
      */
-    protected StringHelper $stringHelper;
+    protected $stringHelper;
 
     /**
      * @var CustomerRepositoryInterface
      */
-    private CustomerRepositoryInterface $customerRepository;
+    private $customerRepository;
 
     /**
      * @var ScopeConfigInterface
      */
-    private ScopeConfigInterface $scopeConfig;
+    private $scopeConfig;
 
     /**
      * @var TransportBuilder
      */
-    private TransportBuilder $transportBuilder;
+    private $transportBuilder;
 
     /**
      * @var DataObjectProcessor
      */
-    protected DataObjectProcessor $dataProcessor;
+    protected $dataProcessor;
 
     /**
      * @var Registry
      */
-    protected Registry $registry;
+    protected $registry;
 
     /**
      * @var CustomerViewHelper
      */
-    protected CustomerViewHelper $customerViewHelper;
+    protected $customerViewHelper;
 
     /**
      * @var DateTime
      */
-    protected DateTime $dateTime;
+    protected $dateTime;
 
     /**
      * @var ObjectFactory
      */
-    protected ObjectFactory $objectFactory;
+    protected $objectFactory;
 
     /**
      * @var ExtensibleDataObjectConverter
      */
-    protected ExtensibleDataObjectConverter $extensibleDataObjectConverter;
+    protected $extensibleDataObjectConverter;
 
     /**
      * @var CustomerModel
      */
-    protected CustomerModel $customerModel;
+    protected $customerModel;
 
     /**
      * @var AuthenticationInterface
      */
-    protected AuthenticationInterface $authentication;
+    protected $authentication;
 
     /**
      * @var EmailNotificationInterface
      */
-    private EmailNotificationInterface $emailNotification;
+    private $emailNotification;
 
     /**
      * @var Backend
      */
-    private Backend $eavValidator;
+    private $eavValidator;
 
     /**
      * @var CredentialsValidator
      */
-    private CredentialsValidator $credentialsValidator;
+    private $credentialsValidator;
 
     /**
      * @var DateTimeFactory
      */
-    private DateTimeFactory $dateTimeFactory;
+    private $dateTimeFactory;
 
     /**
      * @var AccountConfirmation
      */
-    private AccountConfirmation $accountConfirmation;
+    private $accountConfirmation;
 
     /**
      * @var SearchCriteriaBuilder
      */
-    private SearchCriteriaBuilder $searchCriteriaBuilder;
+    private $searchCriteriaBuilder;
 
     /**
      * @var AddressRegistry
      */
-    private AddressRegistry $addressRegistry;
+    private $addressRegistry;
 
     /**
      * @var AllowedCountries
      */
-    private AllowedCountries $allowedCountriesReader;
+    private $allowedCountriesReader;
 
     /**
      * @var GetCustomerByToken
      */
-    private GetCustomerByToken $getByToken;
+    private $getByToken;
 
     /**
      * @var SessionCleanerInterface
      */
-    private SessionCleanerInterface $sessionCleaner;
+    private $sessionCleaner;
 
     /**
      * @var AuthorizationInterface
      */
-    private AuthorizationInterface $authorization;
+    private $authorization;
 
     /**
      * @var CustomerLogger
@@ -1146,8 +1146,9 @@ class AccountManagement implements AccountManagementInterface
      * @param string $customerEmail
      * @param int|null $websiteId
      * @return bool
+     * @throws LocalizedException
      */
-    public function isEmailAvailable(string $customerEmail, int $websiteId = null): bool
+    public function isEmailAvailable($customerEmail, $websiteId = null)
     {
         $guestLoginConfig = $this->scopeConfig->getValue(
             self::GUEST_CHECKOUT_LOGIN_OPTION_SYS_CONFIG,
@@ -1155,7 +1156,7 @@ class AccountManagement implements AccountManagementInterface
             $websiteId
         );
 
-        if ($guestLoginConfig === null || $guestLoginConfig === false) {
+        if (!$guestLoginConfig) {
             return true;
         }
 
