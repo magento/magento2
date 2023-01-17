@@ -53,7 +53,6 @@ class SaveRoleTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $model = $objectManager->create(SaveRole::class);
         $model->execute();
 
-        /** @var \Magento\Authorization\Model\RoleFactory $roleFactory */
         $roleFactory = $objectManager->create(\Magento\Authorization\Model\RoleFactory::class);
         $role = $roleFactory->create()->load($roleId);
         $this->assertEquals(2, count($role->getGwsWebsites()));
