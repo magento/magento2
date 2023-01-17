@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Exception;
 
+use GraphQL\Error\ProvidesExtensions;
 use Magento\Framework\Exception\AggregateExceptionInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
@@ -17,7 +18,8 @@ use GraphQL\Error\ClientAware;
  *
  * @api
  */
-class GraphQlInputException extends LocalizedException implements AggregateExceptionInterface, ClientAware
+class GraphQlInputException extends LocalizedException
+    implements AggregateExceptionInterface, ClientAware, ProvidesExtensions
 {
     const EXCEPTION_CATEGORY = 'graphql-input';
 
@@ -83,5 +85,16 @@ class GraphQlInputException extends LocalizedException implements AggregateExcep
     public function getErrors(): array
     {
         return $this->errors;
+    }
+
+    /**
+     * Get error category
+     *
+     * @return array
+     */
+    public function getExtensions(): array
+    {
+        $exceptionCategory['category'] = $this->getCategory();
+        return $exceptionCategory;
     }
 }
