@@ -24,7 +24,7 @@ use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\RulesApplier;
 use Magento\SalesRule\Model\Validator;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\SalesRule\Model\Rule\Condition\Address as ConditionAddress;
+use Magento\SalesRule\Model\Rule\Condition\Product\Found;
 
 /**
  * Discount totals calculation model.
@@ -180,12 +180,23 @@ class Discount extends AbstractTotal
         $rules = $this->calculator->getRules($address);
         $applyDiscardRule = false;
         $breakDiscardRule = false;
-        /** @var Rule $rule */
+        $discardRulePresent = false;
         foreach ($rules as $rule) {
             if ($rule->getStopRulesProcessing()) {
-                $condition = current($rule->getActions()->getConditions());
-                if ($condition && $condition->getType() === ConditionAddress::class) {
-                    $breakDiscardRule = true;
+                $discardRulePresent = true;
+            }
+        }
+
+        /** @var Rule $rule */
+        foreach ($rules as $rule) {
+            if ($discardRulePresent) {
+                if ($rule->getConditions() !== null) {
+                    $classSetInRuleCondition = current($rule->getConditions()->getConditions());
+                    if (!empty($classSetInRuleCondition)) {
+                        if ($classSetInRuleCondition->getType() != Found::class) {
+                            $breakDiscardRule = true;
+                        }
+                    }
                 }
             }
             /** @var Item $item */
@@ -199,6 +210,7 @@ class Discount extends AbstractTotal
                 if ($applyDiscardRule) {
                     $appliedRuleIds = $item->getAppliedRuleIds() ? explode(',', $item->getAppliedRuleIds()) : [];
                     if (count($appliedRuleIds) > 1 && in_array($rule->getId(), $appliedRuleIds)) {
+                        $quote->setAppliedRuleIds('');
                         continue;
                     }
                 }
