@@ -19,7 +19,7 @@ use Magento\Framework\Exception\AuthorizationException;
  */
 class GraphQlAuthorizationException extends AuthorizationException implements ClientAware, ProvidesExtensions
 {
-    const EXCEPTION_CATEGORY = 'graphql-authorization';
+    public const EXCEPTION_CATEGORY = 'graphql-authorization';
 
     /**
      * @var boolean

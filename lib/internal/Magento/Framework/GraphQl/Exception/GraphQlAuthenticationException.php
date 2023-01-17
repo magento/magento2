@@ -22,7 +22,7 @@ class GraphQlAuthenticationException extends AuthenticationException implements 
     /**
      * Describing a category of the error
      */
-    const EXCEPTION_CATEGORY = 'graphql-authentication';
+    public const EXCEPTION_CATEGORY = 'graphql-authentication';
 
     /**
      * @var boolean

@@ -20,7 +20,7 @@ class GraphQlAlreadyExistsException extends AlreadyExistsException implements Cl
     /**
      * Describing a category of the error
      */
-    const EXCEPTION_CATEGORY = 'graphql-already-exists';
+    public const EXCEPTION_CATEGORY = 'graphql-already-exists';
 
     /**
      * @var boolean
