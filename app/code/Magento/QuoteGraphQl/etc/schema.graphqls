@@ -221,6 +221,7 @@ type Cart @doc(description: "Contains the contents and other details about a gue
 }
 
 interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddressTypeResolver") {
+    uid: String! @doc(description: "The unique id of the customer address.")
     firstname: String! @doc(description: "The first name of the customer or guest.")
     lastname: String! @doc(description: "The last name of the customer or guest.")
     company: String @doc(description: "The company specified for the billing or shipping address.")
