@@ -128,7 +128,7 @@ class FieldMetaReader
     private function argumentMetaType(
         InputType $typeMeta,
         Argument $argumentMeta,
-        $result
+        array $result
     ) : array {
         $argumentName = $argumentMeta->name;
         $result['arguments'][$argumentName]  = array_merge(
