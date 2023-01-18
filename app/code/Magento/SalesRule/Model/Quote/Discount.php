@@ -21,7 +21,6 @@ use Magento\SalesRule\Api\Data\DiscountDataInterfaceFactory;
 use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
 use Magento\SalesRule\Model\Data\RuleDiscount;
 use Magento\SalesRule\Model\Rule;
-use Magento\SalesRule\Model\Rule\Condition\Product\Found;
 use Magento\SalesRule\Model\RulesApplier;
 use Magento\SalesRule\Model\Validator;
 use Magento\Store\Model\StoreManagerInterface;
@@ -177,53 +176,25 @@ class Discount extends AbstractTotal
         $this->calculator->init($store->getWebsiteId(), $quote->getCustomerGroupId(), $quote->getCouponCode());
         $this->calculator->initTotals($items, $address);
         $items = $this->calculator->sortItemsByPriority($items, $address);
+        $itemsToApplyRules = $items;
         $rules = $this->calculator->getRules($address);
-
-        $applyDiscardRule = false;
-        $exitRules = false;
-        $isDiscardRule = false;
-        foreach ($rules as $rule) {
-            if ($rule->getStopRulesProcessing()) {
-                $isDiscardRule = true;
-                break;
-            }
-        }
-
         /** @var Rule $rule */
         foreach ($rules as $rule) {
-            if ($isDiscardRule) {
-                if ($rule->getConditions() !== null) {
-                    $ruleCondition = current($rule->getConditions()->getConditions());
-                    if (!empty($ruleCondition)) {
-                        if ($ruleCondition->getType() != Found::class) {
-                            $exitRules = true;
-                        }
-                    }
-                }
-            }
             /** @var Item $item */
-            foreach ($items as $item) {
+            foreach ($itemsToApplyRules as $key => $item) {
                 if ($quote->getIsMultiShipping() && $item->getAddress()->getId() !== $address->getId()) {
                     continue;
                 }
                 if ($item->getNoDiscount() || !$this->calculator->canApplyDiscount($item) || $item->getParentItem()) {
                     continue;
                 }
-                if ($applyDiscardRule) {
-                    $appliedRuleIds = $quote->getAppliedRuleIds() ? explode(',', $quote->getAppliedRuleIds()) : [];
-                    if (count($appliedRuleIds) > 1 && in_array($rule->getId(), $appliedRuleIds)) {
-                        continue;
-                    }
-                }
                 $eventArgs['item'] = $item;
                 $this->eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
                 $this->calculator->process($item, $rule);
-            }
-            if ($rule->getStopRulesProcessing()) {
-                if ($exitRules) {
-                    break;
+                $appliedRuleIds = $item->getAppliedRuleIds() ? explode(',', $item->getAppliedRuleIds()) : [];
+                if ($rule->getStopRulesProcessing() && in_array($rule->getId(), $appliedRuleIds)) {
+                    unset($itemsToApplyRules[$key]);
                 }
-                $applyDiscardRule = true;
             }
             $this->calculator->initTotals($items, $address);
         }
