@@ -66,17 +66,7 @@ class FilteredErrorFormatter implements ErrorFormatter
             return self::NO_ERRORS;
         }
 
-        $clearedAnalysisResult = new AnalysisResult(
-            $this->clearIgnoredErrors($analysisResult->getFileSpecificErrors()),
-            $analysisResult->getNotFileSpecificErrors(),
-            $analysisResult->getInternalErrors(),
-            $analysisResult->getWarnings(),
-            $analysisResult->isDefaultLevelUsed(),
-            $analysisResult->getProjectConfigFile(),
-            $analysisResult->isResultCacheSaved()
-        );
-
-        return $this->tableErrorFormatter->formatErrors($clearedAnalysisResult, $output);
+        return $this->tableErrorFormatter->formatErrors($analysisResult, $output);
     }
 
     /**
