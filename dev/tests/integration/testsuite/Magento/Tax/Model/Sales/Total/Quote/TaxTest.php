@@ -252,7 +252,12 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
             if ($key == 'applied_taxes') {
                 $this->verifyAppliedTaxes($quoteAddress->getAppliedTaxes(), $value);
             } else {
-                $this->assertEqualsWithDelta($value, $quoteAddress->getData($key), self::EPSILON, 'Quote address ' . $key . ' is incorrect');
+                $this->assertEqualsWithDelta(
+                    $value,
+                    $quoteAddress->getData($key),
+                    self::EPSILON,
+                    'Quote address ' . $key . ' is incorrect'
+                );
             }
         }
 
