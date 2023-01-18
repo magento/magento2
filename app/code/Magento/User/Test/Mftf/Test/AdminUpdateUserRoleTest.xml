@@ -25,7 +25,7 @@
             <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="goToNewUserPage"/>
             <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillNewUserForm"/>
             <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="saveNewUser"/>
-
+            <!--Create New Role-->
             <actionGroup ref="AdminStartCreateUserRoleActionGroup" stepKey="startCreateUserRole">
                 <argument name="roleName" value="{{roleSales.name}}"/>
                 <argument name="userPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
