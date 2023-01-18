@@ -97,7 +97,7 @@ class Escaper
                     }
                 );
                 $data = $this->prepareUnescapedCharacters($data);
-                $string = mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8');
+                $string = $data; //mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8');
                 try {
                     $domDocument->loadHTML(
                         '<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>'
@@ -114,7 +114,9 @@ class Escaper
                 $this->escapeText($domDocument);
                 $this->escapeAttributeValues($domDocument);
 
-                $result = mb_convert_encoding($domDocument->saveHTML(), 'UTF-8', 'HTML-ENTITIES');
+//                $result = mb_convert_encoding($domDocument->saveHTML(), 'UTF-8', 'HTML-ENTITIES');
+                $result = html_entity_decode($domDocument->saveHTML(), ENT_QUOTES, 'UTF-8');
+
                 preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
                 return !empty($matches) ? $matches[1] : '';
             } else {
