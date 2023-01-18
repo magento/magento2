@@ -435,7 +435,7 @@ class AwsS3Test extends TestCase
             new \League\Flysystem\DirectoryAttributes('path/1/'),
             new \League\Flysystem\DirectoryAttributes('path/2/')
         ];
-        $expectedResult = [self::URL . 'path/1', self::URL . 'path/2'];
+        $expectedResult = [self::URL . 'path/1/', self::URL . 'path/2/'];
         $this->metadataProviderMock->expects(self::any())->method('getMetadata')
             ->willReturnMap([
                 ['path', ['type' => AwsS3::TYPE_DIR]],
