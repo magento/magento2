@@ -21,10 +21,10 @@ use Magento\SalesRule\Api\Data\DiscountDataInterfaceFactory;
 use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
 use Magento\SalesRule\Model\Data\RuleDiscount;
 use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Model\Rule\Condition\Product\Found;
 use Magento\SalesRule\Model\RulesApplier;
 use Magento\SalesRule\Model\Validator;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\SalesRule\Model\Rule\Condition\Product\Found;
 
 /**
  * Discount totals calculation model.
@@ -178,23 +178,25 @@ class Discount extends AbstractTotal
         $this->calculator->initTotals($items, $address);
         $items = $this->calculator->sortItemsByPriority($items, $address);
         $rules = $this->calculator->getRules($address);
+
         $applyDiscardRule = false;
-        $breakDiscardRule = false;
-        $discardRulePresent = false;
+        $exitRules = false;
+        $isDiscardRule = false;
         foreach ($rules as $rule) {
             if ($rule->getStopRulesProcessing()) {
-                $discardRulePresent = true;
+                $isDiscardRule = true;
+                break;
             }
         }
 
         /** @var Rule $rule */
         foreach ($rules as $rule) {
-            if ($discardRulePresent) {
+            if ($isDiscardRule) {
                 if ($rule->getConditions() !== null) {
-                    $classSetInRuleCondition = current($rule->getConditions()->getConditions());
-                    if (!empty($classSetInRuleCondition)) {
-                        if ($classSetInRuleCondition->getType() != Found::class) {
-                            $breakDiscardRule = true;
+                    $ruleCondition = current($rule->getConditions()->getConditions());
+                    if (!empty($ruleCondition)) {
+                        if ($ruleCondition->getType() != Found::class) {
+                            $exitRules = true;
                         }
                     }
                 }
@@ -218,7 +220,7 @@ class Discount extends AbstractTotal
                 $this->calculator->process($item, $rule);
             }
             if ($rule->getStopRulesProcessing()) {
-                if ($breakDiscardRule) {
+                if ($exitRules) {
                     break;
                 }
                 $applyDiscardRule = true;
