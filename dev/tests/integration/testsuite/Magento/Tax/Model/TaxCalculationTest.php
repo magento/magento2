@@ -16,6 +16,11 @@ use Magento\TestFramework\Helper\Bootstrap;
 class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 {
     /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
+    /**
      * Object Manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
@@ -108,7 +113,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
         );
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails, 1);
-        $this->assertEquals($expected, $this->convertObjectToArray($taxDetails));
+        $this->assertEqualsWithDelta($expected, $this->convertObjectToArray($taxDetails), self::EPSILON);
     }
 
     /**
@@ -1286,7 +1291,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
-        $this->assertEquals($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
+        $this->assertEqualsWithDelta($expectedTaxDetails, $this->convertObjectToArray($taxDetails), self::EPSILON);
     }
 
     /**
@@ -2387,7 +2392,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
-        $this->assertEquals($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
+        $this->assertEqualsWithDelta($expectedTaxDetails, $this->convertObjectToArray($taxDetails), self::EPSILON);
     }
 
     /**
@@ -2424,7 +2429,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
-        $this->assertEquals($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
+        $this->assertEqualsWithDelta($expectedTaxDetails, $this->convertObjectToArray($taxDetails), self::EPSILON);
     }
 
     /**
@@ -2471,7 +2476,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
-        $this->assertEquals($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
+        $this->assertEqualsWithDelta($expectedTaxDetails, $this->convertObjectToArray($taxDetails), self::EPSILON);
     }
 
     /**
