@@ -56,7 +56,7 @@ class MultiStoreCurrencyTest extends AbstractCurrencyTest
 
         $this->reloadProductPriceInfo();
         $this->localeResolver->setLocale('uk_UA');
-        $this->assertProductStorePrice('simple2', '240,00 ', 'fixturestore');
+        $this->assertProductStorePrice('simple2', '240,00 ₴', 'fixturestore');
     }
 
     /**
@@ -80,7 +80,7 @@ class MultiStoreCurrencyTest extends AbstractCurrencyTest
 
         $this->reloadProductPriceInfo();
         $this->localeResolver->setLocale('uk_UA');
-        $this->assertProductStorePrice('simple', 'Special Price 143,76  Regular Price 240,00 ', 'fixturestore');
+        $this->assertProductStorePrice('simple', 'Special Price 143,76 ₴ Regular Price 240,00 ₴', 'fixturestore');
     }
 
     /**
@@ -111,7 +111,7 @@ class MultiStoreCurrencyTest extends AbstractCurrencyTest
         $this->localeResolver->setLocale('uk_UA');
         $this->assertProductStorePrice(
             'simple-product-tax-none',
-            'Buy 2 for 960,00  each and save 80%',
+            'Buy 2 for 960,00 ₴ each and save 80%',
             'fixturestore',
             self::TIER_PRICE_BLOCK_NAME
         );
