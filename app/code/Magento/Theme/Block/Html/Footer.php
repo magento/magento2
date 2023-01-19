@@ -93,7 +93,7 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        return $this->replaceCurrentYear(__($this->_copyright));
+        return $this->replaceCurrentYear((string)__($this->_copyright));
     }
 
     /**
