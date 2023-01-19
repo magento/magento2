@@ -61,6 +61,6 @@ class AdapterTest extends TestCase
      */
     public function testUnderscoresTranslation()
     {
-        $this->markTestIncomplete('MAGETWO-1012: i18n Improvements - Localization/Translations');
+        $this->markTestSkipped('MAGETWO-1012: i18n Improvements - Localization/Translations');
     }
 }
