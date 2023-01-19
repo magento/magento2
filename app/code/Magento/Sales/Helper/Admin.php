@@ -197,8 +197,17 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
                     }
                 }
             }
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $result = html_entity_decode($domDocument->saveHTML(), ENT_QUOTES, 'UTF-8');
+
+            $result = mb_decode_numericentity(
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                html_entity_decode(
+                    $domDocument->saveHTML(),
+                    ENT_QUOTES|ENT_SUBSTITUTE,
+                    'UTF-8'
+                ),
+                $convmap,
+                'UTF-8'
+            );
 
             preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
             $data = !empty($matches) ? $matches[1] : '';

@@ -119,7 +119,16 @@ class Escaper
                 $this->escapeText($domDocument);
                 $this->escapeAttributeValues($domDocument);
 
-                $result = html_entity_decode($domDocument->saveHTML(), ENT_QUOTES, 'UTF-8');
+                $result = mb_decode_numericentity(
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    html_entity_decode(
+                        $domDocument->saveHTML(),
+                        ENT_QUOTES|ENT_SUBSTITUTE,
+                        'UTF-8'
+                    ),
+                    $convmap,
+                    'UTF-8'
+                );
 
                 preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
                 return !empty($matches) ? $matches[1] : '';
