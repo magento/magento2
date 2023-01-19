@@ -104,6 +104,5 @@ class ForgotPasswordTest extends TestCase
             $customer->getId(),
             $this->accountManagement->authenticate('customer@example.com', 'new_Password123')->getId()
         );
-
     }
 }
