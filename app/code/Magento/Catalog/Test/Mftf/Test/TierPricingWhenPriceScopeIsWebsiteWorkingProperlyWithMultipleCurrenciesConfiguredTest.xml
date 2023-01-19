@@ -42,11 +42,9 @@
             <selectOption selector="{{CurrencySetupSection.allowCurrencies}}" parameterArray="['Euro', 'US Dollar']" stepKey="selectCurrencies"/>
             <click stepKey="saveConfigs" selector="{{AdminConfigSection.saveButton}}"/>
             <wait time="15" stepKey="waitfordefaultupdate"/>
-            <click selector="{{AdminBannerBasicActionSection.Scope}}" stepKey="clickScopeSelector"/>
-            <waitForElementVisible selector="{{AdminBannerBasicActionSection.ScopeDropdown}}" stepKey="waitForScopeDropdown"/>
-            <click selector="{{AdminBannerBasicActionSection.ScopeOption(NewWebSiteData.name)}}" stepKey="selectScope"/>
-            <waitForElementVisible selector="{{AdminBannerBasicActionSection.ScopeModal}}" stepKey="waitForScopeModal"/>
-            <click selector="{{AdminBannerBasicActionSection.ScopeModalConfirm}}" stepKey="confirmScopeModal"/>
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreView">
+                <argument name="website" value="NewWebSiteData"/>
+            </actionGroup>
             <waitForPageLoad stepKey="waitForPageLoad7"/>
             <actionGroup ref="AdminSetBaseCurrencyActionGroup" stepKey="setBaseCurrencyEUR">
                 <argument name="currency" value="Euro"/>
@@ -58,11 +56,11 @@
             <unselectOption selector="{{CurrencySetupSection.allowCurrencies}}" parameterArray="['US Dollar']" stepKey="deselectUSCurrency"/>
             <click stepKey="saveConfigs1" selector="{{AdminConfigSection.saveButton}}"/>
             <wait time="15" stepKey="waitforNewWebsiteupdate"/>
-            <click selector="{{AdminBannerBasicActionSection.Scope}}" stepKey="clickScopeSelector1"/>
-            <waitForElementVisible selector="{{AdminBannerBasicActionSection.ScopeDropdown}}" stepKey="waitForScopeDropdown1"/>
-            <click selector="{{AdminBannerBasicActionSection.ScopeOption('Default Config')}}" stepKey="selectScope1"/>
-            <waitForElementVisible selector="{{AdminBannerBasicActionSection.ScopeModal}}" stepKey="waitForScopeModal1"/>
-            <click selector="{{AdminBannerBasicActionSection.ScopeModalConfirm}}" stepKey="confirmScopeModal1"/>
+            <click selector="{{AdminMainActionsSection.storeViewDropdown}}" stepKey="clickWebsiteSwitchDropdown"/>
+            <waitForElementVisible selector="{{AdminMainActionsSection.websiteByName('Main Website')}}" stepKey="waitForWebsiteAreVisible"/>
+            <click selector="{{AdminMainActionsSection.allStoreViews}}" stepKey="clickWebsiteByName"/>
+            <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitingForInformationModal"/>
+            <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreSwitch"/>
             <waitForPageLoad stepKey="waitForPageLoad8"/>
 
             <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="gotToCurrencyRatesPage"/>
