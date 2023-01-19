@@ -97,7 +97,12 @@ class Escaper
                     }
                 );
                 $data = $this->prepareUnescapedCharacters($data);
-                $string = $data; //mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8');
+                $convmap = [0x80, 0x10FFFF, 0, 0x1FFFFF];
+                $string = mb_encode_numericentity(
+                    $data,
+                    $convmap,
+                    'UTF-8'
+                );
                 try {
                     $domDocument->loadHTML(
                         '<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>'
@@ -114,7 +119,6 @@ class Escaper
                 $this->escapeText($domDocument);
                 $this->escapeAttributeValues($domDocument);
 
-//                $result = mb_convert_encoding($domDocument->saveHTML(), 'UTF-8', 'HTML-ENTITIES');
                 $result = html_entity_decode($domDocument->saveHTML(), ENT_QUOTES, 'UTF-8');
 
                 preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
@@ -349,6 +353,7 @@ class Escaper
      * @param string $quote
      * @return string|array
      * @deprecated 101.0.0
+     * @see MAGETWO-54971
      */
     public function escapeJsQuote($data, $quote = '\'')
     {
@@ -369,6 +374,7 @@ class Escaper
      * @param string $data
      * @return string
      * @deprecated 101.0.0
+     * @see MAGETWO-54971
      */
     public function escapeXssInUrl($data)
     {
@@ -417,6 +423,7 @@ class Escaper
      * @param bool $addSlashes
      * @return string
      * @deprecated 101.0.0
+     * @see MAGETWO-54971
      */
     public function escapeQuote($data, $addSlashes = false)
     {
@@ -431,6 +438,7 @@ class Escaper
      *
      * @return \Magento\Framework\ZendEscaper
      * @deprecated 101.0.0
+     * @see MAGETWO-54971
      */
     private function getEscaper()
     {
@@ -446,6 +454,7 @@ class Escaper
      *
      * @return \Psr\Log\LoggerInterface
      * @deprecated 101.0.0
+     * @see MAGETWO-54971
      */
     private function getLogger()
     {
