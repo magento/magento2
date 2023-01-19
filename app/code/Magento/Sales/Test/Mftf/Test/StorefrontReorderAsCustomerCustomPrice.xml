@@ -31,7 +31,8 @@
         </before>
         <after>
             <!-- Disable shipping method for customer with default address -->
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}"
+                        stepKey="disableFlatRate"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="LogoutAsAdmin"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -44,21 +45,25 @@
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="CreateNewOrder">
             <argument name="customer" value="Simple_US_Customer"/>
         </actionGroup>
+        <waitForPageLoad stepKey="WaitForCreateOrderPage"/>
 
-        <!--Click on "Add products by SKU" button > Type SKU > And add it to order without qty value-->
+        <!--Click on "Add products by SKU" button > Type SKU > And add it to order with 1 qty value-->
         <click selector="{{AdminOrderFormItemsOrderedSection.addProductsBySku}}" stepKey="clickAddProductsBySKUButton"/>
         <waitForElementVisible stepKey="waitForElementVisible" selector="{{AdminOrderFormItemsSection.skuNumber('0')}}"/>
-        <fillField selector="{{AdminOrderFormItemsSection.skuNumber('0')}}" stepKey="typeCreatedProductGroupSKU" userInput="$$createSimpleProduct.sku$$"/>
+        <fillField selector="{{AdminOrderFormItemsSection.skuNumber('0')}}" stepKey="typeCreatedProductGroupSKU"
+                   userInput="$$createSimpleProduct.sku$$"/>
         <fillField selector="{{AdminOrderFormItemsSection.qty('0')}}" stepKey="setOrderItemQuantity" userInput="1"/>
-        <pressKey selector="{{AdminOrderFormItemsSection.skuNumber('0')}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" stepKey="pressKey"/>
+        <pressKey selector="{{AdminOrderFormItemsSection.skuNumber('0')}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]"
+                  stepKey="pressKey"/>
         <waitForPageLoad stepKey="WaitForProductAdd"/>
-        <waitForLoadingMaskToDisappear stepKey="wait1"/>
+        <waitForLoadingMaskToDisappear stepKey="WaitForProductAddLoading"/>
 
         <!-- Set product custom price -->
         <click selector="{{OrdersGridSection.customPrice($$createSimpleProduct.name$$)}}" stepKey="ClickOnCustomPrice"/>
-        <fillField selector="{{OrdersGridSection.customPriceInput($$createSimpleProduct.name$$)}}" userInput="10.00" stepKey="FillCustomPrice"/>
+        <fillField selector="{{OrdersGridSection.customPriceInput($$createSimpleProduct.name$$)}}" userInput="10.00"
+                   stepKey="FillCustomPrice"/>
         <click selector="{{AdminOrderFormItemsSection.updateItemsAndQuantities}}" stepKey="clickUpdateItemsAndQuantities"/>
-        <waitForPageLoad stepKey="waitForItemsAndQuantitesUpdating"/>
+        <waitForPageLoad stepKey="waitForItemsAndQuantitiesUpdating"/>
 
         <!--Select FlatRate shipping method-->
         <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
