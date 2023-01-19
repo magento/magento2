@@ -9,10 +9,7 @@ namespace Magento\SalesRule\Model\Quote;
 
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
-use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
-use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -227,11 +224,7 @@ class DiscountTest extends TestCase
     }
 
     /**
-     *
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
-     * @magentoDataFixture Magento/Customer/_files/customer_group.php
-     * @throws LocalizedException
+     * @return void
      * @throws NoSuchEntityException
      */
     #[
@@ -365,9 +358,7 @@ class DiscountTest extends TestCase
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$']),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p2.id$']),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p3.id$']),
-        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p4.id$']),
-        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p4.id$'])
     ]
     public function testDiscountOnSimpleProductWithDiscardSubsequentRule(): void
     {
