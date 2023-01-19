@@ -21,15 +21,11 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
     private const EPSILON = 0.0000000001;
 
     /**
-     * Object Manager
-     *
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * Tax calculation service
-     *
      * @var \Magento\Tax\Api\TaxCalculationInterface
      */
     private $taxCalculationService;
