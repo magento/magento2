@@ -7,17 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Model\Quote;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
-use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Model\Address;
-use Magento\Customer\Model\Customer;
-use Magento\Customer\Model\Group;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -27,14 +20,16 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Quote\Model\Quote\Address\Total\Subtotal;
 use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\QuoteRepository;
 use Magento\Quote\Model\Shipping;
 use Magento\Quote\Model\ShippingAssignment;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\Rule\Condition\Combine as CombineCondition;
 use Magento\SalesRule\Model\Rule\Condition\Product as ProductCondition;
 use Magento\SalesRule\Test\Fixture\ProductCondition as ProductConditionFixture;
 use Magento\SalesRule\Test\Fixture\Rule as RuleFixture;
-use Magento\Tax\Model\ClassModel;
 use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
@@ -67,26 +62,6 @@ class DiscountTest extends TestCase
     private $fixtures;
 
     /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
-     * @var AddressRepositoryInterface
-     */
-    private $addressRepository;
-
-    /**
-     * @var ClassModel
-     */
-    private $classModel;
-
-    /**
-     * @var Address
-     */
-    private $customerAddress;
-
-    /**
      * @var Discount
      */
     private $discountCollector;
@@ -95,11 +70,6 @@ class DiscountTest extends TestCase
      * @var Subtotal
      */
     private $subtotalCollector;
-
-    /**
-     * @var Customer
-     */
-    private $customer;
 
     /**
      * @var ShippingAssignment
@@ -112,14 +82,14 @@ class DiscountTest extends TestCase
     private $shipping;
 
     /**
-     * @var Quote
+     * @var QuoteRepository
      */
     private $quote;
 
     /**
-     * @var Quote\Address
+     * @var Total
      */
-    private $quoteShippingAddress;
+    private $total;
 
     /**
      * @inheritDoc
@@ -131,17 +101,12 @@ class DiscountTest extends TestCase
         $this->criteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
         $this->quoteRepository = $this->objectManager->get(CartRepositoryInterface::class);
         $this->fixtures = DataFixtureStorageManager::getStorage();
-        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-        $this->addressRepository = $this->objectManager->get(AddressRepositoryInterface::class);
-        $this->classModel = $this->objectManager->create(ClassModel::class);
-        $this->customerAddress = $this->objectManager->create(Address::class);
         $this->discountCollector = $this->objectManager->create(Discount::class);
         $this->subtotalCollector = $this->objectManager->create(Subtotal::class);
-        $this->customer = $this->objectManager->create(Customer::class);
         $this->shippingAssignment = $this->objectManager->create(ShippingAssignment::class);
         $this->shipping = $this->objectManager->create(Shipping::class);
-        $this->quote = $this->objectManager->create(Quote::class);
-        $this->quoteShippingAddress = $this->objectManager->create(Quote\Address::class);
+        $this->quote = $this->objectManager->get(QuoteRepository::class);
+        $this->total = $this->objectManager->create(Total::class);
     }
 
     /**
@@ -396,129 +361,25 @@ class DiscountTest extends TestCase
             ],
             'rule3'
         ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p2.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p3.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p4.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
     ]
     public function testDiscountOnSimpleProductWithDiscardSubsequentRule(): void
     {
-        $total = $this->quote([
-            [
-                'product'=> $this->fixtures->get('p1'),
-                'qty'=>1
-            ],
-            [
-                'product'=> $this->fixtures->get('p2'),
-                'qty'=>1
-            ],
-            [
-                'product'=> $this->fixtures->get('p3'),
-                'qty'=>1
-            ],
-            [
-                'product'=> $this->fixtures->get('p4'),
-                'qty'=>1
-            ]
-        ]);
-        $this->assertEquals(-32, $total->getDiscountAmount());
-    }
-
-    /**
-     * Create quote and assert totals values
-     *
-     * @param array $quoteItems
-     * @return Total
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
-     */
-    private function quote(array $quoteItems): Total
-    {
-        $customerTaxClassId = $this->getCustomerTaxClassId();
-        $fixtureCustomerId = 1;
-        /** @var Customer $customer */
-        $customer = $this->customer->load($fixtureCustomerId);
-        /** @var Group $customerGroup */
-        $customerGroup = $this->objectManager->create(Group::class)->load('custom_group', 'customer_group_code');
-        $customerGroup->setTaxClassId($customerTaxClassId)->save();
-        $customer->setGroupId($customerGroup->getId())->save();
-        $productTaxClassId = $this->getProductTaxClassId();
-        $quoteShippingAddressDataObject = $this->getShippingAddressDataObject($fixtureCustomerId);
-        $this->quoteShippingAddress->importCustomerAddressData($quoteShippingAddressDataObject);
-        $this->quote->setStoreId(1)->setIsActive(true)->setIsMultiShipping(0)
-            ->assignCustomerWithAddressChange($this->getCustomerById($customer->getId()))
-            ->setShippingAddress($this->quoteShippingAddress)->setBillingAddress($this->quoteShippingAddress)
-            ->setCheckoutMethod($customer->getMode())->setPasswordHash($customer->encryptPassword(
-                $customer->getPassword()
-            ))->setCouponCode('test');
-
-        foreach ($quoteItems as $quoteItem) {
-            $product = $quoteItem['product'] ?? null;
-            if ($product === null) {
-                /** @var Product $product */
-                $product = $this->productRepository->get($quoteItem['sku'] ?? 'simple');
-                $product->setTaxClassId($productTaxClassId)->save();
-            }
-            $this->quote->addProduct($product, $quoteItem['qty']);
-        }
-
-        $address = $this->quote->getShippingAddress();
+        $cartId = (int)$this->fixtures->get('cart')->getId();
+        $quote = $this->quote->get($cartId);
+        $quote->setStoreId(1)->setIsActive(true)->setIsMultiShipping(0)->setCouponCode('test');
+        $address = $quote->getShippingAddress();
         $this->shipping->setAddress($address);
         $this->shippingAssignment->setShipping($this->shipping);
         $this->shippingAssignment->setItems($address->getAllItems());
-        /** @var  Total $total */
-        $total = $this->objectManager->create(Total::class);
-        $this->subtotalCollector->collect($this->quote, $this->shippingAssignment, $total);
-        $this->discountCollector->collect($this->quote, $this->shippingAssignment, $total);
-        return $total;
-    }
-
-    /**
-     * Get customer tax class id
-     *
-     * @return int
-     */
-    protected function getCustomerTaxClassId()
-    {
-        //customerTaxClass
-        $this->classModel->load('CustomerTaxClass2', 'class_name');
-        return $this->classModel->getId();
-    }
-
-    /**
-     * Get product tax class id
-     *
-     * @return int
-     */
-    protected function getProductTaxClassId()
-    {
-        //productTaxClass
-        $this->classModel->load('ProductTaxClass1', 'class_name');
-        return $this->classModel->getId();
-    }
-
-    /**
-     * @param $fixtureCustomerId
-     * @return AddressInterface
-     * @throws LocalizedException
-     */
-    protected function getShippingAddressDataObject($fixtureCustomerId)
-    {
-        $fixtureCustomerAddressId = 1;
-        $this->customerAddress->load($fixtureCustomerId);
-        /** Set data which corresponds tax class fixture */
-        $this->customerAddress->setCountryId('US')->setRegionId(12)->save();
-        return $this->addressRepository->getById($fixtureCustomerAddressId);
-    }
-
-    /**
-     * @param $id
-     * @return CustomerInterface
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
-     */
-    protected function getCustomerById($id)
-    {
-        /**
-         * @var $customerRepository CustomerRepositoryInterface
-         */
-        $customerRepository = $this->objectManager->create(CustomerRepositoryInterface::class);
-        return $customerRepository->getById($id);
+        $this->subtotalCollector->collect($quote, $this->shippingAssignment, $this->total);
+        $this->discountCollector->collect($quote, $this->shippingAssignment, $this->total);
+        $this->assertEquals(-32, $this->total->getDiscountAmount());
     }
 }
