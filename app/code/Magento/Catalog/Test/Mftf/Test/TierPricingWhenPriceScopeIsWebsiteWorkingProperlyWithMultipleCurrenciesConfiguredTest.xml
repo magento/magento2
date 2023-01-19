@@ -38,6 +38,7 @@
                 <argument name="customStore" value="NewStoreViewData"/>
             </actionGroup>
             <amOnPage url="{{ConfigCurrencySetupPage.url}}" stepKey="navigateToConfigCurrencySetupPage1"/>
+            <click selector="{{CurrencySetupSection.currencyOptions}}" stepKey="openCurrencyOptions"/>
             <selectOption selector="{{CurrencySetupSection.baseCurrency}}" userInput="Swedish Krona" stepKey="setBaseCurrencyField"/>
             <selectOption selector="{{CurrencySetupSection.allowCurrencies}}" parameterArray="['Euro', 'US Dollar']" stepKey="selectCurrencies"/>
             <click stepKey="saveConfigs" selector="{{AdminConfigSection.saveButton}}"/>
@@ -133,6 +134,7 @@
     <after>
         <magentoCLI command="config:set {{GlobalCatalogPriceScopeConfigData.path}} {{GlobalCatalogPriceScopeConfigData.value}}" stepKey="setPriceScopeGlobal"/>
         <amOnPage url="{{ConfigCurrencySetupPage.url}}" stepKey="navigateToConfigCurrencySetupPage2"/>
+        <click selector="{{CurrencySetupSection.currencyOptions}}" stepKey="openCurrencyOptions2"/>
         <selectOption selector="{{CurrencySetupSection.baseCurrency}}" userInput="US Dollar" stepKey="setBaseCurrencyFieldUSD"/>
         <unselectOption selector="{{CurrencySetupSection.allowCurrencies}}" parameterArray="['Euro']" stepKey="unselectCurrencies"/>
         <click stepKey="saveConfigs" selector="{{AdminConfigSection.saveButton}}"/>
