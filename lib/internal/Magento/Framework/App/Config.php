@@ -69,7 +69,7 @@ class Config implements ScopeConfigInterface
                 $scopeCode = $scopeCode->getCode();
             }
             if ($scopeCode) {
-                $configPath .= '/' . strtolower($scopeCode);
+                $configPath .= '/' . $scopeCode;
             }
         }
         if ($path) {

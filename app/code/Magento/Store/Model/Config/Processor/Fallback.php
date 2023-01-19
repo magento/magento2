@@ -11,10 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\TableNotFoundException;
 use Magento\Store\App\Config\Type\Scopes;
 use Magento\Store\Model\ResourceModel\Store;
-use Magento\Store\Model\ResourceModel\Store\AllStoresCollectionFactory;
 use Magento\Store\Model\ResourceModel\Website;
-use Magento\Store\Model\ResourceModel\Website\AllWebsitesCollection;
-use Magento\Store\Model\ResourceModel\Website\AllWebsitesCollectionFactory;
 
 /**
  * Fallback through different scopes and merge them
@@ -190,6 +187,19 @@ class Fallback implements PostProcessorInterface
             // database is empty or not setup
             $this->storeData = [];
             $this->websiteData = [];
+        }
+        $this->normalizeStoreData();
+    }
+
+    /**
+     * Sets stores code to lower case
+     *
+     * @return void
+     */
+    private function normalizeStoreData(): void
+    {
+        foreach ($this->storeData as $key => $store) {
+            $this->storeData[$key]['code'] = strtolower($store['code']);
         }
     }
 }
