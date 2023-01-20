@@ -45,7 +45,6 @@
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="CreateNewOrder">
             <argument name="customer" value="Simple_US_Customer"/>
         </actionGroup>
-        <waitForElementVisible stepKey="waitForProductAddVisible" selector="{{AdminOrderFormItemsOrderedSection.addProductsBySku}}"/>
 
         <!-- Add product to order -->
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrder">
