@@ -58,6 +58,11 @@ class ConfigurationTest extends TestCase
     private $serializer;
 
     /**
+     * @var \Magento\Catalog\Helper\Data|MockObject
+     */
+    private $catalogHelper;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -72,6 +77,7 @@ class ConfigurationTest extends TestCase
         $this->serializer = $this->getMockBuilder(Json::class)
             ->onlyMethods(['unserialize'])
             ->getMockForAbstractClass();
+        $this->catalogHelper = $this->createPartialMock(\Magento\Catalog\Helper\Data::class, ['getTaxPrice']);
 
         $this->serializer->expects($this->any())
             ->method('unserialize')
@@ -87,7 +93,8 @@ class ConfigurationTest extends TestCase
                 'pricingHelper' => $this->pricingHelper,
                 'productConfiguration' => $this->productConfiguration,
                 'escaper' => $this->escaper,
-                'serializer' => $this->serializer
+                'serializer' => $this->serializer,
+                'catalogHelper' => $this->catalogHelper
             ]
         );
     }
@@ -149,7 +156,8 @@ class ConfigurationTest extends TestCase
         $price->expects($this->once())->method('getSelectionFinalTotalPrice')
             ->with($product, $selectionProduct, $itemQty, 0, false, true);
 
-        $this->helper->getSelectionFinalPrice($this->item, $selectionProduct);
+        $selectionPrice = $this->helper->getSelectionFinalPrice($this->item, $selectionProduct);
+        $this->catalogHelper->getTaxPrice($selectionProduct, $selectionPrice);
     }
 
     /**
