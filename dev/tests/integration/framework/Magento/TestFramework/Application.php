@@ -373,6 +373,8 @@ class Application
         );
         $objectManager->removeSharedInstance(LoggerInterface::class, true);
         $objectManager->addSharedInstance($logger, LoggerInterface::class, true);
+        $objectManager->removeSharedInstance(TestFramework\ErrorLog\Logger::class, true);
+        $objectManager->addSharedInstance($logger, TestFramework\ErrorLog\Logger::class, true);
         return $logger;
     }
 
