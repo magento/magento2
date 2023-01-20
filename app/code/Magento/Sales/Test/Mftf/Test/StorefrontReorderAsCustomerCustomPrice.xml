@@ -20,6 +20,7 @@
             <!--Enable flat rate shipping-->
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}"
                         stepKey="enableFlatRate"/>
+
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
                 <field key="price">100.00</field>
@@ -28,6 +29,8 @@
 
             <!-- Create Customer Account -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
             <!-- Disable shipping method for customer with default address -->
@@ -38,23 +41,17 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
-        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
-        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
-
-        <!--Create new order-->
+        <!-- Create new order -->
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="CreateNewOrder">
             <argument name="customer" value="Simple_US_Customer"/>
         </actionGroup>
-        <waitForPageLoad stepKey="WaitForCreateOrderPage"/>
+        <waitForElementVisible stepKey="waitForProductAddVisible" selector="{{AdminOrderFormItemsOrderedSection.addProductsBySku}}"/>
 
-        <!--Click on "Add products by SKU" button > Type SKU > And add it to order with 1 qty value-->
-        <click selector="{{AdminOrderFormItemsOrderedSection.addProductsBySku}}" stepKey="clickAddProductsBySKUButton"/>
-        <waitForElementVisible stepKey="waitForElementVisible" selector="{{AdminOrderFormItemsSection.skuNumber('0')}}"/>
-        <fillField selector="{{AdminOrderFormItemsSection.skuNumber('0')}}" stepKey="typeCreatedProductGroupSKU"
-                   userInput="$$createSimpleProduct.sku$$"/>
-        <fillField selector="{{AdminOrderFormItemsSection.qty('0')}}" stepKey="setOrderItemQuantity" userInput="1"/>
-        <pressKey selector="{{AdminOrderFormItemsSection.skuNumber('0')}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]"
-                  stepKey="pressKey"/>
+        <!-- Add product to order -->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
         <waitForPageLoad stepKey="WaitForProductAdd"/>
         <waitForLoadingMaskToDisappear stepKey="WaitForProductAddLoading"/>
 
