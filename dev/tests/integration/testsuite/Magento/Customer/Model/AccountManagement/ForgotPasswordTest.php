@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Customer\Model\AccountManagement;
 
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -39,6 +40,9 @@ class ForgotPasswordTest extends TestCase
     /** @var StoreManagerInterface */
     private $storeManager;
 
+    /** @var CustomerRepositoryInterface */
+    private $customerRepository;
+
     /**
      * @inheritdoc
      */
@@ -50,6 +54,7 @@ class ForgotPasswordTest extends TestCase
         $this->accountManagement = $this->objectManager->get(AccountManagementInterface::class);
         $this->transportBuilder = $this->objectManager->get(TransportBuilderMock::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
     }
 
     /**
@@ -76,6 +81,7 @@ class ForgotPasswordTest extends TestCase
     {
         // Forgot password section
         $email = 'customer@example.com';
+        $customerId = (int)$this->customerRepository->get($email)->getId();
         $result = $this->accountManagement->initiatePasswordReset($email, AccountManagement::EMAIL_RESET);
         $message = $this->transportBuilder->getSentMessage();
         $messageContent = $message->getBody()->getParts()[0]->getRawContent();
@@ -87,22 +93,20 @@ class ForgotPasswordTest extends TestCase
         $this->accountManagement->initiatePasswordReset($email, AccountManagement::EMAIL_RESET, $websiteId);
 
         // login with old credentials
-        $customer = $this->accountManagement->authenticate('customer@example.com', 'password');
-
         $this->assertEquals(
-            $customer->getId(),
-            $this->accountManagement->authenticate('customer@example.com', 'password')->getId()
+            $customerId,
+            $this->accountManagement->authenticate($email, 'password')->getId()
         );
 
         // Change password
-        $this->accountManagement->changePassword('customer@example.com', 'password', 'new_Password123');
+        $this->accountManagement->changePassword($email, 'password', 'new_Password123');
 
         // Login with new credentials
-        $this->accountManagement->authenticate('customer@example.com', 'new_Password123');
+        $this->accountManagement->authenticate($email, 'new_Password123');
 
         $this->assertEquals(
-            $customer->getId(),
-            $this->accountManagement->authenticate('customer@example.com', 'new_Password123')->getId()
+            $customerId,
+            $this->accountManagement->authenticate($email, 'new_Password123')->getId()
         );
     }
 }
