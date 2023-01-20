@@ -8,11 +8,7 @@ namespace Magento\Bundle\Helper\Catalog\Product;
 use Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
-use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Escaper;
-use Magento\Framework\Pricing\Helper\Data;
-use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Helper for fetching properties by product configuration item
@@ -36,8 +32,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
     protected $productConfiguration;
 
     /**
-     * Escaper
-     *
      * @var \Magento\Framework\Escaper
      */
     protected $escaper;
@@ -130,6 +124,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      *
      * @param ItemInterface $item
      * @return array
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     public function getBundleOptions(ItemInterface $item)
     {
@@ -187,6 +182,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
 
         return $options;
     }
+    //phpcs:enable Generic.Metrics.NestingLevel
 
     /**
      * Retrieves product options list
