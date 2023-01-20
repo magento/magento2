@@ -35,7 +35,7 @@ class ConfigOptionsListConstants
     public const CONFIG_PATH_DB = 'db';
     public const CONFIG_PATH_RESOURCE = 'resource';
     public const CONFIG_PATH_CACHE_TYPES = 'cache_types';
-    public const CONFIG_PATH_DOCUMENT_ROOT_IS_PUB = 'directories/document_root_is_pub';
+    public const CONFIG_PATH_DOCUMENT_ROOT_IS_PUB = 'directories/document_root_is_pub'; /** @deprecated */
     public const CONFIG_PATH_DB_LOGGER_OUTPUT = 'db_logger/output';
     public const CONFIG_PATH_DB_LOGGER_LOG_EVERYTHING = 'db_logger/log_everything';
     public const CONFIG_PATH_DB_LOGGER_QUERY_TIME_THRESHOLD = 'db_logger/query_time_threshold';
