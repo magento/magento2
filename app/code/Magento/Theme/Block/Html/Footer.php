@@ -133,12 +133,12 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
     {
         return parent::getCacheLifetime() ?: 3600;
     }
-    
+
     /**
      * Replace YYYY by the current year
      */
     private function replaceCurrentYear(string $text): string
     {
-        return str_replace('YYYY', (new \DateTime())->format('Y'), $text)   
+        return str_replace('{YYYY}', (new \DateTime())->format('Y'), $text);
     }
 }
