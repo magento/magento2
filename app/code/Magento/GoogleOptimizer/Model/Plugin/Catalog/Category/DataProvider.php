@@ -34,6 +34,8 @@ class DataProvider
     }
 
     /**
+     * Updates metadata.
+     *
      * @param \Magento\Catalog\Model\Category\DataProvider $subject
      * @param array $result
      * @return array
