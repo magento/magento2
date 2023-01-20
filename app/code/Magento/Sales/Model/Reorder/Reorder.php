@@ -231,6 +231,7 @@ class Reorder
     {
         /** @var Collection $collection */
         $collection = $this->productCollectionFactory->create();
+        $collection->setFlag('has_stock_status_filter', true);
         $collection->setStore($storeId)
             ->addIdFilter($orderItemProductIds)
             ->addStoreFilter()
