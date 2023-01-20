@@ -8,6 +8,11 @@ namespace Magento\Bundle\Helper\Catalog\Product;
 use Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
+use Magento\Framework\Pricing\Helper\Data;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Helper for fetching properties by product configuration item
@@ -45,24 +50,32 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
     private $serializer;
 
     /**
+     * @var \Magento\Catalog\Helper\Data
+     */
+    private $catalogHelper;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfiguration
      * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param \Magento\Catalog\Helper\Data|null $catalogHelper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Helper\Product\Configuration $productConfiguration,
         \Magento\Framework\Pricing\Helper\Data $pricingHelper,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        \Magento\Catalog\Helper\Data $catalogHelper = null
     ) {
         $this->productConfiguration = $productConfiguration;
         $this->pricingHelper = $pricingHelper;
         $this->escaper = $escaper;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->catalogHelper = $catalogHelper ?? ObjectManager::getInstance()->get(\Magento\Catalog\Helper\Data::class);
         parent::__construct($context);
     }
 
@@ -97,7 +110,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
         /** @var \Magento\Bundle\Model\Product\Price $price */
         $price = $product->getPriceModel();
 
-        return $price->getSelectionFinalTotalPrice(
+        $selectionPrice = $price->getSelectionFinalTotalPrice(
             $product,
             $selectionProduct,
             $item->getQty(),
@@ -105,6 +118,8 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
             false,
             true
         );
+
+        return $this->catalogHelper->getTaxPrice($selectionProduct, $selectionPrice);
     }
 
     /**
