@@ -19,6 +19,7 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use PHPUnit\Framework\TestCase;
+use Magento\TestFramework\ErrorLog\Logger;
 
 /**
  * Checks the sending of order invoice email to the customer.
@@ -53,6 +54,12 @@ class InvoiceSenderTest extends TestCase
     /** @var InvoiceIdentity */
     private $invoiceIdentity;
 
+    /** @var Logger */
+    private $logger;
+
+    /** @var int */
+    private $minErrorDefaultValue;
+
     /**
      * @inheritdoc
      */
@@ -66,6 +73,14 @@ class InvoiceSenderTest extends TestCase
         $this->orderFactory = $this->objectManager->get(OrderInterfaceFactory::class);
         $this->invoiceFactory = $this->objectManager->get(InvoiceInterfaceFactory::class);
         $this->invoiceIdentity = $this->objectManager->get(InvoiceIdentity::class);
+        $this->logger = $this->objectManager->get(Logger::class);
+
+        $reflection = new \ReflectionClass(get_class($this->logger));
+        $reflectionProperty = $reflection->getProperty('minimumErrorLevel');
+        $reflectionProperty->setAccessible(true);
+        $this->minErrorDefaultValue = $reflectionProperty->getValue($this->logger);
+        $reflectionProperty->setValue($this->logger, 400);
+        $this->logger->clearMessages();
     }
 
     /**
@@ -85,6 +100,7 @@ class InvoiceSenderTest extends TestCase
 
         $this->assertEmpty($invoice->getEmailSent());
         $result = $this->invoiceSender->send($invoice, true);
+        $this->assertEmpty($this->logger->getMessages());
 
         $this->assertTrue($result);
         $this->assertNotEmpty($invoice->getEmailSent());
@@ -110,6 +126,7 @@ class InvoiceSenderTest extends TestCase
 
         $this->assertEmpty($invoice->getEmailSent());
         $result = $this->invoiceSender->send($invoice, true);
+        $this->assertEmpty($this->logger->getMessages());
 
         $this->assertEquals(self::NEW_CUSTOMER_EMAIL, $this->invoiceIdentity->getCustomerEmail());
         $this->assertTrue($result);
@@ -130,6 +147,7 @@ class InvoiceSenderTest extends TestCase
 
         $this->assertEmpty($invoice->getEmailSent());
         $result = $this->invoiceSender->send($invoice, true);
+        $this->assertEmpty($this->logger->getMessages());
 
         $this->assertEquals(self::OLD_CUSTOMER_EMAIL, $this->invoiceIdentity->getCustomerEmail());
         $this->assertTrue($result);
@@ -150,6 +168,7 @@ class InvoiceSenderTest extends TestCase
 
         $this->assertEmpty($invoice->getEmailSent());
         $result = $this->invoiceSender->send($invoice, true);
+        $this->assertEmpty($this->logger->getMessages());
 
         $this->assertEquals(self::ORDER_EMAIL, $this->invoiceIdentity->getCustomerEmail());
         $this->assertTrue($result);
@@ -169,6 +188,7 @@ class InvoiceSenderTest extends TestCase
             ->addAttributeToFilter(InvoiceInterface::ORDER_ID, $order->getID())
             ->getFirstItem();
         $result = $this->invoiceSender->send($invoice);
+        $this->assertEmpty($this->logger->getMessages());
         $this->assertFalse($result);
         $invoice = $order->getInvoiceCollection()->clear()->getFirstItem();
         $this->assertEmpty($invoice->getEmailSent());
@@ -196,6 +216,7 @@ class InvoiceSenderTest extends TestCase
         $order->setCustomerEmail('customer@example.com');
         $invoice = $this->createInvoice($order);
         $result = $this->invoiceSender->send($invoice);
+        $this->assertEmpty($this->logger->getMessages());
         $this->assertFalse($result);
         $this->assertTrue($invoice->getSendEmail());
     }
@@ -224,5 +245,15 @@ class InvoiceSenderTest extends TestCase
     private function getOrder(string $incrementId): OrderInterface
     {
         return $this->orderFactory->create()->loadByIncrementId($incrementId);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        $reflectionProperty = new \ReflectionProperty(get_class($this->logger), 'minimumErrorLevel');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->logger, $this->minErrorDefaultValue);
     }
 }
