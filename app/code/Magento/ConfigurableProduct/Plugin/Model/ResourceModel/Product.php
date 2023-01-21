@@ -10,10 +10,10 @@ namespace Magento\ConfigurableProduct\Plugin\Model\ResourceModel;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Catalog\Model\Indexer\Product\Category;
+use Magento\Catalog\Model\Indexer\Product\Category\Action\Rows;
+use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
-use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Api\FilterBuilder;
@@ -21,7 +21,6 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Indexer\ActionInterface;
-use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Indexer\IndexerRegistry;
 
 /**
@@ -55,14 +54,14 @@ class Product
     private $filterBuilder;
 
     /**
-     * @var CacheContext
-     */
-    private $cacheContext;
-
-    /**
      * @var IndexerRegistry
      */
     private $indexerRegistry;
+
+    /**
+     * @var Rows
+     */
+    private $rowsAction;
 
     /**
      * Initialize Product dependencies.
@@ -72,8 +71,8 @@ class Product
      * @param ProductAttributeRepositoryInterface|null $productAttributeRepository
      * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
      * @param FilterBuilder|null $filterBuilder
-     * @param CacheContext|null $cacheContext
      * @param IndexerRegistry|null $indexerRegistry
+     * @param Rows|null $rowsAction
      */
     public function __construct(
         Configurable $configurable,
@@ -81,8 +80,8 @@ class Product
         ProductAttributeRepositoryInterface $productAttributeRepository = null,
         ?SearchCriteriaBuilder $searchCriteriaBuilder = null,
         ?FilterBuilder $filterBuilder = null,
-        ?CacheContext $cacheContext = null,
-        ?IndexerRegistry $indexerRegistry = null
+        ?IndexerRegistry $indexerRegistry = null,
+        ?Rows $rowsAction  = null
     ) {
         $this->configurable = $configurable;
         $this->productIndexer = $productIndexer;
@@ -92,9 +91,10 @@ class Product
             ->get(SearchCriteriaBuilder::class);
         $this->filterBuilder = $filterBuilder ?: ObjectManager::getInstance()
             ->get(FilterBuilder::class);
-        $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
         $this->indexerRegistry = $indexerRegistry ?: ObjectManager::getInstance()
             ->get(IndexerRegistry::class);
+        $this->rowsAction = $rowsAction ?: ObjectManager::getInstance()
+            ->get(Rows::class);
     }
 
     /**
@@ -133,17 +133,10 @@ class Product
         DataObject $object
     ): ProductResource {
         $productId = $object->getId();
-        $parentProductIds = $this->configurable->getParentIdsByChild($productId);
-        if (count($parentProductIds) > 0) {
-            $productCategoryIndexer = $this->indexerRegistry->get(Category::INDEXER_ID);
-            $productCategoryIndexer->reindexRow($productId);
-
-            $this->cacheContext->registerEntities(
-                ProductModel::CACHE_TAG,
-                array_unique(array_merge([$productId], $parentProductIds))
-            );
-            $indexer = $this->indexerRegistry->get(FulltextIndexer::INDEXER_ID);
-            $indexer->reindexRow($productId);
+        $priceIndexer = $this->indexerRegistry->get(Processor::INDEXER_ID);
+        if ($priceIndexer->isScheduled()
+            && count($this->configurable->getParentIdsByChild($productId)) > 0) {
+            $this->rowsAction->execute([$productId]);
         }
 
         return $result;
