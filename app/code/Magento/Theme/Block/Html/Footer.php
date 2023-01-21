@@ -135,7 +135,9 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
     }
 
     /**
-     * Replace YYYY by the current year
+     * Replace YYYY with the current year
+     *
+     * @param string $text
      */
     private function replaceCurrentYear(string $text): string
     {

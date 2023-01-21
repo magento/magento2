@@ -25,6 +25,11 @@ class FooterTest extends TestCase
      */
     protected $block;
 
+    /**
+     * @var Config
+     */
+    private $scopeConfig;
+    
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
