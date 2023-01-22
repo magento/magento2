@@ -25,6 +25,8 @@ use Magento\Framework\Indexer\IndexerRegistry;
 
 /**
  * Plugin product resource model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product
 {
@@ -81,7 +83,7 @@ class Product
         ?SearchCriteriaBuilder $searchCriteriaBuilder = null,
         ?FilterBuilder $filterBuilder = null,
         ?IndexerRegistry $indexerRegistry = null,
-        ?Rows $rowsAction  = null
+        ?Rows $rowsAction = null
     ) {
         $this->configurable = $configurable;
         $this->productIndexer = $productIndexer;
