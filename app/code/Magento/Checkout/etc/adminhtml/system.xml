@@ -16,6 +16,7 @@
                 <field id="enable_guest_checkout_login" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enable Guest Checkout Login</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enabling this setting will allow unauthenticated users to query if an e-mail address is already associated with a customer account. This can be used to enhance the checkout workflow for guests that do not realize they already have an account but comes at the cost of exposing information to unauthenticated users.</comment>
                 </field>
                 <field id="onepage_checkout_enabled" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enable Onepage Checkout</label>
