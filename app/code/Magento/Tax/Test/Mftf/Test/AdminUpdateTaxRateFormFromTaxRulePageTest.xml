@@ -17,7 +17,6 @@
             <useCaseId value="ACP2E-1527"/>
             <severity value="CRITICAL"/>
             <group value="tax"/>
-            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <createData entity="defaultTaxRate" stepKey="initialTaxRate"/>
