@@ -305,8 +305,8 @@ class DataObjectHelper
                         // (2) remove set_ in start of name
                         // (3) add name without is_ prefix
                         preg_replace(
-                            ['/(^|,)(?!set)[^,]*/S','/(.)([A-Z])/S', '/(^|,)set_/iS', '/(^|,)is_([^,]+)/is'],
-                            ['', '$1_$2', '$1', '$1$2,is_$2'],
+                            ['/(^|,)(?!set)[^,]*/S','/(.)([A-Z])/S','/([A-Z])([A-Z])/S', '/(^|,)set_/iS', '/(^|,)is_([^,]+)/is'],
+                            ['', '$1_$2','$1_$2', '$1', '$1$2,is_$2'],
                             implode(',', $dataObjectMethods)
                         )
                     )

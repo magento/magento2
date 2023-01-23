@@ -24,7 +24,9 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -357,6 +359,32 @@ class DataObjectHelperTest extends TestCase
         $this->assertEquals($cc_number_enc, $orderPaymentObject->getCcNumberEnc());
         $this->assertEquals($poNumber, $orderPaymentObject->getPoNumber());
         $this->assertEquals($cc_type, $orderPaymentObject->getCcType());
+    }
+
+    /**
+     * @return void
+     */
+    public function testPopulateWithArrayWithOrderAttributes(): void
+    {
+        $xForwardedFor = '1.2.3.4';
+
+        /** @var OrderInterface $orderObject */
+        $orderObject = $this->objectManager->getObject(
+            Order::class,
+            ['dataObjectHelper' => $this->dataObjectHelper]
+        );
+
+        $data = [
+            OrderInterface::X_FORWARDED_FOR => $xForwardedFor,
+        ];
+
+        $this->dataObjectHelper->populateWithArray(
+            $orderObject,
+            $data,
+            OrderInterface::class
+        );
+
+        $this->assertEquals($xForwardedFor, $orderObject->getXForwardedFor());
     }
 
     /**
