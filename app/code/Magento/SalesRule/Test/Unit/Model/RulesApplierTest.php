@@ -141,6 +141,10 @@ class RulesApplierTest extends TestCase
             ->willReturn(true);
 
         $rule->expects($this->atLeastOnce())
+            ->method('getConditions')
+            ->willReturn(true);
+
+        $rule->expects($this->atLeastOnce())
             ->method('getActions')
             ->willReturn($actionMock);
 
