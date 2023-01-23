@@ -472,6 +472,9 @@
                         <item name="0" xsi:type="string" translate="true">Discount amount is applied to subtotal only</item>
                         <item name="1" xsi:type="string" translate="true">Discount amount is applied to subtotal and shipping amount separately</item>
                     </item>
+                    <item name="noticePerSimpleAction" xsi:type="array">
+                        <item name="cart_fixed" xsi:type="string" translate="true">Discount amount is distributed among subtotal and shipping amount. Cases when multiple discounts applied to shipping amount are not supported. The option is going to be removed in future releases.</item>
+                    </item>
                 </item>
             </argument>
             <settings>
