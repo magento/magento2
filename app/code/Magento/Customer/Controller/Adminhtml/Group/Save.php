@@ -91,7 +91,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
                 ? [] : $this->getRequest()->getParam('customer_group_excluded_websites');
             $resultRedirect = $this->resultRedirectFactory->create();
             try {
-                $customerGroupCode = (string)$this->getRequest()->getParam('code');
+                $customerGroupCode = trim((string)$this->getRequest()->getParam('code'));
 
                 if ($id !== null) {
                     $customerGroup = $this->groupRepository->getById((int)$id);
@@ -99,7 +99,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
                 } else {
                     $customerGroup = $this->groupDataFactory->create();
                 }
-                $customerGroup->setCode(!empty($customerGroupCode) ? trim($customerGroupCode) : null);
+                $customerGroup->setCode(!empty($customerGroupCode) ? $customerGroupCode : null);
                 $customerGroup->setTaxClassId($taxClass);
 
                 if ($websitesToExclude !== null) {
