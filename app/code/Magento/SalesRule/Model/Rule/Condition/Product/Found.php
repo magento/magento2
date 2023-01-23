@@ -72,8 +72,6 @@ class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
                 $isValid = true;
             }
         }
-
-
         return $isValid;
     }
 }

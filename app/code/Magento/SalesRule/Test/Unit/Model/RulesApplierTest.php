@@ -15,6 +15,7 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Rule\Model\Action\Collection;
+use Magento\Rule\Model\Condition\Combine;
 use Magento\SalesRule\Model\Quote\ChildrenValidationLocator;
 use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory;
@@ -120,11 +121,15 @@ class RulesApplierTest extends TestCase
          */
         $rule = $this->getMockBuilder(Rule::class)
             ->addMethods(['getCouponType', 'getRuleId'])
-            ->onlyMethods(['getStoreLabel', 'getActions'])
+            ->onlyMethods(['getStoreLabel', 'getActions', 'getConditions'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $actionMock = $this->getMockBuilder(Collection::class)
+            ->addMethods(['validate'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $conditionMock = $this->getMockBuilder(Combine::class)
             ->addMethods(['validate'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -142,6 +147,9 @@ class RulesApplierTest extends TestCase
 
         $rule->expects($this->atLeastOnce())
             ->method('getConditions')
+            ->willReturn($conditionMock);
+        $conditionMock->method('validate')
+            ->with($item)
             ->willReturn(true);
 
         $rule->expects($this->atLeastOnce())
