@@ -325,7 +325,15 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _updateAttribute($object, $attribute, $valueId, $value)
     {
-        return $this->_saveAttributeValue($object, $attribute, $value);
+        $table = $attribute->getBackend()->getTable();
+        $connection = $this->getConnection();
+        $connection->update(
+            $table,
+            ['value' => $this->_prepareValueForSave($value, $attribute)],
+            sprintf('%s=%d', $connection->quoteIdentifier('value_id'), $valueId)
+        );
+
+        return $this;
     }
 
     /**
