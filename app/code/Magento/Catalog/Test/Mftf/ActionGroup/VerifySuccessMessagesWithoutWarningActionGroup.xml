@@ -8,21 +8,14 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="VerifySuccessMessagesWithoutNotificationActionGroup">
+    <actionGroup name="VerifySuccessMessagesWithoutWarningActionGroup">
         <annotations>
             <description>Verify the success messages without notification post product save and see the product image is deleted.</description>
         </annotations>
 
-        <arguments>
-            <argument name="image" defaultValue="ProductImage"/>
-        </arguments>
         <waitForPageLoad stepKey="waitForProductPageLoad1"/>
         <!--Verify notification and success messages-->
         <see selector="{{StorefrontMessagesSection.success}}" userInput="{{ProductFormMessages.save_success}}" stepKey="seeSuccessMessage"/>
         <dontSee selector="{{StorefrontMessagesSection.noticeMessage}}" userInput="{{ProductFormMessages.remove_image_notice}}" stepKey="seeNotification"/>
-        <!--Reopen image tab and see the image is deleted-->
-        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesTab"/>
-        <waitForPageLoad stepKey="waitForImagesLoad"/>
-        <dontSeeElement selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="seeImageIsNotDeleted"/>
     </actionGroup>
 </actionGroups>

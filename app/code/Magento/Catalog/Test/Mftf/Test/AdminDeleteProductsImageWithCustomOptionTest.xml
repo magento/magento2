@@ -55,7 +55,9 @@
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct5"/>
         <!--Verify the success messages without notification-->
-        <actionGroup ref="VerifySuccessMessagesWithoutNotificationActionGroup" stepKey="verifySuccessMessages">
+        <actionGroup ref="VerifySuccessMessagesWithoutWarningActionGroup" stepKey="verifySuccessMessages"/>
+        <!-- Assert product first image not in admin product form -->
+        <actionGroup ref="AssertProductImageNotInAdminProductPageActionGroup" stepKey="assertProductImageNotInAdminProductPage">
             <argument name="image" value="ProductImage"/>
         </actionGroup>
     </test>
