@@ -10360,7 +10360,7 @@
         },
         {
             "name": "jms/serializer",
-            "version": "3.17.1",
+            "version": "3.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/serializer.git",
