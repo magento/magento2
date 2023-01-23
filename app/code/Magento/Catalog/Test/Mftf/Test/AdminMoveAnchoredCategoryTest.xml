@@ -51,6 +51,7 @@
         </actionGroup>
         <!--Verify that navigation menu categories level is correct-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage1"/>
+        <waitForElementVisible selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryTwo.name$)}}" stepKey="waitForTopCategoryVisible"/>
         <seeElement selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryTwo.name$)}}" stepKey="verifyThatTopCategoryIsSubCategoryTwo"/>
         <moveMouseOver selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryTwo.name$)}}" stepKey="mouseOverSubCategoryTwo"/>
         <waitForAjaxLoad stepKey="waitForAjaxOnMouseOverSubCategoryTwo"/>
