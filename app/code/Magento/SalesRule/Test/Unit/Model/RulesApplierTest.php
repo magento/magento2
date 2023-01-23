@@ -131,6 +131,7 @@ class RulesApplierTest extends TestCase
             ->getMock();
         $conditionMock = $this->getMockBuilder(Combine::class)
             ->addMethods(['validate'])
+            ->onlyMethods(['getConditions'])
             ->disableOriginalConstructor()
             ->getMock();
 
