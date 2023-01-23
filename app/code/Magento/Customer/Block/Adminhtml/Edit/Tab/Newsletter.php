@@ -414,7 +414,7 @@ class Newsletter extends Generic implements TabInterface
      */
     public function getStatusChangedDate()
     {
-        $customer = $this->getCurrentCustomerId();
+        $customer = $this->getCurrentCustomer();
         if ($customer === null) {
             return '';
         }
