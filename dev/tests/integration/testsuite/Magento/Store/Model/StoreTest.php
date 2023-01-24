@@ -460,15 +460,13 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $params['context'] = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Framework\Model\Context::class, ['appState' => $appStateMock]);
 
-        $configMock->expects($this->any())
+        $configMock
             ->method('getValue')
-            ->with($this->stringContains(Store::XML_PATH_STORE_IN_URL))
-            ->willReturn($storeInUrl);
-
-        $configMock->expects($this->any())
-            ->method('getValue')
-            ->with($this->stringContains(StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED))
-            ->willReturn($singleStoreModeEnabled);
+            ->withConsecutive(
+                [$this->stringContains(StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED)],
+                [$this->stringContains(Store::XML_PATH_STORE_IN_URL)]
+            )
+            ->willReturnOnConsecutiveCalls($singleStoreModeEnabled, $storeInUrl);
 
         $params['config'] = $configMock;
         $model = $objectManager->create(\Magento\Store\Model\Store::class, $params);
