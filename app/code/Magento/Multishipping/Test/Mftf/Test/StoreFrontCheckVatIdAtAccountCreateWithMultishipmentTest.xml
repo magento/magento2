@@ -41,8 +41,8 @@
         <waitForElementVisible selector="{{MultishippingSection.shippingMultipleCheckout}}" stepKey="waitMultipleAddressShippingButton"/>
         <click selector="{{MultishippingSection.shippingMultipleCheckout}}" stepKey="clickToMultipleAddressShippingButton"/>
         <!--Create an account-->
-        <waitForElementVisible selector="{{createAnAccountButtonForCustomer.createAnAccount}}" stepKey="waitCreateAnAccountButton"/>
-        <click selector="{{createAnAccountButtonForCustomer.createAnAccount}}" stepKey="clickOnCreateAnAccountButton"/>
+        <waitForElementVisible selector="{{AdminCreateUserSection.createAnAccount}}" stepKey="waitCreateAnAccountButton"/>
+        <click selector="{{AdminCreateUserSection.createAnAccount}}" stepKey="clickOnCreateAnAccountButton"/>
         <waitForPageLoad stepKey="waitForCreateAccountPageToLoad"/>
         <!--Check the VAT Number field-->
         <seeElement selector="{{StorefrontCustomerAddressSection.vatId}}" stepKey="assertVatIdField"/>
