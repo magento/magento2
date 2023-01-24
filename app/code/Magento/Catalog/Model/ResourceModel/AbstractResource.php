@@ -181,9 +181,10 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Catalog\Model\AbstractModel $object
      * @param AbstractAttribute $attribute
      * @param mixed $value
+     * @param int|null $valueId
      * @return $this
      */
-    protected function _saveAttributeValue($object, $attribute, $value)
+    protected function _saveAttributeValue($object, $attribute, $value, $valueId = null)
     {
         $connection = $this->getConnection();
         $hasSingleStore = $this->_storeManager->hasSingleStore();
@@ -213,14 +214,27 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             );
         }
 
-        $data = new \Magento\Framework\DataObject(
-            [
-                'attribute_id' => $attribute->getAttributeId(),
-                'store_id' => $storeId,
-                $entityIdField => $object->getData($entityIdField),
-                'value' => $this->_prepareValueForSave($value, $attribute),
-            ]
-        );
+        if ($valueId > 0) {
+            $data = new \Magento\Framework\DataObject(
+                [
+                    'value_id' => $valueId,
+                    'attribute_id' => $attribute->getAttributeId(),
+                    'store_id' => $storeId,
+                    $entityIdField => $object->getData($entityIdField),
+                    'value' => $this->_prepareValueForSave($value, $attribute),
+                ]
+            );
+        } else {
+            $data = new \Magento\Framework\DataObject(
+                [
+                    'attribute_id' => $attribute->getAttributeId(),
+                    'store_id' => $storeId,
+                    $entityIdField => $object->getData($entityIdField),
+                    'value' => $this->_prepareValueForSave($value, $attribute),
+                ]
+            );
+        }
+
         $bind = $this->_prepareDataForTable($data, $table);
 
         if ($attribute->isScopeStore()) {
@@ -325,15 +339,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _updateAttribute($object, $attribute, $valueId, $value)
     {
-        $table = $attribute->getBackend()->getTable();
-        $connection = $this->getConnection();
-        $connection->update(
-            $table,
-            ['value' => $this->_prepareValueForSave($value, $attribute)],
-            sprintf('%s=%d', $connection->quoteIdentifier('value_id'), $valueId)
-        );
-
-        return $this;
+        return $this->_saveAttributeValue($object, $attribute, $value, $valueId);
     }
 
     /**
