@@ -474,12 +474,18 @@ class TierPriceValidator
             $items = $this->customerGroupRepository->getList($searchCriteria->create())->getItems();
             $item = array_shift($items);
 
-            if (!$item || $item->getCode() !== $code) {
-                $this->customerGroupsByCode[$code] = false;
+            if (!$item) {
                 return false;
             }
 
-            $this->customerGroupsByCode[strtolower($item->getCode())] = $item->getId();
+            $itemCode = $item->getCode();
+            $itemId = $item->getId();
+
+            if ($itemCode !== $code) {
+                return false;
+            }
+
+            $this->customerGroupsByCode[strtolower($itemCode)] = $itemId;
         }
 
         return $this->customerGroupsByCode[$code];
