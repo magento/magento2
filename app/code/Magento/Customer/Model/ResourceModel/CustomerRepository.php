@@ -204,7 +204,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         $prevCustomerData = $prevCustomerDataArr = null;
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
-            $prevCustomerDataArr = $prevCustomerData->__toArray();
+            $prevCustomerDataArr = $this->prepareCustomerData($prevCustomerData->__toArray());
         }
         /** @var $customer \Magento\Customer\Model\Data\Customer */
         $customerArr = $customer->__toArray();
@@ -407,7 +407,7 @@ class CustomerRepository implements CustomerRepositoryInterface
      * Retrieve customers which match a specified criteria.
      *
      * This call returns an array of objects, but detailed information about each object’s attributes might not be
-     * included. See https://devdocs.magento.com/codelinks/attributes.html#CustomerRepositoryInterface to determine
+     * included. See https://developer.adobe.com/commerce/webapi/rest/attributes#CustomerRepositoryInterface to determine
      * which call to use to get detailed information about all attributes for an object.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
@@ -485,6 +485,7 @@ class CustomerRepository implements CustomerRepositoryInterface
      * Helper function that adds a FilterGroup to the collection.
      *
      * @deprecated 101.0.0
+     * @see no alternative
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
@@ -527,5 +528,22 @@ class CustomerRepository implements CustomerRepositoryInterface
         if (!isset($customerArr['group_id']) && $prevCustomerDataArr && isset($prevCustomerDataArr['group_id'])) {
             $customerModel->setGroupId($prevCustomerDataArr['group_id']);
         }
+    }
+
+    /**
+     * Prepare customer data.
+     *
+     * @param array $customerData
+     * @return array
+     */
+    private function prepareCustomerData(array $customerData): array
+    {
+        if (isset($customerData[CustomerInterface::CUSTOM_ATTRIBUTES])) {
+            foreach ($customerData[CustomerInterface::CUSTOM_ATTRIBUTES] as $attribute) {
+                $customerData[$attribute['attribute_code']] = $attribute['value'];
+            }
+            unset($customerData[CustomerInterface::CUSTOM_ATTRIBUTES]);
+        }
+        return $customerData;
     }
 }
