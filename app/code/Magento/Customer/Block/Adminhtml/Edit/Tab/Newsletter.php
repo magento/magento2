@@ -46,8 +46,6 @@ class Newsletter extends Generic implements TabInterface
     protected $customerAccountManagement;
 
     /**
-     * Core registry
-     *
      * @var Registry
      */
     protected $_coreRegistry = null;
