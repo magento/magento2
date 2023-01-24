@@ -181,10 +181,9 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Catalog\Model\AbstractModel $object
      * @param AbstractAttribute $attribute
      * @param mixed $value
-     * @param int|null $valueId
      * @return $this
      */
-    protected function _saveAttributeValue($object, $attribute, $value, $valueId = null)
+    protected function _saveAttributeValue($object, $attribute, $value)
     {
         $connection = $this->getConnection();
         $hasSingleStore = $this->_storeManager->hasSingleStore();
@@ -214,25 +213,28 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             );
         }
 
-        if ($valueId > 0) {
-            $data = new \Magento\Framework\DataObject(
-                [
-                    'value_id' => $valueId,
-                    'attribute_id' => $attribute->getAttributeId(),
-                    'store_id' => $storeId,
-                    $entityIdField => $object->getData($entityIdField),
-                    'value' => $this->_prepareValueForSave($value, $attribute),
-                ]
-            );
-        } else {
-            $data = new \Magento\Framework\DataObject(
-                [
-                    'attribute_id' => $attribute->getAttributeId(),
-                    'store_id' => $storeId,
-                    $entityIdField => $object->getData($entityIdField),
-                    'value' => $this->_prepareValueForSave($value, $attribute),
-                ]
-            );
+        $data = new \Magento\Framework\DataObject(
+            [
+                'attribute_id' => $attribute->getAttributeId(),
+                'store_id' => $storeId,
+                $entityIdField => $object->getData($entityIdField),
+                'value' => $this->_prepareValueForSave($value, $attribute),
+            ]
+        );
+
+        $entity = $attribute->getEntity();
+        $row = $this->getAttributeRow($entity, $object, $attribute);
+        $whereArr = [];
+        foreach ($row as $field => $value) {
+            $whereArr[] = $connection->quoteInto($field . '=?', $value);
+        }
+        $where = implode(' AND ', $whereArr);
+        $select = $connection->select()->from($table, ['value_id', 'value'])->where($where);
+        $origRow = $connection->fetchRow($select);
+        $origValueId = $origRow['value_id'] ?? false;
+
+        if ($origValueId > 0) {
+            $data->setData('value_id', $origValueId);
         }
 
         $bind = $this->_prepareDataForTable($data, $table);
@@ -339,7 +341,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _updateAttribute($object, $attribute, $valueId, $value)
     {
-        return $this->_saveAttributeValue($object, $attribute, $value, $valueId);
+        return $this->_saveAttributeValue($object, $attribute, $value);
     }
 
     /**
