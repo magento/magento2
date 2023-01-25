@@ -8,10 +8,9 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!--Add Customer Tax Class-->
     <actionGroup name="AssertCountryAndRegionValueActionGroup">
         <annotations>
-            <description>Verify country and state value.</description>
+            <description>Verify country and region values.</description>
         </annotations>
         <arguments>
             <argument name="value" type="string"/>

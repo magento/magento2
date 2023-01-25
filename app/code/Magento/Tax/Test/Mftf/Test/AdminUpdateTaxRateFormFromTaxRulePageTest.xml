@@ -10,9 +10,9 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminUpdateTaxRateFormFromTaxRulePageTest">
         <annotations>
-            <stories value="Country and region not updating properly in Tax Rate"/>
-            <title value="Country not updating properly in Tax Rate"/>
-            <description value="Tax Rate Country and region doesn't update when we try it through Tax Rule."/>
+            <stories value="Country and region updating properly in Tax Rate pop-up."/>
+            <title value="Country and region updating properly in Tax Rate."/>
+            <description value="Tax Rate country and region update when changed through Tax Rule."/>
             <testCaseId value="AC-7782"/>
             <useCaseId value="ACP2E-1527"/>
             <severity value="CRITICAL"/>
