@@ -10,7 +10,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminUpdateTaxRulePageActionGroup">
         <annotations>
-            <description>Open tax rule page.Update country and region value of tax rate popup.Verify successfully save message.</description>
+            <description>Open tax rule page to update country and region value of tax rate modal and verify successfully save message.</description>
         </annotations>
         <arguments>
             <argument name="code" type="string"/>
