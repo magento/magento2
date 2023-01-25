@@ -5,6 +5,7 @@
  */
 namespace Magento\Bundle\Helper\Catalog\Product;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -130,7 +131,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      *
      * @param ItemInterface $item
      * @return array
-     * phpcs:disable Generic.Metrics.NestingLevel
      */
     public function getBundleOptions(ItemInterface $item)
     {
@@ -166,29 +166,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
                         $bundleSelections = $bundleOption->getSelections();
 
                         foreach ($bundleSelections as $bundleSelection) {
-                            $qty = $this->getSelectionQty($product, $bundleSelection->getSelectionId()) * 1;
-                            if ($qty) {
-                                $selectionPrice = $this->getSelectionFinalPrice($item, $bundleSelection);
-                                $selectionFinalPrice = $this->catalogHelper->getTaxPrice($item, $selectionPrice);
-
-                                $displayBothPrices = $this->taxHelper->displayBothPrices();
-                                if ($displayBothPrices) {
-                                    $selectionFinalPrice = $this->catalogHelper->getTaxPrice($item, $selectionPrice, true);
-                                    $selectionFinalPriceExclTax = $this->catalogHelper->getTaxPrice($item, $selectionPrice, false);
-                                }
-                                $option['value'][] = $qty . ' x '
-                                    . $this->escaper->escapeHtml($bundleSelection->getName())
-                                    . ' '
-                                    . $this->pricingHelper->currency(
-                                        $selectionFinalPrice
-                                    )
-                                    . ' '
-                                    . ($displayBothPrices ? __('Excl. tax:') . ' '
-                                    . $this->pricingHelper->currency(
-                                        $selectionFinalPriceExclTax
-                                    ) : '');
-                                $option['has_html'] = true;
-                            }
+                            $option = $this->getOptionPriceHtml($item, $bundleSelection, $option);
                         }
 
                         if ($option['value']) {
@@ -201,7 +179,47 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
 
         return $options;
     }
-    //phpcs:enable Generic.Metrics.NestingLevel
+
+    /**
+     * Get bundle options' prices
+     *
+     * @param ItemInterface $item
+     * @param ProductInterface $bundleSelection
+     * @param array $option
+     * @return array
+     */
+    private function getOptionPriceHtml(ItemInterface $item, ProductInterface $bundleSelection, array $option): array
+    {
+        $product = $item->getProduct();
+        $qty = $this->getSelectionQty($item->getProduct(), $bundleSelection->getSelectionId()) * 1;
+        if ($qty) {
+            $selectionPrice = $this->getSelectionFinalPrice($item, $bundleSelection);
+            $selectionFinalPrice = $this->catalogHelper->getTaxPrice($item->getProduct(), $selectionPrice);
+
+            $displayBothPrices = $this->taxHelper->displayBothPrices();
+            if ($displayBothPrices) {
+                $selectionFinalPrice =
+                    $this->catalogHelper
+                        ->getTaxPrice($product, $selectionPrice, true);
+                $selectionFinalPriceExclTax =
+                    $this->catalogHelper
+                        ->getTaxPrice($product, $selectionPrice, false);
+            }
+            $option['value'][] = $qty . ' x '
+                . $this->escaper->escapeHtml($bundleSelection->getName())
+                . ' '
+                . $this->pricingHelper->currency(
+                    $selectionFinalPrice
+                )
+                . ' '
+                . ($displayBothPrices ? __('Excl. tax:') . ' '
+                    . $this->pricingHelper->currency(
+                        $selectionFinalPriceExclTax
+                    ) : '');
+            $option['has_html'] = true;
+        }
+        return $option;
+    }
 
     /**
      * Retrieves product options list

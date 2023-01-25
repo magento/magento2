@@ -163,8 +163,7 @@ class ConfigurationTest extends TestCase
         $price->expects($this->once())->method('getSelectionFinalTotalPrice')
             ->with($product, $selectionProduct, $itemQty, 0, false, true);
 
-        $selectionPrice = $this->helper->getSelectionFinalPrice($this->item, $selectionProduct);
-        $this->catalogHelper->getTaxPrice($selectionProduct, $selectionPrice);
+        $this->helper->getSelectionFinalPrice($this->item, $selectionProduct);
     }
 
     /**
@@ -278,7 +277,7 @@ class ConfigurationTest extends TestCase
             ->willReturn('name');
         $this->catalogHelper->expects($this->any())
             ->method('getTaxPrice')
-            ->with($itemOption, 15)
+            ->with($product, 15)
             ->willReturn(15);
         $this->taxHelper->expects($this->any())
             ->method('displayBothPrices')
