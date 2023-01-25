@@ -175,6 +175,22 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     }
 
     /**
+     * Get option id.
+     *
+     * @param string $value
+     * @return null|string
+     */
+    public function getOptionId($value)
+    {
+        foreach ($this->getAllOptions() as $option) {
+            if ($this->mbStrcasecmp($option['label'], $value) == 0 || (int)$option['value'] === $value) {
+                return $option['value'];
+            }
+        }
+        return null;
+    }
+
+    /**
      * Add Value Sort To Collection Select
      *
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
