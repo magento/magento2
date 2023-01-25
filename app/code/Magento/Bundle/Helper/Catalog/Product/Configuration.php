@@ -49,12 +49,18 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
     private $catalogHelper;
 
     /**
+     * @var \Magento\Tax\Helper\Data|mixed
+     */
+    private $taxHelper;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfiguration
      * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param \Magento\Catalog\Helper\Data|null $catalogHelper
+     * @param \Magento\Tax\Helper\Data|null $taxHelper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -62,7 +68,8 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
         \Magento\Framework\Pricing\Helper\Data $pricingHelper,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        \Magento\Catalog\Helper\Data $catalogHelper = null
+        \Magento\Catalog\Helper\Data $catalogHelper = null,
+        \Magento\Tax\Helper\Data $taxHelper = null
     ) {
         $this->productConfiguration = $productConfiguration;
         $this->pricingHelper = $pricingHelper;
@@ -70,6 +77,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->catalogHelper = $catalogHelper ?? ObjectManager::getInstance()->get(\Magento\Catalog\Helper\Data::class);
+        $this->taxHelper = $taxHelper ?? ObjectManager::getInstance()->get(\Magento\Tax\Helper\Data::class);
         parent::__construct($context);
     }
 
@@ -104,7 +112,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
         /** @var \Magento\Bundle\Model\Product\Price $price */
         $price = $product->getPriceModel();
 
-        $selectionPrice = $price->getSelectionFinalTotalPrice(
+        return $price->getSelectionFinalTotalPrice(
             $product,
             $selectionProduct,
             $item->getQty(),
@@ -112,8 +120,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
             false,
             true
         );
-
-        return $this->catalogHelper->getTaxPrice($selectionProduct, $selectionPrice);
     }
 
     /**
@@ -162,12 +168,25 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
                         foreach ($bundleSelections as $bundleSelection) {
                             $qty = $this->getSelectionQty($product, $bundleSelection->getSelectionId()) * 1;
                             if ($qty) {
+                                $selectionPrice = $this->getSelectionFinalPrice($item, $bundleSelection);
+                                $selectionFinalPrice = $this->catalogHelper->getTaxPrice($item, $selectionPrice);
+
+                                $displayBothPrices = $this->taxHelper->displayBothPrices();
+                                if ($displayBothPrices) {
+                                    $selectionFinalPrice = $this->catalogHelper->getTaxPrice($item, $selectionPrice, true);
+                                    $selectionFinalPriceExclTax = $this->catalogHelper->getTaxPrice($item, $selectionPrice, false);
+                                }
                                 $option['value'][] = $qty . ' x '
                                     . $this->escaper->escapeHtml($bundleSelection->getName())
                                     . ' '
                                     . $this->pricingHelper->currency(
-                                        $this->getSelectionFinalPrice($item, $bundleSelection)
-                                    );
+                                        $selectionFinalPrice
+                                    )
+                                    . ' '
+                                    . ($displayBothPrices ? __('Excl. tax:') . ' '
+                                    . $this->pricingHelper->currency(
+                                        $selectionFinalPriceExclTax
+                                    ) : '');
                                 $option['has_html'] = true;
                             }
                         }

@@ -63,6 +63,11 @@ class ConfigurationTest extends TestCase
     private $catalogHelper;
 
     /**
+     * @var \Magento\Tax\Helper\Data|MockObject
+     */
+    private $taxHelper;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -78,6 +83,7 @@ class ConfigurationTest extends TestCase
             ->onlyMethods(['unserialize'])
             ->getMockForAbstractClass();
         $this->catalogHelper = $this->createPartialMock(\Magento\Catalog\Helper\Data::class, ['getTaxPrice']);
+        $this->taxHelper = $this->createPartialMock(\Magento\Tax\Helper\Data::class, ['displayBothPrices']);
 
         $this->serializer->expects($this->any())
             ->method('unserialize')
@@ -94,7 +100,8 @@ class ConfigurationTest extends TestCase
                 'productConfiguration' => $this->productConfiguration,
                 'escaper' => $this->escaper,
                 'serializer' => $this->serializer,
-                'catalogHelper' => $this->catalogHelper
+                'catalogHelper' => $this->catalogHelper,
+                'taxHelper' => $this->taxHelper
             ]
         );
     }
@@ -271,7 +278,11 @@ class ConfigurationTest extends TestCase
             ->willReturn('name');
         $this->catalogHelper->expects($this->any())
             ->method('getTaxPrice')
+            ->with($itemOption, 15)
             ->willReturn(15);
+        $this->taxHelper->expects($this->any())
+            ->method('displayBothPrices')
+            ->willReturn(false);
         $this->pricingHelper->expects($this->once())->method('currency')->with(15)
             ->willReturn('<span class="price">$15.00</span>');
         $priceModel->expects($this->once())->method('getSelectionFinalTotalPrice')->willReturn(15);
