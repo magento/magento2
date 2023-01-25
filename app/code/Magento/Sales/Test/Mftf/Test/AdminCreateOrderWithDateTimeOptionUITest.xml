@@ -26,7 +26,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <updateData createDataKey="createProduct" entity="productWithDateTimeOption" stepKey="updateProductWithOption"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -43,9 +43,12 @@
         <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearch"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
         <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectProduct"/>
-        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <waitForPageLoad stepKey="waitForAjaxLoad"/>
         <executeJS function="{{AdminProductCustomizableOptionsSection.requiredFieldIndicator}}" stepKey="dateTimeRequiredFieldIndicator"/>
-        <assertEquals expected='"*"' expectedType="string" actualType="variable" actual="dateTimeRequiredFieldIndicator" message="pass" stepKey="assertRequiredFieldIndicator"/>
+        <assertEquals message="pass" stepKey="assertRequiredFieldIndicator">
+			<actualResult type="variable">dateTimeRequiredFieldIndicator</actualResult>
+			<expectedResult type="string">"*"</expectedResult>
+        </assertEquals>
     </test>
 </tests>
 

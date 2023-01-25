@@ -25,7 +25,7 @@ class PageTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->page = Bootstrap::getObjectManager()->get(Page::class);
     }

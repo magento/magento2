@@ -124,3 +124,7 @@ Summary,Summary
 "Message is added to queue, wait to get your file soon. Make sure your cron job is running to export the file","Message is added to queue, wait to get your file soon. Make sure your cron job is running to export the file"
 "Invalid data","Invalid data"
 "Invalid response","Invalid response"
+"File %1 deleted","File %1 deleted"
+"Please provide valid export file name","Please provide valid export file name"
+"%1 is not a valid file","%1 is not a valid file"
+"Content of uploaded file was changed, please re-upload the file","Content of uploaded file was changed, please re-upload the file"

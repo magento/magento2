@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Declaration\Schema\Db;
 
 /**
  * This class is responsible for read different schema structural elements: indexes, constraints,
  * table names and columns.
+ *
+ * @api
  */
 interface DbSchemaWriterInterface
 {
@@ -30,9 +33,9 @@ interface DbSchemaWriterInterface
     /**
      * Create table from SQL fragments, like columns, constraints, foreign keys, indexes, etc.
      *
-     * @param $tableName
-     * @param $resource
-     * @param  array $definition
+     * @param string $tableName
+     * @param string $resource
+     * @param array $definition
      * @param array $options
      * @return Statement
      */
@@ -62,7 +65,7 @@ interface DbSchemaWriterInterface
     public function addElement($elementName, $resource, $tableName, $elementDefinition, $elementType);
 
     /**
-     * Return statements which reset auto_increment to 1.
+     * Return statements which reset auto_increment to the current maximum AUTO_INCREMENT column value plus one.
      *
      * @param string $tableName
      * @param string $resource
@@ -78,7 +81,7 @@ interface DbSchemaWriterInterface
      * @param string $columnName
      * @param string $resource
      * @param string $tableName
-     * @param  string $columnDefinition
+     * @param string $columnDefinition
      * @return Statement
      */
     public function modifyColumn($columnName, $resource, $tableName, $columnDefinition);

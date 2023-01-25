@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductAttributeSection">
+        <element name="attributeSectionHeader" type="button" selector="//div[@data-index='attributes']" timeout="30"/>
+        <element name="textAttributeByCode" type="text" selector="//input[@name='product[{{arg}}]']" parameterized="true"/>
+        <element name="textAttributeByName" type="text" selector="//div[@data-index='attributes']//fieldset[contains(@class, 'admin__field') and .//*[contains(.,'{{var}}')]]//input" parameterized="true"/>
+        <element name="dropDownAttribute" type="select" selector="//select[@name='product[{{arg}}]']" parameterized="true" timeout="30"/>
+        <element name="attributeSection" type="block" selector="//div[@data-index='attributes']/div[contains(@class, 'admin__collapsible-content _show')]" timeout="30"/>
+        <element name="customAttribute" type="text" selector="product[{{attributecode}}]" timeout="30" parameterized="true"/>
+        <element name="attributeGroupByName" type="button" selector="//div[@class='fieldset-wrapper-title']//span[text()='{{group}}']" parameterized="true"/>
+        <element name="attributeByGroupAndName" type="text" selector="//div[@class='fieldset-wrapper-title']//span[text()='{{group}}']/../../following-sibling::div//span[contains(text(),'attribute')]" parameterized="true"/>
+    </section>
+</sections>

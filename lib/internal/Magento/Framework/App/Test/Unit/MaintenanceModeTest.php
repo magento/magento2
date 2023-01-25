@@ -3,19 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Event\Manager;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Filesystem;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * MaintenanceMode Test
- */
 class MaintenanceModeTest extends TestCase
 {
     /**
@@ -24,19 +23,19 @@ class MaintenanceModeTest extends TestCase
     protected $model;
 
     /**
-     * @var WriteInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var WriteInterface|MockObject
      */
     protected $flagDir;
 
     /**
-     * @var Manager|\PHPUnit\Framework\MockObject\MockObject
+     * @var Manager|MockObject
      */
     private $eventManager;
 
     /**
      * @inheritdoc
      */
-    protected function setup()
+    protected function setup(): void
     {
         $this->flagDir = $this->getMockForAbstractClass(WriteInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
@@ -96,6 +95,10 @@ class MaintenanceModeTest extends TestCase
         $this->flagDir->expects($this->exactly(2))
             ->method('isExist')
             ->willReturnMap($mapisExist);
+        $this->flagDir->expects($this->once())
+            ->method('readFile')
+            ->with(MaintenanceMode::IP_FILENAME)
+            ->willReturn('');
         $this->assertFalse($this->model->isOn());
     }
 

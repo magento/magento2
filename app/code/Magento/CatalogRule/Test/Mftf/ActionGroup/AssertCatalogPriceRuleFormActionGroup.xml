@@ -14,7 +14,6 @@
         </annotations>
         <arguments>
             <argument name="catalogRule" defaultValue="inactiveCatalogRule" />
-            <argument name="status"  type="string" defaultValue=""/>
             <argument name="websites" type="string"/>
             <argument name="customerGroup" type="string"/>
         </arguments>

@@ -14,7 +14,7 @@ class VirtualTypeMapperTest extends \PHPUnit\Framework\TestCase
      */
     private $mapper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $managerHelper = new ObjectManager($this);
         $this->mapper = $managerHelper->getObject(VirtualTypeMapper::class, [

@@ -31,6 +31,7 @@ Subtotal,Subtotal
 "Cart %1 does not contain item %2","Cart %1 does not contain item %2"
 "Could not save quote","Could not save quote"
 "Cart %1 doesn't contain item  %2","Cart %1 doesn't contain item  %2"
+"The cart doesn't contain the item","The cart doesn't contain the item"
 "Could not remove item from quote","Could not remove item from quote"
 "The qty value is required to update quote item.","The qty value is required to update quote item."
 "Minimum order amount is %1","Minimum order amount is %1"
@@ -67,3 +68,4 @@ Carts,Carts
 "Invalid state change requested","Invalid state change requested"
 "Validated Country Code","Validated Country Code"
 "Validated Vat Number","Validated Vat Number"
+"Invalid Quote Item id %1","Invalid Quote Item id %1"

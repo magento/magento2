@@ -28,7 +28,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->orderConfig = $this->objectManager->create(Config::class);
@@ -49,5 +49,29 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $completeState = $allStates[$completeStatus->getStatus()];
 
         $this->assertEquals($completeStatus->getLabel(), $completeState->getText());
+    }
+
+    /**
+     * Test Mask Status For Area
+     *
+     * @param string $code
+     * @param string $expected
+     * @dataProvider dataProviderForTestMaskStatusForArea
+     */
+    public function testMaskStatusForArea(string $code, string $expected)
+    {
+        $result = $this->orderConfig->getStatusFrontendLabel($code);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderForTestMaskStatusForArea()
+    {
+        return [
+            ['fraud', 'Suspected Fraud'],
+            ['processing', 'Processing'],
+        ];
     }
 }

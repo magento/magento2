@@ -3,63 +3,75 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Contact\Test\Unit\Block;
 
 use Magento\Contact\Block\ContactForm;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ContactFormTest extends \PHPUnit\Framework\TestCase
+/**
+ * @covers \Magento\Contact\Block\ContactForm
+ */
+class ContactFormTest extends TestCase
 {
     /**
-     * @var \Magento\Contact\Block\ContactForm
+     * @var ContactForm
      */
-    protected $contactForm;
+    private $contactForm;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
-    protected $contextMock;
+    private $contextMock;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
-    protected $urlBuilderMock;
+    private $urlBuilderMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUrlBuilder'])
             ->getMock();
 
-        $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->contextMock->expects($this->any())
             ->method('getUrlBuilder')
             ->willReturn($this->urlBuilderMock);
 
-        $this->contactForm = new ContactForm(
-            $this->contextMock
+        $this->contactForm = (new ObjectManagerHelper($this))->getObject(
+            ContactForm::class,
+            [
+                'context' => $this->contextMock
+            ]
         );
     }
 
     /**
-     * @return void
+     * Test isScopePrivate()
      */
-    public function testScope()
+    public function testScope(): void
     {
         $this->assertTrue($this->contactForm->isScopePrivate());
     }
 
     /**
-     * @return void
+     * Test get form action
      */
-    public function testGetFormAction()
+    public function testGetFormAction(): void
     {
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')

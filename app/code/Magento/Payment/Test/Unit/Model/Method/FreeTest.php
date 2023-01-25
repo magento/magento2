@@ -3,43 +3,68 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Payment\Test\Unit\Model\Method;
+
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Registry;
+use Magento\Payment\Helper\Data;
+use Magento\Payment\Model\Method\Free;
+use Magento\Payment\Model\Method\Logger;
+use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FreeTest extends \PHPUnit\Framework\TestCase
+class FreeTest extends TestCase
 {
-    /** @var \Magento\Payment\Model\Method\Free */
+    /**
+     * @var Free
+     */
     protected $methodFree;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var MockObject
+     */
     protected $scopeConfig;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var MockObject
+     */
     protected $currencyPrice;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $paymentData  = $this->createMock(\Magento\Payment\Helper\Data::class);
-        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->currencyPrice = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
+        $paymentData  = $this->createMock(Data::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->currencyPrice = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->getMock();
 
-        $context = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
-        $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $context = $this->createPartialMock(Context::class, ['getEventDispatcher']);
+        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $context->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
 
-        $registry = $this->createMock(\Magento\Framework\Registry::class);
-        $extensionAttributesFactory = $this->createMock(\Magento\Framework\Api\ExtensionAttributesFactory::class);
-        $customAttributeFactory = $this->createMock(\Magento\Framework\Api\AttributeValueFactory::class);
+        $registry = $this->createMock(Registry::class);
+        $extensionAttributesFactory = $this->createMock(ExtensionAttributesFactory::class);
+        $customAttributeFactory = $this->createMock(AttributeValueFactory::class);
 
-        $loggerMock = $this->getMockBuilder(\Magento\Payment\Model\Method\Logger::class)
-            ->setConstructorArgs([$this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class)])
+        $loggerMock = $this->getMockBuilder(Logger::class)
+            ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
             ->getMock();
 
-        $this->methodFree = new \Magento\Payment\Model\Method\Free(
+        $this->methodFree = new Free(
             $context,
             $registry,
             $extensionAttributesFactory,
@@ -55,18 +80,17 @@ class FreeTest extends \PHPUnit\Framework\TestCase
      * @param string $orderStatus
      * @param string $paymentAction
      * @param mixed $result
+     *
+     * @return void
      * @dataProvider getConfigPaymentActionProvider
      */
-    public function testGetConfigPaymentAction($orderStatus, $paymentAction, $result)
+    public function testGetConfigPaymentAction($orderStatus, $paymentAction, $result): void
     {
-        $this->scopeConfig->expects($this->at(0))
-            ->method('getValue')
-            ->will($this->returnValue($orderStatus));
 
         if ($orderStatus != 'pending') {
-            $this->scopeConfig->expects($this->at(1))
+            $this->scopeConfig
                 ->method('getValue')
-                ->will($this->returnValue($paymentAction));
+                ->willReturnOnConsecutiveCalls($orderStatus, $paymentAction);
         }
         $this->assertEquals($result, $this->methodFree->getConfigPaymentAction());
     }
@@ -76,17 +100,23 @@ class FreeTest extends \PHPUnit\Framework\TestCase
      * @param bool $isActive
      * @param bool $notEmptyQuote
      * @param bool $result
+     *
+     * @return void
      * @dataProvider getIsAvailableProvider
      */
-    public function testIsAvailable($grandTotal, $isActive, $notEmptyQuote, $result)
-    {
+    public function testIsAvailable(
+        float $grandTotal,
+        bool $isActive,
+        bool $notEmptyQuote,
+        bool $result
+    ): void {
         $quote = null;
         if ($notEmptyQuote) {
-            $quote = $this->createMock(\Magento\Quote\Model\Quote::class);
+            $quote = $this->createMock(Quote::class);
             $quote->expects($this->any())
                 ->method('__call')
-                ->with($this->equalTo('getGrandTotal'))
-                ->will($this->returnValue($grandTotal));
+                ->with('getGrandTotal')
+                ->willReturn($grandTotal);
         }
 
         $this->currencyPrice->expects($this->any())
@@ -95,7 +125,7 @@ class FreeTest extends \PHPUnit\Framework\TestCase
 
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($isActive));
+            ->willReturn($isActive);
 
         $this->assertEquals($result, $this->methodFree->isAvailable($quote));
     }
@@ -103,7 +133,7 @@ class FreeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getIsAvailableProvider()
+    public function getIsAvailableProvider(): array
     {
         return [
             [0, true, true, true],
@@ -117,7 +147,7 @@ class FreeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getConfigPaymentActionProvider()
+    public function getConfigPaymentActionProvider(): array
     {
         return [
             ['pending', 'action', null],

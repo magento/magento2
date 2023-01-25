@@ -111,6 +111,6 @@ class CreateViewsBackup
     public function getDropViewSql(string $viewName): string
     {
         $quotedViewName = $this->getConnection()->quoteIdentifier($viewName);
-        return sprintf('DROP VIEW IF EXISTS %s;\n', $quotedViewName);
+        return sprintf("DROP VIEW IF EXISTS %s;\n", $quotedViewName);
     }
 }

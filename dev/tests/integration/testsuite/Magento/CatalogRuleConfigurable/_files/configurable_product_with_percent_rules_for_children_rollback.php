@@ -9,8 +9,11 @@ use Magento\CatalogRule\Api\CatalogRuleRepositoryInterface;
 use Magento\CatalogRule\Model\Indexer\IndexBuilder;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/configurable_product_with_percent_rule_rollback.php';
+Resolver::getInstance()->requireDataFixture(
+    'Magento/CatalogRuleConfigurable/_files/configurable_product_with_percent_rule_rollback.php'
+);
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var CatalogRuleRepositoryInterface $ruleRepository */

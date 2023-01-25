@@ -19,4 +19,11 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Modifier\PriceAttributes">
+        <arguments>
+            <argument name="priceAttributeList" xsi:type="array">
+                <item name="msrp" xsi:type="string">msrp</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

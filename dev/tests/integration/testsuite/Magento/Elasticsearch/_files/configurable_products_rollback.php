@@ -5,6 +5,7 @@
  */
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $objectManager = Bootstrap::getObjectManager();
 
@@ -24,10 +25,9 @@ foreach (['simple_10', 'simple_20', 'configurable'] as $sku) {
     } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
     }
 }
-
-require __DIR__ . '/configurable_attribute_rollback.php';
-require __DIR__ . '/select_attribute_rollback.php';
-require __DIR__ . '/multiselect_attribute_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Elasticsearch/_files/configurable_attribute_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Elasticsearch/_files/select_attribute_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Elasticsearch/_files/multiselect_attribute_rollback.php');
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

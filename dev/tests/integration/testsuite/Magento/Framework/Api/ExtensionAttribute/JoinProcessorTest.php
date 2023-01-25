@@ -26,27 +26,27 @@ class JoinProcessorTest extends \PHPUnit\Framework\TestCase
     private $joinProcessor;
 
     /**
-     * @var Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $config;
 
     /**
-     * @var JoinDataInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var JoinDataInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionAttributeJoinDataFactory;
 
     /**
-     * @var TypeProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var TypeProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $typeProcessor;
 
     /**
-     * @var AppResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var AppResource|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appResource;
 
     /**
-     * @var ExtensionAttributesFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ExtensionAttributesFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionAttributesFactory;
 
@@ -55,7 +55,7 @@ class JoinProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $joinProcessorHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttribute\Config::class)
             ->disableOriginalConstructor()
@@ -102,7 +102,7 @@ class JoinProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $this->config->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($this->getConfig()));
+            ->willReturn($this->getConfig());
 
         $collection = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
@@ -252,7 +252,7 @@ SELECT `e`.*,
 EXPECTED_SQL;
         $resultSql = $collection->getSelectSql(true);
         $formattedResultSql = str_replace(',', ",\n    ", $resultSql);
-        $this->assertContains($expectedSql, $formattedResultSql);
+        $this->assertStringContainsString($expectedSql, $formattedResultSql);
     }
 
     /**

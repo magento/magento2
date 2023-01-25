@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config" type="configType">
+    </xs:element>
+
+    <xs:complexType name="configType">
+        <xs:sequence>
+            <xs:element type="searchType" name="search" maxOccurs="unbounded" minOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="searchType">
+        <xs:annotation>
+            <xs:documentation>
+                Search used for find assets in content
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element type="patternsType" name="patterns" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="patternsType">
+        <xs:annotation>
+            <xs:documentation>
+                List of RegExp patterns that used for find assets
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element type="patternType" name="pattern" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="patternType">
+        <xs:simpleContent>
+            <xs:annotation>
+                <xs:documentation>
+                    RegExp pattern that used for find assets
+                </xs:documentation>
+            </xs:annotation>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="name" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+</xs:schema>

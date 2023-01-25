@@ -1,38 +1,49 @@
 parameters:
-	checkExplicitMixedMissingReturn: true
-	checkPhpDocMissingReturn: true
-	reportUnmatchedIgnoredErrors: false
-	excludes_analyse:
-		- %rootDir%/../../../lib/internal/Magento/Framework/ObjectManager/Test/Unit/*
-		- %rootDir%/../../../*/_files/*
-		- %rootDir%/../../../dev/tests/functional/*
-		- %rootDir%/../../../dev/tests/*/Fixtures/*
-		- %rootDir%/../../../dev/tests/*/tmp/*
-		- %rootDir%/../../../dev/tests/*/_generated/*
-		- %rootDir%/../../../pub/*
-	autoload_directories:
-		- %rootDir%/../../../dev/tests/static/framework/tests/unit/testsuite/Magento
-		- %rootDir%/../../../dev/tests/integration/framework/tests/unit/testsuite/Magento
-		- %rootDir%/../../../dev/tests/api-functional/_files/Magento
-	autoload_files:
-			- %rootDir%/../../../dev/tests/static/framework/autoload.php
-			- %rootDir%/../../../dev/tests/integration/framework/autoload.php
-			- %rootDir%/../../../dev/tests/api-functional/framework/autoload.php
-			- %rootDir%/../../../dev/tests/setup-integration/framework/autoload.php
-			- %rootDir%/../../../dev/tests/static/framework/Magento/PhpStan/autoload.php
-	ignoreErrors:
-	    # Ignore PHPStan\Rules\Classes\UnusedConstructorParametersRule
-		- '#Constructor of class [a-zA-Z0-9\\_]+ has an unused parameter#'
-		# Ignore setCustomErrorHandler function not found in bootstrap files
-		- '#Function setCustomErrorHandler not found#'
-		# Ignore 'return statement is missing' error when 'void' is present in return type list
-		- '#Method (?:.*?) should return (?:.*?)void(?:.*?) but return statement is missing.#'
+    checkExplicitMixedMissingReturn: true
+    checkPhpDocMissingReturn: true
+    reportUnmatchedIgnoredErrors: false
+    excludePaths:
+        - %rootDir%/../../../lib/internal/Magento/Framework/ObjectManager/Test/Unit/*
+        - %rootDir%/../../../*/_files/*
+        - %rootDir%/../../../dev/tests/*/Fixtures/*
+        - %rootDir%/../../../dev/tests/*/tmp/*
+        - %rootDir%/../../../dev/tests/*/_generated/*
+        - %rootDir%/../../../pub/*
+    scanDirectories:
+        - %rootDir%/../../../dev/tests/static/framework/tests/unit/testsuite/Magento
+        - %rootDir%/../../../dev/tests/integration/framework/tests/unit/testsuite/Magento
+        - %rootDir%/../../../dev/tests/api-functional/_files/Magento
+    bootstrapFiles:
+            - %rootDir%/../../../dev/tests/static/framework/autoload.php
+            - %rootDir%/../../../dev/tests/integration/framework/autoload.php
+            - %rootDir%/../../../dev/tests/api-functional/framework/autoload.php
+            - %rootDir%/../../../dev/tests/setup-integration/framework/autoload.php
+            - %rootDir%/../../../dev/tests/static/framework/Magento/PhpStan/autoload.php
+    ignoreErrors:
+        # Ignore PHPStan\Rules\Classes\UnusedConstructorParametersRule
+        - '#Constructor of class [a-zA-Z0-9\\_]+ has an unused parameter#'
+        # Ignore setCustomErrorHandler function not found in bootstrap files
+        - '#Function setCustomErrorHandler not found#'
+        # Ignore 'return statement is missing' error when 'void' is present in return type list
+        - '#Method (?:.*?) should return (?:.*?)void(?:.*?) but return statement is missing.#'
+        # Ignore constants, defined dynamically.
+        - '#Constant TESTS_WEB_API_ADAPTER not found.#'
+        - '#Constant TESTS_BASE_URL not found.#'
+        - '#Constant TESTS_XDEBUG_ENABLED not found.#'
+        - '#Constant TESTS_XDEBUG_SESSION not found.#'
+        - '#Constant INTEGRATION_TESTS_DIR not found.#'
+        - '#Constant MAGENTO_MODULES_PATH not found.#'
+        - '#Constant TESTS_MODULES_PATH not found.#'
+        - '#Constant TESTS_INSTALLATION_DB_CONFIG_FILE not found.#'
+        - '#Constant T_[A-Z_]+ not found.#'
+
 
 services:
-	errorFormatter.filtered:
-		class: Magento\PhpStan\Formatters\FilteredErrorFormatter
-		arguments:
-			showTipsOfTheDay: false
-			checkThisOnly: false
-			inferPrivatePropertyTypeFromConstructor: true
-			checkMissingTypehints: %checkMissingTypehints%
+    -
+        class: Magento\PhpStan\Reflection\Php\DataObjectClassReflectionExtension
+        tags: {phpstan.broker.methodsClassReflectionExtension: {priority: 100}}
+
+    errorFormatter.filtered:
+        class: Magento\PhpStan\Formatters\FilteredErrorFormatter
+        arguments:
+            tableErrorFormatter: @errorFormatter.table

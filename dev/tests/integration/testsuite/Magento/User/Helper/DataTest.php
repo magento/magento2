@@ -15,7 +15,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $_helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

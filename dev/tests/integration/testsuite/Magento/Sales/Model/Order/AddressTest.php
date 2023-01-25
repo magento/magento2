@@ -12,7 +12,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /** @var Address */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order\Address::class);
     }

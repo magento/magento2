@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Create;
 
 use Magento\Backend\App\Action\Context;
@@ -12,21 +14,28 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Controller\Adminhtml\Order\Create\Reorder;
+use Magento\Sales\Helper\Reorder as ReorderHelper;
 use Magento\Sales\Model\AdminOrder\Create;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
-use Magento\Sales\Helper\Reorder as ReorderHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
- * Class ReorderTest
+ * Verify reorder class.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class ReorderTest extends \PHPUnit\Framework\TestCase
+class ReorderTest extends TestCase
 {
     /**
      * @var Reorder
@@ -39,67 +48,67 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
     private $context;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $requestMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|MockObject
      */
     private $orderMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     private $messageManagerMock;
 
     /**
-     * @var ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ForwardFactory|MockObject
      */
     private $resultForwardFactoryMock;
 
     /**
-     * @var RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectFactory|MockObject
      */
     private $resultRedirectFactoryMock;
 
     /**
-     * @var Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var Redirect|MockObject
      */
     private $resultRedirectMock;
 
     /**
-     * @var Forward|\PHPUnit_Framework_MockObject_MockObject
+     * @var Forward|MockObject
      */
     private $resultForwardMock;
 
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|MockObject
      */
     private $quoteSessionMock;
 
     /**
-     * @var OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderRepositoryInterface|MockObject
      */
     private $orderRepositoryMock;
 
     /**
-     * @var ReorderHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReorderHelper|MockObject
      */
     private $reorderHelperMock;
 
     /**
-     * @var UnavailableProductsProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var UnavailableProductsProvider|MockObject
      */
     private $unavailableProductsProviderMock;
 
     /**
-     * @var Create|\PHPUnit_Framework_MockObject_MockObject
+     * @var Create|MockObject
      */
     private $orderCreateMock;
 
@@ -109,39 +118,39 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
     private $orderId;
 
     /**
-     * @return void
+     * @var LoggerInterface|MockObject
      */
-    protected function setUp()
+    private $loggerMock;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $this->orderId = 111;
-        $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)->getMockForAbstractClass();
-        $this->orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getEntityId', 'getId', 'setReordered'])
+        $this->orderRepositoryMock = $this->getMockForAbstractClass(OrderRepositoryInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->resultForwardFactoryMock = $this->createMock(ForwardFactory::class);
+        $this->resultRedirectFactoryMock = $this->createMock(RedirectFactory::class);
+        $this->resultRedirectMock = $this->createMock(Redirect::class);
+        $this->resultForwardMock = $this->createMock(Forward::class);
+        $this->reorderHelperMock = $this->createMock(ReorderHelper::class);
+        $this->unavailableProductsProviderMock = $this->createMock(UnavailableProductsProvider::class);
+        $this->orderCreateMock = $this->createMock(Create::class);
+        $this->orderMock = $this->getMockBuilder(Order::class)->disableOriginalConstructor()
+            ->onlyMethods(['getEntityId', 'getId'])
+            ->addMethods(['setReordered'])
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass();
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)->getMockForAbstractClass();
-        $this->resultForwardFactoryMock = $this->getMockBuilder(ForwardFactory::class)
-            ->disableOriginalConstructor()
+        $this->quoteSessionMock = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()
+            ->onlyMethods(['clearStorage'])
+            ->addMethods(['setUseOldShippingMethod'])
             ->getMock();
-        $this->resultRedirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)->disableOriginalConstructor()->getMock();
-        $this->resultForwardMock = $this->getMockBuilder(Forward::class)->disableOriginalConstructor()->getMock();
-        $this->quoteSessionMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['clearStorage', 'setUseOldShippingMethod'])
-            ->getMock();
-        $this->reorderHelperMock = $this->getMockBuilder(ReorderHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)->getMockForAbstractClass();
-        $this->unavailableProductsProviderMock = $this->getMockBuilder(UnavailableProductsProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderCreateMock = $this->getMockBuilder(Create::class)->disableOriginalConstructor()->getMock();
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
+            ->getMockForAbstractClass();
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+
+        $objectManager = new ObjectManager($this);
         $this->context = $objectManager->getObject(
             Context::class,
             [
@@ -160,14 +169,17 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
                 'reorderHelper' => $this->reorderHelperMock,
                 'context' => $this->context,
                 'resultForwardFactory' => $this->resultForwardFactoryMock,
+                'logger' => $this->loggerMock
             ]
         );
     }
 
     /**
+     * Verify execute with no route.
+     *
      * @return void
      */
-    public function testExecuteForward()
+    public function testExecuteForward(): void
     {
         $this->clearStorage();
         $this->getOrder();
@@ -178,9 +190,11 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify execute redirect order grid.
+     *
      * @return void
      */
-    public function testExecuteRedirectOrderGrid()
+    public function testExecuteRedirectOrderGrid(): void
     {
         $this->clearStorage();
         $this->getOrder();
@@ -193,9 +207,11 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify execute redirect back.
+     *
      * @return void
      */
-    public function testExecuteRedirectBack()
+    public function testExecuteRedirectBack(): void
     {
         $this->clearStorage();
         $this->getOrder();
@@ -210,38 +226,157 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify execute redirect new order.
+     *
      * @return void
      */
-    public function testExecuteRedirectNewOrder()
+    public function testExecuteRedirectNewOrder(): void
     {
-        $this->clearStorage();
+        $this->quoteSessionMock->expects($this->once())->method('clearStorage')->willReturnSelf();
         $this->getOrder();
         $this->canReorder(true);
         $this->createRedirect();
         $this->getOrderId($this->orderId);
         $this->getUnavailableProducts([]);
-        $this->initFromOrder();
+        $this->orderMock->expects($this->once())->method('setReordered')->with(true)->willReturnSelf();
+        $this->quoteSessionMock->expects($this->once())
+            ->method('setUseOldShippingMethod')
+            ->with(true)
+            ->willReturnSelf();
+        $this->objectManagerMock
+            ->method('get')
+            ->withConsecutive([Quote::class], [Quote::class], [Create::class])
+            ->willReturnOnConsecutiveCalls($this->quoteSessionMock, $this->quoteSessionMock, $this->orderCreateMock);
+        $this->orderCreateMock->expects($this->once())
+            ->method('initFromOrder')
+            ->with($this->orderMock)
+            ->willReturnSelf();
         $this->setPath('sales/*');
 
         $this->assertInstanceOf(Redirect::class, $this->reorder->execute());
     }
 
     /**
+     * Verify redirect new order with throws exception.
+     *
      * @return void
      */
-    private function clearStorage()
+    public function testExecuteRedirectNewOrderWithThrowsException(): void
     {
-        $this->objectManagerMock->expects($this->at(0))
-            ->method('get')
-            ->with(Quote::class)
-            ->willReturn($this->quoteSessionMock);
-        $this->quoteSessionMock->expects($this->once())->method('clearStorage')->will($this->returnSelf());
+        $exception = new NoSuchEntityException();
+
+        $this->clearStorage();
+        $this->getOrder();
+        $this->canReorder(true);
+        $this->createRedirect();
+        $this->getOrderId($this->orderId);
+        $this->getUnavailableProducts([]);
+
+        $this->orderMock->expects($this->once())
+            ->method('setReordered')
+            ->with(true)
+            ->willThrowException($exception);
+        $this->messageManagerMock
+            ->expects($this->once())
+            ->method('addErrorMessage')
+            ->willReturnSelf();
+        $this->resultRedirectMock
+            ->expects($this->once())
+            ->method('setPath')
+            ->with('sales/*')
+            ->willReturnSelf();
+        $this->assertInstanceOf(Redirect::class, $this->reorder->execute());
     }
 
     /**
+     * Verify redirect new order with exception.
+     *
      * @return void
      */
-    private function getOrder()
+    public function testExecuteRedirectNewOrderWithException(): void
+    {
+        $exception = new \Exception();
+
+        $this->clearStorage();
+        $this->getOrder();
+        $this->canReorder(true);
+        $this->createRedirect();
+        $this->getOrderId($this->orderId);
+        $this->getUnavailableProducts([]);
+        $this->orderMock->expects($this->once())
+            ->method('setReordered')
+            ->with(true)
+            ->willThrowException(new $exception());
+        $this->messageManagerMock
+            ->expects($this->once())
+            ->method('addException')
+            ->with($exception, __('Error while processing order.'))
+            ->willReturnSelf();
+        $this->resultRedirectMock
+            ->expects($this->once())
+            ->method('setPath')
+            ->with('sales/*')
+            ->willReturnSelf();
+        $this->assertInstanceOf(Redirect::class, $this->reorder->execute());
+    }
+
+    /**
+     * Verify redirect new order with throws out of stock exception.
+     *
+     * @return void
+     */
+    public function testExecuteReorderWithThrowsLocalizedException(): void
+    {
+        $errorPhrase = __('This product is out of stock.');
+        $exception = new LocalizedException($errorPhrase);
+
+        $this->clearStorage();
+        $this->getOrder();
+        $this->canReorder(true);
+        $this->createRedirect();
+        $this->getOrderId($this->orderId);
+        $this->getUnavailableProducts([]);
+
+        $this->orderMock->expects($this->once())
+            ->method('setReordered')
+            ->with(true)
+            ->willThrowException($exception);
+        $this->loggerMock
+            ->expects($this->any())
+            ->method('critical')
+            ->willReturn($exception);
+        $this->messageManagerMock
+            ->expects($this->once())
+            ->method('addErrorMessage')
+            ->willReturnSelf();
+        $this->resultRedirectMock
+            ->expects($this->once())
+            ->method('setPath')
+            ->with('sales/*')
+            ->willReturnSelf();
+        $this->assertInstanceOf(Redirect::class, $this->reorder->execute());
+    }
+
+    /**
+     * Mock clear storage.
+     *
+     * @return void
+     */
+    private function clearStorage(): void
+    {
+        $this->objectManagerMock
+            ->method('get')
+            ->withConsecutive([Quote::class])
+            ->willReturnOnConsecutiveCalls($this->quoteSessionMock);
+        $this->quoteSessionMock->expects($this->once())->method('clearStorage')->willReturnSelf();
+    }
+
+    /**
+     * Mock get order.
+     *
+     * @return void
+     */
+    private function getOrder(): void
     {
         $this->requestMock->expects($this->once())
             ->method('getParam')
@@ -254,9 +389,12 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Mock and return 'canReorder' method.
+     *
      * @param bool $result
+     * @return void
      */
-    private function canReorder($result)
+    private function canReorder(bool $result): void
     {
         $entityId = 1;
         $this->orderMock->expects($this->once())->method('getEntityId')->willReturn($entityId);
@@ -267,18 +405,22 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Mock result forward.
+     *
      * @return void
      */
-    private function prepareForward()
+    private function prepareForward(): void
     {
         $this->resultForwardFactoryMock->expects($this->once())->method('create')->willReturn($this->resultForwardMock);
         $this->resultForwardMock->expects($this->once())->method('forward')->with('noroute')->willReturnSelf();
     }
 
     /**
+     * Mock create.
+     *
      * @return void
      */
-    private function createRedirect()
+    private function createRedirect(): void
     {
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
@@ -286,54 +428,42 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Mock order 'getId' method.
+     *
      * @param null|int $orderId
+     *
+     * @return void
      */
-    private function getOrderId($orderId)
+    private function getOrderId($orderId): void
     {
         $this->orderMock->expects($this->once())->method('getId')->willReturn($orderId);
     }
 
     /**
+     * Mock result redirect 'setPath' method.
+     *
      * @param string $path
      * @param null|array $params
+     *
+     * @return void
      */
-    private function setPath($path, $params = [])
+    private function setPath(string $path, $params = []): void
     {
         $this->resultRedirectMock->expects($this->once())->method('setPath')->with($path, $params);
     }
 
     /**
+     * Mock unavailable products provider.
+     *
      * @param array $unavailableProducts
+     *
+     * @return void
      */
-    private function getUnavailableProducts(array $unavailableProducts)
+    private function getUnavailableProducts(array $unavailableProducts): void
     {
         $this->unavailableProductsProviderMock->expects($this->any())
             ->method('getForOrder')
             ->with($this->orderMock)
             ->willReturn($unavailableProducts);
-    }
-
-    /**
-     * @return void
-     */
-    private function initFromOrder()
-    {
-        $this->orderMock->expects($this->once())->method('setReordered')->with(true)->willReturnSelf();
-        $this->objectManagerMock->expects($this->at(1))
-            ->method('get')
-            ->with(Quote::class)
-            ->willReturn($this->quoteSessionMock);
-        $this->quoteSessionMock->expects($this->once())
-            ->method('setUseOldShippingMethod')
-            ->with(true)
-            ->will($this->returnSelf());
-        $this->objectManagerMock->expects($this->at(2))
-            ->method('get')
-            ->with(Create::class)
-            ->willReturn($this->orderCreateMock);
-        $this->orderCreateMock->expects($this->once())
-            ->method('initFromOrder')
-            ->with($this->orderMock)
-            ->willReturnSelf();
     }
 }

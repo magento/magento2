@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ShopByButtonInMobileTest">
+        <annotations>
+            <features value="Layered Navigation"/>
+            <stories value="Storefront Shop By collapsible button in mobile themes"/>
+            <title value="Storefront Shop By collapsible button works in a mobile theme"/>
+            <description value="Storefront Shop By collapsible button should work in a mobile theme"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-6092"/>
+            <group value="LayeredNavigation"/>
+            <group value="SearchEngine"/>
+        </annotations>
+        <before>
+            <createData entity="productDropDownAttribute" stepKey="attribute"/>
+            <createData entity="productAttributeOption1" stepKey="option1">
+                <requiredEntity createDataKey="attribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="attributeSet">
+                <requiredEntity createDataKey="attribute"/>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+            <resizeWindow width="1280" height="1024" stepKey="resizeWindowToDesktop"/>
+        </after>
+        <!-- Go to default attribute set edit page and add the product attribute to the set -->
+        <comment userInput="Go to default attribute set edit page and add the product attribute to the set" stepKey="commentAttributeSetEdit" />
+        <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/" stepKey="onAttributeSetEdit"/>
+        <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute($$attribute.attribute[attribute_code]$$)}}" selector2="{{AdminProductAttributeSetSection.attribute('Product Details')}}" stepKey="assignTestAttributes"/>
+        <click selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="clickAttributeSetSave"/>
+        <!-- Go to simple product edit page and set the product attribute to a value -->
+        <comment userInput="Go to simple product edit page and set the product attribute to a value" stepKey="commentProductAttributeEdit" />
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
+            <argument name="productId" value="$$simpleProduct1.id$$"/>
+        </actionGroup>
+        <selectOption selector="{{AdminProductFormSection.customSelectField($$attribute.attribute[attribute_code]$$)}}" userInput="option1" stepKey="selectAttribute"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexAll"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        <!-- Check storefront mobile view for shop by button is functioning as expected -->
+        <comment userInput="Check storefront mobile view for shop by button is functioning as expected" stepKey="commentCheckShopByButton" />
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <submitForm selector="#search_mini_form" parameterArray="['q' => 'Simple']" stepKey="fillSearchBar" />
+        <resizeWindow width="600" height="800" stepKey="resizeWindow"/>
+        <waitForPageLoad stepKey="waitForHomePageToLoad2"/>
+        <seeElement selector="{{StorefrontCategorySidebarMobileSection.shopByButton}}" stepKey="seeShopByButton"/>
+        <click selector="{{StorefrontCategorySidebarMobileSection.shopByButton}}" stepKey="clickShopByButton"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.filterOptionsTitle('$$attribute.attribute[default_label]$$')}}" stepKey="seeShopByOption"/>
+    </test>
+</tests>

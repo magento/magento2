@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Plugin;
 
@@ -13,14 +14,14 @@ use Magento\Customer\Model\Plugin\CustomerNotification;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Area;
-use Magento\Framework\App\HttpRequestInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Exception\NoSuchEntityException;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
+class CustomerNotificationTest extends TestCase
 {
     private const STUB_CUSTOMER_ID = 1;
 
@@ -64,18 +65,18 @@ class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
      */
     private $plugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sessionMock = $this->createMock(Session::class);
         $this->sessionMock->method('getCustomerId')->willReturn(self::STUB_CUSTOMER_ID);
 
-        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
-        $this->actionMock = $this->createMock(ActionInterface::class);
-        $this->requestMock = $this->getMockBuilder([RequestInterface::class, HttpRequestInterface::class])
-            ->getMock();
+        $this->customerRepositoryMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $this->actionMock = $this->getMockForAbstractClass(ActionInterface::class);
+        $this->requestMock = $this->getMockBuilder(RequestStubInterface::class)
+            ->getMockForAbstractClass();
         $this->requestMock->method('isPost')->willReturn(true);
 
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->appStateMock = $this->createMock(State::class);
         $this->appStateMock->method('getAreaCode')->willReturn(Area::AREA_FRONTEND);
@@ -100,7 +101,7 @@ class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
     {
         $customerGroupId = 1;
 
-        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $customerMock->method('getGroupId')->willReturn($customerGroupId);
         $customerMock->method('getId')->willReturn(self::STUB_CUSTOMER_ID);
 

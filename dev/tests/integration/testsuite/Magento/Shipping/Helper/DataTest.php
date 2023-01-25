@@ -14,7 +14,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     private $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Shipping\Helper\Data::class
@@ -101,7 +101,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $code
-     * @return \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getMockOrderRepository($code)
     {
@@ -109,13 +109,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $order = $objectManager->create(\Magento\Sales\Model\Order::class);
         $order->setProtectCode($code);
         $orderRepository = $this->createMock(\Magento\Sales\Api\OrderRepositoryInterface::class);
-        $orderRepository->expects($this->atLeastOnce())->method('get')->will($this->returnValue($order));
+        $orderRepository->expects($this->atLeastOnce())->method('get')->willReturn($order);
         return $orderRepository;
     }
 
     /**
      * @param $code
-     * @return \Magento\Sales\Model\Order\ShipmentRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Sales\Model\Order\ShipmentRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getMockShipmentRepository($code)
     {
@@ -145,7 +145,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 'setId',
                 42,
                 'abc',
-                'http://localhost/index.php/shipping/tracking/popup?hash=c2hpcF9pZDo0MjphYmM%2C'
+                'http://localhost/index.php/shipping/tracking/popup?hash=c2hpcF9pZDo0MjphYmM%7E'
             ],
             [\Magento\Sales\Model\Order\Shipment\Track::class,
                 'setEntityId',

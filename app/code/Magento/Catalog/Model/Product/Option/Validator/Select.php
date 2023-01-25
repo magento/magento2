@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Model\Product\Option\Validator;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
 use Magento\Catalog\Model\Product\Option;
 
 /**
@@ -22,6 +23,9 @@ class Select extends DefaultValidator
     protected function checkAllValuesRemoved($values)
     {
         foreach ($values as $value) {
+            if ($value instanceof ProductCustomOptionValuesInterface) {
+                $value = $value->toArray();
+            }
             if (!array_key_exists('is_delete', $value) || $value['is_delete'] != 1) {
                 return false;
             }

@@ -3,13 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Session;
+use Magento\Backend\Model\View\Result\Forward;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\Session\Storage;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\CreditmemoManagementInterface;
+use Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Save;
+use Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader;
+use Magento\Sales\Helper\Data as SalesData;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveTest extends \PHPUnit\Framework\TestCase
+class SaveTest extends TestCase
 {
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\Creditmemo
@@ -17,103 +42,113 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     protected $_controller;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseInterface|MockObject
      */
     protected $_responseMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
     protected $_sessionMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $_messageManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $memoLoaderMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ForwardFactory|MockObject
      */
     protected $resultForwardFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
+     * @var Forward|MockObject
      */
     protected $resultForwardMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectFactory|MockObject
      */
     protected $resultRedirectFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var Redirect|MockObject
      */
     protected $resultRedirectMock;
 
     /**
+     * @var CreditmemoSender|MockObject
+     */
+    private $creditmemoSender;
+
+    /**
+     * @var SalesData|MockObject
+     */
+    private $salesData;
+
+    /**
      * Init model for future tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $helper = new ObjectManager($this);
+        $this->_responseMock = $this->createMock(Http::class);
         $this->_responseMock->headersSentThrowsException = false;
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $constructArguments = $objectManager->getConstructArguments(
-            \Magento\Backend\Model\Session::class,
-            ['storage' => new \Magento\Framework\Session\Storage()]
+            Session::class,
+            ['storage' => new Storage()]
         );
-        $this->_sessionMock = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
+        $this->_sessionMock = $this->getMockBuilder(Session::class)
             ->setMethods(['setFormData'])
             ->setConstructorArgs($constructArguments)
             ->getMock();
         $this->resultForwardFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\ForwardFactory::class
+            ForwardFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultForwardMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Forward::class)
+        $this->resultForwardMock = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class
+            RedirectFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $registryMock = $this->createMock(Registry::class);
         $this->_objectManager->expects(
             $this->any()
         )->method(
             'get'
         )->with(
-            $this->equalTo(\Magento\Framework\Registry::class)
-        )->will(
-            $this->returnValue($registryMock)
+            Registry::class
+        )->willReturn(
+            $registryMock
         );
-        $this->_messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->_messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $arguments = [
             'response' => $this->_responseMock,
@@ -124,14 +159,34 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'resultRedirectFactory' => $this->resultRedirectFactoryMock
         ];
 
-        $context = $helper->getObject(\Magento\Backend\App\Action\Context::class, $arguments);
+        $context = $helper->getObject(Context::class, $arguments);
 
-        $this->memoLoaderMock = $this->createMock(\Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader::class);
+        $creditmemoManagement =  $this->getMockBuilder(CreditmemoManagementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_objectManager->expects($this->any())
+            ->method('create')
+            ->with(CreditmemoManagementInterface::class)
+            ->willReturn($creditmemoManagement);
+        $this->creditmemoSender = $this->getMockBuilder(CreditMemoSender::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['send'])
+            ->getMock();
+        $this->creditmemoSender->expects($this->any())
+            ->method('send')
+            ->willReturn(true);
+        $this->salesData = $this->getMockBuilder(SalesData::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['canSendNewCreditmemoEmail'])
+            ->getMock();
+        $this->memoLoaderMock = $this->createMock(CreditmemoLoader::class);
         $this->_controller = $helper->getObject(
-            \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Save::class,
+            Save::class,
             [
                 'context' => $context,
                 'creditmemoLoader' => $this->memoLoaderMock,
+                'creditmemoSender' => $this->creditmemoSender,
+                'salesData' => $this->salesData
             ]
         );
     }
@@ -148,22 +203,22 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'getPost'
         )->with(
             'creditmemo'
-        )->will(
-            $this->returnValue($data)
+        )->willReturn(
+            $data
         );
-        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(null));
+        $this->_requestMock->expects($this->any())->method('getParam')->willReturn(null);
 
         $creditmemoMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Creditmemo::class,
-            ['load', 'getGrandTotal', '__wakeup']
+            Creditmemo::class,
+            ['load', 'getGrandTotal']
         );
-        $creditmemoMock->expects($this->once())->method('getGrandTotal')->will($this->returnValue('1'));
+        $creditmemoMock->expects($this->once())->method('getGrandTotal')->willReturn('1');
         $this->memoLoaderMock->expects(
             $this->once()
         )->method(
             'load'
-        )->will(
-            $this->returnValue($creditmemoMock)
+        )->willReturn(
+            $creditmemoMock
         );
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
@@ -179,7 +234,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertInstanceOf(
-            \Magento\Backend\Model\View\Result\Redirect::class,
+            Redirect::class,
             $this->_controller->execute()
         );
     }
@@ -196,22 +251,22 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'getPost'
         )->with(
             'creditmemo'
-        )->will(
-            $this->returnValue($data)
+        )->willReturn(
+            $data
         );
-        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(null));
+        $this->_requestMock->expects($this->any())->method('getParam')->willReturn(null);
 
         $creditmemoMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Creditmemo::class,
-            ['load', 'isValidGrandTotal', '__wakeup']
+            Creditmemo::class,
+            ['load', 'isValidGrandTotal']
         );
-        $creditmemoMock->expects($this->once())->method('isValidGrandTotal')->will($this->returnValue(false));
+        $creditmemoMock->expects($this->once())->method('isValidGrandTotal')->willReturn(false);
         $this->memoLoaderMock->expects(
             $this->once()
         )->method(
             'load'
-        )->will(
-            $this->returnValue($creditmemoMock)
+        )->willReturn(
+            $creditmemoMock
         );
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
@@ -234,7 +289,97 @@ class SaveTest extends \PHPUnit\Framework\TestCase
      */
     protected function _setSaveActionExpectationForMageCoreException($data, $errorMessage)
     {
-        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($this->equalTo($errorMessage));
-        $this->_sessionMock->expects($this->once())->method('setFormData')->with($this->equalTo($data));
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($errorMessage);
+        $this->_sessionMock->expects($this->once())->method('setFormData')->with($data);
+    }
+
+    /**
+     * @return array
+     */
+    public function testExecuteEmailsDataProvider()
+    {
+        /**
+        * string $sendEmail
+        * bool $emailEnabled
+        * bool $shouldEmailBeSent
+        */
+        return [
+            ['', false, false],
+            ['', true, false],
+            ['on', false, false],
+            ['on', true, true]
+        ];
+    }
+
+    /**
+     * @param string $sendEmail
+     * @param bool $emailEnabled
+     * @param bool $shouldEmailBeSent
+     * @dataProvider testExecuteEmailsDataProvider
+     */
+    public function testExecuteEmails(
+        $sendEmail,
+        $emailEnabled,
+        $shouldEmailBeSent
+    ) {
+        $orderId = 1;
+        $creditmemoId = 2;
+        $invoiceId = 3;
+        $creditmemoData = ['items' => [], 'send_email' => $sendEmail];
+
+        $this->resultRedirectFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultRedirectMock);
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('sales/order/view', ['order_id' => $orderId])
+            ->willReturnSelf();
+
+        $order = $this->createPartialMock(
+            Order::class,
+            []
+        );
+
+        $creditmemo = $this->createPartialMock(
+            Creditmemo::class,
+            ['isValidGrandTotal', 'getOrder', 'getOrderId']
+        );
+        $creditmemo->expects($this->once())
+            ->method('isValidGrandTotal')
+            ->willReturn(true);
+        $creditmemo->expects($this->once())
+            ->method('getOrder')
+            ->willReturn($order);
+        $creditmemo->expects($this->once())
+            ->method('getOrderId')
+            ->willReturn($orderId);
+
+        $this->_requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['order_id', null, $orderId],
+                    ['creditmemo_id', null, $creditmemoId],
+                    ['creditmemo', null, $creditmemoData],
+                    ['invoice_id', null, $invoiceId]
+                ]
+            );
+
+        $this->_requestMock->expects($this->any())
+            ->method('getPost')
+            ->willReturn($creditmemoData);
+
+        $this->memoLoaderMock->expects($this->once())
+            ->method('load')
+            ->willReturn($creditmemo);
+
+        $this->salesData->expects($this->any())
+            ->method('canSendNewCreditmemoEmail')
+            ->willReturn($emailEnabled);
+        if ($shouldEmailBeSent) {
+            $this->creditmemoSender->expects($this->once())
+                ->method('send');
+        }
+        $this->assertEquals($this->resultRedirectMock, $this->_controller->execute());
     }
 }

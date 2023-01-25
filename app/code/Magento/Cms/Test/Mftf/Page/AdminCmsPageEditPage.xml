@@ -7,7 +7,7 @@
  -->
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="AdminCmsPageEditPage" area="admin" url="/cms/page/edit/page_id/{{id}}" parameterized="true" module="Magento_Cms">
+    <page name="AdminCmsPageEditPage" area="admin" url="/cms/page/edit/page_id/{{pageId}}" parameterized="true" module="Magento_Cms">
         <section name="CmsNewPagePageActionsSection"/>
         <section name="CmsNewPagePageBasicFieldsSection"/>
         <section name="CmsNewPagePageContentSection"/>

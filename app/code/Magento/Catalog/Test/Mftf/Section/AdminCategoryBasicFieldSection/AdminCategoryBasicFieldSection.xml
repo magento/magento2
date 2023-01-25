@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCategoryBasicFieldSection">
+        <element name="IncludeInMenu" type="checkbox" selector="input[name='include_in_menu']"/>
+        <element name="includeInMenuLabel" type="text" selector="input[name='include_in_menu']+label"/>
+        <element name="includeInMenuUseDefault" type="checkbox" selector="input[name='use_default[include_in_menu]']"/>
+        <element name="EnableCategory" type="checkbox" selector="input[name='is_active']"/>
+        <element name="enableCategoryLabel" type="text" selector="input[name='is_active']+label"/>
+        <element name="enableUseDefault" type="checkbox" selector="input[name='use_default[is_active]']"/>
+        <element name="CategoryNameInput" type="input" selector="input[name='name']"/>
+        <element name="RequiredFieldIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=name]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
+        <element name="RequiredFieldIndicatorColor" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=name]&gt;.admin__field-label span'), ':after').getPropertyValue('color');"/>
+        <element name="categoryNameUseDefault" type="checkbox" selector="input[name='use_default[name]']"/>
+        <element name="ContentTab" type="input" selector="input[name='name']"/>
+        <element name="FieldError" type="text" selector=".admin__field-error[data-bind='attr: {for: {{field}}}, text: error']" parameterized="true"/>
+        <element name="panelFieldControl" type="input" selector="//aside//div[@data-index=&quot;{{arg1}}&quot;]/descendant::*[@name=&quot;{{arg2}}&quot;]" parameterized="true"/>
+        <element name="productsInCategory" type="input" selector="div[data-index='assign_products']" timeout="30"/>
+        <element name="scheduleDesignUpdateTab" type="block" selector="div[data-index='schedule_design_update']" timeout="15"/>
+        <element name="categoryNameRequiredField" type="text" selector="//label[@class='admin__field-error' and contains(text(),'This is a required field.')]" timeout="15"/>
+        <element name="urlExistsErrorMessage" type="text" selector="//div[@class='message message-error error']//h4[contains(text(),'The value specified in the URL Key field would generate a URL that already exists.')]" timeout="30"/>
+        <element name="presenceProductsInCategory" type="text" selector="//div[@class='admin__data-grid-wrap admin__data-grid-wrap-static']//td[3]" timeout="30"/>
+        <element name="anchorSwitch" type="input" selector="//input[@name='is_anchor']/../..//div[@class='admin__actions-switch']" timeout="30"/>
+        <element name="categoryTreeForThree" type="input" selector="//span[contains(text(),'{{var1}}')]/../../..//ul//a//span[contains(text(),'{{var2}}')]/../../..//ul//a/span[contains(text(),'{{var3}}')]" parameterized="true"/>
+        <element name="categoryTreeForFour" type="input" selector="//span[contains(text(),'{{CatA}}') and contains(text(),'({{qty1}})') ]/../../..//ul//a//span[contains(text(),'{{CatB}}') and  contains(text(),'({{qty2}})')]/../../..//ul//a/span[contains(text(),'{{CatC}}') and contains(text(),'({{qty3}})')]/../../../../../..//li[2]//a/span[contains(text(),'{{CatD}}') and contains(text(),'({{qty4}})')]" parameterized="true"/>
+        <element name="categoryTreeForFive" type="input" selector="//span[contains(text(),'{{CatA}}') and contains(text(),'({{qty1}})') ]/../../..//ul//a//span[contains(text(),'{{CatB}}') and  contains(text(),'({{qty2}})')]/../../..//ul//a/span[contains(text(),'{{CatC}}') and contains(text(),'({{qty3}})')]/../../../../../..//li[2]//a/span[contains(text(),'{{CatD}}') and contains(text(),'({{qty4}})')]/.././../..//ul//a/span[contains(text(),'{{CatE}}') and contains(text(),'({{qty5}})')]" parameterized="true"/>
+        <element name="sourceCategory" type="text" selector="//div[@class='x-tree-node-el folder active-category x-tree-node-leaf  x-tree-selected']//a/span[contains(text(),'{{var1}}')]" parameterized="true"/>
+        <element name="destinationCategory" type="text" selector="//div[@class='x-tree-node-el folder active-category x-tree-node-expanded']//a/span[contains(text(),'Default Category')]"/>
+
+        <element name="grabPopUpText" type="input" selector="//div[@class='modal-inner-wrap']//div[@data-id='information-dialog-category']//div[text()='This operation can take a long time']"/>
+        <element name="acceptPopUp" type="input" selector="//div[@class='modal-inner-wrap']//button[@class='action-primary']/span[text()='Ok']"/>
+    </section>
+</sections>

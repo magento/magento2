@@ -11,6 +11,7 @@ namespace Magento\Framework\Indexer;
  * Index Dimension object
  *
  * @api
+ * @since 101.0.6
  */
 class Dimension
 {
@@ -38,6 +39,7 @@ class Dimension
      * Get dimension name
      *
      * @return string
+     * @since 101.0.6
      */
     public function getName(): string
     {
@@ -48,6 +50,7 @@ class Dimension
      * Get dimension value
      *
      * @return string
+     * @since 101.0.6
      */
     public function getValue(): string
     {

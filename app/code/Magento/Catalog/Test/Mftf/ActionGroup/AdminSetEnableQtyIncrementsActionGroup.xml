@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSetEnableQtyIncrementsActionGroup">
+        <annotations>
+            <description>Set "Enable Qty Increments" config in 'Advanced Inventory' panel on the Admin Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="value" type="string"/>
+        </arguments>
+        <scrollTo selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrements}}" stepKey="scrollToEnableQtyIncrements"/>
+        <click selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrementsUseConfigSettings}}" stepKey="clickOnEnableQtyIncrementsUseConfigSettingsCheckbox"/>
+        <selectOption selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrements}}"  userInput="{{value}}"
+                      stepKey="setEnableQtyIncrements"/>
+    </actionGroup>
+</actionGroups>

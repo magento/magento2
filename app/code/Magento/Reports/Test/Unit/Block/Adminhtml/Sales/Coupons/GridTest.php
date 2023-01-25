@@ -7,23 +7,33 @@ declare(strict_types=1);
 
 namespace Magento\Reports\Test\Unit\Block\Adminhtml\Sales\Coupons;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid;
+use Magento\Reports\Model\Item;
+use Magento\Reports\Model\ResourceModel\Report\Collection\Factory;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Test for class \Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid
  */
-class GridTest extends \PHPUnit\Framework\TestCase
+class GridTest extends TestCase
 {
     /**
-     * @var \Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid
+     * @var Grid
      */
     private $model;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Reports\Model\ResourceModel\Report\Collection\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|MockObject
      */
     private $resourceFactoryMock;
 
@@ -34,17 +44,17 @@ class GridTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMock();
         $this->resourceFactoryMock = $this
-            ->getMockBuilder(\Magento\Reports\Model\ResourceModel\Report\Collection\Factory::class)
+            ->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $aggregatedColumns = [1 => 'SUM(value)'];
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid::class,
+            Grid::class,
             [
                 '_storeManager' => $this->storeManagerMock,
                 '_aggregatedColumns' => $aggregatedColumns,
@@ -57,34 +67,39 @@ class GridTest extends \PHPUnit\Framework\TestCase
      * @dataProvider getCountTotalsDataProvider
      *
      * @param string $reportType
-     * @param int $priceRuleType
+     * @param array|null $rulesList
      * @param int $collectionSize
      * @param bool $expectedCountTotals
+     * @param array|null $expectedRuleFilter
      * @return void
      */
     public function testGetCountTotals(
         string $reportType,
-        int $priceRuleType,
+        ?array $rulesList,
         int $collectionSize,
-        bool $expectedCountTotals
+        bool $expectedCountTotals,
+        ?array $expectedRuleFilter = null
     ): void {
-        $filterData = new \Magento\Framework\DataObject();
+        $filterData = new DataObject();
         $filterData->setData('report_type', $reportType);
         $filterData->setData('period_type', 'day');
         $filterData->setData('from', '2000-01-01');
         $filterData->setData('to', '2000-01-30');
         $filterData->setData('store_ids', '1');
-        $filterData->setData('price_rule_type', $priceRuleType);
-        if ($priceRuleType) {
-            $filterData->setData('rules_list', ['0,1']);
-        }
+        $filterData->setData('price_rule_type', $rulesList !== null);
+        $filterData->setData('rules_list', $rulesList);
         $filterData->setData('order_statuses', 'statuses');
         $this->model->setFilterData($filterData);
 
         $resourceCollectionName = $this->model->getResourceCollectionName();
-        $collectionMock = $this->buildBaseCollectionMock($filterData, $resourceCollectionName, $collectionSize);
+        $collectionMock = $this->buildBaseCollectionMock(
+            $filterData,
+            $resourceCollectionName,
+            $collectionSize,
+            $expectedRuleFilter
+        );
 
-        $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+        $store = $this->getMockBuilder(StoreInterface::class)
             ->getMock();
         $this->storeManagerMock->method('getStores')
             ->willReturn([1 => $store]);
@@ -101,24 +116,27 @@ class GridTest extends \PHPUnit\Framework\TestCase
     public function getCountTotalsDataProvider(): array
     {
         return [
-            ['created_at_shipment', 0, 0, false],
-            ['created_at_shipment', 0, 1, true],
-            ['updated_at_order', 0, 1, true],
-            ['updated_at_order', 1, 1, true],
+            ['created_at_shipment', null, 0, false],
+            ['created_at_shipment', null, 1, true],
+            ['updated_at_order', null, 1, true],
+            ['updated_at_order', ['1,2'], 1, true, ['1', '2']],
+            ['updated_at_order', ['1', '2'], 1, true, ['1', '2']],
         ];
     }
 
     /**
-     * @param \Magento\Framework\DataObject $filterData
+     * @param DataObject $filterData
      * @param string $resourceCollectionName
      * @param int $collectionSize
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @param array|null $ruleFilter
+     * @return MockObject
      */
     private function buildBaseCollectionMock(
-        \Magento\Framework\DataObject $filterData,
+        DataObject $filterData,
         string $resourceCollectionName,
-        int $collectionSize
-    ): \PHPUnit_Framework_MockObject_MockObject {
+        int $collectionSize,
+        ?array $ruleFilter
+    ): MockObject {
         $collectionMock = $this->getMockBuilder($resourceCollectionName)
             ->disableOriginalConstructor()
             ->getMock();
@@ -149,7 +167,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         if ($filterData->getData('price_rule_type')) {
             $collectionMock->expects($this->once())
                 ->method('addRuleFilter')
-                ->with(\explode(',', $filterData->getData('rules_list')[0]))
+                ->with($ruleFilter)
                 ->willReturnSelf();
         }
 
@@ -160,7 +178,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->method('getSize')
             ->willReturn($collectionSize);
         if ($collectionSize) {
-            $itemMock = $this->getMockBuilder(\Magento\Reports\Model\Item::class)
+            $itemMock = $this->getMockBuilder(Item::class)
                 ->disableOriginalConstructor()
                 ->getMock();
             $collectionMock->expects($this->once())

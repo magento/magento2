@@ -3,23 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CurrencySymbol\Test\Unit\Block\Adminhtml\System;
 
-class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Block\Widget\Button;
+use Magento\CurrencySymbol\Block\Adminhtml\System\Currencysymbol;
+use Magento\CurrencySymbol\Model\System\CurrencysymbolFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\TestCase;
+
+class CurrencysymbolTest extends TestCase
 {
     /**
      * Object manager helper
      *
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new ObjectManager($this);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->objectManagerHelper);
     }
@@ -27,18 +37,18 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
     public function testPrepareLayout()
     {
         $symbolSystemFactoryMock = $this->createPartialMock(
-            \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory::class,
+            CurrencysymbolFactory::class,
             ['create']
         );
 
-        $blockMock = $this->createPartialMock(
-            \Magento\Framework\View\Element\BlockInterface::class,
-            ['addChild', 'toHtml']
-        );
+        $blockMock = $this->getMockBuilder(BlockInterface::class)
+            ->addMethods(['addChild'])
+            ->onlyMethods(['toHtml'])
+            ->getMockForAbstractClass();
 
-        /** @var $layoutMock \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var LayoutInterface|MockObject $layoutMock */
         $layoutMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\LayoutInterface::class,
+            LayoutInterface::class,
             [],
             '',
             false,
@@ -53,7 +63,7 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
             ->method('addChild')
             ->with(
                 'save_button',
-                \Magento\Backend\Block\Widget\Button::class,
+                Button::class,
                 [
                     'label' => __('Save Currency Symbols'),
                     'class' => 'save primary save-currency-symbols',
@@ -63,9 +73,9 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        /** @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currencysymbol */
+        /** @var Currencysymbol $block */
         $block = $this->objectManagerHelper->getObject(
-            \Magento\CurrencySymbol\Block\Adminhtml\System\Currencysymbol::class,
+            Currencysymbol::class,
             [
                 'symbolSystemFactory' => $symbolSystemFactoryMock,
                 'layout' => $layoutMock

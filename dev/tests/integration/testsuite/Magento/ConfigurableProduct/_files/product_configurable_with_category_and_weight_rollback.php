@@ -4,4 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/product_configurable_rollback.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/product_configurable_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/category_rollback.php');
+Resolver::getInstance()->requireDataFixture(
+    'Magento/ConfigurableProduct/_files/configurable_attribute_first_rollback.php'
+);

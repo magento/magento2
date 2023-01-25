@@ -5,6 +5,7 @@
  */
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Quote\Model\QuoteFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Paypal\Model\Config;
@@ -12,17 +13,19 @@ use Magento\Sales\Model\Order;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-include __DIR__ . '/../../GraphQl/Quote/_files/guest/create_empty_cart.php';
-include __DIR__ . '/../../PaypalGraphQl/_files/add_simple_product_payflowLink.php';
-include __DIR__ . '/../../GraphQl/Quote/_files/guest/set_guest_email.php';
-include __DIR__ . '/../../GraphQl/Quote/_files/set_new_shipping_address.php';
-include __DIR__ . '/../../GraphQl/Quote/_files/set_new_billing_address.php';
-include __DIR__ . '/../../GraphQl/Quote/_files/set_flatrate_shipping_method.php';
+Resolver::getInstance()->requireDataFixture('Magento/GraphQl/Quote/_files/guest/create_empty_cart.php');
+Resolver::getInstance()->requireDataFixture('Magento/PaypalGraphQl/_files/add_simple_product_payflowLink.php');
+Resolver::getInstance()->requireDataFixture('Magento/GraphQl/Quote/_files/guest/set_guest_email.php');
+Resolver::getInstance()->requireDataFixture('Magento/GraphQl/Quote/_files/set_new_shipping_address.php');
+Resolver::getInstance()->requireDataFixture('Magento/GraphQl/Quote/_files/set_new_billing_address.php');
+Resolver::getInstance()->requireDataFixture('Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php');
 
 /** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
-
+/** @var QuoteFactory $quoteFactory */
+$quoteFactory = Bootstrap::getObjectManager()->get(QuoteFactory::class);
 $store = $objectManager->get(StoreManagerInterface::class)->getStore();
 
 $quoteResource = Bootstrap::getObjectManager()->get(QuoteResource::class);

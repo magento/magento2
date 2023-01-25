@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCartItemsCountDisplayUniqueItemsTest" extends="StorefrontCartItemsCountDisplayItemsQuantitiesTest">
+        <annotations>
+            <stories value="Checkout order summary has wrong item count"/>
+            <title value="Checkout order summary has wrong item count - display unique items"/>
+            <description value="Items count in shopping cart and on checkout page should be consistent with settings 'checkout/cart_link/use_qty'"/>
+            <testCaseId value="MC-18281"/>
+            <severity value="CRITICAL"/>
+            <group value="checkout"/>
+        </annotations>
+
+        <!-- Assert Products Count in Mini Cart -->
+        <actionGroup ref="StorefrontAssertMiniCartItemCountActionGroup" stepKey="assertProductCountAndTextInMiniCart">
+            <argument name="productCount" value="2"/>
+            <argument name="productCountText" value="2 Items in Cart"/>
+        </actionGroup>
+        <!-- Assert Products Count on checkout page -->
+        <actionGroup ref="StorefrontCheckoutAndAssertOrderSummaryDisplayActionGroup" stepKey="assertProductCountOnCheckoutPage">
+            <argument name="itemsText" value="2 Items in Cart"/>
+        </actionGroup>
+
+        <before>
+            <!--Set Display Cart Summary to display items quantities-->
+            <magentoCLI command="config:set {{DisplayUniqueItems.path}} {{DisplayUniqueItems.value}}" stepKey="setDisplayCartSummary"/>
+        </before>
+    </test>
+</tests>

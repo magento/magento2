@@ -6,93 +6,128 @@
 
 namespace Magento\Wishlist\Controller\Index;
 
+use Magento\Catalog\Helper\Product;
 use Magento\Catalog\Model\Product\Exception as ProductException;
+use Magento\Checkout\Model\Cart as CheckoutCart;
+use Magento\Checkout\Helper\Cart as CartHelper;
 use Magento\Framework\App\Action;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Escaper;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Wishlist\Controller\AbstractIndex;
+use Magento\Wishlist\Controller\WishlistProviderInterface;
+use Magento\Wishlist\Helper\Data;
+use Magento\Wishlist\Model\Item\OptionFactory;
+use Magento\Wishlist\Model\ItemFactory;
+use Magento\Wishlist\Model\LocaleQuantityProcessor;
+use Magento\Wishlist\Model\ResourceModel\Item\Option\Collection;
 
 /**
  * Add wishlist item to shopping cart and remove from wishlist controller.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Cart extends \Magento\Wishlist\Controller\AbstractIndex implements Action\HttpPostActionInterface
+class Cart extends AbstractIndex implements Action\HttpPostActionInterface
 {
     /**
-     * @var \Magento\Wishlist\Controller\WishlistProviderInterface
+     * @var WishlistProviderInterface
      */
     protected $wishlistProvider;
 
     /**
-     * @var \Magento\Wishlist\Model\LocaleQuantityProcessor
+     * @var LocaleQuantityProcessor
      */
     protected $quantityProcessor;
 
     /**
-     * @var \Magento\Wishlist\Model\ItemFactory
+     * @var ItemFactory
      */
     protected $itemFactory;
 
     /**
-     * @var \Magento\Checkout\Model\Cart
+     * @var CheckoutCart
      */
     protected $cart;
 
     /**
-     * @var \Magento\Checkout\Helper\Cart
+     * @var CartHelper
      */
     protected $cartHelper;
 
     /**
-     * @var \Magento\Wishlist\Model\Item\OptionFactory
+     * @var OptionFactory
      */
     private $optionFactory;
 
     /**
-     * @var \Magento\Catalog\Helper\Product
+     * @var Product
      */
     protected $productHelper;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     protected $escaper;
 
     /**
-     * @var \Magento\Wishlist\Helper\Data
+     * @var Data
      */
     protected $helper;
 
     /**
-     * @var \Magento\Framework\Data\Form\FormKey\Validator
+     * @var Validator
      */
     protected $formKeyValidator;
 
     /**
+     * @var CookieManagerInterface
+     */
+    private $cookieManager;
+
+    /**
+     * @var CookieMetadataFactory
+     */
+    private $cookieMetadataFactory;
+
+    /**
      * @param Action\Context $context
-     * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
-     * @param \Magento\Wishlist\Model\LocaleQuantityProcessor $quantityProcessor
-     * @param \Magento\Wishlist\Model\ItemFactory $itemFactory
-     * @param \Magento\Checkout\Model\Cart $cart
-     * @param \Magento\Wishlist\Model\Item\OptionFactory $optionFactory
-     * @param \Magento\Catalog\Helper\Product $productHelper
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Wishlist\Helper\Data $helper
-     * @param \Magento\Checkout\Helper\Cart $cartHelper
-     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+     * @param WishlistProviderInterface $wishlistProvider
+     * @param LocaleQuantityProcessor $quantityProcessor
+     * @param ItemFactory $itemFactory
+     * @param CheckoutCart $cart
+     * @param OptionFactory $optionFactory
+     * @param Product $productHelper
+     * @param Escaper $escaper
+     * @param Data $helper
+     * @param CartHelper $cartHelper
+     * @param Validator $formKeyValidator
+     * @param CookieManagerInterface|null $cookieManager
+     * @param CookieMetadataFactory|null $cookieMetadataFactory
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
-        \Magento\Wishlist\Model\LocaleQuantityProcessor $quantityProcessor,
-        \Magento\Wishlist\Model\ItemFactory $itemFactory,
-        \Magento\Checkout\Model\Cart $cart,
-        \Magento\Wishlist\Model\Item\OptionFactory $optionFactory,
-        \Magento\Catalog\Helper\Product $productHelper,
-        \Magento\Framework\Escaper $escaper,
-        \Magento\Wishlist\Helper\Data $helper,
-        \Magento\Checkout\Helper\Cart $cartHelper,
-        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+        WishlistProviderInterface $wishlistProvider,
+        LocaleQuantityProcessor $quantityProcessor,
+        ItemFactory $itemFactory,
+        CheckoutCart $cart,
+        OptionFactory $optionFactory,
+        Product $productHelper,
+        Escaper $escaper,
+        Data $helper,
+        CartHelper $cartHelper,
+        Validator $formKeyValidator,
+        ?CookieManagerInterface $cookieManager = null,
+        ?CookieMetadataFactory $cookieMetadataFactory = null
     ) {
         $this->wishlistProvider = $wishlistProvider;
         $this->quantityProcessor = $quantityProcessor;
@@ -104,6 +139,9 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
         $this->helper = $helper;
         $this->cartHelper = $cartHelper;
         $this->formKeyValidator = $formKeyValidator;
+        $this->cookieManager = $cookieManager ?: ObjectManager::getInstance()->get(CookieManagerInterface::class);
+        $this->cookieMetadataFactory = $cookieMetadataFactory ?:
+            ObjectManager::getInstance()->get(CookieMetadataFactory::class);
         parent::__construct($context);
     }
 
@@ -113,14 +151,14 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
      * If Product has required options - item removed from wishlist and redirect
      * to product view page with message about needed defined required options
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (!$this->formKeyValidator->validate($this->getRequest())) {
             return $resultRedirect->setPath('*/*/');
@@ -167,7 +205,7 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
         );
 
         try {
-            /** @var \Magento\Wishlist\Model\ResourceModel\Item\Option\Collection $options */
+            /** @var Collection $options */
             $options = $this->optionFactory->create()->getCollection()->addItemFilter([$itemId]);
             $item->setOptions($options->getOptionsByItem($itemId));
 
@@ -178,15 +216,44 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
 
             $item->mergeBuyRequest($buyRequest);
             $item->addToCart($this->cart, true);
+
+            $related = $this->getRequest()->getParam('related_product');
+            if (!empty($related)) {
+                $this->cart->addProductsByIds(explode(',', $related));
+            }
+
             $this->cart->save()->getQuote()->collectTotals();
             $wishlist->save();
 
             if (!$this->cart->getQuote()->getHasError()) {
-                $message = __(
-                    'You added %1 to your shopping cart.',
-                    $this->escaper->escapeHtml($item->getProduct()->getName())
+                $this->messageManager->addComplexSuccessMessage(
+                    'addCartSuccessMessage',
+                    [
+                        'product_name' => $item->getProduct()->getName(),
+                        'cart_url' => $this->cartHelper->getCartUrl()
+                    ]
                 );
-                $this->messageManager->addSuccessMessage($message);
+                $productsToAdd = [
+                    [
+                        'sku' => $item->getProduct()->getSku(),
+                        'name' => $item->getProduct()->getName(),
+                        'price' => $item->getProduct()->getFinalPrice(),
+                        'qty' => $item->getQty(),
+                    ]
+                ];
+
+                /** @var PublicCookieMetadata $publicCookieMetadata */
+                $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
+                    ->setDuration(3600)
+                    ->setPath('/')
+                    ->setHttpOnly(false)
+                    ->setSameSite('Strict');
+
+                $this->cookieManager->setPublicCookie(
+                    'add_to_cart',
+                    \rawurlencode(\json_encode($productsToAdd)),
+                    $publicCookieMetadata
+                );
             }
 
             if ($this->cartHelper->getShouldRedirectToCart()) {
@@ -199,7 +266,7 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
             }
         } catch (ProductException $e) {
             $this->messageManager->addErrorMessage(__('This product(s) is out of stock.'));
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->messageManager->addNoticeMessage($e->getMessage());
             $redirectUrl = $configureUrl;
         } catch (\Exception $e) {
@@ -209,7 +276,7 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
         $this->helper->calculate();
 
         if ($this->getRequest()->isAjax()) {
-            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            /** @var Json $resultJson */
             $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
             $resultJson->setData(['backUrl' => $redirectUrl]);
             return $resultJson;

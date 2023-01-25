@@ -76,19 +76,19 @@ class TranslatedListsTest extends TestCase
         'sr_Latn_RS' => 'Serbia'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockConfig = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->mockConfig->method('getAllowedLocales')
-            ->willReturn(array_keys($this->expectedLocales));
+            ->willReturn($this->expectedLocales);
         $this->mockConfig->method('getAllowedCurrencies')
             ->willReturn($this->expectedCurrencies);
 
         $this->mockLocaleResolver = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->mockLocaleResolver->expects($this->once())
             ->method('getLocale')
             ->willReturn('en_US');
@@ -223,12 +223,12 @@ class TranslatedListsTest extends TestCase
         $expected = [];
         foreach ($this->expectedLocales as $locale) {
             $script = \Locale::getDisplayScript($locale);
-            $scriptTranslated = $script ? \Locale::getDisplayScript($locale, $locale) .', ' : '';
+            $scriptTranslated = $script ? \Locale::getDisplayScript($locale, $locale) . ', ' : '';
             $expected[$locale] = ucwords(\Locale::getDisplayLanguage($locale, $locale))
                 . ' (' . $scriptTranslated
                 . \Locale::getDisplayRegion($locale, $locale) . ') / '
                 . $this->languages[$locale]
-                . ' (' . ($script ? $script .', ' : '') . $this->countries[$locale] . ')';
+                . ' (' . ($script ? $script . ', ' : '') . $this->countries[$locale] . ')';
         }
 
         return $expected;
@@ -245,7 +245,7 @@ class TranslatedListsTest extends TestCase
         foreach ($this->expectedLocales as $locale) {
             $script = \Locale::getScript($locale);
             $scriptDisplayed = $script ? \Locale::getDisplayScript($locale) . ', ' : '';
-            $expected[$locale] = $this->languages[$locale] .' (' .$scriptDisplayed .$this->countries[$locale] .')';
+            $expected[$locale] = $this->languages[$locale] . ' (' . $scriptDisplayed . $this->countries[$locale] . ')';
         }
 
         return $expected;

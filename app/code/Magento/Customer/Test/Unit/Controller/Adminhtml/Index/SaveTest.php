@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
 
 use Magento\Backend\App\Action\Context;
@@ -42,8 +44,10 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Newsletter\Model\SubscriptionManagerInterface;
-use PHPUnit\Framework\TestCase;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Testing Save Customer use case from admin page
@@ -192,7 +196,7 @@ class SaveTest extends TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
@@ -236,33 +240,37 @@ class SaveTest extends TestCase
             ->getMock();
         $this->customerRepositoryMock = $this->getMockBuilder(CustomerRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->customerAddressRepositoryMock = $this->getMockBuilder(
             AddressRepositoryInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->customerMapperMock = $this->getMockBuilder(
             \Magento\Customer\Model\Customer\Mapper::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->customerAddressMapperMock = $this->getMockBuilder(
             Mapper::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->dataHelperMock = $this->getMockBuilder(
             DataObjectHelper::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->subscriberFactoryMock = $this->getMockBuilder(SubscriberFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->subscriptionManager = $this->createMock(SubscriptionManagerInterface::class);
+        $this->subscriptionManager = $this->getMockForAbstractClass(SubscriptionManagerInterface::class);
         $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->redirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -277,7 +285,14 @@ class SaveTest extends TestCase
             ->getMock();
         $this->emailNotificationMock = $this->getMockBuilder(EmailNotificationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
+        $website = $this->createPartialMock(\Magento\Store\Model\Website::class, ['getStoreIds']);
+        $website->method('getStoreIds')
+            ->willReturn([1]);
+        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMockForAbstractClass();
+        $storeManager->method('getWebsite')
+            ->willReturn($website);
 
         $objectManager = new ObjectManager($this);
 
@@ -304,6 +319,7 @@ class SaveTest extends TestCase
                 'addressRepository' => $this->customerAddressRepositoryMock,
                 'addressMapper' => $this->customerAddressMapperMock,
                 'subscriptionManager' => $this->subscriptionManager,
+                'storeManager' => $storeManager,
             ]
         );
 
@@ -370,7 +386,8 @@ class SaveTest extends TestCase
         /** @var AttributeMetadataInterface|MockObject $customerFormMock */
         $attributeMock = $this->getMockBuilder(
             AttributeMetadataInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $attributeMock->expects($this->atLeastOnce())
             ->method('getAttributeCode')
             ->willReturn('coolness');
@@ -420,7 +437,8 @@ class SaveTest extends TestCase
 
         $customerFormMock = $this->getMockBuilder(
             Form::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $customerFormMock->expects($this->once())
             ->method('extractData')
             ->with($this->requestMock, 'customer')
@@ -449,7 +467,7 @@ class SaveTest extends TestCase
             );
 
         /** @var CustomerInterface|MockObject $customerMock */
-        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $customerMock->method('getId')->willReturn($customerId);
         $this->customerDataFactoryMock->expects($this->once())
             ->method('create')
@@ -486,11 +504,6 @@ class SaveTest extends TestCase
             ->method('credentialsChanged')
             ->with($customerMock, $customerEmail)
             ->willReturnSelf();
-
-        $this->authorizationMock->expects($this->once())
-            ->method('isAllowed')
-            ->with(null)
-            ->willReturn(true);
 
         $this->subscriptionManager->expects($this->once())
             ->method($subscriptionStatus ? 'subscribeCustomer' : 'unsubscribeCustomer')
@@ -560,7 +573,8 @@ class SaveTest extends TestCase
         /** @var AttributeMetadataInterface|MockObject $customerFormMock */
         $attributeMock = $this->getMockBuilder(
             AttributeMetadataInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $attributeMock->expects($this->atLeastOnce())
             ->method('getAttributeCode')
             ->willReturn('coolness');
@@ -610,7 +624,8 @@ class SaveTest extends TestCase
 
         $customerFormMock = $this->getMockBuilder(
             Form::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $customerFormMock->expects($this->once())
             ->method('extractData')
             ->with($this->requestMock, 'customer')
@@ -640,7 +655,7 @@ class SaveTest extends TestCase
             );
 
         /** @var CustomerInterface|MockObject $customerMock */
-        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $customerMock->method('getId')->willReturn($customerId);
         $this->customerDataFactoryMock->expects($this->once())
             ->method('create')
@@ -660,10 +675,6 @@ class SaveTest extends TestCase
             ->method('createAccount')
             ->with($customerMock, null, '')
             ->willReturn($customerMock);
-        $this->authorizationMock->expects($this->once())
-            ->method('isAllowed')
-            ->with(null)
-            ->willReturn(true);
         $this->subscriptionManager->expects($this->once())
             ->method($subscriptionStatus ? 'subscribeCustomer' : 'unsubscribeCustomer')
             ->with($customerId, $subscriptionStore);
@@ -712,18 +723,19 @@ class SaveTest extends TestCase
         ];
         $extractedData = [
             'coolness' => false,
-            'disable_auto_group_change' => 'false',
+            'disable_auto_group_change' => 0,
             'dob' => '1996-03-12',
         ];
 
         /** @var AttributeMetadataInterface|MockObject $customerFormMock */
         $attributeMock = $this->getMockBuilder(
             AttributeMetadataInterface::class
-        )->disableOriginalConstructor()->getMock();
-        $attributeMock->expects($this->exactly(2))
+        )->disableOriginalConstructor()
+            ->getMock();
+        $attributeMock->expects($this->once())
             ->method('getAttributeCode')
             ->willReturn('coolness');
-        $attributeMock->expects($this->exactly(2))
+        $attributeMock->expects($this->once())
             ->method('getFrontendInput')
             ->willReturn('int');
         $attributes = [$attributeMock];
@@ -748,32 +760,33 @@ class SaveTest extends TestCase
         $objectMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectMock->expects($this->exactly(2))
+        $objectMock->expects($this->once())
             ->method('getData')
             ->with('customer')
             ->willReturn($postValue['customer']);
 
-        $this->objectFactoryMock->expects($this->exactly(2))
+        $this->objectFactoryMock->expects($this->once())
             ->method('create')
             ->with(['data' => $postValue])
             ->willReturn($objectMock);
 
         $customerFormMock = $this->getMockBuilder(
             Form::class
-        )->disableOriginalConstructor()->getMock();
-        $customerFormMock->expects($this->exactly(2))
+        )->disableOriginalConstructor()
+            ->getMock();
+        $customerFormMock->expects($this->once())
             ->method('extractData')
             ->with($this->requestMock, 'customer')
             ->willReturn($extractedData);
-        $customerFormMock->expects($this->exactly(2))
+        $customerFormMock->expects($this->once())
             ->method('compactData')
             ->with($extractedData)
             ->willReturn($extractedData);
-        $customerFormMock->expects($this->exactly(2))
+        $customerFormMock->expects($this->once())
             ->method('getAttributes')
             ->willReturn($attributes);
 
-        $this->formFactoryMock->expects($this->exactly(2))
+        $this->formFactoryMock->expects($this->once())
             ->method('create')
             ->with(
                 CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
@@ -786,7 +799,8 @@ class SaveTest extends TestCase
         /** @var CustomerInterface|MockObject $customerMock */
         $customerMock = $this->getMockBuilder(
             CustomerInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->customerDataFactoryMock->expects($this->once())
             ->method('create')
@@ -796,7 +810,10 @@ class SaveTest extends TestCase
             ->method('createAccount')
             ->with($customerMock, null, '')
             ->willThrowException(new \Magento\Framework\Validator\Exception(__('Validator Exception')));
-
+        $this->customerMapperMock->expects($this->once())
+            ->method('toFlatArray')
+            ->with($customerMock)
+            ->willReturn($extractedData);
         $customerMock->expects($this->never())
             ->method('getId');
 
@@ -863,18 +880,19 @@ class SaveTest extends TestCase
         ];
         $extractedData = [
             'coolness' => false,
-            'disable_auto_group_change' => 'false',
+            'disable_auto_group_change' => 0,
             'dob' => '1996-03-12',
         ];
 
         /** @var AttributeMetadataInterface|MockObject $customerFormMock */
         $attributeMock = $this->getMockBuilder(
             AttributeMetadataInterface::class
-        )->disableOriginalConstructor()->getMock();
-        $attributeMock->expects($this->exactly(2))
+        )->disableOriginalConstructor()
+            ->getMock();
+        $attributeMock->expects($this->once())
             ->method('getAttributeCode')
             ->willReturn('coolness');
-        $attributeMock->expects($this->exactly(2))
+        $attributeMock->expects($this->once())
             ->method('getFrontendInput')
             ->willReturn('int');
         $attributes = [$attributeMock];
@@ -899,12 +917,12 @@ class SaveTest extends TestCase
         $objectMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectMock->expects($this->exactly(2))
+        $objectMock->expects($this->once())
             ->method('getData')
             ->with('customer')
             ->willReturn($postValue['customer']);
 
-        $this->objectFactoryMock->expects($this->exactly(2))
+        $this->objectFactoryMock->expects($this->once())
             ->method('create')
             ->with(['data' => $postValue])
             ->willReturn($objectMock);
@@ -912,20 +930,21 @@ class SaveTest extends TestCase
         /** @var Form|MockObject $formMock */
         $customerFormMock = $this->getMockBuilder(
             Form::class
-        )->disableOriginalConstructor()->getMock();
-        $customerFormMock->expects($this->exactly(2))
+        )->disableOriginalConstructor()
+            ->getMock();
+        $customerFormMock->expects($this->once())
             ->method('extractData')
             ->with($this->requestMock, 'customer')
             ->willReturn($extractedData);
-        $customerFormMock->expects($this->exactly(2))
+        $customerFormMock->expects($this->once())
             ->method('compactData')
             ->with($extractedData)
             ->willReturn($extractedData);
-        $customerFormMock->expects($this->exactly(2))
+        $customerFormMock->expects($this->once())
             ->method('getAttributes')
             ->willReturn($attributes);
 
-        $this->formFactoryMock->expects($this->exactly(2))
+        $this->formFactoryMock->expects($this->once())
             ->method('create')
             ->with(
                 CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
@@ -937,7 +956,8 @@ class SaveTest extends TestCase
 
         $customerMock = $this->getMockBuilder(
             CustomerInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->customerDataFactoryMock->expects($this->once())
             ->method('create')
@@ -969,6 +989,11 @@ class SaveTest extends TestCase
         $this->messageManagerMock->expects($this->once())
             ->method('addMessage')
             ->with(new Error('Localized Exception'));
+
+        $this->customerMapperMock->expects($this->once())
+            ->method('toFlatArray')
+            ->with($customerMock)
+            ->willReturn($extractedData);
 
         $this->sessionMock->expects($this->once())
             ->method('setCustomerFormData')
@@ -1014,18 +1039,19 @@ class SaveTest extends TestCase
         ];
         $extractedData = [
             'coolness' => false,
-            'disable_auto_group_change' => 'false',
+            'disable_auto_group_change' => 0,
             'dob' => '1996-03-12',
         ];
 
         /** @var AttributeMetadataInterface|MockObject $customerFormMock */
         $attributeMock = $this->getMockBuilder(
             AttributeMetadataInterface::class
-        )->disableOriginalConstructor()->getMock();
-        $attributeMock->expects($this->exactly(2))
+        )->disableOriginalConstructor()
+            ->getMock();
+        $attributeMock->expects($this->once())
             ->method('getAttributeCode')
             ->willReturn('coolness');
-        $attributeMock->expects($this->exactly(2))
+        $attributeMock->expects($this->once())
             ->method('getFrontendInput')
             ->willReturn('int');
         $attributes = [$attributeMock];
@@ -1050,32 +1076,33 @@ class SaveTest extends TestCase
         $objectMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectMock->expects($this->exactly(2))
+        $objectMock->expects($this->once())
             ->method('getData')
             ->with('customer')
             ->willReturn($postValue['customer']);
 
-        $this->objectFactoryMock->expects($this->exactly(2))
+        $this->objectFactoryMock->expects($this->once())
             ->method('create')
             ->with(['data' => $postValue])
             ->willReturn($objectMock);
 
         $customerFormMock = $this->getMockBuilder(
             Form::class
-        )->disableOriginalConstructor()->getMock();
-        $customerFormMock->expects($this->exactly(2))
+        )->disableOriginalConstructor()
+            ->getMock();
+        $customerFormMock->expects($this->once())
             ->method('extractData')
             ->with($this->requestMock, 'customer')
             ->willReturn($extractedData);
-        $customerFormMock->expects($this->exactly(2))
+        $customerFormMock->expects($this->once())
             ->method('compactData')
             ->with($extractedData)
             ->willReturn($extractedData);
-        $customerFormMock->expects($this->exactly(2))
+        $customerFormMock->expects($this->once())
             ->method('getAttributes')
             ->willReturn($attributes);
 
-        $this->formFactoryMock->expects($this->exactly(2))
+        $this->formFactoryMock->expects($this->once())
             ->method('create')
             ->with(
                 CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
@@ -1088,13 +1115,14 @@ class SaveTest extends TestCase
         /** @var CustomerInterface|MockObject $customerMock */
         $customerMock = $this->getMockBuilder(
             CustomerInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->customerDataFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($customerMock);
 
-        $exception = new \Exception(__('Exception'));
+        $exception = new \Exception('Exception');
         $this->managementMock->expects($this->once())
             ->method('createAccount')
             ->with($customerMock, null, '')
@@ -1121,6 +1149,11 @@ class SaveTest extends TestCase
         $this->messageManagerMock->expects($this->once())
             ->method('addExceptionMessage')
             ->with($exception, __('Something went wrong while saving the customer.'));
+
+        $this->customerMapperMock->expects($this->once())
+            ->method('toFlatArray')
+            ->with($customerMock)
+            ->willReturn($extractedData);
 
         $this->sessionMock->expects($this->once())
             ->method('setCustomerFormData')

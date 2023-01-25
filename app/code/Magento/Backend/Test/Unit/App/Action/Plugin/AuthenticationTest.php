@@ -3,18 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\App\Action\Plugin;
 
 use Magento\Backend\App\Action\Plugin\Authentication;
+use Magento\Backend\Controller\Adminhtml\Index;
+use Magento\Backend\Model\Auth;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\User\Model\User;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class AuthenticationTest
- */
-class AuthenticationTest extends \PHPUnit\Framework\TestCase
+class AuthenticationTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\Model\Auth | \PHPUnit_Framework_MockObject_MockObject
+     * @var Auth|MockObject
      */
     protected $auth;
 
@@ -23,31 +29,40 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
      */
     protected $plugin;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $this->auth = $this->createPartialMock(
-            \Magento\Backend\Model\Auth::class,
+            Auth::class,
             ['getUser', 'isLoggedIn', 'getAuthStorage']
         );
         $objectManager = new ObjectManager($this);
         $this->plugin = $objectManager->getObject(
-            \Magento\Backend\App\Action\Plugin\Authentication::class,
+            Authentication::class,
             ['auth' => $this->auth]
         );
     }
 
-    protected function tearDown()
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
     {
         $this->auth = null;
         $this->plugin = null;
     }
 
-    public function testAroundDispatchProlongStorage()
+    /**
+     * @return void
+     */
+    public function testAroundDispatchProlongStorage(): void
     {
-        $subject = $this->createMock(\Magento\Backend\Controller\Adminhtml\Index::class);
-        $request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getActionName']);
-        $user = $this->createPartialMock(\Magento\User\Model\User::class, ['reload', '__wakeup']);
-        $storage = $this->createPartialMock(\Magento\Backend\Model\Auth\Session::class, ['prolong', 'refreshAcl']);
+        $subject = $this->createMock(Index::class);
+        $request = $this->createPartialMock(Http::class, ['getActionName']);
+        $user = $this->createPartialMock(User::class, ['reload', '__wakeup']);
+        $storage = $this->createPartialMock(Session::class, ['prolong', 'refreshAcl']);
 
         $expectedResult = 'expectedResult';
         $action = 'index';
@@ -55,24 +70,24 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
 
         $this->auth->expects($this->any())
             ->method('getUser')
-            ->will($this->returnValue($user));
+            ->willReturn($user);
         $this->auth->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue($loggedIn));
+            ->willReturn($loggedIn);
         $this->auth->expects($this->any())
             ->method('getAuthStorage')
-            ->will($this->returnValue($storage));
+            ->willReturn($storage);
 
         $request->expects($this->once())
             ->method('getActionName')
-            ->will($this->returnValue($action));
+            ->willReturn($action);
 
         $user->expects($this->once())
             ->method('reload');
 
-        $storage->expects($this->at(0))
+        $storage
             ->method('prolong');
-        $storage->expects($this->at(1))
+        $storage
             ->method('refreshAcl');
 
         $proceed = function ($request) use ($expectedResult) {
@@ -83,28 +98,29 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Calls aroundDispatch to access protected method _processNotLoggedInUser
+     * Calls aroundDispatch to access protected method _processNotLoggedInUser.
      *
+     * @return void
      * Data provider supplies different possibilities of request parameters and properties
      * @dataProvider processNotLoggedInUserDataProvider
      */
-    public function testProcessNotLoggedInUser($isIFrameParam, $isAjaxParam, $isForwardedFlag)
+    public function testProcessNotLoggedInUser($isIFrameParam, $isAjaxParam, $isForwardedFlag): void
     {
-        $subject = $this->getMockBuilder(\Magento\Backend\Controller\Adminhtml\Index::class)
+        $subject = $this->getMockBuilder(Index::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $storage = $this->getMockBuilder(\Magento\Backend\Model\Auth\Session::class)
+        $storage = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         // Stubs to control the flow of execution in aroundDispatch
-        $this->auth->expects($this->any())->method('getAuthStorage')->will($this->returnValue($storage));
-        $request->expects($this->once())->method('getActionName')->will($this->returnValue('non/open/action/name'));
+        $this->auth->expects($this->any())->method('getAuthStorage')->willReturn($storage);
+        $request->expects($this->once())->method('getActionName')->willReturn('non/open/action/name');
         $this->auth->expects($this->any())->method('getUser')->willReturn(false);
-        $this->auth->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
+        $this->auth->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $request->expects($this->any())->method('getPost')->willReturn(false);
 
         // Test cases and expectations based on provided data
@@ -149,7 +165,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function processNotLoggedInUserDataProvider()
+    public function processNotLoggedInUserDataProvider(): array
     {
         return [
             'iFrame' => [true, false, false],

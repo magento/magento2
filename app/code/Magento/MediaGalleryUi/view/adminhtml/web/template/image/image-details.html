@@ -1,0 +1,64 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="image-details" if="image">
+    <div class="image-details-image">
+        <img attr="src: image().image_url"/>
+    </div>
+    <div class="image-details-sidebar">
+        <div class="image-details-section">
+            <h3 class="image-title" text="image().title"></h3>
+            <div class="image-type">
+                <span class="source"><img if="image().source" class="media-gallery-source-icon" attr="{ src: image().source }" /></span>
+                <span class="type" data-ui-id="content-type" text="image().content_type"></span>
+            </div>
+        </div>
+        <div class="filename image-details-section">
+            <h3 translate="'Filename'"></h3>
+            <p text="image().path"></p>
+        </div>
+        <div class="general-details image-details-section" if="image().details">
+            <h3 translate="'Details'"></h3>
+            <div class="attributes">
+                <each args="image().details">
+                    <div class="attribute"  if="value">
+                      <span if="$parent.notEmpty(value)" class="title" translate="title"></span>
+                      <ifnot args="$parent.isArray(value)">
+                        <div class="value" text="value"></div>
+                      </ifnot>
+                      <if args="$parent.isArray(value)">
+                        <each args="{ data: value, as: 'item'}">
+                          <div class="value">
+                            <a attr="href: $parents[1].getFilterUrl(item.link)"
+                               text="$parents[1].getUsedInText(item)"></a><br/>
+                          </div>
+                        </each>
+                      </if>
+                    </div>
+                </each>
+            </div>
+        </div>
+        <div class="description image-details-section" if="image().description">
+            <h3 translate="'Description'"></h3>
+            <p text="image().description"></p>
+        </div>
+        <div class="tags image-details-section" if="image().tags.length">
+            <h3 translate="'Tags'"></h3>
+            <div class="tags-list" css="{'show-all-tags': showAllTags}">
+                <each args="data: image().tags, as: '$tag'">
+                    <span class="tag-item" text="$parent.getTagText($tag, $index())"
+                          css="{'show-more-item': ($index() + 1) > $parent.tagListLimit}"></span>
+                </each>
+            </div>
+            <div class="show-more-link-container">
+                <a href="#" class="show-more-link" if="image().tags.length > tagListLimit"
+                   translate="'Show More'" click="showMoreImageTags"></a>
+            </div>
+        </div>
+
+        <each args="getRegion('additional_image_details')" render=""></each>
+    </div>
+</div>

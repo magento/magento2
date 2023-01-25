@@ -3,36 +3,55 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Tests for \Magento\Framework\Data\Form\Element\Link
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
-class LinkTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\Data\Form\Element\Factory;
+use Magento\Framework\Data\Form\Element\Link;
+use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+class LinkTest extends TestCase
 {
+    private const RANDOM_STRING = '123456abcdef';
+
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\Link
+     * @var Link
      */
     protected $_link;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
-        $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
-        $escaperMock = $objectManager->getObject(\Magento\Framework\Escaper::class);
-        $this->_link = new \Magento\Framework\Data\Form\Element\Link(
+        $objectManager = new ObjectManager($this);
+        $factoryMock = $this->createMock(Factory::class);
+        $collectionFactoryMock = $this->createMock(CollectionFactory::class);
+        $escaperMock = $objectManager->getObject(Escaper::class);
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn(self::RANDOM_STRING);
+        $this->_link = new Link(
             $factoryMock,
             $collectionFactoryMock,
-            $escaperMock
+            $escaperMock,
+            [],
+            $this->createMock(SecureHtmlRenderer::class),
+            $randomMock
         );
-        $formMock = new \Magento\Framework\DataObject();
+        $formMock = new DataObject();
         $formMock->getHtmlIdPrefix('id_prefix');
         $formMock->getHtmlIdPrefix('id_suffix');
         $this->_link->setForm($formMock);
@@ -58,7 +77,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->_link->setValue('Link Text');
         $html = $this->_link->getElementHtml();
         $this->assertEquals(
-            "link_before<a id=\"link_id\"  data-ui-id=\"form-element-\">Link Text</a>\nlink_after",
+            "link_before<a id=\"link_id\" formelementhookid=\"elemId" .self::RANDOM_STRING
+            ."\" data-ui-id=\"form-element-\">Link Text</a>\nlink_after",
             $html
         );
     }

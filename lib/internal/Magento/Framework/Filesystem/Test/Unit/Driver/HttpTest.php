@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Filesystem\Test\Unit\Driver;
 
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Driver\Http;
 use PHPUnit\Framework\TestCase;
 
@@ -30,7 +31,7 @@ class HttpTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         require_once __DIR__ . '/../_files/http_mock.php';
 
@@ -131,7 +132,7 @@ class HttpTest extends TestCase
     /**
      * Verify File get contents.
      *
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      * @return void
      */
     public function testFileGetContents(): void
@@ -144,7 +145,7 @@ class HttpTest extends TestCase
     /**
      * Verify File get contents without content.
      *
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      * @return void
      */
     public function testFileGetContentsNoContent(): void
@@ -157,7 +158,7 @@ class HttpTest extends TestCase
     /**
      * Verify File put contents.
      *
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      * @return void
      */
     public function testFilePutContents(): void
@@ -169,7 +170,7 @@ class HttpTest extends TestCase
     /**
      * Verify file put contents without content.
      *
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      * @return void
      */
     public function testFilePutContentsNoContent(): void
@@ -181,11 +182,11 @@ class HttpTest extends TestCase
     /**
      * Verify File put contents if is fail.
      *
-     * @expectedException \Magento\Framework\Exception\FileSystemException
      * @return void
      */
     public function testFilePutContentsFail(): void
     {
+        $this->expectException('Magento\Framework\Exception\FileSystemException');
         self::$filePutContents = false;
         (new Http())->filePutContents('', '');
     }
@@ -193,19 +194,19 @@ class HttpTest extends TestCase
     /**
      * Verify File open invalid url.
      *
-     * @expectedException \Magento\Framework\Exception\FileSystemException
-     * @expectedExceptionMessage The download URL is incorrect. Verify and try again.
      * @return void
      */
     public function testFileOpenInvalidUrl(): void
     {
+        $this->expectException('Magento\Framework\Exception\FileSystemException');
+        $this->expectExceptionMessage('The download URL is incorrect. Verify and try again.');
         (new Http())->fileOpen('', '');
     }
 
     /**
      * Verify File open.
      *
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      * @return void
      */
     public function testFileOpen(): void

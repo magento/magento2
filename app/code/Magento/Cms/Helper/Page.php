@@ -8,32 +8,35 @@ namespace Magento\Cms\Helper;
 use Magento\Cms\Model\Page\CustomLayoutManagerInterface;
 use Magento\Cms\Model\Page\CustomLayoutRepositoryInterface;
 use Magento\Cms\Model\Page\IdentityMap;
-use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Result\Page as ResultPage;
 
 /**
  * CMS Page Helper
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
  */
-class Page extends \Magento\Framework\App\Helper\AbstractHelper
+class Page extends AbstractHelper
 {
     /**
      * CMS no-route config path
      */
-    const XML_PATH_NO_ROUTE_PAGE = 'web/default/cms_no_route';
+    public const XML_PATH_NO_ROUTE_PAGE = 'web/default/cms_no_route';
 
     /**
      * CMS no cookies config path
      */
-    const XML_PATH_NO_COOKIES_PAGE = 'web/default/cms_no_cookies';
+    public const XML_PATH_NO_COOKIES_PAGE = 'web/default/cms_no_cookies';
 
     /**
      * CMS home page config path
      */
-    const XML_PATH_HOME_PAGE = 'web/default/cms_home_page';
+    public const XML_PATH_HOME_PAGE = 'web/default/cms_home_page';
 
     /**
      * Design package instance
@@ -58,15 +61,11 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_localeDate;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Page factory
-     *
      * @var \Magento\Cms\Model\PageFactory
      */
     protected $_pageFactory;
@@ -146,14 +145,14 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Return result CMS page
      *
-     * @param Action $action
+     * @param ActionInterface $action
      * @param int $pageId
-     * @return \Magento\Framework\View\Result\Page|bool
+     * @return ResultPage|bool
      */
-    public function prepareResultPage(Action $action, $pageId = null)
+    public function prepareResultPage(ActionInterface $action, $pageId = null)
     {
         if ($pageId !== null && $pageId !== $this->_page->getId()) {
-            $delimiterPosition = strrpos($pageId, '|');
+            $delimiterPosition = strrpos((string)$pageId, '|');
             if ($delimiterPosition) {
                 $pageId = substr($pageId, 0, $delimiterPosition);
             }
@@ -180,11 +179,13 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
                 $this->_design->setDesignTheme($this->_page->getCustomTheme());
             }
         }
-        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        /** @var ResultPage $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $this->setLayoutType($inRange, $resultPage);
         $resultPage->addHandle('cms_page_view');
-        $pageHandles = ['id' => str_replace('/', '_', $this->_page->getIdentifier())];
+        $pageHandles = [
+            'id' => $this->_page->getIdentifier() === null ? '' : str_replace('/', '_', $this->_page->getIdentifier())
+        ];
         //Selected custom updates.
         try {
             $this->customLayoutManager->applyUpdate(
@@ -247,8 +248,8 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * Set layout type
      *
      * @param bool $inRange
-     * @param \Magento\Framework\View\Result\Page $resultPage
-     * @return \Magento\Framework\View\Result\Page
+     * @param ResultPage $resultPage
+     * @return ResultPage
      */
     protected function setLayoutType($inRange, $resultPage)
     {

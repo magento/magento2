@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSaveTaxRuleActionGroup">
+        <annotations>
+            <description>Clicks the Save Rule button on the Tax Rule page.</description>
+        </annotations>
+        <waitForElementVisible selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="waitForSaveButton"/>
+        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForSave"/>
+        <waitForText selector="{{AdminMessagesSection.success}}" userInput="You saved the tax rule." stepKey="waitForSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

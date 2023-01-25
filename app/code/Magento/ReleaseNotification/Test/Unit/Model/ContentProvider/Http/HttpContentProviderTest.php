@@ -3,18 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ReleaseNotification\Test\Unit\Model\ContentProvider\Http;
 
+use Magento\Framework\HTTP\ClientInterface;
 use Magento\ReleaseNotification\Model\ContentProvider\Http\HttpContentProvider;
 use Magento\ReleaseNotification\Model\ContentProvider\Http\UrlBuilder;
-use Magento\Framework\HTTP\ClientInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * A unit test for testing of the representation of a HttpContentProvider request.
  */
-class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
+class HttpContentProviderTest extends TestCase
 {
     /**
      * @var HttpContentProvider
@@ -22,39 +25,35 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
     private $httpContentProvider;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
     /**
-     * @var UrlBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlBuilder|MockObject
      */
     private $urlBuilderMock;
 
     /**
-     * @var ClientInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientInterface|MockObject
      */
     private $httpClientMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->getMockForAbstractClass();
-        $this->urlBuilderMock = $this->getMockBuilder(UrlBuilder::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUrl'])
-            ->getMock();
-        $this->httpClientMock = $this->getMockBuilder(ClientInterface::class)
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlBuilder::class);
+        $this->httpClientMock = $this->createMock(ClientInterface::class);
+        $requestTimeout = 10;
+        $this->httpClientMock->expects($this->once())
+            ->method('setTimeout')
+            ->with($requestTimeout);
 
-        $objectManager = new ObjectManager($this);
-        $this->httpContentProvider = $objectManager->getObject(
-            HttpContentProvider::class,
-            [
-                'httpClient' => $this->httpClientMock,
-                'urlBuilder' => $this->urlBuilderMock,
-                'logger' => $this->loggerMock
-            ]
+        $this->httpContentProvider = new HttpContentProvider(
+            $this->httpClientMock,
+            $this->urlBuilderMock,
+            $this->loggerMock,
+            $requestTimeout
         );
     }
 
@@ -63,7 +62,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
         $version = '2.3.0';
         $edition = 'Community';
         $locale = 'fr_FR';
-        $url = 'https://content.url.example/'. $version . '/' . $edition . '/' . $locale . '.json';
+        $url = 'https://content.url.example/' . $version . '/' . $edition . '/' . $locale . '.json';
         $response = '{"return":"success"}';
 
         $this->urlBuilderMock->expects($this->any())
@@ -89,7 +88,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
         $version = '2.3.5';
         $edition = 'Community';
         $locale = 'fr_FR';
-        $url = 'https://content.url.example/'. $version . '/' . $edition . '/' . $locale . '.json';
+        $url = 'https://content.url.example/' . $version . '/' . $edition . '/' . $locale . '.json';
 
         $this->urlBuilderMock->expects($this->any())
             ->method('getUrl')
@@ -98,7 +97,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
         $this->httpClientMock->expects($this->once())
             ->method('get')
             ->with($url)
-            ->will($this->throwException(new \Exception));
+            ->willThrowException(new \Exception());
         $this->httpClientMock->expects($this->never())->method('getBody');
         $this->loggerMock->expects($this->once())
             ->method('warning');
@@ -111,8 +110,8 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
         $version = '2.3.1';
         $edition = 'Community';
         $locale = 'fr_FR';
-        $urlLocale = 'https://content.url.example/'. $version . '/' . $edition . '/' . $locale . '.json';
-        $urlDefaultLocale = 'https://content.url.example/'. $version . '/' . $edition . '/en_US.json';
+        $urlLocale = 'https://content.url.example/' . $version . '/' . $edition . '/' . $locale . '.json';
+        $urlDefaultLocale = 'https://content.url.example/' . $version . '/' . $edition . '/en_US.json';
         $response = '{"return":"default-locale"}';
 
         $this->urlBuilderMock->expects($this->exactly(2))
@@ -146,8 +145,8 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetContentSuccessOnDefaultOrEmpty($version, $edition, $locale, $response)
     {
-        $urlLocale = 'https://content.url.example/'. $version . '/' . $edition . '/' . $locale . '.json';
-        $urlDefaultLocale = 'https://content.url.example/'. $version . '/' . $edition . '/en_US.json';
+        $urlLocale = 'https://content.url.example/' . $version . '/' . $edition . '/' . $locale . '.json';
+        $urlDefaultLocale = 'https://content.url.example/' . $version . '/' . $edition . '/en_US.json';
         $urlDefault = 'https://content.url.example/' . $version . '/default.json';
 
         $this->urlBuilderMock->expects($this->exactly(3))

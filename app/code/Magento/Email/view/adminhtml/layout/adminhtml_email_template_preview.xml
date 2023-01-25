@@ -6,6 +6,13 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <remove src="extjs/resources/css/ext-all.css"/>
+        <remove src="extjs/resources/css/ytheme-magento.css"/>
+        <remove src="css/styles-old.css"/>
+        <remove src="css/styles.css"/>
+        <remove src="jquery/jstree/themes/default/style.css"/>
+    </head>
     <body>
         <attribute name="id" value="html-body"/>
         <attribute name="class" value="preview-window"/>

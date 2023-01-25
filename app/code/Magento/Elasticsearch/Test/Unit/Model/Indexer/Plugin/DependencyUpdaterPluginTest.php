@@ -7,19 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Test\Unit\Model\Indexer\Plugin;
 
+use Magento\CatalogInventory\Model\Indexer\Stock\Processor as CatalogInventoryStockIndexer;
+use Magento\CatalogSearch\Model\Indexer\Fulltext as CatalogSearchFulltextIndexer;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\Model\Indexer\Plugin\DependencyUpdaterPlugin;
 use Magento\Framework\Indexer\Config\DependencyInfoProvider;
-use Magento\CatalogSearch\Model\Indexer\Fulltext as CatalogSearchFulltextIndexer;
-use Magento\CatalogInventory\Model\Indexer\Stock\Processor as CatalogInventoryStockIndexer;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Magento\Elasticsearch\Model\Indexer\Plugin\DependencyUpdaterPlugin class.
  */
-class DependencyUpdaterPluginTest extends \PHPUnit\Framework\TestCase
+class DependencyUpdaterPluginTest extends TestCase
 {
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 
@@ -29,14 +31,14 @@ class DependencyUpdaterPluginTest extends \PHPUnit\Framework\TestCase
     private $plugin;
 
     /**
-     * @var DependencyInfoProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var DependencyInfoProvider|MockObject
      */
     private $providerMock;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()

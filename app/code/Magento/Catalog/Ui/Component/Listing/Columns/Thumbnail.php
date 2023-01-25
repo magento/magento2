@@ -9,7 +9,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
- * Column with thumbnail images
+ * Class Thumbnail
  *
  * @api
  * @since 100.0.2

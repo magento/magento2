@@ -36,7 +36,10 @@ class ResetAttemptForFrontendObserverTest extends TestCase
             ->willReturn($logMock);
 
         /** @var MockObject|Observer $eventObserverMock */
-        $eventObserverMock = $this->createPartialMock(Observer::class, ['getModel']);
+        $eventObserverMock = $this->getMockBuilder(Observer::class)
+            ->addMethods(['getModel'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $eventObserverMock->expects($this->once())
             ->method('getModel')
             ->willReturn($this->createMock(Customer::class));

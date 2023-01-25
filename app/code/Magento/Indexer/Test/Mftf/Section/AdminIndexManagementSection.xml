@@ -17,5 +17,7 @@
         <element name="indexerStatus" type="text" selector="//tr[descendant::td[contains(., '{{status}}')]]//*[contains(@class, 'col-indexer_status')]/span" parameterized="true"/>
         <element name="successMessage" type="text" selector="//*[@data-ui-id='messages-message-success']" timeout="120"/>
         <element name="selectMassAction" type="select" selector="#gridIndexer_massaction-mass-select"/>
+        <element name="columnScheduleStatus" type="text" selector="//th[contains(@class, 'col-indexer_schedule_status')]"/>
+        <element name="indexerScheduleStatus" type="text" selector="//tr[contains(.,'{{var1}}')]//td[contains(@class,'col-indexer_schedule_status')]" parameterized="true"/>
     </section>
 </sections>

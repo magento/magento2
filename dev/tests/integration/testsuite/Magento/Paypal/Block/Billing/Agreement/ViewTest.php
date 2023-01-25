@@ -14,7 +14,7 @@ class ViewTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     /** @var \Magento\Paypal\Block\Billing\Agreement\View */
     protected $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_block = Bootstrap::getObjectManager()->create(\Magento\Paypal\Block\Billing\Agreement\View::class);
         parent::setUp();

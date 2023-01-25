@@ -51,7 +51,7 @@ class VariationHandlerTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
@@ -75,7 +75,7 @@ class VariationHandlerTest extends TestCase
             ->setSwatchImage('some_test_image.jpg')
             ->setNewVariationsAttributeSetId($this->product->getDefaultAttributeSetId());
         $generatedProducts = $this->variationHandler->generateSimpleProducts($this->product, $productsData);
-        $this->assertEquals(3, count($generatedProducts));
+        $this->assertCount(3, $generatedProducts);
         foreach ($generatedProducts as $productId) {
             $stockItem = $this->stockRegistry->getStockItem($productId);
             $product = $this->productRepository->getById($productId);

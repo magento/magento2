@@ -3,41 +3,48 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Mview\Test\Unit;
 
-class ActionFactoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Mview\ActionFactory;
+use Magento\Framework\Mview\ActionInterface;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ActionFactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Mview\ActionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ActionFactory|MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->model = new \Magento\Framework\Mview\ActionFactory($this->objectManagerMock);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->model = new ActionFactory($this->objectManagerMock);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage NotAction doesn't implement \Magento\Framework\Mview\ActionInterface
-     */
     public function testGetWithException()
     {
-        $notActionInterfaceMock = $this->getMockBuilder('Action')->getMock();
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('NotAction doesn\'t implement \Magento\Framework\Mview\ActionInterface');
+        $notActionInterfaceMock = $this->getMockBuilder('Action')
+            ->getMock();
         $this->objectManagerMock->expects(
             $this->once()
         )->method(
             'get'
         )->with(
             'NotAction'
-        )->will(
-            $this->returnValue($notActionInterfaceMock)
+        )->willReturn(
+            $notActionInterfaceMock
         );
         $this->model->get('NotAction');
     }
@@ -45,7 +52,7 @@ class ActionFactoryTest extends \PHPUnit\Framework\TestCase
     public function testGet()
     {
         $actionInterfaceMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\ActionInterface::class,
+            ActionInterface::class,
             [],
             '',
             false
@@ -55,11 +62,11 @@ class ActionFactoryTest extends \PHPUnit\Framework\TestCase
         )->method(
             'get'
         )->with(
-            \Magento\Framework\Mview\ActionInterface::class
-        )->will(
-            $this->returnValue($actionInterfaceMock)
+            ActionInterface::class
+        )->willReturn(
+            $actionInterfaceMock
         );
-        $this->model->get(\Magento\Framework\Mview\ActionInterface::class);
-        $this->assertInstanceOf(\Magento\Framework\Mview\ActionInterface::class, $actionInterfaceMock);
+        $this->model->get(ActionInterface::class);
+        $this->assertInstanceOf(ActionInterface::class, $actionInterfaceMock);
     }
 }

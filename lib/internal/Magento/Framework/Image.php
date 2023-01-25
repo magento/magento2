@@ -48,10 +48,6 @@ class Image
     {
         $this->_adapter->checkDependencies();
 
-        if (!file_exists($this->_fileName)) {
-            throw new \RuntimeException("File '{$this->_fileName}' does not exist.");
-        }
-
         $this->_adapter->open($this->_fileName);
     }
 
@@ -85,7 +81,6 @@ class Image
      * @param int $angle
      * @access public
      * @return void
-     * @deprecated unused
      */
     public function rotate($angle)
     {
@@ -195,7 +190,7 @@ class Image
      * @param int $watermarkImageOpacity Watermark image opacity.
      * @param bool $repeat Enable or disable watermark brick.
      * @access public
-     * @throws \RuntimeException
+     * @throws \Exception
      * @return void
      */
     public function watermark(
@@ -205,9 +200,6 @@ class Image
         $watermarkImageOpacity = 30,
         $repeat = false
     ) {
-        if (!file_exists($watermarkImage)) {
-            throw new \RuntimeException("Required file '{$watermarkImage}' does not exists.");
-        }
         $this->_adapter->watermark($watermarkImage, $positionX, $positionY, $watermarkImageOpacity, $repeat);
     }
 
@@ -233,29 +225,25 @@ class Image
         return $this->_adapter->getImageType();
     }
 
-    // phpcs:disable Magento2.CodeAnalysis.EmptyBlock
     /**
      * Process
      *
-     * @access public,
+     * @access public
      * @return void
      */
-    public function process()
+    public function process() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
     }
-    // phpcs:enable Magento2.CodeAnalysis.EmptyBlock
 
-    // phpcs:disable Magento2.CodeAnalysis.EmptyBlock
     /**
      * Instruction
      *
      * @access public
      * @return void
      */
-    public function instruction()
+    public function instruction() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
     }
-    // phpcs:enable Magento2.CodeAnalysis.EmptyBlock
 
     /**
      * Set image background color

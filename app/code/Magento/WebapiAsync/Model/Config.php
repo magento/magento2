@@ -3,35 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Model;
 
+use Magento\AsynchronousOperations\Model\ConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Webapi\Model\Cache\Type\Webapi as WebapiCache;
 use Magento\Webapi\Model\Config as WebapiConfig;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Webapi\Model\Config\Converter;
 
 /**
  * Class for accessing to Webapi_Async configuration.
  */
-class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
+class Config implements ConfigInterface
 {
     /**
-     * @var \Magento\Webapi\Model\Cache\Type\Webapi
+     * @var WebapiCache
      */
     private $cache;
 
     /**
-     * @var \Magento\Webapi\Model\Config
+     * @var WebapiConfig
      */
     private $webApiConfig;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var SerializerInterface
      */
     private $serializer;
 
@@ -43,18 +42,18 @@ class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Webapi\Model\Cache\Type\Webapi $cache
-     * @param \Magento\Webapi\Model\Config $webApiConfig
-     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
+     * @param WebapiCache $cache
+     * @param WebapiConfig $webApiConfig
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         WebapiCache $cache,
         WebapiConfig $webApiConfig,
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer
     ) {
         $this->cache = $cache;
         $this->webApiConfig = $webApiConfig;
-        $this->serializer = $serializer ? : ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer;
     }
 
     /**
@@ -105,8 +104,9 @@ class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
     private function generateTopicsDataFromWebapiConfig()
     {
         $webApiConfig = $this->webApiConfig->getServices();
+        $webApiConfig = $webApiConfig[Converter::KEY_ROUTES] ?? [];
         $services = [];
-        foreach ($webApiConfig[Converter::KEY_ROUTES] as $routeUrl => $routeData) {
+        foreach ($webApiConfig as $routeUrl => $routeData) {
             foreach ($routeData as $httpMethod => $httpMethodData) {
                 if ($httpMethod !== \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET) {
                     $serviceInterface = $httpMethodData[Converter::KEY_SERVICE][Converter::KEY_SERVICE_CLASS];
@@ -179,7 +179,7 @@ class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
      */
     private function generateKey($typeName, $methodName, $delimiter = '\\', $lcfirst = true)
     {
-        $parts = explode($delimiter, trim($typeName, $delimiter));
+        $parts = explode($delimiter, trim($typeName ?: '', $delimiter));
         foreach ($parts as &$part) {
             $part = ltrim($part, ':');
             if ($lcfirst === true) {

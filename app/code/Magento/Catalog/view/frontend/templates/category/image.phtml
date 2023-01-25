@@ -16,10 +16,9 @@
 // phpcs:disable Magento2.Security.LanguageConstruct.DirectOutput
 ?>
 <?php
-    $_helper    = $this->helper(Magento\Catalog\Helper\Output::class);
     $_category  = $block->getCurrentCategory();
     $_imgHtml   = '';
-    if ($_imgUrl = $_category->getImageUrl()) {
+    if ($_imgUrl = $block->getImage()->getUrl($_category)) {
         $_imgHtml = '<div class="category-image"><img src="'
             . $block->escapeUrl($_imgUrl)
             . '" alt="'
@@ -27,7 +26,7 @@
             . '" title="'
             . $block->escapeHtmlAttr($_category->getName())
             . '" class="image" /></div>';
-        $_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');
+        $_imgHtml = $block->getOutput()->categoryAttribute($_category, $_imgHtml, 'image');
         /* @noEscape */ echo $_imgHtml;
     }
 ?>

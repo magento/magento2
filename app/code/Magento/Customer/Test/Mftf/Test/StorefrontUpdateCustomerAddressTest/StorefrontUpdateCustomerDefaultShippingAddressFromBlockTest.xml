@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontUpdateCustomerDefaultShippingAddressFromBlockTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Update Customer Address"/>
+            <title value="Update customer default shipping address via the Storefront"/>
+            <description value="Customer should be able to update a default shipping address via the Storefront"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-40247"/>
+            <useCaseId value="MAGETWO-97504"/>
+            <group value="customer"/>
+            <group value="update"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer_With_Different_Billing_Shipping_Addresses" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
+        </after>
+
+        <!--Log in to Storefront as Customer 1 -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontCustomerAddressesPage.url}}" stepKey="OpenCustomerAddNewAddress"/>
+        <waitForElementVisible selector="{{StorefrontCustomerAddressesSection.editDefaultShippingAddress}}" stepKey="waitForChangeShippingAddressLinkVisible"/>
+        <click selector="{{StorefrontCustomerAddressesSection.editDefaultShippingAddress}}" stepKey="ClickEditDefaultShippingAddress"/>
+        <fillField userInput="EditedFirstNameShipping" selector="{{StorefrontCustomerAddressFormSection.firstName}}" stepKey="fillFirstName"/>
+        <fillField userInput="EditedLastNameShipping" selector="{{StorefrontCustomerAddressFormSection.lastName}}" stepKey="fillLastName"/>
+        <click selector="{{StorefrontCustomerAddressFormSection.saveAddress}}" stepKey="saveCustomerAddress"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessageVisible"/>
+        <see userInput="You saved the address." selector="{{StorefrontMessagesSection.success}}" stepKey="verifyAddressAdded"/>
+        <see userInput="EditedFirstNameShipping" selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" stepKey="checkNewAddressesFirstNameOnDefaultShipping"/>
+        <see userInput="EditedLastNameShipping" selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" stepKey="checkNewAddressesLastNameOnDefaultShipping"/>
+        <see userInput="{{US_Address_TX_Default_Billing.firstname}}" selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" stepKey="checkNewAddressesFirstNameOnDefaultBilling"/>
+        <see userInput="{{US_Address_TX_Default_Billing.lastname}}" selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" stepKey="checkNewAddressesLastNameOnDefaultBilling"/>
+    </test>
+</tests>

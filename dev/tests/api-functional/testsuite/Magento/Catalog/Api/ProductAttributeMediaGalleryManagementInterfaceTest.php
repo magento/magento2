@@ -8,7 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Api;
 
+use Magento\Catalog\Test\Fixture\Product;
 use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
@@ -54,9 +59,14 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
     private $objectManager;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
@@ -96,6 +106,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
         ];
 
         $this->testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
+        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -235,8 +246,8 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
         $this->assertEquals($updatedImage['file'], $targetProduct->getData('image'));
         // No values for default store view were provided
         $this->assertNull($updatedImage['label_default']);
-        $this->assertNull($updatedImage['position_default']);
-        $this->assertNull($updatedImage['disabled_default']);
+        $this->assertEquals(1, $updatedImage['position_default']);
+        $this->assertEquals(0, $updatedImage['disabled_default']);
     }
 
     /**
@@ -396,11 +407,12 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
      * Test create() method if provided content is not base64 encoded
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The image content must be valid base64 encoded data.
      */
     public function testCreateThrowsExceptionIfProvidedContentIsNotBase64Encoded()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The image content must be valid base64 encoded data.');
+
         $encodedContent = 'not_a_base64_encoded_content';
         $requestData = [
             'id' => null,
@@ -423,11 +435,12 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
      * Test create() method if provided content is not an image
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The image content must be valid base64 encoded data.
      */
     public function testCreateThrowsExceptionIfProvidedContentIsNotAnImage()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The image content must be valid base64 encoded data.');
+
         $encodedContent = base64_encode('not_an_image');
         $requestData = [
             'id' => null,
@@ -450,11 +463,12 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
      * Test create() method if provided image has wrong MIME type
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The image MIME type is not valid or not supported.
      */
     public function testCreateThrowsExceptionIfProvidedImageHasWrongMimeType()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The image MIME type is not valid or not supported.');
+
         $encodedContent = base64_encode(file_get_contents($this->testImagePath));
         $requestData = [
             'id' => null,
@@ -476,11 +490,14 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
     /**
      * Test create method if target product does not exist
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
+
         $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/wrong_product_sku/media';
 
         $requestData = [
@@ -504,11 +521,12 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
      * Test create() method if provided image name contains forbidden characters
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Provided image name contains forbidden characters.
      */
     public function testCreateThrowsExceptionIfProvidedImageNameContainsForbiddenCharacters()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Provided image name contains forbidden characters.');
+
         $requestData = [
             'id' => null,
             'media_type' => 'image',
@@ -529,11 +547,14 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
     /**
      * Test update() method if target product does not exist
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testUpdateThrowsExceptionIfTargetProductDoesNotExist()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
+
         $this->updateServiceInfo['rest']['resourcePath'] = '/V1/products/wrong_product_sku/media'
             . '/' . 'wrong-sku';
         $requestData = [
@@ -555,11 +576,12 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
      * Test update() method if there is no image with given id
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage No image with the provided ID was found. Verify the ID and try again.
      */
     public function testUpdateThrowsExceptionIfThereIsNoImageWithGivenId()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('No image with the provided ID was found. Verify the ID and try again.');
+
         $requestData = [
             'sku' => 'simple',
             'entry' => [
@@ -581,11 +603,14 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
     /**
      * Test delete() method if target product does not exist
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testDeleteThrowsExceptionIfTargetProductDoesNotExist()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
+
         $this->deleteServiceInfo['rest']['resourcePath'] = '/V1/products/wrong_product_sku/media/9999';
         $requestData = [
             'sku' => 'wrong_product_sku',
@@ -599,11 +624,12 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
      * Test delete() method if there is no image with given id
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage No image with the provided ID was found. Verify the ID and try again.
      */
     public function testDeleteThrowsExceptionIfThereIsNoImageWithGivenId()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('No image with the provided ID was found. Verify the ID and try again.');
+
         $this->deleteServiceInfo['rest']['resourcePath'] = '/V1/products/simple/media/9999';
         $requestData = [
             'sku' => 'simple',
@@ -611,6 +637,33 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
         ];
 
         $this->_webApiCall($this->deleteServiceInfo, $requestData);
+    }
+
+    #[
+        DataFixture(StoreFixture::class, as: 'store2'),
+        DataFixture(Product::class, ['media_gallery_entries' => [[], []]], as: 'product')
+    ]
+    public function testDeleteThrowsExceptionIfTheImageCannotBeRemoved(): void
+    {
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
+        $product = $this->fixtures->get('product');
+        $mediaGalleryEntries = $product->getMediaGalleryEntries();
+        $this->assertCount(2, $mediaGalleryEntries);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The image cannot be removed as it has been assigned to the other image role');
+
+        $entry = array_shift($mediaGalleryEntries);
+        $requestData = [
+            'sku' => $product->getSku(),
+            'entryId' => $entry->getId(),
+        ];
+        $this->deleteServiceInfo['rest']['resourcePath'] = strtr('/V1/products/sku/media/entryId', $requestData);
+
+        $this->_webApiCall($this->deleteServiceInfo, $requestData);
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $product = $productRepository->get($product->getSku(), forceReload: true);
+        $mediaGalleryEntries = $product->getMediaGalleryEntries();
+        $this->assertCount(2, $mediaGalleryEntries);
     }
 
     /**
@@ -773,6 +826,6 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
         $this->assertEquals(1, $updatedImage['position']);
         $this->assertEquals(0, $updatedImage['disabled']);
         $this->assertStringStartsWith('/t/e/test_image', $updatedImage['file']);
-        $this->assertEquals($videoContent, array_intersect($updatedImage, $videoContent));
+        $this->assertEquals($videoContent, array_intersect_key($updatedImage, $videoContent));
     }
 }

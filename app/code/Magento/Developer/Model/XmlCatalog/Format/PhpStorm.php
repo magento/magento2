@@ -3,14 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Developer\Model\XmlCatalog\Format;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DomDocument\DomDocumentFactory;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\WriteFactory;
 
 /**
@@ -43,11 +44,11 @@ class PhpStorm implements FormatInterface
     public function __construct(
         ReadFactory $readFactory,
         WriteFactory $fileWriteFactory,
-        DomDocumentFactory $domDocumentFactory = null
+        DomDocumentFactory $domDocumentFactory
     ) {
         $this->currentDirRead = $readFactory->create(getcwd());
         $this->fileWriteFactory = $fileWriteFactory;
-        $this->domDocumentFactory = $domDocumentFactory ?: ObjectManager::getInstance()->get(DomDocumentFactory::class);
+        $this->domDocumentFactory = $domDocumentFactory;
     }
 
     /**
@@ -55,6 +56,7 @@ class PhpStorm implements FormatInterface
      *
      * @param string[] $dictionary
      * @param string $configFilePath relative path to the PhpStorm misc.xml
+     *
      * @return void
      */
     public function generateCatalog(array $dictionary, $configFilePath)
@@ -65,7 +67,7 @@ class PhpStorm implements FormatInterface
         try {
             $file = $this->fileWriteFactory->create(
                 $configFilePath,
-                \Magento\Framework\Filesystem\DriverPool::FILE,
+                DriverPool::FILE,
                 'r'
             );
             $dom = $this->domDocumentFactory->create();
@@ -103,7 +105,7 @@ class PhpStorm implements FormatInterface
         $dom->formatOutput = true;
         $file = $this->fileWriteFactory->create(
             $configFilePath,
-            \Magento\Framework\Filesystem\DriverPool::FILE,
+            DriverPool::FILE,
             'w'
         );
         $file->write($dom->saveXML());

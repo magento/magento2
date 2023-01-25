@@ -7,6 +7,7 @@
 namespace Magento\Config\Console\Command;
 
 use Magento\Config\Model\Config\Backend\Admin\Custom;
+use Magento\Config\Model\Config\PathValidator;
 use Magento\Config\Model\Config\Structure\Converter;
 use Magento\Config\Model\Config\Structure\Data as StructureData;
 use Magento\Directory\Model\Currency;
@@ -23,7 +24,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -89,7 +90,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         Bootstrap::getInstance()->reinitialize();
         $this->objectManager = Bootstrap::getObjectManager();
@@ -115,7 +116,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
@@ -253,7 +254,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             $value,
             $this->scopeConfig->getValue($path, $scope, $scopeCode)
         );
-        $this->assertSame(null, $this->arrayManager->get($configPath, $this->loadConfig()));
+        $this->assertNull($this->arrayManager->get($configPath, $this->loadConfig()));
 
         $this->runCommand($arguments, $optionsLock, '<info>Value was saved in app/etc/env.php and locked.</info>');
         $this->runCommand($arguments, $optionsLock, '<info>Value was saved in app/etc/env.php and locked.</info>');
@@ -442,6 +443,15 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             [Custom::XML_PATH_GENERAL_LOCALE_CODE, 'en_AU', ScopeInterface::SCOPE_STORE, 'default'],
             [Custom::XML_PATH_ADMIN_SECURITY_USEFORMKEY, '0']
         ];
+    }
+
+    /**
+     * Test validate path when field has custom config_path
+     */
+    public function testValidatePathWithCustomConfigPath(): void
+    {
+        $pathValidator = $this->objectManager->get(PathValidator::class);
+        $this->assertTrue($pathValidator->validate('general/group/subgroup/second_field'));
     }
 
     /**

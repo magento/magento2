@@ -55,5 +55,19 @@
                 <HTMLImage>PCFET0NUWVBFI</HTMLImage>
             </LabelImage>
         </PackageResults>
+        <PackageResults>
+            <TrackingNumber>2V467W886398839541</TrackingNumber>
+            <ServiceOptionsCharges>
+                <CurrencyCode>USD</CurrencyCode>
+                <MonetaryValue>0.00</MonetaryValue>
+            </ServiceOptionsCharges>
+            <LabelImage>
+                <LabelImageFormat>
+                    <Code>GIF</Code>
+                </LabelImageFormat>
+                <GraphicImage>R0lGODdheAUgA</GraphicImage>
+                <HTMLImage>PCFET0NUWVBFI</HTMLImage>
+            </LabelImage>
+        </PackageResults>
     </ShipmentResults>
 </ShipmentAcceptResponse>

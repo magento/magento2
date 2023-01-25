@@ -3,22 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Framework\Data;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Module\Dependency\Report\Framework\Data\Dependency;
+use PHPUnit\Framework\TestCase;
 
-class DependencyTest extends \PHPUnit\Framework\TestCase
+class DependencyTest extends TestCase
 {
     /**
      * @param string $lib
      * @param int $count
-     * @return \Magento\Setup\Module\Dependency\Report\Framework\Data\Dependency
+     * @return Dependency
      */
     protected function createDependency($lib, $count)
     {
         $objectManagerHelper = new ObjectManager($this);
         return $objectManagerHelper->getObject(
-            \Magento\Setup\Module\Dependency\Report\Framework\Data\Dependency::class,
+            Dependency::class,
             ['lib' => $lib, 'count' => $count]
         );
     }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginFailedTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Login on the Admin Login page"/>
+            <title value="Admin should not be able to log into the backend with invalid credentials"/>
+            <description value="Admin should not be able to log into the backend with invalid credentials"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-71572"/>
+            <group value="example"/>
+            <group value="login"/>
+            <group value="pr_exclude"/>
+        </annotations>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin">
+            <argument name="password" value="INVALID!{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="assertErrorMessage"/>
+    </test>
+</tests>

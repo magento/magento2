@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Backend\Email;
 
 use Magento\Config\Model\Config\Backend\Email\Logo;
@@ -16,71 +18,72 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\MediaStorage\Model\File\Uploader;
 use Magento\MediaStorage\Model\File\UploaderFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LogoTest extends \PHPUnit\Framework\TestCase
+class LogoTest extends TestCase
 {
     /** @var Logo */
     protected $model;
 
-    /** @var Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Context|MockObject */
     protected $contextMock;
 
-    /** @var Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Registry|MockObject */
     protected $registryMock;
 
-    /** @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ScopeConfigInterface|MockObject */
     protected $scopeConfigMock;
 
-    /** @var TypeListInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var TypeListInterface|MockObject */
     protected $typeListMock;
 
-    /** @var UploaderFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UploaderFactory|MockObject */
     protected $uploaderFactoryMock;
 
-    /** @var RequestDataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RequestDataInterface|MockObject */
     protected $requestDataMock;
 
-    /** @var Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Filesystem|MockObject */
     protected $filesystemMock;
 
-    /** @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var WriteInterface|MockObject */
     protected $writeMock;
 
-    /** @var Uploader|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Uploader|MockObject */
     protected $uploaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->registryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
+        $this->registryMock = $this->getMockBuilder(Registry::class)
             ->getMockForAbstractClass();
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
-        $this->typeListMock = $this->getMockBuilder(\Magento\Framework\App\Cache\TypeListInterface::class)
+        $this->typeListMock = $this->getMockBuilder(TypeListInterface::class)
             ->getMockForAbstractClass();
-        $this->uploaderFactoryMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\UploaderFactory::class)
+        $this->uploaderFactoryMock = $this->getMockBuilder(UploaderFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->requestDataMock
-            = $this->getMockBuilder(\Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface::class)
-            ->getMockForAbstractClass();
-        $this->filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+            = $this->getMockBuilder(RequestDataInterface::class)
+                ->getMockForAbstractClass();
+        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->writeMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
+        $this->writeMock = $this->getMockBuilder(WriteInterface::class)
             ->getMock();
-        $this->uploaderMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Uploader::class)
+        $this->uploaderMock = $this->getMockBuilder(Uploader::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->uploaderFactoryMock->expects($this->any())
-            ->method('create')
+        $this->uploaderFactoryMock->method('create')
             ->willReturn($this->uploaderMock);
 
         $this->filesystemMock->expects($this->once())
@@ -118,8 +121,7 @@ class LogoTest extends \PHPUnit\Framework\TestCase
         $this->model->setScopeCode($scopeCode);
         $_FILES['groups']['tmp_name'][$groupId]['fields'][$field]['value'] = $tmpFileName;
 
-        $this->scopeConfigMock->expects($this->any())
-            ->method('getValue')
+        $this->scopeConfigMock->method('getValue')
             ->with($path, $scope, $scopeCode)
             ->willReturn($oldValue);
 
@@ -127,6 +129,9 @@ class LogoTest extends \PHPUnit\Framework\TestCase
             ->method('delete')
             ->with(Logo::UPLOAD_DIR . '/' . $oldValue)
             ->willReturn(true);
+
+        $this->uploaderMock->method('save')
+            ->willReturn(['file' => $oldValue]);
 
         $this->assertEquals($this->model, $this->model->beforeSave());
     }
@@ -149,8 +154,7 @@ class LogoTest extends \PHPUnit\Framework\TestCase
         $this->model->setScope($scope);
         $this->model->setScopeCode($scopeCode);
 
-        $this->scopeConfigMock->expects($this->any())
-            ->method('getValue')
+        $this->scopeConfigMock->method('getValue')
             ->with($path, $scope, $scopeCode)
             ->willReturn($oldValue);
 
@@ -158,6 +162,9 @@ class LogoTest extends \PHPUnit\Framework\TestCase
             ->method('delete')
             ->with(Logo::UPLOAD_DIR . '/' . $oldValue)
             ->willReturn(true);
+
+        $this->uploaderMock->method('save')
+            ->willReturn(['file' => $oldValue]);
 
         $this->assertEquals($this->model, $this->model->beforeSave());
     }
@@ -180,8 +187,7 @@ class LogoTest extends \PHPUnit\Framework\TestCase
         $this->model->setScope($scope);
         $this->model->setScopeCode($scopeCode);
 
-        $this->scopeConfigMock->expects($this->any())
-            ->method('getValue')
+        $this->scopeConfigMock->method('getValue')
             ->with($path, $scope, $scopeCode)
             ->willReturn($oldValue);
 
@@ -211,8 +217,7 @@ class LogoTest extends \PHPUnit\Framework\TestCase
         $this->model->setScope($scope);
         $this->model->setScopeCode($scopeCode);
 
-        $this->scopeConfigMock->expects($this->any())
-            ->method('getValue')
+        $this->scopeConfigMock->method('getValue')
             ->with($path, $scope, $scopeCode)
             ->willReturn($oldValue);
 

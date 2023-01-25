@@ -15,9 +15,10 @@
             <title value="Guest customer should be able to advance search virtual product with product sku that contains hyphen"/>
             <description value="Guest customer should be able to advance search virtual product with product sku that contains hyphen"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-20385"/>
-            <group value="Catalog"/>
-            <group value="SearchEngineMysql"/>
+            <testCaseId value="MC-28816"/>
+            <group value="catalog"/>
+            <group value="SearchEngine"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="ApiVirtualProductWithDescription" stepKey="product"/>

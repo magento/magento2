@@ -7,17 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Interception\Code\Generator;
 
-/**
- * Class Interceptor
- ˚*
- * @package Magento\Framework\Interception\Code\Generator
- */
-class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
+use Magento\Framework\Code\Generator\EntityAbstract;
+use Magento\Framework\GetReflectionMethodReturnTypeValueTrait;
+
+class Interceptor extends EntityAbstract
 {
-    /**
-     * Entity type
-     */
-    const ENTITY_TYPE = 'interceptor';
+    use GetReflectionMethodReturnTypeValueTrait;
+
+    public const ENTITY_TYPE = 'interceptor';
 
     /**
      * Returns default result class name
@@ -52,9 +49,8 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
         $parameters = [];
         $body = "\$this->___init();\n";
         if ($constructor) {
-            foreach ($constructor->getParameters() as $parameter) {
-                $parameters[] = $this->_getMethodParameterInfo($parameter);
-            }
+            $parameters = array_map([$this, '_getMethodParameterInfo'], $constructor->getParameters());
+
             $body .= count($parameters)
                 ? "parent::__construct({$this->_getParameterList($parameters)});"
                 : "parent::__construct();";
@@ -70,7 +66,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
     /**
      * Returns list of methods for class generator
      *
-     * @return mixed
+     * @return array
      */
     protected function _getClassMethods()
     {
@@ -79,7 +75,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
         $reflectionClass = new \ReflectionClass($this->getSourceClassName());
         $publicMethods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
         foreach ($publicMethods as $method) {
-            if ($this->isInterceptedMethod($method)) {
+            if (!$method->isInternal() && $this->isInterceptedMethod($method)) {
                 $methods[] = $this->_getMethodInfo($method);
             }
         }
@@ -107,10 +103,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getMethodInfo(\ReflectionMethod $method)
     {
-        $parameters = [];
-        foreach ($method->getParameters() as $parameter) {
-            $parameters[] = $this->_getMethodParameterInfo($parameter);
-        }
+        $parameters = array_map([$this, '_getMethodParameterInfo'], $method->getParameters());
 
         $returnTypeValue = $this->getReturnTypeValue($method);
         $methodInfo = [
@@ -118,22 +111,18 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => $parameters,
             'body' => str_replace(
                 [
-                    '%methodName%',
+                    '%method%',
                     '%return%',
                     '%parameters%'
                 ],
                 [
                     $method->getName(),
-                    $returnTypeValue === 'void' ? '' : ' return',
+                    $returnTypeValue === 'void' ? '' : 'return ',
                     $this->_getParameterList($parameters)
                 ],
                 <<<'METHOD_BODY'
-$pluginInfo = $this->pluginList->getNext($this->subjectType, '%methodName%');
-if (!$pluginInfo) {
-   %return% parent::%methodName%(%parameters%);
-} else {
-   %return% $this->___callPlugins('%methodName%', func_get_args(), $pluginInfo);
-}
+$pluginInfo = $this->pluginList->getNext($this->subjectType, '%method%');
+%return%$pluginInfo ? $this->___callPlugins('%method%', func_get_args(), $pluginInfo) : parent::%method%(%parameters%);
 METHOD_BODY
             ),
                 'returnType' => $returnTypeValue,
@@ -156,7 +145,7 @@ METHOD_BODY
             array_map(
                 function ($item) {
                     $output = '';
-                    if ($item['variadic']) {
+                    if (!empty($item['variadic'])) {
                         $output .= '... ';
                     }
 
@@ -206,36 +195,12 @@ METHOD_BODY
 
             if ($resultClassName !== $sourceClassName . '\\Interceptor') {
                 $this->_addError(
-                    'Invalid Interceptor class name [' .
-                    $resultClassName .
-                    ']. Use ' .
-                    $sourceClassName .
-                    '\\Interceptor'
+                    'Invalid Interceptor class name ' . $resultClassName . '. Use ' . $sourceClassName . '\\Interceptor'
                 );
                 $result = false;
             }
         }
 
         return $result;
-    }
-
-    /**
-     * Returns return type
-     *
-     * @param \ReflectionMethod $method
-     * @return null|string
-     */
-    private function getReturnTypeValue(\ReflectionMethod $method): ?string
-    {
-        $returnTypeValue = null;
-        $returnType = $method->getReturnType();
-        if ($returnType) {
-            $returnTypeValue = ($returnType->allowsNull() ? '?' : '');
-            $returnTypeValue .= ($returnType->getName() === 'self')
-                ? $this->_getFullyQualifiedClassName($method->getDeclaringClass()->getName())
-                : $returnType->getName();
-        }
-
-        return $returnTypeValue;
     }
 }

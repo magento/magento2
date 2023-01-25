@@ -9,6 +9,7 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
@@ -30,15 +31,31 @@ class GetCartForUser
     private $cartRepository;
 
     /**
+     * @var IsActive
+     */
+    private $isActive;
+
+    /**
+     * @var UpdateCartCurrency
+     */
+    private $updateCartCurrency;
+
+    /**
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param CartRepositoryInterface $cartRepository
+     * @param IsActive $isActive
+     * @param UpdateCartCurrency $updateCartCurrency
      */
     public function __construct(
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
-        CartRepositoryInterface $cartRepository
+        CartRepositoryInterface $cartRepository,
+        IsActive $isActive,
+        UpdateCartCurrency $updateCartCurrency
     ) {
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->cartRepository = $cartRepository;
+        $this->isActive = $isActive;
+        $this->updateCartCurrency = $updateCartCurrency;
     }
 
     /**
@@ -49,6 +66,7 @@ class GetCartForUser
      * @param int $storeId
      * @return Quote
      * @throws GraphQlAuthorizationException
+     * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
      * @throws NoSuchEntityException
      */
@@ -56,35 +74,19 @@ class GetCartForUser
     {
         try {
             $cartId = $this->maskedQuoteIdToQuoteId->execute($cartHash);
+            /** @var Quote $cart */
+            $cart = $this->cartRepository->get($cartId);
         } catch (NoSuchEntityException $exception) {
             throw new GraphQlNoSuchEntityException(
                 __('Could not find a cart with ID "%masked_cart_id"', ['masked_cart_id' => $cartHash])
             );
         }
 
-        try {
-            /** @var Quote $cart */
-            $cart = $this->cartRepository->get($cartId);
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(
-                __('Could not find a cart with ID "%masked_cart_id"', ['masked_cart_id' => $cartHash])
-            );
+        if (false === (bool)$this->isActive->execute($cart)) {
+            throw new GraphQlNoSuchEntityException(__('The cart isn\'t active.'));
         }
 
-        if (false === (bool)$cart->getIsActive()) {
-            throw new GraphQlNoSuchEntityException(
-                __('Current user does not have an active cart.')
-            );
-        }
-
-        if ((int)$cart->getStoreId() !== $storeId) {
-            throw new GraphQlNoSuchEntityException(
-                __(
-                    'Wrong store code specified for cart "%masked_cart_id"',
-                    ['masked_cart_id' => $cartHash]
-                )
-            );
-        }
+        $cart = $this->updateCartCurrency->execute($cart, $storeId);
 
         $cartCustomerId = (int)$cart->getCustomerId();
 

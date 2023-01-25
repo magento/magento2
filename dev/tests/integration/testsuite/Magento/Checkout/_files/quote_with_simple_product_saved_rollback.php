@@ -5,6 +5,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -15,4 +16,4 @@ $quote->load('test_order_with_simple_product_without_address', 'reserved_order_i
 $quoteIdMask = $objectManager->create(\Magento\Quote\Model\QuoteIdMask::class);
 $quoteIdMask->delete($quote->getId());
 
-require 'simple_product_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Checkout/_files/simple_product_rollback.php');

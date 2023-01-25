@@ -4,8 +4,20 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/../../Checkout/_files/quote_with_address.php';
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+use Magento\Quote\Model\QuoteFactory;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\TestFramework\Helper\Bootstrap;
+
+Resolver::getInstance()->requireDataFixture('Magento/Checkout/_files/quote_with_address.php');
+
+$objectManager = Bootstrap::getObjectManager();
+/** @var QuoteFactory $quoteFactory */
+$quoteFactory = Bootstrap::getObjectManager()->get(QuoteFactory::class);
+/** @var QuoteResource $quoteResource */
+$quoteResource = Bootstrap::getObjectManager()->get(QuoteResource::class);
+$quote = $quoteFactory->create();
+$quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(
     'simple'
@@ -46,7 +58,7 @@ $message->save();
 $quote->getItemByProduct($quoteProduct)->setGiftMessageId($message->getId())->save();
 
 /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-$quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+$quoteIdMask = Bootstrap::getObjectManager()
     ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
     ->create();
 $quoteIdMask->setQuoteId($quote->getId());

@@ -21,9 +21,7 @@
         </annotations>
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
-            <!-- Set configurations -->
-            <magentoCLI command="config:set multishipping/options/checkout_multiple 1" stepKey="allowShippingToMultipleAddresses"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!-- Create simple products -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="firstProduct">

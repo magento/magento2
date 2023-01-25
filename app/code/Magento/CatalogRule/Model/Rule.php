@@ -97,7 +97,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     protected static $_priceRulesData = [];
 
     /**
-     * Catalog rule data
+     * Catalog rule data class
      *
      * @var \Magento\CatalogRule\Helper\Data
      */
@@ -350,6 +350,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
             if ($this->getWebsiteIds()) {
                 /** @var $productCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
                 $productCollection = $this->_productCollectionFactory->create();
+                $productCollection->setStoreId($this->_storeManager->getDefaultStoreView()->getId());
                 $productCollection->addWebsiteFilter($this->getWebsiteIds());
                 if ($this->_productsFilter) {
                     $productCollection->addIdFilter($this->_productsFilter);
@@ -501,8 +502,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         } else {
             $customerGroupId = $this->_customerSession->getCustomerGroupId();
         }
-        $currentDateTime = new \DateTime();
-        $dateTs = $currentDateTime->getTimestamp();
+        $dateTs = $this->_localeDate->scopeTimeStamp($storeId);
         $cacheKey = date('Y-m-d', $dateTs) . "|{$websiteId}|{$customerGroupId}|{$productId}|{$price}";
 
         if (!array_key_exists($cacheKey, self::$_priceRulesData)) {
@@ -592,7 +592,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      */
     public function afterSave()
     {
-        if (!$this->getIsActive()) {
+        if (!$this->getIsActive() && !$this->getOrigData(self::IS_ACTIVE)) {
             return parent::afterSave();
         }
 
@@ -604,6 +604,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         } else {
             $this->_ruleProductProcessor->getIndexer()->invalidate();
         }
+
         return parent::afterSave();
     }
 
@@ -881,6 +882,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      *
      * @return Data\Condition\Converter
      * @deprecated 100.1.0
+     * @see getRuleCondition, setRuleCondition
      */
     private function getRuleConditionConverter()
     {
@@ -901,6 +903,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * Clear price rules cache.
+     *
+     * @return void;
      */
     public function clearPriceRulesData(): void
     {

@@ -9,6 +9,9 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Item as AddressItem;
 use Magento\Quote\Model\Quote\Item;
 
+/**
+ * Address total collector model
+ */
 class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     /**
@@ -89,40 +92,35 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         } else {
             $quoteItem = $item;
         }
-        $product = $quoteItem->getProduct();
-        $product->setCustomerGroupId($quoteItem->getQuote()->getCustomerGroupId());
-
-        /**
-         * Quote super mode flag mean what we work with quote without restriction
-         */
-        if ($item->getQuote()->getIsSuperMode()) {
-            if (!$product) {
-                return false;
-            }
-        } else {
-            if (!$product || !$product->isVisibleInCatalog()) {
-                return false;
+        $valid = false;
+        if ($quoteItem) {
+            $product = $quoteItem->getProduct();
+            /**
+             * Quote super mode flag mean what we work with quote without restriction
+             */
+            if ($product && ($item->getQuote()->getIsSuperMode() || $product->isVisibleInCatalog())) {
+                $product->setCustomerGroupId($quoteItem->getQuote()->getCustomerGroupId());
+                $quoteItem->setConvertedPrice(null);
+                $originalPrice = $product->getPrice();
+                if ($quoteItem->getParentItem() && $quoteItem->isChildrenCalculated()) {
+                    $finalPrice = $quoteItem->getParentItem()->getProduct()->getPriceModel()->getChildFinalPrice(
+                        $quoteItem->getParentItem()->getProduct(),
+                        $quoteItem->getParentItem()->getQty(),
+                        $product,
+                        $quoteItem->getQty()
+                    );
+                    $this->_calculateRowTotal($item, $finalPrice, $originalPrice);
+                } elseif (!$quoteItem->getParentItem()) {
+                    $finalPrice = $product->getFinalPrice($quoteItem->getQty());
+                    $this->_calculateRowTotal($item, $finalPrice, $originalPrice);
+                    $this->_addAmount($item->getRowTotal());
+                    $this->_addBaseAmount($item->getBaseRowTotal());
+                    $address->setTotalQty($address->getTotalQty() + $item->getQty());
+                }
+                $valid = true;
             }
         }
-
-        $quoteItem->setConvertedPrice(null);
-        $originalPrice = $product->getPrice();
-        if ($quoteItem->getParentItem() && $quoteItem->isChildrenCalculated()) {
-            $finalPrice = $quoteItem->getParentItem()->getProduct()->getPriceModel()->getChildFinalPrice(
-                $quoteItem->getParentItem()->getProduct(),
-                $quoteItem->getParentItem()->getQty(),
-                $product,
-                $quoteItem->getQty()
-            );
-            $this->_calculateRowTotal($item, $finalPrice, $originalPrice);
-        } elseif (!$quoteItem->getParentItem()) {
-            $finalPrice = $product->getFinalPrice($quoteItem->getQty());
-            $this->_calculateRowTotal($item, $finalPrice, $originalPrice);
-            $this->_addAmount($item->getRowTotal());
-            $this->_addBaseAmount($item->getBaseRowTotal());
-            $address->setTotalQty($address->getTotalQty() + $item->getQty());
-        }
-        return true;
+        return $valid;
     }
 
     /**
@@ -147,7 +145,7 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * Remove item
      *
      * @param Address $address
-     * @param  AddressItem|Item $item
+     * @param AddressItem|Item $item
      * @return $this
      */
     protected function _removeItem($address, $item)

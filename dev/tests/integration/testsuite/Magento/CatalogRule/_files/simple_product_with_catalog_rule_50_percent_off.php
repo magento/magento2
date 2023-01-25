@@ -16,8 +16,9 @@ use Magento\CatalogRule\Model\RuleFactory;
 use Magento\Customer\Model\Group;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../Store/_files/second_website_with_two_stores.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_website_with_two_stores.php');
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var WebsiteRepositoryInterface $websiteRepository */

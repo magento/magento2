@@ -3,58 +3,60 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\Model\Config\Reader\Source\Dynamic;
 
 use Magento\Framework\App\Config\Scope\Converter;
+use Magento\Framework\DataObject;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Config\Reader\Source\Dynamic\Store as StoreSource;
+use Magento\Store\Model\Config\Reader\Source\Dynamic\Website as WebsiteSource;
 use Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\WebsiteFactory;
-use Magento\Store\Model\Website;
-use Magento\Store\Model\Config\Reader\Source\Dynamic\Website as WebsiteSource;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Framework\DataObject;
+use Magento\Store\Model\Website;
+use Magento\Store\Model\WebsiteFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class StoreTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StoreTest extends \PHPUnit\Framework\TestCase
+class StoreTest extends TestCase
 {
     /**
-     * @var ScopedFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopedFactory|MockObject
      */
     private $collectionFactory;
 
     /**
-     * @var Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var Converter|MockObject
      */
     private $converter;
 
     /**
-     * @var WebsiteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteFactory|MockObject
      */
     private $websiteFactory;
 
     /**
-     * @var Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var Website|MockObject
      */
     private $website;
 
     /**
-     * @var WebsiteSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteSource|MockObject
      */
     private $websiteSource;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManager;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|MockObject
      */
     private $store;
 
@@ -63,18 +65,21 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     private $storeSource;
 
-    public function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $this->collectionFactory = $this->getMockBuilder(ScopedFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->converter = $this->getMockBuilder(Converter::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->websiteFactory = $this->getMockBuilder(\Magento\Store\Model\WebsiteFactory::class)
+        $this->websiteFactory = $this->getMockBuilder(WebsiteFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->website = $this->getMockBuilder(\Magento\Store\Model\Website::class)
             ->disableOriginalConstructor()
@@ -84,10 +89,10 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeSource = new StoreSource(
             $this->collectionFactory,
             $this->converter,
@@ -97,7 +102,10 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGet()
+    /**
+     * @return void
+     */
+    public function testGet(): void
     {
         $scopeCode = 'myStore';
         $expectedResult = [
@@ -126,17 +134,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->with(1)
             ->willReturn([]);
 
-        $this->converter->expects($this->at(0))
+        $this->converter
             ->method('convert')
-            ->with([
-                'config/key1' => 'default_db_value1',
-                'config/key3' => 'default_db_value3'
-            ])
-            ->willReturnArgument(0);
-
-        $this->converter->expects($this->at(1))
-            ->method('convert')
-            ->with($expectedResult)
+            ->withConsecutive([$expectedResult], [$expectedResult])
             ->willReturnArgument(0);
 
         $this->assertEquals($expectedResult, $this->storeSource->get($scopeCode));

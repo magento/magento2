@@ -3,19 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogInventory\Model\Indexer\Stock\Plugin;
+
+use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Store\Model\ResourceModel\Group;
 
 class StoreGroup
 {
     /**
-     * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
+     * @var Processor
      */
     protected $_indexerProcessor;
 
     /**
-     * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor  $indexerProcessor
+     * @param Processor $indexerProcessor
      */
-    public function __construct(\Magento\CatalogInventory\Model\Indexer\Stock\Processor $indexerProcessor)
+    public function __construct(Processor $indexerProcessor)
     {
         $this->_indexerProcessor = $indexerProcessor;
     }
@@ -23,18 +28,19 @@ class StoreGroup
     /**
      * Before save handler
      *
-     * @param \Magento\Store\Model\ResourceModel\Group $subject
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param Group $subject
+     * @param Group $result
+     * @param AbstractModel $object
      *
-     * @return void
+     * @return Group
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeSave(
-        \Magento\Store\Model\ResourceModel\Group $subject,
-        \Magento\Framework\Model\AbstractModel $object
-    ) {
-        if (!$object->getId() || $object->dataHasChangedFor('website_id')) {
+    public function afterSave(Group $subject, Group $result, AbstractModel $object)
+    {
+        if ($object->isObjectNew() || $object->dataHasChangedFor('website_id')) {
             $this->_indexerProcessor->markIndexerAsInvalid();
         }
+
+        return $result;
     }
 }

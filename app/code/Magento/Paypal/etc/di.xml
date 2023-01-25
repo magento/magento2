@@ -149,6 +149,7 @@
     <type name="Magento\Paypal\Controller\Transparent\Response">
         <arguments>
             <argument name="responseValidator" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidatorInController</argument>
+            <argument name="sessionTransparent" xsi:type="object">Magento\Checkout\Model\Session</argument>
         </arguments>
     </type>
 
@@ -249,6 +250,21 @@
                 <item name="paypal/wpp/proxy_host" xsi:type="string">1</item>
                 <item name="paypal/wpp/proxy_port" xsi:type="string">1</item>
                 <item name="paypal/wpp/sandbox_flag" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Session\SessionStartChecker">
+        <plugin name="transparent_session_checker" type="Magento\Paypal\Plugin\TransparentSessionChecker"/>
+    </type>
+    <type name="Magento\Sales\Model\Order\Payment">
+        <plugin name="paypal_transparent" type="Magento\Paypal\Plugin\TransparentOrderPayment"/>
+    </type>
+    <type name="Magento\Paypal\Model\System\Config\Source\DisableFundingOptions">
+        <arguments>
+            <argument name="disallowedFundingOptions" xsi:type="array">
+                <item name="CREDIT" xsi:type="string">PayPal Credit</item>
+                <item name="CARD" xsi:type="string">PayPal Guest Checkout Credit Card Icons</item>
+                <item name="ELV" xsi:type="string">Elektronisches Lastschriftverfahren - German ELV</item>
             </argument>
         </arguments>
     </type>

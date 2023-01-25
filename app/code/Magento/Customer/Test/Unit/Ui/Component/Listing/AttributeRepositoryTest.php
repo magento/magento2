@@ -3,81 +3,113 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing;
 
+use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Api\AddressMetadataManagementInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\CustomerMetadataManagementInterface;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Api\Data\OptionInterface;
+use Magento\Customer\Model\AttributeMetadataDataProvider;
+use Magento\Customer\Model\Indexer\Attribute\Filter;
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test AttributeRepository Class
  */
-class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
+class AttributeRepositoryTest extends TestCase
 {
-    /** @var \Magento\Customer\Api\CustomerMetadataManagementInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerMetadataManagementInterface|MockObject */
     protected $customerMetadataManagement;
 
-    /** @var \Magento\Customer\Api\AddressMetadataManagementInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AddressMetadataManagementInterface|MockObject */
     protected $addressMetadataManagement;
 
-    /** @var \Magento\Customer\Api\CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerMetadataInterface|MockObject */
     protected $customerMetadata;
 
-    /** @var \Magento\Customer\Api\AddressMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AddressMetadataInterface|MockObject */
     protected $addressMetadata;
 
-    /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AttributeMetadataInterface|MockObject */
     protected $attribute;
 
-    /** @var \Magento\Customer\Api\Data\OptionInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var OptionInterface|MockObject */
     protected $option;
 
-    /** @var \Magento\Customer\Model\Indexer\Attribute\Filter|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Filter|MockObject */
     protected $attributeFilter;
 
     /** @var AttributeRepository */
     protected $component;
 
-    protected function setUp()
+    /**
+     * @var AttributeMetadataDataProvider|MockObject
+     */
+    private $attributeMetadataDataProvider;
+
+    /**
+     * @var AbstractAttribute|MockObject
+     */
+    private $attributeModel;
+
+    protected function setUp(): void
     {
         $this->customerMetadataManagement = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\CustomerMetadataManagementInterface::class,
+            CustomerMetadataManagementInterface::class,
             [],
             '',
             false
         );
         $this->addressMetadataManagement = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\AddressMetadataManagementInterface::class,
+            AddressMetadataManagementInterface::class,
             [],
             '',
             false
         );
         $this->customerMetadata = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\CustomerMetadataInterface::class,
+            CustomerMetadataInterface::class,
             [],
             '',
             false
         );
         $this->addressMetadata = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\AddressMetadataInterface::class,
+            AddressMetadataInterface::class,
             [],
             '',
             false
         );
         $this->attribute = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\AttributeMetadataInterface::class,
+            AttributeMetadataInterface::class,
             [],
             '',
             false
         );
-        $this->option = $this->createMock(\Magento\Customer\Api\Data\OptionInterface::class);
+        $this->option = $this->getMockForAbstractClass(OptionInterface::class);
 
-        $this->attributeFilter = $this->createMock(\Magento\Customer\Model\Indexer\Attribute\Filter::class);
+        $this->attributeFilter = $this->createMock(Filter::class);
+
+        $this->attributeMetadataDataProvider = $this->createMock(
+            AttributeMetadataDataProvider::class
+        );
+
+        $this->attributeModel = $this->getMockBuilder(AbstractAttribute::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->component = new AttributeRepository(
             $this->customerMetadataManagement,
             $this->addressMetadataManagement,
             $this->customerMetadata,
             $this->addressMetadata,
-            $this->attributeFilter
+            $this->attributeFilter,
+            $this->attributeMetadataDataProvider
         );
     }
 
@@ -137,6 +169,10 @@ class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('filter')
             ->willReturnArgument(0);
 
+        $this->attributeModel->addData(['grid_filter_condition_type' => 1]);
+        $this->attributeMetadataDataProvider->method('getAttribute')
+            ->willReturn($this->attributeModel);
+
         $this->assertEquals(
             [
                 $billingPrefix . $attributeCode => [
@@ -158,6 +194,7 @@ class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
                     'validation_rules' => [],
                     'required'=> false,
                     'entity_type_code' => 'customer_address',
+                    'grid_filter_condition_type' => 1
                 ]
             ],
             $this->component->getList()

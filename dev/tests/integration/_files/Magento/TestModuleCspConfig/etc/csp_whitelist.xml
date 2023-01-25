@@ -11,6 +11,7 @@
             <values>
                 <value id="mage-base" type="host">https://magento.com</value>
                 <value id="hash" type="hash" algorithm="sha256">B2yPHKaXnvFWtRChIbabYmUBFZdVfKKXHbWtWidDVF8=</value>
+                <value id="hash2" type="hash" algorithm="sha256">B2yPHKaXnvFWtRChIbabYmUBFZdVfKKXHbWtWidDVF9=</value>
             </values>
         </policy>
         <policy id="media-src">

@@ -33,21 +33,20 @@
 
         <!-- ko if: element.notice -->
             <div class="field-note" data-bind="attr: { id: element.noticeId }">
-                <span data-bind="text: element.notice"/>
+                <span data-bind="text: element.notice"></span>
             </div>
         <!-- /ko -->
 
         <!-- ko if: element.error() -->
             <div class="field-error" data-bind="attr: { id: element.errorId }" generated="true">
-                <span data-bind="text: element.error"/>
+                <span data-bind="text: element.error"></span>
             </div>
         <!-- /ko -->
 
         <!-- ko if: element.warn() -->
             <div role="alert" class="message warning" data-bind="attr: { id: element.warningId }" generated="true">
-                <span data-bind="text: element.warn"/>
+                <span data-bind="text: element.warn"></span>
             </div>
         <!-- /ko -->
     </div>
 </div>
-<!-- /ko -->

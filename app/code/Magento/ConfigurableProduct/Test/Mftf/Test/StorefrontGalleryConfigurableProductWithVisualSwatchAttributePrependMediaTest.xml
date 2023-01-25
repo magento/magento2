@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontGalleryConfigurableProductWithVisualSwatchAttributePrependMediaTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Prepend variation media on storefront"/>
+            <title value="Storefront Gallery - Configurable Product with Visual Swatch: prepend variation media"/>
+            <description value="Verify functionality of updating Gallery items on 'view Product' Storefront page for Configurable Product with Visual Swatch input type attribute. Verify that Configurable Product media in Gallery is prepended with media from selected variation"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-26184"/>
+            <group value="catalog"/>
+            <group value="configurableProduct"/>
+            <group value="swatch"/>
+        </annotations>
+
+        <before>
+            <!--Create 1 configurable product -->
+            <createData entity="ApiConfigurableProductWithDescription" stepKey="createConfigurableProduct"/>
+            <!-- Create product swatch attribute with 2 variations -->
+            <createData entity="VisualSwatchProductAttributeForm" stepKey="createVisualSwatchAttribute"/>
+            <createData entity="SwatchProductAttributeOption1" stepKey="swatchAttributeFirstOption">
+                <requiredEntity createDataKey="createVisualSwatchAttribute"/>
+            </createData>
+            <createData entity="SwatchProductAttributeOption2" stepKey="swatchAttributeSecondOption">
+                <requiredEntity createDataKey="createVisualSwatchAttribute"/>
+            </createData>
+            <createData entity="SwatchProductAttributeOption3" stepKey="swatchAttributeThirdOption">
+                <requiredEntity createDataKey="createVisualSwatchAttribute"/>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Open configurable product edit page -->
+            <amOnPage url="{{AdminProductEditPage.url($createConfigurableProduct.id$)}}" stepKey="goToProductIndex"/>
+
+            <!-- Add attribute to configurable product-->
+            <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection"/>
+            <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="createProductConfigurations">
+                <argument name="attributeCode" value="$createVisualSwatchAttribute.attribute_code$"/>
+            </actionGroup>
+
+            <!-- Load media for configurable product -->
+            <actionGroup ref="AddProductImageActionGroup" stepKey="addFirstImageToConfigurableProduct">
+                <argument name="image" value="Magento2"/>
+            </actionGroup>
+            <actionGroup ref="AddProductImageActionGroup" stepKey="addSecondImageToConfigurableProduct">
+                <argument name="image" value="Magento3"/>
+            </actionGroup>
+            <actionGroup ref="AdminAddProductVideoWithPreviewActionGroup" stepKey="addVideoToConfigurableProduct">
+                <argument name="video" value="VimeoProductVideo"/>
+                <argument name="image" value="{{TestImageNew.file}}"/>
+            </actionGroup>
+            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertVideoAddedToConfigurableProduct">
+                <argument name="video" value="VimeoProductVideo"/>
+            </actionGroup>
+            <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveConfigurableProduct"/>
+
+            <!-- Load media for configurable product variation option1 -->
+            <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openConfigurableProductVariationOption1">
+                <argument name="productSku" value="$createConfigurableProduct.sku$-$swatchAttributeFirstOption.option[store_labels][0][label]$"/>
+            </actionGroup>
+            <actionGroup ref="AddProductImageActionGroup" stepKey="addFirstImageToConfigurableProductVariationOption1">
+                <argument name="image" value="MagentoLogo"/>
+            </actionGroup>
+            <actionGroup ref="AddProductImageActionGroup" stepKey="addSecondImageToConfigurableProductVariationOption1">
+                <argument name="image" value="TestImageNew"/>
+            </actionGroup>
+            <actionGroup ref="AdminAddProductVideoWithPreviewActionGroup" stepKey="addVideoToConfigurableProductVariationOption1">
+                <argument name="video" value="VimeoProductVideo"/>
+                <argument name="image" value="{{placeholderSmallImage.file}}"/>
+            </actionGroup>
+            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertVideoAddedToConfigurableProductVariationOption1">
+                <argument name="video" value="VimeoProductVideo"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProductVariationOption1"/>
+
+            <!-- Load media for configurable product variation option3 -->
+            <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openConfigurableProductVariationOption3">
+                <argument name="productSku" value="$createConfigurableProduct.sku$-$swatchAttributeThirdOption.option[store_labels][0][label]$"/>
+            </actionGroup>
+            <actionGroup ref="AdminAddProductVideoWithPreviewActionGroup" stepKey="addVideoToConfigurableProductVariationOption3">
+                <argument name="video" value="VimeoProductVideo"/>
+                <argument name="image" value="{{Magento3.file}}"/>
+            </actionGroup>
+            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertVideoAddedToConfigurableProductVariationOption3">
+                <argument name="video" value="VimeoProductVideo"/>
+            </actionGroup>
+            <actionGroup ref="AddProductImageActionGroup" stepKey="addSecondImageToConfigurableProductVariationOption3">
+                <argument name="image" value="TestImageAdobe"/>
+            </actionGroup>
+            <actionGroup ref="AdminAddProductVideoWithPreviewActionGroup" stepKey="addSecondVideoToConfigurableProductVariationOption3">
+                <argument name="video" value="VimeoProductVideo"/>
+                <argument name="image" value="{{MagentoLogo.file}}"/>
+            </actionGroup>
+            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertSecondVideoAddedToConfigurableProductVariationOption3">
+                <argument name="video" value="VimeoProductVideo"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProductVariationOption3"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created -->
+           <magentoCron groups="index" stepKey="reindexInvalidatedIndicesAfterCreateAttributes"/>
+        </before>
+
+        <after>
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProductsWithAllVariations">
+                <argument name="product" value="$createConfigurableProduct$"/>
+            </actionGroup>
+            <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForDeleteSuccessMessage"/>
+            <see selector="{{AdminMessagesSection.success}}" userInput="A total of 4 record(s) have been deleted." stepKey="seeDeleteSuccessMessage"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearProductGridFilters"/>
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteProductVisualSwatchAttribute">
+                <argument name="ProductAttribute" value="$createVisualSwatchAttribute$"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductAttributeGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+            <!-- Reindex invalidated indices after product attribute has been created -->
+           <magentoCron groups="index" stepKey="reindexInvalidatedIndicesAfterDeleteAttributes"/>
+        </after>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConfigurableProductPage">
+            <argument name="productUrl" value="$createConfigurableProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!--CASE 0: Selected options = none; Expected media : C1, C2, C3-->
+        <comment userInput="BIC workaround" stepKey="waitForThumbnailsAppearCase0"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase0"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase0"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase0"/>
+        <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase0"/>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage1Case0">
+            <expectedResult type="string">|{{Magento2.filename}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase0[0]</actualResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage2Case0">
+            <expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase0[1]</actualResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage3Case0">
+            <expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase0[2]</actualResult>
+        </assertRegExp>
+        <actionGroup ref="AssertStorefrontProductImageAppearsOnProductPagePreviewActionGroup" stepKey="seeImageOnPreviewCase0">
+            <argument name="productImage" value="{{Magento2.filename}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageOpenImageFullscreenActionGroup" stepKey="openFullScreenPageCase0"/>
+        <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsFullScreenPageCase0"/>
+        <assertEquals stepKey="checkPositionInThumbnailForImagesFromFullScreenPageCase0">
+            <expectedResult type="variable">getListOfThumbnailsCase0</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsFullScreenPageCase0</actualResult>
+        </assertEquals>
+        <actionGroup ref="StorefrontProductPageCloseFullscreenGalleryActionGroup" stepKey="closeFullScreenPageCase0"/>
+
+        <!--CASE 1: Selected options = B1; Expected media : D1, D2, D3, C1, C2, C3-->
+        <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeFirstOption.option[store_labels][0][label]$)}}" stepKey="chooseFirstOptionCase1"/>
+        <waitForPageLoad stepKey="waitForThumbnailsAppearCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('4')}}" stepKey="waitForFourthThumbnailCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('5')}}" stepKey="waitForFifthThumbnailCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('6')}}" stepKey="waitForSixthThumbnailCase1"/>
+        <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase1"/>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage1Case1">
+            <expectedResult type="string">|{{MagentoLogo.filename}}.*.png|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase1[0]</actualResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage2Case1">
+            <expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase1[1]</actualResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage3Case1">
+            <expectedResult type="string">|{{placeholderSmallImage.name}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase1[2]</actualResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage4Case1">
+            <expectedResult type="string">|{{Magento2.filename}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase1[3]</actualResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage5Case1">
+            <expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase1[4]</actualResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage6Case1">
+            <expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase1[5]</actualResult>
+        </assertRegExp>
+        <actionGroup ref="AssertStorefrontProductImageAppearsOnProductPagePreviewActionGroup" stepKey="seeImageOnPreviewCase1">
+            <argument name="productImage" value="{{MagentoLogo.filename}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageOpenImageFullscreenActionGroup" stepKey="openFullScreenPageCase1"/>
+        <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsFullScreenPageCase1"/>
+        <assertEquals stepKey="checkPositionInThumbnailForImagesFromFullScreenPageCase1">
+            <expectedResult type="variable">getListOfThumbnailsCase1</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsFullScreenPageCase1</actualResult>
+        </assertEquals>
+        <actionGroup ref="StorefrontProductPageCloseFullscreenGalleryActionGroup" stepKey="closeFullScreenPageCase1"/>
+
+        <!--CASE 2: Selected options = B2; Expected media : C1, C2, C3-->
+        <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeSecondOption.option[store_labels][0][label]$)}}" stepKey="chooseFirstOptionCase2"/>
+        <waitForPageLoad stepKey="waitForThumbnailsAppearCase2"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase2"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase2"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase2"/>
+        <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase2"/>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage1Case2">
+            <expectedResult type="string">|{{Magento2.filename}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase2[0]</actualResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage2Case2">
+            <expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase2[1]</actualResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage3Case2">
+            <expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase2[2]</actualResult>
+        </assertRegExp>
+        <actionGroup ref="AssertStorefrontProductImageAppearsOnProductPagePreviewActionGroup" stepKey="seeImageOnPreviewCase2">
+            <argument name="productImage" value="{{Magento2.filename}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageOpenImageFullscreenActionGroup" stepKey="openFullScreenPageCase2"/>
+        <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsFullScreenPageCase2"/>
+        <assertEquals stepKey="checkPositionInThumbnailForImagesFromFullScreenPageCase2">
+            <expectedResult type="variable">getListOfThumbnailsCase2</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsFullScreenPageCase2</actualResult>
+        </assertEquals>
+        <actionGroup ref="StorefrontProductPageCloseFullscreenGalleryActionGroup" stepKey="closeFullScreenPageCase2"/>
+
+        <!--CASE 3: Selected options = B3; Expected media : E1, E2, E3, C1, C2, C3-->
+        <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeThirdOption.option[store_labels][0][label]$)}}" stepKey="chooseFirstOptionCase3"/>
+        <waitForPageLoad stepKey="waitForThumbnailsAppearCase3"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase3"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase3"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase3"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('4')}}" stepKey="waitForFourthThumbnailCase3"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('5')}}" stepKey="waitForFifthThumbnailCase3"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('6')}}" stepKey="waitForSixthThumbnailCase3"/>
+        <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase3"/>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage1Case3">
+            <expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase3[0]</actualResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage2Case3">
+            <expectedResult type="string">|{{TestImageAdobe.filename}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase3[1]</actualResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage3Case3">
+            <expectedResult type="string">|{{MagentoLogo.filename}}.*.png|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase3[2]</actualResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage4Case3">
+            <expectedResult type="string">|{{Magento2.filename}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase3[3]</actualResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage5Case3">
+            <expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase3[4]</actualResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage6Case3">
+            <expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase3[5]</actualResult>
+        </assertRegExp>
+        <actionGroup ref="AssertStorefrontProductImageAppearsOnProductPagePreviewActionGroup" stepKey="seeImageOnPreviewCase3">
+            <argument name="productImage" value="{{Magento3.filename}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageOpenImageFullscreenActionGroup" stepKey="openFullScreenPageCase3"/>
+        <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsFullScreenPageCase3"/>
+        <assertEquals stepKey="checkPositionInThumbnailForImagesFromFullScreenPageCase3">
+            <expectedResult type="variable">getListOfThumbnailsCase3</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsFullScreenPageCase3</actualResult>
+        </assertEquals>
+        <actionGroup ref="StorefrontProductPageCloseFullscreenGalleryActionGroup" stepKey="closeFullScreenPageCase3"/>
+
+        <!--CASE 4: Selected options = none; Expected media : C1, C2, C3-->
+        <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeThirdOption.option[store_labels][0][label]$)}}" stepKey="unselectThirdOptionCase4"/>
+        <waitForPageLoad stepKey="waitForThumbnailsAppearCase4"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase4"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase4"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase4"/>
+        <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase4"/>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage1Case4">
+            <expectedResult type="string">|{{Magento2.filename}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase4[0]</actualResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage2Case4">
+            <expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase4[1]</actualResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage3Case4">
+            <expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsCase4[2]</actualResult>
+        </assertRegExp>
+        <actionGroup ref="AssertStorefrontProductImageAppearsOnProductPagePreviewActionGroup" stepKey="seeImageOnPreviewCase4">
+            <argument name="productImage" value="{{Magento2.filename}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageOpenImageFullscreenActionGroup" stepKey="openFullScreenPageCase4"/>
+        <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsFullScreenPageCase4"/>
+        <assertEquals stepKey="checkPositionInThumbnailForImagesFromFullScreenPageCase4">
+            <expectedResult type="variable">getListOfThumbnailsCase4</expectedResult>
+            <actualResult type="variable">getListOfThumbnailsFullScreenPageCase4</actualResult>
+        </assertEquals>
+        <actionGroup ref="StorefrontProductPageCloseFullscreenGalleryActionGroup" stepKey="closeFullScreenPageCase4"/>
+    </test>
+</tests>

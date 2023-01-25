@@ -35,7 +35,7 @@ class MassUnlockTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->dispatch('backend/admin/locks/massunlock');
 
         $this->assertSessionMessages(
-            $this->contains((string)__('Unlocked %1 user(s).', count($userIds))),
+            $this->containsEqual((string)__('Unlocked %1 user(s).', count($userIds))),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect();

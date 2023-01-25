@@ -3,44 +3,53 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\MessageQueue\Test\Unit\Config;
 
+use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\MessageQueue as RemoteServiceReader;
+use Magento\Framework\MessageQueue\Config\Data;
+use Magento\Framework\MessageQueue\Config\Reader\Env;
+use Magento\Framework\MessageQueue\Config\Reader\Xml;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+class DataTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\Config\Reader\Xml|\PHPUnit_Framework_MockObject_MockObject
+     * @var Xml|MockObject
      */
     protected $xmlReaderMock;
 
     /**
-     * @var \Magento\Framework\MessageQueue\Config\Reader\Env|\PHPUnit_Framework_MockObject_MockObject
+     * @var Env|MockObject
      */
     protected $envReaderMock;
 
     /**
-     * @var RemoteServiceReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var RemoteServiceReader|MockObject
      */
     protected $remoteServiceReaderMock;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheInterface|MockObject
      */
     protected $cacheMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->xmlReaderMock = $this->getMockBuilder(\Magento\Framework\MessageQueue\Config\Reader\Xml::class)
+        $this->xmlReaderMock = $this->getMockBuilder(Xml::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->envReaderMock = $this->getMockBuilder(\Magento\Framework\MessageQueue\Config\Reader\Env::class)
+        $this->envReaderMock = $this->getMockBuilder(Env::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->remoteServiceReaderMock = $this
@@ -48,10 +57,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 \Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\MessageQueue::class
             )->disableOriginalConstructor()
             ->getMock();
-        $this->cacheMock = $this->getMockBuilder(\Magento\Framework\Config\CacheInterface::class)
+        $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
+            ->getMockForAbstractClass();
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
     }
 
     public function testGet()
@@ -77,9 +86,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     private function getModel()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         return $objectManager->getObject(
-            \Magento\Framework\MessageQueue\Config\Data::class,
+            Data::class,
             [
                 'xmlReader' => $this->xmlReaderMock,
                 'cache' => $this->cacheMock,

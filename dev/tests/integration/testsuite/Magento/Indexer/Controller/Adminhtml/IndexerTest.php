@@ -19,7 +19,7 @@ class IndexerTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     {
         $this->dispatch('backend/indexer/indexer/list/');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<h1 class="page-title">Index Management</h1>', $body);
+        $this->assertStringContainsString('<h1 class="page-title">Index Management</h1>', $body);
         $this->assertEquals(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
@@ -28,8 +28,8 @@ class IndexerTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
             ),
             'Mode selector is not found'
         );
-        $this->assertContains('option value="change_mode_onthefly"', $body);
-        $this->assertContains('option value="change_mode_changelog"', $body);
+        $this->assertStringContainsString('option value="change_mode_onthefly"', $body);
+        $this->assertStringContainsString('option value="change_mode_changelog"', $body);
     }
 
     /**

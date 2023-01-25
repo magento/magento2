@@ -3,15 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Pricing\Test\Unit\Amount;
 
 use Magento\Framework\Pricing\Amount\Base;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class BaseTest
- *
- */
-class BaseTest extends \PHPUnit\Framework\TestCase
+class BaseTest extends TestCase
 {
     /**
      * Test getValue() without exclude argument
@@ -158,6 +157,6 @@ class BaseTest extends \PHPUnit\Framework\TestCase
      */
     protected function createEntity($amount, array $adjustmentAmounts = [])
     {
-        return new \Magento\Framework\Pricing\Amount\Base($amount, $adjustmentAmounts);
+        return new Base($amount, $adjustmentAmounts);
     }
 }

@@ -3,33 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
+use Magento\Eav\Model\Attribute;
+use Magento\Eav\Model\Attribute\Data\Text;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\TypeFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Validator\Alnum;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Eav text attribute model test
  */
-class TextTest extends \PHPUnit\Framework\TestCase
+class TextTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Attribute\Data\Text
+     * @var Text
      */
     private $model;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $locale = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $localeResolver = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
-        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $helper = new StringUtils;
+        $locale = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $helper = new StringUtils();
 
-        $this->model = new \Magento\Eav\Model\Attribute\Data\Text($locale, $logger, $localeResolver, $helper);
+        $this->model = new Text($locale, $logger, $localeResolver, $helper);
         $this->model->setAttribute(
             $this->createAttribute(
                 [
@@ -45,7 +57,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritDoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->model = null;
     }
@@ -130,10 +142,10 @@ class TextTest extends \PHPUnit\Framework\TestCase
             ['QazWsx', true],
             ['QazWsx123', true],
             ['QazWsx 123',
-                [\Zend_Validate_Alnum::NOT_ALNUM => '"Test" contains non-alphabetic or non-numeric characters.']
+                [Alnum::NOT_ALNUM => '"Test" contains non-alphabetic or non-numeric characters.']
             ],
             ['QazWsx_123',
-                [\Zend_Validate_Alnum::NOT_ALNUM => '"Test" contains non-alphabetic or non-numeric characters.']
+                [Alnum::NOT_ALNUM => '"Test" contains non-alphabetic or non-numeric characters.']
             ],
             ['QazWsx12345', [
                 __('"%1" length must be equal or less than %2 characters.', 'Test', 10)]
@@ -179,7 +191,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
             ['QazWsx123', true],
             ['QazWsx 123', true],
             ['QazWsx_123',
-                [\Zend_Validate_Alnum::NOT_ALNUM => '"Test" contains non-alphabetic or non-numeric characters.']
+                [Alnum::NOT_ALNUM => '"Test" contains non-alphabetic or non-numeric characters.']
             ],
             ['QazWsx12345', [
                 __('"%1" length must be equal or less than %2 characters.', 'Test', 10)]
@@ -188,21 +200,30 @@ class TextTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param array $attributeData
-     * @return \Magento\Eav\Model\Attribute
+     * Test for string with diacritics validation
      */
-    protected function createAttribute($attributeData): \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+    public function testValidateValueStringWithDiacritics(): void
     {
-        $attributeClass = \Magento\Eav\Model\Attribute::class;
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $eavTypeFactory = $this->createMock(\Magento\Eav\Model\Entity\TypeFactory::class);
+        $inputValue = "á â à å ä ð é ê è ë í î ì ï ó ô ò ø õ ö ú û ù ü æ œ ç ß a ĝ ń ŕ ý ð ñ";
+        $expectedResult = true;
+        self::assertEquals($expectedResult, $this->model->validateValue($inputValue));
+    }
+
+    /**
+     * @param array $attributeData
+     * @return Attribute
+     */
+    protected function createAttribute($attributeData): AbstractAttribute
+    {
+        $attributeClass = Attribute::class;
+        $objectManagerHelper = new ObjectManager($this);
+        $eavTypeFactory = $this->createMock(TypeFactory::class);
         $arguments = $objectManagerHelper->getConstructArguments(
             $attributeClass,
             ['eavTypeFactory' => $eavTypeFactory, 'data' => $attributeData]
         );
 
-        /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|
-         * \PHPUnit_Framework_MockObject_MockObject
+        /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|MockObject $attribute
          */
         $attribute = $this->getMockBuilder($attributeClass)
             ->setMethods(['_init'])

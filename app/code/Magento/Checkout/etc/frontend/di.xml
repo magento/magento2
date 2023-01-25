@@ -49,6 +49,7 @@
             <argument name="configProviders" xsi:type="array">
                 <item name="checkout_default_config_provider" xsi:type="object">Magento\Checkout\Model\DefaultConfigProvider</item>
                 <item name="checkout_summary_config_provider" xsi:type="object">Magento\Checkout\Model\Cart\CheckoutSummaryConfigProvider</item>
+                <item name="checkout_payment_provider" xsi:type="object">Magento\Checkout\Model\PaymentCaptchaConfigProvider</item>
             </argument>
         </arguments>
     </type>
@@ -98,5 +99,26 @@
     </type>
     <type name="Magento\Quote\Model\Quote">
         <plugin name="clear_addresses_after_product_delete" type="Magento\Checkout\Plugin\Model\Quote\ResetQuoteAddresses"/>
+    </type>
+    <type name="Magento\Captcha\CustomerData\Captcha">
+        <arguments>
+            <argument name="formIds" xsi:type="array">
+                <item name="payment_processing_request" xsi:type="string">payment_processing_request</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\StoreSwitcher\RedirectDataPreprocessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="checkout_session" xsi:type="object">Magento\Checkout\Model\StoreSwitcher\RedirectDataPreprocessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\StoreSwitcher\RedirectDataPostprocessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="checkout_session" xsi:type="object">Magento\Checkout\Model\StoreSwitcher\RedirectDataPostprocessor</item>
+            </argument>
+        </arguments>
     </type>
 </config>

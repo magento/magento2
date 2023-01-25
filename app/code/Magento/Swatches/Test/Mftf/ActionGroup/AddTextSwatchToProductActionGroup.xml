@@ -19,6 +19,7 @@
             <argument name="option2" defaultValue="textSwatchOption2" type="string"/>
             <argument name="option3" defaultValue="textSwatchOption3" type="string"/>
             <argument name="usedInProductListing" defaultValue="No" type="string"/>
+            <argument name="usedInLayeredNavigation" defaultValue="No" type="string"/>
         </arguments>
 
         <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
@@ -41,6 +42,7 @@
         <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab"/>
         <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.UseInProductListing}}" stepKey="waitForTabSwitch"/>
         <selectOption selector="{{AdvancedAttributePropertiesSection.UseInProductListing}}" userInput="{{usedInProductListing}}" stepKey="useInProductListing"/>
+        <selectOption selector="{{AttributePropertiesSection.useInLayeredNavigation}}" userInput="{{usedInLayeredNavigation}}" stepKey="useInLayeredNavigation"/>
         <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSave"/>
     </actionGroup>
 </actionGroups>

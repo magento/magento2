@@ -32,6 +32,11 @@
                     <supported>1</supported>
                 </instant_purchase>
             </fake_vault>
+            <fake_no_model>
+                <!-- This method on purpose does not have a 'model' node. -->
+                <title>Fake Payment Method without &lt;model&gt;</title>
+                <active>0</active>
+            </fake_no_model>
         </payment>
     </default>
 </config>

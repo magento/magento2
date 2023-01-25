@@ -47,11 +47,12 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage GraphQL response contains errors: The country isn't available.
      */
     public function testGetCountryNotFoundException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: The country isn\'t available.');
+
         $query = <<<QUERY
 query {
     country(id: "BLAH") {
@@ -73,11 +74,12 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Country "id" value should be specified
      */
     public function testMissedInputParameterException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Country "id" value should be specified');
+
         $query = <<<QUERY
 {
   country {

@@ -3,42 +3,75 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Wysiwyg\Files;
+
+use Exception;
+use Magento\Backend\Model\Session;
+use Magento\Framework\App\Response\Http;
+use Magento\Framework\App\ViewInterface;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
+use Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\Contents;
+use Magento\Theme\Helper\Storage;
+use Magento\Theme\Model\Wysiwyg\Storage as WysiwygStorage;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ContentsTest extends \PHPUnit\Framework\TestCase
+class ContentsTest extends TestCase
 {
-    /** @var \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files */
+    /**
+     * @var Files
+     */
     protected $controller;
 
-    /** @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var ViewInterface|MockObject
+     */
     protected $view;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\PHPUnit_Framework_MockObject_MockObject*/
+    /**
+     * @var MockObject|MockObject
+     */
     protected $objectManager;
 
-    /** @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Session|MockObject
+     */
     protected $session;
 
-    /** @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Http|MockObject
+     */
     protected $response;
 
-    /** @var \Magento\Theme\Helper\Storage|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Storage|MockObject
+     */
     protected $storage;
 
-    protected function setUp()
+    /**
+     * @inheirtDoc
+     */
+    protected function setUp(): void
     {
-        $this->view = $this->createMock(\Magento\Framework\App\ViewInterface::class);
-        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->session = $this->createMock(\Magento\Backend\Model\Session::class);
-        $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
-        $this->storage = $this->createMock(\Magento\Theme\Helper\Storage::class);
+        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->session = $this->createMock(Session::class);
+        $this->response = $this->createMock(Http::class);
+        $this->storage = $this->createMock(Storage::class);
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $this->controller = $helper->getObject(
-            \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\Contents::class,
+            Contents::class,
             [
                 'objectManager' => $this->objectManager,
                 'view' => $this->view,
@@ -49,12 +82,15 @@ class ContentsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
-        $layout = $this->getMockForAbstractClass(\Magento\Framework\View\LayoutInterface::class, [], '', false);
-        $storage = $this->createMock(\Magento\Theme\Model\Wysiwyg\Storage::class);
+        $layout = $this->getMockForAbstractClass(LayoutInterface::class, [], '', false);
+        $storage = $this->createMock(WysiwygStorage::class);
         $block = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\BlockInterface::class,
+            BlockInterface::class,
             [],
             '',
             false,
@@ -76,24 +112,20 @@ class ContentsTest extends \PHPUnit\Framework\TestCase
         $block->expects($this->once())
             ->method('setStorage')
             ->with($storage);
-        $this->objectManager->expects($this->at(0))
-            ->method('get')
-            ->with(\Magento\Theme\Model\Wysiwyg\Storage::class)
-            ->willReturn($storage);
         $this->storage->expects($this->once())
             ->method('getCurrentPath')
-            ->willThrowException(new \Exception('Message'));
+            ->willThrowException(new Exception('Message'));
 
-        $jsonData = $this->createMock(\Magento\Framework\Json\Helper\Data::class);
+        $jsonData = $this->createMock(Data::class);
         $jsonData->expects($this->once())
             ->method('jsonEncode')
             ->with(['error' => true, 'message' => 'Message'])
             ->willReturn('{"error":"true","message":"Message"}');
 
-        $this->objectManager->expects($this->at(1))
+        $this->objectManager
             ->method('get')
-            ->with(\Magento\Framework\Json\Helper\Data::class)
-            ->willReturn($jsonData);
+            ->withConsecutive([WysiwygStorage::class], [Data::class])
+            ->willReturnOnConsecutiveCalls($storage, $jsonData);
 
         $this->response->expects($this->once())
             ->method('representJson');

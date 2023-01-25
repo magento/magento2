@@ -3,90 +3,107 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo;
 
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Sales\Api\Data\CreditmemoInterface;
+use Magento\Sales\Api\Data\CreditmemoItemInterface;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Creditmemo\RefundOperation;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for refund operation.
  */
-class RefundOperationTest extends \PHPUnit\Framework\TestCase
+class RefundOperationTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\RefundOperation
+     * @var RefundOperation
      */
     private $subject;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderInterface|MockObject
      */
     private $orderMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\CreditmemoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoInterface|MockObject
      */
     private $creditmemoMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderPaymentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderPaymentInterface|MockObject
      */
     private $paymentMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     private $priceCurrencyMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     private $eventManagerMock;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
+        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->creditmemoMock = $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoInterface::class)
+        $this->creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseCost', 'setDoTransaction', 'getPaymentRefundDisallowed'])
+            ->addMethods(['getBaseCost', 'setDoTransaction', 'getPaymentRefundDisallowed'])
             ->getMockForAbstractClass();
 
-        $this->paymentMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
+        $this->paymentMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['refund'])
+            ->addMethods(['refund'])
             ->getMockForAbstractClass();
 
-        $this->priceCurrencyMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
+        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['round'])
+            ->onlyMethods(['round'])
             ->getMockForAbstractClass();
 
-        $contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
+        $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEventDispatcher'])
+            ->onlyMethods(['getEventDispatcher'])
             ->getMock();
 
-        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->willReturn($this->eventManagerMock);
 
-        $this->subject = new \Magento\Sales\Model\Order\Creditmemo\RefundOperation(
+        $this->subject = new RefundOperation(
             $contextMock,
             $this->priceCurrencyMock
         );
     }
 
     /**
-     * @param string $state
+     * @param int $state
+     *
+     * @return void
      * @dataProvider  executeNotRefundedCreditmemoDataProvider
      */
-    public function testExecuteNotRefundedCreditmemo($state)
+    public function testExecuteNotRefundedCreditmemo(int $state): void
     {
         $this->creditmemoMock->expects($this->once())
             ->method('getState')
@@ -104,17 +121,21 @@ class RefundOperationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Data provider for testExecuteNotRefundedCreditmemo
+     *
      * @return array
      */
-    public function executeNotRefundedCreditmemoDataProvider()
+    public function executeNotRefundedCreditmemoDataProvider(): array
     {
         return [
             [Creditmemo::STATE_OPEN],
-            [Creditmemo::STATE_CANCELED],
+            [Creditmemo::STATE_CANCELED]
         ];
     }
 
-    public function testExecuteWithWrongOrder()
+    /**
+     * @return void
+     */
+    public function testExecuteWithWrongOrder(): void
     {
         $creditmemoOrderId = 1;
         $orderId = 2;
@@ -137,9 +158,11 @@ class RefundOperationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $amounts
+     * @return void
+     *
      * @dataProvider baseAmountsDataProvider
      */
-    public function testExecuteOffline($amounts)
+    public function testExecuteOffline(array $amounts): void
     {
         $orderId = 1;
         $online = false;
@@ -202,9 +225,11 @@ class RefundOperationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $amounts
+     *
+     * @return void
      * @dataProvider baseAmountsDataProvider
      */
-    public function testExecuteOnline($amounts)
+    public function testExecuteOnline(array $amounts): void
     {
         $orderId = 1;
         $online = true;
@@ -261,7 +286,7 @@ class RefundOperationTest extends \PHPUnit\Framework\TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function baseAmountsDataProvider()
+    public function baseAmountsDataProvider(): array
     {
         return [
             [[
@@ -359,15 +384,17 @@ class RefundOperationTest extends \PHPUnit\Framework\TestCase
                     'result' => 7,
                     'order' => ['method' => 'getBaseTotalInvoicedCost', 'amount' => 18],
                     'creditmemo' => ['method' => 'getBaseCost', 'amount' => 11],
-                ],
-            ]],
+                ]
+            ]]
         ];
     }
 
     /**
-     * @param $amounts
+     * @param array $amounts
+     *
+     * @return void
      */
-    private function setBaseAmounts($amounts)
+    private function setBaseAmounts(array $amounts): void
     {
         foreach ($amounts as $amountName => $summands) {
             $this->orderMock->expects($this->once())
@@ -382,17 +409,23 @@ class RefundOperationTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    private function registerItems()
+    /**
+     * @return void
+     */
+    private function registerItems(): void
     {
         $item1 = $this->getCreditmemoItemMock();
         $item1->expects($this->once())->method('isDeleted')->willReturn(true);
         $item1->expects($this->never())->method('setCreditMemo');
 
         $item2 = $this->getCreditmemoItemMock();
-        $item2->expects($this->at(0))->method('isDeleted')->willReturn(false);
         $item2->expects($this->once())->method('setCreditMemo')->with($this->creditmemoMock);
         $item2->expects($this->once())->method('getQty')->willReturn(0);
-        $item2->expects($this->at(3))->method('isDeleted')->with(true);
+        $item2
+            ->method('isDeleted')
+            ->withConsecutive([], [true])
+            ->willReturnOnConsecutiveCalls(false, null);
+
         $item2->expects($this->never())->method('register');
 
         $item3 = $this->getCreditmemoItemMock();
@@ -407,13 +440,14 @@ class RefundOperationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
-    private function getCreditmemoItemMock()
+    private function getCreditmemoItemMock(): MockObject
     {
-        return $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoItemInterface::class)
+        return $this->getMockBuilder(CreditmemoItemInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isDeleted', 'setCreditMemo', 'getQty', 'register'])
+            ->onlyMethods(['getQty'])
+            ->addMethods(['isDeleted', 'setCreditMemo', 'register'])
             ->getMockForAbstractClass();
     }
 }

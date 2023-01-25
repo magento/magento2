@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Crontab;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -10,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Interface \Magento\Framework\Crontab\CrontabManagerInterface
  *
+ * @api
  */
 interface CrontabManagerInterface
 {

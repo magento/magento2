@@ -6,9 +6,9 @@
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ProductRepository;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-// phpcs:ignore Magento2.Security.IncludeFile
-require __DIR__ . '/../../../Magento/ConfigurableProduct/_files/product_configurable.php';
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/product_configurable.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 // phpcs:ignore Magento2.Security.IncludeFile

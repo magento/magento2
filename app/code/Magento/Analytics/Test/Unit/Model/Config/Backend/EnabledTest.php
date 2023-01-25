@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Analytics\Test\Unit\Model\Config\Backend;
 
@@ -11,22 +12,24 @@ use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class EnabledTest extends \PHPUnit\Framework\TestCase
+class EnabledTest extends TestCase
 {
     /**
-     * @var SubscriptionHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubscriptionHandler|MockObject
      */
     private $subscriptionHandlerMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
     /**
-     * @var Value|\PHPUnit_Framework_MockObject_MockObject
+     * @var Value|MockObject
      */
     private $configMock;
 
@@ -53,19 +56,13 @@ class EnabledTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->subscriptionHandlerMock = $this->getMockBuilder(SubscriptionHandler::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->subscriptionHandlerMock = $this->createMock(SubscriptionHandler::class);
 
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
-        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -87,7 +84,6 @@ class EnabledTest extends \PHPUnit\Framework\TestCase
         $this->enabledModel->setData('value', $this->valueEnabled);
 
         $this->configMock
-            ->expects($this->any())
             ->method('getValue')
             ->willReturn(!$this->valueEnabled);
 
@@ -111,7 +107,6 @@ class EnabledTest extends \PHPUnit\Framework\TestCase
         $this->enabledModel->setData('value', $this->valueDisabled);
 
         $this->configMock
-            ->expects($this->any())
             ->method('getValue')
             ->willReturn(!$this->valueDisabled);
 
@@ -135,7 +130,6 @@ class EnabledTest extends \PHPUnit\Framework\TestCase
         $this->enabledModel->setData('value', null);
 
         $this->configMock
-            ->expects($this->any())
             ->method('getValue')
             ->willReturn(null);
 
@@ -158,10 +152,10 @@ class EnabledTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testExecuteAfterSaveFailedWithLocalizedException()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $exception = new \Exception('Message');
         $this->enabledModel->setData('value', $this->valueEnabled);
 

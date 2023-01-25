@@ -58,7 +58,7 @@ class Store implements ObserverInterface
             $this->dimensionFactory->create(['name' => 'scope', 'value' => $store->getId()])
         ];
         $configData = $this->indexerConfig->getIndexer(FulltextIndexer::INDEXER_ID);
-        /** @var \Magento\CatalogSearch\Model\Indexer\IndexerHandler $indexHandler */
+        /** @var \Magento\Framework\Indexer\SaveHandler\IndexerInterface $indexHandler */
         $indexHandler = $this->indexerHandlerFactory->create(['data' => $configData]);
         $indexHandler->cleanIndex($dimensions);
     }

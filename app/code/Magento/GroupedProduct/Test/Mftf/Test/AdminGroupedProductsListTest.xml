@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminGroupedProductsAreListedWhenOutOfStock">
+    <test name="AdminGroupedProductsAreListedWhenOutOfStockTest">
         <annotations>
             <features value="GroupedProduct"/>
             <stories value="MAGETWO-93181: Grouped product doesn't take care about his Linked Products when SalableQuantity &lt; ProductLink.ExtensionAttributes.Qty after Source Deduction"/>
@@ -27,7 +27,7 @@
             <createData entity="SimpleProduct4" stepKey="simpleProduct2">
                 <requiredEntity createDataKey="category1"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
@@ -37,8 +37,7 @@
         </after>
 
         <!-- Create product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageAdd"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="adminProductIndexPageAdd"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>

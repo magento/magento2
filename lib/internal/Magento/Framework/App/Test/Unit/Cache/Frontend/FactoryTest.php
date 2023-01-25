@@ -3,11 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\Cache\Frontend;
 
-class FactoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Cache\Frontend\Factory;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\Test\Unit\Cache\Frontend\FactoryTest\CacheDecoratorDummy;
+use Magento\Framework\Cache\Core;
+use Magento\Framework\Cache\Frontend\Adapter\Zend;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class FactoryTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         require_once __DIR__ . '/FactoryTest/CacheDecoratorDummy.php';
     }
@@ -18,12 +32,12 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $result = $model->create(['backend' => 'Zend_Cache_Backend_BlackHole']);
 
         $this->assertInstanceOf(
-            \Magento\Framework\Cache\FrontendInterface::class,
+            FrontendInterface::class,
             $result,
             'Created object must implement \Magento\Framework\Cache\FrontendInterface'
         );
         $this->assertInstanceOf(
-            \Magento\Framework\Cache\Core::class,
+            Core::class,
             $result->getLowLevelFrontend(),
             'Created object must have \Magento\Framework\Cache\Core frontend by default'
         );
@@ -99,7 +113,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             [],
             [
                 [
-                    'class' => \Magento\Framework\App\Test\Unit\Cache\Frontend\FactoryTest\CacheDecoratorDummy::class,
+                    'class' => CacheDecoratorDummy::class,
                     'parameters' => ['param' => 'value'],
                 ]
             ]
@@ -107,7 +121,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $result = $model->create(['backend' => 'Zend_Cache_Backend_BlackHole']);
 
         $this->assertInstanceOf(
-            \Magento\Framework\App\Test\Unit\Cache\Frontend\FactoryTest\CacheDecoratorDummy::class,
+            CacheDecoratorDummy::class,
             $result
         );
 
@@ -121,15 +135,16 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $enforcedOptions
      * @param array $decorators
-     * @return \Magento\Framework\App\Cache\Frontend\Factory
+     * @return Factory
+     * phpcs:disable Squiz.PHP.NonExecutableCode.Unreachable
      */
     protected function _buildModelForCreate($enforcedOptions = [], $decorators = [])
     {
         $processFrontendFunc = function ($class, $params) {
             switch ($class) {
-                case \Magento\Framework\Cache\Frontend\Adapter\Zend::class:
+                case Zend::class:
                     return new $class($params['frontendFactory']);
-                case \Magento\Framework\App\Test\Unit\Cache\Frontend\FactoryTest\CacheDecoratorDummy::class:
+                case CacheDecoratorDummy::class:
                     $frontend = $params['frontend'];
                     unset($params['frontend']);
                     return new $class($frontend, $params);
@@ -138,21 +153,21 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                     break;
             }
         };
-        /** @var $objectManager \PHPUnit_Framework_MockObject_MockObject */
-        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManager->expects($this->any())->method('create')->will($this->returnCallback($processFrontendFunc));
+        /** @var MockObject $objectManager */
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManager->expects($this->any())->method('create')->willReturnCallback($processFrontendFunc);
 
-        $dirMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $dirMock = $this->getMockForAbstractClass(ReadInterface::class);
         $dirMock->expects($this->any())
             ->method('getAbsolutePath')
-            ->will($this->returnValue('DIR'));
-        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
-        $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($dirMock));
-        $filesystem->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($dirMock));
+            ->willReturn('DIR');
+        $filesystem = $this->createMock(Filesystem::class);
+        $filesystem->expects($this->any())->method('getDirectoryRead')->willReturn($dirMock);
+        $filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($dirMock);
 
-        $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $resource = $this->createMock(ResourceConnection::class);
 
-        $model = new \Magento\Framework\App\Cache\Frontend\Factory(
+        $model = new Factory(
             $objectManager,
             $filesystem,
             $resource,

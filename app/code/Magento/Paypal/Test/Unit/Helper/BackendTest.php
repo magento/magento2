@@ -3,43 +3,49 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Helper;
 
 use Magento\Config\Model\Config;
 use Magento\Config\Model\Config\ScopeDefiner;
 use Magento\Directory\Helper\Data;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\RequestInterface;
+use Magento\Paypal\Block\Adminhtml\System\Config\Field\Country;
 use Magento\Paypal\Helper\Backend;
 use Magento\Paypal\Model\Config\StructurePlugin;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BackendTest extends \PHPUnit\Framework\TestCase
+class BackendTest extends TestCase
 {
     const SCOPE = 'website';
 
     const SCOPE_ID = 1;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $request;
 
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     private $directoryHelperMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $backendConfig;
 
     /**
-     * @var ScopeDefiner|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeDefiner|MockObject
      */
     private $scopeDefiner;
 
@@ -48,22 +54,22 @@ class BackendTest extends \PHPUnit\Framework\TestCase
      */
     private $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->context->expects(static::once())
             ->method('getRequest')
             ->willReturn($this->request);
-        $this->directoryHelperMock = $this->getMockBuilder(\Magento\Directory\Helper\Data::class)
+        $this->directoryHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->backendConfig = $this->getMockBuilder(\Magento\Config\Model\Config::class)
+        $this->backendConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeDefiner = $this->getMockBuilder(\Magento\Config\Model\Config\ScopeDefiner::class)
+        $this->scopeDefiner = $this->getMockBuilder(ScopeDefiner::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -115,7 +121,7 @@ class BackendTest extends \PHPUnit\Framework\TestCase
         $this->configurationCountryCodePrepareConfig($config);
         $this->directoryHelperMock->expects($this->once())
             ->method('getDefaultCountry')
-            ->will($this->returnValue($default));
+            ->willReturn($default);
         $this->configurationCountryCodeAssertResult($default);
     }
 
@@ -155,7 +161,6 @@ class BackendTest extends \PHPUnit\Framework\TestCase
      */
     private function configurationCountryCodePrepareConfig($config)
     {
-
         $this->scopeDefiner->expects($this->once())
             ->method('getScope')
             ->willReturn(self::SCOPE);
@@ -166,7 +171,7 @@ class BackendTest extends \PHPUnit\Framework\TestCase
 
         $this->backendConfig->expects($this->once())
             ->method('getConfigDataValue')
-            ->with(\Magento\Paypal\Block\Adminhtml\System\Config\Field\Country::FIELD_CONFIG_PATH)
+            ->with(Country::FIELD_CONFIG_PATH)
             ->willReturn($config);
     }
 

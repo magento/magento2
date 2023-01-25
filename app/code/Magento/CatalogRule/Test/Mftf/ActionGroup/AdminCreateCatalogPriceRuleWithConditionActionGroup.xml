@@ -9,9 +9,6 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateCatalogPriceRuleWithConditionActionGroup" extends="CreateCatalogPriceRuleActionGroup">
-        <arguments>
-            <argument name="catalogRuleType" type="entity" defaultValue="PriceRuleWithCondition"/>
-        </arguments>
         <waitForPageLoad stepKey="waitForPageLoad" after="addNewRule"/>
         <click selector="{{AdminNewCatalogPriceRule.conditionsTab}}" stepKey="expandConditions" before="openActionDropdown"/>
         <scrollTo selector="{{AdminNewCatalogPriceRule.conditionsTab}}" stepKey="scrollToConditionsTab" after="expandConditions"/>
@@ -23,6 +20,9 @@
         <comment userInput="Assert that attribute contains today date without time" stepKey="assertDate" after="waitForAttributeLoad"/>
         <generateDate date="now" format="Y-m-d" stepKey="today" after="assertDate"/>
         <grabTextFrom selector="{{PriceRuleConditionsSection.firstProductAttributeSelected}}"  stepKey="grabTextFromSelectedAttribute" after="today"/>
-        <assertEquals expected="$today" actual="$grabTextFromSelectedAttribute" stepKey="assertTodayDate" after="grabTextFromSelectedAttribute"/>
+        <assertEquals stepKey="assertTodayDate" after="grabTextFromSelectedAttribute">
+			<actualResult type="const">$grabTextFromSelectedAttribute</actualResult>
+			<expectedResult type="const">$today</expectedResult>
+        </assertEquals>
     </actionGroup>
 </actionGroups>

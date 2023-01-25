@@ -37,7 +37,11 @@
     </type>
     <type name="Magento\Catalog\Model\Product\Webapi\ProductOutputProcessor">
         <arguments>
-            <argument name="deserializer" xsi:type="object">Magento\Framework\Webapi\Rest\Request\Deserializer\Json</argument>
+            <argument name="deserializer" xsi:type="object">Magento\Catalog\Model\Product\Webapi\Rest\RequestTypeBasedDeserializer</argument>
         </arguments>
+    </type>
+    <type name="Magento\Catalog\Api\ProductLinkRepositoryInterface">
+        <plugin name="reindex_after_save_product_links" type="Magento\Catalog\Plugin\Api\ProductLinkRepositoryInterface\ReindexAfterSaveProductLinksPlugin"/>
+        <plugin name="reindex_after_delete_by_id_product_links" type="Magento\Catalog\Plugin\Api\ProductLinkRepositoryInterface\ReindexAfterDeleteByIdProductLinksPlugin"/>
     </type>
 </config>

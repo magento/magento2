@@ -3,18 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
 
-class XmlScannerTest extends \PHPUnit\Framework\TestCase
+use Magento\Setup\Module\Di\Code\Scanner\XmlScanner;
+use Magento\Setup\Module\Di\Compiler\Log\Log;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class XmlScannerTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Di\Code\Scanner\XmlScanner
+     * @var XmlScanner
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_logMock;
 
@@ -23,10 +29,13 @@ class XmlScannerTest extends \PHPUnit\Framework\TestCase
      */
     protected $_testFiles = [];
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->_model = new \Magento\Setup\Module\Di\Code\Scanner\XmlScanner(
-            $this->_logMock = $this->createMock(\Magento\Setup\Module\Di\Compiler\Log\Log::class)
+        $this->_model = new XmlScanner(
+            $this->_logMock = $this->createMock(Log::class)
         );
         $testDir = __DIR__ . '/../../' . '/_files';
         $this->_testFiles = [
@@ -36,36 +45,31 @@ class XmlScannerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testCollectEntities()
+    /**
+     * @return void
+     */
+    public function testCollectEntities(): void
     {
         $className = 'Magento\Store\Model\Config\Invalidator\Proxy';
-        $this->_logMock->expects(
-            $this->at(0)
-        )->method(
-            'add'
-        )->with(
-            4,
-            $className,
-            'Invalid proxy class for ' . substr($className, 0, -5)
-        );
-        $this->_logMock->expects(
-            $this->at(1)
-        )->method(
-            'add'
-        )->with(
-            4,
-            '\Magento\SomeModule\Model\Element\Proxy',
-            'Invalid proxy class for ' . substr('\Magento\SomeModule\Model\Element\Proxy', 0, -5)
-        );
-        $this->_logMock->expects(
-            $this->at(2)
-        )->method(
-            'add'
-        )->with(
-            4,
-            '\Magento\SomeModule\Model\Nested\Element\Proxy',
-            'Invalid proxy class for ' . substr('\Magento\SomeModule\Model\Nested\Element\Proxy', 0, -5)
-        );
+        $this->_logMock
+            ->method('add')
+            ->withConsecutive(
+                [
+                    4,
+                    $className,
+                    'Invalid proxy class for ' . substr($className, 0, -5)
+                ],
+                [
+                    4,
+                    '\Magento\SomeModule\Model\Element\Proxy',
+                    'Invalid proxy class for ' . substr('\Magento\SomeModule\Model\Element\Proxy', 0, -5)
+                ],
+                [
+                    4,
+                    '\Magento\SomeModule\Model\Nested\Element\Proxy',
+                    'Invalid proxy class for ' . substr('\Magento\SomeModule\Model\Nested\Element\Proxy', 0, -5)
+                ]
+            );
         $actual = $this->_model->collectEntities($this->_testFiles);
         $expected = [];
         $this->assertEquals($expected, $actual);

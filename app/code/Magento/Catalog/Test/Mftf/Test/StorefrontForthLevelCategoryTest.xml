@@ -16,6 +16,7 @@
             <description value="When the submenu was created in the third stage follow, the submenu works"/>
             <severity value="MAJOR"/>
             <group value="Catalog"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category1"/>
@@ -34,8 +35,9 @@
             <deleteData createDataKey="category3" stepKey="deleteCategory3"/>
             <deleteData createDataKey="category2" stepKey="deleteCategory2"/>
             <deleteData createDataKey="category1" stepKey="deleteCategory1"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="cleanInvalidatedCaches"/>
         </after>
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage"/>
         <moveMouseOver
             selector="{{StorefrontHeaderSection.NavigationCategoryByName($$category1.name$$)}}"
             stepKey="hoverCategoryLevelOne"/>

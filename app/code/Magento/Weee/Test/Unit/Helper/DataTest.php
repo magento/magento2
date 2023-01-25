@@ -1,17 +1,35 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Weee\Test\Unit\Helper;
 
+use Magento\Bundle\Model\Product\Type;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type\Simple;
+use Magento\Framework\DataObject;
+use Magento\Framework\Registry;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Sales\Model\Order\Item;
+use Magento\Store\Model\Store;
+use Magento\Tax\Helper\Data;
 use Magento\Weee\Helper\Data as WeeeHelper;
+use Magento\Weee\Model\Config;
+use Magento\Weee\Model\Tax;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataTest extends \PHPUnit\Framework\TestCase
+class DataTest extends TestCase
 {
     const ROW_AMOUNT_INVOICED = '200';
     const BASE_ROW_AMOUNT_INVOICED = '400';
@@ -23,69 +41,78 @@ class DataTest extends \PHPUnit\Framework\TestCase
     const BASE_TAX_AMOUNT_REFUNDED = '21';
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $product;
 
     /**
-     * @var \Magento\Weee\Model\Tax
+     * @var Tax
      */
     protected $weeeTax;
 
     /**
-     * @var \Magento\Tax\Helper\Data
+     * @var Data
      */
     protected $taxData;
 
     /**
-     * @var \Magento\Weee\Helper\Data
+     * @var WeeeHelper
      */
     protected $helperData;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Json|MockObject
+     */
     private $serializerMock;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $weeeConfig = $this->createMock(\Magento\Weee\Model\Config::class);
-        $weeeConfig->expects($this->any())->method('isEnabled')->will($this->returnValue(true));
-        $weeeConfig->expects($this->any())->method('getListPriceDisplayType')->will($this->returnValue(1));
-        $this->weeeTax = $this->createMock(\Magento\Weee\Model\Tax::class);
-        $this->weeeTax->expects($this->any())->method('getWeeeAmount')->will($this->returnValue('11.26'));
+        $this->product = $this->createMock(Product::class);
+        $weeeConfig = $this->createMock(Config::class);
+        $weeeConfig->method('isEnabled')->willReturn(true);
+        $weeeConfig->method('getListPriceDisplayType')->willReturn(1);
+        $this->weeeTax = $this->createMock(Tax::class);
+        $this->weeeTax->method('getWeeeAmount')->willReturn('11.26');
         $this->taxData = $this->createPartialMock(
-            \Magento\Tax\Helper\Data::class,
+            Data::class,
             ['getPriceDisplayType', 'priceIncludesTax']
         );
 
-        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
+        $this->serializerMock = $this->getMockBuilder(Json::class)
+            ->getMock();
 
         $arguments = [
             'weeeConfig' => $weeeConfig,
             'weeeTax' => $this->weeeTax,
             'taxData' => $this->taxData,
-            'serializer'  => $this->serializerMock
+            'serializer' => $this->serializerMock
         ];
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->helperData = $helper->getObject(\Magento\Weee\Helper\Data::class, $arguments);
+        $helper = new ObjectManager($this);
+        $this->helperData = $helper->getObject(WeeeHelper::class, $arguments);
     }
 
-    public function testGetAmount()
+    /**
+     * @return void
+     */
+    public function testGetAmount(): void
     {
-        $this->product->expects($this->any())->method('hasData')->will($this->returnValue(false));
-        $this->product->expects($this->any())->method('getData')->will($this->returnValue(11.26));
+        $this->product->method('hasData')->willReturn(false);
+        $this->product->method('getData')->willReturn(11.26);
 
         $this->assertEquals('11.26', $this->helperData->getAmountExclTax($this->product));
     }
 
     /**
-     * @return \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @return Item|MockObject
      */
-    private function setupOrderItem()
+    private function setupOrderItem(): Item
     {
-        $orderItem = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $orderItem = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
+            ->onlyMethods(['__wakeup'])
             ->getMock();
 
         $weeeTaxApplied = [
@@ -97,7 +124,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 WeeeHelper::KEY_WEEE_AMOUNT_REFUNDED => self::ROW_AMOUNT_REFUNDED,
                 WeeeHelper::KEY_BASE_WEEE_AMOUNT_REFUNDED => self::BASE_ROW_AMOUNT_REFUNDED,
                 WeeeHelper::KEY_WEEE_TAX_AMOUNT_REFUNDED => self::TAX_AMOUNT_REFUNDED,
-                WeeeHelper::KEY_BASE_WEEE_TAX_AMOUNT_REFUNDED => self::BASE_TAX_AMOUNT_REFUNDED,
+                WeeeHelper::KEY_BASE_WEEE_TAX_AMOUNT_REFUNDED => self::BASE_TAX_AMOUNT_REFUNDED
             ],
             [
                 WeeeHelper::KEY_WEEE_AMOUNT_INVOICED => self::ROW_AMOUNT_INVOICED,
@@ -107,7 +134,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 WeeeHelper::KEY_WEEE_AMOUNT_REFUNDED => self::ROW_AMOUNT_REFUNDED,
                 WeeeHelper::KEY_BASE_WEEE_AMOUNT_REFUNDED => self::BASE_ROW_AMOUNT_REFUNDED,
                 WeeeHelper::KEY_WEEE_TAX_AMOUNT_REFUNDED => self::TAX_AMOUNT_REFUNDED,
-                WeeeHelper::KEY_BASE_WEEE_TAX_AMOUNT_REFUNDED => self::BASE_TAX_AMOUNT_REFUNDED,
+                WeeeHelper::KEY_BASE_WEEE_TAX_AMOUNT_REFUNDED => self::BASE_TAX_AMOUNT_REFUNDED
             ],
         ];
 
@@ -116,63 +143,87 @@ class DataTest extends \PHPUnit\Framework\TestCase
             json_encode($weeeTaxApplied)
         );
 
-        $this->serializerMock->expects($this->any())
+        $this->serializerMock
             ->method('unserialize')
-            ->will($this->returnValue($weeeTaxApplied));
+            ->willReturn($weeeTaxApplied);
 
         return $orderItem;
     }
 
-    public function testGetWeeeAmountInvoiced()
+    /**
+     * @return void
+     */
+    public function testGetWeeeAmountInvoiced(): void
     {
         $orderItem = $this->setupOrderItem();
         $value = $this->helperData->getWeeeAmountInvoiced($orderItem);
         $this->assertEquals(self::ROW_AMOUNT_INVOICED, $value);
     }
 
-    public function testGetBaseWeeeAmountInvoiced()
+    /**
+     * @return void
+     */
+    public function testGetBaseWeeeAmountInvoiced(): void
     {
         $orderItem = $this->setupOrderItem();
         $value = $this->helperData->getBaseWeeeAmountInvoiced($orderItem);
         $this->assertEquals(self::BASE_ROW_AMOUNT_INVOICED, $value);
     }
 
-    public function testGetWeeeTaxAmountInvoiced()
+    /**
+     * @return void
+     */
+    public function testGetWeeeTaxAmountInvoiced(): void
     {
         $orderItem = $this->setupOrderItem();
         $value = $this->helperData->getWeeeTaxAmountInvoiced($orderItem);
         $this->assertEquals(self::TAX_AMOUNT_INVOICED, $value);
     }
 
-    public function testGetWeeeBaseTaxAmountInvoiced()
+    /**
+     * @return void
+     */
+    public function testGetWeeeBaseTaxAmountInvoiced(): void
     {
         $orderItem = $this->setupOrderItem();
         $value = $this->helperData->getBaseWeeeTaxAmountInvoiced($orderItem);
         $this->assertEquals(self::BASE_TAX_AMOUNT_INVOICED, $value);
     }
 
-    public function testGetWeeeAmountRefunded()
+    /**
+     * @return void
+     */
+    public function testGetWeeeAmountRefunded(): void
     {
         $orderItem = $this->setupOrderItem();
         $value = $this->helperData->getWeeeAmountRefunded($orderItem);
         $this->assertEquals(self::ROW_AMOUNT_REFUNDED, $value);
     }
 
-    public function testGetBaseWeeeAmountRefunded()
+    /**
+     * @return void
+     */
+    public function testGetBaseWeeeAmountRefunded(): void
     {
         $orderItem = $this->setupOrderItem();
         $value = $this->helperData->getBaseWeeeAmountRefunded($orderItem);
         $this->assertEquals(self::BASE_ROW_AMOUNT_REFUNDED, $value);
     }
 
-    public function testGetWeeeTaxAmountRefunded()
+    /**
+     * @return void
+     */
+    public function testGetWeeeTaxAmountRefunded(): void
     {
         $orderItem = $this->setupOrderItem();
         $value = $this->helperData->getWeeeTaxAmountRefunded($orderItem);
         $this->assertEquals(self::TAX_AMOUNT_REFUNDED, $value);
     }
 
-    public function testGetBaseWeeeTaxAmountRefunded()
+    /**
+     * @return void
+     */
+    public function testGetBaseWeeeTaxAmountRefunded(): void
     {
         $orderItem = $this->setupOrderItem();
         $value = $this->helperData->getBaseWeeeTaxAmountRefunded($orderItem);
@@ -180,35 +231,40 @@ class DataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider dataProviderGetWeeeAttributesForBundle
-     * @param int $priceIncludesTax
-     * @param bool $priceDisplay
+     * @param int $priceDisplay
+     * @param bool $priceIncludesTax
      * @param array $expectedAmount
+     *
+     * @return void
+     * @dataProvider dataProviderGetWeeeAttributesForBundle
      */
-    public function testGetWeeeAttributesForBundle($priceDisplay, $priceIncludesTax, $expectedAmount)
-    {
+    public function testGetWeeeAttributesForBundle(
+        int $priceDisplay,
+        bool $priceIncludesTax,
+        array $expectedAmount
+    ): void {
         $prodId1 = 1;
         $prodId2 = 2;
         $fptCode1 = 'fpt' . $prodId1;
         $fptCode2 = 'fpt' . $prodId2;
 
-        $weeeObject1 = new \Magento\Framework\DataObject(
+        $weeeObject1 = new DataObject(
             [
                 'code' => $fptCode1,
-                'amount' => '15',
+                'amount' => '15.00',
                 'amount_excl_tax' => '15.0000',
                 'tax_amount' => '1'
             ]
         );
-        $weeeObject2 = new \Magento\Framework\DataObject(
+        $weeeObject2 = new DataObject(
             [
                 'code' => $fptCode2,
-                'amount' => '10',
+                'amount' => '10.00',
                 'amount_excl_tax' => '10.0000',
                 'tax_amount' => '5'
             ]
         );
-        $expectedObject1 = new \Magento\Framework\DataObject(
+        $expectedObject1 = new DataObject(
             [
                 'code' => $fptCode1,
                 'amount' => $expectedAmount[0],
@@ -216,7 +272,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 'tax_amount' => '1'
             ]
         );
-        $expectedObject2 = new \Magento\Framework\DataObject(
+        $expectedObject2 = new DataObject(
             [
                 'code' => $fptCode2,
                 'amount' => $expectedAmount[1],
@@ -226,159 +282,178 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
 
         $expectedArray = [$prodId1 => [$fptCode1 => $expectedObject1], $prodId2 => [$fptCode2 => $expectedObject2]];
-        $this->weeeTax->expects($this->any())
+        $this->weeeTax
             ->method('getProductWeeeAttributes')
-            ->will($this->returnValue([$weeeObject1, $weeeObject2]));
-        $this->taxData->expects($this->any())
+            ->willReturn([$weeeObject1, $weeeObject2]);
+        $this->taxData
             ->method('getPriceDisplayType')
             ->willReturn($priceDisplay);
-        $this->taxData->expects($this->any())
+        $this->taxData
             ->method('priceIncludesTax')
             ->willReturn($priceIncludesTax);
 
-        $productSimple = $this->createPartialMock(\Magento\Catalog\Model\Product\Type\Simple::class, ['getId']);
-        $productSimple->expects($this->at(0))
+        $productSimple = $this->getMockBuilder(Simple::class)
+            ->addMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productSimple
             ->method('getId')
-            ->will($this->returnValue($prodId1));
-        $productSimple->expects($this->at(1))
-            ->method('getId')
-            ->will($this->returnValue($prodId2));
+            ->willReturnOnConsecutiveCalls($prodId1, $prodId2);
 
-        $productInstance = $this->createMock(\Magento\Bundle\Model\Product\Type::class);
-        $productInstance->expects($this->any())
+        $productInstance = $this->createMock(Type::class);
+        $productInstance
             ->method('getSelectionsCollection')
-            ->will($this->returnValue([$productSimple]));
+            ->willReturn([$productSimple]);
 
-        $store=$this->createMock(\Magento\Store\Model\Store::class);
-        /** @var \Magento\Catalog\Model\Product $product */
+        $store=$this->createMock(Store::class);
+        /** @var Product $product */
         $product = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             ['getTypeInstance', 'getStoreId', 'getStore', 'getTypeId']
         );
-        $product->expects($this->any())
+        $product
             ->method('getTypeInstance')
-            ->will($this->returnValue($productInstance));
-        $product->expects($this->any())
+            ->willReturn($productInstance);
+        $product
             ->method('getStoreId')
-            ->will($this->returnValue(1));
-        $product->expects($this->any())
+            ->willReturn(1);
+        $product
             ->method('getStore')
-            ->will($this->returnValue($store));
-        $product->expects($this->any())
+            ->willReturn($store);
+        $product
             ->method('getTypeId')
-            ->will($this->returnValue('bundle'));
+            ->willReturn('bundle');
 
-        $registry=$this->createMock(\Magento\Framework\Registry::class);
-        $registry->expects($this->any())
+        $registry = $this->createMock(Registry::class);
+        $registry
             ->method('registry')
             ->with('current_product')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
-        $result =  $this->helperData->getWeeeAttributesForBundle($product);
+        $result = $this->helperData->getWeeeAttributesForBundle($product);
         $this->assertEquals($expectedArray, $result);
     }
 
     /**
      * @return array
      */
-    public function dataProviderGetWeeeAttributesForBundle()
+    public function dataProviderGetWeeeAttributesForBundle(): array
     {
         return [
             [2, false, ["16.00", "15.00"]],
             [2, true, ["15.00", "10.00"]],
             [1, false, ["15.00", "10.00"]],
-            [1, true, ["15.00", "10.00"]],
+            [1, true, ["15.0000", "10.0000"]],
             [3, false, ["16.00", "15.00"]],
-            [3, true, ["15.00", "10.00"]],
+            [3, true, ["15.00", "10.00"]]
         ];
     }
 
-    public function testGetAppliedSimple()
+    /**
+     * @return void
+     */
+    public function testGetAppliedSimple(): void
     {
         $testArray = ['key' => 'value'];
-        $itemProductSimple = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            ['getWeeeTaxApplied', 'getHasChildren']
-        );
-        $itemProductSimple->expects($this->any())
+        $itemProductSimple = $this->getMockBuilder(QuoteItem::class)
+            ->addMethods(['getWeeeTaxApplied', 'getHasChildren'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemProductSimple
             ->method('getHasChildren')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
-        $itemProductSimple->expects($this->any())
+        $itemProductSimple
             ->method('getWeeeTaxApplied')
-            ->will($this->returnValue(json_encode($testArray)));
+            ->willReturn(json_encode($testArray));
 
-        $this->serializerMock->expects($this->any())
+        $this->serializerMock
             ->method('unserialize')
-            ->will($this->returnValue($testArray));
+            ->willReturn($testArray);
 
         $this->assertEquals($testArray, $this->helperData->getApplied($itemProductSimple));
     }
 
-    public function testGetAppliedBundle()
+    /**
+     * @return void
+     */
+    public function testGetAppliedBundle(): void
     {
         $testArray1 = ['key1' => 'value1'];
         $testArray2 = ['key2' => 'value2'];
 
         $testArray = array_merge($testArray1, $testArray2);
 
-        $itemProductSimple1=$this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getWeeeTaxApplied']);
-        $itemProductSimple2=$this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getWeeeTaxApplied']);
+        $itemProductSimple1 = $this->getMockBuilder(QuoteItem::class)
+            ->addMethods(['getWeeeTaxApplied'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemProductSimple2 = $this->getMockBuilder(QuoteItem::class)
+            ->addMethods(['getWeeeTaxApplied'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $itemProductSimple1->expects($this->any())
+        $itemProductSimple1
             ->method('getWeeeTaxApplied')
-            ->will($this->returnValue(json_encode($testArray1)));
+            ->willReturn(json_encode($testArray1));
 
-        $itemProductSimple2->expects($this->any())
+        $itemProductSimple2
             ->method('getWeeeTaxApplied')
-            ->will($this->returnValue(json_encode($testArray2)));
+            ->willReturn(json_encode($testArray2));
 
-        $itemProductBundle = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            ['getHasChildren', 'isChildrenCalculated', 'getChildren']
-        );
-        $itemProductBundle->expects($this->any())
+        $itemProductBundle = $this->getMockBuilder(QuoteItem::class)
+            ->addMethods(['getHasChildren'])
+            ->onlyMethods(['isChildrenCalculated', 'getChildren'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemProductBundle
             ->method('getHasChildren')
-            ->will($this->returnValue(true));
-        $itemProductBundle->expects($this->any())
+            ->willReturn(true);
+        $itemProductBundle
             ->method('isChildrenCalculated')
-            ->will($this->returnValue(true));
-        $itemProductBundle->expects($this->any())
+            ->willReturn(true);
+        $itemProductBundle
             ->method('getChildren')
-            ->will($this->returnValue([$itemProductSimple1, $itemProductSimple2]));
+            ->willReturn([$itemProductSimple1, $itemProductSimple2]);
 
-        $this->serializerMock->expects($this->any())
+        $this->serializerMock
             ->method('unserialize')
-            ->will($this->returnValue($testArray));
+            ->willReturn($testArray);
 
         $this->assertEquals($testArray, $this->helperData->getApplied($itemProductBundle));
     }
 
-    public function testGetRecursiveAmountSimple()
+    /**
+     * @return void
+     */
+    public function testGetRecursiveAmountSimple(): void
     {
         $testAmountUnit = 2;
         $testAmountRow = 34;
 
-        $itemProductSimple = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            ['getHasChildren', 'getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount']
-        );
-        $itemProductSimple->expects($this->any())
+        $itemProductSimple = $this->getMockBuilder(QuoteItem::class)
+            ->addMethods(['getHasChildren', 'getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemProductSimple
             ->method('getHasChildren')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
-        $itemProductSimple->expects($this->any())
+        $itemProductSimple
             ->method('getWeeeTaxAppliedAmount')
-            ->will($this->returnValue($testAmountUnit));
-        $itemProductSimple->expects($this->any())
+            ->willReturn($testAmountUnit);
+        $itemProductSimple
             ->method('getWeeeTaxAppliedRowAmount')
-            ->will($this->returnValue($testAmountRow));
+            ->willReturn($testAmountRow);
 
         $this->assertEquals($testAmountUnit, $this->helperData->getWeeeTaxAppliedAmount($itemProductSimple));
         $this->assertEquals($testAmountRow, $this->helperData->getWeeeTaxAppliedRowAmount($itemProductSimple));
     }
 
-    public function testGetRecursiveAmountBundle()
+    /**
+     * @return void
+     */
+    public function testGetRecursiveAmountBundle(): void
     {
         $testAmountUnit1 = 1;
         $testAmountUnit2 = 2;
@@ -388,116 +463,129 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $testAmountRow2 = 444;
         $testTotalRow = $testAmountRow1 + $testAmountRow2;
 
-        $itemProductSimple1 = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            ['getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount']
-        );
-        $itemProductSimple2 = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            ['getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount']
-        );
+        $itemProductSimple1 = $this->getMockBuilder(QuoteItem::class)
+            ->addMethods(['getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemProductSimple2 = $this->getMockBuilder(QuoteItem::class)
+            ->addMethods(['getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $itemProductSimple1->expects($this->any())
+        $itemProductSimple1
             ->method('getWeeeTaxAppliedAmount')
-            ->will($this->returnValue($testAmountUnit1));
-        $itemProductSimple1->expects($this->any())
+            ->willReturn($testAmountUnit1);
+        $itemProductSimple1
             ->method('getWeeeTaxAppliedRowAmount')
-            ->will($this->returnValue($testAmountRow1));
+            ->willReturn($testAmountRow1);
 
-        $itemProductSimple2->expects($this->any())
+        $itemProductSimple2
             ->method('getWeeeTaxAppliedAmount')
-            ->will($this->returnValue($testAmountUnit2));
-        $itemProductSimple2->expects($this->any())
+            ->willReturn($testAmountUnit2);
+        $itemProductSimple2
             ->method('getWeeeTaxAppliedRowAmount')
-            ->will($this->returnValue($testAmountRow2));
+            ->willReturn($testAmountRow2);
 
-        $itemProductBundle = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            ['getHasChildren', 'isChildrenCalculated', 'getChildren']
-        );
-        $itemProductBundle->expects($this->any())
+        $itemProductBundle = $this->getMockBuilder(QuoteItem::class)
+            ->addMethods(['getHasChildren'])
+            ->onlyMethods(['isChildrenCalculated', 'getChildren'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemProductBundle
             ->method('getHasChildren')
-            ->will($this->returnValue(true));
-        $itemProductBundle->expects($this->any())
+            ->willReturn(true);
+        $itemProductBundle
             ->method('isChildrenCalculated')
-            ->will($this->returnValue(true));
-        $itemProductBundle->expects($this->any())
+            ->willReturn(true);
+        $itemProductBundle
             ->method('getChildren')
-            ->will($this->returnValue([$itemProductSimple1, $itemProductSimple2]));
+            ->willReturn([$itemProductSimple1, $itemProductSimple2]);
 
         $this->assertEquals($testTotalUnit, $this->helperData->getWeeeTaxAppliedAmount($itemProductBundle));
         $this->assertEquals($testTotalRow, $this->helperData->getWeeeTaxAppliedRowAmount($itemProductBundle));
     }
 
-    public function testGetProductWeeeAttributesForDisplay()
+    /**
+     * @return void
+     */
+    public function testGetProductWeeeAttributesForDisplay(): void
     {
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->product->expects($this->any())
+        $store = $this->createMock(Store::class);
+        $this->product
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
         $result = $this->helperData->getProductWeeeAttributesForDisplay($this->product);
         $this->assertNull($result);
     }
 
-    public function testGetTaxDisplayConfig()
+    /**
+     * @return void
+     */
+    public function testGetTaxDisplayConfig(): void
     {
         $expected = 1;
-        $taxData = $this->createPartialMock(\Magento\Tax\Helper\Data::class, ['getPriceDisplayType']);
-        $taxData->expects($this->any())->method('getPriceDisplayType')->will($this->returnValue($expected));
+        $taxData = $this->createPartialMock(Data::class, ['getPriceDisplayType']);
+        $taxData->method('getPriceDisplayType')->willReturn($expected);
         $arguments = [
             'taxData' => $taxData,
         ];
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $helperData = $helper->getObject(\Magento\Weee\Helper\Data::class, $arguments);
+        $helper = new ObjectManager($this);
+        $helperData = $helper->getObject(WeeeHelper::class, $arguments);
 
         $this->assertEquals($expected, $helperData->getTaxDisplayConfig());
     }
 
-    public function testGetTotalAmounts()
+    /**
+     * @return void
+     */
+    public function testGetTotalAmounts(): void
     {
         $item1Weee = 5;
         $item2Weee = 7;
         $expected = $item1Weee + $item2Weee;
-        $itemProductSimple1 = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            ['getWeeeTaxAppliedRowAmount']
-        );
-        $itemProductSimple2 = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            ['getWeeeTaxAppliedRowAmount']
-        );
+        $itemProductSimple1 = $this->getMockBuilder(QuoteItem::class)
+            ->addMethods(['getWeeeTaxAppliedRowAmount'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemProductSimple2 = $this->getMockBuilder(QuoteItem::class)
+            ->addMethods(['getWeeeTaxAppliedRowAmount'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $items = [$itemProductSimple1, $itemProductSimple2];
 
-        $itemProductSimple1->expects($this->any())
+        $itemProductSimple1
             ->method('getWeeeTaxAppliedRowAmount')
             ->willReturn($item1Weee);
-        $itemProductSimple2->expects($this->any())
+        $itemProductSimple2
             ->method('getWeeeTaxAppliedRowAmount')
             ->willReturn($item2Weee);
 
         $this->assertEquals($expected, $this->helperData->getTotalAmounts($items));
     }
 
-    public function testGetBaseTotalAmounts()
+    /**
+     * @return void
+     */
+    public function testGetBaseTotalAmounts(): void
     {
         $item1BaseWeee = 4;
         $item2BaseWeee = 3;
         $expected = $item1BaseWeee + $item2BaseWeee;
-        $itemProductSimple1 = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            ['getBaseWeeeTaxAppliedRowAmnt']
-        );
-        $itemProductSimple2 = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            ['getBaseWeeeTaxAppliedRowAmnt']
-        );
+        $itemProductSimple1 = $this->getMockBuilder(QuoteItem::class)
+            ->addMethods(['getBaseWeeeTaxAppliedRowAmnt'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemProductSimple2 = $this->getMockBuilder(QuoteItem::class)
+            ->addMethods(['getBaseWeeeTaxAppliedRowAmnt'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $items = [$itemProductSimple1, $itemProductSimple2];
 
-        $itemProductSimple1->expects($this->any())
+        $itemProductSimple1
             ->method('getBaseWeeeTaxAppliedRowAmnt')
             ->willReturn($item1BaseWeee);
-        $itemProductSimple2->expects($this->any())
+        $itemProductSimple2
             ->method('getBaseWeeeTaxAppliedRowAmnt')
             ->willReturn($item2BaseWeee);
 

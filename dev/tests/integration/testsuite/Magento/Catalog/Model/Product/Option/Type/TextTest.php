@@ -31,7 +31,7 @@ class TextTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->optionText = $this->objectManager->create(Text::class);

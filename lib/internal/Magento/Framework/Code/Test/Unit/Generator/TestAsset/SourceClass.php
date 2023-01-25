@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Generator\TestAsset;
 
-use Zend\Code\Generator\ClassGenerator;
+use Laminas\Code\Generator\ClassGenerator;
 
 /**
  * phpcs:ignoreFile
@@ -15,7 +15,7 @@ class SourceClass extends ParentClass
     /**
      * Public child constructor
      *
-     * @param \Zend\Code\Generator\ClassGenerator $classGenerator
+     * @param ClassGenerator $classGenerator
      * @param string $param1
      * @param string $param2
      * @param string $param3
@@ -35,7 +35,7 @@ class SourceClass extends ParentClass
     /**
      * Public child method
      *
-     * @param \Zend\Code\Generator\ClassGenerator $classGenerator
+     * @param ClassGenerator $classGenerator
      * @param string $param1
      * @param string $param2
      * @param string $param3
@@ -58,7 +58,7 @@ class SourceClass extends ParentClass
     /**
      * Public child method with reference
      *
-     * @param \Zend\Code\Generator\ClassGenerator $classGenerator
+     * @param ClassGenerator $classGenerator
      * @param array $array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -70,7 +70,7 @@ class SourceClass extends ParentClass
     /**
      * Protected child method
      *
-     * @param \Zend\Code\Generator\ClassGenerator $classGenerator
+     * @param ClassGenerator $classGenerator
      * @param string $param1
      * @param string $param2
      * @param string $param3
@@ -88,7 +88,7 @@ class SourceClass extends ParentClass
     /**
      * Private child method
      *
-     * @param \Zend\Code\Generator\ClassGenerator $classGenerator
+     * @param ClassGenerator $classGenerator
      * @param string $param1
      * @param string $param2
      * @param string $param3

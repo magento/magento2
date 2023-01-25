@@ -15,7 +15,7 @@
         <arguments>
             <argument name="store" type="string"/>
         </arguments>
-        
+
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStorefrontHomePageLoad"/>
         <dontSee selector="{{StorefrontFooterSection.storeLink(store)}}" stepKey="AssertStoreNotOnStorefront"/>

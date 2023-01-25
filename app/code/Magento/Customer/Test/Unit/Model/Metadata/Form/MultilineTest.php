@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
 use Magento\Customer\Model\Metadata\Form\Multiline;
@@ -18,7 +20,7 @@ class MultilineTest extends TextTest
      */
     protected function getClass($value)
     {
-        return new \Magento\Customer\Model\Metadata\Form\Multiline(
+        return new Multiline(
             $this->localeMock,
             $this->loggerMock,
             $this->attributeMetadataMock,
@@ -37,7 +39,7 @@ class MultilineTest extends TextTest
      */
     public function testValidateValueRequired($value, $expected)
     {
-        $this->attributeMetadataMock->expects($this->any())->method('getMultilineCount')->will($this->returnValue(5));
+        $this->attributeMetadataMock->expects($this->any())->method('getMultilineCount')->willReturn(5);
 
         parent::testValidateValueRequired($value, $expected);
     }
@@ -52,7 +54,7 @@ class MultilineTest extends TextTest
             [
                 'lines' => [['one', 'two'], true],
                 'mixed lines' => [['one', '', ''], true],
-                'empty lines' => [['', '', ''], true]
+                'empty lines' => [['', '', ''], '"" is a required value.']
             ]
         );
     }
@@ -64,7 +66,7 @@ class MultilineTest extends TextTest
      */
     public function testValidateValueLength($value, $expected)
     {
-        $this->attributeMetadataMock->expects($this->any())->method('getMultilineCount')->will($this->returnValue(5));
+        $this->attributeMetadataMock->expects($this->any())->method('getMultilineCount')->willReturn(5);
 
         parent::testValidateValueLength($value, $expected);
     }

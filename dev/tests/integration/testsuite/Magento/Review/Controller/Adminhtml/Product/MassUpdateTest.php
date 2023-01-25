@@ -13,7 +13,7 @@ use Magento\Framework\Acl\Builder;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\UrlInterface;
 use Magento\Review\Model\ResourceModel\Review\CollectionFactory;
-use Zend\Http\Request;
+use Laminas\Http\Request;
 
 /**
  * Test Mass Update action.
@@ -45,7 +45,7 @@ class MassUpdateTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -72,7 +72,10 @@ class MassUpdateTest extends AbstractBackendController
         $review = $collection->getItemByColumnValue('status_id', Review::STATUS_PENDING);
 
         // Exclude resource from ACL.
-        $this->aclBuilder->getAcl()->deny(null, 'Magento_Review::reviews_all');
+        $this->aclBuilder->getAcl()->deny(
+            \Magento\TestFramework\Bootstrap::ADMIN_ROLE_ID,
+            'Magento_Review::reviews_all'
+        );
         $this->getRequest()->setPostValue(['reviews' => $review->getId()]);
 
         parent::testAclHasAccess();

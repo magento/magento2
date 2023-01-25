@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\App\Action;
 
 use Magento\Customer\Model\Session;
@@ -78,7 +80,7 @@ class ContextPluginTest extends TestCase
      */
     protected $contextPlugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
 
@@ -107,8 +109,8 @@ class ContextPluginTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(
                 [
-                'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress', 'getCustomerTaxClassId',
-                'getWebsiteId', 'isLoggedIn'
+                    'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress', 'getCustomerTaxClassId',
+                    'getWebsiteId', 'isLoggedIn'
                 ]
             )
             ->getMock();

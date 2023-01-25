@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGalleryEditImageDetailsTest" deprecated="Use AdminMediaGalleryEditImageDetailsFromGridTest instead">
+        <annotations>
+            <features value="MediaGallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/724"/>
+            <title value="DEPRECATED. User edits image meta data in media gallery"/>
+            <stories value="[Story # 38] User views basic image attributes in Media Gallery"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/3961351"/>
+            <description value="User edits image meta data in Standalone Media Gallery"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminMediaGalleryEditImageDetailsFromGridTest instead</issueId>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
+        </after>
+
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
+            <argument name="image" value="ImageUpload"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryEditImageDetailsActionGroup" stepKey="editImageDetails"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveImage">
+            <argument name="image" value="UpdatedImageDetails"/>
+        </actionGroup>
+        <actionGroup ref="AssertImageAttributesOnEnhancedMediaGalleryActionGroup" stepKey="verifyUpdateImageOnTheGrid">
+            <argument name="image" value="UpdatedImageDetails"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDetailsActionGroup" stepKey="verifyImageDetails">
+            <argument name="image" value="UpdatedImageDetails"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDescriptionActionGroup" stepKey="verifyImageDescription">
+            <argument name="description" value="UpdatedImageDetails.description"/>
+        </actionGroup>
+    </test>
+</tests>

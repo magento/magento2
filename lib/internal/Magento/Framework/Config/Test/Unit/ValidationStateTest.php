@@ -3,9 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Config\Test\Unit;
 
-class ValidationStateTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Arguments\ValidationState;
+use Magento\Framework\App\State;
+use PHPUnit\Framework\TestCase;
+
+class ValidationStateTest extends TestCase
 {
     /**
      * @param string $appMode
@@ -14,7 +20,7 @@ class ValidationStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsValidationRequired($appMode, $expectedResult)
     {
-        $model = new \Magento\Framework\App\Arguments\ValidationState($appMode);
+        $model = new ValidationState($appMode);
         $this->assertEquals($model->isValidationRequired(), $expectedResult);
     }
 
@@ -24,9 +30,9 @@ class ValidationStateTest extends \PHPUnit\Framework\TestCase
     public function isValidationRequiredDataProvider()
     {
         return [
-            [\Magento\Framework\App\State::MODE_DEVELOPER, true],
-            [\Magento\Framework\App\State::MODE_DEFAULT, false],
-            [\Magento\Framework\App\State::MODE_PRODUCTION, false]
+            [State::MODE_DEVELOPER, true],
+            [State::MODE_DEFAULT, false],
+            [State::MODE_PRODUCTION, false]
         ];
     }
 }

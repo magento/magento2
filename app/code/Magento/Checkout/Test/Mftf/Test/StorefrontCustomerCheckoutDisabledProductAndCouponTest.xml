@@ -35,7 +35,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createUSCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductListing"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductListing"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
         </after>
 
@@ -45,7 +45,7 @@
         </actionGroup>
 
         <!-- Add product to shopping cart -->
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage"/>
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="productCount" value="1"/>
@@ -63,14 +63,14 @@
         </actionGroup>
 
         <!-- Sign out Customer from storefront -->
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
 
         <!-- Login to admin panel -->
         <openNewTab stepKey="openNewTab"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Find the first simple product that we just created using the product grid and go to its page-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
 
         <!-- Disabled simple product from grid -->
         <actionGroup ref="ChangeStatusProductUsingProductGridActionGroup" stepKey="disabledProductFromGrid">
@@ -85,7 +85,7 @@
         </actionGroup>
 
         <!-- Check cart -->
-        <click selector="{{StorefrontMiniCartSection.show}}" stepKey="clickMiniCart2"/>
-        <dontSeeElement selector="{{StorefrontMiniCartSection.quantity}}" stepKey="dontSeeCartItem"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickMiniCart2"/>
+        <dontSeeElement selector="{{StorefrontMinicartSection.quantity}}" stepKey="dontSeeCartItem"/>
     </test>
 </tests>

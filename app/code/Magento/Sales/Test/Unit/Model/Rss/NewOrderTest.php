@@ -3,19 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Rss;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Rss\UrlBuilderInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Sales\Block\Adminhtml\Order\Details;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Model\ResourceModel\Order\Collection;
+use Magento\Sales\Model\Rss\NewOrder;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class NewOrderTest
- * @package Magento\Sales\Model\Rss
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NewOrderTest extends \PHPUnit\Framework\TestCase
+class NewOrderTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Rss\NewOrder
+     * @var NewOrder
      */
     protected $model;
 
@@ -25,42 +39,42 @@ class NewOrderTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $orderFactory;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|MockObject
      */
     protected $timezoneInterface;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime|MockObject
      */
     protected $dateTime;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigInterface;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $eventManager;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|MockObject
      */
     protected $layout;
 
     /**
-     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlBuilderInterface|MockObject
      */
     protected $rssUrlBuilderInterface;
 
@@ -81,21 +95,22 @@ class NewOrderTest extends \PHPUnit\Framework\TestCase
         ],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->orderFactory = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
-        $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
-        $this->timezoneInterface = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $this->dateTime = $this->createMock(\Magento\Framework\Stdlib\DateTime::class);
-        $this->scopeConfigInterface = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
-        $this->layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
-        $this->rssUrlBuilderInterface = $this->getMockBuilder(\Magento\Framework\App\Rss\UrlBuilderInterface::class)
+        $this->orderFactory = $this->createPartialMock(OrderFactory::class, ['create']);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->timezoneInterface = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->dateTime = $this->createMock(DateTime::class);
+        $this->scopeConfigInterface = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->rssUrlBuilderInterface = $this->getMockBuilder(UrlBuilderInterface::class)
             ->setMethods(['getUrl'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\Sales\Model\Rss\NewOrder::class,
+            NewOrder::class,
             [
                 'orderFactory' => $this->orderFactory,
                 'urlBuilder' => $this->urlBuilder,
@@ -116,42 +131,48 @@ class NewOrderTest extends \PHPUnit\Framework\TestCase
 
     public function testGetData()
     {
-        $this->dateTime->expects($this->once())->method('formatDate')->will($this->returnValue(date('Y-m-d H:i:s')));
+        $this->dateTime->expects($this->once())->method('formatDate')->willReturn(date('Y-m-d H:i:s'));
 
         $this->rssUrlBuilderInterface->expects($this->once())->method('getUrl')
             ->with(['_secure' => true, '_nosecret' => true, 'type' => 'new_order'])
-            ->will($this->returnValue('http://magento.com/backend/rss/feed/index/type/new_order'));
+            ->willReturn('http://magento.com/backend/rss/feed/index/type/new_order');
 
         $this->timezoneInterface->expects($this->once())->method('formatDate')
-            ->will($this->returnValue('2014-09-10 17:39:50'));
+            ->willReturn('2014-09-10 17:39:50');
 
-        $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
-            ->setMethods(['__sleep', '__wakeup', 'getResourceCollection', 'getIncrementId', 'getId', 'getCreatedAt'])
-            ->disableOriginalConstructor()->getMock();
-        $order->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $order->expects($this->once())->method('getIncrementId')->will($this->returnValue('100000001'));
-        $order->expects($this->once())->method('getCreatedAt')->will($this->returnValue(time()));
+        $order = $this->getMockBuilder(Order::class)
+            ->setMethods(['getResourceCollection', 'getIncrementId', 'getId', 'getCreatedAt'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $order->expects($this->once())->method('getId')->willReturn(1);
+        $order->expects($this->once())->method('getIncrementId')->willReturn('100000001');
+        $order->expects($this->once())->method('getCreatedAt')->willReturn(time());
 
-        $collection = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Collection::class)
+        $collection = $this->getMockBuilder(Collection::class)
             ->setMethods(['addAttributeToFilter', 'addAttributeToSort', 'getIterator'])
-            ->disableOriginalConstructor()->getMock();
-        $collection->expects($this->once())->method('addAttributeToFilter')->will($this->returnSelf());
-        $collection->expects($this->once())->method('addAttributeToSort')->will($this->returnSelf());
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collection->expects($this->once())->method('addAttributeToFilter')->willReturnSelf();
+        $collection->expects($this->once())->method('addAttributeToSort')->willReturnSelf();
         $collection->expects($this->once())->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator([$order])));
+            ->willReturn(new \ArrayIterator([$order]));
 
-        $order->expects($this->once())->method('getResourceCollection')->will($this->returnValue($collection));
-        $this->orderFactory->expects($this->once())->method('create')->will($this->returnValue($order));
+        $order->expects($this->once())->method('getResourceCollection')->willReturn($collection);
+        $this->orderFactory->expects($this->once())->method('create')->willReturn($order);
 
-        $this->eventManager->expects($this->once())->method('dispatch')->will($this->returnSelf());
+        $this->eventManager->expects($this->once())->method('dispatch')->willReturnSelf();
 
-        $block = $this->createPartialMock(\Magento\Sales\Block\Adminhtml\Order\Details::class, ['setOrder', 'toHtml']);
-        $block->expects($this->once())->method('setOrder')->with($order)->will($this->returnSelf());
-        $block->expects($this->once())->method('toHtml')->will($this->returnValue('Order Description'));
+        $block = $this->getMockBuilder(Details::class)
+            ->addMethods(['setOrder'])
+            ->onlyMethods(['toHtml'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $block->expects($this->once())->method('setOrder')->with($order)->willReturnSelf();
+        $block->expects($this->once())->method('toHtml')->willReturn('Order Description');
 
-        $this->layout->expects($this->once())->method('getBlockSingleton')->will($this->returnValue($block));
+        $this->layout->expects($this->once())->method('getBlockSingleton')->willReturn($block);
         $this->urlBuilder->expects($this->once())->method('getUrl')
-            ->will($this->returnValue('http://magento.com/sales/order/view/order_id/1'));
+            ->willReturn('http://magento.com/sales/order/view/order_id/1');
         $this->assertEquals($this->feedData, $this->model->getRssData());
     }
 

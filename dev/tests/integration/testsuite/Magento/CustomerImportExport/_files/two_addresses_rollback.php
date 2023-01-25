@@ -10,9 +10,9 @@ use Magento\Framework\Registry;
 use Magento\Customer\Model\Customer;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Model\Address;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-//Clearing websites.
-include __DIR__ . '/../../Store/_files/websites_different_countries_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/websites_different_countries_rollback.php');
 
 /** @var Registry $registry */
 $registry = Bootstrap::getObjectManager()->get(Registry::class);

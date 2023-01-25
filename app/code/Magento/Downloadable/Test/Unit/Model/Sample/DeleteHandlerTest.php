@@ -45,7 +45,7 @@ class DeleteHandlerTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entityMock = $this->createMock(Product::class);
         $this->sampleRepositoryMock = $this->getMockBuilder(SampleRepository::class)
@@ -71,7 +71,7 @@ class DeleteHandlerTest extends TestCase
             ->method('getSku')
             ->willReturn(self::STUB_PRODUCT_SKU);
 
-        $sampleMock = $this->createMock(SampleInterface::class);
+        $sampleMock = $this->getMockForAbstractClass(SampleInterface::class);
         $sampleMock->expects($this->once())
             ->method('getId')
             ->willReturn(self::STUB_SAMPLE_ID);

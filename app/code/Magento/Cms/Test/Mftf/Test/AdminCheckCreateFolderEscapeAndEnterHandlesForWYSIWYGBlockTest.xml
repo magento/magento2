@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckCreateFolderEscapeAndEnterHandlesForWYSIWYGBlockTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="WYSIWYG toolbar configuration with Magento Media Gallery"/>
+            <group value="Cms"/>
+            <title value="Admin should be able to cancel and close 'create folder' modal window using ESC key and
+                to add image to new folder (using enter key) for WYSIWYG content of Block"/>
+            <description value="Admin should be able to cancel and close 'create folder' modal window using ESC key and
+                to add image to new folder (using enter key) for WYSIWYG content of Block"/>
+            <severity value="MAJOR"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultBlock" stepKey="createPreReqBlock" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="enableOldMediaGallery">
+                <argument name="enabled" value="0"/>
+            </actionGroup>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
+        </before>
+        <after>
+            <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableOldMediaGallery">
+                <argument name="enabled" value="1"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage">
+            <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
+        </actionGroup>
+        <actionGroup ref="ClickInsertEditImageTinyMCEButtonActionGroup" stepKey="clickInsertImageIcon"/>
+        <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="clickBrowserBtn"/>
+        <actionGroup ref="VerifyMediaGalleryStorageActionsActionGroup" stepKey="VerifyMediaGalleryStorageBtn"/>
+
+        <actionGroup ref="CreateImageFolderByEnterKeyActionGroup" stepKey="CreateImageFolderByEnterKeyPress">
+            <argument name="ImageFolder" value="ImageFolder"/>
+        </actionGroup>
+
+        <actionGroup ref="DeleteFolderActionGroup" stepKey="DeleteCreatedFolder">
+            <argument name="ImageFolder" value="ImageFolder"/>
+        </actionGroup>
+
+        <actionGroup ref="PressEscImageFolderActionGroup" stepKey="CancelImageFolderCreation">
+            <argument name="ImageFolder" value="ImageFolder"/>
+        </actionGroup>
+    </test>
+</tests>

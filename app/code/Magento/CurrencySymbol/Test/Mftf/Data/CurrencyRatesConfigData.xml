@@ -20,6 +20,42 @@
         <data key="scope">websites</data>
         <data key="scope_code">base</data>
     </entity>
+    <entity name="SetCurrencyYENBaseConfig">
+        <data key="path">currency/options/base</data>
+        <data key="value">JPY</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetCurrencyCADBaseConfig">
+        <data key="path">currency/options/base</data>
+        <data key="value">CAD</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetCurrencyRHDBaseConfig">
+        <data key="path">currency/options/base</data>
+        <data key="value">RHD</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetCurrencyAUDBaseConfig">
+        <data key="path">currency/options/base</data>
+        <data key="value">AUD</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetCurrencyHKDBaseConfig">
+        <data key="path">currency/options/base</data>
+        <data key="value">HKD</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetCurrencyNZDBaseConfig">
+        <data key="path">currency/options/base</data>
+        <data key="value">NZD</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
     <entity name="SetAllowedCurrenciesConfigForUSD">
         <data key="path">currency/options/allow</data>
         <data key="value">USD</data>
@@ -29,6 +65,42 @@
     <entity name="SetAllowedCurrenciesConfigForEUR">
         <data key="path">currency/options/allow</data>
         <data key="value">EUR</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetAllowedCurrenciesConfigForRHD">
+        <data key="path">currency/options/allow</data>
+        <data key="value">RHD</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetAllowedCurrenciesConfigForYEN">
+        <data key="path">currency/options/allow</data>
+        <data key="value">JPY</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetAllowedCurrenciesConfigForCAD">
+        <data key="path">currency/options/allow</data>
+        <data key="value">CAD</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetAllowedCurrenciesConfigForAUD">
+        <data key="path">currency/options/allow</data>
+        <data key="value">AUD</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetAllowedCurrenciesConfigForHKD">
+        <data key="path">currency/options/allow</data>
+        <data key="value">HKD</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetAllowedCurrenciesConfigForNZD">
+        <data key="path">currency/options/allow</data>
+        <data key="value">NZD</data>
         <data key="scope">websites</data>
         <data key="scope_code">base</data>
     </entity>
@@ -44,9 +116,57 @@
         <data key="scope">websites</data>
         <data key="scope_code">base</data>
     </entity>
+    <entity name="SetDefaultCurrencyYENConfig">
+        <data key="path">currency/options/default</data>
+        <data key="value">JPY</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetDefaultCurrencyCADConfig">
+        <data key="path">currency/options/default</data>
+        <data key="value">CAD</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetDefaultCurrencyAUDConfig">
+        <data key="path">currency/options/default</data>
+        <data key="value">AUD</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetDefaultCurrencyHKDConfig">
+        <data key="path">currency/options/default</data>
+        <data key="value">HKD</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetDefaultCurrencyNZDConfig">
+        <data key="path">currency/options/default</data>
+        <data key="value">NZD</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
     <entity name="SetDefaultCurrencyUSDConfig">
         <data key="path">currency/options/default</data>
         <data key="value">USD</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetCurrencyIDRBaseConfig">
+        <data key="path">currency/options/base</data>
+        <data key="value">IDR</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetDefaultCurrencyIDRConfig">
+        <data key="path">currency/options/default</data>
+        <data key="value">IDR</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetAllowedCurrenciesConfigForIDR">
+        <data key="path">currency/options/allow</data>
+        <data key="value">IDR</data>
         <data key="scope">websites</data>
         <data key="scope_code">base</data>
     </entity>

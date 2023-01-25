@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\AnalyticsToken;
@@ -10,21 +12,23 @@ use Magento\Analytics\Model\Cryptographer;
 use Magento\Analytics\Model\EncodedContext;
 use Magento\Analytics\Model\EncodedContextFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CryptographerTest extends \PHPUnit\Framework\TestCase
+class CryptographerTest extends TestCase
 {
     /**
-     * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnalyticsToken|MockObject
      */
     private $analyticsTokenMock;
 
     /**
-     * @var EncodedContextFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncodedContextFactory|MockObject
      */
     private $encodedContextFactoryMock;
 
     /**
-     * @var EncodedContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncodedContext|MockObject
      */
     private $encodedContextMock;
 
@@ -61,20 +65,16 @@ class CryptographerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->analyticsTokenMock = $this->getMockBuilder(AnalyticsToken::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 
         $this->encodedContextFactoryMock = $this->getMockBuilder(EncodedContextFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->encodedContextMock = $this->getMockBuilder(EncodedContext::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->encodedContextMock = $this->createMock(EncodedContext::class);
 
         $this->key = '';
         $this->source = '';
@@ -170,11 +170,11 @@ class CryptographerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider encodeNotValidSourceDataProvider
      */
     public function testEncodeNotValidSource($source)
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->cryptographer->encode($source);
     }
 
@@ -189,11 +189,9 @@ class CryptographerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testEncodeNotValidCipherMethod()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $source = 'Some string';
         $cryptographer = $this->objectManagerHelper->getObject(
             Cryptographer::class,
@@ -205,11 +203,9 @@ class CryptographerTest extends \PHPUnit\Framework\TestCase
         $cryptographer->encode($source);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testEncodeTokenNotValid()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $source = 'Some string';
 
         $this->analyticsTokenMock

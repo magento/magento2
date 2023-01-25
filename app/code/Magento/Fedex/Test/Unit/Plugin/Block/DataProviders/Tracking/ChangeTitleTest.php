@@ -30,7 +30,7 @@ class ChangeTitleTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
         $this->plugin = $objectManagerHelper->getObject(ChangeTitle::class);

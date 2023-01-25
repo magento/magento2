@@ -3,54 +3,61 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\User\Test\Unit\Block\Role\Tab;
 
-use Magento\User\Model\ResourceModel\User\CollectionFactory;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\LayoutInterface;
+use Magento\User\Block\Role\Tab\Users;
 use Magento\User\Model\ResourceModel\User\Collection;
+use Magento\User\Model\ResourceModel\User\CollectionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class UsersTest extends \PHPUnit\Framework\TestCase
+class UsersTest extends TestCase
 {
     /**
-     * @var \Magento\User\Block\Role\Tab\Users
+     * @var Users
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|MockObject
      */
     protected $layoutMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $userCollectionFactoryMock $userCollectionMock */
-        $userCollectionMock = $this->getMockBuilder(\Magento\User\Model\ResourceModel\User\Collection::class)
+        /** @var Collection|MockObject $userCollectionFactoryMock $userCollectionMock */
+        $userCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        /** @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject $userCollectionFactoryMock */
+        /** @var CollectionFactory|MockObject $userCollectionFactoryMock */
         $userCollectionFactoryMock = $this->getMockBuilder(
-            \Magento\User\Model\ResourceModel\User\CollectionFactory::class
+            CollectionFactory::class
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject $requestMock */
-        $requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        /** @var RequestInterface|MockObject $requestMock */
+        $requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $userCollectionFactoryMock->expects($this->any())->method('create')->willReturn($userCollectionMock);
         $userCollectionMock->expects($this->any())->method('load')->willReturn($userCollectionMock);
         $userCollectionMock->expects($this->any())->method('getItems');
 
-        $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
+        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->model = $objectManager->getObject(
-            \Magento\User\Block\Role\Tab\Users::class,
+            Users::class,
             [
                 'userCollectionFactory' => $userCollectionFactoryMock,
                 'request' => $requestMock,

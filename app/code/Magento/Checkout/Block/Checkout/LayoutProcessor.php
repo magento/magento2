@@ -132,9 +132,9 @@ class LayoutProcessor implements LayoutProcessorInterface
             $elements[$code]['dataType'] = 'select';
             $elements[$code]['formElement'] = 'select';
 
-            foreach ($options as $key => $value) {
+            foreach ($options as $value) {
                 $elements[$code]['options'][] = [
-                    'value' => $key,
+                    'value' => $value,
                     'label' => $value,
                 ];
             }
@@ -299,6 +299,7 @@ class LayoutProcessor implements LayoutProcessorInterface
             'deps' => 'checkoutProvider',
             'dataScopePrefix' => 'billingAddress' . $paymentCode,
             'billingAddressListProvider' => '${$.name}.billingAddressList',
+            '__disableTmpl' => ['billingAddressListProvider' => false],
             'sortOrder' => 1,
             'children' => [
                 'billingAddressList' => [
@@ -329,6 +330,7 @@ class LayoutProcessor implements LayoutProcessorInterface
                                 ],
                                 'filterBy' => [
                                     'target' => '${ $.provider }:${ $.parentScope }.country_id',
+                                    '__disableTmpl' => ['target' => false],
                                     'field' => 'country_id',
                                 ],
                             ],

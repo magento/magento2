@@ -14,13 +14,9 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
  * This patch sets up search weight for the product's system attributes, reindex required after patch applying.
- *
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVersionInterface
 {
-
     /**
      * @var IndexerInterfaceFactory
      */
@@ -68,6 +64,7 @@ class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVe
                     ->save();
             }
         );
+        return $this;
     }
 
     /**

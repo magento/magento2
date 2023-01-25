@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddProductToCartWithExpiredSessionTest">
+        <annotations>
+            <title value="Adding a product to cart from category page with an expired session"/>
+            <description value="Adding a product to cart from category page with an expired session"/>
+            <features value="Module/ Catalog"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-93289"/>
+            <stories value="MAGETWO-66666: Adding a product to cart from category page with an expired session does not allow product to be added"/>
+            <group value="customer"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontFakeBrokenSessionActionGroup" stepKey="fakeBrokenSession"/>
+        <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addProductToCart"/>
+        <actionGroup ref="StorefrontAssertProductAddToCartErrorMessageActionGroup" stepKey="assertFailure">
+            <argument name="message" value="Your session has expired"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -3,35 +3,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Backend;
 
 use Magento\Config\Model\Config\Backend\Serialized;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class SerializedTest
- */
-class SerializedTest extends \PHPUnit\Framework\TestCase
+class SerializedTest extends TestCase
 {
-    /** @var \Magento\Config\Model\Config\Backend\Serialized */
+    /** @var Serialized */
     private $serializedConfig;
 
-    /** @var Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Json|MockObject */
     private $serializerMock;
 
-    /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var LoggerInterface|MockObject */
     private $loggerMock;
 
-    protected function setUp()
+    private $scopeConfigMock;
+
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->serializerMock = $this->createMock(Json::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $contextMock = $this->createMock(Context::class);
-        $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $contextMock->method('getEventDispatcher')
             ->willReturn($eventManagerMock);
         $contextMock->method('getLogger')
@@ -41,6 +47,7 @@ class SerializedTest extends \PHPUnit\Framework\TestCase
             [
                 'serializer' => $this->serializerMock,
                 'context' => $contextMock,
+                'config' => $this->scopeConfigMock,
             ]
         );
     }
@@ -132,5 +139,30 @@ class SerializedTest extends \PHPUnit\Framework\TestCase
                 'string array'
             ]
         ];
+    }
+
+    /**
+     * If a config value is not available in core_confid_data the defaults are
+     * loaded from the config.xml file. Those defaults may be arrays.
+     * The Serialized backend model has to override its parent
+     * getOldValue function, to prevent an array to string conversion error
+     * and serialize those values.
+     */
+    public function testGetOldValueWithNonScalarDefaultValue(): void
+    {
+        $value = [
+            ['foo' => '1', 'bar' => '2'],
+        ];
+        $serializedValue = \json_encode($value);
+
+        $this->scopeConfigMock->method('getValue')->willReturn($value);
+        $this->serializerMock->method('serialize')->willReturn($serializedValue);
+
+        $this->serializedConfig->setData('value', $serializedValue);
+
+        $oldValue = $this->serializedConfig->getOldValue();
+
+        $this->assertIsString($oldValue, 'Default value from the config is not serialized.');
+        $this->assertSame($serializedValue, $oldValue);
     }
 }

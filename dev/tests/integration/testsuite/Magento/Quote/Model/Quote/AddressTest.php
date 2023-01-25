@@ -45,7 +45,7 @@ class AddressTest extends TestCase
     /**
      * phpcs:ignoreFile
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $db = Bootstrap::getInstance()->getBootstrap()
             ->getApplication()
@@ -61,7 +61,7 @@ class AddressTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->_quote = Bootstrap::getObjectManager()->create(
             Quote::class
@@ -94,7 +94,7 @@ class AddressTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var CustomerRegistry $customerRegistry */
         $customerRegistry = Bootstrap::getObjectManager()
@@ -262,7 +262,7 @@ class AddressTest extends TestCase
         $this->_quote->setOrigData('customer_id', null);
         $shippingAddress = $this->_quote->getShippingAddress();
         $shippingAddress->beforeSave();
-        $this->assertEquals(false, $this->_quote->getShippingAddress()->getSameAsBilling());
+        $this->assertSame(0, $this->_quote->getShippingAddress()->getSameAsBilling());
     }
 
     /**

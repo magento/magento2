@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateSimpleProductNegativePriceTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create a Simple Product via Admin"/>
+            <title value="Admin should not be able to create a product with a negative price"/>
+            <description value="Admin should not be able to create a product with a negative price"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MAGETWO-89912"/>
+            <group value="product"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToCreateProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillName"/>
+        <actionGroup ref="FillMainProductFormByStringActionGroup" stepKey="fillPrice">
+            <argument name="productName" value="{{SimpleProduct.name}}"/>
+            <argument name="productSku" value="{{SimpleProduct.sku}}"/>
+            <argument name="productPrice" value="-42"/>
+            <argument name="productQuantity" value="{{SimpleProduct.quantity}}"/>
+            <argument name="productStatus" value="{{SimpleProduct.status}}"/>
+            <argument name="productWeight" value="{{SimpleProduct.weight}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
+        <actionGroup ref="AssertAdminValidationErrorAppearedForPriceFieldOnProductEditPageActionGroup" stepKey="seePriceValidationError">
+            <argument name="errorMessage" value="Please enter a number 0 or greater, without comma in this field."/>
+        </actionGroup>
+    </test>
+</tests>

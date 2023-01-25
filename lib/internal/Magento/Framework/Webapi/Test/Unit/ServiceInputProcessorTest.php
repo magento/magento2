@@ -3,100 +3,146 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Webapi\Test\Unit;
 
+use Magento\Eav\Model\TypeLocator;
+use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Api\AttributeValueFactory;
+use \Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\App\Cache\Type\Reflection;
+use Magento\Framework\Exception\InvalidArgumentException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Reflection\FieldNamer;
+use Magento\Framework\Reflection\MethodsMap;
+use Magento\Framework\Reflection\NameFinder;
+use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Webapi\Validator\IOLimit\DefaultPageSizeSetter;
 use Magento\Framework\Webapi\ServiceInputProcessor;
+use Magento\Framework\Webapi\Validator\IOLimit\IOLimitConfigProvider;
+use Magento\Framework\Webapi\Validator\EntityArrayValidator;
 use Magento\Framework\Webapi\ServiceTypeToEntityTypeMap;
-use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleConstructor;
-use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\WebapiBuilderFactory;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\DataArray;
-use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes;
-use Magento\Webapi\Test\Unit\Service\Entity\DataArrayData;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Nested;
-use Magento\Webapi\Test\Unit\Service\Entity\NestedData;
+use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray;
+use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleConstructor;
+use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService;
+use Magento\Webapi\Test\Unit\Service\Entity\DataArrayData;
+use Magento\Webapi\Test\Unit\Service\Entity\NestedData;
 use Magento\Webapi\Test\Unit\Service\Entity\SimpleArrayData;
 use Magento\Webapi\Test\Unit\Service\Entity\SimpleData;
-use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
+class ServiceInputProcessorTest extends TestCase
 {
     /** @var ServiceInputProcessor */
     protected $serviceInputProcessor;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     protected $attributeValueFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     protected $customAttributeTypeLocator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var MockObject  */
     protected $objectManagerMock;
 
-    /** @var  \Magento\Framework\Reflection\MethodsMap */
+    /** @var  MethodsMap */
     protected $methodsMap;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     protected $fieldNamer;
 
     /**
-     * @var ServiceTypeToEntityTypeMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaInterface|MockObject
+     */
+    private $searchCriteria;
+
+    /**
+     * @var ServiceTypeToEntityTypeMap|MockObject
      */
     private $serviceTypeToEntityTypeMap;
 
-    protected function setUp()
+    /**
+     * @var IOLimitConfigProvider|MockObject
+     */
+    private $inputLimitConfig;
+
+    /**
+     * @var DefaultPageSizeSetter|MockObject
+     */
+    private $defaultPageSizeSetter;
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
+        $this->searchCriteria  = self::getMockBuilder(SearchCriteriaInterface::class)
             ->getMock();
+
+        $objectManagerStatic = [
+            SearchCriteriaInterface::class => $this->searchCriteria
+        ];
+        $objectManager = new ObjectManager($this);
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->objectManagerMock->expects($this->any())
             ->method('create')
             ->willReturnCallback(
-                function ($className, $arguments = []) use ($objectManager) {
+                function ($className, $arguments = []) use ($objectManager, $objectManagerStatic) {
+                    if (isset($objectManagerStatic[$className])) {
+                        return $objectManagerStatic[$className];
+                    }
+
                     return $objectManager->getObject($className, $arguments);
                 }
             );
 
-        /** @var \Magento\Framework\Reflection\TypeProcessor $typeProcessor */
-        $typeProcessor = $objectManager->getObject(\Magento\Framework\Reflection\TypeProcessor::class);
-        $cache = $this->getMockBuilder(\Magento\Framework\App\Cache\Type\Reflection::class)
+        /** @var TypeProcessor $typeProcessor */
+        $typeProcessor = $objectManager->getObject(TypeProcessor::class);
+        $cache = $this->getMockBuilder(Reflection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $cache->expects($this->any())->method('load')->willReturn(false);
 
         $this->customAttributeTypeLocator = $this->getMockBuilder(
-            \Magento\Eav\Model\TypeLocator::class
+            TypeLocator::class
         )
             ->disableOriginalConstructor()
             ->getMock();
 
         /** @var \Magento\Framework\Api\AttributeDataBuilder */
-        $this->attributeValueFactoryMock = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
+        $this->attributeValueFactoryMock = $this->getMockBuilder(AttributeValueFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeValueFactoryMock->expects($this->any())
             ->method('create')
             ->willReturnCallback(
                 function () use ($objectManager) {
-                    return $objectManager->getObject(\Magento\Framework\Api\AttributeValue::class);
+                    return $objectManager->getObject(AttributeValue::class);
                 }
             );
 
-        $this->fieldNamer = $this->getMockBuilder(\Magento\Framework\Reflection\FieldNamer::class)
+        $this->fieldNamer = $this->getMockBuilder(FieldNamer::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
         $this->methodsMap = $objectManager->getObject(
-            \Magento\Framework\Reflection\MethodsMap::class,
+            MethodsMap::class,
             [
                 'cache' => $cache,
                 'typeProcessor' => $typeProcessor,
@@ -104,7 +150,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
                 'fieldNamer' => $this->fieldNamer
             ]
         );
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturn('serializedData');
         $serializerMock->method('unserialize')
@@ -118,20 +164,37 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->inputLimitConfig = self::getMockBuilder(IOLimitConfigProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $inputArraySizeLimitValue = $this->createMock(InputArraySizeLimitValue::class);
+
+        $this->defaultPageSizeSetter = self::getMockBuilder(DefaultPageSizeSetter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->serviceInputProcessor = $objectManager->getObject(
-            \Magento\Framework\Webapi\ServiceInputProcessor::class,
+            ServiceInputProcessor::class,
             [
                 'typeProcessor' => $typeProcessor,
                 'objectManager' => $this->objectManagerMock,
                 'customAttributeTypeLocator' => $this->customAttributeTypeLocator,
                 'attributeValueFactory' => $this->attributeValueFactoryMock,
                 'methodsMap' => $this->methodsMap,
-                'serviceTypeToEntityTypeMap' => $this->serviceTypeToEntityTypeMap
+                'serviceTypeToEntityTypeMap' => $this->serviceTypeToEntityTypeMap,
+                'serviceInputValidator' => new EntityArrayValidator(
+                    50,
+                    $this->inputLimitConfig,
+                    $inputArraySizeLimitValue
+                ),
+                'defaultPageSizeSetter' => $this->defaultPageSizeSetter,
+                'defaultPageSize' => 123
             ]
         );
 
-        /** @var \Magento\Framework\Reflection\NameFinder $nameFinder */
-        $nameFinder = $objectManager->getObject(\Magento\Framework\Reflection\NameFinder::class);
+        /** @var NameFinder $nameFinder */
+        $nameFinder = $objectManager->getObject(NameFinder::class);
         $objectManager->setBackwardCompatibleProperty(
             $this->serviceInputProcessor,
             'nameFinder',
@@ -143,7 +206,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $data = ['entityId' => 15, 'name' => 'Test'];
         $result = $this->serviceInputProcessor->process(
-            \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
+            TestService::class,
             'simple',
             $data
         );
@@ -156,7 +219,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $data = [];
         $result = $this->serviceInputProcessor->process(
-            \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
+            TestService::class,
             'simpleDefaultValue',
             $data
         );
@@ -164,15 +227,13 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(TestService::DEFAULT_VALUE, $result[0]);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage One or more input exceptions have occurred.
-     */
     public function testNonExistentPropertiesWithoutDefaultArgumentValue()
     {
+        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectExceptionMessage('One or more input exceptions have occurred.');
         $data = [];
         $result = $this->serviceInputProcessor->process(
-            \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
+            TestService::class,
             'simple',
             $data
         );
@@ -183,14 +244,14 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $data = ['nested' => ['details' => ['entityId' => 15, 'name' => 'Test']]];
         $result = $this->serviceInputProcessor->process(
-            \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
+            TestService::class,
             'nestedData',
             $data
         );
         $this->assertNotNull($result);
         $this->assertTrue($result[0] instanceof Nested);
         /** @var array $result */
-        $this->assertEquals(1, count($result));
+        $this->assertCount(1, $result);
         $this->assertNotEmpty($result[0]);
         /** @var NestedData $arg */
         $arg = $result[0];
@@ -207,7 +268,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $data = ['simpleConstructor' => ['entityId' => 15, 'name' => 'Test']];
         $result = $this->serviceInputProcessor->process(
-            \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
+            TestService::class,
             'simpleConstructor',
             $data
         );
@@ -223,17 +284,17 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $data = ['ids' => [1, 2, 3, 4]];
         $result = $this->serviceInputProcessor->process(
-            \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
+            TestService::class,
             'simpleArray',
             $data
         );
         $this->assertNotNull($result);
         /** @var array $result */
-        $this->assertEquals(1, count($result));
+        $this->assertCount(1, $result);
         /** @var array $ids */
         $ids = $result[0];
         $this->assertNotNull($ids);
-        $this->assertEquals(4, count($ids));
+        $this->assertCount(4, $ids);
         $this->assertEquals($data['ids'], $ids);
     }
 
@@ -241,13 +302,13 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $data = ['associativeArray' => ['key' => 'value', 'key_two' => 'value_two']];
         $result = $this->serviceInputProcessor->process(
-            \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
+            TestService::class,
             'associativeArray',
             $data
         );
         $this->assertNotNull($result);
         /** @var array $result */
-        $this->assertEquals(1, count($result));
+        $this->assertCount(1, $result);
         /** @var array $associativeArray */
         $associativeArray = $result[0];
         $this->assertNotNull($associativeArray);
@@ -259,13 +320,13 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $data = ['associativeArray' => ['item' => 'value']];
         $result = $this->serviceInputProcessor->process(
-            \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
+            TestService::class,
             'associativeArray',
             $data
         );
         $this->assertNotNull($result);
         /** @var array $result */
-        $this->assertEquals(1, count($result));
+        $this->assertCount(1, $result);
         /** @var array $associativeArray */
         $associativeArray = $result[0];
         $this->assertNotNull($associativeArray);
@@ -276,13 +337,13 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $data = ['associativeArray' => ['item' => ['value1','value2']]];
         $result = $this->serviceInputProcessor->process(
-            \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
+            TestService::class,
             'associativeArray',
             $data
         );
         $this->assertNotNull($result);
         /** @var array $result */
-        $this->assertEquals(1, count($result));
+        $this->assertCount(1, $result);
         /** @var array $associativeArray */
         $array = $result[0];
         $this->assertNotNull($array);
@@ -299,16 +360,16 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $result = $this->serviceInputProcessor->process(
-            \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
+            TestService::class,
             'dataArray',
             $data
         );
         $this->assertNotNull($result);
         /** @var array $result */
-        $this->assertEquals(1, count($result));
+        $this->assertCount(1, $result);
         /** @var array $dataObjects */
         $dataObjects = $result[0];
-        $this->assertEquals(2, count($dataObjects));
+        $this->assertCount(2, $dataObjects);
         /** @var SimpleData $first */
         $first = $dataObjects[0];
         /** @var SimpleData $second */
@@ -321,24 +382,65 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Second', $second->getName());
     }
 
+    public function testArrayOfDataObjectPropertiesIsValidated()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectErrorMessage(
+            'Maximum items of type "\\' . Simple::class . '" is 50'
+        );
+        $this->inputLimitConfig->method('isInputLimitingEnabled')
+            ->willReturn(true);
+        $objects = [];
+        for ($i = 0; $i < 51; $i++) {
+            $objects[] = ['entityId' => $i + 1, 'name' => 'Item' . $i];
+        }
+        $data = [
+            'dataObjects' => $objects,
+        ];
+        $this->serviceInputProcessor->process(
+            TestService::class,
+            'dataArray',
+            $data
+        );
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testDefaultPageSizeSetterIsInvoked()
+    {
+        $this->defaultPageSizeSetter->expects(self::once())
+            ->method('processSearchCriteria')
+            ->with($this->searchCriteria);
+
+        $data = [
+            'searchCriteria' => []
+        ];
+        $this->serviceInputProcessor->process(
+            TestService::class,
+            'search',
+            $data
+        );
+    }
+
     public function testNestedSimpleArrayProperties()
     {
         $data = ['arrayData' => ['ids' => [1, 2, 3, 4]]];
         $result = $this->serviceInputProcessor->process(
-            \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
+            TestService::class,
             'nestedSimpleArray',
             $data
         );
         $this->assertNotNull($result);
         /** @var array $result */
-        $this->assertEquals(1, count($result));
+        $this->assertCount(1, $result);
         /** @var SimpleArrayData $dataObject */
         $dataObject = $result[0];
         $this->assertTrue($dataObject instanceof SimpleArray);
         /** @var array $ids */
         $ids = $dataObject->getIds();
         $this->assertNotNull($ids);
-        $this->assertEquals(4, count($ids));
+        $this->assertCount(4, $ids);
         $this->assertEquals($data['arrayData']['ids'], $ids);
     }
 
@@ -348,14 +450,14 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
             'associativeArrayData' => ['associativeArray' => ['key' => 'value', 'key2' => 'value2']],
         ];
         $result = $this->serviceInputProcessor->process(
-            \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
+            TestService::class,
             'nestedAssociativeArray',
             $data
         );
         $this->assertNotNull($result);
         /** @var array $result */
-        $this->assertEquals(1, count($result));
-        /** @var \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray $dataObject */
+        $this->assertCount(1, $result);
+        /** @var AssociativeArray $dataObject */
         $dataObject = $result[0];
         $this->assertTrue($dataObject instanceof AssociativeArray);
         /** @var array $associativeArray */
@@ -373,19 +475,19 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $result = $this->serviceInputProcessor->process(
-            \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
+            TestService::class,
             'nestedDataArray',
             $data
         );
         $this->assertNotNull($result);
         /** @var array $result */
-        $this->assertEquals(1, count($result));
-        /** @var DataArrayData $dataObjects */
+        $this->assertCount(1, $result);
+        /** @var \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\DataArray $dataObjects */
         $dataObjects = $result[0];
         $this->assertTrue($dataObjects instanceof DataArray);
         /** @var array $items */
         $items = $dataObjects->getItems();
-        $this->assertEquals(2, count($items));
+        $this->assertCount(2, $items);
         /** @var SimpleData $first */
         $first = $items[0];
         /** @var SimpleData $second */
@@ -412,7 +514,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         $this->serviceTypeToEntityTypeMap->expects($this->any())->method('getEntityType')->willReturn($expectedObject);
 
         $result = $this->serviceInputProcessor->process(
-            \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
+            TestService::class,
             'ObjectWithCustomAttributesMethod',
             $inputData
         );
@@ -458,7 +560,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
                 'expectedObject'=>  $this->getObjectWithCustomAttributes('integer', TestService::DEFAULT_VALUE),
             ],
             'customAttributeObject' => [
-                'customAttributeType' => \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray::class,
+                'customAttributeType' => SimpleArray::class,
                 'inputData' => [
                     'param' => [
                         'customAttributes' => [
@@ -497,7 +599,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
      */
     protected function getObjectWithCustomAttributes($type, $value = [])
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $customAttributeValue = null;
         switch ($type) {
             case 'integer':
@@ -505,37 +607,36 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
                 break;
             case 'SimpleArray':
                 $customAttributeValue = $objectManager->getObject(
-                    \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray::class,
+                    SimpleArray::class,
                     ['data' => $value]
                 );
                 break;
             case 'Simple[]':
                 $dataObjectSimple1 = $objectManager->getObject(
-                    \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple::class,
+                    Simple::class,
                     ['data' => $value[0]]
                 );
                 $dataObjectSimple2 = $objectManager->getObject(
-                    \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple::class,
+                    Simple::class,
                     ['data' => $value[1]]
                 );
                 $customAttributeValue = [$dataObjectSimple1, $dataObjectSimple2];
                 break;
             case 'emptyData':
                 return $objectManager->getObject(
-                    \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes::class,
+                    ObjectWithCustomAttributes::class,
                     ['data' => []]
                 );
             default:
                 return null;
         }
         return $objectManager->getObject(
-            \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes::class,
+            ObjectWithCustomAttributes::class,
             ['data' => [
                 'custom_attributes' => [
                     TestService::CUSTOM_ATTRIBUTE_CODE => $objectManager->getObject(
-                        \Magento\Framework\Api\AttributeValue::class,
-                        ['data' =>
-                            [
+                        AttributeValue::class,
+                        ['data' => [
                                 'attribute_code' => TestService::CUSTOM_ATTRIBUTE_CODE,
                                 'value' => $customAttributeValue
                             ]
@@ -550,12 +651,12 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
      * Cover invalid custom attribute data
      *
      * @dataProvider invalidCustomAttributesDataProvider
-     * @expectedException \Magento\Framework\Webapi\Exception
      */
     public function testCustomAttributesExceptions($inputData)
     {
+        $this->expectException('Magento\Framework\Webapi\Exception');
         $this->serviceInputProcessor->process(
-            \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
+            TestService::class,
             'ObjectWithCustomAttributesMethod',
             $inputData
         );

@@ -23,7 +23,7 @@ class IndexerConfigFilesTest extends \PHPUnit\Framework\TestCase
      */
     protected $schemaFile;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $this->schemaFile = $urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer.xsd');

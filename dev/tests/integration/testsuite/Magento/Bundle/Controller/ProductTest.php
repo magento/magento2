@@ -22,8 +22,8 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         $product = $productRepository->get('bundle-product');
         $this->dispatch('catalog/product/view/id/' . $product->getEntityId());
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains('Bundle Product', $responseBody);
-        $this->assertContains(
+        $this->assertStringContainsString('Bundle Product', $responseBody);
+        $this->assertStringContainsString(
             'In stock',
             $responseBody,
             'Bundle Product Detailed Page does not contain In Stock field'
@@ -32,7 +32,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals(1, $addToCartCount, '"Add to Cart" button should appear on the page exactly once.');
         $actualLinkCount = substr_count($responseBody, '>Bundle Product Items<');
         $this->assertEquals(1, $actualLinkCount, 'Bundle product options should appear on the page exactly once.');
-        $this->assertNotContains('class="options-container-big"', $responseBody);
+        $this->assertStringNotContainsString('class="options-container-big"', $responseBody);
         $this->assertEquals(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(

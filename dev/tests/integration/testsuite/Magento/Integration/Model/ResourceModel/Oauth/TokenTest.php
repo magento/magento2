@@ -7,6 +7,7 @@
 namespace Magento\Integration\Model\ResourceModel\Oauth;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Oauth\Helper\Oauth;
 use Magento\Integration\Model\Oauth\Token;
 
 /**
@@ -16,17 +17,17 @@ use Magento\Integration\Model\Oauth\Token;
  */
 class TokenTest extends \PHPUnit\Framework\TestCase
 {
-    const TOKEN_LIFETIME = 1; // in hours
-    
-    const BASE_CREATED_AT_TIMESTAMP = 100000;
-    
+    public const TOKEN_LIFETIME = 1; // in hours
+
+    public const BASE_CREATED_AT_TIMESTAMP = 100000;
+
     /**
      * @var array
      */
     private $generatedTokens;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime | \PHPUnit\Framework\MockObject\MockObject
      */
     private $dateTimeMock;
 
@@ -45,7 +46,12 @@ class TokenTest extends \PHPUnit\Framework\TestCase
      */
     private $tokenFactory;
 
-    protected function setUp()
+    /**
+     * @var Oauth
+     */
+    private $oauthHelper;
+
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->tokenFactory = $this->objectManager->create(\Magento\Integration\Model\Oauth\TokenFactory::class);
@@ -59,6 +65,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
             \Magento\Integration\Model\ResourceModel\Oauth\Token::class,
             ['date' => $this->dateTimeMock]
         );
+        $this->oauthHelper = $this->objectManager->create(Oauth::class);
 
         $this->generatedTokens = $this->generateTokens();
 
@@ -280,5 +287,25 @@ class TokenTest extends \PHPUnit\Framework\TestCase
                 "Token {$tokenNumber} was NOT expected to be deleted after clean up"
             );
         }
+    }
+
+    public function testSave(): void
+    {
+        $token = $this->oauthHelper->generateToken();
+        $tokenSecret = $this->oauthHelper->generateTokenSecret();
+        $model = $this->tokenFactory->create();
+        $model->setData(
+            [
+                'token' => $token,
+                'secret' => $tokenSecret,
+                 'type' => Token::TYPE_ACCESS
+            ]
+        );
+        $model->save();
+
+        $tokenResourceModel = $model->getResource();
+
+        $this->assertEquals($tokenSecret, $model->getSecret());
+        $this->assertNotEquals($model->getSecret(), $tokenResourceModel->load($model, 'secret'));
     }
 }

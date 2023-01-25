@@ -23,7 +23,7 @@
             <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="setAddStoreCodeToUrlsToYes"/>
             <createData entity="secondCustomWebsite" stepKey="createCustomWebsite"/>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminStoreGroupCreateActionGroup" stepKey="createNewStore">
                 <argument name="Website" value="secondCustomWebsite"/>
                 <argument name="storeGroup" value="customStoreGroup"/>
@@ -32,6 +32,7 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStoreEN"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
 
         <after>
@@ -42,6 +43,7 @@
                 <argument name="websiteName" value="$createCustomWebsite.website[name]$"/>
             </actionGroup>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="resetFiltersOnStoresIndexPage"/>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPageToResetFilters"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersOnProductIndexPage"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

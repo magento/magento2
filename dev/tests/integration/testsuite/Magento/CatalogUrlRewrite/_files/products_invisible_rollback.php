@@ -7,6 +7,7 @@
 declare(strict_types=1);
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->getInstance()->reinitialize();
 
@@ -33,5 +34,5 @@ foreach ($skus as $sku) {
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
-require __DIR__ . '/../../Store/_files/store_rollback.php';
-require __DIR__ . '/../../Store/_files/second_store_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/store_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store_rollback.php');

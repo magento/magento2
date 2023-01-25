@@ -17,5 +17,6 @@
         <element name="submitButton" type="button" selector=".action-primary.action-accept" timeout="30"/>
         <element name="rowByIndex" type="text" selector="tr[data-role='row']:nth-of-type({{var1}})" parameterized="true" timeout="30"/>
         <element name="edit" type="button" selector=".data-grid .edit"/>
+        <element name="activate" type="button" selector="#integrationGrid_table>tbody>tr:nth-child(1)>td.col-activate>a"/>
     </section>
 </sections>

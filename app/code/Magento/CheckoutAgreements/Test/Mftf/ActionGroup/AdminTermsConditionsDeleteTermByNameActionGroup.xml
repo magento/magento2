@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminTermsConditionsDeleteTermByNameActionGroup">
+        <seeInCurrentUrl url="checkout/agreement/edit/id/" stepKey="assertEditPage"/>
+        <click selector="{{AdminEditTermFormSection.delete}}" stepKey="clickDeleteButton"/>
+        <waitForElementVisible selector="{{AdminEditTermFormSection.acceptPopupButton}}" stepKey="waitForElement"/>
+        <click selector="{{AdminEditTermFormSection.acceptPopupButton}}" stepKey="clickDeleteOkButton"/>
+        <waitForText selector="{{AdminTermFormMessagesSection.successMessage}}" userInput="You deleted the condition." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

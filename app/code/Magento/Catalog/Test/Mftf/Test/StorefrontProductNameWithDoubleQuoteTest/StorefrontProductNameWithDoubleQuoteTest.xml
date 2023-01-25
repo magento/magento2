@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductNameWithDoubleQuoteTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create products"/>
+            <title value="Product with double quote in name"/>
+            <description value="Product with a double quote in the name should appear correctly on the storefront"/>
+            <severity value="BLOCKER"/>
+            <group value="product"/>
+            <testCaseId value="MAGETWO-92384"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!--Create product via admin-->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToProductCreatePage">
+            <argument name="product" value="SimpleProductNameWithDoubleQuote"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="SimpleProductNameWithDoubleQuote"/>
+        </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="selectCategory"/>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageToProduct">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+
+        <!--Check product in category listing-->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToCategoryPage">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageByNameAndSrc(SimpleProductNameWithDoubleQuote.name, ProductImage.fileName)}}" stepKey="seeCorrectImageCategoryPage"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeCorrectNameCategoryPage">
+            <argument name="productName" value="{{SimpleProductNameWithDoubleQuote.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seeCorrectPriceCategoryPage">
+            <argument name="productName" value="{{SimpleProductNameWithDoubleQuote.name}}"/>
+            <argument name="productPrice" value="{{SimpleProductNameWithDoubleQuote.price}}"/>
+        </actionGroup>
+
+        <!--Open product display page-->
+        <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="clickProductToGoProductPage">
+            <argument name="productName" value="{{SimpleProductNameWithDoubleQuote.name}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductDisplayPageLoad"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeCorrectName">
+            <argument name="productName" value="{{SimpleProductNameWithDoubleQuote.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku">
+            <argument name="productSku" value="{{SimpleProductNameWithDoubleQuote.sku}}"/>
+        </actionGroup>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{SimpleProductNameWithDoubleQuote.price}}" stepKey="seeCorrectPrice"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ProductImage.fileName)}}" stepKey="seeCorrectImage"/>
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="seeInStock">
+            <argument name="productStockStatus" value="In Stock"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontBreadcrubmsAreShownActionGroup" stepKey="seeCorrectBreadCrumbCategory">
+            <argument name="breadcrumbs" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontBreadcrubmsAreShownActionGroup" stepKey="seeCorrectBreadCrumbProduct">
+            <argument name="breadcrumbs" value="{{SimpleProductNameWithDoubleQuote.name}}"/>
+        </actionGroup>
+
+        <!--Remove product-->
+        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+            <argument name="product" value="SimpleProductNameWithDoubleQuote"/>
+        </actionGroup>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+    </test>
+</tests>

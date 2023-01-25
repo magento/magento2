@@ -3,40 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Cron;
 
+use Magento\Catalog\Cron\FrontendActionsFlush;
+use Magento\Catalog\Model\FrontendStorageConfigurationInterface;
+use Magento\Catalog\Model\FrontendStorageConfigurationPool;
+use Magento\Catalog\Model\ResourceModel\ProductFrontendAction;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FrontendActionsFlushTest extends \PHPUnit\Framework\TestCase
+class FrontendActionsFlushTest extends TestCase
 {
-    /** @var \Magento\Catalog\Cron\FrontendActionsFlush */
+    /** @var FrontendActionsFlush */
     protected $model;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\ProductFrontendAction|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProductFrontendAction|MockObject */
     protected $productFrontendActionMock;
 
-    /** @var \Magento\Catalog\Model\FrontendStorageConfigurationPool|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FrontendStorageConfigurationPool|MockObject */
     protected $frontendStorageConfigurationPoolMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productFrontendActionMock = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\ProductFrontendAction::class
+            ProductFrontendAction::class
         )
-                ->disableOriginalConstructor()
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->frontendStorageConfigurationPoolMock = $this->getMockBuilder(
-            \Magento\Catalog\Model\FrontendStorageConfigurationPool::class
+            FrontendStorageConfigurationPool::class
         )
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\Catalog\Cron\FrontendActionsFlush::class,
+            FrontendActionsFlush::class,
             [
                 'productFrontendActionResource' => $this->productFrontendActionMock,
                 'frontendStorageConfigurationPool' => $this->frontendStorageConfigurationPoolMock
@@ -46,15 +56,14 @@ class FrontendActionsFlushTest extends \PHPUnit\Framework\TestCase
 
     public function testExecute()
     {
-        $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
-        $frontendConfiguration = $this->createMock(\Magento\Catalog\Model\FrontendStorageConfigurationInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $selectMock = $this->createMock(Select::class);
+        $frontendConfiguration = $this->getMockForAbstractClass(FrontendStorageConfigurationInterface::class);
 
         $selectMock
             ->expects($this->once())
             ->method('from')
-            ->with('catalog_product_frontend_action', ['action_id', 'type_id'])
-            ->will($this->returnSelf());
+            ->with('catalog_product_frontend_action', ['action_id', 'type_id'])->willReturnSelf();
         $selectMock
             ->expects($this->once())
             ->method('group')

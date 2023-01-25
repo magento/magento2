@@ -13,12 +13,9 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Weee\Model\Tax;
 use Magento\Weee\Observer\SetWeeeRendererInFormObserver;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-/**
- * Class AddPaymentWeeeItemTest
- */
 class SetWeeeRendererInFormObserverTest extends TestCase
 {
     /**
@@ -41,9 +38,9 @@ class SetWeeeRendererInFormObserverTest extends TestCase
     /**
      * Set Up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->taxModelMock = $this->createMock(Tax::class);
         $this->observer = new SetWeeeRendererInFormObserver(
             $this->layoutMock,

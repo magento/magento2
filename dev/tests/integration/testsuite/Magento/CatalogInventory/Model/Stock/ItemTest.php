@@ -12,7 +12,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\CatalogInventory\Model\Stock\Item::class
@@ -55,7 +55,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $savedStockItem->setQty(null);
         $savedStockItem->save();
 
-        $this->assertEquals(null, $savedStockItem->load($savedStockItemId)->getQty());
+        $this->assertNull($savedStockItem->load($savedStockItemId)->getQty());
     }
 
     /**

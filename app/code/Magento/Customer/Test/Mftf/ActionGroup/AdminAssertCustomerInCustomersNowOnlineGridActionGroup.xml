@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Assert company in customers now online grid row -->
+    <actionGroup name="AdminAssertCustomerInCustomersNowOnlineGridActionGroup">
+        <annotations>
+            <description>Validates that the provided Customer is present and correct in the Customer now online grid page.</description>
+        </annotations>
+        <arguments>
+            <argument name="text" type="string"/>
+            <argument name="columnName" type="string"/>
+        </arguments>
+        <waitForText selector="{{AdminCustomersNowOnlineGridSection.gridCell('1', columnName)}}" userInput="{{text}}"  stepKey="waitForCustomesrNowOnline"/>
+    </actionGroup>
+</actionGroups>

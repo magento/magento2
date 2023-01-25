@@ -3,55 +3,74 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Indexer;
 
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Indexer\Table\Strategy;
+use Magento\Framework\Indexer\Table\StrategyInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TemporaryTableStrategyTest extends \PHPUnit\Framework\TestCase
+class TemporaryTableStrategyTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy
+     * @var TemporaryTableStrategy
      */
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\Table\Strategy
+     * @var MockObject|Strategy
      */
     private $tableStrategyMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResourceConnection
+     * @var MockObject|ResourceConnection
      */
     private $resourceMock;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $this->tableStrategyMock = $this->createMock(\Magento\Framework\Indexer\Table\Strategy::class);
-        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->tableStrategyMock = $this->createMock(Strategy::class);
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
 
-        $this->model = new \Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy(
+        $this->model = new TemporaryTableStrategy(
             $this->tableStrategyMock,
             $this->resourceMock
         );
     }
 
-    public function testGetUseIdxTable()
+    /**
+     * @return void
+     */
+    public function testGetUseIdxTable(): void
     {
         $this->tableStrategyMock->expects($this->once())->method('getUseIdxTable')->willReturn(true);
         $this->assertTrue($this->model->getUseIdxTable());
     }
 
-    public function testSetUseIdxTable()
+    /**
+     * @return void
+     */
+    public function testSetUseIdxTable(): void
     {
         $this->tableStrategyMock->expects($this->once())->method('setUseIdxTable')->with(true)->willReturnSelf();
         $this->assertEquals($this->tableStrategyMock, $this->model->setUseIdxTable(true));
     }
 
-    public function testGetTableName()
+    /**
+     * @return void
+     */
+    public function testGetTableName(): void
     {
         $tablePrefix = 'prefix';
-        $expectedResult = $tablePrefix . \Magento\Framework\Indexer\Table\StrategyInterface::IDX_SUFFIX;
+        $expectedResult = $tablePrefix . StrategyInterface::IDX_SUFFIX;
         $this->tableStrategyMock->expects($this->once())->method('getUseIdxTable')->willReturn(true);
         $this->resourceMock->expects($this->once())
             ->method('getTableName')
@@ -60,27 +79,26 @@ class TemporaryTableStrategyTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->model->getTableName($tablePrefix));
     }
 
-    public function testPrepareTableName()
+    /**
+     * @return void
+     */
+    public function testPrepareTableName(): void
     {
         $tablePrefix = 'prefix';
         $expectedResult = $tablePrefix . TemporaryTableStrategy::TEMP_SUFFIX;
-        $tempTableName = $tablePrefix . \Magento\Framework\Indexer\Table\StrategyInterface::TMP_SUFFIX;
+        $tempTableName = $tablePrefix . StrategyInterface::TMP_SUFFIX;
 
         $this->tableStrategyMock->expects($this->once())->method('getUseIdxTable')->willReturn(false);
-        $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->resourceMock->expects($this->once())
             ->method('getConnection')
             ->with('indexer')
             ->willReturn($connectionMock);
-        $this->resourceMock->expects($this->at(1))
+        $this->resourceMock
             ->method('getTableName')
-            ->with($expectedResult)
-            ->willReturn($expectedResult);
-        $this->resourceMock->expects($this->at(2))
-            ->method('getTableName')
-            ->with($tempTableName)
-            ->willReturn($tempTableName);
+            ->withConsecutive([$expectedResult], [$tempTableName])
+            ->willReturnOnConsecutiveCalls($expectedResult, $tempTableName);
         $connectionMock->expects($this->once())
             ->method('createTemporaryTableLike')
             ->with($expectedResult, $tempTableName, true);

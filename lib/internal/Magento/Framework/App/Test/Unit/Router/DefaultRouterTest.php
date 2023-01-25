@@ -5,38 +5,48 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\Router;
 
-class DefaultRouterTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Action\AbstractAction;
+use Magento\Framework\App\Action\Forward;
+use Magento\Framework\App\ActionFactory;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Router\DefaultRouter;
+use Magento\Framework\App\Router\NoRouteHandler;
+use Magento\Framework\App\Router\NoRouteHandlerList;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class DefaultRouterTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\Router\DefaultRouter
+     * @var DefaultRouter
      */
     protected $_model;
 
     public function testMatch()
     {
-        $request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $actionFactory = $this->createMock(\Magento\Framework\App\ActionFactory::class);
+        $request = $this->getMockForAbstractClass(RequestInterface::class);
+        $helper = new ObjectManager($this);
+        $actionFactory = $this->createMock(ActionFactory::class);
         $actionFactory->expects($this->once())->method('create')->with(
-            \Magento\Framework\App\Action\Forward::class
-        )->will(
-            $this->returnValue(
-                $this->getMockForAbstractClass(\Magento\Framework\App\Action\AbstractAction::class, [], '', false)
-            )
+            Forward::class
+        )->willReturn(
+            $this->getMockForAbstractClass(AbstractAction::class, [], '', false)
         );
-        $noRouteHandler = $this->createMock(\Magento\Framework\App\Router\NoRouteHandler::class);
-        $noRouteHandler->expects($this->any())->method('process')->will($this->returnValue(true));
-        $noRouteHandlerList = $this->createMock(\Magento\Framework\App\Router\NoRouteHandlerList::class);
-        $noRouteHandlerList->expects($this->any())->method('getHandlers')->will($this->returnValue([$noRouteHandler]));
+        $noRouteHandler = $this->createMock(NoRouteHandler::class);
+        $noRouteHandler->expects($this->any())->method('process')->willReturn(true);
+        $noRouteHandlerList = $this->createMock(NoRouteHandlerList::class);
+        $noRouteHandlerList->expects($this->any())->method('getHandlers')->willReturn([$noRouteHandler]);
         $this->_model = $helper->getObject(
-            \Magento\Framework\App\Router\DefaultRouter::class,
+            DefaultRouter::class,
             [
                 'actionFactory' => $actionFactory,
                 'noRouteHandlerList' => $noRouteHandlerList
             ]
         );
-        $this->assertInstanceOf(\Magento\Framework\App\Action\AbstractAction::class, $this->_model->match($request));
+        $this->assertInstanceOf(AbstractAction::class, $this->_model->match($request));
     }
 }

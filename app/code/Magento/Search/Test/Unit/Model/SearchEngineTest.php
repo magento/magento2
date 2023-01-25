@@ -3,38 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Search\Test\Unit\Model;
 
+use Magento\Framework\Search\AdapterInterface;
+use Magento\Framework\Search\RequestInterface;
+use Magento\Framework\Search\ResponseInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Search\Model\AdapterFactory;
+use Magento\Search\Model\SearchEngine;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SearchEngineTest extends \PHPUnit\Framework\TestCase
+class SearchEngineTest extends TestCase
 {
     /**
-     * @var \Magento\Search\Model\SearchEngine
+     * @var SearchEngine
      */
     private $searchEngine;
 
     /**
-     * @var \Magento\Framework\Search\AdapterInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $adapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
-        $adapterFactory = $this->getMockBuilder(\Magento\Search\Model\AdapterFactory::class)
+        $adapterFactory = $this->getMockBuilder(AdapterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->adapter = $this->getMockBuilder(\Magento\Framework\Search\AdapterInterface::class)
+        $this->adapter = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $adapterFactory->expects($this->once())->method('create')->will($this->returnValue($this->adapter));
+        $adapterFactory->expects($this->once())->method('create')->willReturn($this->adapter);
 
         $this->searchEngine = $helper->getObject(
-            \Magento\Search\Model\SearchEngine::class,
+            SearchEngine::class,
             [
                 'adapterFactory' => $adapterFactory,
             ]
@@ -43,20 +52,20 @@ class SearchEngineTest extends \PHPUnit\Framework\TestCase
 
     public function testSearch()
     {
-        $request = $this->getMockBuilder(\Magento\Framework\Search\RequestInterface::class)
+        $request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $response = $this->getMockBuilder(\Magento\Framework\Search\ResponseInterface::class)
+        $response = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->adapter->expects($this->once())
             ->method('query')
-            ->with($this->equalTo($request))
-            ->will($this->returnValue($response));
+            ->with($request)
+            ->willReturn($response);
 
         $result = $this->searchEngine->search($request);
-        $this->assertInstanceOf(\Magento\Framework\Search\ResponseInterface::class, $result);
+        $this->assertInstanceOf(ResponseInterface::class, $result);
     }
 }

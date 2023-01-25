@@ -3,41 +3,58 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
-class IteratorTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Model\Config\Structure\Element\Field;
+use Magento\Config\Model\Config\Structure\Element\Group;
+use Magento\Config\Model\Config\Structure\Element\Iterator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class IteratorTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Model\Config\Structure\Element\Iterator
+     * @var Iterator
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_flyweightMock;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
         $elementData = ['group1' => ['id' => 1], 'group2' => ['id' => 2], 'group3' => ['id' => 3]];
-        $this->_flyweightMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
+        $this->_flyweightMock = $this->createMock(Group::class);
 
-        $this->_model = new \Magento\Config\Model\Config\Structure\Element\Iterator($this->_flyweightMock);
+        $this->_model = new Iterator($this->_flyweightMock);
         $this->_model->setElements($elementData, 'scope');
     }
 
-    protected function tearDown()
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
     {
         unset($this->_model);
         unset($this->_flyweightMock);
     }
 
-    public function testIteratorInitializesFlyweight()
+    /**
+     * @return void
+     */
+    public function testIteratorInitializesFlyweight(): void
     {
-        $this->_flyweightMock->expects($this->at(0))->method('setData')->with(['id' => 1], 'scope');
-        $this->_flyweightMock->expects($this->at(2))->method('setData')->with(['id' => 2], 'scope');
-        $this->_flyweightMock->expects($this->at(4))->method('setData')->with(['id' => 3], 'scope');
-        $this->_flyweightMock->expects($this->any())->method('isVisible')->will($this->returnValue(true));
+        $this->_flyweightMock
+            ->method('setData')
+            ->withConsecutive([['id' => 1], 'scope'], [['id' => 2], 'scope'], [['id' => 3], 'scope']);
+        $this->_flyweightMock->expects($this->any())->method('isVisible')->willReturn(true);
         $counter = 0;
         foreach ($this->_model as $item) {
             $this->assertEquals($this->_flyweightMock, $item);
@@ -46,9 +63,9 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(3, $counter);
     }
 
-    public function testIteratorSkipsNonValidElements()
+    public function testIteratorSkipsNonValidElements(): void
     {
-        $this->_flyweightMock->expects($this->exactly(3))->method('isVisible')->will($this->returnValue(false));
+        $this->_flyweightMock->expects($this->exactly(3))->method('isVisible')->willReturn(false);
         $this->_flyweightMock->expects($this->exactly(3))->method('setData');
         foreach ($this->_model as $item) {
             unset($item);
@@ -61,17 +78,17 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
      * @param bool $result
      * @dataProvider isLastDataProvider
      */
-    public function testIsLast($elementId, $result)
+    public function testIsLast($elementId, $result): void
     {
-        $elementMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Field::class);
-        $elementMock->expects($this->once())->method('getId')->will($this->returnValue($elementId));
+        $elementMock = $this->createMock(Field::class);
+        $elementMock->expects($this->once())->method('getId')->willReturn($elementId);
         $this->assertEquals($result, $this->_model->isLast($elementMock));
     }
 
     /**
      * @return array
      */
-    public function isLastDataProvider()
+    public function isLastDataProvider(): array
     {
         return [[1, false], [2, false], [3, true]];
     }

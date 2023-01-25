@@ -394,9 +394,11 @@ class Grouped extends AbstractModifier
                         'externalFilterMode' => true,
                         'imports' => [
                             'storeId' => '${ $.provider }:data.product.current_store_id',
+                            '__disableTmpl' => ['storeId' => false],
                         ],
                         'exports' => [
                             'storeId' => '${ $.externalProvider }:params.current_store_id',
+                            '__disableTmpl' => ['storeId' => false],
                         ],
                     ],
                 ],
@@ -499,7 +501,10 @@ class Grouped extends AbstractModifier
                             'attribute_set' => 'attribute_set_text',
                             'thumbnail' => 'thumbnail_src',
                         ],
-                        'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
+                        'links' => [
+                            'insertData' => '${ $.provider }:${ $.dataProvider }',
+                            '__disableTmpl' => ['insertData' => false],
+                        ],
                         'sortOrder' => 20,
                         'columnsHeader' => false,
                         'columnsHeaderAfterRender' => true,
@@ -557,6 +562,7 @@ class Grouped extends AbstractModifier
                             'fit' => true,
                             'label' => __('Thumbnail'),
                             'sortOrder' => 20,
+                            'labelVisible' => false,
                         ],
                     ],
                 ],
@@ -581,6 +587,7 @@ class Grouped extends AbstractModifier
                             'validation' => [
                                 'validate-number' => true,
                             ],
+                            'labelVisible' => false,
                         ],
                     ],
                 ],
@@ -596,7 +603,8 @@ class Grouped extends AbstractModifier
                             'elementTmpl' => 'Magento_GroupedProduct/components/position',
                             'sortOrder' => 90,
                             'fit' => true,
-                            'dataScope' => 'positionCalculated'
+                            'dataScope' => 'positionCalculated',
+                            'labelVisible' => false,
                         ],
                     ],
                 ],
@@ -655,6 +663,7 @@ class Grouped extends AbstractModifier
                         'fit' => $fit,
                         'label' => $label,
                         'sortOrder' => $sortOrder,
+                        'labelVisible' => false,
                     ],
                 ],
             ],

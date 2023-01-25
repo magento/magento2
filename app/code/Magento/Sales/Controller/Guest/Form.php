@@ -18,7 +18,7 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Helper\Guest as GuestHelper;
 
 /**
- * Class Form
+ * Class Form - display Sales and Returns form for guest users
  */
 class Form extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
 {
@@ -63,7 +63,7 @@ class Form extends \Magento\Framework\App\Action\Action implements HttpGetAction
     public function execute()
     {
         if ($this->customerSession->isLoggedIn()) {
-            return $this->resultRedirectFactory->create()->setPath('customer/account/');
+            return $this->resultRedirectFactory->create()->setPath('sales/order/history');
         }
 
         $resultPage = $this->resultPageFactory->create();

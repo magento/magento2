@@ -8,13 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Helper;
 
-use Magento\Downloadable\Model\Link;
-use Magento\Store\Model\ScopeInterface;
-use PHPUnit\Framework\TestCase;
 use Magento\Downloadable\Helper\Data;
-use Magento\Framework\App\Helper\Context;
+use Magento\Downloadable\Model\Link;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Helper\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class DataTest extends TestCase
 {
@@ -24,21 +25,21 @@ class DataTest extends TestCase
     private $helper;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
      * Setup environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->method('getScopeConfig')->willReturn($this->scopeConfigMock);
 

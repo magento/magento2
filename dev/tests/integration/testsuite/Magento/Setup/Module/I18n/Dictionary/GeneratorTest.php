@@ -41,7 +41,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      */
     protected $backupRegistrar;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
         $paths = $reflection->getProperty('paths');
@@ -77,7 +77,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $this->generator = ServiceLocator::getDictionaryGenerator();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (file_exists($this->outputFileName)) {
             unlink($this->outputFileName);
@@ -109,7 +109,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $output = file_get_contents($this->outputFileName);
         foreach ($expected as $line) {
             if ($line) {
-                $this->assertContains($line, $output);
+                $this->assertStringContainsString($line, $output);
             }
         }
     }

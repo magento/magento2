@@ -3,43 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Security\Test\Unit\Model\ResourceModel;
 
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Security\Model\ResourceModel\AdminSessionInfo;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Security\Model\ResourceModel\AdminSessionInfo testing
  */
-class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
+class AdminSessionInfoTest extends TestCase
 {
-    /** @var \Magento\Security\Model\ResourceModel\AdminSessionInfo */
+    /** @var AdminSessionInfo */
     protected $model;
 
-    /** @var \Magento\Framework\Stdlib\DateTime */
+    /** @var DateTime */
     protected $dateTimeMock;
 
-    /** @var \Magento\Framework\App\ResourceConnection */
+    /** @var ResourceConnection */
     protected $resourceMock;
 
-    /** @var \Magento\Framework\DB\Adapter\AdapterInterface */
+    /** @var AdapterInterface */
     protected $dbAdapterMock;
 
     /**
      * Init mocks for tests
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
-        $this->dateTimeMock = $this->createMock(\Magento\Framework\Stdlib\DateTime::class);
+        $this->dateTimeMock = $this->createMock(DateTime::class);
 
-        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
 
-        $this->dbAdapterMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->dbAdapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->model = $objectManager->getObject(
-            \Magento\Security\Model\ResourceModel\AdminSessionInfo::class,
+            AdminSessionInfo::class,
             [
                 'resource' => $this->resourceMock,
                 'dateTime' => $this->dateTimeMock
@@ -82,7 +89,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
             'user_id = ?' => (int) $userId,
         ];
         if (!empty($excludedSessionIds)) {
-            $whereStatement['session_id NOT IN (?)'] = $excludedSessionIds;
+            $whereStatement['id NOT IN (?)'] = $excludedSessionIds;
         }
         if (!empty($withStatuses)) {
             $whereStatement['status IN (?)'] = $withStatuses;

@@ -3,18 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter;
 
+use InvalidArgumentException;
+use Magento\Elasticsearch\SearchAdapter\Filter\Builder as FilterBuilder;
 use Magento\Elasticsearch\SearchAdapter\Mapper;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder as QueryBuilder;
-use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match as MatchQueryBuilder;
-use Magento\Elasticsearch\SearchAdapter\Filter\Builder as FilterBuilder;
+use Magento\Elasticsearch\SearchAdapter\Query\Builder\MatchQuery as MatchQueryBuilder;
+use Magento\Framework\Search\Request\FilterInterface;
+use Magento\Framework\Search\Request\Query\BoolExpression;
+use Magento\Framework\Search\Request\Query\Filter;
+use Magento\Framework\Search\Request\Query\MatchQuery;
+use Magento\Framework\Search\Request\QueryInterface;
+use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MapperTest extends \PHPUnit\Framework\TestCase
+class MapperTest extends TestCase
 {
     /**
      * @var Mapper
@@ -22,17 +33,17 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var QueryBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueryBuilder|MockObject
      */
     protected $queryBuilder;
 
     /**
-     * @var MatchQueryBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var MatchQueryBuilder|MockObject
      */
     protected $matchQueryBuilder;
 
     /**
-     * @var FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterBuilder|MockObject
      */
     protected $filterBuilder;
 
@@ -40,22 +51,20 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      * Setup method
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->queryBuilder = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\Query\Builder::class)
+        $this->queryBuilder = $this->getMockBuilder(QueryBuilder::class)
             ->setMethods([
                 'initQuery',
                 'initAggregations',
             ])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->matchQueryBuilder = $this->getMockBuilder(
-            \Magento\Elasticsearch\SearchAdapter\Query\Builder\Match::class
-        )
+        $this->matchQueryBuilder = $this->getMockBuilder(MatchQueryBuilder::class)
             ->setMethods(['build'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filterBuilder = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\Filter\Builder::class)
+        $this->filterBuilder = $this->getMockBuilder(FilterBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->queryBuilder->expects($this->any())
@@ -78,7 +87,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            \Magento\Elasticsearch\SearchAdapter\Mapper::class,
+            Mapper::class,
             [
                 'queryBuilder' => $this->queryBuilder,
                 'matchQueryBuilder' => $this->matchQueryBuilder,
@@ -89,16 +98,17 @@ class MapperTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test buildQuery() method with exception
-     * @expectedException \InvalidArgumentException
      */
     public function testBuildQueryFailure()
     {
-        $request = $this->getMockBuilder(\Magento\Framework\Search\RequestInterface::class)
+        $this->expectException(InvalidArgumentException::class);
+
+        $request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $query = $this->getMockBuilder(\Magento\Framework\Search\Request\QueryInterface::class)
+            ->getMockForAbstractClass();
+        $query = $this->getMockBuilder(QueryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $request->expects($this->once())
             ->method('getQuery')
             ->willReturn($query);
@@ -120,14 +130,14 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuildQuery($queryType, $queryMock, $referenceType, $filterMock)
     {
-        $request = $this->getMockBuilder(\Magento\Framework\Search\RequestInterface::class)
+        $request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $query = $this->getMockBuilder($queryMock)
             ->setMethods(['getMust', 'getMustNot', 'getType', 'getShould', 'getReferenceType', 'getReference'])
             ->disableOriginalConstructor()
             ->getMock();
-        $matchQuery = $this->getMockBuilder(\Magento\Framework\Search\Request\Query\Match::class)
+        $matchQuery = $this->getMockBuilder(MatchQuery::class)
             ->disableOriginalConstructor()
             ->getMock();
         $filterQuery = $this->getMockBuilder($filterMock)
@@ -182,20 +192,20 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'matchQuery', \Magento\Framework\Search\Request\Query\Match::class,
-                'query', \Magento\Framework\Search\Request\QueryInterface::class,
+                'matchQuery', MatchQuery::class,
+                'query', QueryInterface::class,
             ],
             [
-                'boolQuery', \Magento\Framework\Search\Request\Query\BoolExpression::class,
-                'query', \Magento\Framework\Search\Request\QueryInterface::class,
+                'boolQuery', BoolExpression::class,
+                'query', QueryInterface::class,
             ],
             [
-                'filteredQuery', \Magento\Framework\Search\Request\Query\Filter::class,
-                'query', \Magento\Framework\Search\Request\QueryInterface::class,
+                'filteredQuery', Filter::class,
+                'query', QueryInterface::class,
             ],
             [
-                'filteredQuery', \Magento\Framework\Search\Request\Query\Filter::class,
-                'filter', \Magento\Framework\Search\Request\FilterInterface::class,
+                'filteredQuery', Filter::class,
+                'filter', FilterInterface::class,
             ],
         ];
     }

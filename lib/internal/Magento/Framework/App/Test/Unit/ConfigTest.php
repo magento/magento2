@@ -3,27 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
-     * @var ScopeCodeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeCodeResolver|MockObject
      */
     private $scopeCodeResolver;
 
     /**
-     * @var ConfigTypeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigTypeInterface|MockObject
      */
     private $configType;
 
     /**
-     * @var ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeInterface|MockObject
      */
     private $scope;
 
@@ -32,7 +36,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $appConfig;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->scopeCodeResolver = $this->getMockBuilder(ScopeCodeResolver::class)
             ->disableOriginalConstructor()

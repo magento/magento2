@@ -3,19 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Model\Connector;
 
+use Laminas\Http\Request;
+use Laminas\Http\Response;
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Connector\Http\ClientInterface;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Analytics\Model\Connector\OTPRequest;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
  * A unit test for testing of the representation of a 'OTP' request.
  */
-class OTPRequestTest extends \PHPUnit\Framework\TestCase
+class OTPRequestTest extends TestCase
 {
     /**
      * @var OTPRequest
@@ -23,55 +29,45 @@ class OTPRequestTest extends \PHPUnit\Framework\TestCase
     private $subject;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $configMock;
 
     /**
-     * @var ClientInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientInterface|MockObject
      */
     private $httpClientMock;
 
     /**
-     * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnalyticsToken|MockObject
      */
     private $analyticsTokenMock;
 
     /**
-     * @var ResponseResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseResolver|MockObject
      */
     private $responseResolverMock;
 
     /**
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
-        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
-        $this->httpClientMock = $this->getMockBuilder(ClientInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->httpClientMock = $this->getMockForAbstractClass(ClientInterface::class);
 
-        $this->analyticsTokenMock = $this->getMockBuilder(AnalyticsToken::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 
-        $this->responseResolverMock = $this->getMockBuilder(ResponseResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        
+        $this->responseResolverMock = $this->createMock(ResponseResolver::class);
+
         $this->subject = new OTPRequest(
             $this->analyticsTokenMock,
             $this->httpClientMock,
@@ -92,7 +88,7 @@ class OTPRequestTest extends \PHPUnit\Framework\TestCase
             'otp' => 'thisisotp',
             'url' => 'http://www.mystore.com',
             'access-token' => 'thisisaccesstoken',
-            'method' => \Magento\Framework\HTTP\ZendClient::POST,
+            'method' => Request::METHOD_POST,
             'body'=> ['access-token' => 'thisisaccesstoken','url' => 'http://www.mystore.com'],
         ];
     }
@@ -111,10 +107,12 @@ class OTPRequestTest extends \PHPUnit\Framework\TestCase
             ->method('getToken')
             ->willReturn($data['access-token']);
 
-        $this->configMock->expects($this->any())
+        $this->configMock
             ->method('getValue')
             ->willReturn($data['url']);
 
+        $response = new Response();
+        $response->setStatusCode(Response::STATUS_CODE_201);
         $this->httpClientMock->expects($this->once())
             ->method('request')
             ->with(
@@ -122,7 +120,7 @@ class OTPRequestTest extends \PHPUnit\Framework\TestCase
                 $data['url'],
                 $data['body']
             )
-            ->willReturn(new \Zend_Http_Response(201, []));
+            ->willReturn($response);
         $this->responseResolverMock->expects($this->once())
             ->method('getResult')
             ->willReturn($data['otp']);
@@ -162,10 +160,12 @@ class OTPRequestTest extends \PHPUnit\Framework\TestCase
             ->method('getToken')
             ->willReturn($data['access-token']);
 
-        $this->configMock->expects($this->any())
+        $this->configMock
             ->method('getValue')
             ->willReturn($data['url']);
 
+        $response = new Response();
+        $response->setCustomStatusCode(Response::STATUS_CODE_CUSTOM);
         $this->httpClientMock->expects($this->once())
             ->method('request')
             ->with(
@@ -173,7 +173,7 @@ class OTPRequestTest extends \PHPUnit\Framework\TestCase
                 $data['url'],
                 $data['body']
             )
-            ->willReturn(new \Zend_Http_Response(0, []));
+            ->willReturn($response);
 
         $this->responseResolverMock->expects($this->once())
             ->method('getResult')

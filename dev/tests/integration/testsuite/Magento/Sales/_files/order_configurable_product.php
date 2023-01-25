@@ -4,18 +4,19 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Sales\Model\Order\Payment;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-// @codingStandardsIgnoreFile
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/product_configurable.php');
 
-require __DIR__ . '/../../../Magento/ConfigurableProduct/_files/product_configurable.php';
-
-/** @var \Magento\Catalog\Model\Product $product */
-$configurableProduct = $product;
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$configurableProduct = $productRepository->get('configurable');
 
 $addressData = include __DIR__ . '/address_data.php';
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Sales\Model\Order\Address $billingAddress */
 $billingAddress = $objectManager->create(\Magento\Sales\Model\Order\Address::class, ['data' => $addressData]);
 $billingAddress->setAddressType('billing');

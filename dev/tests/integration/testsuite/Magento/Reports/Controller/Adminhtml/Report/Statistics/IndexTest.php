@@ -20,6 +20,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     {
         $this->dispatch('backend/reports/report_statistics');
         $actual = $this->getResponse()->getBody();
-        $this->assertContains('Never', $actual);
+        $this->assertStringContainsString('Never', $actual);
     }
 }

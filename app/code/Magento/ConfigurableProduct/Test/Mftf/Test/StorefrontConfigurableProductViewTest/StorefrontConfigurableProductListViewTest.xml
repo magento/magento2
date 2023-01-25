@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductListViewTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="View configurable product in a category in storefront"/>
+            <title value="customer should see the configurable product in the category list"/>
+            <description value="customer should see the configurable product in the category list"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-61"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+
+            <!-- Create a configurable product via the UI -->
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersConfigurable"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterConfigurable">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterFillSelectFieldActionGroup" stepKey="addTypeFilterConfigurable">
+                <argument name="filterName" value="type_id"/>
+                <argument name="filterValue" value="Configurable Product"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyGridFilterConfigurable"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteConfigurableProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersVirtual"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterVirtual">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyGridFilterVirtual"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteVirtualProducts">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Verify storefront category list view -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="amOnCategoryPage1">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait1"/>
+        <actionGroup ref="StorefrontSwitchCategoryViewToListModeActionGroup" stepKey="clickListView"/>
+        <waitForPageLoad stepKey="wait2"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.productImage}}" stepKey="seePhoto"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeName">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
+        <seeElement selector="{{StorefrontCategoryMainSection.productLinkByHref(_defaultProduct.urlKey)}}" stepKey="seeNameLink"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seePrice">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+            <argument name="productPrice" value="{{colorProductAttribute1.price}}"/>
+        </actionGroup>
+    </test>
+</tests>

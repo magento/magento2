@@ -38,7 +38,7 @@ abstract class AbstractCurrencyTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -52,7 +52,7 @@ abstract class AbstractCurrencyTest extends TestCase
     /**
      * @inheridoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->registry->unregister('product');
 

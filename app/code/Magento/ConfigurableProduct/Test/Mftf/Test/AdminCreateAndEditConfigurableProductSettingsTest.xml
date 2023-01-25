@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Log out -->
@@ -51,7 +51,7 @@
 
         <!-- Open product page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
-            <argument name="productUrl" value="{{BaseConfigurableProduct.sku}}"/>
+            <argument name="productUrl" value="{{BaseConfigurableProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert product design settings "left bar is present at product page with 2 columns" -->
@@ -91,7 +91,7 @@
 
         <!-- Verify Url Key after changing -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
-            <argument name="productUrl" value="{{ApiConfigurableProduct.name}}"/>
+            <argument name="productUrl" value="{{ApiConfigurableProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert product design settings "Layout empty" -->
@@ -105,5 +105,6 @@
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

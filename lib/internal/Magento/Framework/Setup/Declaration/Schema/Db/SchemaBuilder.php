@@ -3,16 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Declaration\Schema\Db;
 
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementFactory;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Schema;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\Setup\Declaration\Schema\Sharding;
-use Magento\Framework\Setup\Exception;
 
 /**
  * This type of builder is responsible for converting ENTIRE data, that comes from db
@@ -50,9 +51,9 @@ class SchemaBuilder
     /**
      * Constructor.
      *
-     * @param ElementFactory          $elementFactory
+     * @param ElementFactory $elementFactory
      * @param DbSchemaReaderInterface $dbSchemaReader
-     * @param Sharding                $sharding
+     * @param Sharding $sharding
      */
     public function __construct(
         ElementFactory $elementFactory,
@@ -88,7 +89,7 @@ class SchemaBuilder
                     [
                         'name' => $tableName,
                         'resource' => $resource,
-                        'engine' => strtolower($tableOptions['engine']),
+                        'engine' => strtolower($tableOptions['engine'] ?? ''),
                         'comment' => $tableOptions['comment'] === '' ? null : $tableOptions['comment'],
                         'charset' => $tableOptions['charset'],
                         'collation' => $tableOptions['collation']
@@ -131,8 +132,8 @@ class SchemaBuilder
     /**
      * Process references for all tables. Schema validation required.
      *
-     * @param  Table[] $tables
-     * @param Schema $schema
+     * @param   Table[] $tables
+     * @param   Schema $schema
      */
     private function processReferenceKeys(array $tables, Schema $schema)
     {
@@ -170,15 +171,15 @@ class SchemaBuilder
     /**
      * Retrieve column objects from names.
      *
-     * @param  Column[] $columns
-     * @param  array    $data
-     * @return Column[]
-     * @throws Exception
+     * @param   Column[] $columns
+     * @param   array $data
+     * @return  Column[]
+     * @throws  NotFoundException
      */
     private function resolveInternalRelations(array $columns, array $data)
     {
         if (!is_array($data['column'])) {
-            throw new Exception(
+            throw new NotFoundException(
                 new Phrase("Cannot find columns for internal index")
             );
         }
@@ -188,7 +189,7 @@ class SchemaBuilder
             if (!isset($columns[$columnName])) {
                 $tableName = isset($data['table']) ? $data['table']->getName() : '';
                 trigger_error(
-                    new Phrase(
+                    (string)new Phrase(
                         'Column %1 does not exist for index/constraint %2 in table %3.',
                         [
                             $columnName,

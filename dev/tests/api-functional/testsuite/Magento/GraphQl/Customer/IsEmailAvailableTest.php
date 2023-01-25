@@ -55,11 +55,12 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage GraphQL response contains errors: Email must be specified
      */
     public function testEmailAvailableEmptyValue()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: Email must be specified');
+
         $query =
             <<<QUERY
 {
@@ -72,11 +73,12 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Field "isEmailAvailable" argument "email" of type "String!" is required
      */
     public function testEmailAvailableMissingValue()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Field "isEmailAvailable" argument "email" of type "String!" is required');
+
         $query =
             <<<QUERY
 {
@@ -89,11 +91,12 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage GraphQL response contains errors: Email is invalid
      */
     public function testEmailAvailableInvalidValue()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: Email is invalid');
+
         $query =
             <<<QUERY
 {

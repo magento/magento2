@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminGridSelectRows">
+        <element name="multicheckDropdown" type="button" selector="div[data-role='grid-wrapper'] th.data-grid-multicheck-cell button.action-multicheck-toggle"/>
+        <element name="multicheckOption" type="button" selector="//div[@data-role='grid-wrapper']//th[contains(@class, data-grid-multicheck-cell)]//li//span[text() = '{{label}}']" parameterized="true"/>
+        <element name="bulkActionDropdown" type="button" selector="div.admin__data-grid-header-row.row div.action-select-wrap button.action-select"/>
+        <element name="bulkActionOption" type="button" selector="//div[contains(@class,'admin__data-grid-header-row') and contains(@class, 'row')]//div[contains(@class, 'action-select-wrap')]//ul/li/span[text() = '{{label}}']" parameterized="true"/>
+    </section>
+</sections>

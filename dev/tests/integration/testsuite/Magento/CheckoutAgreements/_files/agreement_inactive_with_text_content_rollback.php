@@ -4,10 +4,22 @@
  * See COPYING.txt for license details.
  */
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-/** @var $agreement \Magento\CheckoutAgreements\Model\Agreement */
-$agreement = $objectManager->create(\Magento\CheckoutAgreements\Model\Agreement::class);
-$agreement->load('Checkout Agreement (inactive)', 'name');
+declare(strict_types=1);
+
+use Magento\CheckoutAgreements\Model\Agreement;
+use Magento\CheckoutAgreements\Model\ResourceModel\Agreement as AgreementResource;
+use Magento\TestFramework\Helper\Bootstrap;
+
+$objectManager = Bootstrap::getObjectManager();
+
+/**
+ * @var $agreement         Agreement
+ * @var $agreementResource AgreementResource
+ */
+$agreement = $objectManager->create(Agreement::class);
+$agreementResource = $objectManager->create(AgreementResource::class);
+
+$agreementResource->load($agreement, 'Checkout Agreement (inactive)', 'name');
 if ($agreement->getId()) {
-    $agreement->delete();
+    $agreementResource->delete($agreement);
 }

@@ -3,26 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Writer\Csv;
 
-class AbstractWriterTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\File\Csv;
+use Magento\Setup\Module\Dependency\Report\Data\ConfigInterface;
+use Magento\Setup\Module\Dependency\Report\Writer\Csv\AbstractWriter;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AbstractWriterTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Dependency\Report\Writer\Csv\AbstractWriter|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractWriter|MockObject
      */
     protected $writer;
 
     /**
-     * @var \Magento\Framework\File\Csv|\PHPUnit_Framework_MockObject_MockObject
+     * @var Csv|MockObject
      */
     protected $csvMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->csvMock = $this->createMock(\Magento\Framework\File\Csv::class);
+        $this->csvMock = $this->createMock(Csv::class);
 
         $this->writer = $this->getMockForAbstractClass(
-            \Magento\Setup\Module\Dependency\Report\Writer\Csv\AbstractWriter::class,
+            AbstractWriter::class,
             ['writer' => $this->csvMock]
         );
     }
@@ -30,7 +38,7 @@ class AbstractWriterTest extends \PHPUnit\Framework\TestCase
     public function testWrite()
     {
         $options = ['report_filename' => 'some_filename'];
-        $configMock = $this->createMock(\Magento\Setup\Module\Dependency\Report\Data\ConfigInterface::class);
+        $configMock = $this->getMockForAbstractClass(ConfigInterface::class);
         $preparedData = ['foo', 'baz', 'bar'];
 
         $this->writer->expects(
@@ -39,8 +47,8 @@ class AbstractWriterTest extends \PHPUnit\Framework\TestCase
             'prepareData'
         )->with(
             $configMock
-        )->will(
-            $this->returnValue($preparedData)
+        )->willReturn(
+            $preparedData
         );
         $this->csvMock->expects($this->once())->method('saveData')->with($options['report_filename'], $preparedData);
 
@@ -49,13 +57,13 @@ class AbstractWriterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $options
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Writing error: Passed option "report_filename" is wrong.
      * @dataProvider dataProviderWrongOptionReportFilename
      */
     public function testWriteWithWrongOptionReportFilename($options)
     {
-        $configMock = $this->createMock(\Magento\Setup\Module\Dependency\Report\Data\ConfigInterface::class);
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Writing error: Passed option "report_filename" is wrong.');
+        $configMock = $this->getMockForAbstractClass(ConfigInterface::class);
 
         $this->writer->write($options, $configMock);
     }

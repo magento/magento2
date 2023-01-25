@@ -3,9 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
+/**
+ * @var $block Magento\Shipping\Block\Adminhtml\Order\Tracking
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
-<?php /** @var $block Magento\Shipping\Block\Adminhtml\Order\Tracking */?>
-<script>
+<?php $scriptString = <<<script
+
 require(['prototype'], function(){
 
     //<![CDATA[
@@ -57,7 +63,11 @@ require(['prototype'], function(){
     //]]>
 
 });
-</script>
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+
 <script id="track_row_template" type="text/x-magento-template">
     <tr>
         <td class="col-carrier">
@@ -65,7 +75,7 @@ require(['prototype'], function(){
                     id="trackingC<%- data.index %>"
                     class="select admin__control-select carrier"
                     disabled="disabled">
-                <?php foreach ($block->getCarriers() as $_code => $_name) : ?>
+                <?php foreach ($block->getCarriers() as $_code => $_name): ?>
                     <option value="<?= $block->escapeHtmlAttr($_code) ?>"><?= $block->escapeHtml($_name) ?></option>
                 <?php endforeach; ?>
             </select>
@@ -116,7 +126,8 @@ require(['prototype'], function(){
         </tbody>
     </table>
 </div>
-<script>
+<?php $scriptString = <<<script
+
 require([
     'mage/template',
     'prototype'
@@ -127,4 +138,7 @@ require([
     //]]>
 
 });
-</script>
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

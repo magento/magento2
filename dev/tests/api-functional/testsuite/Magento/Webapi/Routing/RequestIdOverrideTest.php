@@ -35,7 +35,7 @@ class RequestIdOverrideTest extends \Magento\Webapi\Routing\BaseService
      */
     protected $_soapService = 'testModule5AllSoapAndRest';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_markTestAsRestOnly('Request Id overriding is a REST based feature.');
         $this->_version = 'V1';

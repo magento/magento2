@@ -25,7 +25,7 @@ class PhpTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->templateEngine = $objectManager->get(Php::class);

@@ -44,9 +44,9 @@ class SynonymActionsTest extends TestCase
     /**
      * Setup environment to test
      */
-    protected function setup()
+    protected function setup(): void
     {
-        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
 
         $objectManager = new ObjectManager($this);
 
@@ -112,7 +112,7 @@ class SynonymActionsTest extends TestCase
                                         self::STUB_SYNONYM_GROUP_ID
                                     )
                                 ],
-                                '__disableTmpl' => true
+                                'post' => true
                             ],
                             'edit' => [
                                 'href' => sprintf(
@@ -120,7 +120,6 @@ class SynonymActionsTest extends TestCase
                                     self::STUB_SYNONYM_GROUP_ID
                                 ),
                                 'label' => (string)__('View/Edit'),
-                                '__disableTmpl' => true
                             ]
                         ]
                     ]
@@ -128,8 +127,8 @@ class SynonymActionsTest extends TestCase
             ]
         ];
 
-        $this->urlBuilderMock->method('getUrl')->will(
-            $this->returnValueMap([
+        $this->urlBuilderMock->method('getUrl')->willReturnMap(
+            [
                 [
                     SynonymActions::SYNONYM_URL_PATH_DELETE, ['group_id' => self::STUB_SYNONYM_GROUP_ID],
                     sprintf(self::SYNONYM_GROUP_DELETE_URL, self::STUB_SYNONYM_GROUP_ID)
@@ -138,7 +137,7 @@ class SynonymActionsTest extends TestCase
                     SynonymActions::SYNONYM_URL_PATH_EDIT, ['group_id' => self::STUB_SYNONYM_GROUP_ID],
                     sprintf(self::SYNONYM_GROUP_EDIT_URL, self::STUB_SYNONYM_GROUP_ID)
                 ]
-            ])
+            ]
         );
 
         /**

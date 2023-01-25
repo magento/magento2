@@ -46,7 +46,7 @@ class EmailTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->orderRepository = $this->_objectManager->get(OrderRepository::class);

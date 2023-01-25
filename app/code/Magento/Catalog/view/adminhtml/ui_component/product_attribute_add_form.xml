@@ -63,6 +63,7 @@
                 <required>true</required>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>string</dataType>
                 <label translate="true">Attribute Label</label>

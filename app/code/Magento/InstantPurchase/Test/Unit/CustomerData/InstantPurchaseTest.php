@@ -8,24 +8,26 @@ declare(strict_types=1);
 
 namespace Magento\InstantPurchase\Test\Unit\CustomerData;
 
-use Magento\InstantPurchase\CustomerData\InstantPurchase as CustomerData;
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Session;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\InstantPurchase\CustomerData\InstantPurchase as CustomerData;
 use Magento\InstantPurchase\Model\InstantPurchaseInterface as InstantPurchaseModel;
+use Magento\InstantPurchase\Model\InstantPurchaseOption;
 use Magento\InstantPurchase\Model\Ui\CustomerAddressesFormatter;
 use Magento\InstantPurchase\Model\Ui\PaymentTokenFormatter;
 use Magento\InstantPurchase\Model\Ui\ShippingMethodFormatter;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Store;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\InstantPurchase\Model\InstantPurchaseOption;
-use Magento\Customer\Model\Customer;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for InstantPurchase Customer Data
  *
  * Class \Magento\InstantPurchase\Test\Unit\CustomerData\InstantPurchaseTest
  */
-class InstantPurchaseTest extends \PHPUnit\Framework\TestCase
+class InstantPurchaseTest extends TestCase
 {
     /**
      * @var objectManagerHelper
@@ -33,62 +35,62 @@ class InstantPurchaseTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var CustomerData | \PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerData|MockObject
      */
     private $customerData;
 
     /**
-     * @var Session | \PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
     private $customerSession;
 
     /**
-     * @var StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManager;
 
     /**
-     * @var InstantPurchaseModel | \PHPUnit_Framework_MockObject_MockObject
+     * @var InstantPurchaseModel|MockObject
      */
     private $instantPurchase;
 
     /**
-     * @var PaymentTokenFormatter | \PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentTokenFormatter|MockObject
      */
     private $paymentTokenFormatter;
 
     /**
-     * @var CustomerAddressesFormatter | \PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerAddressesFormatter|MockObject
      */
     private $customerAddressesFormatter;
 
     /**
-     * @var ShippingMethodFormatter | \PHPUnit_Framework_MockObject_MockObject
+     * @var ShippingMethodFormatter|MockObject
      */
     private $shippingMethodFormatter;
 
     /**
-     * @var Store | \PHPUnit_Framework_MockObject_MockObject
+     * @var Store|MockObject
      */
     private $store;
 
     /**
-     * @var Customer | \PHPUnit_Framework_MockObject_MockObject
+     * @var Customer|MockObject
      */
     private $customer;
 
     /**
-     * @var InstantPurchaseOption | \PHPUnit_Framework_MockObject_MockObject
+     * @var InstantPurchaseOption|MockObject
      */
     private $instantPurchaseOption;
 
     /**
      * Setup environment for testing
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerSession = $this->createMock(Session::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->instantPurchase = $this->createMock(InstantPurchaseModel::class);
         $this->paymentTokenFormatter = $this->createMock(PaymentTokenFormatter::class);
         $this->customerAddressesFormatter = $this->createMock(CustomerAddressesFormatter::class);

@@ -10,18 +10,16 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Validator;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\Weight;
 use Magento\ImportExport\Model\Import;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class WeightTest
- */
-class WeightTest extends \PHPUnit\Framework\TestCase
+class WeightTest extends TestCase
 {
     /**
      * @var Weight
      */
     private $weight;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->weight = new Weight();
 
@@ -32,7 +30,7 @@ class WeightTest extends \PHPUnit\Framework\TestCase
             ->method('getEmptyAttributeValueConstant')
             ->willReturn(Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT);
 
-        $contextStub->method('retrieveMessageTemplate')->willReturn(null);
+        $contextStub->method('retrieveMessageTemplate')->willReturn('some template');
         $this->weight->init($contextStub);
     }
 

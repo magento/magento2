@@ -12,6 +12,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Strategy interface for preparing product collection.
+ * @deprecated See elastic search strategy
  */
 class ProductCollectionPrepareStrategy implements ProductCollectionPrepareStrategyInterface
 {

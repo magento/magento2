@@ -113,7 +113,7 @@ class Storage
      */
     public function addCustomerByArray(array $customer): Storage
     {
-        $email = mb_strtolower(trim($customer['email']));
+        $email = isset($customer['email']) ? mb_strtolower(trim($customer['email'])) : '';
         if (!isset($this->_customerIds[$email])) {
             $this->_customerIds[$email] = [];
         }
@@ -130,7 +130,7 @@ class Storage
     /**
      * Add customer to array
      *
-     * @deprecated @see addCustomerByArray
+     * @deprecated 100.3.0 @see addCustomerByArray
      * @param DataObject $customer
      * @return $this
      */
@@ -205,7 +205,7 @@ class Storage
     {
         $identifiers = [];
         foreach ($customersToFind as $customerToFind) {
-            $email = mb_strtolower($customerToFind['email']);
+            $email = isset($customerToFind['email']) ? mb_strtolower($customerToFind['email']) : '';
             $websiteId = $customerToFind['website_id'];
             if (!$this->isLoadedCustomerData($email, $websiteId)) {
                 //Only looking for customers we don't already have ID for.

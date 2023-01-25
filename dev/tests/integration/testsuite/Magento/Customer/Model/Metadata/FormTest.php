@@ -28,7 +28,7 @@ class FormTest extends TestCase
     /** @var array */
     protected $_requestData = [];
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
 

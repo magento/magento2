@@ -50,9 +50,8 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
-        CacheCleaner::cleanAll();
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->attributeRepository = $this->objectManager->get(AttributeRepository::class);

@@ -13,12 +13,13 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Currency\Exception\CurrencyException;
+use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\UrlInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Escaper;
 
 /**
  * Associated products helper
@@ -215,7 +216,6 @@ class AssociatedProducts
                 'code' => $attribute['code'],
                 'label' => $attribute['label'],
                 'position' => $attribute['position'],
-                '__disableTmpl' => true
             ];
 
             foreach ($attribute['chosen'] as $chosenOption) {
@@ -233,7 +233,7 @@ class AssociatedProducts
      * Prepare variations
      *
      * @return void
-     * @throws \Zend_Currency_Exception
+     * @throws CurrencyException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
      */
@@ -266,7 +266,6 @@ class AssociatedProducts
                                 'id' => $attribute->getAttributeId(),
                                 'position' => $configurableAttributes[$attribute->getAttributeId()]['position'],
                                 'chosen' => [],
-                                '__disableTmpl' => true
                             ];
                             $options = $attribute->usesSource() ? $attribute->getSource()->getAllOptions() : [];
                             foreach ($options as $option) {
@@ -277,7 +276,6 @@ class AssociatedProducts
                                         'id' => $option['value'],
                                         'label' => $option['label'],
                                         'value' => $option['value'],
-                                        '__disableTmpl' => true
                                     ];
                                 }
                             }
@@ -289,7 +287,6 @@ class AssociatedProducts
                             'id' => $optionId,
                             'label' => $variation[$attribute->getId()]['label'],
                             'value' => $optionId,
-                            '__disableTmpl' => true
                         ];
                         $variationOptions[] = $variationOption;
                         $attributes[$attribute->getAttributeId()]['chosen'][$optionId] = $variationOption;
@@ -314,9 +311,7 @@ class AssociatedProducts
                         'canEdit' => 0,
                         'newProduct' => 0,
                         'attributes' => $this->getTextAttributes($variationOptions),
-                        'thumbnail_image' => $this->imageHelper->init($product, 'product_thumbnail_image')
-                            ->getUrl(),
-                        '__disableTmpl' => true
+                        'thumbnail_image' => $this->imageHelper->init($product, 'product_thumbnail_image')->getUrl(),
                     ];
                     $productIds[] = $product->getId();
                 }

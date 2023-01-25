@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPaypalSmartButtonWithFranceMerchantCountryTest" extends="AdminOrderRateDisplayedInOneLineTest">
+        <annotations>
+            <features value="Paypal"/>
+            <stories value="PayPal Express Checkout"/>
+            <title value="Mainflow of Paypal Smart Button with Euro currency and merchant country is France"/>
+            <description value="Users are able to place order using Paypal Smart Button using Euro currency and merchant country is France"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-33274"/>
+            <group value="paypalExpress"/>
+            <skip>
+                <issueId value="MC-37236"/>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!--Set price scope global-->
+            <magentoCLI command="config:set {{CatalogPriceScopeGlobalConfigData.path}} {{CatalogPriceScopeGlobalConfigData.value}}" stepKey="setCatalogPriceScopeWebsite"/>
+            <!--Set merchant country-->
+            <magentoCLI command="config:set {{MerchantFrance.path}} {{MerchantFrance.value}}" stepKey="setMerchantCountryUK"/>
+            <!--Enable Advanced Setting-->
+            <magentoCLI command="config:set {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.value}}" stepKey="enableSkipOrderReview"/>
+            <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCache"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
+            <!--Set default merchant country-->
+            <magentoCLI command="config:set {{MerchantUnitedStates.path}} {{MerchantUnitedStates.value}}" stepKey="setMerchantCountryDefault"/>
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
+        </after>
+        <!-- Switch to USD-US Dollar-->
+        <actionGroup ref="StorefrontSwitchCurrencyActionGroup" after="waitForProductPagePageLoad" stepKey="switchCurrency">
+            <argument name="currency" value="USD"/>
+        </actionGroup>
+
+        <!-- click on PayPal payment radio button -->
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" after="guestCheckoutFillingShippingSection" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="guestSelectCheckMoneyOrderPayment"/>
+
+        <!--Click Paypal button-->
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" after="guestSelectCheckMoneyOrderPayment" stepKey="guestPlaceOrder">
+            <argument name="elementNumber" value="0"/>
+        </actionGroup>
+
+        <!--Login to Paypal in-context-->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountOneStepActionGroup" after="guestPlaceOrder" stepKey="LoginToPayPal">
+            <argument name="payerName" value="{{Payer.firstName}}"/>
+        </actionGroup>
+
+        <!--Submit payment on PayPal site-->
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" after="LoginToPayPal" stepKey="submitPayment"/>
+
+        <waitForElement after="submitPayment" selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumber"/>
+        <actionGroup ref="AdminAssertCurrencyInOrderActionGroup" stepKey="seeEURandUSDRate">
+            <argument name="rate" value="USD / EUR rate"/>
+        </actionGroup>
+        <assertEquals stepKey="assertSelectedCategories">
+            <actualResult type="variable">grabRate</actualResult>
+            <expectedResult type="array">[USD / EUR rate:]</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

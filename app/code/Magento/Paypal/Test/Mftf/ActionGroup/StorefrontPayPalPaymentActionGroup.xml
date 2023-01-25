@@ -9,13 +9,12 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="LoginToPayPalPaymentAccount">
         <arguments>
-            <argument name="userName" type="string" defaultValue="{{Payer.buyerEmail}}"/>
-            <argument name="password" type="string" defaultValue="{{Payer.buyerPassword}"/>
+            <argument name="credentials" defaultValue="_CREDS"/>
         </arguments>
-        <fillField selector="{{PayPalPaymentSection.email}}" userInput="{{userName}}" stepKey="fillEmail"/>
+        <fillField selector="{{PayPalPaymentSection.email}}" userInput="{{credentials.magento/paypal_sandbox_login_email}}" stepKey="fillEmail"/>
         <click selector="{{PayPalPaymentSection.nextButton}}" stepKey="clickNext"/>
         <waitForElementVisible selector="{{PayPalPaymentSection.password}}" stepKey="waitForPasswordField"/>
-        <fillField selector="{{PayPalPaymentSection.password}}" userInput="{{password}}" stepKey="fillPassword"/>
+        <fillField selector="{{PayPalPaymentSection.password}}" userInput="{{credentials.magento/paypal_sandbox_login_password}}" stepKey="fillPassword"/>
         <click selector="{{PayPalPaymentSection.loginBtn}}" stepKey="clickLogin"/>
         <waitForPageLoad stepKey="waitForLoginPageLoad"/>
         <click selector="{{PayPalPaymentSection.continueButton}}" stepKey="clickContinue"/>

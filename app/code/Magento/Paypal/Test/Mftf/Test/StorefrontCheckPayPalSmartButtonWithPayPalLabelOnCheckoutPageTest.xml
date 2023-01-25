@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckPayPalSmartButtonWithPayPalLabelOnCheckoutPageTest" extends="StorefrontCheckPayPalSmartButtonWithBuyNowLabelOnProductPageTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="PayPal Smart Button Configuration"/>
+            <title value="Check PayPal Smart Button configuration with PayPal label on Checkout page"/>
+            <description value="Admin is able to customize PayPal Smart Button with PayPal label on Checkout page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-28711"/>
+            <group value="paypal"/>
+            <group value="paypalExpress"/>
+            <skip>
+                <issueId value="MC-33951"/>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" before="createProduct" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create Customer -->
+            <createData entity="Simple_US_Customer" after="createProduct" stepKey="createCustomer"/>
+
+            <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageEnableCustomizeButtonConfigData.path}} {{StorefrontPaypalCheckoutPageEnableCustomizeButtonConfigData.value}}" stepKey="enableCustomizeButton"/>
+            <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageButtonPayPalLabelConfigData.path}} {{StorefrontPaypalCheckoutPageButtonPayPalLabelConfigData.value}}" stepKey="setLabelForPayPalSmartButton"/>
+            <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageButtonVerticalLayoutConfigData.path}} {{StorefrontPaypalCheckoutPageButtonVerticalLayoutConfigData.value}}" stepKey="setLayoutForPayPalSmartButton"/>
+            <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageButtonPillShapeConfigData.path}} {{StorefrontPaypalCheckoutPageButtonPillShapeConfigData.value}}" stepKey="setShapeForPayPalSmartButton"/>
+            <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageButtonBlueColorConfigData.path}} {{StorefrontPaypalCheckoutPageButtonBlueColorConfigData.value}}" stepKey="setColorForPayPalSmartButton"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageDisableCustomizeButtonConfigData.path}} {{StorefrontPaypalCheckoutPageDisableCustomizeButtonConfigData.value}}" stepKey="disableCustomizeButton"/>
+
+            <!-- Delete Category -->
+            <deleteData createDataKey="createCategory" after="deleteProduct" stepKey="deleteCategory"/>
+
+            <!--Logout from customer account-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" before="deleteCustomer" stepKey="logoutCustomer"/>
+
+            <!--Delete customer -->
+            <deleteData createDataKey="createCustomer" after="deleteCategory" stepKey="deleteCustomer"/>
+        </after>
+        <!--Login to storefront as previously created customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" before="goToPayPalSmartButtonPage" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+
+        <actionGroup ref="AddProductToCheckoutPageActionGroup" stepKey="goToPayPalSmartButtonPage">
+            <argument name="Category" value="$createCategory$"/>
+        </actionGroup>
+        <!-- Check PayPal smart button configurations -->
+        <remove keyForRemoval="seeButtonLabelText"/>
+        <actionGroup ref="AssertPayPalButtonLayoutInPaypalLabelActionGroup" stepKey="assertLayoutBtn">
+            <argument name="label" value="{{PayPalLabel.paypal}}"/>
+            <argument name="layout" value="{{PayPalLayout.vertical}}"/>
+            <argument name="shape" value="{{PayPalShape.pill}}"/>
+            <argument name="color" value="{{PayPalColor.blue}}"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertImageAttributesOnEnhancedMediaGalleryActionGroup">
+        <annotations>
+            <description>Assets image information on the Media Gallery grid</description>
+        </annotations>
+        <arguments>
+            <argument name="image"/>
+        </arguments>
+
+        <grabTextFrom selector="{{AdminEnhancedMediaGalleryImageDescriptionSection.title}}" stepKey="grabImageTitle"/>
+        <assertStringContainsString stepKey="verifyImageTitle">
+            <actualResult type="variable">grabImageTitle</actualResult>
+            <expectedResult type="string">{{image.title}}</expectedResult>
+        </assertStringContainsString>
+
+        <grabTextFrom selector="{{AdminEnhancedMediaGalleryImageDescriptionSection.contentType}}" stepKey="grabContentType"/>
+        <assertStringContainsStringIgnoringCase stepKey="verifyContentType">
+            <actualResult type="variable">grabContentType</actualResult>
+            <expectedResult type="string">{{image.extension}}</expectedResult>
+        </assertStringContainsStringIgnoringCase>
+
+        <grabTextFrom selector="{{AdminEnhancedMediaGalleryImageDescriptionSection.dimensions}}" stepKey="grabDimensions"/>
+        <assertNotEmpty stepKey="verifyDimensions">
+            <actualResult type="variable">grabDimensions</actualResult>
+        </assertNotEmpty>
+    </actionGroup>
+</actionGroups>

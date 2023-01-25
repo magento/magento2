@@ -9,6 +9,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $objectManager = Bootstrap::getObjectManager();
 $registry = $objectManager->get(Registry::class);
@@ -25,4 +26,6 @@ try {
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
-require __DIR__ . '/category_with_different_price_products_rollback.php';
+Resolver::getInstance()->requireDataFixture(
+    'Magento/Catalog/_files/category_with_different_price_products_rollback.php'
+);

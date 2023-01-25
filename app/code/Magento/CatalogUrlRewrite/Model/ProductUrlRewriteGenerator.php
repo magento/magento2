@@ -26,49 +26,49 @@ class ProductUrlRewriteGenerator
     const ENTITY_TYPE = 'product';
 
     /**
-     * @deprecated 100.1.4
+     * @deprecated 100.1.0
      * @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService
      */
     protected $storeViewService;
 
     /**
      * @var \Magento\Catalog\Model\Product
-     * @deprecated 100.1.4
+     * @deprecated 100.1.0
      */
     protected $product;
 
     /**
-     * @deprecated 100.1.4
+     * @deprecated 100.1.0
      * @var \Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator
      */
     protected $currentUrlRewritesRegenerator;
 
     /**
-     * @deprecated 100.1.4
+     * @deprecated 100.1.0
      * @var \Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator
      */
     protected $categoriesUrlRewriteGenerator;
 
     /**
-     * @deprecated 100.1.4
+     * @deprecated 100.1.0
      * @var \Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator
      */
     protected $canonicalUrlRewriteGenerator;
 
     /**
-     * @deprecated 100.1.4
+     * @deprecated 100.1.0
      * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory
      */
     protected $objectRegistryFactory;
 
     /**
-     * @deprecated 100.1.4
+     * @deprecated 100.1.0
      * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistry
      */
     protected $productCategories;
 
     /**
-     * @deprecated 100.1.4
+     * @deprecated 100.1.0
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;

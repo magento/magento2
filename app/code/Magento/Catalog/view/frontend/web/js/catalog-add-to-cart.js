@@ -8,8 +8,9 @@ define([
     'mage/translate',
     'underscore',
     'Magento_Catalog/js/product/view/product-ids-resolver',
+    'Magento_Catalog/js/product/view/product-info-resolver',
     'jquery-ui-modules/widget'
-], function ($, $t, _, idsResolver) {
+], function ($, $t, _, idsResolver, productInfoResolver) {
     'use strict';
 
     $.widget('mage.catalogAddToCart', {
@@ -24,7 +25,8 @@ define([
             addToCartButtonDisabledClass: 'disabled',
             addToCartButtonTextWhileAdding: '',
             addToCartButtonTextAdded: '',
-            addToCartButtonTextDefault: ''
+            addToCartButtonTextDefault: '',
+            productInfoResolver: productInfoResolver
         },
 
         /** @inheritdoc */
@@ -32,6 +34,7 @@ define([
             if (this.options.bindSubmit) {
                 this._bindSubmit();
             }
+            $(this.options.addToCartButtonSelector).prop('disabled', false);
         },
 
         /**
@@ -90,6 +93,7 @@ define([
         ajaxSubmit: function (form) {
             var self = this,
                 productIds = idsResolver(form),
+                productInfo = self.options.productInfoResolver(form),
                 formData;
 
             $(self.options.minicartSelector).trigger('contentLoading');
@@ -97,7 +101,7 @@ define([
             formData = new FormData(form[0]);
 
             $.ajax({
-                url: form.attr('action'),
+                url: form.prop('action'),
                 data: formData,
                 type: 'post',
                 dataType: 'json',
@@ -119,6 +123,7 @@ define([
                     $(document).trigger('ajax:addToCart', {
                         'sku': form.data().productSku,
                         'productIds': productIds,
+                        'productInfo': productInfo,
                         'form': form,
                         'response': res
                     });
@@ -172,6 +177,7 @@ define([
                     $(document).trigger('ajax:addToCart:error', {
                         'sku': form.data().productSku,
                         'productIds': productIds,
+                        'productInfo': productInfo,
                         'form': form,
                         'response': res
                     });
@@ -195,7 +201,7 @@ define([
 
             addToCartButton.addClass(this.options.addToCartButtonDisabledClass);
             addToCartButton.find('span').text(addToCartButtonTextWhileAdding);
-            addToCartButton.attr('title', addToCartButtonTextWhileAdding);
+            addToCartButton.prop('title', addToCartButtonTextWhileAdding);
         },
 
         /**
@@ -207,14 +213,14 @@ define([
                 addToCartButton = $(form).find(this.options.addToCartButtonSelector);
 
             addToCartButton.find('span').text(addToCartButtonTextAdded);
-            addToCartButton.attr('title', addToCartButtonTextAdded);
+            addToCartButton.prop('title', addToCartButtonTextAdded);
 
             setTimeout(function () {
                 var addToCartButtonTextDefault = self.options.addToCartButtonTextDefault || $t('Add to Cart');
 
                 addToCartButton.removeClass(self.options.addToCartButtonDisabledClass);
                 addToCartButton.find('span').text(addToCartButtonTextDefault);
-                addToCartButton.attr('title', addToCartButtonTextDefault);
+                addToCartButton.prop('title', addToCartButtonTextDefault);
             }, 1000);
         }
     });

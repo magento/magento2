@@ -45,7 +45,7 @@ class AddOptionToAttributeTest extends TestCase
      */
     private $setup;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = ObjectManager::getInstance();
 
@@ -99,7 +99,9 @@ class AddOptionToAttributeTest extends TestCase
         );
         $optionsAfter = $this->getAttributeOptions(false);
         $this->assertEquals(count($optionsBefore) + 2, count($optionsAfter));
-        $this->assertArraySubset($optionsBefore, $optionsAfter);
+        foreach ($optionsBefore as $option) {
+            $this->assertContainsEquals($option, $optionsAfter);
+        }
     }
 
     /**
@@ -116,7 +118,9 @@ class AddOptionToAttributeTest extends TestCase
         );
         $optionsAfter = $this->getAttributeOptions();
         $this->assertEquals(count($optionsBefore), count($optionsAfter));
-        $this->assertArraySubset($optionsBefore, $optionsAfter);
+        foreach ($optionsBefore as $option) {
+            $this->assertContainsEquals($option, $optionsAfter);
+        }
     }
 
     /**
@@ -197,8 +201,10 @@ class AddOptionToAttributeTest extends TestCase
             ]
         );
         $updatedOptions = $this->getAttributeOptions();
-        $this->assertArraySubset($updatedOptions, $optionsBefore);
         $this->assertEquals(count($updatedOptions), count($optionsBefore) - 1);
+        foreach ($updatedOptions as $option) {
+            $this->assertContainsEquals($option, $optionsBefore);
+        }
     }
 
     /**
@@ -218,5 +224,20 @@ class AddOptionToAttributeTest extends TestCase
         $optionsAfter = $this->getAttributeOptions();
         $this->assertEquals($optionsAfter[0], 'updatedValue');
         $this->assertSame(array_slice($optionsBefore, 1), array_slice($optionsAfter, 1));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setAccessible(true);
+                $property->setValue($this, null);
+            }
+        }
     }
 }

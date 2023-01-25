@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\Model\Config\Importer\Processor;
 
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Config\Importer\Processor\Create;
@@ -16,55 +19,57 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class CreateTest extends \PHPUnit\Framework\TestCase
+class CreateTest extends TestCase
 {
     /**
-     * @var DataDifferenceCalculator|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataDifferenceCalculator|MockObject
      */
     private $dataDifferenceCalculatorMock;
 
     /**
-     * @var WebsiteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteFactory|MockObject
      */
     private $websiteFactoryMock;
 
     /**
-     * @var GroupFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupFactory|MockObject
      */
     private $groupFactoryMock;
 
     /**
-     * @var StoreFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreFactory|MockObject
      */
     private $storeFactoryMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractDb|MockObject
      */
     private $abstractDbMock;
 
     /**
-     * @var Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var Website|MockObject
      */
     private $websiteMock;
 
     /**
-     * @var Group|\PHPUnit_Framework_MockObject_MockObject
+     * @var Group|MockObject
      */
     private $groupMock;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|MockObject
      */
     private $storeMock;
 
@@ -111,7 +116,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initTestData();
 
@@ -397,12 +402,10 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $this->processor->run($this->data);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Some error
-     */
     public function testRunWithException()
     {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Some error');
         $data = [
             'websites' => [],
             'groups' => [],

@@ -8,9 +8,10 @@ declare(strict_types=1);
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/product_image.php';
-require __DIR__ . '/product_simple.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_image.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple.php');
 
 $objectManager = Bootstrap::getObjectManager();
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);

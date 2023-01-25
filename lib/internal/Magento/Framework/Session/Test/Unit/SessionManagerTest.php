@@ -3,45 +3,55 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 // @codingStandardsIgnoreStart
 namespace {
     $mockPHPFunctions = false;
 }
 
 namespace Magento\Framework\Session\Test\Unit {
+    use Magento\Framework\Session\Config\ConfigInterface;
+    use Magento\Framework\Session\SessionManager;
+    use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+    use Magento\Framework\Stdlib\CookieManagerInterface;
+    use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+    use PHPUnit\Framework\MockObject\MockObject;
+    use PHPUnit\Framework\TestCase;
+
     // @codingStandardsIgnoreEnd
 
     /**
      * Test SessionManager
      *
      */
-    class SessionManagerTest extends \PHPUnit\Framework\TestCase
+    class SessionManagerTest extends TestCase
     {
         const SESSION_USE_ONLY_COOKIES = 'session.use_only_cookies';
         const SESSION_USE_ONLY_COOKIES_ENABLE = '1';
 
         /**
-         * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+         * @var ObjectManager
          */
         private $objectManager;
 
         /**
-         * @var \Magento\Framework\Session\SessionManager
+         * @var SessionManager
          */
         private $sessionManager;
 
         /**
-         * @var \Magento\Framework\Session\Config\ConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+         * @var ConfigInterface|MockObject
          */
         private $mockSessionConfig;
 
         /**
-         * @var \Magento\Framework\Stdlib\CookieManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+         * @var CookieManagerInterface|MockObject
          */
         private $mockCookieManager;
 
         /**
-         * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory | \PHPUnit_Framework_MockObject_MockObject
+         * @var CookieMetadataFactory|MockObject
          */
         private $mockCookieMetadataFactory;
 
@@ -50,7 +60,7 @@ namespace Magento\Framework\Session\Test\Unit {
          */
         public static $isIniSetInvoked;
 
-        protected function setUp()
+        protected function setUp(): void
         {
             $this->markTestSkipped('To be fixed in MAGETWO-34751');
             global $mockPHPFunctions;
@@ -58,23 +68,23 @@ namespace Magento\Framework\Session\Test\Unit {
             require_once __DIR__ . '/_files/mock_session_regenerate_id.php';
 
             $mockPHPFunctions = true;
-            $this->mockSessionConfig = $this->getMockBuilder(\Magento\Framework\Session\Config\ConfigInterface::class)
+            $this->mockSessionConfig = $this->getMockBuilder(ConfigInterface::class)
                 ->disableOriginalConstructor()
-                ->getMock();
-            $this->mockCookieManager = $this->createMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
+                ->getMockForAbstractClass();
+            $this->mockCookieManager = $this->getMockForAbstractClass(CookieManagerInterface::class);
             $this->mockCookieMetadataFactory = $this->getMockBuilder(
-                \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
+                CookieMetadataFactory::class
             )
                 ->disableOriginalConstructor()
                 ->getMock();
-            $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+            $this->objectManager = new ObjectManager($this);
             $arguments = [
                 'sessionConfig' => $this->mockSessionConfig,
                 'cookieManager' => $this->mockCookieManager,
                 'cookieMetadataFactory' => $this->mockCookieMetadataFactory,
             ];
             $this->sessionManager = $this->objectManager->getObject(
-                \Magento\Framework\Session\SessionManager::class,
+                SessionManager::class,
                 $arguments
             );
         }
@@ -82,7 +92,7 @@ namespace Magento\Framework\Session\Test\Unit {
         public function testSessionManagerConstructor()
         {
             self::$isIniSetInvoked = false;
-            $this->objectManager->getObject(\Magento\Framework\Session\SessionManager::class);
+            $this->objectManager->getObject(SessionManager::class);
             $this->assertTrue(SessionManagerTest::$isIniSetInvoked);
         }
     }

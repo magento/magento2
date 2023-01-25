@@ -11,7 +11,6 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 /**
  * Catalog product option date type
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
@@ -72,8 +71,21 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $dateValid = true;
         if ($this->_dateExists()) {
             if ($this->useCalendar()) {
+                if (is_array($value) && $this->checkDateWithoutJSCalendar($value)) {
+                    $value['date'] = sprintf("%s/%s/%s", $value['day'], $value['month'], $value['year']);
+                }
+                /* Fixed validation if the date was not saved correctly after re-saved the order
+                for example: "09\/24\/2020,2020-09-24 00:00:00" */
+                if (is_string($value) && preg_match('/^\d{1,4}.+\d{1,4}.+\d{1,4},+(\w|\W)*$/', $value)) {
+                    $value = [
+                        'date' => preg_replace('/,([^,]+),?$/', '', $value),
+                    ];
+                }
                 $dateValid = isset($value['date']) && preg_match('/^\d{1,4}.+\d{1,4}.+\d{1,4}$/', $value['date']);
             } else {
+                if (is_array($value)) {
+                    $value = $this->prepareDateByDateInternal($value);
+                }
                 $dateValid = isset(
                     $value['day']
                 ) && isset(
@@ -184,8 +196,10 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             $date = (new \DateTime())->setTimestamp($timestamp);
             $result = $date->format('Y-m-d H:i:s');
 
+            $originDate = (isset($value['date']) && $value['date'] != '') ? $value['date'] : null;
+
             // Save date in internal format to avoid locale date bugs
-            $this->_setInternalInRequest($result);
+            $this->_setInternalInRequest($result, $originDate);
 
             return $result;
         } else {
@@ -203,32 +217,36 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function getFormattedOptionValue($optionValue)
     {
         if ($this->_formattedOptionValue === null) {
-            if ($this->getOption()->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE) {
-                $result = $this->_localeDate->formatDateTime(
-                    new \DateTime($optionValue),
-                    \IntlDateFormatter::MEDIUM,
-                    \IntlDateFormatter::NONE,
-                    null,
-                    'UTC'
-                );
-            } elseif ($this->getOption()->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME) {
-                $result = $this->_localeDate->formatDateTime(
-                    new \DateTime($optionValue),
-                    \IntlDateFormatter::SHORT,
-                    \IntlDateFormatter::SHORT,
-                    null,
-                    'UTC'
-                );
-            } elseif ($this->getOption()->getType() == ProductCustomOptionInterface::OPTION_TYPE_TIME) {
-                $result = $this->_localeDate->formatDateTime(
-                    new \DateTime($optionValue),
-                    \IntlDateFormatter::NONE,
-                    \IntlDateFormatter::SHORT,
-                    null,
-                    'UTC'
-                );
-            } else {
-                $result = $optionValue;
+            switch ($this->getOption()->getType()) {
+                case ProductCustomOptionInterface::OPTION_TYPE_DATE:
+                    $result = $this->_localeDate->formatDateTime(
+                        new \DateTime($optionValue),
+                        \IntlDateFormatter::MEDIUM,
+                        \IntlDateFormatter::NONE,
+                        null,
+                        'UTC'
+                    );
+                    break;
+                case ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME:
+                    $result = $this->_localeDate->formatDateTime(
+                        new \DateTime($optionValue),
+                        \IntlDateFormatter::SHORT,
+                        \IntlDateFormatter::SHORT,
+                        null,
+                        'UTC'
+                    );
+                    break;
+                case ProductCustomOptionInterface::OPTION_TYPE_TIME:
+                    $result = $this->_localeDate->formatDateTime(
+                        new \DateTime($optionValue),
+                        \IntlDateFormatter::NONE,
+                        \IntlDateFormatter::SHORT,
+                        null,
+                        'UTC'
+                    );
+                    break;
+                default:
+                    $result = $optionValue;
             }
             $this->_formattedOptionValue = $result;
         }
@@ -287,8 +305,8 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $infoBuyRequest = $confItem->getOptionByCode('info_buyRequest');
         try {
             $value = $this->serializer->unserialize($infoBuyRequest->getValue());
-            if (is_array($value) && isset($value['options']) && isset($value['options'][$this->getOption()->getId()])
-            ) {
+
+            if (is_array($value) && isset($value['options'][$this->getOption()->getId()])) {
                 return $value['options'][$this->getOption()->getId()];
             } else {
                 return ['date_internal' => $optionValue];
@@ -325,12 +343,10 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function getYearStart()
     {
-        $_range = explode(',', $this->getConfigData('year_range'));
-        if (isset($_range[0]) && !empty($_range[0])) {
-            return $_range[0];
-        } else {
-            return date('Y');
-        }
+        $_range = $this->getConfigData('year_range') !== null
+            ? explode(',', $this->getConfigData('year_range'))
+            : [];
+        return (isset($_range[0]) && !empty($_range[0])) ? $_range[0] : date('Y');
     }
 
     /**
@@ -340,21 +356,20 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function getYearEnd()
     {
-        $_range = explode(',', $this->getConfigData('year_range'));
-        if (isset($_range[1]) && !empty($_range[1])) {
-            return $_range[1];
-        } else {
-            return date('Y');
-        }
+        $_range = $this->getConfigData('year_range') !== null
+            ? explode(',', $this->getConfigData('year_range'))
+            : [];
+        return (isset($_range[1]) && !empty($_range[1])) ? $_range[1] : date('Y');
     }
 
     /**
      * Save internal value of option in infoBuy_request
      *
      * @param string $internalValue Datetime value in internal format
+     * @param string|null $originDate date value in origin format
      * @return void
      */
-    protected function _setInternalInRequest($internalValue)
+    protected function _setInternalInRequest($internalValue, $originDate = null)
     {
         $requestOptions = $this->getRequest()->getOptions();
         if (!isset($requestOptions[$this->getOption()->getId()])) {
@@ -364,6 +379,9 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             $requestOptions[$this->getOption()->getId()] = [];
         }
         $requestOptions[$this->getOption()->getId()]['date_internal'] = $internalValue;
+        if ($originDate) {
+            $requestOptions[$this->getOption()->getId()]['date'] = $originDate;
+        }
         $this->getRequest()->setOptions($requestOptions);
     }
 
@@ -397,5 +415,39 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 ProductCustomOptionInterface::OPTION_TYPE_TIME
             ]
         );
+    }
+
+    /**
+     * Check is date without JS Calendar
+     *
+     * @param array $value
+     *
+     * @return bool
+     */
+    private function checkDateWithoutJSCalendar(array $value): bool
+    {
+        return empty($value['date'])
+            && !empty($value['day'])
+            && !empty($value['month'])
+            && !empty($value['year']);
+    }
+
+    /**
+     * Prepare date by date internal
+     *
+     * @param array $value
+     * @return array
+     */
+    private function prepareDateByDateInternal(array $value): array
+    {
+        if (!empty($value['date']) && !empty($value['date_internal'])) {
+            $formatDate = explode(' ', $value['date_internal']);
+            $date = explode('-', $formatDate[0]);
+            $value['year'] = $date[0];
+            $value['month'] = $date[1];
+            $value['day'] = $date[2];
+        }
+
+        return $value;
     }
 }

@@ -3,36 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Mview\Test\Unit;
 
-class ProcessorTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Mview\Processor;
+use Magento\Framework\Mview\View\Collection;
+use Magento\Framework\Mview\View\CollectionFactory;
+use Magento\Framework\Mview\ViewInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ProcessorTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Mview\Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var Processor|MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Mview\View\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $viewsFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->viewsFactoryMock =
-            $this->createPartialMock(\Magento\Framework\Mview\View\CollectionFactory::class, ['create']);
-        $this->model = new \Magento\Framework\Mview\Processor($this->viewsFactoryMock);
+            $this->createPartialMock(CollectionFactory::class, ['create']);
+        $this->model = new Processor($this->viewsFactoryMock);
     }
 
     /**
      * Return array of mocked views
      *
      * @param string $method
-     * @return \Magento\Framework\Mview\ViewInterface[]|\PHPUnit_Framework_MockObject_MockObject[]
+     * @return ViewInterface[]|MockObject[]
      */
     protected function getViews($method)
     {
-        $viewMock = $this->createMock(\Magento\Framework\Mview\ViewInterface::class);
+        $viewMock = $this->getMockForAbstractClass(ViewInterface::class);
         $viewMock->expects($this->exactly(2))->method($method);
         return [$viewMock, $viewMock];
     }
@@ -40,19 +49,19 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * Return view collection mock
      *
-     * @return \Magento\Framework\Mview\View\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @return Collection|MockObject
      */
     protected function getViewsMock()
     {
-        $viewsMock = $this->createMock(\Magento\Framework\Mview\View\Collection::class);
-        $this->viewsFactoryMock->expects($this->once())->method('create')->will($this->returnValue($viewsMock));
+        $viewsMock = $this->createMock(Collection::class);
+        $this->viewsFactoryMock->expects($this->once())->method('create')->willReturn($viewsMock);
         return $viewsMock;
     }
 
     public function testUpdate()
     {
         $viewsMock = $this->getViewsMock();
-        $viewsMock->expects($this->once())->method('getItems')->will($this->returnValue($this->getViews('update')));
+        $viewsMock->expects($this->once())->method('getItems')->willReturn($this->getViews('update'));
         $viewsMock->expects($this->never())->method('getItemsByColumnValue');
 
         $this->model->update();
@@ -69,8 +78,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             'getItemsByColumnValue'
         )->with(
             $group
-        )->will(
-            $this->returnValue($this->getViews('update'))
+        )->willReturn(
+            $this->getViews('update')
         );
 
         $this->model->update($group);
@@ -83,8 +92,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getItems'
-        )->will(
-            $this->returnValue($this->getViews('clearChangelog'))
+        )->willReturn(
+            $this->getViews('clearChangelog')
         );
         $viewsMock->expects($this->never())->method('getItemsByColumnValue');
 
@@ -102,8 +111,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             'getItemsByColumnValue'
         )->with(
             $group
-        )->will(
-            $this->returnValue($this->getViews('clearChangelog'))
+        )->willReturn(
+            $this->getViews('clearChangelog')
         );
 
         $this->model->clearChangelog($group);

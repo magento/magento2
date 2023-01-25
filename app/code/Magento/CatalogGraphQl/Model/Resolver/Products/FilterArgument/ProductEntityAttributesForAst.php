@@ -17,6 +17,10 @@ use Magento\Framework\GraphQl\Query\Resolver\Argument\FieldEntityAttributesInter
  */
 class ProductEntityAttributesForAst implements FieldEntityAttributesInterface
 {
+    private const PRODUCT_BASE_TYPE = 'SimpleProduct';
+
+    private const PRODUCT_FILTER_INPUT = 'ProductAttributeFilterInput';
+
     /**
      * @var ConfigInterface
      */
@@ -51,9 +55,9 @@ class ProductEntityAttributesForAst implements FieldEntityAttributesInterface
      */
     public function getEntityAttributes() : array
     {
-        $productTypeSchema = $this->config->getConfigElement('SimpleProduct');
+        $productTypeSchema = $this->config->getConfigElement(self::PRODUCT_BASE_TYPE);
         if (!$productTypeSchema instanceof Type) {
-            throw new \LogicException(__("SimpleProduct type not defined in schema."));
+            throw new \LogicException(__("%1 type not defined in schema.", self::PRODUCT_BASE_TYPE));
         }
 
         $fields = [];
@@ -69,6 +73,9 @@ class ProductEntityAttributesForAst implements FieldEntityAttributesInterface
             }
         }
 
+        $productAttributeFilterFields = $this->getProductAttributeFilterFields();
+        $fields = array_merge($fields, $productAttributeFilterFields);
+
         foreach ($this->additionalAttributes as $attributeName) {
             $fields[$attributeName] = [
                 'type' => 'String',
@@ -77,5 +84,25 @@ class ProductEntityAttributesForAst implements FieldEntityAttributesInterface
         }
 
         return $fields;
+    }
+
+    /**
+     * Get fields from ProductAttributeFilterInput
+     *
+     * @return array
+     */
+    private function getProductAttributeFilterFields()
+    {
+        $filterFields = [];
+
+        $productAttributeFilterSchema = $this->config->getConfigElement(self::PRODUCT_FILTER_INPUT);
+        $productAttributeFilterFields = $productAttributeFilterSchema->getFields();
+        foreach ($productAttributeFilterFields as $filterField) {
+            $filterFields[$filterField->getName()] = [
+                'type' => 'String',
+                'fieldName' => $filterField->getName(),
+            ];
+        }
+        return $filterFields;
     }
 }

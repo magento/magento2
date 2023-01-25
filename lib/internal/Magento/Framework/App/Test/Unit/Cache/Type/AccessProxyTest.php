@@ -3,29 +3,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\Cache\Type;
 
-class AccessProxyTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\Cache\Type\AccessProxy;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ProxyTesting;
+use PHPUnit\Framework\TestCase;
+
+class AccessProxyTest extends TestCase
 {
     /**
      * @param string $method
      * @param array $params
      * @param bool $disabledResult
      * @param mixed $enabledResult
+     *
+     * @return void
      * @dataProvider proxyMethodDataProvider
      */
-    public function testProxyMethod($method, $params, $disabledResult, $enabledResult)
+    public function testProxyMethod($method, $params, $disabledResult, $enabledResult): void
     {
         $identifier = 'cache_type_identifier';
 
-        $frontendMock = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $frontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
 
-        $cacheEnabler = $this->createMock(\Magento\Framework\App\Cache\StateInterface::class);
-        $cacheEnabler->expects($this->at(0))->method('isEnabled')->with($identifier)->will($this->returnValue(false));
-        $cacheEnabler->expects($this->at(1))->method('isEnabled')->with($identifier)->will($this->returnValue(true));
+        $cacheEnabler = $this->getMockForAbstractClass(StateInterface::class);
+        $cacheEnabler
+            ->method('isEnabled')
+            ->withConsecutive([$identifier], [$identifier])
+            ->willReturnOnConsecutiveCalls(false, true);
 
-        $object = new \Magento\Framework\App\Cache\Type\AccessProxy($frontendMock, $cacheEnabler, $identifier);
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ProxyTesting();
+        $object = new AccessProxy($frontendMock, $cacheEnabler, $identifier);
+        $helper = new ProxyTesting();
 
         // For the first call the cache is disabled - so fake default result is returned
         $result = $helper->invokeWithExpectations($object, $frontendMock, $method, $params, $enabledResult);
@@ -39,7 +51,7 @@ class AccessProxyTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public static function proxyMethodDataProvider()
+    public static function proxyMethodDataProvider(): array
     {
         return [
             ['test', ['record_id'], false, 111],

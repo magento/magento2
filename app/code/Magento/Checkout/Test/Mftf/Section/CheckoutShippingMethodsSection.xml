@@ -20,5 +20,10 @@
         <element name="shippingMethodLoader" type="button" selector="//div[contains(@class, 'checkout-shipping-method')]/following-sibling::div[contains(@class, 'loading-mask')]"/>
         <element name="freeShippingShippingMethod" type="input" selector="#s_method_freeshipping_freeshipping" timeout="30"/>
         <element name="noQuotesMsg" type="text" selector="#checkout-step-shipping_method div"/>
+        <element name="price" type="text" selector="//*[@id='checkout-shipping-method-load']//td[@class='col col-price']"/>
+        <element name="shippingRatePriceByName" type="text" selector="//div[@id='checkout-shipping-method-load']//td[contains(., '{{var1}}')]/..//td//span[contains(@class, 'price')]" parameterized="true"/>
+        <element name="showShippingVatNumber" type="text" selector="div.shipping-address-item"/>
+        <element name="showBillingVatNumber" type="text" selector="div.billing-address-details"/>
+        <element name="showShippingInfoVatNumber" type="text" selector="div.shipping-information-content"/>
     </section>
 </sections>

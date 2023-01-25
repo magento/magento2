@@ -13,4 +13,13 @@
         <plugin name="accessControl" type="Magento\Quote\Model\QuoteRepository\Plugin\AccessChangeQuoteControl" />
         <plugin name="authorization" type="Magento\Quote\Model\QuoteRepository\Plugin\Authorization" />
     </type>
+    <type name="Magento\Quote\Api\GuestCartItemRepositoryInterface">
+        <plugin name="updateCartIdFromRequest" type="Magento\Quote\Plugin\UpdateCartId" />
+    </type>
+    <type name="Magento\Quote\Model\Quote">
+        <plugin name="updateQuoteStoreId" type="Magento\Quote\Model\Quote\Plugin\UpdateQuoteStoreId" />
+    </type>
+    <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
+        <plugin name="validateQuoteData" type="Magento\Quote\Plugin\Webapi\Controller\Rest\ValidateQuoteData" sortOrder="1" disabled="false" />
+    </type>
 </config>

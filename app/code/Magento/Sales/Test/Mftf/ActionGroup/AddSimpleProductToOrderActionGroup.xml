@@ -22,9 +22,10 @@
         <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearch"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
         <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectProduct"/>
+        <waitForPageLoad stepKey="waitForProductLoad"/>
         <fillField selector="{{AdminOrderFormItemsSection.rowQty('1')}}" userInput="{{productQty}}" stepKey="fillProductQty"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
-        <wait time="5" stepKey="waitForOptionsToLoad"/>
+        <waitForPageLoad stepKey="waitForOptionsToLoad"/>
     </actionGroup>
 </actionGroups>

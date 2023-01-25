@@ -24,7 +24,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -38,7 +38,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var \Magento\Framework\MessageQueue\Config\Data $queueConfig */
         $queueConfig = $this->objectManager->get(\Magento\Framework\MessageQueue\Config\Data::class);

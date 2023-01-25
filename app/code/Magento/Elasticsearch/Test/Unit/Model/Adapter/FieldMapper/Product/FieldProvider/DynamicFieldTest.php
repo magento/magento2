@@ -7,32 +7,36 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper\Product\FieldProvider;
 
-use Magento\Framework\Api\SearchCriteria;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Api\CategoryListInterface;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Customer\Api\Data\GroupSearchResultsInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
-    as FieldTypeConverterInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\DynamicField;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface
     as IndexTypeConverterInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Catalog\Api\Data\CategorySearchResultsInterface;
-use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Customer\Api\Data\GroupSearchResultsInterface;
-use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
     as FieldNameResolver;
-use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
+    as FieldTypeConverterInterface;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * @SuppressWarnings(PHPMD)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
-class DynamicFieldTest extends \PHPUnit\Framework\TestCase
+class DynamicFieldTest extends TestCase
 {
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\DynamicField
+     * @var DynamicField
      */
     private $provider;
 
@@ -62,11 +66,6 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
     private $attributeAdapterProvider;
 
     /**
-     * @var CategoryListInterface
-     */
-    private $categoryList;
-
-    /**
      * @var Collection
      */
     private $categoryCollection;
@@ -77,206 +76,164 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
     private $fieldNameResolver;
 
     /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManager;
+
+    /**
      * Set up test environment
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->indexTypeConverter = $this->getMockBuilder(IndexTypeConverterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->attributeAdapterProvider = $this->getMockBuilder(AttributeProvider::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getByAttributeCode', 'getByAttribute'])
+            ->onlyMethods(['getByAttributeCode'])
             ->getMock();
         $this->fieldNameResolver = $this->getMockBuilder(FieldNameResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFieldName'])
-            ->getMock();
-        $this->categoryList = $this->getMockBuilder(CategoryListInterface::class)
-            ->disableOriginalConstructor()
+            ->onlyMethods(['getFieldName'])
             ->getMock();
         $this->categoryCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAllIds'])
+            ->onlyMethods(['getAllIds'])
             ->getMock();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
-        $objectManager = new ObjectManagerHelper($this);
-
-        $this->provider = $objectManager->getObject(
-            \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\DynamicField::class,
-            [
-                'groupRepository' => $this->groupRepository,
-                'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
-                'fieldTypeConverter' => $this->fieldTypeConverter,
-                'indexTypeConverter' => $this->indexTypeConverter,
-                'attributeAdapterProvider' => $this->attributeAdapterProvider,
-                'categoryList' => $this->categoryList,
-                'fieldNameResolver' => $this->fieldNameResolver,
-                'categoryCollection' => $this->categoryCollection,
-            ]
+        $this->provider = new DynamicField(
+            $this->fieldTypeConverter,
+            $this->indexTypeConverter,
+            $this->groupRepository,
+            $this->searchCriteriaBuilder,
+            $this->fieldNameResolver,
+            $this->attributeAdapterProvider,
+            $this->categoryCollection,
+            $this->storeManager
         );
     }
 
     /**
-     * @dataProvider attributeProvider
-     * @param $complexType
-     * @param $categoryId
-     * @param $groupId
+     * @param array $categoryIds
+     * @param array $groupIds
+     * @param array $context
      * @param array $expected
-     * @return void
+     * @dataProvider attributeProvider
      */
-    public function testGetAllAttributesTypes(
-        $complexType,
-        $categoryId,
-        $groupId,
-        $expected
-    ) {
+    public function testGetFields(
+        array $categoryIds,
+        array $groupIds,
+        array $context,
+        array $expected
+    ): void {
+        $websiteIdByStoreId = [
+            1 => 1,
+            2 => 1,
+            3 => 2
+        ];
+        $this->storeManager->method('getStore')
+            ->willReturnCallback(
+                function ($storeId) use ($websiteIdByStoreId) {
+                    return $this->createConfiguredMock(
+                        StoreInterface::class,
+                        [
+                            'getId' => $storeId,
+                            'getWebsiteId' => $websiteIdByStoreId[$storeId]
+                        ]
+                    );
+                }
+            );
         $searchCriteria = $this->getMockBuilder(SearchCriteria::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->searchCriteriaBuilder->expects($this->any())
-            ->method('create')
+        $this->searchCriteriaBuilder->method('create')
             ->willReturn($searchCriteria);
         $groupSearchResults = $this->getMockBuilder(GroupSearchResultsInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getItems'])
+            ->onlyMethods(['getItems'])
             ->getMockForAbstractClass();
-        $group = $this->getMockBuilder(GroupInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getId'])
-            ->getMockForAbstractClass();
-        $group->expects($this->any())
-            ->method('getId')
-            ->willReturn($groupId);
-        $groupSearchResults->expects($this->any())
-            ->method('getItems')
-            ->willReturn([$group]);
-
-        $this->categoryCollection->expects($this->any())
-            ->method('getAllIds')
-            ->willReturn([$categoryId]);
-
-        $categoryAttributeMock = $this->getMockBuilder(AttributeAdapter::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode'])
-            ->getMock();
-        $categoryAttributeMock->expects($this->any())
-            ->method('getAttributeCode')
-            ->willReturn('category');
-        $positionAttributeMock = $this->getMockBuilder(AttributeAdapter::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode'])
-            ->getMock();
-        $positionAttributeMock->expects($this->any())
-            ->method('getAttributeCode')
-            ->willReturn('position');
-
-        $this->fieldNameResolver->expects($this->any())
-            ->method('getFieldName')
-            ->will(
-                $this->returnCallback(
-                    function ($attribute) use ($categoryId) {
-                        static $callCount = [];
-                        $attributeCode = $attribute->getAttributeCode();
-                        $callCount[$attributeCode] = !isset($callCount[$attributeCode])
-                            ? 1
-                            : ++$callCount[$attributeCode];
-
-                        if ($attributeCode === 'category') {
-                            return 'category_name_' . $categoryId;
-                        } elseif ($attributeCode === 'position') {
-                            return 'position_' . $categoryId;
-                        } elseif ($attributeCode === 'price') {
-                            return 'price_' . $categoryId . '_1';
-                        }
-                    }
-                )
+        $groups = [];
+        foreach ($groupIds as $groupId) {
+            $groups[] = $this->createConfiguredMock(
+                GroupInterface::class,
+                [
+                    'getId' => $groupId
+                ]
             );
-        $priceAttributeMock = $this->getMockBuilder(AttributeAdapter::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode'])
-            ->getMock();
-        $priceAttributeMock->expects($this->any())
-            ->method('getAttributeCode')
-            ->willReturn('price');
-        $this->indexTypeConverter->expects($this->any())
-            ->method('convert')
+        }
+        $groupSearchResults->method('getItems')
+            ->willReturn($groups);
+
+        $this->categoryCollection->method('getAllIds')
+            ->willReturn($categoryIds);
+
+        $this->fieldNameResolver->method('getFieldName')
+            ->willReturnCallback(
+                function ($attribute, $context) {
+                    switch ($attribute->getAttributeCode()) {
+                        case 'category_name':
+                            return 'category_name_' . $context['categoryId'];
+                        case 'position':
+                            return 'position_' . $context['categoryId'];
+                        case 'price':
+                            return 'price_' . $context['customerGroupId'] . '_' . $context['websiteId'];
+                        default:
+                            return null;
+                    }
+                }
+            );
+        $this->indexTypeConverter->method('convert')
             ->willReturn('no_index');
-        $this->groupRepository->expects($this->any())
-            ->method('getList')
+        $this->groupRepository->method('getList')
             ->willReturn($groupSearchResults);
-        $this->attributeAdapterProvider->expects($this->any())
-            ->method('getByAttributeCode')
-            ->with($this->anything())
-            ->will(
-                $this->returnCallback(
-                    function ($code) use (
-                        $categoryAttributeMock,
-                        $positionAttributeMock,
-                        $priceAttributeMock
-                    ) {
-                        static $callCount = [];
-                        $callCount[$code] = !isset($callCount[$code]) ? 1 : ++$callCount[$code];
-
-                        if ($code === 'position') {
-                            return $positionAttributeMock;
-                        } elseif ($code === 'category_name') {
-                            return $categoryAttributeMock;
-                        } elseif ($code === 'price') {
-                            return $priceAttributeMock;
-                        }
-                    }
-                )
+        $this->attributeAdapterProvider->method('getByAttributeCode')
+            ->willReturnCallback(
+                function ($code) {
+                    return $this->createConfiguredMock(
+                        AttributeAdapter::class,
+                        [
+                            'getAttributeCode' => $code
+                        ]
+                    );
+                }
             );
-        $this->fieldTypeConverter->expects($this->any())
-            ->method('convert')
-            ->with($this->anything())
-            ->will(
-                $this->returnCallback(
-                    function ($type) use ($complexType) {
-                        static $callCount = [];
-                        $callCount[$type] = !isset($callCount[$type]) ? 1 : ++$callCount[$type];
-
-                        if ($type === 'string') {
-                            return 'string';
-                        } elseif ($type === 'float') {
-                            return 'float';
-                        } elseif ($type === 'integer') {
-                            return 'integer';
-                        } else {
-                            return $complexType;
-                        }
-                    }
-                )
+        $this->fieldTypeConverter->method('convert')
+            ->willReturnMap(
+                [
+                    ['string', 'string'],
+                    ['float', 'double'],
+                    ['integer', 'integer'],
+                ]
             );
 
         $this->assertEquals(
             $expected,
-            $this->provider->getFields(['websiteId' => 1])
+            $this->provider->getFields($context)
         );
     }
 
     /**
      * @return array
      */
-    public function attributeProvider()
+    public function attributeProvider(): array
     {
         return [
             [
-                'text',
-                1,
-                1,
+                [1],
+                [1],
+                ['websiteId' => 1],
                 [
                     'category_name_1' => [
                         'type' => 'string',
@@ -287,15 +244,15 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                         'index' => 'no_index'
                     ],
                     'price_1_1' => [
-                        'type' => 'float',
+                        'type' => 'double',
                         'store' => true
                     ]
                 ]
             ],
             [
-                null,
-                1,
-                1,
+                [1],
+                [1],
+                ['websiteId' => 1],
                 [
                     'category_name_1' => [
                         'type' => 'string',
@@ -306,15 +263,15 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                         'index' => 'no_index'
                     ],
                     'price_1_1' => [
-                        'type' => 'float',
+                        'type' => 'double',
                         'store' => true
                     ]
                 ],
             ],
             [
-                null,
-                1,
-                1,
+                [1],
+                [1],
+                ['websiteId' => 1],
                 [
                     'category_name_1' => [
                         'type' => 'string',
@@ -325,7 +282,29 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                         'index' => 'no_index'
                     ],
                     'price_1_1' => [
-                        'type' => 'float',
+                        'type' => 'double',
+                        'store' => true
+                    ]
+                ]
+            ],
+            [
+                [1],
+                [1],
+                [
+                    'storeId' => 3,
+                    'websiteId' => 3
+                ],
+                [
+                    'category_name_1' => [
+                        'type' => 'string',
+                        'index' => 'no_index'
+                    ],
+                    'position_1' => [
+                        'type' => 'integer',
+                        'index' => 'no_index'
+                    ],
+                    'price_1_2' => [
+                        'type' => 'double',
                         'store' => true
                     ]
                 ]

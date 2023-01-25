@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 return [
     'options_node_is_required' => [
         '<?xml version="1.0"?><config><inputType name="name_one" /></config>',
@@ -33,9 +35,7 @@ return [
         '</option></config>',
         [
             "Element 'option', attribute 'renderer': [facet 'pattern'] The value '123true' is not accepted by the " .
-            "pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n",
-            "Element 'option', attribute 'renderer': '123true' is not a valid value of the atomic" .
-            " type 'modelName'.\nLine: 1\n"
+            "pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n"
         ],
     ],
     'disabled_attribute_with_invalid_value' => [

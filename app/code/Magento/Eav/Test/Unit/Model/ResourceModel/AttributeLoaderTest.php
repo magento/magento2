@@ -3,43 +3,56 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\ResourceModel;
 
-class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
+use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Eav\Api\Data\AttributeSearchResultsInterface;
+use Magento\Eav\Model\ResourceModel\AttributeLoader;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AttributeLoaderTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Api\AttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeRepositoryInterface|MockObject
      */
     private $attributeRepositoryMock;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|MockObject
      */
     private $metadataPoolMock;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder|MockObject
      */
     private $searchCriteriaBuilderMock;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\AttributeLoader
+     * @var AttributeLoader
      */
     private $attributeLoader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->attributeRepositoryMock = $this->createMock(\Magento\Eav\Api\AttributeRepositoryInterface::class);
-        $this->metadataPoolMock = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
+        $this->attributeRepositoryMock = $this->getMockForAbstractClass(AttributeRepositoryInterface::class);
+        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->searchCriteriaBuilderMock = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaBuilder::class)
+        $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->attributeLoader = $objectManagerHelper->getObject(
-            \Magento\Eav\Model\ResourceModel\AttributeLoader::class,
+            AttributeLoader::class,
             [
                 'attributeRepository' => $this->attributeRepositoryMock,
                 'metadataPool' => $this->metadataPoolMock,
@@ -56,7 +69,7 @@ class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAttributes($entityType, $attributeSetId, $expectedCondition)
     {
-        $metadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadataInterface::class);
+        $metadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $metadataMock->expects($this->once())
             ->method('getEavEntityType')
             ->willReturn($entityType);
@@ -65,11 +78,11 @@ class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
             ->with($entityType)
             ->willReturn($metadataMock);
 
-        $searchCriteria = $this->createMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
+        $searchCriteria = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('addFilter')
             ->with(
-                \Magento\Eav\Model\ResourceModel\AttributeLoader::ATTRIBUTE_SET_ID,
+                AttributeLoader::ATTRIBUTE_SET_ID,
                 $attributeSetId,
                 $expectedCondition
             )->willReturnSelf();
@@ -77,8 +90,8 @@ class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($searchCriteria);
 
-        $attributeMock = $this->createMock(\Magento\Eav\Api\Data\AttributeInterface::class);
-        $searchResultMock = $this->createMock(\Magento\Eav\Api\Data\AttributeSearchResultsInterface::class);
+        $attributeMock = $this->getMockForAbstractClass(AttributeInterface::class);
+        $searchResultMock = $this->getMockForAbstractClass(AttributeSearchResultsInterface::class);
         $searchResultMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$attributeMock]);

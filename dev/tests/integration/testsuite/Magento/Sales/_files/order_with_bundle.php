@@ -5,16 +5,19 @@
  */
 declare(strict_types=1);
 
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Item;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
 
 $objectManager = ObjectManager::getInstance();
-
-require 'order.php';
 /** @var Order $order */
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
 
 $orderItems = [
     [

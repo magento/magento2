@@ -13,7 +13,7 @@ namespace Magento\ImportExport\Model;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
- * @deprecated
+ * @deprecated 100.3.2
  */
 class Export extends \Magento\ImportExport\Model\AbstractModel
 {
@@ -194,7 +194,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
         if (isset($this->_data[self::FILTER_ELEMENT_GROUP])) {
             $this->addLogComment(__('Begin export of %1', $this->getEntity()));
             $result = $this->_getEntityAdapter()->setWriter($this->_getWriter())->export();
-            $countRows = substr_count(trim($result), "\n");
+            $countRows = substr_count($result, "\n");
             if (!$countRows) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('There is no data for the export.'));
             }

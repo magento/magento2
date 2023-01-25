@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create a new product attribute -->
             <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="openProductAttributePage"/>
@@ -64,6 +64,9 @@
             </actionGroup>
             <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttributeByAttributeCode">
                 <argument name="productAttributeCode" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
             <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess"/>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearAttributesGridFilter"/>
@@ -110,5 +113,6 @@
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProducts">
             <argument name="sku" value="{{ApiConfigurableProduct.sku}}"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

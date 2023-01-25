@@ -15,9 +15,9 @@
             <title value="Guest customer should be able to advance search configurable product with product sku that contains hyphen"/>
             <description value="Guest customer should be able to advance search configurable product with product sku that contains hyphen"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-20389"/>
+            <testCaseId value="MC-28817"/>
             <group value="ConfigurableProduct"/>
-            <group value="SearchEngineMysql"/>
+            <group value="SearchEngine"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="categoryHandle" before="simple1Handle"/>
@@ -86,7 +86,7 @@
             <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductDropDownAttribute"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
     </test>
 </tests>

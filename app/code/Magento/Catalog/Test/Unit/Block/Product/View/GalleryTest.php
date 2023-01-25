@@ -3,11 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Block\Product\View;
 
 use Magento\Catalog\Block\Product\Context;
-use Magento\Catalog\Block\Product\ImageBuilder;
 use Magento\Catalog\Block\Product\View\Gallery;
+use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface;
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
@@ -19,11 +21,13 @@ use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\ArrayUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GalleryTest extends \PHPUnit\Framework\TestCase
+class GalleryTest extends TestCase
 {
     /**
      * @var Gallery
@@ -31,44 +35,49 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
     /**
-     * @var ArrayUtils|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayUtils|MockObject
      */
     protected $arrayUtils;
 
     /**
-     * @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject
+     * @var Image|MockObject
      */
     protected $imageHelper;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|MockObject
      */
     protected $registry;
 
     /**
-     * @var EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncoderInterface|MockObject
      */
     protected $jsonEncoderMock;
 
     /**
-     * @var ImagesConfigFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImagesConfigFactoryInterface|MockObject
      */
     protected $imagesConfigFactoryMock;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|MockObject
      */
     protected $galleryImagesConfigMock;
 
-    /** @var  UrlBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var  UrlBuilder|MockObject
+     */
     private $urlBuilder;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $this->registry = $this->createMock(Registry::class);
         $this->context = $this->createConfiguredMock(
@@ -77,7 +86,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->arrayUtils = $this->createMock(ArrayUtils::class);
-        $this->jsonEncoderMock = $this->createMock(EncoderInterface::class);
+        $this->jsonEncoderMock = $this->getMockForAbstractClass(EncoderInterface::class);
         $this->imagesConfigFactoryMock = $this->getImagesConfigFactory();
         $this->urlBuilder = $this->createMock(UrlBuilder::class);
 
@@ -91,7 +100,10 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
-    public function testGetGalleryImagesJsonWithLabel()
+    /**
+     * @return void
+     */
+    public function testGetGalleryImagesJsonWithLabel(): void
     {
         $this->prepareGetGalleryImagesJsonMocks();
         $json = $this->model->getGalleryImagesJson();
@@ -101,12 +113,15 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('product_page_image_large_url', $decodedJson[0]['full']);
         $this->assertEquals('test_label', $decodedJson[0]['caption']);
         $this->assertEquals('2', $decodedJson[0]['position']);
-        $this->assertEquals(false, $decodedJson[0]['isMain']);
+        $this->assertFalse($decodedJson[0]['isMain']);
         $this->assertEquals('test_media_type', $decodedJson[0]['type']);
         $this->assertEquals('test_video_url', $decodedJson[0]['videoUrl']);
     }
 
-    public function testGetGalleryImagesJsonWithoutLabel()
+    /**
+     * @return void
+     */
+    public function testGetGalleryImagesJsonWithoutLabel(): void
     {
         $this->prepareGetGalleryImagesJsonMocks(false);
         $json = $this->model->getGalleryImagesJson();
@@ -114,17 +129,20 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test_product_name', $decodedJson[0]['caption']);
     }
 
-    private function prepareGetGalleryImagesJsonMocks($hasLabel = true)
+    /**
+     * @return void
+     */
+    private function prepareGetGalleryImagesJsonMocks($hasLabel = true): void
     {
-        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $productTypeMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\AbstractType::class)
+        $productTypeMock = $this->getMockBuilder(AbstractType::class)
             ->disableOriginalConstructor()
             ->getMock();
         $productTypeMock->expects($this->any())
@@ -147,8 +165,8 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             ->with('product')
             ->willReturn($productMock);
 
-        $this->imageHelper = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
-            ->setMethods(['init', 'setImageFile', 'getUrl'])
+        $this->imageHelper = $this->getMockBuilder(Image::class)
+            ->onlyMethods(['init', 'setImageFile', 'getUrl'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -164,22 +182,23 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             ->method('setImageFile')
             ->with('test_file')
             ->willReturnSelf();
-        $this->urlBuilder->expects($this->at(0))
+        $this->urlBuilder
             ->method('getUrl')
-            ->willReturn('product_page_image_small_url');
-        $this->urlBuilder->expects($this->at(1))
-            ->method('getUrl')
-            ->willReturn('product_page_image_medium_url');
-        $this->urlBuilder->expects($this->at(2))
-            ->method('getUrl')
-            ->willReturn('product_page_image_large_url');
+            ->willReturnOnConsecutiveCalls(
+                'product_page_image_small_url',
+                'product_page_image_medium_url',
+                'product_page_image_large_url'
+            );
 
         $this->galleryImagesConfigMock->expects($this->exactly(2))
             ->method('getItems')
             ->willReturn($this->getGalleryImagesConfigItems());
     }
 
-    public function testGetGalleryImages()
+    /**
+     * @return void
+     */
+    public function testGetGalleryImages(): void
     {
         $productMock = $this->createMock(Product::class);
         $productTypeMock = $this->createMock(AbstractType::class);
@@ -212,7 +231,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
      *
      * @return ImagesConfigFactoryInterface
      */
-    private function getImagesConfigFactory()
+    private function getImagesConfigFactory(): ImagesConfigFactoryInterface
     {
         $this->galleryImagesConfigMock = $this->createConfiguredMock(
             Collection::class,
@@ -231,7 +250,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    private function getGalleryImagesConfigItems()
+    private function getGalleryImagesConfigItems(): array
     {
         return  [
             new DataObject([
@@ -253,16 +272,16 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Framework\Data\Collection
+     * @return Collection
      */
-    private function getImagesCollectionWithPopulatedDataObject($hasLabel)
+    private function getImagesCollectionWithPopulatedDataObject($hasLabel): Collection
     {
-        $collectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
+        $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $items = [
-            new \Magento\Framework\DataObject([
+            new DataObject([
                 'file' => 'test_file',
                 'label' => ($hasLabel ? 'test_label' : ''),
                 'position' => '2',

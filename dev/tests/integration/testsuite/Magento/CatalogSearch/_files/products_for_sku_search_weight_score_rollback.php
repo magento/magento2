@@ -18,7 +18,16 @@ $productAttributeRepository = $objectManager->get(ProductAttributeRepositoryInte
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 /** @var Registry $registry */
 $registry = $objectManager->get(Registry::class);
-$productSkus = ['1234-1234-1234-1234', 'Simple', 'product_with_description', 'product_with_attribute'];
+$productSkus = [
+    '1234-1234-1234-1234',
+    'Simple',
+    'product_with_description',
+    'product_with_attribute',
+    'nintendo-wii',
+    'xbox',
+    'console_description',
+    'gamecube_attribute',
+];
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);

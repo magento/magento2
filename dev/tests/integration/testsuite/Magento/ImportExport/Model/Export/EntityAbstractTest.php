@@ -16,7 +16,10 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -65,10 +68,11 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * Check that method throw exception when writer was not defined
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetWriterThrowsException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_model->getWriter();
     }
 
@@ -99,22 +103,3 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
         }
     }
 }
-/**
- * @codingStandardsIgnoreStart
- * Stub abstract class which provide to change protected property "$_disabledAttrs" and test methods depended on it
- */
-abstract class Stub_Magento_ImportExport_Model_Export_AbstractEntity extends
-    \Magento\ImportExport\Model\Export\AbstractEntity
-{
-    public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\ImportExport\Model\Export\Factory $collectionFactory,
-        \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory,
-        array $data = []
-    ) {
-        parent::__construct($scopeConfig, $storeManager, $collectionFactory, $resourceColFactory, $data);
-        $this->_disabledAttrs = ['default_billing', 'default_shipping'];
-    }
-}
-// @codingStandardsIgnoreEnd

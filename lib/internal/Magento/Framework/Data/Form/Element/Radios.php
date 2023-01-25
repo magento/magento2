@@ -11,28 +11,43 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
+/**
+ * Radio buttons form element widget.
+ */
 class Radios extends AbstractElement
 {
+    /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
     /**
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
         Factory $factoryElement,
         CollectionFactory $factoryCollection,
         Escaper $escaper,
-        $data = []
+        $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null
     ) {
-        parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
+        $this->secureRenderer
+            = $secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data, $secureRenderer);
         $this->setType('radios');
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getElementHtml()
     {
@@ -48,8 +63,10 @@ class Radios extends AbstractElement
     }
 
     /**
+     * Render choices.
+     *
      * @param array $option
-     * @param array $selected
+     * @param string[] $selected
      * @return string
      */
     protected function _optionToHtml($option, $selected)
@@ -57,9 +74,11 @@ class Radios extends AbstractElement
         $html = '<div class="admin__field admin__field-option">' .
             '<input type="radio"' . $this->getRadioButtonAttributes($option);
         if (is_array($option)) {
+            $option = new DataObject($option);
+            $optionId = $this->getHtmlId() . $option['value'];
             $html .= 'value="' . $this->_escape(
                 $option['value']
-            ) . '" class="admin__control-radio" id="' . $this->getHtmlId() . $option['value'] . '"';
+            ) . '" class="admin__control-radio" id="' .$optionId  .'"';
             if ($option['value'] == $selected) {
                 $html .= ' checked="checked"';
             }
@@ -70,9 +89,10 @@ class Radios extends AbstractElement
                 '"><span>' .
                 $option['label'] .
                 '</span></label>';
-        } elseif ($option instanceof \Magento\Framework\DataObject) {
-            $html .= 'id="' . $this->getHtmlId() . $option->getValue() . '"' . $option->serialize(
-                ['label', 'title', 'value', 'class', 'style']
+        } elseif ($option instanceof DataObject) {
+            $optionId = $this->getHtmlId() . $option->getValue();
+            $html .= 'id="' .$optionId  .'"' .$option->serialize(
+                ['label', 'title', 'value', 'class']
             );
             if (in_array($option->getValue(), $selected)) {
                 $html .= ' checked="checked"';
@@ -85,12 +105,23 @@ class Radios extends AbstractElement
                 $option->getLabel() .
                 '</label>';
         }
+
+        if ($option->getStyle()) {
+            $html .= $this->secureRenderer->renderStyleAsTag($option->getStyle(), "#$optionId");
+        }
+        if ($option->getOnclick()) {
+            $this->secureRenderer->renderEventListenerAsTag('onclick', $option->getOnclick(), "#$optionId");
+        }
+        if ($option->getOnchange()) {
+            $this->secureRenderer->renderEventListenerAsTag('onchange', $option->getOnchange(), "#$optionId");
+        }
         $html .= '</div>';
+
         return $html;
     }
 
     /**
-     * @return array
+     * @inheritDoc
      */
     public function getHtmlAttributes()
     {
@@ -98,6 +129,8 @@ class Radios extends AbstractElement
     }
 
     /**
+     * Get a choice's HTML attributes.
+     *
      * @param array $option
      * @return string
      */

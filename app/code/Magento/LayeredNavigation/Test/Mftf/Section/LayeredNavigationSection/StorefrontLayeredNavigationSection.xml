@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontLayeredNavigationSection">
+        <element name="shoppingOptionsByName" type="button" selector="//*[text()='Shopping Options']/..//*[contains(text(),'{{arg}}')]" parameterized="true"/>
+        <element name="appliedFilterLabel" type="text" selector=".filter-current .items > li.item:nth-of-type({{position}}) > span.filter-label" parameterized="true"/>
+        <element name="appliedFilterValue" type="text" selector=".filter-current .items > li.item:nth-of-type({{position}}) > span.filter-value" parameterized="true"/>
+        <element name="shoppingOptionsExpanded" type="button" selector="//a[@rel='nofollow' and contains(text(),'{{var}}')]" parameterized="true"/>
+        <element name="shoppingOptionsExpandedCount" type="button" selector="//a[@rel='nofollow' and contains(text(),'{{var1}}')]//span[@class='count' and contains(text(),'{{var2}}')]" parameterized="true"/>
+        <element name="nowShoppingBy" type="text" selector="//strong[@class='block-subtitle filter-current-subtitle']"/>
+        <element name="actionRemove" type="button" selector="//a[@class='action remove']" />
+        <element name="nowShoppingByAttribute" type="text" selector="//span[@class='filter-label' and contains(text(),'{{var}}')]" parameterized="true"/>
+        <element name="nowShoppingByAttributeValue" type="text" selector="//span[@class='filter-value' and contains(text(),'{{var}}')]" parameterized="true"/>
+    </section>
+</sections>

@@ -5,15 +5,25 @@
  */
 declare(strict_types=1);
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Address as OrderAddress;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require 'order.php';
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
+$objectManager = Bootstrap::getObjectManager();
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$product = $productRepository->get('simple');
 /** @var Order $order */
-/** @var Order\Payment $payment */
-/** @var Order\Item $orderItem */
-/** @var array $addressData Data for creating addresses for the orders. */
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
+$payment = $order->getPayment();
+$orderItems = $order->getItems();
+$orderItem = reset($orderItems);
+$addressData = include __DIR__ . '/address_data.php';
 $orders = [
     [
         'increment_id' => '100000002',
@@ -24,6 +34,7 @@ $orders = [
         'base_grand_total' => 120.00,
         'store_id' => 1,
         'website_id' => 1,
+        'created_at' => '2022-09-04'
     ],
     [
         'increment_id' => '100000003',
@@ -35,6 +46,7 @@ $orders = [
         'total_paid' => 130.00,
         'store_id' => 0,
         'website_id' => 0,
+        'created_at' => '2022-09-10'
     ],
     [
         'increment_id' => '100000004',
@@ -45,6 +57,7 @@ $orders = [
         'subtotal' => 140.00,
         'store_id' => 1,
         'website_id' => 1,
+        'created_at' => '2022-09-05'
     ],
     [
         'increment_id' => '100000005',
@@ -56,6 +69,7 @@ $orders = [
         'total_paid' => 150.00,
         'store_id' => 1,
         'website_id' => 1,
+        'created_at' => '2022-09-08'
     ],
     [
         'increment_id' => '100000006',
@@ -67,6 +81,7 @@ $orders = [
         'total_paid' => 160.00,
         'store_id' => 1,
         'website_id' => 1,
+        'created_at' => '2022-09-09'
     ],
 ];
 
@@ -77,7 +92,7 @@ foreach ($orders as $orderData) {
     $newPayment = clone $payment;
     $newPayment->setId(null);
     /** @var $order \Magento\Sales\Model\Order */
-    $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    $order = Bootstrap::getObjectManager()->create(
         \Magento\Sales\Model\Order::class
     );
 

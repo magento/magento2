@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="QuickSearchProductBySkuTest">
+        <annotations>
+            <stories value="Search Product on Storefront"/>
+            <title value="User should be able to use Quick Search to find products"/>
+            <description value="Use Quick Search to find a product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14783"/>
+            <group value="CatalogSearch"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteProduct" createDataKey="createSimpleProduct"/>
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+        </after>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
+            <argument name="phrase" value="$createSimpleProduct.sku$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductFromQuickSearchActionGroup" stepKey="openAndCheckProduct">
+            <argument name="productName" value="$createSimpleProduct.name$"/>
+            <argument name="productUrlKey" value="$createSimpleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+    </test>
+</tests>

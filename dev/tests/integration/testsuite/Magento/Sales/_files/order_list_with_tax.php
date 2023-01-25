@@ -6,12 +6,30 @@
 declare(strict_types=1);
 
 use Magento\Sales\Model\Order\Tax\ItemFactory;
+use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Model\Sales\Order\TaxFactory;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require 'default_rollback.php';
-require 'order_list.php';
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/default_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order_list.php');
 
+$objectManager = Bootstrap::getObjectManager();
+/** @var Collection $orderCollection */
+$orderCollection = $objectManager->create(Collection::class);
+$orderList = $orderCollection->addFieldToFilter(
+    'increment_id',
+    ['in' => ['100000002','100000003','100000004']]
+)->getItems();
+/** @var \Magento\Sales\Model\Order $order */
+$order = $objectManager->create(\Magento\Sales\Model\Order::class);
+$order->loadByIncrementId('100000001');
+$payment = $order->getPayment();
+$billingAddress = $order->getBillingAddress();
+$shippingAddress = $order->getShippingAddress();
+$items = $order->getItems();
+$orderItem = reset($items);
 /** @var array $orderList */
 foreach ($orderList as $order) {
     $amount = 45;

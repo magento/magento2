@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="CustomTranslationData" type="translation_operation">
+        <var key="customer_email" entityType="customer" entityKey="email"/>
+        <var key="customer_password" entityType="customer" entityKey="password"/>
+    </entity>
+    <entity name="RevertProceedToCheckoutTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertProceedToCheckoutTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertProceedToCheckoutTranslateData" type="translation_operation_translate">
+        <data key="original">Proceed to Checkout</data>
+        <data key="custom">Proceed to Checkout</data>
+    </entity>
+
+    <entity name="RevertViewAndEditCartTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertViewAndEditCartTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertViewAndEditCartTranslateData" type="translation_operation_translate">
+        <data key="original">View and Edit Cart</data>
+        <data key="custom">View and Edit Cart</data>
+    </entity>
+
+    <entity name="RevertQtyTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertQtyTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertQtyTranslateData" type="translation_operation_translate">
+        <data key="original">Qty</data>
+        <data key="custom">Qty</data>
+    </entity>
+
+    <entity name="RevertShippingAddressTitleTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertShippingAddressTitleTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertShippingAddressTitleTranslateData" type="translation_operation_translate">
+        <data key="original">Shipping Address</data>
+        <data key="custom">Shipping Address</data>
+    </entity>
+
+    <entity name="RevertButtonShipHereTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertButtonShipHereTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertButtonShipHereTranslateData" type="translation_operation_translate">
+        <data key="original">Ship Here</data>
+        <data key="custom">Ship Here</data>
+    </entity>
+
+    <entity name="RevertButtonNewAddressTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertButtonNewAddressTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertButtonNewAddressTranslateData" type="translation_operation_translate">
+        <data key="original">New Address</data>
+        <data key="custom">New Address</data>
+    </entity>
+
+    <entity name="RevertShippingMethodTitleTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertShippingMethodTitleTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertShippingMethodTitleTranslateData" type="translation_operation_translate">
+        <data key="original">Shipping Methods</data>
+        <data key="custom">Shipping Methods</data>
+    </entity>
+
+    <entity name="RevertButtonNextTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertButtonNextTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertButtonNextTranslateData" type="translation_operation_translate">
+        <data key="original">Next</data>
+        <data key="custom">Next</data>
+    </entity>
+
+    <entity name="RevertOrderSummaryTitleTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertOrderSummaryTitleTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertOrderSummaryTitleTranslateData" type="translation_operation_translate">
+        <data key="original">Order Summary</data>
+        <data key="custom">Order Summary</data>
+    </entity>
+
+    <entity name="RevertItemsInCartTextTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertItemsInCartTextTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertItemsInCartTextTranslateData" type="translation_operation_translate">
+        <data key="original">Item in Cart</data>
+        <data key="custom">Item in Cart</data>
+    </entity>
+
+    <entity name="RevertProgressBarReviewAndPaymentsTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertProgressBarReviewAndPaymentsTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertProgressBarReviewAndPaymentsTranslateData" type="translation_operation_translate">
+        <data key="original">Review &amp; Payments</data>
+        <data key="custom">Review &amp; Payments</data>
+    </entity>
+
+    <entity name="RevertPaymentTitleTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertPaymentTitleTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertPaymentTitleTranslateData" type="translation_operation_translate">
+        <data key="original">Payment Method</data>
+        <data key="custom">Payment Method</data>
+    </entity>
+
+    <entity name="RevertCheckboxSameBillingAddressTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertCheckboxSameBillingAddressTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertCheckboxSameBillingAddressTranslateData" type="translation_operation_translate">
+        <data key="original">My billing and shipping address are the same</data>
+        <data key="custom">My billing and shipping address are the same</data>
+    </entity>
+
+    <entity name="RevertPlaceOrderButtonTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertPlaceOrderButtonTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertPlaceOrderButtonTranslateData" type="translation_operation_translate">
+        <data key="original">Place Order</data>
+        <data key="custom">Place Order</data>
+    </entity>
+
+    <entity name="RevertApplyDiscountCodeTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertApplyDiscountCodeTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertApplyDiscountCodeTranslateData" type="translation_operation_translate">
+        <data key="original">Apply Discount Code</data>
+        <data key="custom">Apply Discount Code</data>
+    </entity>
+
+    <entity name="RevertCartSubtotalTextTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertCartSubtotalTextTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertCartSubtotalTextTranslateData" type="translation_operation_translate">
+        <data key="original">Cart Subtotal</data>
+        <data key="custom">Cart Subtotal</data>
+    </entity>
+
+    <entity name="RevertShippingTextTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertShippingTextTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertShippingTextTranslateData" type="translation_operation_translate">
+        <data key="original">Shipping</data>
+        <data key="custom">Shipping</data>
+    </entity>
+
+    <entity name="RevertOrderTotalTextTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertOrderTotalTextTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertOrderTotalTextTranslateData" type="translation_operation_translate">
+        <data key="original">Order Total</data>
+        <data key="custom">Order Total</data>
+    </entity>
+
+    <entity name="RevertShipToTitleTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertShipToTitleTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertShipToTitleTranslateData" type="translation_operation_translate">
+        <data key="original">Ship To:</data>
+        <data key="custom">Ship To:</data>
+    </entity>
+
+    <entity name="RevertShipViaTitleTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertShipViaTitleTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertShipViaTitleTranslateData" type="translation_operation_translate">
+        <data key="original">Shipping Method:</data>
+        <data key="custom">Shipping Method:</data>
+    </entity>
+    <entity name="RevertWelcomeMessageTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertWelcomeMessageTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertWelcomeMessageTranslateData" type="translation_operation_translate">
+        <data key="original">Default welcome msg!</data>
+        <data key="custom">Default welcome msg!</data>
+    </entity>
+</entities>

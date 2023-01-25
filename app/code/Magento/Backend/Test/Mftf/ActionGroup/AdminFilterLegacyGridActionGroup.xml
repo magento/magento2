@@ -10,10 +10,11 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminFilterLegacyGridActionGroup">
         <arguments>
-            <argument name="fieldSelector" type="string"/>
             <argument name="value" type="string"/>
+            <argument name="field" type="string" defaultValue="{{AdminLegacyDataGridFilterSection.inputFieldByNameAttr('name')}}"/>
             <argument name="button" type="string" defaultValue="{{AdminLegacyDataGridFilterSection.apply}}"/>
         </arguments>
+        <waitForElementVisible selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="waitForResetFilters" />
         <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="resetFilters" />
         <waitForPageLoad stepKey="waitForFilterReset" />
         <fillField selector="{{field}}" userInput="{{value}}" stepKey="fillFieldInFilter"/>

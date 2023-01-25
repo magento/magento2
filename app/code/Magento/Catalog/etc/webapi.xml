@@ -183,6 +183,12 @@
             <resource ref="Magento_Catalog::attributes_attributes" />
         </resources>
     </route>
+    <route url="/V1/products/attributes/:attributeCode/options/:optionId" method="PUT">
+        <service class="Magento\Catalog\Api\ProductAttributeOptionUpdateInterface" method="update" />
+        <resources>
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
     <route url="/V1/products/attributes/:attributeCode/options/:optionId" method="DELETE">
         <service class="Magento\Catalog\Api\ProductAttributeOptionManagementInterface" method="delete" />
         <resources>

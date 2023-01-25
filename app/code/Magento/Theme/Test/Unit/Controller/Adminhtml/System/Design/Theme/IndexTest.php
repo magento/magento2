@@ -4,9 +4,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
 
-class IndexTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest
+use Magento\Backend\Model\Menu;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Theme\Block\Html\Title;
+use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest;
+use Psr\Log\LoggerInterface;
+
+class IndexTest extends ThemeTest
 {
     /**
      * @var string
@@ -15,23 +23,23 @@ class IndexTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Des
 
     public function testIndexAction()
     {
-        $menuModel = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)
-            ->setConstructorArgs([$this->createMock(\Psr\Log\LoggerInterface::class)])
+        $menuModel = $this->getMockBuilder(Menu::class)
+            ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
             ->getMock();
         $menuModel->expects($this->once())
             ->method('getParentItems')
-            ->with($this->equalTo('Magento_Theme::system_design_theme'))
-            ->will($this->returnValue([]));
+            ->with('Magento_Theme::system_design_theme')
+            ->willReturn([]);
 
         $menuBlock = $this->createMock(\Magento\Backend\Block\Menu::class);
         $menuBlock->expects($this->once())
             ->method('getMenuModel')
-            ->will($this->returnValue($menuModel));
+            ->willReturn($menuModel);
 
-        $titleBlock = $this->createMock(\Magento\Theme\Block\Html\Title::class);
+        $titleBlock = $this->createMock(Title::class);
         $titleBlock->expects($this->once())->method('setPageTitle');
 
-        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
         $layout->expects($this->any())
             ->method('getBlock')
             ->willReturnMap([
@@ -41,7 +49,7 @@ class IndexTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Des
 
         $this->view->expects($this->any())
             ->method('getLayout')
-            ->will($this->returnValue($layout));
+            ->willReturn($layout);
 
         $this->_model->execute();
     }

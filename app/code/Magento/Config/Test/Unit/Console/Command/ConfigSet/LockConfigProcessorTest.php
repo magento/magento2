@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Console\Command\ConfigSet;
 
 use Magento\Config\Console\Command\ConfigSet\LockProcessor;
@@ -11,11 +13,13 @@ use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\ScopeInterface;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for ShareProcessor.
@@ -23,7 +27,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  * @see ShareProcessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LockConfigProcessorTest extends \PHPUnit\Framework\TestCase
+class LockConfigProcessorTest extends TestCase
 {
     /**
      * @var LockProcessor
@@ -58,12 +62,12 @@ class LockConfigProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->preparedValueFactory = $this->getMockBuilder(PreparedValueFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->deploymentConfigWriterMock = $this->getMockBuilder(DeploymentConfig\Writer::class)
+        $this->deploymentConfigWriterMock = $this->getMockBuilder(Writer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
@@ -161,12 +165,10 @@ class LockConfigProcessorTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Filesystem is not writable.
-     */
     public function testProcessNotReadableFs()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Filesystem is not writable.');
         $path = 'test/test/test';
         $value = 'value';
 
@@ -190,12 +192,10 @@ class LockConfigProcessorTest extends \PHPUnit\Framework\TestCase
         $this->model->process($path, $value, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid values
-     */
     public function testCustomException()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Invalid values');
         $path = 'test/test/test';
         $value = 'value';
 

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component\Form\Element\DataType;
 
 use Magento\Framework\Locale\ResolverInterface;
@@ -14,9 +16,6 @@ use Magento\Ui\Component\Form\Element\DataType\Date;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class to test Date form element
- */
 class DateTest extends TestCase
 {
     /** @var Context|MockObject */
@@ -40,11 +39,11 @@ class DateTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
-        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
+        $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->objectManagerHelper = new ObjectManager($this);
         $this->processorMock = $this->createMock(Processor::class);
         $this->contextMock->method('getProcessor')->willReturn($this->processorMock);
@@ -76,7 +75,7 @@ class DateTest extends TestCase
         $this->date->prepare();
 
         $config = $this->date->getConfig();
-        $this->assertTrue(is_array($config));
+        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('options', $config);
         $this->assertArrayHasKey('dateFormat', $config['options']);
@@ -117,7 +116,7 @@ class DateTest extends TestCase
         $this->date->prepare();
 
         $config = $this->date->getConfig();
-        $this->assertTrue(is_array($config));
+        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('options', $config);
         $this->assertArrayHasKey('dateFormat', $config['options']);

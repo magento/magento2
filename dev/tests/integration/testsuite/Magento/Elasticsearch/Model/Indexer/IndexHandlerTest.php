@@ -5,6 +5,7 @@
  */
 namespace Magento\Elasticsearch\Model\Indexer;
 
+use Magento\AdvancedSearch\Model\Client\ClientInterface;
 use Magento\Catalog\Model\Product\Action as ProductAction;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
@@ -13,21 +14,23 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext as CatalogSearchFulltextIndexer
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Magento\Elasticsearch6\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Indexer\Model\Indexer;
+use Magento\Framework\Search\EngineResolverInterface;
+use Magento\TestModuleCatalogSearch\Model\SearchEngineVersionReader;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Important: Please make sure that each integration test file works with unique elastic search index. In order to
- * achieve this, use @magentoConfigFixture to pass unique value for 'elasticsearch_index_prefix' for every test
- * method. E.g. '@magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest'
+ * Important: Please make sure that each integration test file works with unique search index. In order to
+ * achieve this, use @magentoConfigFixture to pass unique value for index_prefix for every test
+ * method. E.g. '@magentoConfigFixture current_store catalog/search/elasticsearch7_index_prefix indexerhandlertest'
  *
  * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/Elasticsearch/_files/indexer.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IndexHandlerTest extends \PHPUnit\Framework\TestCase
+class IndexHandlerTest extends TestCase
 {
     /**
      * @var ProductRepositoryInterface
@@ -35,7 +38,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     private $productRepository;
 
     /**
-     * @var ElasticsearchClient
+     * @var ClientInterface
      */
     private $client;
 
@@ -67,7 +70,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $connectionManager = Bootstrap::getObjectManager()->create(ConnectionManager::class);
         $this->client = $connectionManager->getConnection();
@@ -87,8 +90,24 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
+     * Make sure that correct engine is set
+     */
+    protected function assertPreConditions(): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $currentEngine = $objectManager->get(EngineResolverInterface::class)->getCurrentSearchEngine();
+        $installedEngine = $objectManager->get(SearchEngineVersionReader::class)->getFullVersion();
+        $this->assertEquals(
+            $installedEngine,
+            $currentEngine,
+            sprintf(
+                'Search engine configuration "%s" is not compatible with the installed version',
+                $currentEngine
+            )
+        );
+    }
+
+    /**
      * @return void
      */
     public function testReindexAll(): void
@@ -101,13 +120,14 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
 
             $products = $this->searchByName('Simple Product', $storeId);
             $this->assertCount(5, $products);
+
+            $this->assertCount(2, $this->searchByBoolAttribute(0, $storeId));
+            $this->assertCount(3, $this->searchByBoolAttribute(1, $storeId));
         }
     }
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      * @return void
      */
     public function testReindexRowAfterEdit(): void
@@ -131,8 +151,6 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      * @return void
      */
     public function testReindexRowAfterMassAction(): void
@@ -170,8 +188,6 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      * @magentoAppArea adminhtml
      * @return void
      */
@@ -192,8 +208,6 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDbIsolation enabled
      * @magentoAppArea adminhtml
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      * @magentoDataFixture Magento/Elasticsearch/_files/configurable_products.php
      * @return void
      */
@@ -222,7 +236,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Search docs in Elasticsearch by name.
+     * Search docs in search engine by name.
      *
      * @param string $text
      * @param int $storeId
@@ -253,5 +267,31 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
         $products = isset($queryResult['hits']['hits']) ? $queryResult['hits']['hits'] : [];
 
         return $products;
+    }
+
+    /**
+     * Search docs in search engine by boolean attribute.
+     *
+     * @param int $value
+     * @param int $storeId
+     * @return array
+     */
+    private function searchByBoolAttribute(int $value, int $storeId): array
+    {
+        $index = $this->searchIndexNameResolver->getIndexName($storeId, $this->indexer->getId());
+        $searchQuery = [
+            'index' => $index,
+            'type' => $this->entityType,
+            'body' => [
+                'query' => [
+                    'query_string' => [
+                        'query' => $value,
+                        'default_field' => 'boolean_attribute',
+                    ],
+                ],
+            ],
+        ];
+        $queryResult = $this->client->query($searchQuery);
+        return isset($queryResult['hits']['hits']) ? $queryResult['hits']['hits'] : [];
     }
 }

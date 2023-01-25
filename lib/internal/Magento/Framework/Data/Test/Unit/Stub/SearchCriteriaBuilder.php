@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Data\Test\Unit\Stub;
 
+use Magento\Framework\Api\CriteriaInterface;
 use Magento\Framework\Data\AbstractSearchCriteriaBuilder;
 
 class SearchCriteriaBuilder extends AbstractSearchCriteriaBuilder
@@ -14,6 +17,6 @@ class SearchCriteriaBuilder extends AbstractSearchCriteriaBuilder
      */
     public function init()
     {
-        $this->resultObjectInterface = \Magento\Framework\Api\CriteriaInterface::class;
+        $this->resultObjectInterface = CriteriaInterface::class;
     }
 }

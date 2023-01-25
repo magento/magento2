@@ -5,31 +5,58 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\TestFramework\App;
 
+use Magento\Config\Model\Config\Factory as ConfigFactory;
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\TestFramework\ObjectManager;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @inheritdoc
  */
 class ApiMutableScopeConfig implements MutableScopeConfigInterface
 {
-    /**
-     * @var Config
-     */
+    /** @var Config */
     private $testAppConfig;
+
+    /** @var StoreRepositoryInterface */
+    private $storeRepository;
+
+    /** @var WebsiteRepositoryInterface */
+    private $websiteRepository;
+
+    /** @var ConfigFactory */
+    private $configFactory;
+
+    /**
+     * @param ScopeConfigInterface $config
+     * @param StoreRepositoryInterface $storeRepository
+     * @param WebsiteRepositoryInterface $websiteRepository
+     * @param ConfigFactory $configFactory
+     */
+    public function __construct(
+        ScopeConfigInterface $config,
+        StoreRepositoryInterface $storeRepository,
+        WebsiteRepositoryInterface $websiteRepository,
+        ConfigFactory $configFactory
+    ) {
+        $this->testAppConfig = $config;
+        $this->storeRepository = $storeRepository;
+        $this->websiteRepository = $websiteRepository;
+        $this->configFactory = $configFactory;
+    }
 
     /**
      * @inheritdoc
      */
     public function isSetFlag($path, $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)
     {
-        return $this->getTestAppConfig()->isSetFlag($path, $scopeType, $scopeCode);
+        return $this->testAppConfig->isSetFlag($path, $scopeType, $scopeCode);
     }
 
     /**
@@ -37,7 +64,7 @@ class ApiMutableScopeConfig implements MutableScopeConfigInterface
      */
     public function getValue($path, $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)
     {
-        return $this->getTestAppConfig()->getValue($path, $scopeType, $scopeCode);
+        return $this->testAppConfig->getValue($path, $scopeType, $scopeCode);
     }
 
     /**
@@ -46,11 +73,11 @@ class ApiMutableScopeConfig implements MutableScopeConfigInterface
     public function setValue(
         $path,
         $value,
-        $scopeType = \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+        $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
         $scopeCode = null
     ) {
         $this->persistConfig($path, $value, $scopeType, $scopeCode);
-        return $this->getTestAppConfig()->setValue($path, $value, $scopeType, $scopeCode);
+        return $this->testAppConfig->setValue($path, $value, $scopeType, $scopeCode);
     }
 
     /**
@@ -60,21 +87,7 @@ class ApiMutableScopeConfig implements MutableScopeConfigInterface
      */
     public function clean()
     {
-        $this->getTestAppConfig()->clean();
-    }
-
-    /**
-     * Retrieve test app config instance
-     *
-     * @return \Magento\TestFramework\App\Config
-     */
-    private function getTestAppConfig()
-    {
-        if (!$this->testAppConfig) {
-            $this->testAppConfig = ObjectManager::getInstance()->get(ScopeConfigInterface::class);
-        }
-
-        return $this->testAppConfig;
+        $this->testAppConfig->clean();
     }
 
     /**
@@ -84,18 +97,12 @@ class ApiMutableScopeConfig implements MutableScopeConfigInterface
      * @param string $value
      * @param string $scopeType
      * @param string|null $scopeCode
+     * @return void
      */
-    private function persistConfig($path, $value, $scopeType, $scopeCode): void
+    private function persistConfig(string $path, string $value, string $scopeType, ?string $scopeCode): void
     {
         $pathParts = explode('/', $path);
         $store = 0;
-        if ($scopeType === \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            && $scopeCode !== null) {
-            $store = ObjectManager::getInstance()
-                    ->get(\Magento\Store\Api\StoreRepositoryInterface::class)
-                    ->get($scopeCode)
-                    ->getId();
-        }
         $configData = [
             'section' => $pathParts[0],
             'website' => '',
@@ -110,9 +117,15 @@ class ApiMutableScopeConfig implements MutableScopeConfigInterface
                 ]
             ]
         ];
-        ObjectManager::getInstance()
-            ->get(\Magento\Config\Model\Config\Factory::class)
-            ->create(['data' => $configData])
-            ->save();
+        if ($scopeType === ScopeInterface::SCOPE_STORE && $scopeCode !== null) {
+            $store = $this->storeRepository->get($scopeCode)->getId();
+            $configData['store'] = $store;
+        } elseif ($scopeType === ScopeInterface::SCOPE_WEBSITES && $scopeCode !== null) {
+            $website = $this->websiteRepository->get($scopeCode)->getId();
+            $configData['store'] = '';
+            $configData['website'] = $website;
+        }
+
+        $this->configFactory->create(['data' => $configData])->save();
     }
 }

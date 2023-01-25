@@ -31,6 +31,6 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         );
         $address->setAddressType('billing');
         $address->setQuote($quote);
-        $this->assertContains('Los Angeles', $block->renderAddress($address));
+        $this->assertStringContainsString('Los Angeles', $block->renderAddress($address));
     }
 }

@@ -25,12 +25,14 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use Psr\Log\LoggerInterface;
 
 /**
  * Testing for saving an existing or creating a new attribute set.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea adminhtml
+ * @magentoAppIsolation enabled
  */
 class SaveTest extends AbstractBackendController
 {
@@ -87,10 +89,10 @@ class SaveTest extends AbstractBackendController
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
-        $this->logger = $this->_objectManager->get(Monolog::class);
+        $this->logger = $this->_objectManager->get(LoggerInterface::class);
         $this->syslogHandler = $this->_objectManager->create(
             Syslog::class,
             [
@@ -109,7 +111,7 @@ class SaveTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->attributeRepository->get('country_of_manufacture')->setIsUserDefined(false);
         parent::tearDown();
@@ -162,6 +164,7 @@ class SaveTest extends AbstractBackendController
             [
                 'gotoEdit' => '1',
                 'skeleton_set' => $this->getCatalogProductDefaultAttributeSetId(),
+                'attribute_set_name' => ''
             ]
         );
         $this->dispatch('backend/catalog/product_set/save/');
@@ -204,8 +207,11 @@ class SaveTest extends AbstractBackendController
         $jsonResponse = $this->json->unserialize($this->getResponse()->getBody());
         $this->assertNotNull($jsonResponse);
         $this->assertEquals(1, $jsonResponse['error']);
-        $this->assertContains(
-            (string)__('Attribute group with same code already exist. Please rename &quot;attribute-group-name&quot; group'),
+        $this->assertStringContainsString(
+            (string)__(
+                'Attribute group with same code already exist.'
+                . ' Please rename &quot;attribute-group-name&quot; group'
+            ),
             $jsonResponse['message']
         );
     }
@@ -237,7 +243,7 @@ class SaveTest extends AbstractBackendController
         $this->dispatch('backend/catalog/product/edit/id/' . $product->getEntityId());
         $syslogPath = $this->getSyslogPath();
         $syslogContent = file_exists($syslogPath) ? file_get_contents($syslogPath) : '';
-        $this->assertNotContains($message, $syslogContent);
+        $this->assertStringNotContainsString($message, $syslogContent);
     }
 
     /**

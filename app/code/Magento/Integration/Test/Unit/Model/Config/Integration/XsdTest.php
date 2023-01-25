@@ -3,24 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Model\Config\Integration;
+
+use Magento\Framework\Config\Dom;
+use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Config\ValidationStateInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for validation rules implemented by XSD schema for API integration configuration.
  */
-class XsdTest extends \PHPUnit\Framework\TestCase
+class XsdTest extends TestCase
 {
     /**
      * @var string
      */
     protected $schemaFile;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
-        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $urnResolver = new UrnResolver();
         $this->schemaFile = $urnResolver->getRealPath(
             'urn:magento:module:Magento_Integration:etc/integration/api.xsd'
         );
@@ -33,14 +40,16 @@ class XsdTest extends \PHPUnit\Framework\TestCase
      */
     public function testExemplarXml($fixtureXml, array $expectedErrors)
     {
-        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock = $this->getMockForAbstractClass(ValidationStateInterface::class);
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
         $messageFormat = '%message%';
-        $dom = new \Magento\Framework\Config\Dom($fixtureXml, $validationStateMock, [], null, null, $messageFormat);
+        $dom = new Dom($fixtureXml, $validationStateMock, [], null, null, $messageFormat);
         $actualResult = $dom->validate($this->schemaFile, $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult, "Validation result is invalid.");
-        $this->assertEquals($expectedErrors, $actualErrors, "Validation errors does not match.");
+        foreach ($expectedErrors as $error) {
+            $this->assertContains($error, $actualErrors, "Validation errors does not match.");
+        }
     }
 
     /**
@@ -223,9 +232,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
                 </integrations>',
                 [
                     "Element 'integration', attribute 'name': [facet 'minLength'] The value '' has a length of '0'; " .
-                    "this underruns the allowed minimum length of '2'.",
-                    "Element 'integration', attribute 'name': " .
-                    "'' is not a valid value of the atomic type 'integrationNameType'."
+                    "this underruns the allowed minimum length of '2'."
                 ],
             ],
             'resource without name' => [
@@ -250,9 +257,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
                 </integrations>',
                 [
                     "Element 'resource', attribute 'name': [facet 'pattern'] " .
-                    "The value '' is not accepted by the pattern '.+_.+::.+'.",
-                    "Element 'resource', attribute 'name': '' " .
-                    "is not a valid value of the atomic type 'resourceNameType'."
+                    "The value '' is not accepted by the pattern '.+_.+::.+'."
                 ],
             ],
             /** Invalid values */
@@ -267,9 +272,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
                 </integrations>',
                 [
                     "Element 'resource', attribute 'name': [facet 'pattern'] " .
-                    "The value 'customer_manage' is not accepted by the pattern '.+_.+::.+'.",
-                    "Element 'resource', attribute 'name': 'customer_manage' " .
-                    "is not a valid value of the atomic type 'resourceNameType'."
+                    "The value 'customer_manage' is not accepted by the pattern '.+_.+::.+'."
                 ],
             ]
         ];

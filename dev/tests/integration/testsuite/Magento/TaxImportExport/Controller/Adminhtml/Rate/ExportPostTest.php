@@ -7,7 +7,7 @@ namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
 
 class ExportPostTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
-    public function setUp()
+    protected function setUp(): void
     {
         $this->resource = 'Magento_Sales::transactions_fetch';
         $this->uri = 'backend/sales/transactions/fetch';

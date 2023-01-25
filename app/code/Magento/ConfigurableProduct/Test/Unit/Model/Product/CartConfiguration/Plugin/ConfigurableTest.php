@@ -3,12 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\CartConfiguration\Plugin;
 
-class ConfigurableTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\CartConfiguration;
+use Magento\ConfigurableProduct\Model\Product\CartConfiguration\Plugin\Configurable;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigurableTest extends TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Model\Product\CartConfiguration\Plugin\Configurable
+     * @var Configurable
      */
     protected $model;
 
@@ -18,23 +26,23 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     protected $closureMock;
 
     /**
-     * @var \PHPUnit_invFramework_MockObject_MockObject
+     * @var MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->closureMock = function () {
             return 'Expected';
         };
-        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->subjectMock = $this->createMock(\Magento\Catalog\Model\Product\CartConfiguration::class);
-        $this->model = new \Magento\ConfigurableProduct\Model\Product\CartConfiguration\Plugin\Configurable();
+        $this->productMock = $this->createMock(Product::class);
+        $this->subjectMock = $this->createMock(CartConfiguration::class);
+        $this->model = new Configurable();
     }
 
     public function testAroundIsProductConfiguredChecksThatSuperAttributeIsSetWhenProductIsConfigurable()
@@ -44,11 +52,10 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getTypeId'
-        )->will(
-            $this->returnValue(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
+        )->willReturn(
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
         );
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $this->model->aroundIsProductConfigured(
                 $this->subjectMock,
                 $this->closureMock,
@@ -65,8 +72,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getTypeId'
-        )->will(
-            $this->returnValue('custom_product_type')
+        )->willReturn(
+            'custom_product_type'
         );
         $this->assertEquals(
             'Expected',

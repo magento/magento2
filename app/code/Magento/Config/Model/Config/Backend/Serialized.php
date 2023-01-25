@@ -5,6 +5,7 @@
  */
 namespace Magento\Config\Model\Config\Backend;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
@@ -83,5 +84,27 @@ class Serialized extends \Magento\Framework\App\Config\Value
         }
         parent::beforeSave();
         return $this;
+    }
+
+    /**
+     * Get old value from existing config
+     *
+     * @return string
+     */
+    public function getOldValue()
+    {
+        // If the value is retrieved from defaults defined in config.xml
+        // it may be returned as an array.
+        $value = $this->_config->getValue(
+            $this->getPath(),
+            $this->getScope() ?: ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            $this->getScopeCode()
+        );
+
+        if (is_array($value)) {
+            return $this->serializer->serialize($value);
+        }
+
+        return (string)$value;
     }
 }

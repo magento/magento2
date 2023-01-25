@@ -12,7 +12,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
      */
     protected $_resourceModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_resourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Widget\Model\ResourceModel\Layout\Update::class

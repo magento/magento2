@@ -20,7 +20,9 @@
         <element name="StreetLine2" type="input" selector="#order-billing_address_street1" timeout="30"/>
         <element name="City" type="input" selector="#order-billing_address_city" timeout="30"/>
         <element name="Country" type="select" selector="#order-billing_address_country_id" timeout="30"/>
+        <element name="countrySelectedOption" type="select" selector="#order-billing_address_country_id option:checked"/>
         <element name="State" type="select" selector="#order-billing_address_region_id" timeout="30"/>
+        <element name="stateSelectedOption" type="select" selector="#order-billing_address_region_id option:checked"/>
         <element name="Province" type="input" selector="#order-billing_address_region" timeout="30"/>
         <element name="PostalCode" type="input" selector="#order-billing_address_postcode" timeout="30"/>
         <element name="Phone" type="input" selector="#order-billing_address_telephone" timeout="30"/>
@@ -28,8 +30,6 @@
         <element name="VatNumber" type="input" selector="#order-billing_address_vat_id" timeout="30"/>
         <element name="ValidateVatNumber" type="button" selector="#order-billing_address_vat_id + .actions>button.action-default" timeout="30"/>
         <element name="SaveAddress" type="checkbox" selector="#order-billing_address_save_in_address_book"/>
-
-        <element name="emailError" type="text" selector="#email-error"/>
         <element name="firstNameError" type="text" selector="#order-billing_address_firstname-error"/>
         <element name="lastNameError" type="text" selector="#order-billing_address_lastname-error"/>
         <element name="streetAddressError" type="text" selector="#order-billing_address_street0-error"/>

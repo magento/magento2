@@ -30,7 +30,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->block = $this->objectManager->get(LayoutInterface::class)
@@ -63,6 +63,6 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             $this->block->getCheckoutSession()->getQuote()->getAllVisibleItems()[0]
         );
         $html = $this->block->getProductPriceHtml($configurableProduct);
-        $this->assertContains('<span class="price">$10.00</span>', $html);
+        $this->assertStringContainsString('<span class="price">$10.00</span>', $html);
     }
 }

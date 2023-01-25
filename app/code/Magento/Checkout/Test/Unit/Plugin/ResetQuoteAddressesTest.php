@@ -59,7 +59,7 @@ class ResetQuoteAddressesTest extends TestCase
     /**
      * Set Up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->quoteMock = $this->createPartialMock(Quote::class, [
             'getAllAddresses',
@@ -87,7 +87,7 @@ class ResetQuoteAddressesTest extends TestCase
     {
         $this->quoteMock->expects($this->any())
             ->method('getAllVisibleItems')
-            ->will($this->returnValue(static::STUB_QUOTE_ITEMS));
+            ->willReturn(static::STUB_QUOTE_ITEMS);
         $this->quoteMock->expects($this->never())
             ->method('getAllAddresses')
             ->willReturnSelf();
@@ -109,7 +109,7 @@ class ResetQuoteAddressesTest extends TestCase
     ) {
         $this->quoteMock->expects($this->any())
             ->method('getAllVisibleItems')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $address = $this->createPartialMock(Address::class, ['getId']);
 
@@ -121,7 +121,7 @@ class ResetQuoteAddressesTest extends TestCase
 
         $this->quoteMock->expects($this->any())
             ->method('getAllAddresses')
-            ->will($this->returnValue($addresses));
+            ->willReturn($addresses);
 
         $this->quoteMock->expects($this->exactly(count($addresses)))
             ->method('removeAddress')
@@ -165,7 +165,7 @@ class ResetQuoteAddressesTest extends TestCase
 
         $this->quoteMock->expects($this->any())
             ->method('getAllVisibleItems')
-            ->will($this->returnValue($quoteVisibleItems));
+            ->willReturn($quoteVisibleItems);
 
         $this->quoteMock->expects($this->any())
             ->method('getAllAddresses')

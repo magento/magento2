@@ -3,17 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Marketplace\Test\Unit\Block;
 
-class PartnersTest extends \PHPUnit\Framework\TestCase
+use Magento\Marketplace\Block\Partners;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class PartnersTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Block\Partners
+     * @var MockObject|Partners
      */
     private $partnersBlockMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->partnersBlockMock = $this->getPartnersBlockMock(
             [
@@ -30,11 +35,11 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
         $partnersModelMock = $this->getPartnersModelMock(['getPartners']);
         $partnersModelMock->expects($this->once())
             ->method('getPartners')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->partnersBlockMock->expects($this->once())
             ->method('getPartnersModel')
-            ->will($this->returnValue($partnersModelMock));
+            ->willReturn($partnersModelMock);
 
         $this->partnersBlockMock->getPartners();
     }
@@ -42,17 +47,17 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets partners block mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Block\Partners
+     * @return MockObject|Partners
      */
     public function getPartnersBlockMock($methods = null)
     {
-        return $this->createPartialMock(\Magento\Marketplace\Block\Partners::class, $methods);
+        return $this->createPartialMock(Partners::class, $methods);
     }
 
     /**
      * Gets partners model mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Model\Partners
+     * @return MockObject|\Magento\Marketplace\Model\Partners
      */
     public function getPartnersModelMock($methods)
     {

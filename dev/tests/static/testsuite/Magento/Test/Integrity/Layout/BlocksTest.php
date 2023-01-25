@@ -24,7 +24,7 @@ class BlocksTest extends \PHPUnit\Framework\TestCase
     /**
      * Collect declarations of containers per layout file that have aliases
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         foreach (Files::init()->getLayoutFiles([], false) as $file) {
             $xml = simplexml_load_file($file);

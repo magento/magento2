@@ -3,34 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Console\Test\Unit\QuestionPerformer;
 
 use Magento\Framework\Console\QuestionPerformer\YesNo;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\QuestionFactory;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Question\QuestionFactory;
 
-class YesNoTest extends \PHPUnit\Framework\TestCase
+class YesNoTest extends TestCase
 {
     /**
-     * @var InputInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InputInterface|MockObject
      */
     private $inputMock;
 
     /**
-     * @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OutputInterface|MockObject
      */
     private $outputMock;
 
     /**
-     * @var QuestionHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuestionHelper|MockObject
      */
     private $questionHelperMock;
 
     /**
-     * @var QuestionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuestionFactory|MockObject
      */
     private $questionFactoryMock;
 
@@ -42,7 +46,7 @@ class YesNoTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->inputMock = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
@@ -70,7 +74,7 @@ class YesNoTest extends \PHPUnit\Framework\TestCase
         $secondMessage = 'Second message';
         $messages = [$firstMessage, $secondMessage];
 
-        /** @var Question|\PHPUnit_Framework_MockObject_MockObject $questionMock */
+        /** @var Question|MockObject $questionMock */
         $questionMock = $this->getMockBuilder(Question::class)
             ->disableOriginalConstructor()
             ->getMock();

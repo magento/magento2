@@ -3,54 +3,98 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Mview\Test\Unit\View;
 
-use \Magento\Framework\Mview\View\Subscription;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Ddl\Trigger;
+use Magento\Framework\DB\Ddl\TriggerFactory;
+use Magento\Framework\Mview\Config;
+use Magento\Framework\Mview\View\AdditionalColumnsProcessor\DefaultProcessor;
+use Magento\Framework\Mview\View\ChangelogInterface;
+use Magento\Framework\Mview\View\CollectionInterface;
+use Magento\Framework\Mview\View\StateInterface;
+use Magento\Framework\Mview\View\Subscription;
+use Magento\Framework\Mview\ViewInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionException;
+use ReflectionMethod;
 
-class SubscriptionTest extends \PHPUnit\Framework\TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class SubscriptionTest extends TestCase
 {
     /**
      * Mysql PDO DB adapter mock
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @var MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     protected $connectionMock;
 
-    /** @var \Magento\Framework\Mview\View\Subscription */
+    /**
+     * @var Subscription
+     */
     protected $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResourceConnection */
+    /**
+     * @var MockObject|ResourceConnection
+     */
     protected $resourceMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Ddl\TriggerFactory */
+    /**
+     * @var MockObject|TriggerFactory
+     */
     protected $triggerFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Mview\View\CollectionInterface */
+    /**
+     * @var MockObject|CollectionInterface
+     */
     protected $viewCollectionMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Mview\ViewInterface */
+    /**
+     * @var MockObject|ViewInterface
+     */
     protected $viewMock;
 
-    /** @var  string */
+    /**
+     * @var  string
+     */
     private $tableName;
 
-    protected function setUp()
+    /**
+     * @var DefaultProcessor|MockObject
+     */
+    private $defaultProcessor;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
-        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->tableName = 'test_table';
+        $this->connectionMock = $this->createMock(Mysql::class);
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
 
         $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
+        $this->defaultProcessor = $this->createMock(DefaultProcessor::class);
         $this->resourceMock->expects($this->atLeastOnce())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
-
-        $this->triggerFactoryMock = $this->createMock(\Magento\Framework\DB\Ddl\TriggerFactory::class);
+        ObjectManager::getInstance()->expects($this->any())
+            ->method('get')
+            ->with(DefaultProcessor::class)
+            ->willReturn($this->defaultProcessor);
+        $this->triggerFactoryMock = $this->createMock(TriggerFactory::class);
         $this->viewCollectionMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\View\CollectionInterface::class,
+            CollectionInterface::class,
             [],
             '',
             false,
@@ -59,7 +103,7 @@ class SubscriptionTest extends \PHPUnit\Framework\TestCase
             []
         );
         $this->viewMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\ViewInterface::class,
+            ViewInterface::class,
             [],
             '',
             false,
@@ -67,98 +111,100 @@ class SubscriptionTest extends \PHPUnit\Framework\TestCase
             true,
             []
         );
-
+        $this->viewMock->expects($this->any())
+            ->method('getId')
+            ->willReturn(1);
         $this->resourceMock->expects($this->any())
             ->method('getTableName')
-            ->will($this->returnArgument(0));
-
+            ->willReturnArgument(0);
+        $mviewConfigMock = $this->createMock(Config::class);
+        $mviewConfigMock->expects($this->any())
+            ->method('getView')
+            ->willReturn([
+                'subscriptions' => [
+                    $this->tableName => [
+                        'processor' => DefaultProcessor::class
+                    ]
+                ]
+            ]);
         $this->model = new Subscription(
             $this->resourceMock,
             $this->triggerFactoryMock,
             $this->viewCollectionMock,
             $this->viewMock,
             $this->tableName,
-            'columnName'
+            'columnName',
+            [],
+            [],
+            $mviewConfigMock
         );
     }
 
-    public function testGetView()
+    /**
+     * @return void
+     */
+    public function testGetView(): void
     {
         $this->assertEquals($this->viewMock, $this->model->getView());
     }
 
-    public function testGetTableName()
+    /**
+     * @return void
+     */
+    public function testGetTableName(): void
     {
         $this->assertEquals($this->tableName, $this->model->getTableName());
     }
 
-    public function testGetColumnName()
+    /**
+     * @return void
+     */
+    public function testGetColumnName(): void
     {
         $this->assertEquals('columnName', $this->model->getColumnName());
     }
 
     /**
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $triggerName = 'trigger_name';
         $this->resourceMock->expects($this->atLeastOnce())->method('getTriggerName')->willReturn($triggerName);
-        $triggerMock = $this->getMockBuilder(\Magento\Framework\DB\Ddl\Trigger::class)
-            ->setMethods(['setName', 'getName', 'setTime', 'setEvent', 'setTable', 'addStatement'])
+        $triggerMock = $this->getMockBuilder(Trigger::class)
+            ->onlyMethods(['setName', 'getName', 'setTime', 'setEvent', 'setTable', 'addStatement'])
             ->disableOriginalConstructor()
             ->getMock();
         $triggerMock->expects($this->exactly(3))
             ->method('setName')
-            ->with($triggerName)
-            ->will($this->returnSelf());
-        $triggerMock->expects($this->exactly(3))
+            ->with($triggerName)->willReturnSelf();
+        $triggerMock->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('triggerName'));
+            ->willReturn('triggerName');
         $triggerMock->expects($this->exactly(3))
             ->method('setTime')
-            ->with(\Magento\Framework\DB\Ddl\Trigger::TIME_AFTER)
-            ->will($this->returnSelf());
+            ->with(Trigger::TIME_AFTER)->willReturnSelf();
         $triggerMock->expects($this->exactly(3))
-            ->method('setEvent')
-            ->will($this->returnSelf());
+            ->method('setEvent')->willReturnSelf();
         $triggerMock->expects($this->exactly(3))
             ->method('setTable')
-            ->with($this->tableName)
-            ->will($this->returnSelf());
+            ->with($this->tableName)->willReturnSelf();
 
-        $triggerMock->expects($this->at(4))
+        $triggerMock
             ->method('addStatement')
-            ->with("INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);")
-            ->will($this->returnSelf());
-
-        $triggerMock->expects($this->at(5))
-            ->method('addStatement')
-            ->with("INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);")
-            ->will($this->returnSelf());
-
-        $triggerMock->expects($this->at(11))
-            ->method('addStatement')
-            ->with("INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);")
-            ->will($this->returnSelf());
-
-        $triggerMock->expects($this->at(12))
-            ->method('addStatement')
-            ->with("INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);")
-            ->will($this->returnSelf());
-
-        $triggerMock->expects($this->at(18))
-            ->method('addStatement')
-            ->with("INSERT IGNORE INTO test_view_cl (entity_id) VALUES (OLD.columnName);")
-            ->will($this->returnSelf());
-
-        $triggerMock->expects($this->at(19))
-            ->method('addStatement')
-            ->with("INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (OLD.columnName);")
-            ->will($this->returnSelf());
+            ->withConsecutive(
+                ["INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);"],
+                ["INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);"],
+                ["INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);"],
+                ["INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);"],
+                ["INSERT IGNORE INTO test_view_cl (entity_id) VALUES (OLD.columnName);"],
+                ["INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (OLD.columnName);"]
+            )->willReturn($triggerMock);
 
         $changelogMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\View\ChangelogInterface::class,
+            ChangelogInterface::class,
             [],
             '',
             false,
@@ -166,23 +212,23 @@ class SubscriptionTest extends \PHPUnit\Framework\TestCase
             true,
             []
         );
-        $changelogMock->expects($this->exactly(3))
+        $changelogMock->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('test_view_cl'));
+            ->willReturn('test_view_cl');
         $changelogMock->expects($this->exactly(3))
             ->method('getColumnName')
-            ->will($this->returnValue('entity_id'));
+            ->willReturn('entity_id');
 
-        $this->viewMock->expects($this->exactly(3))
+        $this->viewMock->expects($this->atLeastOnce())
             ->method('getChangelog')
-            ->will($this->returnValue($changelogMock));
+            ->willReturn($changelogMock);
 
         $this->triggerFactoryMock->expects($this->exactly(3))
             ->method('create')
-            ->will($this->returnValue($triggerMock));
+            ->willReturn($triggerMock);
 
         $otherChangelogMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\View\ChangelogInterface::class,
+            ChangelogInterface::class,
             [],
             '',
             false,
@@ -190,15 +236,15 @@ class SubscriptionTest extends \PHPUnit\Framework\TestCase
             true,
             []
         );
-        $otherChangelogMock->expects($this->exactly(3))
+        $otherChangelogMock->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('other_test_view_cl'));
+            ->willReturn('other_test_view_cl');
         $otherChangelogMock->expects($this->exactly(3))
             ->method('getColumnName')
-            ->will($this->returnValue('entity_id'));
+            ->willReturn('entity_id');
 
         $otherViewMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\ViewInterface::class,
+            ViewInterface::class,
             [],
             '',
             false,
@@ -208,66 +254,76 @@ class SubscriptionTest extends \PHPUnit\Framework\TestCase
         );
         $otherViewMock->expects($this->exactly(1))
             ->method('getId')
-            ->will($this->returnValue('other_id'));
-        $otherViewMock->expects($this->exactly(1))
+            ->willReturn('other_id');
+        $otherViewMock->expects($this->exactly(4))
             ->method('getSubscriptions')
-            ->will($this->returnValue([['name' => $this->tableName], ['name' => 'otherTableName']]));
-        $otherViewMock->expects($this->exactly(3))
+            ->willReturn(
+                [
+                    $this->tableName => ['name' => $this->tableName, 'column' => 'columnName'],
+                    'otherTableName' => ['name' => 'otherTableName', 'column' => 'columnName']
+                ]
+            );
+        $otherViewMock->expects($this->atLeastOnce())
             ->method('getChangelog')
-            ->will($this->returnValue($otherChangelogMock));
+            ->willReturn($otherChangelogMock);
 
-        $this->viewMock->expects($this->exactly(3))
+        $this->viewMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue('this_id'));
-        $this->viewMock->expects($this->never())
-            ->method('getSubscriptions');
+            ->willReturn('this_id');
 
-        $this->viewCollectionMock->expects($this->exactly(1))
+        $this->viewCollectionMock->expects($this->once())
             ->method('getViewsByStateMode')
-            ->with(\Magento\Framework\Mview\View\StateInterface::MODE_ENABLED)
-            ->will($this->returnValue([$this->viewMock, $otherViewMock]));
+            ->with(StateInterface::MODE_ENABLED)
+            ->willReturn([$this->viewMock, $otherViewMock]);
 
         $this->connectionMock->expects($this->exactly(3))
             ->method('dropTrigger')
             ->with('triggerName')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->connectionMock->expects($this->exactly(3))
             ->method('createTrigger')
             ->with($triggerMock);
 
+        $this->viewMock->expects($this->exactly(3))
+            ->method('getSubscriptions')
+            ->willReturn(
+                [
+                    $this->tableName => ['name' => $this->tableName, 'column' => 'columnName'],
+                    'otherTableName' => ['name' => 'otherTableName', 'column' => 'columnName']
+                ]
+            );
+
         $this->model->create();
     }
 
-    public function testRemove()
+    /**
+     * @return void
+     */
+    public function testRemove(): void
     {
-        $triggerMock = $this->createMock(\Magento\Framework\DB\Ddl\Trigger::class);
+        $triggerMock = $this->createMock(Trigger::class);
         $triggerMock->expects($this->exactly(3))
-            ->method('setName')
-            ->will($this->returnSelf());
-        $triggerMock->expects($this->exactly(3))
+            ->method('setName')->willReturnSelf();
+        $triggerMock->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('triggerName'));
+            ->willReturn('triggerName');
         $triggerMock->expects($this->exactly(3))
             ->method('setTime')
-            ->with(\Magento\Framework\DB\Ddl\Trigger::TIME_AFTER)
-            ->will($this->returnSelf());
+            ->with(Trigger::TIME_AFTER)->willReturnSelf();
         $triggerMock->expects($this->exactly(3))
-            ->method('setEvent')
-            ->will($this->returnSelf());
+            ->method('setEvent')->willReturnSelf();
         $triggerMock->expects($this->exactly(3))
             ->method('setTable')
-            ->with($this->tableName)
-            ->will($this->returnSelf());
+            ->with($this->tableName)->willReturnSelf();
         $triggerMock->expects($this->exactly(3))
-            ->method('addStatement')
-            ->will($this->returnSelf());
+            ->method('addStatement')->willReturnSelf();
 
         $this->triggerFactoryMock->expects($this->exactly(3))
             ->method('create')
-            ->will($this->returnValue($triggerMock));
+            ->willReturn($triggerMock);
 
         $otherChangelogMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\View\ChangelogInterface::class,
+            ChangelogInterface::class,
             [],
             '',
             false,
@@ -275,15 +331,15 @@ class SubscriptionTest extends \PHPUnit\Framework\TestCase
             true,
             []
         );
-        $otherChangelogMock->expects($this->exactly(3))
+        $otherChangelogMock->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('other_test_view_cl'));
+            ->willReturn('other_test_view_cl');
         $otherChangelogMock->expects($this->exactly(3))
             ->method('getColumnName')
-            ->will($this->returnValue('entity_id'));
+            ->willReturn('entity_id');
 
         $otherViewMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\ViewInterface::class,
+            ViewInterface::class,
             [],
             '',
             false,
@@ -291,40 +347,131 @@ class SubscriptionTest extends \PHPUnit\Framework\TestCase
             true,
             []
         );
-        $otherViewMock->expects($this->exactly(1))
+        $otherViewMock->expects($this->atLeastOnce())
             ->method('getId')
-            ->will($this->returnValue('other_id'));
-        $otherViewMock->expects($this->exactly(1))
-            ->method('getSubscriptions')
-            ->will($this->returnValue([['name' => $this->tableName], ['name' => 'otherTableName']]));
-        $otherViewMock->expects($this->exactly(3))
+            ->willReturn('other_id');
+        $otherViewMock->expects($this->atLeastOnce())
             ->method('getChangelog')
-            ->will($this->returnValue($otherChangelogMock));
+            ->willReturn($otherChangelogMock);
 
-        $this->viewMock->expects($this->exactly(3))
+        $this->viewMock->expects($this->atLeastOnce())
             ->method('getId')
-            ->will($this->returnValue('this_id'));
-        $this->viewMock->expects($this->never())
-            ->method('getSubscriptions');
+            ->willReturn('this_id');
+        $otherViewMock->expects($this->atLeastOnce())
+            ->method('getSubscriptions')
+            ->willReturn(
+                [
+                    $this->tableName => ['name' => $this->tableName, 'column' => 'columnName'],
+                    'otherTableName' => ['name' => 'otherTableName', 'column' => 'columnName']
+                ]
+            );
 
         $this->viewCollectionMock->expects($this->exactly(1))
             ->method('getViewsByStateMode')
-            ->with(\Magento\Framework\Mview\View\StateInterface::MODE_ENABLED)
-            ->will($this->returnValue([$this->viewMock, $otherViewMock]));
+            ->with(StateInterface::MODE_ENABLED)
+            ->willReturn([$this->viewMock, $otherViewMock]);
 
         $this->connectionMock->expects($this->exactly(3))
             ->method('dropTrigger')
             ->with('triggerName')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $triggerMock->expects($this->exactly(3))
             ->method('getStatements')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->connectionMock->expects($this->exactly(3))
             ->method('createTrigger')
             ->with($triggerMock);
 
         $this->model->remove();
+    }
+
+    /**
+     * Test ignored columns for mview specified at the subscription level.
+     *
+     * @return void
+     * @throws ReflectionException
+     */
+    public function testBuildStatementIgnoredColumnSubscriptionLevel(): void
+    {
+        $tableName = 'cataloginventory_stock_item';
+        $ignoredColumnName = 'low_stock_date';
+        $notIgnoredColumnName = 'backorders';
+        $viewId = 'cataloginventory_stock';
+        $ignoredData = [
+            $viewId => [
+                $tableName => [
+                    $ignoredColumnName => true,
+                    $notIgnoredColumnName => false
+                ]
+            ]
+        ];
+        $mviewConfigMock = $this->createMock(Config::class);
+        $mviewConfigMock->expects($this->any())
+            ->method('getView')
+            ->willReturn([
+                'subscriptions' => [
+                    $tableName => [
+                        'processor' => DefaultProcessor::class
+                    ]
+                ]
+            ]);
+
+        $this->connectionMock->expects($this->any())
+            ->method('isTableExists')
+            ->with('cataloginventory_stock_item')
+            ->willReturn(true);
+        $this->connectionMock->expects($this->any())
+            ->method('describeTable')
+            ->with($tableName)
+            ->willReturn([
+                'item_id' => ['COLUMN_NAME' => 'item_id'],
+                'product_id' => ['COLUMN_NAME' => 'product_id'],
+                'stock_id' => ['COLUMN_NAME' => 'stock_id'],
+                'qty' => ['COLUMN_NAME' => 'qty'],
+                $ignoredColumnName => ['COLUMN_NAME' => $ignoredColumnName],
+                $notIgnoredColumnName => ['COLUMN_NAME' => $notIgnoredColumnName]
+            ]);
+
+        $otherChangelogMock = $this->getMockForAbstractClass(ChangelogInterface::class);
+        $otherChangelogMock->expects($this->any())
+            ->method('getViewId')
+            ->willReturn($viewId);
+
+        $otherChangelogMock->expects($this->once())
+            ->method('getColumnName')
+            ->willReturn('entity_id');
+
+        $this->viewMock->expects($this->once())
+            ->method('getSubscriptions')
+            ->willReturn(
+                [
+                    $this->tableName => ['name' => $this->tableName, 'column' => 'columnName'],
+                    'cataloginventory_stock_item' => ['name' => 'otherTableName', 'column' => 'columnName']
+                ]
+            );
+        $this->viewMock->expects($this->atLeastOnce())
+            ->method('getChangeLog')
+            ->willReturn($otherChangelogMock);
+
+        $model = new Subscription(
+            $this->resourceMock,
+            $this->triggerFactoryMock,
+            $this->viewCollectionMock,
+            $this->viewMock,
+            $tableName,
+            'columnName',
+            [],
+            $ignoredData,
+            $mviewConfigMock
+        );
+
+        $method = new ReflectionMethod($model, 'buildStatement');
+        $method->setAccessible(true);
+        $statement = $method->invoke($model, Trigger::EVENT_UPDATE, $this->viewMock);
+
+        $this->assertStringNotContainsString($ignoredColumnName, $statement);
+        $this->assertStringContainsString($notIgnoredColumnName, $statement);
     }
 }

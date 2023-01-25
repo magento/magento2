@@ -33,8 +33,8 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->dispatch('backend/admin/system_currency/index');
         $this->getResponse()->isSuccess();
         $body = $this->getResponse()->getBody();
-        $this->assertContains('id="rate-form"', $body);
-        $this->assertContains('save primary save-currency-rates', $body);
-        $this->assertContains('data-ui-id="page-actions-toolbar-reset-button"', $body);
+        $this->assertStringContainsString('id="rate-form"', $body);
+        $this->assertStringContainsString('save primary save-currency-rates', $body);
+        $this->assertStringContainsString('data-ui-id="page-actions-toolbar-reset-button"', $body);
     }
 }

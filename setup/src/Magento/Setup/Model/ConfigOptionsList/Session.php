@@ -40,7 +40,7 @@ class Session implements ConfigOptionsListInterface
     const INPUT_KEY_SESSION_REDIS_SENTINEL_SERVERS = 'session-save-redis-sentinel-servers';
     const INPUT_KEY_SESSION_REDIS_SENTINEL_MASTER = 'session-save-redis-sentinel-master';
     const INPUT_KEY_SESSION_REDIS_SENTINEL_VERIFY_MASTER = 'session-save-redis-sentinel-verify-master';
-    const INPUT_KEY_SESSION_REDIS_SENTINEL_CONNECT_RETRIES = 'session-save-redis-sentinel-connect-retires';
+    const INPUT_KEY_SESSION_REDIS_SENTINEL_CONNECT_RETRIES = 'session-save-redis-sentinel-connect-retries';
 
     const CONFIG_PATH_SESSION_REDIS = 'session/redis';
     const CONFIG_PATH_SESSION_REDIS_HOST = 'session/redis/host';

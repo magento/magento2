@@ -8,10 +8,6 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
     <extension_attributes for="Magento\Customer\Api\Data\CustomerInterface">
-        <attribute code="is_subscribed" type="boolean" >
-            <join reference_table="newsletter_subscriber" reference_field="customer_id" join_on_field="entity_id">
-                <field>subscriber_status</field>
-            </join>
-        </attribute>
+        <attribute code="is_subscribed" type="boolean"/>
     </extension_attributes>
 </config>

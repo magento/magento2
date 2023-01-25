@@ -3,74 +3,82 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Newsletter\Test\Unit\Block\Adminhtml\Template;
 
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\State;
 use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Newsletter\Block\Adminhtml\Template\Preview;
+use Magento\Newsletter\Model\Subscriber;
+use Magento\Newsletter\Model\SubscriberFactory;
+use Magento\Newsletter\Model\Template;
+use Magento\Newsletter\Model\TemplateFactory;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Test for \Magento\Newsletter\Block\Adminhtml\Template\Preview
+ * @covers \Magento\Newsletter\Block\Adminhtml\Template\Preview
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PreviewTest extends \PHPUnit\Framework\TestCase
+class PreviewTest extends TestCase
 {
-    /** @var \Magento\Newsletter\Block\Adminhtml\Template\Preview */
-    protected $preview;
+    /** @var Preview */
+    private $preview;
 
     /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    private $objectManagerHelper;
 
-    /** @var \Magento\Newsletter\Model\Template|\PHPUnit_Framework_MockObject_MockObject */
-    protected $template;
+    /** @var Template|MockObject */
+    private $templateMock;
 
-    /** @var \Magento\Newsletter\Model\SubscriberFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $subscriberFactory;
+    /** @var SubscriberFactory|MockObject */
+    private $subscriberFactoryMock;
 
-    /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
-    protected $appState;
+    /** @var State|MockObject */
+    private $appStateMock;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $storeManager;
+    /** @var StoreManagerInterface|MockObject */
+    private $storeManagerMock;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $request;
+    /** @var RequestInterface|MockObject */
+    private $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $this->appState = $this->createMock(\Magento\Framework\App\State::class);
-        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->template = $this->createPartialMock(
-            \Magento\Newsletter\Model\Template::class,
-            [
-                'setTemplateType',
-                'setTemplateText',
-                'setTemplateStyles',
-                'isPlain',
-                'emulateDesign',
-                'revertDesign',
-                'getProcessedTemplate',
-                'load'
-            ]
-        );
-        $templateFactory = $this->createPartialMock(\Magento\Newsletter\Model\TemplateFactory::class, ['create']);
-        $templateFactory->expects($this->once())->method('create')->willReturn($this->template);
-        $this->subscriberFactory = $this->createPartialMock(
-            \Magento\Newsletter\Model\SubscriberFactory::class,
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->appStateMock = $this->createMock(State::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->templateMock = $this->getMockBuilder(Template::class)
+            ->addMethods(['setTemplateType', 'setTemplateText', 'setTemplateStyles'])
+            ->onlyMethods(['isPlain', 'emulateDesign', 'revertDesign', 'getProcessedTemplate', 'load'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $templateFactory = $this->createPartialMock(TemplateFactory::class, ['create']);
+        $templateFactory->expects($this->once())->method('create')->willReturn($this->templateMock);
+        $this->subscriberFactoryMock = $this->createPartialMock(
+            SubscriberFactory::class,
             ['create']
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $escaper = $this->objectManagerHelper->getObject(
-            \Magento\Framework\Escaper::class
+            Escaper::class
         );
         $this->preview = $this->objectManagerHelper->getObject(
-            \Magento\Newsletter\Block\Adminhtml\Template\Preview::class,
+            Preview::class,
             [
-                'appState' => $this->appState,
-                'storeManager' => $this->storeManager,
-                'request' => $this->request,
+                'appState' => $this->appStateMock,
+                'storeManager' => $this->storeManagerMock,
+                'request' => $this->requestMock,
                 'templateFactory' => $templateFactory,
-                'subscriberFactory' => $this->subscriberFactory,
+                'subscriberFactory' => $this->subscriberFactoryMock,
                 'escaper' => $escaper
             ]
         );
@@ -78,21 +86,28 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
 
     public function testToHtml()
     {
-        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+        $this->requestMock->expects($this->any())->method('getParam')->willReturnMap(
             [
                 ['id', null, 1],
                 ['store', null, 1]
             ]
         );
 
-        $this->template->expects($this->atLeastOnce())->method('emulateDesign')->with(1);
-        $this->template->expects($this->atLeastOnce())->method('revertDesign');
+        $this->templateMock->expects($this->atLeastOnce())->method('emulateDesign')->with(1);
+        $this->templateMock->expects($this->atLeastOnce())->method('revertDesign');
 
-        $this->appState->expects($this->atLeastOnce())->method('emulateAreaCode')
+        $this->appStateMock->expects($this->atLeastOnce())->method('emulateAreaCode')
             ->with(
-                \Magento\Newsletter\Model\Template::DEFAULT_DESIGN_AREA,
-                [$this->template, 'getProcessedTemplate'],
-                [['subscriber' => null]]
+                Template::DEFAULT_DESIGN_AREA,
+                [$this->templateMock, 'getProcessedTemplate'],
+                [
+                    [
+                        'subscriber' => null,
+                        'subscriber_data' => [
+                            'unsubscription_link' => null
+                        ]
+                    ]
+                ]
             )
             ->willReturn('Processed Template');
 
@@ -101,7 +116,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
 
     public function testToHtmlForNewTemplate()
     {
-        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+        $this->requestMock->expects($this->any())->method('getParam')->willReturnMap(
             [
                 ['type', null, TemplateTypesInterface::TYPE_TEXT],
                 ['text', null, 'Processed Template'],
@@ -109,31 +124,34 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->template->expects($this->once())->method('setTemplateType')->with(TemplateTypesInterface::TYPE_TEXT)
+        $this->templateMock->expects($this->once())->method('setTemplateType')->with(TemplateTypesInterface::TYPE_TEXT)
             ->willReturnSelf();
-        $this->template->expects($this->once())->method('setTemplateText')->with('Processed Template')
+        $this->templateMock->expects($this->once())->method('setTemplateText')->with('Processed Template')
             ->willReturnSelf();
-        $this->template->expects($this->once())->method('setTemplateStyles')->with('.class-name{color:red;}')
+        $this->templateMock->expects($this->once())->method('setTemplateStyles')->with('.class-name{color:red;}')
             ->willReturnSelf();
-        $this->template->expects($this->atLeastOnce())->method('isPlain')->willReturn(true);
-        $this->template->expects($this->atLeastOnce())->method('emulateDesign')->with(1);
-        $this->template->expects($this->atLeastOnce())->method('revertDesign');
+        $this->templateMock->expects($this->atLeastOnce())->method('isPlain')->willReturn(true);
+        $this->templateMock->expects($this->atLeastOnce())->method('emulateDesign')->with(1);
+        $this->templateMock->expects($this->atLeastOnce())->method('revertDesign');
 
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
+        $store = $this->createMock(Store::class);
         $store->expects($this->atLeastOnce())->method('getId')->willReturn(1);
 
-        $this->storeManager->expects($this->atLeastOnce())->method('getStores')->willReturn([$store]);
+        $this->storeManagerMock->expects($this->atLeastOnce())->method('getStores')->willReturn([$store]);
 
-        $this->appState->expects($this->atLeastOnce())->method('emulateAreaCode')
+        $this->appStateMock->expects($this->atLeastOnce())->method('emulateAreaCode')
             ->with(
-                \Magento\Newsletter\Model\Template::DEFAULT_DESIGN_AREA,
+                Template::DEFAULT_DESIGN_AREA,
                 [
-                    $this->template,
+                    $this->templateMock,
                     'getProcessedTemplate'
                 ],
                 [
                     [
-                        'subscriber' => null
+                        'subscriber' => null,
+                        'subscriber_data' => [
+                            'unsubscription_link' => null
+                        ]
                     ]
                 ]
             )
@@ -144,30 +162,35 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
 
     public function testToHtmlWithSubscriber()
     {
-        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+        $this->requestMock->expects($this->any())->method('getParam')->willReturnMap(
             [
                 ['id', null, 2],
                 ['store', null, 1],
                 ['subscriber', null, 3]
             ]
         );
-        $subscriber = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
+        $subscriber = $this->createMock(Subscriber::class);
         $subscriber->expects($this->atLeastOnce())->method('load')->with(3)->willReturnSelf();
-        $this->subscriberFactory->expects($this->atLeastOnce())->method('create')->willReturn($subscriber);
+        $this->subscriberFactoryMock->expects($this->atLeastOnce())->method('create')->willReturn($subscriber);
+        $subscriber->expects($this->exactly(2))
+            ->method('getUnsubscriptionLink')
+            ->willReturn('http://example.com/newsletter/subscriber/unsubscribe/');
+        $this->templateMock->expects($this->atLeastOnce())->method('emulateDesign')->with(1);
+        $this->templateMock->expects($this->atLeastOnce())->method('revertDesign');
 
-        $this->template->expects($this->atLeastOnce())->method('emulateDesign')->with(1);
-        $this->template->expects($this->atLeastOnce())->method('revertDesign');
-
-        $this->appState->expects($this->atLeastOnce())->method('emulateAreaCode')
+        $this->appStateMock->expects($this->atLeastOnce())->method('emulateAreaCode')
             ->with(
-                \Magento\Newsletter\Model\Template::DEFAULT_DESIGN_AREA,
+                Template::DEFAULT_DESIGN_AREA,
                 [
-                    $this->template,
+                    $this->templateMock,
                     'getProcessedTemplate'
                 ],
                 [
                     [
-                        'subscriber' => $subscriber
+                        'subscriber' => $subscriber,
+                        'subscriber_data' => [
+                            'unsubscription_link' => $subscriber->getUnsubscriptionLink()
+                        ]
                     ]
                 ]
             )

@@ -4,21 +4,42 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Test class for \Magento\Cms\Controller\Page.
- */
 namespace Magento\Cms\Controller;
 
 use Magento\Cms\Api\GetPageByIdentifierInterface;
+use Magento\Cms\Model\Page\CustomLayoutManagerInterface;
 use Magento\Framework\View\LayoutInterface;
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Cms\Model\CustomLayoutManager;
+use Magento\TestFramework\TestCase\AbstractController;
 
-class PageTest extends \Magento\TestFramework\TestCase\AbstractController
+/**
+ * Test for \Magento\Cms\Controller\Page\View class.
+ */
+class PageTest extends AbstractController
 {
+    /**
+     * @var GetPageByIdentifierInterface
+     */
+    private $pageRetriever;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->_objectManager->configure([
+            'preferences' => [
+                CustomLayoutManagerInterface::class => CustomLayoutManager::class,
+            ]
+        ]);
+        $this->pageRetriever = $this->_objectManager->get(GetPageByIdentifierInterface::class);
+    }
+
     public function testViewAction()
     {
         $this->dispatch('/enable-cookies');
-        $this->assertContains('What are Cookies?', $this->getResponse()->getBody());
+        $this->assertStringContainsString('What are Cookies?', $this->getResponse()->getBody());
     }
 
     public function testViewRedirectWithTrailingSlash()
@@ -37,11 +58,9 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testAddBreadcrumbs()
     {
         $this->dispatch('/enable-cookies');
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\View\LayoutInterface::class
-        );
+        $layout = $this->_objectManager->get(LayoutInterface::class);
         $breadcrumbsBlock = $layout->getBlock('breadcrumbs');
-        $this->assertContains($breadcrumbsBlock->toHtml(), $this->getResponse()->getBody());
+        $this->assertStringContainsString($breadcrumbsBlock->toHtml(), $this->getResponse()->getBody());
     }
 
     /**
@@ -51,7 +70,7 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->dispatch('/shipping');
         $content = $this->getResponse()->getBody();
-        $this->assertContains('Shipping Test Page', $content);
+        $this->assertStringContainsString('Shipping Test Page', $content);
     }
 
     public static function cmsPageWithSystemRouteFixture()
@@ -76,13 +95,56 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testCustomHandles(): void
     {
-        /** @var GetPageByIdentifierInterface $pageFinder */
-        $pageFinder = Bootstrap::getObjectManager()->get(GetPageByIdentifierInterface::class);
-        $page = $pageFinder->execute('test_custom_layout_page_3', 0);
-        $this->dispatch('/cms/page/view/page_id/' .$page->getId());
+        $page = $this->pageRetriever->execute('test_custom_layout_page_3', 0);
+        $this->dispatch('/cms/page/view/page_id/' . $page->getId());
         /** @var LayoutInterface $layout */
-        $layout = Bootstrap::getObjectManager()->get(LayoutInterface::class);
+        $layout = $this->_objectManager->get(LayoutInterface::class);
         $handles = $layout->getUpdate()->getHandles();
         $this->assertContains('cms_page_view_selectable_test_custom_layout_page_3_test_selected', $handles);
+    }
+
+    /**
+     * Check home page custom handle is applied when rendering a page.
+     *
+     * @return void
+     * @throws \Throwable
+     * @magentoDataFixture Magento/Cms/_files/home_with_custom_handle.php
+     */
+    public function testHomePageCustomHandles(): void
+    {
+        $this->dispatch('/');
+        /** @var LayoutInterface $layout */
+        $layout = $this->_objectManager->get(LayoutInterface::class);
+        $handles = $layout->getUpdate()->getHandles();
+        $this->assertContains('cms_page_view_selectable_home_page_custom_layout', $handles);
+    }
+
+    /**
+     * Tests page renders even with unavailable custom page layout.
+     *
+     * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
+     * @dataProvider pageLayoutDataProvider
+     * @param string $pageIdentifier
+     * @return void
+     */
+    public function testPageWithCustomLayout(string $pageIdentifier): void
+    {
+        $page = $this->pageRetriever->execute($pageIdentifier, 0);
+        $this->dispatch('/cms/page/view/page_id/' . $page->getId());
+        $this->assertStringContainsString(
+            '<main id="maincontent" class="page-main">',
+            $this->getResponse()->getBody()
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function pageLayoutDataProvider(): array
+    {
+        return [
+            'Page with 1column layout' => ['page-with-1column-layout'],
+            'Page with unavailable layout' => ['page-with-unavailable-layout']
+        ];
     }
 }

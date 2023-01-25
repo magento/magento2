@@ -78,7 +78,7 @@ XML;
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->converter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
               ->create(\Magento\Framework\Config\Converter::class);

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPaypalSmartButtonInMiniCartPageTest">
+        <annotations>
+            <features value="Paypal"/>
+            <stories value="PayPal Express Checkout"/>
+            <title value="Mainflow of Paypal Smart Button In-Context on Mini Cart Page"/>
+            <description value="Users are able to place order using Paypal Smart Button on Mini Cart Page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-27604"/>
+            <group value="paypalExpress"/>
+            <skip>
+                <issueId value="MC-33951"/>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+
+            <!-- Create Product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create Customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <magentoCLI command="config:set {{StorefrontPaypalEnableTransferCartLineConfigData.path}} {{StorefrontPaypalEnableTransferCartLineConfigData.value}}" stepKey="enableTransferCartLine"/>
+            <magentoCLI command="config:set {{StorefrontPaypalEnableTransferShippingOptionConfigData.path}} {{StorefrontPaypalEnableTransferShippingOptionConfigData.value}}" stepKey="enableTransferShippingOption"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{StorefrontPaypalDisableTransferShippingOptionConfigData.path}} {{StorefrontPaypalDisableTransferShippingOptionConfigData.value}}" stepKey="disableTransferShippingOption"/>
+
+            <!-- Delete Product -->
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+
+            <!--Delete Customer -->
+            <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
+
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!--Login to storefront as previously created customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage"/>
+        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniShoppingCart"/>
+
+        <!--Click Paypal button-->
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
+
+        <!--Login to Paypal in-context-->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentFromCartAccountActionGroup" stepKey="LoginToPayPal">
+            <argument name="payerName" value="{{Payer.firstName}}"/>
+        </actionGroup>
+
+        <!--Transfer Cart Line and Shipping Method assertion-->
+        <actionGroup ref="PayPalAssertTransferLineAndShippingMethodActionGroup" stepKey="assertPayPalSettings">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+
+        <!--Click PayPal button and go back to Magento site-->
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoActionGroup" stepKey="goBackToMagentoSite"/>
+
+        <actionGroup ref="StorefrontSelectShippingMethodOnOrderReviewPageActionGroup" stepKey="selectShippingMethod"/>
+
+        <!--Assert grand total-->
+        <actionGroup ref="StorefrontAssertOrderReviewSummaryWithTaxActionGroup" stepKey="verifyCheckoutPaymentOrderSummary">
+            <argument name="orderSummarySubTotal" value="$123.00"/>
+            <argument name="orderSummaryShippingTotal" value="$5.00"/>
+            <argument name="orderSummaryTax" value="$0.00"/>
+            <argument name="orderSummaryTotal" value="$128.00"/>
+        </actionGroup>
+
+        <!--SubmitOrder-->
+        <actionGroup ref="StorefrontPlaceOrderOnOrderReviewPageActionGroup" stepKey="clickPlaceOrderBtn"/>
+
+        <!-- I see order successful Page instead of Order Review Page -->
+        <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertCheckoutSuccess"/>
+    </test>
+</tests>

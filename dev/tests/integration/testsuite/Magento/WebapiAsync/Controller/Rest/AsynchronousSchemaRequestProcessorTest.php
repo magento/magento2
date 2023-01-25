@@ -25,10 +25,10 @@ class AsynchronousSchemaRequestProcessorTest extends AbstractController
         $schema = $this->getResponse()->getBody();
 
         // Check that an HTTP 202 response is visible for what is normally an HTTP 200.
-        $this->assertRegExp('/202 Accepted/', $schema);
+        $this->assertMatchesRegularExpression('/202 Accepted/', $schema);
 
         // Make sure that the async interface definition is included in the response.
-        $this->assertRegExp('/asynchronous-operations-data-async-response-interface/', $schema);
+        $this->assertMatchesRegularExpression('/asynchronous-operations-data-async-response-interface/', $schema);
     }
 
     /**

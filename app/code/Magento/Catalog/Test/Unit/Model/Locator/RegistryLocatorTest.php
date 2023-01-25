@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Locator;
 
@@ -11,11 +12,10 @@ use Magento\Catalog\Model\Locator\RegistryLocator;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class RegistryLocatorTest
- */
-class RegistryLocatorTest extends \PHPUnit\Framework\TestCase
+class RegistryLocatorTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -28,21 +28,21 @@ class RegistryLocatorTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|MockObject
      */
     protected $registryMock;
 
     /**
-     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInterface|MockObject
      */
     protected $productMock;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|MockObject
      */
     protected $storeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->registryMock = $this->getMockBuilder(Registry::class)
@@ -82,21 +82,17 @@ class RegistryLocatorTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(StoreInterface::class, $this->model->getStore());
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage The product wasn't registered.
-     */
     public function testGetProductWithException()
     {
+        $this->expectException('Magento\Framework\Exception\NotFoundException');
+        $this->expectExceptionMessage('The product wasn\'t registered.');
         $this->assertInstanceOf(ProductInterface::class, $this->model->getProduct());
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage The store wasn't registered. Verify the store and try again.
-     */
     public function testGetStoreWithException()
     {
+        $this->expectException('Magento\Framework\Exception\NotFoundException');
+        $this->expectExceptionMessage('The store wasn\'t registered. Verify the store and try again.');
         $this->assertInstanceOf(StoreInterface::class, $this->model->getStore());
     }
 }

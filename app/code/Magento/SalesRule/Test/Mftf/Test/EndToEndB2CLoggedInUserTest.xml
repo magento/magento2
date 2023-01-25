@@ -10,6 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="EndToEndB2CLoggedInUserTest">
         <before>
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" after="loginAsAdmin" stepKey="deleteCartPriceRule"/>
             <createData entity="ApiSalesRule" stepKey="createSalesRule"/>
             <createData entity="ApiSalesRuleCoupon" stepKey="createSalesRuleCoupon">
                 <requiredEntity createDataKey="createSalesRule"/>

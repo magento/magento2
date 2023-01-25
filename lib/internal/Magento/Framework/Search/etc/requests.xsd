@@ -193,7 +193,15 @@
   <xs:complexType name="termBucket">
     <xs:complexContent>
       <xs:extension base="bucket">
-        </xs:extension>
+        <xs:sequence>
+          <xs:element type="bucketParameters" name="parameters" minOccurs="0" maxOccurs="1" >
+            <xs:key name="bucketParameterName">
+              <xs:selector xpath="parameter" />
+              <xs:field xpath="@name" />
+            </xs:key>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
     </xs:complexContent>
   </xs:complexType>
 
@@ -220,11 +228,17 @@
       <xs:element type="metric" name="metric" maxOccurs="unbounded" minOccurs="0" />
     </xs:sequence>
   </xs:complexType>
+  <xs:complexType name="bucketParameters">
+    <xs:sequence>
+      <xs:element type="bucketParameter" name="parameter" maxOccurs="unbounded" minOccurs="0" />
+    </xs:sequence>
+  </xs:complexType>
 
   <xs:complexType name="match">
     <xs:simpleContent>
       <xs:extension base="xs:string">
         <xs:attribute type="xs:string" name="field" use="required" />
+        <xs:attribute type="xs:string" name="matchCondition" />
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>
@@ -267,6 +281,14 @@
             </xs:restriction>
           </xs:simpleType>
         </xs:attribute>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="bucketParameter">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="required" />
+        <xs:attribute type="xs:string" name="value" use="required" />
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>

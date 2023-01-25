@@ -8,10 +8,6 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="SetDefaultSearchEngineConfig">
-        <data key="path">catalog/search/engine</data>
-        <data key="value">mysql</data>
-    </entity>
     <entity name="SetMinQueryLength3Config">
         <data key="path">catalog/search/min_query_length</data>
         <data key="value">3</data>

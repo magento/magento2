@@ -3,24 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Theme\Customization\File;
 
-use \Magento\Theme\Model\Theme\Customization\File\CustomCss;
+use Magento\Framework\Filesystem;
+use Magento\Framework\View\Design\Theme\Customization\Path;
+use Magento\Framework\View\Design\Theme\FileFactory;
+use Magento\Framework\View\Design\Theme\FileInterface;
+use Magento\Theme\Model\Theme\Customization\File\CustomCss;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CustomCssTest extends \PHPUnit\Framework\TestCase
+class CustomCssTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\Theme\Customization\Path
+     * @var MockObject|Path
      */
     protected $customizationPath;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\Theme\FileFactory
+     * @var MockObject|FileFactory
      */
     protected $fileFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var MockObject|Filesystem
      */
     protected $filesystem;
 
@@ -30,18 +38,18 @@ class CustomCssTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * Initialize testable object
+     * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->customizationPath = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\Customization\Path::class)
+        $this->customizationPath = $this->getMockBuilder(Path::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fileFactory = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\FileFactory::class)
-            ->setMethods(['create'])
+        $this->fileFactory = $this->getMockBuilder(FileFactory::class)
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -53,13 +61,14 @@ class CustomCssTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
      * cover _prepareSortOrder
      * cover _prepareFileName
      */
-    public function testPrepareFile()
+    public function testPrepareFile(): void
     {
-        $file = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\FileInterface::class)
-            ->setMethods(
+        $file = $this->getMockBuilder(FileInterface::class)
+            ->onlyMethods(
                 [
                     'delete',
                     'save',
@@ -71,37 +80,33 @@ class CustomCssTest extends \PHPUnit\Framework\TestCase
                     'getTheme',
                     'setTheme',
                     'getCustomizationService',
-                    'setCustomizationService',
-                    'getId',
-                    'setData',
+                    'setCustomizationService'
                 ]
             )
-            ->getMock();
+            ->addMethods(['getId', 'setData'])
+            ->getMockForAbstractClass();
         $file->expects($this->any())
             ->method('setData')
             ->willReturnMap(
                 [
                     ['file_type', CustomCss::TYPE, $this->returnSelf()],
                     ['file_path', CustomCss::TYPE . '/' . CustomCss::FILE_NAME, $this->returnSelf()],
-                    ['sort_order', CustomCss::SORT_ORDER, $this->returnSelf()],
+                    ['sort_order', CustomCss::SORT_ORDER, $this->returnSelf()]
                 ]
             );
         $file->expects($this->once())
             ->method('getId')
             ->willReturn(null);
-        $file->expects($this->at(0))
+        $file
             ->method('getFileName')
-            ->willReturn(null);
-        $file->expects($this->at(1))
-            ->method('getFileName')
-            ->willReturn(CustomCss::FILE_NAME);
+            ->willReturnOnConsecutiveCalls(null, CustomCss::FILE_NAME);
         $file->expects($this->once())
             ->method('setFileName')
             ->with(CustomCss::FILE_NAME);
 
-        /** @var $file \Magento\Framework\View\Design\Theme\FileInterface */
+        /** @var FileInterface $file */
         $this->assertInstanceOf(
-            \Magento\Theme\Model\Theme\Customization\File\CustomCss::class,
+            CustomCss::class,
             $this->object->prepareFile($file)
         );
     }

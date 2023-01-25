@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\CustomerData;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\CustomerData\Customer as CustomerData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Customer\Helper\View;
-use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
 
 class CustomerTest extends TestCase
@@ -40,7 +40,7 @@ class CustomerTest extends TestCase
     /**
      * Setup environment to test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->currentCustomerMock = $this->createMock(CurrentCustomer::class);
         $this->customerViewHelperMock = $this->createMock(View::class);
@@ -70,7 +70,7 @@ class CustomerTest extends TestCase
     public function testGetSectionDataWithCustomer()
     {
         $this->currentCustomerMock->expects($this->any())->method('getCustomerId')->willReturn(1);
-        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $customerMock->expects($this->any())->method('getFirstname')->willReturn('John');
         $customerMock->expects($this->any())->method('getWebsiteId')->willReturn(1);
         $this->currentCustomerMock->expects($this->any())->method('getCustomer')->willReturn($customerMock);

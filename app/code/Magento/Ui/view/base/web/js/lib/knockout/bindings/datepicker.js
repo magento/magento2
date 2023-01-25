@@ -7,11 +7,8 @@ define([
     'ko',
     'underscore',
     'jquery',
-    'mage/translate',
-    'mage/calendar',
-    'moment',
-    'mageUtils'
-], function (ko, _, $, $t, calendar, moment, utils) {
+    'mage/translate'
+], function (ko, _, $, $t) {
     'use strict';
 
     var defaults = {
@@ -31,8 +28,11 @@ define([
          * For more info about options take a look at "mage/calendar" and jquery.ui.datepicker widget.
          * @param {HTMLElement} el - Element, that binding is applied to
          * @param {Function} valueAccessor - Function that returns value, passed to binding
+         * @param {object} allBindings
+         * @param {object} viewModel
+         * @param {object} bindingContext
          */
-        init: function (el, valueAccessor) {
+        init: function (el, valueAccessor, allBindings, viewModel, bindingContext) {
             var config = valueAccessor(),
                 observable,
                 options = {};
@@ -46,11 +46,23 @@ define([
                 observable = config;
             }
 
-            $(el).calendar(options);
+            require(['mage/calendar'], function () {
+                $(el).calendar(options);
 
-            ko.utils.registerEventHandler(el, 'change', function () {
-                observable(this.value);
+                ko.utils.registerEventHandler(el, 'change', function () {
+                    observable(this.value);
+                });
             });
+
+            if (bindingContext.$data) {
+                bindingContext.$data.value.subscribe(function (newVal) {
+                    if (!newVal) {
+                        $(el).val('');
+                    }
+                }, this);
+            }
+
+
         },
 
         /**
@@ -62,6 +74,7 @@ define([
          */
         update: function (element, valueAccessor) {
             var config = valueAccessor(),
+                $element = $(element),
                 observable,
                 options = {},
                 newVal;
@@ -75,26 +88,23 @@ define([
                 observable = config;
             }
 
-            if (_.isEmpty(observable())) {
-                if ($(element).datepicker('getDate')) {
-                    $(element).datepicker('setDate', null);
-                    $(element).blur();
+            require(['moment', 'mage/utils/misc', 'mage/calendar'], function (moment, utils) {
+                if (_.isEmpty(observable())) {
+                    newVal = null;
+                } else {
+                    newVal = moment(
+                        observable(),
+                        utils.convertToMomentFormat(
+                            options.dateFormat + (options.showsTime ? ' ' + options.timeFormat : '')
+                        )
+                    ).toDate();
                 }
-            } else {
-                newVal = moment(
-                    observable(),
-                    utils.convertToMomentFormat(
-                        options.dateFormat + (options.showsTime ? ' ' + options.timeFormat : '')
-                    )
-                ).toDate();
 
-                if ($(element).datepicker('getDate') == null ||
-                    newVal.valueOf() !== $(element).datepicker('getDate').valueOf()
-                ) {
-                    $(element).datepicker('setDate', newVal);
-                    $(element).blur();
+                if (!options.timeOnly) {
+                    $element.datepicker('setDate', newVal);
+                    $element.trigger('blur');
                 }
-            }
+            });
         }
     };
 });

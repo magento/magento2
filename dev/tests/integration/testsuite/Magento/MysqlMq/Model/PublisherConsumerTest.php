@@ -63,11 +63,11 @@ class PublisherConsumerTest extends QueueTestCaseAbstract
         $logFileContents = file_get_contents($this->logFilePath);
 
         preg_match_all($createdPattern, $logFileContents, $createdMatches);
-        $this->assertEquals(10, count($createdMatches[0]));
+        $this->assertCount(10, $createdMatches[0]);
         preg_match_all($updatedPattern, $logFileContents, $updatedMatches);
-        $this->assertEquals(5, count($updatedMatches[0]));
+        $this->assertCount(5, $updatedMatches[0]);
         preg_match_all($customCreatedPattern, $logFileContents, $customCreatedMatches);
-        $this->assertEquals(3, count($customCreatedMatches[0]));
+        $this->assertCount(3, $customCreatedMatches[0]);
     }
 
     /**

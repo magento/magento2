@@ -7,8 +7,9 @@ define([
     'mage/translate',
     'Magento_Customer/js/customer-data',
     'Magento_Paypal/js/in-context/express-checkout-smart-buttons',
+    'Magento_Ui/js/modal/alert',
     'mage/cookies'
-], function ($, $t, customerData, checkoutSmartButtons) {
+], function ($, $t, customerData, checkoutSmartButtons, alert) {
     'use strict';
 
     return {
@@ -59,11 +60,10 @@ define([
          * @return {*}
          */
         afterPayment: function (res, resolve, reject) {
+
             if (res.success) {
                 return resolve(res.token);
             }
-
-            this.addError(res['error_message']);
 
             return reject(new Error(res['error_message']));
         },
@@ -76,7 +76,7 @@ define([
          * @param {Function} reject
          */
         catchPayment: function (err, resolve, reject) {
-            this.addError(this.paymentActionError);
+            this.addAlert(this.paymentActionError);
             reject(err);
         },
 
@@ -90,6 +90,9 @@ define([
          * @return {jQuery.Deferred}
          */
         beforeOnAuthorize: function (resolve, reject, actions) { //eslint-disable-line no-unused-vars
+            //display loading widget.
+            $('body').trigger('processStart');
+
             return $.Deferred().resolve();
         },
 
@@ -104,13 +107,13 @@ define([
          * @return {*}
          */
         afterOnAuthorize: function (res, resolve, reject, actions) {
+            $('body').trigger('processStop');
+
             if (res.success) {
                 resolve();
 
-                return actions.redirect(window, res.redirectUrl);
+                return actions.redirect(res.redirectUrl);
             }
-
-            this.addError(res['error_message']);
 
             return reject(new Error(res['error_message']));
         },
@@ -123,7 +126,8 @@ define([
          * @param {Function} reject
          */
         catchOnAuthorize: function (err, resolve, reject) {
-            this.addError(this.paymentActionError);
+            $('body').trigger('processStop');
+            this.addAlert(this.paymentActionError);
             reject(err);
         },
 
@@ -134,7 +138,8 @@ define([
          * @param {Object} actions
          */
         onCancel: function (data, actions) {
-            actions.redirect(window, this.clientConfig.onCancelUrl);
+            $('body').trigger('processStop');
+            actions.redirect(this.clientConfig.onCancelUrl);
         },
 
         /**
@@ -164,6 +169,17 @@ define([
         },
 
         /**
+         * Add alert message
+         *
+         * @param {String} message
+         */
+        addAlert: function (message) {
+            alert({
+                content: message
+            });
+        },
+
+        /**
          * @returns {String}
          */
         getButtonId: function () {
@@ -176,8 +192,6 @@ define([
          * @return {Object}
          */
         prepareClientConfig: function () {
-            this.clientConfig.client = {};
-            this.clientConfig.client[this.clientConfig.environment] = this.clientConfig.merchantId;
             this.clientConfig.rendererComponent = this;
             this.clientConfig.formKey = $.mage.cookies.get('form_key');
 

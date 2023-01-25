@@ -3,18 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Plugin\Model\ResourceModel\Attribute;
 
-use Magento\Catalog\Plugin\Model\ResourceModel\Attribute\Save;
-use Magento\PageCache\Model\Config;
-use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Catalog\Model\ResourceModel\Attribute;
+use Magento\Catalog\Plugin\Model\ResourceModel\Attribute\Save;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\PageCache\Model\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SaveTest extends \PHPUnit\Framework\TestCase
+class SaveTest extends TestCase
 {
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|MockObject
      */
     private $subjectMock;
 
@@ -24,16 +27,16 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     protected $save;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     protected $config;
 
     /**
-     * @var TypeListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TypeListInterface|MockObject
      */
     protected $typeList;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->createPartialMock(Config::class, ['isEnabled']);
         $this->typeList = $this->getMockForAbstractClass(

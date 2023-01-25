@@ -8,7 +8,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="sales_order" resource="sales" engine="innodb" comment="Sales Flat Order">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
         <column xsi:type="varchar" name="state" nullable="true" length="32" comment="State"/>
         <column xsi:type="varchar" name="status" nullable="true" length="32" comment="Status"/>
@@ -16,11 +16,11 @@
         <column xsi:type="varchar" name="protect_code" nullable="true" length="255" comment="Protect Code"/>
         <column xsi:type="varchar" name="shipping_description" nullable="true" length="255"
                 comment="Shipping Description"/>
-        <column xsi:type="smallint" name="is_virtual" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="is_virtual" unsigned="true" nullable="true" identity="false"
                 comment="Is Virtual"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
-        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="customer_id" unsigned="true" nullable="true" identity="false"
                 comment="Customer ID"/>
         <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Discount Amount"/>
@@ -136,32 +136,32 @@
                 comment="Total Qty Ordered"/>
         <column xsi:type="decimal" name="total_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Refunded"/>
-        <column xsi:type="smallint" name="can_ship_partially" padding="5" unsigned="true" nullable="true"
+        <column xsi:type="smallint" name="can_ship_partially" unsigned="true" nullable="true"
                 identity="false" comment="Can Ship Partially"/>
-        <column xsi:type="smallint" name="can_ship_partially_item" padding="5" unsigned="true" nullable="true"
+        <column xsi:type="smallint" name="can_ship_partially_item" unsigned="true" nullable="true"
                 identity="false" comment="Can Ship Partially Item"/>
-        <column xsi:type="smallint" name="customer_is_guest" padding="5" unsigned="true" nullable="true"
+        <column xsi:type="smallint" name="customer_is_guest" unsigned="true" nullable="true"
                 identity="false" comment="Customer Is Guest"/>
-        <column xsi:type="smallint" name="customer_note_notify" padding="5" unsigned="true" nullable="true"
+        <column xsi:type="smallint" name="customer_note_notify" unsigned="true" nullable="true"
                 identity="false" comment="Customer Note Notify"/>
-        <column xsi:type="int" name="billing_address_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="billing_address_id" unsigned="false" nullable="true" identity="false"
                 comment="Billing Address ID"/>
-        <column xsi:type="int" name="customer_group_id" padding="11" unsigned="false" nullable="true" identity="false"/>
-        <column xsi:type="int" name="edit_increment" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="true" identity="false"/>
+        <column xsi:type="int" name="edit_increment" unsigned="false" nullable="true" identity="false"
                 comment="Edit Increment"/>
-        <column xsi:type="smallint" name="email_sent" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="email_sent" unsigned="true" nullable="true" identity="false"
                 comment="Email Sent"/>
-        <column xsi:type="smallint" name="send_email" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="send_email" unsigned="true" nullable="true" identity="false"
                 comment="Send Email"/>
-        <column xsi:type="smallint" name="forced_shipment_with_invoice" padding="5" unsigned="true" nullable="true"
+        <column xsi:type="smallint" name="forced_shipment_with_invoice" unsigned="true" nullable="true"
                 identity="false" comment="Forced Do Shipment With Invoice"/>
-        <column xsi:type="int" name="payment_auth_expiration" padding="11" unsigned="false" nullable="true"
+        <column xsi:type="int" name="payment_auth_expiration" unsigned="false" nullable="true"
                 identity="false" comment="Payment Authorization Expiration"/>
-        <column xsi:type="int" name="quote_address_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="quote_address_id" unsigned="false" nullable="true" identity="false"
                 comment="Quote Address ID"/>
-        <column xsi:type="int" name="quote_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="quote_id" unsigned="false" nullable="true" identity="false"
                 comment="Quote ID"/>
-        <column xsi:type="int" name="shipping_address_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="shipping_address_id" unsigned="false" nullable="true" identity="false"
                 comment="Shipping Address ID"/>
         <column xsi:type="decimal" name="adjustment_negative" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Adjustment Negative"/>
@@ -188,7 +188,7 @@
         <column xsi:type="decimal" name="weight" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Weight"/>
         <column xsi:type="datetime" name="customer_dob" on_update="false" nullable="true" comment="Customer Dob"/>
-        <column xsi:type="varchar" name="increment_id" nullable="true" length="32" comment="Increment ID"/>
+        <column xsi:type="varchar" name="increment_id" nullable="true" length="50" comment="Increment ID"/>
         <column xsi:type="varchar" name="applied_rule_ids" nullable="true" length="128" comment="Applied Rule Ids"/>
         <column xsi:type="varchar" name="base_currency_code" nullable="true" length="3" comment="Base Currency Code"/>
         <column xsi:type="varchar" name="customer_email" nullable="true" length="128" comment="Customer Email"/>
@@ -208,7 +208,7 @@
         <column xsi:type="varchar" name="hold_before_state" nullable="true" length="32" comment="Hold Before State"/>
         <column xsi:type="varchar" name="hold_before_status" nullable="true" length="32" comment="Hold Before Status"/>
         <column xsi:type="varchar" name="order_currency_code" nullable="true" length="3" comment="Order Currency Code"/>
-        <column xsi:type="varchar" name="original_increment_id" nullable="true" length="32"
+        <column xsi:type="varchar" name="original_increment_id" nullable="true" length="50"
                 comment="Original Increment ID"/>
         <column xsi:type="varchar" name="relation_child_id" nullable="true" length="32" comment="Relation Child ID"/>
         <column xsi:type="varchar" name="relation_child_real_id" nullable="true" length="32"
@@ -220,15 +220,15 @@
         <column xsi:type="varchar" name="shipping_method" nullable="true" length="120"/>
         <column xsi:type="varchar" name="store_currency_code" nullable="true" length="3" comment="Store Currency Code"/>
         <column xsi:type="varchar" name="store_name" nullable="true" length="255" comment="Store Name"/>
-        <column xsi:type="varchar" name="x_forwarded_for" nullable="true" length="32" comment="X Forwarded For"/>
+        <column xsi:type="varchar" name="x_forwarded_for" nullable="true" length="255" comment="X Forwarded For"/>
         <column xsi:type="text" name="customer_note" nullable="true" comment="Customer Note"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
-        <column xsi:type="smallint" name="total_item_count" padding="5" unsigned="true" nullable="false"
+        <column xsi:type="smallint" name="total_item_count" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Total Item Count"/>
-        <column xsi:type="int" name="customer_gender" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="customer_gender" unsigned="false" nullable="true" identity="false"
                 comment="Customer Gender"/>
         <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Amount"/>
@@ -296,13 +296,13 @@
         </index>
     </table>
     <table name="sales_order_grid" resource="sales" engine="innodb" comment="Sales Flat Order Grid">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
         <column xsi:type="varchar" name="status" nullable="true" length="32" comment="Status"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="varchar" name="store_name" nullable="true" length="255" comment="Store Name"/>
-        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="customer_id" unsigned="true" nullable="true" identity="false"
                 comment="Customer ID"/>
         <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Grand Total"/>
@@ -385,17 +385,17 @@
         </index>
     </table>
     <table name="sales_order_address" resource="sales" engine="innodb" comment="Sales Flat Order Address">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="parent_id" unsigned="true" nullable="true" identity="false"
                 comment="Parent ID"/>
-        <column xsi:type="int" name="customer_address_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="customer_address_id" unsigned="false" nullable="true" identity="false"
                 comment="Customer Address ID"/>
-        <column xsi:type="int" name="quote_address_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="quote_address_id" unsigned="false" nullable="true" identity="false"
                 comment="Quote Address ID"/>
-        <column xsi:type="int" name="region_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="region_id" unsigned="false" nullable="true" identity="false"
                 comment="Region ID"/>
-        <column xsi:type="int" name="customer_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="customer_id" unsigned="false" nullable="true" identity="false"
                 comment="Customer ID"/>
         <column xsi:type="varchar" name="fax" nullable="true" length="255" comment="Fax"/>
         <column xsi:type="varchar" name="region" nullable="true" length="255" comment="Region"/>
@@ -413,11 +413,11 @@
         <column xsi:type="varchar" name="suffix" nullable="true" length="255" comment="Suffix"/>
         <column xsi:type="varchar" name="company" nullable="true" length="255" comment="Company"/>
         <column xsi:type="text" name="vat_id" nullable="true" comment="Vat ID"/>
-        <column xsi:type="smallint" name="vat_is_valid" padding="6" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="smallint" name="vat_is_valid" unsigned="false" nullable="true" identity="false"
                 comment="Vat Is Valid"/>
         <column xsi:type="text" name="vat_request_id" nullable="true" comment="Vat Request ID"/>
         <column xsi:type="text" name="vat_request_date" nullable="true" comment="Vat Request Date"/>
-        <column xsi:type="smallint" name="vat_request_success" padding="6" unsigned="false" nullable="true"
+        <column xsi:type="smallint" name="vat_request_success" unsigned="false" nullable="true"
                 identity="false" comment="Vat Request Success"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -430,13 +430,13 @@
         </index>
     </table>
     <table name="sales_order_status_history" resource="sales" engine="innodb" comment="Sales Flat Order Status History">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="parent_id" unsigned="true" nullable="false" identity="false"
                 comment="Parent ID"/>
-        <column xsi:type="int" name="is_customer_notified" padding="11" unsigned="false" nullable="true"
+        <column xsi:type="int" name="is_customer_notified" unsigned="false" nullable="true"
                 identity="false" comment="Is Customer Notified"/>
-        <column xsi:type="smallint" name="is_visible_on_front" padding="5" unsigned="true" nullable="false"
+        <column xsi:type="smallint" name="is_visible_on_front" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Is Visible On Front"/>
         <column xsi:type="text" name="comment" nullable="true" comment="Comment"/>
         <column xsi:type="varchar" name="status" nullable="true" length="32" comment="Status"/>
@@ -458,36 +458,36 @@
         </index>
     </table>
     <table name="sales_order_item" resource="sales" engine="innodb" comment="Sales Flat Order Item">
-        <column xsi:type="int" name="item_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="item_id" unsigned="true" nullable="false" identity="true"
                 comment="Item ID"/>
-        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Order ID"/>
-        <column xsi:type="int" name="parent_item_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="parent_item_id" unsigned="true" nullable="true" identity="false"
                 comment="Parent Item ID"/>
-        <column xsi:type="int" name="quote_item_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="quote_item_id" unsigned="true" nullable="true" identity="false"
                 comment="Quote Item ID"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="true" identity="false"
                 comment="Product ID"/>
         <column xsi:type="varchar" name="product_type" nullable="true" length="255" comment="Product Type"/>
-        <column xsi:type="text" name="product_options" nullable="true" comment="Product Options"/>
+        <column xsi:type="longtext" name="product_options" nullable="true" comment="Product Options"/>
         <column xsi:type="decimal" name="weight" scale="4" precision="12" unsigned="false" nullable="true" default="0"
                 comment="Weight"/>
-        <column xsi:type="smallint" name="is_virtual" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="is_virtual" unsigned="true" nullable="true" identity="false"
                 comment="Is Virtual"/>
         <column xsi:type="varchar" name="sku" nullable="true" length="255" comment="Sku"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
         <column xsi:type="text" name="description" nullable="true" comment="Description"/>
         <column xsi:type="text" name="applied_rule_ids" nullable="true" comment="Applied Rule Ids"/>
         <column xsi:type="text" name="additional_data" nullable="true" comment="Additional Data"/>
-        <column xsi:type="smallint" name="is_qty_decimal" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="is_qty_decimal" unsigned="true" nullable="true" identity="false"
                 comment="Is Qty Decimal"/>
-        <column xsi:type="smallint" name="no_discount" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="no_discount" unsigned="true" nullable="false" identity="false"
                 default="0" comment="No Discount"/>
         <column xsi:type="decimal" name="qty_backordered" scale="4" precision="12" unsigned="false" nullable="true"
                 default="0" comment="Qty Backordered"/>
@@ -550,9 +550,9 @@
         <column xsi:type="decimal" name="tax_before_discount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Before Discount"/>
         <column xsi:type="varchar" name="ext_order_item_id" nullable="true" length="255" comment="Ext Order Item ID"/>
-        <column xsi:type="smallint" name="locked_do_invoice" padding="5" unsigned="true" nullable="true"
+        <column xsi:type="smallint" name="locked_do_invoice" unsigned="true" nullable="true"
                 identity="false" comment="Locked Do Invoice"/>
-        <column xsi:type="smallint" name="locked_do_ship" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="locked_do_ship" unsigned="true" nullable="true" identity="false"
                 comment="Locked Do Ship"/>
         <column xsi:type="decimal" name="price_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Price Incl Tax"/>
@@ -601,9 +601,9 @@
         </index>
     </table>
     <table name="sales_order_payment" resource="sales" engine="innodb" comment="Sales Flat Order Payment">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="parent_id" unsigned="true" nullable="false" identity="false"
                 comment="Parent ID"/>
         <column xsi:type="decimal" name="base_shipping_captured" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Captured"/>
@@ -641,7 +641,7 @@
                 comment="Amount Ordered"/>
         <column xsi:type="decimal" name="base_amount_canceled" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Amount Canceled"/>
-        <column xsi:type="int" name="quote_payment_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="quote_payment_id" unsigned="false" nullable="true" identity="false"
                 comment="Quote Payment ID"/>
         <column xsi:type="text" name="additional_data" nullable="true" comment="Additional Data"/>
         <column xsi:type="varchar" name="cc_exp_month" nullable="true" length="12" comment="Cc Exp Month"/>
@@ -695,27 +695,27 @@
         </index>
     </table>
     <table name="sales_shipment" resource="sales" engine="innodb" comment="Sales Flat Shipment">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="decimal" name="total_weight" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Total Weight"/>
         <column xsi:type="decimal" name="total_qty" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Total Qty"/>
-        <column xsi:type="smallint" name="email_sent" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="email_sent" unsigned="true" nullable="true" identity="false"
                 comment="Email Sent"/>
-        <column xsi:type="smallint" name="send_email" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="send_email" unsigned="true" nullable="true" identity="false"
                 comment="Send Email"/>
-        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false" identity="false"
                 comment="Order ID"/>
-        <column xsi:type="int" name="customer_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="customer_id" unsigned="false" nullable="true" identity="false"
                 comment="Customer ID"/>
-        <column xsi:type="int" name="shipping_address_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="shipping_address_id" unsigned="false" nullable="true" identity="false"
                 comment="Shipping Address ID"/>
-        <column xsi:type="int" name="billing_address_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="billing_address_id" unsigned="false" nullable="true" identity="false"
                 comment="Billing Address ID"/>
-        <column xsi:type="int" name="shipment_status" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="shipment_status" unsigned="false" nullable="true" identity="false"
                 comment="Shipment Status"/>
         <column xsi:type="varchar" name="increment_id" nullable="true" length="50" comment="Increment ID"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
@@ -725,7 +725,7 @@
         <column xsi:type="text" name="packages" nullable="true" comment="Packed Products in Packages"/>
         <column xsi:type="mediumblob" name="shipping_label" nullable="true" comment="Shipping Label Content"/>
         <column xsi:type="text" name="customer_note" nullable="true" comment="Customer Note"/>
-        <column xsi:type="smallint" name="customer_note_notify" padding="5" unsigned="true" nullable="true"
+        <column xsi:type="smallint" name="customer_note_notify" unsigned="true" nullable="true"
                 identity="false" comment="Customer Note Notify"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -761,20 +761,20 @@
         </index>
     </table>
     <table name="sales_shipment_grid" resource="sales" engine="innodb" comment="Sales Flat Shipment Grid">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
         <column xsi:type="varchar" name="increment_id" nullable="true" length="50" comment="Increment ID"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="varchar" name="order_increment_id" nullable="false" length="32" comment="Order Increment ID"/>
-        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false" identity="false"
                 comment="Order ID"/>
-        <column xsi:type="timestamp" name="order_created_at" on_update="true" nullable="false"
+        <column xsi:type="timestamp" name="order_created_at" on_update="false" nullable="false"
                 default="CURRENT_TIMESTAMP" comment="Order Increment ID"/>
         <column xsi:type="varchar" name="customer_name" nullable="false" length="128" comment="Customer Name"/>
         <column xsi:type="decimal" name="total_qty" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Total Qty"/>
-        <column xsi:type="int" name="shipment_status" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="shipment_status" unsigned="false" nullable="true" identity="false"
                 comment="Shipment Status"/>
         <column xsi:type="varchar" name="order_status" nullable="true" length="32" comment="Order"/>
         <column xsi:type="varchar" name="billing_address" nullable="true" length="255" comment="Billing Address"/>
@@ -782,7 +782,7 @@
         <column xsi:type="varchar" name="billing_name" nullable="true" length="128" comment="Billing Name"/>
         <column xsi:type="varchar" name="shipping_name" nullable="true" length="128" comment="Shipping Name"/>
         <column xsi:type="varchar" name="customer_email" nullable="true" length="128" comment="Customer Email"/>
-        <column xsi:type="int" name="customer_group_id" padding="11" unsigned="false" nullable="true" identity="false"/>
+        <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="true" identity="false"/>
         <column xsi:type="varchar" name="payment_method" nullable="true" length="32" comment="Payment Method"/>
         <column xsi:type="varchar" name="shipping_information" nullable="true" length="255"
                 comment="Shipping Method Name"/>
@@ -825,6 +825,9 @@
         <index referenceId="SALES_SHIPMENT_GRID_BILLING_NAME" indexType="btree">
             <column name="billing_name"/>
         </index>
+        <index referenceId="SALES_SHIPMENT_GRID_ORDER_ID" indexType="btree">
+            <column name="order_id"/>
+        </index>
         <index referenceId="FTI_086B40C8955F167B8EA76653437879B4" indexType="fulltext">
             <column name="increment_id"/>
             <column name="order_increment_id"/>
@@ -836,9 +839,9 @@
         </index>
     </table>
     <table name="sales_shipment_item" resource="sales" engine="innodb" comment="Sales Flat Shipment Item">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="parent_id" unsigned="true" nullable="false" identity="false"
                 comment="Parent ID"/>
         <column xsi:type="decimal" name="row_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Row Total"/>
@@ -847,9 +850,9 @@
         <column xsi:type="decimal" name="weight" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Weight"/>
         <column xsi:type="decimal" name="qty" scale="4" precision="12" unsigned="false" nullable="true" comment="Qty"/>
-        <column xsi:type="int" name="product_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="product_id" unsigned="false" nullable="true" identity="false"
                 comment="Product ID"/>
-        <column xsi:type="int" name="order_item_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="order_item_id" unsigned="false" nullable="true" identity="false"
                 comment="Order Item ID"/>
         <column xsi:type="text" name="additional_data" nullable="true" comment="Additional Data"/>
         <column xsi:type="text" name="description" nullable="true" comment="Description"/>
@@ -866,14 +869,14 @@
         </index>
     </table>
     <table name="sales_shipment_track" resource="sales" engine="innodb" comment="Sales Flat Shipment Track">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="parent_id" unsigned="true" nullable="false" identity="false"
                 comment="Parent ID"/>
         <column xsi:type="decimal" name="weight" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Weight"/>
         <column xsi:type="decimal" name="qty" scale="4" precision="12" unsigned="false" nullable="true" comment="Qty"/>
-        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false" identity="false"
                 comment="Order ID"/>
         <column xsi:type="text" name="track_number" nullable="true" comment="Number"/>
         <column xsi:type="text" name="description" nullable="true" comment="Description"/>
@@ -900,13 +903,13 @@
         </index>
     </table>
     <table name="sales_shipment_comment" resource="sales" engine="innodb" comment="Sales Flat Shipment Comment">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="parent_id" unsigned="true" nullable="false" identity="false"
                 comment="Parent ID"/>
-        <column xsi:type="int" name="is_customer_notified" padding="11" unsigned="false" nullable="true"
+        <column xsi:type="int" name="is_customer_notified" unsigned="false" nullable="true"
                 identity="false" comment="Is Customer Notified"/>
-        <column xsi:type="smallint" name="is_visible_on_front" padding="5" unsigned="true" nullable="false"
+        <column xsi:type="smallint" name="is_visible_on_front" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Is Visible On Front"/>
         <column xsi:type="text" name="comment" nullable="true" comment="Comment"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
@@ -925,9 +928,9 @@
         </index>
     </table>
     <table name="sales_invoice" resource="sales" engine="innodb" comment="Sales Flat Invoice">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Grand Total"/>
@@ -967,21 +970,21 @@
                 comment="Base Subtotal"/>
         <column xsi:type="decimal" name="discount_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Discount Amount"/>
-        <column xsi:type="int" name="billing_address_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="billing_address_id" unsigned="false" nullable="true" identity="false"
                 comment="Billing Address ID"/>
-        <column xsi:type="smallint" name="is_used_for_refund" padding="5" unsigned="true" nullable="true"
+        <column xsi:type="smallint" name="is_used_for_refund" unsigned="true" nullable="true"
                 identity="false" comment="Is Used For Refund"/>
-        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false" identity="false"
                 comment="Order ID"/>
-        <column xsi:type="smallint" name="email_sent" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="email_sent" unsigned="true" nullable="true" identity="false"
                 comment="Email Sent"/>
-        <column xsi:type="smallint" name="send_email" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="send_email" unsigned="true" nullable="true" identity="false"
                 comment="Send Email"/>
-        <column xsi:type="smallint" name="can_void_flag" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="can_void_flag" unsigned="true" nullable="true" identity="false"
                 comment="Can Void Flag"/>
-        <column xsi:type="int" name="state" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="state" unsigned="false" nullable="true" identity="false"
                 comment="State"/>
-        <column xsi:type="int" name="shipping_address_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="shipping_address_id" unsigned="false" nullable="true" identity="false"
                 comment="Shipping Address ID"/>
         <column xsi:type="varchar" name="store_currency_code" nullable="true" length="3" comment="Store Currency Code"/>
         <column xsi:type="varchar" name="transaction_id" nullable="true" length="255" comment="Transaction ID"/>
@@ -1011,7 +1014,7 @@
         <column xsi:type="varchar" name="discount_description" nullable="true" length="255"
                 comment="Discount Description"/>
         <column xsi:type="text" name="customer_note" nullable="true" comment="Customer Note"/>
-        <column xsi:type="smallint" name="customer_note_notify" padding="5" unsigned="true" nullable="true"
+        <column xsi:type="smallint" name="customer_note_notify" unsigned="true" nullable="true"
                 identity="false" comment="Customer Note Notify"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -1050,22 +1053,22 @@
         </index>
     </table>
     <table name="sales_invoice_grid" resource="sales" engine="innodb" comment="Sales Flat Invoice Grid">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
         <column xsi:type="varchar" name="increment_id" nullable="true" length="50" comment="Increment ID"/>
-        <column xsi:type="int" name="state" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="state" unsigned="false" nullable="true" identity="false"
                 comment="State"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="varchar" name="store_name" nullable="true" length="255" comment="Store Name"/>
-        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false" identity="false"
                 comment="Order ID"/>
         <column xsi:type="varchar" name="order_increment_id" nullable="true" length="50" comment="Order Increment ID"/>
         <column xsi:type="timestamp" name="order_created_at" on_update="false" nullable="true"
                 comment="Order Created At"/>
         <column xsi:type="varchar" name="customer_name" nullable="true" length="255" comment="Customer Name"/>
         <column xsi:type="varchar" name="customer_email" nullable="true" length="255" comment="Customer Email"/>
-        <column xsi:type="int" name="customer_group_id" padding="11" unsigned="false" nullable="true" identity="false"/>
+        <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="true" identity="false"/>
         <column xsi:type="varchar" name="payment_method" nullable="true" length="128" comment="Payment Method"/>
         <column xsi:type="varchar" name="store_currency_code" nullable="true" length="3" comment="Store Currency Code"/>
         <column xsi:type="varchar" name="order_currency_code" nullable="true" length="3" comment="Order Currency Code"/>
@@ -1135,9 +1138,9 @@
         </index>
     </table>
     <table name="sales_invoice_item" resource="sales" engine="innodb" comment="Sales Flat Invoice Item">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="parent_id" unsigned="true" nullable="false" identity="false"
                 comment="Parent ID"/>
         <column xsi:type="decimal" name="base_price" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Base Price"/>
@@ -1166,9 +1169,9 @@
                 nullable="true" comment="Base Row Total Incl Tax"/>
         <column xsi:type="decimal" name="row_total_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Row Total Incl Tax"/>
-        <column xsi:type="int" name="product_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="product_id" unsigned="false" nullable="true" identity="false"
                 comment="Product ID"/>
-        <column xsi:type="int" name="order_item_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="order_item_id" unsigned="false" nullable="true" identity="false"
                 comment="Order Item ID"/>
         <column xsi:type="text" name="additional_data" nullable="true" comment="Additional Data"/>
         <column xsi:type="text" name="description" nullable="true" comment="Description"/>
@@ -1191,13 +1194,13 @@
         </index>
     </table>
     <table name="sales_invoice_comment" resource="sales" engine="innodb" comment="Sales Flat Invoice Comment">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="parent_id" unsigned="true" nullable="false" identity="false"
                 comment="Parent ID"/>
-        <column xsi:type="smallint" name="is_customer_notified" padding="5" unsigned="true" nullable="true"
+        <column xsi:type="smallint" name="is_customer_notified" unsigned="true" nullable="true"
                 identity="false" comment="Is Customer Notified"/>
-        <column xsi:type="smallint" name="is_visible_on_front" padding="5" unsigned="true" nullable="false"
+        <column xsi:type="smallint" name="is_visible_on_front" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Is Visible On Front"/>
         <column xsi:type="text" name="comment" nullable="true" comment="Comment"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
@@ -1216,9 +1219,9 @@
         </index>
     </table>
     <table name="sales_creditmemo" resource="sales" engine="innodb" comment="Sales Flat Creditmemo">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="decimal" name="adjustment_positive" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Adjustment Positive"/>
@@ -1268,21 +1271,21 @@
                 comment="Shipping Tax Amount"/>
         <column xsi:type="decimal" name="tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Amount"/>
-        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false" identity="false"
                 comment="Order ID"/>
-        <column xsi:type="smallint" name="email_sent" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="email_sent" unsigned="true" nullable="true" identity="false"
                 comment="Email Sent"/>
-        <column xsi:type="smallint" name="send_email" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="send_email" unsigned="true" nullable="true" identity="false"
                 comment="Send Email"/>
-        <column xsi:type="int" name="creditmemo_status" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="creditmemo_status" unsigned="false" nullable="true" identity="false"
                 comment="Creditmemo Status"/>
-        <column xsi:type="int" name="state" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="state" unsigned="false" nullable="true" identity="false"
                 comment="State"/>
-        <column xsi:type="int" name="shipping_address_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="shipping_address_id" unsigned="false" nullable="true" identity="false"
                 comment="Shipping Address ID"/>
-        <column xsi:type="int" name="billing_address_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="billing_address_id" unsigned="false" nullable="true" identity="false"
                 comment="Billing Address ID"/>
-        <column xsi:type="int" name="invoice_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="invoice_id" unsigned="false" nullable="true" identity="false"
                 comment="Invoice ID"/>
         <column xsi:type="varchar" name="store_currency_code" nullable="true" length="3" comment="Store Currency Code"/>
         <column xsi:type="varchar" name="order_currency_code" nullable="true" length="3" comment="Order Currency Code"/>
@@ -1310,7 +1313,7 @@
         <column xsi:type="varchar" name="discount_description" nullable="true" length="255"
                 comment="Discount Description"/>
         <column xsi:type="text" name="customer_note" nullable="true" comment="Customer Note"/>
-        <column xsi:type="smallint" name="customer_note_notify" padding="5" unsigned="true" nullable="true"
+        <column xsi:type="smallint" name="customer_note_notify" unsigned="true" nullable="true"
                 identity="false" comment="Customer Note Notify"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -1349,29 +1352,29 @@
         </index>
     </table>
     <table name="sales_creditmemo_grid" resource="sales" engine="innodb" comment="Sales Flat Creditmemo Grid">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
         <column xsi:type="varchar" name="increment_id" nullable="true" length="50" comment="Increment ID"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true" comment="Updated At"/>
-        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false" identity="false"
                 comment="Order ID"/>
         <column xsi:type="varchar" name="order_increment_id" nullable="true" length="50" comment="Order Increment ID"/>
         <column xsi:type="timestamp" name="order_created_at" on_update="false" nullable="true"
                 comment="Order Created At"/>
         <column xsi:type="varchar" name="billing_name" nullable="true" length="255" comment="Billing Name"/>
-        <column xsi:type="int" name="state" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="state" unsigned="false" nullable="true" identity="false"
                 comment="Status"/>
         <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Grand Total"/>
         <column xsi:type="varchar" name="order_status" nullable="true" length="32" comment="Order Status"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="varchar" name="billing_address" nullable="true" length="255" comment="Billing Address"/>
         <column xsi:type="varchar" name="shipping_address" nullable="true" length="255" comment="Shipping Address"/>
         <column xsi:type="varchar" name="customer_name" nullable="false" length="128" comment="Customer Name"/>
         <column xsi:type="varchar" name="customer_email" nullable="true" length="128" comment="Customer Email"/>
-        <column xsi:type="smallint" name="customer_group_id" padding="6" unsigned="false" nullable="true"
+        <column xsi:type="smallint" name="customer_group_id" unsigned="false" nullable="true"
                 identity="false" comment="Customer Group ID"/>
         <column xsi:type="varchar" name="payment_method" nullable="true" length="32" comment="Payment Method"/>
         <column xsi:type="varchar" name="shipping_information" nullable="true" length="255"
@@ -1437,9 +1440,9 @@
         </index>
     </table>
     <table name="sales_creditmemo_item" resource="sales" engine="innodb" comment="Sales Flat Creditmemo Item">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="parent_id" unsigned="true" nullable="false" identity="false"
                 comment="Parent ID"/>
         <column xsi:type="decimal" name="base_price" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Base Price"/>
@@ -1468,9 +1471,9 @@
                 nullable="true" comment="Base Row Total Incl Tax"/>
         <column xsi:type="decimal" name="row_total_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Row Total Incl Tax"/>
-        <column xsi:type="int" name="product_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="product_id" unsigned="false" nullable="true" identity="false"
                 comment="Product ID"/>
-        <column xsi:type="int" name="order_item_id" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="order_item_id" unsigned="false" nullable="true" identity="false"
                 comment="Order Item ID"/>
         <column xsi:type="text" name="additional_data" nullable="true" comment="Additional Data"/>
         <column xsi:type="text" name="description" nullable="true" comment="Description"/>
@@ -1493,13 +1496,13 @@
         </index>
     </table>
     <table name="sales_creditmemo_comment" resource="sales" engine="innodb" comment="Sales Flat Creditmemo Comment">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="parent_id" unsigned="true" nullable="false" identity="false"
                 comment="Parent ID"/>
-        <column xsi:type="int" name="is_customer_notified" padding="11" unsigned="false" nullable="true"
+        <column xsi:type="int" name="is_customer_notified" unsigned="false" nullable="true"
                 identity="false" comment="Is Customer Notified"/>
-        <column xsi:type="smallint" name="is_visible_on_front" padding="5" unsigned="true" nullable="false"
+        <column xsi:type="smallint" name="is_visible_on_front" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Is Visible On Front"/>
         <column xsi:type="text" name="comment" nullable="true" comment="Comment"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
@@ -1518,12 +1521,12 @@
         </index>
     </table>
     <table name="sales_invoiced_aggregated" resource="sales" engine="innodb" comment="Sales Invoiced Aggregated">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" comment="Period"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="varchar" name="order_status" nullable="true" length="50" comment="Order Status"/>
-        <column xsi:type="int" name="orders_count" padding="11" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="int" name="orders_count" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Orders Count"/>
         <column xsi:type="decimal" name="orders_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Orders Invoiced"/>
@@ -1550,12 +1553,12 @@
     </table>
     <table name="sales_invoiced_aggregated_order" resource="sales" engine="innodb"
            comment="Sales Invoiced Aggregated Order">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" comment="Period"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="varchar" name="order_status" nullable="false" length="50" comment="Order Status"/>
-        <column xsi:type="int" name="orders_count" padding="11" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="int" name="orders_count" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Orders Count"/>
         <column xsi:type="decimal" name="orders_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Orders Invoiced"/>
@@ -1582,12 +1585,12 @@
     </table>
     <table name="sales_order_aggregated_created" resource="sales" engine="innodb"
            comment="Sales Order Aggregated Created">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" comment="Period"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="varchar" name="order_status" nullable="false" length="50" comment="Order Status"/>
-        <column xsi:type="int" name="orders_count" padding="11" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="int" name="orders_count" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Orders Count"/>
         <column xsi:type="decimal" name="total_qty_ordered" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Total Qty Ordered"/>
@@ -1636,12 +1639,12 @@
     </table>
     <table name="sales_order_aggregated_updated" resource="sales" engine="innodb"
            comment="Sales Order Aggregated Updated">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" comment="Period"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="varchar" name="order_status" nullable="false" length="50" comment="Order Status"/>
-        <column xsi:type="int" name="orders_count" padding="11" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="int" name="orders_count" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Orders Count"/>
         <column xsi:type="decimal" name="total_qty_ordered" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Total Qty Ordered"/>
@@ -1689,18 +1692,18 @@
         </index>
     </table>
     <table name="sales_payment_transaction" resource="sales" engine="innodb" comment="Sales Payment Transaction">
-        <column xsi:type="int" name="transaction_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="transaction_id" unsigned="true" nullable="false" identity="true"
                 comment="Transaction ID"/>
-        <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="parent_id" unsigned="true" nullable="true" identity="false"
                 comment="Parent ID"/>
-        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Order ID"/>
-        <column xsi:type="int" name="payment_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="payment_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Payment ID"/>
         <column xsi:type="varchar" name="txn_id" nullable="true" length="100" comment="Txn ID"/>
         <column xsi:type="varchar" name="parent_txn_id" nullable="true" length="100" comment="Parent Txn ID"/>
         <column xsi:type="varchar" name="txn_type" nullable="true" length="15" comment="Txn Type"/>
-        <column xsi:type="smallint" name="is_closed" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="is_closed" unsigned="true" nullable="false" identity="false"
                 default="1" comment="Is Closed"/>
         <column xsi:type="blob" name="additional_information" nullable="true" comment="Additional Information"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
@@ -1730,12 +1733,12 @@
         </index>
     </table>
     <table name="sales_refunded_aggregated" resource="sales" engine="innodb" comment="Sales Refunded Aggregated">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" comment="Period"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="varchar" name="order_status" nullable="false" length="50" comment="Order Status"/>
-        <column xsi:type="int" name="orders_count" padding="11" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="int" name="orders_count" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Orders Count"/>
         <column xsi:type="decimal" name="refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Refunded"/>
@@ -1760,12 +1763,12 @@
     </table>
     <table name="sales_refunded_aggregated_order" resource="sales" engine="innodb"
            comment="Sales Refunded Aggregated Order">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" comment="Period"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="varchar" name="order_status" nullable="true" length="50" comment="Order Status"/>
-        <column xsi:type="int" name="orders_count" padding="11" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="int" name="orders_count" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Orders Count"/>
         <column xsi:type="decimal" name="refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Refunded"/>
@@ -1789,14 +1792,14 @@
         </index>
     </table>
     <table name="sales_shipping_aggregated" resource="sales" engine="innodb" comment="Sales Shipping Aggregated">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" comment="Period"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="varchar" name="order_status" nullable="true" length="50" comment="Order Status"/>
         <column xsi:type="varchar" name="shipping_description" nullable="true" length="255"
                 comment="Shipping Description"/>
-        <column xsi:type="int" name="orders_count" padding="11" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="int" name="orders_count" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Orders Count"/>
         <column xsi:type="decimal" name="total_shipping" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Shipping"/>
@@ -1820,14 +1823,14 @@
     </table>
     <table name="sales_shipping_aggregated_order" resource="sales" engine="innodb"
            comment="Sales Shipping Aggregated Order">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" comment="Period"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="varchar" name="order_status" nullable="true" length="50" comment="Order Status"/>
         <column xsi:type="varchar" name="shipping_description" nullable="true" length="255"
                 comment="Shipping Description"/>
-        <column xsi:type="int" name="orders_count" padding="11" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="int" name="orders_count" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Orders Count"/>
         <column xsi:type="decimal" name="total_shipping" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Shipping"/>
@@ -1851,18 +1854,18 @@
     </table>
     <table name="sales_bestsellers_aggregated_daily" resource="sales" engine="innodb"
            comment="Sales Bestsellers Aggregated Daily">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" comment="Period"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="true" identity="false"
                 comment="Product ID"/>
         <column xsi:type="varchar" name="product_name" nullable="true" length="255" comment="Product Name"/>
         <column xsi:type="decimal" name="product_price" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Product Price"/>
         <column xsi:type="decimal" name="qty_ordered" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Qty Ordered"/>
-        <column xsi:type="smallint" name="rating_pos" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="rating_pos" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Rating Pos"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
@@ -1884,18 +1887,18 @@
     </table>
     <table name="sales_bestsellers_aggregated_monthly" resource="sales" engine="innodb"
            comment="Sales Bestsellers Aggregated Monthly">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" comment="Period"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="true" identity="false"
                 comment="Product ID"/>
         <column xsi:type="varchar" name="product_name" nullable="true" length="255" comment="Product Name"/>
         <column xsi:type="decimal" name="product_price" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Product Price"/>
         <column xsi:type="decimal" name="qty_ordered" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Qty Ordered"/>
-        <column xsi:type="smallint" name="rating_pos" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="rating_pos" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Rating Pos"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
@@ -1917,18 +1920,18 @@
     </table>
     <table name="sales_bestsellers_aggregated_yearly" resource="sales" engine="innodb"
            comment="Sales Bestsellers Aggregated Yearly">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" comment="Period"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="true" identity="false"
                 comment="Product ID"/>
         <column xsi:type="varchar" name="product_name" nullable="true" length="255" comment="Product Name"/>
         <column xsi:type="decimal" name="product_price" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Product Price"/>
         <column xsi:type="decimal" name="qty_ordered" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Qty Ordered"/>
-        <column xsi:type="smallint" name="rating_pos" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="rating_pos" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Rating Pos"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
@@ -1949,9 +1952,9 @@
         </index>
     </table>
     <table name="sales_order_tax" resource="sales" engine="innodb" comment="Sales Order Tax Table">
-        <column xsi:type="int" name="tax_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="tax_id" unsigned="true" nullable="false" identity="true"
                 comment="Tax ID"/>
-        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false" identity="false"
                 comment="Order ID"/>
         <column xsi:type="varchar" name="code" nullable="true" length="255" comment="Code"/>
         <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Title"/>
@@ -1959,13 +1962,13 @@
                 comment="Percent"/>
         <column xsi:type="decimal" name="amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Amount"/>
-        <column xsi:type="int" name="priority" padding="11" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="int" name="priority" unsigned="false" nullable="false" identity="false"
                 comment="Priority"/>
-        <column xsi:type="int" name="position" padding="11" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="int" name="position" unsigned="false" nullable="false" identity="false"
                 comment="Position"/>
         <column xsi:type="decimal" name="base_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Amount"/>
-        <column xsi:type="smallint" name="process" padding="6" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="smallint" name="process" unsigned="false" nullable="false" identity="false"
                 comment="Process"/>
         <column xsi:type="decimal" name="base_real_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Real Amount"/>
@@ -1979,11 +1982,11 @@
         </index>
     </table>
     <table name="sales_order_tax_item" resource="sales" engine="innodb" comment="Sales Order Tax Item">
-        <column xsi:type="int" name="tax_item_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="tax_item_id" unsigned="true" nullable="false" identity="true"
                 comment="Tax Item ID"/>
-        <column xsi:type="int" name="tax_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="tax_id" unsigned="true" nullable="false" identity="false"
                 comment="Tax ID"/>
-        <column xsi:type="int" name="item_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="item_id" unsigned="true" nullable="true" identity="false"
                 comment="Item ID"/>
         <column xsi:type="decimal" name="tax_percent" scale="4" precision="12" unsigned="false" nullable="false"
                 comment="Real Tax Percent For Item"/>
@@ -1995,7 +1998,7 @@
                 comment="Real tax amount for the item and tax rate"/>
         <column xsi:type="decimal" name="real_base_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 comment="Real base tax amount for the item and tax rate"/>
-        <column xsi:type="int" name="associated_item_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="associated_item_id" unsigned="true" nullable="true" identity="false"
                 comment="Id of the associated item"/>
         <column xsi:type="varchar" name="taxable_item_type" nullable="false" length="32"
                 comment="Type of the taxable item"/>
@@ -2029,9 +2032,9 @@
     <table name="sales_order_status_state" resource="sales" engine="innodb" comment="Sales Order Status Table">
         <column xsi:type="varchar" name="status" nullable="false" length="32" comment="Status"/>
         <column xsi:type="varchar" name="state" nullable="false" length="32" comment="Label"/>
-        <column xsi:type="smallint" name="is_default" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="is_default" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Is Default"/>
-        <column xsi:type="smallint" name="visible_on_front" padding="5" unsigned="true" nullable="false"
+        <column xsi:type="smallint" name="visible_on_front" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Visible on front"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="status"/>
@@ -2043,7 +2046,7 @@
     </table>
     <table name="sales_order_status_label" resource="sales" engine="innodb" comment="Sales Order Status Label Table">
         <column xsi:type="varchar" name="status" nullable="false" length="32" comment="Status"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" identity="false"
                 comment="Store ID"/>
         <column xsi:type="varchar" name="label" nullable="false" length="128" comment="Label"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">

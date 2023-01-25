@@ -5,11 +5,19 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/../../../Magento/Customer/_files/two_customers.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/two_customers.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple.php');
+
+$objectManager = Bootstrap::getObjectManager();
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$product = $productRepository->get('simple');
 $firstCustomerIdFromFixture = 1;
-$wishlistForFirstCustomer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+$wishlistForFirstCustomer = $objectManager->create(
     \Magento\Wishlist\Model\Wishlist::class
 );
 $wishlistForFirstCustomer->loadByCustomerId($firstCustomerIdFromFixture, true);
@@ -17,7 +25,7 @@ $item = $wishlistForFirstCustomer->addNewItem($product, new \Magento\Framework\D
 $wishlistForFirstCustomer->save();
 
 $secondCustomerIdFromFixture = 2;
-$wishlistForSecondCustomer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+$wishlistForSecondCustomer = $objectManager->create(
     \Magento\Wishlist\Model\Wishlist::class
 );
 $wishlistForSecondCustomer->loadByCustomerId($secondCustomerIdFromFixture, true);

@@ -3,35 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Stdlib\Test\Unit\Cookie;
 
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test SensitiveCookieMetaData
  *
  */
-class SensitiveCookieMetadataTest extends \PHPUnit\Framework\TestCase
+class SensitiveCookieMetadataTest extends TestCase
 {
-    /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var  ObjectManager */
     private $objectManager;
 
     /** @var SensitiveCookieMetadata */
     private $sensitiveCookieMetadata;
 
-    /** @var  \Magento\Framework\App\Request\Http | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Http|MockObject */
     private $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->sensitiveCookieMetadata = $this->objectManager->getObject(
-            \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata::class,
+            SensitiveCookieMetadata::class,
             [
                 'request' => $this->requestMock,
             ]
@@ -47,7 +52,7 @@ class SensitiveCookieMetadataTest extends \PHPUnit\Framework\TestCase
     {
         /** @var \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata $object */
         $object = $this->objectManager->getObject(
-            \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata::class,
+            SensitiveCookieMetadata::class,
             [
                 'request' => $this->requestMock,
                 'metadata' => $metadata,
@@ -98,7 +103,7 @@ class SensitiveCookieMetadataTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata $object */
         $object = $this->objectManager->getObject(
-            \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata::class,
+            SensitiveCookieMetadata::class,
             [
                 'request' => $this->requestMock,
                 'metadata' => $metadata,
@@ -157,7 +162,7 @@ class SensitiveCookieMetadataTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata $object */
         $object = $this->objectManager->getObject(
-            \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata::class,
+            SensitiveCookieMetadata::class,
             [
                 'request' => $this->requestMock,
                 'metadata' => $metadata,
@@ -184,6 +189,7 @@ class SensitiveCookieMetadataTest extends \PHPUnit\Framework\TestCase
                     SensitiveCookieMetadata::KEY_DOMAIN => 'domain',
                     SensitiveCookieMetadata::KEY_PATH => 'path',
                     SensitiveCookieMetadata::KEY_HTTP_ONLY => 1,
+                    SensitiveCookieMetadata::KEY_SAME_SITE => 'Lax',
                 ],
                 0,
             ],
@@ -198,6 +204,7 @@ class SensitiveCookieMetadataTest extends \PHPUnit\Framework\TestCase
                     SensitiveCookieMetadata::KEY_DOMAIN => 'domain',
                     SensitiveCookieMetadata::KEY_PATH => 'path',
                     SensitiveCookieMetadata::KEY_HTTP_ONLY => 1,
+                    SensitiveCookieMetadata::KEY_SAME_SITE => 'Lax',
                 ],
             ],
             'without secure 2' => [
@@ -211,6 +218,7 @@ class SensitiveCookieMetadataTest extends \PHPUnit\Framework\TestCase
                     SensitiveCookieMetadata::KEY_DOMAIN => 'domain',
                     SensitiveCookieMetadata::KEY_PATH => 'path',
                     SensitiveCookieMetadata::KEY_HTTP_ONLY => 1,
+                    SensitiveCookieMetadata::KEY_SAME_SITE => 'Lax',
                 ],
             ],
         ];
@@ -235,7 +243,8 @@ class SensitiveCookieMetadataTest extends \PHPUnit\Framework\TestCase
     {
         return [
             "getDomain" => ["setDomain", 'getDomain', "example.com"],
-            "getPath" => ["setPath", 'getPath', "path"]
+            "getPath" => ["setPath", 'getPath', "path"],
+            "getSameSite" => ["setSameSite", 'getSameSite', 'Lax']
         ];
     }
 }

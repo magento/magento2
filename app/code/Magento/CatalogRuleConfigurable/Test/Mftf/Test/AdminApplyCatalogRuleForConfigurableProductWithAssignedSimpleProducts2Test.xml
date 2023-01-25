@@ -144,8 +144,7 @@
             </createData>
 
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
-            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <!-- Delete created data -->
@@ -169,12 +168,19 @@
             <deleteData createDataKey="customerGroup" stepKey="deleteCustomerGroup"/>
 
             <!-- Delete created price rules -->
-            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
+            <actionGroup ref="RemoveCatalogPriceRuleActionGroup" stepKey="deleteCatalogPriceRule">
+                <argument name="ruleName" value="{{_defaultCatalogRule.name}}"/>
+            </actionGroup>
             <!-- Admin log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
         </after>
 
         <!-- Create catalog price rule -->
@@ -189,7 +195,7 @@
         </actionGroup>
         <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
 
-        <actionGroup ref="AdminReindexAndFlushCache" stepKey="reindexAndFlushCache"/>
+        <comment userInput="Adding the comment to replace AdminReindexAndFlushCache action group ('indexer:reindex', 'cache:flush' commands) for preserving Backward Compatibility" stepKey="reindexAndFlushCache"/>
 
         <!-- Login to storefront from customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomerOnStorefront">

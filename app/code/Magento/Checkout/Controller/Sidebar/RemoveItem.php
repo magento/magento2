@@ -3,104 +3,113 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Controller\Sidebar;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Exception;
+use Magento\Checkout\Model\Sidebar;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
+use Magento\Framework\Controller\Result\RedirectFactory as ResultRedirectFactory;
+use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Exception\LocalizedException;
+use Psr\Log\LoggerInterface;
 
-class RemoveItem extends \Magento\Framework\App\Action\Action implements HttpPostActionInterface
+/**
+ * Controller for removing quote item from shopping cart.
+ */
+class RemoveItem extends Action implements HttpPostActionInterface
 {
     /**
-     * @var \Magento\Checkout\Model\Sidebar
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var ResultJsonFactory
+     */
+    private $resultJsonFactory;
+
+    /**
+     * @var ResultRedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @var Sidebar
      */
     protected $sidebar;
 
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var \Magento\Framework\Json\Helper\Data
-     */
-    protected $jsonHelper;
-
-    /**
-     * @var \Magento\Framework\View\Result\PageFactory
-     */
-    protected $resultPageFactory;
-
-    /**
-     * @var \Magento\Framework\Data\Form\FormKey\Validator
+     * @var Validator
      */
     private $formKeyValidator;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Checkout\Model\Sidebar $sidebar
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @param Context $context
+     * @param RequestInterface $request
+     * @param ResultJsonFactory $resultJsonFactory
+     * @param ResultRedirectFactory $resultRedirectFactory
+     * @param Sidebar $sidebar
+     * @param Validator $formKeyValidator
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Checkout\Model\Sidebar $sidebar,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+        Context $context,
+        RequestInterface $request,
+        ResultJsonFactory $resultJsonFactory,
+        ResultRedirectFactory $resultRedirectFactory,
+        Sidebar $sidebar,
+        Validator $formKeyValidator,
+        LoggerInterface $logger
     ) {
-        $this->sidebar = $sidebar;
-        $this->logger = $logger;
-        $this->jsonHelper = $jsonHelper;
-        $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
+        $this->request = $request;
+        $this->resultJsonFactory = $resultJsonFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->sidebar = $sidebar;
+        $this->formKeyValidator = $formKeyValidator;
+        $this->logger = $logger;
     }
 
     /**
-     * @return $this
+     * @inheritDoc
      */
     public function execute()
     {
-        if (!$this->getFormKeyValidator()->validate($this->getRequest())) {
-            return $this->resultRedirectFactory->create()->setPath('*/cart/');
+        if (!$this->formKeyValidator->validate($this->request)) {
+            return $this->resultRedirectFactory->create()
+                ->setPath('*/cart/');
         }
-        $itemId = (int)$this->getRequest()->getParam('item_id');
+
+        $itemId = (int)$this->request->getParam('item_id');
+        $error = '';
+
         try {
             $this->sidebar->checkQuoteItem($itemId);
             $this->sidebar->removeQuoteItem($itemId);
-            return $this->jsonResponse();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            return $this->jsonResponse($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (LocalizedException $e) {
+            $error = $e->getMessage();
+        } catch (\Zend_Db_Exception $e) {
             $this->logger->critical($e);
-            return $this->jsonResponse($e->getMessage());
+            $error = __('An unspecified error occurred. Please contact us for assistance.');
+        } catch (Exception $e) {
+            $this->logger->critical($e);
+            $error = $e->getMessage();
         }
-    }
 
-    /**
-     * Compile JSON response
-     *
-     * @param string $error
-     * @return \Magento\Framework\App\Response\Http
-     */
-    protected function jsonResponse($error = '')
-    {
-        $response = $this->sidebar->getResponseData($error);
+        $resultJson = $this->resultJsonFactory->create();
+        $resultJson->setData($this->sidebar->getResponseData($error));
 
-        return $this->getResponse()->representJson(
-            $this->jsonHelper->jsonEncode($response)
-        );
-    }
-
-    /**
-     * @return \Magento\Framework\Data\Form\FormKey\Validator
-     * @deprecated 100.0.9
-     */
-    private function getFormKeyValidator()
-    {
-        if (!$this->formKeyValidator) {
-            $this->formKeyValidator = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Data\Form\FormKey\Validator::class);
-        }
-        return $this->formKeyValidator;
+        return $resultJson;
     }
 }

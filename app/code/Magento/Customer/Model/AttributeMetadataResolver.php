@@ -6,17 +6,17 @@ declare(strict_types=1);
  */
 namespace Magento\Customer\Model;
 
-use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Ui\Component\Form\Field;
-use Magento\Eav\Model\Entity\Type;
-use Magento\Eav\Api\Data\AttributeInterface;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Config\Share as ShareConfig;
-use Magento\Customer\Model\FileUploaderDataResolver;
+use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
+use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Ui\Component\Form\Field;
+use Magento\Ui\DataProvider\EavValidationRules;
 
 /**
  * Class to build meta data of the customer or customer address attribute
@@ -37,6 +37,7 @@ class AttributeMetadataResolver
         'notice' => 'note',
         'default' => 'default_value',
         'size' => 'multiline_count',
+        'attributeId' => 'attribute_id',
     ];
 
     /**
@@ -76,24 +77,41 @@ class AttributeMetadataResolver
     private $shareConfig;
 
     /**
+     * @var GroupManagement
+     */
+    private $groupManagement;
+
+    /**
+     * @var AttributeWebsiteRequired|null
+     */
+    private ?AttributeWebsiteRequired $attributeWebsiteRequired;
+
+    /**
      * @param CountryWithWebsites $countryWithWebsiteSource
      * @param EavValidationRules $eavValidationRules
      * @param FileUploaderDataResolver $fileUploaderDataResolver
      * @param ContextInterface $context
      * @param ShareConfig $shareConfig
+     * @param GroupManagement|null $groupManagement
+     * @param AttributeWebsiteRequired|null $attributeWebsiteRequired
      */
     public function __construct(
         CountryWithWebsites $countryWithWebsiteSource,
         EavValidationRules $eavValidationRules,
         FileUploaderDataResolver $fileUploaderDataResolver,
         ContextInterface $context,
-        ShareConfig $shareConfig
+        ShareConfig $shareConfig,
+        ?GroupManagement $groupManagement = null,
+        ?AttributeWebsiteRequired $attributeWebsiteRequired = null
     ) {
         $this->countryWithWebsiteSource = $countryWithWebsiteSource;
         $this->eavValidationRules = $eavValidationRules;
         $this->fileUploaderDataResolver = $fileUploaderDataResolver;
         $this->context = $context;
         $this->shareConfig = $shareConfig;
+        $this->groupManagement = $groupManagement ?? ObjectManager::getInstance()->get(GroupManagement::class);
+        $this->attributeWebsiteRequired = $attributeWebsiteRequired ??
+            ObjectManager::getInstance()->get(AttributeWebsiteRequired::class);
     }
 
     /**
@@ -111,6 +129,7 @@ class AttributeMetadataResolver
         bool $allowToShowHiddenAttributes
     ): array {
         $meta = $this->modifyBooleanAttributeMeta($attribute);
+        $this->modifyGroupAttributeMeta($attribute);
         // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
         foreach (self::$metaProperties as $metaName => $origName) {
             $value = $attribute->getDataUsingMethod($origName);
@@ -197,6 +216,21 @@ class AttributeMetadataResolver
     }
 
     /**
+     * Modify group attribute meta data
+     *
+     * @param AttributeInterface $attribute
+     * @return void
+     */
+    private function modifyGroupAttributeMeta(AttributeInterface $attribute): void
+    {
+        if ($attribute->getAttributeCode() === 'group_id') {
+            $defaultGroup = $this->groupManagement->getDefaultGroup();
+            $defaultGroupId = $defaultGroup->getId();
+            $attribute->setDataUsingMethod(self::$metaProperties['default'], $defaultGroupId);
+        }
+    }
+
+    /**
      * Add global scope parameter and filter options to website meta
      *
      * @param array $meta
@@ -214,5 +248,53 @@ class AttributeMetadataResolver
                 'field' => 'website_ids'
             ];
         }
+
+        if (isset($meta[CustomerInterface::WEBSITE_ID])) {
+            $this->processWebsiteIsRequired($meta);
+        }
+    }
+
+    /**
+     * Adds attribute 'required' validation according to the scope.
+     *
+     * @param array $meta
+     * @return void
+     */
+    private function processWebsiteIsRequired(&$meta): void
+    {
+        $attributeIds = array_values(
+            array_map(
+                function ($attribute) {
+                    return $attribute['arguments']['data']['config']['attributeId'];
+                },
+                array_filter(
+                    $meta,
+                    function ($attribute) {
+                        return isset($attribute['arguments']['data']['config']['attributeId']);
+                    }
+                )
+            )
+        );
+        $websiteIds = array_values(
+            array_map(
+                function ($option) {
+                    return (int)$option['value'];
+                },
+                $meta[CustomerInterface::WEBSITE_ID]['arguments']['data']['config']['options']
+            )
+        );
+
+        $websiteRequired = $this->attributeWebsiteRequired->get($attributeIds, $websiteIds);
+        array_walk(
+            $meta,
+            function (&$attribute) use ($websiteRequired) {
+                $id = $attribute['arguments']['data']['config']['attributeId'];
+                unset($attribute['arguments']['data']['config']['attributeId']);
+                if (!empty($websiteRequired[$id])) {
+                    $attribute['arguments']['data']['config']
+                        ['validation']['required-entry-website'] = $websiteRequired[$id];
+                }
+            }
+        );
     }
 }

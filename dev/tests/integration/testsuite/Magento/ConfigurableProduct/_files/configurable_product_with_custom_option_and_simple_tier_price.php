@@ -7,18 +7,25 @@ declare(strict_types=1);
 
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Customer\Model\Group;
 use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/product_configurable_with_custom_option_type_text.php';
+Resolver::getInstance()->requireDataFixture(
+    'Magento/ConfigurableProduct/_files/product_configurable_with_custom_option_type_text.php'
+);
 
+$objectManager = Bootstrap::getObjectManager();
 /** @var WebsiteRepositoryInterface $websiteRepository */
 $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 /** @var ProductTierPriceInterfaceFactory $tierPriceFactory */
 $tierPriceFactory = $objectManager->get(ProductTierPriceInterfaceFactory::class);
 /** @var ProductTierPriceExtensionFactory $tpExtensionAttributeFactory */
 $tpExtensionAttributeFactory = $objectManager->get(ProductTierPriceExtensionFactory::class);
-
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
 $firstSimple = $productRepository->get('simple_10');
 $firstSimple->setSpecialPrice(9);
 $productRepository->save($firstSimple);

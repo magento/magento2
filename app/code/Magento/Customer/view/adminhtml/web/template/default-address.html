@@ -1,47 +1,53 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
 <div data-bind="attr: {class: contentClass}">
     <div data-bind="attr: {class: 'fieldset-wrapper address-information ' + defaultAddressClass}">
         <address>
-            <div class="address_caption">
-                <text args="title"/>
+            <div class="address_caption" data-bind="attr: {id: defaultAddressId}">
+                <text args="title"></text>
                 <each args="data: elems, as: 'element'">
-                    <render if="hasTemplate()"/>
+                    <render if="hasTemplate()"></render>
                 </each>
             </div>
             <div class="address_details" ifnot="_.isEmpty($data.address)">
-                <text args="address.prefix" if="address.prefix"/>
-                <text args="address.firstname"/>
-                <text args="address.middlename" if="address.middlename"/>
-                <text args="address.lastname"/>
-                <text args="address.suffix" if="address.suffix"/>
-                <br/>
+                <text args="address.prefix" if="address.prefix"></text>
+                <text args="address.firstname"></text>
+                <text args="address.middlename" if="address.middlename"></text>
+                <text args="address.lastname"></text>
+                <text args="address.suffix" if="address.suffix"></text>
+                <br>
                 <if args="address.company">
-                    <text args="address.company"/>
-                    <br/>
+                    <text args="address.company"></text>
+                    <br>
                 </if>
                 <if args="address.street">
-                    <text args="address.street" if="_.isString(address.street)"/>
-                    <text args="_.values(address.street).filter(value => _.isString(value)).join(', ')"
-                          ifnot="_.isString(address.street)"/>
-                    <br/>
+                    <text args="address.street" if="_.isString(address.street)"></text>
+                    <text args="_.filter(_.values(_.compact(address.street)), function (value) { return _.isString(value)}).join(', ')"
+                          ifnot="_.isString(address.street)"></text>
+                    <br>
                 </if>
-                <text args="address.city + ', '" if="address.city"/>
-                <text args="address.region + ', '" if="address.region"/>
+                <text args="address.city + ', '" if="address.city"></text>
+                <text args="address.region + ', '" if="address.region"></text>
                 <if args="address.postcode">
-                    <text args="address.postcode"/>
-                    <br/>
+                    <text args="address.postcode"></text>
+                    <br>
                 </if>
-                <text args="address.country"/>
+                <text args="address.country"></text>
                 <if args="address.telephone">
-                    <br/>T: <a attr="href: 'tel:' + address.telephone" text="address.telephone"/>
+                    <br>T: <a attr="href: 'tel:' + address.telephone" text="address.telephone"></a>
                 </if>
                 <if args="address.fax">
-                    <br/>F: <text args="address.fax"/>
+                    <br>F: <text args="address.fax"></text>
                 </if>
                 <if args="address.vat_id">
-                    <br/>VAT: <text args="address.vat_id"/>
+                    <br>VAT: <text args="address.vat_id"></text>
                 </if>
             </div>
-            <translate args="notExistsMessage" if="_.isEmpty($data.address)"/>
+            <translate args="notExistsMessage" if="_.isEmpty($data.address)"></translate>
         </address>
     </div>
 </div>

@@ -18,10 +18,11 @@
             <testCaseId value="MC-14382" />
             <group value="security"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Log in to Admin Panel -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Unlock Admin user -->
@@ -92,7 +93,7 @@
         </actionGroup>
 
         <!-- Try to login as admin and check error -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsLockedAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsLockedAdmin"/>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginError" />
     </test>
 </tests>

@@ -35,15 +35,15 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $transport = $this->getMockBuilder(\Magento\Framework\Mail\TransportInterface::class)
             ->setMethods(['sendMessage'])
             ->getMockForAbstractClass();
-        $transport->expects($this->exactly(2))->method('sendMessage')->will($this->returnSelf());
+        $transport->expects($this->exactly(2))->method('sendMessage')->willReturnSelf();
 
         $builder = $this->createPartialMock(
             \Magento\Newsletter\Model\Queue\TransportBuilder::class,
             ['getTransport', 'setFrom', 'addTo']
         );
-        $builder->expects($this->exactly(2))->method('getTransport')->will($this->returnValue($transport));
-        $builder->expects($this->exactly(2))->method('setFrom')->will($this->returnSelf());
-        $builder->expects($this->exactly(2))->method('addTo')->will($this->returnSelf());
+        $builder->expects($this->exactly(2))->method('getTransport')->willReturn($transport);
+        $builder->expects($this->exactly(2))->method('setFrom')->willReturnSelf();
+        $builder->expects($this->exactly(2))->method('addTo')->willReturnSelf();
 
         /** @var $queue \Magento\Newsletter\Model\Queue */
         $queue = $objectManager->create(
@@ -61,6 +61,8 @@ class QueueTest extends \PHPUnit\Framework\TestCase
      */
     public function testSendPerSubscriberProblem()
     {
+        // md5 used here only for random string generation for test purposes. No cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $errorMsg = md5(microtime());
 
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
@@ -79,11 +81,11 @@ class QueueTest extends \PHPUnit\Framework\TestCase
             \Magento\Newsletter\Model\Queue\TransportBuilder::class,
             ['getTransport', 'setFrom', 'addTo', 'setTemplateOptions', 'setTemplateVars']
         );
-        $builder->expects($this->any())->method('getTransport')->will($this->returnValue($transport));
-        $builder->expects($this->any())->method('setTemplateOptions')->will($this->returnSelf());
-        $builder->expects($this->any())->method('setTemplateVars')->will($this->returnSelf());
-        $builder->expects($this->any())->method('setFrom')->will($this->returnSelf());
-        $builder->expects($this->any())->method('addTo')->will($this->returnSelf());
+        $builder->expects($this->any())->method('getTransport')->willReturn($transport);
+        $builder->expects($this->any())->method('setTemplateOptions')->willReturnSelf();
+        $builder->expects($this->any())->method('setTemplateVars')->willReturnSelf();
+        $builder->expects($this->any())->method('setFrom')->willReturnSelf();
+        $builder->expects($this->any())->method('addTo')->willReturnSelf();
 
         /** @var $queue \Magento\Newsletter\Model\Queue */
         $queue = $objectManager->create(\Magento\Newsletter\Model\Queue::class, ['transportBuilder' => $builder]);

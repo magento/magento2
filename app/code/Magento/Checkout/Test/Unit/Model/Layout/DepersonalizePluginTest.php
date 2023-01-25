@@ -3,84 +3,133 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\Model\Layout;
 
+use Magento\Checkout\Model\Layout\DepersonalizePlugin;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\LayoutInterface;
+use Magento\PageCache\Model\DepersonalizeChecker;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
- * Class DepersonalizePluginTest
+ * Unit tests for \Magento\Checkout\Model\Layout\DepersonalizePlugin class.
  */
-class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
+class DepersonalizePluginTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Model\Layout\DepersonalizePluginTest
+     * @var DepersonalizePlugin
      */
-    protected $plugin;
+    private $plugin;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|MockObject
      */
-    protected $layoutMock;
+    private $layoutMock;
 
     /**
-     * @var \Magento\Checkout\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var CheckoutSession|MockObject
      */
-    protected $checkoutSessionMock;
+    private $checkoutSessionMock;
 
     /**
-     * @var \Magento\PageCache\Model\DepersonalizeChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var DepersonalizeChecker|MockObject
      */
-    protected $depersonalizeCheckerMock;
+    private $depersonalizeCheckerMock;
 
     /**
-     * SetUp
+     * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->checkoutSessionMock = $this->createPartialMock(
-            \Magento\Framework\Session\Generic::class,
-            ['clearStorage', 'setData', 'getData']
+            CheckoutSession::class,
+            ['clearStorage', 'setQuoteId', 'getQuoteId']
         );
-        $this->checkoutSessionMock = $this->createPartialMock(\Magento\Checkout\Model\Session::class, ['clearStorage']);
-        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\Manager::class);
-        $this->cacheConfigMock = $this->createMock(\Magento\PageCache\Model\Config::class);
-        $this->depersonalizeCheckerMock = $this->createMock(\Magento\PageCache\Model\DepersonalizeChecker::class);
+        $this->depersonalizeCheckerMock = $this->createMock(DepersonalizeChecker::class);
 
-        $this->plugin = new \Magento\Checkout\Model\Layout\DepersonalizePlugin(
-            $this->depersonalizeCheckerMock,
-            $this->checkoutSessionMock
+        $this->plugin = (new ObjectManagerHelper($this))->getObject(
+            DepersonalizePlugin::class,
+            [
+                'depersonalizeChecker' => $this->depersonalizeCheckerMock,
+                'checkoutSession' => $this->checkoutSessionMock,
+            ]
         );
     }
 
     /**
-     * Test method afterGenerateXml
+     * Test afterGenerateElements method when depersonalization is needed.
+     *
+     * @return void
      */
-    public function testAfterGenerateXml()
+    public function testAfterGenerateElements(): void
     {
-        $expectedResult = $this->createMock(\Magento\Framework\View\Layout::class);
-
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(true);
         $this->checkoutSessionMock
             ->expects($this->once())
             ->method('clearStorage')
-            ->will($this->returnValue($expectedResult));
+            ->willReturnSelf();
+        $this->checkoutSessionMock
+            ->expects($this->once())
+            ->method('setQuoteId')
+            ->willReturn(1);
 
-        $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $expectedResult);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertEmpty($this->plugin->afterGenerateElements($this->layoutMock));
     }
 
-    public function testAfterGenerateXmlNoDepersonalize()
+    /**
+     * Test afterGenerateElements method when depersonalization is not needed.
+     *
+     * @return void
+     */
+    public function testAfterGenerateElementsNoDepersonalize(): void
     {
-        $expectedResult = $this->createMock(\Magento\Framework\View\Layout::class);
-
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(false);
         $this->checkoutSessionMock
             ->expects($this->never())
             ->method('clearStorage')
-            ->will($this->returnValue($expectedResult));
+            ->willReturnSelf();
+        $this->checkoutSessionMock
+            ->expects($this->never())
+            ->method('setQuoteId')
+            ->willReturn(1);
 
-        $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $expectedResult);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertEmpty($this->plugin->afterGenerateElements($this->layoutMock));
+    }
+
+    /**
+     * Test beforeGenerateElements method when depersonalization is needed.
+     *
+     * @return void
+     */
+    public function testBeforeGenerateXml(): void
+    {
+        $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(true);
+        $this->checkoutSessionMock
+            ->expects($this->once())
+            ->method('getQuoteId')
+            ->willReturn(1);
+
+        $this->assertEmpty($this->plugin->beforeGenerateXml($this->layoutMock));
+    }
+
+    /**
+     * Test beforeGenerateElements method when depersonalization is not needed.
+     *
+     * @return void
+     */
+    public function testBeforeGenerateXmlNoDepersonalize(): void
+    {
+        $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(false);
+        $this->checkoutSessionMock
+            ->expects($this->never())
+            ->method('getQuoteId')
+            ->willReturn(1);
+
+        $this->assertEmpty($this->plugin->beforeGenerateXml($this->layoutMock));
     }
 }

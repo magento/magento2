@@ -3,24 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GroupedProduct\Test\Unit\Block\Cart\Item\Renderer;
 
-use Magento\Catalog\Model\Config\Source\Product\Thumbnail as ThumbnailSource;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GroupedProduct\Block\Cart\Item\Renderer\Grouped as Renderer;
+use Magento\Quote\Model\Quote\Item;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class GroupedTest extends \PHPUnit\Framework\TestCase
+class GroupedTest extends TestCase
 {
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ScopeConfigInterface|MockObject */
     private $scopeConfig;
 
     /** @var Renderer */
     private $renderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $objectManagerHelper = new ObjectManager($this);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->renderer = $objectManagerHelper->getObject(
             \Magento\GroupedProduct\Block\Cart\Item\Renderer\Grouped::class,
             ['scopeConfig' => $this->scopeConfig]
@@ -30,10 +37,10 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     public function testGetIdentities()
     {
         $productTags = ['catalog_product_1'];
-        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product->expects($this->exactly(2))->method('getIdentities')->will($this->returnValue($productTags));
-        $item = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
-        $item->expects($this->exactly(2))->method('getProduct')->will($this->returnValue($product));
+        $product = $this->createMock(Product::class);
+        $product->expects($this->exactly(2))->method('getIdentities')->willReturn($productTags);
+        $item = $this->createMock(Item::class);
+        $item->expects($this->exactly(2))->method('getProduct')->willReturn($product);
         $this->renderer->setItem($item);
         $this->assertEquals(array_merge($productTags, $productTags), $this->renderer->getIdentities());
     }

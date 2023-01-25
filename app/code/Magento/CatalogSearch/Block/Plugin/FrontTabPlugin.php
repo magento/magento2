@@ -45,6 +45,7 @@ class FrontTabPlugin
             [
                 'name' => 'search_weight',
                 'label' => __('Search Weight'),
+                'note' => __('10 is the highest priority/heaviest weighting.'),
                 'values' => $this->weightSource->getOptions()
             ],
             'is_searchable'

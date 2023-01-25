@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Mail;
 
 use Magento\Framework\Mail\Exception\InvalidArgumentException;
-use Zend\Mime\Part as ZendMimePart;
+use Laminas\Mime\Part as LaminasMimePart;
 
 /**
  * @inheritDoc
@@ -21,7 +21,7 @@ class MimePart implements MimePartInterface
     public const CHARSET_UTF8 = 'utf-8';
 
     /**
-     * @var ZendMimePart
+     * @var LaminasMimePart
      */
     private $mimePart;
 
@@ -50,7 +50,7 @@ class MimePart implements MimePartInterface
         $content,
         ?string $type = MimeInterface::TYPE_HTML,
         ?string $fileName = null,
-        ?string $disposition = null,
+        ?string $disposition = MimeInterface::DISPOSITION_INLINE,
         ?string $encoding = MimeInterface::ENCODING_QUOTED_PRINTABLE,
         ?string $description = null,
         ?array $filters = [],
@@ -61,7 +61,7 @@ class MimePart implements MimePartInterface
         ?bool $isStream = null
     ) {
         try {
-            $this->mimePart = new ZendMimePart($content);
+            $this->mimePart = new LaminasMimePart($content);
         } catch (\Exception $e) {
             throw new InvalidArgumentException($e->getMessage());
         }

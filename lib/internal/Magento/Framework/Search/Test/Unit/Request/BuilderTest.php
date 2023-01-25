@@ -3,79 +3,93 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Search\Test\Unit\Request;
 
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Search\Request;
+use Magento\Framework\Search\Request\Binder;
+use Magento\Framework\Search\Request\Builder;
+use Magento\Framework\Search\Request\Cleaner;
+use Magento\Framework\Search\Request\Config;
+use Magento\Framework\Search\Request\Mapper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BuilderTest extends \PHPUnit\Framework\TestCase
+class BuilderTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Search\Request\Builder
+     * @var Builder
      */
     private $requestBuilder;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Search\Request\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $config;
 
     /**
-     * @var \Magento\Framework\Search\Request\Mapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Mapper|MockObject
      */
     private $requestMapper;
 
     /**
-     * @var \Magento\Framework\Search\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var Request|MockObject
      */
     private $request;
 
     /**
-     * @var \Magento\Framework\Search\Request\Binder|\PHPUnit_Framework_MockObject_MockObject
+     * @var Binder|MockObject
      */
     private $binder;
 
     /**
-     * @var \Magento\Framework\Search\Request\Cleaner|\PHPUnit_Framework_MockObject_MockObject
+     * @var Cleaner|MockObject
      */
     private $cleaner;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
-        $this->config = $this->getMockBuilder(\Magento\Framework\Search\Request\Config::class)
-            ->setMethods(['get'])
+        $this->config = $this->getMockBuilder(Config::class)
+            ->onlyMethods(['get'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
-        $this->requestMapper = $this->getMockBuilder(\Magento\Framework\Search\Request\Mapper::class)
-            ->setMethods(['getRootQuery', 'getBuckets'])
+        $this->requestMapper = $this->getMockBuilder(Mapper::class)
+            ->onlyMethods(['getRootQuery', 'getBuckets'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->request = $this->getMockBuilder(\Magento\Framework\Search\Request::class)
+        $this->request = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->binder = $this->getMockBuilder(\Magento\Framework\Search\Request\Binder::class)
-            ->setMethods(['bind'])
+        $this->binder = $this->getMockBuilder(Binder::class)
+            ->onlyMethods(['bind'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cleaner = $this->getMockBuilder(\Magento\Framework\Search\Request\Cleaner::class)
-            ->setMethods(['clean'])
+        $this->cleaner = $this->getMockBuilder(Cleaner::class)
+            ->onlyMethods(['clean'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->requestBuilder = $helper->getObject(
-            \Magento\Framework\Search\Request\Builder::class,
+            Builder::class,
             [
                 'config' => $this->config,
                 'objectManager' => $this->objectManager,
@@ -86,37 +100,41 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @return void
      */
-    public function testCreateInvalidArgumentExceptionNotDefined()
+    public function testCreateInvalidArgumentExceptionNotDefined(): void
     {
+        $this->expectException('InvalidArgumentException');
         $this->requestBuilder->create();
     }
 
     /**
-     * @expectedException \Magento\Framework\Search\Request\NonExistingRequestNameException
-     * @expectedExceptionMessage Request name 'rn' doesn't exist.
+     * @return void
      */
-    public function testCreateInvalidArgumentException()
+    public function testCreateInvalidArgumentException(): void
     {
+        $this->expectException('Magento\Framework\Search\Request\NonExistingRequestNameException');
+        $this->expectExceptionMessage('Request name \'rn\' doesn\'t exist.');
         $requestName = 'rn';
 
         $this->requestBuilder->setRequestName($requestName);
-        $this->config->expects($this->once())->method('get')->with($this->equalTo($requestName))->willReturn(null);
+        $this->config->expects($this->once())->method('get')->with($requestName)->willReturn(null);
 
         $this->requestBuilder->create();
     }
 
     /**
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $data = [
             'dimensions' => [
                 'scope' => [
                     'name' => 'scope',
-                    'value' => 'default',
+                    'value' => 'default'
                 ],
             ],
             'queries' => [
@@ -126,14 +144,14 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
                     'queryReference' => [
                         [
                             'clause' => 'must',
-                            'ref' => 'fulltext_search_query',
+                            'ref' => 'fulltext_search_query'
                         ],
                         [
                             'clause' => 'must',
-                            'ref' => 'fulltext_search_query2',
+                            'ref' => 'fulltext_search_query2'
                         ],
                     ],
-                    'type' => 'boolQuery',
+                    'type' => 'boolQuery'
                 ],
                 'fulltext_search_query' => [
                     'name' => 'fulltext_search_query',
@@ -142,20 +160,20 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
                     'match' => [
                         [
                             'field' => 'data_index',
-                            'boost' => '2',
+                            'boost' => '2'
                         ],
                     ],
-                    'type' => 'matchQuery',
+                    'type' => 'matchQuery'
                 ],
                 'fulltext_search_query2' => [
                     'name' => 'fulltext_search_query2',
                     'filterReference' => [
                         [
-                            'ref' => 'pid',
-                        ],
+                            'ref' => 'pid'
+                        ]
                     ],
-                    'type' => 'filteredQuery',
-                ],
+                    'type' => 'filteredQuery'
+                ]
             ],
             'filters' => [
                 'pid' => [
@@ -163,34 +181,34 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
                     'filterReference' => [
                         [
                             'clause' => 'should',
-                            'ref' => 'pidm',
+                            'ref' => 'pidm'
                         ],
                         [
                             'clause' => 'should',
-                            'ref' => 'pidsh',
+                            'ref' => 'pidsh'
                         ],
                     ],
-                    'type' => 'boolFilter',
+                    'type' => 'boolFilter'
                 ],
                 'pidm' => [
                     'name' => 'pidm',
                     'field' => 'product_id',
                     'type' => 'rangeFilter',
                     'from' => '$pidm_from$',
-                    'to' => '$pidm_to$',
+                    'to' => '$pidm_to$'
                 ],
                 'pidsh' => [
                     'name' => 'pidsh',
                     'field' => 'product_id',
                     'type' => 'termFilter',
-                    'value' => '$pidsh$',
+                    'value' => '$pidsh$'
                 ],
             ],
             'from' => '10',
             'size' => '10',
             'query' => 'one_match_filters',
             'index' => 'catalogsearch_fulltext',
-            'aggregations' => [],
+            'aggregations' => []
         ];
         $requestName = 'rn';
         $this->requestBuilder->bind('fulltext_search_query', 'socks');
@@ -204,10 +222,11 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $this->binder->expects($this->once())->method('bind')->willReturn($data);
         $this->cleaner->expects($this->once())->method('clean')->willReturn($data);
         $this->requestMapper->expects($this->once())->method('getRootQuery')->willReturn([]);
-        $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->requestMapper);
-        $this->objectManager->expects($this->at(2))->method('create')->willReturn($this->request);
-        $this->config->expects($this->once())->method('get')->with($this->equalTo($requestName))->willReturn($data);
+        $this->objectManager
+            ->method('create')
+            ->willReturnOnConsecutiveCalls($this->requestMapper, null, $this->request);
+        $this->config->expects($this->once())->method('get')->with($requestName)->willReturn($data);
         $result = $this->requestBuilder->create();
-        $this->assertInstanceOf(\Magento\Framework\Search\Request::class, $result);
+        $this->assertInstanceOf(Request::class, $result);
     }
 }

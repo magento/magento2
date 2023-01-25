@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableProductBulkDeleteTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create, Read, Update, Delete"/>
+            <title value="admin should be able to mass delete configurable products"/>
+            <description value="admin should be able to mass delete configurable products"/>
+            <testCaseId value="MC-99"/>
+            <group value="ConfigurableProduct"/>
+            <severity value="BLOCKER"/>
+        </annotations>
+
+        <before>
+            <!-- TODO: Parts of this should be converted to an actionGroup once MQE-993 is fixed. -->
+            <!-- Create shared category and attribute -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Create first of three configurable products -->
+            <createData entity="ApiConfigurableProduct" stepKey="createProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption1">
+                <requiredEntity createDataKey="createProduct1"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createProduct1"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createProduct1"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+
+            <!-- Create second configurable product -->
+            <createData entity="ApiConfigurableProduct" stepKey="createProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct4">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption2">
+                <requiredEntity createDataKey="createProduct2"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild3">
+                <requiredEntity createDataKey="createProduct2"/>
+                <requiredEntity createDataKey="createConfigChildProduct3"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild4">
+                <requiredEntity createDataKey="createProduct2"/>
+                <requiredEntity createDataKey="createConfigChildProduct4"/>
+            </createData>
+
+            <!-- Create third configurable product -->
+            <createData entity="ApiConfigurableProduct" stepKey="createProduct3">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct5">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct6">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption3">
+                <requiredEntity createDataKey="createProduct3"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild5">
+                <requiredEntity createDataKey="createProduct3"/>
+                <requiredEntity createDataKey="createConfigChildProduct5"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild6">
+                <requiredEntity createDataKey="createProduct3"/>
+                <requiredEntity createDataKey="createConfigChildProduct6"/>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigChildProduct3" stepKey="deleteConfigChildProduct3"/>
+            <deleteData createDataKey="createConfigChildProduct4" stepKey="deleteConfigChildProduct4"/>
+            <deleteData createDataKey="createConfigChildProduct5" stepKey="deleteConfigChildProduct5"/>
+            <deleteData createDataKey="createConfigChildProduct6" stepKey="deleteConfigChildProduct6"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+
+        <!-- Search for prefix of the 3 products we created via api -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" stepKey="clearAll" visible="true"/>
+        <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchForProduct">
+            <argument name="keyword" value="ApiConfigurableProduct.name"/>
+        </actionGroup>
+
+        <!-- Select all, then delete -->
+        <click selector="{{AdminProductGridSection.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
+        <click selector="{{AdminProductGridSection.multicheckOption('Select All')}}" stepKey="selectAllProductInFilteredGrid"/>
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
+        <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
+
+        <!-- Should not see the records in the admin panel -->
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMsg">
+            <argument name="message" value="A total of 3 record(s) have been deleted."/>
+        </actionGroup>
+        <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="0" stepKey="seeNoResults"/>
+
+        <!-- after delete, assert product pages are 404 -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="gotoStorefront1">
+            <argument name="product" value="$$createProduct1$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProduct1"/>
+        <actionGroup ref="StorefrontAssertPageNotFoundErrorOnProductDetailPageActionGroup" stepKey="seeWhoops1">
+            <argument name="product" value="$$createProduct1$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="dontSeeProduct1"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="gotoStorefront2">
+            <argument name="product" value="$$createProduct2$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProduct2"/>
+        <actionGroup ref="StorefrontAssertPageNotFoundErrorOnProductDetailPageActionGroup" stepKey="seeWhoops2">
+            <argument name="product" value="$$createProduct2$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="dontSeeProduct2"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="gotoStorefront3">
+            <argument name="product" value="$$createProduct3$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProduct3"/>
+        <actionGroup ref="StorefrontAssertPageNotFoundErrorOnProductDetailPageActionGroup" stepKey="seeWhoops3">
+            <argument name="product" value="$$createProduct3$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="dontSeeProduct3"/>
+    </test>
+</tests>

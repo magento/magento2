@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 return [
     'without_required_resource_handle' => [
         '<?xml version="1.0"?><config></config>',
@@ -16,29 +18,21 @@ return [
         '<?xml version="1.0"?><config><resource name="testinvalidname$" /></config>',
         [
             "Element 'resource', attribute 'name': [facet 'pattern'] The value 'testinvalidname$' is not accepted" .
-            " by the pattern '[A-Za-z_0-9]+'.\nLine: 1\n",
-            "Element 'resource', attribute 'name': 'testinvalidname$' is not a valid value of the atomic " .
-            "type 'nameIdentifier'.\nLine: 1\n",
-            "Element 'resource', attribute 'name': Warning: No precomputed value available, the value was either " .
-            "invalid or something strange happend.\nLine: 1\n"
+            " by the pattern '[A-Za-z_0-9]+'.\nLine: 1\n"
         ],
     ],
     'resource_extends_attribute_invalid_value' => [
         '<?xml version="1.0"?><config><resource name="test_name" extends="test@"/></config>',
         [
             "Element 'resource', attribute 'extends': [facet 'pattern'] The value 'test@' is not accepted " .
-            "by the pattern '[A-Za-z_0-9]+'.\nLine: 1\n",
-            "Element 'resource', attribute 'extends': 'test@' is not a valid value of the atomic" .
-            " type 'nameIdentifier'.\nLine: 1\n"
+            "by the pattern '[A-Za-z_0-9]+'.\nLine: 1\n"
         ],
     ],
     'resource_connection_attribute_invalid_value' => [
         '<?xml version="1.0"?><config><resource name="test_name" connection="test#"/></config>',
         [
             "Element 'resource', attribute 'connection': [facet 'pattern'] The value 'test#' is not accepted " .
-            "by the pattern '[A-Za-z_0-9]+'.\nLine: 1\n",
-            "Element 'resource', attribute 'connection': 'test#' is not a valid value of the atomic" .
-            " type 'nameIdentifier'.\nLine: 1\n"
+            "by the pattern '[A-Za-z_0-9]+'.\nLine: 1\n"
         ],
     ],
     'resource_with_notallowed_attribute' => [

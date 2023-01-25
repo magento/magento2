@@ -12,14 +12,17 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Encryption\Adapter\SodiumChachaIetf;
 use Magento\Framework\Encryption\Crypt;
 use Magento\Framework\Encryption\Encryptor;
-use Magento\Framework\Math\Random;
 use Magento\Framework\Encryption\KeyValidator;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Throwable;
 
 /**
  * Test case for \Magento\Framework\Encryption\Encryptor
  */
-class EncryptorTest extends \PHPUnit\Framework\TestCase
+class EncryptorTest extends TestCase
 {
     private const CRYPT_KEY_1 = 'g9mY9KLrcuAVJfsmVUSRkKFLDdUPVkaZ';
 
@@ -31,22 +34,22 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     private $encryptor;
 
     /**
-     * @var Random|\PHPUnit_Framework_MockObject_MockObject
+     * @var Random|MockObject
      */
     private $randomGeneratorMock;
 
     /**
-     * @var KeyValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var KeyValidator|MockObject
      */
     private $keyValidatorMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->randomGeneratorMock = $this->createMock(Random::class);
-        /** @var DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject $deploymentConfigMock */
+        /** @var DeploymentConfig|MockObject $deploymentConfigMock */
         $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $deploymentConfigMock->expects($this->any())
             ->method('get')
@@ -65,6 +68,8 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Hashing without a salt.
+     *
+     * @return void
      */
     public function testGetHashNoSalt(): void
     {
@@ -76,53 +81,73 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Providing salt for hash.
+     *
+     * @return void
      */
     public function testGetHashSpecifiedSalt(): void
     {
         $this->randomGeneratorMock->expects($this->never())->method('getRandomString');
-        $expected = $this->encryptor->getLatestHashVersion() === Encryptor::HASH_VERSION_ARGON2ID13 ?
-            '7640855aef9cb6ffd20229601d2904a2192e372b391db8230d7faf073b393e4c:salt:2' :
-            '13601bda4ea78e55a07b98866d2be6be0744e3866f13c00c811cab608a28f322:salt:1';
-        $actual = $this->encryptor->getHash('password', 'salt');
+        if ($this->encryptor->getLatestHashVersion() >= Encryptor::HASH_VERSION_ARGON2ID13) {
+            $version = Encryptor::HASH_VERSION_ARGON2ID13;
+            $expected = '7640855aef9cb6ffd20229601d2904a2192e372b391db8230d7faf073b393e4c:salt:2';
+        } else {
+            $version = Encryptor::HASH_VERSION_SHA256;
+            $expected = '13601bda4ea78e55a07b98866d2be6be0744e3866f13c00c811cab608a28f322:salt:1';
+        }
+        $actual = $this->encryptor->getHash('password', 'salt', $version);
         $this->assertEquals($expected, $actual);
     }
 
     /**
      * Hashing with random salt.
+     *
+     * @return void
      */
     public function testGetHashRandomSaltDefaultLength(): void
     {
-        $salt = '-----------random_salt----------';
+        $salt = 'random-salt';
+        $salt = str_pad(
+            $salt,
+            $this->encryptor->getLatestHashVersion() >= Encryptor::HASH_VERSION_ARGON2ID13
+                ? SODIUM_CRYPTO_PWHASH_SALTBYTES : 32,
+            $salt
+        );
+        if ($this->encryptor->getLatestHashVersion() >= Encryptor::HASH_VERSION_ARGON2ID13) {
+            $version = Encryptor::HASH_VERSION_ARGON2ID13;
+            $expected = '2d78b5e93b683c4d3b0574c1ced8e40ddec7730c2e1b35f282b2c955b5cb7262:' . $salt . ':2';
+        } else {
+            $version = Encryptor::HASH_VERSION_SHA256;
+            $expected = '2c210995b6029cdbd3a88c32be1083fdca263cf19600247d09a2409b30f09f16:' . $salt . ':1';
+        }
         $this->randomGeneratorMock
             ->expects($this->once())
             ->method('getRandomString')
-            ->with($this->encryptor->getLatestHashVersion() === Encryptor::HASH_VERSION_ARGON2ID13 ? 16 : 32)
             ->willReturn($salt);
-        $expected = $this->encryptor->getLatestHashVersion() === Encryptor::HASH_VERSION_ARGON2ID13 ?
-            '0be2351d7513d3e9622bd2df1891c39ba5ba6d1e3d67a058c60d6fd83f6641d8:' . $salt . ':2' :
-            'a1c7fc88037b70c9be84d3ad12522c7888f647915db78f42eb572008422ba2fa:' . $salt . ':1';
-        $actual = $this->encryptor->getHash('password', true);
+        $actual = $this->encryptor->getHash('password', true, $version);
         $this->assertEquals($expected, $actual);
     }
 
     /**
      * Hashing with random salt of certain length.
+     *
+     * @return void
      */
     public function testGetHashRandomSaltSpecifiedLength(): void
     {
         $this->randomGeneratorMock
             ->expects($this->once())
             ->method('getRandomString')
-            ->with($this->encryptor->getLatestHashVersion() === Encryptor::HASH_VERSION_ARGON2ID13 ? 16 : 11)
             ->willReturn(
-                $this->encryptor->getLatestHashVersion() === Encryptor::HASH_VERSION_ARGON2ID13 ?
+                $this->encryptor->getLatestHashVersion() >= Encryptor::HASH_VERSION_ARGON2ID13 ?
                     'random_salt12345' :
                     'random_salt'
             );
-        $expected = $this->encryptor->getLatestHashVersion() === Encryptor::HASH_VERSION_ARGON2ID13 ?
+        $expected = $this->encryptor->getLatestHashVersion() >= Encryptor::HASH_VERSION_ARGON2ID13 ?
             'ca7982945fa90444b78d586678ff1c223ce13f99a39ec9541eae8b63ada3816a:random_salt12345:2' :
             '4c5cab8dd00137d11258f8f87b93fd17bd94c5026fc52d3c5af911dd177a2611:random_salt:1';
-        $actual = $this->encryptor->getHash('password', 11);
+        $version = $this->encryptor->getLatestHashVersion() >= Encryptor::HASH_VERSION_ARGON2ID13
+            ? Encryptor::HASH_VERSION_ARGON2ID13 : Encryptor::HASH_VERSION_SHA256;
+        $actual = $this->encryptor->getHash('password', 11, $version);
         $this->assertEquals($expected, $actual);
     }
 
@@ -133,12 +158,13 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
      * @param string $hash
      * @param bool $expected
      *
+     * @return void
      * @dataProvider validateHashDataProvider
      */
     public function testValidateHash($password, $hash, $expected, int $requiresVersion): void
     {
         if ($requiresVersion > $this->encryptor->getLatestHashVersion()) {
-            $this->markTestSkipped('On current installation encryptor does not support algo #' .$requiresVersion);
+            $this->markTestSkipped('On current installation encryptor does not support algo #' . $requiresVersion);
         }
         $actual = $this->encryptor->validateHash($password, $hash);
         $this->assertEquals($expected, $actual);
@@ -168,11 +194,12 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
      *
      * @param mixed $key
      *
+     * @return void
      * @dataProvider emptyKeyDataProvider
-     * @expectedException \SodiumException
      */
     public function testEncryptWithEmptyKey($key): void
     {
+        $this->expectException('SodiumException');
         $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $deploymentConfigMock->expects($this->any())
             ->method('get')
@@ -188,6 +215,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
      *
      * @param mixed $key
      *
+     * @return void
      * @dataProvider emptyKeyDataProvider
      */
     public function testDecryptWithEmptyKey($key): void
@@ -214,6 +242,8 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Seeing that encrypting uses sodium.
+     *
+     * @return void
      */
     public function testEncrypt(): void
     {
@@ -232,6 +262,8 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Check that decrypting works.
+     *
+     * @return void
      */
     public function testDecrypt(): void
     {
@@ -243,6 +275,8 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Using an old algo.
+     *
+     * @return void
      */
     public function testLegacyDecrypt(): void
     {
@@ -256,6 +290,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         [, , $iv, $encrypted] = explode(':', $data, 4);
 
         // Decrypt returned data with RIJNDAEL_256 cipher, cbc mode
+        //phpcs:ignore PHPCompatibility.Constants.RemovedConstants
         $crypt = new Crypt(self::CRYPT_KEY_1, MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC, $iv);
         // Verify decrypted matches original data
         $this->assertEquals($encrypted, base64_encode($crypt->encrypt($actual)));
@@ -263,18 +298,16 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Seeing that changing a key does not stand in a way of decrypting.
+     *
+     * @return void
      */
     public function testEncryptDecryptNewKeyAdded(): void
     {
         $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
-        $deploymentConfigMock->expects($this->at(0))
+        $deploymentConfigMock
             ->method('get')
-            ->with(Encryptor::PARAM_CRYPT_KEY)
-            ->willReturn(self::CRYPT_KEY_1);
-        $deploymentConfigMock->expects($this->at(1))
-            ->method('get')
-            ->with(Encryptor::PARAM_CRYPT_KEY)
-            ->willReturn(self::CRYPT_KEY_1 . "\n" . self::CRYPT_KEY_2);
+            ->withConsecutive([Encryptor::PARAM_CRYPT_KEY], [Encryptor::PARAM_CRYPT_KEY])
+            ->willReturnOnConsecutiveCalls(self::CRYPT_KEY_1, self::CRYPT_KEY_1 . "\n" . self::CRYPT_KEY_2);
         $model1 = new Encryptor($this->randomGeneratorMock, $deploymentConfigMock);
         // simulate an encryption key is being added
         $model2 = new Encryptor($this->randomGeneratorMock, $deploymentConfigMock);
@@ -290,6 +323,8 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Checking that encryptor relies on key validator.
+     *
+     * @return void
      */
     public function testValidateKey(): void
     {
@@ -300,10 +335,11 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     /**
      * Checking that encryptor relies on key validator.
      *
-     * @expectedException \Exception
+     * @return void
      */
     public function testValidateKeyInvalid(): void
     {
+        $this->expectException('Exception');
         $this->keyValidatorMock->method('isValid')->willReturn(false);
         $this->encryptor->validateKey('-----    ');
     }
@@ -339,6 +375,12 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
                 false,
                 Encryptor::HASH_VERSION_SHA256,
                 '/^[0-9a-z]{64}$/'
+            ],
+            [
+                'password',
+                true,
+                Encryptor::HASH_VERSION_ARGON2ID13_AGNOSTIC,
+                '/^.+\:.+\:' .Encryptor::HASH_VERSION_ARGON2ID13_AGNOSTIC .'\_\d+\_\d+\_\d+$/is'
             ]
         ];
     }
@@ -352,17 +394,27 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
      * @param string|bool $salt
      * @param int $hashAlgo
      * @param string $pattern
+     *
+     * @return void
      */
     public function testGetHashMustUseSpecifiedHashingAlgo($password, $salt, $hashAlgo, $pattern): void
     {
+        $this->randomGeneratorMock->method('getRandomString')
+            ->willReturnCallback(
+                function (int $length = 32): string {
+                    return random_bytes($length);
+                }
+            );
         $hash = $this->encryptor->getHash($password, $salt, $hashAlgo);
-        $this->assertRegExp($pattern, $hash);
+        $this->assertMatchesRegularExpression($pattern, $hash);
     }
 
     /**
      * Test hashing working as promised.
+     *
+     * @return void
      */
-    public function testHash()
+    public function testHash(): void
     {
         //Checking that the same hash is returned for the same value.
         $hash1 = $this->encryptor->hash($value = 'some value');
@@ -379,5 +431,65 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEquals($hash3, $hash1);
         //Validation still works
         $this->assertTrue($this->encryptor->validateHash($value, $hash3));
+    }
+
+    /**
+     * Test that generated hashes can be later validated.
+     *
+     * @return void
+     * @throws Throwable
+     */
+    public function testValidation(): void
+    {
+        $original = 'password';
+        $this->randomGeneratorMock->method('getRandomString')
+            ->willReturnCallback(
+                function (int $length = 32): string {
+                    return bin2hex(random_bytes($length));
+                }
+            );
+        for ($version = $this->encryptor->getLatestHashVersion(); $version >= 0; $version--) {
+            $hash = $this->encryptor->getHash($original, true, $version);
+            $this->assertTrue(
+                $this->encryptor->isValidHash($original, $hash),
+                'Algo #' .$version .' hash is invalid'
+            );
+        }
+    }
+
+    /**
+     * Test that upgraded generated hashes can be later validated.
+     *
+     * @return void
+     * @throws Throwable
+     */
+    public function testUpgradedValidation(): void
+    {
+        $original = 'password';
+        $hash = $original;
+        $this->randomGeneratorMock->method('getRandomString')
+            ->willReturnCallback(
+                function (int $length = 32): string {
+                    return bin2hex(random_bytes($length));
+                }
+            );
+        //The hash will become sort of downgraded but that's important for the latest Argon algo.
+        for ($version = $this->encryptor->getLatestHashVersion(); $version >= 0; $version--) {
+            $info = explode(Encryptor::DELIMITER, $hash, 3);
+            if (count($info) !== 3) {
+                $salt = true;
+                $hashStr = $hash;
+                $versionInfo = '';
+            } else {
+                $salt = $info[1];
+                $hashStr = $info[0];
+                $versionInfo = $info[2] .':';
+            }
+            $hash = $this->encryptor->getHash($hashStr, $salt, $version);
+            [$hashStr, $salt, $newVersion] = explode(Encryptor::DELIMITER, $hash, 3);
+            $hash = implode(Encryptor::DELIMITER, [$hashStr, $salt, $versionInfo .$newVersion]);
+        }
+
+        $this->assertTrue($this->encryptor->isValidHash($original, $hash));
     }
 }

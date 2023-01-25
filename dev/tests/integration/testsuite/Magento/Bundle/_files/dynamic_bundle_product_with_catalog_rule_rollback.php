@@ -5,14 +5,28 @@
  */
 declare(strict_types=1);
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogRule\Api\CatalogRuleRepositoryInterface;
 use Magento\CatalogRule\Model\Indexer\IndexBuilder;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
 use Magento\TestFramework\Catalog\Model\GetCategoryByName;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Catalog/_files/category_with_different_price_products_rollback.php';
+Resolver::getInstance()->requireDataFixture(
+    'Magento/Catalog/_files/category_with_different_price_products_rollback.php'
+);
 
+$objectManager = Bootstrap::getObjectManager();
+/** @var CategoryRepositoryInterface $categoryRepository */
+$categoryRepository = $objectManager->get(CategoryRepositoryInterface::class);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+/** @var Registry $registry */
+$registry = $objectManager->get(Registry::class);
 /** @var GetCategoryByName $getCategoryByName */
 $getCategoryByName = $objectManager->create(GetCategoryByName::class);
 /** @var  CollectionFactory $ruleCollectionFactory */

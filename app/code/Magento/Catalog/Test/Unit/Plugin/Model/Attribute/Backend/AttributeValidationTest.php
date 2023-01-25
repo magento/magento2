@@ -8,14 +8,17 @@ declare(strict_types=1);
 namespace Magento\Catalog\Test\Unit\Plugin\Model\Attribute\Backend;
 
 use Magento\Catalog\Plugin\Model\Attribute\Backend\AttributeValidation;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AttributeValidationTest extends \PHPUnit\Framework\TestCase
+class AttributeValidationTest extends TestCase
 {
     /**
      * @var AttributeValidation
@@ -23,12 +26,12 @@ class AttributeValidationTest extends \PHPUnit\Framework\TestCase
     private $attributeValidation;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|MockObject
      */
     private $storeMock;
 
@@ -48,46 +51,49 @@ class AttributeValidationTest extends \PHPUnit\Framework\TestCase
     private $isProceedMockCalled = false;
 
     /**
-     * @var AbstractBackend|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractBackend|MockObject
      */
     private $subjectMock;
 
     /**
-     * @var AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractAttribute|MockObject
      */
     private $attributeMock;
 
     /**
-     * @var DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObject|MockObject
      */
     private $entityMock;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
         $this->attributeMock = $this->getMockBuilder(AbstractBackend::class)
-            ->setMethods(['getAttributeCode'])
+            ->addMethods(['getAttributeCode'])
             ->getMockForAbstractClass();
         $this->subjectMock = $this->getMockBuilder(AbstractBackend::class)
-            ->setMethods(['getAttribute'])
+            ->onlyMethods(['getAttribute'])
             ->getMockForAbstractClass();
         $this->subjectMock->expects($this->any())
             ->method('getAttribute')
             ->willReturn($this->attributeMock);
 
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->getMockForAbstractClass();
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
 
         $this->entityMock = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
 
         $this->allowedEntityTypes = [$this->entityMock];
@@ -100,7 +106,7 @@ class AttributeValidationTest extends \PHPUnit\Framework\TestCase
             AttributeValidation::class,
             [
                 'storeManager' => $this->storeManagerMock,
-                'allowedEntityTypes' => $this->allowedEntityTypes,
+                'allowedEntityTypes' => $this->allowedEntityTypes
             ]
         );
     }
@@ -109,11 +115,12 @@ class AttributeValidationTest extends \PHPUnit\Framework\TestCase
      * @param bool $shouldProceedRun
      * @param bool $defaultStoreUsed
      * @param null|int|string $storeId
-     * @dataProvider aroundValidateDataProvider
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     *
      * @return void
+     * @throws NoSuchEntityException
+     * @dataProvider aroundValidateDataProvider
      */
-    public function testAroundValidate(bool $shouldProceedRun, bool $defaultStoreUsed, $storeId)
+    public function testAroundValidate(bool $shouldProceedRun, bool $defaultStoreUsed, $storeId): void
     {
         $this->isProceedMockCalled = false;
         $attributeCode = 'code';
@@ -121,17 +128,15 @@ class AttributeValidationTest extends \PHPUnit\Framework\TestCase
         $this->storeMock->expects($this->once())
             ->method('getId')
             ->willReturn($storeId);
+
         if ($defaultStoreUsed) {
             $this->attributeMock->expects($this->once())
                 ->method('getAttributeCode')
                 ->willReturn($attributeCode);
-            $this->entityMock->expects($this->at(0))
+            $this->entityMock
                 ->method('getData')
-                ->willReturn([$attributeCode => null]);
-            $this->entityMock->expects($this->at(1))
-                ->method('getData')
-                ->with($attributeCode)
-                ->willReturn(null);
+                ->withConsecutive([], [$attributeCode])
+                ->willReturnOnConsecutiveCalls([$attributeCode => null], null);
         }
 
         $this->attributeValidation->aroundValidate($this->subjectMock, $this->proceedMock, $this->entityMock);
@@ -139,7 +144,8 @@ class AttributeValidationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Data provider for testAroundValidate
+     * Data provider for testAroundValidate.
+     *
      * @return array
      */
     public function aroundValidateDataProvider(): array
@@ -148,7 +154,7 @@ class AttributeValidationTest extends \PHPUnit\Framework\TestCase
             [true, false, '0'],
             [true, false, 0],
             [true, false, null],
-            [false, true, 1],
+            [false, true, 1]
         ];
     }
 }

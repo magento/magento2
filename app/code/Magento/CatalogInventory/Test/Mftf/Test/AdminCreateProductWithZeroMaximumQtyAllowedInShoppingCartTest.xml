@@ -23,7 +23,8 @@
         <before>
             <createData entity="DefaultValueForMaxSaleQty" stepKey="setDefaultValueForMaxSaleQty"/>
             <createData entity="SimpleProduct2" stepKey="createdProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <createData entity="DefaultValueForMaxSaleQty" stepKey="setDefaultValueForMaxSaleQty"/>
@@ -54,16 +55,18 @@
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigWithCorrectNumber"/>
 
         <!-- Go to product page -->
-        <amOnPage url="{{AdminProductEditPage.url($$createdProduct.id$$)}}" stepKey="openAdminProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminProductEditPage">
+            <argument name="productId" value="$$createdProduct.id$$"/>
+        </actionGroup>
         <!-- Validate zero value -->
         <actionGroup ref="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="productValidateZeroValue">
             <argument name="qty" value="0"/>
-            <argument name="errorMessage" value="Please enter a number greater than 0 in this field."/>
+            <argument name="errorMessage" value="Please enter a number greater than 0, without comma in this field."/>
         </actionGroup>
         <!-- Validate negative value -->
         <actionGroup ref="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="productValidateNegativeValue">
             <argument name="qty" value="-1"/>
-            <argument name="errorMessage" value="Please enter a number greater than 0 in this field."/>
+            <argument name="errorMessage" value="Please enter a number greater than 0, without comma in this field."/>
         </actionGroup>
         <!-- Validate alphabetical value -->
         <actionGroup ref="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="productValidateAlphabeticalValue">

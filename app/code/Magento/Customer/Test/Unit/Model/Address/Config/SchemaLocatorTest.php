@@ -3,17 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Address\Config;
 
-class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Customer\Model\Address\Config\SchemaLocator;
+use Magento\Framework\Module\Dir\Reader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class SchemaLocatorTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Model\Address\Config\SchemaLocator
+     * @var SchemaLocator
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var Reader|MockObject
      */
     protected $_moduleReader;
 
@@ -27,10 +34,10 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $_xsdFile;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_xsdFile = $this->_xsdDir . '/address_formats.xsd';
-        $this->_moduleReader = $this->createPartialMock(\Magento\Framework\Module\Dir\Reader::class, ['getModuleDir']);
+        $this->_moduleReader = $this->createPartialMock(Reader::class, ['getModuleDir']);
         $this->_moduleReader->expects(
             $this->once()
         )->method(
@@ -38,11 +45,11 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Customer'
-        )->will(
-            $this->returnValue($this->_xsdDir)
+        )->willReturn(
+            $this->_xsdDir
         );
 
-        $this->_model = new \Magento\Customer\Model\Address\Config\SchemaLocator($this->_moduleReader);
+        $this->_model = new SchemaLocator($this->_moduleReader);
     }
 
     public function testGetSchema()

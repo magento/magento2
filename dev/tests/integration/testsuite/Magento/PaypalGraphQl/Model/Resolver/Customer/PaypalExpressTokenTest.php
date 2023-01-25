@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Customer;
 
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Paypal\Model\Api\Nvp;
 use Magento\PaypalGraphQl\PaypalExpressAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -29,7 +30,7 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
      */
     private $quoteIdToMaskedId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -83,9 +84,9 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
             ->with(Nvp::SET_EXPRESS_CHECKOUT, $paypalRequest)
             ->willReturn($paypalResponse);
 
-        /** @var \Magento\Integration\Model\Oauth\Token $tokenModel */
-        $tokenModel = $this->objectManager->create(\Magento\Integration\Model\Oauth\Token::class);
-        $customerToken = $tokenModel->createCustomerToken(1)->getToken();
+        /** @var CustomerTokenServiceInterface $tokenService */
+        $tokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
+        $customerToken = $tokenService->createCustomerAccessToken('customer@example.com', 'password');
 
         $requestHeaders = [
             'Accept' => 'application/json',

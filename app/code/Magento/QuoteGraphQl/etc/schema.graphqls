@@ -2,367 +2,419 @@
 # See COPYING.txt for license details.
 
 type Query {
-    cart(cart_id: String!): Cart @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart") @doc(description:"Returns information about shopping cart") @cache(cacheable: false)
-    customerCart: Cart! @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CustomerCart") @doc(description:"Returns information about the customer shopping cart") @cache(cacheable: false)
+    """phpcs:ignore Magento2.GraphQL.ValidArgumentName"""
+    cart(cart_id: String! @doc(description: "The unique ID of the cart to query.")): Cart @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart") @doc(description:"Return information about the specified shopping cart.") @cache(cacheable: false)
+    customerCart: Cart! @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CustomerCart") @doc(description:"Return information about the customer's shopping cart.") @cache(cacheable: false)
 }
 
 type Mutation {
-    createEmptyCart(input: createEmptyCartInput): String @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CreateEmptyCart") @doc(description:"Creates an empty shopping cart for a guest or logged in user")
-    addSimpleProductsToCart(input: AddSimpleProductsToCartInput): AddSimpleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
-    addVirtualProductsToCart(input: AddVirtualProductsToCartInput): AddVirtualProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
-    applyCouponToCart(input: ApplyCouponToCartInput): ApplyCouponToCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ApplyCouponToCart")
-    removeCouponFromCart(input: RemoveCouponFromCartInput): RemoveCouponFromCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\RemoveCouponFromCart")
-    updateCartItems(input: UpdateCartItemsInput): UpdateCartItemsOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\UpdateCartItems")
-    removeItemFromCart(input: RemoveItemFromCartInput): RemoveItemFromCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\RemoveItemFromCart")
-    setShippingAddressesOnCart(input: SetShippingAddressesOnCartInput): SetShippingAddressesOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetShippingAddressesOnCart")
-    setBillingAddressOnCart(input: SetBillingAddressOnCartInput): SetBillingAddressOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetBillingAddressOnCart")
-    setShippingMethodsOnCart(input: SetShippingMethodsOnCartInput): SetShippingMethodsOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetShippingMethodsOnCart")
-    setPaymentMethodOnCart(input: SetPaymentMethodOnCartInput): SetPaymentMethodOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentMethodOnCart")
-    setGuestEmailOnCart(input: SetGuestEmailOnCartInput): SetGuestEmailOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetGuestEmailOnCart")
-    setPaymentMethodAndPlaceOrder(input: SetPaymentMethodAndPlaceOrderInput): PlaceOrderOutput @deprecated(reason: "Should use setPaymentMethodOnCart and placeOrder mutations in single request.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentAndPlaceOrder")
-    mergeCarts(source_cart_id: String!, destination_cart_id: String!): Cart! @doc(description:"Merges the source cart into the destination cart") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\MergeCarts")
-    placeOrder(input: PlaceOrderInput): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder")
+    createEmptyCart(input: createEmptyCartInput @doc(description: "An optional input object that assigns the specified ID to the cart.")): String @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CreateEmptyCart") @doc(description:"Create an empty shopping cart for a guest or logged in user")
+    addSimpleProductsToCart(input: AddSimpleProductsToCartInput @doc(description: "An input object that defines which simple products to add to the cart.")): AddSimpleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart") @doc(description:"Add one or more simple products to the specified cart. We recommend using `addProductsToCart` instead.")
+    addVirtualProductsToCart(input: AddVirtualProductsToCartInput @doc(description: "An input object that defines which virtual products to add to the cart.")): AddVirtualProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart") @doc(description:"Add one or more virtual products to the specified cart. We recommend using `addProductsToCart` instead.")
+    applyCouponToCart(input: ApplyCouponToCartInput @doc(description: "An input object that defines the coupon code to apply to the cart.")): ApplyCouponToCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ApplyCouponToCart") @doc(description:"Apply a pre-defined coupon code to the specified cart.")
+    removeCouponFromCart(input: RemoveCouponFromCartInput @doc(description: "An input object that defines which coupon code to remove from the cart.")): RemoveCouponFromCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\RemoveCouponFromCart") @doc(description:"Remove a previously-applied coupon from the cart. The cart must contain at least one item in order to remove the coupon.")
+    updateCartItems(input: UpdateCartItemsInput @doc(description: "An input object that defines products to be updated.")): UpdateCartItemsOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\UpdateCartItems") @doc(description:"Modify items in the cart.")
+    removeItemFromCart(input: RemoveItemFromCartInput @doc(description: "An input object that defines which products to remove from the cart.")): RemoveItemFromCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\RemoveItemFromCart") @doc(description:"Delete the entire quantity of a specified item from the cart. If you remove all items from the cart, the cart continues to exist.")
+    setShippingAddressesOnCart(input: SetShippingAddressesOnCartInput @doc(description: "An input object that defines one or more shipping addresses to be assigned to the cart.")): SetShippingAddressesOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetShippingAddressesOnCart") @doc(description:"Set one or more shipping addresses on a specific cart.")
+    setBillingAddressOnCart(input: SetBillingAddressOnCartInput @doc(description: "An input object that defines the billing address to be assigned to the cart.")): SetBillingAddressOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetBillingAddressOnCart") @doc(description:"Set the billing address on a specific cart.")
+    setShippingMethodsOnCart(input: SetShippingMethodsOnCartInput @doc(description: "An input object that applies one or more shipping methods to the cart.")): SetShippingMethodsOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetShippingMethodsOnCart") @doc(description:"Set one or more delivery methods on a cart.")
+    setPaymentMethodOnCart(input: SetPaymentMethodOnCartInput @doc(description: "An input object that defines which payment method to apply to the cart.")): SetPaymentMethodOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentMethodOnCart") @doc(description:"Apply a payment method to the cart.")
+    setGuestEmailOnCart(input: SetGuestEmailOnCartInput @doc(description: "An input object that defines a guest email address.")): SetGuestEmailOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetGuestEmailOnCart") @doc(description:"Assign the email address of a guest to the cart.")
+    setPaymentMethodAndPlaceOrder(input: SetPaymentMethodAndPlaceOrderInput): PlaceOrderOutput @deprecated(reason: "Should use setPaymentMethodOnCart and placeOrder mutations in single request.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentAndPlaceOrder") @doc(description:"Set the cart payment method and convert the cart into an order.")
+    """phpcs:ignore Magento2.GraphQL.ValidArgumentName"""
+    assignCustomerToGuestCart(cart_id: String!): Cart! @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AssignCustomerToGuestCart") @doc(description:"Assign a logged-in customer to the specified guest shopping cart.")
+    """phpcs:ignore Magento2.GraphQL.ValidArgumentName"""
+    mergeCarts(source_cart_id: String! @doc(description: "The guest's cart ID before they login."), destination_cart_id: String @doc(description: "The cart ID after the guest logs in.")): Cart! @doc(description:"Transfer the contents of a guest cart into the cart of a logged-in customer.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\MergeCarts")
+    placeOrder(input: PlaceOrderInput @doc(description: "An input object that defines the shopper's cart ID.")): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder") @doc(description:"Convert the quote into an order.")
+    addProductsToCart(cartId: String! @doc(description: "The cart ID of the shopper."), cartItems: [CartItemInput!]! @doc(description: "An array that defines the products to add to the cart.")): AddProductsToCartOutput @doc(description:"Add any type of product to the cart.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddProductsToCart")
 }
 
-input createEmptyCartInput {
-    cart_id: String
+input createEmptyCartInput @doc(description: "Assigns a specific `cart_id` to the empty cart.") {
+    cart_id: String @doc(description: "The ID to assign to the cart.")
 }
 
-input AddSimpleProductsToCartInput {
-    cart_id: String!
-    cart_items: [SimpleProductCartItemInput!]!
+input AddSimpleProductsToCartInput @doc(description: "Defines the simple and group products to add to the cart.") {
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
+    cart_items: [SimpleProductCartItemInput!]! @doc(description: "An array of simple and group items to add.")
 }
 
-input SimpleProductCartItemInput {
-    data: CartItemInput!
-    customizable_options:[CustomizableOptionInput!]
+input SimpleProductCartItemInput @doc(description: "Defines a single product to add to the cart.") {
+    data: CartItemInput! @doc(description: "An object containing the `sku`, `quantity`, and other relevant information about the product.")
+    customizable_options:[CustomizableOptionInput!] @doc(description: "An array that defines customizable options for the product.")
 }
 
-input AddVirtualProductsToCartInput {
-    cart_id: String!
-    cart_items: [VirtualProductCartItemInput!]!
+input AddVirtualProductsToCartInput @doc(description: "Defines the virtual products to add to the cart.") {
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
+    cart_items: [VirtualProductCartItemInput!]! @doc(description: "An array of virtual products to add.")
 }
 
-input VirtualProductCartItemInput {
-    data: CartItemInput!
-    customizable_options:[CustomizableOptionInput!]
+input VirtualProductCartItemInput @doc(description: "Defines a single product to add to the cart.") {
+    data: CartItemInput! @doc(description: "An object containing the `sku`, `quantity`, and other relevant information about the product.")
+    customizable_options:[CustomizableOptionInput!] @doc(description: "An array that defines customizable options for the product.")
 }
 
-input CartItemInput {
-    sku: String!
-    quantity: Float!
+input CartItemInput @doc(description: "Defines an item to be added to the cart.") {
+    sku: String! @doc(description: "The SKU of the product.")
+    quantity: Float! @doc(description: "The amount or number of an item to add.")
+    parent_sku: String @doc(description: "For a child product, the SKU of its parent product.")
+    selected_options: [ID!] @doc(description: "The selected options for the base product, such as color or size, using the unique ID for an object such as `CustomizableRadioOption`, `CustomizableDropDownOption`, or `ConfigurableProductOptionsValues`.")
+    entered_options: [EnteredOptionInput!] @doc(description: "An array of entered options for the base product, such as personalization text.")
 }
 
-input CustomizableOptionInput {
-    id: Int!
-    value_string: String!
+input CustomizableOptionInput @doc(description: "Defines a customizable option.") {
+    id: Int @doc(description: "The customizable option ID of the product.")
+    value_string: String! @doc(description: "The string value of the option.")
 }
 
-input ApplyCouponToCartInput {
-    cart_id: String!
-    coupon_code: String!
+input ApplyCouponToCartInput @doc(description: "Specifies the coupon code to apply to the cart.") {
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
+    coupon_code: String! @doc(description: "A valid coupon code.")
 }
 
-input UpdateCartItemsInput {
-    cart_id: String!
-    cart_items: [CartItemUpdateInput!]!
+input UpdateCartItemsInput @doc(description: "Modifies the specified items in the cart.") {
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
+    cart_items: [CartItemUpdateInput!]! @doc(description: "An array of items to be updated.")
 }
 
-input CartItemUpdateInput {
-    cart_item_id: Int!
-    quantity: Float
-    customizable_options: [CustomizableOptionInput!]
+input CartItemUpdateInput @doc(description: "A single item to be updated.") {
+    cart_item_id: Int @doc(description: "Deprecated. Use `cart_item_uid` instead.")
+    cart_item_uid: ID @doc(description: "The unique ID for a `CartItemInterface` object.")
+    quantity: Float @doc(description: "The new quantity of the item.")
+    customizable_options: [CustomizableOptionInput!] @doc(description: "An array that defines customizable options for the product.")
 }
 
-input RemoveItemFromCartInput {
-    cart_id: String!
-    cart_item_id: Int!
+input RemoveItemFromCartInput @doc(description: "Specifies which items to remove from the cart.") {
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
+    cart_item_id: Int @doc(description: "Deprecated. Use `cart_item_uid` instead.")
+    cart_item_uid: ID @doc(description: "Required field. The unique ID for a `CartItemInterface` object.")
 }
 
-input SetShippingAddressesOnCartInput {
-    cart_id: String!
-    shipping_addresses: [ShippingAddressInput!]!
+input SetShippingAddressesOnCartInput @doc(description: "Specifies an array of addresses to use for shipping.") {
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
+    shipping_addresses: [ShippingAddressInput!]! @doc(description: "An array of shipping addresses.")
 }
 
-input ShippingAddressInput {
-    customer_address_id: Int # If provided then will be used address from address book
-    address: CartAddressInput
-    customer_notes: String
+input ShippingAddressInput @doc(description: "Defines a single shipping address.") {
+    customer_address_id: Int @doc(description: "An ID from the customer's address book that uniquely identifies the address to be used for shipping.")
+    address: CartAddressInput @doc(description: "Defines a shipping address.")
+    customer_notes: String @doc(description: "Text provided by the shopper.")
 }
 
-input SetBillingAddressOnCartInput {
-    cart_id: String!
-    billing_address: BillingAddressInput!
+input SetBillingAddressOnCartInput @doc(description: "Sets the billing address.") {
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
+    billing_address: BillingAddressInput! @doc(description: "The billing address.")
 }
 
-input BillingAddressInput {
-    customer_address_id: Int
-    address: CartAddressInput
-    use_for_shipping: Boolean @doc(description: "Deprecated: use `same_as_shipping` field instead")
-    same_as_shipping: Boolean @doc(description: "Set billing address same as shipping")
+input BillingAddressInput @doc(description: "Defines the billing address.") {
+    customer_address_id: Int @doc(description: "An ID from the customer's address book that uniquely identifies the address to be used for billing.")
+    address: CartAddressInput @doc(description: "Defines a billing address.")
+    use_for_shipping: Boolean @doc(description: "Indicates whether to set the shipping address to be the same as this billing address.")
+    same_as_shipping: Boolean @doc(description: "Indicates whether to set the billing address to be the same as the existing shipping address on the cart.")
 }
 
-input CartAddressInput {
-    firstname: String!
-    lastname: String!
-    company: String
-    street: [String!]!
-    city: String!
-    region: String
-    postcode: String
-    country_code: String!
-    telephone: String!
-    save_in_address_book: Boolean
+input CartAddressInput @doc(description: "Defines the billing or shipping address to be applied to the cart.") {
+    firstname: String! @doc(description: "The first name of the customer or guest.")
+    lastname: String! @doc(description: "The last name of the customer or guest.")
+    company: String @doc(description: "The company specified for the billing or shipping address.")
+    street: [String!]! @doc(description: "An array containing the street for the billing or shipping address.")
+    city: String! @doc(description: "The city specified for the billing or shipping address.")
+    region: String @doc(description: "A string that defines the state or province of the billing or shipping address.")
+    region_id: Int @doc(description: "An integer that defines the state or province of the billing or shipping address.")
+    postcode: String @doc(description: "The ZIP or postal code of the billing or shipping address.")
+    country_code: String! @doc(description: "The country code and label for the billing or shipping address.")
+    telephone: String @doc(description: "The telephone number for the billing or shipping address.")
+    vat_id: String @doc(description: "The VAT company number for billing or shipping address.")
+    save_in_address_book: Boolean @doc(description: "Determines whether to save the address in the customer's address book. The default value is true.")
 }
 
-input SetShippingMethodsOnCartInput {
-    cart_id: String!
-    shipping_methods: [ShippingMethodInput!]!
+input SetShippingMethodsOnCartInput @doc(description: "Applies one or shipping methods to the cart.") {
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
+    shipping_methods: [ShippingMethodInput!]! @doc(description: "An array of shipping methods.")
 }
 
-input ShippingMethodInput {
-    carrier_code: String!
-    method_code: String!
+input ShippingMethodInput @doc(description: "Defines the shipping carrier and method.") {
+    carrier_code: String! @doc(description: "A string that identifies a commercial carrier or an offline delivery method.")
+    method_code: String! @doc(description: "A string that indicates which service a commercial carrier will use to ship items. For offline delivery methods, this value is similar to the label displayed on the checkout page.")
 }
 
-input SetPaymentMethodAndPlaceOrderInput {
-    cart_id: String!
-    payment_method: PaymentMethodInput!
+input SetPaymentMethodAndPlaceOrderInput @doc(description: "Applies a payment method to the quote.") {
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
+    payment_method: PaymentMethodInput! @doc(description: "The payment method data to apply to the cart.")
 }
 
-input PlaceOrderInput {
-    cart_id: String!
+input PlaceOrderInput @doc(description: "Specifies the quote to be converted to an order.") {
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
 }
 
-input SetPaymentMethodOnCartInput {
-    cart_id: String!
-    payment_method: PaymentMethodInput!
+input SetPaymentMethodOnCartInput @doc(description: "Applies a payment method to the cart.") {
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
+    payment_method: PaymentMethodInput! @doc(description: "The payment method data to apply to the cart.")
 }
 
-input PaymentMethodInput {
-    code: String! @doc(description:"Payment method code")
-    purchase_order_number: String @doc(description:"Purchase order number")
+input PaymentMethodInput @doc(description: "Defines the payment method.") {
+    code: String! @doc(description: "The internal name for the payment method.")
+    purchase_order_number: String @doc(description:"The purchase order number. Optional for most payment methods.")
 }
 
-input SetGuestEmailOnCartInput {
-    cart_id: String!
-    email: String!
+input SetGuestEmailOnCartInput @doc(description: "Defines the guest email and cart.") {
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
+    email: String! @doc(description: "The email address of the guest.")
 }
 
-type CartPrices {
-    grand_total: Money
-    subtotal_including_tax: Money
-    subtotal_excluding_tax: Money
-    discount: CartDiscount @deprecated(reason: "Use discounts instead ")
-    subtotal_with_discount_excluding_tax: Money
-    applied_taxes: [CartTaxItem]
-    discounts: [Discount] @doc(description:"An array of applied discounts") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Discounts")
+type CartPrices  @doc(description: "Contains details about the final price of items in the cart, including discount and tax information.") {
+    grand_total: Money  @doc(description: "The total, including discounts, taxes, shipping, and other fees.")
+    subtotal_including_tax: Money  @doc(description: "The subtotal including any applied taxes.")
+    subtotal_excluding_tax: Money  @doc(description: "The subtotal without any applied taxes.")
+    discount: CartDiscount @deprecated(reason: "Use discounts instead.")
+    subtotal_with_discount_excluding_tax: Money  @doc(description: "The subtotal with any discounts applied, but not taxes.")
+    applied_taxes: [CartTaxItem]  @doc(description: "An array containing the names and amounts of taxes applied to each item in the cart.")
+    discounts: [Discount] @doc(description:"An array containing cart rule discounts, store credit and gift cards applied to the cart.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Discounts")
 }
 
-type CartTaxItem {
-    amount: Money!
-    label: String!
+type CartTaxItem  @doc(description: "Contains tax information about an item in the cart.") {
+    amount: Money! @doc(description: "The amount of tax applied to the item.")
+    label: String! @doc(description: "The description of the tax.")
 }
 
-type CartDiscount {
-    amount: Money!
-    label: [String!]!
+type CartDiscount @doc(description: "Contains information about discounts applied to the cart.") {
+    amount: Money! @doc(description: "The amount of the discount applied to the item.")
+    label: [String!]! @doc(description: "The description of the discount.")
 }
 
-type SetPaymentMethodOnCartOutput {
-    cart: Cart!
+type SetPaymentMethodOnCartOutput @doc(description: "Contains details about the cart after setting the payment method.") {
+    cart: Cart! @doc(description: "The cart after setting the payment method.")
 }
 
-type SetBillingAddressOnCartOutput {
-    cart: Cart!
+type SetBillingAddressOnCartOutput @doc(description: "Contains details about the cart after setting the billing address.") {
+    cart: Cart! @doc(description: "The cart after setting the billing address.")
 }
 
-type SetShippingAddressesOnCartOutput {
-    cart: Cart!
+type SetShippingAddressesOnCartOutput @doc(description: "Contains details about the cart after setting the shipping addresses.") {
+    cart: Cart! @doc(description: "The cart after setting the shipping addresses.")
 }
 
-type SetShippingMethodsOnCartOutput {
-    cart: Cart!
+type SetShippingMethodsOnCartOutput @doc(description: "Contains details about the cart after setting the shipping methods.") {
+    cart: Cart! @doc(description: "The cart after setting the shipping methods.")
 }
 
-type ApplyCouponToCartOutput {
-    cart: Cart!
+type ApplyCouponToCartOutput @doc(description: "Contains details about the cart after applying a coupon.") {
+    cart: Cart! @doc(description: "The cart after applying a coupon.")
 }
 
-type PlaceOrderOutput {
-    order: Order!
+type PlaceOrderOutput @doc(description: "Contains the results of the request to place an order.") {
+    order: Order! @doc(description: "The ID of the order.")
 }
 
-type Cart {
-    id: ID! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\MaskedCartId") @doc(description: "The ID of the cart.")
-    items: [CartItemInterface] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItems")
-    applied_coupon: AppliedCoupon @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupon") @doc(description:"An array of coupons that have been applied to the cart") @deprecated(reason: "Use applied_coupons instead ")
-    applied_coupons: [AppliedCoupon] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupons") @doc(description:"An array of `AppliedCoupon` objects. Each object contains the `code` text attribute, which specifies the coupon code")
-    email: String @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartEmail")
-    shipping_addresses: [ShippingCartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddresses")
-    billing_address: BillingCartAddress @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress")
-    available_payment_methods: [AvailablePaymentMethod] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "Available payment methods")
-    selected_payment_method: SelectedPaymentMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SelectedPaymentMethod")
-    prices: CartPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartPrices")
-    total_quantity: Float! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartTotalQuantity")
-    is_virtual: Boolean! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartIsVirtual")
+type Cart @doc(description: "Contains the contents and other details about a guest or customer cart.") {
+    id: ID! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\MaskedCartId") @doc(description: "The unique ID for a `Cart` object.")
+    items: [CartItemInterface] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItems") @doc(description: "An array of products that have been added to the cart.")
+    applied_coupon: AppliedCoupon @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupon") @deprecated(reason: "Use `applied_coupons` instead.")
+    applied_coupons: [AppliedCoupon] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupons") @doc(description:"An array of `AppliedCoupon` objects. Each object contains the `code` text attribute, which specifies the coupon code.")
+    email: String @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartEmail") @doc(description: "The email address of the guest or customer.")
+    shipping_addresses: [ShippingCartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddresses") @doc(description: "An array of shipping addresses assigned to the cart.")
+    billing_address: BillingCartAddress @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress") @doc(description: "The billing address assigned to the cart.")
+    available_payment_methods: [AvailablePaymentMethod] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "An array of available payment methods.")
+    selected_payment_method: SelectedPaymentMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SelectedPaymentMethod") @doc(description: "Indicates which payment method was applied to the cart.")
+    prices: CartPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartPrices") @doc(description: "Pricing details for the quote.")
+    total_quantity: Float! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartTotalQuantity") @doc(description: "The total number of items in the cart.")
+    is_virtual: Boolean! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartIsVirtual") @doc(description: "Indicates whether the cart contains only virtual products.")
 }
 
 interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddressTypeResolver") {
-    firstname: String!
-    lastname: String!
-    company: String
-    street: [String!]!
-    city: String!
-    region: CartAddressRegion
-    postcode: String
-    country: CartAddressCountry!
-    telephone: String!
+    uid: String! @doc(description: "The unique id of the customer address.")
+    firstname: String! @doc(description: "The first name of the customer or guest.")
+    lastname: String! @doc(description: "The last name of the customer or guest.")
+    company: String @doc(description: "The company specified for the billing or shipping address.")
+    street: [String!]! @doc(description: "An array containing the street for the billing or shipping address.")
+    city: String! @doc(description: "The city specified for the billing or shipping address.")
+    region: CartAddressRegion @doc(description: "An object containing the region label and code.")
+    postcode: String @doc(description: "The ZIP or postal code of the billing or shipping address.")
+    country: CartAddressCountry! @doc(description: "An object containing the country label and code.")
+    telephone: String @doc(description: "The telephone number for the billing or shipping address.")
+    vat_id: String @doc(description: "The VAT company number for billing or shipping address.")
 }
 
-type ShippingCartAddress implements CartAddressInterface {
-    available_shipping_methods: [AvailableShippingMethod] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddress\\AvailableShippingMethods")
-    selected_shipping_method: SelectedShippingMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddress\\SelectedShippingMethod")
-    customer_notes: String
-    items_weight: Float @deprecated(reason: "This information shoud not be exposed on frontend")
-    cart_items: [CartItemQuantity] @deprecated(reason: "`cart_items_v2` should be used instead")
-    cart_items_v2: [CartItemInterface]
+type ShippingCartAddress implements CartAddressInterface @doc(description: "Contains shipping addresses and methods.") {
+    available_shipping_methods: [AvailableShippingMethod] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddress\\AvailableShippingMethods") @doc(description: "An array that lists the shipping methods that can be applied to the cart.")
+    selected_shipping_method: SelectedShippingMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddress\\SelectedShippingMethod") @doc(description: "An object that describes the selected shipping method.")
+    customer_notes: String @doc(description: "Text provided by the shopper.")
+    items_weight: Float @deprecated(reason: "This information should not be exposed on the frontend.")
+    cart_items: [CartItemQuantity] @deprecated(reason: "Use `cart_items_v2` instead.")
+    cart_items_v2: [CartItemInterface] @doc(description: "An array that lists the items in the cart.")
 }
 
-type BillingCartAddress implements CartAddressInterface {
-    customer_notes: String @deprecated (reason: "The field is used only in shipping address")
+type BillingCartAddress implements CartAddressInterface @doc(description: "Contains details about the billing address.") {
+    customer_notes: String @deprecated (reason: "The field is used only in shipping address.")
 }
 
-type CartItemQuantity @doc(description:"Deprecated: `cart_items` field of `ShippingCartAddress` returns now  `CartItemInterface` instead of `CartItemQuantity`") {
-    cart_item_id: Int! @deprecated(reason: "`cart_items` field of `ShippingCartAddress` returns now `CartItemInterface` instead of `CartItemQuantity`")
-    quantity: Float! @deprecated(reason: "`cart_items` field of `ShippingCartAddress` returns now `CartItemInterface` instead of `CartItemQuantity`")
+type CartItemQuantity @doc(description: "Deprecated: The `ShippingCartAddress.cart_items` field now returns `CartItemInterface`.") {
+    cart_item_id: Int! @deprecated(reason: "The `ShippingCartAddress.cart_items` field now returns `CartItemInterface`.")
+    quantity: Float! @deprecated(reason: "The `ShippingCartAddress.cart_items` field now returns `CartItemInterface`.")
 }
 
-type CartAddressRegion {
-    code: String!
-    label: String!
+type CartAddressRegion @doc(description: "Contains details about the region in a billing or shipping address.") {
+    code: String @doc(description: "The state or province code.")
+    label: String @doc(description: "The display label for the region.")
+    region_id: Int @doc(description: "The unique ID for a pre-defined region.")
 }
 
-type CartAddressCountry {
-    code: String!
-    label: String!
+type CartAddressCountry @doc(description: "Contains details the country in a billing or shipping address.") {
+    code: String! @doc(description: "The country code.")
+    label: String! @doc(description: "The display label for the country.")
 }
 
-type SelectedShippingMethod {
-    carrier_code: String!
-    method_code: String!
-    carrier_title: String!
-    method_title: String!
-    amount: Money!
-    base_amount: Money @deprecated(reason: "The field should not be used on the storefront")
+type SelectedShippingMethod @doc(description: "Contains details about the selected shipping method and carrier.") {
+    carrier_code: String! @doc(description: "A string that identifies a commercial carrier or an offline shipping method.")
+    method_code: String! @doc(description: "A shipping method code associated with a carrier.")
+    carrier_title: String! @doc(description: "The label for the carrier code.")
+    method_title: String! @doc(description: "The label for the method code.")
+    amount: Money! @doc(description: "The cost of shipping using this shipping method.")
+    base_amount: Money @deprecated(reason: "The field should not be used on the storefront.")
+    price_excl_tax: Money! @doc(description: "The cost of shipping using this shipping method, excluding tax.")
+    price_incl_tax: Money! @doc(description: "The cost of shipping using this shipping method, including tax.")
 }
 
-type AvailableShippingMethod {
-    carrier_code: String!
-    carrier_title: String!
-    method_code: String @doc(description: "Could be null if method is not available")
-    method_title: String @doc(description: "Could be null if method is not available")
-    error_message: String
-    amount: Money!
-    base_amount: Money @deprecated(reason: "The field should not be used on the storefront")
-    price_excl_tax: Money!
-    price_incl_tax: Money!
-    available: Boolean!
+type AvailableShippingMethod @doc(description: "Contains details about the possible shipping methods and carriers.") {
+    carrier_code: String! @doc(description: "A string that identifies a commercial carrier or an offline shipping method.")
+    carrier_title: String! @doc(description: "The label for the carrier code.")
+    method_code: String @doc(description: "A shipping method code associated with a carrier. The value could be null if no method is available.")
+    method_title: String @doc(description: "The label for the shipping method code. The value could be null if no method is available.")
+    error_message: String @doc(description: "Describes an error condition.")
+    amount: Money! @doc(description: "The cost of shipping using this shipping method.")
+    base_amount: Money @deprecated(reason: "The field should not be used on the storefront.")
+    price_excl_tax: Money! @doc(description: "The cost of shipping using this shipping method, excluding tax.")
+    price_incl_tax: Money! @doc(description: "The cost of shipping using this shipping method, including tax.")
+    available: Boolean! @doc(description: "Indicates whether this shipping method can be applied to the cart.")
 }
 
-type AvailablePaymentMethod {
-    code: String! @doc(description: "The payment method code")
+type AvailablePaymentMethod @doc(description: "Describes a payment method that the shopper can use to pay for the order.") {
+    code: String! @doc(description: "The payment method code.")
     title: String! @doc(description: "The payment method title.")
 }
 
-type SelectedPaymentMethod {
-    code: String! @doc(description: "The payment method code")
+type SelectedPaymentMethod @doc(description: "Describes the payment method the shopper selected.") {
+    code: String! @doc(description: "The payment method code.")
     title: String! @doc(description: "The payment method title.")
     purchase_order_number: String @doc(description: "The purchase order number.")
 }
 
-type AppliedCoupon {
-    code: String!
+type AppliedCoupon @doc(description: "Contains the applied coupon code.") {
+    code: String! @doc(description: "The coupon code the shopper applied to the card.")
 }
 
-input RemoveCouponFromCartInput {
-    cart_id: String!
+input RemoveCouponFromCartInput @doc(description: "Specifies the cart from which to remove a coupon.") {
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
 }
 
-type RemoveCouponFromCartOutput {
-    cart: Cart
+type RemoveCouponFromCartOutput @doc(description: "Contains details about the cart after removing a coupon.") {
+    cart: Cart @doc(description: "The cart after removing a coupon.")
 }
 
-type AddSimpleProductsToCartOutput {
-    cart: Cart!
+type AddSimpleProductsToCartOutput @doc(description: "Contains details about the cart after adding simple or group products.") {
+    cart: Cart! @doc(description: "The cart after adding products.")
 }
 
-type AddVirtualProductsToCartOutput {
-    cart: Cart!
+type AddVirtualProductsToCartOutput @doc(description: "Contains details about the cart after adding virtual products.") {
+    cart: Cart! @doc(description: "The cart after adding products.")
 }
 
-type UpdateCartItemsOutput {
-    cart: Cart!
+type UpdateCartItemsOutput @doc(description: "Contains details about the cart after updating items.") {
+    cart: Cart! @doc(description: "The cart after updating products.")
 }
 
-type RemoveItemFromCartOutput {
-    cart: Cart!
+type RemoveItemFromCartOutput @doc(description: "Contains details about the cart after removing an item.") {
+    cart: Cart! @doc(description: "The cart after removing an item.")
 }
 
-type SetGuestEmailOnCartOutput {
-    cart: Cart!
+type SetGuestEmailOnCartOutput @doc(description: "Contains details about the cart after setting the email of a guest.") {
+    cart: Cart! @doc(description: "The cart after setting the guest email.")
 }
 
-type SimpleCartItem implements CartItemInterface @doc(description: "Simple Cart Item") {
-    customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
+type SimpleCartItem implements CartItemInterface @doc(description: "An implementation for simple product cart items.") {
+    customizable_options: [SelectedCustomizableOption]! @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions") @doc(description: "An array containing the customizable options the shopper selected.")
 }
 
-type VirtualCartItem implements CartItemInterface @doc(description: "Virtual Cart Item") {
-    customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
+type VirtualCartItem implements CartItemInterface @doc(description: "An implementation for virtual product cart items.") {
+    customizable_options: [SelectedCustomizableOption]! @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions") @doc(description: "An array containing customizable options the shopper selected.")
 }
 
-interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemTypeResolver") {
-    id: String!
-    quantity: Float!
-    prices: CartItemPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemPrices")
-    product: ProductInterface!
+interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemTypeResolver") @doc(description: "An interface for products in a cart.") {
+    id: String! @deprecated(reason: "Use `uid` instead.")
+    uid: ID! @doc(description: "The unique ID for a `CartItemInterface` object.")
+    quantity: Float! @doc(description: "The quantity of this item in the cart.")
+    prices: CartItemPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemPrices") @doc(description: "Contains details about the price of the item, including taxes and discounts.")
+    product: ProductInterface! @doc(description: "Details about an item in the cart.")
+    errors: [CartItemError!] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemErrors") @doc(description: "An array of errors encountered while loading the cart item")
+}
+
+type CartItemError {
+    code: CartItemErrorType! @doc(description: "An error code that describes the error encountered")
+    message: String! @doc(description: "A localized error message")
+}
+
+enum CartItemErrorType {
+    UNDEFINED
+    ITEM_QTY
+    ITEM_INCREMENTS
 }
 
 type Discount @doc(description:"Defines an individual discount. A discount can be applied to the cart as a whole or to an item.") {
-    amount: Money! @doc(description:"The amount of the discount")
-    label: String! @doc(description:"A description of the discount")
+    amount: Money! @doc(description:"The amount of the discount.")
+    label: String! @doc(description:"A description of the discount.")
 }
 
-type CartItemPrices {
-    price: Money!
-    row_total: Money!
-    row_total_including_tax: Money!
-    discounts: [Discount] @doc(description:"An array of discounts to be applied to the cart item")
-    total_item_discount: Money @doc(description:"The total of all discounts applied to the item")
+type CartItemPrices @doc(description: "Contains details about the price of the item, including taxes and discounts.") {
+    price: Money! @doc(description: "The price of the item before any discounts were applied. The price that might include tax, depending on the configured display settings for cart.")
+    price_including_tax:  Money! @doc(description: "The price of the item before any discounts were applied. The price that might include tax, depending on the configured display settings for cart.")
+    row_total: Money! @doc(description: "The value of the price multiplied by the quantity of the item.")
+    row_total_including_tax: Money! @doc(description: "The value of `row_total` plus the tax applied to the item.")
+    discounts: [Discount] @doc(description: "An array of discounts to be applied to the cart item.")
+    total_item_discount: Money @doc(description: "The total of all discounts applied to the item.")
 }
 
-type SelectedCustomizableOption {
-    id: Int!
-    label: String!
-    is_required: Boolean!
-    values: [SelectedCustomizableOptionValue!]!
-    sort_order: Int!
+type SelectedCustomizableOption @doc(description: "Identifies a customized product that has been placed in a cart.") {
+    id: Int! @deprecated(reason: "Use `SelectedCustomizableOption.customizable_option_uid` instead.")
+    customizable_option_uid: ID! @doc(description: "The unique ID for a specific `CustomizableOptionInterface` object, such as a `CustomizableFieldOption`, `CustomizableFileOption`, or `CustomizableAreaOption` object.")
+    label: String! @doc(description: "The display name of the selected customizable option.")
+    type: String! @doc(description: "The type of `CustomizableOptionInterface` object.")
+    is_required: Boolean! @doc(description: "Indicates whether the customizable option is required.")
+    values: [SelectedCustomizableOptionValue!]! @doc(description: "An array of selectable values.")
+    sort_order: Int! @doc(description: "A value indicating the order to display this option.")
 }
 
-type SelectedCustomizableOptionValue {
-    id: Int!
-    label: String!
-    value: String!
-    price: CartItemSelectedOptionValuePrice!
+type SelectedCustomizableOptionValue @doc(description: "Identifies the value of the selected customized option.") {
+    id: Int! @deprecated(reason: "Use `SelectedCustomizableOptionValue.customizable_option_value_uid` instead.")
+    customizable_option_value_uid: ID! @doc(description: "The unique ID for a value object that corresponds to the object represented by the `customizable_option_uid` attribute.")
+    label: String! @doc(description: "The display name of the selected value.")
+    value: String! @doc(description: "The text identifying the selected value.")
+    price: CartItemSelectedOptionValuePrice! @doc(description: "The price of the selected customizable value.")
 }
 
-type CartItemSelectedOptionValuePrice {
-    value: Float!
-    units: String!
-    type: PriceTypeEnum!
+type CartItemSelectedOptionValuePrice @doc(description: "Contains details about the price of a selected customizable value.") {
+    value: Float! @doc(description: "A price value.")
+    units: String! @doc(description: "A string that describes the unit of the value.")
+    type: PriceTypeEnum! @doc(description: "Indicates whether the price type is fixed, percent, or dynamic.")
 }
 
-type Order {
-    order_number: String!
-    order_id: String @deprecated(reason: "The order_id field is deprecated, use order_number instead.")
+type Order @doc(description: "Contains the order ID.") {
+    order_number: String! @doc(description: "The unique ID for an `Order` object.")
+    order_id: String @deprecated(reason: "Use `order_number` instead.")
 }
+
+type CartUserInputError @doc(description:"An error encountered while adding an item to the the cart.") {
+    message: String! @doc(description: "A localized error message.")
+    code: CartUserInputErrorType! @doc(description: "A cart-specific error code.")
+}
+
+type AddProductsToCartOutput @doc(description: "Contains details about the cart after adding products to it.") {
+    cart: Cart! @doc(description: "The cart after products have been added.")
+    user_errors: [CartUserInputError!]! @doc(description: "Contains errors encountered while adding an item to the cart.")
+}
+
+enum CartUserInputErrorType {
+    PRODUCT_NOT_FOUND
+    NOT_SALABLE
+    INSUFFICIENT_STOCK
+    UNDEFINED
+}
+

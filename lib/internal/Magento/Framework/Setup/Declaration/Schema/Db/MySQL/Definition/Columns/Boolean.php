@@ -66,6 +66,8 @@ class Boolean implements DbDefinitionProcessorInterface
     }
 
     /**
+     * Get definition for given column.
+     *
      * @param \Magento\Framework\Setup\Declaration\Schema\Dto\Columns\Boolean $column
      * @inheritdoc
      */
@@ -85,11 +87,17 @@ class Boolean implements DbDefinitionProcessorInterface
     /**
      * Boolean is presented as tinyint(1).
      *
-     * @inheritdoc
+     * @param  array $data
+     * @return array
      */
     public function fromDefinition(array $data)
     {
-        if ($data['type'] === self::INTEGER_TYPE && $data['padding'] === self::INTEGER_PADDING) {
+        if ($data['type'] === self::INTEGER_TYPE &&
+            (
+                array_key_exists('padding', $data) &&
+                $data['padding'] === self::INTEGER_PADDING
+            )
+        ) {
             $data['type'] = strtolower(self::TYPE);
             if (isset($data['default'])) {
                 $data['default'] = $data['default'] === null ? null : (bool) $data['default'];

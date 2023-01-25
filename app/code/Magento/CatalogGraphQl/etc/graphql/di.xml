@@ -91,8 +91,6 @@
             </argument>
         </arguments>
     </virtualType>
-    <preference for="Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match"
-                type="Magento\CatalogGraphQl\Model\Search\Adapter\Mysql\Query\Builder\Match" />
     <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
         <arguments>
             <argument name="extendedConfigData" xsi:type="array">
@@ -182,4 +180,32 @@
             <argument name="templateFilterModel" xsi:type="string">Magento\Widget\Model\Template\FilterEmulate</argument>
         </arguments>
     </type>
+    <type name="Magento\WishlistGraphQl\Model\Resolver\Type\WishlistItemType">
+        <arguments>
+            <argument name="supportedTypes" xsi:type="array">
+                <item name="simple" xsi:type="string">SimpleWishlistItem</item>
+                <item name="virtual" xsi:type="string">VirtualWishlistItem</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
+        <plugin name="availableProductsFilter" type="Magento\CatalogGraphQl\Plugin\AvailableProductsFilter" />
+    </type>
+    <type name="Magento\CatalogGraphQl\Model\Category\Hydrator">
+        <arguments>
+            <argument name="dataObjectProcessor" xsi:type="object">Magento\CatalogGraphQl\Category\DataObjectProcessor</argument>
+        </arguments>
+    </type>
+    <virtualType
+        name="Magento\CatalogGraphQl\Category\DataObjectProcessor"
+        type="Magento\Framework\Reflection\DataObjectProcessor"
+    >
+        <arguments>
+            <argument name="excludedMethodsClassMap" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="array">
+                    <item name="getChildren" xsi:type="string">getChildren</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

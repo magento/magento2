@@ -41,7 +41,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
@@ -52,7 +52,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     /**
      * test for \Magento\MediaStorage\Model\File\Storage\Database::deleteFolder()
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/MediaStorage/_files/database_mode.php
      * @magentoConfigFixture current_store system/media_storage_configuration/media_storage 1
      * @magentoConfigFixture current_store system/media_storage_configuration/media_database default_setup
@@ -74,7 +74,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         foreach ($filenames as $filename) {
             $this->mediaDirectory->writeFile($filename, '');
             $this->databaseHelper->saveFile($filename);
-            $this->assertEquals(true, $this->databaseHelper->fileExists($filename));
+            $this->assertTrue($this->databaseHelper->fileExists($filename));
         }
 
         $this->databaseHelper->deleteFolder('test1/test2/test3');
@@ -82,7 +82,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         $this->databaseHelper->deleteFolder('test8');
 
         foreach ($filenames as $filename) {
-            $this->assertEquals(false, $this->databaseHelper->fileExists($filename));
+            $this->assertFalse($this->databaseHelper->fileExists($filename));
             $this->mediaDirectory->delete($filename);
         }
     }

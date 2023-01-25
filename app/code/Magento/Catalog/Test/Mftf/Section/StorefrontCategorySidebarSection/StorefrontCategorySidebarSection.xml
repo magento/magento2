@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCategorySidebarSection">
+        <element name="layeredFilterBlock" type="block" selector="#layered-filter-block"/>
+        <element name="filterOptionsTitle" type="text" selector="//div[@class='filter-options-title' and contains(text(), '{{var1}}')]" parameterized="true"/>
+        <element name="filterOptions" type="text" selector=".filter-options-content .items"/>
+        <element name="filterOption" type="text" selector=".filter-options-content .item"/>
+        <element name="optionQty" type="text" selector=".filter-options-content .item .count"/>
+        <element name="filterOptionByLabel" type="button" selector=" div.filter-options-item div[data-option-label='{{optionLabel}}']" parameterized="true"/>
+        <element name="removeFilter" type="button" selector="div.filter-current .remove" timeout="30"/>
+        <element name="activeFilterOptions" type="text" selector=".filter-options-item.active .items"/>
+        <element name="activeFilterOptionItemByPosition" type="text" selector=".filter-options-item.active .items li:nth-child({{itemPosition}}) a" parameterized="true" timeout="30"/>
+        <element name="enabledFilterOptionItemByLabel" type="text" selector="//div[contains(@class, 'filter-options')]//li[@class='item']//a[contains(text(), '{{optionLabel}}')]" parameterized="true" timeout="30"/>
+        <element name="disabledFilterOptionItemByLabel" type="text" selector="//div[contains(@class, 'filter-options')]//li[@class='item' and contains(text(), '{{optionLabel}}')]" parameterized="true" timeout="30"/>
+        <element name="visibleOptionQty" type="text" selector=".filter-options-item.active .items li:nth-child({{itemPosition}}) a .count" parameterized="true" timeout="30"/>
+        <element name="shopByCategoryLinkButton" type="button" selector="//div[@class='sidebar sidebar-main']//strong[text()='Shop By']/../..//dt[text()='Category']/..//a[text()='{{var1}}']/..//span[contains(text(),' 1 ')]" parameterized="true"/>
+        <element name="expandCategoryLayeredNavigationButton" type="button" selector="//div[@class='filter-options-title'][text()='Category']"/>
+        <element name="seeLayeredNavigationCategory" type="button" selector="//div[@class='filter-options-content']//a[contains(text(),'SecondLevel')]"/>
+        <element name="seeLayeredNavigationCategoryProductQty" type="button" selector="//*[@id='narrow-by-list']/div[1]/div[2]/ol/li/a/span"/>
+        <element name="expandPriceLayeredNavigationButton" type="button" selector="//div[@class='filter-options-title'][text()='Price']"/>
+        <element name="seeLayeredNavigationFirstPriceRange" type="button" selector="//a//span[@class='price' and text()='${{minPrice}}']/..//span[@class='price' and text()='${{maxPrice}}']/..//span[@class='count' and text()=({{count}})]" parameterized="true"/>
+        <element name="seeLayeredNavigationSecondPriceRange" type="button" selector="//a//span[@class='price' and text()='${{minPrice2}}']/../..//a[text()='{{maxPrice2}}']/..//span[@class='count' and text()=({{count}})]" parameterized="true"/>
+    </section>
+</sections>

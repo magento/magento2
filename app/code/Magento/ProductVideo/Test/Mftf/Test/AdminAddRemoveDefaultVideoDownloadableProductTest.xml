@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddRemoveDefaultVideoDownloadableProductTest" extends="AdminAddRemoveDefaultVideoSimpleProductTest">
+        <annotations>
+            <features value="ProductVideo"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to add/remove default product video for a Downloadable Product"/>
+            <description value="Admin should be able to add/remove default product video for a Downloadable Product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-114"/>
+            <testCaseId value="MC-207"/>
+            <group value="catalog"/>
+            <group value="downloadable"/>
+            <group value="productVideo"/>
+            <skip>
+                <issueId value="MC-33903"/>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <magentoCLI command="downloadable:domains:add" arguments="static.magento.com" before="setYoutubeApiKeyConfig" stepKey="addDownloadableDomain"/>
+            <createData entity="ApiDownloadableProduct" stepKey="createProduct"/>
+            <createData entity="ApiDownloadableLink" after="createProduct" stepKey="addDownloadableLink">
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+        </before>
+        <after>
+            <magentoCLI command="downloadable:domains:remove" arguments="static.magento.com" before="setYoutubeApiKeyDefaultConfig" stepKey="removeDownloadableDomain"/>
+        </after>
+    </test>
+</tests>

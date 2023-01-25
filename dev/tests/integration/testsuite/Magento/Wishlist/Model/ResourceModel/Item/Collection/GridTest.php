@@ -34,7 +34,7 @@ class GridTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = ObjectManager::getInstance();
         $this->registryManager = $this->objectManager->get(Registry::class);

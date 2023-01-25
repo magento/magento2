@@ -8,6 +8,12 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="GeneralLocaleCodeConfigsForUkraine">
+        <data key="path">general/locale/code</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+        <data key="value">uk_UA</data>
+    </entity>
     <entity name="GeneralLocalCodeConfigsForChina">
         <data key="path">general/locale/code</data>
         <data key="scope">websites</data>
@@ -19,5 +25,11 @@
         <data key="scope">websites</data>
         <data key="scope_code">base</data>
         <data key="value">en_US</data>
+    </entity>
+    <entity name="GeneralLocalCodeConfigsForMexico">
+        <data key="path">general/locale/code</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+        <data key="value">es_MX</data>
     </entity>
 </entities>

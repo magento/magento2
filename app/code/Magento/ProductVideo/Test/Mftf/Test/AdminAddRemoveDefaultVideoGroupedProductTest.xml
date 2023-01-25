@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddRemoveDefaultVideoGroupedProductTest" extends="AdminAddRemoveDefaultVideoSimpleProductTest">
+        <annotations>
+            <features value="ProductVideo"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to add/remove default product video for a Grouped Product"/>
+            <description value="Admin should be able to add/remove default product video for a Grouped Product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-108"/>
+            <testCaseId value="MC-203"/>
+            <group value="catalog"/>
+            <group value="groupedProduct"/>
+            <group value="productVideo"/>
+            <skip>
+                <issueId value="MC-33903"/>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" after="setYoutubeApiKeyConfig" stepKey="createFirstSimpleProduct"/>
+            <createData entity="SimpleProduct2" after="createFirstSimpleProduct" stepKey="createSecondSimpleProduct"/>
+            <createData entity="ApiGroupedProduct" stepKey="createProduct"/>
+            <createData entity="OneSimpleProductLink" after="createProduct" stepKey="addFirstProduct">
+                <requiredEntity createDataKey="createProduct"/>
+                <requiredEntity createDataKey="createFirstSimpleProduct"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addFirstProduct" after="addFirstProduct" stepKey="addSecondProduct">
+                <requiredEntity createDataKey="createProduct"/>
+                <requiredEntity createDataKey="createSecondSimpleProduct"/>
+            </updateData>
+        </before>
+        <after>
+            <deleteData createDataKey="createFirstSimpleProduct" after="setYoutubeApiKeyDefaultConfig" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" before="deleteProduct" stepKey="deleteSecondSimpleProduct"/>
+        </after>
+    </test>
+</tests>

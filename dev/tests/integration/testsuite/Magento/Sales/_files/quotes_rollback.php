@@ -10,6 +10,7 @@ use Magento\Framework\Registry;
 use Magento\Quote\Model\QuoteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 /** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
@@ -33,4 +34,4 @@ foreach ($items as $item) {
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
-require dirname(dirname(__DIR__)) . '/Store/_files/second_store_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store_rollback.php');

@@ -3,70 +3,105 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Newsletter\Test\Unit\Model\Template;
 
+use Magento\Email\Model\Template\Css\Processor;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\Css\PreProcessor\Adapter\CssInliner;
+use Magento\Framework\Escaper;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filter\VariableResolverInterface;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\LayoutFactory;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Newsletter\Model\Subscriber;
+use Magento\Newsletter\Model\Template\Filter;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Variable\Model\Source\Variables;
+use Magento\Variable\Model\VariableFactory;
+use Magento\Widget\Model\ResourceModel\Widget as WidgetResourceModel;
+use Magento\Widget\Model\Widget;
+use Magento\Widget\Model\Widget as WidgetModel;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
 /**
+ * @covers \Magento\Newsletter\Model\Template\Filter
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FilterTest extends \PHPUnit\Framework\TestCase
+class FilterTest extends TestCase
 {
     /**
-     * @var \Magento\Newsletter\Model\Template\Filter
+     * @var Filter
      */
-    protected $filter;
+    private $filter;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
-    protected $storeManager;
+    private $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
-    protected $appState;
+    private $appStateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $scopeConfig = $this->getMockForAbstractClass(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class,
+            ScopeConfigInterface::class,
             [],
             '',
             false
         );
-        $this->storeManager = $this->getMockForAbstractClass(
-            \Magento\Store\Model\StoreManagerInterface::class,
+        $this->storeManagerMock = $this->getMockForAbstractClass(
+            StoreManagerInterface::class,
             [],
             '',
             false
         );
-        $logger = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class, [], '', false);
-        $layout = $this->getMockForAbstractClass(\Magento\Framework\View\LayoutInterface::class, [], '', false);
-        $urlModel = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class, [], '', false);
-        $string = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
-        $escaper = $this->createMock(\Magento\Framework\Escaper::class);
-        $assetRepo = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
-        $coreVariableFactory = $this->createPartialMock(\Magento\Variable\Model\VariableFactory::class, ['create']);
-        $layoutFactory = $this->createPartialMock(\Magento\Framework\View\LayoutFactory::class, ['create']);
-        $this->appState = $this->createMock(\Magento\Framework\App\State::class);
-        $emogrifier = $this->createMock(\Pelago\Emogrifier::class);
-        $configVariables = $this->createMock(\Magento\Variable\Model\Source\Variables::class);
-        $widgetResource = $this->createMock(\Magento\Widget\Model\ResourceModel\Widget::class);
-        $widget = $this->createMock(\Magento\Widget\Model\Widget::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class, [], '', false);
+        $layout = $this->getMockForAbstractClass(LayoutInterface::class, [], '', false);
+        $urlModel = $this->getMockForAbstractClass(UrlInterface::class, [], '', false);
+        $string = $this->createMock(StringUtils::class);
+        $escaper = $this->createMock(Escaper::class);
+        $assetRepo = $this->createMock(Repository::class);
+        $coreVariableFactory = $this->createPartialMock(VariableFactory::class, ['create']);
+        $layoutFactory = $this->createPartialMock(LayoutFactory::class, ['create']);
+        $this->appStateMock = $this->createMock(State::class);
+        $configVariables = $this->createMock(Variables::class);
+        $widgetResource = $this->createMock(WidgetResourceModel::class);
+        $widget = $this->createMock(WidgetModel::class);
+        $variableResolver = $this->createMock(VariableResolverInterface::class);
+        $cssProcessor = $this->createMock(Processor::class);
+        $pubDirectory = $this->createMock(Filesystem::class);
+        $cssInliner = $this->createMock(CssInliner::class);
 
-        $this->filter = new \Magento\Newsletter\Model\Template\Filter(
+        $this->filter = new Filter(
             $string,
             $logger,
             $escaper,
             $assetRepo,
             $scopeConfig,
             $coreVariableFactory,
-            $this->storeManager,
+            $this->storeManagerMock,
             $layout,
             $layoutFactory,
-            $this->appState,
+            $this->appStateMock,
             $urlModel,
-            $emogrifier,
             $configVariables,
+            $variableResolver,
+            $cssProcessor,
+            $pubDirectory,
+            $cssInliner,
             $widgetResource,
             $widget
         );
@@ -74,19 +109,19 @@ class FilterTest extends \PHPUnit\Framework\TestCase
 
     public function testWidgetDirective()
     {
-        $subscriber = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
+        $subscriber = $this->createMock(Subscriber::class);
         $this->filter->setVariables(['subscriber' => $subscriber]);
 
         $construction = '{{widget type="\Magento\Cms\Block\Widget\Page\Link" page_id="1"}}';
 
-        $store = $this->getMockForAbstractClass(\Magento\Store\Api\Data\StoreInterface::class, [], '', false);
+        $store = $this->getMockForAbstractClass(StoreInterface::class, [], '', false);
         $store->expects($this->once())
             ->method('getId')
             ->willReturn(1);
-        $this->storeManager->expects($this->once())
+        $this->storeManagerMock->expects($this->once())
             ->method('getStore')
             ->willReturn($store);
-        $this->appState->expects($this->once())
+        $this->appStateMock->expects($this->once())
             ->method('emulateAreaCode')
             ->with(
                 'frontend',
@@ -107,16 +142,16 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->filter->widgetDirective([
-                1 => $construction,
-                2 => 'type="\Magento\Cms\Block\Widget\Page\Link" page_id="1"'
-            ]);
+            1 => $construction,
+            2 => 'type="\Magento\Cms\Block\Widget\Page\Link" page_id="1"'
+        ]);
     }
 
     public function testWidgetDirectiveWithoutRequiredVariable()
     {
         $construction = '{{widget type="\Magento\Cms\Block\Widget\Page\Link" page_id="1"}}';
 
-        $this->storeManager->expects($this->never())
+        $this->storeManagerMock->expects($this->never())
             ->method('getStore');
         $result = $this->filter->widgetDirective(
             [

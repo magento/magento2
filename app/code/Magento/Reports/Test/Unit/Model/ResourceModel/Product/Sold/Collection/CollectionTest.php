@@ -11,8 +11,8 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Reports\Model\ResourceModel\Product\Sold\Collection;
 use Magento\Sales\Model\Order;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Verify data collection class.
@@ -39,16 +39,12 @@ class CollectionTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->selectMock = $this->createMock(Select::class);
-        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->collection = $this->getMockBuilder(Collection::class)
-            ->setMethods([
-                'getSelect',
-                'getConnection',
-                'getTable'
-            ])
+            ->onlyMethods(['getSelect', 'getConnection', 'getTable'])
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -69,15 +65,15 @@ class CollectionTest extends TestCase
         $this->selectMock->expects($this->exactly(2))
             ->method('columns')
             ->willReturnSelf();
-        $this->selectMock->expects($this->at(6))
+        $this->selectMock
             ->method('columns')
-            ->with('COUNT(DISTINCT main_table.entity_id)');
-        $this->selectMock->expects($this->at(7))
+            ->withConsecutive(
+                ['COUNT(DISTINCT main_table.entity_id)'],
+                ['COUNT(DISTINCT order_items.item_id)']
+            );
+        $this->selectMock
             ->method('reset')
-            ->with(Select::COLUMNS);
-        $this->selectMock->expects($this->at(8))
-            ->method('columns')
-            ->with('COUNT(DISTINCT order_items.item_id)');
+            ->withConsecutive([], [], [], [Select::COLUMNS]);
 
         $this->assertEquals($this->selectMock, $this->collection->getSelectCountSql());
     }

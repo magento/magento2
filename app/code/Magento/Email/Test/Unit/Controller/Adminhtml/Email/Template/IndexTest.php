@@ -3,109 +3,131 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Email\Test\Unit\Controller\Adminhtml\Email\Template;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Block\Menu;
+use Magento\Backend\Block\Widget\Breadcrumbs;
+use Magento\Email\Controller\Adminhtml\Email\Template\Index;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\View;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout;
+use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Title;
+use Magento\Framework\View\Result\Page;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Index
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IndexTest extends \PHPUnit\Framework\TestCase
+class IndexTest extends TestCase
 {
     /**
-     * @var \Magento\Email\Controller\Adminhtml\Email\Template\Index
+     * @var Index
      */
-    protected $indexController;
+    private $indexController;
 
     /**
-     * @var \Magento\Backend\App\Action\Context
+     * @var Context
      */
-    protected $context;
+    private $context;
 
     /**
-     * @var \Magento\Framework\App\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request|MockObject
      */
-    protected $requestMock;
+    private $requestMock;
 
     /**
-     * @var \Magento\Framework\App\View|\PHPUnit_Framework_MockObject_MockObject
+     * @var View|MockObject
      */
-    protected $viewMock;
+    private $viewMock;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var Layout|MockObject
      */
-    protected $layoutMock;
+    private $layoutMock;
 
     /**
-     * @var \Magento\Backend\Block\Menu|\PHPUnit_Framework_MockObject_MockObject
+     * @var Menu|MockObject
      */
-    protected $menuBlockMock;
+    private $menuBlockMock;
 
     /**
-     * @var \Magento\Backend\Block\Widget\Breadcrumbs|\PHPUnit_Framework_MockObject_MockObject
+     * @var Breadcrumbs|MockObject
      */
-    protected $breadcrumbsBlockMock;
+    private $breadcrumbsBlockMock;
 
     /**
-     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var Page|MockObject
      */
-    protected $resultPageMock;
+    private $resultPageMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
-    protected $pageConfigMock;
+    private $pageConfigMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var Title|MockObject
      */
-    protected $pageTitleMock;
+    private $pageTitleMock;
 
-    protected function setUp()
+    /**
+     * @var MockObject|Registry
+     */
+    private $registryMock;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->registryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
+        $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->viewMock = $this->getMockBuilder(\Magento\Framework\App\View::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['loadLayout', 'getLayout', 'getPage', 'renderLayout'])
+        $this->viewMock = $this->getMockBuilder(View::class)->disableOriginalConstructor()
+            ->onlyMethods(['loadLayout', 'getLayout', 'getPage', 'renderLayout'])
             ->getMock();
-        $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getBlock'])
+        $this->layoutMock = $this->getMockBuilder(Layout::class)->disableOriginalConstructor()
+            ->onlyMethods(['getBlock'])
             ->getMock();
-        $this->menuBlockMock = $this->getMockBuilder(\Magento\Backend\Block\Menu::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setActive', 'getMenuModel', 'getParentItems'])
+        $this->menuBlockMock = $this->getMockBuilder(Menu::class)->disableOriginalConstructor()
+            ->onlyMethods(['getMenuModel'])
+            ->addMethods(['setActive', 'getParentItems'])
             ->getMock();
-        $this->breadcrumbsBlockMock = $this->getMockBuilder(\Magento\Backend\Block\Widget\Breadcrumbs::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['addLink'])
+        $this->breadcrumbsBlockMock = $this->getMockBuilder(Breadcrumbs::class)->disableOriginalConstructor()
+            ->onlyMethods(['addLink'])
             ->getMock();
-        $this->resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setActiveMenu', 'getConfig', 'addBreadcrumb'])
+        $this->resultPageMock = $this->getMockBuilder(Page::class)->disableOriginalConstructor()
+            ->onlyMethods(['getConfig'])
+            ->addMethods(['setActiveMenu', 'addBreadcrumb'])
             ->getMock();
-        $this->pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
+        $this->pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->pageTitleMock = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
+        $this->pageTitleMock = $this->getMockBuilder(Title::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->context = $objectManager->getObject(
-            \Magento\Backend\App\Action\Context::class,
+            Context::class,
             [
                 'request' => $this->requestMock,
                 'view' => $this->viewMock
             ]
         );
         $this->indexController = $objectManager->getObject(
-            \Magento\Email\Controller\Adminhtml\Email\Template\Index::class,
+            Index::class,
             [
                 'context' => $this->context,
             ]
@@ -114,24 +136,21 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Index::execute
+     *
+     * @return void
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $this->prepareExecute();
 
         $this->viewMock->expects($this->atLeastOnce())
             ->method('getLayout')
             ->willReturn($this->layoutMock);
-        $this->layoutMock->expects($this->at(0))
-            ->method('getBlock')
-            ->with('menu')
-            ->will($this->returnValue($this->menuBlockMock));
         $this->menuBlockMock->expects($this->any())
-            ->method('getMenuModel')
-            ->will($this->returnSelf());
+            ->method('getMenuModel')->willReturnSelf();
         $this->menuBlockMock->expects($this->any())
             ->method('getParentItems')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->viewMock->expects($this->once())
             ->method('getPage')
             ->willReturn($this->resultPageMock);
@@ -144,10 +163,10 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $this->pageTitleMock->expects($this->once())
             ->method('prepend')
             ->with('Email Templates');
-        $this->layoutMock->expects($this->at(1))
+        $this->layoutMock
             ->method('getBlock')
-            ->with('breadcrumbs')
-            ->will($this->returnValue($this->breadcrumbsBlockMock));
+            ->withConsecutive(['menu'], ['breadcrumbs'])
+            ->willReturnOnConsecutiveCalls($this->menuBlockMock, $this->breadcrumbsBlockMock);
         $this->breadcrumbsBlockMock->expects($this->any())
             ->method('addLink')
             ->willReturnSelf();
@@ -157,17 +176,19 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Index::execute
+     *
+     * @return void
      */
-    public function testExecuteAjax()
+    public function testExecuteAjax(): void
     {
         $this->prepareExecute(true);
-        $indexController = $this->getMockBuilder(\Magento\Email\Controller\Adminhtml\Email\Template\Index::class)
-            ->setMethods(['getRequest', '_forward'])
+        $indexController = $this->getMockBuilder(Index::class)
+            ->onlyMethods(['getRequest', '_forward'])
             ->disableOriginalConstructor()
             ->getMock();
         $indexController->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $indexController->expects($this->once())
             ->method('_forward')
             ->with('grid');
@@ -176,8 +197,10 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param bool $ajax
+     *
+     * @return void
      */
-    protected function prepareExecute($ajax = false)
+    protected function prepareExecute(bool $ajax = false): void
     {
         $this->requestMock->expects($this->once())
             ->method('getQuery')

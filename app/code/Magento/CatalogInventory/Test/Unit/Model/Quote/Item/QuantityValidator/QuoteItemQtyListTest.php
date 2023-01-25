@@ -3,16 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Quote\Item\QuantityValidator;
 
+use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
-use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
 
 /**
- * Class QuoteItemQtyListTest
- *
  * Test for QuoteItemQtyList class
  */
 class QuoteItemQtyListTest extends TestCase
@@ -31,7 +30,7 @@ class QuoteItemQtyListTest extends TestCase
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
         $this->quoteItemQtyList = $objectManagerHelper->getObject(QuoteItemQtyList::class);

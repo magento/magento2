@@ -3,53 +3,86 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Search\Test\Unit\Controller\Adminhtml\Term;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Session;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Search\Controller\Adminhtml\Term\Save;
+use Magento\Search\Model\Query;
+use Magento\Search\Model\QueryFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SaveTest extends \PHPUnit\Framework\TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class SaveTest extends TestCase
 {
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var RequestInterface|MockObject
+     */
     private $request;
 
-    /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Redirect|MockObject
+     */
     private $redirect;
 
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var ManagerInterface|MockObject
+     */
     private $messageManager;
 
-    /** @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Session|MockObject
+     */
     private $session;
 
-    /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Context|MockObject
+     */
     private $context;
 
-    /** @var \Magento\Search\Model\Query|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Query|MockObject
+     */
     private $query;
 
-    /** @var \Magento\Search\Controller\Adminhtml\Term\Save */
+    /**
+     * @var Save
+     */
     private $controller;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->redirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
-            ->setMethods(['setPath'])
+        $this->redirect = $this->getMockBuilder(Redirect::class)
+            ->onlyMethods(['setPath'])
             ->disableOriginalConstructor()
             ->getMock();
-        $redirectFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
-            ->setMethods(['create'])
+        $redirectFactory = $this->getMockBuilder(ResultFactory::class)
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $redirectFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->redirect));
+            ->willReturn($this->redirect);
         $this->context->expects($this->any())
             ->method('getResultRedirectFactory')
             ->willReturn($redirectFactory);
@@ -57,52 +90,53 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('getResultFactory')
             ->willReturn($redirectFactory);
 
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPostValue', 'isPost', 'getPost'])
+            ->addMethods(['getPostValue', 'isPost', 'getPost'])
             ->getMockForAbstractClass();
         $this->context->expects($this->atLeastOnce())
             ->method('getRequest')
             ->willReturn($this->request);
 
-        $objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->context->expects($this->any())
             ->method('getObjectManager')
             ->willReturn($objectManager);
 
-        $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
+        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addSuccessMessage', 'addErrorMessage', 'addExceptionMessage'])
+            ->onlyMethods(['addSuccessMessage', 'addErrorMessage', 'addExceptionMessage'])
             ->getMockForAbstractClass();
         $this->context->expects($this->any())
             ->method('getMessageManager')
             ->willReturn($this->messageManager);
 
-        $this->session = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
+        $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setPageData'])
+            ->addMethods(['setPageData'])
             ->getMock();
         $this->context->expects($this->any())
             ->method('getSession')
             ->willReturn($this->session);
 
-        $this->query = $this->getMockBuilder(\Magento\Search\Model\Query::class)
+        $this->query = $this->getMockBuilder(Query::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'load', 'addData', 'setIsProcessed', 'save', 'loadByQueryText', 'setStoreId'])
+            ->onlyMethods(['getId', 'load', 'addData', 'save', 'loadByQueryText', 'setStoreId'])
+            ->addMethods(['setIsProcessed'])
             ->getMock();
-        $queryFactory = $this->getMockBuilder(\Magento\Search\Model\QueryFactory::class)
-            ->setMethods(['create'])
+        $queryFactory = $this->getMockBuilder(QueryFactory::class)
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $queryFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->query));
+            ->willReturn($this->query);
 
         $this->controller = $objectManagerHelper->getObject(
-            \Magento\Search\Controller\Adminhtml\Term\Save::class,
+            Save::class,
             [
                 'context' => $this->context,
                 'queryFactory' => $queryFactory,
@@ -113,12 +147,18 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     /**
      * @param bool $isPost
      * @param array $data
+     *
+     * @return void
      * @dataProvider executeIsPostDataDataProvider
      */
-    public function testExecuteIsPostData($isPost, $data)
+    public function testExecuteIsPostData(bool $isPost, array $data): void
     {
-        $this->request->expects($this->at(0))->method('getPostValue')->willReturn($data);
-        $this->request->expects($this->at(1))->method('isPost')->willReturn($isPost);
+        $this->request
+            ->method('getPostValue')
+            ->willReturn($data);
+        $this->request
+            ->method('isPost')
+            ->willReturn($isPost);
         $this->redirect->expects($this->once())->method('setPath')->willReturnSelf();
         $this->assertSame($this->redirect, $this->controller->execute());
     }
@@ -126,7 +166,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function executeIsPostDataDataProvider()
+    public function executeIsPostDataDataProvider(): array
     {
         return [
             [false, ['0' => '0']],
@@ -134,11 +174,14 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testExecuteLoadQueryQueryId()
+    /**
+     * @return void
+     */
+    public function testExecuteLoadQueryQueryId(): void
     {
         $queryId = 1;
         $queryText = '';
-        $this->mockGetRequestData($queryText, $queryId);
+        $this->mockGetRequestData($queryText, $queryId, false);
 
         $this->query->expects($this->once())->method('getId')->willReturn(false);
         $this->query->expects($this->once())->method('load')->with($queryId);
@@ -149,13 +192,14 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->redirect, $this->controller->execute());
     }
 
-    public function testExecuteLoadQueryQueryIdQueryText()
+    /**
+     * @return void
+     */
+    public function testExecuteLoadQueryQueryIdQueryText(): void
     {
         $queryId = 1;
         $queryText = 'search';
         $this->mockGetRequestData($queryText, $queryId);
-
-        $this->request->expects($this->at(4))->method('getPost')->with('store_id', false)->willReturn(1);
 
         $this->query->expects($this->once())->method('setStoreId');
         $this->query->expects($this->once())->method('loadByQueryText')->with($queryText);
@@ -167,13 +211,14 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->redirect, $this->controller->execute());
     }
 
-    public function testExecuteLoadQueryQueryIdQueryText2()
+    /**
+     * @return void
+     */
+    public function testExecuteLoadQueryQueryIdQueryText2(): void
     {
         $queryId = 1;
         $queryText = 'search';
         $this->mockGetRequestData($queryText, $queryId);
-
-        $this->request->expects($this->at(4))->method('getPost')->with('store_id', false)->willReturn(1);
 
         $this->query->expects($this->once())->method('setStoreId');
         $this->query->expects($this->once())->method('loadByQueryText')->with($queryText);
@@ -186,14 +231,15 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->redirect, $this->controller->execute());
     }
 
-    public function testExecuteLoadQueryQueryIdQueryTextException()
+    /**
+     * @return void
+     */
+    public function testExecuteLoadQueryQueryIdQueryTextException(): void
     {
         $queryId = 1;
         $anotherQueryId = 2;
         $queryText = 'search';
         $this->mockGetRequestData($queryText, $queryId);
-
-        $this->request->expects($this->at(4))->method('getPost')->with('store_id', false)->willReturn(1);
 
         $this->query->expects($this->once())->method('setStoreId');
         $this->query->expects($this->once())->method('loadByQueryText')->with($queryText);
@@ -205,13 +251,14 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->redirect, $this->controller->execute());
     }
 
-    public function testExecuteException()
+    /**
+     * @return void
+     */
+    public function testExecuteException(): void
     {
         $queryId = 1;
         $queryText = 'search';
         $this->mockGetRequestData($queryText, $queryId);
-
-        $this->request->expects($this->at(4))->method('getPost')->with('store_id', false)->willReturn(1);
 
         $this->query->expects($this->once())->method('setStoreId');
         $this->query->expects($this->once())->method('loadByQueryText')->willThrowException(new \Exception());
@@ -225,12 +272,31 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $queryText
      * @param int $queryId
+     * @param bool $withStoreId
+     *
+     * @return void
      */
-    private function mockGetRequestData($queryText, $queryId)
-    {
-        $this->request->expects($this->at(0))->method('getPostValue')->willReturn(['0' => '0']);
-        $this->request->expects($this->at(1))->method('isPost')->willReturn(true);
-        $this->request->expects($this->at(2))->method('getPost')->with('query_text', false)->willReturn($queryText);
-        $this->request->expects($this->at(3))->method('getPost')->with('query_id', null)->willReturn($queryId);
+    private function mockGetRequestData(
+        string $queryText,
+        int $queryId,
+        bool $withStoreId = true
+    ): void {
+        $this->request
+            ->method('getPostValue')
+            ->willReturn(['0' => '0']);
+        $this->request
+            ->method('isPost')
+            ->willReturn(true);
+        if ($withStoreId) {
+            $this->request
+                ->method('getPost')
+                ->withConsecutive(['query_text', false], ['query_id', null], ['store_id', false])
+                ->willReturnOnConsecutiveCalls($queryText, $queryId, 1);
+        } else {
+            $this->request
+                ->method('getPost')
+                ->withConsecutive(['query_text', false], ['query_id', null])
+                ->willReturnOnConsecutiveCalls($queryText, $queryId);
+        }
     }
 }

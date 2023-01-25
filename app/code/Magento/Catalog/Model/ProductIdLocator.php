@@ -19,8 +19,6 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
     private $idsLimit;
 
     /**
-     * Metadata pool.
-     *
      * @var \Magento\Framework\EntityManager\MetadataPool
      */
     private $metadataPool;
@@ -74,12 +72,13 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
      * $data['product_sku']['link_field_value' => 'product_type']
      *
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function retrieveProductIdsBySkus(array $skus)
     {
         $neededSkus = [];
         foreach ($skus as $sku) {
-            $unifiedSku = strtolower(trim($sku));
+            $unifiedSku = $sku !== null ? strtolower(trim($sku)) : '';
             if (!isset($this->idsBySku[$unifiedSku])) {
                 $neededSkus[] = $sku;
             }
@@ -97,7 +96,7 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
             for ($currentPage = 1; $currentPage <= $pages; $currentPage++) {
                 $collection->setCurPage($currentPage);
                 foreach ($collection->getItems() as $item) {
-                    $sku = strtolower(trim($item->getSku()));
+                    $sku = $item->getSku() !== null ? strtolower(trim($item->getSku())) : '';
                     $itemIdentifier = $item->getData($linkField);
                     $this->idsBySku[$sku][$itemIdentifier] = $item->getTypeId();
                 }
@@ -107,7 +106,7 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
 
         $productIds = [];
         foreach ($skus as $sku) {
-            $unifiedSku = strtolower(trim($sku));
+            $unifiedSku = $sku !== null ? strtolower(trim($sku)) : '';
             if (isset($this->idsBySku[$unifiedSku])) {
                 $productIds[$sku] = $this->idsBySku[$unifiedSku];
             }
@@ -124,7 +123,7 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
     private function truncateToLimit()
     {
         if (count($this->idsBySku) > $this->idsLimit) {
-            $this->idsBySku = array_slice($this->idsBySku, round($this->idsLimit / -2));
+            $this->idsBySku = array_slice($this->idsBySku, $this->idsLimit * -1, null, true);
         }
     }
 }

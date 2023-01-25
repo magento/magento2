@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Metadata;
 
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
@@ -17,43 +19,48 @@ use Magento\Customer\Model\Data\ValidationRule;
 use Magento\Customer\Model\Metadata\AttributeMetadataHydrator;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
+class AttributeMetadataHydratorTest extends TestCase
 {
     /**
-     * @var AttributeMetadataInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeMetadataInterfaceFactory|MockObject
      */
     private $attributeMetadataFactoryMock;
 
     /**
-     * @var OptionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var OptionInterfaceFactory|MockObject
      */
     private $optionFactoryMock;
 
     /**
-     * @var ValidationRuleInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidationRuleInterfaceFactory|MockObject
      */
     private $validationRuleFactoryMock;
 
     /**
-     * @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeMetadataInterface|MockObject
      */
     private $attributeMetadataMock;
 
     /**
-     * @var DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObjectProcessor|MockObject
      */
     private $dataObjectProcessorMock;
 
     /**
-     * @var AttributeMetadataHydrator|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeMetadataHydrator|MockObject
      */
     private $attributeMetadataHydrator;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->attributeMetadataFactoryMock = $this->createPartialMock(
@@ -62,7 +69,7 @@ class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
         );
         $this->optionFactoryMock = $this->createPartialMock(OptionInterfaceFactory::class, ['create']);
         $this->validationRuleFactoryMock = $this->createPartialMock(ValidationRuleInterfaceFactory::class, ['create']);
-        $this->attributeMetadataMock = $this->createMock(AttributeMetadataInterface::class);
+        $this->attributeMetadataMock = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
         $this->dataObjectProcessorMock = $this->createMock(DataObjectProcessor::class);
         $this->attributeMetadataHydrator = $objectManager->getObject(
             AttributeMetadataHydrator::class,
@@ -76,9 +83,10 @@ class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testHydrate()
+    public function testHydrate(): void
     {
         $optionOneData = [
             'label' => 'Label 1',
@@ -108,30 +116,23 @@ class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
         ];
 
         $optionOne = new Option($optionOneData);
-        $this->optionFactoryMock->expects($this->at(0))
-            ->method('create')
-            ->with(['data' => $optionOneData])
-            ->willReturn($optionOne);
         $optionThree = new Option($optionThreeData);
-        $this->optionFactoryMock->expects($this->at(1))
-            ->method('create')
-            ->with(['data' => $optionThreeData])
-            ->willReturn($optionThree);
         $optionFour = new Option($optionFourData);
-        $this->optionFactoryMock->expects($this->at(2))
-            ->method('create')
-            ->with(['data' => $optionFourData])
-            ->willReturn($optionFour);
 
         $optionTwoDataPartiallyConverted = [
             'label' => 'Label 2',
             'options' => [$optionThree, $optionFour]
         ];
-        $optionFour = new Option($optionTwoDataPartiallyConverted);
-        $this->optionFactoryMock->expects($this->at(3))
+        $optionFive = new Option($optionTwoDataPartiallyConverted);
+        $this->optionFactoryMock
             ->method('create')
-            ->with(['data' => $optionTwoDataPartiallyConverted])
-            ->willReturn($optionFour);
+            ->withConsecutive(
+                [['data' => $optionOneData]],
+                [['data' => $optionThreeData]],
+                [['data' => $optionFourData]],
+                [['data' => $optionTwoDataPartiallyConverted]]
+            )
+            ->willReturnOnConsecutiveCalls($optionOne, $optionThree, $optionFour, $optionFive);
 
         $validationRuleOne = new ValidationRule($validationRuleOneData);
         $this->validationRuleFactoryMock->expects($this->once())
@@ -142,7 +143,7 @@ class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
         $attributeMetadataPartiallyConverted = [
             'attribute_code' => 'attribute_code',
             'frontend_input' => 'hidden',
-            'options' => [$optionOne, $optionFour],
+            'options' => [$optionOne, $optionFive],
             'validation_rules' => [$validationRuleOne]
         ];
 
@@ -160,10 +161,7 @@ class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
             $attributeMetadataData['attribute_code'],
             $attributeMetadata->getAttributeCode()
         );
-        $this->assertInternalType(
-            \PHPUnit\Framework\Constraint\IsType::TYPE_ARRAY,
-            $attributeMetadata->getOptions()
-        );
+        $this->assertIsArray($attributeMetadata->getOptions());
         $this->assertArrayHasKey(
             0,
             $attributeMetadata->getOptions()
@@ -176,20 +174,14 @@ class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey(1, $attributeMetadata->getOptions());
         $this->assertInstanceOf(OptionInterface::class, $attributeMetadata->getOptions()[1]);
 
-        $this->assertInternalType(
-            \PHPUnit\Framework\Constraint\IsType::TYPE_ARRAY,
-            $attributeMetadata->getOptions()[1]->getOptions()
-        );
+        $this->assertIsArray($attributeMetadata->getOptions()[1]->getOptions());
         $this->assertArrayHasKey(0, $attributeMetadata->getOptions()[1]->getOptions());
         $this->assertInstanceOf(OptionInterface::class, $attributeMetadata->getOptions()[1]->getOptions()[0]);
         $this->assertEquals(
             $optionThreeData['label'],
             $attributeMetadata->getOptions()[1]->getOptions()[0]->getLabel()
         );
-        $this->assertInternalType(
-            \PHPUnit\Framework\Constraint\IsType::TYPE_ARRAY,
-            $attributeMetadata->getValidationRules()
-        );
+        $this->assertIsArray($attributeMetadata->getValidationRules());
         $this->assertArrayHasKey(0, $attributeMetadata->getValidationRules());
         $this->assertInstanceOf(ValidationRuleInterface::class, $attributeMetadata->getValidationRules()[0]);
         $this->assertEquals(
@@ -198,7 +190,10 @@ class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testExtract()
+    /**
+     * @return void
+     */
+    public function testExtract(): void
     {
         $data = ['foo' => 'bar'];
         $this->dataObjectProcessorMock->expects($this->once())

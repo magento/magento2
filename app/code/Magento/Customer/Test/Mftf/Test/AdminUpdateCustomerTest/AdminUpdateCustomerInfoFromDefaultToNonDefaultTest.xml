@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateCustomerInfoFromDefaultToNonDefaultTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Update Customer Information in Admin"/>
+            <title value="Update Customer Info from Default to Non-Default in Admin"/>
+            <description value="Update Customer Info from Default to Non-Default in Admin"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-13619"/>
+            <group value="Customer"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData stepKey="customer" entity="Simple_Customer_Without_Address"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value="customer_grid"/>
+            </actionGroup>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
+            <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="goToCustomersGridPage"/>
+            <actionGroup stepKey="resetFilter" ref="AdminResetFilterInCustomerGrid"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{AdminCustomerPage.url}}edit/id/$$customer.id$$/" stepKey="openCustomerEditPage"/>
+        <waitForPageLoad stepKey="waitForCustomerEditPage"/>
+        <!-- Update Customer Account Information -->
+        <actionGroup stepKey="editCustomerInformation" ref="AdminEditCustomerAccountInformationActionGroup">
+            <argument name="firstName" value="$$customer.firstname$$updated"/>
+            <argument name="lastName" value="$$customer.lastname$$updated"/>
+            <argument name="email" value="updated$$customer.email$$"/>
+        </actionGroup>
+        <!--Update Customer Addresses -->
+        <actionGroup stepKey="editCustomerAddress" ref="AdminEditCustomerAddressSetDefaultShippingAndBillingActionGroup">
+            <argument name="customerAddress" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <actionGroup stepKey="saveAndCheckSuccessMessage" ref="AdminSaveCustomerAndAssertSuccessMessage"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="goToCustomersGridPage"/>
+        <actionGroup stepKey="resetFilter" ref="AdminResetFilterInCustomerGrid"/>
+        <actionGroup stepKey="filterByEamil" ref="AdminFilterCustomerGridByEmail">
+            <argument name="email" value="updated$$customer.email$$"/>
+        </actionGroup>
+        <actionGroup stepKey="checkCustomerInGrid" ref="AdminAssertCustomerInCustomersGrid">
+            <argument name="text" value="updated$$customer.email$$"/>
+            <argument name="row" value="1"/>
+        </actionGroup>
+        <!-- Assert Customer in Customer Form -->
+        <amOnPage url="{{AdminCustomerPage.url}}edit/id/$$customer.id$$/" stepKey="openCustomerEditPageAfterSave"/>
+        <waitForPageLoad stepKey="waitForCustomerEditPageAfterSave"/>
+        <!-- Assert Customer Account Information -->
+        <actionGroup stepKey="checkCustomerAccountInformation" ref="AdminAssertCustomerAccountInformation">
+            <argument name="firstName" value="$$customer.firstname$$updated"/>
+            <argument name="lastName" value="$$customer.lastname$$updated"/>
+            <argument name="email" value="updated$$customer.email$$"/>
+        </actionGroup>
+        <!-- Assert Customer Default Billing Address -->
+        <actionGroup stepKey="checkDefaultBilling" ref="AdminAssertCustomerDefaultBillingAddress">
+            <argument name="firstName" value="$$customer.firstname$$updated"/>
+            <argument name="lastName" value="$$customer.lastname$$updated"/>
+            <argument name="street1" value="{{CustomerAddressSimple.street[0]}}"/>
+            <argument name="state" value="{{CustomerAddressSimple.state}}"/>
+            <argument name="postcode" value="{{CustomerAddressSimple.postcode}}"/>
+            <argument name="country" value="{{CustomerAddressSimple.country_id}}"/>
+            <argument name="telephone" value="{{CustomerAddressSimple.telephone}}"/>
+        </actionGroup>
+        <!-- Assert Customer Default Shipping Address -->
+        <actionGroup stepKey="checkDefaultShipping" ref="AdminAssertCustomerDefaultShippingAddress">
+            <argument name="firstName" value="$$customer.firstname$$updated"/>
+            <argument name="lastName" value="$$customer.lastname$$updated"/>
+            <argument name="street1" value="{{CustomerAddressSimple.street[0]}}"/>
+            <argument name="state" value="{{CustomerAddressSimple.state}}"/>
+            <argument name="postcode" value="{{CustomerAddressSimple.postcode}}"/>
+            <argument name="country" value="{{CustomerAddressSimple.country_id}}"/>
+            <argument name="telephone" value="{{CustomerAddressSimple.telephone}}"/>
+        </actionGroup>
+    </test>
+</tests>

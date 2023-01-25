@@ -17,12 +17,13 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-17607"/>
             <useCaseId value="MC-15523"/>
+            <severity value="MAJOR"/>
             <group value="swatches"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
             <comment userInput="Login as Admin" stepKey="commentLoginAsAdmin"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Log out -->
@@ -37,8 +38,7 @@
         </actionGroup>
         <!-- Select Edit next to the Default Store View -->
         <comment userInput="Select Edit next to the Default Store View" stepKey="commentEditDefaultView"/>
-        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickToEditDefaultStoreView"/>
-        <waitForPageLoad stepKey="waitForDefaultStorePage"/>
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickToEditDefaultStoreView"/>
         <!-- Expand the Product Image Watermarks section-->
         <comment userInput="Expand the Product Image Watermarks section" stepKey="commentOpenWatermarksSection"/>
         <click selector="{{AdminDesignConfigSection.watermarkSectionHeader}}" stepKey="clickToProductImageWatermarks"/>

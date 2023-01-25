@@ -3,21 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Data\Test\Unit;
 
-class StructureTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Data\Structure;
+use PHPUnit\Framework\TestCase;
+
+class StructureTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Data\Structure
+     * @var Structure
      */
     protected $_structure;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_structure = new \Magento\Framework\Data\Structure();
+        $this->_structure = new Structure();
     }
 
     /**
@@ -30,7 +35,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         $this->assertSame([], $this->_structure->exportElements());
         $this->_structure->importElements($elements);
         $this->assertSame($elements, $this->_structure->exportElements());
-        $structure = new \Magento\Framework\Data\Structure($elements);
+        $structure = new Structure($elements);
         $this->assertSame($elements, $structure->exportElements());
     }
 
@@ -44,21 +49,21 @@ class StructureTest extends \PHPUnit\Framework\TestCase
             [['element' => ['arbitrary_key' => 'value']]],
             [
                 [
-                    'one' => [\Magento\Framework\Data\Structure::CHILDREN => ['two' => 2, 'three' => 3]],
-                    'two' => [\Magento\Framework\Data\Structure::PARENT => 'one'],
-                    'three' => [\Magento\Framework\Data\Structure::PARENT => 'one'],
-                    'four' => [\Magento\Framework\Data\Structure::CHILDREN => []],
+                    'one' => [Structure::CHILDREN => ['two' => 2, 'three' => 3]],
+                    'two' => [Structure::PARENT => 'one'],
+                    'three' => [Structure::PARENT => 'one'],
+                    'four' => [Structure::CHILDREN => []],
                 ]
             ],
             [
                 [
                     'one' => [
-                        \Magento\Framework\Data\Structure::CHILDREN => ['two' => 't.w.o.'],
-                        \Magento\Framework\Data\Structure::GROUPS => [
+                        Structure::CHILDREN => ['two' => 't.w.o.'],
+                        Structure::GROUPS => [
                             'group' => ['two' => 'two', 'three' => 'three'],
                         ],
                     ],
-                    'two' => [\Magento\Framework\Data\Structure::PARENT => 'one'],
+                    'two' => [Structure::PARENT => 'one'],
                     'three' => [],
                 ]
             ]
@@ -69,10 +74,10 @@ class StructureTest extends \PHPUnit\Framework\TestCase
      * @param array $elements
      * @return void
      * @dataProvider importExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testImportException($elements)
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->_structure->importElements($elements);
     }
 
@@ -84,54 +89,54 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         return [
             'numeric id' => [['element']],
             'completely missing nested set' => [
-                ['one' => [\Magento\Framework\Data\Structure::PARENT => 'two'], 'two' => []],
+                ['one' => [Structure::PARENT => 'two'], 'two' => []],
             ],
             'messed up nested set' => [
                 [
-                    'one' => [\Magento\Framework\Data\Structure::PARENT => 'two'],
-                    'two' => [\Magento\Framework\Data\Structure::CHILDREN => ['three' => 't.h.r.e.e.']],
+                    'one' => [Structure::PARENT => 'two'],
+                    'two' => [Structure::CHILDREN => ['three' => 't.h.r.e.e.']],
                     'three' => [],
                 ],
             ],
             'nested set invalid data type' => [
-                ['one' => [\Magento\Framework\Data\Structure::CHILDREN => '']],
+                ['one' => [Structure::CHILDREN => '']],
             ],
             'duplicate aliases' => [
                 [
                     'one' => [
-                        \Magento\Framework\Data\Structure::CHILDREN => ['two' => 'alias', 'three' => 'alias'],
+                        Structure::CHILDREN => ['two' => 'alias', 'three' => 'alias'],
                     ],
-                    'two' => [\Magento\Framework\Data\Structure::PARENT => 'one'],
-                    'three' => [\Magento\Framework\Data\Structure::PARENT => 'one'],
+                    'two' => [Structure::PARENT => 'one'],
+                    'three' => [Structure::PARENT => 'one'],
                 ],
             ],
             'missing reference back to parent' => [
                 ['one' => [
-                    \Magento\Framework\Data\Structure::CHILDREN => ['two' => 't.w.o.'], ], 'two' => [],
+                    Structure::CHILDREN => ['two' => 't.w.o.'], ], 'two' => [],
                 ],
             ],
             'broken reference back to parent' => [
                 [
                     'one' => [
-                        \Magento\Framework\Data\Structure::CHILDREN => ['two' => 't.w.o.', 'three' => 't.h.r.e.e.'],
+                        Structure::CHILDREN => ['two' => 't.w.o.', 'three' => 't.h.r.e.e.'],
                     ],
-                    'two' => [\Magento\Framework\Data\Structure::PARENT => 'three'],
-                    'three' => [\Magento\Framework\Data\Structure::PARENT => 'one'],
+                    'two' => [Structure::PARENT => 'three'],
+                    'three' => [Structure::PARENT => 'one'],
                 ],
             ],
-            'groups invalid data type' => [['one' => [\Magento\Framework\Data\Structure::GROUPS => '']]],
+            'groups invalid data type' => [['one' => [Structure::GROUPS => '']]],
             'group invalid data type' => [
-                ['one' => [\Magento\Framework\Data\Structure::GROUPS => [1]]],
+                ['one' => [Structure::GROUPS => [1]]],
             ],
             'asymmetric group' => [
                 [
-                    'one' => [\Magento\Framework\Data\Structure::GROUPS => ['two' => 'three']],
+                    'one' => [Structure::GROUPS => ['two' => 'three']],
                     'two' => [],
                     'three' => [],
                 ],
             ],
             'group references to non-existing element' => [
-                ['one' => [\Magento\Framework\Data\Structure::GROUPS => ['two' => 'two']]],
+                ['one' => [Structure::GROUPS => ['two' => 'two']]],
             ]
         ];
     }
@@ -140,10 +145,10 @@ class StructureTest extends \PHPUnit\Framework\TestCase
      * @param array $elements
      * @return void
      * @dataProvider importExceptionElementNotFoundDataProvider
-     * @expectedException \OutOfBoundsException
      */
     public function testImportExceptionElementNotFound($elements)
     {
+        $this->expectException('OutOfBoundsException');
         $this->_structure->importElements($elements);
     }
 
@@ -154,14 +159,14 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'non-existing parent' => [
-                ['element' => [\Magento\Framework\Data\Structure::PARENT => 'unknown']],
+                ['element' => [Structure::PARENT => 'unknown']],
             ],
             'missing child' => [
                 [
                     'one' => [
-                        \Magento\Framework\Data\Structure::CHILDREN => ['two' => 't.w.o.', 'three' => 't.h.r.e.e.'],
+                        Structure::CHILDREN => ['two' => 't.w.o.', 'three' => 't.h.r.e.e.'],
                     ],
-                    'two' => [\Magento\Framework\Data\Structure::PARENT => 'one'],
+                    'two' => [Structure::PARENT => 'one'],
                 ],
             ],
         ];
@@ -184,10 +189,10 @@ class StructureTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateElementException()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $elementId = uniqid('id');
         $this->_structure->createElement($elementId, []);
         $this->_structure->createElement($elementId, []);
@@ -227,21 +232,21 @@ class StructureTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \OutOfBoundsException
      */
     public function testSetAttributeNoElementException()
     {
+        $this->expectException('OutOfBoundsException');
         $this->_structure->setAttribute('non-existing', 'foo', 'bar');
     }
 
     /**
      * @param string $attribute
      * @return void
-     * @expectedException \InvalidArgumentException
      * @dataProvider setAttributeArgumentExceptionDataProvider
      */
     public function testSetAttributeArgumentException($attribute)
     {
+        $this->expectException('InvalidArgumentException');
         $this->_structure->importElements(['element' => []]);
         $this->_structure->setAttribute('element', $attribute, 'value');
     }
@@ -252,18 +257,18 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     public function setAttributeArgumentExceptionDataProvider()
     {
         return [
-            [\Magento\Framework\Data\Structure::CHILDREN],
-            [\Magento\Framework\Data\Structure::PARENT],
-            [\Magento\Framework\Data\Structure::GROUPS]
+            [Structure::CHILDREN],
+            [Structure::PARENT],
+            [Structure::GROUPS]
         ];
     }
 
     /**
      * @return void
-     * @expectedException \OutOfBoundsException
      */
     public function testGetAttributeNoElementException()
     {
+        $this->expectException('OutOfBoundsException');
         $this->_structure->getAttribute('non-existing', 'foo');
     }
 
@@ -282,11 +287,11 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($element, $this->_structure->getElement('four.5'));
         $this->assertEquals(
             'four.5',
-            $this->_structure->getAttribute('two', \Magento\Framework\Data\Structure::PARENT)
+            $this->_structure->getAttribute('two', Structure::PARENT)
         );
         $this->assertEquals(
             'four.5',
-            $this->_structure->getAttribute('three', \Magento\Framework\Data\Structure::PARENT)
+            $this->_structure->getAttribute('three', Structure::PARENT)
         );
 
         // rename element and see how parent got updated
@@ -335,7 +340,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
             "The 'x' is expected to be at '{$expectedOffset}' offset, rather than '{$actualOffset}', in array: " .
             var_export(
                 $children,
-                1
+                true
             )
         );
     }
@@ -365,11 +370,11 @@ class StructureTest extends \PHPUnit\Framework\TestCase
      * @param string $elementId
      * @param string $parentId
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider setAsChildExceptionDataProvider
      */
     public function testSetAsChildException($elementId, $parentId)
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->_structure->createElement('one', []);
         $this->_structure->createElement('two', []);
         $this->_structure->createElement('three', []);
@@ -396,7 +401,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         // specify element by name
         $this->_structure->unsetChild('five');
         $this->assertFalse($this->_structure->getParentId('five'));
-        $this->assertArrayNotHasKey(\Magento\Framework\Data\Structure::CHILDREN, $this->_structure->getElement('six'));
+        $this->assertArrayNotHasKey(Structure::CHILDREN, $this->_structure->getElement('six'));
 
         // specify element by parent and alias
         $this->_structure->unsetChild('four', 'tw');
@@ -459,10 +464,10 @@ class StructureTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testReorderChildException()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->_structure->createElement('one', []);
         $this->_structure->createElement('two', []);
         $this->_structure->reorderChild('one', 'two', 0);
@@ -516,10 +521,10 @@ class StructureTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testReorderToSiblingException()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->_structure->createElement('one', []);
         $this->_structure->createElement('two', []);
         $this->_structure->createElement('three', []);
@@ -616,11 +621,11 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         $this->_structure->importElements(
             [
                 'one' => [],
-                'two' => [\Magento\Framework\Data\Structure::PARENT => 'four', 'foo' => 'bar'],
-                'three' => [\Magento\Framework\Data\Structure::PARENT => 'four', 'bar' => 'baz'],
-                'four' => [\Magento\Framework\Data\Structure::CHILDREN => ['three' => 'th', 'two' => 'tw']],
-                'five' => [\Magento\Framework\Data\Structure::PARENT => 'six', 5],
-                'six' => [\Magento\Framework\Data\Structure::CHILDREN => ['five' => 'f']],
+                'two' => [Structure::PARENT => 'four', 'foo' => 'bar'],
+                'three' => [Structure::PARENT => 'four', 'bar' => 'baz'],
+                'four' => [Structure::CHILDREN => ['three' => 'th', 'two' => 'tw']],
+                'five' => [Structure::PARENT => 'six', 5],
+                'six' => [Structure::CHILDREN => ['five' => 'f']],
             ]
         );
     }
@@ -631,11 +636,11 @@ class StructureTest extends \PHPUnit\Framework\TestCase
      */
     protected function _populateSampleSortStructure()
     {
-        $child = [\Magento\Framework\Data\Structure::PARENT => 'parent'];
+        $child = [Structure::PARENT => 'parent'];
         $this->_structure->importElements(
             [
                 'parent' => [
-                    \Magento\Framework\Data\Structure::CHILDREN => [
+                    Structure::CHILDREN => [
                         'one' => 'e1',
                         'two' => 'e2',
                         'three' => 'e3',

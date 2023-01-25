@@ -8,6 +8,7 @@ namespace Magento\Paypal\Model;
 
 use Exception;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
@@ -116,7 +117,7 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
         if (!$merchantEmail) {
             return $this->_config;
         }
-        $receiver = $this->getRequestData('business') ?: $this->getRequestData('receiver_email');
+        $receiver = $this->getRequestData('business') ?: ($this->getRequestData('receiver_email') ?? '');
         if (strtolower($merchantEmail) != strtolower($receiver)) {
             // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new Exception(
@@ -301,6 +302,9 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
         $payment->setParentTransactionId($parentTransactionId);
         $payment->setShouldCloseParentTransaction('Completed' === $this->getRequestData('auth_status'));
         $payment->setIsTransactionClosed(0);
+        if ($this->_order->getState() === Order::STATE_PENDING_PAYMENT) {
+            $this->_order->setState(Order::STATE_PROCESSING);
+        }
         $payment->registerCaptureNotification(
             $this->getRequestData('mc_gross'),
             $skipFraudDetection && $parentTransactionId

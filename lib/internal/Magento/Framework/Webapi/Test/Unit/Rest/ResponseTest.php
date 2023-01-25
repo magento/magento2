@@ -5,47 +5,59 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Webapi\Test\Unit\Rest;
 
+use Magento\Framework\App\State;
 use Magento\Framework\Phrase;
+use Magento\Framework\Webapi\ErrorProcessor;
+use Magento\Framework\Webapi\Rest\Response;
+use Magento\Framework\Webapi\Rest\Response\Renderer\Json;
+use Magento\Framework\Webapi\Rest\Response\Renderer\Xml;
+use Magento\Framework\Webapi\Rest\Response\RendererFactory;
+use PHPUnit\Framework\TestCase;
 
-class ResponseTest extends \PHPUnit\Framework\TestCase
+class ResponseTest extends TestCase
 {
-    /** @var \Magento\Framework\Webapi\Rest\Response */
+    /** @var Response */
     protected $responseRest;
 
-    /** @var \Magento\Framework\App\State */
+    /** @var State */
     protected $appStateMock;
 
-    /** @var \Magento\Framework\Webapi\Rest\Response\Renderer\Xml */
+    /** @var Xml */
     protected $rendererMock;
 
-    /** @var \Magento\Framework\Webapi\ErrorProcessor */
+    /** @var ErrorProcessor */
     protected $errorProcessorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** Mock all objects required for SUT. */
         $this->rendererMock = $this->getMockBuilder(
-            \Magento\Framework\Webapi\Rest\Response\Renderer\Json::class
-        )->disableOriginalConstructor()->getMock();
+            Json::class
+        )->disableOriginalConstructor()
+        ->getMock();
         $rendererFactoryMock = $this->getMockBuilder(
-            \Magento\Framework\Webapi\Rest\Response\RendererFactory::class
-        )->disableOriginalConstructor()->getMock();
-        $rendererFactoryMock->expects($this->any())->method('get')->will($this->returnValue($this->rendererMock));
-        $this->errorProcessorMock = $this->getMockBuilder(\Magento\Framework\Webapi\ErrorProcessor::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->appStateMock = $this->createMock(\Magento\Framework\App\State::class);
+            RendererFactory::class
+        )->disableOriginalConstructor()
+        ->getMock();
+        $rendererFactoryMock->expects($this->any())->method('get')->willReturn($this->rendererMock);
+        $this->errorProcessorMock = $this->getMockBuilder(ErrorProcessor::class)
+            ->disableOriginalConstructor()
+        ->getMock();
+        $this->appStateMock = $this->createMock(State::class);
 
         /** Init SUP. */
-        $this->responseRest = new \Magento\Framework\Webapi\Rest\Response(
+        $this->responseRest = new Response(
             $rendererFactoryMock,
             $this->errorProcessorMock,
             $this->appStateMock
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->responseRest,
@@ -152,15 +164,15 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getMimeType'
-        )->will(
-            $this->returnValue('application/json')
+        )->willReturn(
+            'application/json'
         );
         $this->rendererMock->expects(
             $this->any()
         )->method(
             'render'
-        )->will(
-            $this->returnCallback([$this, 'callbackForSendResponseTest'], $this->returnArgument(0))
+        )->willReturnCallback(
+            [$this, 'callbackForSendResponseTest'], $this->returnArgument(0)
         );
         $exceptionMessage = 'Message';
         $exceptionHttpCode = \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST;
@@ -169,8 +181,8 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'maskException'
-        )->will(
-            $this->returnValue($exception)
+        )->willReturn(
+            $exception
         );
 
         $this->responseRest->setException($exception);

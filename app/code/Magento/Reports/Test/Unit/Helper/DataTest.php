@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Reports\Test\Unit\Helper;
 
@@ -11,11 +12,13 @@ use Magento\Framework\Data\Collection;
 use Magento\Reports\Helper\Data;
 use Magento\Reports\Model\Item;
 use Magento\Reports\Model\ItemFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for \Magento\Reports\Helper\Data class.
  */
-class DataTest extends \PHPUnit\Framework\TestCase
+class DataTest extends TestCase
 {
     /**
      * @var Data
@@ -23,25 +26,25 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $data;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var ItemFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ItemFactory|MockObject
      */
     protected $itemFactoryMock;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->itemFactoryMock = $this->getMockBuilder(ItemFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -56,10 +59,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
      * @param string $to
      * @param string $period
      * @param array $results
-     * @dataProvider intervalsDataProvider
+     *
      * @return void
+     * @dataProvider intervalsDataProvider
      */
-    public function testGetIntervals($from, $to, $period, $results)
+    public function testGetIntervals($from, $to, $period, $results): void
     {
         $this->assertEquals($this->data->getIntervals($from, $to, $period), $results);
     }
@@ -69,19 +73,21 @@ class DataTest extends \PHPUnit\Framework\TestCase
      * @param string $to
      * @param string $period
      * @param array $results
-     * @dataProvider intervalsDataProvider
+     *
      * @return void
+     * @dataProvider intervalsDataProvider
      */
-    public function testPrepareIntervalsCollection($from, $to, $period, $results)
+    public function testPrepareIntervalsCollection($from, $to, $period, $results): void
     {
         $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addItem'])
+            ->onlyMethods(['addItem'])
             ->getMock();
 
         $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setPeriod', 'setIsEmpty'])
+            ->onlyMethods(['setIsEmpty'])
+            ->addMethods(['setPeriod'])
             ->getMock();
 
         $this->itemFactoryMock->expects($this->exactly(count($results)))
@@ -92,11 +98,14 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $collection->expects($this->exactly(count($results)))
             ->method('addItem');
 
-        foreach ($results as $key => $result) {
-            $item->expects($this->at($key + $key))
-                ->method('setPeriod')
-                ->with($result);
+        $withArgs = [];
+
+        foreach ($results as $result) {
+            $withArgs[] = [$result];
         }
+        $item
+            ->method('setPeriod')
+            ->withConsecutive(...$withArgs);
 
         $this->data->prepareIntervalsCollection($collection, $from, $to, $period);
     }
@@ -104,20 +113,20 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function intervalsDataProvider()
+    public function intervalsDataProvider(): array
     {
         return [
             [
                 'from' => '2000-01-15 10:00:00',
                 'to' => '2000-01-15 11:00:00',
                 'period' => Data::REPORT_PERIOD_TYPE_DAY,
-                'results' => ['2000-01-15'],
+                'results' => ['2000-01-15']
             ],
             [
                 'from' => '2000-01-15 10:00:00',
                 'to' => '2000-01-17 10:00:00',
                 'period' => Data::REPORT_PERIOD_TYPE_MONTH,
-                'results' => ['2000-01'],
+                'results' => ['2000-01']
             ],
             [
                 'from' => '2000-01-15 10:00:00',
@@ -129,31 +138,31 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 'from' => '2000-01-15 10:00:00',
                 'to' => '2000-01-16 11:00:00',
                 'period' => Data::REPORT_PERIOD_TYPE_DAY,
-                'results' => ['2000-01-15', '2000-01-16'],
+                'results' => ['2000-01-15', '2000-01-16']
             ],
             [
                 'from' => '2000-01-15 10:00:00',
                 'to' => '2000-02-17 10:00:00',
                 'period' => Data::REPORT_PERIOD_TYPE_MONTH,
-                'results' => ['2000-01', '2000-02'],
+                'results' => ['2000-01', '2000-02']
             ],
             [
                 'from' => '2000-01-15 10:00:00',
                 'to' => '2003-02-15 10:00:00',
                 'period' => Data::REPORT_PERIOD_TYPE_YEAR,
-                'results' => ['2000', '2001', '2002', '2003'],
+                'results' => ['2000', '2001', '2002', '2003']
             ],
             [
                 'from' => '2000-12-31 10:00:00',
                 'to' => '2001-01-01 10:00:00',
                 'period' => Data::REPORT_PERIOD_TYPE_YEAR,
-                'results' => ['2000', '2001'],
+                'results' => ['2000', '2001']
             ],
             [
                 'from' => '',
                 'to' => '',
                 'period' => Data::REPORT_PERIOD_TYPE_YEAR,
-                'results' => [],
+                'results' => []
             ]
         ];
     }

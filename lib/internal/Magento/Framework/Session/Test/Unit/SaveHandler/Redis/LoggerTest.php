@@ -3,14 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Session\Test\Unit\SaveHandler\Redis;
 
+use Cm\RedisSession\Handler\ConfigInterface;
 use Cm\RedisSession\Handler\LoggerInterface;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Session\SaveHandler\Redis\Logger;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class LoggerTest extends \PHPUnit\Framework\TestCase
+class LoggerTest extends TestCase
 {
     /**
-     * @var \Cm\RedisSession\Handler\ConfigInterface
+     * @var ConfigInterface
      */
     protected $config;
 
@@ -25,7 +32,7 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
     protected $logger;
 
     /**
-     * @var \Magento\Framework\App\Request\Http
+     * @var Http
      */
     protected $request;
 
@@ -34,18 +41,18 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
      */
     protected $requestUri = 'customer/account/login';
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->config = $this->createMock(\Cm\RedisSession\Handler\ConfigInterface::class);
+        $this->config = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->config->expects($this->once())
             ->method('getLogLevel')
             ->willReturn(LoggerInterface::DEBUG);
         $this->psrLogger = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->request = $this->createMock(Http::class);
         //$this->logger = new Logger($this->config, $this->psrLogger, $this->request);
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->logger = $objectManager->getObject(
-            \Magento\Framework\Session\SaveHandler\Redis\Logger::class,
+            Logger::class,
             [
                 'config' => $this->config,
                 'logger' => $this->psrLogger,

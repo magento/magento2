@@ -27,7 +27,7 @@ class CustomerAddressAttributeTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->config = $objectManager->get(Config::class);

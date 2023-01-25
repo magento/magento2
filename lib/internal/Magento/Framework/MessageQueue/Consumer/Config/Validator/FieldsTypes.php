@@ -13,7 +13,7 @@ use Magento\Framework\MessageQueue\Consumer\Config\ValidatorInterface;
 class FieldsTypes implements ValidatorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate($configData)
     {
@@ -54,14 +54,31 @@ class FieldsTypes implements ValidatorInterface
                 );
             }
         }
-        if (null !== $consumerConfig['maxMessages'] && !is_numeric($consumerConfig['maxMessages'])) {
+        $additionalNumericFields = ['maxMessages', 'maxIdleTime', 'sleep'];
+        foreach ($additionalNumericFields as $fieldName) {
+            if (null !== $consumerConfig[$fieldName] && !is_numeric($consumerConfig[$fieldName])) {
+                throw new \LogicException(
+                    sprintf(
+                        "Type of '%s' field specified in configuration of '%s' consumer is invalid. "
+                        . "Given '%s', '%s' was expected.",
+                        $fieldName,
+                        $consumerName,
+                        gettype($consumerConfig[$fieldName]),
+                        'int|null'
+                    )
+                );
+            }
+        }
+        if (null !== $consumerConfig['onlySpawnWhenMessageAvailable']
+            && !is_bool($consumerConfig['onlySpawnWhenMessageAvailable'])
+        ) {
             throw new \LogicException(
                 sprintf(
-                    "Type of 'maxMessages' field specified in configuration of '%s' consumer is invalid. "
-                    . "Given '%s', '%s' was expected.",
+                    "Type of 'onlySpawnWhenMessageAvailable' field specified in configuration of '%s' "
+                    . "consumer is invalid. Given '%s', '%s' was expected.",
                     $consumerName,
-                    gettype($consumerConfig['maxMessages']),
-                    'int|null'
+                    gettype($consumerConfig['onlySpawnWhenMessageAvailable']),
+                    'boolean|null'
                 )
             );
         }

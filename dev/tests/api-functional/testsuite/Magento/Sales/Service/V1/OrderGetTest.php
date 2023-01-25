@@ -16,13 +16,13 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class OrderGetTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/orders';
+    private const RESOURCE_PATH = '/V1/orders';
 
-    const SERVICE_READ_NAME = 'salesOrderRepositoryV1';
+    private const SERVICE_READ_NAME = 'salesOrderRepositoryV1';
 
-    const SERVICE_VERSION = 'V1';
+    private const SERVICE_VERSION = 'V1';
 
-    const ORDER_INCREMENT_ID = '100000001';
+    private const ORDER_INCREMENT_ID = '100000001';
 
     /**
      * @var ObjectManagerInterface
@@ -74,7 +74,7 @@ class OrderGetTest extends WebapiAbstract
         $expectedShippingAddress = [
             'address_type' => 'shipping',
             'city' => 'Los Angeles',
-            'email' => 'customer@null.com',
+            'email' => 'customer@example.com',
             'postcode' => '11111',
             'region' => 'CA'
         ];
@@ -132,7 +132,7 @@ class OrderGetTest extends WebapiAbstract
         $appliedTaxes = $result['extension_attributes']['item_applied_taxes'];
         self::assertEquals($expectedTax['type'], $appliedTaxes[0]['type']);
         self::assertNotEmpty($appliedTaxes[0]['applied_taxes']);
-        self::assertEquals(true, $result['extension_attributes']['converting_from_quote']);
+        self::assertTrue($result['extension_attributes']['converting_from_quote']);
         self::assertArrayHasKey('payment_additional_info', $result['extension_attributes']);
         self::assertNotEmpty($result['extension_attributes']['payment_additional_info']);
     }

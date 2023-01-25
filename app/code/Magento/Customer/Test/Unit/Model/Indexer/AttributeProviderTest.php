@@ -3,16 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Indexer;
 
+use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Indexer\AttributeProvider;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
+use Magento\Framework\Indexer\Handler\AttributeHandler;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AttributeProviderTest extends \PHPUnit\Framework\TestCase
+class AttributeProviderTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     protected $eavConfig;
 
@@ -21,9 +29,9 @@ class AttributeProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+        $this->eavConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->object = new AttributeProvider(
@@ -50,22 +58,22 @@ class AttributeProviderTest extends \PHPUnit\Framework\TestCase
         $attrBackendType = 'b_type';
         $attrFrontendInput = 'int';
 
-        /** @var \Magento\Eav\Model\Entity\Type|\PHPUnit_Framework_MockObject_MockObject $collectionMock $entityType */
-        $entityType = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
+        /** @var Type|MockObject $collectionMock $entityType */
+        $entityType = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::class)
+        /** @var Collection|MockObject $collectionMock */
+        $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject $entity */
+        /** @var \Magento\Customer\Model\ResourceModel\Customer|MockObject $entity */
         $entity = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Customer\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */
-        $attribute = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
+        /** @var Attribute|MockObject $attribute */
+        $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setEntity',
                     'getName',
@@ -118,20 +126,20 @@ class AttributeProviderTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->assertEquals(
-            ['fields' =>
-                [
-                    $existentName => $existentField,
-                    $attrName => [
-                        'name' => $attrName,
-                        'handler' => \Magento\Framework\Indexer\Handler\AttributeHandler::class,
-                        'origin' => $attrName,
-                        'type' => 'virtual',
-                        'filters' => [],
-                        'dataType' => $attrBackendType,
-                        'entity' => Customer::ENTITY,
-                        'bind' => null,
-                    ],
+            ['fields' => [
+                $existentName => $existentField,
+                $attrName => [
+                    'name' => $attrName,
+                    'handler' => AttributeHandler::class,
+                    'origin' => $attrName,
+                    'type' => 'virtual',
+                    'filters' => [],
+                    'dataType' => $attrBackendType,
+                    'entity' => Customer::ENTITY,
+                    'bind' => null,
+                    'index' => false
                 ],
+            ],
             ],
             $this->object->addDynamicData($data)
         );
@@ -153,22 +161,22 @@ class AttributeProviderTest extends \PHPUnit\Framework\TestCase
         $attrBackendType = 'static';
         $attrFrontendInput = 'text';
 
-        /** @var \Magento\Eav\Model\Entity\Type|\PHPUnit_Framework_MockObject_MockObject $collectionMock $entityType */
-        $entityType = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
+        /** @var Type|MockObject $collectionMock $entityType */
+        $entityType = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::class)
+        /** @var Collection|MockObject $collectionMock */
+        $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject $entity */
+        /** @var \Magento\Customer\Model\ResourceModel\Customer|MockObject $entity */
         $entity = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Customer\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */
-        $attribute = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
+        /** @var Attribute|MockObject $attribute */
+        $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setEntity',
                     'getName',
@@ -206,21 +214,25 @@ class AttributeProviderTest extends \PHPUnit\Framework\TestCase
         $attribute->expects($this->any())
             ->method('canBeSearchableInGrid')
             ->willReturn(true);
-        $attribute->expects($this->never())
-            ->method('canBeFilterableInGrid');
+        $attribute->expects($this->once())
+            ->method('canBeFilterableInGrid')
+            ->willReturn(false);
+        $attribute->expects($this->once())
+            ->method('getName')
+            ->willReturn($attrName);
 
         $this->assertEquals(
-            ['fields' =>
-                [
-                    $attrName => [
-                        'name' => $attrName,
-                        'handler' => 'handler',
-                        'origin' => $attrName,
-                        'type' => 'searchable',
-                        'filters' => ['filter'],
-                        'dataType' => 'data_type',
-                    ],
+            ['fields' => [
+                $attrName => [
+                    'name' => $attrName,
+                    'handler' => 'handler',
+                    'origin' => $attrName,
+                    'type' => 'searchable',
+                    'filters' => ['filter'],
+                    'dataType' => 'data_type',
+                    'index' => false
                 ],
+            ],
             ],
             $this->object->addDynamicData($data)
         );
@@ -252,22 +264,22 @@ class AttributeProviderTest extends \PHPUnit\Framework\TestCase
         $attrBackendType = 'varchar';
         $attrFrontendInput = 'text';
 
-        /** @var \Magento\Eav\Model\Entity\Type|\PHPUnit_Framework_MockObject_MockObject $collectionMock $entityType */
-        $entityType = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
+        /** @var Type|MockObject $collectionMock $entityType */
+        $entityType = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::class)
+        /** @var Collection|MockObject $collectionMock */
+        $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject $entity */
+        /** @var \Magento\Customer\Model\ResourceModel\Customer|MockObject $entity */
         $entity = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Customer\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */
-        $attribute = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
+        /** @var Attribute|MockObject $attribute */
+        $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setEntity',
                     'getName',
@@ -320,19 +332,19 @@ class AttributeProviderTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->assertEquals(
-            ['fields' =>
-                [
-                    $attrName => [
-                        'name' => $attrName,
-                        'handler' => \Magento\Framework\Indexer\Handler\AttributeHandler::class,
-                        'origin' => $attrName,
-                        'type' => 'filterable',
-                        'filters' => [],
-                        'dataType' => 'varchar',
-                        'entity' => Customer::ENTITY,
-                        'bind' => 'to_field',
-                    ],
+            ['fields' => [
+                $attrName => [
+                    'name' => $attrName,
+                    'handler' => AttributeHandler::class,
+                    'origin' => $attrName,
+                    'type' => 'filterable',
+                    'filters' => [],
+                    'dataType' => 'varchar',
+                    'entity' => Customer::ENTITY,
+                    'bind' => 'to_field',
+                    'index' => false
                 ],
+            ],
                 'references' => [
                     'customer' => [
                         'to' => 'to_field',

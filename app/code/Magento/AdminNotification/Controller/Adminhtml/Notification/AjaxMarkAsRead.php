@@ -1,33 +1,34 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
+use Magento\AdminNotification\Controller\Adminhtml\Notification;
+use Magento\AdminNotification\Model\NotificationService;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class AjaxMarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notification
+/**
+ * AdminNotification AjaxMarkAsRead controller
+ */
+class AjaxMarkAsRead extends Notification implements HttpPostActionInterface
 {
     /**
-     * @var \Magento\AdminNotification\Model\NotificationService
+     * @var NotificationService
      */
     private $notificationService;
 
     /**
      * @param Action\Context $context
-     * @param \Magento\AdminNotification\Model\NotificationService|null $notificationService
-     * @throws \RuntimeException
+     * @param NotificationService $notificationService
      */
-    public function __construct(
-        Action\Context $context,
-        \Magento\AdminNotification\Model\NotificationService $notificationService = null
-    ) {
+    public function __construct(Action\Context $context, NotificationService $notificationService)
+    {
         parent::__construct($context);
-        $this->notificationService = $notificationService?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\AdminNotification\Model\NotificationService::class);
+        $this->notificationService = $notificationService;
     }
 
     /**

@@ -3,9 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
@@ -13,38 +15,40 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Fixtures\CategoriesFixture;
 use Magento\Setup\Fixtures\FixtureModel;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CategoriesFixtureTest extends \PHPUnit\Framework\TestCase
+class CategoriesFixtureTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FixtureModel
+     * @var MockObject|FixtureModel
      */
     private $fixtureModelMock;
 
     /**
-     * @var \Magento\Setup\Fixtures\CategoriesFixture
+     * @var CategoriesFixture
      */
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $collectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $collectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $categoryFactoryMock;
 
     /**
      * @inhertidoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fixtureModelMock = $this->createMock(FixtureModel::class);
         $this->collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
@@ -83,37 +87,39 @@ class CategoriesFixtureTest extends \PHPUnit\Framework\TestCase
         $this->fixtureModelMock
             ->expects($this->exactly(2))
             ->method('getValue')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
 
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->collectionMock);
         $this->collectionMock->expects($this->once())->method('getSize')->willReturn(2);
 
-        $parentCategoryMock = $this->createPartialMock(\Magento\Catalog\Model\Category::class, [
-                'getName',
-                'setId',
-                'getId',
-                'setUrlKey',
-                'setUrlPath',
-                'setName',
-                'setParentId',
-                'setPath',
-                'setLevel',
-                'getLevel',
-                'setAvailableSortBy',
-                'setDefaultSortBy',
-                'setIsActive',
-                'setIsAnchor',
-                'save',
-                'setStoreId',
-                'load',
-            ]);
+        $parentCategoryMock = $this->getMockBuilder(Category::class)
+            ->addMethods(['setUrlKey', 'setUrlPath', 'setDefaultSortBy', 'setIsAnchor'])
+            ->onlyMethods(
+                [
+                    'getName',
+                    'setId',
+                    'getId',
+                    'setName',
+                    'setParentId',
+                    'setPath',
+                    'setLevel',
+                    'getLevel',
+                    'setAvailableSortBy',
+                    'setIsActive',
+                    'save',
+                    'setStoreId',
+                    'load'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $parentCategoryMock->expects($this->once())->method('getId')->willReturn(5);
         $parentCategoryMock->expects($this->once())->method('getLevel')->willReturn(3);
         $categoryMock = clone $parentCategoryMock;
         $categoryMock->expects($this->once())
             ->method('getName')
             ->with('Category 1')
-            ->will($this->returnValue('category_name'));
+            ->willReturn('category_name');
         $categoryMock->expects($this->once())
             ->method('setId')
             ->willReturnSelf();

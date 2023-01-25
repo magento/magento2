@@ -3,16 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model;
 
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductLink\CollectionProvider;
 use Magento\Catalog\Model\ProductLink\CollectionProviderInterface;
 use Magento\Catalog\Model\ProductLink\Converter\ConverterInterface;
 use Magento\Catalog\Model\ProductLink\Converter\ConverterPool;
-use Magento\Catalog\Model\Product;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CollectionProviderTest extends \PHPUnit\Framework\TestCase
+class CollectionProviderTest extends TestCase
 {
     /**
      * @var CollectionProvider
@@ -20,31 +23,31 @@ class CollectionProviderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $converterPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $providerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $converterMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productMock = $this->createMock(Product::class);
         $this->converterPoolMock = $this->createMock(ConverterPool::class);
-        $this->providerMock = $this->createMock(CollectionProviderInterface::class);
-        $this->converterMock = $this->createMock(ConverterInterface::class);
+        $this->providerMock = $this->getMockForAbstractClass(CollectionProviderInterface::class);
+        $this->converterMock = $this->getMockForAbstractClass(ConverterInterface::class);
 
         $this->model = new CollectionProvider($this->converterPoolMock, ['crosssell' => $this->providerMock]);
     }
@@ -109,12 +112,11 @@ class CollectionProviderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test exception when collection provider is not configured for product link type.
-     *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The collection provider isn't registered.
      */
     public function testGetCollectionWithMissingProviders()
     {
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectExceptionMessage('The collection provider isn\'t registered.');
         $this->model->getCollection($this->productMock, 'upsell');
     }
 }

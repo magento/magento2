@@ -14,7 +14,7 @@ class ResourceTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Framework\App\ResourceConnection::class);
@@ -32,9 +32,9 @@ class ResourceTest extends \PHPUnit\Framework\TestCase
         );
 
         $tableName = $this->_model->getTableName([$tableNameOrig, $tableSuffix]);
-        $this->assertContains($tablePrefix, $tableName);
-        $this->assertContains($tableSuffix, $tableName);
-        $this->assertContains($tableNameOrig, $tableName);
+        $this->assertStringContainsString($tablePrefix, $tableName);
+        $this->assertStringContainsString($tableSuffix, $tableName);
+        $this->assertStringContainsString($tableNameOrig, $tableName);
     }
 
     /**

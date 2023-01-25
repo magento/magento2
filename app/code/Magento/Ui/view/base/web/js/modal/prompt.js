@@ -27,6 +27,44 @@ define([
             value: '',
             validation: false,
             validationRules: [],
+            keyEventHandlers: {
+
+                /**
+                 * Enter key press handler,
+                 * submit result and close modal window
+                 * @param {Object} event - event
+                 */
+                enterKey: function (event) {
+                    if (this.options.isOpen && this.modal.find(document.activeElement).length ||
+                        this.options.isOpen && this.modal[0] === document.activeElement) {
+                        this.closeModal(true);
+                        event.preventDefault();
+                    }
+                },
+
+                /**
+                 * Tab key press handler,
+                 * set focus to elements
+                 */
+                tabKey: function () {
+                    if (document.activeElement === this.modal[0]) {
+                        this._setFocus('start');
+                    }
+                },
+
+                /**
+                 * Escape key press handler,
+                 * cancel and close modal window
+                 * @param {Object} event - event
+                 */
+                escapeKey: function (event) {
+                    if (this.options.isOpen && this.modal.find(document.activeElement).length ||
+                        this.options.isOpen && this.modal[0] === document.activeElement) {
+                        this.closeModal();
+                        event.preventDefault();
+                    }
+                }
+            },
             actions: {
 
                 /**
@@ -73,6 +111,7 @@ define([
         _create: function () {
             this.options.focus = this.options.promptField;
             this.options.validation = this.options.validation && this.options.validationRules.length;
+            this.options.outerClickHandler = this.options.outerClickHandler || _.bind(this.closeModal, this, false);
             this._super();
             this.modal.find(this.options.modalContent).append(this.getFormTemplate());
             this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this, false));
@@ -167,7 +206,7 @@ define([
             }
 
             this.options.actions.always();
-            this.element.bind('promptclosed', _.bind(this._remove, this));
+            this.element.on('promptclosed', _.bind(this._remove, this));
 
             return this._super();
         }

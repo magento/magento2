@@ -35,7 +35,7 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
         $entityTypeMock = $this->createMock(\Magento\Eav\Model\Entity\Type::class);
         $eavConfig->expects($this->any())->method('getEntityType')->willReturn($entityTypeMock);
 
-        /** @var $model AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $model AbstractEntity|\PHPUnit\Framework\MockObject\MockObject */
         $model = $this->getMockForAbstractClass(
             AbstractEntity::class,
             [

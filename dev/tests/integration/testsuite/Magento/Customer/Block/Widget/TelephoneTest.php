@@ -22,8 +22,8 @@ class TelephoneTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Block\Widget\Telephone::class
         );
 
-        $this->assertContains('title="Phone&#x20;Number"', $block->toHtml());
-        $this->assertContains('required', $block->toHtml());
+        $this->assertStringContainsString('title="Phone&#x20;Number"', $block->toHtml());
+        $this->assertStringContainsString('required', $block->toHtml());
     }
 
     /**
@@ -44,11 +44,11 @@ class TelephoneTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Block\Widget\Telephone::class
         );
 
-        $this->assertContains('title="Phone&#x20;Number"', $block->toHtml());
-        $this->assertNotContains('required', $block->toHtml());
+        $this->assertStringContainsString('title="Phone&#x20;Number"', $block->toHtml());
+        $this->assertStringNotContainsString('required', $block->toHtml());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var \Magento\Eav\Model\Config $eavConfig */
         $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);

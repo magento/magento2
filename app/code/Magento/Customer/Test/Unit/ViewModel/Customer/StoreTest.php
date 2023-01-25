@@ -9,13 +9,14 @@ declare(strict_types=1);
 namespace Magento\Customer\Test\Unit\ViewModel\Customer;
 
 use Magento\Customer\Model\Config\Share as ConfigShare;
-use Magento\Framework\App\Request\DataPersistorInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Customer\ViewModel\Customer\Store as CustomerStore;
-use Magento\Store\Model\System\Store as SystemStore;
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\System\Store as SystemStore;
+use Magento\Store\Model\Website;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for customer's store view model
@@ -55,13 +56,13 @@ class StoreTest extends TestCase
      */
     private $dataPersistor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->systemStore = $this->createMock(SystemStore::class);
         $this->store = $this->createMock(Store::class);
         $this->configShare = $this->createMock(ConfigShare::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->dataPersistor = $this->createMock(DataPersistorInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->dataPersistor = $this->getMockForAbstractClass(DataPersistorInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->customerStore = $this->objectManagerHelper->getObject(
             CustomerStore::class,
@@ -89,6 +90,10 @@ class StoreTest extends TestCase
             ->willReturn($isWebsiteScope);
         $this->store->method('getWebsiteId')
             ->willReturn(1);
+
+        $websiteMock = $this->createPartialMock(Website::class, ['getId']);
+        $websiteMock->method('getId')->willReturn(1);
+        $this->systemStore->method('getWebsiteCollection')->willReturn([$websiteMock]);
 
         if ($isCustomerDataInSession) {
             $this->dataPersistor->method('get')

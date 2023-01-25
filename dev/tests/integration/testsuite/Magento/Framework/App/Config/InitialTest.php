@@ -17,14 +17,13 @@ class InitialTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }
 
     public function testGetMetadata()
     {
-        CacheCleaner::cleanAll();
         $this->assertEquals(
             $this->objectManager->create(Config::class)->getMetadata(),
             $this->objectManager->create(Config::class)->getMetadata()
@@ -37,7 +36,6 @@ class InitialTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetData($scope)
     {
-        CacheCleaner::cleanAll();
         $this->assertEquals(
             $this->objectManager->create(Config::class)->getData($scope),
             $this->objectManager->create(Config::class)->getData($scope)

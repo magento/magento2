@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMassDeleteBundleProductsTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Admin list bundle products"/>
+            <title value="Admin should be able to mass delete bundle products"/>
+            <description value="Admin should be able to mass delete bundle products"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-218"/>
+            <group value="Bundle"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct3"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct4"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+        </before>
+        <after>
+            <!--Clear Filters-->
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFiltersAfter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="simpleProduct3" stepKey="deleteSimpleProduct3"/>
+            <deleteData createDataKey="simpleProduct4" stepKey="deleteSimpleProduct4"/>
+        </after>
+
+        <!--Go to bundle product creation page-->
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToBundleProductCreationPage">
+            <argument name="attributeSetId" value="{{BundleProduct.set}}"/>
+            <argument name="productType" value="{{BundleProduct.type}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
+
+        <!--Create bundle product-->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="conditionallyOpenSectionBundleItems"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickAddOption3"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleOptions"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillOptionTitle"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectInputType"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickAddProductsToOption"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterBundleProductOptions"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectFirstGridRow"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterBundleProductOptions2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectFirstGridRow2"/>
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="clickAddSelectedBundleProducts">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
+            <argument name="prodTwoSku" value="$$simpleProduct2.sku$$"/>
+            <argument name="optionTitle" value="{{BundleProduct.optionTitle1}}"/>
+            <argument name="inputType" value="{{BundleProduct.optionInputType1}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductDefaultQty1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductDefaultQty2"/>
+
+        <!--Fill out ancillary data on bundle product-->
+        <actionGroup ref="AncillaryPrepBundleProductActionGroup" stepKey="createBundledProductForTwoSimpleProducts">
+            <argument name="bundleProduct" value="BundleProduct"/>
+        </actionGroup>
+
+        <!--Save the product-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+
+        <!--Creating Second bundle product-->
+        <!--Go to bundle product creation page-->
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToBundleProductCreationPage2">
+            <argument name="attributeSetId" value="{{BundleProduct.set}}"/>
+            <argument name="productType" value="{{BundleProduct.type}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad2"/>
+
+        <!--Create bundle product 2-->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="conditionallyOpenSectionBundleItems2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickAddOption32"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleOptions2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillOptionTitle2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectInputType2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickAddProductsToOption2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterBundleProductOptionsx2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectFirstGridRowx2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterBundleProductOptions22"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectFirstGridRow22"/>
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="clickAddSelectedBundleProducts2">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$simpleProduct3.sku$$"/>
+            <argument name="prodTwoSku" value="$$simpleProduct4.sku$$"/>
+            <argument name="optionTitle" value="{{BundleProduct.optionTitle1}}"/>
+            <argument name="inputType" value="{{BundleProduct.optionInputType1}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductDefaultQty12"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductDefaultQty22"/>
+
+        <actionGroup ref="AdminFillProductNameOnProductFormActionGroup" stepKey="fillProductName2">
+            <argument name="productName" value="{{BundleProduct.name2}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillProductSkuOnProductFormActionGroup" stepKey="fillProductSku2">
+            <argument name="productSku" value="{{BundleProduct.sku2}}"/>
+        </actionGroup>
+
+        <!--Trigger SEO drop down-->
+        <scrollTo selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="moveToSEOSection"/>
+        <conditionalClick selector="{{AdminProductFormBundleSection.seoDropdown}}" dependentSelector="{{AdminProductFormBundleSection.urlKey}}" visible="false" stepKey="openDropDownIfClosed"/>
+
+        <!--Fill URL input-->
+        <fillField userInput="{{BundleProduct.urlKey2}}" selector="{{AdminProductFormBundleSection.urlKey}}" stepKey="FillsinSEOlinkExtension2"/>
+
+        <!--Save the product-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton2"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown2">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+
+        <!--Mass delete bundle products-->
+        <!--Clear Filters-->
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFilters"/>
+
+        <!--Setting filter-->
+        <actionGroup ref="BundleProductFilter" stepKey="FilterForOnlyBundleProducts"/>
+
+        <!--Delete-->
+        <actionGroup ref="AdminDeleteAllProductsFromGridActionGroup" stepKey="selectAndDeleteProducts"/>
+
+        <!--Locating delete message-->
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="deleteMessage"/>
+
+        <!--Clear Cache - resets products according to enabled/disabled view-->
+        <actionGroup ref="ClearPageCacheActionGroup" stepKey="ClearPageCaches"/>
+
+        <!--Testing deletion of products-->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="GoToProductPageAgain">
+            <argument name="productUrl" value="{{BundleProduct.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="WaitForProductPageToLoadToShowElement"/>
+        <actionGroup ref="StorefrontAssertProductNameIsNotShownOnProductPageActionGroup" stepKey="LookingForNameOfProduct">
+            <argument name="productName" value="{{BundleProduct.name}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="LookingForPageNotFoundMessage"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="GoToProductPageAgain2">
+            <argument name="productUrl" value="{{BundleProduct.urlKey2}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="WaitForProductPageToLoadToShowElement2"/>
+        <actionGroup ref="StorefrontAssertProductNameIsNotShownOnProductPageActionGroup" stepKey="LookingForNameOfProduct2">
+            <argument name="productName" value="{{BundleProduct.name2}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="LookingForPageNotFoundMessage2"/>
+    </test>
+</tests>

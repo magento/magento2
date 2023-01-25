@@ -75,9 +75,7 @@ define([
             this._super();
             this.clientConfig.quoteId = window.checkoutConfig.quoteData['entity_id'];
             this.clientConfig.customerId = window.customerData.id;
-            this.clientConfig.merchantId = this.merchantId;
             this.clientConfig.button = 0;
-            this.clientConfig.commit = true;
 
             return this.clientConfig;
         },
@@ -87,7 +85,6 @@ define([
          */
         onClick: function () {
             additionalValidators.validate();
-            this.selectPaymentMethod();
         },
 
         /**
@@ -99,6 +96,47 @@ define([
             messageList.addErrorMessage({
                 message: message
             });
+        },
+
+        /**
+         * After payment execute
+         *
+         * @param {Object} res
+         * @param {Function} resolve
+         * @param {Function} reject
+         *
+         * @return {*}
+         */
+        afterPayment: function (res, resolve, reject) {
+            if (res.success) {
+                return resolve(res.token);
+            }
+
+            this.addError(res['error_message']);
+
+            return reject(new Error(res['error_message']));
+        },
+
+        /**
+         * After onAuthorize execute
+         *
+         * @param {Object} res
+         * @param {Function} resolve
+         * @param {Function} reject
+         * @param {Object} actions
+         *
+         * @return {*}
+         */
+        afterOnAuthorize: function (res, resolve, reject, actions) {
+            if (res.success) {
+                resolve();
+
+                return actions.redirect(res.redirectUrl);
+            }
+
+            this.addError(res['error_message']);
+
+            return reject(new Error(res['error_message']));
         }
     });
 });

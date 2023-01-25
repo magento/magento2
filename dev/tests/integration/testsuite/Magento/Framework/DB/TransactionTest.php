@@ -16,7 +16,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = $this->objectManager
@@ -67,10 +67,13 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $resourceConnection->getConnection('default')->getTransactionLevel());
     }
 
+    /**
+     * @magentoDataFixture Magento/Framework/DB/_files/dummy_fixture.php
+     */
     public function testTransactionLevelDbIsolationDefault()
     {
         $resourceConnection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\App\ResourceConnection::class);
-        $this->assertEquals(0, $resourceConnection->getConnection('default')->getTransactionLevel());
+        $this->assertEquals(1, $resourceConnection->getConnection('default')->getTransactionLevel());
     }
 }

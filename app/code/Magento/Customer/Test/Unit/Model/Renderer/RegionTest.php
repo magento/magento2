@@ -3,12 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Renderer;
 
+use Magento\Customer\Model\Renderer\Region;
+use Magento\Directory\Helper\Data;
+use Magento\Directory\Model\Country;
+use Magento\Directory\Model\CountryFactory;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class RegionTest extends \PHPUnit\Framework\TestCase
+class RegionTest extends TestCase
 {
+    /**
+     * Simulate "serialize" method of a form element.
+     *
+     * @param string[] $keys
+     * @param array $data
+     * @return string
+     */
+    private function mockSerialize(array $keys, array $data): string
+    {
+        $attributes = [];
+        foreach ($keys as $key) {
+            if (empty($data[$key])) {
+                continue;
+            }
+            $attributes[] = $key .'="' .$data[$key] .'"';
+        }
+
+        return implode(' ', $attributes);
+    }
+
     /**
      * @param array $regionCollection
      * @dataProvider renderDataProvider
@@ -16,53 +48,64 @@ class RegionTest extends \PHPUnit\Framework\TestCase
     public function testRender($regionCollection)
     {
         $countryFactoryMock = $this->createMock(
-            \Magento\Directory\Model\CountryFactory::class
+            CountryFactory::class
         );
         $directoryHelperMock = $this->createPartialMock(
-            \Magento\Directory\Helper\Data::class,
+            Data::class,
             ['isRegionRequired']
         );
-        $escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        $escaperMock = $this->createMock(Escaper::class);
+        /** @var MockObject|AbstractElement $elementMock */
         $elementMock = $this->createPartialMock(
-            \Magento\Framework\Data\Form\Element\AbstractElement::class,
-            ['getForm', 'getHtmlAttributes']
+            AbstractElement::class,
+            ['getForm', 'getHtmlAttributes', 'serialize']
         );
-        $countryMock = $this->createPartialMock(
-            \Magento\Framework\Data\Form\Element\AbstractElement::class,
-            ['getValue']
+        $elementMock->method('serialize')->willReturnCallback(
+            function (array $attributes) use ($elementMock): string {
+                return $this->mockSerialize($attributes, $elementMock->getData());
+            }
+        );
+        $countryMock = $this->getMockBuilder(AbstractElement::class)
+            ->onlyMethods(['serialize'])
+            ->addMethods(['getValue'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $countryMock->method('serialize')->willReturnCallback(
+            function (array $attributes) use ($countryMock): string {
+                return $this->mockSerialize($attributes, $countryMock->getData());
+            }
         );
         $regionMock = $this->createMock(
-            \Magento\Framework\Data\Form\Element\AbstractElement::class
+            AbstractElement::class
         );
-        $countryModelMock = $this->createPartialMock(
-            \Magento\Directory\Model\Country::class,
-            ['setId', 'getLoadedRegionCollection', 'toOptionArray', '__wakeup']
-        );
-        $formMock = $this->createPartialMock(\Magento\Framework\Data\Form::class, ['getElement']);
+        $countryModelMock = $this->getMockBuilder(Country::class)
+            ->addMethods(['toOptionArray'])
+            ->onlyMethods(['setId', 'getLoadedRegionCollection', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formMock = $this->createPartialMock(Form::class, ['getElement']);
 
-        $elementMock->expects($this->any())->method('getForm')->will($this->returnValue($formMock));
+        $elementMock->expects($this->any())->method('getForm')->willReturn($formMock);
         $elementMock->expects(
             $this->any()
         )->method(
             'getHtmlAttributes'
-        )->will(
-            $this->returnValue(
-                [
-                    'title',
-                    'class',
-                    'style',
-                    'onclick',
-                    'onchange',
-                    'disabled',
-                    'readonly',
-                    'tabindex',
-                    'placeholder',
-                ]
-            )
+        )->willReturn(
+            [
+                'title',
+                'class',
+                'style',
+                'onclick',
+                'onchange',
+                'disabled',
+                'readonly',
+                'tabindex',
+                'placeholder',
+            ]
         );
 
         $objectManager = new ObjectManager($this);
-        $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
+        $escaper = $objectManager->getObject(Escaper::class);
         $reflection = new \ReflectionClass($elementMock);
         $reflection_property = $reflection->getProperty('_escaper');
         $reflection_property->setAccessible(true);
@@ -72,32 +115,32 @@ class RegionTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getElement'
-        )->will(
-            $this->returnValueMap([['country_id', $countryMock], ['region_id', $regionMock]])
+        )->willReturnMap(
+            [['country_id', $countryMock], ['region_id', $regionMock]]
         );
-        $countryMock->expects($this->any())->method('getValue')->will($this->returnValue('GE'));
+        $countryMock->expects($this->any())->method('getValue')->willReturn('GE');
         $directoryHelperMock->expects(
             $this->any()
         )->method(
             'isRegionRequired'
-        )->will(
-            $this->returnValueMap([['GE', true]])
+        )->willReturnMap(
+            [['GE', true]]
         );
-        $countryFactoryMock->expects($this->once())->method('create')->will($this->returnValue($countryModelMock));
-        $countryModelMock->expects($this->any())->method('setId')->will($this->returnSelf());
-        $countryModelMock->expects($this->any())->method('getLoadedRegionCollection')->will($this->returnSelf());
-        $countryModelMock->expects($this->any())->method('toOptionArray')->will($this->returnValue($regionCollection));
+        $countryFactoryMock->expects($this->once())->method('create')->willReturn($countryModelMock);
+        $countryModelMock->expects($this->any())->method('setId')->willReturnSelf();
+        $countryModelMock->expects($this->any())->method('getLoadedRegionCollection')->willReturnSelf();
+        $countryModelMock->expects($this->any())->method('toOptionArray')->willReturn($regionCollection);
 
-        $model = new \Magento\Customer\Model\Renderer\Region($countryFactoryMock, $directoryHelperMock, $escaperMock);
+        $model = new Region($countryFactoryMock, $directoryHelperMock, $escaperMock);
 
-        $static = new \ReflectionProperty(\Magento\Customer\Model\Renderer\Region::class, '_regionCollections');
+        $static = new \ReflectionProperty(Region::class, '_regionCollections');
         $static->setAccessible(true);
         $static->setValue([]);
 
         $html = $model->render($elementMock);
 
-        $this->assertContains('required', $html);
-        $this->assertContains('required-entry', $html);
+        $this->assertStringContainsString('required', $html);
+        $this->assertStringContainsString('required-entry', $html);
     }
 
     /**
@@ -109,8 +152,8 @@ class RegionTest extends \PHPUnit\Framework\TestCase
             'with no defined regions' => [[]],
             'with defined regions' => [
                 [
-                    new \Magento\Framework\DataObject(['value' => 'Bavaria']),
-                    new \Magento\Framework\DataObject(['value' => 'Saxony']),
+                    new DataObject(['value' => 'Bavaria']),
+                    new DataObject(['value' => 'Saxony']),
                 ],
             ]
         ];

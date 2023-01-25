@@ -3,13 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\ImportExport\Model\Source\Import\AbstractBehavior
  */
 namespace Magento\ImportExport\Test\Unit\Model\Source\Import;
 
-class BehaviorAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Source\Import\AbstractBehaviorTestCase
+use Magento\ImportExport\Model\Source\Import\AbstractBehavior;
+
+class BehaviorAbstractTest extends AbstractBehaviorTestCase
 {
     /**
      * Source array data
@@ -28,12 +31,12 @@ class BehaviorAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Source\
         ['value' => 'key_2', 'label' => 'label_2'],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $model = $this->getMockForAbstractClass(
-            \Magento\ImportExport\Model\Source\Import\AbstractBehavior::class,
+            AbstractBehavior::class,
             [[]],
             '',
             false,
@@ -41,7 +44,7 @@ class BehaviorAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Source\
             true,
             ['toArray']
         );
-        $model->expects($this->any())->method('toArray')->will($this->returnValue($this->_sourceArray));
+        $model->expects($this->any())->method('toArray')->willReturn($this->_sourceArray);
 
         $this->_model = $model;
     }

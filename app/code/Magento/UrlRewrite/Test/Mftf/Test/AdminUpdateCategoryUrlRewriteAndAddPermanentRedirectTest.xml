@@ -13,13 +13,13 @@
             <title value="Update Category URL Rewrites, permanent"/>
             <description value="Login as Admin and update category UrlRewrite and add Permanent redirect type"/>
             <testCaseId value="MC-5357"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
         </annotations>
 
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>

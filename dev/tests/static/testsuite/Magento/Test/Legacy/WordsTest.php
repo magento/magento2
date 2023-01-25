@@ -18,7 +18,7 @@ class WordsTest extends \PHPUnit\Framework\TestCase
      */
     protected static $_wordsFinder;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$_wordsFinder = new \Magento\TestFramework\Inspection\WordsFinder(
             glob(__DIR__ . '/_files/words_*.xml'),

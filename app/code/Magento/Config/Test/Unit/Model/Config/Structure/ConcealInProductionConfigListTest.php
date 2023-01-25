@@ -3,20 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Structure;
 
 use Magento\Config\Model\Config\Structure\ConcealInProductionConfigList;
 use Magento\Framework\App\State;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @deprecated Original class has changed the location
  * @see \Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProduction
  * @see \Magento\Config\Test\Unit\Model\Config\Structure\ElementVisibility\ConcealInProductionTest
  */
-class ConcealInProductionConfigListTest extends \PHPUnit\Framework\TestCase
+class ConcealInProductionConfigListTest extends TestCase
 {
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
     private $stateMock;
 
@@ -25,7 +29,7 @@ class ConcealInProductionConfigListTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()

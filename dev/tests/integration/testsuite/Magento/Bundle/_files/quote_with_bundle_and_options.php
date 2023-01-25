@@ -7,8 +7,9 @@
 declare(strict_types=1);
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/product_with_multiple_options.php';
+Resolver::getInstance()->requireDataFixture('Magento/Bundle/_files/product_with_multiple_options.php');
 
 $objectManager = Bootstrap::getObjectManager();
 

@@ -28,6 +28,7 @@ use Magento\Paypal\Model\Api\Type\Factory as ApiFactory;
  */
 class PlaceOrderWithHostedProTest extends TestCase
 {
+    /** @var string */
     private $paymentMethod = Config::METHOD_HOSTEDPRO;
 
     /** @var GraphQlRequest */
@@ -45,7 +46,7 @@ class PlaceOrderWithHostedProTest extends TestCase
     /** @var Nvp|MockObject */
     private $nvpMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
@@ -69,7 +70,7 @@ class PlaceOrderWithHostedProTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->removeSharedInstance(ApiFactory::class);
     }
@@ -106,7 +107,7 @@ class PlaceOrderWithHostedProTest extends TestCase
               return_url:"paypal/hostedpro/customreturn"
           }
       }
-  }) {    
+  }) {
        cart {
           selected_payment_method {
           code
@@ -180,7 +181,7 @@ QUERY;
             return_url:"paypal/hostedpro/customReturnUrl"
           }
       }
-  }) {    
+  }) {
        cart {
           selected_payment_method {
           code
@@ -197,7 +198,8 @@ QUERY;
 
         $exceptionMessage = 'Declined response message from PayPal gateway';
         $exception = new LocalizedException(__($exceptionMessage));
-        $expectedExceptionMessage = 'Unable to place order: ' . $exceptionMessage;
+        $expectedExceptionMessage = 'Unable to place order: A server error stopped your order from being placed. ' .
+            'Please try to place your order again';
 
         $this->nvpMock->method('call')->willThrowException($exception);
 
@@ -241,7 +243,7 @@ QUERY;
             return_url:"http://mysite.com/paypal/hostedpro/customReturnUrl"
           }
       }
-  }) {    
+  }) {
        cart {
           selected_payment_method {
           code

@@ -11,6 +11,8 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\AbstractSource;
+use Magento\Customer\Model\Indexer\Processor;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Customer entity import
@@ -25,7 +27,7 @@ class Customer extends AbstractCustomer
     /**
      * Collection name attribute
      */
-    const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Attribute\Collection::class;
+    public const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Attribute\Collection::class;
 
     /**#@+
      * Permanent column names
@@ -33,49 +35,45 @@ class Customer extends AbstractCustomer
      * Names that begins with underscore is not an attribute. This name convention is for
      * to avoid interference with same attribute name.
      */
-    const COLUMN_EMAIL = 'email';
+    public const COLUMN_EMAIL = 'email';
 
-    const COLUMN_STORE = '_store';
+    public const COLUMN_STORE = '_store';
 
-    const COLUMN_PASSWORD = 'password';
+    public const COLUMN_PASSWORD = 'password';
 
     /**#@-*/
 
     /**#@+
      * Error codes
      */
-    const ERROR_DUPLICATE_EMAIL_SITE = 'duplicateEmailSite';
+    public const ERROR_DUPLICATE_EMAIL_SITE = 'duplicateEmailSite';
 
-    const ERROR_ROW_IS_ORPHAN = 'rowIsOrphan';
+    public const ERROR_ROW_IS_ORPHAN = 'rowIsOrphan';
 
-    const ERROR_INVALID_STORE = 'invalidStore';
+    public const ERROR_INVALID_STORE = 'invalidStore';
 
-    const ERROR_EMAIL_SITE_NOT_FOUND = 'emailSiteNotFound';
+    public const ERROR_EMAIL_SITE_NOT_FOUND = 'emailSiteNotFound';
 
-    const ERROR_PASSWORD_LENGTH = 'passwordLength';
-
-    /**#@-*/
+    public const ERROR_PASSWORD_LENGTH = 'passwordLength';
 
     /**#@+
      * Keys which used to build result data array for future update
      */
-    const ENTITIES_TO_CREATE_KEY = 'entities_to_create';
+    public const ENTITIES_TO_CREATE_KEY = 'entities_to_create';
 
-    const ENTITIES_TO_UPDATE_KEY = 'entities_to_update';
+    public const ENTITIES_TO_UPDATE_KEY = 'entities_to_update';
 
-    const ATTRIBUTES_TO_SAVE_KEY = 'attributes_to_save';
-
-    /**#@-*/
+    public const ATTRIBUTES_TO_SAVE_KEY = 'attributes_to_save';
 
     /**
      * Minimum password length
      */
-    const MIN_PASSWORD_LENGTH = 6;
+    public const MIN_PASSWORD_LENGTH = 6;
 
     /**
      * Default customer group
      */
-    const DEFAULT_GROUP_ID = 1;
+    public const DEFAULT_GROUP_ID = 1;
 
     /**
      * Customers information from import file
@@ -101,8 +99,6 @@ class Customer extends AbstractCustomer
     protected $_entityTable;
 
     /**
-     * Customer model
-     *
      * @var \Magento\Customer\Model\Customer
      */
     protected $_customerModel;
@@ -127,14 +123,12 @@ class Customer extends AbstractCustomer
     protected $_resourceHelper;
 
     /**
-     * {@inheritdoc}
+     * @var string
      */
     protected $masterAttributeCode = 'email';
 
     /**
-     * Valid column names
-     *
-     * @array
+     * @var array
      */
     protected $validColumnNames = [
         self::COLUMN_DEFAULT_BILLING,
@@ -144,6 +138,8 @@ class Customer extends AbstractCustomer
 
     /**
      * Customer fields in file
+     *
+     * @var array
      */
     protected $customerFields = [
         CustomerInterface::GROUP_ID,
@@ -169,6 +165,11 @@ class Customer extends AbstractCustomer
     ];
 
     /**
+     * @var Processor
+     */
+    private $indexerProcessor;
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -182,6 +183,7 @@ class Customer extends AbstractCustomer
      * @param \Magento\Customer\Model\ResourceModel\Attribute\CollectionFactory $attrCollectionFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param array $data
+     * @param Processor $indexerProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -197,7 +199,8 @@ class Customer extends AbstractCustomer
         \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory,
         \Magento\Customer\Model\ResourceModel\Attribute\CollectionFactory $attrCollectionFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
-        array $data = []
+        array $data = [],
+        ?Processor $indexerProcessor = null
     ) {
         $this->_resourceHelper = $resourceHelper;
 
@@ -254,6 +257,7 @@ class Customer extends AbstractCustomer
         /** @var $customerResource \Magento\Customer\Model\ResourceModel\Customer */
         $customerResource = $this->_customerModel->getResource();
         $this->_entityTable = $customerResource->getEntityTable();
+        $this->indexerProcessor = $indexerProcessor ?: ObjectManager::getInstance()->get(Processor::class);
     }
 
     /**
@@ -357,6 +361,7 @@ class Customer extends AbstractCustomer
      * @param array|AbstractSource $rows
      *
      * @return void
+     * @since 100.2.3
      */
     public function prepareCustomerData($rows): void
     {
@@ -377,6 +382,7 @@ class Customer extends AbstractCustomer
 
     /**
      * @inheritDoc
+     * @since 100.2.3
      */
     public function validateData()
     {
@@ -433,7 +439,8 @@ class Customer extends AbstractCustomer
                 }
             } elseif ('multiselect' == $attributeParameters['type']) {
                 $ids = [];
-                foreach (explode($multiSeparator, mb_strtolower($value)) as $subValue) {
+                $values = $value !== null ? explode($multiSeparator, mb_strtolower($value)) : [];
+                foreach ($values as $subValue) {
                     $ids[] = $this->getSelectAttrIdByValue($attributeParameters, $subValue);
                 }
                 $value = implode(',', $ids);
@@ -495,15 +502,16 @@ class Customer extends AbstractCustomer
      * Import data rows
      *
      * @return bool
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _importData()
     {
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $this->prepareCustomerData($bunch);
-            $entitiesToCreate = [[]];
-            $entitiesToUpdate = [[]];
+            $entitiesToCreate = [];
+            $entitiesToUpdate = [];
             $entitiesToDelete = [];
             $attributesToSave = [];
 
@@ -537,8 +545,8 @@ class Customer extends AbstractCustomer
                 }
             }
 
-            $entitiesToCreate = array_merge(...$entitiesToCreate);
-            $entitiesToUpdate = array_merge(...$entitiesToUpdate);
+            $entitiesToCreate = array_merge([], ...$entitiesToCreate);
+            $entitiesToUpdate = array_merge([], ...$entitiesToUpdate);
 
             $this->updateItemsCounterStats($entitiesToCreate, $entitiesToUpdate, $entitiesToDelete);
             /**
@@ -554,7 +562,7 @@ class Customer extends AbstractCustomer
                 $this->_deleteCustomerEntities($entitiesToDelete);
             }
         }
-
+        $this->indexerProcessor->markIndexerAsInvalid();
         return true;
     }
 

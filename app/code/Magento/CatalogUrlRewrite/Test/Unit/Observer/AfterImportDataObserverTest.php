@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,118 +7,129 @@
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
-use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\CatalogUrlRewrite\Model\ObjectRegistry;
+use Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory;
+use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver;
+use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
+use Magento\UrlRewrite\Model\MergeDataProvider;
+use Magento\UrlRewrite\Model\MergeDataProviderFactory;
+use Magento\UrlRewrite\Model\UrlFinderInterface;
+use Magento\UrlRewrite\Model\UrlPersistInterface;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class AfterImportDataObserverTest
- *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
+class AfterImportDataObserverTest extends TestCase
 {
     /**
-     * @var string
-     */
-    private $categoryId = 10;
-
-    /**
-     * @var \Magento\UrlRewrite\Model\UrlPersistInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlPersistInterface|MockObject
      */
     private $urlPersist;
 
     /**
-     * @var \Magento\UrlRewrite\Model\UrlFinderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlFinderInterface|MockObject
      */
     protected $urlFinder;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductUrlRewriteGenerator|MockObject
      */
     private $productUrlRewriteGenerator;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRepositoryInterface|MockObject
      */
     private $productRepository;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogImportExport\Model\Import\Product|MockObject
      */
     protected $importProduct;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Observer|MockObject
      */
     private $observer;
 
     /**
-     * @var \Magento\Framework\Event|\PHPUnit_Framework_MockObject_MockObject
+     * @var Event|MockObject
      */
     private $event;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductFactory|MockObject
      */
     private $catalogProductFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManager;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectRegistryFactory|MockObject
      */
     private $objectRegistryFactory;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductUrlPathGenerator|MockObject
      */
     private $productUrlPathGenerator;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreViewService|MockObject
      */
     private $storeViewService;
 
     /**
-     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlRewriteFactory|MockObject
      */
     private $urlRewriteFactory;
 
     /**
-     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlRewrite|MockObject
      */
     private $urlRewrite;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectRegistry|MockObject
      */
     private $objectRegistry;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver
+     * @var AfterImportDataObserver
      */
     private $import;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|MockObject
      */
     private $product;
 
     /**
-     * @var \Magento\UrlRewrite\Model\MergeDataProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var MergeDataProvider|MockObject
      */
     private $mergeDataProvider;
 
     /**
-     * @var CategoryCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryCollectionFactory|MockObject
      */
     private $categoryCollectionFactory;
 
@@ -151,7 +162,7 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->importProduct = $this->createPartialMock(
             \Magento\CatalogImportExport\Model\Import\Product::class,
@@ -164,14 +175,14 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->catalogProductFactory = $this->createPartialMock(
-            \Magento\Catalog\Model\ProductFactory::class,
+            ProductFactory::class,
             [
                 'create',
             ]
         );
         $this->storeManager = $this
             ->getMockBuilder(
-                \Magento\Store\Model\StoreManagerInterface::class
+                StoreManagerInterface::class
             )
             ->disableOriginalConstructor()
             ->setMethods(
@@ -180,36 +191,38 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMockForAbstractClass();
-        $this->event = $this->createPartialMock(\Magento\Framework\Event::class, ['getAdapter', 'getBunch']);
-        $this->event->expects($this->any())->method('getAdapter')->willReturn($this->importProduct);
-        $this->event->expects($this->any())->method('getBunch')->willReturn($this->products);
-        $this->observer = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
-        $this->observer->expects($this->any())->method('getEvent')->willReturn($this->event);
-        $this->urlPersist = $this->getMockBuilder(\Magento\UrlRewrite\Model\UrlPersistInterface::class)
+        $this->event = $this->getMockBuilder(Event::class)
+            ->addMethods(['getAdapter', 'getBunch'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->event->expects($this->any())->method('getAdapter')->willReturn($this->importProduct);
+        $this->event->expects($this->any())->method('getBunch')->willReturn($this->products);
+        $this->observer = $this->createPartialMock(Observer::class, ['getEvent']);
+        $this->observer->expects($this->any())->method('getEvent')->willReturn($this->event);
+        $this->urlPersist = $this->getMockBuilder(UrlPersistInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->productUrlRewriteGenerator =
-            $this->getMockBuilder(\Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::class)
+            $this->getMockBuilder(ProductUrlRewriteGenerator::class)
                 ->disableOriginalConstructor()
                 ->setMethods(['generate'])
                 ->getMock();
-        $this->productRepository = $this->getMockBuilder(\Magento\Catalog\Api\ProductRepositoryInterface::class)
+        $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->objectRegistryFactory = $this->createMock(\Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory::class);
+            ->getMockForAbstractClass();
+        $this->objectRegistryFactory = $this->createMock(ObjectRegistryFactory::class);
         $this->productUrlPathGenerator = $this->createMock(
-            \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator::class
+            ProductUrlPathGenerator::class
         );
-        $this->storeViewService = $this->createMock(\Magento\CatalogUrlRewrite\Service\V1\StoreViewService::class);
+        $this->storeViewService = $this->createMock(StoreViewService::class);
         $this->urlRewriteFactory = $this->createPartialMock(
-            \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory::class,
+            UrlRewriteFactory::class,
             [
                 'create',
             ]
         );
         $this->urlFinder = $this
-            ->getMockBuilder(\Magento\UrlRewrite\Model\UrlFinderInterface::class)
+            ->getMockBuilder(UrlFinderInterface::class)
             ->setMethods(
                 [
                     'findAllByData',
@@ -217,37 +230,31 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->urlRewrite = $this
-            ->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
+            ->getMockBuilder(UrlRewrite::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->product = $this
             ->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->objectRegistry = $this
-            ->getMockBuilder(\Magento\CatalogUrlRewrite\Model\ObjectRegistry::class)
+            ->getMockBuilder(ObjectRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $mergeDataProviderFactory = $this->createPartialMock(
-            \Magento\UrlRewrite\Model\MergeDataProviderFactory::class,
+            MergeDataProviderFactory::class,
             ['create']
         );
-        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider();
+        $this->mergeDataProvider = new MergeDataProvider();
         $mergeDataProviderFactory->expects($this->once())->method('create')->willReturn($this->mergeDataProvider);
-
         $this->categoryCollectionFactory = $this->getMockBuilder(CategoryCollectionFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->objectManager = new ObjectManager($this);
         $this->import = $this->objectManager->getObject(
-            \Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver::class,
+            AfterImportDataObserver::class,
             [
                 'catalogProductFactory' => $this->catalogProductFactory,
                 'objectRegistryFactory' => $this->objectRegistryFactory,
@@ -267,10 +274,7 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
      * Test for afterImportData()
      * Covers afterImportData() + protected methods used inside
      *
-     * @covers \Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver::_populateForUrlGeneration
-     * @covers \Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver::isGlobalScope
-     * @covers \Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver::populateGlobalProduct
-     * @covers \Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver::addProductToImport
+     * @covers \Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -280,7 +284,7 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
         $websiteId = 'websiteId value';
         $productsCount = count($this->products);
         $websiteMock = $this->createPartialMock(
-            \Magento\Store\Model\Website::class,
+            Website::class,
             [
                 'getStoreIds',
             ]
@@ -310,7 +314,7 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
                 [$this->products[0][ImportProduct::COL_SKU]],
                 [$this->products[1][ImportProduct::COL_SKU]]
             )->willReturn([]);
-        $getProductWebsitesCallsCount = $productsCount*2;
+        $getProductWebsitesCallsCount = $productsCount * 2;
         $this->importProduct
             ->expects($this->exactly($getProductWebsitesCallsCount))
             ->method('getProductWebsites')
@@ -327,72 +331,46 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
         $this->importProduct
             ->expects($this->exactly(1))
             ->method('getStoreIdByCode')
-            ->will($this->returnValueMap($map));
-        $product = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
-            [
-                'getId',
-                'setId',
-                'getSku',
-                'setStoreId',
-                'getStoreId',
-            ]
-        );
-        $product
-            ->expects($this->exactly($productsCount))
-            ->method('setId')
-            ->withConsecutive([$newSku[0]['entity_id']], [$newSku[1]['entity_id']]);
-        $product
-            ->expects($this->any())
-            ->method('getId')
-            ->willReturnOnConsecutiveCalls(
-                $newSku[0]['entity_id'],
-                $newSku[0]['entity_id'],
-                $newSku[0]['entity_id'],
-                $newSku[0]['entity_id'],
-                $newSku[1]['entity_id'],
-                $newSku[1]['entity_id'],
-                $newSku[1]['entity_id']
+            ->willReturnMap($map);
+        $mockProducts = [];
+        foreach ($this->products as $productsKey => $productsValue) {
+            $product = $this->createPartialMock(
+                \Magento\Catalog\Model\Product::class,
+                [
+                    'getId',
+                    'setId',
+                    'getSku',
+                    'setStoreId',
+                    'getStoreId',
+                ]
             );
-        $product
-            ->expects($this->exactly($productsCount))
-            ->method('getSku')
-            ->will(
-                $this->onConsecutiveCalls(
-                    $this->products[0]['sku'],
-                    $this->products[1]['sku']
-                )
-            );
-        $product
-            ->expects($this->exactly($productsCount))
-            ->method('getStoreId')
-            ->will(
-                $this->onConsecutiveCalls(
-                    $this->products[0][ImportProduct::COL_STORE],
-                    $this->products[1][ImportProduct::COL_STORE]
-                )
-            );
-        $product
-            ->expects($this->exactly($productsCount))
-            ->method('setStoreId')
-            ->withConsecutive(
-                [$this->products[0][ImportProduct::COL_STORE]],
-                [$this->products[1][ImportProduct::COL_STORE]]
-            );
+            $product->expects($this->any())
+                ->method('setId')
+                ->with($newSku[$productsKey]['entity_id']);
+            $product->expects($this->any())
+                ->method('getId')
+                ->willReturn($newSku[$productsKey]['entity_id']);
+            $product->expects($this->any())
+                ->method('getSku')
+                ->willReturn($productsValue['sku']);
+            $product->expects($this->any())->method('getStoreId')
+                ->willReturn($productsValue[ImportProduct::COL_STORE]);
+            $product->expects($this->any())
+                ->method('setStoreId')
+                ->with($productsValue[ImportProduct::COL_STORE]);
+            $mockProducts[] = $product;
+        }
         $this->catalogProductFactory
             ->expects($this->exactly($productsCount))
             ->method('create')
-            ->willReturn($product);
-
+            ->willReturnOnConsecutiveCalls(...$mockProducts);
         $this->urlFinder->expects($this->any())->method('findAllByData')->willReturn([]);
-
         $this->productUrlPathGenerator->expects($this->any())->method('getUrlPathWithSuffix')
             ->willReturn('urlPathWithSuffix');
         $this->productUrlPathGenerator->expects($this->any())->method('getUrlPath')
             ->willReturn('urlPath');
         $this->productUrlPathGenerator->expects($this->any())->method('getCanonicalUrlPath')
             ->willReturn('canonicalUrlPath');
-
         $this->urlRewrite->expects($this->any())->method('setStoreId')->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setEntityId')->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setEntityType')->willReturnSelf();
@@ -402,240 +380,20 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
         $this->urlRewrite->expects($this->any())->method('getRequestPath')->willReturn('requestPath');
         $this->urlRewrite->expects($this->any())->method('getStoreId')
             ->willReturnOnConsecutiveCalls(0, 'not global');
-
         $this->urlRewriteFactory->expects($this->any())->method('create')->willReturn($this->urlRewrite);
-
         $productUrls = [
             'requestPath_0' => $this->urlRewrite,
             'requestPath_not global' => $this->urlRewrite
         ];
-
         $this->urlPersist
             ->expects($this->once())
             ->method('replace')
             ->with($productUrls);
-
         $this->import->execute($this->observer);
     }
 
     /**
-     * Cover canonicalUrlRewriteGenerate().
-     */
-    public function testCanonicalUrlRewriteGenerateWithUrlPath()
-    {
-        $productId = 'product_id';
-        $requestPath = 'simple-product.html';
-        $storeId = 10;
-        $product = $this
-            ->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $productsByStores = [$storeId => $product];
-        $products = [
-            $productId => $productsByStores,
-        ];
-
-        $targetPath = 'catalog/product/view/id/' . $productId;
-        $this->setPropertyValue($this->import, 'products', $products);
-
-        $this->productUrlPathGenerator
-            ->expects($this->once())
-            ->method('getUrlPathWithSuffix')
-            ->will($this->returnValue($requestPath));
-        $this->productUrlPathGenerator
-            ->expects($this->once())
-            ->method('getUrlPath')
-            ->will($this->returnValue('urlPath'));
-        $this->productUrlPathGenerator
-            ->expects($this->once())
-            ->method('getCanonicalUrlPath')
-            ->will($this->returnValue($targetPath));
-        $this->urlRewrite
-            ->expects($this->once())
-            ->method('setStoreId')
-            ->with($storeId)
-            ->will($this->returnSelf());
-        $this->urlRewrite
-            ->expects($this->once())
-            ->method('setEntityId')
-            ->with($productId)
-            ->will($this->returnSelf());
-        $this->urlRewrite
-            ->expects($this->once())
-            ->method('setEntityType')
-            ->with(ProductUrlRewriteGenerator::ENTITY_TYPE)
-            ->will($this->returnSelf());
-        $this->urlRewrite
-            ->expects($this->once())
-            ->method('setRequestPath')
-            ->with($requestPath)
-            ->will($this->returnSelf());
-        $this->urlRewrite
-            ->expects($this->once())
-            ->method('setTargetPath')
-            ->with($targetPath)
-            ->will($this->returnSelf());
-        $this->urlRewriteFactory
-            ->expects($this->once())
-            ->method('create')
-            ->willReturn($this->urlRewrite);
-
-        $actualResult = $this->invokeMethod($this->import, 'canonicalUrlRewriteGenerate');
-        $this->assertEquals(
-            [
-                $this->urlRewrite,
-            ],
-            $actualResult
-        );
-    }
-
-    /**
-     * Cover canonicalUrlRewriteGenerate().
-     */
-    public function testCanonicalUrlRewriteGenerateWithEmptyUrlPath()
-    {
-        $productId = 'product_id';
-        $storeId = 10;
-        $product = $this
-            ->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $productsByStores = [$storeId => $product];
-        $products = [
-            $productId => $productsByStores,
-        ];
-
-        $this->setPropertyValue($this->import, 'products', $products);
-
-        $this->productUrlPathGenerator
-            ->expects($this->once())
-            ->method('getUrlPath')
-            ->will($this->returnValue(''));
-        $this->urlRewriteFactory
-            ->expects($this->never())
-            ->method('create');
-
-        $actualResult = $this->invokeMethod($this->import, 'canonicalUrlRewriteGenerate');
-        $this->assertEquals([], $actualResult);
-    }
-
-    /**
-     * Cover categoriesUrlRewriteGenerate().
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testCategoriesUrlRewriteGenerate()
-    {
-        $urlPathWithCategory = 'category/simple-product.html';
-        $storeId = 10;
-        $productId = 'product_id';
-        $canonicalUrlPathWithCategory = 'canonical-path-with-category';
-        $product = $this
-            ->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $productsByStores = [
-            $storeId => $product,
-        ];
-        $products = [
-            $productId => $productsByStores,
-        ];
-        $categoryCache = [
-            $productId => [$this->categoryId],
-        ];
-
-        $this->setPropertyValue($this->import, 'products', $products);
-        $this->setPropertyValue($this->import, 'categoryCache', $categoryCache);
-        $this->setPropertyValue($this->import, 'import', $this->importProduct);
-
-        $this->productUrlPathGenerator
-            ->expects($this->any())
-            ->method('getUrlPathWithSuffix')
-            ->will($this->returnValue($urlPathWithCategory));
-        $this->productUrlPathGenerator
-            ->expects($this->any())
-            ->method('getCanonicalUrlPath')
-            ->will($this->returnValue($canonicalUrlPathWithCategory));
-        $category = $this->createMock(\Magento\Catalog\Model\Category::class);
-        $category
-            ->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue($this->categoryId));
-        $category
-            ->expects($this->any())
-            ->method('getAnchorsAbove')
-            ->willReturn([]);
-        $categoryCollection = $this->getMockBuilder(CategoryCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $categoryCollection->expects($this->once())
-            ->method('addIdFilter')
-            ->with([$this->categoryId])
-            ->willReturnSelf();
-        $categoryCollection->expects($this->once())
-            ->method('setStoreId')
-            ->with($storeId)
-            ->willReturnSelf();
-        $categoryCollection->expects($this->exactly(3))
-            ->method('addAttributeToSelect')
-            ->withConsecutive(
-                ['name'],
-                ['url_key'],
-                ['url_path']
-            )->willReturnSelf();
-        $categoryCollection->expects($this->once())
-            ->method('getFirstItem')
-            ->willReturn($category);
-
-        $this->categoryCollectionFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($categoryCollection);
-
-        $this->urlRewrite
-            ->expects($this->any())
-            ->method('setStoreId')
-            ->with($storeId)
-            ->will($this->returnSelf());
-        $this->urlRewrite
-            ->expects($this->any())
-            ->method('setEntityId')
-            ->with($productId)
-            ->will($this->returnSelf());
-        $this->urlRewrite
-            ->expects($this->any())
-            ->method('setEntityType')
-            ->with(ProductUrlRewriteGenerator::ENTITY_TYPE)
-            ->will($this->returnSelf());
-        $this->urlRewrite
-            ->expects($this->any())
-            ->method('setRequestPath')
-            ->with($urlPathWithCategory)
-            ->will($this->returnSelf());
-        $this->urlRewrite
-            ->expects($this->any())
-            ->method('setTargetPath')
-            ->with($canonicalUrlPathWithCategory)
-            ->will($this->returnSelf());
-        $this->urlRewrite
-            ->expects($this->any())
-            ->method('setMetadata')
-            ->with(['category_id' => $this->categoryId])
-            ->will($this->returnSelf());
-        $this->urlRewriteFactory
-            ->expects($this->any())
-            ->method('create')
-            ->willReturn($this->urlRewrite);
-
-        $actualResult = $this->invokeMethod($this->import, 'categoriesUrlRewriteGenerate');
-        $this->assertEquals(
-            [
-                $this->urlRewrite,
-            ],
-            $actualResult
-        );
-    }
-
-    /**
-     * @param \Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver $object
+     * @param AfterImportDataObserver $object
      * @param string $property
      * @param mixed $value
      * @return void
@@ -646,21 +404,6 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
         $reflectionProperty = $reflection->getProperty($property);
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
-    }
-
-    /**
-     * @param \Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver $object
-     * @param string $methodName
-     * @param array $parameters
-     * @return mixed
-     */
-    protected function invokeMethod($object, $methodName, array $parameters = [])
-    {
-        $reflection = new \ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
-
-        return $method->invokeArgs($object, $parameters);
     }
 
     /**
@@ -681,25 +424,17 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
         $metadata,
         $description
     ) {
-        $this->urlRewrite->expects($this->any())->method('setStoreId')->with($storeId)
-            ->will($this->returnSelf());
-        $this->urlRewrite->expects($this->any())->method('setEntityId')->with($productId)
-            ->will($this->returnSelf());
+        $this->urlRewrite->expects($this->any())->method('setStoreId')->with($storeId)->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setEntityId')->with($productId)->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setEntityType')
-            ->with(ProductUrlRewriteGenerator::ENTITY_TYPE)->will($this->returnSelf());
-        $this->urlRewrite->expects($this->any())->method('setRequestPath')->with($requestPath)
-            ->will($this->returnSelf());
-        $this->urlRewrite->expects($this->any())->method('setTargetPath')->with($targetPath)
-            ->will($this->returnSelf());
-        $this->urlRewrite->expects($this->any())->method('setIsAutogenerated')->with(0)
-            ->will($this->returnSelf());
-        $this->urlRewrite->expects($this->any())->method('setRedirectType')->with($redirectType)
-            ->will($this->returnSelf());
-        $this->urlRewrite->expects($this->any())->method('setMetadata')->with($metadata)
-            ->will($this->returnSelf());
-        $this->urlRewriteFactory->expects($this->any())->method('create')->will($this->returnValue($this->urlRewrite));
-        $this->urlRewrite->expects($this->once())->method('setDescription')->with($description)
-            ->will($this->returnSelf());
+            ->with(ProductUrlRewriteGenerator::ENTITY_TYPE)->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setRequestPath')->with($requestPath)->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setTargetPath')->with($targetPath)->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setIsAutogenerated')->with(0)->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setRedirectType')->with($redirectType)->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setMetadata')->with($metadata)->willReturnSelf();
+        $this->urlRewriteFactory->expects($this->any())->method('create')->willReturn($this->urlRewrite);
+        $this->urlRewrite->expects($this->once())->method('setDescription')->with($description)->willReturnSelf();
     }
 
     /**
@@ -711,14 +446,15 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
         $rewrites = [];
         foreach ($currentRewrites as $urlRewrite) {
             /**
-             * @var \PHPUnit_Framework_MockObject_MockObject
+             * @var MockObject
              */
-            $url = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
-                ->disableOriginalConstructor()->getMock();
+            $url = $this->getMockBuilder(UrlRewrite::class)
+                ->disableOriginalConstructor()
+                ->getMock();
             foreach ($urlRewrite as $key => $value) {
                 $url->expects($this->any())
                     ->method('get' . str_replace('_', '', ucwords($key, '_')))
-                    ->will($this->returnValue($value));
+                    ->willReturn($value);
             }
             $rewrites[] = $url;
         }

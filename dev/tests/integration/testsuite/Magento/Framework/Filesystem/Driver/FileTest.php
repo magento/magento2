@@ -46,7 +46,7 @@ class FileTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->driver = new File();
         $this->absolutePath = dirname(__DIR__) . '/_files/';
@@ -62,6 +62,32 @@ class FileTest extends TestCase
     protected function tearDown(): void
     {
         $this->removeGeneratedDirectory();
+    }
+
+    /**
+     * Tests read directory with symlynked folders.
+     *
+     * @return void
+     */
+    public function testReadDirectoryRecursivelyWithSymlinkedFolders(): void
+    {
+        $sourceDirectory = $this->generatedPath . '/source';
+        $destinationDirectory = $this->generatedPath . '/destination';
+
+        $this->driver->createDirectory($sourceDirectory);
+        $this->driver->createDirectory($sourceDirectory . '/directory1');
+        $this->driver->createDirectory($destinationDirectory);
+
+        $linkName = $destinationDirectory . '/link';
+        $this->driver->symlink($sourceDirectory, $linkName);
+
+        $paths = [
+            $destinationDirectory . '/link' . '/directory1',
+            $destinationDirectory . '/link'
+
+        ];
+        $actual = $this->driver->readDirectoryRecursively($destinationDirectory);
+        $this->assertEquals($paths, $actual);
     }
 
     /**
@@ -88,10 +114,11 @@ class FileTest extends TestCase
      * Tests directory reading exception.
      *
      * @return void
-     * @expectedException \Magento\Framework\Exception\FileSystemException
      */
     public function testReadDirectoryRecursivelyFailure(): void
     {
+        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
+
         $this->driver->readDirectoryRecursively($this->getTestPath('not-existing-directory'));
     }
 

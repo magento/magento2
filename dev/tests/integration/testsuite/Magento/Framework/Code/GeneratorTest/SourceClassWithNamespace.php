@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Code\GeneratorTest;
 
-use Zend\Code\Generator\ClassGenerator;
+use Laminas\Code\Generator\ClassGenerator;
 
 /**
  * phpcs:ignoreFile
@@ -28,7 +28,7 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
     /**
      * Public child method
      *
-     * @param \Zend\Code\Generator\ClassGenerator $classGenerator
+     * @param \Laminas\Code\Generator\ClassGenerator $classGenerator
      * @param string $param1
      * @param string $param2
      * @param string $param3
@@ -49,7 +49,7 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
     /**
      * Public child method with reference
      *
-     * @param \Zend\Code\Generator\ClassGenerator $classGenerator
+     * @param \Laminas\Code\Generator\ClassGenerator $classGenerator
      * @param string $param1
      * @param array $array
      *
@@ -62,7 +62,7 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
     /**
      * Protected child method
      *
-     * @param \Zend\Code\Generator\ClassGenerator $classGenerator
+     * @param \Laminas\Code\Generator\ClassGenerator $classGenerator
      * @param string $param1
      * @param string $param2
      * @param string $param3
@@ -80,7 +80,7 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
     /**
      * Private child method
      *
-     * @param \Zend\Code\Generator\ClassGenerator $classGenerator
+     * @param \Laminas\Code\Generator\ClassGenerator $classGenerator
      * @param string $param1
      * @param string $param2
      * @param string $param3
@@ -152,6 +152,7 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
      */
     public function public71Another(?\DateTime $arg1, $arg2 = false): ?string
     {
+        // phpstan:ignore
     }
 
     /**
@@ -164,5 +165,6 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
      */
     public function publicWithSelf($arg = false): self
     {
+        // phpstan:ignore
     }
 }

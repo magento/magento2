@@ -13,8 +13,8 @@
             <description>Validates that the Welcome message is present and correct and not you link absent.</description>
         </annotations>
 
-        <waitForElementVisible selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="waitDefaultMessage"/>
-        <see userInput="Default welcome msg!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="verifyDefaultMessage"/>
+        <waitForElementVisible selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="waitDefaultMessage"/>
+        <waitForText userInput="Default welcome msg!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="verifyDefaultMessage"/>
         <dontSeeElement selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="checkAbsenceLinkNotYou"/>
     </actionGroup>
 </actionGroups>

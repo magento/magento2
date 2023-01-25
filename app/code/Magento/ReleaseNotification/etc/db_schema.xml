@@ -9,9 +9,9 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="release_notification_viewer_log" resource="default" engine="innodb"
            comment="Release Notification Viewer Log Table">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true"
                 comment="Log ID"/>
-        <column xsi:type="int" name="viewer_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="viewer_id" unsigned="true" nullable="false" identity="false"
                 comment="Viewer admin user ID"/>
         <column xsi:type="varchar" name="last_view_version" nullable="false" length="16"
                 comment="Viewer last view on product version"/>

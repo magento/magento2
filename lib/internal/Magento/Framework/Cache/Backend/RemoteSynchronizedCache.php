@@ -6,6 +6,10 @@
 
 namespace Magento\Framework\Cache\Backend;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Cache\CompositeStaleCacheNotifier;
+use Magento\Framework\Cache\StaleCacheNotifierInterface;
+
 /**
  * Remote synchronized cache
  *
@@ -31,19 +35,19 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     private $remote;
 
     /**
-     * Cache invalidation time
-     *
-     * @var \Zend_Cache_Backend_ExtendedInterface
-     */
-    protected $cacheInvalidationTime;
-
-    /**
      * Suffix for hash to compare data version in cache storage.
      */
     private const HASH_SUFFIX = ':hash';
 
     /**
-     * @inheritdoc
+     * Prefix for locks in case stale cache is used.
+     */
+    private const REMOTE_SYNC_LOCK_PREFIX = 'rsl::';
+
+    /**
+     *  Available options
+     *
+     * @var array available options
      */
     protected $_options = [
         'remote_backend' => '',
@@ -53,8 +57,29 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         'local_backend' => '',
         'local_backend_options' => [],
         'local_backend_custom_naming' => true,
-        'local_backend_autoload' => true
+        'local_backend_autoload' => true,
+        'use_stale_cache' => false,
+        'cleanup_percentage' => 95,
     ];
+
+    /**
+     * In memory state for locks.
+     *
+     * @var array
+     */
+    private $lockList = [];
+
+    /**
+     * Sign for locks, helps to avoid removing a lock that was created by another client
+     *
+     * @var string
+     */
+    private $lockSign;
+
+    /**
+     * @var StaleCacheNotifierInterface
+     */
+    private $notifier;
 
     /**
      * @param array $options
@@ -101,6 +126,8 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
                 );
             }
         }
+
+        $this->lockSign = $this->generateLockSign();
     }
 
     /**
@@ -108,7 +135,8 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function setDirectives($directives)
     {
-        return $this->local->setDirectives($directives);
+        $this->remote->setDirectives($directives);
+        $this->local->setDirectives($directives);
     }
 
     /**
@@ -166,27 +194,28 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     public function load($id, $doNotTestCacheValidity = false)
     {
         $localData = $this->local->load($id);
-        $remoteData = false;
 
-        if (false === $localData) {
-            $remoteData = $this->remote->load($id);
-
-            if (false === $remoteData) {
-                return false;
-            }
-        } else {
-            if ($this->getDataVersion($localData) !== $this->loadRemoteDataVersion($id)) {
-                $localData = false;
-                $remoteData = $this->remote->load($id);
+        if ($localData !== false) {
+            if ($this->getDataVersion($localData) === $this->loadRemoteDataVersion($id)) {
+                return $localData;
             }
         }
 
+        $remoteData = $this->remote->load($id);
         if ($remoteData !== false) {
             $this->local->save($remoteData, $id);
-            $localData = $remoteData;
+
+            return $remoteData;
+        } elseif ($localData && $this->_options['use_stale_cache']) {
+            if ($this->lock($id)) {
+                return false;
+            } else {
+                $this->notifyStaleCache();
+                return $localData;
+            }
         }
 
-        return $localData;
+        return false;
     }
 
     /**
@@ -204,15 +233,42 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     {
         $dataToSave = $data;
         $remHash = $this->loadRemoteDataVersion($id);
-
-        if ($remHash !== false) {
-            $dataToSave = $this->remote->load($id);
-        } else {
+        $isRemoteUpToDate = false;
+        if ($remHash !== false && $this->getDataVersion($data) === $remHash) {
+            $remoteData = $this->remote->load($id);
+            if ($remoteData !== false && $this->getDataVersion($data) === $this->getDataVersion($remoteData)) {
+                $isRemoteUpToDate = true;
+                $dataToSave = $remoteData;
+            }
+        }
+        if (!$isRemoteUpToDate) {
             $this->remote->save($data, $id, $tags, $specificLifetime);
             $this->saveRemoteDataVersion($data, $id, $tags, $specificLifetime);
         }
 
+        if ($this->_options['use_stale_cache']) {
+            $this->unlock($id);
+        }
+
+        // mt_rand() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
+        if (!mt_rand(0, 100) && $this->checkIfLocalCacheSpaceExceeded()) {
+            $this->local->clean();
+        }
+
+        // Local cache doesn't save tags intentionally since it will cause inconsistency after flushing the cache
+        // in multinode environment
         return $this->local->save($dataToSave, $id, [], $specificLifetime);
+    }
+
+    /**
+     * Check if local cache space bigger that configure amount
+     *
+     * @return bool
+     */
+    private function checkIfLocalCacheSpaceExceeded()
+    {
+        return $this->local->getFillingPercentage() >= ($this->_options['cleanup_percentage'] ?? 95);
     }
 
     /**
@@ -220,9 +276,11 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function remove($id)
     {
-         return $this->removeRemoteDataVersion($id) &&
-            $this->remote->remove($id) &&
-            $this->local->remove($id);
+        $result = $this->removeRemoteDataVersion($id) && $this->remote->remove($id);
+        if ($result && !$this->_options['use_stale_cache']) {
+            $result = $this->local->remove($id);
+        }
+        return $result;
     }
 
     /**
@@ -230,7 +288,8 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
     {
-        return $this->remote->clean($mode, $tags);
+        return $this->remote->clean($mode, $tags) &&
+            $this->local->clean($mode);
     }
 
     /**
@@ -238,7 +297,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function getIds()
     {
-        return $this->local->getIds();
+        return $this->remote->getIds();
     }
 
     /**
@@ -246,7 +305,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function getTags()
     {
-        return $this->local->getTags();
+        return $this->remote->getTags();
     }
 
     /**
@@ -254,7 +313,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function getIdsMatchingTags($tags = [])
     {
-        return $this->local->getIdsMatchingTags($tags);
+        return $this->remote->getIdsMatchingTags($tags);
     }
 
     /**
@@ -262,7 +321,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function getIdsNotMatchingTags($tags = [])
     {
-        return $this->local->getIdsNotMatchingTags($tags);
+        return $this->remote->getIdsNotMatchingTags($tags);
     }
 
     /**
@@ -270,7 +329,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function getIdsMatchingAnyTags($tags = [])
     {
-        return $this->local->getIdsMatchingAnyTags($tags);
+        return $this->remote->getIdsMatchingAnyTags($tags);
     }
 
     /**
@@ -278,7 +337,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function getFillingPercentage()
     {
-        return $this->local->getFillingPercentage();
+        return $this->remote->getFillingPercentage();
     }
 
     /**
@@ -286,7 +345,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function getMetadatas($id)
     {
-        return $this->local->getMetadatas($id);
+        return $this->remote->getMetadatas($id);
     }
 
     /**
@@ -294,7 +353,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function touch($id, $extraLifetime)
     {
-        return $this->local->touch($id, $extraLifetime);
+        return $this->remote->touch($id, $extraLifetime);
     }
 
     /**
@@ -302,6 +361,125 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function getCapabilities()
     {
-        return $this->local->getCapabilities();
+        return $this->remote->getCapabilities();
+    }
+
+    /**
+     * Sets a lock
+     *
+     * @param string $id
+     * @return bool
+     */
+    private function lock(string $id): bool
+    {
+        $this->lockList[$id] = microtime(true);
+
+        $data = $this->remote->load($this->getLockName($id));
+
+        if (false !== $data) {
+            return false;
+        }
+
+        $this->remote->save($this->lockSign, $this->getLockName($id), [], 10);
+
+        $data = $this->remote->load($this->getLockName($id));
+
+        if ($data === $this->lockSign) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Release a lock.
+     *
+     * @param string $id
+     * @return bool
+     */
+    private function unlock(string $id): bool
+    {
+        if (isset($this->lockList[$id])) {
+            unset($this->lockList[$id]);
+        }
+
+        $data = $this->remote->load($this->getLockName($id));
+
+        if (false === $data) {
+            return false;
+        }
+
+        $removeResult = false;
+        if ($data === $this->lockSign) {
+            $removeResult = (bool)$this->remote->remove($this->getLockName($id));
+        }
+
+        return $removeResult;
+    }
+
+    /**
+     * Calculate lock name.
+     *
+     * @param string $id
+     * @return string
+     */
+    private function getLockName(string $id): string
+    {
+        return self::REMOTE_SYNC_LOCK_PREFIX . $id;
+    }
+
+    /**
+     * Release all locks.
+     *
+     * @return void
+     */
+    private function unlockAll()
+    {
+        foreach ($this->lockList as $id) {
+            $this->unlock($id);
+        }
+    }
+
+    /**
+     * Release all locks on destruct.
+     *
+     * @return void
+     */
+    public function __destruct()
+    {
+        $this->unlockAll();
+    }
+
+    /**
+     * Function that generates lock sign that helps to avoid removing a lock that was created by another client.
+     *
+     * @return string
+     */
+    private function generateLockSign()
+    {
+        $sign = \implode(
+            '-',
+            [
+                \getmypid(), \crc32(\gethostname())
+            ]
+        );
+
+        try {
+            $sign .= '-' . \bin2hex(\random_bytes(4));
+        } catch (\Exception $e) {
+            $sign .= '-' . \uniqid('-uniqid-');
+        }
+
+        return $sign;
+    }
+
+    /**
+     * Function that notifies configured cache types to be switched off.
+     */
+    private function notifyStaleCache(): void
+    {
+        $this->notifier = $this->notifier ??
+            ObjectManager::getInstance()->get(CompositeStaleCacheNotifier::class);
+        $this->notifier->cacheLoaderIsUsingStaleCache();
     }
 }

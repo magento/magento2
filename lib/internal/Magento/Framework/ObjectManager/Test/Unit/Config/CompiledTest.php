@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 
 use Magento\Framework\ObjectManager\Config\Compiled;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class CompiledTest extends \PHPUnit\Framework\TestCase
+class CompiledTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -20,7 +23,7 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
      */
     private $compiled;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -163,7 +166,7 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetArgumentsNotDefined()
     {
-        $this->assertSame(null, $this->compiled->getArguments('class_not_stored_in_config'));
+        $this->assertNull($this->compiled->getArguments('class_not_stored_in_config'));
     }
 
     /**

@@ -26,19 +26,19 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var SaveHandlerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var SaveHandlerFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $saveHandlerFactoryMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
@@ -50,7 +50,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->removeSharedInstance(DeploymentConfig::class);
         $this->objectManager->removeSharedInstance(SaveHandlerFactory::class);
@@ -113,14 +113,10 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $defaultHandlerMock->expects($this->once())->method('open')->with('explicit_save_path', 'test_session_id');
 
-        $this->saveHandlerFactoryMock->expects($this->at(0))
+        $this->saveHandlerFactoryMock
             ->method('create')
-            ->with('redis')
-            ->willReturn($redisHandlerMock);
-        $this->saveHandlerFactoryMock->expects($this->at(1))
-            ->method('create')
-            ->with(SaveHandlerInterface::DEFAULT_HANDLER)
-            ->willReturn($defaultHandlerMock);
+            ->withConsecutive(['redis'], [SaveHandlerInterface::DEFAULT_HANDLER])
+            ->willReturnOnConsecutiveCalls($redisHandlerMock, $defaultHandlerMock);
 
         $sessionConfig = $this->objectManager->create(ConfigInterface::class);
         /** @var SaveHandler $saveHandler */

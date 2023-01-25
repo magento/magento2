@@ -24,7 +24,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->block = Bootstrap::getObjectManager()->get(
             \Magento\Reports\Block\Adminhtml\Grid::class

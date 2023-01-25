@@ -3,20 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Model\ResourceModel;
 
+use Magento\Bundle\Model\Option\Validator;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Bundle Option Resource Model
  */
-class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Option extends AbstractDb
 {
     /**
-     * @var \Magento\Bundle\Model\Option\Validator
+     * @var Validator
      */
     private $validator;
 
@@ -31,22 +37,23 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $entityManager;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Bundle\Model\Option\Validator $validator
+     * @param Context $context
+     * @param Validator $validator
+     * @param MetadataPool $metadataPool
+     * @param EntityManager $entityManager
      * @param string $connectionName
-     * @param EntityManager|null $entityManager
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Bundle\Model\Option\Validator $validator,
-        $connectionName = null,
-        EntityManager $entityManager = null
+        Context $context,
+        Validator $validator,
+        MetadataPool $metadataPool,
+        EntityManager $entityManager,
+        $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
         $this->validator = $validator;
-
-        $this->entityManager = $entityManager
-            ?: ObjectManager::getInstance()->get(EntityManager::class);
+        $this->metadataPool = $metadataPool;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -60,7 +67,10 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Remove selections by option id
+     *
      * @param int $optionId
+     *
      * @return int
      */
     public function removeOptionSelections($optionId)
@@ -74,36 +84,37 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * After save process
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
+     *
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _afterSave(AbstractModel $object)
     {
         parent::_afterSave($object);
 
-        $condition = [
-            'option_id = ?' => $object->getId(),
-            'store_id = ? OR store_id = 0' => $object->getStoreId(),
-            'parent_product_id = ?' => $object->getParentId()
-        ];
-
         $connection = $this->getConnection();
-        $connection->delete($this->getTable('catalog_product_bundle_option_value'), $condition);
-
-        $data = new \Magento\Framework\DataObject();
+        $data = new DataObject();
         $data->setOptionId($object->getId())
             ->setStoreId($object->getStoreId())
             ->setParentProductId($object->getParentId())
             ->setTitle($object->getTitle());
 
-        $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
+        $connection->insertOnDuplicate(
+            $this->getTable('catalog_product_bundle_option_value'),
+            $data->getData(),
+            ['title']
+        );
 
         /**
          * also saving default fallback value
          */
         if (0 !== (int)$object->getStoreId()) {
             $data->setStoreId(0)->setTitle($object->getDefaultTitle());
-            $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
+            $connection->insertOnDuplicate(
+                $this->getTable('catalog_product_bundle_option_value'),
+                $data->getData(),
+                ['title']
+            );
         }
 
         return $this;
@@ -112,10 +123,10 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * After delete process
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
      */
-    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
+    protected function _afterDelete(AbstractModel $object)
     {
         parent::_afterDelete($object);
 
@@ -136,6 +147,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $productId
      * @param int $storeId
+     *
      * @return array
      */
     public function getSearchableData($productId, $storeId)
@@ -148,7 +160,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'option_title_default.title'
         );
         $bind = ['store_id' => $storeId, 'product_id' => $productId];
-        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $select = $connection->select()
             ->from(
                 ['opt' => $this->getMainTable()],
@@ -180,7 +192,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getValidationRulesBeforeSave()
     {
@@ -188,21 +200,9 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Get MetadataPool instance
-     * @return MetadataPool
+     * @inheritDoc
      */
-    private function getMetadataPool()
-    {
-        if (!$this->metadataPool) {
-            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        }
-        return $this->metadataPool;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function save(\Magento\Framework\Model\AbstractModel $object)
+    public function save(AbstractModel $object)
     {
         $this->entityManager->save($object);
 

@@ -20,14 +20,17 @@ class IntegrationTest extends \PHPUnit\Framework\TestCase
      */
     protected $consumer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->consumer = $objectManager->create(\Magento\Integration\Model\Oauth\Consumer::class);
         $this->consumer->setData(
             [
+                // md5() here just to generate unique string
+                // phpcs:disable Magento2.Security.InsecureFunction
                 'key' => md5(uniqid()),
                 'secret' => md5(uniqid()),
+                // phpcs:enable
                 'callback_url' => 'http://example.com/callback',
                 'rejected_callback_url' => 'http://example.com/rejectedCallback'
             ]

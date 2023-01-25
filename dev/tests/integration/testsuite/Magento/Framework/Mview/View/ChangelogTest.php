@@ -6,9 +6,12 @@
 namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Mview\View;
 
 /**
  * Test Class for \Magento\Framework\Mview\View\Changelog
+ *
+ * @magentoDbIsolation disabled
  */
 class ChangelogTest extends \PHPUnit\Framework\TestCase
 {
@@ -18,7 +21,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     protected $resource;
 
@@ -30,21 +33,21 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
     protected $connection;
 
     /**
-     * @var \Magento\Framework\Mview\View\Changelog
+     * @var Changelog
      */
     protected $model;
 
     /**
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->resource = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class);
+        $this->resource = $this->objectManager->get(ResourceConnection::class);
         $this->connection = $this->resource->getConnection();
 
         $this->model = $this->objectManager->create(
-            \Magento\Framework\Mview\View\Changelog::class,
+            Changelog::class,
             ['resource' => $this->resource]
         );
         $this->model->setViewId('test_view_id_1');
@@ -53,8 +56,9 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
+     * @throws ChangelogTableNotExistsException
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->model->drop();
     }
@@ -63,12 +67,13 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
      * Test for create() and drop() methods
      *
      * @return void
+     * @throws ChangelogTableNotExistsException
      */
     public function testCreateAndDrop()
     {
-        /** @var \Magento\Framework\Mview\View\Changelog $model */
+        /** @var Changelog $model */
         $model = $this->objectManager->create(
-            \Magento\Framework\Mview\View\Changelog::class,
+            Changelog::class,
             ['resource' => $this->resource]
         );
         $model->setViewId('test_view_id_2');
@@ -84,11 +89,12 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
      * Test for getVersion() method
      *
      * @return void
+     * @throws \Exception
      */
     public function testGetVersion()
     {
         $model = $this->objectManager->create(
-            \Magento\Framework\Mview\View\Changelog::class,
+            Changelog::class,
             ['resource' => $this->resource]
         );
         $model->setViewId('test_view_id_2');
@@ -104,6 +110,8 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
      * Test for clear() method
      *
      * @return void
+     * @throws ChangelogTableNotExistsException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function testClear()
     {
@@ -117,9 +125,59 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Create entity table for MView
+     *
+     * @param string $tableName
+     * @return void
+     */
+    private function createEntityTable(string $tableName)
+    {
+        $table = $this->resource->getConnection()->newTable(
+            $tableName
+        )->addColumn(
+            'entity_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+            'Version ID'
+        )->addColumn(
+            'additional_column',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            'Entity ID'
+        );
+        $this->resource->getConnection()->createTable($table);
+    }
+
+    public function testAdditionalColumns()
+    {
+        $tableName = 'test_mview_table';
+        $this->createEntityTable($tableName);
+        $view = $this->objectManager->create(View::class);
+        $view->load('test_view_with_additional_columns');
+        $view->subscribe();
+        $this->connection->insert($tableName, ['entity_id' => 12, 'additional_column' => 13]);
+        $select = $this->connection->select()
+            ->from($view->getChangelog()->getName(), ['entity_id', 'test_additional_column']);
+        $actual = $this->connection->fetchAll($select);
+        $this->assertEquals(
+            [
+                'entity_id' => "12",
+                'test_additional_column' => "13"
+            ],
+            reset($actual)
+        );
+        $this->connection->dropTable($tableName);
+        $this->connection->dropTable($view->getChangelog()->getName());
+    }
+
+    /**
      * Test for getList() method
      *
      * @return void
+     * @throws ChangelogTableNotExistsException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function testGetList()
     {
@@ -137,11 +195,11 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
             $this->connection->insert($changelogName, $data);
         }
         $this->assertEquals(5, $this->model->getVersion());
-        $this->assertEquals(3, count($this->model->getList(0, 5)));//distinct entity_ids
-        $this->assertEquals(3, count($this->model->getList(2, 5)));//distinct entity_ids
-        $this->assertEquals(2, count($this->model->getList(0, 3)));//distinct entity_ids
-        $this->assertEquals(1, count($this->model->getList(0, 2)));//distinct entity_ids
-        $this->assertEquals(1, count($this->model->getList(2, 3)));//distinct entity_ids
-        $this->assertEquals(0, count($this->model->getList(4, 3)));//because fromVersionId > toVersionId
+        $this->assertCount(3, $this->model->getList(0, 5));//distinct entity_ids
+        $this->assertCount(3, $this->model->getList(2, 5));//distinct entity_ids
+        $this->assertCount(2, $this->model->getList(0, 3));//distinct entity_ids
+        $this->assertCount(1, $this->model->getList(0, 2));//distinct entity_ids
+        $this->assertCount(1, $this->model->getList(2, 3));//distinct entity_ids
+        $this->assertCount(0, $this->model->getList(4, 3));//because fromVersionId > toVersionId
     }
 }

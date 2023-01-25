@@ -3,71 +3,87 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Test\Unit\Observer;
 
-use Magento\Downloadable\Observer\SaveDownloadableOrderItemObserver;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Downloadable\Model\Link\Purchased;
+use Magento\Downloadable\Model\Link\Purchased\ItemFactory;
+use Magento\Downloadable\Model\Link\PurchasedFactory;
 use Magento\Downloadable\Model\Product\Type as DownloadableProductType;
 use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory;
+use Magento\Downloadable\Observer\SaveDownloadableOrderItemObserver;
+use Magento\Framework\App\Config;
+use Magento\Framework\DataObject;
+use Magento\Framework\DataObject\Copy;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Item;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
+class SaveDownloadableOrderItemObserverTest extends TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order */
+    /** @var MockObject|Order */
     private $orderMock;
 
     /** @var SaveDownloadableOrderItemObserver */
     private $saveDownloadableOrderItemObserver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Config
+     * @var MockObject|Config
      */
     private $scopeConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Downloadable\Model\Link\PurchasedFactory
+     * @var MockObject|PurchasedFactory
      */
     private $purchasedFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Catalog\Model\ProductFactory
+     * @var MockObject|ProductFactory
      */
     private $productFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Downloadable\Model\Link\Purchased\ItemFactory
+     * @var MockObject|ItemFactory
      */
     private $itemFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | CollectionFactory
+     * @var MockObject|CollectionFactory
      */
     private $itemsFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject\Copy
+     * @var MockObject|Copy
      */
     private $objectCopyService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject
+     * @var MockObject|DataObject
      */
     private $resultMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject
+     * @var MockObject|DataObject
      */
     private $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Event
+     * @var MockObject|Event
      */
     private $eventMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Event\Observer
+     * @var MockObject|Observer
      */
     private $observerMock;
 
@@ -75,65 +91,65 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config::class)
+        $this->scopeConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['isSetFlag', 'getValue'])
             ->getMock();
 
-        $this->purchasedFactory = $this->getMockBuilder(\Magento\Downloadable\Model\Link\PurchasedFactory::class)
+        $this->purchasedFactory = $this->getMockBuilder(PurchasedFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->productFactory = $this->getMockBuilder(\Magento\Catalog\Model\ProductFactory::class)
+        $this->productFactory = $this->getMockBuilder(ProductFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->itemFactory = $this->getMockBuilder(\Magento\Downloadable\Model\Link\Purchased\ItemFactory::class)
+        $this->itemFactory = $this->getMockBuilder(ItemFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->itemsFactory = $this->getMockBuilder(
-            \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory::class
+            CollectionFactory::class
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectCopyService = $this->getMockBuilder(\Magento\Framework\DataObject\Copy::class)
+        $this->objectCopyService = $this->getMockBuilder(Copy::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resultMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $this->resultMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['setIsAllowed'])
             ->getMock();
 
-        $this->storeMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $this->storeMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
+        $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStore', 'getResult', 'getQuote', 'getOrder'])
             ->getMock();
 
-        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'getStoreId', 'getState', 'isCanceled', 'getAllItems'])
             ->getMock();
 
-        $this->observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        $this->observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEvent'])
             ->getMock();
 
         $this->saveDownloadableOrderItemObserver = (new ObjectManagerHelper($this))->getObject(
-            \Magento\Downloadable\Observer\SaveDownloadableOrderItemObserver::class,
+            SaveDownloadableOrderItemObserver::class,
             [
                 'scopeConfig' => $this->scopeConfig,
                 'purchasedFactory' => $this->purchasedFactory,
@@ -148,7 +164,7 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
     public function testSaveDownloadableOrderItem()
     {
         $itemId = 100;
-        $itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
         $itemMock->expects($this->atLeastOnce())
@@ -160,12 +176,15 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
         $itemMock->expects($this->any())
             ->method('getProductType')
             ->willReturn(DownloadableProductType::TYPE_DOWNLOADABLE);
+        $itemMock->expects($this->any())
+            ->method('getRealProductType')
+            ->willReturn(DownloadableProductType::TYPE_DOWNLOADABLE);
 
         $this->orderMock->expects($this->once())
             ->method('getStoreId')
             ->willReturn(10500);
 
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
         $product->expects($this->once())
@@ -204,7 +223,7 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getProduct')
             ->willReturn(null);
 
-        $purchasedLink = $this->getMockBuilder(\Magento\Downloadable\Model\Link\Purchased::class)
+        $purchasedLink = $this->getMockBuilder(Purchased::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'setLinkSectionTitle', 'save'])
             ->getMock();
@@ -221,12 +240,12 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
         $this->purchasedFactory->expects($this->any())
             ->method('create')
             ->willReturn($purchasedLink);
-        $event = new \Magento\Framework\DataObject(
+        $event = new DataObject(
             [
                 'item' => $itemMock,
             ]
         );
-        $observer = new \Magento\Framework\Event\Observer(
+        $observer = new Observer(
             [
                 'event' => $event
             ]
@@ -237,7 +256,7 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
     public function testSaveDownloadableOrderItemNotDownloadableItem()
     {
         $itemId = 100;
-        $itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
         $itemMock->expects($this->any())
@@ -248,12 +267,12 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
             ->willReturn('simple');
         $itemMock->expects($this->never())
             ->method('getProduct');
-        $event = new \Magento\Framework\DataObject(
+        $event = new DataObject(
             [
                 'item' => $itemMock,
             ]
         );
-        $observer = new \Magento\Framework\Event\Observer(
+        $observer = new Observer(
             [
                 'event' => $event
             ]
@@ -263,18 +282,18 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveDownloadableOrderItemNotSavedOrderItem()
     {
-        $itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
         $itemMock->expects($this->any())
             ->method('getId')
             ->willReturn(null);
-        $event = new \Magento\Framework\DataObject(
+        $event = new DataObject(
             [
                 'item' => $itemMock,
             ]
         );
-        $observer = new \Magento\Framework\Event\Observer(
+        $observer = new Observer(
             [
                 'event' => $event
             ]
@@ -286,7 +305,7 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
     public function testSaveDownloadableOrderItemSavedPurchasedLink()
     {
         $itemId = 100;
-        $itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
         $itemMock->expects($this->any())
@@ -295,8 +314,11 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
         $itemMock->expects($this->any())
             ->method('getProductType')
             ->willReturn(DownloadableProductType::TYPE_DOWNLOADABLE);
+        $itemMock->expects($this->any())
+            ->method('getRealProductType')
+            ->willReturn(DownloadableProductType::TYPE_DOWNLOADABLE);
 
-        $purchasedLink = $this->getMockBuilder(\Magento\Downloadable\Model\Link\Purchased::class)
+        $purchasedLink = $this->getMockBuilder(Purchased::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'setLinkSectionTitle', 'save', 'getId'])
             ->getMock();
@@ -311,12 +333,12 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($purchasedLink);
 
-        $event = new \Magento\Framework\DataObject(
+        $event = new DataObject(
             [
                 'item' => $itemMock,
             ]
         );
-        $observer = new \Magento\Framework\Event\Observer(
+        $observer = new Observer(
             [
                 'event' => $event
             ]
@@ -329,7 +351,7 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
      * @param $orderItemId
      * @param bool $isSaved
      * @param null|string $expectedStatus
-     * @return \Magento\Downloadable\Model\Link\Purchased\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Downloadable\Model\Link\Purchased\Item|MockObject
      */
     private function createLinkItem($status, $orderItemId, $isSaved = false, $expectedStatus = null)
     {
@@ -343,7 +365,7 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
         if ($isSaved) {
             $linkItem->expects($this->once())
                 ->method('setStatus')
-                ->with($this->equalTo($expectedStatus))
+                ->with($expectedStatus)
                 ->willReturnSelf();
             $linkItem->expects($this->once())
                 ->method('save')

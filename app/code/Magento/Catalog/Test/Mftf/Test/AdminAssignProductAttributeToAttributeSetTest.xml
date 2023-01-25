@@ -14,7 +14,7 @@
             <stories value="Add/Update attribute set"/>
             <title value="Admin should be able to assign attributes to an attribute set"/>
             <description value="Admin should be able to assign attributes to an attribute set"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-168"/>
             <group value="Catalog"/>
         </annotations>
@@ -28,14 +28,14 @@
                 <requiredEntity createDataKey="attribute"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Go to default attribute set edit page -->
@@ -52,8 +52,10 @@
         <!-- Save attribute set -->
         <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
         <!-- Go to create new product page -->
-        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct">
+            <argument name="attributeSetId" value="{{AddToDefaultSet.attributeSetId}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad"/>
         <!-- Assert attribute can be used in product creation -->
         <seeElement selector="{{AdminProductFormSection.attributeLabelByText($$attribute.attribute[frontend_labels][0][label]$$)}}" stepKey="seeLabel"/>
     </test>

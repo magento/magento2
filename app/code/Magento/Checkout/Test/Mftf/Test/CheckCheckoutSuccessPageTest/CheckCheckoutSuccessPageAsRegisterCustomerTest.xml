@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CheckCheckoutSuccessPageAsRegisterCustomerTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Success page elements are presented for placed order as Customer"/>
+            <title value="Customer Checkout"/>
+            <description value="To be sure that other elements of Success page are shown for placed order as registered Customer."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-16488"/>
+            <group value="checkout"/>
+            <group value="pr_exclude"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <createData entity="Simple_US_Customer" stepKey="createSimpleUsCustomer">
+                <field key="group_id">1</field>
+            </createData>
+        </before>
+
+        <after>
+            <!-- Cancel orders -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="goToOrdersPage"/>
+            <actionGroup ref="AdminGridColumnShowActionGroup" stepKey="showCustomerEmailColumn">
+                <argument name="columnLabel" value="Customer Email"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="filterOrdersByCustomerEmail">
+                <argument name="filterInputName" value="customer_email"/>
+                <argument name="filterValue" value="$$createSimpleUsCustomer.email$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyFilters"/>
+            <actionGroup ref="AdminGridBulkActionGroup" stepKey="cancelOrders">
+                <argument name="actionLabel" value="Cancel"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+
+            <!-- Logout from customer account -->
+            <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="logoutCustomerOne"/>
+            <waitForPageLoad stepKey="waitLogoutCustomerOne"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Log in to Storefront as Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUpNewUser">
+            <argument name="Customer" value="$$createSimpleUsCustomer$$"/>
+        </actionGroup>
+
+        <!-- Go to product page -->
+        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForCatalogPageLoad"/>
+
+        <!-- Add Product to Shopping Cart -->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Go to Checkout -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFirstShippingMethod"/>
+        <comment userInput="Adding the comment to replace waitForLoadingMask2 action for preserving Backward Compatibility" stepKey="waitForLoadingMask2"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <!-- Click Place Order button -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSuccessTitle"/>
+        <see selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order number is: " stepKey="seeOrderNumber"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessNotify"/>
+
+        <click selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="clickOrderLink"/>
+        <seeInCurrentUrl url="{{StorefrontCustomerOrderPage.url}}" stepKey="seeMyOrderPage"/>
+
+        <!-- Go to product page -->
+        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage2"/>
+        <waitForPageLoad stepKey="waitForCatalogPageLoad2"/>
+
+        <!-- Add Product to Shopping Cart -->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage2">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Go to Checkout -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
+        <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFirstShippingMethod2"/>
+        <comment userInput="Adding the comment to replace waitForLoadingMask3 action for preserving Backward Compatibility" stepKey="waitForLoadingMask3"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext2"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
+
+        <!-- Click Place Order button -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder2"/>
+        <comment userInput="BIC Workaround" stepKey="waitForLoadSuccessPage2"/>
+        <click selector="{{CheckoutSuccessMainSection.continueShoppingButton}}" stepKey="clickContinueShoppingButton"/>
+        <see userInput="Home Page" selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="seeHomePageTitle"/>
+        <seeCurrentUrlEquals url="{{_ENV.MAGENTO_BASE_URL}}" stepKey="seeHomePageUrl"/>
+
+        <!-- Go to product page -->
+        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage3"/>
+        <waitForPageLoad stepKey="waitForCatalogPageLoad3"/>
+
+        <!-- Add Product to Shopping Cart -->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage3">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Go to Checkout -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart3"/>
+        <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFirstShippingMethod3"/>
+        <comment userInput="Adding the comment to replace waitForLoadingMask4 action for preserving Backward Compatibility" stepKey="waitForLoadingMask4"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext3"/>
+
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment3"/>
+
+        <!-- Click Place Order button -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder3"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage3"/>
+
+        <!-- Check "Print Receipt" button is presented (desktop only) -->
+        <seeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeVisiblePrint"/>
+        <resizeWindow width="600" height="800" stepKey="resizeWindow"/>
+        <waitForElementNotVisible selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="waitInvisiblePrint"/>
+        <dontSeeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeInvisiblePrint"/>
+        <resizeWindow width="1360" height="1020" stepKey="maximizeWindowKey1"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="waitVisiblePrint"/>
+        <seeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeVisiblePrint2"/>
+
+        <!-- See print page -->
+        <click selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="clickPrintLink"/>
+        <helper class="Magento\Sales\Test\Mftf\Helper\SalesHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered">
+            <argument name="expectedUrl">sales/order/print/order_id/</argument>
+            <argument name="expectedUrlComparisonType">COMPARISON_PATH_SUBSET_MATCH</argument>
+        </helper>
+
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToWindow"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToTab"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="seePrintPage"/>
+        <seeElement selector="{{StorefrontCustomerOrderViewSection.orderTitle}}" stepKey="seeOrderTitleOnPrint"/>
+        <switchToWindow stepKey="switchToWindow2"/>
+    </test>
+</tests>

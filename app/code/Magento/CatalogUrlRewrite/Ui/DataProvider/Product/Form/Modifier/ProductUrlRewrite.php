@@ -125,6 +125,7 @@ class ProductUrlRewrite extends AbstractModifier
                     'handleUseDefault' => '${ $.parentName }.url_key:isUseDefault',
                     'handleChanges' => '${ $.provider }:data.product.'
                         . ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
+                    '__disableTmpl' => ['urlKey' => false, 'handleUseDefault' => false, 'handleChanges' => false],
                 ],
                 'description' => __('Create Permanent Redirect for old URL'),
                 'dataScope' => 'url_key_create_redirect',

@@ -11,6 +11,9 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Ui\Component\Form;
 
+/**
+ * Class for Product Form Modifier User Default
+ */
 class UsedDefault extends AbstractModifier
 {
     /**
@@ -49,7 +52,7 @@ class UsedDefault extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -57,7 +60,7 @@ class UsedDefault extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -124,6 +127,7 @@ class UsedDefault extends AbstractModifier
                 ],
                 'imports' => [
                     'linksPurchasedSeparately' => '${$.provider}:data.product.links_purchased_separately',
+                    '__disableTmpl' => ['linksPurchasedSeparately' => false],
                 ],
             ];
             $this->meta = $this->arrayManager->set($checkboxPath, $this->meta, $useDefaultConfig);
@@ -159,6 +163,7 @@ class UsedDefault extends AbstractModifier
                 ],
                 'exports' => [
                     'checked' => '${$.parentName}.' . $indexTitle . ':disabled',
+                    '__disableTmpl' => ['checked' => false],
                 ],
             ];
             $this->meta = $this->arrayManager->set($checkboxPath, $this->meta, $useDefaultConfig);

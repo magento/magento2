@@ -3,41 +3,54 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db;
+
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\ResourceModel\Db\ReadEntityRow;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for ReadEntityRow class.
  */
-class ReadEntityRowTest extends \PHPUnit\Framework\TestCase
+class ReadEntityRowTest extends TestCase
 {
     /**
      * Subject of testing.
      *
-     * @var \Magento\Framework\Model\ResourceModel\Db\ReadEntityRow
+     * @var ReadEntityRow
      */
     protected $subject;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|MockObject
      */
     protected $select;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connection;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|MockObject
      */
     protected $metadataPool;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->select = $this->createMock(\Magento\Framework\DB\Select::class);
+        $this->select = $this->createMock(Select::class);
 
         $this->connection = $this->getMockForAbstractClass(
-            \Magento\Framework\DB\Adapter\AdapterInterface::class,
+            AdapterInterface::class,
             [],
             '',
             false,
@@ -54,7 +67,7 @@ class ReadEntityRowTest extends \PHPUnit\Framework\TestCase
             ->method('quoteIdentifier')
             ->willReturnArgument(0);
 
-        $metadata = $this->createMock(\Magento\Framework\EntityManager\EntityMetadata::class);
+        $metadata = $this->createMock(EntityMetadata::class);
 
         $metadata->expects($this->any())
             ->method('getEntityTable')
@@ -68,19 +81,22 @@ class ReadEntityRowTest extends \PHPUnit\Framework\TestCase
             ->method('getIdentifierField')
             ->willReturn('identifier');
 
-        $this->metadataPool = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
+        $this->metadataPool = $this->createMock(MetadataPool::class);
 
         $this->metadataPool->expects($this->any())
             ->method('getMetadata')
             ->with('Test\Entity\Type')
             ->willReturn($metadata);
 
-        $this->subject = new \Magento\Framework\Model\ResourceModel\Db\ReadEntityRow(
+        $this->subject = new ReadEntityRow(
             $this->metadataPool
         );
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         $identifier = '100000001';
 
@@ -92,15 +108,10 @@ class ReadEntityRowTest extends \PHPUnit\Framework\TestCase
             ->with(['t' => 'entity_table'])
             ->willReturnSelf();
 
-        $this->select->expects($this->at(1))
+        $this->select
             ->method('where')
-            ->with('identifier = ?', $identifier)
-            ->willReturnSelf();
-
-        $this->select->expects($this->at(2))
-            ->method('where')
-            ->with('store_id = ?', 1)
-            ->willReturnSelf();
+            ->withConsecutive(['identifier = ?', $identifier], ['store_id = ?', 1])
+            ->willReturnOnConsecutiveCalls($this->select, $this->select);
 
         $this->connection->expects($this->once())
             ->method('fetchRow')

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Helper\Product;
 
 class CompareTest extends \PHPUnit\Framework\TestCase
@@ -17,7 +18,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
      */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_helper = $this->_objectManager->get(\Magento\Catalog\Helper\Product\Compare::class);
@@ -27,7 +28,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
     {
         /** @var $empty \Magento\Catalog\Helper\Product\Compare */
         $empty = $this->_objectManager->create(\Magento\Catalog\Helper\Product\Compare::class);
-        $this->assertContains('/catalog/product_compare/index/', $empty->getListUrl());
+        $this->assertStringContainsString('/catalog/product_compare/index/', $empty->getListUrl());
     }
 
     public function testGetAddUrl()
@@ -61,12 +62,15 @@ class CompareTest extends \PHPUnit\Framework\TestCase
     public function testGetRemoveUrl()
     {
         $url = $this->_helper->getRemoveUrl();
-        $this->assertContains('/catalog/product_compare/remove/', $url);
+        $this->assertStringContainsString('/catalog/product_compare/remove/', $url);
     }
 
     public function testGetClearListUrl()
     {
-        $this->assertContains('\/catalog\/product_compare\/clear\/', $this->_helper->getPostDataClearList());
+        $this->assertStringContainsString(
+            '\/catalog\/product_compare\/clear\/',
+            $this->_helper->getPostDataClearList()
+        );
     }
 
     /**
@@ -84,6 +88,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
      * calculate()
      * getItemCount()
      * hasItems()
+     *
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoDbIsolation disabled
      */
@@ -120,7 +125,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
         $product = $this->_objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->setId(10);
         $url = $this->_helper->{$method}($product);
-        $this->assertContains($expectedFullAction, $url);
+        $this->assertStringContainsString($expectedFullAction, $url);
     }
 
     /**

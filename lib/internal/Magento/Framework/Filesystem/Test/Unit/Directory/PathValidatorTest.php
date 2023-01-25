@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Unit Test for \Magento\Framework\Filesystem\Directory\PathValidator
  *
@@ -7,30 +7,32 @@
  */
 namespace Magento\Framework\Filesystem\Test\Unit\Directory;
 
-use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\Directory\PathValidator;
+use Magento\Framework\Filesystem\Driver\File;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class PathValidatorTest extends \PHPUnit\Framework\TestCase
+class PathValidatorTest extends TestCase
 {
     /**
      * \Magento\Framework\Filesystem\Driver
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $driver;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\PathValidator
+     * @var PathValidator
      */
     protected $pathValidator;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->driver = $this->createMock(\Magento\Framework\Filesystem\Driver\File::class);
-        $this->pathValidator = new \Magento\Framework\Filesystem\Directory\PathValidator(
+        $this->driver = $this->createMock(File::class);
+        $this->pathValidator = new PathValidator(
             $this->driver
         );
     }
@@ -38,7 +40,7 @@ class PathValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * Tear down
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->pathValidator = null;
     }
@@ -57,8 +59,8 @@ class PathValidatorTest extends \PHPUnit\Framework\TestCase
             ->method('getRealPathSafety')
             ->willReturnMap(
                 [
-                    [$directoryPath, $directoryPath],
-                    [null, $prefix . $directoryPath . ltrim($path, '/')],
+                    [$directoryPath, rtrim($directoryPath, DIRECTORY_SEPARATOR)],
+                    [null, $prefix . $directoryPath . ltrim($path, DIRECTORY_SEPARATOR)],
                 ]
             );
 

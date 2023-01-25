@@ -3,39 +3,56 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Directory\Test\Unit\Model\ResourceModel\Country;
 
+use Magento\Directory\Helper\Data;
+use Magento\Directory\Model\ResourceModel\Country\Collection;
+use Magento\Directory\Model\ResourceModel\CountryFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Locale\ListsInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
     /**
-     * @var \Magento\Directory\Model\ResourceModel\Country\Collection
+     * @var Collection
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $connection = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
-        $select = $this->createMock(\Magento\Framework\DB\Select::class);
-        $connection->expects($this->once())->method('select')->will($this->returnValue($select));
+        $connection = $this->createMock(Mysql::class);
+        $select = $this->createMock(Select::class);
+        $connection->expects($this->once())->method('select')->willReturn($select);
 
         $resource = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
+            AbstractDb::class,
             [],
             '',
             false,
@@ -43,23 +60,23 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             true,
             ['getConnection', 'getMainTable', 'getTable', '__wakeup']
         );
-        $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
-        $resource->expects($this->any())->method('getTable')->will($this->returnArgument(0));
+        $resource->expects($this->any())->method('getConnection')->willReturn($connection);
+        $resource->expects($this->any())->method('getTable')->willReturnArgument(0);
 
-        $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
-        $localeListsMock = $this->createMock(\Magento\Framework\Locale\ListsInterface::class);
-        $localeListsMock->expects($this->any())->method('getCountryTranslation')->will($this->returnArgument(0));
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $localeListsMock = $this->getMockForAbstractClass(ListsInterface::class);
+        $localeListsMock->expects($this->any())->method('getCountryTranslation')->willReturnArgument(0);
 
         $fetchStrategy = $this->getMockForAbstractClass(
-            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class
+            FetchStrategyInterface::class
         );
-        $entityFactory = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $countryFactory = $this->createMock(\Magento\Directory\Model\ResourceModel\CountryFactory::class);
-        $helperDataMock = $this->createMock(\Magento\Directory\Helper\Data::class);
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $entityFactory = $this->createMock(EntityFactory::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $countryFactory = $this->createMock(CountryFactory::class);
+        $helperDataMock = $this->createMock(Data::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $objectManager = new ObjectManager($this);
         $arguments = [
             'logger' => $logger,
             'eventManager' => $eventManager,
@@ -73,7 +90,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             'storeManager' => $this->storeManagerMock
         ];
         $this->_model = $objectManager
-            ->getObject(\Magento\Directory\Model\ResourceModel\Country\Collection::class, $arguments);
+            ->getObject(Collection::class, $arguments);
     }
 
     /**
@@ -85,7 +102,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testToOptionArray($optionsArray, $emptyLabel, $foregroundCountries, $expectedResults)
     {
-        $website1 = $this->createMock(WebsiteInterface::class);
+        $website1 = $this->getMockForAbstractClass(WebsiteInterface::class);
         $website1->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn(1);
@@ -94,7 +111,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->willReturn([$website1]);
 
         foreach ($optionsArray as $itemData) {
-            $this->_model->addItem(new \Magento\Framework\DataObject($itemData));
+            $this->_model->addItem(new DataObject($itemData));
         }
 
         $this->_model->setForegroundCountries($foregroundCountries);

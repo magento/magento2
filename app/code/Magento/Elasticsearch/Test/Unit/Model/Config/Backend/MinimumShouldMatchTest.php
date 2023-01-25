@@ -26,7 +26,7 @@ class MinimumShouldMatchTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(MinimumShouldMatch::class);

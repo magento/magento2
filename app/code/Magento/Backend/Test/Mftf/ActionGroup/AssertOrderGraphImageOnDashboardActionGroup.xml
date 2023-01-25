@@ -10,6 +10,6 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertOrderGraphImageOnDashboardActionGroup">
         <click selector="{{AdminDashboardSection.ordersTab}}" stepKey="clickOrdersBtn"/>
-        <seeElement selector="{{AdminDashboardSection.ordersChart}}" stepKey="seeGraphImage"/>
+        <seeElement selector="{{AdminDashboardSection.ordersChart}}" stepKey="seeOrdersChart"/>
     </actionGroup>
 </actionGroups>

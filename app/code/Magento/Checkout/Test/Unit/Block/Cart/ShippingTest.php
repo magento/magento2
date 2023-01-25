@@ -9,16 +9,16 @@ declare(strict_types=1);
 namespace Magento\Checkout\Test\Unit\Block\Cart;
 
 use Magento\Checkout\Block\Cart\Shipping;
-use Magento\Checkout\Model\CompositeConfigProvider;
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
+use Magento\Checkout\Model\CompositeConfigProvider;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
-use Magento\Framework\View\Element\Template\Context;
-use Magento\Customer\Model\Session as CustomerSession;
-use Magento\Checkout\Model\Session as CheckoutSession;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\Store;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -101,10 +101,10 @@ class ShippingTest extends TestCase
         $this->customerSessionMock = $this->createMock(CustomerSession::class);
         $this->checkoutSessionMock = $this->createMock(CheckoutSession::class);
         $this->configProviderMock = $this->createMock(CompositeConfigProvider::class);
-        $this->layoutProcessorMock = $this->createMock(LayoutProcessorInterface::class);
+        $this->layoutProcessorMock = $this->getMockForAbstractClass(LayoutProcessorInterface::class);
         $this->serializerMock = $this->createMock(JsonHexTag::class);
         $this->jsonHexTagSerializerMock = $this->createMock(JsonHexTag::class);
-        $this->storeManagerInterfaceMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerInterfaceMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->layout = self::STUB_PREINITIALIZED_COMPONENTS;
 
         $objectManager = new ObjectManager($this);

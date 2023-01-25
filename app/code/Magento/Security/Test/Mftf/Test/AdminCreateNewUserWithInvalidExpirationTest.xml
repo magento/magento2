@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateNewUserWithInvalidExpirationTest">
+        <annotations>
+            <features value="Security"/>
+            <stories value="Create new user with invalid expiration date."/>
+            <title value="Create new user with invalid expiration date"/>
+            <description value="Create new user with invalid expiration date."/>
+            <testCaseId value="" />
+            <severity value="CRITICAL"/>
+            <group value="security"/>
+            <group value="pr_exclude"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="openNewUserPage" />
+        <generateDate date="-5 day" format="M j, Y g:i:s A" stepKey="expiresDateTime"/>
+        <actionGroup ref="AdminFillInUserWithExpirationActionGroup" stepKey="fillInNewUserWithValidExpiration">
+            <argument name="expires_at" value="{$expiresDateTime}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveUserInvalidExpirationActionGroup" stepKey="saveNewUserWithInvalidExpirationError" />
+    </test>
+</tests>

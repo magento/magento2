@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StoreFrontCustomerAdvancedAttributesSection">
+        <element name="textFieldAttribute" type="input" selector="//input[@id='{{var}}']" parameterized="true"/>
+        <element name="textAreaAttribute" type="input" selector="//textarea[@id='{{var}}']" parameterized="true"/>
+        <element name="multiLineFirstAttribute" type="input" selector="//input[@id='{{var}}_0']" parameterized="true"/>
+        <element name="multiLineSecondAttribute" type="input" selector="//input[@id='{{var}}_1']" parameterized="true"/>
+        <element name="datedAttribute" type="input" selector="//input[@id='{{var}}']" parameterized="true"/>
+        <element name="dropDownAttribute" type="select" selector="//select[@id='{{var}}']" parameterized="true"/>
+        <element name="dropDownOptionAttribute" type="text" selector="//*[@id='{{var}}']/option[2]" parameterized="true"/>
+        <element name="multiSelectFirstOptionAttribute" type="text" selector="//select[@id='{{var}}']/option[3]" parameterized="true"/>
+        <element name="yesNoAttribute" type="select" selector="//select[@id='{{var}}']" parameterized="true"/>
+        <element name="yesNoOptionAttribute" type="select" selector="//select[@id='{{var}}']/option[2]" parameterized="true"/>
+        <element name="selectedOption" type="text" selector="//select[@id='{{var}}']/option[@selected='selected']" parameterized="true"/>
+        <element name="attributeLabel" type="text" selector="//span[text()='{{attributeLabel}}']" parameterized="true"/>
+        <element name="fileAttribute" type="file" selector="//input[@type='file' and @name='{{attributeCode}}']" parameterized="true" timeout="30"/>
+        <element name="customFileAttributeUploadButton" type="input" selector=".file-uploader-area input[name='{{attributeCode}}'] ~ .file-uploader-button" parameterized="true"/>
+        <element name="fileUploaderPreviewLink" type="block" selector="//input[@type='file' and @name='{{attributeCode}}']/ancestor::div[contains(@class, 'file-uploader')]//div[contains(@class, 'file-uploader-preview')]//a[contains(@class, 'preview-link')]" parameterized="true"/>
+        <element name="fileUploaderPreviewImage" type="block" selector="//input[@type='file' and @name='{{attributeCode}}']/ancestor::div[contains(@class, 'file-uploader')]//div[contains(@class, 'file-uploader-preview')]//img" parameterized="true"/>
+    </section>
+</sections>

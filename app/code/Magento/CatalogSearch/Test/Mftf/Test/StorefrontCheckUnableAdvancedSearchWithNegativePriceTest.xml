@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckUnableAdvancedSearchWithNegativePriceTest">
+        <annotations>
+            <stories value="Use Advanced Search"/>
+            <title value="Unable negative price use to advanced search"/>
+            <description value="Check unable negative price use to advanced search by price from and price to"/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
+        <actionGroup ref="StorefrontOpenAdvancedSearchActionGroup" stepKey="openAdvancedSearch"/>
+        <actionGroup ref="StorefrontAssertUnableSearchNegativeForPriceFieldActionGroup" stepKey="assertUnableSearch">
+            <argument name="price_to" value="-50"/>
+            <argument name="price_from" value="-10"/>
+        </actionGroup>
+    </test>
+</tests>

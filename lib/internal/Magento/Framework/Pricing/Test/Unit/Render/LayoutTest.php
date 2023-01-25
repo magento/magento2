@@ -3,14 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Pricing\Test\Unit\Render;
 
-use \Magento\Framework\Pricing\Render\Layout;
+use Magento\Framework\Pricing\Render\Layout;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\Layout\ProcessorInterface;
+use Magento\Framework\View\LayoutFactory;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Framework\Pricing\Render\Layout
  */
-class LayoutTest extends \PHPUnit\Framework\TestCase
+class LayoutTest extends TestCase
 {
     /**
      * @var Layout
@@ -18,41 +27,41 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var  \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var  LayoutInterface|MockObject
      */
     protected $layout;
 
     /**
-     * @var \Magento\Framework\View\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutFactory|MockObject
      */
     protected $layoutFactory;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|MockObject
      */
     protected $generalLayout;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
-        $this->generalLayout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $this->layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->generalLayout = $this->getMockForAbstractClass(LayoutInterface::class);
 
         $isCacheable = false;
         $this->generalLayout->expects($this->once())
             ->method('isCacheable')
-            ->will($this->returnValue(false));
-        $layoutFactory = $this->getMockBuilder(\Magento\Framework\View\LayoutFactory::class)
+            ->willReturn(false);
+        $layoutFactory = $this->getMockBuilder(LayoutFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $layoutFactory->expects($this->once())
             ->method('create')
-            ->with($this->equalTo(['cacheable' => $isCacheable]))
-            ->will($this->returnValue($this->layout));
+            ->with(['cacheable' => $isCacheable])
+            ->willReturn($this->layout);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\Framework\Pricing\Render\Layout::class,
+            Layout::class,
             [
                 'layoutFactory' => $layoutFactory,
                 'generalLayout' => $this->generalLayout
@@ -64,25 +73,25 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     {
         $handle = 'test_handle';
 
-        $layoutProcessor = $this->createMock(\Magento\Framework\View\Layout\ProcessorInterface::class);
+        $layoutProcessor = $this->getMockForAbstractClass(ProcessorInterface::class);
         $layoutProcessor->expects($this->once())
             ->method('addHandle')
             ->with($handle);
         $this->layout->expects($this->once())
             ->method('getUpdate')
-            ->will($this->returnValue($layoutProcessor));
+            ->willReturn($layoutProcessor);
 
         $this->model->addHandle($handle);
     }
 
     public function testLoadLayout()
     {
-        $layoutProcessor = $this->createMock(\Magento\Framework\View\Layout\ProcessorInterface::class);
+        $layoutProcessor = $this->getMockForAbstractClass(ProcessorInterface::class);
         $layoutProcessor->expects($this->once())
             ->method('load');
         $this->layout->expects($this->once())
             ->method('getUpdate')
-            ->will($this->returnValue($layoutProcessor));
+            ->willReturn($layoutProcessor);
 
         $this->layout->expects($this->once())
             ->method('generateXml');
@@ -97,12 +106,12 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     {
         $blockName = 'block.name';
 
-        $block = $this->createMock(\Magento\Framework\View\Element\BlockInterface::class);
+        $block = $this->getMockForAbstractClass(BlockInterface::class);
 
         $this->layout->expects($this->once())
             ->method('getBlock')
             ->with($blockName)
-            ->will($this->returnValue($block));
+            ->willReturn($block);
 
         $this->assertEquals($block, $this->model->getBlock($blockName));
     }

@@ -15,12 +15,13 @@ use Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderFactory;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\Sanitizer;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\LayoutInterface as PageLayoutInterface;
 
 /**
- * Class Context
+ * Request context for UI components to utilize.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -51,8 +52,6 @@ class Context implements ContextInterface
     protected $contentTypeFactory;
 
     /**
-     * Accept type
-     *
      * @var string
      */
     protected $acceptType;
@@ -80,8 +79,6 @@ class Context implements ContextInterface
     protected $componentsDefinitions = [];
 
     /**
-     * Url Builder
-     *
      * @var UrlInterface
      */
     protected $urlBuilder;
@@ -102,6 +99,11 @@ class Context implements ContextInterface
     private $authorization;
 
     /**
+     * @var Sanitizer
+     */
+    private $sanitizer;
+
+    /**
      * @param PageLayoutInterface $pageLayout
      * @param RequestInterface $request
      * @param ButtonProviderFactory $buttonProviderFactory
@@ -113,6 +115,7 @@ class Context implements ContextInterface
      * @param DataProviderInterface|null $dataProvider
      * @param string $namespace
      * @param AuthorizationInterface|null $authorization
+     * @param Sanitizer|null $sanitizer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -126,7 +129,8 @@ class Context implements ContextInterface
         UiComponentFactory $uiComponentFactory,
         DataProviderInterface $dataProvider = null,
         $namespace = null,
-        AuthorizationInterface $authorization = null
+        AuthorizationInterface $authorization = null,
+        ?Sanitizer $sanitizer = null
     ) {
         $this->namespace = $namespace;
         $this->request = $request;
@@ -141,6 +145,7 @@ class Context implements ContextInterface
         $this->authorization = $authorization ?: ObjectManager::getInstance()->get(
             AuthorizationInterface::class
         );
+        $this->sanitizer = $sanitizer ?? ObjectManager::getInstance()->get(Sanitizer::class);
         $this->setAcceptType();
     }
 
@@ -241,20 +246,31 @@ class Context implements ContextInterface
      */
     public function getDataSourceData(UiComponentInterface $component)
     {
+        //Getting dynamic data for the component
         $dataSource = $component->getDataSourceData();
         $this->prepareDataSource($dataSource, $component);
         $dataProviderConfig = $this->getDataProvider()->getConfigData();
+        //Dynamic UI component data should not contain templates.
+        $config = $this->sanitizer->sanitize(array_merge($dataSource, $dataProviderConfig));
+
+        $params = [
+            'namespace' => $this->getNamespace()
+        ];
+
+        $providerRequestFieldName = $this->getDataProvider()->getRequestFieldName();
+        $providerRequestFieldValue = $this->request->getParam($providerRequestFieldName);
+        if ($providerRequestFieldValue) {
+            $params[$providerRequestFieldName] = $providerRequestFieldValue;
+        }
         return [
             $this->getDataProvider()->getName() => [
                 'type' => 'dataSource',
                 'name' => $this->getDataProvider()->getName(),
                 'dataScope' => $this->getNamespace(),
                 'config' => array_replace_recursive(
-                    array_merge($dataSource, $dataProviderConfig),
+                    $config,
                     [
-                        'params' => [
-                            'namespace' => $this->getNamespace()
-                        ],
+                        'params' => $params,
                     ]
                 )
             ]
@@ -340,13 +356,16 @@ class Context implements ContextInterface
     {
         $this->acceptType = 'html';
 
-        $rawAcceptType = $this->request->getHeader('Accept');
-        if (strpos($rawAcceptType, 'json') !== false) {
-            $this->acceptType = 'json';
-        } elseif (strpos($rawAcceptType, 'html') !== false) {
-            $this->acceptType = 'html';
-        } elseif (strpos($rawAcceptType, 'xml') !== false) {
-            $this->acceptType = 'xml';
+        $acceptTypes = $this->getSortedAcceptHeader();
+        foreach ($acceptTypes as $acceptType) {
+            if (strpos($acceptType, 'json') !== false) {
+                $this->acceptType = 'json';
+            } elseif (strpos($acceptType, 'html') !== false) {
+                $this->acceptType = 'html';
+            } elseif (strpos($acceptType, 'xml') !== false) {
+                $this->acceptType = 'xml';
+            }
+            break;
         }
     }
 
@@ -373,7 +392,7 @@ class Context implements ContextInterface
      * @param UiComponentInterface $component
      * @return void
      */
-    protected function prepareDataSource(array & $data, UiComponentInterface $component)
+    protected function prepareDataSource(array &$data, UiComponentInterface $component)
     {
         $childComponents = $component->getChildComponents();
         if (!empty($childComponents)) {
@@ -398,5 +417,33 @@ class Context implements ContextInterface
     public function getUiComponentFactory()
     {
         return $this->uiComponentFactory;
+    }
+
+    /**
+     * Returns sorted accept header based on q value
+     *
+     * @return array
+     */
+    private function getSortedAcceptHeader()
+    {
+        $acceptTypes = [];
+        $acceptHeader = $this->request->getHeader('Accept');
+        $contentTypes = explode(',', $acceptHeader);
+        foreach ($contentTypes as $contentType) {
+            // the default quality is 1.
+            $q = 1;
+            // check if there is a different quality
+            if (strpos($contentType, ';q=') !== false) {
+                list($contentType, $q) = explode(';q=', $contentType);
+            }
+
+            if (array_key_exists($q, $acceptTypes)) {
+                $acceptTypes[$q] = $acceptTypes[$q] . ',' . $contentType;
+            } else {
+                $acceptTypes[$q] = $contentType;
+            }
+        }
+        krsort($acceptTypes);
+        return array_values($acceptTypes);
     }
 }

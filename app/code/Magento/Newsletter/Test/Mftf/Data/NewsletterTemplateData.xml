@@ -13,5 +13,13 @@
         <data key="subject">Test Newsletter Subject</data>
         <data key="senderName">Admin</data>
         <data key="senderEmail">admin@magento.com</data>
+        <data key="textAreaContent">Some Test Content</data>
+    </entity>
+    <entity name="updatedNewsletter" type="cms_page">
+        <data key="name" unique="suffix">Updated Newsletter Template</data>
+        <data key="subject">Updated Newsletter Subject</data>
+        <data key="senderName">Admin</data>
+        <data key="senderEmail">admin@magento.com</data>
+        <data key="textAreaContent">Some Updated Test Content</data>
     </entity>
 </entities>

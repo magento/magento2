@@ -3,41 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\ProductTypes;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\ProductTypes\Config;
+use Magento\Catalog\Model\ProductTypes\Config\Reader;
+use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Catalog\Model\ProductTypes\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var Reader|MockObject
      */
     private $readerMock;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheInterface|MockObject
      */
     private $cacheMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializerMock;
 
     /**
-     * @var \Magento\Catalog\Model\ProductTypes\Config
+     * @var Config
      */
     private $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->readerMock = $this->createMock(\Magento\Catalog\Model\ProductTypes\Config\Reader::class);
-        $this->cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
-        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->objectManager = new ObjectManager($this);
+        $this->readerMock = $this->createMock(Reader::class);
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
     }
 
     /**
@@ -57,7 +67,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->willReturn($value);
 
         $this->config = $this->objectManager->getObject(
-            \Magento\Catalog\Model\ProductTypes\Config::class,
+            Config::class,
             [
                 'reader' => $this->readerMock,
                 'cache' => $this->cacheMock,
@@ -90,7 +100,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->willReturn(['types' => $expected]);
 
         $this->config = $this->objectManager->getObject(
-            \Magento\Catalog\Model\ProductTypes\Config::class,
+            Config::class,
             [
                 'reader' => $this->readerMock,
                 'cache' => $this->cacheMock,
@@ -111,7 +121,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
 
         $this->config = $this->objectManager->getObject(
-            \Magento\Catalog\Model\ProductTypes\Config::class,
+            Config::class,
             [
                 'reader' => $this->readerMock,
                 'cache' => $this->cacheMock,
@@ -119,6 +129,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'serializer' => $this->serializerMock,
             ]
         );
-        $this->assertEquals(false, $this->config->isProductSet('typeId'));
+        $this->assertFalse($this->config->isProductSet('typeId'));
     }
 }

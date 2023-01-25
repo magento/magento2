@@ -18,7 +18,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="textProductAttribute" stepKey="createProductAttribute"/>
             <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
             <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/$$createAttributeSet.attribute_set_id$$/"
@@ -46,10 +46,10 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!--Open product page-->
-        <amOnPage url="{{StorefrontProductPage.url($$createProductDefault.name$$)}}" stepKey="goToProductDefaultPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProductDefault.custom_attributes[url_key]$$)}}" stepKey="goToProductDefaultPage"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <!--Click on 'Add to Compare' link-->
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="clickOnAddToCompare">
@@ -60,7 +60,7 @@
             <argument name="productVar" value="$$createProductDefault$$"/>
         </actionGroup>
         <!--Open product with custom attribute page-->
-        <amOnPage url="{{StorefrontProductPage.url($$createProductCustom.name$$)}}" stepKey="goToProductCustomPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProductCustom.custom_attributes[url_key]$$)}}" stepKey="goToProductCustomPage"/>
         <waitForPageLoad stepKey="waitForProductCustomPage"/>
         <!--Click on 'Add to Compare' link-->
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="clickOnAddToCompareCustom">

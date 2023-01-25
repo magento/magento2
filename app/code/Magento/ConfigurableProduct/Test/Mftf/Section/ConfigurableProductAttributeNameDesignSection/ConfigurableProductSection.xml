@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="ConfigurableProductSection">
+        <element name="addProductItem" type="button" selector="//*[@id='add_new_product']/button[2]"/>
+        <element name="configProductItem" type="button" selector="//*[@id='add_new_product']//*[contains(text(),'Configurable Product')]"/>
+        <element name="nextButton" type="button" selector="//div[@class='nav-bar-outer-actions']//*[contains(text(),'Next')]"/>
+        <element name="generateConfigure" type="button" selector="//div[@class='nav-bar-outer-actions']//*[contains(text(),'Generate Products')]"/>
+        <element name="selectCreatedAttribute" type="button" selector="//*[@class='admin__data-grid-wrap']//td[normalize-space()='design123']/preceding-sibling::td"/>
+        <element name="selectTheCreatedAttribute" type="button" selector="//*[@class='admin__data-grid-wrap']//td[normalize-space()='{{text}}']/preceding-sibling::td"  parameterized="true"/>
+        <element name="closeFrame" type="button" selector="//*[@class='modal-header']//*[contains(text(),'Create Product Configurations')]/following-sibling::button"/>
+    </section>
+</sections>

@@ -13,14 +13,11 @@ use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\MediaGallery\Model\Keyword\Command\SaveAssetKeywords;
-use Magento\MediaGallery\Model\Keyword\Command\SaveAssetLinks;
+use Magento\MediaGallery\Model\ResourceModel\Keyword\SaveAssetLinks;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-/**
- * SaveAssetKeywordsTest.
- */
 class SaveAssetKeywordsTest extends TestCase
 {
     /**
@@ -56,7 +53,7 @@ class SaveAssetKeywordsTest extends TestCase
     /**
      * SetUp
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->saveAssetLinksMock = $this->createMock(SaveAssetLinks::class);
@@ -64,7 +61,7 @@ class SaveAssetKeywordsTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->selectMock = $this->createMock(Select::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->sut = new SaveAssetKeywords(
             $this->resourceConnectionMock,

@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\CatalogImportExport\Model\Export\RowCustomizerInterface" type="Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite" />
     <preference for="Magento\CatalogImportExport\Model\StockItemImporterInterface" type="Magento\CatalogImportExport\Model\StockItemImporter" />
+    <preference for="Magento\CatalogImportExport\Model\StockItemProcessorInterface" type="Magento\CatalogImportExport\Model\StockItemProcessor" />
     <preference for="Magento\CatalogImportExport\Model\Export\ProductFilterInterface" type="Magento\CatalogImportExport\Model\Export\ProductFilters" />
     <type name="Magento\ImportExport\Model\Import">
         <plugin name="catalogProductFlatIndexerImport" type="Magento\CatalogImportExport\Model\Indexer\Product\Flat\Plugin\Import" />
@@ -48,6 +49,16 @@
             <argument name="filters" xsi:type="array">
                 <item name="category_ids" xsi:type="object">Magento\CatalogImportExport\Model\Export\Product\CategoryFilter</item>
                 <item name="quantity_and_stock_status" xsi:type="object">Magento\CatalogImportExport\Model\Export\Product\StockStatusFilter</item>
+                <item name="website_ids" xsi:type="object">Magento\CatalogImportExport\Model\Export\Product\WebsiteFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogImportExport\Model\Import\Product\LinkProcessor">
+        <arguments>
+            <argument name="linkNameToId" xsi:type="array">
+                <item name="_related_" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED</item>
+                <item name="_crosssell_" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL</item>
+                <item name="_upsell_" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL</item>
             </argument>
         </arguments>
     </type>

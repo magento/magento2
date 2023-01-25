@@ -37,10 +37,10 @@ class CouponManagementTest extends WebapiAbstract
         $ruleId = $salesRule->getRuleId();
 
         $result = $this->generate($ruleId, $count, $length, $format);
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertTrue(count($result) == $count);
         foreach ($result as $code) {
-            $this->assertRegExp($regex, $code);
+            $this->assertMatchesRegularExpression($regex, $code);
         }
 
         $couponList = $this->getList($ruleId);
@@ -156,7 +156,7 @@ class CouponManagementTest extends WebapiAbstract
                     ],
                 ],
                 'current_page' => 1,
-                'page_size' => 9999,
+                'page_size' => 300,
             ],
         ];
 

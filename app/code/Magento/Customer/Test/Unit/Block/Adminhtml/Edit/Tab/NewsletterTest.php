@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Tab;
 
 use Magento\Backend\Block\Template\Context;
@@ -102,7 +104,7 @@ class NewsletterTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
         $this->registryMock = $this->createMock(Registry::class);
@@ -111,9 +113,9 @@ class NewsletterTest extends TestCase
             SubscriberFactory::class,
             ['create']
         );
-        $this->accountManagementMock = $this->createMock(AccountManagementInterface::class);
-        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->accountManagementMock = $this->getMockForAbstractClass(AccountManagementInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->backendSessionMock = $this->getMockBuilder(Session::class)
             ->setMethods(['getCustomerFormData'])
             ->disableOriginalConstructor()
@@ -127,7 +129,7 @@ class NewsletterTest extends TestCase
         $this->contextMock->method('getStoreManager')
             ->willReturn($this->storeManager);
         $this->systemStore = $this->createMock(SystemStore::class);
-        $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
+        $this->customerRepository = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
         $this->shareConfig = $this->createMock(Share::class);
 
         $objectManager = new ObjectManager($this);
@@ -173,7 +175,7 @@ class NewsletterTest extends TestCase
         $this->registryMock->method('registry')->with(RegistryConstants::CURRENT_CUSTOMER_ID)
             ->willReturn($customerId);
 
-        $customer = $this->createMock(CustomerInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->method('getWebsiteId')->willReturn($websiteId);
         $customer->method('getStoreId')->willReturn($storeId);
         $customer->method('getId')->willReturn($customerId);
@@ -215,10 +217,11 @@ class NewsletterTest extends TestCase
             )
             ->willReturn($statusElementMock);
         $fieldsetMock->expects($this->once())->method('setReadonly')->with(true, true);
-        $formMock = $this->createPartialMock(
-            Form::class,
-            ['setHtmlIdPrefix', 'addFieldset', 'setValues', 'getElement', 'setForm', 'setParent', 'setBaseUrl']
-        );
+        $formMock = $this->getMockBuilder(Form::class)
+            ->addMethods(['setHtmlIdPrefix', 'setForm', 'setParent', 'setBaseUrl'])
+            ->onlyMethods(['addFieldset', 'setValues', 'getElement'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $formMock->expects($this->once())->method('setHtmlIdPrefix')->with('_newsletter');
         $formMock->expects($this->once())->method('addFieldset')->willReturn($fieldsetMock);
         $this->formFactoryMock->expects($this->once())->method('create')->willReturn($formMock);
@@ -247,7 +250,7 @@ class NewsletterTest extends TestCase
 
         $this->registryMock->method('registry')->with(RegistryConstants::CURRENT_CUSTOMER_ID)
             ->willReturn($customerId);
-        $customer = $this->createMock(CustomerInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->method('getWebsiteId')->willReturn($websiteId);
         $customer->method('getStoreId')->willReturn($storeId);
         $customer->method('getId')->willReturn($customerId);
@@ -287,18 +290,25 @@ class NewsletterTest extends TestCase
             )
             ->willReturn($statusElementMock);
         $fieldsetMock->expects($this->once())->method('setReadonly')->with(true, true);
-        $statusElementForm = $this->createPartialMock(Checkbox::class, ['setChecked', 'setValue']);
+        $statusElementForm = $this->getMockBuilder(Checkbox::class)
+            ->addMethods(['setChecked', 'setValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $statusElementForm->method('setValue')
             ->with($isSubscribedCustomerSession);
         $statusElementForm->method('setChecked')
             ->with($isSubscribedCustomerSession);
-        $storeElementForm = $this->createPartialMock(Select::class, ['setValue']);
+        $storeElementForm = $this->getMockBuilder(Select::class)
+            ->addMethods(['setValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $storeElementForm->method('setValue')
             ->with(Store::DEFAULT_STORE_ID);
-        $formMock = $this->createPartialMock(
-            Form::class,
-            ['setHtmlIdPrefix', 'addFieldset', 'setValues', 'getElement', 'setForm', 'setParent', 'setBaseUrl']
-        );
+        $formMock = $this->getMockBuilder(Form::class)
+            ->addMethods(['setHtmlIdPrefix', 'setForm', 'setParent', 'setBaseUrl'])
+            ->onlyMethods(['addFieldset', 'setValues', 'getElement'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $formMock->expects($this->once())->method('setHtmlIdPrefix')->with('_newsletter');
         $formMock->expects($this->once())->method('addFieldset')->willReturn($fieldsetMock);
         $formMock->method('getElement')

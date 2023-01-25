@@ -69,4 +69,60 @@
         <data key="path">catalog/frontend/grid_per_page_values</data>
         <data key="value">1,2</data>
     </entity>
+    <entity name="DefaultGridPerPageDefaultConfigData">
+        <data key="path">catalog/frontend/grid_per_page</data>
+        <data key="value">12</data>
+    </entity>
+    <entity name="CustomGridPerPageDefaultConfigData">
+        <data key="path">catalog/frontend/grid_per_page</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="CustomListMode">
+         <data key="path">catalog/frontend/list_mode</data>
+         <data key="value">list-grid</data>
+    </entity>
+    <entity name="CustomStoreFrontGridPerPageValuesConfigData">
+         <data key="path">catalog/frontend/grid_per_page_values</data>
+         <data key="value">1,10,50,100</data>
+    </entity>
+    <entity name="CustomStoreFrontGridPerPageConfigData">
+         <data key="path">catalog/frontend/grid_per_page</data>
+         <data key="value">10</data>
+    </entity>
+    <entity name="CustomStoreFrontListPerPageValuesConfigData">
+         <data key="path">catalog/frontend/list_per_page_values</data>
+         <data key="value">1,10,30</data>
+    </entity>
+    <entity name="CustomStoreFrontListPerPageConfigData">
+         <data key="path">catalog/frontend/list_per_page</data>
+         <data key="value">1</data>
+    </entity>
+    <entity name="CustomStoreFrontProductsSortBy">
+        <data key="path">catalog/frontend/default_sort_by</data>
+        <data key="value">price</data>
+    </entity>
+    <entity name="CustomStoreFrontAllProductsPerPage">
+        <data key="path">catalog/frontend/list_allow_all</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DefaultListMode">
+        <data key="path">catalog/frontend/list_mode</data>
+        <data key="value">grid-list</data>
+    </entity>
+    <entity name="DefaultStoreFrontListPerPageValuesConfigData">
+        <data key="path">catalog/frontend/list_per_page_values</data>
+        <data key="value">5,10,15,20,25</data>
+    </entity>
+    <entity name="DefaultStoreFrontListPerPageConfigData">
+        <data key="path">catalog/frontend/list_per_page</data>
+        <data key="value">10</data>
+    </entity>
+    <entity name="DefaultStoreFrontProductsSortBy">
+        <data key="path">catalog/frontend/default_sort_by</data>
+        <data key="value">position</data>
+    </entity>
+    <entity name="DefaultStoreFrontAllProductsPerPage">
+        <data key="path">catalog/frontend/list_allow_all</data>
+        <data key="value">0</data>
+    </entity>
 </entities>

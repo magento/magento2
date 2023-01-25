@@ -15,8 +15,9 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Quote\Model\QuoteManagement;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/two_bundle_products_with_separate_shipping.php';
+Resolver::getInstance()->requireDataFixture('Magento/Bundle/_files/two_bundle_products_with_separate_shipping.php');
 $addressData = include __DIR__ . '/../../../Magento/Sales/_files/address_data.php';
 
 $objectManager = Bootstrap::getObjectManager();

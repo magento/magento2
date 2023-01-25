@@ -91,7 +91,7 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_physicalThemeId = null;
         $this->_virtualThemeId = null;

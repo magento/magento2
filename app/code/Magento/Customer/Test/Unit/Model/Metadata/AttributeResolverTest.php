@@ -3,26 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Metadata;
 
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\AttributeMetadataDataProvider;
 use Magento\Customer\Model\Metadata\AttributeResolver;
+use Magento\Framework\Exception\NoSuchEntityException;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AttributeResolverTest extends \PHPUnit\Framework\TestCase
+class AttributeResolverTest extends TestCase
 {
     /** @var AttributeResolver */
     protected $model;
 
-    /** @var AttributeMetadataDataProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AttributeMetadataDataProvider|MockObject */
     protected $metadataDataProviderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->metadataDataProviderMock = $this->getMockBuilder(
-            \Magento\Customer\Model\AttributeMetadataDataProvider::class
-        )->disableOriginalConstructor()->getMock();
+            AttributeMetadataDataProvider::class
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = new AttributeResolver(
             $this->metadataDataProviderMock
@@ -34,16 +40,16 @@ class AttributeResolverTest extends \PHPUnit\Framework\TestCase
         $entityType = 'type';
         $attributeCode = 'code';
 
-        /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $attributeMock */
-        $attributeMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
+        /** @var AttributeMetadataInterface|MockObject $attributeMock */
+        $attributeMock = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $attributeMock->expects($this->once())
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
 
-        /** @var Attribute|\PHPUnit_Framework_MockObject_MockObject $modelMock */
-        $modelMock = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
+        /** @var Attribute|MockObject $modelMock */
+        $modelMock = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -55,19 +61,18 @@ class AttributeResolverTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($modelMock, $this->model->getModelByAttribute($entityType, $attributeMock));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with entityType = type, attributeCode = code
-     */
     public function testGetModelByAttributeWithoutModel()
     {
+        $this->expectException(NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with entityType = type, attributeCode = code');
+
         $entityType = 'type';
         $attributeCode = 'code';
 
-        /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $attributeMock */
-        $attributeMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
+        /** @var AttributeMetadataInterface|MockObject $attributeMock */
+        $attributeMock = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $attributeMock->expects($this->exactly(2))
             ->method('getAttributeCode')
             ->willReturn($attributeCode);

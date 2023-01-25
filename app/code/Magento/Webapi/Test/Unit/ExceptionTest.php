@@ -5,9 +5,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Webapi\Test\Unit;
 
-class ExceptionTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Webapi\Exception;
+use Magento\Webapi\Model\Soap\Fault;
+use PHPUnit\Framework\TestCase;
+
+class ExceptionTest extends TestCase
 {
     /**
      * Test Webapi exception construct.
@@ -16,15 +22,15 @@ class ExceptionTest extends \PHPUnit\Framework\TestCase
     {
         $code = 1111;
         $details = ['key1' => 'value1', 'key2' => 'value2'];
-        $apiException = new \Magento\Framework\Webapi\Exception(
+        $apiException = new Exception(
             __('Message'),
             $code,
-            \Magento\Framework\Webapi\Exception::HTTP_UNAUTHORIZED,
+            Exception::HTTP_UNAUTHORIZED,
             $details
         );
         $this->assertEquals(
             $apiException->getHttpCode(),
-            \Magento\Framework\Webapi\Exception::HTTP_UNAUTHORIZED,
+            Exception::HTTP_UNAUTHORIZED,
             'Exception code is set incorrectly in construct.'
         );
         $this->assertEquals(
@@ -47,19 +53,19 @@ class ExceptionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage("The specified HTTP code \"{$httpCode}\" is invalid.");
         /** Create \Magento\Framework\Webapi\Exception object with invalid code. */
         /** Valid codes range is from 400 to 599. */
-        new \Magento\Framework\Webapi\Exception(__('Message'), 0, $httpCode);
+        new Exception(__('Message'), 0, $httpCode);
     }
 
     public function testGetOriginatorSender()
     {
-        $apiException = new \Magento\Framework\Webapi\Exception(
+        $apiException = new Exception(
             __('Message'),
             0,
-            \Magento\Framework\Webapi\Exception::HTTP_UNAUTHORIZED
+            Exception::HTTP_UNAUTHORIZED
         );
         /** Check that Webapi \Exception object with code 401 matches Sender originator.*/
         $this->assertEquals(
-            \Magento\Webapi\Model\Soap\Fault::FAULT_CODE_SENDER,
+            Fault::FAULT_CODE_SENDER,
             $apiException->getOriginator(),
             'Wrong Sender originator detecting.'
         );
@@ -67,14 +73,14 @@ class ExceptionTest extends \PHPUnit\Framework\TestCase
 
     public function testGetOriginatorReceiver()
     {
-        $apiException = new \Magento\Framework\Webapi\Exception(
+        $apiException = new Exception(
             __('Message'),
             0,
-            \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR
+            Exception::HTTP_INTERNAL_ERROR
         );
         /** Check that Webapi \Exception object with code 500 matches Receiver originator.*/
         $this->assertEquals(
-            \Magento\Webapi\Model\Soap\Fault::FAULT_CODE_RECEIVER,
+            Fault::FAULT_CODE_RECEIVER,
             $apiException->getOriginator(),
             'Wrong Receiver originator detecting.'
         );

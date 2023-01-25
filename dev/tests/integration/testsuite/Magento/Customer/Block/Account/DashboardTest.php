@@ -21,7 +21,7 @@ class DashboardTest extends \PHPUnit\Framework\TestCase
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->customerSession = Bootstrap::getObjectManager()->get(\Magento\Customer\Model\Session::class);
         $this->customerRepository = Bootstrap::getObjectManager()->get(
@@ -43,7 +43,7 @@ class DashboardTest extends \PHPUnit\Framework\TestCase
     /**
      * Execute per test cleanup.
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->customerSession->setCustomerId(null);
 

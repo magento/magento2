@@ -12,14 +12,18 @@
         <element name="collapseAll" type="button" selector=".tree-actions a:first-child"/>
         <element name="expandAll" type="button" selector=".tree-actions a:last-child"/>
         <element name="categoryHighlighted" type="text" selector="//div[@id='store.menu']//span[contains(text(),'{{name}}')]/ancestor::li" parameterized="true" timeout="30"/>
-        <element name="categoryNotHighlighted" type="text" selector="ul[id=\'ui-id-2\'] li[class~=\'active\']" timeout="30"/>
-        <element name="categoryTreeRoot" type="text" selector="div.x-tree-root-node>li.x-tree-node:first-of-type>div.x-tree-node-el:first-of-type" timeout="30"/>
+        <element name="categoryNotHighlighted" type="text" selector="[id=\'store.menu\'] ul li.active" timeout="30"/>
+        <element name="categoryTreeRoot" type="text" selector="li.x-tree-node:first-of-type > div.x-tree-node-el:first-of-type" timeout="30"/>
         <element name="categoryInTree" type="text" selector="//a/span[contains(text(), '{{name}}')]" parameterized="true" timeout="30"/>
         <element name="categoryInTreeUnderRoot" type="text" selector="//li/ul/li[@class='x-tree-node']/div/a/span[contains(text(), '{{name}}')]" parameterized="true"/>
+        <element name="childCategoryUnderParent" type="text" selector="//li/ul/li[@class='x-tree-node']/div/a/span[contains(text(), '{{parentCategoryName}}')]/../../../ul/li[@class='x-tree-node']/div/a/span[contains(text(), '{{childCategoryName}}')]" parameterized="true"/>
         <element name="lastCreatedCategory" type="block" selector=".x-tree-root-ct li li:last-child" />
         <element name="treeContainer" type="block" selector=".tree-holder" />
         <element name="expandRootCategory" type="text" selector="img.x-tree-elbow-end-plus"/>
         <element name="expandRootCategoryByName" type="button" selector="//div[@class='x-tree-root-node']/li/div/a/span[contains(., '{{categoryName}}')]/../../img[contains(@class, 'x-tree-elbow-end-plus')]" parameterized="true" timeout="30"/>
         <element name="categoryByName" type="text" selector="//div[contains(@class, 'categories-side-col')]//a/span[contains(text(), '{{categoryName}}')]" parameterized="true" timeout="30"/>
+        <element name="expandCategoryByName" type="text" selector="//span[contains(text(),'{{categoryName}}')]/ancestor::div[contains(@class,'x-tree-node-el')]//img[contains(@class,'x-tree-elbow-end-plus') or contains(@class,'x-tree-elbow-plus')]" parameterized="true" timeout="30"/>
+        <element name="subCategoryProductCount" type="text" selector="//div[@class='tree-holder']//span[contains(text(),'SimpleSubCategory') and contains(text(),'({{productCount}})')]" parameterized="true"/>
+        <element name="defaultCategoryProductCount" type="text" selector="//div[@class='tree-holder']//span[contains(text(),'Default Category') and contains(text(),'({{productCount}})')]" parameterized="true"/>
     </section>
 </sections>

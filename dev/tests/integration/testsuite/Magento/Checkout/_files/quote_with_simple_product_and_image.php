@@ -3,9 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Catalog/_files/product_image.php';
-require __DIR__ . '/quote_with_simple_product.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_image.php');
+Resolver::getInstance()->requireDataFixture('Magento/Checkout/_files/quote_with_simple_product.php');
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);

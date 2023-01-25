@@ -3,43 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Config\Model\Config\Structure\AbstractElement;
+use Magento\Config\Model\Config\Structure\Element\Section;
 use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SectionTest extends \PHPUnit\Framework\TestCase
+class SectionTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Model\Config\Structure\Element\Section
+     * @var Section
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_authorizationMock;
 
     /**
-     * @var ElementVisibilityInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElementVisibilityInterface|MockObject
      */
     private $elementVisibilityMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
             ->getMockForAbstractClass();
-        $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
-        $this->_authorizationMock = $this->createMock(\Magento\Framework\AuthorizationInterface::class);
+        $this->_storeManagerMock = $this->createMock(StoreManager::class);
+        $this->_authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
 
         $this->_model = $objectManager->getObject(
-            \Magento\Config\Model\Config\Structure\Element\Section::class,
+            Section::class,
             [
                 'storeManager' => $this->_storeManagerMock,
                 'authorization' => $this->_authorizationMock,
@@ -49,11 +57,11 @@ class SectionTest extends \PHPUnit\Framework\TestCase
             $this->_model,
             'elementVisibility',
             $this->elementVisibilityMock,
-            \Magento\Config\Model\Config\Structure\AbstractElement::class
+            AbstractElement::class
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
         unset($this->_storeManagerMock);
@@ -73,8 +81,8 @@ class SectionTest extends \PHPUnit\Framework\TestCase
             'isAllowed'
         )->with(
             'someResource'
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->_model->setData(['resource' => 'someResource'], 'store');
@@ -89,8 +97,8 @@ class SectionTest extends \PHPUnit\Framework\TestCase
 
     public function testIsVisibleProceedsWithVisibilityCheckIfSectionIsAllowed()
     {
-        $this->_authorizationMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->_authorizationMock->expects($this->any())->method('isAllowed')->willReturn(true);
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(true);
         $this->_model->setData(['resource' => 'Magento_Backend::all'], 'scope');
         $this->_model->isVisible();
     }

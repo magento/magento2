@@ -25,7 +25,7 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -52,11 +52,12 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
      */
     public function testAddVirtualProductToCartIfCartIdIsEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameter "cart_id" is missing');
+
         $query = <<<QUERY
 mutation {
   addSimpleProductsToCart(
@@ -78,11 +79,12 @@ QUERY;
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_items" is missing
      */
     public function testAddVirtualProductToCartIfCartItemsAreEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameter "cart_items" is missing');
+
         $query = <<<QUERY
 mutation {
   addSimpleProductsToCart(
@@ -106,11 +108,12 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/virtual_product.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testAddVirtualToNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $sku = 'virtual_product';
         $quantity = 1;
         $maskedQuoteId = 'non_existent_masked_id';
@@ -122,11 +125,12 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Could not find a product with SKU "virtual_product"
      */
     public function testNonExistentProductToCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a product with SKU "virtual_product"');
+
         $sku = 'virtual_product';
         $quantity = 1;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');

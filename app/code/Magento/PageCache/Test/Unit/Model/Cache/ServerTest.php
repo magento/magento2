@@ -3,38 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\PageCache\Test\Unit\Model\Cache;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use \Magento\PageCache\Model\Cache\Server;
-use \Zend\Uri\UriFactory;
+use Laminas\Uri\UriFactory;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Cache\InvalidateLogger;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\PageCache\Model\Cache\Server;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ServerTest extends \PHPUnit\Framework\TestCase
+class ServerTest extends TestCase
 {
     /** @var Server */
     protected $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\DeploymentConfig */
+    /** @var MockObject|DeploymentConfig */
     protected $configMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\RequestInterface */
+    /** @var MockObject|RequestInterface */
     protected $requestMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\UrlInterface */
+    /** @var MockObject|UrlInterface */
     protected $urlBuilderMock;
 
-    protected function setUp()
+    /** @var MockObject|InvalidateLogger */
+    private $loggerMock;
+
+    protected function setUp(): void
     {
-        $this->configMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
-        $this->loggerMock = $this->createMock(\Magento\Framework\Cache\InvalidateLogger::class);
-        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+        $this->configMock = $this->createMock(DeploymentConfig::class);
+        $this->loggerMock = $this->createMock(InvalidateLogger::class);
+        $this->requestMock = $this->createMock(Http::class);
+        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\PageCache\Model\Cache\Server::class,
+            Server::class,
             [
                 'urlBuilder' => $this->urlBuilderMock,
                 'config' => $this->configMock,

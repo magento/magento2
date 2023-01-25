@@ -1,8 +1,0 @@
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
-
-.braintree-section .heading {background: url("images/braintree_logo.png") no-repeat 0 50% / 18rem auto; padding-left: 20rem;}
-.braintree-section .button-container {float: right;}
-.braintree-section .config-alt {background: url("images/braintree_allinone.png") no-repeat scroll 0 0 / 100% auto; height: 28px; margin: 0.5rem 0 0; width: 230px;}

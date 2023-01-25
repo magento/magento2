@@ -29,7 +29,7 @@ class PaymentInfoTest extends \PHPUnit\Framework\TestCase
     /** @var Quote */
     protected $_quote;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = Bootstrap::getObjectManager();
         $this->_order = $this->_objectManager->create(

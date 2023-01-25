@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 return [
     'config_only_with_entity_node' => [
         '<?xml version="1.0"?><config><entity type="type_one" /></config>',
@@ -52,24 +54,11 @@ return [
         [
             "Element 'entity', attribute 'type': [facet 'pattern'] The value 'Name' is not accepted by the pattern " .
             "'[a-z_]+'.\nLine: 1\n",
-            "Element 'entity', attribute 'type': 'Name' is not a valid value of the atomic type " .
-            "'identifierType'.\nLine: 1\n",
-            "Element 'entity', attribute 'type': Warning: No precomputed value available, the value" .
-            " was either invalid or something strange happend.\nLine: 1\n",
             "Element 'attribute', attribute 'code': [facet " .
             "'pattern'] The value 'code1' is not accepted by the pattern '[a-z_]+'.\nLine: 1\n",
-            "Element 'attribute', attribute " .
-            "'code': 'code1' is not a valid value of the atomic type 'identifierType'.\nLine: 1\n",
-            "Element 'attribute', attribute " .
-            "'code': Warning: No precomputed value available, " .
-            "the value was either invalid or something strange happend.\nLine: 1\n",
             "Element 'field', attribute 'code': [facet 'pattern'] " .
             "The value 'code::one' is not accepted by the pattern '" .
-            "[a-z_]+'.\nLine: 1\n",
-            "Element 'field', attribute 'code': 'code::one' is not a valid value of the atomic type " .
-            "'identifierType'.\nLine: 1\n",
-            "Element 'field', attribute 'code': Warning: No precomputed value available, the value " .
-            "was either invalid or something strange happend.\nLine: 1\n"
+            "[a-z_]+'.\nLine: 1\n"
         ],
     ]
 ];

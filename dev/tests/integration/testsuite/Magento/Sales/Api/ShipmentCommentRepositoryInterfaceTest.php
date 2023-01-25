@@ -19,7 +19,7 @@ class ShipmentCommentRepositoryInterfaceTest extends \PHPUnit\Framework\TestCase
      */
     private $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->repository = Bootstrap::getObjectManager()->create(ShipmentCommentRepositoryInterface::class);
     }
@@ -71,7 +71,7 @@ class ShipmentCommentRepositoryInterfaceTest extends \PHPUnit\Framework\TestCase
         $searchResult = $this->repository->getList($searchCriteria);
 
         $items = array_values($searchResult->getItems());
-        $this->assertEquals(1, count($items));
+        $this->assertCount(1, $items);
         $this->assertEquals('comment 2', $items[0][ShipmentCommentInterface::COMMENT]);
     }
 }

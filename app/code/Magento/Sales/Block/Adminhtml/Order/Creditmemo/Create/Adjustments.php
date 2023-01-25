@@ -5,7 +5,9 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
 
+use Magento\Framework\Currency\Data\Currency as CurrencyData;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Sales\Model\Order;
 
 /**
  * Credit memo adjustments block
@@ -23,8 +25,6 @@ class Adjustments extends \Magento\Backend\Block\Template
     protected $_source;
 
     /**
-     * Tax config
-     *
      * @var \Magento\Tax\Model\Config
      */
     protected $_taxConfig;
@@ -66,6 +66,28 @@ class Adjustments extends \Magento\Backend\Block\Template
         $parent->removeTotal('adjustment_negative');
         $parent->addTotal($total);
         return $this;
+    }
+
+    /**
+     * Format value based on order currency
+     *
+     * @param null|float $value
+     *
+     * @return string
+     * @since 102.1.0
+     */
+    public function formatValue($value)
+    {
+        /** @var Order $order */
+        $order = $this->getSource()->getOrder();
+
+        return $order->getOrderCurrency()->formatPrecision(
+            $value,
+            2,
+            ['display' => CurrencyData::NO_SYMBOL],
+            false,
+            false
+        );
     }
 
     /**

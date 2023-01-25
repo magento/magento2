@@ -44,7 +44,7 @@ class AbstractShipmentControllerTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->transportBuilder = $this->_objectManager->get(TransportBuilderMock::class);

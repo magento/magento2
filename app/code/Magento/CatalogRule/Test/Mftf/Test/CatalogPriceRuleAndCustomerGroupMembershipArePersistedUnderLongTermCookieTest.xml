@@ -27,10 +27,7 @@
             </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
-            <!--Delete all Catalog Price Rule if exist-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
-            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
-
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
 
             <!--Create Catalog Rule-->
             <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="startCreatingFirstPriceRule"/>
@@ -43,8 +40,7 @@
             <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForThirdPriceRule"/>
             <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="clickSaveAndApplyRule"/>
 
-            <!-- Perform reindex -->
-            <magentoCLI command="indexer:reindex" arguments="catalogrule_rule" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
         </before>
         <after>
             <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
@@ -53,7 +49,9 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Delete the rule -->
-            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
+            <actionGroup ref="RemoveCatalogPriceRuleActionGroup" stepKey="deleteCatalogPriceRule">
+                <argument name="ruleName" value="{{_defaultCatalogRule.name}}"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

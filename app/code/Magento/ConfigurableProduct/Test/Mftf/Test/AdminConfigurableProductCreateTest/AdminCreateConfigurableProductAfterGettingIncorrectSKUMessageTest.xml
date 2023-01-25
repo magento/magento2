@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateConfigurableProductAfterGettingIncorrectSKUMessageTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create, Read, Update, Delete"/>
+            <title value="admin should be able to create a configurable product after incorrect sku"/>
+            <description value="admin should be able to create a configurable product after incorrect sku"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MAGETWO-96365"/>
+            <useCaseId value="MAGETWO-94556"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
+            <argument name="productId" value="$$createConfigProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="openConfigurationPane"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickFilters"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" userInput="color" stepKey="fillFilterAttributeCodeField"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="waitCreateNewValueAppears"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue1"/>
+        <fillField userInput="{{colorProductAttribute2.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
+        <click selector="{{ConfigurableProductSection.generateConfigure}}" stepKey="generateConfigure"/>
+        <waitForPageLoad stepKey="waitForGenerateConfigure"/>
+        <grabValueFrom selector="{{AdminProductFormConfigurationsSection.firstSKUInConfigurableProductsGrid}}" stepKey="grabTextFromContent"/>
+        <fillField stepKey="fillMoreThan64Symbols" selector="{{AdminProductFormConfigurationsSection.firstSKUInConfigurableProductsGrid}}" userInput="01234567890123456789012345678901234567890123456789012345678901234"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct1"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.closePopUp}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.closePopUp}}" visible="true" stepKey="clickOnCloseInPopup"/>
+        <see stepKey="seeErrorMessage" userInput="Please enter less or equal than 64 symbols."/>
+        <fillField stepKey="fillCorrectSKU" selector="{{AdminProductFormConfigurationsSection.firstSKUInConfigurableProductsGrid}}" userInput="$grabTextFromContent"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct2"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="clickOnConfirmInPopup"/>
+        <see userInput="You saved the product." stepKey="seeSaveConfirmation"/>
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+        <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid1"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="color" stepKey="fillFilter"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearch"/>
+        <click selector="{{AdminProductAttributeGridSection.AttributeCode('color')}}" stepKey="clickRowToEdit"/>
+        <click selector="{{DropdownAttributeOptionsSection.deleteButton(1)}}" stepKey="deleteOption"/>
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute"/>
+        <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid2"/>
+        <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
+            <argument name="sku" value="$grabTextFromContent"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="visitAdminProductPage"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clickClearFiltersInitial"/>
+    </test>
+</tests>

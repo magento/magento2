@@ -10,7 +10,7 @@ namespace Magento\Framework\Model\ResourceModel\Db;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
- * Class ProfilerTest
+ * Test profiler on database queries
  */
 class ProfilerTest extends \PHPUnit\Framework\TestCase
 {
@@ -29,7 +29,7 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
      *
      * phpcs:disable Magento2.Functions.StaticFunction
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$_testResourceName = 'testtest_' . random_int(1000, 9999) . '_setup';
 
@@ -41,12 +41,12 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
      *
      * phpcs:disable Magento2.Functions.StaticFunction
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         \Magento\Framework\Profiler::disable();
     } // phpcs:enable
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Framework\App\ResourceConnection::class);
@@ -140,7 +140,7 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
 
         try {
             $connection->select()->from('unknown_table')->query()->fetch();
-        } catch (\Zend_Db_Statement_Exception $exception) {
+        } catch (\Magento\Framework\DB\Adapter\TableNotFoundException $exception) {
             $this->assertNotEmpty($exception);
         }
 

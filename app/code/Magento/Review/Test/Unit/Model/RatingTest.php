@@ -3,23 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Review\Model\Review;
 use Magento\Review\Model\Rating;
+use Magento\Review\Model\Review;
+use PHPUnit\Framework\TestCase;
 
-class RatingTest extends \PHPUnit\Framework\TestCase
+class RatingTest extends TestCase
 {
     /**
-     * @var \Magento\Review\Model\Rating
+     * @var Rating
      */
     private $rating;
 
     /**
      * Init objects needed by tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $this->rating = $helper->getObject(Rating::class);

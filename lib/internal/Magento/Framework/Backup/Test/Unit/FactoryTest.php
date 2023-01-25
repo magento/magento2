@@ -3,31 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Backup\Test\Unit;
 
-class FactoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Backup\Factory;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\TestCase;
+
+class FactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Backup\Factory
+     * @var Factory
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->_model = new \Magento\Framework\Backup\Factory($this->_objectManager);
+        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_model = new Factory($this->_objectManager);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testCreateWrongType()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->_model->create('WRONG_TYPE');
     }
 
@@ -37,7 +41,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreate($type)
     {
-        $this->_objectManager->expects($this->once())->method('create')->will($this->returnValue('ModelInstance'));
+        $this->_objectManager->expects($this->once())->method('create')->willReturn('ModelInstance');
 
         $this->assertEquals('ModelInstance', $this->_model->create($type));
     }

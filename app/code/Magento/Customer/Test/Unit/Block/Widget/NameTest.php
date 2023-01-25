@@ -3,19 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
+use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Block\Widget\Name;
+use Magento\Customer\Helper\Address;
+use Magento\Customer\Model\Data\Customer;
+use Magento\Customer\Model\Options;
+use Magento\Framework\Escaper;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Customer\Block\Widget\Name.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NameTest extends \PHPUnit\Framework\TestCase
+class NameTest extends TestCase
 {
     /**#@+
      * Constant values used throughout the various unit tests.
@@ -43,62 +55,81 @@ class NameTest extends \PHPUnit\Framework\TestCase
     const INVALID_ATTRIBUTE_CODE = 'invalid attribute code';
 
     const PREFIX_STORE_LABEL = 'Name Prefix';
-
     /**#@-*/
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject | AttributeMetadataInterface */
+    /**
+     * @var MockObject|AttributeMetadataInterface
+     */
     private $attribute;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Options */
+    /**
+     * @var MockObject|Options
+     */
     private $_options;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Escaper */
+    /**
+     * @var MockObject|Escaper
+     */
     private $_escaper;
 
-    /** @var  Name */
+    /**
+     * @var Name
+     */
     private $_block;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\CustomerMetadataInterface */
+    /**
+     * @var MockObject|CustomerMetadataInterface
+     */
     private $customerMetadata;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\AddressMetadataInterface */
+    /**
+     * @var MockObject|AddressMetadataInterface
+     */
     private $addressMetadata;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager;
 
-    protected function setUp()
+    /**
+     * @var bool
+     */
+    private $isVisibleAttribute = true;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_escaper = $this->createMock(\Magento\Framework\Escaper::class);
-        $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
-        $context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->_escaper));
+        $this->_objectManager = new ObjectManager($this);
+        $this->_escaper = $this->createMock(Escaper::class);
+        $context = $this->createMock(Context::class);
+        $context->expects($this->any())->method('getEscaper')->willReturn($this->_escaper);
 
-        $addressHelper = $this->createMock(\Magento\Customer\Helper\Address::class);
+        $addressHelper = $this->createMock(Address::class);
 
-        $this->_options = $this->createMock(\Magento\Customer\Model\Options::class);
+        $this->_options = $this->createMock(Options::class);
 
-        $this->attribute = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
+        $this->attribute = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->getMockForAbstractClass();
-        $this->customerMetadata = $this->getMockBuilder(\Magento\Customer\Api\CustomerMetadataInterface::class)
+        $this->customerMetadata = $this->getMockBuilder(CustomerMetadataInterface::class)
             ->getMockForAbstractClass();
         $this->customerMetadata->expects($this->any())
             ->method('getAttributeMetadata')
-            ->will($this->returnValue($this->attribute));
+            ->willReturn($this->attribute);
         $this->customerMetadata
             ->expects($this->any())
             ->method('getCustomAttributesMetadata')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
-        $this->addressMetadata = $this->getMockBuilder(\Magento\Customer\Api\AddressMetadataInterface::class)
+        $this->addressMetadata = $this->getMockBuilder(AddressMetadataInterface::class)
             ->getMockForAbstractClass();
         $this->addressMetadata->expects($this->any())
             ->method('getAttributeMetadata')
-            ->will($this->returnValue($this->attribute));
+            ->willReturn($this->attribute);
 
-        $this->_block = new \Magento\Customer\Block\Widget\Name(
+        $this->_block = new Name(
             $context,
             $addressHelper,
             $this->customerMetadata,
@@ -108,51 +139,58 @@ class NameTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
      * @see self::_setUpShowAttribute()
      */
-    public function testShowPrefix()
+    public function testShowPrefix(): void
     {
-        $this->_setUpShowAttribute([\Magento\Customer\Model\Data\Customer::PREFIX => self::PREFIX]);
+        $this->_setUpShowAttribute([Customer::PREFIX => self::PREFIX]);
         $this->assertTrue($this->_block->showPrefix());
 
-        $this->attribute->expects($this->at(0))->method('isVisible')->will($this->returnValue(false));
+        $this->isVisibleAttribute = false;
         $this->assertFalse($this->_block->showPrefix());
+        $this->isVisibleAttribute = true;
     }
 
-    public function testShowPrefixWithException()
+    /**
+     * @return void
+     */
+    public function testShowPrefixWithException(): void
     {
         $this->customerMetadata->expects(
             $this->any()
         )->method(
             'getAttributeMetadata'
-        )->will(
-            $this->throwException(new NoSuchEntityException(
+        )->willThrowException(
+            new NoSuchEntityException(
                 __(
                     'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
-            ))
+            )
         );
         $this->assertFalse($this->_block->showPrefix());
     }
 
     /**
      * @param $method
+     *
+     * @return void
      * @dataProvider methodDataProvider
      */
-    public function testMethodWithNoSuchEntityException($method)
+    public function testMethodWithNoSuchEntityException($method): void
     {
         $this->customerMetadata->expects(
             $this->any()
         )->method(
             'getAttributeMetadata'
-        )->will(
-            $this->throwException(new NoSuchEntityException(
+        )->willThrowException(
+            new NoSuchEntityException(
                 __(
                     'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
-            ))
+            )
         );
         $this->assertFalse($this->_block->{$method}());
     }
@@ -160,7 +198,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function methodDataProvider()
+    public function methodDataProvider(): array
     {
         return [
             'showPrefix' => ['showPrefix'],
@@ -173,46 +211,62 @@ class NameTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
      * @see self::_setUpIsAttributeRequired()
      */
-    public function testIsPrefixRequired()
+    public function testIsPrefixRequired(): void
     {
         $this->_setUpIsAttributeRequired();
         $this->assertTrue($this->_block->isPrefixRequired());
     }
 
-    public function testShowMiddlename()
+    /**
+     * @return void
+     */
+    public function testShowMiddlename(): void
     {
-        $this->_setUpShowAttribute([\Magento\Customer\Model\Data\Customer::MIDDLENAME => self::MIDDLENAME]);
+        $this->_setUpShowAttribute([Customer::MIDDLENAME => self::MIDDLENAME]);
         $this->assertTrue($this->_block->showMiddlename());
     }
 
-    public function testIsMiddlenameRequired()
+    /**
+     * @return void
+     */
+    public function testIsMiddlenameRequired(): void
     {
         $this->_setUpIsAttributeRequired();
         $this->assertTrue($this->_block->isMiddlenameRequired());
     }
 
-    public function testShowSuffix()
+    /**
+     * @return void
+     */
+    public function testShowSuffix(): void
     {
-        $this->_setUpShowAttribute([\Magento\Customer\Model\Data\Customer::SUFFIX => self::SUFFIX]);
+        $this->_setUpShowAttribute([Customer::SUFFIX => self::SUFFIX]);
         $this->assertTrue($this->_block->showSuffix());
     }
 
-    public function testIsSuffixRequired()
+    /**
+     * @return void
+     */
+    public function testIsSuffixRequired(): void
     {
         $this->_setUpIsAttributeRequired();
         $this->assertTrue($this->_block->isSuffixRequired());
     }
 
-    public function testGetPrefixOptionsNotEmpty()
+    /**
+     * @return void
+     */
+    public function testGetPrefixOptionsNotEmpty(): void
     {
         /**
          * Added some padding so that the trim() call on Customer::getPrefix() will remove it. Also added
          * special characters so that the escapeHtml() method returns a htmlspecialchars translated value.
          */
         $customer = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class
+            CustomerInterface::class
         )->getMockForAbstractClass();
         $customer->expects($this->once())->method('getPrefix')->willReturn('  <' . self::PREFIX . '>  ');
 
@@ -228,18 +282,21 @@ class NameTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getNamePrefixOptions'
-        )->will(
-            $this->returnValue($prefixOptions)
+        )->willReturn(
+            $prefixOptions
         );
-        $this->_escaper->expects($this->once())->method('escapeHtml')->will($this->returnValue($prefix));
+        $this->_escaper->expects($this->once())->method('escapeHtml')->willReturn($prefix);
 
         $this->assertSame($expectedOptions, $this->_block->getPrefixOptions());
     }
 
-    public function testGetPrefixOptionsEmpty()
+    /**
+     * @return void
+     */
+    public function testGetPrefixOptionsEmpty(): void
     {
         $customer = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class
+            CustomerInterface::class
         )->getMockForAbstractClass();
         $this->_block->setObject($customer);
 
@@ -247,21 +304,24 @@ class NameTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getNamePrefixOptions'
-        )->will(
-            $this->returnValue([])
+        )->willReturn(
+            []
         );
 
         $this->assertEmpty($this->_block->getPrefixOptions());
     }
 
-    public function testGetSuffixOptionsNotEmpty()
+    /**
+     * @return void
+     */
+    public function testGetSuffixOptionsNotEmpty(): void
     {
         /**
          * Added padding and special characters to show that trim() works on Customer::getSuffix() and that
          * a properly htmlspecialchars translated value is returned.
          */
         $customer = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class
+            CustomerInterface::class
         )->getMockForAbstractClass();
         $customer->expects($this->once())->method('getSuffix')->willReturn('  <' . self::SUFFIX . '>  ');
         $this->_block->setObject($customer);
@@ -276,18 +336,21 @@ class NameTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getNameSuffixOptions'
-        )->will(
-            $this->returnValue($suffixOptions)
+        )->willReturn(
+            $suffixOptions
         );
-        $this->_escaper->expects($this->once())->method('escapeHtml')->will($this->returnValue($suffix));
+        $this->_escaper->expects($this->once())->method('escapeHtml')->willReturn($suffix);
 
         $this->assertSame($expectedOptions, $this->_block->getSuffixOptions());
     }
 
-    public function testGetSuffixOptionsEmpty()
+    /**
+     * @return void
+     */
+    public function testGetSuffixOptionsEmpty(): void
     {
         $customer = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class
+            CustomerInterface::class
         )->getMockForAbstractClass();
         $this->_block->setObject($customer);
 
@@ -295,14 +358,17 @@ class NameTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getNameSuffixOptions'
-        )->will(
-            $this->returnValue([])
+        )->willReturn(
+            []
         );
 
         $this->assertEmpty($this->_block->getSuffixOptions());
     }
 
-    public function testGetClassName()
+    /**
+     * @return void
+     */
+    public function testGetClassName(): void
     {
         /** Test the default case when the block has no data set for the class name. */
         $this->assertEquals(self::DEFAULT_CLASS_NAME, $this->_block->getClassName());
@@ -318,31 +384,18 @@ class NameTest extends \PHPUnit\Framework\TestCase
      * @param bool $isSuffixVisible Value returned by Name::showSuffix()
      * @param string $expectedValue The expected value of Name::getContainerClassName()
      *
+     * @return void
      * @dataProvider getContainerClassNameProvider
      */
-    public function testGetContainerClassName($isPrefixVisible, $isMiddlenameVisible, $isSuffixVisible, $expectedValue)
-    {
-        $this->attribute->expects(
-            $this->at(0)
-        )->method(
-            'isVisible'
-        )->will(
-            $this->returnValue($isPrefixVisible)
-        );
-        $this->attribute->expects(
-            $this->at(1)
-        )->method(
-            'isVisible'
-        )->will(
-            $this->returnValue($isMiddlenameVisible)
-        );
-        $this->attribute->expects(
-            $this->at(2)
-        )->method(
-            'isVisible'
-        )->will(
-            $this->returnValue($isSuffixVisible)
-        );
+    public function testGetContainerClassName(
+        $isPrefixVisible,
+        $isMiddlenameVisible,
+        $isSuffixVisible,
+        $expectedValue
+    ): void {
+        $this->attribute
+            ->method('isVisible')
+            ->willReturnOnConsecutiveCalls($isPrefixVisible, $isMiddlenameVisible, $isSuffixVisible);
 
         $this->assertEquals($expectedValue, $this->_block->getContainerClassName());
     }
@@ -353,7 +406,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getContainerClassNameProvider()
+    public function getContainerClassNameProvider(): array
     {
         return [
             [false, false, false, self::DEFAULT_CLASS_NAME],
@@ -377,9 +430,10 @@ class NameTest extends \PHPUnit\Framework\TestCase
      * @param string $storeLabel The attribute's store label
      * @param string $expectedValue The expected value of Name::getStoreLabel()
      *
+     * @return void
      * @dataProvider getStoreLabelProvider
      */
-    public function testGetStoreLabel($attributeCode, $storeLabel, $expectedValue)
+    public function testGetStoreLabel($attributeCode, $storeLabel, $expectedValue): void
     {
         $this->attribute->expects($this->atLeastOnce())->method('getStoreLabel')->willReturn($storeLabel);
         $this->assertEquals($expectedValue, $this->_block->getStoreLabel($attributeCode));
@@ -392,7 +446,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getStoreLabelProvider()
+    public function getStoreLabelProvider(): array
     {
         return [
             [self::INVALID_ATTRIBUTE_CODE, '', ''],
@@ -400,19 +454,22 @@ class NameTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testGetStoreLabelWithException()
+    /**
+     * @return void
+     */
+    public function testGetStoreLabelWithException(): void
     {
         $this->customerMetadata->expects(
             $this->any()
         )->method(
             'getAttributeMetadata'
-        )->will(
-            $this->throwException(new NoSuchEntityException(
+        )->willThrowException(
+            new NoSuchEntityException(
                 __(
                     'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
-            ))
+            )
         );
         $this->assertSame('', (string)$this->_block->getStoreLabel('attributeCode'));
     }
@@ -421,11 +478,13 @@ class NameTest extends \PHPUnit\Framework\TestCase
      * Helper method for testing all show*() methods.
      *
      * @param array $data Customer attribute(s)
+     *
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    private function _setUpShowAttribute(array $data)
+    private function _setUpShowAttribute(array $data): void
     {
-        $customer = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
+        $customer = $this->getMockBuilder(CustomerInterface::class)
             ->getMockForAbstractClass();
 
         /**
@@ -440,13 +499,20 @@ class NameTest extends \PHPUnit\Framework\TestCase
          * first call to the method. Subsequent calls may return true or false depending on the returnValue
          * of the at({0, 1, 2, 3, ...}), etc. calls as set and configured in a particular test.
          */
-        $this->attribute->expects($this->at(0))->method('isVisible')->will($this->returnValue(true));
+        $testClass = $this;
+        $this->attribute
+            ->method('isVisible')
+            ->willReturnCallback(function () use ($testClass) {
+                return $testClass->isVisibleAttribute;
+            });
     }
 
     /**
      * Helper method for testing all is*Required() methods.
+     *
+     * @return void
      */
-    private function _setUpIsAttributeRequired()
+    private function _setUpIsAttributeRequired(): void
     {
         /**
          * These settings cause the first code path in Name::_getAttribute() to be skipped so that the rest of
@@ -463,8 +529,8 @@ class NameTest extends \PHPUnit\Framework\TestCase
          * all code paths in Name::_getAttribute() will be executed. Returning true for the third isRequired()
          * call causes the is*Required() method of the block to return true for the attribute.
          */
-        $this->attribute->expects($this->at(0))->method('isRequired')->will($this->returnValue(false));
-        $this->attribute->expects($this->at(1))->method('isRequired')->will($this->returnValue(true));
-        $this->attribute->expects($this->at(2))->method('isRequired')->will($this->returnValue(true));
+        $this->attribute
+            ->method('isRequired')
+            ->willReturnOnConsecutiveCalls(false, true, true);
     }
 }

@@ -3,30 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\View;
 
-class GiftmessageTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\DataObject;
+use Magento\Sales\Block\Adminhtml\Order\View\Giftmessage;
+use PHPUnit\Framework\TestCase;
+
+class GiftmessageTest extends TestCase
 {
     public function testGetSaveButtonHtml()
     {
-        $item = new \Magento\Framework\DataObject();
+        $item = new DataObject();
         $expectedHtml = 'some_value';
 
-        /** @var $block \Magento\Sales\Block\Adminhtml\Order\View\Giftmessage */
+        /** @var Giftmessage $block */
         $block = $this->createPartialMock(
-            \Magento\Sales\Block\Adminhtml\Order\View\Giftmessage::class,
+            Giftmessage::class,
             ['getChildBlock', 'getChildHtml']
         );
-        $block->setEntity(new \Magento\Framework\DataObject());
-        $block->expects($this->once())->method('getChildBlock')->with('save_button')->will($this->returnValue($item));
+        $block->setEntity(new DataObject());
+        $block->expects($this->once())->method('getChildBlock')->with('save_button')->willReturn($item);
         $block->expects(
             $this->once()
         )->method(
             'getChildHtml'
         )->with(
             'save_button'
-        )->will(
-            $this->returnValue($expectedHtml)
+        )->willReturn(
+            $expectedHtml
         );
 
         $this->assertEquals($expectedHtml, $block->getSaveButtonHtml());

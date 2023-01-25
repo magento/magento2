@@ -21,7 +21,7 @@ $data = [
             \Magento\Store\Model\StoreManagerInterface::class
         )->getStore()->getWebsiteId()
     ],
-    'customer_group_ids' => [\Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID],
+    'customer_group_ids' => [\Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID, 1],
     'coupon_type' => \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC,
     'coupon_code' => uniqid(),
     'simple_action' => \Magento\SalesRule\Model\Rule::BY_PERCENT_ACTION,

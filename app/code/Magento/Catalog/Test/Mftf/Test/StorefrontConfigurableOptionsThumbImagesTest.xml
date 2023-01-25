@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableOptionsThumbImagesTest">
+        <annotations>
+            <stories value="Configurable Product"/>
+            <title value="Check thumbnail images and active image for Configurable Product"/>
+            <description value="Login as admin, create attribute with two options, configurable product with two
+                associated simple products. Add few images for products, check the fotorama thumbnail images
+                (visible and active) for each selected option for the configurable product"/>
+            <group value="catalog"/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+
+            <!-- Create Default Category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <!-- Create an attribute with two options to be used in the first child product -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <!-- Add the attribute just created to default attribute set -->
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <!-- Get the first option of the attribute created -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Get the second option of the attribute created -->
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Create Configurable product -->
+            <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create a simple product and give it the attribute with the first option -->
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+
+            <!--Create a simple product and give it the attribute with the second option -->
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <!-- Create the configurable product -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <!-- Add the first simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+
+            <!-- Add the second simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+
+            <!-- ConfigProduct -->
+            <!-- Go to Product Page (ConfigProduct) -->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToConfigProduct">
+                <argument name="productId" value="$$createConfigProduct.id$$"/>
+            </actionGroup>
+
+            <!--Switch to 'Default Store View' scope and open product page-->
+            <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchDefaultStoreViewForConfigProduct">
+                <argument name="storeViewName" value="'Default Store View'"/>
+            </actionGroup>
+
+            <!-- Add images for ConfigProduct -->
+            <actionGroup ref="AddProductImageActionGroup" stepKey="addConfigProductMagento3">
+                <argument name="image" value="Magento3"/>
+            </actionGroup>
+
+            <actionGroup ref="AddProductImageActionGroup" stepKey="addConfigProductTestImageAdobe">
+                <argument name="image" value="TestImageAdobe"/>
+            </actionGroup>
+            <actionGroup ref="AdminAssignImageBaseRoleActionGroup" stepKey="assignTestImageAdobeBaseRole">
+                <argument name="image" value="TestImageAdobe"/>
+            </actionGroup>
+
+            <!-- Save changes fot ConfigProduct -->
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigProductProduct"/>
+
+            <!-- ChildProduct1 -->
+            <!-- Go to Product Page (ChildProduct1) -->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToChildProduct1">
+                <argument name="productId" value="$$createConfigChildProduct1.id$$"/>
+            </actionGroup>
+
+            <!--Switch to 'Default Store View' scope and open product page-->
+            <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchDefaultStoreViewForChildProduct1">
+                <argument name="storeViewName" value="'Default Store View'"/>
+            </actionGroup>
+
+            <!-- Add images for ChildProduct1 -->
+            <actionGroup ref="AddProductImageActionGroup" stepKey="addChildProduct1ProductImage">
+                <argument name="image" value="ProductImage"/>
+            </actionGroup>
+            <actionGroup ref="AddProductImageActionGroup" stepKey="addChildProduct1Magento2">
+                <argument name="image" value="Magento2"/>
+            </actionGroup>
+            <actionGroup ref="AdminAssignImageRolesIfUnassignedActionGroup" stepKey="assignMagento2Role">
+                <argument name="image" value="Magento2"/>
+            </actionGroup>
+
+            <!-- Save changes fot ChildProduct1 -->
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveChildProduct1Product"/>
+
+            <!-- ChildProduct2 -->
+            <!-- Go to Product Page (ChildProduct2) -->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToChildProduct2">
+                <argument name="productId" value="$$createConfigChildProduct2.id$$"/>
+            </actionGroup>
+
+            <!--Switch to 'Default Store View' scope and open product page-->
+            <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchDefaultStoreViewForChildProduct2">
+                <argument name="storeViewName" value="'Default Store View'"/>
+            </actionGroup>
+
+            <!-- Add image for ChildProduct2 -->
+            <actionGroup ref="AddProductImageActionGroup" stepKey="addChildProduct2TestImageNew">
+                <argument name="image" value="TestImageNew"/>
+            </actionGroup>
+
+            <!-- Save changes fot ChildProduct2 -->
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveChildProduct2Product"/>
+        </before>
+        <after>
+            <!-- Delete Created Data -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+           <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+
+        <!-- Open ConfigProduct in Store Front Page -->
+        <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="openProductInStoreFront"/>
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
+
+        <!-- Check fotorama thumbnail images (no selected options) -->
+        <actionGroup ref="StorefrontAssertFotoramaImageAvailabilityActionGroup" stepKey="seeMagento3ForNoOption">
+            <argument name="fileName" value="{{Magento3.filename}}"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAssertFotoramaImageAvailabilityActionGroup" stepKey="seeActiveTestImageAdobeForNoOption">
+            <argument name="fileName" value="{{TestImageAdobe.filename}}"/>
+        </actionGroup>
+
+        <!-- Select first option -->
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectFirstOptionValue">
+            <argument name="attributeLabel" value="$$createConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$getConfigAttributeOption1.label$$"/>
+        </actionGroup>
+
+        <!-- Check fotorama thumbnail images (first option selected) -->
+        <actionGroup ref="StorefrontAssertFotoramaImageAvailabilityActionGroup" stepKey="seeMagento3ForFirstOption">
+            <argument name="fileName" value="{{Magento3.filename}}"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAssertFotoramaImageAvailabilityActionGroup" stepKey="seeTestImageAdobeForFirstOption">
+            <argument name="fileName" value="{{TestImageAdobe.filename}}"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAssertFotoramaImageAvailabilityActionGroup" stepKey="seeProductImageForFirstOption">
+            <argument name="fileName" value="{{ProductImage.filename}}"/>
+        </actionGroup>
+
+        <!-- Check active fotorama thumbnail image (first option selected) -->
+        <actionGroup ref="StorefrontAssertActiveProductImageActionGroup" stepKey="seeActiveMagento2ForFirstOption">
+            <argument name="fileName" value="{{Magento2.filename}}"/>
+        </actionGroup>
+
+        <!-- Select second option -->
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectSecondOptionValue">
+            <argument name="attributeLabel" value="$$createConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$getConfigAttributeOption2.label$$"/>
+        </actionGroup>
+
+        <!-- Check fotorama thumbnail images (second option selected) -->
+        <actionGroup ref="StorefrontAssertFotoramaImageAvailabilityActionGroup" stepKey="seeMagento3ForSecondOption">
+            <argument name="fileName" value="{{Magento3.filename}}"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAssertFotoramaImageAvailabilityActionGroup" stepKey="seeTestImageAdobeForSecondOption">
+            <argument name="fileName" value="{{TestImageAdobe.filename}}"/>
+        </actionGroup>
+
+        <!-- Check active fotorama thumbnail image (second option selected) -->
+        <actionGroup ref="StorefrontAssertActiveProductImageActionGroup" stepKey="seeActiveTestImageNewForSecondOption">
+            <argument name="fileName" value="{{TestImageNew.filename}}"/>
+        </actionGroup>
+    </test>
+</tests>

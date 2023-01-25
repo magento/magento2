@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminNewCatalogPriceRule">
+        <element name="saveAndApply" type="button" selector="#save_and_apply" timeout="30"/>
+        <element name="save" type="button" selector="#save" timeout="30"/>
+        <element name="saveAndContinue" type="button" selector="#save_and_continue" timeout="30"/>
+        <element name="delete" type="button" selector="#delete" timeout="30"/>
+        <element name="okButton" type="button" selector="//button[@class='action-primary action-accept']"/>
+        <element name="successMessage" type="text" selector="#messages"/>
+
+        <element name="ruleName" type="input" selector="[name='name']"/>
+        <element name="ruleNameNew" type="input" selector="[name='staging[name]']"/>
+        <element name="description" type="textarea" selector="[name='description']"/>
+        <element name="status" type="select" selector="[name='is_active']"/>
+        <element name="isActive" type="text" selector="input[name='is_active']+label"/>
+        <element name="activeByStatus" type="text" selector="div.admin__actions-switch input[name='is_active'][value='{{value}}']+label" parameterized="true"/>
+
+        <element name="websites" type="select" selector="[name='website_ids']"/>
+        <element name="active" type="checkbox" selector="//div[contains(@class, 'admin__actions-switch')]/input[@name='is_active']/../label"/>
+        <element name="activeIsEnabled" type="checkbox" selector="(//div[contains(@class, 'admin__actions-switch')])[1]/input[@value='1']"/>
+        <element name="activePosition" type="checkbox" selector="fieldset[class='admin__fieldset'] div[class*='_required']:nth-of-type(4)"/>
+        <element name="websitesOptions" type="select" selector="[name='website_ids'] option"/>
+        <element name="customerGroups" type="select" selector="[name='customer_group_ids']"/>
+        <element name="customerGroupsOptions" type="select" selector="[name='customer_group_ids'] option"/>
+
+        <element name="fromDateButton" type="button" selector="[name='from_date'] + button" timeout="15"/>
+        <element name="startDateButton" type="button" selector="[name='staging[start_time]'] + button" timeout="15"/>
+        <element name="toDateButton" type="button" selector="[name='to_date'] + button" timeout="15"/>
+        <element name="todayDate" type="button" selector="#ui-datepicker-div [data-handler='today']"/>
+        <element name="fromDate" type="input" selector="[name='from_date']"/>
+        <element name="toDate" type="input" selector="[name='to_date']"/>
+        <element name="priority" type="input" selector="[name='sort_order']"/>
+        <element name="conditionsTab" type="block" selector="[data-index='block_promo_catalog_edit_tab_conditions']"/>
+        <element name="conditionsTabTitle" type="block" selector="[data-index='block_promo_catalog_edit_tab_conditions'] .fieldset-wrapper-title"/>
+        <element name="conditionsTabBody" type="block" selector="[data-index='block_promo_catalog_edit_tab_conditions'] .admin__fieldset-wrapper-content"/>
+        <element name="actionsTab" type="block" selector="[data-index='actions']"/>
+        <element name="actionsTabTitle" type="block" selector="[data-index='actions'] .fieldset-wrapper-title"/>
+        <element name="actionsTabBody" type="block" selector="[data-index='actions'] .admin__fieldset-wrapper-content"/>
+        <element name="fieldError" type="text" selector="//input[@name='{{fieldName}}']/following-sibling::label[@class='admin__field-error']" parameterized="true"/>
+    </section>
+</sections>

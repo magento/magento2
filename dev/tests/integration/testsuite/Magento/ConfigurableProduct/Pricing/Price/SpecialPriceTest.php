@@ -26,7 +26,7 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
      */
     private $productCollectionFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->productCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);

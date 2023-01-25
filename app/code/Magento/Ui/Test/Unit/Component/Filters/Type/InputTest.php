@@ -3,42 +3,48 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component\Filters\Type;
 
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Input;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class InputTest
- */
-class InputTest extends \PHPUnit\Framework\TestCase
+class InputTest extends TestCase
 {
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var UiComponentFactory|MockObject
      */
     protected $uiComponentFactory;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterBuilder|MockObject
      */
     protected $filterBuilderMock;
 
     /**
-     * @var \Magento\Ui\Component\Filters\FilterModifier|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterModifier|MockObject
      */
     protected $filterModifierMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockForAbstractClass(
             ContextInterface::class,
@@ -50,9 +56,9 @@ class InputTest extends \PHPUnit\Framework\TestCase
             UiComponentFactory::class,
             ['create']
         );
-        $this->filterBuilderMock = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
+        $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
         $this->filterModifierMock = $this->createPartialMock(
-            \Magento\Ui\Component\Filters\FilterModifier::class,
+            FilterModifier::class,
             ['applyFilterModifier']
         );
     }
@@ -73,21 +79,21 @@ class InputTest extends \PHPUnit\Framework\TestCase
             []
         );
 
-        $this->assertTrue($date->getComponentName() === Input::NAME);
+        $this->assertSame(Input::NAME, $date->getComponentName());
     }
 
     /**
      * Run test prepare method
      *
-     * @param string $name
+     * @param array $data
      * @param array $filterData
      * @param array|null $expectedCondition
      * @dataProvider getPrepareDataProvider
      * @return void
      */
-    public function testPrepare(string $name, array $filterData, ?array $expectedCondition): void
+    public function testPrepare(array $data, array $filterData, ?array $expectedCondition): void
     {
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+        $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
@@ -113,7 +119,7 @@ class InputTest extends \PHPUnit\Framework\TestCase
             ->method('getFiltersParams')
             ->willReturn($filterData);
         $dataProvider = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface::class,
+            DataProviderInterface::class,
             [],
             '',
             false
@@ -125,26 +131,26 @@ class InputTest extends \PHPUnit\Framework\TestCase
 
         $this->uiComponentFactory->expects($this->any())
             ->method('create')
-            ->with($name, Input::COMPONENT, ['context' => $this->contextMock])
+            ->with($data['name'], Input::COMPONENT, ['context' => $this->contextMock])
             ->willReturn($uiComponent);
 
         if ($expectedCondition !== null) {
             $this->filterBuilderMock->expects($this->once())
                 ->method('setConditionType')
-                ->with('like')
+                ->with($expectedCondition['setConditionType'])
                 ->willReturnSelf();
 
             $this->filterBuilderMock->expects($this->once())
                 ->method('setField')
-                ->with($name)
+                ->with($data['name'])
                 ->willReturnSelf();
 
             $this->filterBuilderMock->expects($this->once())
                 ->method('setValue')
-                ->with($expectedCondition['like'])
+                ->with($expectedCondition['setValue'])
                 ->willReturnSelf();
 
-            $filterMock = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)
+            $filterMock = $this->getMockBuilder(Filter::class)
                 ->disableOriginalConstructor()
                 ->getMock();
 
@@ -159,7 +165,7 @@ class InputTest extends \PHPUnit\Framework\TestCase
             $this->filterBuilderMock,
             $this->filterModifierMock,
             [],
-            ['name' => $name]
+            $data
         );
 
         $date->prepare();
@@ -172,29 +178,97 @@ class InputTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'test_date',
+                [
+                    'name' => 'test_date',
+                ],
                 ['test_date' => ''],
                 null,
             ],
             [
-                'test_date',
+                [
+                    'name' => 'test_date',
+                ],
                 ['test_date' => null],
                 null,
             ],
             [
-                'test_date',
+                [
+                    'name' => 'test_date',
+                ],
                 ['test_date' => '0'],
-                ['like' => '%0%'],
+                [
+                    'setConditionType' => 'like',
+                    'setValue' => '%0%',
+                ],
             ],
             [
-                'test_date',
+                [
+                    'name' => 'test_date',
+                ],
                 ['test_date' => 'some_value'],
-                ['like' => '%some\_value%'],
+                [
+                    'setConditionType' => 'like',
+                    'setValue' => '%some\_value%',
+                ],
             ],
             [
-                'test_date',
+                [
+                    'name' => 'test_date',
+                ],
                 ['test_date' => '%'],
-                ['like' => '%\%%'],
+                [
+                    'setConditionType' => 'like',
+                    'setValue' => '%\%%',
+                ],
+            ],
+            [
+                [
+                    'name' => 'text_attr',
+                    'config' => [
+                        'filter' => [
+                            'filterType' => 'text',
+                            'conditionType' => 'eq',
+                        ]
+                    ]
+                ],
+                ['text_attr' => 'something'],
+                [
+                    'setConditionType' => 'eq',
+                    'setValue' => 'something',
+                ],
+            ],
+            [
+                [
+                    'name' => 'text_attr',
+                    'config' => [
+                        'filter' => [
+                            'filterType' => 'text',
+                            'conditionType' => 'like',
+                        ]
+                    ]
+                ],
+                ['text_attr' => 'something'],
+                [
+                    'setConditionType' => 'like',
+                    'setValue' => '%something%',
+                ],
+            ],
+            [
+                [
+                    'name' => 'text_attr',
+                    'config' => [
+                        'filter' => [
+                            'filterType' => 'text',
+                            'conditionType' => 'like',
+                            'valueExpression' => '%s%%'
+                        ]
+                    ]
+                ],
+                ['text_attr' => 'something'],
+                [
+                    'setConditionType' => 'like',
+                    'setValue' => 'something%',
+                ],
             ],
         ];
     }

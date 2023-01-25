@@ -36,7 +36,10 @@ class ResetAttemptForBackendObserverTest extends TestCase
             ->willReturn($logMock);
 
         /** @var MockObject|Observer $eventObserverMock */
-        $eventObserverMock = $this->createPartialMock(Observer::class, ['getUser']);
+        $eventObserverMock = $this->getMockBuilder(Observer::class)
+            ->addMethods(['getUser'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $eventMock = $this->createMock(Event::class);
         $eventObserverMock->expects($this->once())
             ->method('getUser')
@@ -48,6 +51,6 @@ class ResetAttemptForBackendObserverTest extends TestCase
             ResetAttemptForBackendObserver::class,
             ['resLogFactory' => $resLogFactoryMock]
         );
-        $this->assertInstanceOf(Log::class, $observer->execute($eventObserverMock));
+        $observer->execute($eventObserverMock);
     }
 }

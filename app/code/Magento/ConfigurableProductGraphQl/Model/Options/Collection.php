@@ -9,18 +9,25 @@ namespace Magento\ConfigurableProductGraphQl\Model\Options;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\CollectionFactory;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection
     as AttributeCollection;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
-use Magento\Catalog\Model\ProductFactory;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\CollectionFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\GraphQl\Query\Uid;
 
 /**
  * Collection for fetching options for all configurable options pulled back in result set.
  */
 class Collection
 {
+    /**
+     * Option type name
+     */
+    private const OPTION_TYPE = 'configurable';
+
     /**
      * @var CollectionFactory
      */
@@ -46,19 +53,26 @@ class Collection
      */
     private $attributeMap = [];
 
+    /** @var Uid */
+    private $uidEncoder;
+
     /**
      * @param CollectionFactory $attributeCollectionFactory
      * @param ProductFactory $productFactory
      * @param MetadataPool $metadataPool
+     * @param Uid|null $uidEncoder
      */
     public function __construct(
         CollectionFactory $attributeCollectionFactory,
         ProductFactory $productFactory,
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool,
+        Uid $uidEncoder = null
     ) {
         $this->attributeCollectionFactory = $attributeCollectionFactory;
         $this->productFactory = $productFactory;
         $this->metadataPool = $metadataPool;
+        $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
+            ->get(Uid::class);
     }
 
     /**
@@ -66,7 +80,7 @@ class Collection
      *
      * @param int $productId
      */
-    public function addProductId(int $productId) : void
+    public function addProductId(int $productId): void
     {
         if (!in_array($productId, $this->productIds)) {
             $this->productIds[] = $productId;
@@ -79,7 +93,7 @@ class Collection
      * @param int $productId
      * @return array
      */
-    public function getAttributesByProductId(int $productId) : array
+    public function getAttributesByProductId(int $productId): array
     {
         $attributes = $this->fetch();
 
@@ -95,9 +109,9 @@ class Collection
      *
      * @return array
      */
-    private function fetch() : array
+    private function fetch(): array
     {
-        if (empty($this->productIds) || !empty($this->attributeMap)) {
+        if (empty($this->productIds) || array_key_exists(end($this->productIds), $this->attributeMap)) {
             return $this->attributeMap;
         }
 
@@ -121,9 +135,24 @@ class Collection
             $attributeData = $attribute->getData();
             $this->attributeMap[$productId][$attribute->getId()] = $attribute->getData();
             $this->attributeMap[$productId][$attribute->getId()]['id'] = $attribute->getId();
-            $this->attributeMap[$productId][$attribute->getId()]['attribute_code']
-                = $attribute->getProductAttribute()->getAttributeCode();
-            $this->attributeMap[$productId][$attribute->getId()]['values'] = $attributeData['options'];
+            $this->attributeMap[$productId][$attribute->getId()]['uid'] = $this->uidEncoder->encode(
+                self::OPTION_TYPE . '/' . $productId . '/' . $attribute->getAttributeId()
+            );
+            $this->attributeMap[$productId][$attribute->getId()]['attribute_id_v2'] =
+                $attribute->getProductAttribute()->getAttributeId();
+            $this->attributeMap[$productId][$attribute->getId()]['attribute_uid'] =
+                $this->uidEncoder->encode((string) $attribute->getProductAttribute()->getAttributeId());
+            $this->attributeMap[$productId][$attribute->getId()]['product_uid'] =
+                $this->uidEncoder->encode((string) $attribute->getProductId());
+            $this->attributeMap[$productId][$attribute->getId()]['attribute_code'] =
+                $attribute->getProductAttribute()->getAttributeCode();
+            $this->attributeMap[$productId][$attribute->getId()]['values'] = array_map(
+                function ($value) use ($attribute) {
+                    $value['attribute_id'] = $attribute->getAttributeId();
+                    return $value;
+                },
+                $attributeData['options']
+            );
             $this->attributeMap[$productId][$attribute->getId()]['label']
                 = $attribute->getProductAttribute()->getStoreLabel();
         }

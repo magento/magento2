@@ -12,7 +12,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // @codingStandardsIgnoreStart
         $config = new \Magento\Framework\Simplexml\Config();

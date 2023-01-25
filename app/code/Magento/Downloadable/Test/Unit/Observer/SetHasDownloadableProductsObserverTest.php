@@ -45,19 +45,16 @@ class SetHasDownloadableProductsObserverTest extends TestCase
     /**
      * Setup environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
         $this->orderMock = $this->createPartialMock(Order::class, ['getAllItems']);
 
-        $this->checkoutSessionMock = $this->createPartialMock(
-            CheckoutSession::class,
-            [
-                'getHasDownloadableProducts',
-                'setHasDownloadableProducts'
-            ]
-        );
+        $this->checkoutSessionMock = $this->getMockBuilder(CheckoutSession::class)
+            ->addMethods(['getHasDownloadableProducts', 'setHasDownloadableProducts'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->setHasDownloadableProductsObserver = $this->objectManager->getObject(
             SetHasDownloadableProductsObserver::class,

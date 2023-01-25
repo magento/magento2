@@ -50,7 +50,7 @@ class DomTest extends \PHPUnit\Framework\TestCase
      */
     protected $_mapper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $fixturePath = realpath(__DIR__ . '/../../_files') . '/';
         $this->_fileList = [
@@ -59,9 +59,9 @@ class DomTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->_fileResolverMock = $this->createMock(\Magento\Framework\App\Arguments\FileResolver\Primary::class);
-        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue($this->_fileList));
+        $this->_fileResolverMock->expects($this->once())->method('get')->willReturn($this->_fileList);
 
-        /** @var Phrase\Renderer\Composite|\PHPUnit_Framework_MockObject_MockObject $renderer */
+        /** @var Phrase\Renderer\Composite|\PHPUnit\Framework\MockObject\MockObject $renderer */
         $renderer = $this->getMockBuilder(Phrase\Renderer\Composite::class)
             ->disableOriginalConstructor()
             ->getMock();

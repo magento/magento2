@@ -10,8 +10,9 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Customer;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-include __DIR__ . '/customer_confirmation_config_enable.php';
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer_confirmation_config_enable.php');
 
 $objectManager = Bootstrap::getObjectManager();
 

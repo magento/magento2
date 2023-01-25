@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="PayPalAdvancedSettingConfigSection">
+        <element name="advancedSettingTab" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec_settings_ec_advanced-head" parameterized="true"/>
+        <element name="frontendExperienceSettingsTab" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec_settings_ec_advanced_express_checkout_frontend-head" parameterized="true"/>
+        <element name="checkoutPageTab" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec_settings_ec_advanced_express_checkout_frontend_checkout_page_button-head" parameterized="true"/>
+        <element name="displayonshoppingcart" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec_settings_ec_advanced_visible_on_cart" parameterized="true"/>
+    </section>
+</sections>

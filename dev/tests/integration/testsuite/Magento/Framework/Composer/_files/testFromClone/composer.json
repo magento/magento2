@@ -7,7 +7,7 @@
         "AFL-3.0"
     ],
     "require": {
-        "php": "~5.5.22||~5.6.0||~7.0.0",
+        "php": "~8.1.0",
         "ext-ctype": "*",
         "ext-curl": "*",
         "ext-dom": "*",
@@ -26,27 +26,27 @@
         "phpseclib/phpseclib": "~0.3",
         "symfony/console": "~2.3",
         "tubalmartin/cssmin": "2.4.8-p6",
-        "zendframework/zend-code": "2.4.0",
-        "zendframework/zend-config": "2.4.0",
-        "zendframework/zend-console": "2.4.0",
-        "zendframework/zend-di": "2.4.0",
-        "zendframework/zend-eventmanager": "2.4.0",
-        "zendframework/zend-form": "2.4.0",
-        "zendframework/zend-http": "2.4.0",
-        "zendframework/zend-i18n": "2.4.0",
-        "zendframework/zend-json": "2.4.0",
-        "zendframework/zend-log": "2.4.0",
-        "zendframework/zend-modulemanager": "2.4.0",
-        "zendframework/zend-mvc": "2.4.0",
-        "zendframework/zend-serializer": "2.4.0",
-        "zendframework/zend-server": "2.4.0",
-        "zendframework/zend-servicemanager": "2.4.0",
-        "zendframework/zend-soap": "2.4.0",
-        "zendframework/zend-stdlib": "2.4.0",
-        "zendframework/zend-text": "2.4.0",
-        "zendframework/zend-uri": "2.4.0",
-        "zendframework/zend-validator": "2.4.0",
-        "zendframework/zend-view": "2.4.0"
+        "laminas/laminas-code": "2.4.0",
+        "laminas/laminas-config": "2.4.0",
+        "laminas/laminas-console": "2.4.0",
+        "laminas/laminas-di": "2.4.0",
+        "laminas/laminas-eventmanager": "2.4.0",
+        "laminas/laminas-form": "2.4.0",
+        "laminas/laminas-http": "2.4.0",
+        "laminas/laminas-i18n": "2.4.0",
+        "laminas/laminas-json": "2.4.0",
+        "laminas/laminas-log": "2.4.0",
+        "laminas/laminas-modulemanager": "2.4.0",
+        "laminas/laminas-mvc": "2.4.0",
+        "laminas/laminas-serializer": "2.4.0",
+        "laminas/laminas-server": "2.4.0",
+        "laminas/laminas-servicemanager": "2.4.0",
+        "laminas/laminas-soap": "2.4.0",
+        "laminas/laminas-stdlib": "2.4.0",
+        "laminas/laminas-text": "2.4.0",
+        "laminas/laminas-uri": "2.4.0",
+        "laminas/laminas-validator": "2.4.0",
+        "laminas/laminas-view": "2.4.0"
     },
     "require-dev": {
         "fabpot/php-cs-fixer": "~1.2",
@@ -171,9 +171,7 @@
             "linkorb/jsmin-php": "lib/internal/JSMin",
             "components/jquery": [
                 "lib/web/jquery.js",
-                "lib/web/jquery/jquery.min.js",
-                "lib/web/jquery/jquery-migrate.js",
-                "lib/web/jquery/jquery-migrate.min.js"
+                "lib/web/jquery/jquery.min.js"
             ],
             "blueimp/jquery-file-upload": "lib/web/jquery/fileUploader",
             "components/jqueryui": [
@@ -187,6 +185,9 @@
         }
     },
     "config": {
+        "allow-plugins": {
+            "magento/*": true
+        },
         "sort-packages": true,
         "use-include-path": true
     },

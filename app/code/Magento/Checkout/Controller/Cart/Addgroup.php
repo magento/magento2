@@ -104,13 +104,25 @@ class Addgroup extends \Magento\Checkout\Controller\Cart implements HttpPostActi
             if ($orderCustomerId == $currentCustomerId) {
                 $this->cart->addOrderItem($item, 1);
                 if (!$this->cart->getQuote()->getHasError()) {
-                    $message = __(
-                        'You added %1 to your shopping cart.',
-                        $this->escaper->escapeHtml($item->getName())
+                    $this->messageManager->addComplexSuccessMessage(
+                        'addCartSuccessMessage',
+                        [
+                            'product_name' => $item->getName(),
+                            'cart_url' => $this->getCartUrl()
+                        ]
                     );
-                    $this->messageManager->addSuccessMessage($message);
                 }
             }
         }
+    }
+
+    /**
+     * Returns cart url
+     *
+     * @return string
+     */
+    private function getCartUrl()
+    {
+        return $this->_url->getUrl('checkout/cart', ['_secure' => true]);
     }
 }

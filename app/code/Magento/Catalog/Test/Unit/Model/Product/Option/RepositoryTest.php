@@ -3,17 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Option;
 
-use \Magento\Catalog\Model\Product\Option\Repository;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
-use \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option\Converter;
+use Magento\Catalog\Model\Product\Option\Repository;
+use Magento\Catalog\Model\Product\OptionFactory;
+use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Model\ResourceModel\Product\Option;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RepositoryTest extends \PHPUnit\Framework\TestCase
+class RepositoryTest extends TestCase
 {
     /**
      * @var Repository
@@ -21,46 +32,49 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     protected $optionRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $productRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $optionResourceMock;
 
     /**
-     * @var ProductCustomOptionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductCustomOptionInterface|MockObject
      */
     protected $optionMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $optionCollectionFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $productMock;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $this->productRepositoryMock = $this->createMock(\Magento\Catalog\Model\ProductRepository::class);
-        $this->optionResourceMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Option::class);
-        $this->converterMock = $this->createMock(\Magento\Catalog\Model\Product\Option\Converter::class);
+        $this->productRepositoryMock = $this->createMock(ProductRepository::class);
+        $this->optionResourceMock = $this->createMock(Option::class);
+        $converterMock = $this->createMock(Converter::class);
         $this->optionMock = $this->createMock(\Magento\Catalog\Model\Product\Option::class);
-        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $optionFactory = $this->createPartialMock(\Magento\Catalog\Model\Product\OptionFactory::class, ['create']);
+        $this->productMock = $this->createMock(Product::class);
+        $optionFactory = $this->createPartialMock(OptionFactory::class, ['create']);
         $this->optionCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
+        $metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
+        $metadata = $this->getMockBuilder(EntityMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
         $metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
@@ -68,14 +82,17 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->optionRepository = new Repository(
             $this->productRepositoryMock,
             $this->optionResourceMock,
-            $this->converterMock,
+            $converterMock,
             $this->optionCollectionFactory,
             $optionFactory,
             $metadataPool
         );
     }
 
-    public function testGetList()
+    /**
+     * @return void
+     */
+    public function testGetList(): void
     {
         $productSku = 'simple_product';
         $expectedResult = ['Expected_option'];
@@ -88,17 +105,21 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->optionRepository->getList($productSku));
     }
 
-    public function testDelete()
+    /**
+     * @return void
+     */
+    public function testDelete(): void
     {
         $this->optionResourceMock->expects($this->once())->method('delete')->with($this->optionMock);
         $this->assertTrue($this->optionRepository->delete($this->optionMock));
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     * @return void
      */
-    public function testGetNonExistingOption()
+    public function testGetNonExistingOption(): void
     {
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $optionId = 1;
         $productSku = 'simple_product';
         $this->productRepositoryMock
@@ -114,7 +135,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->optionRepository->get($productSku, $optionId);
     }
 
-    public function testGet()
+    /**
+     * @return void
+     */
+    public function testGet(): void
     {
         $optionId = 1;
         $productSku = 'simple_product';
@@ -131,10 +155,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     * @return void
      */
-    public function testDeleteByIdentifierNonExistingOption()
+    public function testDeleteByIdentifierNonExistingOption(): void
     {
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $optionId = 1;
         $productSku = 'simple_product';
         $this->productRepositoryMock
@@ -151,7 +176,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->optionRepository->deleteByIdentifier($productSku, $optionId);
     }
 
-    public function testDeleteByIdentifier()
+    /**
+     * @return void
+     */
+    public function testDeleteByIdentifier(): void
     {
         $optionId = 1;
         $productSku = 'simple_product';
@@ -172,10 +200,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
+     * @return void
      */
-    public function testDeleteByIdentifierWhenCannotRemoveOption()
+    public function testDeleteByIdentifierWhenCannotRemoveOption(): void
     {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
         $optionId = 1;
         $productSku = 'simple_product';
         $this->productRepositoryMock
@@ -199,20 +228,22 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The ProductSku is empty. Set the ProductSku and try again.
+     * @return void
      */
-    public function testSaveCouldNotSaveException()
+    public function testSaveCouldNotSaveException(): void
     {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectExceptionMessage('The ProductSku is empty. Set the ProductSku and try again.');
         $this->optionMock->expects($this->once())->method('getProductSku')->willReturn(null);
         $this->optionRepository->save($this->optionMock);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     * @return void
      */
-    public function testSaveNoSuchEntityException()
+    public function testSaveNoSuchEntityException(): void
     {
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $productSku = 'simple_product';
         $optionId = 1;
         $productOptionId = 2;
@@ -229,7 +260,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->optionRepository->save($this->optionMock);
     }
 
-    public function testSave()
+    /**
+     * @return void
+     */
+    public function testSave(): void
     {
         $productSku = 'simple_product';
         $optionId = 1;
@@ -239,7 +273,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $originalValue2 = clone $originalValue1;
         $originalValue3 = clone $originalValue1;
 
-        $originalValue1->expects($this->at(0))->method('getData')->with('option_type_id')->willReturn(10);
+        $originalValue1
+            ->method('getData')
+            ->withConsecutive(['option_type_id'])
+            ->willReturnOnConsecutiveCalls(10);
         $originalValue1->expects($this->once())->method('setData')->with('is_delete', 1);
         $originalValue2->expects($this->once())->method('getData')->with('option_type_id')->willReturn(4);
         $originalValue3->expects($this->once())->method('getData')->with('option_type_id')->willReturn(5);
@@ -256,12 +293,12 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ['option_type_id' => 4],
             ['option_type_id' => 5]
         ]);
-        $optionCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Option\Collection::class)
+        $optionCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $optionCollection->expects($this->once())->method('getProductOptions')->willReturn([$this->optionMock]);
         $this->optionCollectionFactory->expects($this->once())->method('create')->willReturn($optionCollection);
-        $this->optionMock->expects($this->once())->method('getValues')->willReturn([
+        $this->optionMock->expects($this->exactly(2))->method('getValues')->willReturn([
             $originalValue1,
             $originalValue2,
             $originalValue3
@@ -269,7 +306,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->optionMock, $this->optionRepository->save($this->optionMock));
     }
 
-    public function testSaveWhenOptionTypeWasChanged()
+    /**
+     * @return void
+     */
+    public function testSaveWhenOptionTypeWasChanged(): void
     {
         $productSku = 'simple_product';
         $optionId = 1;
@@ -285,12 +325,12 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ['option_type_id' => 4],
             ['option_type_id' => 5]
         ]);
-        $optionCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Option\Collection::class)
+        $optionCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $optionCollection->expects($this->once())->method('getProductOptions')->willReturn([$this->optionMock]);
         $this->optionCollectionFactory->expects($this->once())->method('create')->willReturn($optionCollection);
-        $this->optionMock->expects($this->once())->method('getValues')->willReturn(null);
+        $this->optionMock->expects($this->exactly(2))->method('getValues')->willReturn(null);
         $this->assertEquals($this->optionMock, $this->optionRepository->save($this->optionMock));
     }
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdvancedAttributePropertiesSection">
+        <element name="AdvancedAttributePropertiesSectionToggle" type="button" selector="#advanced_fieldset-wrapper"/>
+        <element name="AttributeCode" type="text" selector="#attribute_code"/>
+        <element name="DefaultValueText" type="textarea" selector="#default_value_text"/>
+        <element name="DefaultValueTextArea" type="textarea" selector="#default_value_textarea"/>
+        <element name="DefaultValueDate" type="textarea" selector="#default_value_date"/>
+        <element name="defaultValueDatetime" type="date" selector="#default_value_datetime"/>
+        <element name="DefaultValueYesNo" type="textarea" selector="#default_value_yesno"/>
+        <element name="Scope" type="select" selector="#is_global"/>
+        <element name="UniqueValue" type="select" selector="#is_unique"/>
+        <element name="AddToColumnOptions" type="select" selector="#is_used_in_grid"/>
+        <element name="UseInFilterOptions" type="select" selector="#is_filterable_in_grid"/>
+        <element name="UseInProductListing" type="select" selector="#used_in_product_listing"/>
+        <element name="UseInSearch" type="select" selector="#is_searchable"/>
+        <element name="VisibleInAdvancedSearch" type="select" selector="#is_visible_in_advanced_search"/>
+    </section>
+</sections>

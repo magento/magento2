@@ -4,50 +4,70 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Swatches\Test\Unit\Controller\Ajax;
 
-/**
- * Class Media
- */
-class MediaTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\PageCache\Model\Config;
+use Magento\Swatches\Controller\Ajax\Media;
+use Magento\Swatches\Helper\Data;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class MediaTest extends TestCase
 {
     /** @var array */
     private $mediaGallery;
 
-    /** @var \Magento\Swatches\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Data|MockObject */
     private $swatchHelperMock;
 
-    /** @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProductFactory|MockObject */
     private $productModelFactoryMock;
 
-    /** @var \Magento\PageCache\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Config|MockObject */
     private $config;
 
-    /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Product|MockObject */
     private $productMock;
 
-    /** @var \Magento\Framework\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Context|MockObject */
     private $contextMock;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RequestInterface|MockObject */
     private $requestMock;
 
-    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ResponseInterface|MockObject */
     private $responseMock;
 
-    /** @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ResultFactory|MockObject */
     private $resultFactory;
 
-    /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Json|MockObject */
     private $jsonMock;
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var ObjectManager */
     private $objectManager;
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager|\Magento\Swatches\Controller\Ajax\Media */
+    /** @var ObjectManager|Media */
     private $controller;
 
-    protected function setUp()
+    /** @var int */
+    private $productId = 23;
+
+    /**
+     * @inheridoc
+     */
+    protected function setUp(): void
     {
         $this->mediaGallery = [
             'image' => '/m/a/magento.png',
@@ -56,35 +76,35 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             'swatch_image' => '/m/a/magento.png',
         ];
 
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->swatchHelperMock = $this->createMock(\Magento\Swatches\Helper\Data::class);
+        $this->swatchHelperMock = $this->createMock(Data::class);
         $this->productModelFactoryMock = $this->createPartialMock(
-            \Magento\Catalog\Model\ProductFactory::class,
+            ProductFactory::class,
             ['create']
         );
-        $this->config = $this->createMock(\Magento\PageCache\Model\Config::class);
+        $this->config = $this->createMock(Config::class);
         $this->config->method('getTtl')->willReturn(1);
 
-        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->contextMock = $this->createMock(\Magento\Framework\App\Action\Context::class);
+        $this->productMock = $this->createMock(Product::class);
+        $this->contextMock = $this->createMock(Context::class);
 
-        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->contextMock->method('getRequest')->willReturn($this->requestMock);
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
+        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setPublicHeaders'])
             ->getMockForAbstractClass();
         $this->responseMock->method('setPublicHeaders')->willReturnSelf();
         $this->contextMock->method('getResponse')->willReturn($this->responseMock);
-        $this->resultFactory = $this->createPartialMock(\Magento\Framework\Controller\ResultFactory::class, ['create']);
+        $this->resultFactory = $this->createPartialMock(ResultFactory::class, ['create']);
         $this->contextMock->method('getResultFactory')->willReturn($this->resultFactory);
 
-        $this->jsonMock = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
+        $this->jsonMock = $this->createMock(Json::class);
         $this->resultFactory->expects($this->once())->method('create')->with('json')->willReturn($this->jsonMock);
 
         $this->controller = $this->objectManager->getObject(
-            \Magento\Swatches\Controller\Ajax\Media::class,
+            Media::class,
             [
                 'context' => $this->contextMock,
                 'swatchHelper' => $this->swatchHelperMock,
@@ -94,23 +114,49 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testExecute()
+    /**
+     * Prepare product mock for test execution.
+     *
+     * @return void
+     */
+    private function prepareProductMock(): void
     {
-        $this->requestMock->expects($this->any())->method('getParam')->with('product_id')->willReturn(59);
+        $this->requestMock
+            ->expects($this->once())
+            ->method('getParam')
+            ->with('product_id')
+            ->willReturn($this->productId);
+        $this->productModelFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($this->productMock);
         $this->productMock
             ->expects($this->once())
             ->method('load')
-            ->with(59)
+            ->with($this->productId)
             ->willReturn($this->productMock);
         $this->productMock
             ->expects($this->once())
             ->method('getIdentities')
             ->willReturn(['tags']);
+    }
 
-        $this->productModelFactoryMock
+    /**
+     * Check that controller return media gallery for the product.
+     *
+     * @return void
+     */
+    public function testExecute()
+    {
+        $this->prepareProductMock();
+        $this->productMock
             ->expects($this->once())
-            ->method('create')
-            ->willReturn($this->productMock);
+            ->method('getId')
+            ->willReturn($this->productId);
+        $this->productMock
+            ->expects($this->once())
+            ->method('getStatus')
+            ->willReturn(Status::STATUS_ENABLED);
 
         $this->swatchHelperMock
             ->expects($this->once())
@@ -121,11 +167,61 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->jsonMock
             ->expects($this->once())
             ->method('setData')
-            ->with($this->mediaGallery)
-            ->will($this->returnSelf());
+            ->with($this->mediaGallery)->willReturnSelf();
 
         $result = $this->controller->execute();
 
-        $this->assertInstanceOf(\Magento\Framework\Controller\Result\Json::class, $result);
+        $this->assertInstanceOf(Json::class, $result);
+    }
+
+    /**
+     * Check that controller does not crash while taking the non-existing product.
+     *
+     * @return void
+     */
+    public function testExecuteNonExistingProduct()
+    {
+        $this->prepareProductMock();
+        $this->productMock
+            ->expects($this->once())
+            ->method('getId')
+            ->willReturn(null);
+
+        $this->jsonMock
+            ->expects($this->once())
+            ->method('setData')
+            ->with([])->willReturnSelf();
+
+        $result = $this->controller->execute();
+
+        $this->assertInstanceOf(Json::class, $result);
+    }
+
+    /**
+     * Check that controller does not return media gallery for disabled product.
+     *
+     * @return void
+     */
+    public function testExecuteDisabledProduct()
+    {
+        $this->prepareProductMock();
+        $this->productMock
+            ->expects($this->once())
+            ->method('getId')
+            ->willReturn($this->productId);
+
+        $this->productMock
+            ->expects($this->once())
+            ->method('getStatus')
+            ->willReturn(Status::STATUS_DISABLED);
+
+        $this->jsonMock
+            ->expects($this->once())
+            ->method('setData')
+            ->with([])->willReturnSelf();
+
+        $result = $this->controller->execute();
+
+        $this->assertInstanceOf(Json::class, $result);
     }
 }

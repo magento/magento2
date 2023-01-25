@@ -23,16 +23,16 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
     /**#@+
      * Auto tear down options in setFixture
      */
-    const AUTO_TEAR_DOWN_DISABLED = 0;
-    const AUTO_TEAR_DOWN_AFTER_METHOD = 1;
-    const AUTO_TEAR_DOWN_AFTER_CLASS = 2;
+    public const AUTO_TEAR_DOWN_DISABLED = 0;
+    public const AUTO_TEAR_DOWN_AFTER_METHOD = 1;
+    public const AUTO_TEAR_DOWN_AFTER_CLASS = 2;
     /**#@-*/
 
     /**#@+
      * Web API adapters that are used to perform actual calls.
      */
-    const ADAPTER_SOAP = 'soap';
-    const ADAPTER_REST = 'rest';
+    public const ADAPTER_SOAP = 'soap';
+    public const ADAPTER_REST = 'rest';
     /**#@-*/
 
     /**
@@ -105,7 +105,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      * Initialize fixture namespaces.
      * //phpcs:disable
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         //phpcs:enable
         parent::setUpBeforeClass();
@@ -118,7 +118,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      * @return void
      * //phpcs:disable
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         //phpcs:enable
         //clear garbage in memory
@@ -142,7 +142,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $fixtureNamespace = self::_getFixtureNamespace();
         if (isset(self::$_methodLevelFixtures[$fixtureNamespace])
@@ -258,10 +258,10 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      *
      * @param \Magento\Framework\Model\AbstractModel $model
      * @param bool $secure
-     * @return \Magento\TestFramework\TestCase\WebapiAbstract
+     * @return void
      * //phpcs:disable
      */
-    public static function callModelDelete($model, $secure = false)
+    public static function callModelDelete($model, $secure = false) : void
     {
         //phpcs:enable
         if ($model instanceof \Magento\Framework\Model\AbstractModel && $model->getId()) {
@@ -566,6 +566,9 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
     public function processRestExceptionResult(\Exception $e)
     {
         $error = json_decode($e->getMessage(), true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $error['message'] = $e->getMessage();
+        }
         //Remove line breaks and replace with space
         $error['message'] = trim(preg_replace('/\s+/', ' ', $error['message']));
         // remove trace and type, will only be present if server is in dev mode
@@ -592,7 +595,11 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
         $expectedWrappedErrors = [],
         $traceString = null
     ) {
-        $this->assertContains($expectedMessage, $soapFault->getMessage(), "Fault message is invalid.");
+        $this->assertStringContainsString(
+            $expectedMessage,
+            $soapFault->getMessage(),
+            "Fault message is invalid."
+        );
 
         $errorDetailsNode = 'GenericFault';
         $errorDetails = isset($soapFault->detail->$errorDetailsNode) ? $soapFault->detail->$errorDetailsNode : null;
@@ -611,7 +618,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
                 ->getMode();
             if ($mode == \Magento\Framework\App\State::MODE_DEVELOPER) {
                 /** Developer mode changes tested behavior and it cannot properly be tested for now */
-                $this->assertContains(
+                $this->assertStringContainsString(
                     $traceString,
                     $errorDetails->$traceNode,
                     'Trace Information is incorrect.'

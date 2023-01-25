@@ -3,33 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Validator\Test\Unit\Constraint;
+
+use Magento\Framework\DataObject;
+use Magento\Framework\Validator\Constraint\Property;
+use Magento\Framework\Validator\ValidatorInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for \Magento\Framework\Validator\Constraint\Property
  */
-class PropertyTest extends \PHPUnit\Framework\TestCase
+class PropertyTest extends TestCase
 {
     const PROPERTY_NAME = 'test';
 
     /**
-     * @var \Magento\Framework\Validator\Constraint\Property
+     * @var Property
      */
     protected $_constraint;
 
     /**
-     * @var \Magento\Framework\Validator\ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidatorInterface|MockObject
      */
     protected $_validatorMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_validatorMock = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
-        $this->_constraint = new \Magento\Framework\Validator\Constraint\Property(
+        $this->_validatorMock = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $this->_constraint = new Property(
             $this->_validatorMock,
             self::PROPERTY_NAME
         );
@@ -42,7 +49,7 @@ class PropertyTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEmpty($this->_constraint->getAlias());
         $alias = 'foo';
-        $constraint = new \Magento\Framework\Validator\Constraint\Property(
+        $constraint = new Property(
             $this->_validatorMock,
             self::PROPERTY_NAME,
             $alias
@@ -74,8 +81,8 @@ class PropertyTest extends \PHPUnit\Framework\TestCase
             'isValid'
         )->with(
             $validateValue
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
 
         if ($expectedResult) {
@@ -85,8 +92,8 @@ class PropertyTest extends \PHPUnit\Framework\TestCase
                 $this->once()
             )->method(
                 'getMessages'
-            )->will(
-                $this->returnValue($validatorMessages)
+            )->willReturn(
+                $validatorMessages
             );
         }
 
@@ -104,7 +111,7 @@ class PropertyTest extends \PHPUnit\Framework\TestCase
         return [
             [[self::PROPERTY_NAME => 'Property value', 'foo' => 'Foo value'], 'Property value', true],
             [
-                new \Magento\Framework\DataObject([self::PROPERTY_NAME => 'Property value']),
+                new DataObject([self::PROPERTY_NAME => 'Property value']),
                 'Property value',
                 true
             ],

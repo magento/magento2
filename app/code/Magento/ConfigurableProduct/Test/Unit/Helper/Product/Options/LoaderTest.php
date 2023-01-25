@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Helper\Product\Options;
 
 use Magento\Catalog\Model\Product;
@@ -13,12 +15,10 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class LoaderTest
- */
-class LoaderTest extends \PHPUnit\Framework\TestCase
+class LoaderTest extends TestCase
 {
     /**
      * @var OptionValueInterfaceFactory|MockObject
@@ -40,7 +40,7 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
      */
     private $loader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->optionValueFactory = $this->getMockBuilder(OptionValueInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -82,8 +82,10 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $attributes = [$attribute];
-        
-        $iterator = $this->getMockBuilder(Collection::class)->disableOriginalConstructor()->getMock();
+
+        $iterator = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $iterator->expects($this->once())->method('getIterator')
             ->willReturn(new \ArrayIterator($attributes));
 

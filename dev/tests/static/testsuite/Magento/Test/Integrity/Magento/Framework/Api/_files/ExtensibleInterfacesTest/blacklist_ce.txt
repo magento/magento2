@@ -2,3 +2,4 @@ module Magento_Payment Model/Info.php
 module Magento_Customer Model/Address/AbstractAddress.php
 library magento/framework MessageQueue/Rpc/Publisher.php
 module Magento_GraphQl Model/Query/ContextInterface.php
+module Magento_LoginAsCustomerApi Api/Data/AuthenticationDataInterface.php

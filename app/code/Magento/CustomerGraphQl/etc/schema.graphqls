@@ -1,144 +1,184 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
+type StoreConfig {
+    required_character_classes_number : String @doc(description: "The number of different character classes (lowercase, uppercase, digits, special characters) required in a password.")
+    minimum_password_length : String @doc(description: "The minimum number of characters required for a valid password.")
+    autocomplete_on_storefront : Boolean @doc(description: "Indicates whether to enable autocomplete on login and forgot password forms.")
+}
+
 type Query {
-    customer: Customer @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\Customer") @doc(description: "The customer query returns information about a customer account") @cache(cacheable: false)
+    customer: Customer @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\Customer") @doc(description: "Return detailed information about a customer account.") @cache(cacheable: false)
     isEmailAvailable (
-        email: String! @doc(description: "The new customer email")
-    ): IsEmailAvailableOutput @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\IsEmailAvailable")
+        email: String! @doc(description: "The email address to check.")
+    ): IsEmailAvailableOutput @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\IsEmailAvailable") @doc(description: "Check whether the specified email has already been used to create a customer account.")
 }
 
 type Mutation {
-    generateCustomerToken(email: String!, password: String!): CustomerToken @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\GenerateCustomerToken") @doc(description:"Retrieve the customer token")
-    changeCustomerPassword(currentPassword: String!, newPassword: String!): Customer @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\ChangePassword") @doc(description:"Changes the password for the logged-in customer")
-    createCustomer (input: CustomerInput!): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CreateCustomer") @doc(description:"Create customer account")
-    updateCustomer (input: CustomerInput!): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomer") @doc(description:"Update the customer's personal information")
-    revokeCustomerToken: RevokeCustomerTokenOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\RevokeCustomerToken") @doc(description:"Revoke the customer token")
-    createCustomerAddress(input: CustomerAddressInput!): CustomerAddress @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\CreateCustomerAddress") @doc(description: "Create customer address")
-    updateCustomerAddress(id: Int!, input: CustomerAddressInput): CustomerAddress @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomerAddress") @doc(description: "Update customer address")
-    deleteCustomerAddress(id: Int!): Boolean @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\DeleteCustomerAddress") @doc(description: "Delete customer address")
+    generateCustomerToken(email: String! @doc(description: "The customer's email address."), password: String! @doc(description: "The customer's password.")): CustomerToken @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\GenerateCustomerToken") @doc(description:"Generate a token for specified customer.")
+    changeCustomerPassword(currentPassword: String! @doc(description: "The customer's original password."), newPassword: String! @doc(description: "The customer's updated password.")): Customer @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\ChangePassword") @doc(description:"Change the password for the logged-in customer.")
+    createCustomer (input: CustomerInput! @doc(description: "An input object that defines the customer to be created.")): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CreateCustomer") @doc(description:"Use `createCustomerV2` instead.")
+    createCustomerV2 (input: CustomerCreateInput! @doc(description: "An input object that defines the customer to be created.")): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CreateCustomer") @doc(description:"Create a customer account.")
+    updateCustomer (input: CustomerInput! @doc(description: "An input object that defines the customer characteristics to update.")): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomer") @doc(description:"Use `updateCustomerV2` instead.")
+    updateCustomerV2 (input: CustomerUpdateInput! @doc(description: "An input object that defines the customer characteristics to update.")): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomer") @doc(description:"Update the customer's personal information.")
+    deleteCustomer: Boolean @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\DeleteCustomer") @doc(description:"Delete customer account")
+    revokeCustomerToken: RevokeCustomerTokenOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\RevokeCustomerToken") @doc(description:"Revoke the customer token.")
+    createCustomerAddress(input: CustomerAddressInput!): CustomerAddress @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\CreateCustomerAddress") @doc(description: "Create a billing or shipping address for a customer or guest.")
+    updateCustomerAddress(id: Int! @doc(description: "The ID assigned to the customer address."), input: CustomerAddressInput @doc(description: "An input object that contains changes to the customer address.")): CustomerAddress @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomerAddress") @doc(description: "Update the billing or shipping address of a customer or guest.")
+    deleteCustomerAddress(id: Int! @doc(description: "The ID of the customer address to be deleted.")): Boolean @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\DeleteCustomerAddress") @doc(description: "Delete the billing or shipping address of a customer.")
+    requestPasswordResetEmail(email: String! @doc(description: "The customer's email address.")): Boolean  @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\RequestPasswordResetEmail") @doc(description: "Request an email with a reset password token for the registered customer identified by the specified email.")
+    resetPassword(email: String! @doc(description: "The customer's email address."), resetPasswordToken: String! @doc(description: "A runtime token generated by the `requestPasswordResetEmail` mutation."), newPassword: String! @doc(description: "The customer's new password.")): Boolean  @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\ResetPassword") @doc(description: "Reset a customer's password using the reset password token that the customer received in an email after requesting it using `requestPasswordResetEmail`.")
+    updateCustomerEmail(email: String! @doc(description: "The customer's email address."), password: String! @doc(description: "The customer's password.")): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomerEmail") @doc(description: "Change the email address for the logged-in customer.")
 }
 
-input CustomerAddressInput {
-    firstname: String @doc(description: "The first name of the person associated with the shipping/billing address")
-    lastname: String @doc(description: "The family name of the person associated with the shipping/billing address")
-    company: String @doc(description: "The customer's company")
-    telephone: String @doc(description: "The telephone number")
-    street: [String] @doc(description: "An array of strings that define the street number and name")
-    city: String @doc(description: "The city or town")
-    region: CustomerAddressRegionInput @doc(description: "An object containing the region name, region code, and region ID")
-    postcode: String @doc(description: "The customer's ZIP or postal code")
+input CustomerAddressInput @doc(description: "Contains details about a billing or shipping address."){
+    firstname: String @doc(description: "The first name of the person associated with the billing/shipping address.")
+    lastname: String @doc(description: "The family name of the person associated with the billing/shipping address.")
+    company: String @doc(description: "The customer's company.")
+    telephone: String @doc(description: "The customer's telephone number.")
+    street: [String] @doc(description: "An array of strings that define the street number and name.")
+    city: String @doc(description: "The customer's city or town.")
+    region: CustomerAddressRegionInput @doc(description: "An object containing the region name, region code, and region ID.")
+    postcode: String @doc(description: "The customer's ZIP or postal code.")
     country_id: CountryCodeEnum @doc(description: "Deprecated: use `country_code` instead.")
-    country_code: CountryCodeEnum @doc(description: "The customer's country")
-    default_shipping: Boolean @doc(description: "Indicates whether the address is the default shipping address")
-    default_billing: Boolean @doc(description: "Indicates whether the address is the default billing address")
-    fax: String @doc(description: "The fax number")
-    middlename: String @doc(description: "The middle name of the person associated with the shipping/billing address")
+    country_code: CountryCodeEnum @doc(description: "The two-letter code representing the customer's country.")
+    default_shipping: Boolean @doc(description: "Indicates whether the address is the default shipping address.")
+    default_billing: Boolean @doc(description: "Indicates whether the address is the default billing address.")
+    fax: String @doc(description: "The customer's fax number.")
+    middlename: String @doc(description: "The middle name of the person associated with the billing/shipping address.")
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
-    suffix: String @doc(description: "A value such as Sr., Jr., or III")
-    vat_id: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
+    suffix: String @doc(description: "A value such as Sr., Jr., or III.")
+    vat_id: String @doc(description: "The customer's Tax/VAT number (for corporate customers).")
     custom_attributes: [CustomerAddressAttributeInput] @doc(description: "Deprecated: Custom attributes should not be put into container.")
 }
 
-input CustomerAddressRegionInput @doc(description: "CustomerAddressRegionInput defines the customer's state or province") {
-    region_code: String @doc(description: "The address region code")
-    region: String @doc(description: "The state or province name")
-    region_id: Int @doc(description: "region_id is deprecated. Region ID is excessive on storefront and region code should suffice for all scenarios")
+input CustomerAddressRegionInput @doc(description: "Defines the customer's state or province.") {
+    region_code: String @doc(description: "The address region code.")
+    region: String @doc(description: "The state or province name.")
+    region_id: Int @doc(description: "The unique ID for a pre-defined region.")
 }
 
-input CustomerAddressAttributeInput {
-    attribute_code: String! @doc(description: "Attribute code")
-    value: String! @doc(description: "Attribute value")
+input CustomerAddressAttributeInput @doc(description: "Specifies the attribute code and value of a customer attribute.") {
+    attribute_code: String! @doc(description: "The name assigned to the attribute.")
+    value: String! @doc(description: "The value assigned to the attribute.")
 }
 
-type CustomerToken {
-    token: String @doc(description: "The customer token")
+type CustomerToken @doc(description: "Contains a customer authorization token.") {
+    token: String @doc(description: "The customer authorization token.")
 }
 
-input CustomerInput {
+input CustomerInput @doc(description: "An input object that assigns or updates customer attributes.") {
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
-    firstname: String @doc(description: "The customer's first name")
-    middlename: String @doc(description: "The customer's middle name")
-    lastname: String @doc(description: "The customer's family name")
-    suffix: String @doc(description: "A value such as Sr., Jr., or III")
-    email: String @doc(description: "The customer's email address. Required for customer creation")
-    dob: String @doc(description: "Deprecated: Use `date_of_birth` instead")
-    date_of_birth: String @doc(description: "The customer's date of birth")
-    taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
-    gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2)")
-    password: String @doc(description: "The customer's password")
-    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter")
+    firstname: String @doc(description: "The customer's first name.")
+    middlename: String @doc(description: "The customer's middle name.")
+    lastname: String @doc(description: "The customer's family name.")
+    suffix: String @doc(description: "A value such as Sr., Jr., or III.")
+    email: String @doc(description: "The customer's email address. Required when creating a customer.")
+    dob: String @doc(description: "Deprecated: Use `date_of_birth` instead.")
+    date_of_birth: String @doc(description: "The customer's date of birth.")
+    taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers).")
+    gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2).")
+    password: String @doc(description: "The customer's password.")
+    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter.")
 }
 
-type CustomerOutput {
-    customer: Customer!
-}
-
-type RevokeCustomerTokenOutput {
-    result: Boolean!
-}
-
-type Customer @doc(description: "Customer defines the customer name and address and other details") {
-    created_at: String @doc(description: "Timestamp indicating when the account was created")
-    group_id: Int @deprecated(reason: "Customer group should not be exposed in the storefront scenarios")
+input CustomerCreateInput  @doc(description: "An input object for creating a customer.") {
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
-    firstname: String @doc(description: "The customer's first name")
-    middlename: String @doc(description: "The customer's middle name")
-    lastname: String @doc(description: "The customer's family name")
-    suffix: String @doc(description: "A value such as Sr., Jr., or III")
-    email: String @doc(description: "The customer's email address. Required")
-    default_billing: String @doc(description: "The ID assigned to the billing address")
-    default_shipping: String @doc(description: "The ID assigned to the shipping address")
-    dob: String @doc(description: "The customer's date of birth") @deprecated(reason: "Use `date_of_birth` instead")
-    date_of_birth: String @doc(description: "The customer's date of birth")
-    taxvat: String @doc(description: "The customer's Value-added tax (VAT) number (for corporate customers)")
-    id: Int @doc(description: "The ID assigned to the customer") @deprecated(reason: "id is not needed as part of Customer because on server side it can be identified based on customer token used for authentication. There is no need to know customer ID on the client side.")
-    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\IsSubscribed")
-    addresses: [CustomerAddress] @doc(description: "An array containing the customer's shipping and billing addresses") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddresses")
-    gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2)")
+    firstname: String! @doc(description: "The customer's first name.")
+    middlename: String @doc(description: "The customer's middle name.")
+    lastname: String! @doc(description: "The customer's family name.")
+    suffix: String @doc(description: "A value such as Sr., Jr., or III.")
+    email: String! @doc(description: "The customer's email address.")
+    dob: String @doc(description: "Deprecated: Use `date_of_birth` instead.")
+    date_of_birth: String @doc(description: "The customer's date of birth.")
+    taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers).")
+    gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2).")
+    password: String @doc(description: "The customer's password.")
+    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter.")
 }
 
-type CustomerAddress @doc(description: "CustomerAddress contains detailed information about a customer's billing and shipping addresses"){
-    id: Int @doc(description: "The ID assigned to the address object")
-    customer_id: Int @doc(description: "The customer ID") @deprecated(reason: "customer_id is not needed as part of CustomerAddress, address ID (id) is unique identifier for the addresses.")
-    region: CustomerAddressRegion @doc(description: "An object containing the region name, region code, and region ID")
-    region_id: Int @deprecated(reason: "Region ID is excessive on storefront and region code should suffice for all scenarios")
-    country_id: String @doc(description: "The customer's country") @deprecated(reason: "Use `country_code` instead.")
-    country_code: CountryCodeEnum @doc(description: "The customer's country")
-    street: [String] @doc(description: "An array of strings that define the street number and name")
-    company: String @doc(description: "The customer's company")
-    telephone: String @doc(description: "The telephone number")
-    fax: String @doc(description: "The fax number")
-    postcode: String @doc(description: "The customer's ZIP or postal code")
-    city: String @doc(description: "The city or town")
-    firstname: String @doc(description: "The first name of the person associated with the shipping/billing address")
-    lastname: String @doc(description: "The family name of the person associated with the shipping/billing address")
-    middlename: String @doc(description: "The middle name of the person associated with the shipping/billing address")
+input CustomerUpdateInput @doc(description: "An input object for updating a customer.") {
+    date_of_birth: String @doc(description: "The customer's date of birth.")
+    dob: String @doc(description: "Deprecated: Use `date_of_birth` instead.")
+    firstname: String @doc(description: "The customer's first name.")
+    gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2).")
+    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter.")
+    lastname: String @doc(description: "The customer's family name.")
+    middlename: String @doc(description: "The customer's middle name.")
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
-    suffix: String @doc(description: "A value such as Sr., Jr., or III")
-    vat_id: String @doc(description: "The customer's Value-added tax (VAT) number (for corporate customers)")
-    default_shipping: Boolean @doc(description: "Indicates whether the address is the default shipping address")
-    default_billing: Boolean @doc(description: "Indicates whether the address is the default billing address")
-    custom_attributes: [CustomerAddressAttribute] @deprecated(reason: "Custom attributes should not be put into container")
-    extension_attributes: [CustomerAddressAttribute] @doc(description: "Address extension attributes")
+    suffix: String @doc(description: "A value such as Sr., Jr., or III.")
+    taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers).")
 }
 
-type CustomerAddressRegion @doc(description: "CustomerAddressRegion defines the customer's state or province") {
-    region_code: String @doc(description: "The address region code")
-    region: String @doc(description: "The state or province name")
-    region_id: Int @deprecated(reason: "Region ID is excessive on storefront and region code should suffice for all scenarios")
+type CustomerOutput @doc(description: "Contains details about a newly-created or updated customer.") {
+    customer: Customer! @doc(description: "Customer details after creating or updating a customer.")
 }
 
-type CustomerAddressAttribute {
-     attribute_code: String @doc(description: "Attribute code")
-     value: String @doc(description: "Attribute value")
+type RevokeCustomerTokenOutput @doc(description: "Contains the result of a request to revoke a customer token.") {
+    result: Boolean! @doc(description: "The result of a request to revoke a customer token.")
 }
 
-type IsEmailAvailableOutput {
-    is_email_available: Boolean @doc(description: "Is email availabel value")
+type Customer @doc(description: "Defines the customer name, addresses, and other details.") {
+    created_at: String @doc(description: "Timestamp indicating when the account was created.")
+    group_id: Int @deprecated(reason: "Customer group should not be exposed in the storefront scenarios.")
+    prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
+    firstname: String @doc(description: "The customer's first name.")
+    middlename: String @doc(description: "The customer's middle name.")
+    lastname: String @doc(description: "The customer's family name.")
+    suffix: String @doc(description: "A value such as Sr., Jr., or III.")
+    email: String @doc(description: "The customer's email address. Required.")
+    default_billing: String @doc(description: "The ID assigned to the billing address.")
+    default_shipping: String @doc(description: "The ID assigned to the shipping address.")
+    dob: String @doc(description: "The customer's date of birth.") @deprecated(reason: "Use `date_of_birth` instead.")
+    date_of_birth: String @doc(description: "The customer's date of birth.")
+    taxvat: String @doc(description: "The customer's Value-added tax (VAT) number (for corporate customers).")
+    id: Int @doc(description: "The ID assigned to the customer.") @deprecated(reason: "`id` is not needed as part of `Customer`, because on the server side, it can be identified based on the customer token used for authentication. There is no need to know customer ID on the client side.")
+    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\IsSubscribed")
+    addresses: [CustomerAddress] @doc(description: "An array containing the customer's shipping and billing addresses.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddresses")
+    gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2).")
 }
 
-enum CountryCodeEnum @doc(description: "The list of countries codes") {
+type CustomerAddress @doc(description: "Contains detailed information about a customer's billing or shipping address."){
+    id: Int @doc(description: "The ID of a `CustomerAddress` object.")
+    customer_id: Int @doc(description: "The customer ID") @deprecated(reason: "`customer_id` is not needed as part of `CustomerAddress`. The `id` is a unique identifier for the addresses.")
+    region: CustomerAddressRegion @doc(description: "An object containing the region name, region code, and region ID.")
+    region_id: Int @doc(description: "The unique ID for a pre-defined region.")
+    country_id: String @doc(description: "The customer's country.") @deprecated(reason: "Use `country_code` instead.")
+    country_code: CountryCodeEnum @doc(description: "The customer's country.")
+    street: [String] @doc(description: "An array of strings that define the street number and name.")
+    company: String @doc(description: "The customer's company.")
+    telephone: String @doc(description: "The customer's telephone number.")
+    fax: String @doc(description: "The customer's fax number.")
+    postcode: String @doc(description: "The customer's ZIP or postal code.")
+    city: String @doc(description: "The customer's city or town.")
+    firstname: String @doc(description: "The first name of the person associated with the shipping/billing address.")
+    lastname: String @doc(description: "The family name of the person associated with the shipping/billing address.")
+    middlename: String @doc(description: "The middle name of the person associated with the shipping/billing address.")
+    prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
+    suffix: String @doc(description: "A value such as Sr., Jr., or III.")
+    vat_id: String @doc(description: "The customer's Value-added tax (VAT) number (for corporate customers).")
+    default_shipping: Boolean @doc(description: "Indicates whether the address is the customer's default shipping address.")
+    default_billing: Boolean @doc(description: "Indicates whether the address is the customer's default billing address.")
+    custom_attributes: [CustomerAddressAttribute] @deprecated(reason: "Custom attributes should not be put into a container.")
+    extension_attributes: [CustomerAddressAttribute] @doc(description: "Contains any extension attributes for the address.")
+}
+
+type CustomerAddressRegion @doc(description: "Defines the customer's state or province.") {
+    region_code: String @doc(description: "The address region code.")
+    region: String @doc(description: "The state or province name.")
+    region_id: Int @doc(description: "The unique ID for a pre-defined region.")
+}
+
+type CustomerAddressAttribute @doc(description: "Specifies the attribute code and value of a customer address attribute.") {
+     attribute_code: String @doc(description: "The name assigned to the customer address attribute.")
+     value: String @doc(description: "The valuue assigned to the customer address attribute.")
+}
+
+type IsEmailAvailableOutput @doc(description: "Contains the result of the `isEmailAvailable` query.") {
+    is_email_available: Boolean @doc(description: "Indicates whether the specified email address can be used to create a customer.")
+}
+
+enum CountryCodeEnum @doc(description: "The list of country codes.") {
     AF @doc(description: "Afghanistan")
     AX @doc(description: "Åland Islands")
     AL @doc(description: "Albania")

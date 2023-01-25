@@ -3,72 +3,83 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\CustomerData;
 
 use Magento\Catalog\Api\Data\ProductFrontendActionInterface;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Api\Data\ProductRenderSearchResultsInterface;
+use Magento\Catalog\CustomerData\ProductsRenderInfoSection;
+use Magento\Catalog\Model\Product\ProductFrontendAction\Synchronizer;
+use Magento\Catalog\Model\ProductRenderList;
 use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\EntityManager\Hydrator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductsRenderInfoSectionTest extends \PHPUnit\Framework\TestCase
+class ProductsRenderInfoSectionTest extends TestCase
 {
-    /** @var \Magento\Catalog\CustomerData\ProductsRenderInfoSection */
+    /** @var ProductsRenderInfoSection */
     protected $model;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StoreManager|MockObject */
     protected $storeManagerMock;
 
-    /** @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SearchCriteriaBuilder|MockObject */
     protected $searchCriteriaBuilderMock;
 
-    /** @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FilterBuilder|MockObject */
     protected $filterBuilderMock;
 
-    /** @var \Magento\Catalog\Model\ProductRenderList |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProductRenderList|MockObject */
     protected $productRenderRepositoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     protected $synchronizerMock;
 
-    /** @var \Magento\Framework\EntityManager\Hydrator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Hydrator|MockObject */
     protected $hydratorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManager::class)
+        $this->storeManagerMock = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->searchCriteriaBuilderMock = $this
-            ->getMockBuilder(\Magento\Framework\Api\SearchCriteriaBuilder::class)
+            ->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filterBuilderMock = $this->getMockBuilder(\Magento\Framework\Api\FilterBuilder::class)
+        $this->filterBuilderMock = $this->getMockBuilder(FilterBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->productRenderRepositoryMock = $this
-            ->getMockBuilder(\Magento\Catalog\Model\ProductRenderList::class)
+            ->getMockBuilder(ProductRenderList::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->synchronizerMock = $this
-            ->getMockBuilder(\Magento\Catalog\Model\Product\ProductFrontendAction\Synchronizer::class)
+            ->getMockBuilder(Synchronizer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->hydratorMock = $this->getMockBuilder(\Magento\Framework\EntityManager\Hydrator::class)
+        $this->hydratorMock = $this->getMockBuilder(Hydrator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\Catalog\CustomerData\ProductsRenderInfoSection::class,
+            ProductsRenderInfoSection::class,
             [
                 'storeManager' => $this->storeManagerMock,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
@@ -82,8 +93,8 @@ class ProductsRenderInfoSectionTest extends \PHPUnit\Framework\TestCase
 
     private function prepareProductIds()
     {
-        $actionFirst = $this->createMock(ProductFrontendActionInterface::class);
-        $actionSecond = $this->createMock(ProductFrontendActionInterface::class);
+        $actionFirst = $this->getMockForAbstractClass(ProductFrontendActionInterface::class);
+        $actionSecond = $this->getMockForAbstractClass(ProductFrontendActionInterface::class);
         $actions = [$actionFirst, $actionSecond];
         $this->synchronizerMock->expects($this->once())
             ->method('getAllActions')
@@ -98,8 +109,8 @@ class ProductsRenderInfoSectionTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSectionData()
     {
-        $productRender = $this->createMock(ProductRenderInterface::class);
-        $searchResult = $this->createMock(ProductRenderSearchResultsInterface::class);
+        $productRender = $this->getMockForAbstractClass(ProductRenderInterface::class);
+        $searchResult = $this->getMockForAbstractClass(ProductRenderSearchResultsInterface::class);
 
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()

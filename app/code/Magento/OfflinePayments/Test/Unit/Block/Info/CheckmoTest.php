@@ -3,22 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\OfflinePayments\Test\Unit\Block\Info;
 
 use Magento\Framework\View\Element\Template\Context;
 use Magento\OfflinePayments\Block\Info\Checkmo;
 use Magento\Payment\Model\Info;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * CheckmoTest contains list of test for block methods testing
  */
-class CheckmoTest extends \PHPUnit\Framework\TestCase
+class CheckmoTest extends TestCase
 {
     /**
      * @var Info|MockObject
      */
-    private $info;
+    private $infoMock;
 
     /**
      * @var Checkmo
@@ -26,45 +29,48 @@ class CheckmoTest extends \PHPUnit\Framework\TestCase
     private $block;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->addMethods([])
             ->getMock();
 
-        $this->info = $this->getMockBuilder(Info::class)
+        $this->infoMock = $this->getMockBuilder(Info::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAdditionalInformation'])
+            ->onlyMethods(['getAdditionalInformation'])
             ->getMock();
 
         $this->block = new Checkmo($context);
     }
 
     /**
-     * @covers \Magento\OfflinePayments\Block\Info\Checkmo::getPayableTo
      * @param array $details
      * @param string|null $expected
+     *
+     * @return void
      * @dataProvider getPayableToDataProvider
+     * @covers \Magento\OfflinePayments\Block\Info\Checkmo::getPayableTo
      */
-    public function testGetPayableTo($details, $expected)
+    public function testGetPayableTo($details, $expected): void
     {
-        $this->info->expects(static::at(0))
+        $this->infoMock
             ->method('getAdditionalInformation')
-            ->with('payable_to')
-            ->willReturn($details);
-        $this->block->setData('info', $this->info);
+            ->withConsecutive(['payable_to'])
+            ->willReturnOnConsecutiveCalls($details);
+        $this->block->setData('info', $this->infoMock);
 
         static::assertEquals($expected, $this->block->getPayableTo());
     }
 
     /**
-     * Get list of variations for payable configuration option testing
+     * Get list of variations for payable configuration option testing.
+     *
      * @return array
      */
-    public function getPayableToDataProvider()
+    public function getPayableToDataProvider(): array
     {
         return [
             ['payable_to' => 'payable', 'payable'],
@@ -73,27 +79,30 @@ class CheckmoTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Magento\OfflinePayments\Block\Info\Checkmo::getMailingAddress
      * @param array $details
      * @param string|null $expected
+     *
+     * @return void
      * @dataProvider getMailingAddressDataProvider
+     * @covers \Magento\OfflinePayments\Block\Info\Checkmo::getMailingAddress
      */
-    public function testGetMailingAddress($details, $expected)
+    public function testGetMailingAddress($details, $expected): void
     {
-        $this->info->expects(static::at(1))
+        $this->infoMock
             ->method('getAdditionalInformation')
-            ->with('mailing_address')
-            ->willReturn($details);
-        $this->block->setData('info', $this->info);
+            ->withConsecutive([], ['mailing_address'])
+            ->willReturnOnConsecutiveCalls(null, $details);
+        $this->block->setData('info', $this->infoMock);
 
         static::assertEquals($expected, $this->block->getMailingAddress());
     }
 
     /**
-     * Get list of variations for mailing address testing
+     * Get list of variations for mailing address testing.
+     *
      * @return array
      */
-    public function getMailingAddressDataProvider()
+    public function getMailingAddressDataProvider(): array
     {
         return [
             ['mailing_address' => 'blah@blah.com', 'blah@blah.com'],
@@ -102,16 +111,17 @@ class CheckmoTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
      * @covers \Magento\OfflinePayments\Block\Info\Checkmo::getMailingAddress
      */
-    public function testConvertAdditionalDataIsNeverCalled()
+    public function testConvertAdditionalDataIsNeverCalled(): void
     {
         $mailingAddress = 'blah@blah.com';
-        $this->info->expects(static::at(1))
+        $this->infoMock
             ->method('getAdditionalInformation')
-            ->with('mailing_address')
-            ->willReturn($mailingAddress);
-        $this->block->setData('info', $this->info);
+            ->withConsecutive([], ['mailing_address'])
+            ->willReturnOnConsecutiveCalls(null, $mailingAddress);
+        $this->block->setData('info', $this->infoMock);
 
         // First we set the property $this->_mailingAddress
         $this->block->getMailingAddress();

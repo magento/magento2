@@ -3,47 +3,60 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
 use Magento\CheckoutAgreements\Model\AgreementModeOptions;
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
+use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection;
+use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AgreementsProviderTest extends \PHPUnit\Framework\TestCase
+class AgreementsProviderTest extends TestCase
 {
     /**
-     * @var \Magento\CheckoutAgreements\Model\AgreementsProvider
+     * @var AgreementsProvider
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $agreementCollFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeManagerMock;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->agreementCollFactoryMock = $this->createPartialMock(
-            \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->model = $objectManager->getObject(
-            \Magento\CheckoutAgreements\Model\AgreementsProvider::class,
+            AgreementsProvider::class,
             [
                 'agreementCollectionFactory' => $this->agreementCollFactoryMock,
                 'storeManager' => $this->storeManagerMock,
@@ -52,7 +65,10 @@ class AgreementsProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetRequiredAgreementIdsIfAgreementsEnabled()
+    /**
+     * @return void
+     */
+    public function testGetRequiredAgreementIdsIfAgreementsEnabled(): void
     {
         $storeId = 100;
         $expectedResult = [1, 2, 3, 4, 5];
@@ -62,29 +78,28 @@ class AgreementsProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $agreementCollection = $this->createMock(
-            \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection::class
+            Collection::class
         );
         $this->agreementCollFactoryMock->expects($this->once())->method('create')->willReturn($agreementCollection);
 
-        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeMock = $this->createMock(Store::class);
         $storeMock->expects($this->once())->method('getId')->willReturn($storeId);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
         $agreementCollection->expects($this->once())->method('addStoreFilter')->with($storeId)->willReturnSelf();
-        $agreementCollection->expects($this->at(1))
+        $agreementCollection
             ->method('addFieldToFilter')
-            ->with('is_active', 1)
-            ->willReturnSelf();
-        $agreementCollection->expects($this->at(2))
-            ->method('addFieldToFilter')
-            ->with('mode', AgreementModeOptions::MODE_MANUAL)
-            ->willReturnSelf();
+            ->withConsecutive(['is_active', 1], ['mode', AgreementModeOptions::MODE_MANUAL])
+            ->willReturnOnConsecutiveCalls($agreementCollection, $agreementCollection);
         $agreementCollection->expects($this->once())->method('getAllIds')->willReturn($expectedResult);
 
         $this->assertEquals($expectedResult, $this->model->getRequiredAgreementIds());
     }
 
-    public function testGetRequiredAgreementIdsIfAgreementsDisabled()
+    /**
+     * @return void
+     */
+    public function testGetRequiredAgreementIdsIfAgreementsDisabled(): void
     {
         $expectedResult = [];
         $this->scopeConfigMock->expects($this->once())

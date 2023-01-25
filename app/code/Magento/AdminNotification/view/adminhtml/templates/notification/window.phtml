@@ -6,10 +6,10 @@
 
 /**
  * @see \Magento\AdminNotification\Block\Window
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
 <ul class="message-system-list"
-    style="display: none;"
     data-mage-init='{
         "Magento_Ui/js/modal/modal": {
             "autoOpen": true,
@@ -25,3 +25,4 @@
         </a>
     </li>
 </ul>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', '.message-system-list'); ?>

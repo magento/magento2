@@ -25,7 +25,7 @@ use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory as QuoteCollection
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Quote repository.
+ * Repository for quote entity.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -43,7 +43,7 @@ class QuoteRepository implements CartRepositoryInterface
 
     /**
      * @var QuoteFactory
-     * @deprecated
+     * @deprecated 101.1.2
      */
     protected $quoteFactory;
 
@@ -54,7 +54,7 @@ class QuoteRepository implements CartRepositoryInterface
 
     /**
      * @var QuoteCollection
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $quoteCollection;
 
@@ -134,8 +134,8 @@ class QuoteRepository implements CartRepositoryInterface
     {
         if (!isset($this->quotesById[$cartId])) {
             $quote = $this->loadQuote('loadByIdWithoutStore', 'cartId', $cartId, $sharedStoreIds);
-            $this->getLoadHandler()->load($quote);
             $this->quotesById[$cartId] = $quote;
+            $this->getLoadHandler()->load($quote);
         }
         return $this->quotesById[$cartId];
     }
@@ -146,10 +146,16 @@ class QuoteRepository implements CartRepositoryInterface
     public function getForCustomer($customerId, array $sharedStoreIds = [])
     {
         if (!isset($this->quotesByCustomerId[$customerId])) {
-            $quote = $this->loadQuote('loadByCustomer', 'customerId', $customerId, $sharedStoreIds);
-            $this->getLoadHandler()->load($quote);
-            $this->quotesById[$quote->getId()] = $quote;
-            $this->quotesByCustomerId[$customerId] = $quote;
+            $customerQuote = $this->loadQuote('loadByCustomer', 'customerId', $customerId, $sharedStoreIds);
+            $customerQuoteId = $customerQuote->getId();
+            //prevent loading quote items for same quote
+            if (isset($this->quotesById[$customerQuoteId])) {
+                $customerQuote = $this->quotesById[$customerQuoteId];
+            } else {
+                $this->getLoadHandler()->load($customerQuote);
+            }
+            $this->quotesById[$customerQuoteId] = $customerQuote;
+            $this->quotesByCustomerId[$customerId] = $customerQuote;
         }
         return $this->quotesByCustomerId[$customerId];
     }
@@ -261,7 +267,7 @@ class QuoteRepository implements CartRepositoryInterface
      * @param FilterGroup $filterGroup The filter group.
      * @param QuoteCollection $collection The quote collection.
      * @return void
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @throws InputException The specified filter group or quote collection does not exist.
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, QuoteCollection $collection)

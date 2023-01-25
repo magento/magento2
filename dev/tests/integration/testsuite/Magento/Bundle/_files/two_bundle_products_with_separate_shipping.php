@@ -14,8 +14,9 @@ use Magento\Catalog\Model\Product\Type as BundleProductType;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/multiple_products.php';
+Resolver::getInstance()->requireDataFixture('Magento/Bundle/_files/multiple_products.php');
 
 $objectManager = Bootstrap::getObjectManager();
 
@@ -65,12 +66,40 @@ $bundleProduct->setTypeId(BundleProductType::TYPE_BUNDLE)
     )->setBundleSelectionsData(
         [
             [
-                ['product_id' => 10, 'selection_qty' => 1, 'selection_can_change_qty' => 1, 'delete' => ''],
-                ['product_id' => 11, 'selection_qty' => 1, 'selection_can_change_qty' => 1, 'delete' => ''],
+                [
+                    'product_id' => 10,
+                    'selection_qty' => 1,
+                    'selection_can_change_qty' => 1,
+                    'delete' => '',
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
+                ],
+                [
+                    'product_id' => 11,
+                    'selection_qty' => 1,
+                    'selection_can_change_qty' => 1,
+                    'delete' => '',
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
+                ],
             ],
             [
-                ['product_id' => 12, 'selection_qty' => 1, 'selection_can_change_qty' => 1, 'delete' => ''],
-                ['product_id' => 13, 'selection_qty' => 1, 'selection_can_change_qty' => 1, 'delete' => ''],
+                [
+                    'product_id' => 12,
+                    'selection_qty' => 1,
+                    'selection_can_change_qty' => 1,
+                    'delete' => '',
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
+                ],
+                [
+                    'product_id' => 13,
+                    'selection_qty' => 1,
+                    'selection_can_change_qty' => 1,
+                    'delete' => '',
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
+                ],
             ],
         ]
     );
@@ -98,6 +127,8 @@ foreach ([$bundleProduct, $bundleProduct2] as $product) {
                             $linkProduct = $productRepository->getById($linkData['product_id']);
                             $link->setSku($linkProduct->getSku());
                             $link->setQty($linkData['selection_qty']);
+                            $link->setPriceType($linkData['selection_price_type']);
+                            $link->setPrice($linkData['selection_price_value']);
                             $links[] = $link;
                         }
                     }

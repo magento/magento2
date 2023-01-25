@@ -3,26 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit;
 
-class ScopeResolverPoolTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\App\ScopeResolverPool;
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class ScopeResolverPoolTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $_helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->_helper = new ObjectManager($this);
     }
 
     public function testGet()
     {
-        $scope = $this->createMock(\Magento\Framework\App\ScopeResolverInterface::class);
+        $scope = $this->getMockForAbstractClass(ScopeResolverInterface::class);
         $scopeResolver = $this->_helper->getObject(
-            \Magento\Framework\App\ScopeResolverPool::class,
+            ScopeResolverPool::class,
             [
                 'scopeResolvers' => ['test' => $scope]
             ]
@@ -34,16 +41,16 @@ class ScopeResolverPoolTest extends \PHPUnit\Framework\TestCase
      * @param string $scope
      *
      * @covers \Magento\Framework\App\ScopeResolverPool::get()
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid scope type
      * @dataProvider testGetExceptionDataProvider
      */
     public function testGetException($scope)
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Invalid scope type');
         $scopeResolver = $this->_helper->getObject(
-            \Magento\Framework\App\ScopeResolverPool::class,
+            ScopeResolverPool::class,
             [
-                'scopeResolvers' => ['test' => new \Magento\Framework\DataObject()]
+                'scopeResolvers' => ['test' => new DataObject()]
             ]
         );
         $scopeResolver->get($scope);

@@ -12,9 +12,6 @@
         <annotations>
             <description>Requires navigation to the Category creation/edit page. Click on the Upload button. Validates that the Image exists.</description>
         </annotations>
-        <arguments>
-            <argument name="image" defaultValue="ProductImage"/>
-        </arguments>
 
         <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.uploadButton}}" visible="false" stepKey="openContentSection"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>

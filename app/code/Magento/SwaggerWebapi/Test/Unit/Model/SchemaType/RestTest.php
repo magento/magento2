@@ -10,18 +10,20 @@ namespace Magento\SwaggerWebapi\Test\Unit\Model\SchemaType;
 
 use Magento\Swagger\Api\Data\SchemaTypeInterface;
 use Magento\SwaggerWebapi\Model\SchemaType\Rest;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RestTest extends \PHPUnit\Framework\TestCase
+class RestTest extends TestCase
 {
     /**
-     * @var SchemaTypeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SchemaTypeInterface|MockObject
      */
     private $rest;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->rest = new Rest('rest');
     }

@@ -3,25 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Model\Config\Backend;
 
-class ManagestockTest extends \PHPUnit\Framework\TestCase
+use Magento\CatalogInventory\Model\Config\Backend\Managestock;
+use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ManagestockTest extends TestCase
 {
-    /** @var  \Magento\CatalogInventory\Model\Indexer\Stock\Processor|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $configMock;
+
+    /** @var  Processor|MockObject */
     protected $stockIndexerProcessor;
 
-    /** @var \Magento\CatalogInventory\Model\Config\Backend\Managestock */
+    /** @var Managestock */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stockIndexerProcessor = $this->getMockBuilder(
-            \Magento\CatalogInventory\Model\Indexer\Stock\Processor::class
-        )->disableOriginalConstructor()->getMock();
-        $this->model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            \Magento\CatalogInventory\Model\Config\Backend\Managestock::class,
+            Processor::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->model = (new ObjectManager($this))->getObject(
+            Managestock::class,
             [
-                'stockIndexerProcessor' => $this->stockIndexerProcessor,
+                'config' => $this->configMock,
+                'stockIndexerProcessor' => $this->stockIndexerProcessor
             ]
         );
     }
@@ -48,6 +68,8 @@ class ManagestockTest extends \PHPUnit\Framework\TestCase
     {
         $this->model->setValue($newStockValue);
         $this->stockIndexerProcessor->expects($this->exactly($callCount))->method('markIndexerAsInvalid');
+        $this->configMock->method('getValue')->willReturn(0);   // old value for stock status
+
         $this->model->afterSave();
     }
 }

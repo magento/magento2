@@ -10,7 +10,7 @@ class FileSystemReaderTest extends \PHPUnit\Framework\TestCase
     /** @var  FilesystemReader */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $fileResolver = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\Search\Request\Config\FileResolverStub::class

@@ -26,7 +26,7 @@ class HttpPluginTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->httpPlugin = new HttpPlugin();

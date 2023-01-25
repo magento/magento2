@@ -24,7 +24,7 @@ class EnvironmentPlaceholderTest extends \PHPUnit\Framework\TestCase
      */
     private $env = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $this->objectManager->get(EnvironmentPlaceholder::class);
@@ -96,7 +96,7 @@ class EnvironmentPlaceholderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $_ENV = $this->env;
     }

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductOptionsTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="View configurable product details in storefront"/>
+            <title value="Guest customer should be able to see product configuration options"/>
+            <description value="Guest customer should be able to see product configuration options"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-92"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Create a configurable product via the UI -->
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersVirtual"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterVirtual">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyGridFilterVirtual"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteVirtualProducts">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Verify configurable product options in storefront product view -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="amOnConfigurableProductPage">
+            <argument name="productUrlKey" value="{{_defaultProduct.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeProductName">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectOption1">
+            <argument name="attributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            <argument name="optionLabel" value="{{colorProductAttribute1.name}}"/>
+        </actionGroup>
+        <dontSee userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeProductPriceLabel1"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeProductPrice1">
+            <argument name="productPrice" value="1.00"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectOption2">
+            <argument name="attributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            <argument name="optionLabel" value="{{colorProductAttribute2.name}}"/>
+        </actionGroup>
+        <dontSee userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeProductPriceLabel2"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeProductPrice2">
+            <argument name="productPrice" value="2.00"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectOption3">
+            <argument name="attributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            <argument name="optionLabel" value="{{colorProductAttribute3.name}}"/>
+        </actionGroup>
+        <dontSee userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeProductPriceLabel3"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeProductPrice3">
+            <argument name="productPrice" value="3.00"/>
+        </actionGroup>
+    </test>
+</tests>

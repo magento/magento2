@@ -13,7 +13,7 @@ use Magento\Framework\App\RequestInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * AssociatedProductsTest
+ * Test verifies modifier for configurable associated product
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -32,7 +32,7 @@ class AssociatedProductsTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->registry = $this->objectManager->get(\Magento\Framework\Registry::class);
@@ -48,8 +48,8 @@ class AssociatedProductsTest extends TestCase
     {
         $productSku = 'configurable';
         $associatedProductsData = [
-            [10 => '10.000'],
-            [20 => '20.000']
+            [10 => '10.000000'],
+            [20 => '20.000000']
         ];
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
@@ -58,7 +58,7 @@ class AssociatedProductsTest extends TestCase
         $store = $this->objectManager->create(\Magento\Store\Model\Store::class);
         $store->load('admin');
         $this->registry->register('current_store', $store);
-        /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject $localeResolver */
+        /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject $localeResolver */
         $localeResolver = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
             ->setMethods(['getLocale'])
             ->getMockForAbstractClass();
@@ -124,6 +124,45 @@ class AssociatedProductsTest extends TestCase
             $skus,
             'Only products with specified attribute should be in product list'
         );
+    }
+
+    /**
+     * Test that ASSOCIATED_PRODUCT_LISTING component uses POST to retrieve data
+     *
+     * @return void
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoAppArea adminhtml
+     */
+    public function testUiComponentAssociatedProductListingConfig()
+    {
+        /** @var RequestInterface $request */
+        $request = $this->objectManager->get(RequestInterface::class);
+        $request->setParams([
+            FilterModifier::FILTER_MODIFIER => [
+                'test_configurable' => [
+                    'condition_type' => 'notnull',
+                ],
+            ],
+            'attributes_codes' => [
+                'test_configurable'
+            ],
+        ]);
+        $context = $this->objectManager->create(ContextInterface::class, ['request' => $request]);
+        /** @var UiComponentFactory $uiComponentFactory */
+        $uiComponentFactory = $this->objectManager->get(UiComponentFactory::class);
+        $uiComponent = $uiComponentFactory->create(
+            ConfigurablePanel::ASSOCIATED_PRODUCT_LISTING,
+            null,
+            ['context' => $context]
+        );
+
+        foreach ($uiComponent->getChildComponents() as $childUiComponent) {
+            $childUiComponent->prepare();
+        }
+        $dataSourceConfig = $uiComponent->getContext()->getDataProvider()->getConfigData();
+        $dataSourceRequestConfig = $dataSourceConfig['storageConfig']['requestConfig'];
+        $this->assertIsArray($dataSourceRequestConfig);
+        $this->assertEquals('POST', $dataSourceRequestConfig['method']);
     }
 
     /**

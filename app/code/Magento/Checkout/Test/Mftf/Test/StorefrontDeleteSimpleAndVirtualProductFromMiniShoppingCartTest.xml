@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <!--Create  simple product-->
             <createData entity="SimpleProduct2" stepKey="simpleProduct">
                 <field key="price">10.00</field>
@@ -40,15 +40,14 @@
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
         <!-- Add virtual Product to the cart -->
-        <amOnPage url="{{StorefrontProductPage.url($$virtualProduct.name$$)}}" stepKey="amOnStorefrontVirtualProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$virtualProduct.custom_attributes[url_key]$$)}}" stepKey="amOnStorefrontVirtualProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct1ToTheCart">
             <argument name="productName" value="$$virtualProduct.name$$"/>
         </actionGroup>
 
         <!-- Assert Simple and Virtual products in mini cart -->
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
-        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProductInMiniCart">
             <argument name="productName" value="$$simpleProduct.name$$"/>
             <argument name="productPrice" value="$10.00"/>

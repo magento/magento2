@@ -3,16 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
 /** Create category */
-require dirname(dirname(__DIR__)) . '/Catalog/_files/category.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/category.php');
 /** Create category with special chars */
-require dirname(dirname(__DIR__)) . '/Catalog/_files/catalog_category_with_slash.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/catalog_category_with_slash.php');
 /** Create fixture store */
-require dirname(dirname(__DIR__)) . '/Store/_files/second_store.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store.php');
 /** Create product with multiselect attribute and values */
-require dirname(dirname(__DIR__)) . '/Catalog/_files/products_with_multiselect_attribute.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/products_with_multiselect_attribute.php');
 /** Create dummy text attribute */
-require dirname(dirname(__DIR__)) . '/Catalog/_files/product_text_attribute.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_text_attribute.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

@@ -8,7 +8,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="cms_block" resource="default" engine="innodb" comment="CMS Block Table">
-        <column xsi:type="smallint" name="block_id" padding="6" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="smallint" name="block_id" unsigned="false" nullable="false" identity="true"
                 comment="Entity ID"/>
         <column xsi:type="varchar" name="title" nullable="false" length="255" comment="Block Title"/>
         <column xsi:type="varchar" name="identifier" nullable="false" length="255" comment="Block String Identifier"/>
@@ -17,11 +17,14 @@
                 comment="Block Creation Time"/>
         <column xsi:type="timestamp" name="update_time" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Block Modification Time"/>
-        <column xsi:type="smallint" name="is_active" padding="6" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="smallint" name="is_active" unsigned="false" nullable="false" identity="false"
                 default="1" comment="Is Block Active"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="block_id"/>
         </constraint>
+        <index referenceId="CMS_BLOCK_IDENTIFIER" indexType="btree">
+            <column name="identifier"/>
+        </index>
         <index referenceId="CMS_BLOCK_TITLE_IDENTIFIER_CONTENT" indexType="fulltext">
             <column name="title"/>
             <column name="identifier"/>
@@ -29,8 +32,8 @@
         </index>
     </table>
     <table name="cms_block_store" resource="default" engine="innodb" comment="CMS Block To Store Linkage Table">
-        <column xsi:type="smallint" name="block_id" padding="6" unsigned="false" nullable="false" identity="false"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="block_id" unsigned="false" nullable="false" identity="false"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" identity="false"
                 comment="Store ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="block_id"/>
@@ -45,7 +48,7 @@
         </index>
     </table>
     <table name="cms_page" resource="default" engine="innodb" comment="CMS Page Table">
-        <column xsi:type="smallint" name="page_id" padding="6" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="smallint" name="page_id" unsigned="false" nullable="false" identity="true"
                 comment="Entity ID"/>
         <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Page Title"/>
         <column xsi:type="varchar" name="page_layout" nullable="true" length="255" comment="Page Layout"/>
@@ -58,9 +61,9 @@
                 comment="Page Creation Time"/>
         <column xsi:type="timestamp" name="update_time" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Page Modification Time"/>
-        <column xsi:type="smallint" name="is_active" padding="6" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="smallint" name="is_active" unsigned="false" nullable="false" identity="false"
                 default="1" comment="Is Page Active"/>
-        <column xsi:type="smallint" name="sort_order" padding="6" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="smallint" name="sort_order" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Page Sort Order"/>
         <column xsi:type="text" name="layout_update_xml" nullable="true" comment="Page Layout Update Content"/>
         <column xsi:type="varchar" name="custom_theme" nullable="true" length="100" comment="Page Custom Theme"/>
@@ -88,9 +91,9 @@
         </index>
     </table>
     <table name="cms_page_store" resource="default" engine="innodb" comment="CMS Page To Store Linkage Table">
-        <column xsi:type="smallint" name="page_id" padding="6" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="smallint" name="page_id" unsigned="false" nullable="false" identity="false"
                 comment="Entity ID"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" identity="false"
                 comment="Store ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="page_id"/>

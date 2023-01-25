@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminCategoryGridPageDetailsActionGroup">
+        <arguments>
+            <argument name="category"/>
+        </arguments>
+        <annotations>
+            <description>Assert category grid page name and path column values for a specific category</description>
+        </annotations>
+
+        <grabTextFrom selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.columnValue('Name')}}" stepKey="grabNameColumnValue"/>
+        <assertEquals stepKey="assertNameColumn">
+            <expectedResult type="string">$$category.name$$</expectedResult>
+            <actualResult type="variable">grabNameColumnValue</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.columnValue('Path')}}" stepKey="grabPathColumnValue"/>
+        <assertStringContainsString stepKey="assertPathColumn">
+            <expectedResult type="string">$$category.name$$</expectedResult>
+            <actualResult type="variable">grabPathColumnValue</actualResult>
+        </assertStringContainsString>
+    </actionGroup>
+</actionGroups>

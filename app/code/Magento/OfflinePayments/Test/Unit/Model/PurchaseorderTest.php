@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\OfflinePayments\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OfflinePayments\Model\Purchaseorder;
 use Magento\Payment\Helper\Data as PaymentHelper;
@@ -15,34 +18,36 @@ use Magento\Payment\Model\Info as PaymentInfo;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Payment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class PurchaseorderTest extends \PHPUnit\Framework\TestCase
+class PurchaseorderTest extends TestCase
 {
     /**
      * @var Purchaseorder
      */
-    protected $_object;
+    private $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
-    protected $_scopeConfig;
+    private $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
-        $eventManager = $this->createMock(EventManagerInterface::class);
+        $eventManager = $this->getMockForAbstractClass(EventManagerInterface::class);
         $paymentDataMock = $this->createMock(PaymentHelper::class);
-        $this->_scopeConfig = $this->createPartialMock(
+        $this->scopeConfigMock = $this->createPartialMock(
             ScopeConfigInterface::class,
             ['getValue', 'isSetFlag']
         );
-        $this->_object = $objectManagerHelper->getObject(
+        $this->object = $objectManagerHelper->getObject(
             Purchaseorder::class,
             [
                 'eventManager' => $eventManager,
                 'paymentData' => $paymentDataMock,
-                'scopeConfig' => $this->_scopeConfig,
+                'scopeConfig' => $this->scopeConfigMock,
             ]
         );
     }
@@ -54,32 +59,29 @@ class PurchaseorderTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $instance = $this->createMock(PaymentInfo::class);
-        $this->_object->setData('info_instance', $instance);
-        $result = $this->_object->assignData($data);
-        $this->assertEquals($result, $this->_object);
+        $this->object->setData('info_instance', $instance);
+        $result = $this->object->assignData($data);
+        $this->assertEquals($result, $this->object);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Purchase order number is a required field.
-     */
     public function testValidate()
     {
         $data = new DataObject([]);
 
-        $addressMock = $this->createMock(OrderAddressInterface::class);
+        $addressMock = $this->getMockForAbstractClass(OrderAddressInterface::class);
         $addressMock->expects($this->once())->method('getCountryId')->willReturn('UY');
 
-        $orderMock = $this->createMock(OrderInterface::class);
+        $orderMock = $this->getMockForAbstractClass(OrderInterface::class);
         $orderMock->expects($this->once())->method('getBillingAddress')->willReturn($addressMock);
 
         $instance = $this->createMock(Payment::class);
 
         $instance->expects($this->once())->method('getOrder')->willReturn($orderMock);
 
-        $this->_object->setData('info_instance', $instance);
-        $this->_object->assignData($data);
+        $this->object->setData('info_instance', $instance);
+        $this->object->assignData($data);
 
-        $this->_object->validate();
+        $result = $this->object->validate();
+        $this->assertEquals($result, $this->object);
     }
 }

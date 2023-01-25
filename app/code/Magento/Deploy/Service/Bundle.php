@@ -27,17 +27,17 @@ class Bundle
     /**
      * Path to package subdirectory where bundle files are located
      */
-    const BUNDLE_JS_DIR = 'js/bundle';
+    public const BUNDLE_JS_DIR = 'js/bundle';
 
     /**
      * Matched file extension name for JavaScript files
      */
-    const ASSET_TYPE_JS = 'js';
+    public const ASSET_TYPE_JS = 'js';
 
     /**
      * Matched file extension name for template files
      */
-    const ASSET_TYPE_HTML = 'html';
+    public const ASSET_TYPE_HTML = 'html';
 
     /**
      * Public static directory writable interface
@@ -84,13 +84,15 @@ class Bundle
     private $file;
 
     /**
-     * Bundle constructor
-     *
+     * @var BundleConfig
+     */
+    private $bundleConfig;
+
+    /**
      * @param Filesystem $filesystem
      * @param BundleInterfaceFactory $bundleFactory
      * @param BundleConfig $bundleConfig
      * @param Files $files
-     *
      * @param File|null $file
      *
      * @throws \Magento\Framework\Exception\FileSystemException
@@ -155,7 +157,7 @@ class Bundle
                     . '/' . $sourcePath['locale']
                     . '/' . $filePath;
             } else {
-                $sourcePath = str_replace('\\', '/', $sourcePath);
+                $sourcePath = str_replace('\\', '/', $sourcePath ?? '');
                 $sourcePath = $this->pubStaticDir->getRelativePath($sourcePath);
                 $filePath = substr($sourcePath, strlen($area . '/' . $theme . '/' . $locale) + 1);
             }
@@ -239,7 +241,7 @@ class Bundle
      */
     private function prepareExcludePath($path)
     {
-        if (strpos($path, Repository::FILE_ID_SEPARATOR) !== false) {
+        if ($path !== null && strpos($path, Repository::FILE_ID_SEPARATOR) !== false) {
             list($excludedModule, $excludedPath) = explode(Repository::FILE_ID_SEPARATOR, $path);
             if ($excludedModule == 'Lib') {
                 return $excludedPath;

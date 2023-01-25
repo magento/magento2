@@ -21,7 +21,7 @@
             <argument name="description" type="string"/>
         </arguments>
 
-        <amOnPage url="{{AdminUrlRewriteEditPage.url}}" stepKey="openUrlRewriteEditPage"/>
+        <amOnPage url="{{AdminUrlRewriteEditPage.url('')}}" stepKey="openUrlRewriteEditPage"/>
         <waitForPageLoad stepKey="waitForUrlRewriteEditPageToLoad" after="openUrlRewriteEditPage"/>
         <click selector="{{AdminUrlRewriteEditSection.createCustomUrlRewrite}}" stepKey="clickOnCustonUrlRewrite"/>
         <click selector="{{AdminUrlRewriteEditSection.createCustomUrlRewriteValue('customUrlRewriteValue')}}" stepKey="selectCustom"/>
@@ -33,6 +33,6 @@
         <click selector="{{AdminUrlRewriteEditSection.redirectTypeValue('redirectTypeValue')}}" stepKey="selectRedirectTypeValue"/>
         <fillField selector="{{AdminUrlRewriteEditSection.description}}" userInput="{{description}}" stepKey="fillDescription"/>
         <click selector="{{AdminUrlRewriteEditSection.saveButton}}" stepKey="clickOnSaveButton"/>
-        <seeElement selector="{{AdminMessagesSection.successMessage}}" stepKey="seeSuccessSaveMessage"/>
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="seeSuccessSaveMessage"/>
     </actionGroup>
 </actionGroups>

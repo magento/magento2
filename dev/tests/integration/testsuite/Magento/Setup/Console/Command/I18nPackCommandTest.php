@@ -22,13 +22,13 @@ class I18nPackCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $tester;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->command = new I18nPackCommand();
         $this->tester = new CommandTester($this->command);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->removeCsv('A');
         $this->removeCsv('B');
@@ -63,11 +63,12 @@ class I18nPackCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Cannot open dictionary file:
      */
     public function testExecuteNonExistingPath()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot open dictionary file:');
+
         $nonExistPath = BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/non_exist.csv';
         $this->tester->execute(
             [
@@ -79,11 +80,12 @@ class I18nPackCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Possible values for 'mode' option are 'replace' and 'merge'
      */
     public function testExecuteInvalidMode()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Possible values for \'mode\' option are \'replace\' and \'merge\'');
+
         $this->tester->execute(
             [
                 'source' => BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/i18n.csv',

@@ -25,20 +25,20 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
      */
     private $mageState;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         /** @var \Magento\Framework\App\DeploymentConfig $config */
         $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\DeploymentConfig::class);
         self::$typesConfig = $config->get(State::CACHE_KEY);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->mageState = Bootstrap::getObjectManager()->get(AppState::class)->getMode();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Bootstrap::getObjectManager()->get(AppState::class)->setMode($this->mageState);
         /** @var $cacheState \Magento\Framework\App\Cache\StateInterface */

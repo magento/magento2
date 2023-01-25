@@ -17,7 +17,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
      */
     protected $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\View\LayoutInterface::class
@@ -39,7 +39,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $category = $this->createPartialMock(\Magento\Catalog\Model\Category::class, ['getAvailableSortByOptions']);
         $category->expects($this->atLeastOnce())
             ->method('getAvailableSortByOptions')
-            ->will($this->returnValue($sortOptions));
+            ->willReturn($sortOptions);
         $category->setId(100500); // Any id - just for layer navigation
         /** @var \Magento\Catalog\Model\Layer\Resolver $resolver */
         $resolver = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

@@ -38,6 +38,8 @@ class Adjustment extends AbstractAdjustment
     }
 
     /**
+     * Apply the right HTML output to the adjustment
+     *
      * @return string
      */
     protected function apply()
@@ -172,5 +174,16 @@ class Adjustment extends AbstractAdjustment
     public function displayPriceExcludingTax()
     {
         return $this->taxHelper->displayPriceExcludingTax();
+    }
+
+    /**
+     * Obtain a value for data-price-type attribute
+     *
+     * @return string
+     */
+    public function getDataPriceType(): string
+    {
+        $priceType = $this->amountRender->getPriceType();
+        return $priceType === 'finalPrice' ? 'basePrice' : ($priceType ? 'base' . ucfirst($priceType) : '');
     }
 }

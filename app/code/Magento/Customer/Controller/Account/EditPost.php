@@ -4,10 +4,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Customer\Model\AddressRegistry;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Model\AuthenticationInterface;
@@ -27,13 +29,17 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\Phrase;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
- * Class EditPost
+ * Customer edit account information controller
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EditPost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface
@@ -69,7 +75,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
     protected $session;
 
     /**
-     * @var \Magento\Customer\Model\EmailNotificationInterface
+     * @var EmailNotificationInterface
      */
     private $emailNotification;
 
@@ -94,6 +100,16 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
     private $addressRegistry;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var SessionCleanerInterface|null
+     */
+    private $sessionCleaner;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement
@@ -102,6 +118,8 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      * @param CustomerExtractor $customerExtractor
      * @param Escaper|null $escaper
      * @param AddressRegistry|null $addressRegistry
+     * @param Filesystem $filesystem
+     * @param SessionCleanerInterface|null $sessionCleaner
      */
     public function __construct(
         Context $context,
@@ -111,7 +129,9 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         Validator $formKeyValidator,
         CustomerExtractor $customerExtractor,
         ?Escaper $escaper = null,
-        AddressRegistry $addressRegistry = null
+        AddressRegistry $addressRegistry = null,
+        Filesystem $filesystem = null,
+        ?SessionCleanerInterface $sessionCleaner = null
     ) {
         parent::__construct($context);
         $this->session = $customerSession;
@@ -121,6 +141,8 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         $this->customerExtractor = $customerExtractor;
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
         $this->addressRegistry = $addressRegistry ?: ObjectManager::getInstance()->get(AddressRegistry::class);
+        $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(Filesystem::class);
+        $this->sessionCleaner = $sessionCleaner ?: ObjectManager::getInstance()->get(SessionCleanerInterface::class);
     }
 
     /**
@@ -132,9 +154,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
     {
 
         if (!($this->authentication instanceof AuthenticationInterface)) {
-            return ObjectManager::getInstance()->get(
-                \Magento\Customer\Model\AuthenticationInterface::class
-            );
+            return ObjectManager::getInstance()->get(AuthenticationInterface::class);
         } else {
             return $this->authentication;
         }
@@ -149,9 +169,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
     private function getEmailNotification()
     {
         if (!($this->emailNotification instanceof EmailNotificationInterface)) {
-            return ObjectManager::getInstance()->get(
-                EmailNotificationInterface::class
-            );
+            return ObjectManager::getInstance()->get(EmailNotificationInterface::class);
         } else {
             return $this->emailNotification;
         }
@@ -160,9 +178,8 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
     /**
      * @inheritDoc
      */
-    public function createCsrfValidationException(
-        RequestInterface $request
-    ): ?InvalidRequestException {
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
         /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('*/*/edit');
@@ -184,11 +201,12 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
     /**
      * Change customer email or password action
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return Redirect
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         $validFormKey = $this->formKeyValidator->validate($this->getRequest());
 
@@ -199,9 +217,17 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
                 $currentCustomerDataObject
             );
 
+            $attributeToDelete = $this->_request->getParam('delete_attribute_value');
+            if ($attributeToDelete !== null) {
+                $this->deleteCustomerFileAttribute(
+                    $customerCandidateDataObject,
+                    $attributeToDelete
+                );
+            }
+
             try {
                 // whether a customer enabled change email option
-                $this->processChangeEmailRequest($currentCustomerDataObject);
+                $isEmailChanged = $this->processChangeEmailRequest($currentCustomerDataObject);
 
                 // whether a customer enabled change password option
                 $isPasswordChanged = $this->changeCustomerPassword($currentCustomerDataObject->getEmail());
@@ -217,6 +243,12 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
                 );
                 $this->dispatchSuccessEvent($customerCandidateDataObject);
                 $this->messageManager->addSuccessMessage(__('You saved the account information.'));
+                // logout from current session if password or email changed.
+                if ($isPasswordChanged || $isEmailChanged) {
+                    $this->session->logout();
+                    $this->session->start();
+                    return $resultRedirect->setPath('customer/account/login');
+                }
                 return $resultRedirect->setPath('customer/account');
             } catch (InvalidEmailOrPasswordException $e) {
                 $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
@@ -228,13 +260,14 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
                 $this->session->logout();
                 $this->session->start();
                 $this->messageManager->addErrorMessage($message);
+
                 return $resultRedirect->setPath('customer/account/login');
             } catch (InputException $e) {
                 $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
                 foreach ($e->getErrors() as $error) {
                     $this->messageManager->addErrorMessage($this->escaper->escapeHtml($error->getMessage()));
                 }
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('We can\'t save the customer.'));
@@ -246,16 +279,17 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('*/*/edit');
+
         return $resultRedirect;
     }
 
     /**
      * Account editing action completed successfully event
      *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customerCandidateDataObject
+     * @param CustomerInterface $customerCandidateDataObject
      * @return void
      */
-    private function dispatchSuccessEvent(\Magento\Customer\Api\Data\CustomerInterface $customerCandidateDataObject)
+    private function dispatchSuccessEvent(CustomerInterface $customerCandidateDataObject)
     {
         $this->_eventManager->dispatch(
             'customer_account_edited',
@@ -268,7 +302,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      *
      * @param int $customerId
      *
-     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @return CustomerInterface
      */
     private function getCustomerDataObject($customerId)
     {
@@ -278,13 +312,13 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
     /**
      * Create Data Transfer Object of customer candidate
      *
-     * @param \Magento\Framework\App\RequestInterface $inputData
-     * @param \Magento\Customer\Api\Data\CustomerInterface $currentCustomerData
-     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @param RequestInterface $inputData
+     * @param CustomerInterface $currentCustomerData
+     * @return CustomerInterface
      */
     private function populateNewCustomerDataObject(
-        \Magento\Framework\App\RequestInterface $inputData,
-        \Magento\Customer\Api\Data\CustomerInterface $currentCustomerData
+        RequestInterface $inputData,
+        CustomerInterface $currentCustomerData
     ) {
         $attributeValues = $this->getCustomerMapper()->toFlatArray($currentCustomerData);
         $customerDto = $this->customerExtractor->extract(
@@ -330,12 +364,12 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
     /**
      * Process change email request
      *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $currentCustomerDataObject
-     * @return void
+     * @param CustomerInterface $currentCustomerDataObject
+     * @return bool
      * @throws InvalidEmailOrPasswordException
      * @throws UserLockedException
      */
-    private function processChangeEmailRequest(\Magento\Customer\Api\Data\CustomerInterface $currentCustomerDataObject)
+    private function processChangeEmailRequest(CustomerInterface $currentCustomerDataObject)
     {
         if ($this->getRequest()->getParam('change_email')) {
             // authenticate user for changing email
@@ -344,12 +378,15 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
                     $currentCustomerDataObject->getId(),
                     $this->getRequest()->getPost('current_password')
                 );
+                $this->sessionCleaner->clearFor((int) $currentCustomerDataObject->getId());
+                return true;
             } catch (InvalidEmailOrPasswordException $e) {
                 throw new InvalidEmailOrPasswordException(
                     __("The password doesn't match this account. Verify the password and try again.")
                 );
             }
         }
+        return false;
     }
 
     /**
@@ -362,7 +399,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
     private function getCustomerMapper()
     {
         if ($this->customerMapper === null) {
-            $this->customerMapper = ObjectManager::getInstance()->get(\Magento\Customer\Model\Customer\Mapper::class);
+            $this->customerMapper = ObjectManager::getInstance()->get(Mapper::class);
         }
         return $this->customerMapper;
     }
@@ -378,6 +415,43 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         foreach ($customer->getAddresses() as $address) {
             $addressModel = $this->addressRegistry->retrieve($address->getId());
             $addressModel->setShouldIgnoreValidation(true);
+        }
+    }
+
+    /**
+     * Removes file attribute from customer entity and file from filesystem
+     *
+     * @param CustomerInterface $customerCandidateDataObject
+     * @param string $attributeToDelete
+     * @return void
+     */
+    private function deleteCustomerFileAttribute(
+        CustomerInterface $customerCandidateDataObject,
+        string $attributeToDelete
+    ) : void {
+        if ($attributeToDelete !== '') {
+            if (strpos($attributeToDelete, ',') !== false) {
+                $attributes = explode(',', $attributeToDelete);
+            } else {
+                $attributes[] = $attributeToDelete;
+            }
+            foreach ($attributes as $attr) {
+                $attributeValue = $customerCandidateDataObject->getCustomAttribute($attr);
+                if ($attributeValue!== null) {
+                    if ($attributeValue->getValue() !== '') {
+                        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+                        $fileName = $attributeValue->getValue();
+                        $path = $mediaDirectory->getAbsolutePath('customer' . $fileName);
+                        if ($fileName && $mediaDirectory->isFile($path)) {
+                            $mediaDirectory->delete($path);
+                        }
+                        $customerCandidateDataObject->setCustomAttribute(
+                            $attr,
+                            ''
+                        );
+                    }
+                }
+            }
         }
     }
 }

@@ -3,29 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Block\Backend;
 
-class ContainerTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Block\Widget\Button\ButtonList;
+use Magento\Backend\Block\Widget\Context;
+use Magento\Framework\UrlInterface;
+use Magento\Indexer\Block\Backend\Container;
+use PHPUnit\Framework\TestCase;
+
+class ContainerTest extends TestCase
 {
     public function testPseudoConstruct()
     {
         $headerText = __('Indexer Management');
         $buttonList = $this->createPartialMock(
-            \Magento\Backend\Block\Widget\Button\ButtonList::class,
+            ButtonList::class,
             ['remove', 'add']
         );
         $buttonList->expects($this->once())->method('add');
         $buttonList->expects($this->once())->method('remove')->with('add');
-        $urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $contextMock = $this->createPartialMock(
-            \Magento\Backend\Block\Widget\Context::class,
+            Context::class,
             ['getUrlBuilder', 'getButtonList']
         );
 
-        $contextMock->expects($this->once())->method('getUrlBuilder')->will($this->returnValue($urlBuilderMock));
-        $contextMock->expects($this->once())->method('getButtonList')->will($this->returnValue($buttonList));
+        $contextMock->expects($this->once())->method('getUrlBuilder')->willReturn($urlBuilderMock);
+        $contextMock->expects($this->once())->method('getButtonList')->willReturn($buttonList);
 
-        $block = new \Magento\Indexer\Block\Backend\Container($contextMock);
+        $block = new Container($contextMock);
 
         $this->assertEquals($block->getHeaderText(), $headerText);
     }

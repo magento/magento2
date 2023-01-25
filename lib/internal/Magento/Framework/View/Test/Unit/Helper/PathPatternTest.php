@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Helper;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Helper\PathPattern;
+use PHPUnit\Framework\TestCase;
 
-class PathPatternTest extends \PHPUnit\Framework\TestCase
+class PathPatternTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Helper\PathPattern
+     * @var PathPattern
      */
     protected $pathPatternHelper;
 
@@ -19,11 +23,11 @@ class PathPatternTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->pathPatternHelper = $this->objectManagerHelper->getObject(
-            \Magento\Framework\View\Helper\PathPattern::class
+            PathPattern::class
         );
     }
 

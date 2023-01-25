@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontProductPageOpenImageFullscreenActionGroup">
+        <annotations>
+            <description>Finds image of the product in thumbnails and open a full-screen review.</description>
+        </annotations>
+        <arguments>
+            <argument name="imageNumber" type="string" defaultValue="2"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnail(imageNumber)}}" stepKey="waitThumbnailAppears"/>
+        <conditionalClick selector="{{StorefrontProductMediaSection.fotoramaImageThumbnail(imageNumber)}}" dependentSelector="{{StorefrontProductMediaSection.fotoramaImageThumbnailActive(imageNumber)}}" visible="false" stepKey="clickOnThumbnailImage"/>
+        <click selector="{{StorefrontProductMediaSection.gallery}}" stepKey="openFullScreenPage"/>
+        <waitForPageLoad stepKey="waitForFullScreen"/>
+    </actionGroup>
+</actionGroups>

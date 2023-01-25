@@ -56,7 +56,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->taxRateService = $objectManager->get(\Magento\Tax\Api\TaxRateRepositoryInterface::class);
@@ -75,7 +75,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
         $this->getFixtureTaxRules();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $taxRules = $this->getFixtureTaxRules();
         if (count($taxRules)) {
@@ -126,7 +126,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $data);
             $this->fail('Expected exception was not raised');
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 'SoapFault does not contain expected message.'
@@ -164,7 +164,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $data);
             $this->fail('Expected exception was not raised');
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 'SOAP-ERROR: Encoding: object has no \'rate\' property',
                 $e->getMessage(),
                 'SoapFault does not contain expected message.'
@@ -369,7 +369,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
         } catch (\Exception $e) {
             $expectedMessage = 'No such entity with %fieldName = %fieldValue';
 
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Exception does not contain expected message."
@@ -426,7 +426,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
         } catch (\Exception $e) {
             $expectedMessage = 'No such entity with %fieldName = %fieldValue';
 
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Exception does not contain expected message."
@@ -493,7 +493,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
         } catch (\Exception $e) {
             $expectedMessage = "The tax rate can't be removed because it exists in a tax rule.";
 
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Exception does not contain expected message."

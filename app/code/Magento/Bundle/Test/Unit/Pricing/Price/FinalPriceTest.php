@@ -3,121 +3,156 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
-use Magento\Bundle\Pricing\Price\BundleOptionPrice;
-use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Bundle\Model\Product\Price;
+use Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface;
+use Magento\Bundle\Pricing\Price\BundleOptionPrice;
+use Magento\Bundle\Pricing\Price\FinalPrice;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\PriceInfo\Base;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * @SuppressWarnings(PHPMD)
+ * Test class for \Magento\Bundle\Pricing\Price\FinalPrice
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FinalPriceTest extends \PHPUnit\Framework\TestCase
+class FinalPriceTest extends TestCase
 {
-    /** @var \Magento\Bundle\Pricing\Price\FinalPrice */
-    protected $finalPrice;
-
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
-
-    /** @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $saleableInterfaceMock;
-
-    /** @var float */
-    protected $quantity = 1.;
-
-    /** @var float*/
-    protected $baseAmount;
-
-    /** @var \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $bundleCalculatorMock;
-
-    /** @var \Magento\Framework\Pricing\PriceInfo\Base |\PHPUnit_Framework_MockObject_MockObject */
-    protected $priceInfoMock;
-
-    /** @var \Magento\Catalog\Pricing\Price\BasePrice|\PHPUnit_Framework_MockObject_MockObject */
-    protected $basePriceMock;
-
-    /** @var BundleOptionPrice|\PHPUnit_Framework_MockObject_MockObject */
-    protected $bundleOptionMock;
-
-    /** @var CustomOptionPrice|\PHPUnit_Framework_MockObject_MockObject */
-    protected $customOptionPriceMock;
-
     /**
-     * @var PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FinalPrice
      */
-    protected $priceCurrencyMock;
+    private $finalPrice;
 
     /**
-     * @var ProductCustomOptionRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
+
+    /**
+     * @var SaleableInterface|MockObject
+     */
+    private $saleableInterfaceMock;
+
+    /**
+     * @var float
+     */
+    private $quantity = 1.;
+
+    /**
+     * @var BundleCalculatorInterface|MockObject
+     */
+    private $bundleCalculatorMock;
+
+    /**
+     * @var PriceCurrencyInterface|MockObject
+     */
+    private $priceCurrencyMock;
+
+    /**
+     * @var ProductCustomOptionRepositoryInterface|MockObject
      */
     private $productOptionRepositoryMock;
+
+    /**
+     * @var float
+     */
+    private $baseAmount;
+
+    /**
+     * @var Base|MockObject
+     */
+    private $priceInfoMock;
+
+    /**
+     * @var BasePrice|MockObject
+     */
+    private $basePriceMock;
+
+    /**
+     * @var BundleOptionPrice|MockObject
+     */
+    private $bundleOptionMock;
+
+    /**
+     * @var CustomOptionPrice|MockObject
+     */
+    private $customOptionPriceMock;
 
     /**
      * @return void
      */
     protected function prepareMock()
     {
-        $this->saleableInterfaceMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $this->saleableInterfaceMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPriceType', 'getPriceInfo'])
             ->getMock();
         $this->bundleCalculatorMock = $this->createMock(
-            \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface::class
+            BundleCalculatorInterface::class
         );
 
-        $this->basePriceMock = $this->createMock(\Magento\Catalog\Pricing\Price\BasePrice::class);
-        $this->basePriceMock->expects($this->any())
-            ->method('getValue')
-            ->will($this->returnValue($this->baseAmount));
+        $this->basePriceMock = $this->createMock(BasePrice::class);
+        $this->basePriceMock->method('getValue')
+            ->willReturn($this->baseAmount);
 
-        $this->bundleOptionMock = $this->getMockBuilder(\Magento\Bundle\Pricing\Price\BundleOptionPrice::class)
+        $this->bundleOptionMock = $this->getMockBuilder(BundleOptionPrice::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->customOptionPriceMock = $this->getMockBuilder(\Magento\Catalog\Pricing\Price\CustomOptionPrice::class)
+        $this->customOptionPriceMock = $this->getMockBuilder(CustomOptionPrice::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->priceInfoMock = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
+        $this->priceInfoMock = $this->createMock(Base::class);
 
         $this->priceInfoMock->expects($this->atLeastOnce())
             ->method('getPrice')
-            ->will($this->returnValueMap([
-                [\Magento\Catalog\Pricing\Price\BasePrice::PRICE_CODE, $this->basePriceMock],
-                [BundleOptionPrice::PRICE_CODE, $this->bundleOptionMock],
-                [CustomOptionPrice::PRICE_CODE, $this->customOptionPriceMock],
-            ]));
+            ->willReturnMap(
+                [
+                    [BasePrice::PRICE_CODE, $this->basePriceMock],
+                    [BundleOptionPrice::PRICE_CODE, $this->bundleOptionMock],
+                    [CustomOptionPrice::PRICE_CODE, $this->customOptionPriceMock],
+                ]
+            );
 
         $this->saleableInterfaceMock->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfoMock));
+            ->willReturn($this->priceInfoMock);
 
-        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
-
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->finalPrice = new \Magento\Bundle\Pricing\Price\FinalPrice(
-            $this->saleableInterfaceMock,
-            $this->quantity,
-            $this->bundleCalculatorMock,
-            $this->priceCurrencyMock
-        );
-
+        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $this->productOptionRepositoryMock = $this->getMockForAbstractClass(
             ProductCustomOptionRepositoryInterface::class
         );
-        $reflection = new \ReflectionClass(get_class($this->finalPrice));
-        $reflectionProperty = $reflection->getProperty('productOptionRepository');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->finalPrice, $this->productOptionRepositoryMock);
+
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->finalPrice = $this->objectManagerHelper->getObject(
+            FinalPrice::class,
+            [
+                'saleableItem' => $this->saleableInterfaceMock,
+                'quantity' => $this->quantity,
+                'calculator' => $this->bundleCalculatorMock,
+                'priceCurrency' => $this->priceCurrencyMock,
+                'productOptionRepository' => $this->productOptionRepositoryMock
+            ]
+        );
     }
 
     /**
+     * @param $baseAmount
+     * @param $optionsValue
+     * @param $result
      * @dataProvider getValueDataProvider
      */
     public function testGetValue($baseAmount, $optionsValue, $result)
@@ -126,7 +161,7 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
         $this->prepareMock();
         $this->bundleOptionMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($optionsValue));
+            ->willReturn($optionsValue);
 
         $this->assertSame($result, $this->finalPrice->getValue());
     }
@@ -144,6 +179,7 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param $baseAmount
      * @dataProvider getValueDataProvider
      */
     public function testGetMaximalPrice($baseAmount)
@@ -154,8 +190,8 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getMaxAmount')
-            ->with($this->equalTo($this->baseAmount), $this->equalTo($this->saleableInterfaceMock))
-            ->will($this->returnValue($result));
+            ->with($this->baseAmount, $this->saleableInterfaceMock)
+            ->willReturn($result);
         $this->assertSame($result, $this->finalPrice->getMaximalPrice());
         //The second call should use cached value
         $this->assertSame($result, $this->finalPrice->getMaximalPrice());
@@ -178,8 +214,8 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getMaxAmount')
-            ->with($this->equalTo($this->baseAmount + $optionMaxPrice), $this->equalTo($this->saleableInterfaceMock))
-            ->will($this->returnValue($result));
+            ->with($this->baseAmount + $optionMaxPrice, $this->saleableInterfaceMock)
+            ->willReturn($result);
         $this->assertSame($result, $this->finalPrice->getMaximalPrice());
         //The second call should use cached value
         $this->assertSame($result, $this->finalPrice->getMaximalPrice());
@@ -192,7 +228,7 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
         $result = 7;
         $this->prepareMock();
         $customOptions = [
-            $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductCustomOptionInterface::class)
+            $this->getMockBuilder(ProductCustomOptionInterface::class)
                 ->setMethods(['setProduct'])
                 ->getMockForAbstractClass()
         ];
@@ -212,8 +248,8 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getAmount')
-            ->with($this->equalTo($this->baseAmount + $optionMaxPrice), $this->equalTo($this->saleableInterfaceMock))
-            ->will($this->returnValue($result));
+            ->with($this->baseAmount + $optionMaxPrice, $this->saleableInterfaceMock)
+            ->willReturn($result);
         $this->assertSame($result, $this->finalPrice->getMinimalPrice());
         //The second call should use cached value
         $this->assertSame($result, $this->finalPrice->getMinimalPrice());
@@ -230,8 +266,8 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getAmount')
-            ->with($this->equalTo($this->baseAmount), $this->equalTo($this->saleableInterfaceMock))
-            ->will($this->returnValue($result));
+            ->with($this->baseAmount, $this->saleableInterfaceMock)
+            ->willReturn($result);
         $this->assertSame($result, $this->finalPrice->getMinimalPrice());
         //The second call should use cached value
         $this->assertSame($result, $this->finalPrice->getMinimalPrice());
@@ -243,8 +279,8 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
         $this->prepareMock();
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getAmountWithoutOption')
-            ->with($this->equalTo($this->baseAmount), $this->equalTo($this->saleableInterfaceMock))
-            ->will($this->returnValue($result));
+            ->with($this->baseAmount, $this->saleableInterfaceMock)
+            ->willReturn($result);
         $this->assertSame($result, $this->finalPrice->getPriceWithoutOption());
         //The second call should use cached value
         $this->assertSame($result, $this->finalPrice->getPriceWithoutOption());

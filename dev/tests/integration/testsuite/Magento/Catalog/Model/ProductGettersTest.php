@@ -31,7 +31,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
      */
     private $productRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product::class
@@ -225,6 +225,25 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
+     */
+    public function testMultipleMultiselectTextValues()
+    {
+        $expectedArray = [];
+
+        for ($i = 1; $i < 200; $i++) {
+            $expectedArray[] = sprintf('Multiselect option %d', $i);
+        }
+
+        $product = $this->productRepository->get('simple_ms_3');
+
+        self::assertEquals(
+            $expectedArray,
+            $product->getAttributeText('multiselect_attribute_text')
+        );
+    }
+
     public function testGetCustomDesignDate()
     {
         $this->assertEquals(['from' => null, 'to' => null], $this->_model->getCustomDesignDate());
@@ -260,7 +279,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
     {
         $setId = $this->_model->getDefaultAttributeSetId();
         $this->assertNotEmpty($setId);
-        $this->assertRegExp('/^[0-9]+$/', $setId);
+        $this->assertMatchesRegularExpression('/^[0-9]+$/', $setId);
     }
 
     public function testGetPreconfiguredValues()
@@ -270,7 +289,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test', $this->_model->getPreconfiguredValues());
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $mediaDirectory = $objectManager->get(

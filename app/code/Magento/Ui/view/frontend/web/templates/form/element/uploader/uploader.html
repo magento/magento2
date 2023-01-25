@@ -10,28 +10,28 @@
         <div class="file-uploader-area">
             <input type="file" afterRender="onElementRender" attr="id: uid, name: inputName, multiple: isMultipleFiles"
                    disable="disabled"/>
-            <label class="file-uploader-button action-default" attr="for: uid" translate="'Upload'"/>
+            <label class="file-uploader-button action-default" attr="for: uid" translate="'Upload'"></label>
 
-            <span class="file-uploader-spinner"/>
-            <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
+            <span class="file-uploader-spinner"></span>
+            <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"></render>
         </div>
 
-        <render args="tooltipTpl" if="$data.tooltip"/>
+        <render args="tooltipTpl" if="$data.tooltip"></render>
 
         <div class="field-note" if="$data.notice" attr="id: noticeId">
-            <span html="notice"/>
+            <span><strong translate="NOTE"></strong>: <translate args="$data.notice"></translate></span>
         </div>
 
-        <each args="data: value, as: '$file'" render="$parent.getPreviewTmpl($file)"/>
+        <each args="data: value, as: '$file'" render="$parent.getPreviewTmpl($file)"></each>
 
         <div if="isMultipleFiles" class="file-uploader-summary">
             <label attr="for: uid"
                    class="file-uploader-placeholder"
                    css="'placeholder-' + placeholderType">
                     <span class="file-uploader-placeholder-text"
-                          translate="'Click here or drag and drop to add files.'"/>
+                          translate="'Click here or drag and drop to add files.'"></span>
             </label>
         </div>
     </div>
-    <render args="$data.service.template" if="$data.hasService()"/>
+    <render args="$data.service.template" if="$data.hasService()"></render>
 </div>

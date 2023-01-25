@@ -18,8 +18,8 @@ use Magento\Framework\Phrase\Renderer\Translate;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Translation\Model\Js\Config;
 use Magento\Translation\Model\Js\DataProvider as ModelDataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Verify data provider translation
@@ -61,7 +61,7 @@ class DataProviderTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->appStateMock = $this->createMock(State::class);
         $this->configMock = $this->createMock(Config::class);
@@ -92,6 +92,7 @@ class DataProviderTest extends TestCase
      * Verify data translate.
      *
      * @param array $config
+     *
      * @return void
      * @dataProvider configDataProvider
      */
@@ -121,11 +122,14 @@ class DataProviderTest extends TestCase
             ->method('getStaticHtmlFiles')
             ->willReturnMap($staticFilesMap);
 
-        foreach ($config['contentsMap'] as $index => $content) {
-            $this->fileReadMock->expects($this->at($index))
-                ->method('readAll')
-                ->willReturn($content);
+        $willReturn = [];
+
+        foreach ($config['contentsMap'] as $content) {
+            $willReturn[] = $content;
         }
+        $this->fileReadMock
+            ->method('readAll')
+            ->willReturnOnConsecutiveCalls(...$willReturn);
 
         $this->configMock->expects($this->any())
             ->method('getPatterns')
@@ -147,12 +151,13 @@ class DataProviderTest extends TestCase
      * Verify get data throwing exception.
      *
      * @param array $config
+     *
      * @return void
      * @dataProvider configDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetDataThrowingException(array $config): void
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $themePath = 'blank';
         $areaCode = 'adminhtml';
         $patterns = $config['patterns'];
@@ -194,7 +199,7 @@ class DataProviderTest extends TestCase
                         '~(?:i18n\:|_\.i18n\()\s*(["\'])(.*?)(?<!\\\\)\1~',
                         '~translate\=("\')([^\'].*?)\'\"~',
                         '~(?s)\$t\(\s*([\'"])(\?\<translate\>.+?)(?<!\\\)\1\s*(*SKIP)\)(?s)~',
-                        '~translate args\=("|\'|"\'|\\\"\')([^\'].*?)(\'\\\"|\'"|\'|")~',
+                        '~translate args\=("|\'|"\'|\\\"\')([^\'].*?)(\'\\\"|\'"|\'|")~'
                     ],
                     'expectedResult' => [
                         'hello1' => 'hello1translated',
@@ -202,13 +207,13 @@ class DataProviderTest extends TestCase
                         'hello3' => 'hello3translated',
                         'hello4' => 'hello4translated',
                         'ko i18' => 'ko i18 translated',
-                        'underscore i18' => 'underscore i18 translated',
+                        'underscore i18' => 'underscore i18 translated'
                     ],
                     'contentsMap' => [
                         'content1$.mage.__("hello1")content1',
                         'content2$.mage.__("hello2")content2',
                         'content2$.mage.__("hello4")content4 <!-- ko i18n: "ko i18" --><!-- /ko -->',
-                        'content2$.mage.__("hello3")content3 <% _.i18n("underscore i18") %>',
+                        'content2$.mage.__("hello3")content3 <% _.i18n("underscore i18") %>'
                     ],
                     'translateMap' => [
                         [['hello1'], [], 'hello1translated'],
@@ -216,9 +221,9 @@ class DataProviderTest extends TestCase
                         [['hello3'], [], 'hello3translated'],
                         [['hello4'], [], 'hello4translated'],
                         [['ko i18'], [], 'ko i18 translated'],
-                        [['underscore i18'], [], 'underscore i18 translated'],
+                        [['underscore i18'], [], 'underscore i18 translated']
                     ]
-                ],
+                ]
             ]
         ];
     }

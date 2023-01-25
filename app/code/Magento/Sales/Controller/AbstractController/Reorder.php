@@ -8,10 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Controller\AbstractController;
 
+use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\App\Action;
-use Magento\Framework\Registry;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Registry;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
 
 /**
@@ -30,9 +32,14 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
     protected $_coreRegistry;
 
     /**
-     * @var ReorderHelper
+     * @var \Magento\Sales\Model\Reorder\Reorder
      */
-    private $reorderHelper;
+    private $reorder;
+
+    /**
+     * @var CheckoutSession
+     */
+    private $checkoutSession;
 
     /**
      * Constructor
@@ -41,17 +48,23 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
      * @param OrderLoaderInterface $orderLoader
      * @param Registry $registry
      * @param ReorderHelper|null $reorderHelper
+     * @param \Magento\Sales\Model\Reorder\Reorder|null $reorder
+     * @param CheckoutSession|null $checkoutSession
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Action\Context $context,
         OrderLoaderInterface $orderLoader,
         Registry $registry,
-        ReorderHelper $reorderHelper = null
+        ReorderHelper $reorderHelper = null,
+        \Magento\Sales\Model\Reorder\Reorder $reorder = null,
+        CheckoutSession $checkoutSession = null
     ) {
         $this->orderLoader = $orderLoader;
         $this->_coreRegistry = $registry;
-        $this->reorderHelper = $reorderHelper ?: ObjectManager::getInstance()->get(ReorderHelper::class);
         parent::__construct($context);
+        $this->reorder = $reorder ?: ObjectManager::getInstance()->get(\Magento\Sales\Model\Reorder\Reorder::class);
+        $this->checkoutSession = $checkoutSession ?: ObjectManager::getInstance()->get(CheckoutSession::class);
     }
 
     /**
@@ -66,37 +79,31 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
             return $result;
         }
         $order = $this->_coreRegistry->registry('current_order');
+
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
-        if (!$this->reorderHelper->canReorder($order->getId())) {
-            $this->messageManager->addErrorMessage(__("Reorder is not available."));
+        try {
+            $reorderOutput = $this->reorder->execute($order->getIncrementId(), $order->getStoreId());
+        } catch (LocalizedException $localizedException) {
+            $this->messageManager->addErrorMessage($localizedException->getMessage());
             return $resultRedirect->setPath('checkout/cart');
         }
 
-        /* @var $cart \Magento\Checkout\Model\Cart */
-        $cart = $this->_objectManager->get(\Magento\Checkout\Model\Cart::class);
-        $items = $order->getItemsCollection();
-        foreach ($items as $item) {
-            try {
-                $cart->addOrderItem($item);
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                if ($this->_objectManager->get(\Magento\Checkout\Model\Session::class)->getUseNotice(true)) {
-                    $this->messageManager->addNoticeMessage($e->getMessage());
-                } else {
-                    $this->messageManager->addErrorMessage($e->getMessage());
-                }
-                return $resultRedirect->setPath('*/*/history');
-            } catch (\Exception $e) {
-                $this->messageManager->addExceptionMessage(
-                    $e,
-                    __('We can\'t add this item to your shopping cart right now.')
-                );
-                return $resultRedirect->setPath('checkout/cart');
+        // Set quote id for guest session: \Magento\Quote\Api\CartRepositoryInterface::save doesn't set quote id
+        // to session for guest customer, as it does \Magento\Checkout\Model\Cart::save which is deprecated.
+        $this->checkoutSession->setQuoteId($reorderOutput->getCart()->getId());
+
+        $errors = $reorderOutput->getErrors();
+        if (!empty($errors)) {
+            $useNotice = $this->_objectManager->get(\Magento\Checkout\Model\Session::class)->getUseNotice(true);
+            foreach ($errors as $error) {
+                $useNotice
+                    ? $this->messageManager->addNoticeMessage($error->getMessage())
+                    : $this->messageManager->addErrorMessage($error->getMessage());
             }
         }
 
-        $cart->save();
         return $resultRedirect->setPath('checkout/cart');
     }
 }

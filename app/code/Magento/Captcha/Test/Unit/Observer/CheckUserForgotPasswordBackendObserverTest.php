@@ -90,7 +90,7 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $formId = 'backend_forgotpassword';
 
@@ -100,7 +100,7 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
             ->setMethods(['setEmail'])
             ->getMockForAbstractClass();
         $this->actionFlagMock = $this->createMock(ActionFlag::class);
-        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->requestMock = $this->createMock(HttpRequest::class);
 
         $objectManager = new ObjectManagerHelper($this);
@@ -134,7 +134,10 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
             ->method('getResponse')
             ->willReturn($this->httpResponseMock);
 
-        $this->eventObserverMock = $this->createPartialMock(Observer::class, ['getControllerAction']);
+        $this->eventObserverMock = $this->getMockBuilder(Observer::class)
+            ->addMethods(['getControllerAction'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->eventObserverMock->expects($this->any())
             ->method('getControllerAction')
             ->willReturn($this->controllerMock);

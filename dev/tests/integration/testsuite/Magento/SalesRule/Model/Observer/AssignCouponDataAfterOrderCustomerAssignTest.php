@@ -86,7 +86,7 @@ class AssignCouponDataAfterOrderCustomerAssignTest extends \PHPUnit\Framework\Te
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
@@ -110,7 +110,7 @@ class AssignCouponDataAfterOrderCustomerAssignTest extends \PHPUnit\Framework\Te
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->salesRule = null;
         $this->customer = null;

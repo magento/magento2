@@ -11,7 +11,7 @@ use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\UrlInterface;
 
 /**
- * Class ProductActions
+ * Class ProductActions for Listing Columns
  *
  * @api
  * @since 100.0.2
@@ -58,9 +58,9 @@ class ProductActions extends Column
                         'catalog/product/edit',
                         ['id' => $item['entity_id'], 'store' => $storeId]
                     ),
+                    'ariaLabel' => __('Edit ') . $item['name'],
                     'label' => __('Edit'),
                     'hidden' => false,
-                    '__disableTmpl' => true
                 ];
             }
         }

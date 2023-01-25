@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\PageCache\Test\Unit\Observer;
 
@@ -42,7 +43,7 @@ class FlushAllCacheTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createPartialMock(Config::class, ['getType', 'isEnabled']);
         $this->fullPageCacheMock = $this->createPartialMock(Type::class, ['clean']);

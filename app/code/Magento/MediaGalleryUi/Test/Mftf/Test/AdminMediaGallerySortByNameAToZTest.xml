@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGallerySortByNameAToZTest">
+        <annotations>
+            <features value="MediaGallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1776"/>
+            <title value="User uses Sort by Name A to Z in Standalone Media Gallery"/>
+            <stories value="User uses Sort by Name A to Z in Standalone Media Gallery"/>
+            <testCaseId value="https://github.com/magento/adobe-stock-integration/issues/1776"/>
+            <description value="User uses Sort by Name A to Z in Standalone Media Gallery"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGalleryPage"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+                <argument name="FolderName" value="wysiwyg"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectParentFolderForDelete">
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteParentFolder"/>
+            <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertParentFolderWasDeleted">
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+            </actionGroup>
+        </after>
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGalleryPage"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
+            <argument name="name" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openParentFolderForm"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createParentFolder">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertParentFolderCreated">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForGridToLoadAfterParentFolderCreated"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
+            <argument name="image" value="ImageUpload"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadSecondImage">
+            <argument name="image" value="ImageUpload1"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadThirdImage">
+            <argument name="image" value="ImageUpload3"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForGridToLoad"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryClickSortActionGroup" stepKey="sortByNameAToZ">
+            <argument name="sortName" value="name_az"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminEnhancedMediaGallerySortByActionGroup" stepKey="assertImagePositionAfterSortByNameAToZ">
+            <argument name="firstImageFile" value="{{ImageUpload.file}}"/>
+            <argument name="secondImageFile" value="{{ImageUpload1.value}}"/>
+            <argument name="thirdImageFile" value="{{ImageUpload3.value}}"/>
+        </actionGroup>
+    </test>
+</tests>

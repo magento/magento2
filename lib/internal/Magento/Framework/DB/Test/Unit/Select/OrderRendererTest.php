@@ -3,16 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\DB\Test\Unit\Select;
 
-class OrderRendererTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\DB\Platform\Quote;
+use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Select\OrderRenderer;
+use PHPUnit\Framework\TestCase;
+
+class OrderRendererTest extends TestCase
 {
     public function testRender()
     {
-        $quoteMock = $this->getMockBuilder(\Magento\Framework\DB\Platform\Quote::class)
+        $quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $parts = [
@@ -26,9 +33,9 @@ class OrderRendererTest extends \PHPUnit\Framework\TestCase
             ->willReturnArgument(0);
         $selectMock->expects($this->any())
             ->method('getPart')
-            ->with(\Magento\Framework\DB\Select::ORDER)
+            ->with(Select::ORDER)
             ->willReturn($parts);
-        $model = new \Magento\Framework\DB\Select\OrderRenderer($quoteMock);
+        $model = new OrderRenderer($quoteMock);
         $this->assertEquals(" ORDER BY 10, ASC, field1 1\n", $model->render($selectMock));
     }
 }

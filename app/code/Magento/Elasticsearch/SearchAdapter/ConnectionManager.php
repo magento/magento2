@@ -7,10 +7,12 @@ namespace Magento\Elasticsearch\SearchAdapter;
 
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\AdvancedSearch\Model\Client\ClientFactoryInterface;
-use Magento\Elasticsearch\Model\Client\Elasticsearch;
+use Magento\AdvancedSearch\Model\Client\ClientInterface as Elasticsearch;
 use Psr\Log\LoggerInterface;
 
 /**
+ * Class provides interface for Search Engine connection
+ *
  * @api
  * @since 100.1.0
  */
@@ -73,7 +75,7 @@ class ConnectionManager
     }
 
     /**
-     * Connect to Elasticsearch client with default options
+     * Connect to Search client with default options
      *
      * @param array $options
      * @throws \RuntimeException
@@ -85,7 +87,7 @@ class ConnectionManager
             $this->client = $this->clientFactory->create($this->clientConfig->prepareClientOptions($options));
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new \RuntimeException('Elasticsearch client is not set.');
+            throw new \RuntimeException('Search client is not set.');
         }
     }
 }

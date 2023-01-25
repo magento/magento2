@@ -27,7 +27,7 @@ class ReviewTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         )->getId();
         $this->dispatch('backend/review/product/edit/id/' . $reviewId);
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains('&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;', $responseBody);
-        $this->assertNotContains('<script>alert("xss");</script>', $responseBody);
+        $this->assertStringContainsString('&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;', $responseBody);
+        $this->assertStringNotContainsString('<script>alert("xss");</script>', $responseBody);
     }
 }

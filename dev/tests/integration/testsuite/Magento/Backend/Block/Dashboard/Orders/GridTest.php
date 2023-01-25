@@ -15,7 +15,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
      */
     private $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

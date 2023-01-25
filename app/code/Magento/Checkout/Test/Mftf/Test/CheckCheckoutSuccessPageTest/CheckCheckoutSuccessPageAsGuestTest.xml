@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CheckCheckoutSuccessPageAsGuestTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Success page elements are presented for placed order as Guest"/>
+            <title value="Guest Checkout - elements of success page are presented for placed order as guest"/>
+            <description value="To be sure that other elements of Success page are presented for placed order as Guest"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-16490"/>
+            <group value="checkout"/>
+            <group value="cloud_smoke"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+        </before>
+
+        <after>
+            <!--Cancel orders-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="goToOrdersPage"/>
+            <actionGroup ref="AdminGridColumnShowActionGroup" stepKey="showCustomerEmailColumn">
+                <argument name="columnLabel" value="Customer Email"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="filterOrdersByCustomerEmail">
+                <argument name="filterInputName" value="customer_email"/>
+                <argument name="filterValue" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyFilters"/>
+            <actionGroup ref="AdminGridBulkActionGroup" stepKey="cancelOrders">
+                <argument name="actionLabel" value="Cancel"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <!--Go to product page-->
+        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForCatalogPageLoad"/>
+
+        <!--Add Product to Shopping Cart-->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!--Go to Checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
+        </actionGroup>
+
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+
+        <!--Click Place Order button-->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <comment userInput="BIC Workaround" stepKey="waitForLoadSuccessPage"/>
+        <comment userInput="BIC Workaround" stepKey="seeSuccessTitle"/>
+        <see selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order # is: " stepKey="seeOrderNumber"/>
+
+        <!--Check register section-->
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessNotify"/>
+        <see selector="{{CheckoutSuccessRegisterSection.registerMessage}}" userInput="You can track your order status by creating an account." stepKey="seeRegisterMessage"/>
+        <see selector="{{CheckoutSuccessRegisterSection.customerEmail}}" userInput="Email Address: {{CustomerEntityOne.email}}" stepKey="seeCustomerEmail"/>
+        <seeElement selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="seeVisibleCreateAccountButton"/>
+        <click selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="clickCreateAccountButton"/>
+        <seeInCurrentUrl url="{{StorefrontCustomerCreatePage.url}}" stepKey="seeCreateAccountPage"/>
+        <see userInput="Create New Customer Account" selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="seeCreateAccountPageTitle"/>
+
+        <!--Go to product page-->
+        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage2"/>
+        <waitForPageLoad stepKey="waitForCatalogPageLoad2"/>
+
+        <!--Add Product to Shopping Cart-->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage2">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!--Go to Checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection2">
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
+        </actionGroup>
+
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
+
+        <!--Click Place Order button-->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder2"/>
+        <comment userInput="BIC Workaround" stepKey="waitForLoadSuccessPage2"/>
+
+        <!--Continue shopping-->
+        <click selector="{{CheckoutSuccessMainSection.continueShoppingButton}}" stepKey="clickContinueShoppingButton"/>
+        <seeCurrentUrlEquals url="{{_ENV.MAGENTO_BASE_URL}}" stepKey="seeHomePageUrl"/>
+        <see userInput="Home Page" selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="seeHomePageTitle"/>
+    </test>
+</tests>

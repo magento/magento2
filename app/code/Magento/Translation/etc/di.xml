@@ -43,10 +43,21 @@
         <arguments>
             <argument name="renderers" xsi:type="array">
                 <item name="translation" xsi:type="object">Magento\Framework\Phrase\Renderer\Translate</item>
-                <item name="messageFormatter" xsi:type="object">Magento\Framework\Phrase\Renderer\MessageFormatter</item>
                 <item name="placeholder" xsi:type="object">Magento\Framework\Phrase\Renderer\Placeholder</item>
                 <item name="inline" xsi:type="object">Magento\Framework\Phrase\Renderer\Inline</item>
             </argument>
+        </arguments>
+    </type>
+    <virtualType name="dataProviderCompositeRenderer" type="Magento\Framework\Phrase\Renderer\Composite">
+        <arguments>
+            <argument name="renderers" xsi:type="array">
+                <item name="inline" xsi:type="object">Magento\Translation\Model\Inline\Renderer</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Translation\Model\Js\DataProvider">
+        <arguments>
+            <argument name="translate" xsi:type="object">dataProviderCompositeRenderer</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Phrase\Renderer\Translate">

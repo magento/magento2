@@ -15,11 +15,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-/**
- * Class TablesWhitelistGenerateCommandTest
- *
- * @package Magento\Developer\Test\Unit\Console\Command
- */
 class TablesWhitelistGenerateCommandTest extends TestCase
 {
     // Exception Messages!
@@ -32,7 +27,7 @@ class TablesWhitelistGenerateCommandTest extends TestCase
     /** @var GenerateCommand $instance */
     private $instance;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->whitelistGenerator = $this->getMockBuilder(WhitelistGenerator::class)
             ->disableOriginalConstructor()
@@ -45,11 +40,11 @@ class TablesWhitelistGenerateCommandTest extends TestCase
      * Test case for success scenario
      *
      * @param string $arguments
-     * @param string $expected
+     * @param int $expected
      *
      * @dataProvider successDataProvider
      */
-    public function testCommandSuccess(string $arguments, string $expected)
+    public function testCommandSuccess(string $arguments, int $expected)
     {
         $this->whitelistGenerator->expects($this->once())
             ->method('generate')
@@ -64,13 +59,13 @@ class TablesWhitelistGenerateCommandTest extends TestCase
      * Test case for failure scenario
      *
      * @param string $arguments
-     * @param string $expected
+     * @param int $expected
      * @param \Exception|ConfigException $exception
      * @param string $output
      *
      * @dataProvider failureDataProvider
      */
-    public function testCommandFailure(string $arguments, string $expected, $exception, string $output)
+    public function testCommandFailure(string $arguments, int $expected, $exception, string $output)
     {
         $this->whitelistGenerator->expects($this->once())
             ->method('generate')

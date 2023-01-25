@@ -8,11 +8,11 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="wishlist" resource="default" engine="innodb" comment="Wishlist main Table">
-        <column xsi:type="int" name="wishlist_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="wishlist_id" unsigned="true" nullable="false" identity="true"
                 comment="Wishlist ID"/>
-        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="customer_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Customer ID"/>
-        <column xsi:type="smallint" name="shared" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="shared" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Sharing flag (0 or 1)"/>
         <column xsi:type="varchar" name="sharing_code" nullable="true" length="32" comment="Sharing encrypted code"/>
         <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true" comment="Last updated date"/>
@@ -30,13 +30,13 @@
         </index>
     </table>
     <table name="wishlist_item" resource="default" engine="innodb" comment="Wishlist items">
-        <column xsi:type="int" name="wishlist_item_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="wishlist_item_id" unsigned="true" nullable="false" identity="true"
                 comment="Wishlist item ID"/>
-        <column xsi:type="int" name="wishlist_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="wishlist_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Wishlist ID"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Product ID"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="timestamp" name="added_at" on_update="false" nullable="true" comment="Add date and time"/>
         <column xsi:type="text" name="description" nullable="true" comment="Short description of wish list item"/>
@@ -63,11 +63,11 @@
         </index>
     </table>
     <table name="wishlist_item_option" resource="default" engine="innodb" comment="Wishlist Item Option Table">
-        <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="option_id" unsigned="true" nullable="false" identity="true"
                 comment="Option ID"/>
-        <column xsi:type="int" name="wishlist_item_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="wishlist_item_id" unsigned="true" nullable="false" identity="false"
                 comment="Wishlist Item ID"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" identity="false"
                 comment="Product ID"/>
         <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Code"/>
         <column xsi:type="text" name="value" nullable="true" comment="Value"/>

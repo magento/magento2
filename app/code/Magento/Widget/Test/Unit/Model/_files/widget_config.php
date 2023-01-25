@@ -1,11 +1,17 @@
-<?php
+<?php declare(strict_types=1);
+
+use Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser;
+use Magento\CatalogWidget\Block\Product\Widget\Conditions;
+use Magento\Config\Model\Config\Source\Yesno;
+use Magento\Sales\Block\Widget\Guest\Form;
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
     'sales_widget_guestform' => [
-        '@' => ['type' => \Magento\Sales\Block\Widget\Guest\Form::class],
+        '@' => ['type' => Form::class],
         'is_email_compatible' => '1',
         'name' => 'Orders and Returns',
         'description' => 'Orders and Returns Search Form',
@@ -27,7 +33,7 @@ return [
                 'visible' => '0',
             ],
             'link_display' => [
-                'source_model' => \Magento\Config\Model\Config\Source\Yesno::class,
+                'source_model' => Yesno::class,
                 'type' => 'select',
                 'visible' => '1',
                 'sort_order' => '10',
@@ -48,7 +54,7 @@ return [
                 'type' => 'label',
                 '@' => ['type' => 'complex'],
                 'helper_block' => [
-                    'type' => \Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser::class,
+                    'type' => Chooser::class,
                     'data' => ['button' => ['open' => 'Select Product...']],
                 ],
                 'visible' => '1',
@@ -57,12 +63,12 @@ return [
                 'label' => 'Product',
             ],
             'condition' => [
-                'type' => \Magento\CatalogWidget\Block\Product\Widget\Conditions::class,
+                'type' => Conditions::class,
                 'visible' => '1',
                 'required' => '1',
                 'sort_order' => '10',
                 'label' => 'Conditions',
-             ],
+            ],
 
         ],
         'supported_containers' => [

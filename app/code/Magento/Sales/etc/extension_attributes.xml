@@ -13,4 +13,7 @@
     <extension_attributes for="Magento\Sales\Api\Data\OrderInterface">
         <attribute code="payment_additional_info" type="Magento\Payment\Api\Data\PaymentAdditionalInfoInterface[]" />
     </extension_attributes>
+    <extension_attributes for="Magento\Sales\Api\Data\OrderPaymentInterface">
+        <attribute code="notification_message" type="string" />
+    </extension_attributes>
 </config>

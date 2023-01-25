@@ -3,48 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Paypal\Model\PayflowConfig;
-use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Payment\Model\MethodInterface;
 use Magento\Paypal\Model\Config;
+use Magento\Paypal\Model\PayflowConfig;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class PayflowConfigTest
- */
-class PayflowConfigTest extends \PHPUnit\Framework\TestCase
+class PayflowConfigTest extends TestCase
 {
-
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var MethodInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var MethodInterface|MockObject
      */
     protected $methodInterfaceMock;
 
     /**
-     * @var PayflowConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var PayflowConfig|MockObject
      */
     protected $config;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
-            ->setMethods(['getValue', 'isSetFlag'])
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->onlyMethods(['getValue', 'isSetFlag'])
             ->getMockForAbstractClass();
-        $this->methodInterfaceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
+        $this->methodInterfaceMock = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
 
         $om = new ObjectManager($this);
         $this->config = $om->getObject(
-            \Magento\Paypal\Model\PayflowConfig::class,
+            PayflowConfig::class,
             [
                 'scopeConfig' => $this->scopeConfigMock
             ]
@@ -55,9 +58,10 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
      * @param string $paymentAction
      * @param string|null $expectedValue
      *
+     * @return void
      * @dataProvider getTrxTypeDataProvider
      */
-    public function testGetTrxType($paymentAction, $expectedValue)
+    public function testGetTrxType($paymentAction, $expectedValue): void
     {
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
@@ -69,12 +73,12 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getTrxTypeDataProvider()
+    public function getTrxTypeDataProvider(): array
     {
         return [
             [PayflowConfig::PAYMENT_ACTION_AUTH, PayflowConfig::TRXTYPE_AUTH_ONLY],
             [PayflowConfig::PAYMENT_ACTION_SALE, PayflowConfig::TRXTYPE_SALE],
-            ['other', null],
+            ['other', null]
         ];
     }
 
@@ -82,9 +86,10 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
      * @param string $paymentAction
      * @param string|null $expectedValue
      *
+     * @return void
      * @dataProvider getPaymentActionDataProvider
      */
-    public function testGetPaymentAction($paymentAction, $expectedValue)
+    public function testGetPaymentAction($paymentAction, $expectedValue): void
     {
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
@@ -96,16 +101,19 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getPaymentActionDataProvider()
+    public function getPaymentActionDataProvider(): array
     {
         return [
             [PayflowConfig::PAYMENT_ACTION_AUTH, AbstractMethod::ACTION_AUTHORIZE],
             [PayflowConfig::PAYMENT_ACTION_SALE, AbstractMethod::ACTION_AUTHORIZE_CAPTURE],
-            ['other', null],
+            ['other', null]
         ];
     }
 
-    public function testGetTransactionUrlWithTestModeOn()
+    /**
+     * @return void
+     */
+    public function testGetTransactionUrlWithTestModeOn(): void
     {
         $this->scopeConfigMock->expects($this->never())
             ->method('getValue');
@@ -118,7 +126,10 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('transaction_url_test_mode', $this->config->getTransactionUrl(1));
     }
 
-    public function testGetTransactionUrlWithTestModeOff()
+    /**
+     * @return void
+     */
+    public function testGetTransactionUrlWithTestModeOff(): void
     {
         $this->scopeConfigMock->expects($this->never())
             ->method('getValue');
@@ -131,7 +142,10 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('transaction_url', $this->config->getTransactionUrl(0));
     }
 
-    public function testGetTransactionUrlWithTestModeEmptyAndSandboxOn()
+    /**
+     * @return void
+     */
+    public function testGetTransactionUrlWithTestModeEmptyAndSandboxOn(): void
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
@@ -145,7 +159,10 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('transaction_url_test_mode', $this->config->getTransactionUrl());
     }
 
-    public function testGetTransactionUrlWithTestModeEmptyAndSandboxOff()
+    /**
+     * @return void
+     */
+    public function testGetTransactionUrlWithTestModeEmptyAndSandboxOff(): void
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
@@ -164,27 +181,32 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
      * @param string $currentMethod
      * @param bool $result
      *
+     * @return void
      * @dataProvider dataProviderForTestIsMethodActive
      */
-    public function testIsMethodActive(array $expectsMethods, $currentMethod, $result)
+    public function testIsMethodActive(array $expectsMethods, $currentMethod, $result): void
     {
         $this->config->setStoreId(5);
 
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->with('paypal/general/merchant_country')
-            ->will($this->returnValue('US'));
+            ->willReturn('US');
 
-        $i = 0;
+        $withArgs = $willReturnArgs = [];
+
         foreach ($expectsMethods as $method => $isActive) {
-            $this->scopeConfigMock->expects($this->at($i++))
-                ->method('isSetFlag')
-                ->with(
-                    "payment/{$method}/active",
-                    ScopeInterface::SCOPE_STORE,
-                    5
-                )->willReturn($isActive);
+            $withArgs[] = [
+                "payment/{$method}/active",
+                ScopeInterface::SCOPE_STORE,
+                5
+            ];
+            $willReturnArgs[] = $isActive;
         }
+        $this->scopeConfigMock
+            ->method('isSetFlag')
+            ->withConsecutive(...$withArgs)
+            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
 
         $this->assertEquals($result, $this->config->isMethodActive($currentMethod));
     }
@@ -192,32 +214,32 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestIsMethodActive()
+    public function dataProviderForTestIsMethodActive(): array
     {
         return [
             [
                 'expectsMethods' => [
                     Config::METHOD_PAYMENT_PRO => 0,
-                    Config::METHOD_PAYFLOWPRO => 1,
+                    Config::METHOD_PAYFLOWPRO => 1
                 ],
                 'currentMethod' => Config::METHOD_PAYMENT_PRO,
-                'result' => true,
+                'result' => true
             ],
             [
                 'expectsMethods' => [
                     Config::METHOD_PAYMENT_PRO => 1
                 ],
                 'currentMethod' => Config::METHOD_PAYFLOWPRO,
-                'result' => true,
+                'result' => true
             ],
             [
                 'expectsMethods' => [
                     Config::METHOD_PAYMENT_PRO => 0,
-                    Config::METHOD_PAYFLOWPRO => 0,
+                    Config::METHOD_PAYFLOWPRO => 0
                 ],
                 'currentMethod' => 777,
-                'result' => false,
-            ],
+                'result' => false
+            ]
         ];
     }
 }

@@ -17,7 +17,7 @@ class ReferentialTest extends \PHPUnit\Framework\TestCase
     /** @var string[] $_registeredGroups all registered payment groups */
     protected static $_registeredGroups = [];
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::_populateUsedGroups();
         self::_populateRegisteredGroups();

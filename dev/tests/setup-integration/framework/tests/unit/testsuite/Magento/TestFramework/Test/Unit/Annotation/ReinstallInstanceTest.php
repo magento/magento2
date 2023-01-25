@@ -25,11 +25,11 @@ class ReinstallInstanceTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\TestFramework\Application|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Application|\PHPUnit\Framework\MockObject\MockObject
      */
     private $applicationMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->applicationMock = $this
             ->getMockBuilder(\Magento\TestFramework\Application::class)

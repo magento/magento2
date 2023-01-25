@@ -3,167 +3,194 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogRule\Test\Unit\Model;
+
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\CatalogRule\Api\Data\RuleInterface;
+use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
+use Magento\CatalogRule\Model\Rule;
+use Magento\CatalogRule\Model\Rule\Condition\CombineFactory;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Model\ResourceModel\Iterator;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Rule\Model\Condition\Combine;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RuleTest extends \PHPUnit\Framework\TestCase
+class RuleTest extends TestCase
 {
-    /** @var \Magento\CatalogRule\Model\Rule */
-    protected $rule;
+    /**
+     * @var Rule
+     */
+    private $rule;
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /**
+     * @var ObjectManager
+     */
     private $objectManager;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $storeManager;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $combineFactory;
-
-    /** @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject */
-    protected $storeModel;
-
-    /** @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject */
-    protected $websiteModel;
-
-    /** @var \Magento\Rule\Model\Condition\Combine|\PHPUnit_Framework_MockObject_MockObject */
-    protected $condition;
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManager;
 
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var CombineFactory|MockObject
      */
-    protected $_ruleProductProcessor;
+    private $combineFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|MockObject
      */
-    protected $_productCollectionFactory;
+    private $storeModel;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Iterator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Website|MockObject
      */
-    protected $_resourceIterator;
+    private $websiteModel;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Combine|MockObject
      */
-    protected $productModel;
+    private $condition;
 
     /**
-     * Set up before test
-     *
-     * @return void
+     * @var RuleProductProcessor|MockObject
      */
-    protected function setUp()
+    private $ruleProductProcessor;
+
+    /**
+     * @var CollectionFactory|MockObject
+     */
+    private $productCollectionFactory;
+
+    /**
+     * @var Iterator|MockObject
+     */
+    private $resourceIterator;
+
+    /**
+     * @var Product|MockObject
+     */
+    private $productModel;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->storeModel = $this->createPartialMock(\Magento\Store\Model\Store::class, ['__wakeup', 'getId']);
+        $this->objectManager = new ObjectManager($this);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeModel = $this->createPartialMock(Store::class, ['__wakeup', 'getId']);
         $this->combineFactory = $this->createPartialMock(
-            \Magento\CatalogRule\Model\Rule\Condition\CombineFactory::class,
+            CombineFactory::class,
             [
                 'create'
             ]
         );
         $this->productModel = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             [
                 '__wakeup',
                 'getId',
                 'setData'
             ]
         );
-        $this->condition = $this->createPartialMock(
-            \Magento\Rule\Model\Condition\Combine::class,
-            [
-                'setRule',
-                'validate'
-            ]
-        );
+        $this->condition = $this->getMockBuilder(Combine::class)
+            ->addMethods(['setRule'])
+            ->onlyMethods(['validate'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->websiteModel = $this->createPartialMock(
-            \Magento\Store\Model\Website::class,
+            Website::class,
             [
                 '__wakeup',
                 'getId',
                 'getDefaultStore'
             ]
         );
-        $this->_ruleProductProcessor = $this->createMock(
-            \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor::class
+        $this->ruleProductProcessor = $this->createMock(
+            RuleProductProcessor::class
         );
 
-        $this->_productCollectionFactory = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
+        $this->productCollectionFactory = $this->createPartialMock(
+            CollectionFactory::class,
             ['create']
         );
 
-        $this->_resourceIterator = $this->createPartialMock(
-            \Magento\Framework\Model\ResourceModel\Iterator::class,
+        $this->resourceIterator = $this->createPartialMock(
+            Iterator::class,
             ['walk']
         );
 
-        $extensionFactoryMock = $this->createMock(\Magento\Framework\Api\ExtensionAttributesFactory::class);
-        $attributeValueFactoryMock = $this->createMock(\Magento\Framework\Api\AttributeValueFactory::class);
+        $extensionFactoryMock = $this->createMock(ExtensionAttributesFactory::class);
+        $attributeValueFactoryMock = $this->createMock(AttributeValueFactory::class);
 
         $this->rule = $this->objectManager->getObject(
-            \Magento\CatalogRule\Model\Rule::class,
+            Rule::class,
             [
                 'storeManager' => $this->storeManager,
                 'combineFactory' => $this->combineFactory,
-                'ruleProductProcessor' => $this->_ruleProductProcessor,
-                'productCollectionFactory' => $this->_productCollectionFactory,
-                'resourceIterator' => $this->_resourceIterator,
+                'ruleProductProcessor' => $this->ruleProductProcessor,
+                'productCollectionFactory' => $this->productCollectionFactory,
+                'resourceIterator' => $this->resourceIterator,
                 'extensionFactory' => $extensionFactoryMock,
                 'customAttributeFactory' => $attributeValueFactoryMock,
-                'serializer' => $this->getSerializerMock(),
+                'serializer' => $this->getSerializerMock()
             ]
         );
     }
 
     /**
-     * Get mock for serializer
+     * Get mock for serializer.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
-    private function getSerializerMock()
+    private function getSerializerMock(): MockObject
     {
-        $serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['serialize', 'unserialize'])
+        $serializerMock = $this->getMockBuilder(Json::class)->disableOriginalConstructor()
+            ->onlyMethods(['serialize', 'unserialize'])
             ->getMock();
 
         $serializerMock->expects($this->any())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_encode($value);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
             );
 
         $serializerMock->expects($this->any())
             ->method('unserialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_decode($value, true);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
             );
 
         return $serializerMock;
     }
 
     /**
-     * @dataProvider dataProviderCallbackValidateProduct
      * @param bool $validate
      *
      * @return void
+     * @dataProvider dataProviderCallbackValidateProduct
      */
-    public function testCallbackValidateProduct($validate)
+    public function testCallbackValidateProduct($validate): void
     {
         $args['product'] = $this->productModel;
         $args['attributes'] = [];
@@ -180,25 +207,22 @@ class RuleTest extends \PHPUnit\Framework\TestCase
             'updated_at' => '2014-06-25 14:37:15'
         ];
         $this->storeManager->expects($this->any())->method('getWebsites')->with(false)
-            ->will($this->returnValue([$this->websiteModel, $this->websiteModel]));
-        $this->websiteModel->expects($this->at(0))->method('getId')
-            ->will($this->returnValue('1'));
-        $this->websiteModel->expects($this->at(2))->method('getId')
-            ->will($this->returnValue('2'));
+            ->willReturn([$this->websiteModel, $this->websiteModel]);
+        $this->websiteModel
+            ->method('getId')
+            ->willReturnOnConsecutiveCalls('1', '2');
         $this->websiteModel->expects($this->any())->method('getDefaultStore')
-            ->will($this->returnValue($this->storeModel));
-        $this->storeModel->expects($this->at(0))->method('getId')
-            ->will($this->returnValue('1'));
-        $this->storeModel->expects($this->at(1))->method('getId')
-            ->will($this->returnValue('2'));
+            ->willReturn($this->storeModel);
+        $this->storeModel
+            ->method('getId')
+            ->willReturnOnConsecutiveCalls('1', '2');
         $this->combineFactory->expects($this->any())->method('create')
-            ->will($this->returnValue($this->condition));
+            ->willReturn($this->condition);
         $this->condition->expects($this->any())->method('validate')
-            ->will($this->returnValue($validate));
-        $this->condition->expects($this->any())->method('setRule')
-            ->will($this->returnSelf());
+            ->willReturn($validate);
+        $this->condition->expects($this->any())->method('setRule')->willReturnSelf();
         $this->productModel->expects($this->any())->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->rule->callbackValidateProduct($args);
 
@@ -209,139 +233,153 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Data provider for callbackValidateProduct test
+     * Data provider for callbackValidateProduct test.
      *
      * @return array
      */
-    public function dataProviderCallbackValidateProduct()
+    public function dataProviderCallbackValidateProduct(): array
     {
         return [
             [false],
-            [true],
+            [true]
         ];
     }
 
     /**
-     * Test validateData action
+     * Test validateData action.
      *
-     * @dataProvider validateDataDataProvider
      * @param array $data Data for the rule actions
      * @param bool|array $expected True or an array of errors
      *
      * @return void
+     * @dataProvider validateDataDataProvider
      */
-    public function testValidateData($data, $expected)
+    public function testValidateData(array $data, $expected): void
     {
-        $result = $this->rule->validateData(new \Magento\Framework\DataObject($data));
+        $result = $this->rule->validateData(new DataObject($data));
         $this->assertEquals($result, $expected);
     }
 
     /**
-     * Data provider for testValidateData test
+     * Data provider for testValidateData test.
      *
      * @return array
      */
-    public function validateDataDataProvider()
+    public function validateDataDataProvider(): array
     {
         return [
             [
                 [
                     'simple_action' => 'by_fixed',
-                    'discount_amount' => '123',
+                    'discount_amount' => '123'
                 ],
                 true
             ],
             [
                 [
                     'simple_action' => 'by_percent',
-                    'discount_amount' => '9,99',
+                    'discount_amount' => '9.99'
                 ],
                 true
             ],
             [
                 [
                     'simple_action' => 'by_percent',
-                    'discount_amount' => '123.12',
+                    'discount_amount' => '123.12'
                 ],
                 [
-                    'Percentage discount should be between 0 and 100.',
+                    'Percentage discount should be between 0 and 100.'
                 ]
             ],
             [
                 [
                     'simple_action' => 'to_percent',
-                    'discount_amount' => '-12',
+                    'discount_amount' => '-12'
                 ],
                 [
-                    'Percentage discount should be between 0 and 100.',
+                    'Percentage discount should be between 0 and 100.'
                 ]
             ],
             [
                 [
                     'simple_action' => 'to_fixed',
-                    'discount_amount' => '-1234567890',
+                    'discount_amount' => '-1234567890'
                 ],
                 [
-                    'Discount value should be 0 or greater.',
+                    'Discount value should be 0 or greater.'
                 ]
             ],
             [
                 [
                     'simple_action' => 'invalid action',
-                    'discount_amount' => '12',
+                    'discount_amount' => '12'
                 ],
                 [
-                    'Unknown action.',
+                    'Unknown action.'
                 ]
-            ],
+            ]
         ];
     }
 
     /**
-     * Test after delete action
+     * Test after delete action.
      *
      * @return void
      */
-    public function testAfterDelete()
+    public function testAfterDelete(): void
     {
-        $indexer = $this->createMock(\Magento\Framework\Indexer\IndexerInterface::class);
+        $indexer = $this->getMockForAbstractClass(IndexerInterface::class);
         $indexer->expects($this->once())->method('invalidate');
-        $this->_ruleProductProcessor->expects($this->once())->method('getIndexer')->will($this->returnValue($indexer));
+        $this->ruleProductProcessor->expects($this->once())->method('getIndexer')->willReturn($indexer);
         $this->rule->afterDelete();
     }
 
     /**
-     * Test after update action for inactive rule
+     * Test after update action for active and deactivated rule.
+     *
+     * @param int $active
      *
      * @return void
+     * @dataProvider afterUpdateDataProvider
      */
-    public function testAfterUpdateInactive()
+    public function testAfterUpdate(int $active): void
     {
         $this->rule->isObjectNew(false);
-        $this->rule->setIsActive(0);
-        $this->_ruleProductProcessor->expects($this->never())->method('getIndexer');
+        $this->rule->setIsActive($active);
+        $this->rule->setOrigData(RuleInterface::IS_ACTIVE, 1);
+        $indexer = $this->getMockForAbstractClass(IndexerInterface::class);
+        $indexer->expects($this->once())->method('invalidate');
+        $this->ruleProductProcessor->expects($this->once())->method('getIndexer')->willReturn($indexer);
         $this->rule->afterSave();
     }
 
     /**
-     * Test after update action for active rule
+     * Test after update action for inactive rule.
      *
      * @return void
      */
-    public function testAfterUpdateActive()
+    public function testAfterUpdateInactiveRule(): void
     {
         $this->rule->isObjectNew(false);
-        $this->rule->setIsActive(1);
-        $indexer = $this->createMock(\Magento\Framework\Indexer\IndexerInterface::class);
-        $indexer->expects($this->once())->method('invalidate');
-        $this->_ruleProductProcessor->expects($this->once())->method('getIndexer')->will($this->returnValue($indexer));
+        $this->rule->setIsActive(0);
+        $this->rule->setOrigData(RuleInterface::IS_ACTIVE, 0);
+        $this->ruleProductProcessor->expects($this->never())->method('getIndexer');
         $this->rule->afterSave();
+    }
+
+    /**
+     * @return array
+     */
+    public function afterUpdateDataProvider(): array
+    {
+        return [
+            ['active' => 0],
+            ['active' => 1]
+        ];
     }
 
     /**
      * Test isRuleBehaviorChanged action
-     *
-     * @dataProvider isRuleBehaviorChangedDataProvider
      *
      * @param array $dataArray
      * @param array $originDataArray
@@ -349,14 +387,19 @@ class RuleTest extends \PHPUnit\Framework\TestCase
      * @param bool $result
      *
      * @return void
+     * @dataProvider isRuleBehaviorChangedDataProvider
      */
-    public function testIsRuleBehaviorChanged($dataArray, $originDataArray, $isObjectNew, $result)
-    {
+    public function testIsRuleBehaviorChanged(
+        array $dataArray,
+        array $originDataArray,
+        bool $isObjectNew,
+        bool $result
+    ): void {
         $this->rule->setData('website_ids', []);
         $this->rule->isObjectNew($isObjectNew);
-        $indexer = $this->createMock(\Magento\Framework\Indexer\IndexerInterface::class);
+        $indexer = $this->getMockForAbstractClass(IndexerInterface::class);
         $indexer->expects($this->any())->method('invalidate');
-        $this->_ruleProductProcessor->expects($this->any())->method('getIndexer')->will($this->returnValue($indexer));
+        $this->ruleProductProcessor->expects($this->any())->method('getIndexer')->willReturn($indexer);
 
         foreach ($dataArray as $data) {
             $this->rule->setData($data);
@@ -370,11 +413,11 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Data provider for testIsRuleBehaviorChanged test
+     * Data provider for testIsRuleBehaviorChanged test.
      *
      * @return array
      */
-    public function isRuleBehaviorChangedDataProvider()
+    public function isRuleBehaviorChangedDataProvider(): array
     {
         return [
             [['new name', 'new description'], ['name', 'description'], false, false],
@@ -382,11 +425,14 @@ class RuleTest extends \PHPUnit\Framework\TestCase
             [['name', 'important_data'], ['name', 'important_data'], false, false],
             [['name', 'new important_data'], ['name', 'important_data'], false, true],
             [['name', 'description'], ['name', 'description'], true, true],
-            [['name', 'description'], ['name', 'important_data'], true, true],
+            [['name', 'description'], ['name', 'important_data'], true, true]
         ];
     }
 
-    public function testGetConditionsFieldSetId()
+    /**
+     * @return void
+     */
+    public function testGetConditionsFieldSetId(): void
     {
         $formName = 'form_name';
         $this->rule->setId(100);
@@ -394,9 +440,12 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->rule->getConditionsFieldSetId($formName));
     }
 
-    public function testReindex()
+    /**
+     * @return void
+     */
+    public function testReindex(): void
     {
-        $this->_ruleProductProcessor->expects($this->once())->method('reindexList');
+        $this->ruleProductProcessor->expects($this->once())->method('reindexList');
         $this->rule->reindex();
     }
 }

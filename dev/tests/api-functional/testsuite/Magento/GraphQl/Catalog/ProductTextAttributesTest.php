@@ -18,7 +18,7 @@ class ProductTextAttributesTest extends GraphQlAbstract
      */
     private $productRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productRepository = Bootstrap::getObjectManager()::getInstance()->get(ProductRepositoryInterface::class);
     }
@@ -134,9 +134,21 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertContains($assertionCmsBlockText, $response['products']['items'][0]['description']['html']);
-        self::assertNotContains('{{block id', $response['products']['items'][0]['description']['html']);
-        self::assertContains($assertionCmsBlockText, $response['products']['items'][0]['short_description']['html']);
-        self::assertNotContains('{{block id', $response['products']['items'][0]['short_description']['html']);
+        self::assertStringContainsString(
+            $assertionCmsBlockText,
+            $response['products']['items'][0]['description']['html']
+        );
+        self::assertStringNotContainsString(
+            '{{block id',
+            $response['products']['items'][0]['description']['html']
+        );
+        self::assertStringContainsString(
+            $assertionCmsBlockText,
+            $response['products']['items'][0]['short_description']['html']
+        );
+        self::assertStringNotContainsString(
+            '{{block id',
+            $response['products']['items'][0]['short_description']['html']
+        );
     }
 }

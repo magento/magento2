@@ -3,38 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Block\Adminhtml\Promo\Quote\Edit;
 
+use Magento\Backend\Block\Widget\Context;
+use Magento\Framework\DataObject;
+use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\GenericButton;
 use Magento\SalesRule\Model\RegistryConstants;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class GenericButtonTest extends \PHPUnit\Framework\TestCase
+class GenericButtonTest extends TestCase
 {
     /**
-     * @var \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\GenericButton
+     * @var GenericButton
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $registryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
-        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
-        $contextMock = $this->createMock(\Magento\Backend\Block\Widget\Context::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->registryMock = $this->createMock(Registry::class);
+        $contextMock = $this->createMock(Context::class);
 
         $contextMock->expects($this->once())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
 
         $this->model = (new ObjectManager($this))->getObject(
-            \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\GenericButton::class,
+            GenericButton::class,
             [
                 'context' => $contextMock,
                 'registry' => $this->registryMock
@@ -65,7 +74,7 @@ class GenericButtonTest extends \PHPUnit\Framework\TestCase
     public function testGetRuleId()
     {
         $ruleId = 42;
-        $ruleMock = new \Magento\Framework\DataObject(['id' => $ruleId]);
+        $ruleMock = new DataObject(['id' => $ruleId]);
         $this->registryMock->expects($this->once())
             ->method('registry')
             ->with(RegistryConstants::CURRENT_SALES_RULE)

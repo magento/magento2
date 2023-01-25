@@ -21,7 +21,7 @@
 
         <!-- Clearing QTY field -->
         <doubleClick selector="{{StorefrontMinicartSection.itemQuantityBySku(product.sku)}}" stepKey="doubleClickOnQtyInput"/>
-        <pressKey selector="{{StorefrontMinicartSection.itemQuantityBySku(product.sku)}}" parameterArray="[\WebDriverKeys::DELETE]" stepKey="clearQty"/>
+        <pressKey selector="{{StorefrontMinicartSection.itemQuantityBySku(product.sku)}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::DELETE]" stepKey="clearQty"/>
         <!-- Clearing QTY field -->
 
         <fillField selector="{{StorefrontMinicartSection.itemQuantityBySku(product.sku)}}"  userInput="{{quote.qty}}" stepKey="changeQty"/>

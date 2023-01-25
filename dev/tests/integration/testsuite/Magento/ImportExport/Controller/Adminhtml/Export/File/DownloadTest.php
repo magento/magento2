@@ -54,7 +54,7 @@ class DownloadTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -65,7 +65,7 @@ class DownloadTest extends AbstractBackendController
         $this->backendUrl->turnOnSecretKey();
         $this->sourceFilePath = __DIR__ . '/../../Import/_files' . DIRECTORY_SEPARATOR . $this->fileName;
         //Refers to tests 'var' directory
-        $this->varDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::VAR_DIR);
+        $this->varDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
     }
 
     /**
@@ -124,9 +124,11 @@ class DownloadTest extends AbstractBackendController
      */
     private function copyFile($destinationFilePath): void
     {
-        //Refers to application root directory
-        $rootDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::ROOT);
-        $rootDirectory->copyFile($this->sourceFilePath, $this->varDirectory->getAbsolutePath($destinationFilePath));
+        $driver = $this->varDirectory->getDriver();
+        $absolutePath = $this->varDirectory->getAbsolutePath($destinationFilePath);
+
+        $driver->createDirectory(dirname($absolutePath));
+        $driver->filePutContents($absolutePath, file_get_contents($this->sourceFilePath));
     }
 
     /**
@@ -145,7 +147,7 @@ class DownloadTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->auth = null;
 
@@ -155,7 +157,7 @@ class DownloadTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $filesystem = Bootstrap::getObjectManager()->get(Filesystem::class);
         /** @var WriteInterface $directory */

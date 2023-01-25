@@ -3,82 +3,91 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\User\Test\Unit\Block\Role\Tab;
 
-/**
- * Class EditTest to cover Magento\User\Block\Role\Tab\Edit
- *
- */
-class EditTest extends \PHPUnit\Framework\TestCase
+use Magento\Authorization\Model\Acl\AclRetriever;
+use Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory;
+use Magento\Framework\Acl\AclResource\ProviderInterface;
+use Magento\Framework\Acl\RootResource;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Integration\Helper\Data;
+use Magento\User\Block\Role\Tab\Edit;
+use Magento\User\Controller\Adminhtml\User\Role\SaveRole;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class EditTest extends TestCase
 {
-    /** @var \Magento\User\Block\Role\Tab\Edit */
+    /** @var Edit */
     protected $model;
 
-    /** @var \Magento\Framework\Acl\RootResource|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RootResource|MockObject */
     protected $rootResourceMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     protected $rulesCollectionFactoryMock;
 
-    /** @var \Magento\Authorization\Model\Acl\AclRetriever|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AclRetriever|MockObject */
     protected $aclRetrieverMock;
 
-    /** @var \Magento\Framework\Acl\AclResource\ProviderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProviderInterface|MockObject */
     protected $aclResourceProviderMock;
 
-    /** @var \Magento\Integration\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Data|MockObject */
     protected $integrationDataMock;
 
-    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Registry|MockObject */
     protected $coreRegistryMock;
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var ObjectManager */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->rootResourceMock = $this->getMockBuilder(\Magento\Framework\Acl\RootResource::class)
+        $this->rootResourceMock = $this->getMockBuilder(RootResource::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
         $this->rulesCollectionFactoryMock = $this
-            ->getMockBuilder(\Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory::class)
+            ->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->aclRetrieverMock = $this->getMockBuilder(\Magento\Authorization\Model\Acl\AclRetriever::class)
+        $this->aclRetrieverMock = $this->getMockBuilder(AclRetriever::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
         $this->aclResourceProviderMock = $this->getMockBuilder(
-            \Magento\Framework\Acl\AclResource\ProviderInterface::class
+            ProviderInterface::class
         )->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->integrationDataMock = $this->getMockBuilder(\Magento\Integration\Helper\Data::class)
+        $this->integrationDataMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->coreRegistryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
+        $this->coreRegistryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->setMethods(['registry'])
             ->getMock();
 
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new ObjectManager($this);
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\User\Block\Role\Tab\Edit::class,
+            Edit::class,
             [
                 'aclRetriever' => $this->aclRetrieverMock,
                 'rootResource' => $this->rootResourceMock,
                 'rulesCollectionFactory' => $this->rulesCollectionFactoryMock,
                 'aclResourceProvider' => $this->aclResourceProviderMock,
-                'integrationData' => $this->integrationDataMock,
+                'integrationData' => $this->integrationDataMock
             ]
         );
         $this->model->setCoreRegistry($this->coreRegistryMock);
@@ -91,6 +100,13 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ['id' => 'Invalid_Node', 'children' => ['resource4', 'resource5', 'resource6']]
         ];
         $mappedResources = ['mapped1', 'mapped2', 'mapped3'];
+        $this->coreRegistryMock->expects($this->once())
+            ->method('registry')
+            ->with(SaveRole::RESOURCE_ALL_FORM_DATA_SESSION_KEY)
+            ->willReturn(true);
+        $this->rootResourceMock->expects($this->exactly(1))
+            ->method('getId')
+            ->willReturn(10);
         $this->aclResourceProviderMock->expects($this->once())->method('getAclResources')->willReturn($resources);
         $this->integrationDataMock->expects($this->once())->method('mapResources')->willReturn($mappedResources);
 
@@ -107,7 +123,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
 
         $this->coreRegistryMock->expects($this->once())
             ->method('registry')
-            ->with(\Magento\User\Controller\Adminhtml\User\Role\SaveRole::RESOURCE_ALL_FORM_DATA_SESSION_KEY)
+            ->with(SaveRole::RESOURCE_ALL_FORM_DATA_SESSION_KEY)
             ->willReturn(true);
 
         if ($isAllowed) {

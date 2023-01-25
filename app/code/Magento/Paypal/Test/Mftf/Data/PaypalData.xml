@@ -61,17 +61,12 @@
     <entity name="DefaultApiSignature" type="api_signature">
         <data key="value"/>
     </entity>
-    <entity name="Payer" type="paypal_buyer">
-        <data key="buyerEmail">buyer.mpi@gmail.com</data>
-        <data key="buyerPassword">12345678</data>
-    </entity>
     <entity name="PayPalLabel" type="paypal">
-        <data key="checkout">checkout</data>
-        <data key="credit">credit</data>
-        <data key="pay">pay</data>
-        <data key="buynow">buy now</data>
-        <data key="paypal">pay pal</data>
-        <data key="installment">installment</data>
+        <data key="checkout">Checkout</data>
+        <data key="pay">Pay</data>
+        <data key="buynow">Buy Now</data>
+        <data key="paypal">Paypal</data>
+        <data key="installment">Pagos en</data>
     </entity>
     <entity name="PayPalLayout" type="paypal">
         <data key="horizontal">horizontal</data>
@@ -84,7 +79,7 @@
     </entity>
     <entity name="PayPalShape" type="paypal">
         <data key="pill">pill</data>
-        <data key="rectangle">rectangle</data>
+        <data key="rectangle">rect</data>
     </entity>
     <entity name="PayPalColor" type="paypal">
         <data key="gold">gold</data>
@@ -131,5 +126,101 @@
     </entity>
     <entity name="Payer">
         <data key="firstName">Alex</data>
+    </entity>
+
+    <!-- configuration used for paypal payflow pro -->
+    <entity name="EnablePaypalPayflowProWithVault" type="custom_paypal_payflow_pro_config_state">
+        <requiredEntity type="enable_paypal_payflow">EnablePaypalPayflowProMethod</requiredEntity>
+        <requiredEntity type="payflowpro_cc_vault_active">EnablePaypalPayflowProVault</requiredEntity>
+    </entity>
+    <entity name="RollbackPaypalPayflowPro" type="custom_paypal_payflow_pro_config_state">
+        <requiredEntity type="enable_paypal_payflow">DisablePaypalPayflowProMethod</requiredEntity>
+        <requiredEntity type="payflowpro_cc_vault_active">DisablePaypalPayflowProVault</requiredEntity>
+    </entity>
+    <entity name="PaypalPayflowProConfig" type="paypal_payflow_pro_config_state">
+        <requiredEntity type="business_account">PaypalPayflowProBusinessAccount</requiredEntity>
+        <requiredEntity type="partner">PaypalPayflowProPartner</requiredEntity>
+        <requiredEntity type="user">PaypalPayflowProUser</requiredEntity>
+        <requiredEntity type="vendor">PaypalPayflowProVendor</requiredEntity>
+        <requiredEntity type="pwd">PaypalPayflowProPassword</requiredEntity>
+        <requiredEntity type="sandbox_flag">SandboxFlag</requiredEntity>
+        <requiredEntity type="use_proxy">UseProxy</requiredEntity>
+    </entity>
+    <entity name="PaypalPayflowProBusinessAccount" type="business_account">
+        <data key="value">{{_CREDS.magento/payflow_pro_business_account}}</data>
+    </entity>
+    <entity name="PaypalPayflowProPartner" type="partner">
+        <data key="value">{{_CREDS.magento/payflow_pro_partner}}</data>
+    </entity>
+    <entity name="PaypalPayflowProUser" type="user">
+        <data key="value">{{_CREDS.magento/payflow_pro_user}}</data>
+    </entity>
+    <entity name="PaypalPayflowProVendor" type="vendor">
+        <data key="value">{{_CREDS.magento/payflow_pro_vendor}}</data>
+    </entity>
+    <entity name="PaypalPayflowProPassword" type="pwd">
+        <data key="value">{{_CREDS.magento/payflow_pro_pwd}}</data>
+    </entity>
+    <!-- default configuration used to restore Magento config -->
+    <entity name="DefaultPaypalPayflowProConfig" type="paypal_payflow_pro_config_state">
+        <requiredEntity type="business_account">DefaultPaypalPayflowProBusinessAccount</requiredEntity>
+        <requiredEntity type="partner">DefaultPaypalPayflowProPartner</requiredEntity>
+        <requiredEntity type="user">DefaultPaypalPayflowProUser</requiredEntity>
+        <requiredEntity type="vendor">DefaultPaypalPayflowProVendor</requiredEntity>
+        <requiredEntity type="pwd">DefaultPaypalPayflowProPassword</requiredEntity>
+    </entity>
+    <entity name="DefaultPaypalPayflowProBusinessAccount" type="business_account">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultPaypalPayflowProPartner" type="partner">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultPaypalPayflowProUser" type="user">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultPaypalPayflowProVendor" type="vendor">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultPaypalPayflowProPassword" type="pwd">
+        <data key="value"/>
+    </entity>
+    <entity name="EnablePaypalPayflowProMethod" type="enable_paypal_payflow">
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisablePaypalPayflowProMethod" type="enable_paypal_payflow">
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnablePaypalPayflowProVault" type="payflowpro_cc_vault_active">
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisablePaypalPayflowProVault" type="payflowpro_cc_vault_active">
+        <data key="value">0</data>
+    </entity>
+    <entity name="Visa3DSecureCard" type="data">
+        <data key="cardNumber">4000000000000002</data>
+        <data key="month">12</data>
+        <data key="year">30</data>
+        <data key="cvv">113</data>
+    </entity>
+    <entity name="Visa3DSecureCardInfo">
+        <data key="cardNumberEnding">0002</data>
+        <data key="cardExpire">12/2030</data>
+    </entity>
+    <entity name="VisaDefaultCard" type="data">
+        <data key="cardNumber">4111111111111111</data>
+        <data key="month">01</data>
+        <data key="year">30</data>
+        <data key="cvv">123</data>
+    </entity>
+    <entity name="VisaDefaultCardInfo">
+        <data key="cardNumberEnding">1111</data>
+        <data key="cardExpire">01/2030</data>
+    </entity>
+    <entity name="SamplePaypalExpressConfig2" type="paypal_express_config">
+        <data key="paypal_express_email">rlus_1349181941_biz@ebay.com</data>
+        <data key="paypal_express_api_username">rlus_1349181941_biz_api1.ebay.com</data>
+        <data key="paypal_express_api_password">MDNAZYSJBDYNA6BN</data>
+        <data key="paypal_express_api_signature">AFcWxV21C7fd0v3bYYYRCpSSRl31AqoP3QLd.JUUpDPuPpQIgT0-m401</data>
+        <data key="paypal_express_merchantID">54Z2EE6T7PRB4</data>
     </entity>
 </entities>

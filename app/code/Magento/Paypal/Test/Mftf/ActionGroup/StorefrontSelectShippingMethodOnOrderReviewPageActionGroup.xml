@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontSelectShippingMethodOnOrderReviewPageActionGroup">
+        <annotations>
+            <description>Select Shipping method on Order Review page</description>
+        </annotations>
+        <arguments>
+            <argument name="shippingMethod" defaultValue="Fixed - $5.00" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontPayPalOrderReviewSection.shippingMethod}}" stepKey="waitForShippingMethodDropdown"/>
+        <selectOption selector="{{StorefrontPayPalOrderReviewSection.shippingMethod}}" userInput="{{shippingMethod}}" stepKey="selectShippingMethod" />
+        <waitForPageLoad stepKey="waitForLoadShippingMethod"/>
+    </actionGroup>
+</actionGroups>

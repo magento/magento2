@@ -82,11 +82,12 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testChangePasswordIfUserIsNotAuthorizedTest()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $query = $this->getQuery('currentpassword', 'newpassword');
         $this->graphQlMutation($query);
     }
@@ -104,18 +105,19 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
         $headerMap = $this->getCustomerAuthHeaders($customerEmail, $currentPassword);
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessageRegExp('/Minimum of different classes of characters in password is.*/');
+        $this->expectExceptionMessageMatches('/Minimum of different classes of characters in password is.*/');
 
         $this->graphQlMutation($query, [], '', $headerMap);
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid login or password.
      */
     public function testChangePasswordIfPasswordIsInvalid()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid login or password.');
+
         $customerEmail = 'customer@example.com';
         $currentPassword = 'password';
         $newPassword = 'anotherPassword1';
@@ -129,11 +131,12 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Specify the "currentPassword" value.
      */
     public function testChangePasswordIfCurrentPasswordIsEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Specify the "currentPassword" value.');
+
         $customerEmail = 'customer@example.com';
         $currentPassword = 'password';
         $newPassword = 'anotherPassword1';
@@ -147,11 +150,12 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Specify the "newPassword" value.
      */
     public function testChangePasswordIfNewPasswordIsEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Specify the "newPassword" value.');
+
         $customerEmail = 'customer@example.com';
         $currentPassword = 'password';
         $incorrectNewPassword = '';
@@ -164,11 +168,12 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The account is locked.
      */
     public function testChangePasswordIfCustomerIsLocked()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The account is locked.');
+
         $customerEmail = 'customer@example.com';
         $currentPassword = 'password';
         $newPassword = 'anotherPassword1';

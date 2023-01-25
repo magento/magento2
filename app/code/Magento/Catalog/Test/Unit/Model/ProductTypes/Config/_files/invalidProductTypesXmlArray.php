@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 return [
     'types_with_same_name_attribute_value' => [
         '<?xml version="1.0"?><config><type name="some_name" /><type name="some_name" /></config>',
@@ -23,9 +25,7 @@ return [
         '<?xml version="1.0"?><config><type name="some_name" modelInstance="123" /></config>',
         [
             "Element 'type', attribute 'modelInstance': [facet 'pattern'] The value '123' is not accepted by the" .
-            " pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n",
-            "Element 'type', attribute 'modelInstance': '123' is not a valid value of the atomic type" .
-            " 'modelName'.\nLine: 1\n"
+            " pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n"
         ],
     ],
     'type_indexpriority_invalid_value' => [
@@ -57,18 +57,14 @@ return [
         '<?xml version="1.0"?><config><type name="some_name"><priceModel instance="123123" /></type></config>',
         [
             "Element 'priceModel', attribute 'instance': [facet 'pattern'] The value '123123' is not accepted " .
-            "by the pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n",
-            "Element 'priceModel', attribute 'instance': '123123' is not a valid value of the atomic type" .
-            " 'modelName'.\nLine: 1\n"
+            "by the pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n"
         ],
     ],
     'type_indexermodel_instance_invalid_value' => [
         '<?xml version="1.0"?><config><type name="some_name"><indexerModel instance="123" /></type></config>',
         [
             "Element 'indexerModel', attribute 'instance': [facet 'pattern'] The value '123' is not accepted by " .
-            "the pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n",
-            "Element 'indexerModel', attribute 'instance': '123' is not a valid value of the atomic type" .
-            " 'modelName'.\nLine: 1\n"
+            "the pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n"
         ],
     ],
     'type_indexermodel_without_required_instance_attribute' => [
@@ -83,9 +79,7 @@ return [
         '<?xml version="1.0"?><config><type name="some_name"><stockIndexerModel instance="1234"/></type></config>',
         [
             "Element 'stockIndexerModel', attribute 'instance': [facet 'pattern'] The value '1234' is not " .
-            "accepted by the pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n",
-            "Element 'stockIndexerModel', attribute 'instance': '1234' is not a valid value of the atomic " .
-            "type 'modelName'.\nLine: 1\n"
+            "accepted by the pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n"
         ],
     ],
     'allowedselectiontypes_without_required_type_handle' => [

@@ -7,23 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Plugin;
 
-use Magento\ConfigurableProduct\Model\Plugin\ProductIdentitiesExtender;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Model\Plugin\ProductIdentitiesExtender;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ProductIdentitiesExtenderTest
+ * Unit test for Magento\ConfigurableProduct\Model\Plugin\ProductIdentitiesExtender class.
  */
-class ProductIdentitiesExtenderTest extends \PHPUnit\Framework\TestCase
+class ProductIdentitiesExtenderTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Configurable
+     * @var MockObject|Configurable
      */
     private $configurableTypeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ProductRepositoryInterface
+     * @var MockObject|ProductRepositoryInterface
      */
     private $productRepositoryMock;
 
@@ -32,7 +34,10 @@ class ProductIdentitiesExtenderTest extends \PHPUnit\Framework\TestCase
      */
     private $plugin;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
         $this->configurableTypeMock = $this->getMockBuilder(Configurable::class)
             ->disableOriginalConstructor()
@@ -43,6 +48,11 @@ class ProductIdentitiesExtenderTest extends \PHPUnit\Framework\TestCase
         $this->plugin = new ProductIdentitiesExtender($this->configurableTypeMock, $this->productRepositoryMock);
     }
 
+    /**
+     * Verify after get identities
+     *
+     * @return void
+     */
     public function testAfterGetIdentities()
     {
         $productId = 1;
@@ -56,21 +66,31 @@ class ProductIdentitiesExtenderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $productMock->expects($this->once())
+        $productMock->expects($this->exactly(2))
             ->method('getId')
             ->willReturn($productId);
+        $productMock->expects($this->exactly(2))
+            ->method('getTypeId')
+            ->willReturn(Configurable::TYPE_CODE);
         $this->configurableTypeMock->expects($this->once())
             ->method('getParentIdsByChild')
             ->with($productId)
             ->willReturn([$parentProductId]);
-        $this->productRepositoryMock->expects($this->once())
+        $this->productRepositoryMock->expects($this->exactly(2))
             ->method('getById')
             ->with($parentProductId)
             ->willReturn($parentProductMock);
-        $parentProductMock->expects($this->once())
+        $parentProductMock->expects($this->exactly(2))
             ->method('getIdentities')
             ->willReturn([$parentProductIdentity]);
 
+        $productIdentities = $this->plugin->afterGetIdentities($productMock, [$productIdentity]);
+        $this->assertEquals([$productIdentity, $parentProductIdentity], $productIdentities);
+
+        $this->configurableTypeMock->expects($this->never())
+            ->method('getParentIdsByChild')
+            ->with($productId)
+            ->willReturn([$parentProductId]);
         $productIdentities = $this->plugin->afterGetIdentities($productMock, [$productIdentity]);
         $this->assertEquals([$productIdentity, $parentProductIdentity], $productIdentities);
     }

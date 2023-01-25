@@ -23,6 +23,7 @@ define([
             direction: 'product_list_dir',
             order: 'product_list_order',
             limit: 'product_list_limit',
+            page: 'p',
             modeDefault: 'grid',
             directionDefault: 'asc',
             orderDefault: 'position',
@@ -34,10 +35,26 @@ define([
 
         /** @inheritdoc */
         _create: function () {
-            this._bind($(this.options.modeControl), this.options.mode, this.options.modeDefault);
-            this._bind($(this.options.directionControl), this.options.direction, this.options.directionDefault);
-            this._bind($(this.options.orderControl), this.options.order, this.options.orderDefault);
-            this._bind($(this.options.limitControl), this.options.limit, this.options.limitDefault);
+            this._bind(
+                $(this.options.modeControl, this.element),
+                this.options.mode,
+                this.options.modeDefault
+            );
+            this._bind(
+                $(this.options.directionControl, this.element),
+                this.options.direction,
+                this.options.directionDefault
+            );
+            this._bind(
+                $(this.options.orderControl, this.element),
+                this.options.order,
+                this.options.orderDefault
+            );
+            this._bind(
+                $(this.options.limitControl, this.element),
+                this.options.limit,
+                this.options.limitDefault
+            );
         },
 
         /** @inheritdoc */
@@ -81,24 +98,67 @@ define([
         },
 
         /**
+         * @private
+         */
+        getUrlParams: function () {
+            var decode = window.decodeURIComponent,
+                urlPaths = this.options.url.split('?'),
+                urlParams = urlPaths[1] ? urlPaths[1].split('&') : [],
+                params = {},
+                parameters, i;
+
+            for (i = 0; i < urlParams.length; i++) {
+                parameters = urlParams[i].split('=');
+                params[decode(parameters[0])] = parameters[1] !== undefined ?
+                    decode(parameters[1].replace(/\+/g, '%20')) :
+                    '';
+            }
+
+            return params;
+        },
+
+        /**
+         * @returns {String}
+         * @private
+         */
+        getCurrentLimit: function () {
+            return this.getUrlParams()[this.options.limit] || this.options.limitDefault;
+        },
+
+        /**
+         * @returns {String}
+         * @private
+         */
+        getCurrentPage: function () {
+            return this.getUrlParams()[this.options.page] || 1;
+        },
+
+        /**
          * @param {String} paramName
          * @param {*} paramValue
          * @param {*} defaultValue
          */
         changeUrl: function (paramName, paramValue, defaultValue) {
-            var decode = window.decodeURIComponent,
-                urlPaths = this.options.url.split('?'),
+            var urlPaths = this.options.url.split('?'),
                 baseUrl = urlPaths[0],
-                urlParams = urlPaths[1] ? urlPaths[1].split('&') : [],
-                paramData = {},
-                parameters, i, form, params, key, input, formKey;
+                paramData = this.getUrlParams(),
+                currentPage = this.getCurrentPage(),
+                form, params, key, input, formKey, newPage;
 
-            for (i = 0; i < urlParams.length; i++) {
-                parameters = urlParams[i].split('=');
-                paramData[decode(parameters[0])] = parameters[1] !== undefined ?
-                    decode(parameters[1].replace(/\+/g, '%20')) :
-                    '';
+            if (currentPage > 1 && paramName === this.options.mode) {
+                delete paramData[this.options.page];
             }
+
+            if (currentPage > 1 && paramName === this.options.limit) {
+                newPage = Math.floor(this.getCurrentLimit() * (currentPage - 1) / paramValue) + 1;
+
+                if (newPage > 1) {
+                    paramData[this.options.page] = newPage;
+                } else {
+                    delete paramData[this.options.page];
+                }
+            }
+
             paramData[paramName] = paramValue;
 
             if (this.options.post) {
@@ -130,6 +190,7 @@ define([
                 if (paramValue == defaultValue) { //eslint-disable-line eqeqeq
                     delete paramData[paramName];
                 }
+
                 paramData = $.param(paramData);
                 location.href = baseUrl + (paramData.length ? '?' + paramData : '');
             }

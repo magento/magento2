@@ -7,15 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\CatalogGraphQl\Model\Category\Filter\SearchCriteria;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\GraphQl\Model\Query\ContextInterface;
+use Magento\CatalogGraphQl\Model\Category\CategoryFilter;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree;
-use Magento\CatalogGraphQl\Model\Category\CategoryFilter;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 
 /**
  * Category List resolver, used for GraphQL category data request processing.
@@ -28,11 +33,6 @@ class CategoryList implements ResolverInterface
     private $categoryTree;
 
     /**
-     * @var CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
      * @var CategoryFilter
      */
     private $categoryFilter;
@@ -43,21 +43,34 @@ class CategoryList implements ResolverInterface
     private $extractDataFromCategoryTree;
 
     /**
+     * @var ArgumentsProcessorInterface
+     */
+    private $argsSelection;
+
+    /**
+     * @var SearchCriteria
+     */
+    private $searchCriteria;
+
+    /**
      * @param CategoryTree $categoryTree
      * @param ExtractDataFromCategoryTree $extractDataFromCategoryTree
      * @param CategoryFilter $categoryFilter
-     * @param CollectionFactory $collectionFactory
+     * @param ArgumentsProcessorInterface $argsSelection
+     * @param SearchCriteria $searchCriteria
      */
     public function __construct(
         CategoryTree $categoryTree,
         ExtractDataFromCategoryTree $extractDataFromCategoryTree,
         CategoryFilter $categoryFilter,
-        CollectionFactory $collectionFactory
+        ArgumentsProcessorInterface $argsSelection,
+        SearchCriteria $searchCriteria
     ) {
         $this->categoryTree = $categoryTree;
         $this->extractDataFromCategoryTree = $extractDataFromCategoryTree;
         $this->categoryFilter = $categoryFilter;
-        $this->collectionFactory = $collectionFactory;
+        $this->argsSelection = $argsSelection;
+        $this->searchCriteria = $searchCriteria;
     }
 
     /**
@@ -70,45 +83,52 @@ class CategoryList implements ResolverInterface
         }
         $store = $context->getExtensionAttributes()->getStore();
 
-        $rootCategoryIds = [];
         if (!isset($args['filters'])) {
-            $rootCategoryIds[] = (int)$store->getRootCategoryId();
-        } else {
-            $categoryCollection = $this->collectionFactory->create();
-            try {
-                $this->categoryFilter->applyFilters($args, $categoryCollection, $store);
-            } catch (InputException $e) {
-                return [];
-            }
+            $args['filters']['ids'] = ['eq' => $store->getRootCategoryId()];
+        }
+        try {
+            $processedArgs = $this->argsSelection->process($info->fieldName, $args);
+            $filterResults = $this->categoryFilter->getResult($processedArgs, $store, [], $context);
 
-            foreach ($categoryCollection as $category) {
-                $rootCategoryIds[] = (int)$category->getId();
-            }
+            $topLevelCategoryIds = $filterResults['category_ids'];
+        } catch (InputException $e) {
+            throw new GraphQlInputException(__($e->getMessage()));
         }
 
-        $result = $this->fetchCategories($rootCategoryIds, $info);
-        return $result;
+        return $this->fetchCategoriesByTopLevelIds($topLevelCategoryIds, $info, $processedArgs, [], $context);
     }
 
     /**
      * Fetch category tree data
      *
-     * @param array $categoryIds
+     * @param array $topLevelCategoryIds
      * @param ResolveInfo $info
+     * @param array $processedArgs
+     * @param array $attributeNames
+     * @param ContextInterface $context
      * @return array
-     * @throws GraphQlNoSuchEntityException
+     * @throws LocalizedException
      */
-    private function fetchCategories(array $categoryIds, ResolveInfo $info)
-    {
-        $fetchedCategories = [];
-        foreach ($categoryIds as $categoryId) {
-            $categoryTree = $this->categoryTree->getTree($info, $categoryId);
-            if (empty($categoryTree)) {
-                continue;
-            }
-            $fetchedCategories[] = current($this->extractDataFromCategoryTree->execute($categoryTree));
-        }
-
-        return $fetchedCategories;
+    private function fetchCategoriesByTopLevelIds(
+        array $topLevelCategoryIds,
+        ResolveInfo $info,
+        array $processedArgs,
+        array $attributeNames,
+        ContextInterface $context
+    ) : array {
+        // pagination must be applied to top level category results, children categories are not paginated
+        $processedArgs['pageSize'] = 0;
+        $searchCriteria = $this->searchCriteria->buildCriteria(
+            $processedArgs,
+            $context->getExtensionAttributes()->getStore()
+        );
+        $categoryCollection = $this->categoryTree->getFlatCategoriesByRootIds(
+            $info,
+            $topLevelCategoryIds,
+            $searchCriteria,
+            $attributeNames,
+            $context
+        );
+        return $this->extractDataFromCategoryTree->buildTree($categoryCollection, $topLevelCategoryIds);
     }
 }

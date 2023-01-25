@@ -3,286 +3,327 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Test\Unit\Block\Adminhtml\Export;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Helper\Data;
+use Magento\Eav\Api\Data\AttributeOptionInterfaceFactory;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\Entity\TypeFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Stdlib\DateTime\Timezone;
+use Magento\Framework\View\Element\Html\Date;
+use Magento\Framework\View\Element\Html\Select;
+use Magento\Framework\View\Layout;
+use Magento\ImportExport\Block\Adminhtml\Export\Filter;
+use Magento\ImportExport\Model\ResourceModel\Export\AttributeGridCollectionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD)
  */
-class FilterTest extends \PHPUnit\Framework\TestCase
+class FilterTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filter|MockObject
      */
-    protected $modelContext;
+    private $filter;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Layout|MockObject
      */
-    protected $registry;
+    private $layout;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttributesFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @inheritdoc
      */
-    protected $extensionFactory;
-
-    /**
-     * @var \Magento\Framework\Api\AttributeValueFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $customAttributeFactory;
-
-    /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $eavConfig;
-
-    /**
-     * @var \Magento\Eav\Model\Entity\TypeFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $eavTypeFactory;
-
-    /**
-     * @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $storeManager;
-
-    /**
-     * @var \Magento\Eav\Model\ResourceModel\Helper|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $resourceHelper;
-
-    /**
-     * @var \Magento\Framework\Validator\UniversalFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $universalFactory;
-
-    /**
-     * @var \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $optionDataFactory;
-
-    /**
-     * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dataObjectProcessor;
-
-    /**
-     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dataObjectHelper;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\Timezone|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $localeDate;
-
-    /**
-     * @var \Magento\Catalog\Model\Product\ReservedAttributeList|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $reservedAttributeList;
-
-    /**
-     * @var \Magento\Framework\Locale\Resolver|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $localeResolver;
-
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $resource;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $resourceCollection;
-
-    /**
-     * @var \Magento\Backend\Block\Template\Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $context;
-
-    /**
-     * @var \Magento\Backend\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $backendHelper;
-
-    /**
-     * @var \Magento\ImportExport\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $importExportData;
-
-    /**
-     * @var ObjectManagerHelper
-     */
-    protected $objectManagerHelper;
-
-    /**
-     * @var \Magento\ImportExport\Block\Adminhtml\Export\Filter|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $filter;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $dateTimeFormatter;
-
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->modelContext = $this->createMock(\Magento\Framework\Model\Context::class);
-        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
-        $this->extensionFactory = $this->createMock(\Magento\Framework\Api\ExtensionAttributesFactory::class);
-        $this->customAttributeFactory = $this->createMock(\Magento\Framework\Api\AttributeValueFactory::class);
-        $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
-        $this->eavTypeFactory = $this->createMock(\Magento\Eav\Model\Entity\TypeFactory::class);
-        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
-        $this->resourceHelper = $this->createMock(\Magento\Eav\Model\ResourceModel\Helper::class);
-        $this->universalFactory = $this->createMock(\Magento\Framework\Validator\UniversalFactory::class);
-        $this->optionDataFactory = $this->createMock(\Magento\Eav\Api\Data\AttributeOptionInterfaceFactory::class);
-        $this->dataObjectProcessor = $this->createMock(\Magento\Framework\Reflection\DataObjectProcessor::class);
-        $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
-        $this->localeDate = $this->createMock(\Magento\Framework\Stdlib\DateTime\Timezone::class);
-        $this->localeDate->expects($this->any())->method('getDateFormat')->will($this->returnValue('12-12-2012'));
-        $this->reservedAttributeList = $this->createMock(\Magento\Catalog\Model\Product\ReservedAttributeList::class);
-        $this->localeResolver = $this->createMock(\Magento\Framework\Locale\Resolver::class);
-        $this->resource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
-        $this->resourceCollection = $this->getMockForAbstractClass(
-            \Magento\Framework\Data\Collection\AbstractDb::class,
+        $context = $this->getMockBuilder(Context::class)
+            ->onlyMethods(['getFileSystem', 'getEscaper', 'getLocaleDate', 'getLayout'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $filesystem = $this->createMock(Filesystem::class);
+        $context->expects($this->any())->method('getFileSystem')->willReturn($filesystem);
+        $escaper = $this->createPartialMock(Escaper::class, ['escapeHtml']);
+        $escaper->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
+        $context->expects($this->any())->method('getEscaper')->willReturn($escaper);
+        $timeZone = $this->createMock(Timezone::class);
+        $timeZone->expects($this->any())->method('getDateFormat')->willReturn('M/d/yy');
+        $context->expects($this->any())->method('getLocaleDate')->willReturn($timeZone);
+        $this->layout = $this->createMock(Layout::class);
+        $context->expects($this->any())->method('getLayout')->willReturn($this->layout);
+        $backendHelper = $this->createMock(Data::class);
+        $importExportData = $this->createMock(\Magento\ImportExport\Helper\Data::class);
+        $attributeGridCollectionFactory = $this->createMock(AttributeGridCollectionFactory::class);
+        $this->filter = new Filter(
+            $context,
+            $backendHelper,
+            $importExportData,
             [],
-            '',
-            false
-        );
-        $this->context = $this->createPartialMock(
-            \Magento\Backend\Block\Template\Context::class,
-            ['getFileSystem', 'getEscaper', 'getLocaleDate', 'getLayout']
-        );
-        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
-        $this->context->expects($this->any())->method('getFileSystem')->will($this->returnValue($filesystem));
-        $escaper = $this->createPartialMock(\Magento\Framework\Escaper::class, ['escapeHtml']);
-        $escaper->expects($this->any())->method('escapeHtml')->will($this->returnValue(''));
-        $this->context->expects($this->any())->method('getEscaper')->will($this->returnValue($escaper));
-        $timeZone = $this->createMock(\Magento\Framework\Stdlib\DateTime\Timezone::class);
-        $timeZone->expects($this->any())->method('getDateFormat')->will($this->returnValue('M/d/yy'));
-        $this->context->expects($this->any())->method('getLocaleDate')->will($this->returnValue($timeZone));
-        $dateBlock = $this->createPartialMock(
-            \Magento\Framework\View\Element\Html\Date::class,
-            ['setValue', 'getHtml', 'setId', 'getId']
-        );
-        $dateBlock->expects($this->any())->method('setValue')->will($this->returnSelf());
-        $dateBlock->expects($this->any())->method('getHtml')->will($this->returnValue(''));
-        $dateBlock->expects($this->any())->method('setId')->will($this->returnSelf());
-        $dateBlock->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $layout = $this->createMock(\Magento\Framework\View\Layout::class);
-        $layout->expects($this->any())->method('createBlock')->will($this->returnValue($dateBlock));
-        $this->context->expects($this->any())->method('getLayout')->will($this->returnValue($layout));
-        $this->backendHelper = $this->createMock(\Magento\Backend\Helper\Data::class);
-        $this->importExportData = $this->createMock(\Magento\ImportExport\Helper\Data::class);
-        $this->dateTimeFormatter = $this->createMock(
-            \Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface::class
-        );
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->filter = $this->objectManagerHelper->getObject(
-            \Magento\ImportExport\Block\Adminhtml\Export\Filter::class,
-            [
-                'context' => $this->context,
-                'backendHelper' => $this->backendHelper,
-                'importExportData' => $this->importExportData
-            ]
+            $attributeGridCollectionFactory
         );
     }
 
     /**
-     * Test decorateFilter()
+     * Test date filter
      *
      * @param array $attributeData
-     * @param string $backendType
-     * @param array $columnValue
-     * @dataProvider decorateFilterDataProvider
+     * @param array $values
+     * @param array $expect
+     * @dataProvider dateFilterDataProvider
      */
-    public function testDecorateFilter($attributeData, $backendType, $columnValue)
+    public function testDateFilter(array $attributeData, array $values, array $expect): void
     {
-        $value = '';
-        $attribute = new \Magento\Eav\Model\Entity\Attribute(
-            $this->modelContext,
-            $this->registry,
-            $this->extensionFactory,
-            $this->customAttributeFactory,
-            $this->eavConfig,
-            $this->eavTypeFactory,
-            $this->storeManager,
-            $this->resourceHelper,
-            $this->universalFactory,
-            $this->optionDataFactory,
-            $this->dataObjectProcessor,
-            $this->dataObjectHelper,
-            $this->localeDate,
-            $this->reservedAttributeList,
-            $this->localeResolver,
-            $this->dateTimeFormatter,
-            $this->resource,
-            $this->resourceCollection
-        );
-        $attribute->setAttributeCode($attributeData['code']);
-        $attribute->setFrontendInput($attributeData['input']);
-        $attribute->setOptions($attributeData['options']);
-        $attribute->setFilterOptions($attributeData['filter_options']);
-        $attribute->setBackendType($backendType);
-        $column = new \Magento\Framework\DataObject();
-        $column->setData($columnValue, 'value');
+        $type = Date::class;
+        $block = $block = $this->getMockBuilder($type)
+            ->addMethods(['setValue'])
+            ->onlyMethods(['getHtml'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $block->expects($this->exactly(2))
+            ->method('setValue')
+            ->withConsecutive(...$expect)
+            ->willReturnSelf();
+        $this->layout->expects($this->once())
+            ->method('createBlock')
+            ->with($type)
+            ->willReturn($block);
+        $attribute = $this->getAttributeMock($attributeData);
+        $column = new DataObject();
+        $column->addData($values);
         $isExport = true;
-        $result = $this->filter->decorateFilter($value, $attribute, $column, $isExport);
+        $result = $this->filter->decorateFilter(null, $attribute, $column, $isExport);
         $this->assertNotNull($result);
     }
 
     /**
-     * Dataprovider for testDecorateFilter()
-     *
-     * @return array
+     * @return array[]
      */
-    public function decorateFilterDataProvider()
+    public function dateFilterDataProvider(): array
+    {
+        return  [
+            [
+                [
+                    'attribute_code' =>'updated_at',
+                    'frontend_input' => '',
+                    'options' => [],
+                    'filter_options' => [],
+                    'backend_type' => 'datetime',
+                ],
+                ['values' => ['updated_at' => ['12/12/12', '12/15/12']]],
+                [
+                    ['12/12/12'],
+                    ['12/15/12']
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * Test select filter
+     *
+     * @param array $attributeData
+     * @param array $values
+     * @param array $expect
+     * @dataProvider selectFilterDataProvider
+     */
+    public function testSelectFilter(array $attributeData, array $values, array $expect): void
+    {
+        $html = '<select></select>';
+        $type = Select::class;
+        $block = $block = $this->getMockBuilder($type)
+            ->onlyMethods(['getHtml'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $block->expects($this->once())
+            ->method('getHtml')
+            ->willReturn($html);
+        $this->layout->expects($this->once())
+            ->method('createBlock')
+            ->with($type)
+            ->willReturn($block);
+        $attribute = $this->getAttributeMock($attributeData);
+        $column = new DataObject();
+        $column->addData($values);
+        $isExport = true;
+        $result = $this->filter->decorateFilter(null, $attribute, $column, $isExport);
+        $this->assertEquals($html, $result);
+        $this->assertSame($expect['value'], $block->getValue());
+        $this->assertEquals($expect['options'], $block->getOptions());
+    }
+
+    /**
+     * @return array[]
+     */
+    public function selectFilterDataProvider(): array
+    {
+        return  [
+            [
+                [
+                    'attribute_code' => 'color',
+                    'frontend_input' => 'select',
+                    'filter_options' => ['6' => 'Green', '7' => 'Blue'],
+                    'backend_type' => 'select',
+                ],
+                ['values' => ['color' => '6']],
+                [
+                    'value' => '6',
+                    'options' => [
+                        [
+                            'label' => '-- Not Selected --',
+                            'value' => ''
+                        ],
+                        [
+                            'label' => 'Green',
+                            'value' => '6'
+                        ],
+                        [
+                            'label' => 'Blue',
+                            'value' => '7'
+                        ]
+                    ]
+                ]
+            ],
+            [
+                [
+                    'attribute_code' => 'color',
+                    'frontend_input' => 'select',
+                    'filter_options' => ['6' => 'Green', '7' => 'Blue'],
+                    'backend_type' => 'select',
+                ],
+                ['values' => ['color' => '']],
+                [
+                    'value' => null,
+                    'options' => [
+                        [
+                            'label' => '-- Not Selected --',
+                            'value' => ''
+                        ],
+                        [
+                            'label' => 'Green',
+                            'value' => '6'
+                        ],
+                        [
+                            'label' => 'Blue',
+                            'value' => '7'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Test input filter
+     *
+     * @param array $attributeData
+     * @param array $values
+     * @param array $expect
+     * @dataProvider inputFilterDataProvider
+     */
+    public function testInputFilter(array $attributeData, array $values, array $expect): void
+    {
+        $this->layout->expects($this->never())
+            ->method('createBlock');
+        $attribute = $this->getAttributeMock($attributeData);
+        $column = new DataObject();
+        $column->addData($values);
+        $isExport = true;
+        $result = $this->filter->decorateFilter(null, $attribute, $column, $isExport);
+        $tag = simplexml_load_string($result);
+        $attributes = [];
+        foreach ($tag->attributes() as $name => $value) {
+            $attributes[$name] = "$value";
+        }
+        $this->assertEquals($expect, array_intersect_key($expect, $attributes));
+    }
+
+    /**
+     * @return array[]
+     */
+    public function inputFilterDataProvider(): array
+    {
+        return  [
+            [
+                [
+                    'attribute_code' => 'category_ids',
+                    'frontend_input' => '',
+                    'options' => [],
+                    'filter_options' => [],
+                    'backend_type' => 'varchar',
+                ],
+                ['values' => ['category_ids' => '1']],
+                [
+                    'name' => 'export_filter[category_ids]',
+                    'value' => '1',
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * Test number filter
+     *
+     * @param array $attributeData
+     * @param array $values
+     * @param array $expect
+     * @dataProvider numberFilterDataProvider
+     */
+    public function testNumberFilter(array $attributeData, array $values, array $expect): void
+    {
+        $this->layout->expects($this->never())
+            ->method('createBlock');
+        $attribute = $this->getAttributeMock($attributeData);
+        $column = new DataObject();
+        $column->addData($values);
+        $isExport = true;
+        $result = $this->filter->decorateFilter(null, $attribute, $column, $isExport);
+        $this->assertStringContainsString($expect[0], $result);
+        $this->assertStringContainsString($expect[1], $result);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function numberFilterDataProvider(): array
     {
         return [
             [
-                'attributeCode' => [
-                    'code' =>'updated_at',
-                    'input' => '',
+                [
+                    'attribute_code' => 'cost',
+                    'frontend_input' => '',
                     'options' => [],
-                    'filter_options' => []
+                    'filter_options' => [],
+                    'backend_type' => 'decimal',
                 ],
-                'backendType' => 'datetime',
-                'columnValue' => ['values' => ['updated_at' => '12/12/12']]
+                ['values' => ['cost' => ['3', '5']]],
+                [
+                    'value="3"',
+                    'value="5"',
+                ]
             ],
-            [
-                'attributeCode' => [
-                    'code' => 'category_ids',
-                    'input' => '',
-                    'options' => [],
-                    'filter_options' => []
-                ],
-                'backendType' => 'varchar',
-                'columnValue' => ['values' => ['category_ids' => '1']]
-            ],
-            [
-                'attributeCode' => [
-                    'code' => 'cost',
-                    'input' => '',
-                    'options' => [],
-                    'filter_options' => []
-                ],
-                'backendType' => 'decimal',
-                'columnValue' => ['values' => ['cost' => 'cost']]
-            ],
-            [
-                'attributeCode' => [
-                    'code' => 'color',
-                    'input' => 'select',
-                    'options' => ['red' => 'red'],
-                    'filter_options' => ['opt' => 'val']
-                ],
-                'backendType' => 'select',
-                'columnValue' => ['values' => ['color' => 'red']]
-            ]
         ];
+    }
+
+    /**
+     * @param array $data
+     * @return Attribute
+     */
+    private function getAttributeMock(array $data): Attribute
+    {
+        $attribute = $this->getMockBuilder(Attribute::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $attribute->addData($data);
+
+        return $attribute;
     }
 
     /**

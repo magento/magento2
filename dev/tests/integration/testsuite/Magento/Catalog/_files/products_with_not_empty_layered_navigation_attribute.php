@@ -11,9 +11,13 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Catalog\Model\GetCategoryByName;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/products_with_layered_navigation_attribute.php';
+Resolver::getInstance()->requireDataFixture(
+    'Magento/Catalog/_files/products_with_layered_navigation_attribute.php'
+);
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var StoreManagerInterface $storeManager */
@@ -24,6 +28,9 @@ $attributeRepository = $objectManager->create(ProductAttributeRepositoryInterfac
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 /** @var CategoryRepositoryInterface $categoryRepository */
 $categoryRepository = $objectManager->create(CategoryRepositoryInterface::class);
+/** @var GetCategoryByName $getCategoryByName */
+$getCategoryByName = $objectManager->create(GetCategoryByName::class);
+$category = $getCategoryByName->execute('Category 1');
 $attribute = $attributeRepository->get('test_configurable');
 
 $firstProduct = $productRepository->get('simple1');

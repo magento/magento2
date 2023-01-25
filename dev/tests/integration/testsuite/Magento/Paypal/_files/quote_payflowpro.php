@@ -10,9 +10,11 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\QuoteRepository;
+use Magento\SalesRule\Model\ResourceModel\Coupon\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require 'fixed_discount.php';
+Resolver::getInstance()->requireDataFixture('Magento/Paypal/_files/fixed_discount.php');
 
 /** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
@@ -70,7 +72,7 @@ for ($i = 1; $i <= 3; $i++) {
     $quote->addProduct($item, $i);
 }
 
-$quote->setCouponCode($coupon->getCode());
+$quote->setCouponCode('10_discount');
 $quote->collectTotals();
 
 /** @var QuoteRepository $quoteRepository */

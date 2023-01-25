@@ -11,7 +11,6 @@ use Magento\Checkout\Model\Session;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Intl\DateTimeFactory;
-use Magento\Framework\Session\Generic as GenericSession;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
@@ -26,8 +25,8 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * @param string $currentDateTime
      * @param string $paypalExpDate
-     * @param string $expectedCcMonth
-     * @param string $expectedCcYear
+     * @param int $expectedCcMonth
+     * @param int $expectedCcYear
      * @throws NoSuchEntityException
      *
      * @magentoConfigFixture current_store payment/payflowpro/active 1
@@ -37,8 +36,8 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testPaymentCcExpirationDate(
         string $currentDateTime,
         string $paypalExpDate,
-        string $expectedCcMonth,
-        string $expectedCcYear
+        int $expectedCcMonth,
+        int $expectedCcYear
     ) {
         $reservedOrderId = 'test01';
         $postData = [
@@ -59,7 +58,7 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setPostValue($postData);
         $this->getRequest()->setMethod('POST');
         /** @var Session $checkoutSession */
-        $checkoutSession = $this->_objectManager->get(GenericSession::class);
+        $checkoutSession = $this->_objectManager->get(Session::class);
         $checkoutSession->setQuoteId($quote->getId());
         $this->setCurrentDateTime($currentDateTime);
 

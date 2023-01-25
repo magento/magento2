@@ -20,4 +20,16 @@
         <data key="label">No</data>
         <data key="value">0</data>
     </entity>
+    <entity name="DisableEmailRequiredForOrder">
+        <data key="path">customer/create_account/email_required_create_order</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnableEmailRequiredForOrder">
+        <data key="path">customer/create_account/email_required_create_order</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="ChangeDefaultCheckMoneyOrderTitle">
+        <data key="path">payment/checkmo/title</data>
+        <data key="value">Test</data>
+    </entity>
 </entities>

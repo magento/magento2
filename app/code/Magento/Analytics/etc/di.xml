@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Analytics\ReportXML\ConfigInterface" type="Magento\Analytics\ReportXML\Config" />
+    <preference for="Magento\Analytics\ReportXml\ConfigInterface" type="Magento\Analytics\ReportXml\Config" />
     <preference for="Magento\Analytics\Model\ConfigInterface" type="Magento\Analytics\Model\Config" />
     <preference for="Magento\Analytics\Model\ReportWriterInterface" type="Magento\Analytics\Model\ReportWriter" />
     <preference for="Magento\Analytics\Api\LinkProviderInterface" type="Magento\Analytics\Model\LinkProvider" />
@@ -161,15 +161,9 @@
                 <item name="25" xsi:type="string">payment/banktransfer/active</item>
                 <item name="26" xsi:type="string">payment/cashondelivery/title</item>
                 <item name="27" xsi:type="string">payment/cashondelivery/active</item>
-                <item name="28" xsi:type="string">payment/authorizenet_directpost/title</item>
-                <item name="29" xsi:type="string">payment/authorizenet_directpost/active</item>
-                <item name="30" xsi:type="string">payment/paypal_billing_agreement/title</item>
-                <item name="31" xsi:type="string">payment/paypal_billing_agreement/active</item>
-                <item name="32" xsi:type="string">payment/braintree/title</item>
-                <item name="33" xsi:type="string">payment/braintree/active</item>
-                <item name="34" xsi:type="string">payment/braintree_paypal/title</item>
-                <item name="35" xsi:type="string">payment/braintree_paypal/active</item>
-                <item name="36" xsi:type="string">analytics/general/vertical</item>
+                <item name="28" xsi:type="string">payment/paypal_billing_agreement/title</item>
+                <item name="29" xsi:type="string">payment/paypal_billing_agreement/active</item>
+                <item name="30" xsi:type="string">analytics/general/vertical</item>
             </argument>
         </arguments>
     </type>
@@ -271,5 +265,13 @@
                 <item name="crontab/default/jobs/analytics_subscribe/schedule/cron_expr" xsi:type="string">1</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Analytics\ReportXml\ConnectionFactory">
+        <arguments>
+            <argument name="connectionFactory" xsi:type="object">Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactory</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Integration\Model\Validator\BearerTokenValidator">
+        <plugin name="allow_bearer_token" type="Magento\Analytics\Plugin\BearerTokenValidatorPlugin"/>
     </type>
 </config>

@@ -4,12 +4,21 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/../../../Magento/Catalog/_files/multiple_products.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/multiple_products.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
 $productIds = range(10, 12, 1);
 foreach ($productIds as $productId) {
+    $product = $productRepository->getById($productId, true, null, true);
+    if ((int) $product->getStatus() === \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED) {
+        $product->unlockAttribute('status')
+            ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+        $product->save();
+    }
     /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
     $stockItem = $objectManager->create(\Magento\CatalogInventory\Model\Stock\Item::class);
     $stockItem->load($productId, 'product_id');
@@ -95,14 +104,18 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                     'selection_qty' => 1,
                     'selection_can_change_qty' => 1,
                     'delete' => '',
-                    'option_id' => 1
+                    'option_id' => 1,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ],
                 [
                     'product_id' => 11,
                     'selection_qty' => 1,
                     'selection_can_change_qty' => 1,
                     'delete' => '',
-                    'option_id' => 1
+                    'option_id' => 1,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ]
             ],
             [
@@ -111,14 +124,18 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                     'selection_qty' => 1,
                     'selection_can_change_qty' => 1,
                     'delete' => '',
-                    'option_id' => 2
+                    'option_id' => 2,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ],
                 [
                     'product_id' => 11,
                     'selection_qty' => 1,
                     'selection_can_change_qty' => 1,
                     'delete' => '',
-                    'option_id' => 2
+                    'option_id' => 2,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ]
             ],
             [
@@ -126,13 +143,17 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                     'product_id' => 10,
                     'selection_qty' => 1,
                     'delete' => '',
-                    'option_id' => 3
+                    'option_id' => 3,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ],
                 [
                     'product_id' => 11,
                     'selection_qty' => 1,
                     'delete' => '',
-                    'option_id' => 3
+                    'option_id' => 3,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ]
             ],
             [
@@ -140,13 +161,17 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                     'product_id' => 10,
                     'selection_qty' => 1,
                     'delete' => '',
-                    'option_id' => 4
+                    'option_id' => 4,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ],
                 [
                     'product_id' => 11,
                     'selection_qty' => 1,
                     'delete' => '',
-                    'option_id' => 4
+                    'option_id' => 4,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ]
             ],
             [
@@ -154,18 +179,21 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                     'product_id' => 10,
                     'selection_qty' => 1,
                     'delete' => '',
-                    'option_id' => 5
+                    'option_id' => 5,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ],
                 [
                     'product_id' => 11,
                     'selection_qty' => 1,
                     'delete' => '',
-                    'option_id' => 5
+                    'option_id' => 5,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ]
             ]
         ]
     );
-$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
 if ($product->getBundleOptionsData()) {
     $options = [];
@@ -186,6 +214,8 @@ if ($product->getBundleOptionsData()) {
                         $linkProduct = $productRepository->getById($linkData['product_id']);
                         $link->setSku($linkProduct->getSku());
                         $link->setQty($linkData['selection_qty']);
+                        $link->setPriceType($linkData['selection_price_type']);
+                        $link->setPrice($linkData['selection_price_value']);
                         $links[] = $link;
                     }
                 }

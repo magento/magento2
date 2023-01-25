@@ -30,7 +30,7 @@ class SimplePolicyHeaderRendererTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->renderer = Bootstrap::getObjectManager()->get(SimplePolicyHeaderRenderer::class);
         $this->response = Bootstrap::getObjectManager()->create(HttpResponse::class);
@@ -53,15 +53,7 @@ class SimplePolicyHeaderRendererTest extends TestCase
 
         $this->assertNotEmpty($header = $this->response->getHeader('Content-Security-Policy'));
         $this->assertEmpty($this->response->getHeader('Content-Security-Policy-Report-Only'));
-        $contentSecurityPolicyContent = [];
-        if ($header instanceof \ArrayIterator) {
-            foreach ($header as $item) {
-                $contentSecurityPolicyContent[] = $item->getFieldValue();
-            }
-        } else {
-            $contentSecurityPolicyContent = [$header->getFieldValue()];
-        }
-        $this->assertEquals(['default-src https://magento.com \'self\';'], $contentSecurityPolicyContent);
+        $this->assertEquals('default-src https://magento.com \'self\';', $header->getFieldValue());
     }
 
     /**
@@ -81,17 +73,9 @@ class SimplePolicyHeaderRendererTest extends TestCase
 
         $this->assertNotEmpty($header = $this->response->getHeader('Content-Security-Policy'));
         $this->assertEmpty($this->response->getHeader('Content-Security-Policy-Report-Only'));
-        $contentSecurityPolicyContent = [];
-        if ($header instanceof \ArrayIterator) {
-            foreach ($header as $item) {
-                $contentSecurityPolicyContent[] = $item->getFieldValue();
-            }
-        } else {
-            $contentSecurityPolicyContent = [$header->getFieldValue()];
-        }
         $this->assertEquals(
-            ['default-src https://magento.com \'self\'; report-uri /csp-reports/; report-to report-endpoint;'],
-            $contentSecurityPolicyContent
+            'default-src https://magento.com \'self\'; report-uri /csp-reports/; report-to report-endpoint;',
+            $header->getFieldValue()
         );
         $this->assertNotEmpty($reportToHeader = $this->response->getHeader('Report-To'));
         $this->assertNotEmpty($reportData = json_decode("[{$reportToHeader->getFieldValue()}]", true));
@@ -115,7 +99,7 @@ class SimplePolicyHeaderRendererTest extends TestCase
             ['https://magento.com'],
             ['https'],
             true,
-            true,
+            false,
             true,
             ['5749837589457695'],
             ['B2yPHKaXnvFWtRChIbabYmUBFZdVfKKXHbWtWidDVF8=' => 'sha256'],
@@ -128,9 +112,44 @@ class SimplePolicyHeaderRendererTest extends TestCase
         $this->assertNotEmpty($header = $this->response->getHeader('Content-Security-Policy-Report-Only'));
         $this->assertEmpty($this->response->getHeader('Content-Security-Policy'));
         $this->assertEquals(
-            'default-src https://magento.com https: \'self\' \'unsafe-inline\' \'unsafe-eval\' \'strict-dynamic\''
+            'default-src https://magento.com https: \'self\' \'unsafe-eval\' \'strict-dynamic\''
             . ' \'unsafe-hashes\' \'nonce-'.base64_encode($policy->getNonceValues()[0]).'\''
             . ' \'sha256-B2yPHKaXnvFWtRChIbabYmUBFZdVfKKXHbWtWidDVF8=\';',
+            $header->getFieldValue()
+        );
+    }
+
+    /**
+     * Test rendering a fetch policy with inline allowed.
+     *
+     * @magentoAppArea frontend
+     * @magentoConfigFixture default_store csp/mode/storefront/report_only 1
+     * @magentoConfigFixture default_store csp/mode/storefront/report_uri 0
+     *
+     * @return void
+     */
+    public function testFetchPolicyInlineAllowed(): void
+    {
+        $policy = new FetchPolicy(
+            'script-src',
+            false,
+            ['https://magento.com'],
+            ['https'],
+            true,
+            true,
+            true,
+            ['5749837589457695'],
+            ['B2yPHKaXnvFWtRChIbabYmUBFZdVfKKXHbWtWidDVF8=' => 'sha256'],
+            false,
+            false
+        );
+
+        $this->renderer->render($policy, $this->response);
+
+        $this->assertNotEmpty($header = $this->response->getHeader('Content-Security-Policy-Report-Only'));
+        $this->assertEmpty($this->response->getHeader('Content-Security-Policy'));
+        $this->assertEquals(
+            'script-src https://magento.com https: \'self\' \'unsafe-inline\' \'unsafe-eval\';',
             $header->getFieldValue()
         );
     }

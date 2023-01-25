@@ -22,8 +22,8 @@ class RoleTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $this->dispatch('backend/admin/user_role/editrole');
 
-        $this->assertContains('Role Information', $this->getResponse()->getBody());
-        $this->assertContains($roleAdmin->getRoleName(), $this->getResponse()->getBody());
+        $this->assertStringContainsString('Role Information', $this->getResponse()->getBody());
+        $this->assertStringContainsString($roleAdmin->getRoleName(), $this->getResponse()->getBody());
     }
 
     /**

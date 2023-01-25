@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 return [
     'export_entity_name_must_be_unique' => [
         '<?xml version="1.0"?><config><entity name="name_one" entityAttributeFilterType="name_one"/>'
@@ -26,12 +28,8 @@ return [
         [
             "Element 'entityType', attribute 'model': [facet 'pattern'] The value '1' is not accepted by the " .
             "pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n",
-            "Element 'entityType', attribute 'model': '1' is not a valid value of the atomic type" .
-            " 'modelName'.\nLine: 1\n",
             "Element 'fileFormat', attribute 'model': [facet 'pattern'] The value '1model' is not " .
-            "accepted by the pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n",
-            "Element 'fileFormat', attribute 'model': '1model' is not a valid " .
-            "value of the atomic type 'modelName'.\nLine: 1\n"
+            "accepted by the pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n"
         ],
     ],
     'productType_node_with_required_attribute' => [

@@ -3,57 +3,68 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Attribute;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\ConfigurableProduct\Model\Attribute\LockValidator;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\ConfigurableProduct\Model\Attribute\LockValidator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class LockValidatorTest extends \PHPUnit\Framework\TestCase
+class LockValidatorTest extends TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Model\Attribute\LockValidator
+     * @var LockValidator
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resource;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|MockObject
      */
     private $select;
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|MockObject
      */
     private $metadataPoolMock;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
-        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
-            ->setMethods(['select', 'fetchOne'])
+        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
+            ->onlyMethods(['select', 'fetchOne'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
-            ->setMethods(['reset', 'from', 'join', 'where', 'group', 'limit'])
+        $this->select = $this->getMockBuilder(Select::class)
+            ->onlyMethods(['reset', 'from', 'join', 'where', 'group', 'limit'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -68,9 +79,7 @@ class LockValidatorTest extends \PHPUnit\Framework\TestCase
 
         $this->model = $helper->getObject(
             LockValidator::class,
-            [
-                'resource' => $this->resource
-            ]
+            ['resource' => $this->resource]
         );
         $refClass = new \ReflectionClass(LockValidator::class);
         $refProperty = $refClass->getProperty('metadataPool');
@@ -78,15 +87,18 @@ class LockValidatorTest extends \PHPUnit\Framework\TestCase
         $refProperty->setValue($this->model, $this->metadataPoolMock);
     }
 
-    public function testValidate()
+    /**
+     * @return void
+     */
+    public function testValidate(): void
     {
         $this->validate(false);
     }
 
     /**
-     * @return EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
+     * @return EntityMetadata|MockObject
      */
-    private function getMetaDataMock()
+    private function getMetaDataMock(): EntityMetadata
     {
         $metadata = $this->getMockBuilder(EntityMetadata::class)
             ->disableOriginalConstructor()
@@ -100,19 +112,22 @@ class LockValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This attribute is used in configurable products.
+     * @return void
      */
-    public function testValidateException()
+    public function testValidateException(): void
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('This attribute is used in configurable products.');
         $this->validate(true);
     }
 
     /**
      * @param $exception
-     * @throws \Magento\Framework\Exception\LocalizedException
+     *
+     * @return void
+     * @throws LocalizedException
      */
-    public function validate($exception)
+    public function validate($exception): void
     {
         $attrTable = 'someAttributeTable';
         $productTable = 'someProductTable';
@@ -121,50 +136,48 @@ class LockValidatorTest extends \PHPUnit\Framework\TestCase
 
         $bind = ['attribute_id' => $attributeId, 'attribute_set_id' => $attributeSet];
 
-        /** @var \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject $object */
-        $object = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
-            ->setMethods(['getAttributeId', '__wakeup'])
+        /** @var AbstractModel|MockObject $object */
+        $object = $this->getMockBuilder(AbstractModel::class)
+            ->addMethods(['getAttributeId'])
             ->disableOriginalConstructor()
             ->getMock();
-        $object->expects($this->once())->method('getAttributeId')->will($this->returnValue($attributeId));
+        $object->expects($this->once())->method('getAttributeId')->willReturn($attributeId);
 
         $this->resource->expects($this->once())->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
-        $this->resource->expects($this->at(1))->method('getTableName')
-            ->with($this->equalTo('catalog_product_super_attribute'))
-            ->will($this->returnValue($attrTable));
-        $this->resource->expects($this->at(2))->method('getTableName')
-            ->with($this->equalTo('catalog_product_entity'))
-            ->will($this->returnValue($productTable));
+            ->willReturn($this->connectionMock);
+        $this->resource
+            ->method('getTableName')
+            ->withConsecutive(['catalog_product_super_attribute'], ['catalog_product_entity'])
+            ->willReturnOnConsecutiveCalls($attrTable, $productTable);
 
         $this->connectionMock->expects($this->once())->method('select')
-            ->will($this->returnValue($this->select));
+            ->willReturn($this->select);
         $this->connectionMock->expects($this->once())->method('fetchOne')
-            ->with($this->equalTo($this->select), $this->equalTo($bind))
-            ->will($this->returnValue($exception));
+            ->with($this->select, $bind)
+            ->willReturn($exception);
 
         $this->select->expects($this->once())->method('reset')
-            ->will($this->returnValue($this->select));
+            ->willReturn($this->select);
         $this->select->expects($this->once())->method('from')
             ->with(
-                $this->equalTo(['main_table' => $attrTable]),
-                $this->equalTo(['psa_count' => 'COUNT(product_super_attribute_id)'])
+                ['main_table' => $attrTable],
+                ['psa_count' => 'COUNT(product_super_attribute_id)']
             )
-            ->will($this->returnValue($this->select));
+            ->willReturn($this->select);
         $this->select->expects($this->once())->method('join')
             ->with(
-                $this->equalTo(['entity' => $productTable]),
-                $this->equalTo('main_table.product_id = entity.entity_id')
+                ['entity' => $productTable],
+                'main_table.product_id = entity.entity_id'
             )
-            ->will($this->returnValue($this->select));
+            ->willReturn($this->select);
         $this->select->expects($this->any())->method('where')
-            ->will($this->returnValue($this->select));
+            ->willReturn($this->select);
         $this->select->expects($this->once())->method('group')
-            ->with($this->equalTo('main_table.attribute_id'))
-            ->will($this->returnValue($this->select));
+            ->with('main_table.attribute_id')
+            ->willReturn($this->select);
         $this->select->expects($this->once())->method('limit')
-            ->with($this->equalTo(1))
-            ->will($this->returnValue($this->select));
+            ->with(1)
+            ->willReturn($this->select);
 
         $this->model->validate($object, $attributeSet);
     }

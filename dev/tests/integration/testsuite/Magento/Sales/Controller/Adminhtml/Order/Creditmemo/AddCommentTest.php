@@ -37,12 +37,12 @@ class AddCommentTest extends AbstractCreditmemoControllerTest
         );
         $this->dispatch('backend/sales/order_creditmemo/addComment');
         $html = $this->getResponse()->getBody();
-        $this->assertContains($comment, $html);
+        $this->assertStringContainsString($comment, $html);
 
         $message = $this->transportBuilder->getSentMessage();
         $subject =__('Update to your %1 credit memo', $order->getStore()->getFrontendName())->render();
         $messageConstraint = $this->logicalAnd(
-            new StringContains($order->getBillingAddress()->getName()),
+            new StringContains($order->getCustomerName()),
             new RegularExpression(
                 sprintf(
                     "/Your order #%s has been updated with a status of.*%s/",

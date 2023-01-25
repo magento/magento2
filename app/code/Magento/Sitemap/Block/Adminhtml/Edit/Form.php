@@ -87,7 +87,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Path'),
                 'name' => 'sitemap_path',
                 'required' => true,
-                'note' => __('example: "/sitemap/" or "/" for base path (path must be writeable)'),
+                'note' => __('example: "/media/sitemap/" for base path (path must be writeable)'),
                 'value' => $model->getSitemapPath()
             ]
         );

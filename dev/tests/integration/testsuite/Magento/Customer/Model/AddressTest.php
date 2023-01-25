@@ -18,7 +18,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     protected $addressFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->addressModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Customer\Model\Address::class
@@ -88,7 +88,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('CityZ', $updatedAddressData->getCity());
         $this->assertEquals('CompanyZ', $updatedAddressData->getCompany());
         $this->assertEquals('99999', $updatedAddressData->getPostcode());
-        $this->assertEquals(true, $updatedAddressData->isDefaultBilling());
-        $this->assertEquals(true, $updatedAddressData->isDefaultShipping());
+        $this->assertTrue($updatedAddressData->isDefaultBilling());
+        $this->assertTrue($updatedAddressData->isDefaultShipping());
     }
 }

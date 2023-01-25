@@ -32,7 +32,7 @@ class OrderUpdateTest extends WebapiAbstract
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -144,6 +144,47 @@ class OrderUpdateTest extends WebapiAbstract
         $entityData[OrderInterface::STATUS] = 'complete';
 
         $requestData = ['entity' => $entityData];
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/orders',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'save',
+            ],
+        ];
+        $result = $this->_webApiCall($serviceInfo, $requestData);
+        $this->assertGreaterThan(1, count($result));
+
+        /** @var Order $actualOrder */
+        $actualOrder = $this->objectManager->get(Order::class)->load($order->getId());
+        $this->assertEquals(
+            $order->getData(OrderInterface::INCREMENT_ID),
+            $actualOrder->getData(OrderInterface::INCREMENT_ID)
+        );
+    }
+
+    /**
+     * Check order increment id after updating via webapi
+     *
+     * @magentoApiDataFixture Magento/Sales/_files/order.php
+     */
+    public function testOrderNoAttributesProvidedUpdate()
+    {
+        /** @var Order $order */
+        $order = $this->objectManager->get(Order::class)
+            ->loadByIncrementId(self::ORDER_INCREMENT_ID);
+
+        $entityData = $this->getOrderData($order);
+        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+            $this->markTestSkipped("Soap calls are more strict and contains attributes.");
+            return;
+        }
+
+        $requestData = ['entity' => ['entity_id' => $entityData['entity_id']]];
 
         $serviceInfo = [
             'rest' => [

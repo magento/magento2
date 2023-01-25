@@ -51,7 +51,7 @@ class DeleteAddressTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->escaper = $this->_objectManager->get(Escaper::class);
@@ -197,7 +197,7 @@ class DeleteAddressTest extends AbstractController
         if ($isNeedEscapeMessage) {
             $message = $this->escaper->escapeHtml($message);
         }
-        $this->assertSessionMessages($this->contains($message), MessageInterface::TYPE_ERROR);
+        $this->assertSessionMessages($this->containsEqual($message), MessageInterface::TYPE_ERROR);
     }
 
     /**

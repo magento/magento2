@@ -3,10 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filter\FilterManager;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\Tax\Helper\Data;
 
 /**
  * Order shipment pdf items renderer
@@ -14,36 +23,34 @@ use Magento\Framework\Serialize\Serializer\Json;
 class Shipment extends AbstractItems
 {
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils
+     * @var StringUtils
      */
     protected $string;
 
     /**
-     * Constructor
-     *
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\Filter\FilterManager $filterManager
-     * @param \Magento\Framework\Stdlib\StringUtils $string
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param Data $taxData
+     * @param Filesystem $filesystem
+     * @param FilterManager $filterManager
+     * @param StringUtils $string
+     * @param Json $serializer
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Tax\Helper\Data $taxData,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\Filter\FilterManager $filterManager,
-        \Magento\Framework\Stdlib\StringUtils $string,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = [],
-        Json $serializer = null
+        Context $context,
+        Registry $registry,
+        Data $taxData,
+        Filesystem $filesystem,
+        FilterManager $filterManager,
+        StringUtils $string,
+        Json $serializer,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
         $this->string = $string;
         parent::__construct(
@@ -52,10 +59,10 @@ class Shipment extends AbstractItems
             $taxData,
             $filesystem,
             $filterManager,
+            $serializer,
             $resource,
             $resourceCollection,
-            $data,
-            $serializer
+            $data
         );
     }
 
@@ -95,24 +102,22 @@ class Shipment extends AbstractItems
                 $drawItems[$optionId] = ['lines' => [], 'height' => 15];
             }
 
-            if ($childItem->getParentItem()) {
-                if ($prevOptionId != $attributes['option_id']) {
-                    $line[0] = [
-                        'font' => 'italic',
-                        'text' => $this->string->split($attributes['option_label'], 60, true, true),
-                        'feed' => 60,
-                    ];
+            if ($childItem->getParentItem() && $prevOptionId != $attributes['option_id']) {
+                $line[0] = [
+                    'font' => 'italic',
+                    'text' => $this->string->split($attributes['option_label'], 60, true, true),
+                    'feed' => 100,
+                ];
 
-                    $drawItems[$optionId] = ['lines' => [$line], 'height' => 15];
+                $drawItems[$optionId] = ['lines' => [$line], 'height' => 15];
 
-                    $line = [];
+                $line = [];
 
-                    $prevOptionId = $attributes['option_id'];
-                }
+                $prevOptionId = $attributes['option_id'];
             }
 
-            if ($this->isShipmentSeparately() && $childItem->getParentItem() ||
-                !$this->isShipmentSeparately() && !$childItem->getParentItem()
+            if (($this->isShipmentSeparately() && $childItem->getParentItem()) ||
+                (!$this->isShipmentSeparately() && !$childItem->getParentItem())
             ) {
                 if (isset($shipItems[$childItem->getId()])) {
                     $qty = $shipItems[$childItem->getId()]->getQty() * 1;
@@ -129,10 +134,10 @@ class Shipment extends AbstractItems
 
             // draw Name
             if ($childItem->getParentItem()) {
-                $feed = 65;
+                $feed = 110;
                 $name = $this->getValueHtml($childItem);
             } else {
-                $feed = 60;
+                $feed = 100;
                 $name = $childItem->getName();
             }
             $text = [];
@@ -146,47 +151,41 @@ class Shipment extends AbstractItems
             foreach ($this->string->split($childItem->getSku(), 25) as $part) {
                 $text[] = $part;
             }
-            $line[] = ['text' => $text, 'feed' => 440];
+            $line[] = ['text' => $text, 'feed' => 565, 'align' => 'right'];
 
             $drawItems[$optionId]['lines'][] = $line;
         }
 
         // custom options
         $options = $item->getOrderItem()->getProductOptions();
-        if ($options) {
-            if (isset($options['options'])) {
-                foreach ($options['options'] as $option) {
-                    $lines = [];
-                    $lines[][] = [
-                        'text' => $this->string->split(
-                            $this->filterManager->stripTags($option['label']),
-                            70,
-                            true,
-                            true
-                        ),
-                        'font' => 'italic',
-                        'feed' => 60,
-                    ];
+        if ($options && isset($options['options'])) {
+            foreach ($options['options'] as $option) {
+                $lines = [];
+                $lines[][] = [
+                    'text' => $this->string->split(
+                        $this->filterManager->stripTags($option['label']),
+                        70,
+                        true,
+                        true
+                    ),
+                    'font' => 'italic',
+                    'feed' => 60,
+                ];
 
-                    if ($option['value']) {
-                        $text = [];
-                        $printValue = isset(
-                            $option['print_value']
-                        ) ? $option['print_value'] : $this->filterManager->stripTags(
-                            $option['value']
-                        );
-                        $values = explode(', ', $printValue);
-                        foreach ($values as $value) {
-                            foreach ($this->string->split($value, 50, true, true) as $subValue) {
-                                $text[] = $subValue;
-                            }
+                if ($option['value']) {
+                    $text = [];
+                    $printValue = $option['print_value'] ?? $this->filterManager->stripTags($option['value']);
+                    $values = explode(', ', $printValue);
+                    foreach ($values as $value) {
+                        foreach ($this->string->split($value, 50, true, true) as $subValue) {
+                            $text[] = $subValue;
                         }
-
-                        $lines[][] = ['text' => $text, 'feed' => 65];
                     }
 
-                    $drawItems[] = ['lines' => $lines, 'height' => 15];
+                    $lines[][] = ['text' => $text, 'feed' => 65];
                 }
+
+                $drawItems[] = ['lines' => $lines, 'height' => 15];
             }
         }
 

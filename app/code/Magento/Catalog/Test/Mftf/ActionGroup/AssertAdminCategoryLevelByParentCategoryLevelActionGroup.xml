@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminCategoryLevelByParentCategoryLevelActionGroup">
+        <annotations>
+            <description>Checks category level by parent category level.</description>
+        </annotations>
+        <arguments>
+            <argument name="parentCategoryLevel" type="string" defaultValue="2"/>
+            <argument name="categoryLevel" type="string" defaultValue="3"/>
+        </arguments>
+
+        <assertEquals message="wrongCategoryLevel" stepKey="compareCategoryLevel">
+			<actualResult type="const">{{categoryLevel}}</actualResult>
+			<expectedResult type="const">{{parentCategoryLevel}} + 1</expectedResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

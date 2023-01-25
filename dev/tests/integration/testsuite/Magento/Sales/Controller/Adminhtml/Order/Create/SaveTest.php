@@ -19,7 +19,7 @@ use Magento\Sales\Model\Service\OrderService;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 use PHPUnit\Framework\Constraint\StringContains;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class test backend order save.
@@ -52,7 +52,7 @@ class SaveTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->transportBuilder = $this->_objectManager->get(TransportBuilderMock::class);
@@ -143,6 +143,31 @@ class SaveTest extends AbstractBackendController
 
         $this->assertEquals($message->getSubject(), $subject);
         $this->assertThat($message->getBody()->getParts()[0]->getRawContent(), $assert);
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Sales/_files/guest_quote_with_addresses.php
+     *
+     * @return void
+     */
+    public function testNotSendEmailOnOrderSave(): void
+    {
+        $this->prepareRequest();
+        $this->dispatch('backend/sales/order_create/save');
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You created the order.')]),
+            MessageInterface::TYPE_SUCCESS
+        );
+
+        $this->assertRedirect($this->stringContains('sales/order/view/'));
+
+        $orderId = $this->getOrderId();
+        if ($orderId === false) {
+            $this->fail('Order is not created.');
+        }
+
+        $this->assertNull($this->transportBuilder->getSentMessage());
     }
 
     /**

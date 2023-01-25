@@ -8,7 +8,8 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontCustomerShareWishlistActionGroup">
+    <actionGroup name="StorefrontCustomerShareWishlistActionGroup" deprecated="Use StorefrontShareCustomerWishlistActionGroup">
+        <!-- Deprecated due to Hardcoded WishList Data Using. 18-19 lines -->
         <annotations>
             <description>Shares the Wish List from the Storefront Wish List page. PLEASE NOTE: The details for sharing are Hardcoded using 'Wishlist'.</description>
         </annotations>

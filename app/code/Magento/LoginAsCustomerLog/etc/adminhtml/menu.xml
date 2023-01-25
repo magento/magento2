@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Magento_LoginAsCustomerLog::login_log"
+             title="Login as Customer Log"
+             module="Magento_LoginAsCustomerLog"
+             parent="Magento_Customer::customer"
+             sortOrder="40"
+             resource="Magento_LoginAsCustomerLog::login_log"
+             action="loginascustomer_log/log/index"
+             dependsOnConfig="login_as_customer/general/enabled"/>
+    </menu>
+</config>

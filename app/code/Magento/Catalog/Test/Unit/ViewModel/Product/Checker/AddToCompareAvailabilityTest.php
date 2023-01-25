@@ -8,17 +8,18 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\ViewModel\Product\Checker;
 
-use Magento\Catalog\ViewModel\Product\Checker\AddToCompareAvailability;
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\ViewModel\Product\Checker\AddToCompareAvailability;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for Magento\Catalog\ViewModel\Product\Checker\AddToCompareAvailability.
  */
-class AddToCompareAvailabilityTest extends \PHPUnit\Framework\TestCase
+class AddToCompareAvailabilityTest extends TestCase
 {
 
     /**
@@ -36,12 +37,11 @@ class AddToCompareAvailabilityTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-
         $objectManager = new ObjectManager($this);
 
         $this->stockConfigurationMock =
             $this->getMockBuilder(StockConfigurationInterface::class)
-            ->getMock();
+                ->getMock();
 
         $this->viewModel = $objectManager->getObject(
             AddToCompareAvailability::class,

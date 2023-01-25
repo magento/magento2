@@ -21,7 +21,7 @@ class OrderItemGetTest extends WebapiAbstract
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -51,7 +51,7 @@ class OrderItemGetTest extends WebapiAbstract
 
         $response = $this->_webApiCall($serviceInfo, ['id' => $orderItem->getId()]);
 
-        $this->assertTrue(is_array($response));
+        $this->assertIsArray($response);
         $this->assertOrderItem($orderItem, $response);
 
         //check that nullable fields were marked as optional and were not sent
@@ -103,7 +103,7 @@ class OrderItemGetTest extends WebapiAbstract
 
         $response = $this->_webApiCall($serviceInfo, ['id' => $orderItem->getId()]);
 
-        $this->assertTrue(is_array($response));
+        $this->assertIsArray($response);
         $this->assertEquals(8.00, $response['row_total']);
         $this->assertEquals(8.00, $response['base_row_total']);
         $this->assertEquals(9.00, $response['row_total_incl_tax']);
