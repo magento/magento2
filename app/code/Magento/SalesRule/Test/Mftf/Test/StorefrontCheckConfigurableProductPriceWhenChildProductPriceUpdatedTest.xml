@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckConfigurableProductPriceWhenChildProductPriceUpdatedTest" extends="AdminCheckConfigurableProductPriceWhenChildProductPriceUpdatedTest">
+        <annotations>
+            <stories value="Configurable Product"/>
+            <title value="Page Cache is not cleared for the parent product on the child product save"/>
+            <description value="Verify the updated price of a configurable child product on the storefront when the indexer mode is set to `Update by Schedule` and the price of the child product is updated by admin."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-7815"/>
+            <useCaseId value="ACP2E-1524"/>
+            <group value="product"/>
+        </annotations>
+
+        <remove keyForRemoval="updateSimpleProductOne"/>
+        <actionGroup ref="AdminFillProductPriceFieldAndPressEnterOnProductEditPageActionGroup" stepKey="fillProductPrice" after="waitForProductPageToLoad">
+            <argument name="price" value="{{SimpleProductUpdatePrice90.price}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton" after="fillProductPrice"/>
+
+        <remove keyForRemoval="index"/>
+        <remove keyForRemoval="flushCache"/>
+        <remove keyForRemoval="waitForUpdateStarts"/>
+
+        <!--Select product Attribute option1 and verify changes in the price -->
+        <remove keyForRemoval="seeChildProduct1PriceInStoreFrontAfterUpdate"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeChildProduct1PriceInStoreFrontAfterUpdate" after="selectOption1AfterUpdate">
+            <argument name="productPrice" value="{{SimpleProductUpdatePrice90.price}}"/>
+        </actionGroup>
+
+        <!--Select product Attribute option2 and verify no changes in the price -->
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectOption2AfterUpdate" after="seeChildProduct1PriceInStoreFrontAfterUpdate">
+            <argument name="attributeLabel" value="$$createConfigProductAttribute.default_value$$"/>
+            <argument name="optionLabel" value="$$getConfigAttributeOption2.label$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeChildProduct2PriceInStoreFrontAfterUpdate" after="selectOption2AfterUpdate">
+            <argument name="productPrice" value="$$createConfigChildProduct2.price$$"/>
+        </actionGroup>
+    </test>
+</tests>
