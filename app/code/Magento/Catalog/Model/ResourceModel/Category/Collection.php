@@ -23,7 +23,7 @@ use Magento\Store\Model\ScopeInterface;
 class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
 {
     /**
-     * Event prefix
+     * Event prefix name
      *
      * @var string
      */
@@ -155,7 +155,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $condition = $categoryIds;
         } elseif (is_string($categoryIds)) {
             $ids = explode(',', $categoryIds);
-            if (empty($ids)) {
+            if (count($ids) == 0) {
                 $condition = $categoryIds;
             } else {
                 $condition = ['in' => $ids];
@@ -327,7 +327,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $countSelect = $this->getProductsCountQuery($categoryIds, (bool)$websiteId);
             $categoryProductsCount = $this->_conn->fetchPairs($countSelect);
             foreach ($anchor as $item) {
-                $productsCount = isset($categoriesProductsCount[$item->getId()])
+                $productsCount = isset($categoryProductsCount[$item->getId()])
                     ? (int)$categoryProductsCount[$item->getId()]
                     : $this->getProductsCountFromCategoryTable($item, $websiteId);
                 $item->setProductCount($productsCount);
@@ -556,7 +556,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     private function getProductsCountQuery(array $categoryIds, $addVisibilityFilter = true): Select
     {
-        $categoryTable = $this->getTable('catalog_category_product_index');
+        $connections = $this->_resource->getConnection();
+        $categoryTable = $connections->getTableName('catalog_category_product_index');
         $select = $this->_conn->select()
             ->from(
                 ['cat_index' => $categoryTable],

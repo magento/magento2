@@ -40,11 +40,6 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     private const TEST_PRODUCT_TYPE = 'bundle';
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product
-     */
-    protected $model;
-
-    /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
@@ -77,7 +72,6 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->model = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class);
     }
 
     /**
@@ -397,15 +391,15 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
         bool $validateOnly = false
     ): ProcessingErrorAggregatorInterface {
         /** @var Filesystem $filesystem */
-        $filesystem =$this->objectManager->create(Filesystem::class);
+        $filesystem = $this->objectManager->create(Filesystem::class);
         $directoryWrite = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = ImportAdapter::findAdapterFor($file, $directoryWrite);
-        $errors = $this->model
-            ->setParameters(['behavior' => $behavior, 'entity' => 'catalog_product'])
-            ->setSource($source)
-            ->validateData();
+        $model = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class);
+        $model->setParameters(['behavior' => $behavior, 'entity' => 'catalog_product']);
+        $model->setSource($source);
+        $errors = $model->validateData();
         if (!$validateOnly && !$errors->getAllErrors()) {
-            $this->model->importData();
+            $model->importData();
         }
         return $errors;
     }

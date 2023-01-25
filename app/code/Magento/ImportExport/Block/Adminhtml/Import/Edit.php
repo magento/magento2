@@ -6,8 +6,6 @@
 
 /**
  * Import edit block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import;
 
