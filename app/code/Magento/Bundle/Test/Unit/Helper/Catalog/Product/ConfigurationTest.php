@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Helper\Catalog\Product;
 
+use Magento\Bundle\Helper\Catalog\Product\Tax;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Model\ResourceModel\Option\Collection;
@@ -58,12 +59,7 @@ class ConfigurationTest extends TestCase
     private $serializer;
 
     /**
-     * @var \Magento\Catalog\Helper\Data|MockObject
-     */
-    private $catalogHelper;
-
-    /**
-     * @var \Magento\Tax\Helper\Data|MockObject
+     * @var Tax|MockObject
      */
     private $taxHelper;
 
@@ -82,8 +78,7 @@ class ConfigurationTest extends TestCase
         $this->serializer = $this->getMockBuilder(Json::class)
             ->onlyMethods(['unserialize'])
             ->getMockForAbstractClass();
-        $this->catalogHelper = $this->createPartialMock(\Magento\Catalog\Helper\Data::class, ['getTaxPrice']);
-        $this->taxHelper = $this->createPartialMock(\Magento\Tax\Helper\Data::class, ['displayBothPrices']);
+        $this->taxHelper = $this->createPartialMock(Tax::class, ['displayCartPricesBoth', 'getTaxPrice']);
 
         $this->serializer->expects($this->any())
             ->method('unserialize')
@@ -100,7 +95,6 @@ class ConfigurationTest extends TestCase
                 'productConfiguration' => $this->productConfiguration,
                 'escaper' => $this->escaper,
                 'serializer' => $this->serializer,
-                'catalogHelper' => $this->catalogHelper,
                 'taxHelper' => $this->taxHelper
             ]
         );
@@ -275,12 +269,12 @@ class ConfigurationTest extends TestCase
             ->method('escapeHtml')
             ->with('name')
             ->willReturn('name');
-        $this->catalogHelper->expects($this->any())
+        $this->taxHelper->expects($this->any())
             ->method('getTaxPrice')
             ->with($product, 15)
             ->willReturn(15);
         $this->taxHelper->expects($this->any())
-            ->method('displayBothPrices')
+            ->method('displayCartPricesBoth')
             ->willReturn(false);
         $this->pricingHelper->expects($this->once())->method('currency')->with(15)
             ->willReturn('<span class="price">$15.00</span>');

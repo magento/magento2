@@ -5,11 +5,20 @@
  */
 namespace Magento\Bundle\Helper\Catalog\Product;
 
+use Magento\Bundle\Model\Product\Price;
+use Magento\Bundle\Model\Product\Type;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface;
+use Magento\Catalog\Helper\Product\Configuration as ProductConfiguration;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Pricing\Helper\Data;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Helper for fetching properties by product configuration item
@@ -21,75 +30,67 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
     /**
      * Core data
      *
-     * @var \Magento\Framework\Pricing\Helper\Data
+     * @var Data
      */
     protected $pricingHelper;
 
     /**
      * Catalog product configuration
      *
-     * @var \Magento\Catalog\Helper\Product\Configuration
+     * @var ProductConfiguration
      */
     protected $productConfiguration;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     protected $escaper;
 
     /**
      * Serializer interface instance.
      *
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $serializer;
 
     /**
-     * @var \Magento\Catalog\Helper\Data
-     */
-    private $catalogHelper;
-
-    /**
-     * @var \Magento\Tax\Helper\Data|mixed
+     * @var Tax
      */
     private $taxHelper;
 
     /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Catalog\Helper\Product\Configuration $productConfiguration
-     * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @param \Magento\Catalog\Helper\Data|null $catalogHelper
-     * @param \Magento\Tax\Helper\Data|null $taxHelper
+     * @param Context $context
+     * @param ProductConfiguration $productConfiguration
+     * @param Data $pricingHelper
+     * @param Escaper $escaper
+     * @param Json|null $serializer
+     * @param Tax|null $taxHelper
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Catalog\Helper\Product\Configuration $productConfiguration,
-        \Magento\Framework\Pricing\Helper\Data $pricingHelper,
-        \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        \Magento\Catalog\Helper\Data $catalogHelper = null,
-        \Magento\Tax\Helper\Data $taxHelper = null
+        Context              $context,
+        ProductConfiguration $productConfiguration,
+        Data                 $pricingHelper,
+        Escaper              $escaper,
+        Json                 $serializer = null,
+        Tax                  $taxHelper = null
     ) {
         $this->productConfiguration = $productConfiguration;
         $this->pricingHelper = $pricingHelper;
         $this->escaper = $escaper;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
-        $this->catalogHelper = $catalogHelper ?? ObjectManager::getInstance()->get(\Magento\Catalog\Helper\Data::class);
-        $this->taxHelper = $taxHelper ?? ObjectManager::getInstance()->get(\Magento\Tax\Helper\Data::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
+            ->get(Json::class);
+        $this->taxHelper = $taxHelper ?? ObjectManager::getInstance()->get(Tax::class);
         parent::__construct($context);
     }
 
     /**
      * Get selection quantity
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param int $selectionId
      * @return float
      */
-    public function getSelectionQty(\Magento\Catalog\Model\Product $product, $selectionId)
+    public function getSelectionQty(Product $product, $selectionId)
     {
         $selectionQty = $product->getCustomOption('selection_qty_' . $selectionId);
         if ($selectionQty) {
@@ -102,15 +103,15 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * Obtain final price of selection in a bundle product
      *
      * @param ItemInterface $item
-     * @param \Magento\Catalog\Model\Product $selectionProduct
+     * @param Product $selectionProduct
      * @return float
      */
-    public function getSelectionFinalPrice(ItemInterface $item, \Magento\Catalog\Model\Product $selectionProduct)
+    public function getSelectionFinalPrice(ItemInterface $item, Product $selectionProduct)
     {
         $selectionProduct->unsetData('final_price');
 
         $product = $item->getProduct();
-        /** @var \Magento\Bundle\Model\Product\Price $price */
+        /** @var Price $price */
         $price = $product->getPriceModel();
 
         return $price->getSelectionFinalTotalPrice(
@@ -137,7 +138,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
         $options = [];
         $product = $item->getProduct();
 
-        /** @var \Magento\Bundle\Model\Product\Type $typeInstance */
+        /** @var Type $typeInstance */
         $typeInstance = $product->getTypeInstance();
 
         // get bundle options
@@ -187,6 +188,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * @param ProductInterface $bundleSelection
      * @param array $option
      * @return array
+     * @throws LocalizedException
      */
     private function getOptionPriceHtml(ItemInterface $item, ProductInterface $bundleSelection, array $option): array
     {
@@ -194,15 +196,15 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
         $qty = $this->getSelectionQty($item->getProduct(), $bundleSelection->getSelectionId()) * 1;
         if ($qty) {
             $selectionPrice = $this->getSelectionFinalPrice($item, $bundleSelection);
-            $selectionFinalPrice = $this->catalogHelper->getTaxPrice($item->getProduct(), $selectionPrice);
+            $selectionFinalPrice = $this->taxHelper->getTaxPrice($item->getProduct(), $selectionPrice);
 
-            $displayBothPrices = $this->taxHelper->displayBothPrices();
-            if ($displayBothPrices) {
+            $displayCartPricesBoth = $this->taxHelper->displayCartPricesBoth();
+            if ($displayCartPricesBoth) {
                 $selectionFinalPrice =
-                    $this->catalogHelper
+                    $this->taxHelper
                         ->getTaxPrice($product, $selectionPrice, true);
                 $selectionFinalPriceExclTax =
-                    $this->catalogHelper
+                    $this->taxHelper
                         ->getTaxPrice($product, $selectionPrice, false);
             }
             $option['value'][] = $qty . ' x '
@@ -212,7 +214,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
                     $selectionFinalPrice
                 )
                 . ' '
-                . ($displayBothPrices ? __('Excl. tax:') . ' '
+                . ($displayCartPricesBoth ? __('Excl. tax:') . ' '
                     . $this->pricingHelper->currency(
                         $selectionFinalPriceExclTax
                     ) : '');
