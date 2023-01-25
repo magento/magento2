@@ -7,23 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\StoreGraphQl\Model\Resolver\Store;
 
-use Magento\Config\App\Config\Type\System;
 use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 
-class Identity implements IdentityInterface
+class ConfigIdentity implements IdentityInterface
 {
     /**
      * @var string
      */
-    private $cacheTag = System::CACHE_TAG;
+    const CACHE_TAG = 'gql_store_config';
 
     /**
      * @inheritDoc
      */
     public function getIdentities(array $resolvedData): array
     {
-        $ids =  empty($resolvedData) ?
-            [] : [$this->cacheTag];
-        return $ids;
+        return empty($resolvedData) ? [] : [self::CACHE_TAG];
     }
 }
