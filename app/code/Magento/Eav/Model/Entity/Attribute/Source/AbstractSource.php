@@ -89,7 +89,7 @@ abstract class AbstractSource implements
     public function getOptionId($value)
     {
         foreach ($this->getAllOptions() as $option) {
-            if ($this->mbStrcasecmp($option['label'], $value) == 0 || (int)$option['value'] === $value) {
+            if ($this->mbStrcasecmp($option['label'], $value) == 0 || $option['value'] == $value) {
                 return $option['value'];
             }
         }
@@ -175,7 +175,7 @@ abstract class AbstractSource implements
      * @param string $str2
      * @return int
      */
-    private function mbStrcasecmp($str1, $str2)
+    protected function mbStrcasecmp($str1, $str2)
     {
         $encoding = mb_internal_encoding();
         return strcmp(
