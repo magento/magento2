@@ -269,6 +269,9 @@ class ConfigurationTest extends TestCase
             ->method('escapeHtml')
             ->with('name')
             ->willReturn('name');
+        $this->catalogHelper->expects($this->any())
+            ->method('getTaxPrice')
+            ->willReturn(15);
         $this->pricingHelper->expects($this->once())->method('currency')->with(15)
             ->willReturn('<span class="price">$15.00</span>');
         $priceModel->expects($this->once())->method('getSelectionFinalTotalPrice')->willReturn(15);
