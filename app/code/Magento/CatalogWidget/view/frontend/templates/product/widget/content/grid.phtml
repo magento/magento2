@@ -6,18 +6,13 @@
 
 use Magento\Framework\App\Action\Action;
 
-/** @var \Magento\CatalogWidget\Block\Product\ProductsList $block */
+/**
+ * @var \Magento\CatalogWidget\Block\Product\ProductsList $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 
 // phpcs:disable Generic.Files.LineLength.TooLong
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
-?>
-
-<?php
-/**
- * Product carousel widget template
- *
- * @var \Magento\Framework\Escaper $escaper
- */
 ?>
 
 <?php if ($exist = ($block->getProductCollection() && $block->getProductCollection()->getSize())): ?>
@@ -85,6 +80,7 @@ use Magento\Framework\App\Action\Action;
                                                                 <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                             </button>
                                                         </form>
+                                                        <?php if($block->getBlockHtml('formkey')): ?>
                                                         <script type="text/x-magento-init">
                                                         {
                                                             "[data-role=tocart-form], .form.map.checkout": {
@@ -94,6 +90,7 @@ use Magento\Framework\App\Action\Action;
                                                             }
                                                         }
                                                         </script>
+                                                        <?php endif;?>
                                                     <?php else: ?>
                                                         <?php if ($_item->isAvailable()): ?>
                                                             <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
