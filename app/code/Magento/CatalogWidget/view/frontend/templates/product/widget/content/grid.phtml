@@ -13,6 +13,7 @@ use Magento\Framework\App\Action\Action;
 
 // phpcs:disable Generic.Files.LineLength.TooLong
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 ?>
 
 <?php if ($exist = ($block->getProductCollection() && $block->getProductCollection()->getSize())): ?>
@@ -80,7 +81,7 @@ use Magento\Framework\App\Action\Action;
                                                                 <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                             </button>
                                                         </form>
-                                                        <?php if($block->getBlockHtml('formkey')): ?>
+                                                        <?php if ($block->getBlockHtml('formkey')): ?>
                                                         <script type="text/x-magento-init">
                                                         {
                                                             "[data-role=tocart-form], .form.map.checkout": {
