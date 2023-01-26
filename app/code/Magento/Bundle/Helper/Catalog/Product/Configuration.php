@@ -214,8 +214,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
                 . $this->pricingHelper->currency(
                     $selectionFinalPrice
                 )
-                . ' '
-                . ($displayCartPricesBoth ? __('Excl. tax:') . ' '
+                . ($displayCartPricesBoth ? ' ' . __('Excl. tax:') . ' '
                     . $this->pricingHelper->currency(
                         $selectionFinalPriceExclTax
                     ) : '');

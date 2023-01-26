@@ -17,6 +17,7 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\Escaper;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\Helper\Data;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -178,6 +179,7 @@ class ConfigurationTest extends TestCase
 
     /**
      * @return void
+     * @throws LocalizedException
      */
     public function testGetBundleOptionsEmptyBundleSelectionIds(): void
     {
@@ -222,10 +224,14 @@ class ConfigurationTest extends TestCase
     }
 
     /**
+     * @param $includingTax
+     * @param $displayCartPriceBoth
      * @return void
+     * @throws LocalizedException
+     * @dataProvider getTaxConfiguration
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testGetOptions(): void
+    public function testGetOptions($includingTax, $displayCartPriceBoth): void
     {
         $optionIds = '{"0":"1"}';
         $selectionIds =  '{"0":"2"}';
@@ -271,11 +277,11 @@ class ConfigurationTest extends TestCase
             ->willReturn('name');
         $this->taxHelper->expects($this->any())
             ->method('getTaxPrice')
-            ->with($product, 15)
+            ->with($product, 15, $includingTax)
             ->willReturn(15.00);
         $this->taxHelper->expects($this->any())
             ->method('displayCartPricesBoth')
-            ->willReturn(false);
+            ->willReturn((bool)$displayCartPriceBoth);
         $this->pricingHelper->expects($this->once())->method('currency')->with(15.00)
             ->willReturn('<span class="price">$15.00</span>');
         $priceModel->expects($this->once())->method('getSelectionFinalTotalPrice')->willReturn(15.00);
@@ -322,5 +328,20 @@ class ConfigurationTest extends TestCase
             ],
             $this->helper->getOptions($this->item)
         );
+    }
+
+    /**
+     * Data provider for testGetOptions
+     *
+     * @return array
+     */
+    public function getTaxConfiguration(): array
+    {
+        return [
+            [1, 0],
+            [0, 0],
+            [1, 1],
+            [0, 1]
+        ];
     }
 }
