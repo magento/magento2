@@ -15,7 +15,6 @@ use Magento\Bundle\Pricing\Adjustment\DefaultSelectionPriceListProvider;
 use Magento\Bundle\Pricing\Price\BundleSelectionFactory;
 use Magento\Catalog\Helper\Data as CatalogData;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DataObject;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
