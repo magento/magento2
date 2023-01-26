@@ -310,7 +310,6 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         $params = $this->getRequest()->getParams();
 
         return $this->toolbarMemorizer->isMemorizingAllowed() && empty(array_intersect([
-                Toolbar::PAGE_PARM_NAME,
                 Toolbar::ORDER_PARAM_NAME,
                 Toolbar::DIRECTION_PARAM_NAME,
                 Toolbar::MODE_PARAM_NAME,
