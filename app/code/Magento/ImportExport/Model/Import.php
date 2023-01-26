@@ -28,6 +28,7 @@ use Magento\ImportExport\Model\Import\Adapter;
 use Magento\ImportExport\Model\Import\ConfigInterface;
 use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\Entity\Factory;
+use Magento\ImportExport\Model\Import\EntityInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\ResourceModel\Import\Data;
@@ -98,6 +99,11 @@ class Import extends AbstractModel
     public const FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '_import_empty_attribute_value_constant';
 
     /**
+     * Id of the `importexport_importdata` row after validation.
+     */
+    public const FIELD_IMPORT_IDS = '_import_ids';
+
+    /**
      * Allow multiple values wrapping in double quotes for additional attributes.
      */
     public const FIELDS_ENCLOSURE = 'fields_enclosure';
@@ -117,7 +123,7 @@ class Import extends AbstractModel
     public const IMPORT_DIR = 'import/';
 
     /**
-     * @var AbstractEntity|ImportAbstractEntity
+     * @var EntityInterface
      */
     protected $_entityAdapter;
 
@@ -271,7 +277,7 @@ class Import extends AbstractModel
      * Create instance of entity adapter and return it
      *
      * @throws LocalizedException
-     * @return AbstractEntity|ImportAbstractEntity
+     * @return EntityInterface
      */
     protected function _getEntityAdapter()
     {
@@ -474,8 +480,17 @@ class Import extends AbstractModel
      */
     public function importSource()
     {
-        $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode());
-        $this->setData('behavior', $this->getDataSourceModel()->getBehavior());
+        $ids = $this->_getEntityAdapter()->getIds();
+        if (empty($ids)) {
+            $idsFromPostData = $this->getData(self::FIELD_IMPORT_IDS);
+            if (null !== $idsFromPostData && '' !== $idsFromPostData) {
+                $ids = explode(",", $idsFromPostData);
+                $this->_getEntityAdapter()->setIds($ids);
+            }
+        }
+        $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode($ids));
+        $this->setData('behavior', $this->getDataSourceModel()->getBehavior($ids));
+
         //Validating images temporary directory path if the constraint has been provided
         if ($this->hasData('images_base_directory')
             && $this->getData('images_base_directory') instanceof Filesystem\Directory\ReadInterface
@@ -501,6 +516,7 @@ class Import extends AbstractModel
         $this->addLogComment(__('Begin import of "%1" with "%2" behavior', $this->getEntity(), $this->getBehavior()));
 
         $result = $this->processImport();
+        $this->getDataSourceModel()->markProcessedBunches($ids);
 
         if ($result) {
             $this->addLogComment(
@@ -847,5 +863,15 @@ class Import extends AbstractModel
     public function getDeletedItemsCount()
     {
         return $this->_getEntityAdapter()->getDeletedItemsCount();
+    }
+
+    /**
+     * Retrieve Ids of Validated Rows
+     *
+     * @return int[]
+     */
+    public function getValidatedIds() : array
+    {
+        return $this->_getEntityAdapter()->getIds() ?? [];
     }
 }
