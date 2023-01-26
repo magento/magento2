@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Helper\Catalog\Product;
 
-use Magento\Bundle\Helper\Catalog\Product\Tax;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Model\ResourceModel\Option\Collection;
+use Magento\Bundle\Pricing\Price\TaxPrice;
 use Magento\Catalog\Helper\Product\Configuration;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
@@ -59,7 +59,7 @@ class ConfigurationTest extends TestCase
     private $serializer;
 
     /**
-     * @var Tax|MockObject
+     * @var TaxPrice|MockObject
      */
     private $taxHelper;
 
@@ -78,7 +78,7 @@ class ConfigurationTest extends TestCase
         $this->serializer = $this->getMockBuilder(Json::class)
             ->onlyMethods(['unserialize'])
             ->getMockForAbstractClass();
-        $this->taxHelper = $this->createPartialMock(Tax::class, ['displayCartPricesBoth', 'getTaxPrice']);
+        $this->taxHelper = $this->createPartialMock(TaxPrice::class, ['displayCartPricesBoth', 'getTaxPrice']);
 
         $this->serializer->expects($this->any())
             ->method('unserialize')
@@ -272,13 +272,13 @@ class ConfigurationTest extends TestCase
         $this->taxHelper->expects($this->any())
             ->method('getTaxPrice')
             ->with($product, 15)
-            ->willReturn(15);
+            ->willReturn(15.00);
         $this->taxHelper->expects($this->any())
             ->method('displayCartPricesBoth')
             ->willReturn(false);
-        $this->pricingHelper->expects($this->once())->method('currency')->with(15)
+        $this->pricingHelper->expects($this->once())->method('currency')->with(15.00)
             ->willReturn('<span class="price">$15.00</span>');
-        $priceModel->expects($this->once())->method('getSelectionFinalTotalPrice')->willReturn(15);
+        $priceModel->expects($this->once())->method('getSelectionFinalTotalPrice')->willReturn(15.00);
         $selectionQty->expects($this->any())->method('getValue')->willReturn(1);
         $bundleOption->expects($this->any())->method('getSelections')->willReturn([$product]);
         $bundleOption->expects($this->once())->method('getTitle')->willReturn('title');

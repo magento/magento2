@@ -7,9 +7,10 @@ namespace Magento\Bundle\Helper\Catalog\Product;
 
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Model\Product\Type;
+use Magento\Bundle\Pricing\Price\TaxPrice;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface;
 use Magento\Catalog\Helper\Product\Configuration as ProductConfiguration;
+use Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -54,7 +55,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
     private $serializer;
 
     /**
-     * @var Tax
+     * @var TaxPrice
      */
     private $taxHelper;
 
@@ -64,7 +65,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * @param Data $pricingHelper
      * @param Escaper $escaper
      * @param Json|null $serializer
-     * @param Tax|null $taxHelper
+     * @param TaxPrice|null $taxHelper
      */
     public function __construct(
         Context              $context,
@@ -72,14 +73,14 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
         Data                 $pricingHelper,
         Escaper              $escaper,
         Json                 $serializer = null,
-        Tax                  $taxHelper = null
+        TaxPrice $taxHelper = null
     ) {
         $this->productConfiguration = $productConfiguration;
         $this->pricingHelper = $pricingHelper;
         $this->escaper = $escaper;
         $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(Json::class);
-        $this->taxHelper = $taxHelper ?? ObjectManager::getInstance()->get(Tax::class);
+        $this->taxHelper = $taxHelper ?? ObjectManager::getInstance()->get(TaxPrice::class);
         parent::__construct($context);
     }
 
