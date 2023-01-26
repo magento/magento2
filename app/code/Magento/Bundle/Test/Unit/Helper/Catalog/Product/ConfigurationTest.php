@@ -227,7 +227,6 @@ class ConfigurationTest extends TestCase
      * @param $includingTax
      * @param $displayCartPriceBoth
      * @return void
-     * @throws LocalizedException
      * @dataProvider getTaxConfiguration
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -275,14 +274,21 @@ class ConfigurationTest extends TestCase
             ->method('escapeHtml')
             ->with('name')
             ->willReturn('name');
-        $this->taxHelper->expects($this->any())
-            ->method('getTaxPrice')
-            ->with($product, 15, $includingTax)
-            ->willReturn(15.00);
+        if ($displayCartPriceBoth) {
+            $this->taxHelper->expects($this->any())
+                ->method('getTaxPrice')
+                ->withConsecutive([$product, 15.00, !$includingTax], [$product, 15.00, $includingTax])
+                ->willReturnOnConsecutiveCalls(15.00, 15.00);
+        } else {
+            $this->taxHelper->expects($this->any())
+                ->method('getTaxPrice')
+                ->with($product, 15.00, $includingTax)
+                ->willReturn(15.00);
+        }
         $this->taxHelper->expects($this->any())
             ->method('displayCartPricesBoth')
             ->willReturn((bool)$displayCartPriceBoth);
-        $this->pricingHelper->expects($this->once())->method('currency')->with(15.00)
+        $this->pricingHelper->expects($this->atLeastOnce())->method('currency')->with(15.00)
             ->willReturn('<span class="price">$15.00</span>');
         $priceModel->expects($this->once())->method('getSelectionFinalTotalPrice')->willReturn(15.00);
         $selectionQty->expects($this->any())->method('getValue')->willReturn(1);
@@ -317,11 +323,16 @@ class ConfigurationTest extends TestCase
         $this->productConfiguration->expects($this->once())->method('getCustomOptions')->with($this->item)
             ->willReturn([0 => ['label' => 'title', 'value' => 'value']]);
 
+        if ($displayCartPriceBoth) {
+            $value = '1 x name <span class="price">$15.00</span> Excl. tax: <span class="price">$15.00</span>';
+        } else {
+            $value = '1 x name <span class="price">$15.00</span>';
+        }
         $this->assertEquals(
             [
                 [
                     'label' => 'title',
-                    'value' => ['1 x name <span class="price">$15.00</span>'],
+                    'value' => [$value],
                     'has_html' => true
                 ],
                 ['label' => 'title', 'value' => 'value']
@@ -338,10 +349,8 @@ class ConfigurationTest extends TestCase
     public function getTaxConfiguration(): array
     {
         return [
-            [1, 0],
-            [0, 0],
-            [1, 1],
-            [0, 1]
+            [null, false],
+            [false, true]
         ];
     }
 }

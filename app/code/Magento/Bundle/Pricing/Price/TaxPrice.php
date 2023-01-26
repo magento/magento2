@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Bundle\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
+use Magento\Checkout\Model\Session;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Exception\LocalizedException;
@@ -69,6 +70,11 @@ class TaxPrice
     private $customerGroupRepository;
 
     /**
+     * @var Session
+     */
+    private $checkoutSession;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param TaxClassKeyInterfaceFactory $taxClassKeyFactory
      * @param Config $taxConfig
@@ -77,6 +83,7 @@ class TaxPrice
      * @param TaxCalculationInterface $taxCalculationService
      * @param CustomerSession $customerSession
      * @param GroupRepositoryInterface $customerGroupRepository
+     * @param Session $checkoutSession
      */
     public function __construct(
         StoreManagerInterface            $storeManager,
@@ -86,7 +93,8 @@ class TaxPrice
         QuoteDetailsItemInterfaceFactory $quoteDetailsItemFactory,
         TaxCalculationInterface          $taxCalculationService,
         CustomerSession                  $customerSession,
-        GroupRepositoryInterface         $customerGroupRepository
+        GroupRepositoryInterface         $customerGroupRepository,
+        Session                          $checkoutSession
     ) {
         $this->storeManager = $storeManager;
         $this->taxClassKeyFactory = $taxClassKeyFactory;
@@ -96,6 +104,7 @@ class TaxPrice
         $this->taxCalculationService = $taxCalculationService;
         $this->customerSession = $customerSession;
         $this->customerGroupRepository = $customerGroupRepository;
+        $this->checkoutSession = $checkoutSession;
     }
 
     /**
@@ -129,6 +138,7 @@ class TaxPrice
         $customerTaxClassKey = $this->taxClassKeyFactory->create();
         $item = $this->quoteDetailsItemFactory->create();
         $quoteDetails = $this->quoteDetailsFactory->create();
+        $customerQuote = $this->checkoutSession->getQuote();
 
         if ($priceIncludesTax === null) {
             $priceIncludesTax = $this->taxConfig->priceIncludesTax($store);
@@ -154,6 +164,7 @@ class TaxPrice
             ->setUnitPrice($price);
 
         $quoteDetails
+            ->setShippingAddress($customerQuote->getShippingAddress()->getDataModel())
             ->setCustomerTaxClassKey($customerTaxClassKey)
             ->setItems([$item])
             ->setCustomerId($this->customerSession->getCustomerId());

@@ -197,7 +197,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
         $qty = $this->getSelectionQty($item->getProduct(), $bundleSelection->getSelectionId()) * 1;
         if ($qty) {
             $selectionPrice = $this->getSelectionFinalPrice($item, $bundleSelection);
-            $selectionFinalPrice = $this->taxHelper->getTaxPrice($item->getProduct(), $selectionPrice);
 
             $displayCartPricesBoth = $this->taxHelper->displayCartPricesBoth();
             if ($displayCartPricesBoth) {
@@ -207,6 +206,8 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
                 $selectionFinalPriceExclTax =
                     $this->taxHelper
                         ->getTaxPrice($product, $selectionPrice, false);
+            } else {
+                $selectionFinalPrice = $this->taxHelper->getTaxPrice($item->getProduct(), $selectionPrice);
             }
             $option['value'][] = $qty . ' x '
                 . $this->escaper->escapeHtml($bundleSelection->getName())
