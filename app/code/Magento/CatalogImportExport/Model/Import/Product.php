@@ -2466,6 +2466,10 @@ class Product extends AbstractEntity
         if (is_array($productIdsToReindex) && count($productIdsToReindex) > 0 && !$indexer->isScheduled()) {
             $indexer->reindexList($productIdsToReindex);
         }
+        $indexer = $this->indexerRegistry->get('catalog_product_price');
+        if (is_array($productIdsToReindex) && count($productIdsToReindex) > 0 && !$indexer->isScheduled()) {
+            $indexer->reindexList($productIdsToReindex);
+        }
     }
 
     /**

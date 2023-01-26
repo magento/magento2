@@ -690,7 +690,7 @@ class Import extends AbstractModel
                 $indexer = $this->indexerRegistry->get($indexerId);
 
                 if (!$indexer->isScheduled()) {
-                    $indexer->invalidate();
+                    //$indexer->invalidate();
                 }
                 // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (\InvalidArgumentException $e) {
