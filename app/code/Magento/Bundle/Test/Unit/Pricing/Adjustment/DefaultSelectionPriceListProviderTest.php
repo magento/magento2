@@ -221,4 +221,3 @@ class DefaultSelectionPriceListProviderTest extends TestCase
         $this->model->getPriceList($this->product, true, false);
     }
 }
-
