@@ -9,6 +9,8 @@ namespace Magento\CatalogImportExport\Model\Import;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config as CatalogConfig;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
+use Magento\Catalog\Model\Indexer\Product\Price\Processor as ProductPriceIndexer;
 use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\LinkProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor;
@@ -2462,13 +2464,15 @@ class Product extends AbstractEntity
      */
     private function reindexProducts($productIdsToReindex = [])
     {
-        $indexer = $this->indexerRegistry->get('catalog_product_category');
-        if (is_array($productIdsToReindex) && count($productIdsToReindex) > 0 && !$indexer->isScheduled()) {
-            $indexer->reindexList($productIdsToReindex);
-        }
-        $indexer = $this->indexerRegistry->get('catalog_product_price');
-        if (is_array($productIdsToReindex) && count($productIdsToReindex) > 0 && !$indexer->isScheduled()) {
-            $indexer->reindexList($productIdsToReindex);
+        $indexersToReindex = [
+            ProductCategoryIndexer::INDEXER_ID,
+            ProductPriceIndexer::INDEXER_ID
+        ];
+        foreach ($indexersToReindex as $id) {
+            $indexer = $this->indexerRegistry->get($id);
+            if (is_array($productIdsToReindex) && count($productIdsToReindex) > 0 && !$indexer->isScheduled()) {
+                $indexer->reindexList($productIdsToReindex);
+            }
         }
     }
 
