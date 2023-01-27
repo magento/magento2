@@ -14,7 +14,7 @@ class ConfigIdentity implements IdentityInterface
     /**
      * @var string
      */
-    const CACHE_TAG = 'gql_store_config';
+    public const CACHE_TAG = 'gql_store_config';
 
     /**
      * @inheritDoc

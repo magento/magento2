@@ -7,11 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Annotation;
 
-use Magento\Config\Model\ResourceModel\Config as ConfigResource;
+use Magento\Config\Model\Config\Factory as ConfigFactory;
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\App\ApiMutableScopeConfig;
 use Magento\TestFramework\Config\Model\ConfigStorage;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -22,11 +23,11 @@ use Magento\TestFramework\Helper\Bootstrap;
 class ApiConfigFixture extends ConfigFixture
 {
     /**
-     * Values need to be deleted form the database
+     * Values are inherited
      *
      * @var array
      */
-    private $valuesToDeleteFromDatabase = [];
+    private $valuesNotFromDatabase = [];
 
     /**
      * @inheritdoc
@@ -40,7 +41,7 @@ class ApiConfigFixture extends ConfigFixture
         /** @var ConfigStorage $configStorage */
         $configStorage = Bootstrap::getObjectManager()->get(ConfigStorage::class);
         if (!$configStorage->checkIsRecordExist($configPath, ScopeInterface::SCOPE_STORES, $storeCode)) {
-            $this->valuesToDeleteFromDatabase[$storeCode][$configPath ?? ''] = $requiredValue ?? '';
+            $this->valuesNotFromDatabase[$storeCode][$configPath ?? ''] = $requiredValue ?? '';
         }
 
         parent::setStoreConfigValue($matches, $configPathAndValue);
@@ -56,7 +57,7 @@ class ApiConfigFixture extends ConfigFixture
         /** @var ConfigStorage $configStorage */
         $configStorage = Bootstrap::getObjectManager()->get(ConfigStorage::class);
         if (!$configStorage->checkIsRecordExist($configPath)) {
-            $this->valuesToDeleteFromDatabase['global'][$configPath] = $requiredValue;
+            $this->valuesNotFromDatabase['global'][$configPath] = $requiredValue;
         }
 
         $originalValue = $this->getScopeConfigValue($configPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
@@ -76,7 +77,7 @@ class ApiConfigFixture extends ConfigFixture
         /** @var ConfigStorage $configStorage */
         $configStorage = Bootstrap::getObjectManager()->get(ConfigStorage::class);
         if (!$configStorage->checkIsRecordExist($configPath, ScopeInterface::SCOPE_WEBSITES, $websiteCode)) {
-            $this->valuesToDeleteFromDatabase[$websiteCode][$configPath ?? ''] = $requiredValue ?? '';
+            $this->valuesNotFromDatabase[$websiteCode][$configPath ?? ''] = $requiredValue ?? '';
         }
 
         parent::setWebsiteConfigValue($matches, $configPathAndValue);
@@ -88,12 +89,15 @@ class ApiConfigFixture extends ConfigFixture
      */
     protected function _restoreConfigData()
     {
-        /** @var ConfigResource $configResource */
-        $configResource = Bootstrap::getObjectManager()->get(ConfigResource::class);
         /* Restore global values */
         foreach ($this->globalConfigValues as $configPath => $originalValue) {
-            if (isset($this->valuesToDeleteFromDatabase['global'][$configPath])) {
-                $configResource->deleteConfig($configPath);
+            if (isset($this->valuesNotFromDatabase['global'][$configPath])) {
+                $this->inheritConfig(
+                    $configPath,
+                    $originalValue,
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+                );
             } else {
                 $this->_setConfigValue($configPath, $originalValue);
             }
@@ -103,9 +107,13 @@ class ApiConfigFixture extends ConfigFixture
         foreach ($this->storeConfigValues as $storeCode => $originalData) {
             foreach ($originalData as $configPath => $originalValue) {
                 $storeCode = $storeCode ?: null;
-                if (isset($this->valuesToDeleteFromDatabase[$storeCode][$configPath])) {
-                    $scopeId = $this->getIdByScopeType(ScopeInterface::SCOPE_STORES, $storeCode);
-                    $configResource->deleteConfig($configPath, ScopeInterface::SCOPE_STORES, $scopeId);
+                if (isset($this->valuesNotFromDatabase[$storeCode][$configPath])) {
+                    $this->inheritConfig(
+                        $configPath,
+                        (string)$originalValue,
+                        ScopeInterface::SCOPE_STORES,
+                        $storeCode
+                    );
                 } else {
                     $this->setScopeConfigValue(
                         $configPath,
@@ -121,9 +129,13 @@ class ApiConfigFixture extends ConfigFixture
         foreach ($this->websiteConfigValues as $websiteCode => $originalData) {
             foreach ($originalData as $configPath => $originalValue) {
                 $websiteCode = $websiteCode ?: null;
-                if (isset($this->valuesToDeleteFromDatabase[$websiteCode][$configPath])) {
-                    $scopeId = $this->getIdByScopeType(ScopeInterface::SCOPE_WEBSITES, $websiteCode);
-                    $configResource->deleteConfig($configPath, ScopeInterface::SCOPE_WEBSITES, $scopeId);
+                if (isset($this->valuesNotFromDatabase[$websiteCode][$configPath])) {
+                    $this->inheritConfig(
+                        $configPath,
+                        $originalValue,
+                        ScopeInterface::SCOPE_WEBSITES,
+                        $websiteCode
+                    );
                 } else {
                     $this->setScopeConfigValue(
                         $configPath,
@@ -159,28 +171,47 @@ class ApiConfigFixture extends ConfigFixture
     }
 
     /**
-     * Get id by code
+     * Inherit the config and remove the config from database
      *
+     * @param string $path
+     * @param string $value
      * @param string $scopeType
-     * @param string|null $scopeId
-     * @return int
+     * @param string|null $scopeCode
+     * @return void
      */
-    private function getIdByScopeType(string $scopeType, ?string $scopeId): int
-    {
-        $id = 0;
-        /** @var StoreManagerInterface $storeManager */
-        $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
-        switch ($scopeType) {
-            case ScopeInterface::SCOPE_WEBSITES:
-                $id = (int)$storeManager->getWebsite($scopeId)->getId();
-                break;
-            case ScopeInterface::SCOPE_STORES:
-                $id = (int)$storeManager->getStore($scopeId)->getId();
-                break;
-            default:
-                break;
+    private function inheritConfig(
+        string $path,
+        ?string $value,
+        string $scopeType,
+        ?string $scopeCode
+    ) {
+        $pathParts = explode('/', $path);
+        $store = 0;
+        $configData = [
+            'section' => $pathParts[0],
+            'website' => '',
+            'store' => $store,
+            'groups' => [
+                $pathParts[1] => [
+                    'fields' => [
+                        $pathParts[2] => [
+                            'value' => $value,
+                            'inherit' => 1
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $objectManager = Bootstrap::getObjectManager();
+        if ($scopeType === ScopeInterface::SCOPE_STORE && $scopeCode !== null) {
+            $store = $objectManager->get(StoreRepositoryInterface::class)->get($scopeCode)->getId();
+            $configData['store'] = $store;
+        } elseif ($scopeType === ScopeInterface::SCOPE_WEBSITES && $scopeCode !== null) {
+            $website = $objectManager->get(WebsiteRepositoryInterface::class)->get($scopeCode)->getId();
+            $configData['store'] = '';
+            $configData['website'] = $website;
         }
 
-        return $id;
+        $objectManager->get(ConfigFactory::class)->create(['data' => $configData])->save();
     }
 }

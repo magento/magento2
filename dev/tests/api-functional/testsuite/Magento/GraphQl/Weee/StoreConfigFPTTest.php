@@ -7,52 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Weee;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Config\Storage\WriterInterface;
-use Magento\Framework\ObjectManager\ObjectManager;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Weee\Model\Tax as WeeeDisplayConfig;
-use Magento\Weee\Model\Config;
 
 /**
  * Test for storeConfig FPT config values
+ *
+ * @magentoDbIsolation enabled
  */
 class StoreConfigFPTTest extends GraphQlAbstract
 {
-    /** @var ObjectManager $objectManager */
-    private $objectManager;
-
     /**
-     * @inheritdoc
+     * @magentoConfigFixture default/tax/weee/enable 1
+     * @magentoConfigFixture default/tax/weee/display 0
+     * @magentoConfigFixture default/tax/weee/display_list 0
+     * @magentoConfigFixture default/tax/weee/display_sales 0
      */
-    protected function setUp(): void
+    public function testWeeTaxSettingsDisplayIncludedOnly()
     {
-        $this->objectManager = Bootstrap::getObjectManager();
-    }
-
-    /**
-     * FPT All Display settings
-     *
-     * @param array $weeTaxSettings
-     * @param string $displayValue
-     * @return void
-     *
-     * @dataProvider sameFPTDisplaySettingsProvider
-     */
-    public function testSameFPTDisplaySettings(array $weeTaxSettings, $displayValue)
-    {
-       /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
-
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
-
         $query = $this->getStoreConfigQuery();
         $result = $this->graphQlQuery($query);
         $this->assertArrayNotHasKey('errors', $result);
@@ -61,88 +32,110 @@ class StoreConfigFPTTest extends GraphQlAbstract
         $this->assertNotEmpty($result['storeConfig']['category_fixed_product_tax_display_setting']);
         $this->assertNotEmpty($result['storeConfig']['sales_fixed_product_tax_display_setting']);
 
+        $displayValue = 'INCLUDE_FPT_WITHOUT_DETAILS';
         $this->assertEquals($displayValue, $result['storeConfig']['product_fixed_product_tax_display_setting']);
         $this->assertEquals($displayValue, $result['storeConfig']['category_fixed_product_tax_display_setting']);
         $this->assertEquals($displayValue, $result['storeConfig']['sales_fixed_product_tax_display_setting']);
     }
 
     /**
-     * SameFPTDisplaySettings settings data provider
-     *
-     * @return array
+     * @magentoConfigFixture default/tax/weee/enable 1
+     * @magentoConfigFixture default/tax/weee/display 1
+     * @magentoConfigFixture default/tax/weee/display_list 1
+     * @magentoConfigFixture default/tax/weee/display_sales 1
      */
-    public function sameFPTDisplaySettingsProvider()
+    public function testWeeTaxSettingsDisplayIncludedAndDescription()
     {
-        return [
-            [
-                'weeTaxSettingsDisplayIncludedOnly' => [
-                    'tax/weee/enable' => '1',
-                    Config::XML_PATH_FPT_DISPLAY_PRODUCT_VIEW => WeeeDisplayConfig::DISPLAY_INCL,
-                    Config::XML_PATH_FPT_DISPLAY_PRODUCT_LIST => WeeeDisplayConfig::DISPLAY_INCL,
-                    Config::XML_PATH_FPT_DISPLAY_SALES => WeeeDisplayConfig::DISPLAY_INCL,
-                ],
-                'displayValue' => 'INCLUDE_FPT_WITHOUT_DETAILS',
-            ],
-            [
-                'weeTaxSettingsDisplayIncludedAndDescription' => [
-                    'tax/weee/enable' => '1',
-                    Config::XML_PATH_FPT_DISPLAY_PRODUCT_VIEW => WeeeDisplayConfig::DISPLAY_INCL_DESCR,
-                    Config::XML_PATH_FPT_DISPLAY_PRODUCT_LIST => WeeeDisplayConfig::DISPLAY_INCL_DESCR,
-                    Config::XML_PATH_FPT_DISPLAY_SALES => WeeeDisplayConfig::DISPLAY_INCL_DESCR,
-                ],
-                'displayValue' => 'INCLUDE_FPT_WITH_DETAILS',
-            ],
-            [
-                'weeTaxSettingsDisplayIncludedAndExcludedAndDescription' => [
-                    'tax/weee/enable' => '1',
-                    Config::XML_PATH_FPT_DISPLAY_PRODUCT_VIEW => WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL,
-                    Config::XML_PATH_FPT_DISPLAY_PRODUCT_LIST => WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL,
-                    Config::XML_PATH_FPT_DISPLAY_SALES => WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL,
-                ],
-                'displayValue' => 'EXCLUDE_FPT_AND_INCLUDE_WITH_DETAILS',
-            ],
-            [
-                'weeTaxSettingsDisplayExcluded' => [
-                    'tax/weee/enable' => '1',
-                    Config::XML_PATH_FPT_DISPLAY_PRODUCT_VIEW => WeeeDisplayConfig::DISPLAY_EXCL,
-                    Config::XML_PATH_FPT_DISPLAY_PRODUCT_LIST => WeeeDisplayConfig::DISPLAY_EXCL,
-                    Config::XML_PATH_FPT_DISPLAY_SALES => WeeeDisplayConfig::DISPLAY_EXCL,
-                ],
-                'displayValue' => 'EXCLUDE_FPT_WITHOUT_DETAILS',
-            ],
-            [
-                'weeTaxSettingsDisplayExcluded' => [
-                    'tax/weee/enable' => '0',
-                    Config::XML_PATH_FPT_DISPLAY_PRODUCT_VIEW => WeeeDisplayConfig::DISPLAY_EXCL,
-                    Config::XML_PATH_FPT_DISPLAY_PRODUCT_LIST => WeeeDisplayConfig::DISPLAY_EXCL,
-                    Config::XML_PATH_FPT_DISPLAY_SALES => WeeeDisplayConfig::DISPLAY_EXCL,
-                ],
-                'displayValue' => 'FPT_DISABLED',
-            ],
-        ];
+        $query = $this->getStoreConfigQuery();
+        $result = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $result);
+
+        $this->assertNotEmpty($result['storeConfig']['product_fixed_product_tax_display_setting']);
+        $this->assertNotEmpty($result['storeConfig']['category_fixed_product_tax_display_setting']);
+        $this->assertNotEmpty($result['storeConfig']['sales_fixed_product_tax_display_setting']);
+
+        $displayValue = 'INCLUDE_FPT_WITH_DETAILS';
+        $this->assertEquals($displayValue, $result['storeConfig']['product_fixed_product_tax_display_setting']);
+        $this->assertEquals($displayValue, $result['storeConfig']['category_fixed_product_tax_display_setting']);
+        $this->assertEquals($displayValue, $result['storeConfig']['sales_fixed_product_tax_display_setting']);
+    }
+
+    /**
+     * @magentoConfigFixture default/tax/weee/enable 1
+     * @magentoConfigFixture default/tax/weee/display 2
+     * @magentoConfigFixture default/tax/weee/display_list 2
+     * @magentoConfigFixture default/tax/weee/display_sales 2
+     */
+    public function testWeeTaxSettingsDisplayIncludedAndExcludedAndDescription()
+    {
+        $query = $this->getStoreConfigQuery();
+        $result = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $result);
+
+        $this->assertNotEmpty($result['storeConfig']['product_fixed_product_tax_display_setting']);
+        $this->assertNotEmpty($result['storeConfig']['category_fixed_product_tax_display_setting']);
+        $this->assertNotEmpty($result['storeConfig']['sales_fixed_product_tax_display_setting']);
+
+        $displayValue = 'EXCLUDE_FPT_AND_INCLUDE_WITH_DETAILS';
+        $this->assertEquals($displayValue, $result['storeConfig']['product_fixed_product_tax_display_setting']);
+        $this->assertEquals($displayValue, $result['storeConfig']['category_fixed_product_tax_display_setting']);
+        $this->assertEquals($displayValue, $result['storeConfig']['sales_fixed_product_tax_display_setting']);
+    }
+
+    /**
+     * @magentoConfigFixture default/tax/weee/enable 1
+     * @magentoConfigFixture default/tax/weee/display 3
+     * @magentoConfigFixture default/tax/weee/display_list 3
+     * @magentoConfigFixture default/tax/weee/display_sales 3
+     */
+    public function testWeeTaxSettingsDisplayExcluded()
+    {
+        $query = $this->getStoreConfigQuery();
+        $result = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $result);
+
+        $this->assertNotEmpty($result['storeConfig']['product_fixed_product_tax_display_setting']);
+        $this->assertNotEmpty($result['storeConfig']['category_fixed_product_tax_display_setting']);
+        $this->assertNotEmpty($result['storeConfig']['sales_fixed_product_tax_display_setting']);
+
+        $displayValue = 'EXCLUDE_FPT_WITHOUT_DETAILS';
+        $this->assertEquals($displayValue, $result['storeConfig']['product_fixed_product_tax_display_setting']);
+        $this->assertEquals($displayValue, $result['storeConfig']['category_fixed_product_tax_display_setting']);
+        $this->assertEquals($displayValue, $result['storeConfig']['sales_fixed_product_tax_display_setting']);
+    }
+
+    /**
+     * @magentoConfigFixture default/tax/weee/enable 0
+     * @magentoConfigFixture default/tax/weee/display 3
+     * @magentoConfigFixture default/tax/weee/display_list 3
+     * @magentoConfigFixture default/tax/weee/display_sales 3
+     */
+    public function testWeeTaxSettingsDisabled()
+    {
+        $query = $this->getStoreConfigQuery();
+        $result = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $result);
+
+        $this->assertNotEmpty($result['storeConfig']['product_fixed_product_tax_display_setting']);
+        $this->assertNotEmpty($result['storeConfig']['category_fixed_product_tax_display_setting']);
+        $this->assertNotEmpty($result['storeConfig']['sales_fixed_product_tax_display_setting']);
+
+        $displayValue = 'FPT_DISABLED';
+        $this->assertEquals($displayValue, $result['storeConfig']['product_fixed_product_tax_display_setting']);
+        $this->assertEquals($displayValue, $result['storeConfig']['category_fixed_product_tax_display_setting']);
+        $this->assertEquals($displayValue, $result['storeConfig']['sales_fixed_product_tax_display_setting']);
     }
 
     /**
      * FPT Display setting shuffled
      *
-     * @param array $weeTaxSettings
-     * @return void
-     *
-     * @dataProvider differentFPTDisplaySettingsProvider
+     * @magentoConfigFixture default/tax/weee/enable 1
+     * @magentoConfigFixture default/tax/weee/display 0
+     * @magentoConfigFixture default/tax/weee/display_list 1
+     * @magentoConfigFixture default/tax/weee/display_sales 2
      */
-    public function testDifferentFPTDisplaySettings(array $weeTaxSettings)
+    public function testDifferentFPTDisplaySettings()
     {
-        /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
-
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
-
         $query = $this->getStoreConfigQuery();
         $result = $this->graphQlQuery($query);
         $this->assertArrayNotHasKey('errors', $result);
@@ -163,25 +156,6 @@ class StoreConfigFPTTest extends GraphQlAbstract
             'EXCLUDE_FPT_AND_INCLUDE_WITH_DETAILS',
             $result['storeConfig']['sales_fixed_product_tax_display_setting']
         );
-    }
-
-    /**
-     * DifferentFPTDisplaySettings settings data provider
-     *
-     * @return array
-     */
-    public function differentFPTDisplaySettingsProvider()
-    {
-        return [
-            [
-                'weeTaxSettingsDisplay' => [
-                    'tax/weee/enable' => '1',
-                    Config::XML_PATH_FPT_DISPLAY_PRODUCT_VIEW => WeeeDisplayConfig::DISPLAY_INCL,
-                    Config::XML_PATH_FPT_DISPLAY_PRODUCT_LIST => WeeeDisplayConfig::DISPLAY_INCL_DESCR,
-                    Config::XML_PATH_FPT_DISPLAY_SALES => WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL,
-                ]
-            ],
-        ];
     }
 
     /**
