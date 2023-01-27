@@ -232,8 +232,9 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         $select = $connection->select()->from($table, ['value_id', 'value'])->where($where);
         $origRow = $connection->fetchRow($select);
         $origValueId = $origRow['value_id'] ?? false;
+        $storeIds = $this->_storeManager->getStore($storeId)->getWebsite()->getStoreIds(true);
 
-        if ($origValueId > 0) {
+        if ($origValueId > 0 && count($storeIds) === 1) {
             $data->setData('value_id', $origValueId);
         }
 
@@ -248,7 +249,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             /**
              * Update attribute value for website
              */
-            $storeIds = $this->_storeManager->getStore($storeId)->getWebsite()->getStoreIds(true);
             foreach ($storeIds as $storeId) {
                 $bind['store_id'] = (int) $storeId;
                 $this->_attributeValuesToSave[$table][] = $bind;
