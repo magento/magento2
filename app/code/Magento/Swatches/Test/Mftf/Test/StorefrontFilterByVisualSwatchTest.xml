@@ -104,11 +104,11 @@
         <grabAttributeFrom selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '1')}}" userInput="style" stepKey="grabSwatch1"/>
         <grabAttributeFrom selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '2')}}" userInput="style" stepKey="grabSwatch2"/>
         <assertStringContainsString stepKey="assertSwatch1">
-            <expectedResult type="string">rgb(231, 77, 60)</expectedResult>
+            <expectedResult type="string">e74d3c</expectedResult>
             <actualResult type="string">{$grabSwatch1}</actualResult>
         </assertStringContainsString>
         <assertStringContainsString stepKey="assertSwatch2">
-            <expectedResult type="string">rgb(52, 152, 219)</expectedResult>
+            <expectedResult type="string">3498db</expectedResult>
             <actualResult type="string">{$grabSwatch2}</actualResult>
         </assertStringContainsString>
 
