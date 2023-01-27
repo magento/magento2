@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AutoCompleteSearchTermsAndPhrasesWhileUserIsTypingTest">
+
+        <annotations>
+            <stories value="Search Terms"/>
+            <title value="In this test-case we need to verify that previously used earlier search terms are auto-complete"/>
+            <description value="search terms are auto-complete for Customer when he tries to input the same search term in quick search on Storefront"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5003"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create Simple Product -->
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </before>
+        <after>
+            <!-- Delete create product -->
+            <deleteData createDataKey="simpleProduct"  stepKey="deleteProduct"/>
+            <!-- Go to the catalog search term page -->
+            <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="openAdminCatalogSearchTermIndexPage"/>
+            <!--Filter the search term -->
+            <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByThirdSearchQuery">
+                <argument name="searchQuery" value="$$simpleProduct.name$$"/>
+            </actionGroup>
+            <!--Filter the search term -->
+            <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByThirdSearchQuerySku">
+                <argument name="searchQuery" value="$$simpleProduct.sku$$"/>
+            </actionGroup>
+            <!-- Delete created below search terms -->
+            <actionGroup ref="AdminDeleteSearchTermActionGroup" stepKey="deleteSearchTerms"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Go to storefront home page -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
+        <!--Storefront quick search by  product name -->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName">
+            <argument name="phrase" value="$$simpleProduct.name$$"/>
+        </actionGroup>
+        <!--Verify search suggestions and select the suggestion from dropdown options -->
+        <actionGroup ref="StoreFrontSelectDropDownSearchSuggestionActionGroup" stepKey="seeDropDownSearchSuggestion">
+            <argument name="searchQuery" value="$$simpleProduct.name$$"/>
+        </actionGroup>
+        <!-- Assert Product storefront main page -->
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductName">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+        </actionGroup>
+        <!--Storefront quick search by  product name -->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductNameSku">
+            <argument name="phrase" value="$$simpleProduct.sku$$"/>
+        </actionGroup>
+        <!--Verify search suggestions and select the suggestion from dropdown options -->
+        <actionGroup ref="StoreFrontSelectDropDownSearchSuggestionActionGroup" stepKey="seeDropDownSearchSuggestionSku">
+            <argument name="searchQuery" value="$$simpleProduct.sku$$"/>
+        </actionGroup>
+        <!-- Assert Product storefront main page -->
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductNameSku">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+        </actionGroup>
+
+    </test>
+</tests>
