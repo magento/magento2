@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 
 /**
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -19,7 +20,7 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
     /**
      * Input argument types
      */
-    const INPUT_KEY_TYPES = 'types';
+    private const INPUT_KEY_TYPES = 'types';
 
     /**
      * @inheritdoc
