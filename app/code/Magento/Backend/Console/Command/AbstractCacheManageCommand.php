@@ -20,7 +20,7 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
     /**
      * Input argument types
      */
-    protected const INPUT_KEY_TYPES = 'types';
+    public const INPUT_KEY_TYPES = 'types';
 
     /**
      * @inheritdoc
