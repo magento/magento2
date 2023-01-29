@@ -4740,16 +4740,16 @@
         },
         {
             "name": "magento/zend-pdf",
-            "version": "1.16.0",
+            "version": "1.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-zend-pdf.git",
-                "reference": "cb5179d708fb9c39d753d556f49471d3d0037aac"
+                "reference": "e69a4f0ab33ea1355701cebe6cb64bc02e642b33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-zend-pdf/zipball/cb5179d708fb9c39d753d556f49471d3d0037aac",
-                "reference": "cb5179d708fb9c39d753d556f49471d3d0037aac",
+                "url": "https://api.github.com/repos/magento/magento-zend-pdf/zipball/e69a4f0ab33ea1355701cebe6cb64bc02e642b33",
+                "reference": "e69a4f0ab33ea1355701cebe6cb64bc02e642b33",
                 "shasum": ""
             },
             "require": {
@@ -4791,9 +4791,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento-zend-pdf/issues",
-                "source": "https://github.com/magento/magento-zend-pdf/tree/1.16.0"
+                "source": "https://github.com/magento/magento-zend-pdf/tree/1.16.1"
             },
-            "time": "2022-09-22T18:56:44+00:00"
+            "time": "2023-01-26T16:40:05+00:00"
         },
         {
             "name": "monolog/monolog",
