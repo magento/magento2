@@ -170,9 +170,10 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @var LockGuardedCacheLoader
      */
     private $lockQuery;
-    
+
     /**
      * Store the disabled modules to avoid retrieving it multiple times.
+     * @var array|null
      */
     private static ?array $disabledModules = null;
 
@@ -663,8 +664,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             ) ?? [];
         }
 
-        if (
-            isset(static::$disabledModules[$this->getModuleName()])
+        if (isset(static::$disabledModules[$this->getModuleName()])
             && static::$disabledModules[$this->getModuleName()]
         ) {
             return '';
