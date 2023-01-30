@@ -99,21 +99,18 @@
             <waitForPageLoad stepKey="waitForEditProductPage"/>
 
             <actionGroup ref="ProductSetAdvancedPricingWithIndexActionGroup" stepKey="addProductTierPrice1">
-                <argument name="group" value="ALL GROUPS"/>
                 <argument name="quantity" value="10"/>
                 <argument name="price" value="Discount"/>
                 <argument name="amount" value="10"/>
                 <argument name="index" value="0"/>
             </actionGroup>
             <actionGroup ref="ProductSetAdvancedPricingWithIndexActionGroup" stepKey="addProductTierPrice2">
-                <argument name="group" value="ALL GROUPS"/>
                 <argument name="quantity" value="20"/>
                 <argument name="price" value="Discount"/>
                 <argument name="amount" value="20"/>
                 <argument name="index" value="1"/>
             </actionGroup>
             <actionGroup ref="ProductSetAdvancedPricingWithIndexActionGroup" stepKey="addProductTierPrice3">
-                <argument name="group" value="ALL GROUPS"/>
                 <argument name="quantity" value="30"/>
                 <argument name="price" value="Discount"/>
                 <argument name="amount" value="30"/>

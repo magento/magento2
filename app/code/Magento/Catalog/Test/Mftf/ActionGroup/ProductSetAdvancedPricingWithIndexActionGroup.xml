@@ -14,7 +14,7 @@
         </annotations>
         <arguments>
             <argument name="website" type="string" defaultValue=""/>
-            <argument name="group" type="string" defaultValue="Retailer"/>
+            <argument name="group" type="string" defaultValue=""/>
             <argument name="quantity" type="string" defaultValue="1"/>
             <argument name="price" type="string" defaultValue="Discount"/>
             <argument name="amount" type="string" defaultValue="45"/>
