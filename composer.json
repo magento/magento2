@@ -90,7 +90,7 @@
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "^2",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7 || ^1.0",
         "dg/bypass-finals": "^1.4",
         "friendsofphp/php-cs-fixer": "^3.8",
         "lusitanian/oauth": "^0.8",
