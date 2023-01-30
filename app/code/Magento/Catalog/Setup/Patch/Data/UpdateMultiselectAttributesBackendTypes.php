@@ -81,15 +81,18 @@ class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface
             ->select()
             ->from($varcharTable)
             ->where('attribute_id in (?)', $attributesToMigrate);
-        $dataToMigrate = array_map(static function ($row) {
-            $row['value_id'] = null;
-            return $row;
-        }, $connection->fetchAll($varcharTableDataSql));
 
-        foreach (array_chunk($dataToMigrate, 2000) as $dataChunk) {
-            $connection->insertMultiple($textTable, $dataChunk);
-        }
-
+        $columns = $connection->describeTable($varcharTable);
+        unset($columns['value_id']);
+        $connection->query(
+            $connection->insertFromSelect(
+                $connection->select()
+                    ->from($varcharTable, array_keys($columns))
+                    ->where('attribute_id in (?)', $attributesToMigrate),
+                $textTable,
+                array_keys($columns)
+            )
+        );
         $connection->query($connection->deleteFromSelect($varcharTableDataSql, $varcharTable));
 
         foreach ($attributesToMigrate as $attributeId) {
