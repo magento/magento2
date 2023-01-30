@@ -81,7 +81,7 @@ class Discount extends AbstractTotal
     }
 
     /**
-     * Checking if shipping discount was added in previous invoices.
+     * Checking if shipping discount was added in previous invoices, which are not canceled.
      *
      * @param Invoice $invoice
      * @return bool
@@ -90,7 +90,7 @@ class Discount extends AbstractTotal
     {
         $addShippingDiscount = true;
         foreach ($invoice->getOrder()->getInvoiceCollection() as $previousInvoice) {
-            if ($previousInvoice->getDiscountAmount()) {
+            if ($previousInvoice->getState() != \Magento\Sales\Model\Order\Invoice::STATE_CANCELED && $previousInvoice->getDiscountAmount()) {
                 $addShippingDiscount = false;
             }
         }
