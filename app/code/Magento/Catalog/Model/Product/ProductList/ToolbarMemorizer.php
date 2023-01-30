@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\ProductList;
@@ -15,13 +14,14 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  * Class ToolbarMemorizer
  *
  * Responds for saving toolbar settings to catalog session
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class ToolbarMemorizer
 {
     /**
      * XML PATH to enable/disable saving toolbar parameters to session
      */
-    const XML_PATH_CATALOG_REMEMBER_PAGINATION = 'catalog/frontend/remember_pagination';
+    public const XML_PATH_CATALOG_REMEMBER_PAGINATION = 'catalog/frontend/remember_pagination';
 
     /**
      * @var CatalogSession
@@ -62,6 +62,11 @@ class ToolbarMemorizer
      * @var bool
      */
     private $isMemorizingAllowed;
+
+    /**
+     * @var bool
+     */
+    private $hasMemorizeParam = false;
 
     /**
      * @param Toolbar $toolbarModel
@@ -173,7 +178,18 @@ class ToolbarMemorizer
     {
         if ($value && $this->catalogSession->getData($param) != $value) {
             $this->catalogSession->setData($param, $value);
+            $this->hasMemorizeParam = true;
         }
         return $this;
+    }
+
+    /**
+     * Check has Memorize parameter value apply
+     *
+     * @return bool
+     */
+    public function hasMemorizingParam()
+    {
+        return $this->hasMemorizeParam;
     }
 }

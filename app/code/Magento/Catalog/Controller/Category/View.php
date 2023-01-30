@@ -22,7 +22,6 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\ForwardFactory;
-use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -210,6 +209,9 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl());
         }
         $category = $this->_initCategory();
+        if ($this->toolbarMemorizer->hasMemorizingParam()) {
+            return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl());
+        }
         if ($category) {
             $this->layerResolver->create(Resolver::CATALOG_LAYER_CATEGORY);
             $settings = $this->_catalogDesign->getDesignSettings($category);
