@@ -5,10 +5,9 @@
 
 define([
     'jquery',
-    'mageUtils',
     'jquery/ui',
     'jquery/jstree/jquery.jstree'
-], function ($, utils) {
+], function ($) {
     'use strict';
 
     $.widget('mage.categoryTree', {
