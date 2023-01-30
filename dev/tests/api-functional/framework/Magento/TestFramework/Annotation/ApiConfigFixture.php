@@ -203,7 +203,7 @@ class ApiConfigFixture extends ConfigFixture
             ]
         ];
         $objectManager = Bootstrap::getObjectManager();
-        if ($scopeType === ScopeInterface::SCOPE_STORE && $scopeCode !== null) {
+        if ($scopeType === ScopeInterface::SCOPE_STORES && $scopeCode !== null) {
             $store = $objectManager->get(StoreRepositoryInterface::class)->get($scopeCode)->getId();
             $configData['store'] = $store;
         } elseif ($scopeType === ScopeInterface::SCOPE_WEBSITES && $scopeCode !== null) {
