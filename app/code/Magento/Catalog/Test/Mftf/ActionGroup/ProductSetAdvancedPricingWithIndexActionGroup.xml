@@ -14,7 +14,7 @@
         </annotations>
         <arguments>
             <argument name="website" type="string" defaultValue=""/>
-            <argument name="group" type="string" defaultValue=""/>
+            <!--<argument name="group" type="string" defaultValue="Retailer"/>-->
             <argument name="quantity" type="string" defaultValue="1"/>
             <argument name="price" type="string" defaultValue="Discount"/>
             <argument name="amount" type="string" defaultValue="45"/>
@@ -26,7 +26,7 @@
         <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="addCustomerGroupAllGroupsQty1PriceDiscountAnd10percent"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect(index)}}" stepKey="waitForSelectCustomerGroupNameAttribute2"/>
         <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceWebsiteSelect(index)}}" userInput="{{website}}" stepKey="selectProductWebsiteValue"/>
-        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect(index)}}" userInput="{{group}}" stepKey="selectProductCustomGroupValue"/>
+        <!--<selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect(index)}}" userInput="{{group}}" stepKey="selectProductCustomGroupValue"/>-->
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput(index)}}" userInput="{{quantity}}" stepKey="fillProductTierPriceQtyInput"/>
         <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceValueTypeSelect(index)}}" userInput="{{price}}" stepKey="selectProductTierPriceValueType"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput(index)}}" userInput="{{amount}}" stepKey="selectProductTierPricePriceInput"/>
