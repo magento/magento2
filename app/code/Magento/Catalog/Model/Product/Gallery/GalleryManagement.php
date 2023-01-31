@@ -9,11 +9,16 @@ namespace Magento\Catalog\Model\Product\Gallery;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Api\ImageContentValidatorInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Driver\File\Mime;
 
 /**
  * Class GalleryManagement
@@ -45,17 +50,40 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     private $deleteValidator;
 
     /**
+     * @var ImageContentInterfaceFactory
+     */
+    protected $imageContentInterface;
+
+    /**
+     * Filesystem facade
+     *
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    /**
+     * @var Mime
+     */
+    protected $imageMime;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param ImageContentValidatorInterface $contentValidator
      * @param ProductInterfaceFactory|null $productInterfaceFactory
      * @param DeleteValidator|null $deleteValidator
+     * @param ImageContentInterfaceFactory|null $imageContentInterface
+     * @param Filesystem|null $filesystem
+     * @param Mime|null $imageMime
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         ImageContentValidatorInterface $contentValidator,
         ?ProductInterfaceFactory $productInterfaceFactory = null,
-        ?DeleteValidator $deleteValidator = null
+        ?DeleteValidator $deleteValidator = null,
+        ?ImageContentInterfaceFactory $imageContentInterface = null,
+        ?Filesystem $filesystem = null,
+        ?Mime $imageMime = null
     ) {
         $this->productRepository = $productRepository;
         $this->contentValidator = $contentValidator;
@@ -63,6 +91,12 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
             ?? ObjectManager::getInstance()->get(ProductInterfaceFactory::class);
         $this->deleteValidator = $deleteValidator
             ?? ObjectManager::getInstance()->get(DeleteValidator::class);
+        $this->imageContentInterface = $imageContentInterface
+            ?? ObjectManager::getInstance()->get(ImageContentInterfaceFactory::class);
+        $this->filesystem =  $filesystem
+            ?? ObjectManager::getInstance()->get(Filesystem::class);
+        $this->imageMime = $imageMime
+            ?? ObjectManager::getInstance()->get(Mime::class);
     }
 
     /**
@@ -217,7 +251,21 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     {
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productRepository->get($sku);
+        $mediaGalleryEntries = $product->getMediaGalleryEntries();
+        foreach ($mediaGalleryEntries as $entry) {
+          $entry->setContent($this->getImageContent($product, $entry));
+        }
+        return $mediaGalleryEntries;
+    }
 
-        return $product->getMediaGalleryEntries();
+    private function getImageContent($product, $entry): ImageContentInterface
+    {
+        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $path = $mediaDirectory->getAbsolutePath($product->getMediaConfig()->getMediaPath($entry->getFile()));
+        $imageFileContent = $mediaDirectory->getDriver()->fileGetContents($path);
+        return $this->imageContentInterface->create()
+            ->setName(basename($entry->getFile()))
+            ->setBase64EncodedData(base64_encode($imageFileContent))
+            ->setType($this->imageMime->getMimeType($path));
     }
 }

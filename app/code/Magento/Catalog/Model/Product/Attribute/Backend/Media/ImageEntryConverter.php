@@ -10,13 +10,7 @@ use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\Data\ImageContentInterface;
-use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Driver\File\Mime;
 
 /**
  * Converter for Image media gallery type
@@ -39,41 +33,15 @@ class ImageEntryConverter implements EntryConverterInterface
     protected $dataObjectHelper;
 
     /**
-     * @var ImageContentInterfaceFactory
-     */
-    protected $imageContentInterface;
-
-    /**
-     * Filesystem facade
-     *
-     * @var Filesystem
-     */
-    protected $filesystem;
-
-    /**
-     * @var Mime
-     */
-    protected $imageMime;
-
-    /**
      * @param ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
      * @param DataObjectHelper $dataObjectHelper
-     * @param ImageContentInterfaceFactory|null $imageContentInterface
-     * @param Filesystem|null $filesystem
-     * @param Mime|null $imageMime
      */
     public function __construct(
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        ImageContentInterfaceFactory $imageContentInterface = null,
-        Filesystem $filesystem = null,
-        Mime $imageMime = null
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
         $this->mediaGalleryEntryFactory = $mediaGalleryEntryFactory;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->imageContentInterface = $imageContentInterface ?? ObjectManager::getInstance()->get(ImageContentInterfaceFactory::class);
-        $this->filesystem =  $filesystem ?? ObjectManager::getInstance()->get(Filesystem::class);
-        $this->imageMime = $imageMime ?? ObjectManager::getInstance()->get(Mime::class);
     }
 
     /**
@@ -88,7 +56,6 @@ class ImageEntryConverter implements EntryConverterInterface
      * @param Product $product
      * @param array $rowData
      * @return ProductAttributeMediaGalleryEntryInterface $entry
-     * @throws FileSystemException
      */
     public function convertTo(Product $product, array $rowData)
     {
@@ -106,14 +73,6 @@ class ImageEntryConverter implements EntryConverterInterface
         if (isset($image['value_id'])) {
             $entry->setId($image['value_id']);
         }
-        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $path = $mediaDirectory->getAbsolutePath($product->getMediaConfig()->getMediaPath($entry->getFile()));
-        $imageFileContent = $mediaDirectory->getDriver()->fileGetContents($path);
-        $entryContent = $this->imageContentInterface->create()
-            ->setName(basename($entry->getFile()))
-            ->setBase64EncodedData(base64_encode($imageFileContent))
-            ->setType($this->imageMime->getMimeType($path));
-        $entry->setContent($entryContent);
         return $entry;
     }
 
