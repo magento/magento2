@@ -60,7 +60,7 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
     {
         return [
             'autocomplete' => $this->escapeHtml($this->isAutocompleteEnabled()),
-            'customerRegisterUrl' => $this->escapeUrl($this->getCustomerRegisterUrlUrl()),
+            'customerRegisterUrl' => $this->escapeUrl($this->getCustomerRegisterUrl()),
             'customerForgotPasswordUrl' => $this->escapeUrl($this->getCustomerForgotPasswordUrl()),
             'baseUrl' => $this->escapeUrl($this->getBaseUrl()),
             'customerLoginUrl' => $this->getUrl('customer/ajax/login'),
@@ -108,7 +108,7 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
      *
      * @return string
      */
-    public function getCustomerRegisterUrlUrl()
+    public function getCustomerRegisterUrl()
     {
         return $this->getUrl('customer/account/create');
     }
