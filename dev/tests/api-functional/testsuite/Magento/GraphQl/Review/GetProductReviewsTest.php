@@ -329,7 +329,7 @@ QUERY;
   }
 }
 QUERY;
-        $headers = array ('Store' => $storeCode, 'Authorization' => implode($this->getHeaderMap()));
+        $headers = ['Store' => $storeCode, 'Authorization' => implode($this->getHeaderMap())];
         $response = $this->graphQlQuery($query, [], '', $headers);
         self::assertArrayHasKey('customer', $response);
         self::assertArrayHasKey('reviews', $response['customer']);
@@ -337,7 +337,6 @@ QUERY;
         self::assertNotEmpty($response['customer']['reviews']['items']);
         self::assertCount(1, $response['customer']['reviews']['items']);
     }
-
 
     /**
      * @return array
