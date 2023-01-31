@@ -229,13 +229,17 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             $whereArr[] = $connection->quoteInto($field . '=?', $value);
         }
         $where = implode(' AND ', $whereArr);
-        $select = $connection->select()->from($table, ['value_id', 'value'])->where($where);
+        $select = $connection->select()->from($table, ['value_id', 'value', 'store_id'])->where($where);
         $origRow = $connection->fetchRow($select);
         $origValueId = $origRow['value_id'] ?? false;
+        $origStoreId = (int) $origRow['store_id'] ?? 0;
         $storeIds = $this->_storeManager->getStore($storeId)->getWebsite()->getStoreIds(true);
 
         if ($origValueId > 0 && count($storeIds) === 1) {
             $data->setData('value_id', $origValueId);
+            if ($storeId !== $origStoreId) {
+                $data->setData('store_id', $origStoreId);
+            }
         }
 
         $bind = $this->_prepareDataForTable($data, $table);
