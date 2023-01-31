@@ -144,7 +144,7 @@ class CookieManagerTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         if (isset($cookie['max-age'])) {
             $this->assertEquals(0, $cookie['max-age']);
         }
-        $this->assertEquals('Thu, 01-Jan-1970 00:00:01 GMT', $cookie['expires']);
+        $this->assertEquals('Thu, 01 Jan 1970 00:00:01 GMT', $cookie['expires']);
     }
 
     /**
