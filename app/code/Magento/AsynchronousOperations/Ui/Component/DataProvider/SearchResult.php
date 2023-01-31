@@ -93,6 +93,12 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
         )->where(
             'user_id=?',
             $this->userContext->getUserId()
+        )->where(
+            'user_type=?',
+            UserContextInterface::USER_TYPE_ADMIN
+        )->orWhere(
+            'user_type=?',
+            UserContextInterface::USER_TYPE_INTEGRATION
         );
         return $this;
     }
