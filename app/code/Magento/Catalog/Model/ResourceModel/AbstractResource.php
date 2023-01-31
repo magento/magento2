@@ -221,27 +221,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                 'value' => $this->_prepareValueForSave($value, $attribute),
             ]
         );
-
-        $entity = $attribute->getEntity();
-        $row = $this->getAttributeRow($entity, $object, $attribute);
-        $whereArr = [];
-        foreach ($row as $field => $value) {
-            $whereArr[] = $connection->quoteInto($field . '=?', $value);
-        }
-        $where = implode(' AND ', $whereArr);
-        $select = $connection->select()->from($table, ['value_id', 'value', 'store_id'])->where($where);
-        $origRow = $connection->fetchRow($select);
-        $origValueId = $origRow['value_id'] ?? false;
-        $origStoreId = (int) $origRow['store_id'] ?? 0;
-        $storeIds = $this->_storeManager->getStore($storeId)->getWebsite()->getStoreIds(true);
-
-        if ($origValueId > 0 && count($storeIds) === 1) {
-            $data->setData('value_id', $origValueId);
-            if ($storeId !== $origStoreId) {
-                $data->setData('store_id', $origStoreId);
-            }
-        }
-
         $bind = $this->_prepareDataForTable($data, $table);
 
         if ($attribute->isScopeStore()) {
@@ -253,6 +232,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             /**
              * Update attribute value for website
              */
+            $storeIds = $this->_storeManager->getStore($storeId)->getWebsite()->getStoreIds(true);
             foreach ($storeIds as $storeId) {
                 $bind['store_id'] = (int) $storeId;
                 $this->_attributeValuesToSave[$table][] = $bind;
