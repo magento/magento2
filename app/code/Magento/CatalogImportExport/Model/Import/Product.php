@@ -8,9 +8,9 @@ namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config as CatalogConfig;
-use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor as ProductPriceIndexer;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\LinkProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor;
@@ -31,6 +31,7 @@ use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Indexer\Config\DependencyInfoProviderInterface;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
@@ -768,6 +769,11 @@ class Product extends AbstractEntity
     private $stockItemProcessor;
 
     /**
+     * @var DependencyInfoProviderInterface
+     */
+    private $dependencyInfoProvider;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -817,6 +823,7 @@ class Product extends AbstractEntity
      * @param LinkProcessor|null $linkProcessor
      * @param File|null $fileDriver
      * @param StockItemProcessorInterface|null $stockItemProcessor
+     * @param DependencyInfoProviderInterface|null $dependencyInfoProvider
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -872,7 +879,8 @@ class Product extends AbstractEntity
         StockProcessor $stockProcessor = null,
         LinkProcessor $linkProcessor = null,
         ?File $fileDriver = null,
-        ?StockItemProcessorInterface $stockItemProcessor = null
+        ?StockItemProcessorInterface $stockItemProcessor = null,
+        ?DependencyInfoProviderInterface $dependencyInfoProvider = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -938,6 +946,8 @@ class Product extends AbstractEntity
                 ->get(ProductRepositoryInterface::class);
         $this->stockItemProcessor = $stockItemProcessor ?? ObjectManager::getInstance()
             ->get(StockItemProcessorInterface::class);
+        $this->dependencyInfoProvider = $dependencyInfoProvider ?? ObjectManager::getInstance()
+            ->get(DependencyInfoProviderInterface::class);
     }
 
     /**
@@ -1662,7 +1672,7 @@ class Product extends AbstractEntity
                         $prevAttributeSet,
                         $attributes
                     );
-                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
                 } catch (Skip $skip) {
                     // Product is skipped.  Go on to the next one.
                 }
@@ -2464,14 +2474,25 @@ class Product extends AbstractEntity
      */
     private function reindexProducts($productIdsToReindex = [])
     {
-        $indexersToReindex = [
-            ProductCategoryIndexer::INDEXER_ID,
-            ProductPriceIndexer::INDEXER_ID
-        ];
-        foreach ($indexersToReindex as $id) {
-            $indexer = $this->indexerRegistry->get($id);
-            if (is_array($productIdsToReindex) && count($productIdsToReindex) > 0 && !$indexer->isScheduled()) {
-                $indexer->reindexList($productIdsToReindex);
+        if (is_array($productIdsToReindex) && !empty($productIdsToReindex)) {
+            $indexersToReindex = [
+                ProductCategoryIndexer::INDEXER_ID,
+                ProductPriceIndexer::INDEXER_ID
+            ];
+            foreach ($indexersToReindex as $id) {
+                $indexer = $this->indexerRegistry->get($id);
+                if (!$indexer->isScheduled()) {
+                    //trick for dependent indexers in scheduled mode
+                    //related issue: AC-7851
+                    $idsToRunBefore = $this->dependencyInfoProvider->getIndexerIdsToRunBefore($id);
+                    foreach ($idsToRunBefore as $dependentId) {
+                        $dependentIndexer = $this->indexerRegistry->get($dependentId);
+                        if ($dependentIndexer->isScheduled()) {
+                            $dependentIndexer->reindexList($productIdsToReindex);
+                        }
+                    }
+                    $indexer->reindexList($productIdsToReindex);
+                }
             }
         }
     }
