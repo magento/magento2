@@ -1114,6 +1114,7 @@ class Product extends AbstractEntity
                     'catalog_product_import_bunch_delete_after',
                     ['adapter' => $this, 'bunch' => $bunch]
                 );
+                $this->reindexProducts($idsToDelete);
             }
         }
         return $this;
