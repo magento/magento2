@@ -7,10 +7,8 @@
 namespace Magento\Catalog\Model\Product\Attribute\Backend\Media;
 
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\Data\ImageContentInterface;
-use Magento\Framework\Api\DataObjectHelper;
 
 /**
  * Converter for Image media gallery type
@@ -20,7 +18,7 @@ class ImageEntryConverter implements EntryConverterInterface
     /**
      * Media Entry type code
      */
-    public const MEDIA_TYPE_CODE = 'image';
+    const MEDIA_TYPE_CODE = 'image';
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory
@@ -33,8 +31,8 @@ class ImageEntryConverter implements EntryConverterInterface
     protected $dataObjectHelper;
 
     /**
-     * @param ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
-     * @param DataObjectHelper $dataObjectHelper
+     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
