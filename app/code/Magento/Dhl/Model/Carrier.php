@@ -1047,7 +1047,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                             (string)$this->getConfigData('gateway_url'),
                             Request::METHOD_POST,
                             ['Content-Type' => 'application/xml'],
-                            utf8_encode($request)
+                            mb_convert_encoding($request, 'UTF-8')
                         )
                     ),
                     'date' => $date,
@@ -1105,7 +1105,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $client = $this->_httpClientFactory->create();
         $client->setUri($this->getGatewayURL());
         $client->setOptions(['maxredirects' => 0, 'timeout' => 30]);
-        $client->setRawBody(utf8_encode($request));
+        $client->setRawBody(mb_convert_encoding($request, 'UTF-8'));
         $client->setMethod(HttpRequest::METHOD_POST);
 
         return $client->send()->getBody();
@@ -1716,7 +1716,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         $request = $xml->asXML();
         if ($request && !(mb_detect_encoding($request) == 'UTF-8')) {
-            $request = utf8_encode($request);
+            $request = mb_convert_encoding($request, 'UTF-8');
         }
 
         $responseBody = $this->_getCachedQuotes($request);
@@ -1731,7 +1731,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                         $request
                     )
                 );
-                $responseBody = utf8_decode($response->get()->getBody());
+                $responseBody = mb_convert_encoding($response->get()->getBody(), 'ISO-8859-1', 'UTF-8');
                 $debugData['result'] = $this->filterDebugData($responseBody);
                 $this->_setCachedQuotes($request, $responseBody);
             } catch (\Exception $e) {
@@ -1880,7 +1880,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         //$xml->addChild('PiecesEnabled', 'ALL_CHECK_POINTS');
 
         $request = $xml->asXML();
-        $request = utf8_encode($request);
+        $request = mb_convert_encoding($request, 'UTF-8');
 
         $responseBody = $this->_getCachedQuotes($request);
         if ($responseBody === null) {

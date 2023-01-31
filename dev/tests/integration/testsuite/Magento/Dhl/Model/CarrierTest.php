@@ -286,7 +286,7 @@ class CarrierTest extends TestCase
                 new Response(
                     200,
                     [],
-                    utf8_encode(file_get_contents(__DIR__ . '/../_files/response_shipping_label.xml'))
+                    mb_convert_encoding(file_get_contents(__DIR__ . '/../_files/response_shipping_label.xml'), 'UTF-8')
                 )
             ]
         );
