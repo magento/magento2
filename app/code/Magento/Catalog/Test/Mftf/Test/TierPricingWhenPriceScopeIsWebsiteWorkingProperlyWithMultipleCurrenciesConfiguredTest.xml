@@ -132,6 +132,7 @@
         <magentoCLI command="config:set {{GlobalCatalogPriceScopeConfigData.path}} {{GlobalCatalogPriceScopeConfigData.value}}" stepKey="setPriceScopeGlobal"/>
         <amOnPage url="{{ConfigCurrencySetupPage.url}}" stepKey="navigateToConfigCurrencySetupPage2"/>
         <click selector="{{CurrencySetupSection.currencyOptions}}" stepKey="openCurrencyOptions2"/>
+        <click selector="{{CurrencySetupSection.currencyOptions}}" stepKey="openCurrencyOptions3"/>
         <selectOption selector="{{CurrencySetupSection.baseCurrency}}" userInput="US Dollar" stepKey="setBaseCurrencyFieldUSD"/>
         <unselectOption selector="{{CurrencySetupSection.allowCurrencies}}" parameterArray="['Euro']" stepKey="unselectCurrencies"/>
         <click stepKey="saveConfigs" selector="{{AdminConfigSection.saveButton}}"/>
