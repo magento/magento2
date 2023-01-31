@@ -26,7 +26,7 @@ class ImageEntryConverter implements EntryConverterInterface
     /**
      * Media Entry type code
      */
-    const MEDIA_TYPE_CODE = 'image';
+    public const MEDIA_TYPE_CODE = 'image';
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory
@@ -68,7 +68,6 @@ class ImageEntryConverter implements EntryConverterInterface
         ImageContentInterfaceFactory $imageContentInterface = null,
         Filesystem $filesystem = null,
         Mime $imageMime = null
-
     ) {
         $this->mediaGalleryEntryFactory = $mediaGalleryEntryFactory;
         $this->dataObjectHelper = $dataObjectHelper;
@@ -89,6 +88,7 @@ class ImageEntryConverter implements EntryConverterInterface
      * @param Product $product
      * @param array $rowData
      * @return ProductAttributeMediaGalleryEntryInterface $entry
+     * @throws FileSystemException
      */
     public function convertTo(Product $product, array $rowData)
     {
@@ -106,23 +106,15 @@ class ImageEntryConverter implements EntryConverterInterface
         if (isset($image['value_id'])) {
             $entry->setId($image['value_id']);
         }
-        $imageFileContent = file_get_contents($product->getMediaConfig()->getMediaUrl(($entry->getFile())));
+        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $path = $mediaDirectory->getAbsolutePath($product->getMediaConfig()->getMediaPath($entry->getFile()));
+        $imageFileContent = $mediaDirectory->getDriver()->fileGetContents($path);
         $entryContent = $this->imageContentInterface->create()
             ->setName(basename($entry->getFile()))
             ->setBase64EncodedData(base64_encode($imageFileContent))
-            ->setType($this->getImageMimeType($product,$entry));
+            ->setType($this->imageMime->getMimeType($path));
         $entry->setContent($entryContent);
         return $entry;
-    }
-
-    /**
-     * @throws FileSystemException
-     */
-    public function getImageMimeType($product, $entry)
-    {
-        $directory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        $path = $directory->getAbsolutePath($product->getMediaConfig()->getMediaPath($entry->getFile()));
-        return $this->imageMime->getMimeType($path);
     }
 
     /**
