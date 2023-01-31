@@ -18,9 +18,13 @@ use Magento\Catalog\Model\Product\Gallery\GalleryManagement;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContentValidatorInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Driver\File\Mime;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Filesystem\Io\File;
 
 /**
  * Tests for \Magento\Catalog\Model\Product\Gallery\GalleryManagement.
@@ -75,6 +79,26 @@ class GalleryManagementTest extends TestCase
     private $newProductMock;
 
     /**
+     * @var ImageContentInterface|MockObject
+     */
+    private $imageContentInterface;
+
+    /**
+     * @var Filesystem|MockObject
+     */
+    private $filesystem;
+
+    /**
+     * @var Mime|MockObject
+     */
+    private $mime;
+
+    /**
+     * @var File|MockObject
+     */
+    private $file;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -83,6 +107,10 @@ class GalleryManagementTest extends TestCase
         $this->contentValidatorMock = $this->getMockForAbstractClass(ImageContentValidatorInterface::class);
         $this->productInterfaceFactory = $this->createMock(ProductInterfaceFactory::class);
         $this->deleteValidator = $this->createMock(DeleteValidator::class);
+        $this->imageContentInterface = $this->createMock(ImageContentInterfaceFactory::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
+        $this->mime = $this->createMock(Mime::class);
+        $this->file = $this->createMock(File::class);
         $this->productMock = $this->createPartialMock(
             Product::class,
             [
@@ -102,7 +130,11 @@ class GalleryManagementTest extends TestCase
             $this->productRepositoryMock,
             $this->contentValidatorMock,
             $this->productInterfaceFactory,
-            $this->deleteValidator
+            $this->deleteValidator,
+            $this->imageContentInterface,
+            $this->filesystem,
+            $this->mime,
+            $this->file,
         );
         $this->attributeValueMock = $this->getMockBuilder(AttributeValue::class)
             ->disableOriginalConstructor()

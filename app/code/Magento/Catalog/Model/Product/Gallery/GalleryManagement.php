@@ -9,16 +9,19 @@ namespace Magento\Catalog\Model\Product\Gallery;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Api\ImageContentValidatorInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File\Mime;
+use Magento\Framework\Filesystem\Io\File;
 
 /**
  * Class GalleryManagement
@@ -64,7 +67,12 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     /**
      * @var Mime
      */
-    protected $imageMime;
+    protected $mime;
+
+    /**
+     * @var File
+     */
+    protected $file;
 
     /**
      * @param ProductRepositoryInterface $productRepository
@@ -73,7 +81,8 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
      * @param DeleteValidator|null $deleteValidator
      * @param ImageContentInterfaceFactory|null $imageContentInterface
      * @param Filesystem|null $filesystem
-     * @param Mime|null $imageMime
+     * @param Mime|null $mime
+     * @param File|null $file
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -83,7 +92,8 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         ?DeleteValidator $deleteValidator = null,
         ?ImageContentInterfaceFactory $imageContentInterface = null,
         ?Filesystem $filesystem = null,
-        ?Mime $imageMime = null
+        ?Mime $mime = null,
+        ?File $file = null
     ) {
         $this->productRepository = $productRepository;
         $this->contentValidator = $contentValidator;
@@ -95,8 +105,12 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
             ?? ObjectManager::getInstance()->get(ImageContentInterfaceFactory::class);
         $this->filesystem =  $filesystem
             ?? ObjectManager::getInstance()->get(Filesystem::class);
-        $this->imageMime = $imageMime
+        $this->mime = $mime
             ?? ObjectManager::getInstance()->get(Mime::class);
+        $this->file = $file
+            ?? ObjectManager::getInstance()->get(
+                File::class
+            );
     }
 
     /**
@@ -249,23 +263,31 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
      */
     public function getList($sku)
     {
-        /** @var \Magento\Catalog\Model\Product $product */
+        /** @var Product $product */
         $product = $this->productRepository->get($sku);
         $mediaGalleryEntries = $product->getMediaGalleryEntries();
         foreach ($mediaGalleryEntries as $entry) {
-          $entry->setContent($this->getImageContent($product, $entry));
+            $entry->setContent($this->getImageContent($product, $entry));
         }
         return $mediaGalleryEntries;
     }
 
+    /**
+     * Get image content
+     *
+     * @param Product $product
+     * @param ProductAttributeMediaGalleryEntryInterface $entry
+     * @throws FileSystemException
+     */
     private function getImageContent($product, $entry): ImageContentInterface
     {
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $path = $mediaDirectory->getAbsolutePath($product->getMediaConfig()->getMediaPath($entry->getFile()));
+        $fileName = $this->file->getPathInfo($path)['basename'];
         $imageFileContent = $mediaDirectory->getDriver()->fileGetContents($path);
         return $this->imageContentInterface->create()
-            ->setName(basename($entry->getFile()))
+            ->setName($fileName)
             ->setBase64EncodedData(base64_encode($imageFileContent))
-            ->setType($this->imageMime->getMimeType($path));
+            ->setType($this->mime->getMimeType($path));
     }
 }
