@@ -37,6 +37,8 @@ parameters:
         - '#Constant TESTS_INSTALLATION_DB_CONFIG_FILE not found.#'
         - '#Constant T_[A-Z_]+ not found.#'
 
+includes:
+    - %rootDir%/../../../vendor/phpstan/phpstan-deprecation-rules/rules.neon
 
 services:
     -
