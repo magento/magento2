@@ -538,8 +538,8 @@ class Gd2 extends AbstractAdapter
         } elseif ($this->getWatermarkPosition() == self::POSITION_STRETCH) {
             $watermark = $this->createWaterMark($watermark, $this->_imageSrcWidth, $this->_imageSrcHeight);
         } elseif ($this->getWatermarkPosition() == self::POSITION_CENTER) {
-            $positionX = $this->_imageSrcWidth / 2 - imagesx($watermark) / 2;
-            $positionY = $this->_imageSrcHeight / 2 - imagesy($watermark) / 2;
+            $positionX = (int) ($this->_imageSrcWidth / 2 - imagesx($watermark) / 2);
+            $positionY = (int) ($this->_imageSrcHeight / 2 - imagesy($watermark) / 2);
             $this->imagecopymergeWithAlphaFix(
                 $this->_imageHandler,
                 $watermark,
