@@ -208,7 +208,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
     }
 
     /**
-     * Flush page cache
+     * Tear down test and flush page cache
      *
      * @return void
      */

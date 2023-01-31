@@ -21,6 +21,11 @@ class ConfigIdentity implements IdentityInterface
      */
     public function getIdentities(array $resolvedData): array
     {
-        return empty($resolvedData) ? [] : [self::CACHE_TAG];
+        $data["id"] =  empty($resolvedData) ? [] : $resolvedData["id"];
+        $ids =  empty($resolvedData) ?
+            [] : array_merge([self::CACHE_TAG], array_map(function ($key) {
+                return sprintf('%s_%s', self::CACHE_TAG, $key);
+            }, $data));
+        return $ids;
     }
 }
