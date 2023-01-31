@@ -25,6 +25,16 @@ class Category extends ConfigValue
      */
     private $productAttributeRepository;
 
+    /**
+     * @param Context $context
+     * @param Registry $registry
+     * @param ScopeConfigInterface $config
+     * @param TypeListInterface $cacheTypeList
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
+     * @param array $data
+     * @param ProductAttributeRepositoryInterface|null $productAttributeRepository
+     */
     public function __construct(
         Context $context,
         Registry $registry,
