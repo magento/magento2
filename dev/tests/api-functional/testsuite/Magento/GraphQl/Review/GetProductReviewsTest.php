@@ -335,7 +335,6 @@ QUERY;
         self::assertArrayHasKey('reviews', $response['customer']);
         self::assertArrayHasKey('items', $response['customer']['reviews']);
         self::assertNotEmpty($response['customer']['reviews']['items']);
-        var_dump($response);
         self::assertCount(1, $response['customer']['reviews']['items']);
     }
 
