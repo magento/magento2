@@ -347,38 +347,6 @@ class ConfirmTest extends TestCase
             ->method('getStore')
             ->willReturn($this->storeMock);
 
-        $cookieMetadataManager = $this->getMockBuilder(PhpCookieManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $cookieMetadataManager->expects($this->once())
-            ->method('getCookie')
-            ->with('mage-cache-sessid')
-            ->willReturn(true);
-        $cookieMetadataFactory = $this->getMockBuilder(CookieMetadataFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $cookieMetadata = $this->getMockBuilder(CookieMetadata::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $cookieMetadataFactory->expects($this->once())
-            ->method('createCookieMetadata')
-            ->willReturn($cookieMetadata);
-        $cookieMetadata->expects($this->once())
-            ->method('setPath')
-            ->with('/');
-        $cookieMetadataManager->expects($this->once())
-            ->method('deleteCookie')
-            ->with('mage-cache-sessid', $cookieMetadata);
-
-        $refClass = new \ReflectionClass(Confirm::class);
-        $cookieMetadataManagerProperty = $refClass->getProperty('cookieMetadataManager');
-        $cookieMetadataManagerProperty->setAccessible(true);
-        $cookieMetadataManagerProperty->setValue($this->model, $cookieMetadataManager);
-
-        $cookieMetadataFactoryProperty = $refClass->getProperty('cookieMetadataFactory');
-        $cookieMetadataFactoryProperty->setAccessible(true);
-        $cookieMetadataFactoryProperty->setValue($this->model, $cookieMetadataFactory);
-
         $this->model->execute();
     }
 
@@ -505,19 +473,6 @@ class ConfirmTest extends TestCase
                 ScopeInterface::SCOPE_STORE
             )
             ->willReturn($isSetFlag);
-
-        $cookieMetadataManager = $this->getMockBuilder(PhpCookieManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $cookieMetadataManager->expects($this->once())
-            ->method('getCookie')
-            ->with('mage-cache-sessid')
-            ->willReturn(false);
-
-        $refClass = new \ReflectionClass(Confirm::class);
-        $refProperty = $refClass->getProperty('cookieMetadataManager');
-        $refProperty->setAccessible(true);
-        $refProperty->setValue($this->model, $cookieMetadataManager);
 
         $this->model->execute();
     }
