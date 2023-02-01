@@ -1669,7 +1669,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     public function saveAttribute(DataObject $object, $attributeCode)
     {
-        $updateValue = 0;
         $attribute = $this->getAttribute($attributeCode);
         $backend = $attribute->getBackend();
         $table = $backend->getTable();
@@ -1700,15 +1699,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 $this->_insertAttribute($object, $attribute, $newValue);
             } elseif ($origValueId !== false && $newValue !== null) {
                 $this->_updateAttribute($object, $attribute, $origValueId, $newValue);
-                $updateValue = 1;
             } elseif ($origValueId !== false && $newValue === null && $origValue !== null) {
                 $connection->delete($table, $where);
             }
-            if ($updateValue === 1  && $origValue === $newValue) {
-                $this->_updateAttributeValues($attribute, $origValueId);
-            } else {
-                $this->_processAttributeValues();
-            }
+            $this->_processAttributeValues();
             $connection->commit();
         } catch (\Exception $e) {
             $connection->rollBack();
@@ -2016,37 +2010,5 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 $this->getAttribute($attrCode);
             }
         }
-    }
-
-    /**
-     * Update entity attribute values
-     *
-     * @param AbstractAttribute $attribute
-     * @param mixed $valueId
-     * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    private function _updateAttributeValues(AbstractAttribute $attribute, mixed $valueId): static
-    {
-        $connection = $this->getConnection();
-        foreach ($this->_attributeValuesToSave as $table => $data) {
-            foreach ($data as $columnValue) {
-                $connection->update(
-                    $table,
-                    ['value' => $this->_prepareValueForSave($columnValue['value'], $attribute)],
-                    sprintf('%s=%d', $connection->quoteIdentifier('value_id'), $valueId)
-                );
-            }
-        }
-
-        foreach ($this->_attributeValuesToDelete as $table => $valueIds) {
-            $connection->delete($table, ['value_id IN (?)' => $valueIds]);
-        }
-
-        // reset data arrays
-        $this->_attributeValuesToSave = [];
-        $this->_attributeValuesToDelete = [];
-
-        return $this;
     }
 }
