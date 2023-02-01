@@ -1704,7 +1704,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             } elseif ($origValueId !== false && $newValue === null && $origValue !== null) {
                 $connection->delete($table, $where);
             }
-            if ($updateValue === 1) {
+            if ($updateValue === 1  && $origValue === $newValue) {
                 $this->_updateAttributeValues($attribute, $origValueId);
             } else {
                 $this->_processAttributeValues();
@@ -2026,7 +2026,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _updateAttributeValues(AbstractAttribute $attribute, mixed $valueId): static
+    private function _updateAttributeValues(AbstractAttribute $attribute, mixed $valueId): static
     {
         $connection = $this->getConnection();
         foreach ($this->_attributeValuesToSave as $table => $data) {
@@ -2039,9 +2039,13 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             }
         }
 
+        foreach ($this->_attributeValuesToDelete as $table => $valueIds) {
+            $connection->delete($table, ['value_id IN (?)' => $valueIds]);
+        }
+
         // reset data arrays
         $this->_attributeValuesToSave = [];
-
+        $this->_attributeValuesToDelete = [];
 
         return $this;
     }
