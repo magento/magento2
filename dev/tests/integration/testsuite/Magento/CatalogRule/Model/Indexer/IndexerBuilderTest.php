@@ -8,9 +8,17 @@ namespace Magento\CatalogRule\Model\Indexer;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 
+#[
+    DbIsolation(false),
+    AppIsolation(true),
+]
 class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -58,6 +66,11 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $indexProductProcessor;
 
+    /**
+     * @var WebsiteRepositoryInterface
+     */
+    private $websiteRepository;
+
     protected function setUp(): void
     {
         $this->indexerBuilder = Bootstrap::getObjectManager()->get(
@@ -69,6 +82,7 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->connection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
         $this->indexProductProcessor = Bootstrap::getObjectManager()->get(Processor::class);
+        $this->websiteRepository = Bootstrap::getObjectManager()->get(WebsiteRepositoryInterface::class);
     }
 
     protected function tearDown(): void
@@ -93,8 +107,6 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/CatalogRule/_files/attribute.php
      * @magentoDataFixture Magento/CatalogRule/_files/rule_by_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
@@ -111,8 +123,6 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/CatalogRule/_files/simple_product_with_catalog_rule_50_percent_off_tomorrow.php
      * @magentoConfigFixture base_website general/locale/timezone Europe/Amsterdam
      * @magentoConfigFixture general/locale/timezone America/Chicago
@@ -139,8 +149,6 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/CatalogRule/_files/attribute.php
      * @magentoDataFixture Magento/CatalogRule/_files/rule_by_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
@@ -166,8 +174,6 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/attribute.php
      * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/rule_by_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
@@ -187,9 +193,6 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Tests restoring triggers on `catalogrule_product_price` table after full reindexing in 'Update by schedule' mode.
-     *
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      */
     public function testRestoringTriggersAfterFullReindex()
     {
@@ -206,6 +209,42 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->indexProductProcessor->getIndexer()->setScheduled(false);
         $this->assertEquals(0, $this->getTriggersCount($tableName));
+    }
+
+    #[
+        DataFixture('Magento/CatalogRule/_files/simple_product_with_catalog_rule_50_percent_off.php'),
+    ]
+    public function testReindexByIdForSecondStore(): void
+    {
+        $websiteId = $this->websiteRepository->get('test')->getId();
+        $simpleProduct = $this->productRepository->get('simple');
+        $this->indexerBuilder->reindexById($simpleProduct->getId());
+        $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), $websiteId, 1, $simpleProduct->getId());
+        $this->assertEquals(25, $rulePrice);
+    }
+
+    #[
+        DataFixture('Magento/CatalogRule/_files/simple_product_with_catalog_rule_50_percent_off.php'),
+    ]
+    public function testReindexByIdsForSecondStore(): void
+    {
+        $websiteId = $this->websiteRepository->get('test')->getId();
+        $simpleProduct = $this->productRepository->get('simple');
+        $this->indexerBuilder->reindexByIds([$simpleProduct->getId()]);
+        $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), $websiteId, 1, $simpleProduct->getId());
+        $this->assertEquals(25, $rulePrice);
+    }
+
+    #[
+        DataFixture('Magento/CatalogRule/_files/simple_product_with_catalog_rule_50_percent_off.php'),
+    ]
+    public function testReindexFullForSecondStore(): void
+    {
+        $websiteId = $this->websiteRepository->get('test')->getId();
+        $simpleProduct = $this->productRepository->get('simple');
+        $this->indexerBuilder->reindexFull();
+        $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), $websiteId, 1, $simpleProduct->getId());
+        $this->assertEquals(25, $rulePrice);
     }
 
     /**
