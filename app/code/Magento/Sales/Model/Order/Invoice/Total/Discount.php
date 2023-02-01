@@ -90,7 +90,7 @@ class Discount extends AbstractTotal
     {
         $addShippingDiscount = true;
         foreach ($invoice->getOrder()->getInvoiceCollection() as $previousInvoice) {
-            if ($previousInvoice->getState() != \Magento\Sales\Model\Order\Invoice::STATE_CANCELED && $previousInvoice->getDiscountAmount()) {
+            if ($previousInvoice->getState() != Invoice::STATE_CANCELED && $previousInvoice->getDiscountAmount()) {
                 $addShippingDiscount = false;
             }
         }
