@@ -143,6 +143,7 @@
         "magento/module-cms-url-rewrite": "*",
         "magento/module-compare-list-graph-ql": "*",
         "magento/module-config": "*",
+        "magento/module-async-config": "*",
         "magento/module-configurable-import-export": "*",
         "magento/module-configurable-product": "*",
         "magento/module-configurable-product-sales": "*",
