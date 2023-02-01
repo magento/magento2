@@ -84,7 +84,7 @@ class ConfigTest extends TestCase
     {
         return [
             ['store', 1],
-            ['website'],
+            ['website']
         ];
     }
 }
