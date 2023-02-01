@@ -20,11 +20,11 @@ class Options implements OptionSourceInterface
         return [
             [
                 'value' => UserContextInterface::USER_TYPE_ADMIN,
-                'label' => 'Admin user'
+                'label' => __('Admin user')
             ],
             [
                 'value' => UserContextInterface::USER_TYPE_INTEGRATION,
-                'label' => 'Integration'
+                'label' => __('Integration')
             ]
         ];
     }
