@@ -58,6 +58,6 @@ class Header extends \Magento\Framework\View\Element\Template
             );
         }
         $this->_data['welcome'] =  $this->escaper->escapeQuote($this->_data['welcome'], true);
-        return __($this->_data['welcome']);
+        return addslashes(__($this->_data['welcome']));
     }
 }
