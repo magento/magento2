@@ -83,15 +83,17 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
 
         // Query test store config
         $testStoreCode = 'test';
-        $headerMap['Store'] = $testStoreCode;
-        $responseTestStore = $this->graphQlQueryWithResponseHeaders($query, [], '', $headerMap);
+        $responseTestStore = $this->graphQlQueryWithResponseHeaders($query, [], '', ['Store' => $testStoreCode]);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseTestStore['headers']);
         $testStoreCacheId = $responseTestStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         $this->assertNotEquals($testStoreCacheId, $defaultStoreCacheId);
         // Verify we obtain a cache MISS the first time
         $testStoreResponse = $this->assertCacheMissAndReturnResponse(
             $query,
-            [CacheIdCalculator::CACHE_ID_HEADER => $testStoreCacheId]
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $testStoreCacheId,
+                'Store' => $testStoreCode
+            ]
         );
         $this->assertArrayHasKey('storeConfig', $testStoreResponse['body']);
         $testStoreResponseResult = $testStoreResponse['body']['storeConfig'];
@@ -100,7 +102,10 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         // Verify we obtain a cache HIT the second time
         $testStoreResponseHit = $this->assertCacheHitAndReturnResponse(
             $query,
-            [CacheIdCalculator::CACHE_ID_HEADER => $testStoreCacheId]
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $testStoreCacheId,
+                'Store' => $testStoreCode
+            ]
         );
         $this->assertArrayHasKey('storeConfig', $testStoreResponseHit['body']);
         $testStoreResponseHitResult = $testStoreResponseHit['body']['storeConfig'];
@@ -127,7 +132,10 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         // Verify we obtain a cache MISS the 3rd time
         $testStoreResponseMiss = $this->assertCacheMissAndReturnResponse(
             $query,
-            [CacheIdCalculator::CACHE_ID_HEADER => $testStoreCacheId]
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $testStoreCacheId,
+                'Store' => $testStoreCode
+            ]
         );
         $this->assertArrayHasKey('storeConfig', $testStoreResponseMiss['body']);
         $testStoreResponseMissResult = $testStoreResponseMiss['body']['storeConfig'];
@@ -136,7 +144,10 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         // Verify we obtain a cache HIT the 4th time
         $testStoreResponseHit2 = $this->assertCacheHitAndReturnResponse(
             $query,
-            [CacheIdCalculator::CACHE_ID_HEADER => $testStoreCacheId]
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $testStoreCacheId,
+                'Store' => $testStoreCode
+            ]
         );
         $this->assertArrayHasKey('storeConfig', $testStoreResponseHit2['body']);
         $testStoreResponseHit2Result = $testStoreResponseHit2['body']['storeConfig'];
