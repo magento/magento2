@@ -8,7 +8,6 @@ namespace Magento\CatalogRule\Model\Indexer;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -66,11 +65,6 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $indexProductProcessor;
 
-    /**
-     * @var WebsiteRepositoryInterface
-     */
-    private $websiteRepository;
-
     protected function setUp(): void
     {
         $this->indexerBuilder = Bootstrap::getObjectManager()->get(
@@ -82,7 +76,6 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->connection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
         $this->indexProductProcessor = Bootstrap::getObjectManager()->get(Processor::class);
-        $this->websiteRepository = Bootstrap::getObjectManager()->get(WebsiteRepositoryInterface::class);
     }
 
     protected function tearDown(): void
@@ -216,7 +209,7 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
     ]
     public function testReindexByIdForSecondStore(): void
     {
-        $websiteId = $this->websiteRepository->get('test')->getId();
+        $websiteId = $this->storeManager->getWebsite('test')->getId();
         $simpleProduct = $this->productRepository->get('simple');
         $this->indexerBuilder->reindexById($simpleProduct->getId());
         $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), $websiteId, 1, $simpleProduct->getId());
@@ -228,7 +221,7 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
     ]
     public function testReindexByIdsForSecondStore(): void
     {
-        $websiteId = $this->websiteRepository->get('test')->getId();
+        $websiteId = $this->storeManager->getWebsite('test')->getId();
         $simpleProduct = $this->productRepository->get('simple');
         $this->indexerBuilder->reindexByIds([$simpleProduct->getId()]);
         $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), $websiteId, 1, $simpleProduct->getId());
@@ -240,7 +233,7 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
     ]
     public function testReindexFullForSecondStore(): void
     {
-        $websiteId = $this->websiteRepository->get('test')->getId();
+        $websiteId = $this->storeManager->getWebsite('test')->getId();
         $simpleProduct = $this->productRepository->get('simple');
         $this->indexerBuilder->reindexFull();
         $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), $websiteId, 1, $simpleProduct->getId());
