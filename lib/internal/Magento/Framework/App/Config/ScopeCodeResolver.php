@@ -59,7 +59,7 @@ class ScopeCodeResolver
             $scopeCode = $resolverScopeCode;
         }
 
-        $this->resolvedScopeCodes[$scopeType][$scopeCode] = strtolower($resolverScopeCode);
+        $this->resolvedScopeCodes[$scopeType][$scopeCode] = $resolverScopeCode ?: strtolower($resolverScopeCode);
 
         return $this->resolvedScopeCodes[$scopeType][$scopeCode];
     }
