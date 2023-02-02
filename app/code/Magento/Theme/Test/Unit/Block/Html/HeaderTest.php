@@ -58,13 +58,13 @@ class HeaderTest extends TestCase
     {
         $this->scopeConfig->expects($this->once())->method('getValue')
             ->with('design/header/welcome', ScopeInterface::SCOPE_STORE)
-            ->willReturn('Welcome Message');
+            ->willReturn('Default welcome msg!');
 
         $this->escaper->expects($this->once())
             ->method('escapeQuote')
-            ->with('Welcome Message', true)
-            ->willReturn('Welcome Message');
+            ->with('Default welcome msg!', true)
+            ->willReturn("Message d'accueil par défaut");
 
-        $this->assertEquals('Welcome Message', $this->unit->getWelcome());
+        $this->assertEquals("Message d\'accueil par défaut", $this->unit->getWelcome());
     }
 }
