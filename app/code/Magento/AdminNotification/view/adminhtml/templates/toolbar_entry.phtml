@@ -3,9 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/** @var $this \Magento\AdminNotification\Block\ToolbarEntry */
-
+// phpcs:disable Generic.Files.LineLength
+/** @var $block \Magento\AdminNotification\Block\ToolbarEntry */
     $notificationCount = $block->getUnreadNotificationCount();
     $notificationCounterMax = $block->getNotificationCounterMax();
 ?>
@@ -13,7 +12,7 @@
     data-mage-init='{"toolbarEntry": {}}'
     class="notifications-wrapper admin__action-dropdown-wrap"
     data-notification-count="<?= (int)$notificationCount ?>">
-    <?php if ($notificationCount > 0) : ?>
+    <?php if ($notificationCount > 0): ?>
         <a
             href="<?= $block->escapeUrl($block->getUrl('adminhtml/notification/index')) ?>"
             class="notifications-action admin__action-dropdown"
@@ -27,19 +26,19 @@
         <ul
             class="admin__action-dropdown-menu"
             data-mark-as-read-url="<?= $block->escapeUrl($block->getUrl('adminhtml/notification/ajaxMarkAsRead')) ?>">
-            <?php foreach ($block->getLatestUnreadNotifications() as $notification) : ?>
+            <?php foreach ($block->getLatestUnreadNotifications() as $notification): ?>
                 <?php /** @var $notification \Magento\AdminNotification\Model\Inbox */ ?>
-                <li class="notifications-entry<?php if ($notification->getSeverity() == 1) : ?> notifications-critical<?php endif; ?>"
+                <li class="notifications-entry<?php if ($notification->getSeverity() == 1): ?> notifications-critical<?php endif; ?>"
                     data-notification-id="<?= $block->escapeHtmlAttr($notification->getId()) ?>"
-                    data-notification-severity="<?php if ($notification->getSeverity() == 1) : ?>1<?php endif; ?>">
+                    data-notification-severity="<?php if ($notification->getSeverity() == 1): ?>1<?php endif; ?>">
                     <?php
-                        $notificationDescription = $notification->getDescription();
+                        $notificationDescription = $notification->getDescription() ?? '';
                         $notificationDescriptionLength = $block->getNotificationDescriptionLength();
                     ?>
                     <strong class="notifications-entry-title">
                         <?= $block->escapeHtml($notification->getTitle()) ?>
                     </strong>
-                    <?php if (strlen($notificationDescription) > $notificationDescriptionLength) : ?>
+                    <?php if (strlen($notificationDescription) > $notificationDescriptionLength): ?>
                         <p class="notifications-entry-description _cutted">
                             <span class="notifications-entry-description-start">
                                 <?= $block->escapeHtml(substr($notificationDescription, 0, $notificationDescriptionLength)) ?>
@@ -48,7 +47,7 @@
                                 <?= $block->escapeHtml(substr($notificationDescription, $notificationDescriptionLength)) ?>
                             </span>
                         </p>
-                    <?php else : ?>
+                    <?php else: ?>
                         <p class="notifications-entry-description">
                             <?= $block->escapeHtml($notificationDescription) ?>
                         </p>
@@ -71,7 +70,7 @@
                 </a>
             </li>
         </ul>
-    <?php else : ?>
+    <?php else: ?>
         <a
             class="notifications-action admin__action-dropdown"
             href="<?= $block->escapeUrl($block->getUrl('adminhtml/notification/index')) ?>"

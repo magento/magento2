@@ -8,13 +8,19 @@ namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Indexer\Processor;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\ImportExport\Model\Import;
+use Magento\Framework\Filesystem\Directory\Write as DirectoryWrite;
+use Magento\Framework\Filesystem\File\WriteFactory;
 use Magento\Framework\Indexer\StateInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\Source\CsvFactory;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test for class \Magento\CustomerImportExport\Model\Import\Customer which covers validation logic
+ * Test for class Customer which covers validation logic
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -24,44 +30,54 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     /**
      * Model object which used for tests
      *
-     * @var Customer|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * Model object which used for tests
+     *
+     * @var Customer&\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
-     * Customer data
-     *
      * @var array
      */
     protected $_customerData;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Write
+     * @var DirectoryWrite
      */
     protected $directoryWrite;
 
     /**
-     * @var \Magento\Customer\Model\Indexer\Processor
+     * @var Processor
      */
     private $indexerProcessor;
 
+    /**
+     * @var CsvFactory
+     */
+    private $csvFactory;
+
+    /**
+     * @var WriteFactory
+     */
+    private $writeFactory;
     /**
      * Create all necessary data for tests
      */
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\CustomerImportExport\Model\Import\Customer::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->_model = $this->objectManager->create(Customer::class);
         $this->_model->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE]);
-        $this->indexerProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Customer\Model\Indexer\Processor::class);
-
+        $this->indexerProcessor = $this->objectManager->create(\Magento\Customer\Model\Indexer\Processor::class);
         $propertyAccessor = new \ReflectionProperty($this->_model, 'errorMessageTemplates');
         $propertyAccessor->setAccessible(true);
         $propertyAccessor->setValue($this->_model, []);
-
         $this->_customerData = [
             'firstname' => 'Firstname',
             'lastname' => 'Lastname',
@@ -73,11 +89,10 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             'website_id' => 1,
             'password' => 'password',
         ];
-
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Framework\Filesystem::class);
-        $this->directoryWrite = $filesystem
-            ->getDirectoryWrite(DirectoryList::ROOT);
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $this->directoryWrite = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $this->writeFactory = $this->objectManager->get(WriteFactory::class);
+        $this->csvFactory = $this->objectManager->get(CsvFactory::class);
     }
 
     /**
@@ -147,6 +162,93 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             $updatedCustomer->getGender(),
             'Gender must be changed'
         );
+    }
+
+    /**
+     * Decompresses if gz compressed, stores in memory or temp file, and loads CSV adapter
+     *
+     * @param string $importData
+     * @return Import\AbstractSource
+     */
+    private function createImportAdapter(string $importData)
+    {
+        if (0 === strncmp("\x1f\x8b", $importData, 2)) { // gz's magic string
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $importData = gzdecode($importData);
+        }
+        $openedFile = $this->writeFactory->create('php://temp', '', 'w');
+        $openedFile->write($importData);
+        unset($importData);
+        $directory = $this->directoryWrite;
+        $adapter = $this->csvFactory->create(['directory' => $directory, 'file' => $openedFile]);
+        return $adapter;
+    }
+
+    /**
+     * Test validateSource() and importData() and using same $ids between them
+     *
+     * @magentoDataFixture Magento/Customer/_files/import_export/customer.php
+     */
+    public function testValidateSourceAndImportSource()
+    {
+        /** @var Import $import */
+        $import = $this->objectManager->create(Import::class);
+        $importData = \file_get_contents(__DIR__ . '/_files/2k_customers.csv.gz');
+        $source = $this->createImportAdapter($importData);
+        unset($importData);
+        $import->setData([
+            'form_key' => 'Ded3z8XBEaMWt3sH',
+            'entity' => 'customer',
+            'behavior' => 'add_update',
+            'validation_strategy' => 'validation-stop-on-errors',
+            'allowed_error_count' => '10',
+            '_import_field_separator' => ',',
+            '_import_multiple_value_separator' => ',',
+            '_import_empty_attribute_value_constant' => '__EMPTY__VALUE__',
+            'import_images_file_dir' => '',
+            '_import_ids' => '',
+        ]);
+        $import->validateSource($source);
+        $ids = $import->getValidatedIds();
+        $errorAggregator = $import->getErrorAggregator();
+        $errorStrings = [];
+        foreach ($errorAggregator->getAllErrors() as $error) {
+            $errorStrings[] = sprintf(
+                "Error:\nRowNumber: %s\nColumnName: %s\nCode: %s\nDescription: %s\nLevel: %s\nMessage: %s\n",
+                (string)$error->getRowNumber(),
+                $error->getColumnName(),
+                $error->getErrorCode(),
+                $error->getErrorDescription(),
+                $error->getErrorLevel(),
+                $error->getErrorMessage(),
+            );
+        }
+        if (!empty($errorStrings)) {
+            $exceptionString = sprintf(
+                "Errors:\n%s\n",
+                implode("\n", $errorStrings)
+            );
+            throw new \Exception($exceptionString);
+        }
+        $this->assertCount(20, $ids);
+        /** @var Import $import2 */
+        $import2 = $this->objectManager->create(Import::class);
+        $import2->setData([
+            'form_key' => 'DedGz8CNEaMWt3sH',
+            'entity' => 'customer',
+            'behavior' => 'add_update',
+            'validation_strategy' => 'validation-stop-on-errors',
+            'allowed_error_count' => '10',
+            '_import_field_separator' => ',',
+            '_import_multiple_value_separator' => ',',
+            '_import_empty_attribute_value_constant' => '__EMPTY__VALUE__',
+            'import_images_file_dir' => '',
+            '_import_ids' => implode(',', $ids),
+        ]);
+        $this->assertEmpty($import2->getValidatedIds());
+        $import2->importSource();
+        $createdItemsCount = $import2->getCreatedItemsCount();
+        $this->assertEquals(2000, $createdItemsCount);
     }
 
     /**

@@ -1,0 +1,72 @@
+name: Bug report
+description: Technical issue with the Magento 2 core components
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please read [our guidelines](https://developer.adobe.com/commerce/contributor/guides/code-contributions/#report-an-issue) before submitting the issue.
+  - type: textarea
+    attributes:
+      label: Preconditions and environment
+      description: |
+        Describe your environment.
+        Provide all the details that will help us to reproduce the bug.
+      value: |
+        - Magento version
+        - Anything else that would help a developer reproduce the bug
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      description: |
+        Provide a set of clear steps to reproduce this bug.
+      placeholder: |
+        Example:
+          1. Navigate to storefront as a guest.
+          2. Open Test Category.
+          3. Click “Add to Cart” on the Virtual Product.
+          4. Open mini shopping cart and click “Proceed to Checkout”.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected result
+      description: |
+        Tell us what you expected to happen.
+      placeholder: |
+        Example:
+          Order is placed successfully, customer is redirected to the success page.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Actual result
+      description: |
+        Tell us what happened. Include error messages and issues.
+      placeholder: |
+        Example:
+          “Place order” button is not visible, order cannot be placed.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: |
+        Additional information is often requested when the bug report is processed. You can save time by providing both Magento and browser logs, screenshots, repository branch and HEAD commit you checked out to install Magento and any other artifacts related to the issue.
+        Also, links to the comments with important information, Root Cause analysis, additional video recordings; and anything else that is important for the issue and at some reason cannot be added to other sections.
+  - type: textarea
+    attributes:
+      label: Release note
+      description: |
+        Help us to provide meaningful release notes to the community.
+  - type: checkboxes
+    attributes:
+      label: Triage and priority
+      description: |
+        Provide [Severity](https://developer.adobe.com/commerce/contributor/guides/code-contributions/#community-backlog-priority) assessment for the Issue as a Reporter.
+        This information helps us during the Confirmation and Issue triage processes.
+      options:
+        - label: 'Severity: **S0** _- Affects critical data or functionality and leaves users without workaround._'
+        - label: 'Severity: **S1** _- Affects critical data or functionality and forces users to employ a workaround._'
+        - label: 'Severity: **S2** _- Affects non-critical data or functionality and forces users to employ a workaround._'
+        - label: 'Severity: **S3** _- Affects non-critical data or functionality and does not force users to employ a workaround._'
+        - label: 'Severity: **S4** _- Affects aesthetics, professional look and feel, “quality” or “usability”._'
