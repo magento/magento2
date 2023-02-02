@@ -132,13 +132,15 @@ class LastOrderedItemsTest extends TestCase
             'id' => 1,
             'name' => 'Product Name 1',
             'url' => 'http://example.com',
-            'is_saleable' => true
+            'is_saleable' => true,
+            'product_id' => 1
         ];
         $expectedItem2 = [
             'id' => 2,
             'name' => 'Product Name 2',
             'url' => null,
-            'is_saleable' => true
+            'is_saleable' => true,
+            'product_id' => 2
         ];
         $productIdVisible = 1;
         $productIdNotVisible = 2;
@@ -175,12 +177,12 @@ class LastOrderedItemsTest extends TestCase
         $productNotVisible->expects($this->never())->method('getProductUrl');
         $productNotVisible->expects($this->once())->method('getWebsiteIds')->willReturn([1, 4]);
         $productNotVisible->expects($this->once())->method('getId')->willReturn($productIdNotVisible);
-        $itemWithVisibleProduct->expects($this->once())->method('getProductId')->willReturn($productIdVisible);
+        $itemWithVisibleProduct->expects($this->any())->method('getProductId')->willReturn($productIdVisible);
         $itemWithVisibleProduct->expects($this->once())->method('getProduct')->willReturn($productVisible);
         $itemWithVisibleProduct->expects($this->once())->method('getId')->willReturn($expectedItem1['id']);
         $itemWithVisibleProduct->expects($this->once())->method('getName')->willReturn($expectedItem1['name']);
         $itemWithVisibleProduct->expects($this->once())->method('getStore')->willReturn($storeMock);
-        $itemWithNotVisibleProduct->expects($this->once())->method('getProductId')->willReturn($productIdNotVisible);
+        $itemWithNotVisibleProduct->expects($this->any())->method('getProductId')->willReturn($productIdNotVisible);
         $itemWithNotVisibleProduct->expects($this->once())->method('getProduct')->willReturn($productNotVisible);
         $itemWithNotVisibleProduct->expects($this->once())->method('getId')->willReturn($expectedItem2['id']);
         $itemWithNotVisibleProduct->expects($this->once())->method('getName')->willReturn($expectedItem2['name']);
@@ -255,7 +257,7 @@ class LastOrderedItemsTest extends TestCase
             ->method('getParentItemsRandomCollection')
             ->with(LastOrderedItems::SIDEBAR_ORDER_LIMIT)
             ->willReturn([$orderItemMock]);
-        $orderItemMock->expects($this->once())->method('getProductId')->willReturn($productId);
+        $orderItemMock->expects($this->any())->method('getProductId')->willReturn($productId);
         $this->productRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($productId, false, $storeId)

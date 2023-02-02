@@ -81,7 +81,7 @@
 
         <!-- Fill in address for CA -->
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
-        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{Simple_US_Customer_CA.email}}" stepKey="enterEmail"/>
+        <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{Simple_US_Customer_CA.email}}" stepKey="enterEmail"/>
         <waitForLoadingMaskToDisappear stepKey="waitEmailLoad"/>
         <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="changeAddress">
             <argument name="Address" value="US_Address_CA"/>

@@ -9,6 +9,8 @@ namespace Magento\Fedex\Model;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Measure\Length;
+use Magento\Framework\Measure\Weight;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Webapi\Soap\ClientFactory;
@@ -743,6 +745,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $r = $this->_rawRequest;
         $weight = $this->getTotalNumOfBoxes($r->getFreeMethodWeight());
         $r->setWeight($weight);
+        $r->setPackages($this->createPackages((float)$r->getFreeMethodWeight(), []));
         $r->setService($freeMethod);
     }
 
@@ -1307,7 +1310,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $height = $packageParams->getHeight();
         $width = $packageParams->getWidth();
         $length = $packageParams->getLength();
-        $weightUnits = $packageParams->getWeightUnits() == \Zend_Measure_Weight::POUND ? 'LB' : 'KG';
+        $weightUnits = $packageParams->getWeightUnits() == Weight::POUND ? 'LB' : 'KG';
         $unitPrice = 0;
         $itemsQty = 0;
         $itemsDesc = [];
@@ -1454,7 +1457,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'Length' => $length,
                 'Width' => $width,
                 'Height' => $height,
-                'Units' => $packageParams->getDimensionUnits() == \Zend_Measure_Length::INCH ? 'IN' : 'CM',
+                'Units' => $packageParams->getDimensionUnits() == Length::INCH ? 'IN' : 'CM',
             ];
         }
 

@@ -38,8 +38,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DataProviderTest extends TestCase
 {
-    const ATTRIBUTE_CODE = 'test-code';
-    const OPTIONS_RESULT = 'test-options';
+    private const ATTRIBUTE_CODE = 'test-code';
+    private const OPTIONS_RESULT = 'test-options';
 
     /**
      * @var Config|MockObject
@@ -966,7 +966,8 @@ class DataProviderTest extends TestCase
                                         'max_file_size' => $maxFileSize,
                                         'file_extensions' => 'ext1, eXt2 '
                                     ],
-                                    'label' => __('frontend_label')
+                                    'label' => __('frontend_label'),
+                                    'attributeId' => null
                                 ]
                             ]
                         ]

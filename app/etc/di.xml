@@ -284,6 +284,7 @@
     </type>
     <type name="Magento\Framework\Api\FilterBuilder" shared="false" />
     <type name="Magento\Framework\Api\SearchCriteriaBuilder" shared="false" />
+    <type name="Magento\Framework\Api\SortOrderBuilder" shared="false" />
     <type name="Magento\Framework\View\Layout\Builder" shared="false" />
     <type name="Magento\Framework\View\Page\Builder" shared="false" />
     <type name="Magento\Framework\Message\Manager">
@@ -1853,7 +1854,7 @@
             <argument name="supportedVersionPatterns" xsi:type="array">
                 <item name="MySQL-8" xsi:type="string">^8\.0\.</item>
                 <item name="MySQL-5.7" xsi:type="string">^5\.7\.</item>
-                <item name="MariaDB-(10.2-10.4)" xsi:type="string">^10\.[2-4]\.</item>
+                <item name="MariaDB-(10.2-10.6)" xsi:type="string">^10\.[2-6]\.</item>
             </argument>
         </arguments>
     </type>
@@ -1945,9 +1946,11 @@
             </argument>
         </arguments>
     </type>
+
+
     <type name="Magento\Framework\Webapi\Validator\EntityArrayValidator">
         <arguments>
-            <argument name="complexArrayItemLimit" xsi:type="number">20</argument>
+            <argument name="complexArrayItemLimit" xsi:type="number">999999</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Webapi\Validator\SearchCriteriaValidator">
@@ -1970,7 +1973,7 @@
     </type>
     <type name="Magento\Framework\Webapi\ServiceInputProcessor">
         <arguments>
-            <argument name="defaultPageSize" xsi:type="number">20</argument>
+            <argument name="defaultPageSize" xsi:type="number">999999</argument>
         </arguments>
     </type>
     <preference for="Magento\Framework\Filter\Input\PurifierInterface" type="Magento\Framework\Filter\Input\Purifier"/>

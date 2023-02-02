@@ -62,10 +62,13 @@ class Invoice implements RevertibleDataFixtureInterface
      * @param array $data Parameters. Same format as Invoice::DEFAULT_DATA.
      * Fields structure fields:
      * - $data['items']: can be supplied in following formats:
-     *      - array of arrays [{"sku":"$product1.sku","qty":1}, {"sku":"$product2.sku","qty":1}]
-     *      - array of SKUs ["$product1.sku", "$product2.sku"]
-     *      - array of order items IDs ["$item1.id", "$item2.id"]
-     *      - array of product instances ["$product1", "$product2"]
+     *      - array of arrays [{"sku":"$product1.sku$","qty":1}, {"sku":"$product2.sku$","qty":1}]
+     *      - array of arrays [{"order_item_id":"$oItem1.sku$","qty":1}, {"order_item_id":"$oItem2.sku$","qty":1}]
+     *      - array of arrays [{"product_id":"$product1.id$","qty":1}, {"product_id":"$product2.id$","qty":1}]
+     *      - array of arrays [{"quote_item_id":"$qItem1.id$","qty":1}, {"quote_item_id":"$qItem2.id$","qty":1}]
+     *      - array of SKUs ["$product1.sku$", "$product2.sku$"]
+     *      - array of order items IDs ["$oItem1.id$", "$oItem2.id$"]
+     *      - array of product instances ["$product1$", "$product2$"]
      */
     public function apply(array $data = []): ?DataObject
     {
@@ -107,34 +110,38 @@ class Invoice implements RevertibleDataFixtureInterface
      */
     private function prepareInvoiceItems(array $data): array
     {
-        $items = [];
+        $invoiceItems = [];
         $order = $this->orderRepository->get($data['order_id']);
         $orderItemIdsBySku = [];
+        $orderItemIdsByProductIds = [];
+        $orderItemIdsByQuoteItemIds = [];
         foreach ($order->getItems() as $item) {
             $orderItemIdsBySku[$item->getSku()] = $item->getItemId();
+            $orderItemIdsByQuoteItemIds[$item->getQuoteItemId()] = $item->getItemId();
+            $orderItemIdsByProductIds[$item->getProductId()] = $item->getItemId();
         }
 
         foreach ($data['items'] as $itemToInvoice) {
-            $qty = 1;
-            $orderItemId = 1;
-            $sku = null;
+            $invoiceItem = ['order_item_id' => null, 'qty' => 1];
             if (is_numeric($itemToInvoice)) {
-                $orderItemId = $itemToInvoice;
+                $invoiceItem['order_item_id'] = $itemToInvoice;
             } elseif (is_string($itemToInvoice)) {
-                $sku = $itemToInvoice;
+                $invoiceItem['order_item_id'] = $orderItemIdsBySku[$itemToInvoice];
             } elseif ($itemToInvoice instanceof ProductInterface) {
-                $sku = $itemToInvoice->getSku();
+                $invoiceItem['order_item_id'] = $orderItemIdsBySku[$itemToInvoice->getSku()];
             } else {
-                $qty = $itemToInvoice['qty'] ?? $qty;
-                $orderItemId = $itemToInvoice['order_item_id'] ?? $qty;
-                $sku = $itemToInvoice['sku'] ?? $sku;
+                $invoiceItem = array_intersect($itemToInvoice, $invoiceItem) + $invoiceItem;
+                if (isset($itemToInvoice['sku'])) {
+                    $invoiceItem['order_item_id'] = $orderItemIdsBySku[$itemToInvoice['sku']];
+                } elseif (isset($itemToInvoice['product_id'])) {
+                    $invoiceItem['order_item_id'] = $orderItemIdsByProductIds[$itemToInvoice['product_id']];
+                } elseif (isset($itemToInvoice['quote_item_id'])) {
+                    $invoiceItem['order_item_id'] = $orderItemIdsByQuoteItemIds[$itemToInvoice['quote_item_id']];
+                }
             }
-            if (!$orderItemId && $sku) {
-                $orderItemId = $orderItemIdsBySku[$sku];
-            }
-            $items[] = ['order_item_id' => $orderItemId, 'qty' => $qty];
+            $invoiceItems[] = $invoiceItem;
         }
 
-        return $items;
+        return $invoiceItems;
     }
 }

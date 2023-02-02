@@ -155,7 +155,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $condition = $categoryIds;
         } elseif (is_string($categoryIds)) {
             $ids = explode(',', $categoryIds);
-            $condition = ['in' => $ids];
+            if (count($ids) == 0) {
+                $condition = $categoryIds;
+            } else {
+                $condition = ['in' => $ids];
+            }
         }
         $this->addFieldToFilter('entity_id', $condition);
         return $this;
@@ -552,7 +556,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     private function getProductsCountQuery(array $categoryIds, $addVisibilityFilter = true): Select
     {
-        $categoryTable = $this->getTable('catalog_category_product_index');
+        $connections = $this->_resource->getConnection();
+        $categoryTable = $connections->getTableName('catalog_category_product_index');
         $select = $this->_conn->select()
             ->from(
                 ['cat_index' => $categoryTable],

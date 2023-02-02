@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddUpdateDeleteWidgetOfTypeCatalogCategoryLinkTypeTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="AC-4586 New Widgets Creation of type Catalog category link"/>
+            <title value="Create/Update/Delete Catalog Category Link Widget to Storefront"/>
+            <description value="Admin should be able to create widget type of Catalog category link and shown on storefront"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4586"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createFirstCategory"/>
+            <createData entity="CategoryB" stepKey="createSecondCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+         <deleteData createDataKey="createFirstCategory" stepKey="deleteFirstCat"/>
+         <deleteData createDataKey="createSecondCategory" stepKey="deleteSecondCat"/>
+         <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Main test-->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentPagesPage">
+            <argument name="menuUiId" value="{{AdminMenuContent.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuContentElementsWidgets.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenCreateNewWidgetsOfCatalogCategoryLinkActionGroup" stepKey="createWidget">
+            <argument name="WidgetType" value="Catalog Category Link"/>
+            <argument name="WidgetTheme" value="Magento Luma"/>
+            <argument name="WidgetTitle" value="NewWidget"/>
+            <argument name="AssignToStoreViews" value="All Store Views"/>
+            <argument name="WidgetDisplayOn" value="All Pages"/>
+            <argument name="Container" value="Main Content Area"/>
+            <argument name="Template" value="Category Link Block Template"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="navigateToHomePage"/>
+        <waitForPageLoad stepKey="waitToLoadHomePage"/>
+        <click selector="{{StorefrontHeaderSection.categoryWidgetLink}}" stepKey="clickCategoryLinkButton"/>
+        <waitForPageLoad stepKey="waitToLoadFirstCategoryPage"/>
+        <actionGroup ref="AssertStorefrontCategoryDetailPageNameAndUrlActionGroup" stepKey="assertCategoryNameText">
+            <argument name="categoryName" value="$createFirstCategory.name$"/>
+            <argument name="categoryUrl" value="$$createFirstCategory.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <amOnPage url="admin" stepKey="openAdminPanelPage"/>
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentPagesPage2">
+            <argument name="menuUiId" value="{{AdminMenuContent.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuContentElementsWidgets.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminUpdateWidgetsOfCatalogCategoryLinkActionGroup" stepKey="updateWidget">
+            <argument name="WidgetTitle" value="Catalog CategoryB Link"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="navigateToHomePage2"/>
+        <waitForPageLoad stepKey="waitToLoadHomePage2"/>
+        <click selector="{{StorefrontHeaderSection.categoryWidgetLink}}" stepKey="clickSecondCategoryLinkButton"/>
+        <waitForPageLoad stepKey="waitToLoadSecondCategoryPage"/>
+        <actionGroup ref="AssertStorefrontCategoryDetailPageNameAndUrlActionGroup" stepKey="assertCategoryNameText2">
+            <argument name="categoryName" value="$createSecondCategory.name$"/>
+            <argument name="categoryUrl" value="$$createSecondCategory.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <amOnPage url="admin" stepKey="openAdminPanelPage2"/>
+        <actionGroup ref="AdminMassDeleteWidgetActionGroup" stepKey="massWidgetDelete">
+            <argument name="row" value="1"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitToDeleteAllWidgets"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="navigateToHomePage3"/>
+        <waitForPageLoad stepKey="waitToLoadHomePage3"/>
+        <dontSeeElement selector="{{StorefrontHeaderSection.categoryWidgetLink}}" stepKey="doNotSeeWidgetLink"/>
+    </test>
+</tests>
