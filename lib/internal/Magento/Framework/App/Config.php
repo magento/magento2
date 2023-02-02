@@ -125,6 +125,7 @@ class Config implements ScopeConfigInterface
      */
     public function get($configType, $path = '', $default = null)
     {
+        $path = strtolower($path);
         $result = null;
         if (isset($this->types[$configType])) {
             $result = $this->types[$configType]->get($path);
