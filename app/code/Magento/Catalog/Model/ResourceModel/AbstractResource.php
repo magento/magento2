@@ -325,7 +325,9 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _updateAttribute($object, $attribute, $valueId, $value)
     {
-        if ($valueId > 0) {
+        $entity = $attribute->getEntity();
+        $row = $this->getAttributeRow($entity, $object, $attribute);
+        if ($valueId > 0 && array_key_exists('store_id', $row)) {
             $table = $attribute->getBackend()->getTable();
             $connection = $this->getConnection();
             $connection->update(
