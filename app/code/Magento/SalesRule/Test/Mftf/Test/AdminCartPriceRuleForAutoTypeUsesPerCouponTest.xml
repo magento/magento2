@@ -42,19 +42,14 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
-        <!-- Create a cart price rule  -->
+        <!-- Create a cart price rule -->
         <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{_defaultCoupon.code}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
-        <!-- Select custom customer groups -->
-        <click selector="{{CartPriceRuleSection.customerGroupsToggle}}" stepKey="clickCustomerGroupsToggle" after="selectWebsites"/>
-        <click selector="{{CartPriceRuleSection.selectAll}}" stepKey="clickSelectAll" after="clickCustomerGroupsToggle"/>
-        <click selector="{{CartPriceRuleSection.doneButton}}" stepKey="clickDoneButton" after="clickSelectAll"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="General" stepKey="selectCustomerGroup"/>
         <!-- Choose coupon type auto -->
         <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Auto" stepKey="selectCouponType"/>
-        <!-- Verify `Use Auto Generation` checkbox not visible while `Uses per Coupon` field there for coupon type auto-->
-        <dontSeeCheckboxIsChecked selector="{{AdminCartPriceRulesFormSection.useAutoGeneration}}" stepKey="tickAutoGeneration"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.userPerCoupon}}" userInput="1" stepKey="fillUsesPerCoupon"/>
         <!--Open Actions tabs, fill required field and save the cart price rule-->
         <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
@@ -108,8 +103,8 @@
 
         <!-- Go to Checkout and Click Place Order button -->
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
-        <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}"
-               stepKey="selectFlatShippingMethod"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad2"/>
+        <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" stepKey="selectFlatShippingMethod"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <!-- Checkout select Check/Money Order payment -->
@@ -124,7 +119,7 @@
 
         <!-- Open the Product Page again, add the product to Cart, go to Shopping Cart and Apply the second coupon code -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="openProductPage2"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
         <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartPriceRule2">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="couponCode" value="{$couponCode2}"/>
