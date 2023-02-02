@@ -21,12 +21,13 @@ use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\Stdlib\ArrayUtils;
@@ -97,8 +98,23 @@ class ConfigurableTest extends TestCase
      */
     private $request;
 
+    /**
+     * @var ObjectManagerInterface|MockObject
+     */
+    private $objectManagerMock;
+
+    /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfig;
+
     protected function setUp(): void
     {
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['get'])
+            ->getMockForAbstractClass();
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
         $this->arrayUtils = $this->createMock(ArrayUtils::class);
         $this->jsonEncoder = $this->getMockForAbstractClass(EncoderInterface::class);
         $this->helper = $this->createMock(Data::class);
@@ -129,12 +145,12 @@ class ConfigurableTest extends TestCase
         $context = $this->getContextMock();
         $context->method('getRequest')->willReturn($this->request);
 
-        $deploymentConfig = $this->createPartialMock(
+        $this->deploymentConfig = $this->createPartialMock(
             DeploymentConfig::class,
             ['get']
         );
 
-        $deploymentConfig->expects($this->any())
+        $this->deploymentConfig->expects($this->any())
             ->method('get')
             ->with(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY)
             ->willReturn('448198e08af35844a42d3c93c1ef4e03');
@@ -158,8 +174,7 @@ class ConfigurableTest extends TestCase
                 'configurableAttributeData' => $this->configurableAttributeData,
                 'data' => [],
                 'variationPrices' => $this->variationPricesMock,
-                'customerSession' => $customerSession,
-                'deploymentConfig' => $deploymentConfig,
+                'customerSession' => $customerSession
             ]
         );
     }
@@ -321,6 +336,10 @@ class ConfigurableTest extends TestCase
             ->willReturn($configurableAttributes);
 
         $this->request->method('toArray')->willReturn($requestParams);
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with(DeploymentConfig::class)
+            ->willReturn($this->deploymentConfig);
         $this->assertStringContainsString(
             sha1(json_encode(['color' => 59, 'size' => 1])),
             $this->configurable->getCacheKey()

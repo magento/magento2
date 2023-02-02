@@ -15,6 +15,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\View;
 use Magento\Framework\Escaper;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -77,10 +78,20 @@ class AbstractBlockTest extends TestCase
     private $deploymentConfig;
 
     /**
+     * @var ObjectManagerInterface|MockObject
+     */
+    private $objectManagerMock;
+
+    /**
      * @return void
      */
     protected function setUp(): void
     {
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMockForAbstractClass();
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
         $this->eventManagerMock = $this->getMockForAbstractClass(EventManagerInterface::class);
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->cacheStateMock = $this->getMockForAbstractClass(CacheStateInterface::class);
@@ -116,23 +127,16 @@ class AbstractBlockTest extends TestCase
             ->method('getLockGuardedCacheLoader')
             ->willReturn($this->lockQuery);
 
-        $this->deploymentConfig = $this->createPartialMock(
-            DeploymentConfig::class,
-            ['get']
-        );
-
-        $this->deploymentConfig->expects($this->any())
-            ->method('get')
-            ->with(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY)
-            ->willReturn('448198e08af35844a42d3c93c1ef4e03');
-
         $this->block = $this->getMockForAbstractClass(
             AbstractBlock::class,
             [
                 'context' => $contextMock,
-                'data' => [],
-                'deploymentConfig' => $this->deploymentConfig,
+                'data' => []
             ]
+        );
+        $this->deploymentConfig = $this->createPartialMock(
+            DeploymentConfig::class,
+            ['get']
         );
     }
 
@@ -243,6 +247,16 @@ class AbstractBlockTest extends TestCase
      */
     public function testGetCacheKeyByName()
     {
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with(DeploymentConfig::class)
+            ->willReturn($this->deploymentConfig);
+
+        $this->deploymentConfig->expects($this->any())
+            ->method('get')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY)
+            ->willReturn('448198e08af35844a42d3c93c1ef4e03');
+
         $nameInLayout = 'testBlock';
         $this->block->setNameInLayout($nameInLayout);
         $encryptionKey = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
