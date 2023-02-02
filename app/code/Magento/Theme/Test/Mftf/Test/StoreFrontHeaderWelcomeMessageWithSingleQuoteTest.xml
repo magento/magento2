@@ -23,5 +23,6 @@
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
         <!--Verify welcome message at storefront-->
         <actionGroup ref="AssertStorefrontWelcomeMessageWithSingleQuoteActionGroup" stepKey="assertWelcomeMessage"/>
+        <wait stepKey="waitAfterWelcomeMessageIsLoaded" time="90"/>
     </test>
 </tests>

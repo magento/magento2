@@ -17,5 +17,7 @@
         <waitForPageLoad stepKey="waitForStorefrontPageLoad"/>
         <waitForElementVisible selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="waitWelcomeMessage"/>
         <waitForText userInput="Message d'accueil par défaut" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="verifyWelcomeMessage"/>
+        <waitForPageLoad stepKey="waitForStorefrontPageCompleteLoad"/>
+        <see selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" userInput="Message d'accueil par défaut" stepKey="assertWelcomeMessage" />
     </actionGroup>
 </actionGroups>
