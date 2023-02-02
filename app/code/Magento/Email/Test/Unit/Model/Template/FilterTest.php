@@ -35,7 +35,6 @@ use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Variable\Model\Source\Variables;
@@ -574,5 +573,39 @@ class FilterTest extends TestCase
             " http=\"https://url\" https=\"http://url\""
         ];
         $model->protocolDirective($data);
+    }
+
+    /**
+     * @dataProvider dataProviderCompanyRedirect
+     */
+    public function testStoreDirectiveForCompanyRedirect($construction, $expected, $code)
+    {
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->any())->method('getCode')->willReturn($code);
+
+        $this->backendUrlBuilder->expects($this->once())
+            ->method('getUrl')
+            ->willReturn($expected);
+
+        $result = $this->getModel()->storeDirective($construction);
+        $this->assertEquals($expected, $result);
+    }
+
+    public function dataProviderCompanyRedirect()
+    {
+        return [
+            [
+                ["{{store url=''}}",'store',"url=''"],
+                'http://m246ceeeb2b.french.test/frvw/',
+                'frvw'
+            ],
+            [
+                ["{{store url=''}}",'store_invalid',"url=''"],
+                'http://m246ceeeb2b.test/default/',
+                'default'
+            ]
+        ];
     }
 }
