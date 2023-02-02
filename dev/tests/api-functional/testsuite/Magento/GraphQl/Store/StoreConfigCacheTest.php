@@ -36,6 +36,7 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
     }
 
     /**
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/Store/_files/store.php
      * @throws NoSuchEntityException
      */
