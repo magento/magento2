@@ -18,6 +18,10 @@
             <useCaseId value="ACP2E-1602"/>
             <group value="theme"/>
         </annotations>
+        <!--Login to admin-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdmin"/>
+        <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
+        <!--Verify welcome message at storefront-->
         <actionGroup ref="AssertStorefrontWelcomeMessageWithSingleQuoteActionGroup" stepKey="assertWelcomeMessage"/>
     </test>
 </tests>
