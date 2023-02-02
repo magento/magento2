@@ -321,7 +321,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\Magento\Framework\Exception\State\ExpiredException::class);
 
         $resetToken = 'lsdj579slkj5987slkj595lkj';
-        $this->setResetPasswordData($resetToken, '1970-01-01');
+        $this->setResetPasswordData($resetToken, '1970-01-01 00:00:00');
         $this->accountManagement->validateResetPasswordLinkToken(1, $resetToken);
     }
 
@@ -372,7 +372,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $resetToken = 'lsdj579slkj5987slkj595lkj';
         $password = 'new_Password123';
         $email = 'customer@example.com';
-        $this->setResetPasswordData($resetToken, 'Y-m-d H:i');
+        $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s');
         $this->assertTrue($this->accountManagement->resetPassword($email, $resetToken, $password));
         $this->accountManagement->resetPassword($email, $resetToken, $password);
     }
@@ -465,7 +465,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $resetToken = 'lsdj579slkj5987slkj595lkj';
         $password = 'new_Password123';
 
-        $this->setResetPasswordData($resetToken, '1970-01-01');
+        $this->setResetPasswordData($resetToken, '1970-01-01 00:00:00');
         try {
             $this->accountManagement->resetPassword('customer@example.com', $resetToken, $password);
             $this->fail('Expected exception not thrown.');

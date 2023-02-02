@@ -60,7 +60,6 @@ class ResultTest extends \PHPUnit\Framework\TestCase
     /**
      * Verify search value escaping process
      *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch7
      * @dataProvider toEscapeSearchTextDataProvider
      * @magentoAppArea frontend
      * @param string $searchValue

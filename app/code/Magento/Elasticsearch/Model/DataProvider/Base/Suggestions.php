@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\Model\DataProvider\Base;
 
 use Elasticsearch\Common\Exceptions\BadRequest400Exception;
+use Exception;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Elasticsearch\Model\Config;
@@ -71,6 +72,13 @@ class Suggestions implements SuggestedQueriesInterface
     private $getSuggestionFrequency;
 
     /**
+     * @var array
+     */
+    private $responseErrorExceptionList = [
+        'elasticsearchBadRequest404' => BadRequest400Exception::class
+    ];
+
+    /**
      * Suggestions constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
@@ -82,6 +90,8 @@ class Suggestions implements SuggestedQueriesInterface
      * @param FieldProviderInterface $fieldProvider
      * @param LoggerInterface|null $logger
      * @param GetSuggestionFrequencyInterface|null $getSuggestionFrequency
+     * @param array $responseErrorExceptionList
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -92,7 +102,8 @@ class Suggestions implements SuggestedQueriesInterface
         StoreManager $storeManager,
         FieldProviderInterface $fieldProvider,
         LoggerInterface $logger = null,
-        ?GetSuggestionFrequencyInterface $getSuggestionFrequency = null
+        ?GetSuggestionFrequencyInterface $getSuggestionFrequency = null,
+        array $responseErrorExceptionList = []
     ) {
         $this->queryResultFactory = $queryResultFactory;
         $this->connectionManager = $connectionManager;
@@ -104,6 +115,7 @@ class Suggestions implements SuggestedQueriesInterface
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
         $this->getSuggestionFrequency = $getSuggestionFrequency ?:
             ObjectManager::getInstance()->get(GetSuggestionFrequencyInterface::class);
+        $this->responseErrorExceptionList = array_merge($this->responseErrorExceptionList, $responseErrorExceptionList);
     }
 
     /**
@@ -116,9 +128,13 @@ class Suggestions implements SuggestedQueriesInterface
             $isResultsCountEnabled = $this->isResultsCountEnabled();
             try {
                 $suggestions = $this->getSuggestions($query);
-            } catch (BadRequest400Exception $e) {
-                $this->logger->critical($e);
-                $suggestions = [];
+            } catch (Exception $e) {
+                if ($this->validateException($e)) {
+                    $this->logger->critical($e);
+                    $suggestions = [];
+                } else {
+                    throw $e;
+                }
             }
 
             foreach ($suggestions as $suggestion) {
@@ -126,7 +142,7 @@ class Suggestions implements SuggestedQueriesInterface
                 if ($isResultsCountEnabled) {
                     try {
                         $count = $this->getSuggestionFrequency->execute($suggestion['text']);
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         $this->logger->critical($e);
                     }
 
@@ -152,6 +168,17 @@ class Suggestions implements SuggestedQueriesInterface
             SuggestedQueriesInterface::SEARCH_SUGGESTION_COUNT_RESULTS_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
+    }
+
+    /**
+     * Check if the given class name is in the exception list
+     *
+     * @param Exception $exception
+     * @return bool
+     */
+    private function validateException(Exception $exception): bool
+    {
+        return in_array(get_class($exception), $this->responseErrorExceptionList, true);
     }
 
     /**
@@ -297,8 +324,7 @@ class Suggestions implements SuggestedQueriesInterface
             ScopeInterface::SCOPE_STORE
         );
         $isEnabled = $this->config->isElasticsearchEnabled();
-        $isSuggestionsAllowed = ($isEnabled && $isSuggestionsEnabled);
 
-        return $isSuggestionsAllowed;
+        return $isEnabled && $isSuggestionsEnabled;
     }
 }
