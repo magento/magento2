@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Store;
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\GraphQl\PageCache\GraphQLPageCacheAbstract;
+use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\Store\Api\Data\StoreConfigInterface;
 use Magento\Store\Api\StoreConfigManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
@@ -15,12 +17,11 @@ use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
-use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Test storeConfig query cache
  */
-class StoreConfigCacheTest extends GraphQlAbstract
+class StoreConfigCacheTest extends GraphQLPageCacheAbstract
 {
 
     /** @var ObjectManager */
@@ -46,73 +47,100 @@ class StoreConfigCacheTest extends GraphQlAbstract
         $storeResolver = $this->objectManager->get(StoreResolverInterface::class);
         /** @var StoreRepositoryInterface $storeRepository */
         $storeRepository = $this->objectManager->get(StoreRepositoryInterface::class);
-        $storeId = $storeResolver->getCurrentStoreId();
-        $store = $storeRepository->getById($storeId);
+        $defaultStoreId = $storeResolver->getCurrentStoreId();
+        $store = $storeRepository->getById($defaultStoreId);
+        $defaultStoreCode = $store->getCode();
         /** @var StoreConfigInterface $storeConfig */
-        $storeConfig = current($storeConfigManager->getStoreConfigs([$store->getCode()]));
+        $storeConfig = current($storeConfigManager->getStoreConfigs([$defaultStoreCode]));
         $defaultLocale = $storeConfig->getLocale();
         $query = $this->getQuery();
 
         // Query default store config
-        $response = $this->graphQlQueryWithResponseHeaders($query);
-        $this->assertArrayHasKey('X-Magento-Cache-Debug', $response['headers']);
-        $this->assertEquals('MISS', $response['headers']['X-Magento-Cache-Debug']);
-        $this->assertArrayHasKey('storeConfig', $response['body']);
-        $responseConfig = $response['body']['storeConfig'];
-        $this->assertEquals($storeConfig->getId(), $responseConfig['id']);
-        $this->assertEquals($storeConfig->getCode(), $responseConfig['code']);
-        $this->assertEquals($defaultLocale, $responseConfig['locale']);
-        // Query default store config again
-        $responseHit = $this->graphQlQueryWithResponseHeaders($query);
-        $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseHit['headers']);
-        $this->assertEquals('HIT', $responseHit['headers']['X-Magento-Cache-Debug']);
-        $responseHitConfig = $responseHit['body']['storeConfig'];
-        $this->assertEquals($storeConfig->getCode(), $responseHitConfig['code']);
-        $this->assertEquals($defaultLocale, $responseHitConfig['locale']);
+        $responseDefaultStore = $this->graphQlQueryWithResponseHeaders($query);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseDefaultStore['headers']);
+        $defaultStoreCacheId = $responseDefaultStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        // Verify we obtain a cache MISS the first time
+        $defaultStoreResponse = $this->assertCacheMissAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+        $this->assertArrayHasKey('storeConfig', $defaultStoreResponse['body']);
+        $defaultStoreResponseResult = $defaultStoreResponse['body']['storeConfig'];
+        $this->assertEquals($defaultStoreId, $defaultStoreResponseResult['id']);
+        $this->assertEquals($defaultStoreCode, $defaultStoreResponseResult['code']);
+        $this->assertEquals($defaultLocale, $defaultStoreResponseResult['locale']);
+        // Verify we obtain a cache HIT the second time
+        $defaultStoreResponseHit = $this->assertCacheHitAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+        $this->assertArrayHasKey('storeConfig', $defaultStoreResponseHit['body']);
+        $defaultStoreResponseHitResult = $defaultStoreResponseHit['body']['storeConfig'];
+        $this->assertEquals($defaultStoreId, $defaultStoreResponseHitResult['id']);
+        $this->assertEquals($defaultStoreCode, $defaultStoreResponseHitResult['code']);
+        $this->assertEquals($defaultLocale, $defaultStoreResponseHitResult['locale']);
 
         // Query test store config
-        $headerMap['Store'] = 'test';
+        $testStoreCode = 'test';
+        $headerMap['Store'] = $testStoreCode;
         $responseTestStore = $this->graphQlQueryWithResponseHeaders($query, [], '', $headerMap);
-        $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseTestStore['headers']);
-        $this->assertEquals('MISS', $responseTestStore['headers']['X-Magento-Cache-Debug']);
-        $responseTestStoreConfig = $responseTestStore['body']['storeConfig'];
-        $this->assertEquals('test', $responseTestStoreConfig['code']);
-        $this->assertEquals($defaultLocale, $responseTestStoreConfig['locale']);
-        // Query test store config again
-        $responseTestStoreHit = $this->graphQlQueryWithResponseHeaders($query, [], '', $headerMap);
-        $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseTestStoreHit['headers']);
-        $this->assertEquals('HIT', $responseTestStoreHit['headers']['X-Magento-Cache-Debug']);
-        $responseTestStoreHitConfig = $responseTestStoreHit['body']['storeConfig'];
-        $this->assertEquals('test', $responseTestStoreHitConfig['code']);
-        $this->assertEquals($defaultLocale, $responseTestStoreHitConfig['locale']);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseTestStore['headers']);
+        $testStoreCacheId = $responseTestStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $this->assertNotEquals($testStoreCacheId, $defaultStoreCacheId);
+        // Verify we obtain a cache MISS the first time
+        $testStoreResponse = $this->assertCacheMissAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $testStoreCacheId]
+        );
+        $this->assertArrayHasKey('storeConfig', $testStoreResponse['body']);
+        $testStoreResponseResult = $testStoreResponse['body']['storeConfig'];
+        $this->assertEquals($testStoreCode, $testStoreResponseResult['code']);
+        $this->assertEquals($defaultLocale, $testStoreResponseResult['locale']);
+        // Verify we obtain a cache HIT the second time
+        $testStoreResponseHit = $this->assertCacheHitAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $testStoreCacheId]
+        );
+        $this->assertArrayHasKey('storeConfig', $testStoreResponseHit['body']);
+        $testStoreResponseHitResult = $testStoreResponseHit['body']['storeConfig'];
+        $this->assertEquals($testStoreCode, $testStoreResponseHitResult['code']);
+        $this->assertEquals($defaultLocale, $testStoreResponseHitResult['locale']);
 
         // Change test store locale
         $newLocale = 'de_DE';
-        $this->setConfig('general/locale/code', $newLocale, ScopeInterface::SCOPE_STORES, 'test');
+        $this->setConfig('general/locale/code', $newLocale, ScopeInterface::SCOPE_STORES, $testStoreCode);
 
-        // Query default store config
-        $responseHit2 = $this->graphQlQueryWithResponseHeaders($query);
-        $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseHit2['headers']);
-        $this->assertEquals('HIT', $responseHit2['headers']['X-Magento-Cache-Debug']);
-        $responseHit2Config = $responseHit2['body']['storeConfig'];
-        $this->assertEquals($storeConfig->getCode(), $responseHit2Config['code']);
-        $this->assertEquals($defaultLocale, $responseHit2Config['locale']);
+        // Query default store config after test store config change
+        // Verify we obtain a cache HIT the 3rd time
+        $defaultStoreResponseHit2 = $this->assertCacheHitAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+        $this->assertArrayHasKey('storeConfig', $defaultStoreResponseHit2['body']);
+        $defaultStoreResponseHit2Result = $defaultStoreResponseHit2['body']['storeConfig'];
+        $this->assertEquals($defaultStoreId, $defaultStoreResponseHit2Result['id']);
+        $this->assertEquals($defaultStoreCode, $defaultStoreResponseHit2Result['code']);
+        $this->assertEquals($defaultLocale, $defaultStoreResponseHit2Result['locale']);
 
-        // Query test store config
-        $responseTestStoreMiss = $this->graphQlQueryWithResponseHeaders($query, [], '', $headerMap);
-        $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseTestStoreMiss['headers']);
-        $this->assertEquals('MISS', $responseTestStoreMiss['headers']['X-Magento-Cache-Debug']);
-        $responseTestStoreMissConfig = $responseTestStoreMiss['body']['storeConfig'];
-        $this->assertEquals('test', $responseTestStoreMissConfig['code']);
-        $this->assertEquals($newLocale, $responseTestStoreMissConfig['locale']);
-
-        // Query test store config again
-        $responseTestStoreHit2 = $this->graphQlQueryWithResponseHeaders($query, [], '', $headerMap);
-        $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseTestStoreHit2['headers']);
-        $this->assertEquals('HIT', $responseTestStoreHit2['headers']['X-Magento-Cache-Debug']);
-        $responseTestStoreHit2Config = $responseTestStoreHit2['body']['storeConfig'];
-        $this->assertEquals('test', $responseTestStoreHit2Config['code']);
-        $this->assertEquals($newLocale, $responseTestStoreHit2Config['locale']);
+        // Query test store config after test store config change
+        // Verify we obtain a cache MISS the 3rd time
+        $testStoreResponseMiss = $this->assertCacheMissAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $testStoreCacheId]
+        );
+        $this->assertArrayHasKey('storeConfig', $testStoreResponseMiss['body']);
+        $testStoreResponseMissResult = $testStoreResponseMiss['body']['storeConfig'];
+        $this->assertEquals($testStoreCode, $testStoreResponseMissResult['code']);
+        $this->assertEquals($newLocale, $testStoreResponseMissResult['locale']);
+        // Verify we obtain a cache HIT the 4th time
+        $testStoreResponseHit2 = $this->assertCacheHitAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $testStoreCacheId]
+        );
+        $this->assertArrayHasKey('storeConfig', $testStoreResponseHit2['body']);
+        $testStoreResponseHit2Result = $testStoreResponseHit2['body']['storeConfig'];
+        $this->assertEquals($testStoreCode, $testStoreResponseHit2Result['code']);
+        $this->assertEquals($newLocale, $testStoreResponseHit2Result['locale']);
     }
 
     /**
