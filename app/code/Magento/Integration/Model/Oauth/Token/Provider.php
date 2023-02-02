@@ -172,7 +172,7 @@ class Provider implements TokenProviderInterface
      */
     public function validateOauthToken($oauthToken)
     {
-        return strlen($oauthToken) == \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN;
+        return $oauthToken && strlen($oauthToken) == \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN;
     }
 
     /**
@@ -180,7 +180,7 @@ class Provider implements TokenProviderInterface
      */
     public function getConsumerByKey($consumerKey)
     {
-        if (strlen($consumerKey) != \Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY) {
+        if ($consumerKey && strlen($consumerKey) != \Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY) {
             throw new \Magento\Framework\Oauth\Exception(
                 __('Consumer key is not the correct length')
             );

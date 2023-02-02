@@ -10,7 +10,8 @@ return [
     // so core modules must not be dependent on them
     'Magento\LiveSearch' => [
         'Magento\Elasticsearch',
-        'Magento\Elasticsearch6',
         'Magento\Elasticsearch7',
+        'Magento\Elasticsearch8',
+        'Magento\OpenSearch'
     ],
 ];

@@ -85,8 +85,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     protected $_staticAttributes = [];
 
     /**
-     * Entity table
-     *
      * @var string
      */
     protected $_entityTable;
@@ -929,7 +927,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $attributeBackend = $attribute->getBackend();
         if ($attributeBackend->getType() === 'static') {
             $value = $object->getData($attribute->getAttributeCode());
-            $bind = ['value' => trim($value)];
+            $bind = ['value' => $value !== null ? trim($value) : ''];
 
             $select->from(
                 $this->getEntityTable(),
@@ -944,7 +942,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             }
             $bind = [
                 'attribute_id' => $attribute->getId(),
-                'value' => trim($value),
+                'value' => $value !== null ? trim($value) : '',
             ];
 
             $entityIdField = $object->getResource()->getLinkField();
