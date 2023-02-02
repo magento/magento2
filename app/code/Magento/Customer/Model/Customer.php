@@ -1286,6 +1286,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check if current reset password link token is expired
      *
      * @return boolean
+     * @deprecated
+     * @see \Magento\Customer\Model\AccountManagement::isResetPasswordLinkTokenExpired
      */
     public function isResetPasswordLinkTokenExpired()
     {
@@ -1304,12 +1306,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             return true;
         }
 
-        $dayDifference = floor(($currentTimestamp - $tokenTimestamp) / (24 * 60 * 60));
-        if ($dayDifference >= $expirationPeriod) {
-            return true;
-        }
-
-        return false;
+        $hourDifference = floor(($currentTimestamp - $tokenTimestamp) / (60 * 60));
+        
+        return $hourDifference >= $expirationPeriod;
     }
 
     /**
