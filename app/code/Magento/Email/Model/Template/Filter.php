@@ -585,7 +585,9 @@ class Filter extends Template
          * Pass extra parameter to distinguish stores urls for property Magento\Framework\Url $cacheUrl
          * in multi-store environment
          */
-        $this->urlModel->setScope($this->_storeManager->getStore());
+        if ($construction[1]!="store" && $construction[2]!="url=''") {
+            $this->urlModel->setScope($this->_storeManager->getStore());
+        }
         $params['_escape_params'] = $this->_storeManager->getStore()->getCode();
 
         return $this->urlModel->getUrl($path, $params);
