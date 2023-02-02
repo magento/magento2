@@ -148,7 +148,7 @@ class Media implements AppInterface
             DirectoryList::MEDIA,
             Filesystem\DriverPool::FILE
         );
-        $mediaDirectory = trim($mediaDirectory);
+        $mediaDirectory = $mediaDirectory !== null ? trim($mediaDirectory) : '';
         if (!empty($mediaDirectory)) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $this->mediaDirectoryPath = str_replace('\\', '/', $file->getRealPath($mediaDirectory));

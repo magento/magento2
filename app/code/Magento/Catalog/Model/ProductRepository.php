@@ -936,7 +936,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             foreach ($filterGroup->getFilters() as $filter) {
                 if ($filter->getField() === 'category_id') {
                     $filterValue = $filter->getValue();
-                    $categoryIds[] = is_array($filterValue) ? $filterValue : explode(',', $filterValue);
+                    $categoryIds[] = is_array($filterValue) ? $filterValue : explode(',', $filterValue ?? '');
                 }
             }
         }

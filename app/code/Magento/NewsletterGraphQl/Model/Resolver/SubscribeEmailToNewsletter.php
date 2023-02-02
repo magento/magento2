@@ -82,7 +82,7 @@ class SubscribeEmailToNewsletter implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $email = trim($args['email']);
+        $email = trim($args['email'] ?? '');
 
         if (empty($email)) {
             throw new GraphQlInputException(

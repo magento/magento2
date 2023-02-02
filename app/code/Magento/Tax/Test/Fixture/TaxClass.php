@@ -8,16 +8,16 @@ declare(strict_types=1);
 namespace Magento\Tax\Test\Fixture;
 
 use Magento\Framework\DataObject;
-use Magento\Framework\DataObjectFactory;
 use Magento\Tax\Api\TaxClassRepositoryInterface;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
+use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
 class TaxClass implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
-        'class_name' => '%uniqid%',
-        'class_type' => '%uniqid%',
+        'class_name' => 'taxclass%uniqid%',
+        'class_type' => null,
     ];
 
     /**
@@ -26,18 +26,28 @@ class TaxClass implements RevertibleDataFixtureInterface
     private ServiceFactory $serviceFactory;
 
     /**
-     * @var DataObjectFactory
+     * @var TaxClassRepositoryInterface
      */
-    private DataObjectFactory $dataObjectFactory;
+    private TaxClassRepositoryInterface $taxClassRepository;
+
+    /**
+     * @var ProcessorInterface
+     */
+    private ProcessorInterface $dataProcessor;
 
     /**
      * @param ServiceFactory $serviceFactory
-     * @param DataObjectFactory $dataObjectFactory
+     * @param TaxClassRepositoryInterface $taxClassRepository
+     * @param ProcessorInterface $dataProcessor
      */
-    public function __construct(ServiceFactory $serviceFactory, DataObjectFactory $dataObjectFactory)
-    {
+    public function __construct(
+        ServiceFactory $serviceFactory,
+        TaxClassRepositoryInterface $taxClassRepository,
+        ProcessorInterface $dataProcessor
+    ) {
         $this->serviceFactory = $serviceFactory;
-        $this->dataObjectFactory = $dataObjectFactory;
+        $this->taxClassRepository = $taxClassRepository;
+        $this->dataProcessor = $dataProcessor;
     }
 
     /**
@@ -46,10 +56,13 @@ class TaxClass implements RevertibleDataFixtureInterface
     public function apply(array $data = []): ?DataObject
     {
         $service = $this->serviceFactory->create(TaxClassRepositoryInterface::class, 'save');
+        $taxClassId = $service->execute(
+            [
+                'taxClass' => $this->dataProcessor->process($this, array_merge(self::DEFAULT_DATA, $data))
+            ]
+        );
 
-        return $this->dataObjectFactory->create()->addData([
-            'id' => $service->execute(['taxClass' => array_merge(self::DEFAULT_DATA, $data)]),
-        ]);
+        return $this->taxClassRepository->get($taxClassId);
     }
 
     /**

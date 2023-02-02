@@ -33,6 +33,7 @@
         <amOnPage url="{{CmsPagesPage.url}}?filters[title]=$$createPage.title$$" stepKey="navigateToPageGridWithFilters"/>
         <waitForPageLoad stepKey="waitForPageGrid"/>
         <waitForText selector="{{CmsPagesPageActionsSection.pagesGridRowByTitle($$createPage.title$$)}}" userInput="$$createPage.title$$" stepKey="seePage"/>
+        <seeInCurrentUrl url="admin/cms/page?filters" stepKey="seeAdminCMSPageFilters"/>
         <waitForElementVisible selector="{{CmsPagesPageActionsSection.activeFilter}}" stepKey="seeEnabledFilters"/>
         <waitForText selector="{{CmsPagesPageActionsSection.activeFilter}}" userInput="Title: $$createPage.title$$" stepKey="seePageTitleFilter"/>
     </test>

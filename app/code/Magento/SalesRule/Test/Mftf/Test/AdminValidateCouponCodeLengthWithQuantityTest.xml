@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminValidateCouponCodeLengthWithQuantityTest">
+        <annotations>
+            <stories value="Generate coupon codes ignores Code Length"/>
+            <title value="Admin to validate coupon code length with quantity in cart price rule."/>
+            <description value="Admin to validate coupon code length with quantity in cart price rule."/>
+            <severity value="CRITICAL"/>
+            <useCaseId value="ACP2E-1053"/>
+            <testCaseId value="AC-6642"/>
+            <group value="SalesRule"/>
+        </annotations>
+        <before>
+            <createData entity="SalesRuleSpecificCoupon" stepKey="createSalesRule"/>
+            <!--Login to backend-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Search and go to cart price rule page -->
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="goToCartPriceRulePage"/>
+        <actionGroup ref="AdminFilterCartPriceRuleActionGroup" stepKey="filterCartPriceRule">
+            <argument name="ruleName" value="$$createSalesRule.name$$"/>
+        </actionGroup>
+        <!-- Navigate to Manage Coupon Codes section to validate coupon code length and quantity -->
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}"
+                          dependentSelector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}" visible="true"
+                          stepKey="clickManageCouponCodes"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.couponQty}}" userInput="2501" stepKey="fillFieldCouponQty"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.couponLength}}" userInput="4" stepKey="fillFieldCouponLength"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.couponFormat}}" userInput="Numeric" stepKey="selectCouponFormat"/>
+        <click selector="{{AdminCartPriceRulesFormSection.generateCouponsButton}}" stepKey="clickGenerateCoupon"/>
+        <see selector="{{AdminCartPriceRulesFormSection.errorMessage}}" userInput="When coupon quantity exceeds 2501, the coupon code length must be minimum 5" stepKey="seeGenerationValidationError"/>
+    </test>
+</tests>

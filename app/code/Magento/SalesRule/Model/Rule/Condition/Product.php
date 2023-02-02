@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\SalesRule\Model\Rule\Condition;
 
 /**
@@ -22,7 +21,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     protected function _addSpecialAttributes(array &$attributes)
     {
         parent::_addSpecialAttributes($attributes);
-        $attributes['quote_item_qty'] = __('Quantity in cart');
+        $attributes['parent::quote_item_qty'] = __('Quantity in cart');
         $attributes['quote_item_price'] = __('Price in cart');
         $attributes['quote_item_row_total'] = __('Row total in cart');
 
@@ -38,7 +37,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function getAttribute(): string
     {
         $attribute = $this->getData('attribute');
-        if (strpos($attribute, '::') !== false) {
+        if ($attribute !== null && strpos($attribute, '::') !== false) {
             list(, $attribute) = explode('::', $attribute);
         }
 

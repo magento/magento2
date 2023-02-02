@@ -9,7 +9,7 @@ namespace Magento\Framework\Filter\Test\Unit\FilterManager;
 
 use Magento\Framework\Filter\Factory;
 use Magento\Framework\Filter\FilterManager\Config;
-use Magento\Framework\Filter\ZendFactory;
+use Magento\Framework\Filter\LaminasFactory;
 use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
@@ -27,7 +27,7 @@ class ConfigTest extends TestCase
     public function testGetFactories()
     {
         $expectedConfig = [
-            'test' => 'test', Factory::class, ZendFactory::class,
+            'test' => 'test', Factory::class, LaminasFactory::class,
         ];
         $this->assertEquals($expectedConfig, $this->_config->getFactories());
     }

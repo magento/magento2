@@ -12,6 +12,7 @@ use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 use Magento\Framework\Locale\Resolver as LocaleResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Search\Model\ResourceModel\SynonymReader;
+use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -99,9 +100,10 @@ class BuilderTest extends TestCase
             ->method('getLocale')
             ->willReturn($locale);
         $this->synonymReaderMock->expects($this->once())
-            ->method('getAllSynonyms')
+            ->method('getAllSynonymsForStoreViewId')
             ->willReturn([]);
 
+        $this->model->setStoreId(Store::DEFAULT_STORE_ID);
         $result = $this->model->build();
 
         $analysisFilters = $result["analysis"]["filter"];
@@ -153,9 +155,10 @@ class BuilderTest extends TestCase
             ->willReturn($locale);
 
         $this->synonymReaderMock->expects($this->once())
-            ->method('getAllSynonyms')
+            ->method('getAllSynonymsForStoreViewId')
             ->willReturn($synonyms);
 
+        $this->model->setStoreId(Store::DEFAULT_STORE_ID);
         $result = $this->model->build();
 
         $analysisFilters = $result["analysis"]["filter"];
