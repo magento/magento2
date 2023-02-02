@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontWelcomeMessageWithSingleQuoteActionGroup">
+        <annotations>
+            <description>Validates the Welcome message containing single quote is rendered correctly.</description>
+        </annotations>
+
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="openStorefrontHomePage"/>
+        <waitForPageLoad stepKey="waitForStorefrontPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="waitWelcomeMessage"/>
+        <waitForText userInput="Message d'accueil par défaut" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="verifyWelcomeMessage"/>
+    </actionGroup>
+</actionGroups>

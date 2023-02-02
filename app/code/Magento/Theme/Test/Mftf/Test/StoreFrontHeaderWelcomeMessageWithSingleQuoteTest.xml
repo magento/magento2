@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontHeaderWelcomeMessageWithSingleQuoteTest">
+        <annotations>
+            <features value="Theme"/>
+            <stories value="Returns"/>
+            <title value="Verify header welcome message containing single quote rendered correctly on storefront"/>
+            <description value="Verify header welcome message containing single quote rendered correctly on storefront"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-7876"/>
+            <useCaseId value="ACP2E-1602"/>
+            <group value="theme"/>
+        </annotations>
+        <actionGroup ref="AssertStorefrontWelcomeMessageWithSingleQuoteActionGroup" stepKey="assertWelcomeMessage"/>
+    </test>
+</tests>
