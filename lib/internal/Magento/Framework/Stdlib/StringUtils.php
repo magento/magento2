@@ -28,6 +28,9 @@ class StringUtils
      */
     public function upperCaseWords($str, $sourceSeparator = '_', $destinationSeparator = '_')
     {
+        $destinationSeparator = $destinationSeparator !== null ? $destinationSeparator : '';
+        $sourceSeparator = $sourceSeparator !== null ? $sourceSeparator : '';
+        $str = $str !== null ? $str : '';
         return str_replace(' ', $destinationSeparator, ucwords(str_replace($sourceSeparator, ' ', $str)));
     }
 
@@ -79,6 +82,7 @@ class StringUtils
         if (!$strLen || !is_int($length) || $length <= 0) {
             return $result;
         }
+        $value = $value !== null ? $value : '';
         if ($trim) {
             $value = trim(preg_replace('/\s{2,}/siu', ' ', $value));
         }
@@ -209,6 +213,6 @@ class StringUtils
      */
     public function strpos($haystack, $needle, $offset = null)
     {
-        return mb_strpos($haystack, $needle, $offset ?? 0, self::ICONV_CHARSET);
+        return mb_strpos((string)$haystack, (string)$needle, $offset ?? 0, self::ICONV_CHARSET);
     }
 }

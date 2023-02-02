@@ -88,7 +88,7 @@ class Exchange implements ExchangeInterface
      */
     private function isMatchedBinding(BindingInterface $binding, string $topic): bool
     {
-        $pattern = '/^' . str_replace(['.', '*', '#'], ['\.', '[^.]+?', '(.*?)'], $binding->getTopic()) . '$/';
+        $pattern = '/^' . str_replace(['.', '*', '#'], ['\.', '[^.]+?', '(.*?)'], $binding->getTopic() ?? '') . '$/';
         return preg_match($pattern, $topic) ? true : false;
     }
 }

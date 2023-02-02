@@ -31,6 +31,7 @@
     <entity name="AdminFreeshippingMinimumOrderAmountConfigData">
         <data key="path">carriers/freeshipping/free_shipping_subtotal</data>
         <data key="hundred">100</data>
+        <data key="seventysix">76</data>
         <data key="default">0</data>
     </entity>
     <entity name="AdminResetShippingOrigin" type="shipping_origin">
@@ -46,5 +47,20 @@
     </entity>
     <entity name="ShippingOriginPostcodeInheritValue" type="inheritPostcodeFlag">
         <data key="value">1</data>
+    </entity>
+    <entity name="CustomShippingPricesConfigData">
+        <data key="path">tax/calculation/shipping_includes_tax</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="ShippingPricesConfigData">
+        <data key="path">tax/calculation/shipping_includes_tax</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="DisplayShippingAmountConfigData">
+        <data key="path">tax/cart_display/shipping</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminShippingSettingsOriginRegionConfigData">
+        <data key="path">shipping/origin/region_id</data>
     </entity>
 </entities>

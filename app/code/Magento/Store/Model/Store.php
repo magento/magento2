@@ -5,6 +5,8 @@
  */
 namespace Magento\Store\Model;
 
+use Laminas\Uri\UriFactory;
+use Laminas\Validator\ValidatorInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Directory\Model\Currency;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -19,7 +21,6 @@ use Magento\Framework\Url\ModifierInterface;
 use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
-use Laminas\Uri\UriFactory;
 
 /**
  * Store model
@@ -197,6 +198,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @var boolean|null
      * @deprecated 101.0.0 unused protected property
+     * @see we don't recommend this approach anymore
      */
     protected $_isAdminSecure = null;
 
@@ -265,6 +267,7 @@ class Store extends AbstractExtensibleModel implements
     /**
      * @var \Magento\Framework\Session\SidResolverInterface
      * @deprecated 101.0.5 Not used anymore.
+     * @see we don't recommend this approach anymore
      */
     protected $_sidResolver;
 
@@ -471,8 +474,7 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Validation rules for store
      *
-     * @return \Zend_Validate_Interface|null
-     * @throws \Zend_Validate_Exception
+     * @return ValidatorInterface|null
      */
     protected function _getValidationRulesBeforeSave()
     {
@@ -653,12 +655,12 @@ class Store extends AbstractExtensibleModel implements
                     throw new \InvalidArgumentException('Invalid base url type');
             }
 
-            if (false !== strpos($url, self::BASE_URL_PLACEHOLDER)) {
+            if ($url && false !== strpos($url, self::BASE_URL_PLACEHOLDER)) {
                 $url = str_replace(self::BASE_URL_PLACEHOLDER, $this->_request->getDistroBaseUrl(), $url);
             }
 
             $this->_baseUrlCache[$cacheKey] = $this->urlModifier->execute(
-                rtrim($url, '/') . '/',
+                $url !== null ? rtrim($url, '/') . '/' : '/',
                 ModifierInterface::MODE_BASE
             );
         }
@@ -887,7 +889,7 @@ class Store extends AbstractExtensibleModel implements
      */
     public function setCurrentCurrencyCode($code)
     {
-        $code = is_string($code) && '' !== $code ?  strtoupper($code): '';
+        $code = is_string($code) && '' !== $code ? strtoupper($code) : '';
         if (in_array($code, $this->getAvailableCurrencyCodes())) {
             $this->_getSession()->setCurrencyCode($code);
 
@@ -933,7 +935,7 @@ class Store extends AbstractExtensibleModel implements
     {
         $codes = $this->getData('available_currency_codes');
         if (null === $codes) {
-            $codes = explode(',', $this->getConfig(Currency::XML_PATH_CURRENCY_ALLOW));
+            $codes = explode(',', $this->getConfig(Currency::XML_PATH_CURRENCY_ALLOW) ?? '');
             // add base currency, if it is not in allowed currencies
             $baseCurrencyCode = $this->getBaseCurrencyCode();
             if (!in_array($baseCurrencyCode, $codes)) {
@@ -964,7 +966,7 @@ class Store extends AbstractExtensibleModel implements
      */
     public function getAllowedCurrencies()
     {
-        return explode(',', $this->getConfig($this->_currencyInstalled));
+        return explode(',', $this->getConfig($this->_currencyInstalled) ?? '');
     }
 
     /**
@@ -1058,6 +1060,7 @@ class Store extends AbstractExtensibleModel implements
      * @throws \Exception
      * @since 100.1.3
      * @deprecated 100.1.3
+     * @see we don't recommend this approach anymore
      */
     public function afterSave()
     {

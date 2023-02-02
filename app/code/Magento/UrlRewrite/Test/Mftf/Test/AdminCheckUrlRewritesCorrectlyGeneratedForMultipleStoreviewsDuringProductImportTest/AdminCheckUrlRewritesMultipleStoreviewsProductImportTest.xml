@@ -18,6 +18,7 @@
             <group value="urlRewrite"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableCategoryProductRewrites"/>
             <createData entity="ApiCategory" stepKey="createCategory">
                 <field key="name">category-admin</field>
             </createData>
@@ -48,6 +49,7 @@
             </actionGroup>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFiltersIfSet"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableCategoryProductRewrites"/>
         </after>
         <!--Change category name and URL key for EN Store View-->
         <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchToStoreViewEn">

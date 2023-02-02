@@ -54,31 +54,33 @@ class Multiple implements CustomizableOptionValueInterface
         SelectedOption $selectedOption
     ): array {
         $selectedOptionValueData = [];
-        $optionIds = explode(',', $selectedOption->getValue());
+        $optionIds = explode(',', $selectedOption->getValue() ?? '');
 
         foreach ($optionIds as $optionId) {
             $optionValue = $option->getValueById($optionId);
-            $priceValueUnits = $this->priceUnitLabel->getData($optionValue->getPriceType());
+            if ($optionValue) {
+                $priceValueUnits = $this->priceUnitLabel->getData($optionValue->getPriceType());
 
-            $optionDetails = [
-                self::OPTION_TYPE,
-                $option->getOptionId(),
-                $optionValue->getOptionTypeId()
-            ];
+                $optionDetails = [
+                    self::OPTION_TYPE,
+                    $option->getOptionId(),
+                    $optionValue->getOptionTypeId()
+                ];
 
-            $uuid = $this->uidEncoder->encode((string)implode('/', $optionDetails));
+                $uuid = $this->uidEncoder->encode((string)implode('/', $optionDetails));
 
-            $selectedOptionValueData[] = [
-                'id' => $selectedOption->getId(),
-                'customizable_option_value_uid' => $uuid,
-                'label' => $optionValue->getTitle(),
-                'value' => $optionId,
-                'price' => [
-                    'type' => strtoupper($optionValue->getPriceType()),
-                    'units' => $priceValueUnits,
-                    'value' => $optionValue->getPrice(),
-                ],
-            ];
+                $selectedOptionValueData[] = [
+                    'id' => $selectedOption->getId(),
+                    'customizable_option_value_uid' => $uuid,
+                    'label' => $optionValue->getTitle(),
+                    'value' => $optionId,
+                    'price' => [
+                        'type' => strtoupper($optionValue->getPriceType()),
+                        'units' => $priceValueUnits,
+                        'value' => $optionValue->getPrice(),
+                    ],
+                ];
+            }
         }
 
         return $selectedOptionValueData;
