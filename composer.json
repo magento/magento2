@@ -38,7 +38,7 @@
         "colinmollenhour/credis": "^1.13",
         "colinmollenhour/php-redis-session-abstract": "^1.5",
         "composer/composer": "^2.0, !=2.2.16",
-        "elasticsearch/elasticsearch": "^7.17||^8.5",
+        "elasticsearch/elasticsearch": "^7.17",
         "ezyang/htmlpurifier": "^4.16",
         "guzzlehttp/guzzle": "^7.5",
         "laminas/laminas-captcha": "^2.12",
