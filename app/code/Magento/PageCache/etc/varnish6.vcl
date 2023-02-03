@@ -144,35 +144,39 @@ sub vcl_backend_response {
 	# Perform asynchronous revalidation while stale content is served
     set beresp.grace = 3d;
 
+    # All text-based content can be parsed as ESI
     if (beresp.http.content-type ~ "text") {
         set beresp.do_esi = true;
     }
 
+    # Allow GZIP compression on all JavaScript files and all text-based content
     if (bereq.url ~ "\.js$" || beresp.http.content-type ~ "text") {
         set beresp.do_gzip = true;
     }
-
+    
+    # Add debug headers
     if (beresp.http.X-Magento-Debug) {
         set beresp.http.X-Magento-Cache-Control = beresp.http.Cache-Control;
     }
 
-    # cache only successfully responses and 404s that are not marked as private
-    if ((beresp.status != 200 && beresp.status != 404) || beresp.http.Cache-Control ~ "no-cache|no-store|private") {
+    # Only cache HTTP 200 and HTTP 404 responses
+    if (beresp.status != 200 && beresp.status != 404) {
+        set beresp.ttl = 120s;
         set beresp.uncacheable = true;
-        set beresp.ttl = 86400s;
         return (deliver);
     }
-
-    # validate if we need to cache it and prevent from setting cookie
-    if (beresp.ttl > 0s && (bereq.method == "GET" || bereq.method == "HEAD")) {
-        unset beresp.http.set-cookie;
-    }
-
-    # If the cache key in the Magento response doesn't match (which happens for example after user logs in, or changes store, or changes currency) the one that was sent in the request, don't cache under the request's key
+    
+    # Don't cache if the request cache ID doesn't match the response cache ID for graphql requests
     if (bereq.url ~ "/graphql" && bereq.http.X-Magento-Cache-Id && bereq.http.X-Magento-Cache-Id != beresp.http.X-Magento-Cache-Id) {
        set beresp.ttl = 120s;
        set beresp.uncacheable = true;
        return (deliver);
+    }
+
+    # Remove the Set-Cookie header for cacheable content
+    # Only for HTTP GET & HTTP HEAD requests
+    if (beresp.ttl > 0s && (bereq.method == "GET" || bereq.method == "HEAD")) {
+        unset beresp.http.Set-Cookie;
     }
 }
 
