@@ -24,14 +24,14 @@ use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 {
     /**
-     * Store manager
+     * Store manager to get the store information
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Model factory
+     * Model factory to create a model object
      *
      * @var \Magento\Catalog\Model\Factory
      */
@@ -327,7 +327,11 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     {
         $entity = $attribute->getEntity();
         $row = $this->getAttributeRow($entity, $object, $attribute);
-        if ($valueId > 0 && array_key_exists('store_id', $row)) {
+        $hasSingleStore = $this->_storeManager->hasSingleStore();
+        $storeId = $hasSingleStore
+            ? $this->getDefaultStoreId()
+            : (int) $this->_storeManager->getStore($object->getStoreId())->getId();
+        if ($valueId > 0 && array_key_exists('store_id', $row) && $storeId === $row['store_id']) {
             $table = $attribute->getBackend()->getTable();
             $connection = $this->getConnection();
             $connection->update(
