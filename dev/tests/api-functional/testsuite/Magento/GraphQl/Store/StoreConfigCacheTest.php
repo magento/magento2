@@ -15,17 +15,44 @@ use Magento\Store\Api\StoreConfigManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\TestFramework\App\ApiMutableScopeConfig;
+use Magento\TestFramework\Config\Model\ConfigStorage;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\ObjectManager;
 
 /**
  * Test storeConfig query cache
  */
 class StoreConfigCacheTest extends GraphQLPageCacheAbstract
 {
-
-    /** @var ObjectManager */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     private $objectManager;
+
+    /**
+     * @var ApiMutableScopeConfig
+     */
+    private $config;
+
+    /**
+     * @var ConfigStorage
+     */
+    private $configStorage;
+
+    /**
+     * @var array
+     */
+    private $origConfigs = [];
+
+    /**
+     * @var array
+     */
+    private $notExistingOrigConfigs = [];
+
+    /**
+     * @var StoreConfigInterface
+     */
+    private $defaultStoreConfig;
 
     /**
      * @inheritDoc
@@ -33,15 +60,9 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-    }
+        $this->configStorage = $this->objectManager->get(ConfigStorage::class);
+        $this->config = $this->objectManager->get(ApiMutableScopeConfig::class);
 
-    /**
-     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
-     * @magentoApiDataFixture Magento/Store/_files/store.php
-     * @throws NoSuchEntityException
-     */
-    public function testGetStoreConfig(): void
-    {
         /** @var  StoreConfigManagerInterface $storeConfigManager */
         $storeConfigManager = $this->objectManager->get(StoreConfigManagerInterface::class);
         /** @var StoreResolverInterface $storeResolver */
@@ -52,15 +73,28 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $store = $storeRepository->getById($defaultStoreId);
         $defaultStoreCode = $store->getCode();
         /** @var StoreConfigInterface $storeConfig */
-        $storeConfig = current($storeConfigManager->getStoreConfigs([$defaultStoreCode]));
-        $defaultLocale = $storeConfig->getLocale();
+        $this->defaultStoreConfig = current($storeConfigManager->getStoreConfigs([$defaultStoreCode]));
+    }
+
+    /**
+     * storeConfig query is cached.
+     *
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoApiDataFixture Magento/Store/_files/store.php
+     * @throws NoSuchEntityException
+     */
+    public function testGetStoreConfig(): void
+    {
+        $defaultStoreId = $this->defaultStoreConfig->getId();
+        $defaultStoreCode = $this->defaultStoreConfig->getCode();
+        $defaultLocale = $this->defaultStoreConfig->getLocale();
         $query = $this->getQuery();
 
         // Query default store config
         $responseDefaultStore = $this->graphQlQueryWithResponseHeaders($query);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseDefaultStore['headers']);
         $defaultStoreCacheId = $responseDefaultStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        // Verify we obtain a cache MISS the first time
+        // Verify we obtain a cache MISS the 1st time
         $defaultStoreResponse = $this->assertCacheMissAndReturnResponse(
             $query,
             [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
@@ -70,7 +104,7 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $this->assertEquals($defaultStoreId, $defaultStoreResponseResult['id']);
         $this->assertEquals($defaultStoreCode, $defaultStoreResponseResult['code']);
         $this->assertEquals($defaultLocale, $defaultStoreResponseResult['locale']);
-        // Verify we obtain a cache HIT the second time
+        // Verify we obtain a cache HIT the 2nd time
         $defaultStoreResponseHit = $this->assertCacheHitAndReturnResponse(
             $query,
             [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
@@ -87,7 +121,7 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseTestStore['headers']);
         $testStoreCacheId = $responseTestStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         $this->assertNotEquals($testStoreCacheId, $defaultStoreCacheId);
-        // Verify we obtain a cache MISS the first time
+        // Verify we obtain a cache MISS the 1st time
         $testStoreResponse = $this->assertCacheMissAndReturnResponse(
             $query,
             [
@@ -99,7 +133,7 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $testStoreResponseResult = $testStoreResponse['body']['storeConfig'];
         $this->assertEquals($testStoreCode, $testStoreResponseResult['code']);
         $this->assertEquals($defaultLocale, $testStoreResponseResult['locale']);
-        // Verify we obtain a cache HIT the second time
+        // Verify we obtain a cache HIT the 2nd time
         $testStoreResponseHit = $this->assertCacheHitAndReturnResponse(
             $query,
             [
@@ -111,13 +145,63 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $testStoreResponseHitResult = $testStoreResponseHit['body']['storeConfig'];
         $this->assertEquals($testStoreCode, $testStoreResponseHitResult['code']);
         $this->assertEquals($defaultLocale, $testStoreResponseHitResult['locale']);
+    }
+
+    /**
+     * Store scoped config change triggers purging only the cache of the changed store.
+     *
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoApiDataFixture Magento/Store/_files/store.php
+     * @throws NoSuchEntityException
+     */
+    public function testCachePurgedWithStoreScopeConfigChange(): void
+    {
+        $defaultStoreId = $this->defaultStoreConfig->getId();
+        $defaultStoreCode = $this->defaultStoreConfig->getCode();
+        $defaultLocale = $this->defaultStoreConfig->getLocale();
+        $query = $this->getQuery();
+
+        // Query default store config
+        $responseDefaultStore = $this->graphQlQueryWithResponseHeaders($query);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseDefaultStore['headers']);
+        $defaultStoreCacheId = $responseDefaultStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        // Verify we obtain a cache MISS the 1st time
+        $defaultStoreResponse = $this->assertCacheMissAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+        $this->assertArrayHasKey('storeConfig', $defaultStoreResponse['body']);
+        $defaultStoreResponseResult = $defaultStoreResponse['body']['storeConfig'];
+        $this->assertEquals($defaultStoreId, $defaultStoreResponseResult['id']);
+        $this->assertEquals($defaultStoreCode, $defaultStoreResponseResult['code']);
+        $this->assertEquals($defaultLocale, $defaultStoreResponseResult['locale']);
+
+        // Query test store config
+        $testStoreCode = 'test';
+        $responseTestStore = $this->graphQlQueryWithResponseHeaders($query, [], '', ['Store' => $testStoreCode]);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseTestStore['headers']);
+        $testStoreCacheId = $responseTestStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $this->assertNotEquals($testStoreCacheId, $defaultStoreCacheId);
+        // Verify we obtain a cache MISS the 1st time
+        $testStoreResponse = $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $testStoreCacheId,
+                'Store' => $testStoreCode
+            ]
+        );
+        $this->assertArrayHasKey('storeConfig', $testStoreResponse['body']);
+        $testStoreResponseResult = $testStoreResponse['body']['storeConfig'];
+        $this->assertEquals($testStoreCode, $testStoreResponseResult['code']);
+        $this->assertEquals($defaultLocale, $testStoreResponseResult['locale']);
 
         // Change test store locale
+        $localeConfigPath = 'general/locale/code';
         $newLocale = 'de_DE';
-        $this->setConfig('general/locale/code', $newLocale, ScopeInterface::SCOPE_STORES, $testStoreCode);
+        $this->setConfig($localeConfigPath, $newLocale, ScopeInterface::SCOPE_STORE, $testStoreCode);
 
         // Query default store config after test store config change
-        // Verify we obtain a cache HIT the 3rd time
+        // Verify we obtain a cache HIT the 2nd time, the cache is not purged
         $defaultStoreResponseHit2 = $this->assertCacheHitAndReturnResponse(
             $query,
             [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
@@ -129,7 +213,7 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $this->assertEquals($defaultLocale, $defaultStoreResponseHit2Result['locale']);
 
         // Query test store config after test store config change
-        // Verify we obtain a cache MISS the 3rd time
+        // Verify we obtain a cache MISS the 2nd time, the cache is purged
         $testStoreResponseMiss = $this->assertCacheMissAndReturnResponse(
             $query,
             [
@@ -141,7 +225,7 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $testStoreResponseMissResult = $testStoreResponseMiss['body']['storeConfig'];
         $this->assertEquals($testStoreCode, $testStoreResponseMissResult['code']);
         $this->assertEquals($newLocale, $testStoreResponseMissResult['locale']);
-        // Verify we obtain a cache HIT the 4th time
+        // Verify we obtain a cache HIT the 3rd time
         $testStoreResponseHit2 = $this->assertCacheHitAndReturnResponse(
             $query,
             [
@@ -198,25 +282,63 @@ QUERY;
         return $query;
     }
 
+    protected function tearDown(): void
+    {
+        $this->restoreConfig();
+        parent::tearDown();
+    }
+
     /**
      * Set configuration
      *
      * @param string $path
      * @param string $value
-     * @param string|null $scope
+     * @param string $scopeType
      * @param string|null $scopeCode
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function setConfig(string $path, string $value, ?string $scope = null, ?string $scopeCode = null) : void
+    private function setConfig(
+        string  $path,
+        string  $value,
+        string  $scopeType,
+        ?string $scopeCode = null
+    ): void {
+        if ($this->configStorage->checkIsRecordExist($path, $scopeType, $scopeCode)) {
+            $this->origConfigs[] = [
+                'path' => $path,
+                'value' => $this->configStorage->getValueFromDb($path, $scopeType, $scopeCode),
+                'scopeType' => $scopeType,
+                'scopeCode' => $scopeCode
+            ];
+        } else {
+            $this->notExistingOrigConfigs[] = [
+                'path' => $path,
+                'scopeType' => $scopeType,
+                'scopeCode' => $scopeCode
+            ];
+        }
+        $this->config->setValue($path, $value, $scopeType, $scopeCode);
+    }
+
+    private function restoreConfig()
     {
-        $options = '';
-        $options .= $scope ? "--scope=$scope " : '';
-        $options .= $scopeCode ? "--scope-code=$scopeCode " : '';
-        $options .= "$path $value";
-        $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
-        $out = '';
-        // phpcs:ignore Magento2.Security.InsecureFunction
-        exec("php -f {$appDir}/bin/magento config:set $options", $out);
+        foreach ($this->origConfigs as $origConfig) {
+            $this->config->setValue(
+                $origConfig['path'],
+                $origConfig['value'],
+                $origConfig['scopeType'],
+                $origConfig['scopeCode']
+            );
+        }
+        $this->origConfigs = [];
+
+        foreach ($this->notExistingOrigConfigs as $notExistingOrigConfig) {
+            $this->configStorage->deleteConfigFromDb(
+                $notExistingOrigConfig['path'],
+                $notExistingOrigConfig['scopeType'],
+                $notExistingOrigConfig['scopeCode']
+            );
+        }
+        $this->notExistingOrigConfigs = [];
     }
 }
