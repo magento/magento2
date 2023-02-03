@@ -75,7 +75,8 @@ class FilteredErrorFormatter implements ErrorFormatter
             $analysisResult->getCollectedData(),
             $analysisResult->isDefaultLevelUsed(),
             $analysisResult->getProjectConfigFile(),
-            $analysisResult->isResultCacheSaved()
+            $analysisResult->isResultCacheSaved(),
+            $analysisResult->getPeakMemoryUsageBytes()
         );
 
         return $this->tableErrorFormatter->formatErrors($clearedAnalysisResult, $output);
