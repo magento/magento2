@@ -126,7 +126,6 @@ class ProductUrlRewriteGeneratorTest extends TestCase
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $storeId = 1;
         $urls = ['dummy-url.html'];
 
         $productMock->expects($this->once())
