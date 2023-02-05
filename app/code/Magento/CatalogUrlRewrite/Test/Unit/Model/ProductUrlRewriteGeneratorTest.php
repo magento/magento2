@@ -132,9 +132,6 @@ class ProductUrlRewriteGeneratorTest extends TestCase
         $productMock->expects($this->once())
             ->method('getVisibility')
             ->willReturn(2);
-        $productMock->expects($this->once())
-            ->method('getStoreId')
-            ->willReturn($storeId);
         $productCategoriesMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -146,7 +143,7 @@ class ProductUrlRewriteGeneratorTest extends TestCase
             ->method('getCategoryCollection')
             ->willReturn($productCategoriesMock);
         $this->productScopeRewriteGenerator->expects($this->once())
-            ->method('generateForSpecificStoreView')
+            ->method('generateForGlobalScope')
             ->willReturn($urls);
         $this->assertEquals($urls, $this->productUrlRewriteGenerator->generate($productMock, 1));
     }
