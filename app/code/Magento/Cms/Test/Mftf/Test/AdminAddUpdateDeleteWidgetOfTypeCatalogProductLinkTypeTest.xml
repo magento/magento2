@@ -16,6 +16,9 @@
             <description value="Admin should be able to create widget type of Catalog product link and shown on storefront"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-12209"/>
+             <skip>
+                <issueId value="ACQE-4481"/>
+            </skip>
         </annotations>
 
         <before>
