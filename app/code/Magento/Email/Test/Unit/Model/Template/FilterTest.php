@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Email\Test\Unit\Model\Template;
 
+use Magento\Backend\Model\Url as BackendModelUrl;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Email\Model\Template\Css\Processor;
 use Magento\Email\Model\Template\Filter;
@@ -576,35 +577,47 @@ class FilterTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderCompanyRedirect
+     * @dataProvider dataProviderUrlModelCompanyRedirect
      */
-    public function testStoreDirectiveForCompanyRedirect($construction, $expected, $code)
+    public function testStoreDirectiveForCompanyRedirect($className, $backendModelClass)
     {
         $this->storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
-        $this->store->expects($this->any())->method('getCode')->willReturn($code);
+        $this->store->expects($this->any())->method('getCode')->willReturn('frvw');
+
+        $this->backendUrlBuilder = $this->getMockBuilder($className)
+            ->onlyMethods(['setScope','getUrl'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->backendUrlBuilder->expects($this->once())
             ->method('getUrl')
-            ->willReturn($expected);
+            ->willReturn('http://m246ceeeb2b.test/frvw/');
 
-        $result = $this->getModel()->storeDirective($construction);
-        $this->assertEquals($expected, $result);
+        if ($backendModelClass) {
+            $this->backendUrlBuilder->expects($this->never())->method('setScope');
+        } else {
+            $this->backendUrlBuilder->expects($this->once())->method('setScope')->willReturnSelf();
+        }
+        $this->assertInstanceOf($className, $this->backendUrlBuilder);
+        $result = $this->getModel()->storeDirective(["{{store url=''}}",'store',"url=''"]);
+        $this->assertEquals('http://m246ceeeb2b.test/frvw/', $result);
     }
 
-    public function dataProviderCompanyRedirect()
+    /**
+     * @return array[]
+     */
+    public function dataProviderUrlModelCompanyRedirect(): array
     {
         return [
             [
-                ["{{store url=''}}",'store',"url=''"],
-                'http://m246ceeeb2b.french.test/frvw/',
-                'frvw'
+                UrlInterface::class,
+                0
             ],
             [
-                ["{{store url=''}}",'store_invalid',"url=''"],
-                'http://m246ceeeb2b.test/default/',
-                'default'
+                BackendModelUrl::class,
+                1
             ]
         ];
     }

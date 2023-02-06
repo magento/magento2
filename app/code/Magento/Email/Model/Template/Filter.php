@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Email\Model\Template;
 
 use Exception;
+use Magento\Backend\Model\Url as BackendModelUrl;
 use Magento\Cms\Block\Block;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -588,7 +589,7 @@ class Filter extends Template
          * Pass extra parameter to distinguish stores urls for property Magento\Framework\Url $cacheUrl
          * in multi-store environment
          */
-        if ($construction[1] !== "store") {
+        if (!$this->urlModel instanceof BackendModelUrl) {
             $this->urlModel->setScope($this->_storeManager->getStore());
         }
         $params['_escape_params'] = $this->_storeManager->getStore()->getCode();
