@@ -187,7 +187,7 @@ define([
                 result;
 
             if (request.showTotalRecords === undefined) {
-                request.showTotalRecords = 0;
+                request.showTotalRecords = true;
             }
 
             result = {
@@ -220,7 +220,7 @@ define([
             }
 
             if (data.showTotalRecords === undefined) {
-                data.showTotalRecords = 0;
+                data.showTotalRecords = true;
             }
 
             this._requests.push({
