@@ -140,8 +140,8 @@ class Currency extends BackendCurrency
 
         if (((int)$catalogPriceScope !== 0
             && $adminCurrencyCode !== $currencyCode)) {
-            $storeCurrency = $this->currencyFactory->create()->load($currencyCode);
-            $currencyRate = $storeCurrency->getRate($adminCurrencyCode);
+            $currency = $this->currencyFactory->create()->load($adminCurrencyCode);
+            $currencyRate = $currency->getAnyRate($currencyCode);
         } else {
             $currencyRate = $this->_getRate($row);
         }
