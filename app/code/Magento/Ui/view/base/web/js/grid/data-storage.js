@@ -215,6 +215,10 @@ define([
                 this.removeRequest(cached);
             }
 
+            if (data.showTotalRecords === undefined) {
+                data.showTotalRecords = 0;
+            }
+
             this._requests.push({
                 ids: this.getIds(data.items),
                 params: params,
