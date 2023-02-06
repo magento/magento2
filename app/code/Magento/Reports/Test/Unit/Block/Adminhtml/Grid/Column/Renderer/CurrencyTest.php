@@ -257,8 +257,8 @@ class CurrencyTest extends TestCase
 
         if ($needToGetRateFromModel) {
             $this->currencyMock->expects($this->once())
-                ->method('getRate')
-                ->with($adminCurrencyCode)
+                ->method('getAnyRate')
+                ->with($storeCurrencyCode)
                 ->willReturn($rate);
         }
 
