@@ -19,6 +19,10 @@ class GalleryManagementTest extends WebapiAbstract
 {
     public const RESOURCE_PATH = '/V1/products/';
 
+    public const SERVICE_NAME = 'catalogGalleryManagementV1';
+
+    public const SERVICE_VERSION = 'V1';
+
     /**
      * @var DataFixtureStorage
      */
@@ -46,6 +50,11 @@ class GalleryManagementTest extends WebapiAbstract
                 'resourcePath' => self::RESOURCE_PATH.$productSku."/media",
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'getList',
+            ],
         ];
         $response = $this->_webApiCall($serviceInfo, []);
         $this->assertArrayHasKey('content', $response[0]);
@@ -68,6 +77,11 @@ class GalleryManagementTest extends WebapiAbstract
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH.$productSku."/media/".$entryId,
                 'httpMethod' => Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'get',
             ],
         ];
         $response = $this->_webApiCall($serviceInfo, []);
