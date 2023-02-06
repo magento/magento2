@@ -243,6 +243,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     public function get($sku, $entryId)
     {
         try {
+            /** @var Product $product */
             $product = $this->productRepository->get($sku);
         } catch (\Exception $exception) {
             throw new NoSuchEntityException(__("The product doesn't exist. Verify and try again."));
@@ -251,6 +252,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         $mediaGalleryEntries = $product->getMediaGalleryEntries();
         foreach ($mediaGalleryEntries as $entry) {
             if ($entry->getId() == $entryId) {
+                $entry->setContent($this->getImageContent($product, $entry));
                 return $entry;
             }
         }
