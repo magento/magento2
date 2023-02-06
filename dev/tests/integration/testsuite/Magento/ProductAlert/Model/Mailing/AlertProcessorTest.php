@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\ProductAlert\Model\Mailing;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Locale\Resolver;
@@ -18,6 +21,7 @@ use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\Translate;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
@@ -134,6 +138,37 @@ class AlertProcessorTest extends TestCase
         $expectedText = array_shift($translation);
         $this->assertStringContainsString('/frontend/Magento/luma/pt_BR/', $messageContent);
         $this->assertStringContainsString(substr($expectedText, 0, 50), $messageContent);
+    }
+
+    /**
+     * @magentoConfigFixture current_store catalog/productalert/allow_price 1
+     * @magentoDataFixture Magento/ProductAlert/_files/product_alert.php
+     */
+    public function testCustomerShouldGetEmailForEveryProductPriceDrop(): void
+    {
+        $this->processAlerts();
+
+        $this->assertStringContainsString(
+            '$10.00',
+            $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
+        );
+
+        // Intentional: update product without using ProductRepository
+        // to prevent changes from being cached on application level
+        $product = $this->objectManager->get(ProductFactory::class)->create();
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $productResource = $this->objectManager->get(ProductResourceModel::class);
+        $product->setStoreId(Store::DEFAULT_STORE_ID);
+        $productResource->load($product, $productRepository->get('simple')->getId());
+        $product->setPrice(5);
+        $productResource->save($product);
+
+        $this->processAlerts();
+
+        $this->assertStringContainsString(
+            '$5.00',
+            $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
+        );
     }
 
     /**
