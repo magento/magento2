@@ -48,6 +48,7 @@ class QuickSearchTest extends AbstractController
      * @magentoAppArea frontend
      * @magentoDbIsolation disabled
      * @magentoConfigFixture current_store catalog/search/elasticsearch7_minimum_should_match 100%
+     * @magentoConfigFixture current_store catalog/search/elasticsearch8_minimum_should_match 100%
      * @magentoConfigFixture current_store catalog/search/opensearch_minimum_should_match 100%
      * @magentoDataFixture Magento/Elasticsearch/_files/products_for_search.php
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
