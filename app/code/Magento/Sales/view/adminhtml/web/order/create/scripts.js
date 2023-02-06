@@ -139,6 +139,7 @@ define([
             $(this.getAreaId('header')).callback = 'setCustomerAfter';
             $('back_order_top_button').hide();
             $('reset_order_top_button').show();
+            this.loadArea(['header', 'data'], true);
         },
 
         setCustomerAfter: function () {
