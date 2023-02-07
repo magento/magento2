@@ -57,6 +57,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
      *
      * @return SecurityCookie
      * @deprecated 100.1.0
+     * @see we don't recommend this approach anymore
      */
     private function getSecurityCookie()
     {
@@ -98,6 +99,9 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
                 ->setPid($this->getRequest()->getParam('parent_id', false))
                 ->setRoleType(RoleGroup::ROLE_TYPE)
                 ->setUserType(UserContextInterface::USER_TYPE_ADMIN);
+            if ($this->getRequest()->getParam('gws_is_all', false)) {
+                $role->setGwsWebsites(null)->setGwsStoreGroups(null);
+            }
             $this->_eventManager->dispatch(
                 'admin_permissions_role_prepare_save',
                 ['object' => $role, 'request' => $this->getRequest()]

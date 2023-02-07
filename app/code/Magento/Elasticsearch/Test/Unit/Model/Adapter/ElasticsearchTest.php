@@ -111,6 +111,10 @@ class ElasticsearchTest extends TestCase
      */
     protected function setUp(): void
     {
+        if (!class_exists(\Elasticsearch\Client::class)) {
+            $this->markTestSkipped('AC-6597: Skipped as Elasticsearch 8 is configured');
+        }
+
         $this->objectManager = new ObjectManagerHelper($this);
         $this->connectionManager = $this->getMockBuilder(ConnectionManager::class)
             ->disableOriginalConstructor()
