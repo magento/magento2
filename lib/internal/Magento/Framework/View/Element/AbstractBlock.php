@@ -174,9 +174,9 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
 
     /**
      * Store the disabled modules to avoid retrieving it multiple times.
-     * @var array|null
+     * @var bool|null
      */
-    private static ?array $disabledModules = null;
+    private static ?bool $disabledModules = null;
 
     /**
      * Constructor

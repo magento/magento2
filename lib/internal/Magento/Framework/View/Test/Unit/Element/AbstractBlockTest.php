@@ -241,9 +241,9 @@ class AbstractBlockTest extends TestCase
         $this->eventManagerMock->expects($this->any())
             ->method('dispatch')
             ->with('view_block_abstract_to_html_before', ['block' => $this->block]);
-        $this->scopeConfigMock->expects($this->once())
+        $this->scopeConfigMock
             ->method('getValue')
-            ->with('advanced/modules_disable_output/' . $moduleName, ScopeInterface::SCOPE_STORE)
+            ->with('advanced/modules_disable_output', ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
 
         $this->assertSame('', $this->block->toHtml());
@@ -271,9 +271,9 @@ class AbstractBlockTest extends TestCase
 
         $this->eventManagerMock->expects($expectsDispatchEvent)
             ->method('dispatch');
-        $this->scopeConfigMock->expects($this->once())
+        $this->scopeConfigMock
             ->method('getValue')
-            ->with('advanced/modules_disable_output/' . $moduleName, ScopeInterface::SCOPE_STORE)
+            ->with('advanced/modules_disable_output', ScopeInterface::SCOPE_STORE)
             ->willReturn(false);
         $this->cacheStateMock->expects($this->any())
             ->method('isEnabled')

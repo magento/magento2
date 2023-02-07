@@ -202,7 +202,7 @@ class NewWidgetTest extends TestCase
     {
         $this->eventManager->expects($this->exactly(2))->method('dispatch')
             ->willReturn(true);
-        $this->scopeConfig->expects($this->once())->method('getValue')->withAnyParameters()
+        $this->scopeConfig->method('getValue')->withAnyParameters()
             ->willReturn(false);
         $this->cacheState->expects($this->atLeastOnce())->method('isEnabled')->withAnyParameters()
             ->willReturn(false);
