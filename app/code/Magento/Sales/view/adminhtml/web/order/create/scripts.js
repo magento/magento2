@@ -145,20 +145,20 @@ define([
             this.customerSelectorHide();
             if (this.storeId) {
                 $(this.getAreaId('data')).callback = 'dataLoaded';
-                $(this.getAreaId('form')).callback = 'dataLoaded';
-                this.loadArea(['data', 'form'], true);
+                this.loadArea(['data'], true);
             } else {
                 this.storeSelectorShow();
             }
         },
 
-        setStoreId: function (id) { 
+        setStoreId: function (id) {
             this.storeId = id;
             this.storeSelectorHide();
             this.sidebarShow();
-            this.loadArea(['header', 'sidebar','data'], true);
+            //this.loadArea(['header', 'sidebar','data'], true);
             this.dataShow();
-           /// this.loadArea(['header', 'data', 'form'], true);
+            this.loadArea(['header', 'data'], true);
+            location.reload(true);
         },
 
         setCurrencyId: function (id) {
@@ -507,7 +507,7 @@ define([
             this.loadArea(['card_validation'], true, data);
         },
 
-        setPaymentMethod: function (method) { 
+        setPaymentMethod: function (method) {
             if (this.paymentMethod && $('payment_form_' + this.paymentMethod)) {
                 var form = 'payment_form_' + this.paymentMethod;
                 [form + '_before', form, form + '_after'].each(function (el) {
@@ -1164,7 +1164,42 @@ define([
             }
         },
 
-       
+        loadArea: function (area, indicator, params) {
+            var deferred = new jQuery.Deferred();
+            var url = this.loadBaseUrl;
+            if (area) {
+                area = this.prepareArea(area);
+                url += 'block/' + area;
+            }
+            if (indicator === true) indicator = 'html-body';
+            params = this.prepareParams(params);
+            params.json = true;
+            if (!this.loadingAreas) this.loadingAreas = [];
+            if (indicator) {
+                this.loadingAreas = area;
+                new Ajax.Request(url, {
+                    parameters: params,
+                    loaderArea: indicator,
+                    onSuccess: function (transport) {
+                        var response = transport.responseText.evalJSON();
+                        this.loadAreaResponseHandler(response);
+                        deferred.resolve();
+                    }.bind(this)
+                });
+            } else {
+                new Ajax.Request(url, {
+                    parameters: params,
+                    loaderArea: indicator,
+                    onSuccess: function (transport) {
+                        deferred.resolve();
+                    }
+                });
+            }
+            if (typeof productConfigure != 'undefined' && area instanceof Array && area.indexOf('items') != -1) {
+                productConfigure.clean('quote_items');
+            }
+            return deferred.promise();
+        },
 
         loadAreaResponseHandler: function (response) {
             if (response.error) {
@@ -1238,7 +1273,7 @@ define([
             return 'order-' + area;
         },
 
-        prepareParams: function (params) { 
+        prepareParams: function (params) {
             if (!params) {
                 params = {};
             }
