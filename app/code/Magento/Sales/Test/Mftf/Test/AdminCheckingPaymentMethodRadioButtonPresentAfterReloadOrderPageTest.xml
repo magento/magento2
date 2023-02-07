@@ -57,7 +57,7 @@
         </actionGroup>
 
         <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
-         <waitForPageLoad stepKey="waitForPageFullyLoad"/>
+
         <!-- Assert label with radio button presents after reload the page -->
         <actionGroup ref="AssertAdminPaymentMethodRadioButtonExistsOnCreateOrderPageActionGroup" stepKey="assertCheckMORadioButtonIsPresentAfterReload"/>
         <actionGroup ref="AssertAdminPaymentMethodRadioButtonExistsOnCreateOrderPageActionGroup" stepKey="assertBankTransferRadioButtonIsPresentAfterReload">
