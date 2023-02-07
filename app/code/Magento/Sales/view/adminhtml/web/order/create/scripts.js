@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-define([
+ define([
     'jquery',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/alert',
