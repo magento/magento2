@@ -153,7 +153,6 @@ class GalleryManagementTest extends TestCase
             ->willReturn($this->newProductMock);
     }
 
-
     /**
      * @return void
      */
