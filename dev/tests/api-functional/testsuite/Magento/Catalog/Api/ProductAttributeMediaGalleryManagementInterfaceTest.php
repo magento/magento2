@@ -857,7 +857,10 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'getList',
             ],
         ];
-        $response = $this->_webApiCall($serviceInfo, []);
+        $requestData = [
+            'sku' => $productSku,
+        ];
+        $response = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertArrayHasKey('content', $response[0]);
     }
 
@@ -885,7 +888,11 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'get',
             ],
         ];
-        $response = $this->_webApiCall($serviceInfo, []);
+        $requestData = [
+            'sku' => $productSku,
+            'entryId' => $entryId,
+        ];
+        $response = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertArrayHasKey('content', $response);
     }
 }
