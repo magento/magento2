@@ -10,7 +10,6 @@ namespace Magento\ConfigurableProduct\Plugin\Model\ResourceModel;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Catalog\Model\Indexer\Product\Category\Action\Rows;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
@@ -21,12 +20,9 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Indexer\ActionInterface;
-use Magento\Framework\Indexer\IndexerRegistry;
 
 /**
  * Plugin product resource model
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product
 {
@@ -56,14 +52,9 @@ class Product
     private $filterBuilder;
 
     /**
-     * @var IndexerRegistry
+     * @var Processor
      */
-    private $indexerRegistry;
-
-    /**
-     * @var Rows
-     */
-    private $rowsAction;
+    private $priceIndexProcessor;
 
     /**
      * Initialize Product dependencies.
@@ -73,8 +64,7 @@ class Product
      * @param ProductAttributeRepositoryInterface|null $productAttributeRepository
      * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
      * @param FilterBuilder|null $filterBuilder
-     * @param IndexerRegistry|null $indexerRegistry
-     * @param Rows|null $rowsAction
+     * @param Processor|null $priceIndexProcessor
      */
     public function __construct(
         Configurable $configurable,
@@ -82,8 +72,7 @@ class Product
         ProductAttributeRepositoryInterface $productAttributeRepository = null,
         ?SearchCriteriaBuilder $searchCriteriaBuilder = null,
         ?FilterBuilder $filterBuilder = null,
-        ?IndexerRegistry $indexerRegistry = null,
-        ?Rows $rowsAction = null
+        ?Processor $priceIndexProcessor = null
     ) {
         $this->configurable = $configurable;
         $this->productIndexer = $productIndexer;
@@ -93,10 +82,8 @@ class Product
             ->get(SearchCriteriaBuilder::class);
         $this->filterBuilder = $filterBuilder ?: ObjectManager::getInstance()
             ->get(FilterBuilder::class);
-        $this->indexerRegistry = $indexerRegistry ?: ObjectManager::getInstance()
-            ->get(IndexerRegistry::class);
-        $this->rowsAction = $rowsAction ?: ObjectManager::getInstance()
-            ->get(Rows::class);
+        $this->priceIndexProcessor = $priceIndexProcessor ?: ObjectManager::getInstance()
+            ->get(Processor::class);
     }
 
     /**
@@ -134,11 +121,10 @@ class Product
         ProductResource $result,
         DataObject $object
     ): ProductResource {
-        $productId = $object->getId();
-        $priceIndexer = $this->indexerRegistry->get(Processor::INDEXER_ID);
-        if ($priceIndexer->isScheduled()
-            && count($this->configurable->getParentIdsByChild($productId)) > 0) {
-            $this->rowsAction->execute([$productId]);
+        $configurableProductIds = $this->configurable->getParentIdsByChild($object->getId());
+        if (count($configurableProductIds) > 0) {
+            $priceIndexer = $this->priceIndexProcessor->getIndexer();
+            $priceIndexer->reindexList($configurableProductIds);
         }
 
         return $result;
