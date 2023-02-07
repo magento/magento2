@@ -21,6 +21,7 @@
         <data key="rate">0</data>
     </entity>
     <entity name="SimpleTaxNY" type="tax">
+        <data key="identifier" unique="suffix" >New York</data>
         <data key="state">New York</data>
         <data key="country">United States</data>
         <data key="zip">*</data>
@@ -33,6 +34,7 @@
         <data key="rate">20.00</data>
     </entity>
     <entity name="SimpleTaxCA" type="tax">
+        <data key="identifier" unique="suffix" >California</data>
         <data key="state">California</data>
         <data key="country">United States</data>
         <data key="zip">*</data>

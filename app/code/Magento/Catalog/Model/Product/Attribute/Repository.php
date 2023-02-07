@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Model\Product\Attribute;
 
 use Laminas\Validator\Regex;
-use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Catalog\Api\Data\EavAttributeInterface;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -19,6 +19,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
  */
 class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInterface
 {
+    private const FILTERABLE_ALLOWED_INPUT_TYPES = ['date', 'datetime', 'text', 'textarea', 'texteditor'];
+
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Attribute
      */
@@ -110,6 +112,22 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      */
     public function save(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {
+        if (in_array($attribute->getFrontendInput(), self::FILTERABLE_ALLOWED_INPUT_TYPES)) {
+            if ($attribute->getIsFilterable()) {
+                throw InputException::invalidFieldValue(
+                    EavAttributeInterface::IS_FILTERABLE,
+                    $attribute->getIsFilterable()
+                );
+            }
+
+            if ($attribute->getIsFilterableInSearch()) {
+                throw InputException::invalidFieldValue(
+                    EavAttributeInterface::IS_FILTERABLE_IN_SEARCH,
+                    $attribute->getIsFilterableInSearch()
+                );
+            }
+        }
+
         $attribute->setEntityTypeId(
             $this->eavConfig
                 ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
@@ -156,7 +174,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             );
             $attribute->setIsUserDefined(1);
         }
-        if (!empty($attribute->getData(AttributeInterface::OPTIONS))) {
+        if (!empty($attribute->getData(EavAttributeInterface::OPTIONS))) {
             $options = [];
             $sortOrder = 0;
             $default = [];
