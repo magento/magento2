@@ -16,11 +16,12 @@ use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
+use Magento\Framework\Event\Manager as EventManager;
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\Indexer\CacheContext;
-use Magento\Indexer\Model\Indexer\DeferredCacheCleaner;
 
 /**
  * Plugin product resource model
@@ -55,14 +56,19 @@ class Product
     private $filterBuilder;
 
     /**
-     * @var DeferredCacheCleaner
-     */
-    private $cacheCleaner;
-
-    /**
      * @var CacheContext
      */
     private $cacheContext;
+
+    /**
+     * @var EventManager
+     */
+    private $eventManager;
+
+    /**
+     * @var CacheInterface
+     */
+    private $appCache;
 
     /**
      * Initialize Product dependencies.
@@ -72,8 +78,9 @@ class Product
      * @param ProductAttributeRepositoryInterface|null $productAttributeRepository
      * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
      * @param FilterBuilder|null $filterBuilder
-     * @param DeferredCacheCleaner|null $cacheCleaner
      * @param CacheContext|null $cacheContext
+     * @param EventManager|null $eventManager
+     * @param CacheInterface|null $appCache
      */
     public function __construct(
         Configurable $configurable,
@@ -81,8 +88,9 @@ class Product
         ProductAttributeRepositoryInterface $productAttributeRepository = null,
         ?SearchCriteriaBuilder $searchCriteriaBuilder = null,
         ?FilterBuilder $filterBuilder = null,
-        ?DeferredCacheCleaner $cacheCleaner = null,
-        ?CacheContext $cacheContext = null
+        ?CacheContext $cacheContext = null,
+        ?EventManager $eventManager = null,
+        ?CacheInterface $appCache = null
     ) {
         $this->configurable = $configurable;
         $this->productIndexer = $productIndexer;
@@ -92,8 +100,9 @@ class Product
             ->get(SearchCriteriaBuilder::class);
         $this->filterBuilder = $filterBuilder ?: ObjectManager::getInstance()
             ->get(FilterBuilder::class);
-        $this->cacheCleaner = $cacheCleaner ?? ObjectManager::getInstance()->get(DeferredCacheCleaner::class);
         $this->cacheContext = $cacheContext ?? ObjectManager::getInstance()->get(CacheContext::class);
+        $this->eventManager = $eventManager ?? ObjectManager::getInstance()->get(EventManager::class);
+        $this->appCache = $appCache ?? ObjectManager::getInstance()->get(CacheInterface::class);
     }
 
     /**
@@ -133,9 +142,13 @@ class Product
     ): ProductResource {
         $configurableProductIds = $this->configurable->getParentIdsByChild($object->getId());
         if (count($configurableProductIds) > 0) {
-            $this->cacheCleaner->start();
             $this->cacheContext->registerEntities(ProductModel::CACHE_TAG, $configurableProductIds);
-            $this->cacheCleaner->flush();
+            $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
+            $identities = $this->cacheContext->getIdentities();
+            if (!empty($identities)) {
+                $this->appCache->clean($identities);
+                $this->cacheContext->flush();
+            }
         }
 
         return $result;
