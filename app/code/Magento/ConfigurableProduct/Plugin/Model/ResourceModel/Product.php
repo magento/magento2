@@ -10,7 +10,6 @@ namespace Magento\ConfigurableProduct\Plugin\Model\ResourceModel;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
@@ -20,9 +19,13 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Indexer\ActionInterface;
+use Magento\Framework\Indexer\CacheContext;
+use Magento\Indexer\Model\Indexer\DeferredCacheCleaner;
 
 /**
  * Plugin product resource model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product
 {
@@ -52,9 +55,14 @@ class Product
     private $filterBuilder;
 
     /**
-     * @var Processor
+     * @var DeferredCacheCleaner
      */
-    private $priceIndexProcessor;
+    private $cacheCleaner;
+
+    /**
+     * @var CacheContext
+     */
+    private $cacheContext;
 
     /**
      * Initialize Product dependencies.
@@ -64,7 +72,8 @@ class Product
      * @param ProductAttributeRepositoryInterface|null $productAttributeRepository
      * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
      * @param FilterBuilder|null $filterBuilder
-     * @param Processor|null $priceIndexProcessor
+     * @param DeferredCacheCleaner|null $cacheCleaner
+     * @param CacheContext|null $cacheContext
      */
     public function __construct(
         Configurable $configurable,
@@ -72,7 +81,8 @@ class Product
         ProductAttributeRepositoryInterface $productAttributeRepository = null,
         ?SearchCriteriaBuilder $searchCriteriaBuilder = null,
         ?FilterBuilder $filterBuilder = null,
-        ?Processor $priceIndexProcessor = null
+        ?DeferredCacheCleaner $cacheCleaner = null,
+        ?CacheContext $cacheContext = null
     ) {
         $this->configurable = $configurable;
         $this->productIndexer = $productIndexer;
@@ -82,8 +92,8 @@ class Product
             ->get(SearchCriteriaBuilder::class);
         $this->filterBuilder = $filterBuilder ?: ObjectManager::getInstance()
             ->get(FilterBuilder::class);
-        $this->priceIndexProcessor = $priceIndexProcessor ?: ObjectManager::getInstance()
-            ->get(Processor::class);
+        $this->cacheCleaner = $cacheCleaner ?? ObjectManager::getInstance()->get(DeferredCacheCleaner::class);
+        $this->cacheContext = $cacheContext ?? ObjectManager::getInstance()->get(CacheContext::class);
     }
 
     /**
@@ -123,8 +133,9 @@ class Product
     ): ProductResource {
         $configurableProductIds = $this->configurable->getParentIdsByChild($object->getId());
         if (count($configurableProductIds) > 0) {
-            $priceIndexer = $this->priceIndexProcessor->getIndexer();
-            $priceIndexer->reindexList($configurableProductIds);
+            $this->cacheCleaner->start();
+            $this->cacheContext->registerEntities(ProductModel::CACHE_TAG, $configurableProductIds);
+            $this->cacheCleaner->flush();
         }
 
         return $result;
