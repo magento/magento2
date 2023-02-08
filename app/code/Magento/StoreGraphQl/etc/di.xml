@@ -13,4 +13,10 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Store\Model\Store">
+        <plugin name="getIdentities" type="Magento\StoreGraphQl\Plugin\Store" />
+    </type>
+    <type name="Magento\Store\Model\Website">
+        <plugin name="getIdentities" type="Magento\StoreGraphQl\Plugin\Website" />
+    </type>
 </config>

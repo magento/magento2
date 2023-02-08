@@ -94,7 +94,7 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $responseDefaultStore = $this->graphQlQueryWithResponseHeaders($query);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseDefaultStore['headers']);
         $defaultStoreCacheId = $responseDefaultStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        // Verify we obtain a cache MISS the 1st time
+        // Verify we obtain a cache MISS at the 1st time
         $defaultStoreResponse = $this->assertCacheMissAndReturnResponse(
             $query,
             [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
@@ -104,7 +104,7 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $this->assertEquals($defaultStoreId, $defaultStoreResponseResult['id']);
         $this->assertEquals($defaultStoreCode, $defaultStoreResponseResult['code']);
         $this->assertEquals($defaultLocale, $defaultStoreResponseResult['locale']);
-        // Verify we obtain a cache HIT the 2nd time
+        // Verify we obtain a cache HIT at the 2nd time
         $defaultStoreResponseHit = $this->assertCacheHitAndReturnResponse(
             $query,
             [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
@@ -121,7 +121,7 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseTestStore['headers']);
         $testStoreCacheId = $responseTestStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         $this->assertNotEquals($testStoreCacheId, $defaultStoreCacheId);
-        // Verify we obtain a cache MISS the 1st time
+        // Verify we obtain a cache MISS at the 1st time
         $testStoreResponse = $this->assertCacheMissAndReturnResponse(
             $query,
             [
@@ -133,7 +133,7 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $testStoreResponseResult = $testStoreResponse['body']['storeConfig'];
         $this->assertEquals($testStoreCode, $testStoreResponseResult['code']);
         $this->assertEquals($defaultLocale, $testStoreResponseResult['locale']);
-        // Verify we obtain a cache HIT the 2nd time
+        // Verify we obtain a cache HIT at the 2nd time
         $testStoreResponseHit = $this->assertCacheHitAndReturnResponse(
             $query,
             [
@@ -165,7 +165,7 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $responseDefaultStore = $this->graphQlQueryWithResponseHeaders($query);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseDefaultStore['headers']);
         $defaultStoreCacheId = $responseDefaultStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        // Verify we obtain a cache MISS the 1st time
+        // Verify we obtain a cache MISS at the 1st time
         $defaultStoreResponse = $this->assertCacheMissAndReturnResponse(
             $query,
             [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
@@ -182,7 +182,7 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseTestStore['headers']);
         $testStoreCacheId = $responseTestStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         $this->assertNotEquals($testStoreCacheId, $defaultStoreCacheId);
-        // Verify we obtain a cache MISS the 1st time
+        // Verify we obtain a cache MISS at the 1st time
         $testStoreResponse = $this->assertCacheMissAndReturnResponse(
             $query,
             [
@@ -201,19 +201,19 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $this->setConfig($localeConfigPath, $newLocale, ScopeInterface::SCOPE_STORE, $testStoreCode);
 
         // Query default store config after test store config change
-        // Verify we obtain a cache HIT the 2nd time, the cache is not purged
-        $defaultStoreResponseHit2 = $this->assertCacheHitAndReturnResponse(
+        // Verify we obtain a cache HIT at the 2nd time, the cache is not purged
+        $defaultStoreResponseHit= $this->assertCacheHitAndReturnResponse(
             $query,
             [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
         );
-        $this->assertArrayHasKey('storeConfig', $defaultStoreResponseHit2['body']);
-        $defaultStoreResponseHit2Result = $defaultStoreResponseHit2['body']['storeConfig'];
-        $this->assertEquals($defaultStoreId, $defaultStoreResponseHit2Result['id']);
-        $this->assertEquals($defaultStoreCode, $defaultStoreResponseHit2Result['code']);
-        $this->assertEquals($defaultLocale, $defaultStoreResponseHit2Result['locale']);
+        $this->assertArrayHasKey('storeConfig', $defaultStoreResponseHit['body']);
+        $defaultStoreResponseHitResult = $defaultStoreResponseHit['body']['storeConfig'];
+        $this->assertEquals($defaultStoreId, $defaultStoreResponseHitResult['id']);
+        $this->assertEquals($defaultStoreCode, $defaultStoreResponseHitResult['code']);
+        $this->assertEquals($defaultLocale, $defaultStoreResponseHitResult['locale']);
 
         // Query test store config after test store config change
-        // Verify we obtain a cache MISS the 2nd time, the cache is purged
+        // Verify we obtain a cache MISS at the 2nd time, the cache is purged
         $testStoreResponseMiss = $this->assertCacheMissAndReturnResponse(
             $query,
             [
@@ -225,18 +225,18 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $testStoreResponseMissResult = $testStoreResponseMiss['body']['storeConfig'];
         $this->assertEquals($testStoreCode, $testStoreResponseMissResult['code']);
         $this->assertEquals($newLocale, $testStoreResponseMissResult['locale']);
-        // Verify we obtain a cache HIT the 3rd time
-        $testStoreResponseHit2 = $this->assertCacheHitAndReturnResponse(
+        // Verify we obtain a cache HIT at the 3rd time
+        $testStoreResponseHit = $this->assertCacheHitAndReturnResponse(
             $query,
             [
                 CacheIdCalculator::CACHE_ID_HEADER => $testStoreCacheId,
                 'Store' => $testStoreCode
             ]
         );
-        $this->assertArrayHasKey('storeConfig', $testStoreResponseHit2['body']);
-        $testStoreResponseHit2Result = $testStoreResponseHit2['body']['storeConfig'];
-        $this->assertEquals($testStoreCode, $testStoreResponseHit2Result['code']);
-        $this->assertEquals($newLocale, $testStoreResponseHit2Result['locale']);
+        $this->assertArrayHasKey('storeConfig', $testStoreResponseHit['body']);
+        $testStoreResponseHitResult = $testStoreResponseHit['body']['storeConfig'];
+        $this->assertEquals($testStoreCode, $testStoreResponseHitResult['code']);
+        $this->assertEquals($newLocale, $testStoreResponseHitResult['locale']);
     }
 
     /**
