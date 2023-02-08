@@ -10683,16 +10683,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "4.0.1",
+            "version": "4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "daa28ec4aceec147479f8bf1f474873bbd890050"
+                "reference": "df56830b0230940f3398be5414a4ab5b7df2e057"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/daa28ec4aceec147479f8bf1f474873bbd890050",
-                "reference": "daa28ec4aceec147479f8bf1f474873bbd890050",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/df56830b0230940f3398be5414a4ab5b7df2e057",
+                "reference": "df56830b0230940f3398be5414a4ab5b7df2e057",
                 "shasum": ""
             },
             "require": {
@@ -10705,6 +10705,7 @@
                 "codeception/module-webdriver": "^1.0",
                 "composer/composer": "^1.9 || ^2.0, !=2.2.16",
                 "csharpru/vault-php": "^4.2.1",
+                "doctrine/annotations": "^1.13",
                 "ext-curl": "*",
                 "ext-dom": "*",
                 "ext-iconv": "*",
@@ -10716,7 +10717,7 @@
                 "monolog/monolog": "^2.3",
                 "mustache/mustache": "~2.5",
                 "nikic/php-parser": "^4.4",
-                "php": ">=8.0",
+                "php": ">=8.1",
                 "php-webdriver/webdriver": "^1.9.0",
                 "spomky-labs/otphp": "^10.0",
                 "symfony/console": "^4.4||^5.4",
@@ -10771,9 +10772,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/4.0.1"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/4.1.0"
             },
-            "time": "2023-01-05T22:05:27+00:00"
+            "time": "2023-02-08T16:12:33+00:00"
         },
         {
             "name": "mustache/mustache",
