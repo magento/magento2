@@ -9,6 +9,8 @@ use Magento\Framework\View\Asset\File;
 
 /**
  * Interface ContentProcessorInterface
+ *
+ * @api
  */
 interface ContentProcessorInterface
 {

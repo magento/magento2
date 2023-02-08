@@ -3,8 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/* global $break $ $$ */
-
 /**
  *  @api
  */

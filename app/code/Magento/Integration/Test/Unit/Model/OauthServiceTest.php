@@ -1,14 +1,12 @@
 <?php declare(strict_types=1);
 /**
- * Test for \Magento\Integration\Model\OauthService
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Integration\Test\Unit\Model;
 
-use Magento\Framework\HTTP\ZendClient;
+use Magento\Framework\HTTP\LaminasClient;
 use Magento\Framework\Oauth\Exception;
 use Magento\Framework\Oauth\Helper\Oauth;
 use Magento\Integration\Helper\Oauth\Data;
@@ -29,11 +27,11 @@ use Psr\Log\LoggerInterface;
  */
 class OauthServiceTest extends TestCase
 {
-    const VALUE_CONSUMER_ID = 1;
+    public const VALUE_CONSUMER_ID = 1;
 
-    const VALUE_CONSUMER_KEY = 'asdfghjklaqwerfdtyuiomnbgfdhbsoi';
+    public const VALUE_CONSUMER_KEY = 'asdfghjklaqwerfdtyuiomnbgfdhbsoi';
 
-    const VALUE_TOKEN_TYPE = 'access';
+    public const VALUE_TOKEN_TYPE = 'access';
 
     /** @var ConsumerFactory|MockObject */
     protected $_consumerFactory;
@@ -116,7 +114,7 @@ class OauthServiceTest extends TestCase
             $this->_consumerFactory,
             $this->_tokenFactoryMock,
             $this->createMock(Data::class),
-            $this->createMock(ZendClient::class),
+            $this->createMock(LaminasClient::class),
             $this->getMockForAbstractClass(LoggerInterface::class),
             $this->createMock(Oauth::class),
             $this->_tokenProviderMock

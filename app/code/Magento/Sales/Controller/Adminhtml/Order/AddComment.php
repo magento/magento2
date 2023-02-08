@@ -6,6 +6,7 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 
 /**
@@ -20,12 +21,12 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::comment';
+    public const ADMIN_RESOURCE = 'Magento_Sales::comment';
 
     /**
      * ACL resource needed to send comment email notification
      */
-    const ADMIN_SALES_EMAIL_RESOURCE = 'Magento_Sales::emails';
+    public const ADMIN_SALES_EMAIL_RESOURCE = 'Magento_Sales::emails';
 
     /**
      * Add order comment action
@@ -44,7 +45,8 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
                     );
                 }
 
-                $order->setStatus($data['status']);
+                $orderStatus = $this->getOrderStatus($order->getDataByKey('status'), $data['status']);
+                $order->setStatus($orderStatus);
                 $notify = $data['is_customer_notified'] ?? false;
                 $visible = $data['is_visible_on_front'] ?? false;
 
@@ -52,12 +54,11 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
                     $notify = false;
                 }
 
-                $history = $order->addStatusHistoryComment($data['comment'], $data['status']);
+                $comment = trim(strip_tags($data['comment']));
+                $history = $order->addStatusHistoryComment($comment, $orderStatus);
                 $history->setIsVisibleOnFront($visible);
                 $history->setIsCustomerNotified($notify);
                 $history->save();
-
-                $comment = trim(strip_tags($data['comment']));
 
                 $order->save();
                 /** @var OrderCommentSender $orderCommentSender */
@@ -79,5 +80,18 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
             }
         }
         return $this->resultRedirectFactory->create()->setPath('sales/*/');
+    }
+
+    /**
+     * Get order status to set
+     *
+     * @param string $orderStatus
+     * @param string $historyStatus
+     * @return string
+     */
+    private function getOrderStatus(string $orderStatus, string $historyStatus): string
+    {
+        return ($orderStatus === Order::STATE_PROCESSING || $orderStatus === Order::STATUS_FRAUD) ? $historyStatus
+            : $orderStatus;
     }
 }
