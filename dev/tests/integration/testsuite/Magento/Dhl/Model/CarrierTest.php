@@ -280,13 +280,19 @@ class CarrierTest extends TestCase
             'store',
             null
         );
+        $convmap = [0x80, 0x10FFFF, 0, 0x1FFFFF];
+        $content = mb_encode_numericentity(
+            file_get_contents(__DIR__ . '/../_files/response_shipping_label.xml'),
+            $convmap,
+            'UTF-8'
+        );
         //phpcs:disable Magento2.Functions.DiscouragedFunction
         $this->httpClient->nextResponses(
             [
                 new Response(
                     200,
                     [],
-                    utf8_encode(file_get_contents(__DIR__ . '/../_files/response_shipping_label.xml'))
+                    $content
                 )
             ]
         );
