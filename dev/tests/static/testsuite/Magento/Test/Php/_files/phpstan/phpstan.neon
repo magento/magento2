@@ -38,7 +38,6 @@ parameters:
         - '#Constant T_[A-Z_]+ not found.#'
 
 includes:
-    - %rootDir%/phpstan-deprecation-rules/rules.neon
     - /var/www/html/vendor/phpstan/phpstan-deprecation-rules/rules.neon
 
 services:
