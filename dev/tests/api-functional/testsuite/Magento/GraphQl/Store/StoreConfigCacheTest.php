@@ -15,6 +15,7 @@ use Magento\Store\Api\StoreConfigManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 use Magento\TestFramework\App\ApiMutableScopeConfig;
 use Magento\TestFramework\Config\Model\ConfigStorage;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -151,7 +152,7 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
      * Store scoped config change triggers purging only the cache of the changed store.
      *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
-     * @magentoApiDataFixture Magento/Store/_files/store.php
+     * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
      * @throws NoSuchEntityException
      */
     public function testCachePurgedWithStoreScopeConfigChange(): void
@@ -177,30 +178,30 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $this->assertEquals($defaultLocale, $defaultStoreResponseResult['locale']);
 
         // Query test store config
-        $testStoreCode = 'test';
-        $responseTestStore = $this->graphQlQueryWithResponseHeaders($query, [], '', ['Store' => $testStoreCode]);
+        $secondStoreCode = 'second_store_view';
+        $responseTestStore = $this->graphQlQueryWithResponseHeaders($query, [], '', ['Store' => $secondStoreCode]);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseTestStore['headers']);
-        $testStoreCacheId = $responseTestStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        $this->assertNotEquals($testStoreCacheId, $defaultStoreCacheId);
+        $secondStoreCacheId = $responseTestStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $this->assertNotEquals($secondStoreCacheId, $defaultStoreCacheId);
         // Verify we obtain a cache MISS at the 1st time
-        $testStoreResponse = $this->assertCacheMissAndReturnResponse(
+        $secondStoreResponse = $this->assertCacheMissAndReturnResponse(
             $query,
             [
-                CacheIdCalculator::CACHE_ID_HEADER => $testStoreCacheId,
-                'Store' => $testStoreCode
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
             ]
         );
-        $this->assertArrayHasKey('storeConfig', $testStoreResponse['body']);
-        $testStoreResponseResult = $testStoreResponse['body']['storeConfig'];
-        $this->assertEquals($testStoreCode, $testStoreResponseResult['code']);
-        $this->assertEquals($defaultLocale, $testStoreResponseResult['locale']);
+        $this->assertArrayHasKey('storeConfig', $secondStoreResponse['body']);
+        $secondStoreResponseResult = $secondStoreResponse['body']['storeConfig'];
+        $this->assertEquals($secondStoreCode, $secondStoreResponseResult['code']);
+        $this->assertEquals($defaultLocale, $secondStoreResponseResult['locale']);
 
-        // Change test store locale
+        // Change second store locale
         $localeConfigPath = 'general/locale/code';
         $newLocale = 'de_DE';
-        $this->setConfig($localeConfigPath, $newLocale, ScopeInterface::SCOPE_STORE, $testStoreCode);
+        $this->setConfig($localeConfigPath, $newLocale, ScopeInterface::SCOPE_STORE, $secondStoreCode);
 
-        // Query default store config after test store config change
+        // Query default store config after second store config is changed
         // Verify we obtain a cache HIT at the 2nd time, the cache is not purged
         $defaultStoreResponseHit= $this->assertCacheHitAndReturnResponse(
             $query,
@@ -212,31 +213,128 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $this->assertEquals($defaultStoreCode, $defaultStoreResponseHitResult['code']);
         $this->assertEquals($defaultLocale, $defaultStoreResponseHitResult['locale']);
 
-        // Query test store config after test store config change
+        // Query second store config after second store config is changed
         // Verify we obtain a cache MISS at the 2nd time, the cache is purged
-        $testStoreResponseMiss = $this->assertCacheMissAndReturnResponse(
+        $secondStoreResponseMiss = $this->assertCacheMissAndReturnResponse(
             $query,
             [
-                CacheIdCalculator::CACHE_ID_HEADER => $testStoreCacheId,
-                'Store' => $testStoreCode
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
             ]
         );
-        $this->assertArrayHasKey('storeConfig', $testStoreResponseMiss['body']);
-        $testStoreResponseMissResult = $testStoreResponseMiss['body']['storeConfig'];
-        $this->assertEquals($testStoreCode, $testStoreResponseMissResult['code']);
-        $this->assertEquals($newLocale, $testStoreResponseMissResult['locale']);
+        $this->assertArrayHasKey('storeConfig', $secondStoreResponseMiss['body']);
+        $secondStoreResponseMissResult = $secondStoreResponseMiss['body']['storeConfig'];
+        $this->assertEquals($secondStoreCode, $secondStoreResponseMissResult['code']);
+        $this->assertEquals($newLocale, $secondStoreResponseMissResult['locale']);
         // Verify we obtain a cache HIT at the 3rd time
-        $testStoreResponseHit = $this->assertCacheHitAndReturnResponse(
+        $secondStoreResponseHit = $this->assertCacheHitAndReturnResponse(
             $query,
             [
-                CacheIdCalculator::CACHE_ID_HEADER => $testStoreCacheId,
-                'Store' => $testStoreCode
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
             ]
         );
-        $this->assertArrayHasKey('storeConfig', $testStoreResponseHit['body']);
-        $testStoreResponseHitResult = $testStoreResponseHit['body']['storeConfig'];
-        $this->assertEquals($testStoreCode, $testStoreResponseHitResult['code']);
-        $this->assertEquals($newLocale, $testStoreResponseHitResult['locale']);
+        $this->assertArrayHasKey('storeConfig', $secondStoreResponseHit['body']);
+        $secondStoreResponseHitResult = $secondStoreResponseHit['body']['storeConfig'];
+        $this->assertEquals($secondStoreCode, $secondStoreResponseHitResult['code']);
+        $this->assertEquals($newLocale, $secondStoreResponseHitResult['locale']);
+    }
+
+    /**
+     * Store change triggers purging only the cache of the changed store.
+     *
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
+     * @throws NoSuchEntityException
+     */
+    public function testCachePurgedWithStoreChange(): void
+    {
+        $defaultStoreId = $this->defaultStoreConfig->getId();
+        $defaultStoreCode = $this->defaultStoreConfig->getCode();
+        $defaultLocale = $this->defaultStoreConfig->getLocale();
+        $query = $this->getQuery();
+
+        // Query default store config
+        $responseDefaultStore = $this->graphQlQueryWithResponseHeaders($query);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseDefaultStore['headers']);
+        $defaultStoreCacheId = $responseDefaultStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        // Verify we obtain a cache MISS at the 1st time
+        $defaultStoreResponse = $this->assertCacheMissAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+        $this->assertArrayHasKey('storeConfig', $defaultStoreResponse['body']);
+        $defaultStoreResponseResult = $defaultStoreResponse['body']['storeConfig'];
+        $this->assertEquals($defaultStoreId, $defaultStoreResponseResult['id']);
+        $this->assertEquals($defaultStoreCode, $defaultStoreResponseResult['code']);
+        $this->assertEquals($defaultLocale, $defaultStoreResponseResult['locale']);
+
+        // Query second store config
+        $secondStoreCode = 'second_store_view';
+        $responseTestStore = $this->graphQlQueryWithResponseHeaders($query, [], '', ['Store' => $secondStoreCode]);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseTestStore['headers']);
+        $secondStoreCacheId = $responseTestStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $this->assertNotEquals($secondStoreCacheId, $defaultStoreCacheId);
+        // Verify we obtain a cache MISS at the 1st time
+        $secondStoreResponse = $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+        $this->assertArrayHasKey('storeConfig', $secondStoreResponse['body']);
+        $secondStoreResponseResult = $secondStoreResponse['body']['storeConfig'];
+        $this->assertEquals($secondStoreCode, $secondStoreResponseResult['code']);
+        $secondStoreName = 'Second Store View';
+        $this->assertEquals($secondStoreName, $secondStoreResponseResult['store_name']);
+
+        // Change store name
+        /** @var Store $store */
+        $store = $this->objectManager->create(Store::class);
+        $store->load($secondStoreCode, 'code');
+        $secondStoreNewName = $secondStoreName . ' 2';
+        $store->setName($secondStoreNewName);
+        $store->save();
+
+        // Query default store config after test store config change
+        // Verify we obtain a cache HIT at the 2nd time, the cache is not purged
+        $defaultStoreResponseHit = $this->assertCacheHitAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+        $this->assertArrayHasKey('storeConfig', $defaultStoreResponseHit['body']);
+        $defaultStoreResponseHitResult = $defaultStoreResponseHit['body']['storeConfig'];
+        $this->assertEquals($defaultStoreId, $defaultStoreResponseHitResult['id']);
+        $this->assertEquals($defaultStoreCode, $defaultStoreResponseHitResult['code']);
+        $this->assertEquals($defaultLocale, $defaultStoreResponseHitResult['locale']);
+        $this->assertEquals($defaultStoreResponseResult['store_name'], $defaultStoreResponseHitResult['store_name']);
+
+        // Query second store config after second store config is changed
+        // Verify we obtain a cache MISS at the 2nd time, the cache is purged
+        $secondStoreResponseMiss = $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+        $this->assertArrayHasKey('storeConfig', $secondStoreResponseMiss['body']);
+        $secondStoreResponseMissResult = $secondStoreResponseMiss['body']['storeConfig'];
+        $this->assertEquals($secondStoreCode, $secondStoreResponseMissResult['code']);
+        $this->assertEquals($secondStoreNewName, $secondStoreResponseMissResult['store_name']);
+        // Verify we obtain a cache HIT at the 3rd time
+        $secondStoreResponseHit = $this->assertCacheHitAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+        $this->assertArrayHasKey('storeConfig', $secondStoreResponseHit['body']);
+        $secondStoreResponseHitResult = $secondStoreResponseHit['body']['storeConfig'];
+        $this->assertEquals($secondStoreCode, $secondStoreResponseHitResult['code']);
+        $this->assertEquals($secondStoreNewName, $secondStoreResponseHitResult['store_name']);
     }
 
     /**
