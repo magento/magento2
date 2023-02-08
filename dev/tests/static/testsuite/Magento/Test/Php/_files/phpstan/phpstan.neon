@@ -39,6 +39,7 @@ parameters:
 
 includes:
     - %rootDir%/phpstan-deprecation-rules/rules.neon
+    - /var/www/html/vendor/phpstan/phpstan-deprecation-rules/rules.neon
 
 services:
     -
