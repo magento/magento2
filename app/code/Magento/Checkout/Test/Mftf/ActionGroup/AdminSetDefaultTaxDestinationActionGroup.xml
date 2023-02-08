@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSetDefaultTaxDestinationActionGroup">
+        <annotations>
+            <description>Set admin entries (country, state, postcode) for default tax destination calculation</description>
+        </annotations>
+        <arguments>
+            <argument name="country" type="string" defaultValue="{{US_Address_TX.country}}"/>
+            <argument name="state" type="string" defaultValue="*"/>
+            <argument name="postcode" type="string" defaultValue=""/>
+        </arguments>
+
+        <!-- navigate to the tax configuration page -->
+        <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="goToAdminTaxPage"/>
+        <waitForPageLoad stepKey="waitForTaxConfigLoad"/>
+        <!-- change the Default Tax Destination Calculation Configurations -->
+        <scrollTo selector="#tax_defaults-head" x="0" y="-80" stepKey="scrollToTaxDefaults"/>
+
+        <!-- conditionalClick twice to fix some flaky behavior -->
+        <conditionalClick selector="{{AdminConfigureTaxSection.defaultDestination}}" dependentSelector="#tax_defaults" visible="false" stepKey="clickCalculationSettings"/>
+        <uncheckOption selector="{{AdminConfigureTaxSection.systemValueDefaultCountry}}" stepKey="clickDefaultCountry"/>
+        <selectOption selector="{{AdminConfigureTaxSection.dropdownDefaultCountry}}" userInput="{{country}}" stepKey="selectDefaultCountry"/>
+        <uncheckOption selector="{{AdminConfigureTaxSection.systemValueDefaultState}}" stepKey="clickDefaultState"/>
+        <selectOption selector="{{AdminConfigureTaxSection.dropdownDefaultState}}" userInput="{{state}}" stepKey="selectDefaultState"/>
+        <fillField selector="{{AdminConfigureTaxSection.defaultPostCode}}" userInput="{{postcode}}" stepKey="fillDefaultPostCode"/>
+        <!-- Save the settings -->
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveChanges"/>
+        <waitForText userInput='You saved the configuration.' stepKey="waitForText"/>
+    </actionGroup>
+</actionGroups>
