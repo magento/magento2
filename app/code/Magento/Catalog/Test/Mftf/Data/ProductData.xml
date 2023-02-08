@@ -1484,5 +1484,8 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
-
+    <entity name="ProductWithSpecialCharsInSKU" extends="SimpleProduct" type="product">
+        <data key="name">Simple Product with special characters in SKU</data>
+        <data key="sku">s000&amp;01</data>
+    </entity>
 </entities>
