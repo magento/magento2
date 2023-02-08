@@ -8,8 +8,8 @@ namespace Magento\Customer\Block\Form;
 use Magento\Customer\Block\DataProviders\AddressAttributeData;
 use Magento\Customer\ViewModel\Address\RegionProvider;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\ButtonLockManager;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Customer\ViewModel\CreateAccountButton;
 
 /**
  * Test class for \Magento\Customer\Block\Form\Register
@@ -29,7 +29,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $block = Bootstrap::getObjectManager()->create(Register::class)
             ->setTemplate('Magento_Customer::form/register.phtml')
             ->setShowAddressFields(true)
-            ->setCreateAccountButtonViewModel(Bootstrap::getObjectManager()->create(CreateAccountButton::class));
+            ->setButtonLockManager(Bootstrap::getObjectManager()->create(ButtonLockManager::class));
         $this->setAttributeDataProvider($block);
         $this->setRegionProvider($block);
 
@@ -47,7 +47,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $block = Bootstrap::getObjectManager()->create(Register::class)
             ->setTemplate('Magento_Customer::form/register.phtml')
             ->setShowAddressFields(true)
-            ->setCreateAccountButtonViewModel(Bootstrap::getObjectManager()->create(CreateAccountButton::class));
+            ->setButtonLockManager(Bootstrap::getObjectManager()->create(ButtonLockManager::class));
         $this->setAttributeDataProvider($block);
         $this->setRegionProvider($block);
 
@@ -65,7 +65,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $block = Bootstrap::getObjectManager()->create(Register::class)
             ->setTemplate('Magento_Customer::form/register.phtml')
             ->setShowAddressFields(true)
-            ->setCreateAccountButtonViewModel(Bootstrap::getObjectManager()->create(CreateAccountButton::class));
+            ->setButtonLockManager(Bootstrap::getObjectManager()->create(ButtonLockManager::class));
         $this->setAttributeDataProvider($block);
         $this->setRegionProvider($block);
 
@@ -90,7 +90,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $block = Bootstrap::getObjectManager()->create(Register::class)
             ->setTemplate('Magento_Customer::form/register.phtml')
             ->setShowAddressFields(true)
-            ->setCreateAccountButtonViewModel(Bootstrap::getObjectManager()->create(CreateAccountButton::class));
+            ->setButtonLockManager(Bootstrap::getObjectManager()->create(ButtonLockManager::class));
         $this->setAttributeDataProvider($block);
         $this->setRegionProvider($block);
 
@@ -115,7 +115,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $block = Bootstrap::getObjectManager()->create(Register::class)
             ->setTemplate('Magento_Customer::form/register.phtml')
             ->setShowAddressFields(true)
-            ->setCreateAccountButtonViewModel(Bootstrap::getObjectManager()->create(CreateAccountButton::class));
+            ->setButtonLockManager(Bootstrap::getObjectManager()->create(ButtonLockManager::class));
         $this->setAttributeDataProvider($block);
         $this->setRegionProvider($block);
 
@@ -140,7 +140,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $block = Bootstrap::getObjectManager()->create(Register::class)
             ->setTemplate('Magento_Customer::form/register.phtml')
             ->setShowAddressFields(true)
-            ->setCreateAccountButtonViewModel(Bootstrap::getObjectManager()->create(CreateAccountButton::class));
+            ->setButtonLockManager(Bootstrap::getObjectManager()->create(ButtonLockManager::class));
         $this->setAttributeDataProvider($block);
         $this->setRegionProvider($block);
 
@@ -156,7 +156,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $block = Bootstrap::getObjectManager()->create(Register::class)
             ->setTemplate('Magento_Customer::form/register.phtml')
             ->setShowAddressFields(true)
-            ->setCreateAccountButtonViewModel(Bootstrap::getObjectManager()->create(CreateAccountButton::class));
+            ->setButtonLockManager(Bootstrap::getObjectManager()->create(ButtonLockManager::class));
         $this->setAttributeDataProvider($block);
         $this->setRegionProvider($block);
 
