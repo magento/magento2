@@ -158,7 +158,7 @@
             //this.loadArea(['header', 'sidebar','data'], true);
             this.dataShow();
             this.loadArea(['header', 'data'], true);
-            location.reload(true);
+            location.reload();
         },
 
         setCurrencyId: function (id) {
