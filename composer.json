@@ -166,6 +166,7 @@
         "magento/module-open-search": "*",
         "magento/module-elasticsearch": "*",
         "magento/module-elasticsearch-7": "*",
+        "magento/module-elasticsearch-8": "*",
         "magento/module-email": "*",
         "magento/module-encryption-key": "*",
         "magento/module-fedex": "*",
