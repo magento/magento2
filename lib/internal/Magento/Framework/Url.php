@@ -165,6 +165,13 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     private $cacheUrl = [];
 
     /**
+     * Cache urls requested by getUrl method
+     *
+     * @var array
+     */
+    private $routeCacheUrl = [];
+
+    /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
@@ -743,12 +750,13 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         if (filter_var($routePath, FILTER_VALIDATE_URL)) {
             return $routePath;
         }
-
-        $cacheKey = \sha1('RouteUrl::' . $routePath . $this->serializer->serialize($routeParams));
-        if (isset($this->cacheUrl[$cacheKey])) {
-            return $this->cacheUrl[$cacheKey];
+        $routeCacheUrl= '';
+        if ($routeParams != null) {
+            $routeCacheUrl = \sha1('RouteUrl::' . $routePath . $this->serializer->serialize($routeParams));
+            if (isset($this->routeCacheUrl[$routeCacheUrl])) {
+                return $this->routeCacheUrl[$routeCacheUrl];
+            }
         }
-
         $this->getRouteParamsResolver()->unsetData('route_params');
 
         if (isset($routeParams['_direct'])) {
@@ -763,8 +771,12 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             $this->_setRouteParams($routeParams, false);
         }
 
-        $this->cacheUrl[$cacheKey] = $this->getBaseUrl($routeParams) . $this->_getRoutePath($routeParams);
-        return $this->cacheUrl[$cacheKey];
+        if ($routeParams == null) {
+            return $this->getBaseUrl($routeParams) . $this->_getRoutePath($routeParams);
+        } else {
+            $this->routeCacheUrl[$routeCacheUrl] = $this->getBaseUrl($routeParams) . $this->_getRoutePath($routeParams);
+            return $this->routeCacheUrl[$routeCacheUrl];
+        }
     }
 
     /**
