@@ -41,6 +41,7 @@ class IndexBuilder
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
      * @deprecated 101.0.0
+     * @see MAGETWO-64518
      * @since 100.1.0
      */
     protected $metadataPool;
@@ -52,6 +53,7 @@ class IndexBuilder
      *
      * @var array
      * @deprecated 101.0.0
+     * @see MAGETWO-38167
      */
     protected $_catalogRuleGroupWebsiteColumnsList = ['rule_id', 'customer_group_id', 'website_id'];
 
@@ -257,8 +259,8 @@ class IndexBuilder
      * Reindex by id
      *
      * @param int $id
-     * @throws LocalizedException
      * @return void
+     * @throws LocalizedException
      */
     public function reindexById($id)
     {

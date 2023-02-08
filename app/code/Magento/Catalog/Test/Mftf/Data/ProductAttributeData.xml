@@ -20,8 +20,8 @@
         <data key="is_wysiwyg_enabled">true</data>
         <data key="is_visible_in_advanced_search">true</data>
         <data key="is_visible_on_front">true</data>
-        <data key="is_filterable">true</data>
-        <data key="is_filterable_in_search">true</data>
+        <data key="is_filterable">false</data>
+        <data key="is_filterable_in_search">false</data>
         <data key="used_in_product_listing">true</data>
         <data key="is_used_for_promo_rules">true</data>
         <data key="is_comparable">true</data>
@@ -227,8 +227,8 @@
         <data key="is_visible">true</data>
         <data key="is_visible_in_advanced_search">true</data>
         <data key="is_visible_on_front">true</data>
-        <data key="is_filterable">true</data>
-        <data key="is_filterable_in_search">true</data>
+        <data key="is_filterable">false</data>
+        <data key="is_filterable_in_search">false</data>
         <data key="used_in_product_listing">true</data>
         <data key="is_used_for_promo_rules">true</data>
         <data key="is_comparable">true</data>
@@ -356,8 +356,8 @@
         <data key="is_wysiwyg_enabled">true</data>
         <data key="is_visible_in_advanced_search">true</data>
         <data key="is_visible_on_front">true</data>
-        <data key="is_filterable">true</data>
-        <data key="is_filterable_in_search">true</data>
+        <data key="is_filterable">false</data>
+        <data key="is_filterable_in_search">false</data>
         <data key="used_in_product_listing">true</data>
         <data key="is_used_for_promo_rules">true</data>
         <data key="is_comparable">true</data>
