@@ -202,8 +202,8 @@ class IndexBuilder
      * @param ProductLoader|null $productLoader
      * @param TableSwapper|null $tableSwapper
      * @param TimezoneInterface|null $localeDate
-     * @param IndexerRegistry|null $indexerRegistry
      * @param ProductCollectionFactory|null $productCollectionFactory
+     * @param IndexerRegistry|null $indexerRegistry
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -228,8 +228,8 @@ class IndexBuilder
         ProductLoader $productLoader = null,
         TableSwapper $tableSwapper = null,
         TimezoneInterface $localeDate = null,
-        IndexerRegistry $indexerRegistry = null,
-        ProductCollectionFactory $productCollectionFactory = null
+        ProductCollectionFactory $productCollectionFactory = null,
+        IndexerRegistry $indexerRegistry = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
