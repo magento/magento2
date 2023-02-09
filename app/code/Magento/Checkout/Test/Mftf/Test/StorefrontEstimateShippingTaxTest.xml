@@ -14,7 +14,7 @@
             <title value="Tax and Shipping Estimator in the Cart not reflecting default destination configuration."/>
             <description value="Tax and Shipping Estimator in the Cart not reflecting default destination configuration."/>
             <severity value="CRITICAL"/>
-            <testCaseId value=""/>
+            <testCaseId value="AC-7922"/>
             <useCaseId value="ACP2E-1580"/>
             <group value="checkout"/>
         </annotations>
