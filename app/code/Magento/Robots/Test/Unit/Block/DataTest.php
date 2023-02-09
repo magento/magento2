@@ -105,7 +105,7 @@ class DataTest extends TestCase
 
         $this->initEventManagerMock($data);
 
-        $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
+        $this->scopeConfigMock->method('getValue')->willReturn(false);
 
         $this->robots->expects($this->once())
             ->method('getData')

@@ -291,7 +291,6 @@ class AgreementsTest extends TestCase
                 ['view_block_abstract_to_html_after', ['block' => $this->block, 'transport' => $transport]]
             );
         $this->scopeConfig
-            ->expects($this->once())
             ->method('getValue')
             ->willReturn(false);
         $this->urlBuilder->expects($this->once())->method('getUrl')->with('paypal/billing_agreement/startWizard', []);

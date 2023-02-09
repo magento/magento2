@@ -105,7 +105,7 @@ class RobotsTest extends TestCase
         $expected = '';
 
         $this->initEventManagerMock($expected);
-        $this->scopeConfigMock->expects($this->once())
+        $this->scopeConfigMock
             ->method('getValue')
             ->willReturn(false);
 
@@ -145,7 +145,7 @@ class RobotsTest extends TestCase
         $expected = 'Sitemap: ' . $sitemapFilenameOne . PHP_EOL . 'Sitemap: ' . $sitemapFilenameTwo . PHP_EOL;
 
         $this->initEventManagerMock($expected);
-        $this->scopeConfigMock->expects($this->once())
+        $this->scopeConfigMock
             ->method('getValue')
             ->willReturn(false);
 

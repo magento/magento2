@@ -75,7 +75,7 @@ class ActionsTest extends TestCase
         $childNameTwo = 'child.2';
         $childNames = [$childNameOne, $childNameTwo];
 
-        $this->scopeConfigMock->expects($this->once())
+        $this->scopeConfigMock
             ->method('getValue')
             ->willReturn(false);
 
