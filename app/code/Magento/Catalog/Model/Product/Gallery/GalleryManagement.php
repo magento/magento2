@@ -279,6 +279,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
      *
      * @param Product $product
      * @param ProductAttributeMediaGalleryEntryInterface $entry
+     * @return ImageContentInterface
      * @throws FileSystemException
      */
     private function getImageContent($product, $entry): ImageContentInterface
