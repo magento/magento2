@@ -255,6 +255,130 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
     }
 
     /**
+     * Website scope config change triggers purging only the cache of the stores associated with the changed website.
+     *
+     * Test stores set up:
+     *      STORE - WEBSITE - STORE GROUP
+     *      default - base - main_website_store
+     *      second_store_view - second - second_store
+     *      third_store_view - second - third_store
+     *
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
+     * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testCachePurgedWithWebsiteScopeConfigChange(): void
+    {
+        $this->changeToTwoWebsitesThreeStoreGroupsThreeStores();
+        $defaultLocale = $this->defaultStoreConfig->getLocale();
+        $query = $this->getQuery();
+
+        // Query default store config
+        $responseDefaultStore = $this->graphQlQueryWithResponseHeaders($query);
+        $defaultStoreCacheId = $responseDefaultStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        // Verify we obtain a cache MISS at the 1st time
+        $this->assertCacheMissAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+
+        // Query second store config
+        $secondStoreCode = 'second_store_view';
+        $responseThirdStore = $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            ['Store' => $secondStoreCode]
+        );
+        $secondStoreCacheId = $responseThirdStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        // Verify we obtain a cache MISS at the 1st time
+        $secondStoreResponse = $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+        $this->assertEquals($defaultLocale, $secondStoreResponse['body']['storeConfig']['locale']);
+
+        // Query third store config
+        $thirdStoreCode = 'third_store_view';
+        $responseThirdStore = $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            ['Store' => $thirdStoreCode]
+        );
+        $thirdStoreCacheId = $responseThirdStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        // Verify we obtain a cache MISS at the 1st time
+        $thirdStoreResponse = $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $thirdStoreCacheId,
+                'Store' => $thirdStoreCode
+            ]
+        );
+        $this->assertEquals($defaultLocale, $thirdStoreResponse['body']['storeConfig']['locale']);
+
+        // Change second website locale
+        $localeConfigPath = 'general/locale/code';
+        $newLocale = 'de_DE';
+        $this->setConfig($localeConfigPath, $newLocale, ScopeInterface::SCOPE_WEBSITES, 'second');
+
+        // Query default store config after second store group is changed
+        // Verify we obtain a cache HIT at the 2nd time, the cache is not purged
+        $this->assertCacheHitAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+
+        // Query second store config after the config of its associated second website is changed
+        // Verify we obtain a cache MISS at the 2nd time, the cache is purged
+        $secondStoreResponseMiss = $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+        $this->assertEquals(
+            $newLocale,
+            $secondStoreResponseMiss['body']['storeConfig']['locale']
+        );
+        // Verify we obtain a cache HIT at the 3rd time
+        $this->assertCacheHitAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+
+        // Query third store config after the config of its associated second website is changed
+        // Verify we obtain a cache MISS at the 2nd time, the cache is purged
+        $thirdStoreResponseMiss = $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $thirdStoreCacheId,
+                'Store' => $thirdStoreCode
+            ]
+        );
+        $this->assertEquals(
+            $newLocale,
+            $thirdStoreResponseMiss['body']['storeConfig']['locale']
+        );
+        // Verify we obtain a cache HIT at the 3rd time
+        $this->assertCacheHitAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $thirdStoreCacheId,
+                'Store' => $thirdStoreCode
+            ]
+        );
+    }
+
+    /**
      * Store change triggers purging only the cache of the changed store.
      *
      * Test stores set up:
@@ -615,6 +739,23 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $store3 = $this->objectManager->create(Store::class);
         $store3->load('third_store_view', 'code');
         $store3->setGroupId($store2GroupId)->setWebsiteId(1)->save();
+    }
+
+    private function changeToTwoWebsitesThreeStoreGroupsThreeStores()
+    {
+        /** @var $website2 \Magento\Store\Model\Website */
+        $website2 = $this->objectManager->create(Website::class);
+        $website2Id = $website2->load('second', 'code')->getId();
+
+        // Change third store to the same website of second store
+        /** @var Store $store3 */
+        $store3 = $this->objectManager->create(Store::class);
+        $store3->load('third_store_view', 'code');
+        $store3GroupId = $store3->getStoreGroupId();
+        /** @var Group $store3Group */
+        $store3Group = $this->objectManager->create(Group::class);
+        $store3Group->load($store3GroupId)->setWebsiteId($website2Id)->save();
+        $store3->setWebsiteId($website2Id)->save();
     }
 
     /**
