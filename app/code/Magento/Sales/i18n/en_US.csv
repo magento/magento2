@@ -159,7 +159,7 @@ Transactions,Transactions
 "Order View","Order View"
 Any,Any
 Specified,Specified
-"Applies to Any of the Specified Order Statuses except canceled orders","Applies to Any of the Specified Order Statuses except canceled orders"
+"Applies to Any of the Specified Order Statuses except canceled orders","Applies to Any of the Specified Order Statuses except canceled and pending orders"
 "Cart Price Rule","Cart Price Rule"
 Yes,Yes
 No,No
