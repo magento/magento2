@@ -23,6 +23,20 @@ if ($websiteId2) {
     $website2->delete();
 }
 
+/** Delete the second store groups **/
+$group = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Group::class);
+/** @var $group \Magento\Store\Model\Group */
+$groupId = $group->load('second_store', 'code')->getId();
+if ($groupId) {
+    $group->delete();
+}
+$group2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Group::class);
+/** @var $group2 \Magento\Store\Model\Group */
+$groupId2 = $group2->load('third_store', 'code')->getId();
+if ($groupId2) {
+    $group2->delete();
+}
+
 $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
 if ($store->load('second_store_view', 'code')->getId()) {
     $store->delete();
