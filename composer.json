@@ -9,7 +9,8 @@
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "magento/*": true
+            "magento/*": true,
+            "php-http/discovery": true
         },
         "preferred-install": "dist",
         "sort-packages": true
@@ -38,7 +39,7 @@
         "colinmollenhour/credis": "^1.13",
         "colinmollenhour/php-redis-session-abstract": "^1.5",
         "composer/composer": "^2.0, !=2.2.16",
-        "elasticsearch/elasticsearch": "^7.17||~8.5.0",
+        "elasticsearch/elasticsearch": "~7.17.0 || ~8.5.0",
         "ezyang/htmlpurifier": "^4.16",
         "guzzlehttp/guzzle": "^7.5",
         "laminas/laminas-captcha": "^2.12",
