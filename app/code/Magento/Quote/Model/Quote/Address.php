@@ -639,7 +639,7 @@ class Address extends AbstractAddress implements
     public function getAllItems()
     {
         // We calculate item list once and cache it in three arrays - all items
-        if (!$this->hasData(self::CACHED_ITEMS_ALL)) {
+        if (empty($this->getData(self::CACHED_ITEMS_ALL))) {
             $quoteItems = $this->getQuote()->getItemsCollection();
             $addressItems = $this->getItemsCollection();
 
