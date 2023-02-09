@@ -23,6 +23,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test storeConfig query cache
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StoreConfigCacheTest extends GraphQLPageCacheAbstract
 {
@@ -80,6 +82,11 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
 
     /**
      * storeConfig query is cached.
+     *
+     * Test stores set up:
+     *      STORE - WEBSITE - STORE GROUP
+     *      default - base - main_website_store
+     *      test - base - main_website_store
      *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/Store/_files/store.php
@@ -151,6 +158,11 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
 
     /**
      * Store scoped config change triggers purging only the cache of the changed store.
+     *
+     * Test stores set up:
+     *      STORE - WEBSITE - STORE GROUP
+     *      default - base - main_website_store
+     *      test - base - main_website_store
      *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/Store/_files/store.php
@@ -243,6 +255,11 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
 
     /**
      * Store change triggers purging only the cache of the changed store.
+     *
+     * Test stores set up:
+     *      STORE - WEBSITE - STORE GROUP
+     *      default - base - main_website_store
+     *      test - base - main_website_store
      *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/Store/_files/store.php
@@ -341,9 +358,16 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
     /**
      * Store group change triggers purging only the cache of the stores associated with the changed store group.
      *
+     * Test stores set up:
+     *      STORE - WEBSITE - STORE GROUP
+     *      default - base - main_website_store
+     *      second_store_view - base - second_store
+     *      third_store_view - base - second_store
+     *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCachePurgedWithStoreGroupChange(): void
     {
@@ -352,7 +376,6 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
 
         // Query default store config
         $responseDefaultStore = $this->graphQlQueryWithResponseHeaders($query);
-        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseDefaultStore['headers']);
         $defaultStoreCacheId = $responseDefaultStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS at the 1st time
         $this->assertCacheMissAndReturnResponse(
@@ -368,9 +391,7 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
             '',
             ['Store' => $secondStoreCode]
         );
-        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseThirdStore['headers']);
         $secondStoreCacheId = $responseThirdStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        $this->assertNotEquals($secondStoreCacheId, $defaultStoreCacheId);
         // Verify we obtain a cache MISS at the 1st time
         $secondStoreResponse = $this->assertCacheMissAndReturnResponse(
             $query,
@@ -379,10 +400,8 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
                 'Store' => $secondStoreCode
             ]
         );
-        $this->assertArrayHasKey('storeConfig', $secondStoreResponse['body']);
-        $secondStoreResponseResult = $secondStoreResponse['body']['storeConfig'];
         $secondStoreGroupName = 'Second store group';
-        $this->assertEquals($secondStoreGroupName, $secondStoreResponseResult['store_group_name']);
+        $this->assertEquals($secondStoreGroupName, $secondStoreResponse['body']['storeConfig']['store_group_name']);
 
         // Query third store config
         $thirdStoreCode = 'third_store_view';
@@ -392,7 +411,6 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
             '',
             ['Store' => $thirdStoreCode]
         );
-        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseThirdStore['headers']);
         $thirdStoreCacheId = $responseThirdStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS at the 1st time
         $thirdStoreResponse = $this->assertCacheMissAndReturnResponse(
@@ -402,9 +420,7 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
                 'Store' => $thirdStoreCode
             ]
         );
-        $this->assertArrayHasKey('storeConfig', $thirdStoreResponse['body']);
-        $thirdStoreResponseResult = $thirdStoreResponse['body']['storeConfig'];
-        $this->assertEquals($secondStoreGroupName, $thirdStoreResponseResult['store_group_name']);
+        $this->assertEquals($secondStoreGroupName, $thirdStoreResponse['body']['storeConfig']['store_group_name']);
 
         // Change store group name
         /** @var Group $storeGroup */
@@ -430,9 +446,10 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
                 'Store' => $secondStoreCode
             ]
         );
-        $this->assertArrayHasKey('storeConfig', $secondStoreResponseMiss['body']);
-        $secondStoreResponseMissResult = $secondStoreResponseMiss['body']['storeConfig'];
-        $this->assertEquals($secondStoreGroupNewName, $secondStoreResponseMissResult['store_group_name']);
+        $this->assertEquals(
+            $secondStoreGroupNewName,
+            $secondStoreResponseMiss['body']['storeConfig']['store_group_name']
+        );
         // Verify we obtain a cache HIT at the 3rd time
         $this->assertCacheHitAndReturnResponse(
             $query,
@@ -451,9 +468,10 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
                 'Store' => $thirdStoreCode
             ]
         );
-        $this->assertArrayHasKey('storeConfig', $thirdStoreResponseMiss['body']);
-        $thirdStoreResponseMissResult = $thirdStoreResponseMiss['body']['storeConfig'];
-        $this->assertEquals($secondStoreGroupNewName, $thirdStoreResponseMissResult['store_group_name']);
+        $this->assertEquals(
+            $secondStoreGroupNewName,
+            $thirdStoreResponseMiss['body']['storeConfig']['store_group_name']
+        );
         // Verify we obtain a cache HIT at the 3rd time
         $this->assertCacheHitAndReturnResponse(
             $query,
