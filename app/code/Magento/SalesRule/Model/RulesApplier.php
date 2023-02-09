@@ -413,7 +413,7 @@ class RulesApplier
         $address = $item->getAddress();
         $quote = $item->getQuote();
 
-        $item->setAppliedRuleIds($this->validatorUtility->mergeIds($item->getAppliedRuleIds(), $appliedRuleIds));
+        $item->setAppliedRuleIds(join(',', $appliedRuleIds));
         $address->setAppliedRuleIds($this->validatorUtility->mergeIds($address->getAppliedRuleIds(), $appliedRuleIds));
         $quote->setAppliedRuleIds($this->validatorUtility->mergeIds($quote->getAppliedRuleIds(), $appliedRuleIds));
 
