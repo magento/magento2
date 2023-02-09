@@ -155,6 +155,7 @@ class AlertProcessor
      * @param int $websiteId
      * @return array
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processAlerts(string $alertType, array $customerIds, int $websiteId): array
     {
@@ -182,6 +183,8 @@ class AlertProcessor
         /** @var Website $website */
         $website = $this->storeManager->getWebsite($websiteId);
         $defaultStoreId = $website->getDefaultStore()->getId();
+        $products = [];
+
         $groupedByStore = $this->groupAlertsByStore($collection, (int)$defaultStoreId);
 
         foreach ($groupedByStore as $storeId => $alerts) {
@@ -197,7 +200,12 @@ class AlertProcessor
                         $customer = $this->customerRepository->getById($alert->getCustomerId());
                     }
 
-                    $product = $this->productRepository->getById($alert->getProductId(), false, $defaultStoreId);
+                    if (!isset($products[$alert->getProductId()])) {
+                        $product = $this->productRepository->getById($alert->getProductId(), false, $defaultStoreId, true);
+                        $products[$alert->getProductId()] = $product;
+                    } else {
+                        $product = $products[$alert->getProductId()];
+                    }
 
                     $this->saveAlert($alertType, $alert, $product, $website, $customer, $email);
                 } catch (\Exception $e) {
