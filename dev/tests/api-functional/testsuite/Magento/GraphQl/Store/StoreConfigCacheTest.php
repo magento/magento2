@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Store;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\GraphQl\PageCache\GraphQLPageCacheAbstract;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
@@ -326,7 +327,7 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         $newLocale = 'de_DE';
         $this->setConfig($localeConfigPath, $newLocale, ScopeInterface::SCOPE_WEBSITES, 'second');
 
-        // Query default store config after second store group is changed
+        // Query default store config after the config of the second website is changed
         // Verify we obtain a cache HIT at the 2nd time, the cache is not purged
         $this->assertCacheHitAndReturnResponse(
             $query,
@@ -356,6 +357,138 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
         );
 
         // Query third store config after the config of its associated second website is changed
+        // Verify we obtain a cache MISS at the 2nd time, the cache is purged
+        $thirdStoreResponseMiss = $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $thirdStoreCacheId,
+                'Store' => $thirdStoreCode
+            ]
+        );
+        $this->assertEquals(
+            $newLocale,
+            $thirdStoreResponseMiss['body']['storeConfig']['locale']
+        );
+        // Verify we obtain a cache HIT at the 3rd time
+        $this->assertCacheHitAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $thirdStoreCacheId,
+                'Store' => $thirdStoreCode
+            ]
+        );
+    }
+
+    /**
+     * Default scope config change triggers purging the cache of all stores.
+     *
+     * Test stores set up:
+     *      STORE - WEBSITE - STORE GROUP
+     *      default - base - main_website_store
+     *      second_store_view - second - second_store
+     *      third_store_view - third - third_store
+     *
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
+     * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testCachePurgedWithDefaultScopeConfigChange(): void
+    {
+        $defaultLocale = $this->defaultStoreConfig->getLocale();
+        $query = $this->getQuery();
+
+        // Query default store config
+        $responseDefaultStore = $this->graphQlQueryWithResponseHeaders($query);
+        $defaultStoreCacheId = $responseDefaultStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        // Verify we obtain a cache MISS at the 1st time
+        $this->assertCacheMissAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+
+        // Query second store config
+        $secondStoreCode = 'second_store_view';
+        $responseThirdStore = $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            ['Store' => $secondStoreCode]
+        );
+        $secondStoreCacheId = $responseThirdStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        // Verify we obtain a cache MISS at the 1st time
+        $secondStoreResponse = $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+        $this->assertEquals($defaultLocale, $secondStoreResponse['body']['storeConfig']['locale']);
+
+        // Query third store config
+        $thirdStoreCode = 'third_store_view';
+        $responseThirdStore = $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            ['Store' => $thirdStoreCode]
+        );
+        $thirdStoreCacheId = $responseThirdStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        // Verify we obtain a cache MISS at the 1st time
+        $thirdStoreResponse = $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $thirdStoreCacheId,
+                'Store' => $thirdStoreCode
+            ]
+        );
+        $this->assertEquals($defaultLocale, $thirdStoreResponse['body']['storeConfig']['locale']);
+
+        // Change default locale
+        $localeConfigPath = 'general/locale/code';
+        $newLocale = 'de_DE';
+        $this->setConfig($localeConfigPath, $newLocale, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+
+        // Query default store config after the default config is changed
+        // Verify we obtain a cache MISS at the 2nd time, the cache is purged
+        $defaultStoreResponseMiss = $this->assertCacheMissAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+        $this->assertEquals(
+            $newLocale,
+            $defaultStoreResponseMiss['body']['storeConfig']['locale']
+        );
+        // Verify we obtain a cache HIT at the 3rd time
+        $this->assertCacheHitAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+
+        // Query second store config after the default config is changed
+        // Verify we obtain a cache MISS at the 2nd time, the cache is purged
+        $secondStoreResponseMiss = $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+        $this->assertEquals(
+            $newLocale,
+            $secondStoreResponseMiss['body']['storeConfig']['locale']
+        );
+        // Verify we obtain a cache HIT at the 3rd time
+        $this->assertCacheHitAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+
+        // Query third store config after the default config is changed
         // Verify we obtain a cache MISS at the 2nd time, the cache is purged
         $thirdStoreResponseMiss = $this->assertCacheMissAndReturnResponse(
             $query,
