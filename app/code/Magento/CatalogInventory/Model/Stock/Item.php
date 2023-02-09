@@ -654,7 +654,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     }
 
     /**
-     * @param int $useConfigMinSaleQty
+     * @param bool $useConfigMinSaleQty
      * @return $this
      */
     public function setUseConfigMinSaleQty($useConfigMinSaleQty)

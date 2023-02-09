@@ -173,7 +173,7 @@ interface StockItemInterface extends ExtensibleDataInterface
     public function getUseConfigMinSaleQty();
 
     /**
-     * @param int $useConfigMinSaleQty
+     * @param bool $useConfigMinSaleQty
      * @return $this
      */
     public function setUseConfigMinSaleQty($useConfigMinSaleQty);
