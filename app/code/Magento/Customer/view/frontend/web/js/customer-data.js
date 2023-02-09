@@ -53,7 +53,11 @@ define([
             storage.removeAll();
         }
 
-        if (isLoggedIn === 0) {
+        if (!$.localStorage.isSet('mage-customer-login')) {
+            $.localStorage.set('mage-customer-login', isLoggedIn);
+        }
+        if ($.localStorage.get('mage-customer-login') !== isLoggedIn) {
+            $.localStorage.set('mage-customer-login', isLoggedIn);
             storage.removeAll();
         }
 
