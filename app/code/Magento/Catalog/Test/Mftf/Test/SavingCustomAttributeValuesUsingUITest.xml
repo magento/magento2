@@ -89,28 +89,24 @@
         <click stepKey="clickonFirstRow" selector="{{AdminProductAddAttributeModalSection.firstRowCheckBox}}"/>
         <click stepKey="clickOnAddSelected" selector="{{AdminProductAttributeGridSection.addSelected}}"/>
         <waitForPageLoad stepKey="waitForAttributeAdded2"/>
-
-        <!--<actionGroup ref="FilterProductAttributeByAttributeCodeActionGroup" stepKey="filterByAttributeCode">
-            <argument name="ProductAttributeCode" value="$$createAttribute.attribute_code$$"/>
-        </actionGroup>-->
         <!-- Expand 'Attributes' tab -->
         <actionGroup ref="AdminExpandProductAttributesTabActionGroup" stepKey="expandAttributesTab"/>
         <!-- Check created attribute presents in the 'Attributes' tab -->
         <seeElement selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" stepKey="assertAttributeIsPresentInTab"/>
         <!-- Select attribute options -->
-        <!--<selectOption selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" parameterArray="multiselectProductAttribute.option1_admin" stepKey="selectAttributeOptions"/>-->
         <selectOption selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" userInput="{{multiselectProductAttribute.option1_admin}}" stepKey="selectProduct1AttributeOption"/>
         <!-- Save product -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
-
+        <!-- Go to Storefront and search for product-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createSimpleProduct.name$"/>
         </actionGroup>
+        <!-- Assert custom Attribute in Layered Navigation-->
         <waitForElementVisible selector="{{StorefrontCategorySidebarSection.filterOptionsTitle(multiselectProductAttribute.attribute_code)}}" stepKey="waitForAttributeVisible"/>
         <conditionalClick selector="{{StorefrontCategorySidebarSection.filterOptionsTitle(multiselectProductAttribute.attribute_code)}}" dependentSelector="{{StorefrontCategorySidebarSection.activeFilterOptions}}" visible="false" stepKey="clickToExpandAttribute"/>
         <waitForElementVisible selector="{{StorefrontCategorySidebarSection.activeFilterOptions}}" stepKey="waitForAttributeOptionsVisible"/>
-        <wait time="90" stepKey="Wait"/>
+        <wait time="10" stepKey="Wait"/>
         <see selector="{{StorefrontCategorySidebarSection.filterOption}}" userInput="{{multiselectProductAttribute.option1_frontend}}" stepKey="seeOption2"/>
     </test>
 </tests>
