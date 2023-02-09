@@ -116,8 +116,5 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
             \Magento\Framework\Interception\PluginListInterface::class,
             ['cache' => $objectManager->get(\Magento\Framework\App\Interception\Cache\CompiledConfig::class)]
         );
-        $objectManager
-            ->get(\Magento\Framework\App\Cache\Manager::class)
-            ->setEnabled([CompiledConfig::TYPE_IDENTIFIER], true);
     }
 }
