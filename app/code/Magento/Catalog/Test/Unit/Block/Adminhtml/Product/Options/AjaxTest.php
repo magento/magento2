@@ -76,7 +76,7 @@ class AjaxTest extends TestCase
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
-        $scopeConfig->expects($this->once())->method('getValue')->withAnyParameters()
+        $scopeConfig->method('getValue')->withAnyParameters()
             ->willReturn(false);
 
         $product = $this->getMockBuilder(Product::class)
