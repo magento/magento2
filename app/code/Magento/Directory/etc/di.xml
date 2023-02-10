@@ -11,8 +11,12 @@
         <arguments>
             <argument name="servicesConfig" xsi:type="array">
                 <item name="fixerio" xsi:type="array">
-                    <item name="label" xsi:type="string" translatable="true">Fixer.io</item>
+                    <item name="label" xsi:type="string" translatable="true">Fixer.io (legacy)</item>
                     <item name="class" xsi:type="string">Magento\Directory\Model\Currency\Import\FixerIo</item>
+                </item>
+                <item name="fixerio_apilayer" xsi:type="array">
+                    <item name="label" xsi:type="string" translatable="true">Fixer Api (APILayer)</item>
+                    <item name="class" xsi:type="string">Magento\Directory\Model\Currency\Import\FixerIoApiLayer</item>
                 </item>
                 <item name="currencyconverterapi" xsi:type="array">
                     <item name="label" xsi:type="string" translatable="true">Currency Converter API</item>

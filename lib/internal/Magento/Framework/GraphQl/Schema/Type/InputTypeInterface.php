@@ -11,8 +11,9 @@ use Magento\Framework\GraphQl\Schema\TypeInterface;
 
 /**
  * Interface for GraphQl InputType only used for input
+ *
+ * @api
  */
 interface InputTypeInterface extends \GraphQL\Type\Definition\InputType, TypeInterface
 {
-
 }

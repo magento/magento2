@@ -11,6 +11,7 @@
     <section name="StorefrontCMSPageSection">
         <element name="mediaDescription" type="text" selector=".column.main>p>img"/>
         <element name="imageSource" type="text" selector="//img[contains(@src,'{{imageName}}')]" parameterized="true"/>
+        <element name="imageBySource" type="text" selector="img[src*='{{imageName}}']" parameterized="true"/>
         <element name="mainTitle" type="text" selector="#maincontent .page-title"/>
         <element name="mainContent" type="text" selector="#maincontent"/>
         <element name="footerTop" type="text" selector="footer.page-footer"/>

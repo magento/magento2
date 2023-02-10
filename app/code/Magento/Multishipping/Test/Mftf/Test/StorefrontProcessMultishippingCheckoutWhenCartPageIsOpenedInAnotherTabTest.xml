@@ -45,13 +45,13 @@
             <argument name="Customer" value="$$createCustomerWithMultipleAddresses$$"/>
         </actionGroup>
         <!--  Add two products to the Shopping Cart -->
-        <amOnPage url="{{StorefrontProductPage.url($$createFirstProduct.name$$)}}" stepKey="amOnStorefrontProductFirstPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createFirstProduct.custom_attributes[url_key]$$)}}" stepKey="amOnStorefrontProductFirstPage"/>
         <waitForPageLoad stepKey="waitForTheFirstProduct"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddProductToCart">
             <argument name="product" value="$$createFirstProduct$$"/>
             <argument name="productCount" value="1"/>
         </actionGroup>
-        <amOnPage url="{{StorefrontProductPage.url($$createSecondProduct.name$$)}}" stepKey="amOnStorefrontSecondProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSecondProduct.custom_attributes[url_key]$$)}}" stepKey="amOnStorefrontSecondProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoadForTheSecondProduct"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddSecondProductToCart">
             <argument name="product" value="$$createSecondProduct$$"/>
@@ -85,6 +85,12 @@
         </actionGroup>
         <switchToNextTab stepKey="switchToNextTab"/>
         <!-- Click 'Continue to Billing Information' and 'Go to Review Your Order' -->
+        <actionGroup ref="StorefrontGoToBillingInformationActionGroup" stepKey="redirectToSelectAddressAfterReset"/>
+        <seeOptionIsSelected selector="{{StorefrontCheckoutShippingMultipleAddressesSection.selectedMultipleShippingAddress('1')}}" userInput="{{US_Address_NY.street[1]}}" stepKey="checkAddressIsReset"/>
+        <actionGroup ref="StorefrontCheckoutShippingSelectMultipleAddressesActionGroup" stepKey="selectMultipleAddressesAfterReset">
+            <argument name="firstAddress" value="{{UK_Not_Default_Address.street[0]}}"/>
+            <argument name="secondAddress" value="{{US_Address_NY.street[1]}}"/>
+        </actionGroup>
         <actionGroup ref="StorefrontGoToBillingInformationActionGroup" stepKey="goToBillingInformation"/>
         <see selector="{{ShipmentFormSection.shippingAddress}}" userInput="{{US_Address_NY.city}}" stepKey="seeBillingAddress"/>
         <waitForElementVisible selector="{{StorefrontMultipleShippingMethodSection.goToReviewYourOrderButton}}" stepKey="waitForGoToReviewYourOrderVisible" />

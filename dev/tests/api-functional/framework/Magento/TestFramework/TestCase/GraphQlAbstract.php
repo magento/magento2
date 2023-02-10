@@ -6,7 +6,6 @@
 namespace Magento\TestFramework\TestCase;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\Request\Http;
 
 /**
  * Test case for Web API functional tests for Graphql.
@@ -93,6 +92,29 @@ abstract class GraphQlAbstract extends WebapiAbstract
         array $headers = []
     ): array {
         return $this->getGraphQlClient()->getWithResponseHeaders(
+            $query,
+            $variables,
+            $operationName,
+            $this->composeHeaders($headers)
+        );
+    }
+
+    /**
+     * Perform GraphQL query via POST and returns the response headers
+     *
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @return array
+     */
+    public function graphQlMutationWithResponseHeaders(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ): array {
+        return $this->getGraphQlClient()->postWithResponseHeaders(
             $query,
             $variables,
             $operationName,

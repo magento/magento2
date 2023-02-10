@@ -108,6 +108,8 @@ class Plugin
                     'data' => [
                         'text' => __('Task "%1": ', $bulk->getDescription()) . $text,
                         'severity' => \Magento\Framework\Notification\MessageInterface::SEVERITY_MAJOR,
+                        // md5() here is not for cryptographic use.
+                        // phpcs:ignore Magento2.Security.InsecureFunction
                         'identity' => md5('bulk' . $bulkUuid),
                         'uuid' => $bulkUuid,
                         'status' => $bulkStatus,

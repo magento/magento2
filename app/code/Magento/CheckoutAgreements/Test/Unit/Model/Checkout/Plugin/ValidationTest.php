@@ -126,11 +126,9 @@ class ValidationTest extends TestCase
             ->willReturn(true);
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->quoteMock
-            ->expects($this->once())
             ->method('getIsMultiShipping')
             ->willReturn(false);
         $this->quoteRepositoryMock
-            ->expects($this->once())
             ->method('getActive')
             ->with($cartId)
             ->willReturn($this->quoteMock);
@@ -146,7 +144,7 @@ class ValidationTest extends TestCase
         $this->paymentMock->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
-        $this->model->beforeSavePaymentInformation(
+        $this->model->beforeSavePaymentInformationAndPlaceOrder(
             $this->subjectMock,
             $cartId,
             $this->paymentMock,
@@ -166,11 +164,9 @@ class ValidationTest extends TestCase
             ->willReturn(true);
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->quoteMock
-            ->expects($this->once())
             ->method('getIsMultiShipping')
             ->willReturn(false);
         $this->quoteRepositoryMock
-            ->expects($this->once())
             ->method('getActive')
             ->with($cartId)
             ->willReturn($this->quoteMock);
@@ -186,7 +182,7 @@ class ValidationTest extends TestCase
         $this->paymentMock->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
-        $this->model->beforeSavePaymentInformation(
+        $this->model->beforeSavePaymentInformationAndPlaceOrder(
             $this->subjectMock,
             $cartId,
             $this->paymentMock,
@@ -196,40 +192,6 @@ class ValidationTest extends TestCase
         $this->expectExceptionMessage(
             "The order wasn't placed. First, agree to the terms and conditions, then try placing your order again."
         );
-    }
-
-    public function testBeforeSavePaymentInformation()
-    {
-        $cartId = 100;
-        $agreements = [1, 2, 3];
-        $this->scopeConfigMock
-            ->expects($this->once())
-            ->method('isSetFlag')
-            ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
-            ->willReturn(true);
-        $this->quoteMock
-            ->expects($this->once())
-            ->method('getIsMultiShipping')
-            ->willReturn(false);
-        $this->quoteRepositoryMock
-            ->expects($this->once())
-            ->method('getActive')
-            ->with($cartId)
-            ->willReturn($this->quoteMock);
-        $searchCriteriaMock = $this->createMock(SearchCriteria::class);
-        $this->agreementsFilterMock->expects($this->once())
-            ->method('buildSearchCriteria')
-            ->willReturn($searchCriteriaMock);
-        $this->checkoutAgreementsListMock->expects($this->once())
-            ->method('getList')
-            ->with($searchCriteriaMock)
-            ->willReturn([1]);
-        $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
-        $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(true);
-        $this->paymentMock->expects(static::atLeastOnce())
-            ->method('getExtensionAttributes')
-            ->willReturn($this->extensionAttributesMock);
-        $this->model->beforeSavePaymentInformation($this->subjectMock, $cartId, $this->paymentMock, $this->addressMock);
     }
 
     /**

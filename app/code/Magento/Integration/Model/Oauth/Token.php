@@ -6,8 +6,14 @@
 namespace Magento\Integration\Model\Oauth;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Oauth\Exception as OauthException;
 use Magento\Framework\Oauth\Helper\Oauth as OauthHelper;
+use Magento\Integration\Api\Data\UserTokenParametersInterfaceFactory;
+use Magento\Integration\Api\Exception\UserTokenException;
+use Magento\Integration\Api\UserTokenIssuerInterface;
+use Magento\Integration\Api\UserTokenReaderInterface;
+use Magento\Integration\Model\CustomUserContext;
 use Magento\Integration\Model\ResourceModel\Oauth\Token\Collection as TokenCollection;
 
 /**
@@ -45,15 +51,17 @@ class Token extends \Magento\Framework\Model\AbstractModel
     /**#@+
      * Token types
      */
-    const TYPE_REQUEST = 'request';
+    public const TYPE_REQUEST = 'request';
 
-    const TYPE_ACCESS = 'access';
+    public const TYPE_ACCESS = 'access';
 
-    const TYPE_VERIFIER = 'verifier';
-
-    /**#@- */
+    public const TYPE_VERIFIER = 'verifier';
 
     /**#@- */
+
+    /**
+     * @var OauthHelper
+     */
     protected $_oauthHelper;
 
     /**
@@ -77,6 +85,21 @@ class Token extends \Magento\Framework\Model\AbstractModel
     protected $_keyLengthFactory;
 
     /**
+     * @var UserTokenReaderInterface
+     */
+    private $reader;
+
+    /**
+     * @var UserTokenIssuerInterface
+     */
+    private $issuer;
+
+    /**
+     * @var UserTokenParametersInterfaceFactory
+     */
+    private $tokenParamsFactory;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Model\Context $context
@@ -89,6 +112,9 @@ class Token extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param UserTokenReaderInterface|null $reader
+     * @param UserTokenIssuerInterface|null $issuer
+     * @param UserTokenParametersInterfaceFactory|null $paramsFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -101,7 +127,10 @@ class Token extends \Magento\Framework\Model\AbstractModel
         OauthHelper $oauthHelper,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ?UserTokenReaderInterface $reader = null,
+        ?UserTokenIssuerInterface $issuer = null,
+        ?UserTokenParametersInterfaceFactory $paramsFactory = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_keyLengthFactory = $keyLengthFactory;
@@ -109,6 +138,10 @@ class Token extends \Magento\Framework\Model\AbstractModel
         $this->_consumerFactory = $consumerFactory;
         $this->_oauthData = $oauthData;
         $this->_oauthHelper = $oauthHelper;
+        $this->reader = $reader ?? ObjectManager::getInstance()->get(UserTokenReaderInterface::class);
+        $this->issuer = $issuer ?? ObjectManager::getInstance()->get(UserTokenIssuerInterface::class);
+        $this->tokenParamsFactory = $paramsFactory ??
+            ObjectManager::getInstance()->get(UserTokenParametersInterfaceFactory::class);
     }
 
     /**
@@ -184,11 +217,17 @@ class Token extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $userId
      * @return $this
+     * @deprecated New proper SPI for warking with tokens has been introduced.
+     * @see UserTokenIssuerInterface
      */
     public function createAdminToken($userId)
     {
-        $this->setAdminId($userId);
-        return $this->saveAccessToken(UserContextInterface::USER_TYPE_ADMIN);
+        return $this->loadByToken(
+            $this->issuer->create(
+                new CustomUserContext((int) $userId, UserContextInterface::USER_TYPE_ADMIN),
+                $this->tokenParamsFactory->create()
+            )
+        );
     }
 
     /**
@@ -196,11 +235,17 @@ class Token extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $userId
      * @return $this
+     * @deprecated New proper SPI for warking with tokens has been introduced.
+     * @see UserTokenIssuerInterface
      */
     public function createCustomerToken($userId)
     {
-        $this->setCustomerId($userId);
-        return $this->saveAccessToken(UserContextInterface::USER_TYPE_CUSTOMER);
+        return $this->loadByToken(
+            $this->issuer->create(
+                new CustomUserContext((int) $userId, UserContextInterface::USER_TYPE_CUSTOMER),
+                $this->tokenParamsFactory->create()
+            )
+        );
     }
 
     /**
@@ -318,6 +363,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
     {
         $tokenData = $this->getResource()->selectTokenByConsumerIdAndUserType($consumerId, $userType);
         $this->setData($tokenData ? $tokenData : []);
+        $this->getResource()->afterLoad($this);
         return $this;
     }
 
@@ -352,9 +398,32 @@ class Token extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $token
      * @return $this
+     * @deprecated Proper SPI for managing tokens was introduced.
+     * @see UserTokenReaderInterface
      */
     public function loadByToken($token)
     {
-        return $this->load($token, 'token');
+        $data = $this->load($token, 'token');
+        if ($data->getId()) {
+            return $data;
+        }
+        try {
+            $data = $this->reader->read($token);
+        } catch (UserTokenException $exception) {
+            //Token is not valid, keeping this model's data empty
+            return $this;
+        }
+
+        $this->setUserType($data->getUserContext()->getUserType());
+        if ($data->getUserContext()->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER) {
+            $this->setCustomerId($data->getUserContext()->getUserId());
+        } else {
+            $this->setAdminId($data->getUserContext()->getUserId());
+        }
+        $this->setId(PHP_INT_MAX);
+        $this->setToken($token);
+        $this->setCreatedAt($data->getData()->getIssued()->format('Y-m-d H:i:s'));
+
+        return $this;
     }
 }

@@ -20,7 +20,7 @@
         <element name="firstProductRow" type="text" selector="table.data-grid tr.data-row:first-of-type"/>
         <element name="firstProductRowName" type="text" selector="table.data-grid tr.data-row:first-of-type > td:nth-of-type(4)"/>
         <element name="firstProductRowEditButton" type="button" selector="table.data-grid tr.data-row td .action-menu-item:first-of-type"/>
-        <element name="productThumbnail" type="text" selector="table.data-grid tr:nth-child({{row}}) td.data-grid-thumbnail-cell > img" parameterized="true"/>
+        <element name="productThumbnail" type="text" selector="table.data-grid tr:nth-child({{row}}) td.data-grid-thumbnail-cell > span > span > img" parameterized="true"/>
         <element name="productThumbnailBySrc" type="text" selector="img.admin__control-thumbnail[src*='{{pattern}}']" parameterized="true"/>
         <element name="productGridCell" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[normalize-space(.)='{{column}}']/preceding-sibling::th) +1 ]" parameterized="true"/>
         <element name="productGridHeaderCell" type="text" selector="//div[@data-role='grid-wrapper']//tr//th[contains(., '{{column}}')]" parameterized="true"/>
@@ -37,5 +37,12 @@
         <element name="selectRowBasedOnName" type="input" selector="//td/div[text()='{{var1}}']" parameterized="true"/>
         <element name="changeStatus" type="button" selector="//div[contains(@class,'admin__data-grid-header-row') and contains(@class, 'row')]//div[contains(@class, 'action-menu-item')]//ul/li/span[text() = '{{status}}']" parameterized="true"/>
         <element name="productRowByTypeAndName" type="block" selector="//div[@data-role='grid-wrapper']//table[contains(@class, 'data-grid')]//td[count(../../..//th[./*[.='Type']]/preceding-sibling::th) + 1][./*[.='{{type}}']]/../td[contains(.,'{{name}}')]" parameterized="true" />
+        <element name="productCollapsibleColumns" type="button" selector="//div[@data-state-collapsible='{{state}}']//strong[@class='admin__collapsible-title']//span[text()='{{expandTitle}}']" parameterized="true"/>
+        <element name="allowGiftMessageCheckbox" type="checkbox" selector="//input[@type='checkbox' and @name='product[use_config_gift_message_available]']" />
+        <element name="allowGiftMessageToggle" type="button" selector="//input[@type='checkbox' and @name='product[gift_message_available]' and @value='{{var1}}']/..//label[@class='admin__actions-switch-label']" parameterized="true"/>
+        <element name="allowGiftsWrapCheckbox" type="checkbox" selector="//input[@type='checkbox' and @name='product[use_config_gift_wrapping_available]']" />
+        <element name="allowGiftsWrapToggle" type="button" selector="//input[@type='checkbox' and @name='product[use_config_gift_wrapping_available]' and @value='{{var1}}']/../../../..//label[@class='admin__actions-switch-label']" parameterized="true"/>
+        <element name="priceForGiftsWrapping" type="input" selector="//input[@name='product[gift_wrapping_price]']"/>
     </section>
 </sections>
+

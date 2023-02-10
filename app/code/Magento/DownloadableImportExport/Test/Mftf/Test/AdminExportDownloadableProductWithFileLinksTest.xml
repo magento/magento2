@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminExportDownloadableProductWithFileLinksTest">
+        <annotations>
+            <features value="DownloadableImportExport"/>
+            <stories value="Export Products"/>
+            <title value="Export Downloadable Products with File Links"/>
+            <description value="Verifies that a user can export a Downloadable product with downloadable and sample file
+            links. Verifies that the exported file and the downloadable copy of the exported file contain the expected
+            product (a filter is applied when exporting such that ONLY the downloadable product row should be in the
+            export), the correct downloadable link with files, and the correct downloadable sample links with files.
+            Note that MFTF cannot simply download a file and have access to it due to the test not having access to the
+            server that is running the test browser. Therefore, this test verifies that the Download button can be
+            successfully clicked, grabs the request URL from the Download button, executes the request on the magento
+            machine via a curl request, and verifies the contents of the downloaded file"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-38558"/>
+            <group value="importExport"/>
+            <group value="Downloadable"/>
+        </annotations>
+
+        <before>
+            <!-- Create Category, Create Downloadable Product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiDownloadableProduct" stepKey="createProduct"/>
+            <createData entity="downloadableLink_Files" stepKey="addDownloadableLink">
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+            <createData entity="downloadableSample_File2" stepKey="addDownloadableSamples">
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+            <magentoCron groups="index" stepKey="runCronIndex"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <!-- Delete Data -->
+            <deleteData createDataKey="createProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteExportFileDirectory">
+                <argument name="path">var/export</argument>
+            </helper>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Export Created Products -->
+        <actionGroup ref="AdminNavigateToExportPageActionGroup" stepKey="goToExportIndexPage"/>
+        <actionGroup ref="ExportProductsFilterByAttributeActionGroup" stepKey="exportProductBySku">
+            <argument name="attribute" value="sku"/>
+            <argument name="attributeData" value="$$createProduct.sku$$"/>
+        </actionGroup>
+
+        <!-- Start Message Queue for Export Consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminExportMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminExportMessageConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForReload"/>
+        <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
+        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="getFilename"/>
+        <actionGroup ref="AdminGetExportFilenameOnServerActionGroup" stepKey="grabNameFile">
+            <argument name="rowIndex" value="0"/>
+        </actionGroup>
+
+        <!-- Validate Export File on File System -->
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileExists" stepKey="assertExportFileExists">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsDownloadableProduct">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$$createProduct.name$$</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsDownloadableLink">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">title=$addDownloadableLink.link[title]$,sort_order=$addDownloadableLink.link[sort_order]$,sample_type=$addDownloadableLink.link[sample_type]$,sample_file=/a/d/$addDownloadableLink.link[sample_file_content][name]$,price=$addDownloadableLink.link[price]$0000,number_of_downloads=$addDownloadableLink.link[number_of_downloads]$,is_shareable=$addDownloadableLink.link[is_shareable]$,link_type=$addDownloadableLink.link[link_type]$,link_file=/m/a/$addDownloadableLink.link[link_file_content][name]$</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsDownloadableSampleLink">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">title=$addDownloadableSamples.sample[title]$,sample_type=$addDownloadableSamples.sample[sample_type]$,sample_file=/t/e/$addDownloadableSamples.sample[sample_file_content][name]$</argument>
+        </helper>
+
+        <!-- Download Export File -->
+        <actionGroup ref="DownloadFileActionGroup" stepKey="downloadExport">
+            <argument name="fileName" value="{$getFilename}"/>
+        </actionGroup>
+
+        <!-- Validate Downloaded Export File on File System -->
+        <grabAttributeFrom userInput="href" selector="{{AdminExportAttributeSection.download('0')}}" stepKey="grabExportUrl"/>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsDownloadableProduct">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">$$createProduct.name$$</argument>
+        </helper>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsDownloadableLink">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">title=$addDownloadableLink.link[title]$,sort_order=$addDownloadableLink.link[sort_order]$,sample_type=$addDownloadableLink.link[sample_type]$,sample_file=/a/d/$addDownloadableLink.link[sample_file_content][name]$,price=$addDownloadableLink.link[price]$0000,number_of_downloads=$addDownloadableLink.link[number_of_downloads]$,is_shareable=$addDownloadableLink.link[is_shareable]$,link_type=$addDownloadableLink.link[link_type]$,link_file=/m/a/$addDownloadableLink.link[link_file_content][name]$</argument>
+        </helper>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsDownloadableSampleLink">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">title=$addDownloadableSamples.sample[title]$,sample_type=$addDownloadableSamples.sample[sample_type]$,sample_file=/t/e/$addDownloadableSamples.sample[sample_file_content][name]$</argument>
+        </helper>
+
+        <!-- Delete Export File -->
+        <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
+            <argument name="fileName" value="{$getFilename}"/>
+        </actionGroup>
+        <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileDoesNotExist" stepKey="assertExportFileDeleted">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+        </helper>
+    </test>
+</tests>

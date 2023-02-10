@@ -7,6 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
+use Magento\Customer\Model\Log;
+use Magento\Customer\Model\Logger;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -15,16 +20,27 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class GenerateCustomerTokenTest extends GraphQlAbstract
 {
     /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->logger = Bootstrap::getObjectManager()->get(Logger::class);
+    }
+
+    /**
      * Verify customer token with valid credentials
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
-    public function testGenerateCustomerValidToken()
+    public function testGenerateCustomerValidToken(): void
     {
-        $email = 'customer@example.com';
-        $password = 'password';
-
-        $mutation = $this->getQuery($email, $password);
+        $mutation = $this->getQuery();
 
         $response = $this->graphQlMutation($mutation);
         $this->assertArrayHasKey('generateCustomerToken', $response);
@@ -41,7 +57,7 @@ class GenerateCustomerTokenTest extends GraphQlAbstract
      * @param string $password
      * @param string $message
      */
-    public function testGenerateCustomerTokenInvalidData(string $email, string $password, string $message)
+    public function testGenerateCustomerTokenInvalidData(string $email, string $password, string $message): void
     {
         $this->expectException(\Exception::class);
 
@@ -55,15 +71,14 @@ class GenerateCustomerTokenTest extends GraphQlAbstract
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
-    public function testRegenerateCustomerToken()
+    public function testRegenerateCustomerToken(): void
     {
-        $email = 'customer@example.com';
-        $password = 'password';
-
-        $mutation = $this->getQuery($email, $password);
+        $mutation = $this->getQuery();
 
         $response1 = $this->graphQlMutation($mutation);
         $token1 = $response1['generateCustomerToken']['token'];
+
+        sleep(2);
 
         $response2 = $this->graphQlMutation($mutation);
         $token2 = $response2['generateCustomerToken']['token'];
@@ -108,7 +123,7 @@ class GenerateCustomerTokenTest extends GraphQlAbstract
      * @param string $password
      * @return string
      */
-    private function getQuery(string $email, string $password) : string
+    private function getQuery(string $email = 'customer@example.com', string $password = 'password'): string
     {
         return <<<MUTATION
 mutation {
@@ -125,22 +140,12 @@ MUTATION;
     /**
      * Verify customer with empty email
      */
-    public function testGenerateCustomerTokenWithEmptyEmail()
+    public function testGenerateCustomerTokenWithEmptyEmail(): void
     {
         $email = '';
         $password = 'bad-password';
 
-        $mutation
-            = <<<MUTATION
-mutation {
-	generateCustomerToken(
-        email: "{$email}"
-        password: "{$password}"
-    ) {
-        token
-    }
-}
-MUTATION;
+        $mutation = $this->getQuery($email, $password);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('GraphQL response contains errors: Specify the "email" value.');
@@ -150,25 +155,51 @@ MUTATION;
     /**
      * Verify customer with empty password
      */
-    public function testGenerateCustomerTokenWithEmptyPassword()
+    public function testGenerateCustomerTokenWithEmptyPassword(): void
     {
         $email = 'customer@example.com';
         $password = '';
 
-        $mutation
-            = <<<MUTATION
-mutation {
-	generateCustomerToken(
-        email: "{$email}"
-        password: "{$password}"
-    ) {
-        token
-    }
-}
-MUTATION;
+        $mutation = $this->getQuery($email, $password);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('GraphQL response contains errors: Specify the "password" value.');
         $this->graphQlMutation($mutation);
+    }
+
+    /**
+     * Verify customer log after generate customer token
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testCustomerLogAfterGenerateCustomerToken(): void
+    {
+        $response = $this->graphQlMutation($this->getQuery());
+        $this->assertArrayHasKey('generateCustomerToken', $response);
+        $this->assertIsArray($response['generateCustomerToken']);
+
+        /** @var Log $log */
+        $log = $this->logger->get(1);
+        $this->assertNotEmpty($log->getLastLoginAt());
+    }
+
+    /**
+     * Ensure that customer log record is deleted.
+     *
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        if ($this->logger->get(1)->getLastLoginAt()) {
+            /** @var ResourceConnection $resource */
+            $resource = Bootstrap::getObjectManager()->get(ResourceConnection::class);
+            /** @var AdapterInterface $connection */
+            $connection = $resource->getConnection(ResourceConnection::DEFAULT_CONNECTION);
+            $connection->delete(
+                $resource->getTableName('customer_log'),
+                ['customer_id' => 1]
+            );
+        }
+        parent::tearDown();
     }
 }

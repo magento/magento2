@@ -51,9 +51,9 @@ class DefaultTest extends TestCase
         'case_sensitive' => '0',
         'shown_to_logged_in_user' => ['contact_us' => 1],
         'always_for' => [
-            'user_create',
-            'user_forgotpassword',
-            'contact_us',
+            'user_create' => '1',
+            'user_forgotpassword' => '1',
+            'contact_us' => '1'
         ],
     ];
 

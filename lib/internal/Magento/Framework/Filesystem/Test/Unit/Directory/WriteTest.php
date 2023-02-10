@@ -53,7 +53,7 @@ class WriteTest extends TestCase
             $this->fileFactory,
             $this->driver,
             $this->path,
-            'cool-permissions'
+            0555
         );
     }
 

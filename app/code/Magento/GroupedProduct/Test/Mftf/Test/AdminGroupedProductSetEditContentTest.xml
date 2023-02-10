@@ -24,6 +24,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="GroupedProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
         </after>
 
         <!-- Create product -->
@@ -35,6 +36,6 @@
         </actionGroup>
 
         <!--Checking content storefront-->
-        <amOnPage url="{{GroupedProduct.sku}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{GroupedProduct.urlKey}}.html" stepKey="goToStorefront"/>
     </test>
 </tests>

@@ -9,11 +9,12 @@ declare(strict_types=1);
 namespace Magento\Cms\Model\Page;
 
 use Magento\Cms\Api\GetPageByIdentifierInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Cms\Model\CustomLayoutManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use Magento\Cms\Model\Page as PageModel;
-use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * Test pages data provider.
@@ -22,6 +23,12 @@ use Magento\Framework\App\Request\Http as HttpRequest;
  */
 class DataProviderTest extends TestCase
 {
+    private $providerData = [
+        'name' => 'test',
+        'primaryFieldName' => 'page_id',
+        'requestFieldName' => 'page_id',
+    ];
+
     /**
      * @var DataProvider
      */
@@ -43,28 +50,25 @@ class DataProviderTest extends TestCase
     private $request;
 
     /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $objectManager->configure([
-            'preferences' => [
-                \Magento\Cms\Model\Page\CustomLayoutManagerInterface::class =>
-                    \Magento\TestFramework\Cms\Model\CustomLayoutManager::class
-            ]
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->objectManager->configure([
+            'preferences' => [CustomLayoutManagerInterface::class => CustomLayoutManager::class]
         ]);
-        $this->repo = $objectManager->get(GetPageByIdentifierInterface::class);
-        $this->filesFaker = $objectManager->get(CustomLayoutManager::class);
-        $this->request = $objectManager->get(HttpRequest::class);
-        $this->provider = $objectManager->create(
+        $this->repo = $this->objectManager->get(GetPageByIdentifierInterface::class);
+        $this->filesFaker = $this->objectManager->get(CustomLayoutManager::class);
+        $this->request = $this->objectManager->get(HttpRequest::class);
+        $this->provider = $this->objectManager->create(
             DataProvider::class,
-            [
-                'name' => 'test',
-                'primaryFieldName' => 'page_id',
-                'requestFieldName' => 'page_id',
-                'customLayoutManager' => $this->filesFaker
-            ]
+            array_merge($this->providerData, ['customLayoutManager' => $this->filesFaker])
         );
     }
 
@@ -72,29 +76,42 @@ class DataProviderTest extends TestCase
      * Check that custom layout date is handled properly.
      *
      * @magentoDataFixture Magento/Cms/_files/pages_with_layout_xml.php
-     * @throws \Throwable
+     * @dataProvider customLayoutDataProvider
+     *
+     * @param string $identifier
+     * @param string|null $layoutUpdateSelected
      * @return void
      */
-    public function testCustomLayoutData(): void
+    public function testCustomLayoutData(string $identifier, ?string $layoutUpdateSelected): void
     {
-        $data = $this->provider->getData();
-        $page1Data = null;
-        $page2Data = null;
-        $page3Data = null;
-        foreach ($data as $pageData) {
-            if ($pageData[PageModel::IDENTIFIER] === 'test_custom_layout_page_1') {
-                $page1Data = $pageData;
-            } elseif ($pageData[PageModel::IDENTIFIER] === 'test_custom_layout_page_2') {
-                $page2Data = $pageData;
-            } elseif ($pageData[PageModel::IDENTIFIER] === 'test_custom_layout_page_3') {
-                $page3Data = $pageData;
-            }
-        }
-        $this->assertNotEmpty($page1Data);
-        $this->assertNotEmpty($page2Data);
-        $this->assertEquals('_existing_', $page1Data['layout_update_selected']);
-        $this->assertNull($page2Data['layout_update_selected']);
-        $this->assertEquals('test_selected', $page3Data['layout_update_selected']);
+        $page = $this->repo->execute($identifier, 0);
+
+        $request = $this->objectManager->create(RequestInterface::class);
+        $request->setParam('page_id', $page->getId());
+
+        $provider = $this->objectManager->create(
+            DataProvider::class,
+            array_merge($this->providerData, ['request' => $request])
+        );
+
+        $data = $provider->getData();
+        $pageData = $data[$page->getId()];
+
+        $this->assertEquals($layoutUpdateSelected, $pageData['layout_update_selected']);
+    }
+
+    /**
+     * DataProvider for testCustomLayoutData
+     *
+     * @return array
+     */
+    public function customLayoutDataProvider(): array
+    {
+        return [
+            ['test_custom_layout_page_1', '_existing_'],
+            ['test_custom_layout_page_2', null],
+            ['test_custom_layout_page_3', 'test_selected'],
+        ];
     }
 
     /**

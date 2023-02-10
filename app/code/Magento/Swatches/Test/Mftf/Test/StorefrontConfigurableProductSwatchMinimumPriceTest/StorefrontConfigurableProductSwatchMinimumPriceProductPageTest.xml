@@ -28,6 +28,7 @@
             <actionGroup ref="DeleteProductsByKeywordActionGroup" stepKey="deleteProductsByKeyword">
                 <argument name="keyword" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategoryAttribute"/>
             <!-- Delete color attribute -->
@@ -37,6 +38,9 @@
             <!-- Delete size attribute -->
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteSizeAttribute">
                 <argument name="ProductAttribute" value="ProductSizeAttribute"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
