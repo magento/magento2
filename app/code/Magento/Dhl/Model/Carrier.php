@@ -2195,7 +2195,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param RateRequest $rawRequest
      * @return void
      */
-    private function addExportDeclaration(\Magento\Shipping\Model\Simplexml\Element $xml, RateRequest $rawRequest)
+    private function addExportDeclaration(\Magento\Shipping\Model\Simplexml\Element $xml, RateRequest $rawRequest): void
     {
         $nodeExportDeclaration = $xml->addChild('ExportDeclaration', '', '');
         $nodeExportDeclaration->addChild(
@@ -2239,7 +2239,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param RateRequest $rawRequest
      * @return string
      */
-    private function getInvoiceNumbers(RateRequest $rawRequest)
+    private function getInvoiceNumbers(RateRequest $rawRequest): string
     {
         $invoiceNumbers = [];
         $order = $rawRequest->getOrderShipment()->getOrder();
