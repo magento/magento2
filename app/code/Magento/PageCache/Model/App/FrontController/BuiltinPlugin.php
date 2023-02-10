@@ -6,7 +6,6 @@
 namespace Magento\PageCache\Model\App\FrontController;
 
 use Magento\Framework\App\Response\Http as ResponseHttp;
-use Magento\Customer\Model\Session;
 
 /**
  * Plugin for processing builtin cache
@@ -34,39 +33,23 @@ class BuiltinPlugin
     protected $state;
 
     /**
-     * @var ResponseHttp
-     */
-    protected $responseHttp;
-
-    /**
-     * @var Session
-     */
-    private $session;
-
-    /**
      * Constructor
      *
      * @param \Magento\PageCache\Model\Config $config
      * @param \Magento\Framework\App\PageCache\Version $version
      * @param \Magento\Framework\App\PageCache\Kernel $kernel
      * @param \Magento\Framework\App\State $state
-     * @param ResponseHttp $responseHttp
-     * @param Session $session
      */
     public function __construct(
         \Magento\PageCache\Model\Config $config,
         \Magento\Framework\App\PageCache\Version $version,
         \Magento\Framework\App\PageCache\Kernel $kernel,
-        \Magento\Framework\App\State $state,
-        ResponseHttp $responseHttp,
-        Session $session
+        \Magento\Framework\App\State $state
     ) {
         $this->config = $config;
         $this->version = $version;
         $this->kernel = $kernel;
         $this->state = $state;
-        $this->responseHttp = $responseHttp;
-        $this->session = $session;
     }
 
     /**
@@ -83,9 +66,6 @@ class BuiltinPlugin
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        if (!$this->session->getCustomerId()) {
-            $this->responseHttp->sendVary();
-        }
         $this->version->process();
         if (!$this->config->isEnabled() || $this->config->getType() !== \Magento\PageCache\Model\Config::BUILT_IN) {
             return $proceed($request);
