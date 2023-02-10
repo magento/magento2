@@ -24,7 +24,7 @@
         <!-- change the Default Tax Destination Calculation Configurations -->
         <scrollTo selector="#tax_defaults-head" x="0" y="-80" stepKey="scrollToTaxDefaults"/>
 
-        <!-- conditionalClick twice to fix some flaky behavior -->
+        <!-- Set default tax destination calculation -->
         <conditionalClick selector="{{AdminConfigureTaxSection.defaultDestination}}" dependentSelector="#tax_defaults" visible="false" stepKey="clickCalculationSettings"/>
         <uncheckOption selector="{{AdminConfigureTaxSection.systemValueDefaultCountry}}" stepKey="clickDefaultCountry"/>
         <selectOption selector="{{AdminConfigureTaxSection.dropdownDefaultCountry}}" userInput="{{country}}" stepKey="selectDefaultCountry"/>
