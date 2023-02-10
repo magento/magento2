@@ -47,6 +47,7 @@ class BackpressureFieldValidator implements ValidatorInterface
      * @param array $args
      * @return void
      * @throws GraphQlTooManyRequestsException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function validate(Field $field, $args): void
     {
