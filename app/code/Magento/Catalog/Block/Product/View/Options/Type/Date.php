@@ -26,8 +26,6 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
     protected $_fillLeadingZeros = true;
 
     /**
-     * Catalog product option type date
-     *
      * @var \Magento\Catalog\Model\Product\Option\Type\Date
      */
     protected $_catalogProductOptionTypeDate;
@@ -137,7 +135,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
     public function getDropDownsDateHtml()
     {
         $fieldsSeparator = '&nbsp;';
-        $fieldsOrder = $this->_catalogProductOptionTypeDate->getConfigData('date_fields_order');
+        $fieldsOrder = $this->_catalogProductOptionTypeDate->getConfigData('date_fields_order') ?? '';
         $fieldsOrder = str_replace(',', $fieldsSeparator, $fieldsOrder);
 
         $monthsHtml = $this->_getSelectFromToHtml('month', 1, 12);
@@ -168,7 +166,10 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
             $dayPartHtml = $this->_getHtmlSelect(
                 'day_part'
             )->setOptions(
-                ['am' => __('AM'), 'pm' => __('PM')]
+                [
+                    'am' => $this->escapeHtml(__('AM')),
+                    'pm' => $this->escapeHtml(__('PM'))
+                ]
             )->getHtml();
         }
         $hoursHtml = $this->_getSelectFromToHtml('hour', $hourStart, $hourEnd);

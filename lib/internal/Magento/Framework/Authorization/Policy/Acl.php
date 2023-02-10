@@ -1,8 +1,5 @@
 <?php
 /**
- * Uses ACL to control access. If ACL doesn't contain provided resource,
- * permission for all resources is checked
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,6 +8,9 @@ namespace Magento\Framework\Authorization\Policy;
 use Magento\Framework\Acl\Builder;
 use Magento\Framework\Authorization\PolicyInterface;
 
+/**
+ * Uses ACL to control access. If ACL doesn't contain provided resource, permission for all resources is checked.
+ */
 class Acl implements PolicyInterface
 {
     /**
@@ -40,9 +40,10 @@ class Acl implements PolicyInterface
             return $this->_aclBuilder->getAcl()->isAllowed($roleId, $resourceId, $privilege);
         } catch (\Exception $e) {
             try {
-                if (!$this->_aclBuilder->getAcl()->has($resourceId)) {
+                if (!$this->_aclBuilder->getAcl()->hasResource($resourceId)) {
                     return $this->_aclBuilder->getAcl()->isAllowed($roleId, null, $privilege);
                 }
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             } catch (\Exception $e) {
             }
         }

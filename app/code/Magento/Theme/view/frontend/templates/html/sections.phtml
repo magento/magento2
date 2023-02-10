@@ -19,7 +19,7 @@ $groupCss = $block->getGroupCss();
             <?php foreach ($detailedInfoGroup as $name):?>
                 <?php
                     $html = $layout->renderElement($name);
-                if (!trim($html) && ($block->getUseForce() != true)) {
+                if (!($html !== null && trim($html)) && ($block->getUseForce() != true)) {
                     continue;
                 }
                     $alias = $layout->getElementAlias($name);

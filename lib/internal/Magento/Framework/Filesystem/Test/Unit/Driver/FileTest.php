@@ -5,9 +5,6 @@
  */
 declare(strict_types=1);
 
-
-declare(strict_types=1);
-
 namespace Magento\Framework\Filesystem\Test\Unit\Driver;
 
 use Magento\Framework\Filesystem\Driver\File;
@@ -56,6 +53,8 @@ class FileTest extends TestCase
             ['/root/path/', '/sub', '/root/path/sub'],
             ['/root/path/', '../sub', '/root/path/../sub'],
             ['/root/path/', '/root/path/sub', '/root/path/sub'],
+            ['', '', ''],
+            ['0', '0', '0']
         ];
     }
 
@@ -85,6 +84,8 @@ class FileTest extends TestCase
             ['/root/path/', '/sub', '/sub'],
             ['/root/path/', '/root/path/sub', 'sub'],
             ['/root/path/sub', '/root/path/other', '/root/path/other'],
+            ['/root/path/', '', ''],
+            ['0', '0', '']
         ];
     }
 
@@ -113,11 +114,16 @@ class FileTest extends TestCase
             ['/1/.test', '/1/.test'],
             ['/1/..test', '/1/..test'],
             ['/1/.test/.test', '/1/.test/.test'],
-            ['/1/2/./.', '/1/2/'],
+            ['/1/2/./.', '/1/2'],
+            ['/1/2/./././', '/1/2'],
             ['/1/2/3/../..', '/1'],
-            ['/1/2/3/.', '/1/2/3/'],
+            ['/1/2/3/.', '/1/2/3'],
             ['/1/2/3/./4/5', '/1/2/3/4/5'],
-            ['/1/2/3/../4/5', '/1/2/4/5']
+            ['/1/2/3/../4/5', '/1/2/4/5'],
+            ['1/2/.//.\3/4/..\..\5', '1/2/5'],
+            ['\./.test', '/.test'],
+            ['\\1/\\\.\..test', '/1/..test'],
+            ['/1/2\\3\\\.', '/1/2/3']
         ];
     }
 }

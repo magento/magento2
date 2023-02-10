@@ -15,13 +15,11 @@
              <title value="Guest customer should be able to advance search Downloadable product with product sku that contains hyphen"/>
              <description value="Guest customer should be able to advance search Downloadable product with product that contains hyphen"/>
              <severity value="MAJOR"/>
-             <testCaseId value="MC-252"/>
+             <testCaseId value="MC-28818"/>
              <group value="Downloadable"/>
-             <group value="SearchEngineElasticsearch"/>
-             <skip>
-                 <issueId value="MC-34217"/>
-             </skip>
-         </annotations>
+             <group value="SearchEngine"/>
+            <group value="pr_exclude"/>
+        </annotations>
          <before>
              <magentoCLI command="downloadable:domains:add example.com static.magento.com" before="product" stepKey="addDownloadableDomain"/>
              <createData entity="ApiDownloadableProduct" stepKey="product"/>

@@ -40,7 +40,7 @@ class SaveHandlerTest extends TestCase
     private $hydratorPool;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -61,15 +61,21 @@ class SaveHandlerTest extends TestCase
 
     /**
      * @param array $categoryIds
-     * @param array $categoryLinks
+     * @param array|null $categoryLinks
      * @param array $existCategoryLinks
      * @param array $expectedCategoryLinks
      * @param array $affectedIds
      *
+     * @return void
      * @dataProvider getCategoryDataProvider
      */
-    public function testExecute($categoryIds, $categoryLinks, $existCategoryLinks, $expectedCategoryLinks, $affectedIds)
-    {
+    public function testExecute(
+        array $categoryIds,
+        ?array $categoryLinks,
+        array $existCategoryLinks,
+        array $expectedCategoryLinks,
+        array $affectedIds
+    ): void {
         if ($categoryLinks) {
             $this->hydrator->expects(static::any())
                 ->method('extract')
@@ -82,7 +88,7 @@ class SaveHandlerTest extends TestCase
 
         $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCategoryLinks', 'getCategoryLinks'])
+            ->addMethods(['setCategoryLinks', 'getCategoryLinks'])
             ->getMockForAbstractClass();
         $extensionAttributes->expects(static::any())
             ->method('getCategoryLinks')
@@ -90,16 +96,10 @@ class SaveHandlerTest extends TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getExtensionAttributes',
-                    'setAffectedCategoryIds',
-                    'setIsChangedCategories',
-                    'getCategoryIds'
-                ]
-            )
+            ->onlyMethods(['getExtensionAttributes', 'getCategoryIds'])
+            ->addMethods(['setAffectedCategoryIds', 'setIsChangedCategories'])
             ->getMock();
-        $product->expects(static::at(0))->method('setIsChangedCategories')->with(false);
+        $product->method('setIsChangedCategories')->withConsecutive([false]);
         $product->expects(static::once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
@@ -131,7 +131,7 @@ class SaveHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function getCategoryDataProvider()
+    public function getCategoryDataProvider(): array
     {
         return [
             [
@@ -139,88 +139,92 @@ class SaveHandlerTest extends TestCase
                 null, // dto category links
                 [
                     ['category_id' => 3, 'position' => 10],
-                    ['category_id' => 4, 'position' => 20],
+                    ['category_id' => 4, 'position' => 20]
                 ],
                 [
                     ['category_id' => 3, 'position' => 10],
                     ['category_id' => 4, 'position' => 20],
-                    ['category_id' => 5, 'position' => 0],
+                    ['category_id' => 5, 'position' => 0]
                 ],
-                [3,4,5], //affected category_ids
+                [3,4,5] //affected category_ids
             ],
             [
                 [3, 4], //model category_ids
                 [], // dto category links
                 [
                     ['category_id' => 3, 'position' => 10],
-                    ['category_id' => 4, 'position' => 20],
+                    ['category_id' => 4, 'position' => 20]
                 ],
                 [],
-                [3,4], //affected category_ids
+                [3,4] //affected category_ids
             ],
             [
                 [], //model category_ids
                 [
-                    ['category_id' => 3, 'position' => 20],
+                    ['category_id' => 3, 'position' => 20]
                 ], // dto category links
                 [
                     ['category_id' => 3, 'position' => 10],
-                    ['category_id' => 4, 'position' => 20],
+                    ['category_id' => 4, 'position' => 20]
                 ],
                 [
-                    ['category_id' => 3, 'position' => 20],
+                    ['category_id' => 3, 'position' => 20]
                 ],
-                [3,4], //affected category_ids
+                [3,4] //affected category_ids
+            ],
+            [
+                [3], //model category_ids
+                [
+                    ['category_id' => 3, 'position' => 20]
+                ], // dto category links
+                [
+                    ['category_id' => 3, 'position' => 10]
+                ],
+                [
+                    ['category_id' => 3, 'position' => 20]
+                ],
+                [3] //affected category_ids
+            ],
+            [
+                [], //model category_ids
+                [
+                    ['category_id' => 3, 'position' => 10]
+                ], // dto category links
+                [
+                    ['category_id' => 3, 'position' => 10]
+                ],
+                [
+                    ['category_id' => 3, 'position' => 10]
+                ],
+                [] //affected category_ids
             ],
             [
                 [3], //model category_ids
                 [
                     ['category_id' => 3, 'position' => 20],
+                    ['category_id' => 4, 'position' => 30]
                 ], // dto category links
                 [
-                    ['category_id' => 3, 'position' => 10],
+                    ['category_id' => 3, 'position' => 10]
                 ],
                 [
                     ['category_id' => 3, 'position' => 20],
+                    ['category_id' => 4, 'position' => 30]
                 ],
-                [3], //affected category_ids
-            ],
-            [
-                [], //model category_ids
-                [
-                    ['category_id' => 3, 'position' => 10],
-                ], // dto category links
-                [
-                    ['category_id' => 3, 'position' => 10],
-                ],
-                [
-                    ['category_id' => 3, 'position' => 10],
-                ],
-                [], //affected category_ids
-            ],
-            [
-                [3], //model category_ids
-                [
-                    ['category_id' => 3, 'position' => 20],
-                    ['category_id' => 4, 'position' => 30],
-                ], // dto category links
-                [
-                    ['category_id' => 3, 'position' => 10],
-                ],
-                [
-                    ['category_id' => 3, 'position' => 20],
-                    ['category_id' => 4, 'position' => 30],
-                ],
-                [3, 4], //affected category_ids
-            ],
+                [3, 4] //affected category_ids
+            ]
         ];
     }
 
-    public function testExecuteWithoutProcess()
+    /**
+     * @return void
+     */
+    public function testExecuteWithoutProcess(): void
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getExtensionAttributes', 'hasCategoryIds'])
+            ->onlyMethods(['getExtensionAttributes'])
+            ->addMethods(['hasCategoryIds'])
             ->getMock();
         $product->expects(static::once())
             ->method('getExtensionAttributes')

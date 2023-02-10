@@ -8,6 +8,7 @@ namespace Magento\Store\Model\StoreResolver;
 /**
  * Interface \Magento\Store\Model\StoreResolver\ReaderInterface
  *
+ * @api
  */
 interface ReaderInterface
 {

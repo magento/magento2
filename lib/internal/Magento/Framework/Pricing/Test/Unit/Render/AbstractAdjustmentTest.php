@@ -38,6 +38,9 @@ class AbstractAdjustmentTest extends TestCase
      */
     protected $data;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->priceCurrency = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
@@ -51,13 +54,15 @@ class AbstractAdjustmentTest extends TestCase
                 'data' => $this->data
             ]
         );
-        $this->model = $this->getMockBuilder(AbstractAdjustment::class)
-            ->setConstructorArgs($constructorArgs)
-            ->setMethods(['getData', 'setData', 'apply'])
+        $this->model = $this->getMockBuilder(AbstractAdjustment::class)->setConstructorArgs($constructorArgs)
+            ->onlyMethods(['getData', 'setData', 'apply'])
             ->getMockForAbstractClass();
     }
 
-    public function testConvertAndFormatCurrency()
+    /**
+     * @return void
+     */
+    public function testConvertAndFormatCurrency(): void
     {
         $amount = '100';
         $includeContainer = true;
@@ -73,41 +78,47 @@ class AbstractAdjustmentTest extends TestCase
         $this->assertEquals($result, $this->model->convertAndFormatCurrency($amount, $includeContainer, $precision));
     }
 
-    public function testRender()
+    /**
+     * @return void
+     */
+    public function testRender(): void
     {
         $amountRender = $this->createMock(Amount::class);
         $arguments = ['argument_two' => 2];
         $mergedArguments = ['argument_one' => 1, 'argument_two' => 2];
         $renderText = 'amount data';
 
-        $this->model->expects($this->at(0))
+        $this->model
             ->method('getData')
             ->willReturn($this->data);
-        $this->model->expects($this->at(1))
-            ->method('setData')
-            ->with($mergedArguments);
-        $this->model->expects($this->at(2))
+        $this->model
             ->method('apply')
             ->willReturn($renderText);
-        $this->model->expects($this->at(3))
+        $this->model
             ->method('setData')
-            ->with($this->data);
+            ->withConsecutive([$mergedArguments], [$this->data]);
 
         $result = $this->model->render($amountRender, $arguments);
         $this->assertEquals($renderText, $result);
     }
 
-    public function testGetAmountRender()
+    /**
+     * @return void
+     */
+    public function testGetAmountRender(): void
     {
         $amountRender = $this->createMock(Amount::class);
-        $this->model->expects($this->at(0))
+        $this->model
             ->method('getData')
             ->willReturn($this->data);
         $this->model->render($amountRender);
         $this->assertEquals($amountRender, $this->model->getAmountRender());
     }
 
-    public function testGetPriceType()
+    /**
+     * @return void
+     */
+    public function testGetPriceType(): void
     {
         $amountRender = $this->createMock(Amount::class);
         $price = $this->getMockForAbstractClass(PriceInterface::class);
@@ -126,14 +137,17 @@ class AbstractAdjustmentTest extends TestCase
             ->with($priceCode)
             ->willReturn($price);
 
-        $this->model->expects($this->at(0))
+        $this->model
             ->method('getData')
             ->willReturn($this->data);
         $this->model->render($amountRender);
         $this->assertEquals($price, $this->model->getPriceType($priceCode));
     }
 
-    public function testGetPrice()
+    /**
+     * @return void
+     */
+    public function testGetPrice(): void
     {
         $price = 100;
         $amountRender = $this->createMock(Amount::class);
@@ -142,14 +156,17 @@ class AbstractAdjustmentTest extends TestCase
             ->with()
             ->willReturn($price);
 
-        $this->model->expects($this->at(0))
+        $this->model
             ->method('getData')
             ->willReturn($this->data);
         $this->model->render($amountRender);
         $this->assertEquals($price, $this->model->getPrice());
     }
 
-    public function testGetSealableItem()
+    /**
+     * @return void
+     */
+    public function testGetSealableItem(): void
     {
         $sealableItem = $this->getMockForAbstractClass(SaleableInterface::class);
         $amountRender = $this->createMock(Amount::class);
@@ -158,14 +175,17 @@ class AbstractAdjustmentTest extends TestCase
             ->with()
             ->willReturn($sealableItem);
 
-        $this->model->expects($this->at(0))
+        $this->model
             ->method('getData')
             ->willReturn($this->data);
         $this->model->render($amountRender);
         $this->assertEquals($sealableItem, $this->model->getSaleableItem());
     }
 
-    public function testGetAdjustment()
+    /**
+     * @return void
+     */
+    public function testGetAdjustment(): void
     {
         $amountRender = $this->createMock(Amount::class);
         $adjustment = $this->getMockForAbstractClass(AdjustmentInterface::class);
@@ -184,7 +204,7 @@ class AbstractAdjustmentTest extends TestCase
             ->with($adjustmentCode)
             ->willReturn($adjustment);
 
-        $this->model->expects($this->at(0))
+        $this->model
             ->method('getData')
             ->willReturn($this->data);
         $this->model->expects($this->once())
@@ -194,7 +214,10 @@ class AbstractAdjustmentTest extends TestCase
         $this->assertEquals($adjustment, $this->model->getAdjustment());
     }
 
-    public function testFormatCurrency()
+    /**
+     * @return void
+     */
+    public function testFormatCurrency(): void
     {
         $amount = 5.3456;
         $includeContainer = false;

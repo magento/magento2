@@ -6,28 +6,49 @@
 
 namespace Magento\SalesRule\Model\Quote\Address\Total;
 
-class ShippingTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Api\Data\AddressInterfaceFactory;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Api\Data\ShippingMethodInterface;
+use Magento\Quote\Api\GuestCartItemRepositoryInterface;
+use Magento\Quote\Api\GuestCartManagementInterface;
+use Magento\Quote\Api\GuestShipmentEstimationInterface;
+use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
+use Magento\SalesRule\Model\Rule\Condition\Combine;
+use Magento\SalesRule\Model\Rule\Condition\Product;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ShippingTest extends TestCase
 {
     /**
-     * @var \Magento\Quote\Api\GuestCartManagementInterface
+     * @var GuestCartManagementInterface
      */
     private $cartManagement;
 
     /**
-     * @var \Magento\Quote\Api\GuestCartItemRepositoryInterface
+     * @var GuestCartItemRepositoryInterface
      */
     private $itemRepository;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
     protected function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->cartManagement = $this->objectManager->get(\Magento\Quote\Api\GuestCartManagementInterface::class);
-        $this->itemRepository = $this->objectManager->get(\Magento\Quote\Api\GuestCartItemRepositoryInterface::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->cartManagement = $this->objectManager->get(GuestCartManagementInterface::class);
+        $this->itemRepository = $this->objectManager->get(GuestCartItemRepositoryInterface::class);
     }
 
     /**
@@ -37,7 +58,8 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      */
     public function testRuleByProductWeightWithFreeShipping()
     {
-        $cartId = $this->prepareQuote(1);
+        $cartId = $this->cartManagement->createEmptyCart();
+        $this->addToCart($cartId, 'simple-99', 1);
         $methods = $this->estimateShipping($cartId);
 
         $this->assertTrue(count($methods) > 0);
@@ -52,7 +74,8 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      */
     public function testRuleByProductWeightWithoutFreeShipping()
     {
-        $cartId = $this->prepareQuote(5);
+        $cartId = $this->cartManagement->createEmptyCart();
+        $this->addToCart($cartId, 'simple-99', 5);
         $methods = $this->estimateShipping($cartId);
 
         $this->assertTrue(count($methods) > 0);
@@ -61,46 +84,121 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_free_shipping.php
+     * @magentoDataFixture Magento/Catalog/_files/products_list.php
+     */
+    public function testFreeMethodWeight()
+    {
+        $this->setFreeShippingForProduct('simple-249');
+        $cartId = $this->cartManagement->createEmptyCart();
+        $this->addToCart($cartId, 'simple-249', 3);
+        $this->addToCart($cartId, 'simple-156', 1);
+        $this->estimateShipping($cartId);
+        $quote = $this->getQuote($cartId);
+        $this->assertEquals(10, $quote->getShippingAddress()->getFreeMethodWeight());
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_free_shipping.php
+     * @magentoDataFixture Magento/Catalog/_files/products_list.php
+     */
+    public function testFreeMethodWeightWithMaximumQtyDiscount()
+    {
+        $this->setFreeShippingForProduct('simple-249', 2);
+        $cartId = $this->cartManagement->createEmptyCart();
+        $this->addToCart($cartId, 'simple-249', 5);
+        $this->addToCart($cartId, 'simple-156', 1);
+        $this->estimateShipping($cartId);
+        $quote = $this->getQuote($cartId);
+        $this->assertEquals(40, $quote->getShippingAddress()->getFreeMethodWeight());
+    }
+
+    /**
      * Estimate shipment for guest cart
      *
      * @param int $cartId
-     * @return \Magento\Quote\Api\Data\ShippingMethodInterface[]
+     * @return ShippingMethodInterface[]
      */
     private function estimateShipping($cartId)
     {
-        $addressFactory = $this->objectManager->get(\Magento\Quote\Api\Data\AddressInterfaceFactory::class);
-        /** @var \Magento\Quote\Api\Data\AddressInterface $address */
+        $addressFactory = $this->objectManager->get(AddressInterfaceFactory::class);
+        /** @var AddressInterface $address */
         $address = $addressFactory->create();
         $address->setCountryId('US');
         $address->setRegionId(2);
 
-        /** @var \Magento\Quote\Api\GuestShipmentEstimationInterface $estimation */
-        $estimation = $this->objectManager->get(\Magento\Quote\Api\GuestShipmentEstimationInterface::class);
+        /** @var GuestShipmentEstimationInterface $estimation */
+        $estimation = $this->objectManager->get(GuestShipmentEstimationInterface::class);
         return $estimation->estimateByExtendedAddress($cartId, $address);
     }
 
     /**
-     * Create guest quote with products
-     *
-     * @param int $itemQty
-     * @return int
+     * @param string $cartMaskId
+     * @return CartInterface
+     * @throws NoSuchEntityException
      */
-    private function prepareQuote($itemQty)
+    private function getQuote(string $cartMaskId): CartInterface
     {
-        $cartId = $this->cartManagement->createEmptyCart();
+        /** @var CartRepositoryInterface $cartRepository */
+        $cartRepository = $this->objectManager->get(CartRepositoryInterface::class);
+        /** @var MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId */
+        $maskedQuoteIdToQuoteId = $this->objectManager->get(MaskedQuoteIdToQuoteIdInterface::class);
+        $cartId = $maskedQuoteIdToQuoteId->execute($cartMaskId);
+        return $cartRepository->get($cartId);
+    }
 
-        /** @var \Magento\Quote\Api\Data\CartItemInterfaceFactory $cartItemFactory */
-        $cartItemFactory = $this->objectManager->get(\Magento\Quote\Api\Data\CartItemInterfaceFactory::class);
+    /**
+     * @param string $cartMaskId
+     * @param string $sku
+     * @param int $qty
+     * @throws NoSuchEntityException
+     */
+    private function addToCart(string $cartMaskId, string $sku, int $qty): void
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        /** @var CartRepositoryInterface $cartRepository */
+        $cartRepository = $this->objectManager->get(CartRepositoryInterface::class);
+        $product = $productRepository->get($sku);
+        $quote = $this->getQuote($cartMaskId);
+        $quote->addProduct($product, $qty);
+        $cartRepository->save($quote);
+    }
 
-        /** @var \Magento\Quote\Api\Data\CartItemInterface $cartItem */
-        $cartItem = $cartItemFactory->create();
-        $cartItem->setQuoteId($cartId);
-        $cartItem->setQty($itemQty);
-        $cartItem->setSku('simple-99');
-        $cartItem->setProductType(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE);
-
-        $this->itemRepository->save($cartItem);
-
-        return $cartId;
+    /**
+     * @param string $sku
+     * @param int $qty
+     */
+    public function setFreeShippingForProduct(string $sku, int $qty = 0): void
+    {
+        /** @var Registry $registry */
+        $registry = $this->objectManager->get(Registry::class);
+        $salesRule = $registry->registry('cart_rule_free_shipping');
+        $salesRule->setDiscountQty($qty);
+        $data = [
+            'actions' => [
+                1 => [
+                    'type' => Combine::class,
+                    'attribute' => null,
+                    'operator' => null,
+                    'value' => '1',
+                    'is_value_processed' => null,
+                    'aggregator' => 'all',
+                    'actions' => [
+                        1 => [
+                            'type' => Product::class,
+                            'attribute' => 'sku',
+                            'operator' => '==',
+                            'value' => $sku,
+                            'is_value_processed' => false,
+                        ]
+                    ]
+                ]
+            ],
+        ];
+        $salesRule->loadPost($data);
+        $salesRule->save();
     }
 }

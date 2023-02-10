@@ -4,14 +4,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GroupedProduct\Api;
 
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Indexer\Model\Config;
+use Magento\Catalog\Api\ProductLinkManagementInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Webapi\Rest\Request;
+use Magento\Indexer\Model\Config;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 
-class ProductLinkRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstract
+class ProductLinkRepositoryTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'catalogProductLinkRepositoryV1';
     const SERVICE_VERSION = 'V1';
@@ -55,7 +59,7 @@ class ProductLinkRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAb
             'linked_product_sku' => 'simple-1',
             'position' => 3,
             'extension_attributes' => [
-                'qty' =>  (float) 300.0000,
+                'qty' => (float)300.0000,
             ],
         ];
 
@@ -72,12 +76,15 @@ class ProductLinkRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAb
         ];
         $this->_webApiCall($serviceInfo, ['entity' => $productData]);
 
-        /** @var \Magento\Catalog\Api\ProductLinkManagementInterface $linkManagement */
-        $linkManagement = $this->objectManager->get(\Magento\Catalog\Api\ProductLinkManagementInterface::class);
+        /** @var ProductLinkManagementInterface $linkManagement */
+        $linkManagement = $this->objectManager->get(ProductLinkManagementInterface::class);
         $actual = $linkManagement->getLinkedItemsByType($productSku, $linkType);
-        array_walk($actual, function (&$item) {
-            $item = $item->__toArray();
-        });
+        array_walk(
+            $actual,
+            function (&$item) {
+                $item = $item->__toArray();
+            }
+        );
         $this->assertEquals($productData, $actual[2]);
     }
 
@@ -98,7 +105,7 @@ class ProductLinkRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAb
             'linked_product_sku' => $productSimple,
             'position' => 3,
             'extension_attributes' => [
-                'qty' =>  (float) 300.0000,
+                'qty' => (float)300.0000,
             ],
         ];
         $serviceInfo = [
@@ -125,6 +132,101 @@ class ProductLinkRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAb
     }
 
     /**
+     * Verify empty out of stock grouped product is in stock after child has been added.
+     *
+     * @return void
+     * @magentoApiDataFixture Magento/GroupedProduct/_files/empty_grouped_product.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
+     */
+    public function testGroupedProductIsInStockAfterAddChild(): void
+    {
+        $productSku = 'grouped-product';
+        self::assertFalse($this->isProductInStock($productSku));
+        $items = [
+            'sku' => $productSku,
+            'link_type' => 'associated',
+            'linked_product_type' => 'virtual',
+            'linked_product_sku' => 'virtual-product',
+            'position' => 3,
+            'extension_attributes' => [
+                'qty' => 1,
+            ],
+        ];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $productSku . '/links',
+                'httpMethod' => Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+        $this->_webApiCall($serviceInfo, ['entity' => $items]);
+        self::assertTrue($this->isProductInStock($productSku));
+    }
+
+    /**
+     * Verify in stock grouped product is out stock after children have been removed.
+     *
+     * @return void
+     * @magentoApiDataFixture Magento/GroupedProduct/_files/product_grouped_with_simple.php
+     */
+    public function testGroupedProductIsOutOfStockAfterRemoveChild(): void
+    {
+        $productSku = 'grouped';
+        $childrenSkus = [
+            'simple_11',
+            'simple_22',
+        ];
+        self::assertTrue($this->isProductInStock($productSku));
+
+        foreach ($childrenSkus as $childSku) {
+            $serviceInfo = [
+                'rest' => [
+                    'resourcePath' => self::RESOURCE_PATH . $productSku . '/links/associated/' . $childSku,
+                    'httpMethod' => Request::HTTP_METHOD_DELETE,
+                ],
+                'soap' => [
+                    'service' => self::SERVICE_NAME,
+                    'serviceVersion' => self::SERVICE_VERSION,
+                    'operation' => self::SERVICE_NAME . 'DeleteById',
+                ],
+            ];
+            $requestData = ['sku' => $productSku, 'type' => 'associated', 'linkedProductSku' => $childSku];
+            $this->_webApiCall($serviceInfo, $requestData);
+        }
+
+        self::assertFalse($this->isProductInStock($productSku));
+    }
+
+
+    /**
+     * Check product stock status.
+     *
+     * @param string $productSku
+     * @return bool
+     */
+    private function isProductInStock(string $productSku): bool
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/stockStatuses/' . $productSku,
+                'httpMethod' => Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => 'catalogInventoryStockRegistryV1',
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => 'catalogInventoryStockRegistryV1getStockStatusBySku',
+            ],
+        ];
+        $result = $this->_webApiCall($serviceInfo, ['productSku' => $productSku]);
+
+        return (bool)$result['stock_status'];
+    }
+
+    /**
      * @param string $productSku
      * @return array
      */
@@ -139,11 +241,11 @@ class ProductLinkRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAb
                             [
                                 'field' => 'search_term',
                                 'value' => $productSku,
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -156,13 +258,13 @@ class ProductLinkRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAb
         return [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH_SEARCH . '?' . http_build_query($searchCriteria),
-                'httpMethod' => Request::HTTP_METHOD_GET
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME_SEARCH,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME_SEARCH . 'Search'
-            ]
+                'operation' => self::SERVICE_NAME_SEARCH . 'Search',
+            ],
         ];
     }
 

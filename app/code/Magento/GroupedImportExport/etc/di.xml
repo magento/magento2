@@ -13,4 +13,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogImportExport\Model\StockItemImporterInterface">
+        <plugin name="update_grouped_product_stock_status_plugin" type="Magento\GroupedImportExport\Plugin\CatalogImportExport\Model\StockItemImporter\UpdateGroupedProductStockStatusPlugin" />
+    </type>
 </config>

@@ -7,10 +7,14 @@
 
 <div class="selectmenu" collapsible="">
     <div class="selectmenu-value" openCollapsible="">
-        <input type="text" ko-value="_value" attr="id: index" autoselect/>
+        <input type="text" ko-value="_value" attr="id: index" autoselect aria-labelledby="per-page-text"/>
     </div>
-    <button class="selectmenu-toggle" type="button" css="_active: $collapsible.opened" toggleCollapsible>
-        <span translate="'Select'"/>
+    <button class="selectmenu-toggle"
+            type="button"
+            css="_active: $collapsible.opened"
+            toggleCollapsible
+            aria-labelledby="per-page-text select-button-text">
+        <span id="select-button-text" translate="'Select'"></span>
     </button>
     <div class="selectmenu-items" css="_active: $collapsible.opened" outerClick="discardAll.bind($data)">
         <ul>
@@ -19,20 +23,20 @@
                     <input class="admin__control-text" type="text"
                         ko-value="$size()._value" hasFocus="isEditing($size().value)"/>
                     <button class="action-save" type="button" click="updateSize.bind($data, $size().value, false)">
-                        <span translate="'Save'"/>
+                        <span translate="'Save'"></span>
                     </button>
                     <button class="action-delete" type="button" click="removeSize.bind($data, $size().value, false)">
-                        <span translate="'Delete'"/>
+                        <span translate="'Delete'"></span>
                     </button>
                 </div>
                 <div class="selectmenu-item">
-                    <button class="selectmenu-item-action" type="button" text="$size().label" click="setSize.bind($data, $size().value)"/>
+                    <button class="selectmenu-item-action" type="button" text="$size().label" click="setSize.bind($data, $size().value)"></button>
                     <button class="action-edit" type="button" if="$size().editable"
                         data-bind="
                             click: function () {
                                 discardCustom().edit($size().value);
                             }">
-                        <span translate="'Edit'"/>
+                        <span translate="'Edit'"></span>
                     </button>
                 </div>
             </li>
@@ -46,16 +50,16 @@
                             click: function () {
                                 $data.showCustom()
                                     .discardEditing();
-                            }"/>
+                            }"></button>
                 </div>
                 <div class="selectmenu-item-edit" keyboard="13: applyCustom">
                     <input class="admin__control-text" type="text" ko-value="customValue" hasFocus="isCustomVisible()"/>
                     <button class="action-save" type="button" click="applyCustom">
-                        <span translate="'Save'"/>
+                        <span translate="'Save'"></span>
                     </button>
                 </div>
             </li>
         </ul>
     </div>
 </div>
-<label class="admin__control-support-text" translate="'per page'" attr="for: index"/>
+<label class="admin__control-support-text" translate="'per page'" attr="for: index" id="per-page-text"></label>

@@ -19,6 +19,7 @@
     <preference for="Magento\Framework\View\Model\PageLayout\Config\BuilderInterface" type="Magento\Theme\Model\PageLayout\Config\Builder"/>
     <preference for="Magento\Theme\Model\Design\Config\MetadataProviderInterface" type="Magento\Theme\Model\Design\Config\MetadataProvider"/>
     <preference for="Magento\Theme\Model\Theme\StoreThemesResolverInterface" type="Magento\Theme\Model\Theme\StoreThemesResolver"/>
+    <preference for="Magento\Theme\CustomerData\MessagesProviderInterface" type="Magento\Theme\CustomerData\MessagesProvider"/>
     <type name="Magento\Theme\Model\Config">
         <arguments>
             <argument name="configCache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>

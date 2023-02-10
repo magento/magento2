@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+use Magento\Catalog\Ui\DataProvider\Product\ProductCollection;
+
 ?>
 <?php
 /**
@@ -14,12 +17,15 @@
  *  getPagerVisibility()
  *  getVarNamePage()
  */
-$numColumns = count($block->getColumns());
 
 /**
  * @var \Magento\Backend\Block\Widget\Grid\Extended $block
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Backend\ViewModel\LimitTotalNumberOfProductsInGrid $viewModel
  */
+$numColumns = count($block->getColumns());
+$viewModel = $block->getViewModel();
+
 ?>
 <?php if ($block->getCollection()): ?>
     <?php if ($block->canDisplayContainer()): ?>
@@ -67,11 +73,15 @@ $numColumns = count($block->getColumns());
                 <?php endif; ?>
                 <?php $countRecords = $block->getCollection()->getSize(); ?>
                 <div class="admin__control-support-text">
+                    <?php if (!$block->getCollection() instanceof ProductCollection
+                        || !$viewModel->limitTotalNumberOfProducts()
+                        || $countRecords < $viewModel->getRecordsLimit()): ?>
                         <span id="<?= $block->escapeHtml($block->getHtmlId()) ?>-total-count"
                             <?= /* @noEscape */ $block->getUiId('total-count') ?>>
                             <?= /* @noEscape */ $countRecords ?>
                         </span>
-                    <?= $block->escapeHtml(__('records found')) ?>
+                        <?= $block->escapeHtml(__('records found')) ?>
+                    <?php endif; ?>
                     <span id="<?= $block->escapeHtml($block->getHtmlId()) ?>_massaction-count"
                           class="mass-select-info _empty">
                         <strong data-role="counter">0</strong>
@@ -101,8 +111,7 @@ $numColumns = count($block->getColumns());
                             selected="selected"<?php endif; ?>>200
                         </option>
                     </select>
-                    <label for="<?= $block->escapeHtml($block->getHtmlId())
-                    ?><?= $block->escapeHtml($block->getHtmlId()) ?>_page-limit"
+                    <label for="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-limit"
                         class="admin__control-support-text"><?= $block->escapeHtml(__('per page')) ?></label>
 
                     <div class="admin__data-grid-pager">
@@ -124,23 +133,27 @@ $numColumns = count($block->getColumns());
                                 <span><?= $block->escapeHtml(__('Previous page')) ?></span>
                             </button>
                         <?php endif; ?>
-                        <input type="text"
-                               id="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-current"
-                               name="<?= $block->escapeHtmlAttr($block->getVarNamePage()) ?>"
-                               value="<?= $block->escapeHtmlAttr($_curPage) ?>"
-                               class="admin__control-text"
-                               <?= /* @noEscape */ $block->getUiId('current-page') ?> />
-                        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                            'onkeypress',
-                            /* @noEscape */ $block->getJsObjectName() . '.inputPage(event, \'' .
-                            /* @noEscape */ $_lastPage . '\')',
-                            '#' . $block->escapeHtml($block->getHtmlId()) . '_page-current'
-                        ) ?>
-                        <label class="admin__control-support-text"
-                               for="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-current">
-                            <?= /* @noEscape */ __('of %1', '<span>' .
-                                $block->getCollection()->getLastPageNumber() . '</span>') ?>
-                        </label>
+                        <?php if (!$block->getCollection() instanceof ProductCollection
+                            || !$viewModel->limitTotalNumberOfProducts()
+                            || $countRecords < $viewModel->getRecordsLimit()): ?>
+                            <input type="text"
+                                   id="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-current"
+                                   name="<?= $block->escapeHtmlAttr($block->getVarNamePage()) ?>"
+                                   value="<?= $block->escapeHtmlAttr($_curPage) ?>"
+                                   class="admin__control-text"
+                                   <?= /* @noEscape */ $block->getUiId('current-page') ?> />
+                            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                                'onkeypress',
+                                /* @noEscape */ $block->getJsObjectName() . '.inputPage(event, \'' .
+                                /* @noEscape */ $_lastPage . '\')',
+                                '#' . $block->escapeHtml($block->getHtmlId()) . '_page-current'
+                            ) ?>
+                            <label class="admin__control-support-text"
+                                   for="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-current">
+                                <?= /* @noEscape */ __('of %1', '<span>' .
+                                    $block->getCollection()->getLastPageNumber() . '</span>') ?>
+                            </label>
+                        <?php endif; ?>
                         <?php if ($_curPage < $_lastPage): ?>
                             <button type="button"
                                     title="<?= $block->escapeHtmlAttr(__('Next page')) ?>"
@@ -285,7 +298,9 @@ $numColumns = count($block->getColumns());
         </table>
 
     </div>
+        <?php if ($block->canDisplayContainer()): ?>
 </div>
+        <?php endif; ?>
     <?php
     /** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
     $jsonHelper = $block->getData('jsonHelper');
@@ -301,7 +316,7 @@ script;
 script;
         endif;
 
-        if (strpos($block->getRowClickCallback(), 'order.') !== false):
+        if ($block->getRowClickCallback() && strpos($block->getRowClickCallback(), 'order.') !== false):
             $scriptString .= <<<script
 
     deps.push('Magento_Sales/order/create/form')

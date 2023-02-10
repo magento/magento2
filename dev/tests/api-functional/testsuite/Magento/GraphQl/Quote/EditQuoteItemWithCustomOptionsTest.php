@@ -79,6 +79,8 @@ class EditQuoteItemWithCustomOptionsTest extends GraphQlAbstract
         self::assertCount(2, $itemOptionsResponse);
         self::assertEquals('test', $itemOptionsResponse[0]['values'][0]['value']);
         self::assertEquals('test', $itemOptionsResponse[1]['values'][0]['value']);
+        self::assertEquals('field', $itemOptionsResponse[0]['type']);
+        self::assertEquals('area', $itemOptionsResponse[1]['type']);
     }
 
     /**
@@ -111,6 +113,7 @@ mutation {
         ... on SimpleCartItem {
           customizable_options {
             label
+            type
             values {
               value
             }
@@ -128,6 +131,8 @@ QUERY;
         self::assertCount(2, $cartItemResponse['customizable_options']);
         self::assertEquals('initial value', $cartItemResponse['customizable_options'][0]['values'][0]['value']);
         self::assertEquals('initial value', $cartItemResponse['customizable_options'][1]['values'][0]['value']);
+        self::assertEquals('field', $cartItemResponse['customizable_options'][0]['type']);
+        self::assertEquals('area', $cartItemResponse['customizable_options'][1]['type']);
     }
 
     /**
@@ -210,6 +215,7 @@ mutation {
         ... on SimpleCartItem {
           customizable_options {
             label
+            type
             customizable_option_uid
             values {
               label

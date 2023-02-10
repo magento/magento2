@@ -11,6 +11,7 @@ use Magento\Checkout\Api\AgreementsValidatorInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
+use Magento\Checkout\Api\Exception\PaymentProcessingRateLimitExceededException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
@@ -134,6 +135,9 @@ class OverviewPost extends Checkout implements HttpPostActionInterface
                 $this->_getCheckout()->getCheckoutSession()->setDisplaySuccess(true);
                 $this->_redirect('*/*/success');
             }
+        } catch (PaymentProcessingRateLimitExceededException $ex) {
+            $this->messageManager->addErrorMessage($ex->getMessage());
+            $this->_redirect('*/*/overview');
         } catch (PaymentException $e) {
             $message = $e->getMessage();
             if (!empty($message)) {

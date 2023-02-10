@@ -229,7 +229,7 @@ class ItemTest extends TestCase
         $creditmemoMock->expects($this->exactly(4))
             ->method('roundPrice')
             ->willReturnCallback(function ($arg) {
-                return round($arg, 2);
+                return round((float) $arg, 2);
             });
 
         $qtyInvoiced = 10;

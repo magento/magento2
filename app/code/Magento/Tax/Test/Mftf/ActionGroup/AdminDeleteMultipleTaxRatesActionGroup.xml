@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteMultipleTaxRatesActionGroup">
+        <annotations>
+            <description>Deletes all specified rows one by one on the 'Tax Zones and Rates' page. Defaults to delete all
+                rows except the defaults of 'US-CA-*-Rate 1' and 'US-NY-*-Rate 1'.</description>
+        </annotations>
+        <arguments>
+            <argument name="rowsToDelete" defaultValue="{{AdminTaxRateGridSection.allNonDefaultTaxRates}}" type="string"/>
+            <argument name="expectedRemainingRows" defaultValue="2" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="waitForResetFilter"/>
+        <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="clickResetFilter"/>
+        <waitForPageLoad stepKey="waitForGridReset"/>
+        <helper class="Magento\Tax\Test\Mftf\Helper\TaxHelpers" method="deleteAllSpecifiedTaxRuleRows" stepKey="deleteAllSpecifiedTaxRules">
+            <argument name="rowsToDelete">{{rowsToDelete}}</argument>
+            <argument name="deleteButton">{{AdminMainActionsSection.delete}}</argument>
+            <argument name="modalAcceptButton">{{AdminConfirmationModalSection.ok}}</argument>
+            <argument name="successMessage">You deleted the tax rate.</argument>
+            <argument name="successMessageContainer">{{AdminMessagesSection.success}}</argument>
+        </helper>
+        <waitForPageLoad stepKey="waitForGridLoad"/>
+        <seeNumberOfElements userInput="{{expectedRemainingRows}}" selector="{{AdminTaxRateGridSection.allRows}}" stepKey="seeExpectedFinalTotalRows"/>
+    </actionGroup>
+</actionGroups>

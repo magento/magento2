@@ -217,17 +217,18 @@ class AbstractAddressTest extends TestCase
     {
         $region = $this->getMockBuilder(Region::class)
             ->addMethods(['getCountryId', 'getCode'])
-            ->onlyMethods(['__wakeup', 'load'])
+            ->onlyMethods(['__wakeup', 'load', 'loadByCode'])
             ->disableOriginalConstructor()
             ->getMock();
+        $region->method('loadByCode')
+            ->willReturnSelf();
         $region->expects($this->once())
             ->method('getCode')
             ->willReturn($regionCode);
         $region->expects($this->once())
             ->method('getCountryId')
             ->willReturn($countryId);
-        $this->regionFactoryMock->expects($this->once())
-            ->method('create')
+        $this->regionFactoryMock->method('create')
             ->willReturn($region);
     }
 

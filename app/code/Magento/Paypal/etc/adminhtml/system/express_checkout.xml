@@ -13,7 +13,7 @@
         <comment>Add PayPal as an additional payment method to your checkout page.</comment>
         <attribute type="activity_path">payment/paypal_express/active</attribute>
         <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
-            <comment>https://docs.magento.com/m2/ce/user_guide/payment/paypal-express-checkout.html</comment>
+            <comment>https://docs.magento.com/user-guide/payment/paypal-express-checkout.html</comment>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
         </group>
         <group id="express_checkout_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
@@ -103,6 +103,16 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <attribute type="shared">1</attribute>
                 </field>
+                <field id="buyer_country" translate="label" type="select" sortOrder="85" showInDefault="1" showInWebsite="1">
+                    <label>Buyer Country</label>
+                    <config_path>payment/paypal_express/buyer_country</config_path>
+                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                    <attribute type="shared">1</attribute>
+                    <tooltip>The buyer country determines which funding sources are eligible for a given buyer during testing.</tooltip>
+                    <depends>
+                        <field id="sandbox_flag">1</field>
+                    </depends>
+                </field>
                 <field id="use_proxy" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1">
                     <label>API Uses Proxy</label>
                     <config_path>paypal/wpp/use_proxy</config_path>
@@ -183,6 +193,13 @@
                     <field id="enable_express_checkout_bml">1</field>
                 </depends>
             </field>
+            <field id="enable_paypal_paylater_experience" translate="label comment" type="select" sortOrder="27" showInDefault="1" showInWebsite="1">
+                <label>Enable PayPal Pay Later Experience</label>
+                <config_path>payment/paypal_paylater/experience_active</config_path>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\PayLaterLink</frontend_model>
+                <attribute type="shared">1</attribute>
+            </field>
             <group id="advertise_bml" translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="30">
                 <label>Advertise PayPal Credit</label>
                 <comment>
@@ -193,6 +210,10 @@
                         The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
                         or more. <a href="https://financing.paypal.com/ppfinportal/content/forrester" target="_blank">See Details</a>.]]>
                 </comment>
+                <fieldset_css>paypal-advertise-bml</fieldset_css>
+                <depends>
+                    <field id="enable_paypal_paylater_experience">0</field>
+                </depends>
                 <field id="bml_publisher_id" translate="label comment tooltip" showInDefault="1" showInWebsite="1" sortOrder="10">
                     <label>Publisher ID</label>
                     <comment><![CDATA[Required to display a banner]]></comment>
@@ -311,6 +332,473 @@
                         <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCheckoutN</source_model>
                         <attribute type="shared">1</attribute>
                         <depends><field id="bml_checkout_position">1</field></depends>
+                    </field>
+                </group>
+            </group>
+            <group id="advertise_paylater" translate="label" showInDefault="1" showInWebsite="1" sortOrder="40">
+                <label>Advertise PayPal Pay Later</label>
+                <field id="paylater_enabled" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="10">
+                    <label>Enable PayPal Pay Later</label>
+                    <config_path>payment/paypal_paylater/enabled</config_path>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <depends>
+                    <field id="enable_paypal_paylater_experience">1</field>
+                </depends>
+                <group id="settings_paylater_homepage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
+                    <label>Home Page</label>
+                    <depends>
+                        <field id="paylater_enabled">1</field>
+                    </depends>
+                    <field id="paylater_homepage_display" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="10">
+                        <label>Display</label>
+                        <config_path>payment/paypal_paylater/homepage_display</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <attribute type="shared">1</attribute>
+                    </field>
+                    <field id="paylater_homepage_position" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="20">
+                        <label>Position</label>
+                        <config_path>payment/paypal_paylater/homepage_position</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Position::getPositionsHP</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_homepage_display">1</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_homepage_stylelayout" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="30">
+                        <label>Style Layout</label>
+                        <config_path>payment/paypal_paylater/homepage_stylelayout</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\StyleLayout</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_homepage_display">1</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_homepage_logotype" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="40">
+                        <label>Logo Type</label>
+                        <config_path>payment/paypal_paylater/homepage_logotype</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\LogoType</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_homepage_display">1</field>
+                            <field id="paylater_homepage_stylelayout">text</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_homepage_logoposition" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="50">
+                        <label>Logo Position</label>
+                        <config_path>payment/paypal_paylater/homepage_logoposition</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\LogoPosition</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_homepage_display">1</field>
+                            <field id="paylater_homepage_stylelayout">text</field>
+                            <field id="paylater_homepage_logotype" separator=",">primary,alternative</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_homepage_textcolor" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="60">
+                        <label>Text Color</label>
+                        <config_path>payment/paypal_paylater/homepage_textcolor</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\TextColor</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_homepage_display">1</field>
+                            <field id="paylater_homepage_stylelayout">text</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_homepage_textsize" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="70">
+                        <label>Text Size</label>
+                        <config_path>payment/paypal_paylater/homepage_textsize</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\TextSize</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_homepage_display">1</field>
+                            <field id="paylater_homepage_stylelayout">text</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_homepage_ratio" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="80">
+                        <label>Ratio</label>
+                        <config_path>payment/paypal_paylater/homepage_ratio</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Ratio</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_homepage_display">1</field>
+                            <field id="paylater_homepage_stylelayout">flex</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_homepage_color" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="90">
+                        <label>Color</label>
+                        <config_path>payment/paypal_paylater/homepage_color</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Color</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_homepage_display">1</field>
+                            <field id="paylater_homepage_stylelayout">flex</field>
+                        </depends>
+                    </field>
+                </group>
+                <group id="settings_paylater_productpage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="30">
+                    <label>Catalog Product Page</label>
+                    <depends>
+                        <field id="paylater_enabled">1</field>
+                    </depends>
+                    <field id="paylater_productpage_display" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="10">
+                        <label>Display</label>
+                        <config_path>payment/paypal_paylater/productpage_display</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <attribute type="shared">1</attribute>
+                    </field>
+                    <field id="paylater_productpage_position" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="20">
+                        <label>Position</label>
+                        <config_path>payment/paypal_paylater/productpage_position</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Position::getPositionsCPP</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_productpage_display">1</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_productpage_stylelayout" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="30">
+                        <label>Style Layout</label>
+                        <config_path>payment/paypal_paylater/productpage_stylelayout</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\StyleLayout</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_productpage_display">1</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_productpage_logotype" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="40">
+                        <label>Logo Type</label>
+                        <config_path>payment/paypal_paylater/productpage_logotype</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\LogoType</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_productpage_display">1</field>
+                            <field id="paylater_productpage_stylelayout">text</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_productpage_logoposition" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="50">
+                        <label>Logo Position</label>
+                        <config_path>payment/paypal_paylater/productpage_logoposition</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\LogoPosition</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_productpage_display">1</field>
+                            <field id="paylater_productpage_stylelayout">text</field>
+                            <field id="paylater_productpage_logotype" separator=",">primary,alternative</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_productpage_textcolor" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="60">
+                        <label>Text Color</label>
+                        <config_path>payment/paypal_paylater/productpage_textcolor</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\TextColor</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_productpage_display">1</field>
+                            <field id="paylater_productpage_stylelayout">text</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_productpage_textsize" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="70">
+                        <label>Text Size</label>
+                        <config_path>payment/paypal_paylater/productpage_textsize</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\TextSize</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_productpage_display">1</field>
+                            <field id="paylater_productpage_stylelayout">text</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_productpage_ratio" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="80">
+                        <label>Ratio</label>
+                        <config_path>payment/paypal_paylater/productpage_ratio</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Ratio</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_productpage_display">1</field>
+                            <field id="paylater_productpage_stylelayout">flex</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_productpage_color" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="90">
+                        <label>Color</label>
+                        <config_path>payment/paypal_paylater/productpage_color</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Color</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_productpage_display">1</field>
+                            <field id="paylater_productpage_stylelayout">flex</field>
+                        </depends>
+                    </field>
+                </group>
+                <group id="settings_paylater_cartpage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
+                    <label>Checkout Cart Page</label>
+                    <depends>
+                        <field id="paylater_enabled">1</field>
+                    </depends>
+                    <field id="paylater_cartpage_display" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="10">
+                        <label>Display</label>
+                        <config_path>payment/paypal_paylater/cartpage_display</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <attribute type="shared">1</attribute>
+                    </field>
+                    <field id="paylater_cartpage_position" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="20">
+                        <label>Position</label>
+                        <config_path>payment/paypal_paylater/cartpage_position</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Position::getPositionsCart</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_cartpage_display">1</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_cartpage_stylelayout" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="30">
+                        <label>Style Layout</label>
+                        <config_path>payment/paypal_paylater/cartpage_stylelayout</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\StyleLayout</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_cartpage_display">1</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_cartpage_logotype" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="40">
+                        <label>Logo Type</label>
+                        <config_path>payment/paypal_paylater/cartpage_logotype</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\LogoType</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_cartpage_display">1</field>
+                            <field id="paylater_cartpage_stylelayout">text</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_cartpage_logoposition" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="50">
+                        <label>Logo Position</label>
+                        <config_path>payment/paypal_paylater/cartpage_logoposition</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\LogoPosition</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_cartpage_display">1</field>
+                            <field id="paylater_cartpage_stylelayout">text</field>
+                            <field id="paylater_cartpage_logotype" separator=",">primary,alternative</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_cartpage_textcolor" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="60">
+                        <label>Text Color</label>
+                        <config_path>payment/paypal_paylater/cartpage_textcolor</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\TextColor</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_cartpage_display">1</field>
+                            <field id="paylater_cartpage_stylelayout">text</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_cartpage_textsize" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="70">
+                        <label>Text Size</label>
+                        <config_path>payment/paypal_paylater/cartpage_textsize</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\TextSize</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_cartpage_display">1</field>
+                            <field id="paylater_cartpage_stylelayout">text</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_cartpage_ratio" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="80">
+                        <label>Ratio</label>
+                        <config_path>payment/paypal_paylater/cartpage_ratio</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Ratio</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_cartpage_display">1</field>
+                            <field id="paylater_cartpage_stylelayout">flex</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_cartpage_color" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="90">
+                        <label>Color</label>
+                        <config_path>payment/paypal_paylater/cartpage_color</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Color</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_cartpage_display">1</field>
+                            <field id="paylater_cartpage_stylelayout">flex</field>
+                        </depends>
+                    </field>
+                </group>
+                <group id="settings_paylater_checkout_payment" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="50">
+                    <label>Checkout Payment Step</label>
+                    <depends>
+                        <field id="paylater_enabled">1</field>
+                    </depends>
+                    <field id="paylater_checkout_payment_display" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="10">
+                        <label>Display</label>
+                        <config_path>payment/paypal_paylater/checkout_payment_display</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <attribute type="shared">1</attribute>
+                    </field>
+                    <field id="paylater_checkout_payment_position" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="20">
+                        <label>Position</label>
+                        <config_path>payment/paypal_paylater/checkout_payment_position</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Position::getPositionsCheckout</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_checkout_payment_display">1</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_checkout_payment_stylelayout" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="30">
+                        <label>Style Layout</label>
+                        <config_path>payment/paypal_paylater/checkout_payment_stylelayout</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\StyleLayout</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_checkout_payment_display">1</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_checkout_payment_logotype" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="40">
+                        <label>Logo Type</label>
+                        <config_path>payment/paypal_paylater/checkout_payment_logotype</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\LogoType</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_checkout_payment_display">1</field>
+                            <field id="paylater_checkout_payment_stylelayout">text</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_checkout_payment_logoposition" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="50">
+                        <label>Logo Position</label>
+                        <config_path>payment/paypal_paylater/checkout_payment_logoposition</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\LogoPosition</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_checkout_payment_display">1</field>
+                            <field id="paylater_checkout_payment_stylelayout">text</field>
+                            <field id="paylater_checkout_payment_logotype" separator=",">primary,alternative</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_checkout_payment_textcolor" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="60">
+                        <label>Text Color</label>
+                        <config_path>payment/paypal_paylater/checkout_payment_textcolor</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\TextColor</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_checkout_payment_display">1</field>
+                            <field id="paylater_checkout_payment_stylelayout">text</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_checkout_payment_textsize" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="70">
+                        <label>Text Size</label>
+                        <config_path>payment/paypal_paylater/checkout_payment_textsize</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\TextSize</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_checkout_payment_display">1</field>
+                            <field id="paylater_checkout_payment_stylelayout">text</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_checkout_payment_ratio" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="80">
+                        <label>Ratio</label>
+                        <config_path>payment/paypal_paylater/checkout_payment_ratio</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Ratio</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_checkout_payment_display">1</field>
+                            <field id="paylater_checkout_payment_stylelayout">flex</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_checkout_payment_color" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="90">
+                        <label>Color</label>
+                        <config_path>payment/paypal_paylater/checkout_payment_color</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Color</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_checkout_payment_display">1</field>
+                            <field id="paylater_checkout_payment_stylelayout">flex</field>
+                        </depends>
+                    </field>
+                </group>
+                <group id="settings_paylater_categorypage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="60">
+                    <label>Catalog Category Page</label>
+                    <depends>
+                        <field id="paylater_enabled">1</field>
+                    </depends>
+                    <field id="paylater_categorypage_display" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="10">
+                        <label>Display</label>
+                        <config_path>payment/paypal_paylater/categorypage_display</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <attribute type="shared">1</attribute>
+                    </field>
+                    <field id="paylater_categorypage_position" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="20">
+                        <label>Position</label>
+                        <config_path>payment/paypal_paylater/categorypage_position</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Position::getPositionsCategoryPage</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_categorypage_display">1</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_categorypage_stylelayout" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="30">
+                        <label>Style Layout</label>
+                        <config_path>payment/paypal_paylater/categorypage_stylelayout</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\StyleLayout</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_categorypage_display">1</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_categorypage_logotype" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="40">
+                        <label>Logo Type</label>
+                        <config_path>payment/paypal_paylater/categorypage_logotype</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\LogoType</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_categorypage_display">1</field>
+                            <field id="paylater_categorypage_stylelayout">text</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_categorypage_logoposition" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="50">
+                        <label>Logo Position</label>
+                        <config_path>payment/paypal_paylater/categorypage_logoposition</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\LogoPosition</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_categorypage_display">1</field>
+                            <field id="paylater_categorypage_stylelayout">text</field>
+                            <field id="paylater_categorypage_logotype" separator=",">primary,alternative</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_categorypage_textcolor" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="60">
+                        <label>Text Color</label>
+                        <config_path>payment/paypal_paylater/categorypage_textcolor</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\TextColor</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_categorypage_display">1</field>
+                            <field id="paylater_categorypage_stylelayout">text</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_categorypage_textsize" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="70">
+                        <label>Text Size</label>
+                        <config_path>payment/paypal_paylater/categorypage_textsize</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\TextSize</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_categorypage_display">1</field>
+                            <field id="paylater_categorypage_stylelayout">text</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_categorypage_ratio" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="80">
+                        <label>Ratio</label>
+                        <config_path>payment/paypal_paylater/categorypage_ratio</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Ratio</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_categorypage_display">1</field>
+                            <field id="paylater_categorypage_stylelayout">flex</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_categorypage_color" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="90">
+                        <label>Color</label>
+                        <config_path>payment/paypal_paylater/categorypage_color</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Color</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_categorypage_display">1</field>
+                            <field id="paylater_categorypage_stylelayout">flex</field>
+                        </depends>
                     </field>
                 </group>
             </group>

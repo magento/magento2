@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportSimpleProductImagesDuplicationTest">
+        <annotations>
+            <features value="Import/Export"/>
+            <stories value="Import Products"/>
+            <title value="Duplicated images should not be created if the CSV file is imported more than once"/>
+            <description value="Duplicated images should not be created if the CSV file is imported more than once"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-42985"/>
+            <useCaseId value="MC-42330"/>
+            <group value="catalog_import_export"/>
+            <group value="pr_exclude"/>
+        </annotations>
+
+        <before>
+            <!-- Create Simple Product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <field key="sku">test_sku</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Copy Images to Import Directory for Product Images -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+                <argument name="path">var/import/images/test_image_duplication</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProductBaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{placeholderBaseImage.file}}</argument>
+                <argument name="destination">var/import/images/test_image_duplication/{{placeholderBaseImage.file}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProductSmallImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{placeholderSmallImage.file}}</argument>
+                <argument name="destination">var/import/images/test_image_duplication/{{placeholderSmallImage.file}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProductThumbImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{placeholderThumbnailImage.file}}</argument>
+                <argument name="destination">var/import/images/test_image_duplication/{{placeholderThumbnailImage.file}}</argument>
+            </helper>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
+                <argument name="path">var/import/images/test_image_duplication</argument>
+            </helper>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!--Import product with add/update behavior-->
+        <actionGroup ref="AdminImportProductsWithCustomImagesDirectoryActionGroup" stepKey="importCSVFile1">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="import_simple_product_with_image.csv"/>
+            <argument name="imagesFileDirectory" value="test_image_duplication"/>
+            <argument name="importNoticeMessage" value="Created: 0, Updated: 1, Deleted: 0"/>
+        </actionGroup>
+        <!--Verify images and their roles-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProduct1">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertBaseImageIsPresent1">
+            <argument name="image" value="{{placeholderBaseImage.name}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(placeholderBaseImage.name, 'image')}}" stepKey="assertBaseImageRole1"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSmallImageIsPresent1">
+            <argument name="image" value="{{placeholderSmallImage.name}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(placeholderSmallImage.name, 'small_image')}}" stepKey="assertSmallImageRole1"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertThumbImageIsPresent1">
+            <argument name="image" value="{{placeholderThumbnailImage.name}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(placeholderThumbnailImage.name, 'thumbnail')}}" stepKey="assertThumbImageRole1"/>
+        <!--Verify that only 3 images are present-->
+        <seeNumberOfElements selector="{{AdminProductImagesSection.imageElement}}" userInput="3"  stepKey="seeThreeImages1"/>
+        <!--Import product with add/update behavior-->
+        <actionGroup ref="AdminImportProductsWithCustomImagesDirectoryActionGroup" stepKey="importCSVFile2">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="import_simple_product_with_image.csv"/>
+            <argument name="imagesFileDirectory" value="test_image_duplication"/>
+            <argument name="importNoticeMessage" value="Created: 0, Updated: 1, Deleted: 0"/>
+        </actionGroup>
+        <!--Verify images and their roles-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProduct2">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertBaseImageIsPresent2">
+            <argument name="image" value="{{placeholderBaseImage.name}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(placeholderBaseImage.name, 'image')}}" stepKey="assertBaseImageRole2"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSmallImageIsPresent2">
+            <argument name="image" value="{{placeholderSmallImage.name}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(placeholderSmallImage.name, 'small_image')}}" stepKey="assertSmallImageRole2"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertThumbImageIsPresent2">
+            <argument name="image" value="{{placeholderThumbnailImage.name}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(placeholderThumbnailImage.name, 'thumbnail')}}" stepKey="assertThumbImageRole2"/>
+        <!--Verify that only 3 images are present-->
+        <seeNumberOfElements userInput="3" selector="{{AdminProductImagesSection.imageElement}}" stepKey="seeThreeImages2"/>
+    </test>
+</tests>

@@ -29,6 +29,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSimpleProduct">
                 <argument name="sku" value="Simple"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
@@ -38,11 +39,9 @@
             <argument name="importFile" value="catalog_product_import_bundle.csv"/>
             <argument name="importNoticeMessage" value="Created: 2, Updated: 0, Deleted: 0"/>
         </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterCreate">
-            <argument name="tags" value="full_page"/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterCreate"/>
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="indexerReindexAfterCreate">
-            <argument name="indices" value=""/>
+            <argument name="indices" value="catalog_product_price"/>
         </actionGroup>
 
         <!-- Check Bundle product is visible on the storefront-->
@@ -60,12 +59,8 @@
             <argument name="importFile" value="catalog_product_import_bundle.csv"/>
             <argument name="importNoticeMessage" value="Created: 0, Updated: 2, Deleted: 0"/>
         </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterUpdate">
-            <argument name="tags" value="full_page"/>
-        </actionGroup>
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="indexerReindexAfterUpdate">
-            <argument name="indices" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterUpdate"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="indexerReindexAfterUpdate"/>
 
         <!-- Check Bundle product is still visible on the storefront-->
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPageAfterUpdate">
