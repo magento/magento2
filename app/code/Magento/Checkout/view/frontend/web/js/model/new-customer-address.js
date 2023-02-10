@@ -29,8 +29,6 @@ define([
             /* eslint-enable */
         ) {
             regionId = window.checkoutConfig.defaultRegionId || undefined;
-        } else if (!addressData['region_id']) {
-            regionId = undefined;
         }
 
         return {
