@@ -1398,6 +1398,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      */
     protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
     {
+
         $this->_prepareShipmentRequest($request);
         $this->_mapRequestToShipment($request);
         $this->setRequest($request);
@@ -1658,8 +1659,11 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             $baseCurrencyCode = $this->_storeManager->getWebsite($rawRequest->getWebsiteId())->getBaseCurrencyCode();
             $nodeDutiable->addChild('DeclaredCurrency', $baseCurrencyCode);
             $nodeDutiable->addChild('TermsOfTrade', 'DAP');
-        }
 
+            /** Export Declaration */
+            $this->getExportDeclaration($xml, $rawRequest);
+
+        }
         /**
          * Reference
          * This element identifies the reference information. It is an optional field in the
@@ -2182,5 +2186,66 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         } else {
             return (string)$this->getConfigData('gateway_url');
         }
+    }
+
+    /**
+     * Generating Export Declaration Details
+     *
+     * @param \Magento\Shipping\Model\Simplexml\Element $xml
+     * @param RateRequest $rawRequest
+     * @return void
+     */
+    private function getExportDeclaration($xml, $rawRequest)
+    {
+        $nodeExportDeclaration = $xml->addChild('ExportDeclaration', '', '');
+        $nodeExportDeclaration->addChild(
+            'InvoiceNumber',
+            $rawRequest->getOrderShipment()->getOrder()->hasInvoices() ?
+                $this->getInvoiceNumbers($rawRequest) :
+                $rawRequest->getOrderShipment()->getOrder()->getIncrementId()
+        );
+        $nodeExportDeclaration->addChild('InvoiceDate', date(
+            "Y-m-d",
+            strtotime($rawRequest->getOrderShipment()->getOrder()->getCreatedAt())
+        ));
+        $exportItems = $rawRequest->getPackages();
+        foreach ($exportItems as $exportItem) {
+            $itemWeightUnit = $exportItem['params']['weight_units'] ? substr(
+                $exportItem['params']['weight_units'],
+                0,
+                1
+            ) : 'L';
+            foreach ($exportItem['items'] as $itemNo => $itemData) {
+                $nodeExportItem = $nodeExportDeclaration->addChild('ExportLineItem', '', '');
+                $nodeExportItem->addChild('LineNumber', $itemNo);
+                $nodeExportItem->addChild('Quantity', $itemData['qty']);
+                $nodeExportItem->addChild('QuantityUnit', 'PCS');
+                $nodeExportItem->addChild('Description', $itemData['name']);
+                $nodeExportItem->addChild('Value', $itemData['price']);
+                $nodeItemWeight = $nodeExportItem->addChild('Weight', '', '');
+                $nodeItemWeight->addChild('Weight', $itemData['weight']);
+                $nodeItemWeight->addChild('WeightUnit', $itemWeightUnit);
+                $nodeItemGrossWeight = $nodeExportItem->addChild('GrossWeight');
+                $nodeItemGrossWeight->addChild('Weight', $itemData['weight']);
+                $nodeItemGrossWeight->addChild('WeightUnit', $itemWeightUnit);
+                $nodeExportItem->addChild('ManufactureCountryCode', 'US');
+            }
+        }
+    }
+
+    /**
+     * Fetching Shipment Order Invoice No
+     *
+     * @param RateRequest $rawRequest
+     * @return string
+     */
+    private function getInvoiceNumbers($rawRequest)
+    {
+        $invoiceNumbers = [];
+        $order = $rawRequest->getOrderShipment()->getOrder();
+        foreach ($order->getInvoiceCollection() as $invoice) {
+            $invoiceNumbers[] = $invoice->getIncrementId();
+        }
+        return implode(',', $invoiceNumbers);
     }
 }
