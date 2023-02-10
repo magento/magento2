@@ -20,11 +20,9 @@ use PHPUnit\Framework\TestCase;
 
 class RequestValidatorTest extends TestCase
 {
-    public const SERVICE_METHOD = 'testMethod';
+    const SERVICE_METHOD = 'testMethod';
 
-    public const SERVICE_ID = 'Magento\Webapi\Controller\Rest\TestService';
-
-    public const SERVICE_PATH = '/V1/test-service';
+    const SERVICE_ID = 'Magento\Webapi\Controller\Rest\TestService';
 
     /**
      * @var RequestValidator
@@ -76,6 +74,7 @@ class RequestValidatorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->routeMock = $this->getMockBuilder(Route::class)
+            ->setMethods(['isSecure', 'getServiceMethod', 'getServiceClass', 'getAclResources', 'getParameters'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->authorizationMock = $this->getMockBuilder(Authorization::class)
@@ -101,7 +100,6 @@ class RequestValidatorTest extends TestCase
         $this->routeMock->expects($this->any())->method('getServiceClass')->willReturn(self::SERVICE_ID);
         $this->routeMock->expects($this->any())->method('getServiceMethod')
             ->willReturn(self::SERVICE_METHOD);
-        $this->routeMock->expects($this->any())->method('getRoutePath')->willReturn(self::SERVICE_PATH);
         $routerMock->expects($this->any())->method('match')->willReturn($this->routeMock);
 
         parent::setUp();
