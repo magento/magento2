@@ -1661,7 +1661,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             $nodeDutiable->addChild('TermsOfTrade', 'DAP');
 
             /** Export Declaration */
-            $this->getExportDeclaration($xml, $rawRequest);
+            $this->addExportDeclaration($xml, $rawRequest);
 
         }
         /**
@@ -2195,7 +2195,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param RateRequest $rawRequest
      * @return void
      */
-    private function getExportDeclaration($xml, $rawRequest)
+    private function addExportDeclaration($xml, $rawRequest)
     {
         $nodeExportDeclaration = $xml->addChild('ExportDeclaration', '', '');
         $nodeExportDeclaration->addChild(
@@ -2228,7 +2228,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $nodeItemGrossWeight = $nodeExportItem->addChild('GrossWeight');
                 $nodeItemGrossWeight->addChild('Weight', $itemData['weight']);
                 $nodeItemGrossWeight->addChild('WeightUnit', $itemWeightUnit);
-                $nodeExportItem->addChild('ManufactureCountryCode', 'US');
+                $nodeExportItem->addChild('ManufactureCountryCode', $rawRequest->getShipperAddressCountryCode());
             }
         }
     }
