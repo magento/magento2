@@ -12,13 +12,5 @@
                 <enable_inventory_check>1</enable_inventory_check>
             </options>
         </cataloginventory>
-        <sales>
-            <backpressure>
-                <enabled>0</enabled>
-                <limit>10</limit>
-                <guest_limit>50</guest_limit>
-                <period>60</period>
-            </backpressure>
-        </sales>
     </default>
 </config>
