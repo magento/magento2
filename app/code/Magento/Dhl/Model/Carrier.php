@@ -322,20 +322,20 @@ class Carrier extends AbstractDhl implements CarrierInterface
         CurrencyFactory $currencyFactory,
         Data $directoryData,
         StockRegistryInterface $stockRegistry,
-        \Magento\Shipping\Helper\Carrier                    $carrierHelper,
-        \Magento\Framework\Stdlib\DateTime\DateTime         $coreDate,
-        Reader                $configReader,
-        StoreManagerInterface          $storeManager,
-        StringUtils               $string,
-        Division                    $mathDivision,
+        \Magento\Shipping\Helper\Carrier $carrierHelper,
+        \Magento\Framework\Stdlib\DateTime\DateTime $coreDate,
+        Reader $configReader,
+        StoreManagerInterface $storeManager,
+        StringUtils $string,
+        Division $mathDivision,
         ReadFactory $readFactory,
-        DateTime                                            $dateTime,
-        LaminasClientFactory        $httpClientFactory,
-        array                                               $data = [],
-        XmlValidator                                        $xmlValidator = null,
-        ProductMetadataInterface                            $productMetadata = null,
-        ?AsyncClientInterface                               $httpClient = null,
-        ?ProxyDeferredFactory                               $proxyDeferredFactory = null
+        DateTime $dateTime,
+        LaminasClientFactory $httpClientFactory,
+        array $data = [],
+        XmlValidator $xmlValidator = null,
+        ProductMetadataInterface $productMetadata = null,
+        ?AsyncClientInterface $httpClient = null,
+        ?ProxyDeferredFactory $proxyDeferredFactory = null
     ) {
         $this->readFactory = $readFactory;
         $this->_carrierHelper = $carrierHelper;
