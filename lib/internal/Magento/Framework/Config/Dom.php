@@ -429,9 +429,9 @@ class Dom
         if ($dom) {
             $xml = explode(PHP_EOL, $dom->saveXml());
             $lines = array_slice($xml, max(0, $errorInfo->line - 5), 10, true);
-            $result .= 'The xml was: '.PHP_EOL;
+            $result .= 'The xml was: ' . PHP_EOL;
             foreach ($lines as $lineNumber => $line) {
-                $result .= $lineNumber.':'.$line.PHP_EOL;
+                $result .= $lineNumber . ':' . $line . PHP_EOL;
             }
         }
         return $result;
