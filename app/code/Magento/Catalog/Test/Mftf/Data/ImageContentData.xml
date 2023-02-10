@@ -26,4 +26,25 @@
     <entity name="MagentoLogoImageContentExportImport" extends="MagentoLogoImageContent" type="ImageContent">
         <data key="name">magento-logo.png</data>
     </entity>
+    <entity name="BluePngImageContent" type="ImageContent">
+        <data key="base64_encoded_data">iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAFpOLgnAAAAAXNSR0IArs4c6QAAAIRlWElmTU0AKgAAAAgABQESAAMAAAABAAEAAAEaAAUAAAABAAAASgEbAAUAAAABAAAAUgEoAAMAAAABAAIAAIdpAAQAAAABAAAAWgAAAAAAAABgAAAAAQAAAGAAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAAADKgAwAEAAAAAQAAADIAAAAAaawubwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAVlpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDUuNC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KTMInWQAAAN1JREFUaAXtllEKwlAMBFvvfwsP5XEUhf2MzLOwFp3+BF42TTL7KN236+2+Dc9lOH8dny65T6uMk341MY77MfSpcFxzKnien7xomd7yPha8ux7J/SWl5csXWitxmezKy6O1SUigKC6EKSJxhQSKFVx+u5AXEVU8sUlwoyguhCkicYUEiuJCmCISV0igKC6EKSJxhQSKlZ87NMlBUcX3gzOichdBmIoiHSnCRq10BGEqinSkCBu10hGEqSjSkSJs1EpHEKaiSEeKsFErHUGYiiIdKcJGrXQEYSqKfsaRB19MEgdQHhXpAAAAAElFTkSuQmCC</data>
+        <data key="type">image/png</data>
+        <data key="name" unique="prefix">blue.png</data>
+        <data key="baseImage_md5">5da9660dc7c0536210547e0000f9a9cf</data>
+        <data key="thumbnailImage_md5">b1e89172f4d192f00c1d947741759180</data>
+    </entity>
+    <entity name="RedPngImageContent" type="ImageContent">
+        <data key="base64_encoded_data">iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAFpOLgnAAAAAXNSR0IArs4c6QAAAIRlWElmTU0AKgAAAAgABQESAAMAAAABAAEAAAEaAAUAAAABAAAASgEbAAUAAAABAAAAUgEoAAMAAAABAAIAAIdpAAQAAAABAAAAWgAAAAAAAABgAAAAAQAAAGAAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAAADKgAwAEAAAAAQAAADIAAAAAaawubwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAVlpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDUuNC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KTMInWQAAAN1JREFUaAXtllEKwlAMBFuP4f2v4PkUhf2MzLOwFp3+BF42TTL7KN1v1+2+Dc9lOH8dny65T6uMk341MY77MfSpcFxzKnien7xomd7yPha8ux7J/SWl5csXWitxmezKy6O1SUigKC6EKSJxhQSKFVx+u5AXEVU8sUlwoyguhCkicYUEiuJCmCISV0igKC6EKSJxhQSKlZ87NMlBUcX3gzOichdBmIoiHSnCRq10BGEqinSkCBu10hGEqSjSkSJs1EpHEKaiSEeKsFErHUGYiiIdKcJGrXQEYSqKfsaRB7YwDVopmL/PAAAAAElFTkSuQmCC</data>
+        <data key="type">image/png</data>
+        <data key="name" unique="prefix">red.png</data>
+        <data key="baseImage_md5">55942e709d0a1c85d5174839c2e55cea</data>
+        <data key="thumbnailImage_md5">263ab50a24625c8d4f855cee8b947daa</data>
+    </entity>
+    <entity name="MagentoPlaceHolderImageContent" type="ImageContent">
+        <data key="baseImage_md5">c0459a796c5b8ee74254472c235a7460</data>
+    </entity>
+    <entity name="TestImageWithDotInFilenameImageContent" extends="MagentoLogoImageContent" type="ImageContent">
+        <data key="baseImage_md5">4aa2a3c3eefd29898585a8dd781e5bfd</data>
+        <data key="name" unique="prefix">m.agento-logo.png</data>
+    </entity>
 </entities>

@@ -11,6 +11,8 @@ namespace Magento\Csp\Api\Data;
  * Defined Content Security Policy.
  *
  * Different policies will have different types of data but they all will have identifiers and string representations.
+ *
+ * @api
  */
 interface PolicyInterface
 {

@@ -12,7 +12,6 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\DriverPool;
-use Magento\Framework\Filter\ArrayFilter;
 use Magento\Framework\Validation\ValidationException;
 use Psr\Log\LoggerInterface;
 
@@ -24,6 +23,7 @@ use Psr\Log\LoggerInterface;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  *
  * @api
  * @since 100.0.2
@@ -148,28 +148,33 @@ class Uploader
     /**#@+
      * File upload type (multiple or single)
      */
-    const SINGLE_STYLE = 0;
+    public const SINGLE_STYLE = 0;
 
-    const MULTIPLE_STYLE = 1;
+    public const MULTIPLE_STYLE = 1;
 
     /**#@-*/
 
     /**
      * Temp file name empty code
      */
-    const TMP_NAME_EMPTY = 666;
+    public const TMP_NAME_EMPTY = 666;
 
     /**
      * Maximum Image Width resolution in pixels. For image resizing on client side
      * @deprecated @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxWidth()
      */
-    const MAX_IMAGE_WIDTH = 1920;
+    public const MAX_IMAGE_WIDTH = 1920;
 
     /**
      * Maximum Image Height resolution in pixels. For image resizing on client side
      * @deprecated @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxHeight()
      */
-    const MAX_IMAGE_HEIGHT = 1200;
+    public const MAX_IMAGE_HEIGHT = 1200;
+
+    /**
+     * Maximum file name length
+     */
+    private const MAX_FILE_NAME_LENGTH = 255;
 
     /**
      * Resulting of uploaded file
@@ -219,6 +224,7 @@ class Uploader
         Filesystem $filesystem = null
     ) {
         $this->directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
+        $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
 
         $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(FileSystem::class);
         $this->_setUploadFileId($fileId);
@@ -230,7 +236,6 @@ class Uploader
         }
         $this->fileMime = $fileMime ?: ObjectManager::getInstance()->get(Mime::class);
         $this->driverPool = $driverPool ?: ObjectManager::getInstance()->get(DriverPool::class);
-        $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
     }
 
     /**
@@ -261,7 +266,7 @@ class Uploader
 
         $this->_result = false;
         $destinationFile = $destinationFolder;
-        $fileName = isset($newFileName) ? $newFileName : $this->_file['name'];
+        $fileName = $newFileName ?? $this->_file['name'];
         $fileName = static::getCorrectFileName($fileName);
         if ($this->_enableFilesDispersion) {
             $fileName = $this->correctFileNameCase($fileName);
@@ -355,11 +360,13 @@ class Uploader
         $rootCode = DirectoryList::PUB;
 
         try {
-            if (strpos($destPath, $this->getDirectoryList()->getPath($rootCode)) !== 0) {
+            $path = $this->getDirectoryList()->getPath($rootCode) ?: '';
+            $destPath = $destPath ?: '';
+            if (strpos($destPath, $path) !== 0) {
                 $rootCode = DirectoryList::ROOT;
             }
 
-            $destPath = str_replace($this->getDirectoryList()->getPath($rootCode), '', $destPath);
+            $destPath = str_replace($path, '', $destPath);
             $directory = $this->getTargetDirectory()->getDirectoryWrite($rootCode);
 
             return $this->getFileDriver()->rename(
@@ -491,20 +498,18 @@ class Uploader
      */
     public static function getCorrectFileName($fileName)
     {
+        $fileName = $fileName !== null ? ltrim($fileName, '.') : '';
         $fileName = preg_replace('/[^a-z0-9_\\-\\.]+/i', '_', $fileName);
         $fileInfo = pathinfo($fileName);
         $fileInfo['extension'] = $fileInfo['extension'] ?? '';
 
-        // account for excessively long filenames that cannot be stored completely in database
-        $maxFilenameLength = 200;
-
-        if (strlen($fileInfo['basename']) > $maxFilenameLength) {
+        if (strlen($fileInfo['basename'] ?? '') > self::MAX_FILE_NAME_LENGTH) {
             throw new \LengthException(
-                __('Filename is too long; must be %1 characters or less', $maxFilenameLength)
+                __('Filename is too long; must be %1 characters or less', self::MAX_FILE_NAME_LENGTH)
             );
         }
 
-        if (preg_match('/^_+$/', $fileInfo['filename'])) {
+        if (preg_match('/^_+$/', $fileInfo['filename'] ?? '')) {
             $fileName = 'file.' . $fileInfo['extension'];
         }
 
@@ -533,7 +538,7 @@ class Uploader
      */
     protected static function _addDirSeparator($dir)
     {
-        if (substr($dir, -1) != '/') {
+        if (!$dir || substr($dir, -1) != '/') {
             $dir .= '/';
         }
         return $dir;
@@ -627,7 +632,7 @@ class Uploader
     public function setAllowedExtensions($extensions = [])
     {
         foreach ((array)$extensions as $extension) {
-            $this->_allowedExtensions[] = strtolower($extension);
+            $this->_allowedExtensions[] = $extension !== null ? strtolower($extension) : '';
         }
         return $this;
     }
@@ -640,11 +645,16 @@ class Uploader
      */
     public function checkAllowedExtension($extension)
     {
+        //File extensions should only be allowed to contain alphanumeric characters
+        if ($extension && preg_match('/[^a-z0-9]/i', $extension)) {
+            return false;
+        }
+
         if (!is_array($this->_allowedExtensions) || empty($this->_allowedExtensions)) {
             return true;
         }
 
-        return in_array(strtolower($extension), $this->_allowedExtensions);
+        return $extension && in_array(strtolower($extension), $this->_allowedExtensions);
     }
 
     /**
@@ -677,6 +687,7 @@ class Uploader
                 throw new \DomainException('$_FILES array is empty');
             }
 
+            $fileId = $fileId !== null ? $fileId : '';
             preg_match("/^(.*?)\[(.*?)\]$/", $fileId, $file);
 
             if (is_array($file) && count($file) > 0 && !empty($file[0]) && !empty($file[1])) {
@@ -709,6 +720,7 @@ class Uploader
      * @param array $fileId
      * @return void
      * @throws \InvalidArgumentException
+     * @throws FileSystemException
      */
     private function validateFileId(array $fileId): void
     {
@@ -719,6 +731,7 @@ class Uploader
             if (preg_match('/\.\.(\\\|\/)/', $tmpName) !== 1) {
                 $allowedFolders = [
                     sys_get_temp_dir(),
+                    $this->directoryList->getPath(DirectoryList::SYS_TMP),
                     $this->directoryList->getPath(DirectoryList::MEDIA),
                     $this->directoryList->getPath(DirectoryList::VAR_DIR),
                     $this->directoryList->getPath(DirectoryList::TMP),
@@ -730,14 +743,16 @@ class Uploader
                 ];
 
                 foreach ($allowedFolders as $allowedFolder) {
-                    if (stripos($tmpName, $allowedFolder) === 0) {
+                    $dir = $this->targetDirectory->getDirectoryReadByPath($allowedFolder);
+                    if ($dir->isExist($tmpName)) {
                         $isValid = true;
                         break;
                     }
                 }
 
                 foreach ($disallowedFolders as $disallowedFolder) {
-                    if (stripos($tmpName, $disallowedFolder) === 0) {
+                    $dir = $this->targetDirectory->getDirectoryReadByPath($disallowedFolder);
+                    if ($dir->isExist($tmpName)) {
                         $isValid = false;
                         break;
                     }
@@ -803,7 +818,8 @@ class Uploader
         $fileInfo = pathinfo($destinationFile);
         $index = 1;
         while ($fileExists($fileInfo['dirname'] . '/' . $fileInfo['basename'])) {
-            $fileInfo['basename'] = $fileInfo['filename'] . '_' . $index++ . '.' . $fileInfo['extension'];
+            $fileInfo['basename'] = $fileInfo['filename'] . '_' . ($index++);
+            $fileInfo['basename'] .= isset($fileInfo['extension']) ? '.' . $fileInfo['extension'] : '';
         }
 
         return $fileInfo['basename'];
@@ -832,7 +848,7 @@ class Uploader
     {
         $char = 0;
         $dispersionPath = '';
-        while ($char < 2 && $char < strlen($fileName)) {
+        while ($char < 2 && ($fileName && $char < strlen($fileName))) {
             if (empty($dispersionPath)) {
                 $dispersionPath = '/' . ('.' == $fileName[$char] ? '_' : $fileName[$char]);
             } else {

@@ -40,7 +40,7 @@ class IncosistentReferenceDefinition implements ValidationInterface
          * Columns should have the same types
          */
         if ($column->getType() !== $referenceColumn->getType()) {
-            return true;
+            return false;
         }
 
         return $this->assertUnsigned($column, $referenceColumn) &&

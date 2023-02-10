@@ -18,6 +18,8 @@
             <severity value="MAJOR"/>
             <group value="captcha"/>
             <group value="mtf_migrated"/>
+            <group value="storefront_captcha_enabled"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaLength3ConfigData.path}} {{StorefrontCustomerCaptchaLength3ConfigData.value}}" stepKey="setCaptchaLength" />

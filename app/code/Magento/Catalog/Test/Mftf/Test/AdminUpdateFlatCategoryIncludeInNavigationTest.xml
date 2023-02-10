@@ -51,7 +51,7 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndicesAgain"/>
         </after>
         <!--Verify Category is not listed in navigation menu-->
-        <amOnPage url="/{{CatNotIncludeInMenu.name_lwr}}.html"  stepKey="openCategoryPage"/>
+        <amOnPage url="/{{CatNotIncludeInMenu.urlKey}}.html"  stepKey="openCategoryPage"/>
         <waitForPageLoad time="60" stepKey="waitForPageToBeLoaded"/>
         <dontSee selector="{{StorefrontHeaderSection.NavigationCategoryByName(CatNotIncludeInMenu.name)}}" stepKey="dontSeeCategoryOnNavigation"/>
         <!-- Select created category and enable Include In Menu option-->
@@ -69,7 +69,7 @@
         <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="openIndexManagementPage"/>
         <see stepKey="seeIndexStatus"  selector="{{AdminIndexManagementSection.indexerStatus('Category Flat Data')}}" userInput="Ready"/>
         <!--Verify Category In Store Front-->
-        <amOnPage url="/$$createCategory.name$$.html"  stepKey="openCategoryPage1"/>
+        <amOnPage url="/$$createCategory.custom_attributes[url_key]$$.html"  stepKey="openCategoryPage1"/>
         <waitForPageLoad stepKey="waitForCategoryStoreFrontPageToLoad"/>
         <!--Verify category is visible in First Store View -->
         <click stepKey="selectStoreSwitcher" selector="{{StorefrontHeaderSection.storeViewSwitcher}}"/>

@@ -204,4 +204,18 @@ class EditTest extends TestCase
             )
         );
     }
+
+    /**
+     * Check that submit button is disabled
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @return void
+     */
+    public function testSubmitButtonIsDisabled(): void
+    {
+        $html = $this->block->toHtml();
+        $buttonXpath = "//form[contains(@class, 'form-address-edit')]//button[@type='submit' and @disabled='disabled']";
+        $this->assertEquals(1, Xpath::getElementsCountForXpath($buttonXpath, $html));
+    }
 }

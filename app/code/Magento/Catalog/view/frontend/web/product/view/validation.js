@@ -25,7 +25,7 @@ define([
                 if ($(element).hasClass('datetime-picker')) {
                     element = $(element).parent();
 
-                    if (element.parent().find('[generated=true].mage-error').length) {
+                    if (element.parent().find('.mage-error').length) {
                         return;
                     }
                 }

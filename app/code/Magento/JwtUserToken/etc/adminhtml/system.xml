@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright © Magento, Inc. All rights reserved.
+  ~ See COPYING.txt for license details.
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="webapi" type="text" sortOrder="102" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="jwtauth" translate="label" type="text" sortOrder="260" showInDefault="1">
+                <label>JWT Authentication</label>
+                <field id="jwt_alg" translate="label comment" type="select" sortOrder="1" showInDefault="1">
+                    <label>Algorithm to sign/encrypt JWTs used for authentication</label>
+                    <source_model>Magento\JwtUserToken\Model\Config\JwtAlgorithmSource</source_model>
+                    <comment>Selected algorithm will define JWT type used (JWS or JWE)</comment>
+                </field>
+                <field id="jwe_alg" translate="label comment" type="select" sortOrder="2" showInDefault="1">
+                    <label>Content encryption algorithm for JWEs</label>
+                    <source_model>Magento\JwtUserToken\Model\Config\JweAlgorithmSource</source_model>
+                    <comment>Encryption algorithm for JWT content to be used when JWE algorithm is selected</comment>
+                </field>
+                <field id="customer_expiration" translate="label comment" type="text" sortOrder="3" showInDefault="1">
+                    <label>Customer JWT Expires In</label>
+                    <validate>validate-zero-or-greater validate-number</validate>
+                    <comment>(minutes)</comment>
+                </field>
+                <field id="admin_expiration" translate="label comment" type="text" sortOrder="4" showInDefault="1">
+                    <label>Admin User JWT Expires In</label>
+                    <validate>validate-zero-or-greater validate-number</validate>
+                    <comment>(minutes)</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

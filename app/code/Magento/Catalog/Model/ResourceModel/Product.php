@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link as ProductWebsiteLink;
 use Magento\Eav\Api\AttributeManagementInterface;
 use Magento\Framework\App\ObjectManager;
@@ -40,15 +42,11 @@ class Product extends AbstractResource
     protected $_productCategoryTable;
 
     /**
-     * Catalog category
-     *
      * @var Category
      */
     protected $_catalogCategory;
 
     /**
-     * Category collection factory
-     *
      * @var Category\CollectionFactory
      */
     protected $_categoryCollectionFactory;
@@ -101,6 +99,16 @@ class Product extends AbstractResource
     private $eavAttributeManagement;
 
     /**
+     * @var MediaImageDeleteProcessor
+     */
+    private $mediaImageDeleteProcessor;
+
+    /**
+     * @var ScopeOverriddenValue
+     */
+    private $scopeOverriddenValue;
+
+    /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
@@ -114,6 +122,8 @@ class Product extends AbstractResource
      * @param TableMaintainer|null $tableMaintainer
      * @param UniqueValidationInterface|null $uniqueValidator
      * @param AttributeManagementInterface|null $eavAttributeManagement
+     * @param MediaImageDeleteProcessor|null $mediaImageDeleteProcessor
+     * @param ScopeOverriddenValue|null $scopeOverriddenValue
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -129,7 +139,9 @@ class Product extends AbstractResource
         $data = [],
         TableMaintainer $tableMaintainer = null,
         UniqueValidationInterface $uniqueValidator = null,
-        AttributeManagementInterface $eavAttributeManagement = null
+        AttributeManagementInterface $eavAttributeManagement = null,
+        ?MediaImageDeleteProcessor $mediaImageDeleteProcessor = null,
+        ?ScopeOverriddenValue $scopeOverriddenValue = null
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_catalogCategory = $catalogCategory;
@@ -148,6 +160,10 @@ class Product extends AbstractResource
         $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
         $this->eavAttributeManagement = $eavAttributeManagement
             ?? ObjectManager::getInstance()->get(AttributeManagementInterface::class);
+        $this->mediaImageDeleteProcessor = $mediaImageDeleteProcessor
+            ?? ObjectManager::getInstance()->get(MediaImageDeleteProcessor::class);
+        $this->scopeOverriddenValue = $scopeOverriddenValue
+            ?? ObjectManager::getInstance()->get(ScopeOverriddenValue::class);
     }
 
     /**
@@ -307,6 +323,7 @@ class Product extends AbstractResource
     {
         $this->removeNotInSetAttributeValues($product);
         $this->_saveWebsiteIds($product)->_saveCategories($product);
+        $this->scopeOverriddenValue->clearAttributesValues(ProductInterface::class, $product);
         return parent::_afterSave($product);
     }
 
@@ -639,11 +656,7 @@ class Product extends AbstractResource
      */
     private function getResultKey(string $sku, array $productSkuList): string
     {
-        $key = array_search(strtolower($sku), array_map('strtolower', $productSkuList));
-        if ($key !== false) {
-            $sku = $productSkuList[$key];
-        }
-        return $sku;
+        return in_array(strtolower($sku), array_map('strtolower', $productSkuList)) ? $sku : '';
     }
 
     /**
@@ -818,5 +831,17 @@ class Product extends AbstractResource
         $data = parent::getAttributeRow($entity, $object, $attribute);
         $data['store_id'] = $object->getStoreId();
         return $data;
+    }
+
+    /**
+     * After delete entity process
+     *
+     * @param DataObject $object
+     * @return $this
+     */
+    protected function _afterDelete(DataObject $object)
+    {
+        $this->mediaImageDeleteProcessor->execute($object);
+        return parent::_afterDelete($object);
     }
 }

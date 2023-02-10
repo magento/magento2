@@ -45,12 +45,12 @@
         <actionGroup ref="AdminClickExportTaxRatesActionGroup" stepKey="exportTaxRates"/>
         <grabAttributeFrom userInput="action" selector="{{AdminImportExportTaxRatesSection.exportTaxRatesButtonForm}}" stepKey="grabExportUrl"/>
         <executeJS function="return window.FORM_KEY" stepKey="grabFormKey"/>
-        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsCATaxRate">
+        <helper class="Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsCATaxRate">
             <argument name="url">{$grabExportUrl}</argument>
             <argument name="postBody">{"form_key": "{$grabFormKey}"}</argument>
             <argument name="expectedString">{{US_CA_Rate_1.code}}</argument>
         </helper>
-        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsNYTaxRate">
+        <helper class="Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsNYTaxRate">
             <argument name="url">{$grabExportUrl}</argument>
             <argument name="postBody">{"form_key": "{$grabFormKey}"}</argument>
             <argument name="expectedString">{{US_NY_Rate_1.code}}</argument>
@@ -61,12 +61,12 @@
         <actionGroup ref="AdminClickExportTaxRatesActionGroup" stepKey="exportTaxRates2"/>
         <grabAttributeFrom userInput="action" selector="{{AdminImportExportTaxRatesSection.exportTaxRatesButtonForm}}" stepKey="grabExportUrl2"/>
         <executeJS function="return window.FORM_KEY" stepKey="grabFormKey2"/>
-        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsCATaxRate2">
+        <helper class="Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsCATaxRate2">
             <argument name="url">{$grabExportUrl2}</argument>
             <argument name="postBody">{"form_key": "{$grabFormKey2}"}</argument>
             <argument name="expectedString">{{US_CA_Rate_1.code}}</argument>
         </helper>
-        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsNYTaxRate2">
+        <helper class="Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsNYTaxRate2">
             <argument name="url">{$grabExportUrl2}</argument>
             <argument name="postBody">{"form_key": "{$grabFormKey2}"}</argument>
             <argument name="expectedString">{{US_NY_Rate_1.code}}</argument>
@@ -77,12 +77,12 @@
         <actionGroup ref="AdminExportTaxRatesFromGridActionGroup" stepKey="exportTaxRatesCSV"/>
         <grabAttributeFrom userInput="value" selector="{{AdminTaxRateGridSection.exportFileTypeOption('CSV')}}" stepKey="grabExportUrl3"/>
         <executeJS function="return window.FORM_KEY" stepKey="grabFormKey3"/>
-        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsCATaxRate3">
+        <helper class="Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsCATaxRate3">
             <argument name="url">{$grabExportUrl3}</argument>
             <argument name="postBody">{"form_key": "{$grabFormKey3}"}</argument>
             <argument name="expectedString">{{US_CA_Rate_1.code}}</argument>
         </helper>
-        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsNYTaxRate3">
+        <helper class="Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsNYTaxRate3">
             <argument name="url">{$grabExportUrl3}</argument>
             <argument name="postBody">{"form_key": "{$grabFormKey3}"}</argument>
             <argument name="expectedString">{{US_NY_Rate_1.code}}</argument>
@@ -94,12 +94,12 @@
         </actionGroup>
         <grabAttributeFrom userInput="value" selector="{{AdminTaxRateGridSection.exportFileTypeOption('Excel XML')}}" stepKey="grabExportUrl4"/>
         <executeJS function="return window.FORM_KEY" stepKey="grabFormKey4"/>
-        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsCATaxRate4">
+        <helper class="Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsCATaxRate4">
             <argument name="url">{$grabExportUrl4}</argument>
             <argument name="postBody">{"form_key": "{$grabFormKey4}"}</argument>
             <argument name="expectedString">{{US_CA_Rate_1.code}}</argument>
         </helper>
-        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsNYTaxRate4">
+        <helper class="Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsNYTaxRate4">
             <argument name="url">{$grabExportUrl4}</argument>
             <argument name="postBody">{"form_key": "{$grabFormKey4}"}</argument>
             <argument name="expectedString">{{US_NY_Rate_1.code}}</argument>

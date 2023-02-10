@@ -9,8 +9,13 @@ namespace Magento\Checkout\Model;
 use Magento\Checkout\Api\Exception\PaymentProcessingRateLimitExceededException;
 use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
 use Magento\Checkout\Api\PaymentSavingRateLimiterInterface;
+use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\Quote;
+use Psr\Log\LoggerInterface;
 
 /**
  * Payment information management service.
@@ -22,6 +27,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     /**
      * @var \Magento\Quote\Api\BillingAddressManagementInterface
      * @deprecated 100.1.0 This call was substituted to eliminate extra quote::save call
+     * @see not in use anymore
      */
     protected $billingAddressManagement;
 
@@ -46,12 +52,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     protected $cartTotalsRepository;
 
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @var CartRepositoryInterface
      */
     private $cartRepository;
 
@@ -71,6 +72,21 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     private $saveRateLimiterDisabled = false;
 
     /**
+     * @var AddressRepositoryInterface
+     */
+    private $addressRepository;
+
+    /**
+     * @var AddressComparatorInterface
+     */
+    private $addressComparator;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Quote\Api\BillingAddressManagementInterface $billingAddressManagement
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
@@ -78,7 +94,12 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
      * @param PaymentProcessingRateLimiterInterface|null $paymentRateLimiter
      * @param PaymentSavingRateLimiterInterface|null $saveRateLimiter
+     * @param CartRepositoryInterface|null $cartRepository
+     * @param AddressRepositoryInterface|null $addressRepository
+     * @param AddressComparatorInterface|null $addressComparator
+     * @param LoggerInterface|null $logger
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Quote\Api\BillingAddressManagementInterface $billingAddressManagement,
@@ -87,7 +108,11 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         \Magento\Checkout\Model\PaymentDetailsFactory $paymentDetailsFactory,
         \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository,
         ?PaymentProcessingRateLimiterInterface $paymentRateLimiter = null,
-        ?PaymentSavingRateLimiterInterface $saveRateLimiter = null
+        ?PaymentSavingRateLimiterInterface $saveRateLimiter = null,
+        ?CartRepositoryInterface $cartRepository = null,
+        ?AddressRepositoryInterface $addressRepository = null,
+        ?AddressComparatorInterface $addressComparator = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
@@ -98,6 +123,13 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
             ?? ObjectManager::getInstance()->get(PaymentProcessingRateLimiterInterface::class);
         $this->saveRateLimiter = $saveRateLimiter
             ?? ObjectManager::getInstance()->get(PaymentSavingRateLimiterInterface::class);
+        $this->cartRepository = $cartRepository
+            ?? ObjectManager::getInstance()->get(CartRepositoryInterface::class);
+        $this->addressRepository = $addressRepository
+            ?? ObjectManager::getInstance()->get(AddressRepositoryInterface::class);
+        $this->addressComparator = $addressComparator
+            ?? ObjectManager::getInstance()->get(AddressComparatorInterface::class);
+        $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -118,8 +150,8 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         }
         try {
             $orderId = $this->cartManagement->placeOrder($cartId);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->getLogger()->critical(
+        } catch (LocalizedException $e) {
+            $this->logger->critical(
                 'Placing an order with quote_id ' . $cartId . ' is failed: ' . $e->getMessage()
             );
             throw new CouldNotSaveException(
@@ -127,7 +159,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
                 $e
             );
         } catch (\Exception $e) {
-            $this->getLogger()->critical($e);
+            $this->logger->critical($e);
             throw new CouldNotSaveException(
                 __('A server error stopped your order from being placed. Please try to place your order again.'),
                 $e
@@ -138,6 +170,8 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
 
     /**
      * @inheritdoc
+     *
+     * @throws LocalizedException
      */
     public function savePaymentInformation(
         $cartId,
@@ -154,10 +188,8 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         }
 
         if ($billingAddress) {
-            /** @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository */
-            $quoteRepository = $this->getCartRepository();
             /** @var \Magento\Quote\Model\Quote $quote */
-            $quote = $quoteRepository->getActive($cartId);
+            $quote = $this->cartRepository->getActive($cartId);
             $customerId = $quote->getBillingAddress()
                 ->getCustomerId();
             if (!$billingAddress->getCustomerId() && $customerId) {
@@ -167,12 +199,8 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
             $quote->removeAddress($quote->getBillingAddress()->getId());
             $quote->setBillingAddress($billingAddress);
             $quote->setDataChanges(true);
-            $shippingAddress = $quote->getShippingAddress();
-            if ($shippingAddress && $shippingAddress->getShippingMethod()) {
-                $shippingRate = $shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod());
-                if ($shippingRate) {
-                    $shippingAddress->setLimitCarrier($shippingRate->getCarrier());
-                }
+            if ($quote->getShippingAddress()) {
+                $this->processShippingAddress($quote);
             }
         }
         $this->paymentMethodManagement->set($cartId, $paymentMethod);
@@ -192,31 +220,44 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     }
 
     /**
-     * Get logger instance
+     * Processes shipping address.
      *
-     * @return \Psr\Log\LoggerInterface
-     * @deprecated 100.1.8
+     * @param Quote $quote
+     * @return void
+     * @throws LocalizedException
      */
-    private function getLogger()
+    private function processShippingAddress(Quote $quote): void
     {
-        if (!$this->logger) {
-            $this->logger = ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
+        $shippingAddress = $quote->getShippingAddress();
+        $billingAddress = $quote->getBillingAddress();
+        if ($shippingAddress->getShippingMethod()) {
+            $shippingRate = $shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod());
+            if ($shippingRate) {
+                $shippingAddress->setLimitCarrier($shippingRate->getCarrier());
+            }
         }
-        return $this->logger;
-    }
-
-    /**
-     * Get Cart repository
-     *
-     * @return \Magento\Quote\Api\CartRepositoryInterface
-     * @deprecated 100.2.0
-     */
-    private function getCartRepository()
-    {
-        if (!$this->cartRepository) {
-            $this->cartRepository = ObjectManager::getInstance()
-                ->get(\Magento\Quote\Api\CartRepositoryInterface::class);
+        if ($this->addressComparator->isEqual($shippingAddress, $billingAddress)) {
+            $shippingAddress->setSameAsBilling(1);
         }
-        return $this->cartRepository;
+        // Save new address in the customer address book and set it id for billing and shipping quote addresses.
+        if ($shippingAddress->getSameAsBilling() && $shippingAddress->getSaveInAddressBook()) {
+            $shippingAddressData = $shippingAddress->exportCustomerAddress();
+            $customer = $quote->getCustomer();
+            $hasDefaultBilling = (bool)$customer->getDefaultBilling();
+            $hasDefaultShipping = (bool)$customer->getDefaultShipping();
+            if (!$hasDefaultShipping) {
+                //Make provided address as default shipping address
+                $shippingAddressData->setIsDefaultShipping(true);
+                if (!$hasDefaultBilling && !$billingAddress->getSaveInAddressBook()) {
+                    $shippingAddressData->setIsDefaultBilling(true);
+                }
+            }
+            $shippingAddressData->setCustomerId($quote->getCustomerId());
+            $this->addressRepository->save($shippingAddressData);
+            $quote->addCustomerAddress($shippingAddressData);
+            $shippingAddress->setCustomerAddressData($shippingAddressData);
+            $shippingAddress->setCustomerAddressId($shippingAddressData->getId());
+            $billingAddress->setCustomerAddressId($shippingAddressData->getId());
+        }
     }
 }

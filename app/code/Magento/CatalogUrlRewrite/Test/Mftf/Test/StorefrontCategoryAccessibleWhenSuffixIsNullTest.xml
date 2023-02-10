@@ -16,6 +16,7 @@
             <stories value="Url rewrites"/>
             <severity value="MAJOR"/>
             <group value="CatalogUrlRewrite"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set catalog/seo/category_url_suffix ''" stepKey="setCategoryUrlSuffix"/>
@@ -33,7 +34,7 @@
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfter"/>
         </after>
 
-        <amOnPage url="/$$createCategory.name$$" stepKey="onCategoryPage"/>
+        <amOnPage url="/$$createCategory.custom_attributes[url_key]$$" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <seeInTitle userInput="$$createCategory.name$$" stepKey="assertCategoryNameInTitle"/>
     </test>

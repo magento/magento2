@@ -25,7 +25,7 @@
             <createData entity="_defaultProduct" stepKey="product">
                 <requiredEntity createDataKey="category"/>
             </createData>
-            <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="goToCategoryPage"/>
+            <amOnPage url="{{StorefrontCategoryPage.url($$category.custom_attributes[url_key]$$)}}" stepKey="goToCategoryPage"/>
             <waitForPageLoad stepKey="waitForPageLoad"/>
             <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="moveMouseOverProduct"/>
             <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="clickAddToCartButton"/>

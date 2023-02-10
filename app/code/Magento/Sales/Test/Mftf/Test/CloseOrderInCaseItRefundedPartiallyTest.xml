@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CloseOrderInCaseItRefundedPartiallyTest">
+        <annotations>
+            <group value="Sales"/>
+            <stories value="Close order"/>
+            <title value="Close order in case it refunded partially"/>
+            <description value="Place order, generate invoice and do partial credit memos, it refunded partially and sales status should be closed"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-27378"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!-- Create Simple Product -->
+            <createData entity="SimpleProduct_100" stepKey="simpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create the configurable product -->
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+        </before>
+        <!-- add simple product into cart -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchSimpleProductStorefront">
+            <argument name="phrase" value="$simpleProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToCartFromQuickSearchActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$simpleProduct.name$"/>
+        </actionGroup>
+
+        <!-- add configurable product into cart -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPageAgain"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchConfigurableProductStorefront">
+            <argument name="phrase" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductFromQuickSearchActionGroup" stepKey="openAndCheckProduct">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+            <argument name="productUrlKey" value="{{_defaultProduct.urlKey}}"/>
+        </actionGroup>
+        <actionGroup ref="SelectSingleAttributeAndAddToCartActionGroup" stepKey="addProductToCart1">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+            <argument name="attributeCode" value="{{colorProductAttribute.default_label}}"/>
+            <argument name="optionName" value="{{colorProductAttribute1.name}}"/>
+        </actionGroup>
+
+        <!-- Go to storefront do guest checkout and place order -->
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickCart"/>
+        <actionGroup ref="StorefrontGuestCheckoutProceedActionGroup" stepKey="proceedToCheckout"/>
+        <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFirstShippingMethod"/>
+        <comment userInput="Adding the comment to replace waitForLoadingMask2 action for preserving Backward Compatibility" stepKey="waitForLoadingMask2"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+
+        <!-- Go to sales < Order open the created Order and generate invoice -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoice"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask5" />
+
+        <!-- Click 'Credit Memo' button and fill data from dataset: partial refund -->
+        <actionGroup ref="AdminOpenAndFillCreditMemoRefundAndBackToStockActionGroup" stepKey="fillCreditMemoRefund">
+            <argument name="itemQtyToRefund" value="0"/>
+        </actionGroup>
+
+        <!-- On order's page click 'Refund offline' button -->
+        <actionGroup ref="AdminClickRefundOfflineOnNewMemoPageActionGroup" stepKey="clickRefundOffline"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForResultPage"/>
+
+        <!-- Perform all assertions: assert refund success create message -->
+        <waitForElementVisible selector="{{AdminIndexManagementSection.successMessage}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminIndexManagementSection.successMessage}}" userInput="You created the credit memo." stepKey="assertRefundSuccessCreateMessage"/>
+
+        <!-- Click 'Credit Memo' button -->
+        <waitForElementVisible selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="validateCreditMemo"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickOnCreditMemo"/>
+
+        <!-- On order's page click 'Refund offline' button again-->
+        <actionGroup ref="AdminClickRefundOfflineOnNewMemoPageActionGroup" stepKey="clickRefundOffline1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForResultPage1"/>
+
+        <!-- Perform all assertions: assert refund success create message again -->
+        <waitForElementVisible selector="{{AdminIndexManagementSection.successMessage}}" stepKey="waitForSuccessMessage1"/>
+        <see selector="{{AdminIndexManagementSection.successMessage}}" userInput="You created the credit memo." stepKey="assertRefundSuccessCreateMessage1"/>
+
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage1"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask7"/>
+
+        <!-- Verify the order status grid page shows the order status we just created -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="close" stepKey="verifyOrderStatus"/>
+
+        <after>
+            <!-- Delete product -->
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+
+            <!-- Delete Catagory -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+    </test>
+</tests>
+
+

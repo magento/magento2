@@ -38,11 +38,6 @@ $taxHelper = $block->getData('taxHelper');
                                 value="<?= $block->escapeHtmlAttr($_code) ?>"
                                 id="s_method_<?= $block->escapeHtmlAttr($_code) ?>" <?= /* @noEscape */ $_checked ?>
                                 class="admin__control-radio required-entry"/>
-                            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                                'onclick',
-                                "order.setShippingMethod(this.value)",
-                                'input#s_method_' . $block->escapeHtmlAttr($_code)
-                            ) ?>
                             <label class="admin__field-label" for="s_method_<?= $block->escapeHtmlAttr($_code) ?>">
                                 <?= $block->escapeHtml($_rate->getMethodTitle() ?
                                     $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
@@ -59,6 +54,11 @@ $taxHelper = $block->getData('taxHelper');
                                     <?php endif; ?>
                                 </strong>
                             </label>
+                            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                                'onclick',
+                                "order.setShippingMethod(this.value)",
+                                'input#s_method_' . $block->escapeHtmlAttr($_code)
+                            ) ?>
                         <?php endif; ?>
                     </li>
                 <?php endforeach; ?>

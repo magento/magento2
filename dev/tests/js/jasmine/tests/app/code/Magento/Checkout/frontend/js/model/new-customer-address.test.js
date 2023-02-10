@@ -25,13 +25,15 @@ define([
         });
 
         it('Check on empty object.', function () {
-            var expected = {
-                countryId: 'US',
-                regionCode: null,
-                region: null
-            };
+            var result = newCustomerAddress({}),
+                expected = {
+                    countryId: 'US',
+                    regionCode: null,
+                    region: null
+                };
 
-            expect(JSON.stringify(newCustomerAddress({}))).toEqual(JSON.stringify(expected));
+            result.postcode = undefined;
+            expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
         });
 
         it('Check on function call with empty address data.', function () {
@@ -57,6 +59,7 @@ define([
                     regionId: 1
                 };
 
+            result.postcode = undefined;
             expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
         });
         it('Check on regionId with countryId in address data.', function () {
@@ -69,6 +72,25 @@ define([
                     region: null
                 };
 
+            result.postcode = undefined;
+            expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
+        });
+        it('Check that extensionAttributes property exists if defined', function () {
+            var result = newCustomerAddress({
+                    'extension_attributes': {
+                        'attr_code': 'val'
+                    }
+                }),
+                expected = {
+                    countryId: 'US',
+                    regionCode: null,
+                    region: null,
+                    extensionAttributes: {
+                        'attr_code': 'val'
+                    }
+                };
+
+            result.postcode = undefined;
             expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
         });
     });
