@@ -269,7 +269,6 @@
         "magento/module-quote-downloadable-links": "*",
         "magento/module-quote-graph-ql": "*",
         "magento/module-related-product-graph-ql": "*",
-        "magento/module-release-notification": "*",
         "magento/module-reports": "*",
         "magento/module-require-js": "*",
         "magento/module-review": "*",

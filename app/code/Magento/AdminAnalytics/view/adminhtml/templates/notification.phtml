@@ -10,12 +10,10 @@
 
 <?php
 $isAnaliticsVisible = $block->getNotification()->isAnalyticsVisible() ? 1 : 0;
-$isReleaseVisible = $block->getNotification()->isReleaseVisible() ? 1 : 0;
 $scriptString = <<<script
     define('analyticsPopupConfig', function () {
         return {
             analyticsVisible: {$isAnaliticsVisible},
-            releaseVisible: {$isReleaseVisible},
         }
     });
 script;

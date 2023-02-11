@@ -82,7 +82,6 @@ define([
                             }
                         }
                     ).fail(this.onError);
-                    this.openReleasePopup();
                     this.closeModal();
                 },
 
@@ -108,19 +107,7 @@ define([
                             }
                         }
                     ).fail(this.onError);
-                    this.openReleasePopup();
                     this.closeModal();
-                },
-
-                /**
-                 * Allows admin usage popup to be shown first and then new release notification
-                 */
-                openReleasePopup: function () {
-                    var notificationModalSelector = 'release_notification.release_notification.notification_modal_1';
-
-                    if (analyticsPopupConfig.releaseVisible) {
-                        registry.get(notificationModalSelector).initializeContentAfterAnalytics();
-                    }
                 },
 
                 /**

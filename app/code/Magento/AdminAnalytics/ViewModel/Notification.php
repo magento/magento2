@@ -9,10 +9,9 @@ namespace Magento\AdminAnalytics\ViewModel;
 
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\AdminAnalytics\Model\Condition\CanViewNotification as AdminAnalyticsNotification;
-use Magento\ReleaseNotification\Model\Condition\CanViewNotification as ReleaseNotification;
 
 /**
- * Control display of admin analytics and release notification modals
+ * Control display of admin analytics
  */
 class Notification implements ArgumentInterface
 {
@@ -22,20 +21,12 @@ class Notification implements ArgumentInterface
     private $canViewNotificationAnalytics;
 
     /**
-     * @var ReleaseNotification
-     */
-    private $canViewNotificationRelease;
-
-    /**
      * @param AdminAnalyticsNotification $canViewNotificationAnalytics
-     * @param ReleaseNotification $canViewNotificationRelease
      */
     public function __construct(
-        AdminAnalyticsNotification $canViewNotificationAnalytics,
-        ReleaseNotification $canViewNotificationRelease
+        AdminAnalyticsNotification $canViewNotificationAnalytics
     ) {
         $this->canViewNotificationAnalytics = $canViewNotificationAnalytics;
-        $this->canViewNotificationRelease = $canViewNotificationRelease;
     }
 
     /**
@@ -46,15 +37,5 @@ class Notification implements ArgumentInterface
     public function isAnalyticsVisible(): bool
     {
         return $this->canViewNotificationAnalytics->isVisible([]);
-    }
-
-    /**
-     * Determine if the release popup is visible
-     *
-     * @return bool
-     */
-    public function isReleaseVisible(): bool
-    {
-        return $this->canViewNotificationRelease->isVisible([]);
     }
 }

@@ -7486,40 +7486,6 @@
             "description": "N/A"
         },
         {
-            "name": "magento/module-release-notification",
-            "version": "100.3.1",
-            "dist": {
-                "type": "zip",
-                "url": "https://repo.magento.com/archives/magento/module-release-notification/magento-module-release-notification-100.3.1.0.zip",
-                "reference": null,
-                "shasum": "b6f40a4a0a6328fdf5dde3dd18d702190d5c2347"
-            },
-            "require": {
-                "magento/framework": "102.0.*",
-                "magento/module-backend": "101.0.*",
-                "magento/module-ui": "101.1.*",
-                "magento/module-user": "101.1.*",
-                "php": "~8.1.0"
-            },
-            "suggest": {
-                "magento/module-config": "101.1.*"
-            },
-            "type": "magento2-module",
-            "autoload": {
-                "files": [
-                    "registration.php"
-                ],
-                "psr-4": {
-                    "Magento\\ReleaseNotification\\": ""
-                }
-            },
-            "license": [
-                "OSL-3.0",
-                "AFL-3.0"
-            ],
-            "description": "N/A"
-        },
-        {
             "name": "magento/module-reports",
             "version": "100.3.1",
             "dist": {
@@ -9510,7 +9476,6 @@
                 "magento/module-quote": "101.1.1",
                 "magento/module-quote-analytics": "100.3.1",
                 "magento/module-quote-graph-ql": "100.3.1",
-                "magento/module-release-notification": "100.3.1",
                 "magento/module-reports": "100.3.1",
                 "magento/module-require-js": "100.3.1",
                 "magento/module-review": "100.3.1",

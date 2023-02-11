@@ -13,7 +13,6 @@ Before disabling or uninstalling this module, note that the following modules de
 - Magento_Authorization
 - Magento_NewRelicReporting
 - Magento_ProductVideo
-- Magento_ReleaseNotification
 - Magento_Search
 - Magento_Security
 - Magento_Swatches

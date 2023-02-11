@@ -10,8 +10,7 @@
         "magento/module-backend": "*",
         "magento/module-config": "*",
         "magento/module-store": "*",
-        "magento/module-ui": "*",
-        "magento/module-release-notification": "*"
+        "magento/module-ui": "*"
     },
     "type": "magento2-module",
     "license": [
