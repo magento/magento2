@@ -1086,7 +1086,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
                     if ($storeId != Store::DEFAULT_STORE_ID
                         && isset($data[$itemId][Store::DEFAULT_STORE_ID][$fieldName])
-                        && $data[$itemId][Store::DEFAULT_STORE_ID][$fieldName] == htmlspecialchars_decode($attrValue)
+                        && $data[$itemId][Store::DEFAULT_STORE_ID][$fieldName] == $attrValue
                     ) {
                         continue;
                     }
@@ -1097,7 +1097,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                                 $additionalAttributes[$fieldName] = $fieldName .
                                     ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $this->wrapValue($attrValue);
                             }
-                            $data[$itemId][$storeId][$fieldName] = htmlspecialchars_decode($attrValue);
+                            $data[$itemId][$storeId][$fieldName] = $attrValue;
                         }
                     } else {
                         $this->collectMultiselectValues($item, $code, $storeId);
@@ -1112,7 +1112,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 }
 
                 if (!empty($additionalAttributes)) {
-                    $additionalAttributes = array_map('htmlspecialchars_decode', $additionalAttributes);
                     $data[$itemId][$storeId][self::COL_ADDITIONAL_ATTRIBUTES] =
                         implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalAttributes);
                 } else {
@@ -1123,7 +1122,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $data[$itemId][$storeId][self::COL_STORE] = $storeCode;
                 $data[$itemId][$storeId][self::COL_ATTR_SET] = $this->_attrSetIdToName[$attrSetId];
                 $data[$itemId][$storeId][self::COL_TYPE] = $item->getTypeId();
-                $data[$itemId][$storeId][self::COL_SKU] = htmlspecialchars_decode($item->getSku());
+                $data[$itemId][$storeId][self::COL_SKU] = $item->getSku();
                 $data[$itemId][$storeId]['store_id'] = $storeId;
                 $data[$itemId][$storeId]['product_id'] = $itemId;
                 $data[$itemId][$storeId]['product_link_id'] = $productLinkId;

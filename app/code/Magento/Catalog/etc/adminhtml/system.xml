@@ -199,6 +199,7 @@
                 <field id="category" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Top Level Category</label>
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                    <backend_model>Magento\Catalog\Model\System\Config\Backend\Rss\Category</backend_model>
                 </field>
             </group>
         </section>
