@@ -316,6 +316,9 @@ class CarrierTest extends TestCase
                         'items' => [
                             'item1' => [
                                 'name' => $productName,
+                                'qty' => 1,
+                                'weight' => '0.454000000001',
+                                'price' => '10.00',
                             ],
                         ],
                     ],
@@ -422,8 +425,13 @@ class CarrierTest extends TestCase
         $expectedRequestElement->Shipper->CountryName = $countryNames[$origCountryId];
         $expectedRequestElement->RegionCode = $regionCode;
 
+        if ($origCountryId !== $destCountryId) {
+            $expectedRequestElement->ExportDeclaration->ExportLineItem->ManufactureCountryCode = $origCountryId;
+        }
+
         if ($isProductNameContainsSpecialChars) {
             $expectedRequestElement->ShipmentDetails->Pieces->Piece->PieceContents = self::PRODUCT_NAME_SPECIAL_CHARS;
+            $expectedRequestElement->ExportDeclaration->ExportLineItem->Description = self::PRODUCT_NAME_SPECIAL_CHARS;
         }
 
         return $expectedRequestElement->asXML();
