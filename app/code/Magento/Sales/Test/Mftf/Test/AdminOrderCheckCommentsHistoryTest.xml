@@ -20,51 +20,49 @@
             <group value="sales"/>
         </annotations>
         <before>
-
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-
-            <!-- Customer is created -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-            <!-- Login to Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <!-- Delete products -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-
-            <!-- Delete Category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-
-            <!-- Delete Customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
 
-        <!-- Create new customer order -->
-        <comment userInput="Create new customer order" stepKey="createNewCustomerOrderComment"/>
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
-            <argument name="customer" value="$$createCustomer$$"/>
+        <!-- Create order, invoice, shipment and credit memo -->
+        <createData entity="CustomerCart" stepKey="createCustomerCart">
+            <requiredEntity createDataKey="createCustomer"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addCartItem">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct"/>
+        </createData>
+        <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </createData>
+        <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="createFirstOrder">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </updateData>
+        <createData entity="Invoice" stepKey="invoiceOrder">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </createData>
+        <createData entity="Shipment" stepKey="createShipment">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </createData>
+        <createData entity="CreditMemo" stepKey="createCreditMemo">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </createData>
+
+        <!-- Open Admin Order page -->
+        <actionGroup ref="AdminOpenOrderViewPageByOrderIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="$createCustomerCart.return$"/>
         </actionGroup>
-        <!-- Add Simple product to order -->
-        <comment userInput="Add Simple product to order" stepKey="addSimpleProductToOrderComment"/>
-        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToTheOrder">
-            <argument name="product" value="$$createProduct$$"/>
-        </actionGroup>
-        <!-- Select FlatRate shipping method -->
-        <comment userInput="Select FlatRate shipping method" stepKey="selectFlatRateShippingMethodComment"/>
-        <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
-        <!-- Submit order -->
-        <comment userInput="Submit order" stepKey="submitOrderComment"/>
-        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
-        <!-- Verify order information -->
-        <comment userInput="Verify order information" stepKey="verifyOrderInformationComment"/>
-        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
-        <comment userInput="BIC workaround" stepKey="orderId"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
 
         <!--Go to Comments history and switch to Information -->
         <click selector="{{AdminOrderDetailsOrderViewSection.commentsHistory}}" stepKey="goToCommentsHistory1"/>
@@ -74,8 +72,7 @@
         <!--Go to Comments history and don't see the error message -->
         <click selector="{{AdminOrderDetailsOrderViewSection.commentsHistory}}" stepKey="goToCommentsHistory2"/>
         <waitForPageLoad stepKey="waitForCommentsHistoryPage"/>
-        <see userInput="Order Placed by Store Administrator" stepKey="seeMessageOrderCreatedByAdmin"/>
+        <see userInput="Notes for this Order" stepKey="seeMessageNotesForThisOrder"/>
         <dontSee userInput="A technical problem with the server created an error" stepKey="dontSeeTechnicalErrorMessageTwo"/>
-
     </test>
 </tests>
