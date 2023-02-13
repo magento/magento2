@@ -31,15 +31,17 @@ require([
             this._getFormData(this.options.itemRateDefault);
         },
         openModal: function() {
-            var zipIsRange = this.modal.find('#zip_is_range');
+            var zipIsRange = this.modal.find('#zip_is_range'),
+                rate = this.options.itemRateDefault;
 
-            this._applyItem(this.options.itemRateDefault);
             if (this.options.itemRate && !$.isEmptyObject(this.options.itemRate)) {
-                this._applyItem(this.options.itemRate);
+                rate = {...rate, ...this.options.itemRate};
             }
+            this._applyItem(rate);
             zipIsRange.attr('checked', zipIsRange.val() == 1);
             zipIsRange.trigger('change');
             updater.update();
+            this._applyItem(rate);
             this._super();
         },
         closeModal: function() {
@@ -52,7 +54,7 @@ require([
                 if (!value) {
                     value = '';
                 }
-                dialogElement.find('[name="' + key + '"]').attr('value', value);
+                dialogElement.find('[name="' + key + '"]').val(value);
             });
         },
         updateItemRate: function() {
