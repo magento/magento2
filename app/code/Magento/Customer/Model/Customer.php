@@ -1026,6 +1026,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Validate customer attribute values.
      *
      * @deprecated 100.1.0
+     * @see \Magento\Customer\Model\AccountManagement::validate()
      * @return bool
      */
     public function validate()
