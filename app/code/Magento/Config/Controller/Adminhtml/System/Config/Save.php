@@ -323,18 +323,11 @@ class Save extends AbstractConfig implements HttpPostActionInterface
     public function filterNodes(array $configData): array
     {
         if (!empty($configData['groups'])) {
-            $systemXmlPathsFromKeys = array_keys($this->_configStructure->getFieldPaths());
-            $systemXmlPathsFromValues = array_reduce(
-                array_values($this->_configStructure->getFieldPaths()),
-                'array_merge',
-                []
-            );
             //Full list of paths defined in system.xml
-            $systemXmlConfig = array_merge($systemXmlPathsFromKeys, $systemXmlPathsFromValues);
-
+            $fieldPaths = $this->_configStructure->getFieldPaths();
+            $systemXmlConfig = array_merge(array_keys($fieldPaths), ...array_values($fieldPaths));
             $configData['groups'] = $this->filterPaths($configData['section'], $configData['groups'], $systemXmlConfig);
         }
-
         return $configData;
     }
 
