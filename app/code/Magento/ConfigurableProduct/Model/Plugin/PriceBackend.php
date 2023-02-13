@@ -16,6 +16,8 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 class PriceBackend
 {
     /**
+     * Around validate
+     *
      * @param \Magento\Catalog\Model\Product\Attribute\Backend\Price $subject
      * @param \Closure $proceed
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $object

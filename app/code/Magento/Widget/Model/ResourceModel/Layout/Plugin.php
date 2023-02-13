@@ -24,6 +24,8 @@ class Plugin
     }
 
     /**
+     * Around update
+     *
      * @param \Magento\Framework\View\Model\Layout\Merge $subject
      * @param callable $proceed
      * @param string $handle

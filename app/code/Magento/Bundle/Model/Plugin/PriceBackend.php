@@ -14,6 +14,8 @@ namespace Magento\Bundle\Model\Plugin;
 class PriceBackend
 {
     /**
+     * Around validate
+     *
      * @param \Magento\Catalog\Model\Product\Attribute\Backend\Price $subject
      * @param \Closure $proceed
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $object
