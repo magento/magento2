@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6bf50057f1bf211775a7988d00b59f76",
+    "content-hash": "025e34e2353487f8a4a29c1eacf3704f",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -10736,20 +10736,20 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "4.1.0",
+            "version": "4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "df56830b0230940f3398be5414a4ab5b7df2e057"
+                "reference": "062c1bbabbe8f6bc1aba2f5fc84751997c36f7f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/df56830b0230940f3398be5414a4ab5b7df2e057",
-                "reference": "df56830b0230940f3398be5414a4ab5b7df2e057",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/062c1bbabbe8f6bc1aba2f5fc84751997c36f7f5",
+                "reference": "062c1bbabbe8f6bc1aba2f5fc84751997c36f7f5",
                 "shasum": ""
             },
             "require": {
-                "allure-framework/allure-codeception": "^1.4",
+                "allure-framework/allure-codeception": "^1.5",
                 "allure-framework/allure-phpunit": "^2",
                 "aws/aws-sdk-php": "^3.132",
                 "codeception/codeception": "^4.1",
@@ -10825,9 +10825,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/4.1.0"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/4.2.0"
             },
-            "time": "2023-02-08T16:12:33+00:00"
+            "time": "2023-02-13T18:01:18+00:00"
         },
         {
             "name": "mustache/mustache",
