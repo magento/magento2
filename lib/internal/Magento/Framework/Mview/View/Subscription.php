@@ -108,6 +108,7 @@ class Subscription implements SubscriptionInterface, SubscriptionTriggersInterfa
      * @param array $ignoredUpdateColumnsBySubscription
      * @param Config|null $mviewConfig
      * @param SubscriptionStatementPostprocessorInterface|null $statementPostprocessor
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ResourceConnection $resource,
