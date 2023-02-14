@@ -55,24 +55,24 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     /**
      * @var ImageContentInterfaceFactory
      */
-    protected $imageContentInterface;
+    private $imageContentInterface;
 
     /**
      * Filesystem facade
      *
      * @var Filesystem
      */
-    protected $filesystem;
+    private $filesystem;
 
     /**
      * @var Mime
      */
-    protected $mime;
+    private $mime;
 
     /**
      * @var File
      */
-    protected $file;
+    private $file;
 
     /**
      * @param ProductRepositoryInterface $productRepository
