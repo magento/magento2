@@ -30,12 +30,12 @@ class Data
     /**
      * When we init media gallery empty image types contain this value.
      */
-    const EMPTY_IMAGE_VALUE = 'no_selection';
+    public const EMPTY_IMAGE_VALUE = 'no_selection';
 
     /**
      * The int value of the Default store ID
      */
-    const DEFAULT_STORE_ID = 0;
+    public const DEFAULT_STORE_ID = 0;
 
     /**
      * @var CollectionFactory
