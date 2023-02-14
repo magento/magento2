@@ -48,7 +48,6 @@ class MinimumAmountValidationRule implements QuoteValidationRuleInterface
 
     /**
      * @inheritdoc
-     * @throws \Zend_Currency_Exception
      */
     public function validate(Quote $quote): array
     {
