@@ -13,6 +13,7 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\Query\FieldSelection;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search\QueryPopularity;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
+use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Suggestions;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
@@ -21,7 +22,6 @@ use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Search\Api\SearchInterface;
 use Magento\Search\Model\Search\PageSizeProvider;
-use Magento\Store\Api\Data\StoreInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -68,6 +68,11 @@ class SearchTest extends TestCase
     private $searchCriteriaBuilder;
 
     /**
+     * @var Suggestions|MockObject
+     */
+    private $suggestions;
+
+    /**
      * @var QueryPopularity|MockObject
      */
     private $queryPopularity;
@@ -104,6 +109,9 @@ class SearchTest extends TestCase
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->suggestions = $this->getMockBuilder(Suggestions::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->queryPopularity = $this->getMockBuilder(QueryPopularity::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -115,6 +123,7 @@ class SearchTest extends TestCase
             $this->productsProvider,
             $this->searchCriteriaBuilder,
             $this->argsSelection,
+            $this->suggestions,
             $this->queryPopularity
         );
     }

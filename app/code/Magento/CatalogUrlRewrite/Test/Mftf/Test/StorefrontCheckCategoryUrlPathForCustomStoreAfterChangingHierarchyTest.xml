@@ -34,6 +34,7 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createEnStoreView">
                 <argument name="customStore" value="customStoreEN"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <!-- Delete categories -->
@@ -46,6 +47,7 @@
             </actionGroup>
             <!-- Clear grid filters -->
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearStoreFilters"/>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 

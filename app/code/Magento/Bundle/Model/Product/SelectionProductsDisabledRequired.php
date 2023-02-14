@@ -82,6 +82,7 @@ class SelectionProductsDisabledRequired
      * @param int $bundleId
      * @param int|null $websiteId
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getChildProductIds(int $bundleId, ?int $websiteId = null): array
     {
@@ -128,10 +129,12 @@ class SelectionProductsDisabledRequired
     private function getProducts(array $selectionProductIds, int $websiteId): array
     {
         $productIds = [];
-        $defaultStoreId = $this->storeManager->getWebsite($websiteId)->getDefaultStore()->getId();
+        $defaultStore = $this->storeManager->getWebsite($websiteId)->getDefaultStore();
+        $defaultStoreId = $defaultStore ? $defaultStore->getId() : null;
         foreach ($selectionProductIds as $optionProductIds) {
-            $productIds = array_merge($productIds, $optionProductIds);
+            $productIds[] = $optionProductIds;
         }
+        $productIds = array_merge([], ...$productIds);
         $productCollection = $this->productCollectionFactory->create();
         $productCollection->joinAttribute(
             ProductInterface::STATUS,

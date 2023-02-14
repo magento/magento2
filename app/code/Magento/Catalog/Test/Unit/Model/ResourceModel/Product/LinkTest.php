@@ -54,8 +54,8 @@ class LinkTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     protected function prepareAdapter(): void
     {
         $this->dbSelect = $this->createMock(Select::class);
@@ -69,8 +69,8 @@ class LinkTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetAttributesByType(): void
     {
         $typeId = 4;
@@ -93,8 +93,8 @@ class LinkTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetAttributeTypeTable(): void
     {
         $inputTable = 'megatable';
@@ -113,8 +113,8 @@ class LinkTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetChildrenIds(): void
     {
         //prepare mocks and data
@@ -145,8 +145,8 @@ class LinkTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetParentIdsByChild(): void
     {
         $childId = 234;

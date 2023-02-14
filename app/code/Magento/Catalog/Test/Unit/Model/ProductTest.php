@@ -477,8 +477,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetAttributes(): void
     {
         $productType = $this->getMockBuilder(AbstractType::class)
@@ -502,8 +502,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetStoreIds(): void
     {
         $expectedStoreIds = [1, 2, 3];
@@ -549,8 +549,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetStoreId(): void
     {
         $this->model->setStoreId(3);
@@ -645,8 +645,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSetCategoryCollection(): void
     {
         $collection = $this->getMockBuilder(Collection::class)
@@ -657,8 +657,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetCategory(): void
     {
         $this->model->setData('category_ids', [10]);
@@ -684,8 +684,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetIdBySku(): void
     {
         $this->resource->expects($this->once())->method('getIdBySku')->willReturn(5);
@@ -693,8 +693,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetCategoryIds(): void
     {
         $this->model->lockAttribute('category_ids');
@@ -782,8 +782,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testPriceReindexCallback(): void
     {
         $this->model = $this->objectManagerHelper->getObject(
@@ -1218,8 +1218,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetIsSalableHasDataIsSaleable(): void
     {
         $typeInstanceMock = $this->createMock(Simple::class);
@@ -1288,8 +1288,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     protected function prepareCategoryIndexer(): void
     {
         $this->indexerRegistryMock->expects($this->once())
@@ -1386,8 +1386,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function getMediaAttributes(): void
     {
         $expected = [];
@@ -1399,8 +1399,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetMediaAttributeValues(): void
     {
         $this->mediaConfig->expects($this->once())->method('getMediaAttributeCodes')
@@ -1416,16 +1416,16 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetMediaGalleryEntriesNone(): void
     {
         $this->assertNull($this->model->getMediaGalleryEntries());
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetMediaGalleryEntries(): void
     {
         $this->setupMediaAttributes();
@@ -1466,8 +1466,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSetMediaGalleryEntries(): void
     {
         $expectedResult = [
@@ -1530,8 +1530,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetMediaGalleryImagesMerging(): void
     {
         $mediaEntries =
@@ -1605,8 +1605,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetCustomAttributes(): void
     {
         $priceCode = 'price';
@@ -1659,8 +1659,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetOptions(): void
     {
         $option1Id = 2;
@@ -1713,8 +1713,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetFinalPrice(): void
     {
         $finalPrice = 11;
@@ -1740,8 +1740,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetFinalPricePreset(): void
     {
         $finalPrice = 9.99;
@@ -1766,8 +1766,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetTypeId(): void
     {
         $productType = $this->getMockBuilder(Virtual::class)
@@ -1784,8 +1784,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetOptionById(): void
     {
         $optionId = 100;
@@ -1796,8 +1796,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetOptionByIdWithWrongOptionId(): void
     {
         $optionId = 100;
@@ -1808,8 +1808,8 @@ class ProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetOptionByIdForProductWithoutOptions(): void
     {
         $this->assertNull($this->model->getOptionById(100));

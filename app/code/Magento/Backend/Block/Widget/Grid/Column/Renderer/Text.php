@@ -14,7 +14,7 @@ use Magento\Framework\DataObject;
  * @deprecated 100.2.0 in favour of UI component implementation
  * @since 100.0.2
  */
-class Text extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Text extends AbstractRenderer
 {
     /**
      * Format variables pattern
@@ -61,11 +61,11 @@ class Text extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      */
     private function getFormattedValue(DataObject $row)
     {
-        $value = $this->getColumn()->getFormat() ?: null;
+        $value = $this->getColumn()->getFormat() ?: '';
         if (true === $this->getColumn()->getTranslate()) {
             $value = __($value);
         }
-        if (preg_match_all($this->_variablePattern, $value, $matches)) {
+        if ($value && preg_match_all($this->_variablePattern, $value, $matches)) {
             foreach ($matches[0] as $index => $match) {
                 $replacement = $row->getData($matches[1][$index]);
                 $value = str_replace($match, $replacement, $value);

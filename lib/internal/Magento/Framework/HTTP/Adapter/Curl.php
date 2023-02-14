@@ -3,13 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\HTTP\Adapter;
 
+use Laminas\Http\Client\Adapter\AdapterInterface;
+use Laminas\Http\Request;
+
 /**
  * Curl http adapter
+ *
+ * @api
  */
-class Curl implements \Zend_Http_Client_Adapter_Interface
+class Curl implements AdapterInterface
 {
     /**
      * Parameters array
@@ -53,27 +59,20 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
     ];
 
     /**
-     * Array of CURL options
-     *
-     * @var array
-     */
-    protected $_options = [];
-
-    /**
      * Apply current configuration array to transport resource
      *
      * @return \Magento\Framework\HTTP\Adapter\Curl
      */
     protected function _applyConfig()
     {
-        // apply additional options to cURL
-        foreach ($this->_options as $option => $value) {
-            curl_setopt($this->_getResource(), $option, $value);
-        }
-
         // apply config options
-        foreach ($this->getDefaultConfig() as $option => $value) {
-            curl_setopt($this->_getResource(), $option, $value);
+        foreach ($this->_config as $k => $v) {
+            if (is_string($k) && array_key_exists($k, $this->_allowedParams)) {
+                $k = $this->_allowedParams[$k];
+            }
+            if (is_int($k)) {
+                curl_setopt($this->_getResource(), $k, $v);
+            }
         }
 
         return $this;
@@ -96,27 +95,31 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
     }
 
     /**
-     * Set array of additional cURL options
+     * Set the configuration array for the adapter
      *
      * @param array $options
      * @return $this
      */
-    public function setOptions(array $options = [])
+    public function setOptions($options = [])
     {
-        $this->_options = $options;
+        foreach ($options as $k => $v) {
+            $this->_config[$k] = $v;
+        }
         return $this;
     }
 
     /**
-     * Add additional option to cURL
+     * Add configuration option to cURL
      *
      * @param int $option the CURLOPT_* constants
      * @param mixed $value
      * @return $this
+     * @deprecated To avoid confusion after migration from ZF1 to Laminas (`setConfig` method renamed to `setOptions`).
+     * @see Use \Magento\Framework\HTTP\Adapter\Curl::setOptions instead.
      */
     public function addOption($option, $value)
     {
-        $this->_options[$option] = $value;
+        $this->_config[$option] = $value;
         return $this;
     }
 
@@ -125,13 +128,12 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      *
      * @param array $config
      * @return $this
+     * @deprecated To avoid confusion after migration from ZF1 to Laminas (`setConfig` method renamed to `setOptions`).
+     * @see Use \Magento\Framework\HTTP\Adapter\Curl::setOptions instead.
      */
     public function setConfig($config = [])
     {
-        foreach ($config as $key => $value) {
-            $this->_config[$key] = $value;
-        }
-        return $this;
+        return $this->setOptions($config);
     }
 
     /**
@@ -166,24 +168,24 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
         // set url to post to
         curl_setopt($this->_getResource(), CURLOPT_URL, $url);
         curl_setopt($this->_getResource(), CURLOPT_RETURNTRANSFER, true);
-        if ($method === \Zend_Http_Client::POST) {
+        if ($method === Request::METHOD_POST) {
             curl_setopt($this->_getResource(), CURLOPT_POST, true);
             curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'POST');
             curl_setopt($this->_getResource(), CURLOPT_POSTFIELDS, $body);
-        } elseif ($method === \Zend_Http_Client::PUT) {
+        } elseif ($method === Request::METHOD_PUT) {
             curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($this->_getResource(), CURLOPT_POSTFIELDS, $body);
-        } elseif ($method === \Zend_Http_Client::GET) {
+        } elseif ($method === Request::METHOD_GET) {
             curl_setopt($this->_getResource(), CURLOPT_HTTPGET, true);
             curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'GET');
-        } elseif ($method === \Zend_Http_Client::DELETE) {
+        } elseif ($method === Request::METHOD_DELETE) {
             curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'DELETE');
             curl_setopt($this->_getResource(), CURLOPT_POSTFIELDS, $body);
         }
 
-        if ($http_ver === \Zend_Http_Client::HTTP_1) {
+        if ($http_ver === Request::VERSION_11) {
             curl_setopt($this->_getResource(), CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-        } elseif ($http_ver === \Zend_Http_Client::HTTP_0) {
+        } elseif ($http_ver === Request::VERSION_10) {
             curl_setopt($this->_getResource(), CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
         }
 
@@ -194,8 +196,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
         /**
          * @internal Curl options setter have to be re-factored
          */
-        $header = isset($this->_config['header']) ? $this->_config['header'] : true;
-        curl_setopt($this->_getResource(), CURLOPT_HEADER, $header);
+        curl_setopt($this->_getResource(), CURLOPT_HEADER, $this->_config['header'] ?? true);
 
         return $body;
     }
@@ -208,16 +209,17 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
     public function read()
     {
         $response = curl_exec($this->_getResource());
+        if ($response === false) {
+            return '';
+        }
 
         // Remove 100 and 101 responses headers
-        while (\Zend_Http_Response::extractCode($response) == 100
-            || \Zend_Http_Response::extractCode($response) == 101
-        ) {
+        while ($this->extractCodeFromResponse($response) === 100 || $this->extractCodeFromResponse($response) === 101) {
             $response = preg_split('/^\r?$/m', $response, 2);
             $response = trim($response[1]);
         }
 
-        // CUrl will handle chunked data but leave the header.
+        // Curl will handle chunked data but leave the header.
         $response = preg_replace('/Transfer-Encoding:\s+chunked\r?\n/i', '', $response);
 
         return $response;
@@ -285,6 +287,8 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * @param array $urls
      * @param array $options
      * @return array
+     * @deprecated Because of migration from Zend_Http to laminas-http.
+     * @see No alternatives.
      */
     public function multiRequest($urls, $options = [])
     {
@@ -322,5 +326,22 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
         }
         curl_multi_close($multihandle);
         return $result;
+    }
+
+    /**
+     * Extract the response code from a response string
+     *
+     * @param string $responseString
+     *
+     * @return false|int
+     */
+    private function extractCodeFromResponse(string $responseString)
+    {
+        preg_match("|^HTTP/[\d\.x]+ (\d+)|", $responseString, $matches);
+        if (isset($matches[1])) {
+            return (int)$matches[1];
+        }
+
+        return false;
     }
 }

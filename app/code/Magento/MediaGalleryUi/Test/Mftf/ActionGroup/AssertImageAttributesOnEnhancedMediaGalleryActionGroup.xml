@@ -19,7 +19,7 @@
         <grabTextFrom selector="{{AdminEnhancedMediaGalleryImageDescriptionSection.title}}" stepKey="grabImageTitle"/>
         <assertStringContainsString stepKey="verifyImageTitle">
             <actualResult type="variable">grabImageTitle</actualResult>
-            <expectedResult type="string">{{image.fileName}}</expectedResult>
+            <expectedResult type="string">{{image.title}}</expectedResult>
         </assertStringContainsString>
 
         <grabTextFrom selector="{{AdminEnhancedMediaGalleryImageDescriptionSection.contentType}}" stepKey="grabContentType"/>

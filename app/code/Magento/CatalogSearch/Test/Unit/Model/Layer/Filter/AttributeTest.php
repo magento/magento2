@@ -279,8 +279,8 @@ class AttributeTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetItemsWithApply(): void
     {
         $attributeCode = 'attributeCode';
@@ -398,7 +398,8 @@ class AttributeTest extends TestCase
                     $selectedOptions[0]['label'],
                     $selectedOptions[0]['value'],
                     $facetedData[$selectedOptions[0]['value']]['count']
-                ], [
+                ],
+                [
                     $selectedOptions[1]['label'],
                     $selectedOptions[1]['value'],
                     $facetedData[$selectedOptions[1]['value']]['count']
