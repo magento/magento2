@@ -203,7 +203,8 @@ class AlertProcessor
                     if (!isset($products[$alert->getProductId()])) {
                         $product = $this->productRepository->getById(
                             $alert->getProductId(),
-                            false, $defaultStoreId,
+                            false,
+                            $defaultStoreId,
                             true
                         );
                         $products[$alert->getProductId()] = $product;
