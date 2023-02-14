@@ -20,22 +20,31 @@
         </annotations>
 
         <before>
+            <!--Change default tax destination calculation settings-->
+            <magentoCLI command="config:set {{DefaultTaxDestinationCountry.path}} {{US_Address_NY.country_id}}" stepKey="selectDefaultCountry"/>
+            <magentoCLI command="config:set {{DefaultTaxDestinationRegion.path}} {{RegionNY.region_id}}" stepKey="selectDefaultState"/>
+            <magentoCLI command="config:set {{DefaultTaxDestinationPostcode.path}} {{US_Address_NY.postcode}}" stepKey="fillDefaultPostCode"/>
+
             <!-- Create simple product -->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
+            <!--Reset default tax destination calculation settings-->
+            <magentoCLI command="config:set {{DefaultTaxDestinationCountry.path}} {{DefaultTaxDestinationCountry.value}}" stepKey="resetDefaultCountry"/>
+            <magentoCLI command="config:set {{DefaultTaxDestinationRegion.path}} {{DefaultTaxDestinationRegion.value}}" stepKey="resetDefaultState"/>
+            <magentoCLI command="config:set {{DefaultTaxDestinationPostcode.path}} {{DefaultTaxDestinationPostcode.value}}" stepKey="resetDefaultPostCode"/>
+
             <!-- Delete simple product -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <!--Reset default tax destination calculation-->
-            <actionGroup ref="AdminResetDefaultTaxDestinationActionGroup" stepKey="resetDefaultTaxDestination"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
-        <actionGroup ref="AdminSetDefaultTaxDestinationActionGroup" stepKey="setDefaultTaxDestination">
+        <!--Verify the admin setting for default tac and destination calculation-->
+        <actionGroup ref="AdminAssertDefaultTaxDestinationActionGroup" stepKey="sssertDefaultTaxDestination">
             <argument name="country" value="{{US_Address_NY.country}}"/>
-            <argument name="state" value="{{US_Address_NY.state}}"/>
+            <argument name="state" value="{{RegionNY.region}}"/>
             <argument name="postcode" value="{{US_Address_NY.postcode}}"/>
         </actionGroup>
 
