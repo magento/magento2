@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\App\Cache\Tag\Strategy\Factory">
+        <arguments>
+            <argument name="customStrategies" xsi:type="array">
+                <item name="Magento\Framework\App\Config\ValueInterface" xsi:type="object">\Magento\DirectoryGraphQl\Model\Cache\Tag\Strategy\CurrencyConfig</item>
+                <item name="Magento\Directory\Model\Currency" xsi:type="object">\Magento\DirectoryGraphQl\Model\Cache\Tag\Strategy\Currency</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Directory\Model\Currency">
+        <plugin name="afterSaveRate" type="Magento\DirectoryGraphQl\Plugin\Currency" />
+    </type>
+</config>
