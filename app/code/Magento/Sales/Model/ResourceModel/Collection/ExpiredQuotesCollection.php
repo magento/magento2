@@ -73,6 +73,7 @@ class ExpiredQuotesCollection
         $quotes = $this->quoteCollectionFactory->create();
         $quotes->addFieldToFilter('store_id', $store->getId());
         $quotes->addFieldToFilter('updated_at', ['to' => date("Y-m-d", time() - $lifetime)]);
+        $quotes->addFieldToFilter('is_active', 1);
 
         return $quotes;
     }
