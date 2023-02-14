@@ -23,6 +23,8 @@
         </annotations>
 
         <before>
+             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+
             <createData entity="ApiCategory" stepKey="createCategory"/>
 
             <createData entity="defaultSimpleProduct" stepKey="createConfigProduct">
