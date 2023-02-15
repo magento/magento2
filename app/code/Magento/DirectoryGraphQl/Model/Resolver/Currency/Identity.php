@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\DirectoryGraphQl\Model\Resolver\Currency;
 
 use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Identity implements IdentityInterface
 {
@@ -17,11 +18,25 @@ class Identity implements IdentityInterface
     public const CACHE_TAG = 'gql_currency';
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @param StoreManagerInterface $storeManager
+     */
+    public function __construct(StoreManagerInterface $storeManager)
+    {
+        $this->storeManager = $storeManager;
+    }
+
+    /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getIdentities(array $resolvedData): array
     {
-        return [self::CACHE_TAG];
+        $storeId = $this->storeManager->getStore()->getId();
+        return [self::CACHE_TAG, sprintf('%s_%s', self::CACHE_TAG, $storeId)];
     }
 }

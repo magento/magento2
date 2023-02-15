@@ -40,7 +40,7 @@ class Currency
      */
     public function afterSaveRates(CurrencyModel $subject, CurrencyModel $result): CurrencyModel
     {
-        $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this]);
+        $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $result]);
         return $result;
     }
 }
