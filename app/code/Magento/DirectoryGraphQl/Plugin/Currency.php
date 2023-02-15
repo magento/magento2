@@ -36,6 +36,7 @@ class Currency
      * @param CurrencyModel $subject
      * @param CurrencyModel $result
      * @return CurrencyModel
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSaveRates(CurrencyModel $subject, CurrencyModel $result): CurrencyModel
     {

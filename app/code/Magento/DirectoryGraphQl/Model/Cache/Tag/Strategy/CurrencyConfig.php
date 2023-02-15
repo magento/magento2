@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\DirectoryGraphQl\Model\Cache\Tag\Strategy;
 
-use Magento\CurrencySymbol\Model\System\Currencysymbol;
-use Magento\Directory\Model\Currency;
 use Magento\DirectoryGraphQl\Model\Resolver\Currency\Identity;
 use Magento\Framework\App\Cache\Tag\StrategyInterface;
 use Magento\Framework\App\Config\ValueInterface;
@@ -18,11 +16,14 @@ use Magento\Framework\App\Config\ValueInterface;
  */
 class CurrencyConfig implements StrategyInterface
 {
+    /**
+     * @var string[]
+     */
     private $currencyConfigPaths = [
-        Currency::XML_PATH_CURRENCY_BASE,
-        Currency::XML_PATH_CURRENCY_DEFAULT,
-        Currency::XML_PATH_CURRENCY_ALLOW,
-        Currencysymbol::XML_PATH_CUSTOM_CURRENCY_SYMBOL
+        'currency/options/base',
+        'currency/options/default',
+        'currency/options/allow',
+        'currency/options/customsymbol'
     ];
 
     /**
@@ -34,8 +35,7 @@ class CurrencyConfig implements StrategyInterface
             throw new \InvalidArgumentException('Provided argument is not an object');
         }
 
-        if (
-            $object instanceof ValueInterface
+        if ($object instanceof ValueInterface
             && in_array($object->getPath(), $this->currencyConfigPaths)
             && $object->isValueChanged()
         ) {

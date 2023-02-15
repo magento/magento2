@@ -16,6 +16,10 @@ class Identity implements IdentityInterface
      */
     public const CACHE_TAG = 'gql_currency';
 
+    /**
+     * @inheritdoc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function getIdentities(array $resolvedData): array
     {
         return [self::CACHE_TAG];
