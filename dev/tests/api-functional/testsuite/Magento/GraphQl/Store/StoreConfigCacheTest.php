@@ -218,7 +218,7 @@ class StoreConfigCacheTest extends GraphQLPageCacheAbstract
 
         // Query default store config after second store config is changed
         // Verify we obtain a cache HIT at the 2nd time, the cache is not purged
-        $defaultStoreResponseHit= $this->assertCacheHitAndReturnResponse(
+        $defaultStoreResponseHit = $this->assertCacheHitAndReturnResponse(
             $query,
             [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
         );
