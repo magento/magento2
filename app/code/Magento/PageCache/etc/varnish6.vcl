@@ -1,4 +1,4 @@
-# VCL version 5.0 is not supported so it should be 4.0 even though actually used Varnish version is 6
+# The VCL version is not related to the version of Varnish. Use VCL version 4.1 to enforce the use of Varnish 6 or later
 vcl 4.1;
 
 import std;
