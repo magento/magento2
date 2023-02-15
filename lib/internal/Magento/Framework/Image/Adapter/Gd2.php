@@ -344,8 +344,12 @@ class Gd2 extends AbstractAdapter
         $transparentColor = false;
 
         if ($transparentIndex >= 0 && $transparentIndex <= imagecolorstotal($this->_imageHandler)) {
-            list($red, $green, $blue) = array_values(imagecolorsforindex($this->_imageHandler, $transparentIndex));
-            $transparentColor = imagecolorallocate($imageResourceTo, (int) $red, (int) $green, (int) $blue);
+            try {
+                $colorsForIndex = imagecolorsforindex($this->_imageHandler, $transparentIndex);
+                list($red, $green, $blue) = array_values($colorsForIndex);
+                $transparentColor = imagecolorallocate($imageResourceTo, (int) $red, (int) $green, (int) $blue);
+            } catch (\ValueError $e) {
+            }
         }
         if (false === $transparentColor) {
             throw new \InvalidArgumentException('Failed to allocate transparent color for image.');
