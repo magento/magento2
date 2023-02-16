@@ -41,7 +41,8 @@ class MassOnTheFly extends \Magento\Indexer\Controller\Adminhtml\Indexer impleme
 
                 $this->messageManager->addSuccessMessage(
                     __(
-                        '%1 indexer(s) have been updated to "Update on Save" mode. %2 skipped because there was nothing to change.',
+                        '%1 indexer(s) have been updated to "Update on Save" mode. 
+                        %2 skipped because there was nothing to change.',
                         $updatedIndexersCount,
                         count($indexerIds) - $updatedIndexersCount
                     )
