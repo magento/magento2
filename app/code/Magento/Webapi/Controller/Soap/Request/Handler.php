@@ -12,11 +12,14 @@ use InvalidArgumentException;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\MetadataObjectInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Framework\App\Backpressure\BackpressureExceededException;
+use Magento\Framework\App\BackpressureEnforcerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\Webapi\Backpressure\BackpressureContextFactory;
 use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\Request as WebapiRequest;
 use Magento\Framework\Webapi\Exception as WebapiException;
@@ -27,9 +30,9 @@ use Magento\Framework\Reflection\MethodsMap;
 use Magento\Webapi\Model\ServiceMetadata;
 
 /**
- * Handler of requests to SOAP server.
+ * Handler of requests to SOAP server
  *
- * The main responsibility is to instantiate proper action controller (service) and execute requested method on it.
+ * The main responsibility is to instantiate proper action controller (service) and execute requested method on it
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -83,13 +86,21 @@ class Handler
     private $paramsOverrider;
 
     /**
+     * @var BackpressureContextFactory
+     */
+    private BackpressureContextFactory $backpressureContextFactory;
+
+    /**
+     * @var BackpressureEnforcerInterface
+     */
+    private BackpressureEnforcerInterface $backpressureEnforcer;
+
+    /**
      * @var InputArraySizeLimitValue
      */
     private $inputArraySizeLimitValue;
 
     /**
-     * Initialize dependencies.
-     *
      * @param WebapiRequest $request
      * @param ObjectManagerInterface $objectManager
      * @param SoapConfig $apiConfig
@@ -100,6 +111,8 @@ class Handler
      * @param MethodsMap $methodsMapProcessor
      * @param ParamsOverrider|null $paramsOverrider
      * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
+     * @param BackpressureContextFactory|null $backpressureContextFactory
+     * @param BackpressureEnforcerInterface|null $backpressureEnforcer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -112,7 +125,9 @@ class Handler
         DataObjectProcessor $dataObjectProcessor,
         MethodsMap $methodsMapProcessor,
         ?ParamsOverrider $paramsOverrider = null,
-        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
+        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null,
+        ?BackpressureContextFactory $backpressureContextFactory = null,
+        ?BackpressureEnforcerInterface $backpressureEnforcer = null
     ) {
         $this->_request = $request;
         $this->_objectManager = $objectManager;
@@ -123,12 +138,16 @@ class Handler
         $this->_dataObjectProcessor = $dataObjectProcessor;
         $this->methodsMapProcessor = $methodsMapProcessor;
         $this->paramsOverrider = $paramsOverrider ?? ObjectManager::getInstance()->get(ParamsOverrider::class);
-        $this->inputArraySizeLimitValue = $inputArraySizeLimitValue ?? ObjectManager::getInstance()
-                ->get(InputArraySizeLimitValue::class);
+        $this->inputArraySizeLimitValue = $inputArraySizeLimitValue
+            ?? ObjectManager::getInstance()->get(InputArraySizeLimitValue::class);
+        $this->backpressureContextFactory = $backpressureContextFactory
+            ?? ObjectManager::getInstance()->get(BackpressureContextFactory::class);
+        $this->backpressureEnforcer = $backpressureEnforcer
+            ?? ObjectManager::getInstance()->get(BackpressureEnforcerInterface::class);
     }
 
     /**
-     * Handler for all SOAP operations.
+     * Handler for all SOAP operations
      *
      * @param string $operation
      * @param array $arguments
@@ -136,6 +155,8 @@ class Handler
      * @throws WebapiException
      * @throws \LogicException
      * @throws AuthorizationException
+     * phpcs:disable Magento2.Functions.DiscouragedFunction
+     * phpcs:disable Generic.PHP.NoSilencedErrors
      */
     public function __call($operation, $arguments)
     {
@@ -148,6 +169,9 @@ class Handler
         if ($serviceMethodInfo[ServiceMetadata::KEY_IS_SECURE] && !$this->_request->isSecure()) {
             throw new WebapiException(__("Operation allowed only in HTTPS"));
         }
+
+        //Backpressure enforcement
+        $this->backpressureEnforcement($serviceMethodInfo['class'], $serviceMethodInfo['method'], $operation);
 
         if (!$this->authorization->isAllowed($serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])) {
             throw new AuthorizationException(
@@ -239,7 +263,7 @@ class Handler
             $result = $this->_dataObjectConverter
                 ->convertKeysToCamelCase($this->_dataObjectProcessor->buildOutputDataArray($data, $dataType));
         } elseif (is_array($data)) {
-            $dataType = substr($dataType, 0, -2);
+            $dataType = substr((string)$dataType, 0, -2);
             foreach ($data as $key => $value) {
                 if ($value instanceof $dataType
                     // the following two options are supported for backward compatibility
@@ -258,5 +282,29 @@ class Handler
             throw new InvalidArgumentException("Service returned result in invalid format.");
         }
         return [self::RESULT_NODE_NAME => $result];
+    }
+
+    /**
+     * Backpressure enforcement
+     *
+     * @param string $class
+     * @param string $method
+     * @param string $operation
+     * @throws WebapiException
+     */
+    private function backpressureEnforcement(string $class, string $method, string $operation)
+    {
+        $context = $this->backpressureContextFactory->create($class, $method, $operation);
+        if ($context) {
+            try {
+                $this->backpressureEnforcer->enforce($context);
+            } catch (BackpressureExceededException $exception) {
+                throw new WebapiException(
+                    __('Too Many Requests'),
+                    0,
+                    WebapiException::HTTP_TOO_MANY_REQUESTS
+                );
+            }
+        }
     }
 }

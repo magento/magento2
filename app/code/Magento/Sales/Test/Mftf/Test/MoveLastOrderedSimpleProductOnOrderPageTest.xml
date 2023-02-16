@@ -47,7 +47,7 @@
         </after>
 
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="createOrder"/>
-        
+
         <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
             <argument name="customerId" value="$createCustomer.id$"/>
         </actionGroup>
@@ -55,20 +55,23 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickEditButton"/>
 
         <actionGroup ref="AdminClickCreateOrderButtonOnEditCustomerPageActionGroup" stepKey="clickCreateOrder"/>
-    
+
         <actionGroup ref="AdminCheckLastOrderedProductOnCustomerEditPageActionGroup" stepKey="addProductToOrder">
             <argument name="productName" value="$$createProduct.name$$"/>
-        </actionGroup>    
-    
+        </actionGroup>
+
         <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickUpdateChangesBtn"/>
 
-        <actionGroup ref="AdminSeeProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeProductName">
-            <argument name="expectedValue" value="$$createProduct.name$$"/>
-        </actionGroup>    
-        <actionGroup ref="AdminSeeProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeProductPrice">
-            <argument name="columnName" value="Price"/>
-            <argument name="expectedValue" value="$$createProduct.price$$"/>
-        </actionGroup>    
-
+        <!-- Assert product in items ordered grid -->
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeProductName">
+            <argument name="index" value="1"/>
+            <argument name="attribute" value="Product"/>
+            <argument name="value" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeProductPrice">
+            <argument name="index" value="1"/>
+            <argument name="attribute" value="Price"/>
+            <argument name="value" value="$$createProduct.price$$"/>
+        </actionGroup>
     </test>
 </tests>

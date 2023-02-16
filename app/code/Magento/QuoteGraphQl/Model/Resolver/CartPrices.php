@@ -130,7 +130,7 @@ class CartPrices implements ResolverInterface
             return null;
         }
         return [
-            'label' => explode(', ', $total->getDiscountDescription()),
+            'label' => $total->getDiscountDescription() !== null ? explode(', ', $total->getDiscountDescription()) : [],
             'amount' => ['value' => $total->getDiscountAmount(), 'currency' => $currency]
         ];
     }

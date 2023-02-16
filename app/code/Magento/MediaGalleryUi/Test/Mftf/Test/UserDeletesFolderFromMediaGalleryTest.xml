@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="UserDeletesFolderFromMediaGalleryTest">
+        <annotations>
+            <features value="MediaGallery"/>
+            <stories value="User deletes folder from Media Gallery"/>
+            <title value="User deletes folder from Media Gallery"/>
+            <testCaseId value="AC-6377"/>
+            <description value="User deletes folder from Media Gallery"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+        <before>
+            <!-- Step1 Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Step2 Disabled Old Media Gallery and Page Builder -->
+            <magentoCLI command="config:set {{MediaGalleryConfigDataEnabled.path}} {{MediaGalleryConfigDataEnabled.value}}" stepKey="disabledOldMediaGallery"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="disablePageBuilder"/>
+            <magentoCLI command="cache:clean config" stepKey="flushCache"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{MediaGalleryConfigDataDisabled.path}} {{MediaGalleryConfigDataDisabled.value}}" stepKey="enableOldMediaGallery"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="enablePageBuilder"/>
+            <magentoCLI command="cache:clean config" stepKey="flushCache"/>
+        </after>
+
+        <!-- Step3 Creates folder in Media Gallery -->
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPage"/>
+        <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+        <conditionalClick selector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" dependentSelector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" visible="true" stepKey="clickFilterIfAny"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
+            <argument name="name" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="VerfyNewFolderIsCreated"/>
+        <conditionalClick selector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" dependentSelector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" visible="true" stepKey="clickFilterIfAnyPostFolderCreation"/>
+        <click selector="{{AdminMediaGalleryFolderSection.closeInsertFileSlide}}" stepKey="closeInsertFileSlide"/>
+
+        <!-- Step4 Open Media Gallery from wysiwyg -->
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPageForWysiwyg"/>
+        <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPageFromWysiwyg"/>
+
+        <!-- Step4.1 Delete Folder is diabled by default for no selected folder -->
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="unselectFoldersToVerifyDeleteFolderButtonStatus">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" stepKey="DeleteFolderButtonIsDisabled"/>
+
+        <!-- Step4.2 Delete Folder is enabled post selecting folder -->
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolderToVerifyDeleteFolderStatus">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <dontSeeElement selector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" stepKey="DeleteFolderButtonIsNotDisabledAnymore"/>
+        <seeElement selector="{{AdminMediaGalleryFolderSection.activeDeleteFolderButton}}" stepKey="DeleteFolderButtonIsNowEnabled"/>
+
+        <!-- Step4.3 Delete Folder is disabled post selecting folder -->
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="deselectWysiwygFolder">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" stepKey="DeleteFolderButtonIsNowDisabledAgain"/>
+
+        <!-- Step5 Select folder to delete -->
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolderAgain">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <click selector="{{AdminMediaGalleryFolderSection.activeDeleteFolderButton}}" stepKey="ClickOnDeleteFolderButtonForSelectedFolder"/>
+        <waitForPageLoad stepKey="waitForMediaGalleryPageLoadOnClickFolderDelete"/>
+        <seeElement selector="{{AdminMediaGalleryFolderSection.folderDeleteMessageTitle}}" stepKey="verifyTheDeleteFolderMessageTitle"/>
+        <seeElement selector="{{AdminMediaGalleryFolderSection.folderDeleteMessageContent(AdminMediaGalleryFolderData.name)}}" stepKey="verifyTheDeleteFolderMessageContent"/>
+        <waitForPageLoad stepKey="waitForMediaGalleryPageLoadPostFolderDelete"/>
+        <click selector="{{AdminMediaGalleryFolderSection.folderCancelDeleteButton}}" stepKey="clickCancelDeleteButton"/>
+        <waitForPageLoad stepKey="waitForMediaGalleryPageLoadPostCancelFolderDelete"/>
+        <click selector="{{AdminMediaGalleryFolderSection.activeDeleteFolderButton}}" stepKey="AgainClickOnDeleteFolderButtonForSelectedFolder"/>
+        <waitForPageLoad stepKey="waitForMediaGalleryPageLoadPostFolderDeleteAgain"/>
+        <seeElement selector="{{AdminMediaGalleryFolderSection.folderDeleteMessageTitle}}" stepKey="reverifyTheDeleteFolderMessageTitle"/>
+        <seeElement selector="{{AdminMediaGalleryFolderSection.folderDeleteMessageContent(AdminMediaGalleryFolderData.name)}}" stepKey="reverifyTheDeleteFolderMessageContent"/>
+        <click selector="{{AdminMediaGalleryFolderSection.folderConfirmDeleteButton}}" stepKey="clickConfirmDeleteButton"/>
+        <waitForPageLoad stepKey="waitForMediaGalleryPageLoadPostFinalFolderDelete"/>
+    </test>
+</tests>
+

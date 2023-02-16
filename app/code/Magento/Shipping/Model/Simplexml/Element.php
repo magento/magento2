@@ -52,8 +52,13 @@ class Element extends \Magento\Framework\Simplexml\Element
      */
     public function xmlentities($value = null)
     {
+        if ($value === null) {
+            return '';
+        }
+
         $value = str_replace('&amp;', '&', $value);
         $value = str_replace('&', '&amp;', $value);
+
         return $value;
     }
 }

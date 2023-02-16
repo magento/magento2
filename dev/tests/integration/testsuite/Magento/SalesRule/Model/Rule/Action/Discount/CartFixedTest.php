@@ -12,7 +12,10 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Api\Data\TotalsInformationInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Checkout\Model\TotalsInformationManagement;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
@@ -22,12 +25,17 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Quote\Api\Data\TotalsInterface;
 use Magento\Quote\Api\GuestCartItemRepositoryInterface;
 use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Quote\Api\GuestCartTotalRepositoryInterface;
 use Magento\Quote\Api\GuestCouponManagementInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\AddressFactory;
 use Magento\Quote\Model\QuoteIdMask;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
@@ -35,7 +43,10 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\SalesRule\Api\RuleRepositoryInterface;
 use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\RuleFactory;
+use Magento\SalesRule\Test\Fixture\Rule as RuleFixture;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -498,31 +509,118 @@ class CartFixedTest extends TestCase
      * @magentoDataFixture Magento/SalesRule/_files/cart_rule_50_percent_off_no_condition.php
      * @magentoDataFixture Magento/SalesRule/_files/cart_fixed_10_discount.php
      * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_products.php
+     * @dataProvider discountByPercentDataProvider
      * @return void
      */
-    public function testDiscountsWhenByPercentRuleAppliedFirstAndCartFixedRuleSecond(): void
-    {
-        $totalDiscount = -20.99;
-        $discounts = [
-            'simple1' => 5.72,
-            'simple2' => 15.27,
-        ];
+    public function testDiscountsWhenByPercentRuleAppliedFirstAndCartFixedRuleSecond(
+        $percentDiscount,
+        $expectedDiscounts
+    ): void {
+        //Update rule discount
+        /** @var Rule $rule */
+        $rule = $this->getRule('50% off - July 4');
+        $rule->setDiscountAmount($percentDiscount);
+        $this->saveRule($rule);
         $quote = $this->getQuote('test_quote_with_simple_products');
         $quote->setCouponCode('2?ds5!2d');
         $quote->collectTotals();
         $this->quoteRepository->save($quote);
         $this->assertEquals(21.98, $quote->getBaseSubtotal());
-        $this->assertEquals($totalDiscount, $quote->getShippingAddress()->getDiscountAmount());
+        $this->assertEquals($expectedDiscounts['totalDiscount'], $quote->getShippingAddress()->getDiscountAmount());
         $items = $quote->getAllItems();
         $this->assertCount(2, $items);
         $item = array_shift($items);
         $this->assertEquals('simple1', $item->getSku());
         $this->assertEquals(5.99, $item->getPrice());
-        $this->assertEquals($discounts[$item->getSku()], $item->getDiscountAmount());
+        $this->assertEquals($expectedDiscounts[$item->getSku()], $item->getDiscountAmount());
         $item = array_shift($items);
         $this->assertEquals('simple2', $item->getSku());
         $this->assertEquals(15.99, $item->getPrice());
-        $this->assertEquals($discounts[$item->getSku()], $item->getDiscountAmount());
+        $this->assertEquals($expectedDiscounts[$item->getSku()], $item->getDiscountAmount());
+    }
+
+    public function discountByPercentDataProvider()
+    {
+        return [
+            [
+                'percentDiscount' => 0,
+                'expectedDiscounts' => ['simple1' => 2.73, 'simple2' => 7.27, 'totalDiscount' => -10]
+            ],
+            [
+                'percentDiscount' => 15.5,
+                'expectedDiscounts' => ['simple1' => 3.65, 'simple2' => 9.76, 'totalDiscount' => -13.41]
+            ],
+            [
+                'percentDiscount' => 50,
+                'expectedDiscounts' => ['simple1' => 5.72, 'simple2' => 15.27, 'totalDiscount' => -20.99]
+            ],
+            [
+                'percentDiscount' => 100,
+                'expectedDiscounts' => ['simple1' => 5.99, 'simple2' => 15.99, 'totalDiscount' => -21.98]
+            ],
+        ];
+    }
+
+    /**
+     * @magentoConfigFixture current_store sales/minimum_order/tax_including 1
+     * @magentoConfigFixture current_store sales/minimum_order/include_discount_amount 1
+     * @magentoConfigFixture current_store tax/calculation/price_includes_tax 1
+     * @magentoConfigFixture current_store tax/calculation/shipping_includes_tax 1
+     * @magentoConfigFixture current_store tax/calculation/discount_tax 1
+     * @magentoConfigFixture current_store tax/calculation/apply_after_discount 1
+     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_with_coupon_5_off_no_condition.php
+     * @magentoDataFixture Magento/Tax/_files/tax_rule_region_1_al.php
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_taxable_product_and_customer.php
+     */
+    public function testCartFixedDiscountPriceIncludeTax()
+    {
+        $quote = $this->getQuote('test_order_with_taxable_product');
+        $quote->setCouponCode('CART_FIXED_DISCOUNT_5');
+        $quote->getShippingAddress()
+            ->setShippingMethod('flatrate_flatrate')
+            ->setCollectShippingRates(true);
+        $quote->collectTotals();
+        $this->quoteRepository->save($quote);
+
+        $this->assertEquals(0.4, $quote->getShippingAddress()->getTaxAmount());
+        $this->assertEquals(5, $quote->getShippingAddress()->getShippingAmount());
+        $this->assertEquals(5, $quote->getShippingAddress()->getSubtotalWithDiscount());
+        $this->assertEquals(-5, $quote->getShippingAddress()->getDiscountAmount());
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['price' => 15], 'p1'),
+        DataFixture(ProductFixture::class, ['price' => 10], 'p2'),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'simple_action' => Rule::BY_PERCENT_ACTION,
+                'discount_amount' => 50,
+                'apply_to_shipping' => 1,
+                'stop_rules_processing' => 0,
+                'sort_order' => 1,
+            ]
+        ),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'simple_action' => Rule::CART_FIXED_ACTION,
+                'discount_amount' => 40,
+                'apply_to_shipping' => 1,
+                'stop_rules_processing' => 0,
+                'sort_order' => 2
+            ]
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$', 'qty' => 2]),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p2.id$', 'qty' => 2])
+    ]
+    public function testCarFixedDiscountWithApplyToShippingAmountAfterADiscount(): void
+    {
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $totals = $this->getTotals((int) $cart->getId());
+        $this->assertEquals(0, $totals->getGrandTotal());
+        $this->assertEquals(-70, $totals->getDiscountAmount());
     }
 
     /**
@@ -579,5 +677,32 @@ class CartFixedTest extends TestCase
         /** @var \Magento\SalesRule\Model\ResourceModel\Rule $resourceModel */
         $resourceModel = $this->objectManager->get(\Magento\SalesRule\Model\ResourceModel\Rule::class);
         $resourceModel->save($rule);
+    }
+    /**
+     * @param int $cartId
+     * @return TotalsInterface
+     */
+    private function getTotals(int $cartId): TotalsInterface
+    {
+        /** @var Address $address */
+        $address = $this->objectManager->get(AddressFactory::class)->create();
+        $totalsManagement = $this->objectManager->get(TotalsInformationManagement::class);
+        $address->setAddressType(Address::ADDRESS_TYPE_SHIPPING)
+            ->setCountryId('US')
+            ->setRegionId(12)
+            ->setRegion('California')
+            ->setPostcode('90230');
+        $addressInformation = $this->objectManager->create(
+            TotalsInformationInterface::class,
+            [
+                'data' => [
+                    'address' => $address,
+                    'shipping_method_code' => 'flatrate',
+                    'shipping_carrier_code' => 'flatrate',
+                ],
+            ]
+        );
+
+        return $totalsManagement->calculate($cartId, $addressInformation);
     }
 }

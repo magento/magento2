@@ -120,6 +120,7 @@ class DataObject implements \ArrayAccess
      * @param string $key
      * @param string|int $index
      * @return mixed
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getData($key = '', $index = null)
     {
@@ -128,7 +129,7 @@ class DataObject implements \ArrayAccess
         }
 
         /* process a/b/c key as ['a']['b']['c'] */
-        if (strpos($key, '/') !== false) {
+        if ($key !== null && strpos($key, '/') !== false) {
             $data = $this->getDataByPath($key);
         } else {
             $data = $this->_getData($key);
@@ -159,7 +160,7 @@ class DataObject implements \ArrayAccess
      */
     public function getDataByPath($path)
     {
-        $keys = explode('/', $path);
+        $keys = explode('/', (string)$path);
 
         $data = $this->_data;
         foreach ($keys as $key) {
@@ -208,7 +209,7 @@ class DataObject implements \ArrayAccess
      */
     public function setDataUsingMethod($key, $args = [])
     {
-        $method = 'set' . str_replace('_', '', ucwords($key, '_'));
+        $method = 'set' . ($key !== null ? str_replace('_', '', ucwords($key, '_')) : '');
         $this->{$method}($args);
         return $this;
     }
@@ -222,7 +223,7 @@ class DataObject implements \ArrayAccess
      */
     public function getDataUsingMethod($key, $args = null)
     {
-        $method = 'get' . str_replace('_', '', ucwords($key, '_'));
+        $method = 'get' . ($key !== null ? str_replace('_', '', ucwords($key, '_')) : '');
         return $this->{$method}($args);
     }
 
@@ -293,11 +294,11 @@ class DataObject implements \ArrayAccess
             if ($addCdata === true) {
                 $fieldValue = "<![CDATA[{$fieldValue}]]>";
             } else {
-                $fieldValue = str_replace(
+                $fieldValue = $fieldValue !== null ? str_replace(
                     ['&', '"', "'", '<', '>'],
                     ['&amp;', '&quot;', '&apos;', '&lt;', '&gt;'],
                     $fieldValue
-                );
+                ) : '';
             }
             $xml .= "<{$fieldName}>{$fieldValue}</{$fieldName}>\n";
         }
@@ -386,7 +387,7 @@ class DataObject implements \ArrayAccess
      */
     public function __call($method, $args)
     {
-        switch (substr($method, 0, 3)) {
+        switch (substr((string)$method, 0, 3)) {
             case 'get':
                 $key = $this->_underscore(substr($method, 3));
                 $index = isset($args[0]) ? $args[0] : null;

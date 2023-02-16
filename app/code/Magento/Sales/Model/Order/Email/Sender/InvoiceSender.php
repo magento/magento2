@@ -24,6 +24,7 @@ use Magento\Store\Model\App\Emulation;
 /**
  * Sends order invoice email to the customer.
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InvoiceSender extends Sender
@@ -125,6 +126,7 @@ class InvoiceSender extends Sender
                 $order->setBaseTaxAmount((float) $invoice->getBaseTaxAmount());
                 $order->setBaseShippingAmount((float) $invoice->getBaseShippingAmount());
             }
+            $paymentHTML = $this->getPaymentHtml($order);
             $this->appEmulation->startEnvironmentEmulation($order->getStoreId(), Area::AREA_FRONTEND, true);
             $transport = [
                 'order' => $order,
@@ -133,7 +135,7 @@ class InvoiceSender extends Sender
                 'invoice_id' => $invoice->getId(),
                 'comment' => $invoice->getCustomerNoteNotify() ? $invoice->getCustomerNote() : '',
                 'billing' => $order->getBillingAddress(),
-                'payment_html' => $this->getPaymentHtml($order),
+                'payment_html' => $paymentHTML,
                 'store' => $order->getStore(),
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
                 'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
