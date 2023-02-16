@@ -665,9 +665,8 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             ) ?? [];
         }
 
-        if (($this->getModuleName() !== null && $this->getModuleName()) ||
-            (isset(static::$disabledModules[$this->getModuleName()])
-                && static::$disabledModules[$this->getModuleName()])
+        if (isset(static::$disabledModules[$this->getModuleName()])
+                && static::$disabledModules[$this->getModuleName()]
         ) {
             return '';
         }
