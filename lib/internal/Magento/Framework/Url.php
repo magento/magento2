@@ -759,7 +759,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         }
 
         $cacheKey = \sha1('RouteUrl::' . $routePath . $this->serializer->serialize($routeParams));
-        if (isset($this->cacheUrl[$cacheKey])) {
+        if ($routeParams != null && isset($this->cacheUrl[$cacheKey])) {
             return $this->cacheUrl[$cacheKey];
         }
 
