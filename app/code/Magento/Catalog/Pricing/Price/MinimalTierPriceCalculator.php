@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Pricing\Price;
 
-use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * As Low As shows minimal value of Tier Prices
@@ -21,11 +21,17 @@ class MinimalTierPriceCalculator implements MinimalPriceCalculatorInterface
     private $calculator;
 
     /**
+     * @var null
+     */
+    private $lowestTierPrice;
+
+    /**
      * @param CalculatorInterface $calculator
      */
     public function __construct(CalculatorInterface $calculator)
     {
         $this->calculator = $calculator;
+        $this->lowestTierPrice = null;
     }
 
     /**
@@ -39,15 +45,19 @@ class MinimalTierPriceCalculator implements MinimalPriceCalculatorInterface
         /** @var TierPrice $price */
         $price = $saleableItem->getPriceInfo()->getPrice(TierPrice::PRICE_CODE);
         $tierPriceList = $price->getTierPriceList();
+        $finalPrice = $saleableItem->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
 
-        $tierPrices = [];
+        $minPrice = $finalPrice;
         foreach ($tierPriceList as $tierPrice) {
             /** @var AmountInterface $price */
             $price = $tierPrice['price'];
-            $tierPrices[] = $price->getValue();
+            if ($minPrice > $price->getValue()) {
+                $minPrice = $price->getValue();
+                $this->lowestTierPrice = $price;
+            }
         }
 
-        return $tierPrices ? min($tierPrices) : null;
+        return $this->lowestTierPrice?->getValue();
     }
 
     /**
@@ -59,9 +69,6 @@ class MinimalTierPriceCalculator implements MinimalPriceCalculatorInterface
     public function getAmount(SaleableInterface $saleableItem)
     {
         $value = $this->getValue($saleableItem);
-
-        return $value === null
-            ? null
-            : $this->calculator->getAmount($value, $saleableItem, 'tax');
+        return $value === null ? null : $this->lowestTierPrice;
     }
 }
