@@ -7,13 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\DirectoryGraphQl\Plugin;
 
+use Magento\DirectoryGraphQl\Model\Resolver\Currency\Identity;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Directory\Model\Currency as CurrencyModel;
 
 /**
  * Currency plugin
  */
-class Currency
+class Currency implements IdentityInterface
 {
     /**
      * Application Event Dispatcher
@@ -40,7 +42,15 @@ class Currency
      */
     public function afterSaveRates(CurrencyModel $subject, CurrencyModel $result): CurrencyModel
     {
-        $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $result]);
+        $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this]);
         return $result;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIdentities()
+    {
+        return [Identity::CACHE_TAG];
     }
 }

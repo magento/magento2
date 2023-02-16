@@ -10,7 +10,6 @@
         <arguments>
             <argument name="customStrategies" xsi:type="array">
                 <item name="Magento\Framework\App\Config\ValueInterface" xsi:type="object">\Magento\DirectoryGraphQl\Model\Cache\Tag\Strategy\CurrencyConfig</item>
-                <item name="Magento\Directory\Model\Currency" xsi:type="object">\Magento\DirectoryGraphQl\Model\Cache\Tag\Strategy\Currency</item>
             </argument>
         </arguments>
     </type>
