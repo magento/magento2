@@ -45,10 +45,13 @@ class IndexerBuilderInScheduledModeTest extends \PHPUnit\Framework\TestCase
         AppIsolation(true),
         DataFixture('Magento/Catalog/_files/product_with_options.php'),
         DataFixture('Magento/CatalogRule/_files/catalog_rule_10_off_not_logged.php'),
-        DataFixture('Magento/CatalogRule/_files/set_indexer_to_scheduled_mode.php'),
     ]
     public function testReindexOfDependentIndexer(): void
     {
+        $indexer = $this->ruleProductProcessor->getIndexer();
+        $indexer->reindexAll();
+        $indexer->setScheduled(true);
+
         $product = $this->productRepository->get('simple');
         $productId = (int)$product->getId();
 
@@ -61,10 +64,12 @@ class IndexerBuilderInScheduledModeTest extends \PHPUnit\Framework\TestCase
         $product = $this->getProductFromCollection($productId);
         $this->assertEquals(9, $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue());
 
-        $this->ruleProductProcessor->getIndexer()->reindexList([$productId]);
+        $indexer->reindexList([$productId]);
 
         $product = $this->getProductFromCollection($productId);
         $this->assertEquals(90, $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue());
+
+        $indexer->setScheduled(false);
     }
 
     /**
