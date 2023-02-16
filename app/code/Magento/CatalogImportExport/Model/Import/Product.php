@@ -2080,9 +2080,13 @@ class Product extends AbstractEntity
      */
     private function getRemoteFileContent(string $filename): string
     {
-        // phpcs:disable Magento2.Functions.DiscouragedFunction
-        $content = file_get_contents($filename);
-        // phpcs:enable Magento2.Functions.DiscouragedFunction
+        try {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $content = file_get_contents($filename);
+        } catch (\Exception $e) {
+            $content = false;
+        }
+
         return $content !== false ? $content : '';
     }
 
