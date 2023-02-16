@@ -21,6 +21,9 @@ class CurrencyTest extends GraphQlAbstract
      *      test - base - main_website_store
      *
      * @magentoApiDataFixture Magento/Store/_files/store.php
+     * @magentoConfigFixture default/currency/options/base USD
+     * @magentoConfigFixture default/currency/options/default USD
+     * @magentoConfigFixture default/currency/options/allow USD
      * @magentoConfigFixture test_store currency/options/base USD
      * @magentoConfigFixture test_store currency/options/default CNY
      * @magentoConfigFixture test_store currency/options/allow CNY,USD
