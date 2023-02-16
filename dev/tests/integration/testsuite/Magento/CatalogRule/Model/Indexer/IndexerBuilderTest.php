@@ -7,8 +7,6 @@ namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Fixture\AppIsolation;
@@ -67,16 +65,6 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $indexProductProcessor;
 
-    /**
-     * @var RuleProductProcessor
-     */
-    private $ruleProductProcessor;
-
-    /**
-     * @var CollectionFactory
-     */
-    private $productCollectionFactory;
-
     protected function setUp(): void
     {
         $this->indexerBuilder = Bootstrap::getObjectManager()->get(
@@ -88,8 +76,6 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->connection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
         $this->indexProductProcessor = Bootstrap::getObjectManager()->get(Processor::class);
-        $this->ruleProductProcessor = Bootstrap::getObjectManager()->get(RuleProductProcessor::class);
-        $this->productCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);
     }
 
     protected function tearDown(): void
@@ -265,7 +251,7 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
     {
         return count(
             $this->connection->getConnection()
-                ->query('SHOW TRIGGERS LIKE \'' . $tableName . '\'')
+                ->query('SHOW TRIGGERS LIKE \''. $tableName . '\'')
                 ->fetchAll()
         );
     }
