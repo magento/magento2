@@ -165,13 +165,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     private $cacheUrl = [];
 
     /**
-     * Cache urls requested by getUrl method
-     *
-     * @var array
-     */
-    private $routeCacheUrl = [];
-
-    /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
@@ -772,7 +765,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
 
         $this->cacheUrl[$cacheKey] = $this->getBaseUrl($routeParams) . $this->_getRoutePath($routeParams);
         return $this->cacheUrl[$cacheKey];
-
     }
 
     /**
