@@ -23,6 +23,9 @@
                     <argument name="sort_order" xsi:type="string">30</argument>
                 </arguments>
                 <block class="Magento\Review\Block\Form" name="product.review.form" as="review_form" ifconfig="catalog/review/active">
+                    <arguments>
+                        <argument name="button_lock_manager" xsi:type="object">Magento\Framework\View\Element\ButtonLockManager</argument>
+                    </arguments>
                     <container name="product.review.form.fields.before" as="form_fields_before" label="Review Form Fields Before"/>
                 </block>
             </block>
