@@ -10,12 +10,10 @@ use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\App\Area;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DbIsolation;
-use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Helper\Bootstrap;
 
 #[
@@ -286,39 +284,5 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
             ->setUrlKey('product-third')
             ->setData('test_attribute', 'NO_test_attribute_value')
             ->save();
-    }
-
-    #[
-        AppArea(Area::AREA_FRONTEND),
-        DataFixture('Magento/CatalogRule/_files/simple_product_with_catalog_rule_50_percent_off.php'),
-        DataFixture('Magento/CatalogRule/_files/set_indexer_to_scheduled_mode.php'),
-    ]
-    public function testReindexOfDependentIndexer(): void
-    {
-        $productId = $this->productRepository->get('simple')->getId();
-
-        $productCollection = $this->productCollectionFactory->create();
-        $productCollection->addIdFilter($productId);
-        //$productCollection->addPriceData();
-        $productCollection->load();
-        echo (string)$productCollection->getSelect();
-        $product = $productCollection->getFirstItem();
-        echo "\n\n" . $product->getId() . '=';
-        //$product = $productCollection->getItemByColumnValue('sku', 'simple');
-        //$product = $this->productRepository->get('simple');
-        //print_r($product->getPriceInfo());
-        echo $product->getFinalPrice();
-        echo ' * ';
-        $product->setPrice(500);
-        $this->productRepository->save($product);
-        $product = $this->productRepository->get('simple');
-        echo $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
-        $product->setPrice(50);
-        $this->productRepository->save($product);
-
-        $this->indexProductProcessor->getIndexer()->setScheduled(false);
-        $this->ruleProductProcessor->getIndexer()->setScheduled(false);
-
-        $this->indexerBuilder->reindexFull();
     }
 }
