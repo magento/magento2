@@ -16,9 +16,7 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
      */
     public function testAggregationBooleanAttribute()
     {
-        $this->markTestSkipped('MC-22184: Elasticsearch returns incorrect aggregation options for booleans');
-
-        $query = $this->getGraphQlQuery(
+        $query = $this->getGraphQlQueryWithItems(
             '"search_product_1", "search_product_2", "search_product_3", "search_product_4" ,"search_product_5"'
         );
 
@@ -39,11 +37,11 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
         $booleanAggregation = reset($booleanAggregation);
         $this->assertEquals('Boolean Attribute', $booleanAggregation['label']);
         $this->assertEquals('boolean_attribute', $booleanAggregation['attribute_code']);
-        $this->assertContainsEquals(['label' => '1', 'value'=> '1', 'count' => '3'], $booleanAggregation['options']);
+        $this->assertContainsEquals(['label' => '1', 'value' => '1', 'count' => '3'], $booleanAggregation['options']);
 
         $this->assertEquals(2, $booleanAggregation['count']);
         $this->assertCount(2, $booleanAggregation['options']);
-        $this->assertContainsEquals(['label' => '0', 'value'=> '0', 'count' => '2'], $booleanAggregation['options']);
+        $this->assertContainsEquals(['label' => '0', 'value' => '0', 'count' => '2'], $booleanAggregation['options']);
     }
 
     /**
@@ -70,10 +68,10 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
         $this->assertEquals('Price', $priceAggregation['label']);
         $this->assertEquals(4, $priceAggregation['count']);
         $expectedOptions = [
-            ['label' => '10-20', 'value'=> '10_20', 'count' => '2'],
-            ['label' => '20-30', 'value'=> '20_30', 'count' => '1'],
-            ['label' => '30-40', 'value'=> '30_40', 'count' => '1'],
-            ['label' => '40-50', 'value'=> '40_50', 'count' => '1']
+            ['label' => '10-20', 'value' => '10_20', 'count' => '2'],
+            ['label' => '20-30', 'value' => '20_30', 'count' => '1'],
+            ['label' => '30-40', 'value' => '30_40', 'count' => '1'],
+            ['label' => '40-50', 'value' => '40_50', 'count' => '1']
         ];
         $this->assertEquals($expectedOptions, $priceAggregation['options']);
     }
@@ -81,7 +79,7 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
      * @magentoApiDataFixture Magento/Directory/_files/usd_cny_rate.php
-     * @magentoConfigFixture default_store currency/options/allow CNY,USD
+     * @magentoConfigFixture default_store currency/options/allow CNY,USD,EUR
      */
     public function testAggregationPriceRangesWithCurrencyHeader()
     {
@@ -103,12 +101,28 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
         $this->assertEquals('Price', $priceAggregation['label']);
         $this->assertEquals(4, $priceAggregation['count']);
         $expectedOptions = [
-            ['label' => '70-140', 'value'=> '70_140', 'count' => '2'],
-            ['label' => '140-210', 'value'=> '140_210', 'count' => '1'],
-            ['label' => '210-280', 'value'=> '210_280', 'count' => '1'],
-            ['label' => '280-350', 'value'=> '280_350', 'count' => '1']
+            ['label' => '70-140', 'value' => '70_140', 'count' => '2'],
+            ['label' => '140-210', 'value' => '140_210', 'count' => '1'],
+            ['label' => '210-280', 'value' => '210_280', 'count' => '1'],
+            ['label' => '280-350', 'value' => '280_350', 'count' => '1']
         ];
         $this->assertEquals($expectedOptions, $priceAggregation['options']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
+     * @magentoConfigFixture default_store currency/options/allow USD,EUR
+     */
+    public function testEmptyAggregationsForNotFoundProducts()
+    {
+        $headerMap['Content-Currency'] = 'USD';
+        $query = $this->getGraphQlQuery(
+            '"search_product_9999", "search_product_8888"'
+        );
+        $result = $this->graphQlQuery($query, [], '', $headerMap);
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertArrayHasKey('aggregations', $result['products']);
+        $this->assertEmpty($result['products']['aggregations']);
     }
 
     /**
@@ -127,19 +141,25 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
         $priceAggregation = array_filter(
             $result['products']['aggregations'],
             function ($a) {
-                return $a['attribute_code'] == 'product_price_attribute_bucket';
+                return $a['attribute_code'] == 'product_price_attribute';
             }
         );
         $this->assertNotEmpty($priceAggregation);
         $priceAggregation = reset($priceAggregation);
         $this->assertEquals(2, $priceAggregation['count']);
         $expectedOptions = [
-            ['label' => '0_1000', 'value'=> '0_1000', 'count' => '3'],
-            ['label' => '1000_2000', 'value'=> '1000_2000', 'count' => '2']
+            ['label' => '0_1000', 'value' => '0_1000', 'count' => '3'],
+            ['label' => '1000_2000', 'value' => '1000_2000', 'count' => '2']
         ];
         $this->assertEquals($expectedOptions, $priceAggregation['options']);
     }
 
+    /**
+     * Get GraphQl products query with aggregations
+     *
+     * @param string $skus
+     * @return string
+     */
     private function getGraphQlQuery(string $skus)
     {
         return <<<QUERY
@@ -154,6 +174,35 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
         value
         count
       }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * Get GraphQl products query with aggregations and items
+     *
+     * @param string $skus
+     * @return string
+     */
+    private function getGraphQlQueryWithItems(string $skus): string
+    {
+        return <<<QUERY
+{
+    products(filter: {sku: {in: [{$skus}]}}){
+    aggregations{
+      label
+      attribute_code
+      count
+      options{
+        label
+        value
+        count
+      }
+    },
+    items{
+      id
     }
   }
 }

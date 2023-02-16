@@ -12,10 +12,9 @@ use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\ValidatorInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 
-/**
- * Class CanRefund
- */
 class CanRefund implements ValidatorInterface
 {
     /**
@@ -29,17 +28,25 @@ class CanRefund implements ValidatorInterface
     private $orderRepository;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * CanRefund constructor.
      *
      * @param OrderPaymentRepositoryInterface $paymentRepository
      * @param OrderRepositoryInterface $orderRepository
+     * @param ScopeConfigInterface|null $scopeConfig
      */
     public function __construct(
         OrderPaymentRepositoryInterface $paymentRepository,
-        OrderRepositoryInterface $orderRepository
+        OrderRepositoryInterface $orderRepository,
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         $this->paymentRepository = $paymentRepository;
         $this->orderRepository = $orderRepository;
+        $this->scopeConfig = $scopeConfig ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -58,6 +65,8 @@ class CanRefund implements ValidatorInterface
     }
 
     /**
+     * Validate if a refund is possible for the payment method
+     *
      * @param InvoiceInterface $invoice
      * @return bool
      */
@@ -69,19 +78,32 @@ class CanRefund implements ValidatorInterface
             return false;
         }
         $method = $payment->getMethodInstance();
-        return $this->canPartialRefund($method, $payment) || $this->canFullRefund($invoice, $method);
+        if (!$method instanceof \Magento\Payment\Model\Method\Free) {
+            return $this->canPartialRefund($method, $payment) || $this->canFullRefund($invoice, $method);
+        }
+        return true;
     }
 
     /**
+     * Validate if available grand total is enough to be refunded
+     *
      * @param InvoiceInterface $entity
      * @return bool
      */
     private function isGrandTotalEnoughToRefund(InvoiceInterface $entity)
     {
-        return abs($entity->getBaseGrandTotal() - $entity->getBaseTotalRefunded()) >= .0001;
+        $isAllowedZeroGrandTotal = $this->scopeConfig->getValue(
+            'sales/zerograndtotal_creditmemo/allow_zero_grandtotal',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
+        return abs($entity->getBaseGrandTotal() - $entity->getBaseTotalRefunded()) >= .0001 ||
+            $isAllowedZeroGrandTotal;
     }
 
     /**
+     * Validate if partial refund is possible
+     *
      * @param MethodInterface $method
      * @param InfoInterface $payment
      * @return bool
@@ -94,6 +116,8 @@ class CanRefund implements ValidatorInterface
     }
 
     /**
+     * Validate if full refund is possible
+     *
      * @param InvoiceInterface $invoice
      * @param MethodInterface $method
      * @return bool
