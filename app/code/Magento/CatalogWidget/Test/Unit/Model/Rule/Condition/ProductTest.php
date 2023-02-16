@@ -189,7 +189,12 @@ class ProductTest extends TestCase
             [
                 false,
                 false,
-                'e.entity_id'
+                'at_price.value'
+            ],
+            [
+                false,
+                true,
+                'price_index.min_price'
             ],
         ];
     }
@@ -248,7 +253,7 @@ class ProductTest extends TestCase
                         1 => 2
                     ]
                 ],
-                new \Zend_Db_Expr('1, 3')
+                '2'
             ],
             [
                 [
