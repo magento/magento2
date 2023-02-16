@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6bf50057f1bf211775a7988d00b59f76",
+    "content-hash": "e311d5a0ac66042f5d4c839f64996e87",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -4422,16 +4422,16 @@
         },
         {
             "name": "magento/composer",
-            "version": "1.9.0-beta2",
+            "version": "1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/composer.git",
-                "reference": "660389b85207e20d25710d5d4c96421a7261fde3"
+                "reference": "71274ccec4abc54c42c5fc8f59d91401defbc99c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/composer/zipball/660389b85207e20d25710d5d4c96421a7261fde3",
-                "reference": "660389b85207e20d25710d5d4c96421a7261fde3",
+                "url": "https://api.github.com/repos/magento/composer/zipball/71274ccec4abc54c42c5fc8f59d91401defbc99c",
+                "reference": "71274ccec4abc54c42c5fc8f59d91401defbc99c",
                 "shasum": ""
             },
             "require": {
@@ -4456,9 +4456,9 @@
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
             "support": {
                 "issues": "https://github.com/magento/composer/issues",
-                "source": "https://github.com/magento/composer/tree/1.9.0-beta2"
+                "source": "https://github.com/magento/composer/tree/1.9.0"
             },
-            "time": "2023-01-04T19:41:18+00:00"
+            "time": "2023-02-15T20:41:53+00:00"
         },
         {
             "name": "magento/composer-dependency-version-audit-plugin",
@@ -4504,21 +4504,22 @@
         },
         {
             "name": "magento/magento-composer-installer",
-            "version": "0.4.0-beta1",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-composer-installer.git",
-                "reference": "dc7065e47acec3338f282ea679d9ee815cd807ac"
+                "reference": "85496104b065f5a7b8d824f37017c53dbbb93a44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-composer-installer/zipball/dc7065e47acec3338f282ea679d9ee815cd807ac",
-                "reference": "dc7065e47acec3338f282ea679d9ee815cd807ac",
+                "url": "https://api.github.com/repos/magento/magento-composer-installer/zipball/85496104b065f5a7b8d824f37017c53dbbb93a44",
+                "reference": "85496104b065f5a7b8d824f37017c53dbbb93a44",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^1.1 || ^2.0",
-                "composer/composer": "^1.9 || ^2.0"
+                "composer/composer": "^1.9 || ^2.0",
+                "laminas/laminas-stdlib": "^3.11.0"
             },
             "replace": {
                 "magento-hackathon/magento-composer-installer": "*"
@@ -4578,9 +4579,9 @@
                 "magento"
             ],
             "support": {
-                "source": "https://github.com/magento/magento-composer-installer/tree/0.4.0-beta1"
+                "source": "https://github.com/magento/magento-composer-installer/tree/0.4.0"
             },
-            "time": "2022-06-27T21:45:22+00:00"
+            "time": "2022-12-01T15:21:32+00:00"
         },
         {
             "name": "magento/zend-cache",
@@ -13925,10 +13926,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "magento/composer": 10,
-        "magento/magento-composer-installer": 10
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -13952,5 +13950,5 @@
         "lib-libxml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.2.0"
 }
