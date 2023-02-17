@@ -84,8 +84,8 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
                 [(int)$option->getOptionId()],
                 $bundleProduct
             );
+            $selectionsCollection->setFlag('has_stock_status_filter', true);
             $selectionsCollection->removeAttributeToSelect();
-            $selectionsCollection->addQuantityFilter();
 
             if (!$useRegularPrice) {
                 $selectionsCollection->addAttributeToSelect('special_price');
@@ -140,6 +140,9 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
     private function addMiniMaxPriceList(Product $bundleProduct, $selectionsCollection, $searchMin, $useRegularPrice)
     {
         $selectionsCollection->addPriceFilter($bundleProduct, $searchMin, $useRegularPrice);
+        if ($bundleProduct->isSalable()) {
+            $selectionsCollection->addQuantityFilter();
+        }
         $selectionsCollection->setPage(0, 1);
 
         $selection = $selectionsCollection->getFirstItem();
