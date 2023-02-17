@@ -47,7 +47,7 @@ sub vcl_recv {
     # Reduce grace to the configured setting if the backend is healthy
     # In case of an unhealthy backend, the original grace is used
     if (std.healthy(req.backend_hint)) {
-        set req.grace = /* {{ grace }} */s;
+        set req.grace = /* {{ grace_period }} */s;
     }
     
     if (req.method == "PURGE") {
