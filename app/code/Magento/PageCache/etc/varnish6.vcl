@@ -40,7 +40,7 @@ sub vcl_recv {
     unset req.http.proxy;
     
     # Add X-Forwarded-Proto header when using https
-    if (!req.http.X-Forwarded-Proto && (std.port(server.ip) == 443) || std.port(server.ip) == 8443)) {
+    if (!req.http.X-Forwarded-Proto && (std.port(server.ip) == 443 || std.port(server.ip) == 8443)) {
         set req.http.X-Forwarded-Proto = "https";
     }
     
