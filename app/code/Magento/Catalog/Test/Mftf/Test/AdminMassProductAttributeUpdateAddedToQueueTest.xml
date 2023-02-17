@@ -39,6 +39,7 @@
             <argument name="keyword" value="api-simple-product"/>
         </actionGroup>
         <actionGroup ref="SortProductsByIdDescendingActionGroup" stepKey="sortProductsByIdDescending"/>
+        <waitForElementClickable selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="waitForSelectThirdProduct"/>
         <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="selectThirdProduct"/>
         <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="selectSecondProduct"/>
         <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('3')}}" stepKey="selectFirstProduct"/>
