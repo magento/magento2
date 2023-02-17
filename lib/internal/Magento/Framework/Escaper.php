@@ -96,7 +96,10 @@ class Escaper
                     }
                 );
                 $data = $this->prepareUnescapedCharacters($data);
-                $string = mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8');
+                $string = htmlspecialchars_decode(
+                    iconv('UTF-8', 'ISO-8859-1', htmlentities($data, ENT_COMPAT, 'UTF-8')),
+                    ENT_QUOTES
+                );
                 try {
                     $domDocument->loadHTML(
                         '<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>'

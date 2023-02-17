@@ -43,6 +43,11 @@ class Rate extends AbstractModel
     protected $_address;
 
     /**
+     * @var string
+     */
+    public $carrier_sort_order;
+
+    /**
      * @return void
      */
     protected function _construct()
