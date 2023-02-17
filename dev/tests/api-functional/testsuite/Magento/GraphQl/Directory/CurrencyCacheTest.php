@@ -242,6 +242,7 @@ class CurrencyCacheTest extends GraphQLPageCacheAbstract
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
      * @magentoConfigFixture default/currency/options/allow USD
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCachePurgedWithWebsiteScopeCurrencyConfigChange(): void
     {
@@ -362,6 +363,7 @@ class CurrencyCacheTest extends GraphQLPageCacheAbstract
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
      * @magentoConfigFixture default/currency/options/allow USD
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCachePurgedWithDefaultScopeCurrencyConfigChange(): void
     {
@@ -482,6 +484,7 @@ class CurrencyCacheTest extends GraphQLPageCacheAbstract
      * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
      * @magentoConfigFixture default/currency/options/allow CNY,USD
      * @magentoDataFixture Magento/Directory/_files/usd_cny_rate.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCachePurgedWithExchangeRateChange(): void
     {
