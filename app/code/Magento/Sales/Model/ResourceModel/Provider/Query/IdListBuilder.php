@@ -10,6 +10,7 @@ namespace Magento\Sales\Model\ResourceModel\Provider\Query;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Sales\Model\ResourceModel\Grid;
 
 /**
  * Query builder for retrieving list of updated order ids that was not synced to grid table.
@@ -55,6 +56,18 @@ class IdListBuilder
     }
 
     /**
+     * Reset added additional grid table where entities may already exist.
+     *
+     * @return $this
+     */
+    public function resetAdditionalGridTable(): IdListBuilder
+    {
+        $this->additionalGridTables = [];
+
+        return $this;
+    }
+
+    /**
      * Returns connection.
      *
      * @return AdapterInterface
@@ -69,23 +82,6 @@ class IdListBuilder
     }
 
     /**
-     * Returns update time of the last row in the grid.
-     *
-     * @param string $gridTableName
-     * @return string
-     */
-    private function getLastUpdatedAtValue(string $gridTableName): string
-    {
-        $select = $this->getConnection()->select()
-            ->from($this->getConnection()->getTableName($gridTableName), ['updated_at'])
-            ->order('updated_at DESC')
-            ->limit(1);
-        $row = $this->getConnection()->fetchRow($select);
-
-        return $row['updated_at'] ?? '0000-00-00 00:00:00';
-    }
-
-    /**
      * Builds select object.
      *
      * @param string $mainTableName
@@ -95,15 +91,21 @@ class IdListBuilder
     public function build(string $mainTableName, string $gridTableName): Select
     {
         $select = $this->getConnection()->select()
-            ->from($mainTableName, [$mainTableName . '.entity_id']);
-        $lastUpdateTime = $this->getLastUpdatedAtValue($gridTableName);
-        $select->where($mainTableName . '.updated_at >= ?', $lastUpdateTime);
+            ->from(['main_table' => $mainTableName], ['main_table.entity_id'])
+            ->joinLeft(
+                ['grid_table' => $this->resourceConnection->getTableName($gridTableName)],
+                'main_table.entity_id = grid_table.entity_id',
+                []
+            );
+
+        $select->where('grid_table.entity_id IS NULL');
+        $select->limit(Grid::BATCH_SIZE);
         foreach ($this->additionalGridTables as $table) {
             $select->joinLeft(
                 [$table => $table],
                 sprintf(
                     '%s.%s = %s.%s',
-                    $mainTableName,
+                    'main_table',
                     'entity_id',
                     $table,
                     'entity_id'
