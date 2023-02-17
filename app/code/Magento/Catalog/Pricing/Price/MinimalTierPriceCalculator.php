@@ -43,8 +43,8 @@ class MinimalTierPriceCalculator implements MinimalPriceCalculatorInterface
     public function getValue(SaleableInterface $saleableItem)
     {
         /** @var TierPrice $price */
-        $price = $saleableItem->getPriceInfo()->getPrice(TierPrice::PRICE_CODE);
-        $tierPriceList = $price->getTierPriceList();
+        $tierPrice = $saleableItem->getPriceInfo()->getPrice(TierPrice::PRICE_CODE);
+        $tierPriceList = $tierPrice->getTierPriceList();
         $finalPrice = $saleableItem->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
 
         $minPrice = $finalPrice;

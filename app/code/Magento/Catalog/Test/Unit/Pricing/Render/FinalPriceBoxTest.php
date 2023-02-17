@@ -339,10 +339,10 @@ class FinalPriceBoxTest extends TestCase
         $arguments = [
             'zone' => 'test_zone',
             'list_category_page' => true,
-            'display_label' => 'As low as',
+            'display_label' => __('As low as'),
             'price_id' => $priceId,
             'include_container' => false,
-            'skip_adjustments' => true
+            'skip_adjustments' => false
         ];
 
         $amountRender = $this->createPartialMock(Amount::class, ['toHtml']);
