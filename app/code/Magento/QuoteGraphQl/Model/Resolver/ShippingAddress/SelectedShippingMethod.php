@@ -72,7 +72,7 @@ class SelectedShippingMethod implements ResolverInterface
             'method_title' => $selectedShippingMethod->getMethodTitle() ?? '',
             'amount' => [
                 'value' => $address->getShippingInclTax(),
-                'currency' => $address->getQuote()->getQuoteCurrencyCode(),
+                'currency' => $cart->getQuoteCurrencyCode(),
             ],
             'price_excl_tax' => [
                 'value' => $selectedShippingMethod->getPriceExclTax(),
