@@ -120,6 +120,7 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
     /**
      * Get customer register url
      * @deprecated due to requirements
+     * @see getCustomerRegisterUrl
      * @return string
      */
     public function getCustomerRegisterUrlUrl()
