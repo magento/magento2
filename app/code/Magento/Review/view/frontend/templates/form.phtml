@@ -74,7 +74,12 @@
     </fieldset>
     <div class="actions-toolbar review-form-actions">
         <div class="primary actions-primary">
-            <button type="submit" class="action submit primary"><span><?= $block->escapeHtml(__('Submit Review')) ?></span></button>
+            <button type="submit" class="action submit primary"
+                <?php if ($block->getButtonLockManager()->isDisabled('review_form_submit')): ?>
+                    disabled="disabled"
+                <?php endif; ?>>
+                <span><?= $block->escapeHtml(__('Submit Review')) ?></span>
+            </button>
         </div>
     </div>
 </form>

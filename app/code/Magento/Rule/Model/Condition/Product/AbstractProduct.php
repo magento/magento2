@@ -516,7 +516,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
             ) ? $this->_localeFormat->getNumber(
                 $arr['is_value_parsed']
             ) : false;
-        } elseif (!empty($arr['operator']) && $arr['operator'] == '()') {
+        } elseif (!empty($arr['operator']) && in_array($arr['operator'], ['()', '!()', true])) {
             if (isset($arr['value'])) {
                 $arr['value'] = preg_replace('/\s*,\s*/', ',', $arr['value']);
             }
