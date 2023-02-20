@@ -153,6 +153,7 @@ Configuration,Configuration
 "Other Settings","Other Settings"
 "HTML Head","HTML Head"
 "Allowed file types: ico, png, gif, jpg, jpeg, apng. Not all browsers support all these formats!","Allowed file types: ico, png, gif, jpg, jpeg, apng. Not all browsers support all these formats!"
+"Not all browsers support all these formats! Note: ICO file type is supported by ImageMagik adapter that can be set from Store / Configuration / Developer / Image Processing Settings.","Not all browsers support all these formats! Note: ICO file type is supported by ImageMagik adapter that can be set from Store / Configuration / Developer / Image Processing Settings."
 "Favicon Icon","Favicon Icon"
 "Default Page Title","Default Page Title"
 "Page Title Prefix","Page Title Prefix"
