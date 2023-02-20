@@ -263,6 +263,7 @@
         <arguments>
             <argument name="disallowedFundingOptions" xsi:type="array">
                 <item name="CREDIT" xsi:type="string">PayPal Credit</item>
+                <item name="VENMO" xsi:type="string">Venmo</item>
                 <item name="CARD" xsi:type="string">PayPal Guest Checkout Credit Card Icons</item>
                 <item name="ELV" xsi:type="string">Elektronisches Lastschriftverfahren - German ELV</item>
             </argument>
