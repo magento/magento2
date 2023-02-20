@@ -15,7 +15,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class ExpiredQuotesCollection
+ * The ExpiredQuotesCollection class removes quotes that are older than specified in the Quote LifeTime field
  */
 class ExpiredQuotesCollection
 {
