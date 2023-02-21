@@ -18,7 +18,8 @@
             <group value="sales"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set dev/grid/async_indexing 1" stepKey="enableAsyncIndexing"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{AsyncGridsIndexingConfigData.enable_option}}" stepKey="enableAsyncIndexing"/>
             <magentoCLI command="cache:clean" stepKey="cacheCleanBefore"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct">
@@ -27,7 +28,7 @@
         </before>
 
         <after>
-            <magentoCLI command="config:set dev/grid/async_indexing 0" stepKey="disableAsyncIndexing"/>
+            <magentoCLI command="config:set {{AsyncGridsIndexingConfigData.disable_option}}" stepKey="disableAsyncIndexing"/>
             <magentoCLI command="cache:clean" stepKey="cacheCleanAfter"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
