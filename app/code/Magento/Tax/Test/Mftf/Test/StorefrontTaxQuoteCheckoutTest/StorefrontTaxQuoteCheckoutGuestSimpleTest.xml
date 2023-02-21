@@ -80,6 +80,7 @@
         <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="changeAddress">
             <argument name="Address" value="US_Address_CA"/>
         </actionGroup>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="checkFlatRateShippingMethod" />
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
