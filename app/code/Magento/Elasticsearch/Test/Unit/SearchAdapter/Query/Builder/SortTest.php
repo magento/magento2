@@ -87,7 +87,7 @@ class SortTest extends TestCase
             ->willReturn($sortItems);
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isSortable', 'isFloatType', 'isIntegerType', 'isComplexType', 'getAttributeCode'])
+            ->setMethods(['isSortable', 'isFloatType', 'isIntegerType', 'isComplexType'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('isSortable')
@@ -101,9 +101,6 @@ class SortTest extends TestCase
         $attributeMock->expects($this->any())
             ->method('isComplexType')
             ->willReturn($isComplexType);
-        $attributeMock->expects($this->any())
-            ->method('getAttributeCode')
-            ->willReturn('attributeCode');
         $this->attributeAdapterProvider->expects($this->any())
             ->method('getByAttributeCode')
             ->with($this->anything())
