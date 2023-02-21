@@ -46,7 +46,7 @@
             <requiredEntity createDataKey="createGuestCartOne"/>
         </updateData>
 
-        <magentoCLI command="cron:run" stepKey="runCronOne"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronOne"/>
 
         <createData entity="Invoice" stepKey="invoiceOrderOne">
             <requiredEntity createDataKey="createGuestCartOne"/>
@@ -68,7 +68,7 @@
             <requiredEntity createDataKey="createGuestCartOne"/>
         </createData>
 
-        <magentoCLI command="cron:run" stepKey="runCronTwo"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronTwo"/>
 
         <createData entity="GuestCart" stepKey="createGuestCartThree"/>
         <createData entity="SimpleCartItem" stepKey="addCartItemThree">
@@ -94,7 +94,7 @@
             <requiredEntity createDataKey="createGuestCartTwo"/>
         </createData>
 
-        <magentoCLI command="cron:run" stepKey="runCronThree"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronThree"/>
 
         <createData entity="Invoice" stepKey="invoiceOrderTwo">
             <requiredEntity createDataKey="createGuestCartTwo"/>
@@ -108,15 +108,17 @@
             <requiredEntity createDataKey="createGuestCartTwo"/>
         </createData>
 
-        <magentoCLI command="cron:run" stepKey="runCronFour"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronFour"/>
 
         <createData entity="CreditMemo" stepKey="refundOrderThree">
             <requiredEntity createDataKey="createGuestCartThree"/>
         </createData>
 
-        <magentoCLI command="cron:run" stepKey="runCronFive"/>
-        <magentoCLI command="cron:run" stepKey="runCronSix"/>
-        <magentoCLI command="cron:run" stepKey="runCronSeven"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronFive"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronSix"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronSeven"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronEight"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronNine"/>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
@@ -132,6 +134,8 @@
             <argument name="entityId" value="$createGuestCartOne.return$"/>
         </actionGroup>
 
+        <waitForPageLoad time="30" stepKey="waitForPageLoadOne"/>
+
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageOne"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask1" after="openInvoicesTabOrdersPageOne"/>
         <waitForElementVisible selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvoicesTabOpenedOne"/>
@@ -145,6 +149,8 @@
             <argument name="entityId" value="$createGuestCartTwo.return$"/>
         </actionGroup>
 
+        <waitForPageLoad time="30" stepKey="waitForPageLoadTwo"/>
+
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageTwo"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask2" after="openInvoicesTabOrdersPageTwo"/>
         <waitForElementVisible selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvoicesTabOpenedTwo"/>
@@ -157,6 +163,8 @@
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderThree">
             <argument name="entityId" value="$createGuestCartThree.return$"/>
         </actionGroup>
+
+        <waitForPageLoad time="30" stepKey="waitForPageLoadThree"/>
 
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageThree"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask3" after="openInvoicesTabOrdersPageThree"/>
