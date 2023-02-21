@@ -1784,6 +1784,9 @@
                 <item name="http_method_validator" xsi:type="object">
                     Magento\Framework\App\Request\HttpMethodValidator
                 </item>
+                <item name="backpressure" xsi:type="object">
+                    Magento\Framework\App\Request\BackpressureValidator
+                </item>
             </argument>
         </arguments>
     </virtualType>
@@ -1974,6 +1977,28 @@
     <type name="Magento\Framework\Webapi\ServiceInputProcessor">
         <arguments>
             <argument name="defaultPageSize" xsi:type="number">999999</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\App\BackpressureEnforcerInterface"
+                type="Magento\Framework\App\Backpressure\SlidingWindow\SlidingWindowEnforcer"/>
+    <preference for="Magento\Framework\App\Backpressure\SlidingWindow\RequestLoggerFactoryInterface"
+                type="Magento\Framework\App\Backpressure\SlidingWindow\RequestLoggerFactory"/>
+    <preference for="Magento\Framework\App\Backpressure\SlidingWindow\LimitConfigManagerInterface"
+                type="Magento\Framework\App\Backpressure\SlidingWindow\CompositeLimitConfigManager"/>
+    <preference for="Magento\Framework\App\Request\Backpressure\RequestTypeExtractorInterface"
+                type="Magento\Framework\App\Request\Backpressure\CompositeRequestTypeExtractor"/>
+    <preference for="Magento\Framework\Webapi\Backpressure\BackpressureRequestTypeExtractorInterface"
+                type="Magento\Framework\Webapi\Backpressure\CompositeRequestTypeExtractor" />
+    <type name="Magento\Framework\App\Request\Backpressure\CompositeRequestTypeExtractor">
+        <arguments>
+            <argument name="extractors" xsi:type="array" />
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Backpressure\SlidingWindow\RequestLoggerFactory">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="redis" xsi:type="string">\Magento\Framework\App\Backpressure\SlidingWindow\RedisRequestLogger</item>
+            </argument>
         </arguments>
     </type>
     <preference for="Magento\Framework\Filter\Input\PurifierInterface" type="Magento\Framework\Filter\Input\Purifier"/>
