@@ -23,9 +23,11 @@ use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreRepository;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\ObjectManager;
+use Magento\Translation\Test\Fixture\Translation as TranslationFixture;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -104,38 +106,25 @@ class AlertProcessorTest extends TestCase
      * @magentoConfigFixture fixture_second_store_store general/locale/code pt_BR
      * @magentoDataFixture Magento/ProductAlert/_files/product_alert_with_store.php
      */
+    #[
+        DataFixture(
+            TranslationFixture::class,
+            [
+                'string' => 'Price change alert! We wanted you to know that prices have changed for these products:',
+                'translate' => 'Alerta de mudanca de preco! Queriamos que voce soubesse' .
+                    ' que os precos mudaram para esses produtos:',
+                'locale' => 'pt_BR',
+            ]
+        ),
+    ]
     public function testProcessPortuguese()
     {
-        // get second store
-        $storeRepository = $this->objectManager->create(StoreRepository::class);
-        $secondStore = $storeRepository->get('fixture_second_store');
-
-        // check if Portuguese language is specified for the second store
-        $storeResolver = $this->objectManager->get(Resolver::class);
-        $storeResolver->emulate($secondStore->getId());
-        $this->assertEquals('pt_BR', $storeResolver->getLocale());
-
-        // set translation data and check it
-        $modulesReader = $this->createPartialMock(Reader::class, ['getModuleDir']);
-        $modulesReader->method('getModuleDir')
-            ->willReturn(dirname(__DIR__) . '/../_files/i18n');
-        /** @var Translate $translator */
-        $translator = $this->objectManager->create(Translate::class, ['modulesReader' => $modulesReader]);
-        $translation = [
-            'Price change alert! We wanted you to know that prices have changed for these products:' =>
-                'Alerta de mudanca de preco! Queriamos que voce soubesse que os precos mudaram para esses produtos:'
-        ];
-        $translator->loadData();
-        $this->assertEquals($translation, $translator->getData());
-        $this->objectManager->addSharedInstance($translator, Translate::class);
-        $this->objectManager->removeSharedInstance(PhraseRendererTranslate::class);
-        Phrase::setRenderer($this->objectManager->create(RendererInterface::class));
-
         // dispatch process() method and check sent message
         $this->processAlerts();
         $message = $this->transportBuilder->getSentMessage();
         $messageContent = $message->getBody()->getParts()[0]->getRawContent();
-        $expectedText = array_shift($translation);
+        $expectedText = 'Alerta de mudanca de preco! Queriamos que voce soubesse' .
+            ' que os precos mudaram para esses produtos:';
         $this->assertStringContainsString('/frontend/Magento/luma/pt_BR/', $messageContent);
         $this->assertStringContainsString(substr($expectedText, 0, 50), $messageContent);
     }
