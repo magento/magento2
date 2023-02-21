@@ -343,7 +343,7 @@ class Gd2 extends AbstractAdapter
         // fill image with indexed non-alpha transparency
         $transparentColor = false;
 
-        if ($transparentIndex >= 0 && $transparentIndex <= imagecolorstotal($this->_imageHandler)) {
+        if ($transparentIndex >= 0 && $transparentIndex < imagecolorstotal($this->_imageHandler)) {
             try {
                 $colorsForIndex = imagecolorsforindex($this->_imageHandler, $transparentIndex);
                 list($red, $green, $blue) = array_values($colorsForIndex);
@@ -391,7 +391,7 @@ class Gd2 extends AbstractAdapter
         if (IMAGETYPE_GIF === $fileType || IMAGETYPE_PNG === $fileType) {
             // check for specific transparent color
             $transparentIndex = imagecolortransparent($imageResource);
-            if ($transparentIndex >= 0) {
+            if ($transparentIndex >= 0 and $transparentIndex < imagecolorstotal($imageResource)) {
                 return $transparentIndex;
             } elseif (IMAGETYPE_PNG === $fileType) {
                 // assume that truecolor PNG has transparency
