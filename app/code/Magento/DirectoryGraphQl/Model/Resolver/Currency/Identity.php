@@ -32,10 +32,12 @@ class Identity implements IdentityInterface
 
     /**
      * @inheritdoc
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getIdentities(array $resolvedData): array
     {
+        if (empty($resolvedData)) {
+            return [];
+        }
         $storeId = $this->storeManager->getStore()->getId();
         return [self::CACHE_TAG, sprintf('%s_%s', self::CACHE_TAG, $storeId)];
     }
