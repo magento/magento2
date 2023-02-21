@@ -8,9 +8,9 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="InvitationsData" type="data">
+    <entity name="AdminMarketingInviteData" type="data">
         <data key="email" unique="prefix">John.Doe@example.com</data>
-        <data key="message">Invitation Message </data>
+        <data key="message">Sample Message </data>
         <data key="store_id">Default Store View</data>
         <data key="group_id">General</data>
     </entity>
