@@ -16,8 +16,8 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\UrlFactory;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\UrlFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -66,16 +66,6 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
     protected $session;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     */
-    private $cookieMetadataFactory;
-
-    /**
-     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
-     */
-    private $cookieMetadataManager;
-
-    /**
      * @param Context $context
      * @param Session $customerSession
      * @param ScopeConfigInterface $scopeConfig
@@ -106,38 +96,6 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
     }
 
     /**
-     * Retrieve cookie manager
-     *
-     * @deprecated 101.0.0
-     * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
-     */
-    private function getCookieManager()
-    {
-        if (!$this->cookieMetadataManager) {
-            $this->cookieMetadataManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class
-            );
-        }
-        return $this->cookieMetadataManager;
-    }
-
-    /**
-     * Retrieve cookie metadata factory
-     *
-     * @deprecated 101.0.0
-     * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     */
-    private function getCookieMetadataFactory()
-    {
-        if (!$this->cookieMetadataFactory) {
-            $this->cookieMetadataFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
-            );
-        }
-        return $this->cookieMetadataFactory;
-    }
-
-    /**
      * Confirm customer account by id and confirmation key
      *
      * @return \Magento\Framework\Controller\Result\Redirect
@@ -161,15 +119,9 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
         }
 
         try {
-            // log in and send greeting email
+            //activate and send greeting email
             $customerEmail = $this->customerRepository->getById($customerId)->getEmail();
-            $customer = $this->customerAccountManagement->activate($customerEmail, $key);
-            $this->session->setCustomerDataAsLoggedIn($customer);
-            if ($this->getCookieManager()->getCookie('mage-cache-sessid')) {
-                $metadata = $this->getCookieMetadataFactory()->createCookieMetadata();
-                $metadata->setPath('/');
-                $this->getCookieManager()->deleteCookie('mage-cache-sessid', $metadata);
-            }
+            $this->customerAccountManagement->activate($customerEmail, $key);
             $this->messageManager->addSuccess($this->getSuccessMessage());
             $resultRedirect->setUrl($this->getSuccessRedirect());
             return $resultRedirect;
@@ -197,7 +149,7 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
                     'If you are a registered VAT customer, please click <a href="%1">here</a> to enter your shipping address for proper VAT calculation.',
                     $this->urlModel->getUrl('customer/address/edit')
                 );
-                // @codingStandardsIgnoreEnd
+            // @codingStandardsIgnoreEnd
             } else {
                 // @codingStandardsIgnoreStart
                 $message = __(
