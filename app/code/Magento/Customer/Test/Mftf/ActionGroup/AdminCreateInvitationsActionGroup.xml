@@ -7,24 +7,24 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminCreateInvitationActionGroup">
+    <actionGroup name="AdminCreateInvitationsActionGroup">
         <annotations>
             <description>Adds the invitation.</description>
         </annotations>
         <arguments>
-            <argument name="email" type="string" defaultValue="{{InvitationData.email}}"/>
-            <argument name="message" type="string" defaultValue="{{InvitationData.message}}"/>
-            <argument name="store" type="string" defaultValue="{{InvitationData.store_id}}"/>
-            <argument name="group" type="string" defaultValue="{{InvitationData.group_id}}"/>
+            <argument name="email" type="string" defaultValue="{{InvitationsData.email}}"/>
+            <argument name="message" type="string" defaultValue="{{InvitationsData.message}}"/>
+            <argument name="store" type="string" defaultValue="{{InvitationsData.store_id}}"/>
+            <argument name="group" type="string" defaultValue="{{InvitationsData.group_id}}"/>
         </arguments>
 
-        <click selector="{{AdminInvitationSection.addInvitation}}" stepKey="clickAddInvitationButton"/>
+        <click selector="{{AdminInvitationsSection.addInvitation}}" stepKey="clickAddInvitationButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <fillField selector="{{AdminInvitationSection.email}}" userInput="{{email}}" stepKey="fillInEmailField"/>
-        <fillField selector="{{AdminInvitationSection.message}}" userInput="{{message}}" stepKey="fillInMessageFields"/>
-        <selectOption selector="{{AdminInvitationSection.sendFrom}}" userInput="{{store}}" stepKey="selectInvitationSendFrom"/>
-        <selectOption selector="{{AdminInvitationSection.inviteeGroup}}" userInput="{{group}}" stepKey="selectInviteeGroup"/>
-        <click selector="{{AdminInvitationSection.saveInvitation}}" stepKey="clickSaveInvitationButton"/>
-        <waitForText selector="{{AdminInvitationSection.successMessage}}" userInput="We sent 1 invitation(s)." stepKey="seeSuccessMessage"/>
+        <fillField selector="{{AdminInvitationsSection.email}}" userInput="{{email}}" stepKey="fillInEmailField"/>
+        <fillField selector="{{AdminInvitationsSection.message}}" userInput="{{message}}" stepKey="fillInMessageFields"/>
+        <selectOption selector="{{AdminInvitationsSection.sendFrom}}" userInput="{{store}}" stepKey="selectInvitationSendFrom"/>
+        <selectOption selector="{{AdminInvitationsSection.inviteeGroup}}" userInput="{{group}}" stepKey="selectInviteeGroup"/>
+        <click selector="{{AdminInvitationsSection.saveInvitation}}" stepKey="clickSaveInvitationButton"/>
+        <waitForText selector="{{AdminInvitationsSection.successMessage}}" userInput="We sent 1 invitation(s)." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>
