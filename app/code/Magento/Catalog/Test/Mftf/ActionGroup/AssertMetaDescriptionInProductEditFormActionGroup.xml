@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertMetaDescriptionInProductEditFormActionGroup">
+        <arguments>
+            <argument name="productMetaDescription" type="string"/>
+        </arguments>
+        <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-150" stepKey="scrollToContentSection"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickSearchEngineOptimizationTab"/>
+        <seeInField selector="{{AdminProductSEOSection.metaDescriptionInput}}" userInput="{{productMetaDescription}}" stepKey="seeProductMetaDescription"/>
+    </actionGroup>
+</actionGroups>
