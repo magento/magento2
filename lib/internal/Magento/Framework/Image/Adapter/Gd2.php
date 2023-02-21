@@ -348,6 +348,7 @@ class Gd2 extends AbstractAdapter
                 $colorsForIndex = imagecolorsforindex($this->_imageHandler, $transparentIndex);
                 list($red, $green, $blue) = array_values($colorsForIndex);
                 $transparentColor = imagecolorallocate($imageResourceTo, (int) $red, (int) $green, (int) $blue);
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (\ValueError $e) {
             }
         }
@@ -391,7 +392,7 @@ class Gd2 extends AbstractAdapter
         if (IMAGETYPE_GIF === $fileType || IMAGETYPE_PNG === $fileType) {
             // check for specific transparent color
             $transparentIndex = imagecolortransparent($imageResource);
-            if ($transparentIndex >= 0 and $transparentIndex < imagecolorstotal($imageResource)) {
+            if ($transparentIndex >= 0 && $transparentIndex < imagecolorstotal($imageResource)) {
                 return $transparentIndex;
             } elseif (IMAGETYPE_PNG === $fileType) {
                 // assume that truecolor PNG has transparency
