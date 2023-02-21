@@ -122,6 +122,14 @@ class Sort
             ];
         }
 
+        if (!empty($sorts)) {
+            $sorts[] = [
+                '_id' => [
+                    'order' => 'desc'
+                ]
+            ];
+        }
+
         return $sorts;
     }
 }

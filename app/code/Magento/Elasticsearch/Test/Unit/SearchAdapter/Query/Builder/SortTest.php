@@ -87,7 +87,7 @@ class SortTest extends TestCase
             ->willReturn($sortItems);
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isSortable', 'isFloatType', 'isIntegerType', 'isComplexType'])
+            ->setMethods(['isSortable', 'isFloatType', 'isIntegerType', 'isComplexType', 'getAttributeCode'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('isSortable')
@@ -101,6 +101,9 @@ class SortTest extends TestCase
         $attributeMock->expects($this->any())
             ->method('isComplexType')
             ->willReturn($isComplexType);
+        $attributeMock->expects($this->any())
+            ->method('getAttributeCode')
+            ->willReturn('attributeCode');
         $this->attributeAdapterProvider->expects($this->any())
             ->method('getByAttributeCode')
             ->with($this->anything())
@@ -166,6 +169,11 @@ class SortTest extends TestCase
                         'price' => [
                             'order' => 'desc'
                         ]
+                    ],
+                    [
+                        '_id' => [
+                            'order' => 'desc'
+                        ]
                     ]
                 ]
             ],
@@ -188,6 +196,11 @@ class SortTest extends TestCase
                 [
                     [
                         'price' => [
+                            'order' => 'desc'
+                        ]
+                    ],
+                    [
+                        '_id' => [
                             'order' => 'desc'
                         ]
                     ]
@@ -214,6 +227,11 @@ class SortTest extends TestCase
                         'name.sort_name' => [
                             'order' => 'desc'
                         ]
+                    ],
+                    [
+                        '_id' => [
+                            'order' => 'desc'
+                        ]
                     ]
                 ]
             ],
@@ -238,6 +256,11 @@ class SortTest extends TestCase
                         'not_eav_attribute' => [
                             'order' => 'desc'
                         ]
+                    ],
+                    [
+                        '_id' => [
+                            'order' => 'desc'
+                        ]
                     ]
                 ]
             ],
@@ -260,6 +283,11 @@ class SortTest extends TestCase
                 [
                     [
                         'color_value.sort_color' => [
+                            'order' => 'desc'
+                        ]
+                    ],
+                    [
+                        '_id' => [
                             'order' => 'desc'
                         ]
                     ]
