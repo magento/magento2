@@ -30,20 +30,6 @@ define([
     url.setBaseUrl(window.BASE_URL);
     options.sectionLoadUrl = url.build('customer/section/load');
 
-    function initStorage() {
-        if (options.cookieLifeTime !== 'undefined') {
-            $.cookieStorage.setConf({
-                path: '/',
-                expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000)
-            });
-            storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
-            storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
-        }
-    }
-
-    // Initialize storage with default parameters to prevent JS errors while component still not initialized
-    initStorage();
-
     /**
      * @param {Object} invalidateOptions
      */
@@ -241,7 +227,14 @@ define([
         /**
          * Storage init
          */
-        initStorage: initStorage,
+        initStorage: function () {
+            $.cookieStorage.setConf({
+                path: '/',
+                expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000)
+            });
+            storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
+            storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
+        },
 
         /**
          * Retrieve the list of sections that has expired since last page reload.
@@ -269,7 +262,9 @@ define([
 
             // process sections that can expire due to storage information inconsistency
             _.each(cookieSectionTimestamps, function (cookieSectionTimestamp, sectionName) {
-                sectionData = storage.get(sectionName);
+                if (storage !== undefined) {
+                    sectionData = storage.get(sectionName);
+                }
 
                 if (typeof sectionData === 'undefined' ||
                     typeof sectionData === 'object' &&
@@ -406,10 +401,6 @@ define([
          */
         'Magento_Customer/js/customer-data': function (settings) {
             options = settings;
-
-            // re-init storage with a new settings
-            customerData.initStorage();
-
             customerData.initStorage();
             invalidateCacheBySessionTimeOut(settings);
             invalidateCacheByCloseCookieSession();
