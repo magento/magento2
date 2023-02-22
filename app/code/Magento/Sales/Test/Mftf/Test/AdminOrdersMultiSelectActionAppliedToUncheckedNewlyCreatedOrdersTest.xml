@@ -30,11 +30,9 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
-
         <after>
-
-            <!--Remove default flat rate shipping method settings-->
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="disableFlatRate"/>
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
             <!--Delete product-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!--Delete customer-->

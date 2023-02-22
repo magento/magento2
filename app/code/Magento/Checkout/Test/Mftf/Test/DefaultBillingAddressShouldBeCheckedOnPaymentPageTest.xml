@@ -33,22 +33,23 @@
             </actionGroup>
         </before>
         <after>
-            <!-- Disable shipping method for customer with default address -->
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
-            <!--Logout from customer account-->
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="disableFlatRate"/>
+            <!-- set shipping as default -->
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <!--Logout from customer account -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <!-- set shipping as default            -->
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
-            <conditionalClick selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTab}}" dependentSelector="{{AdminShippingMethodFlatRateSection.carriersFlatRateActive}}" visible="false" stepKey="expandFlatRateTab"/>
-            <click selector="{{AdminShippingMethodFlatRateSection.carriersEnableFlatRateActive}}" stepKey="useDefaultValue"/>
-            <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfigs"/>
-            <waitForPageLoad stepKey="waitForPageLoad"/>
-            <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="loginAsAdmin"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openShippingMethodConfigPage"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandFlatRateTab"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="useDefaultValue"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="saveConfigs"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility"  stepKey="waitForPageLoad"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility"  stepKey="seeSuccessMessage"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="logout"/>
             <!-- set shipping as default            -->
             <comment userInput="BIC workaround" stepKey="logoutCustomer"/>
         </after>

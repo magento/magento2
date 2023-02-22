@@ -26,8 +26,8 @@
             </createData>
         </before>
         <after>
-            <!-- Disable shipping method for customer with default address -->
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="disableFlatRate"/>
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>

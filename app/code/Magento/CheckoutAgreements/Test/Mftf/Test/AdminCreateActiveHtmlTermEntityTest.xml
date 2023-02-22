@@ -29,7 +29,8 @@
         </before>
         <after>
             <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility"  stepKey="disableFlatRate"/>
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
             <deleteData createDataKey="createProduct" stepKey="deletedProduct"/>
 
             <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
