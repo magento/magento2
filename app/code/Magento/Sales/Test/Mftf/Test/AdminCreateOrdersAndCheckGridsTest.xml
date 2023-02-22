@@ -128,6 +128,10 @@
         <waitForPageLoad time="30" stepKey="waitForGrid"/>
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
 
+        <comment userInput="Comment is added to preserve the step key for backward compatibility"  stepKey="getOrderOneId"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility"  stepKey="getOrderTwoId"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility"  stepKey="getOrderThreeId"/>
+
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderOne">
             <argument name="entityId" value="$createGuestCartOne.return$"/>
         </actionGroup>
