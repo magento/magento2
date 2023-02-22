@@ -168,7 +168,7 @@ class SortTest extends TestCase
                         ]
                     ],
                     [
-                        '_id' => [
+                        'entity_id' => [
                             'order' => 'desc'
                         ]
                     ]
@@ -197,7 +197,7 @@ class SortTest extends TestCase
                         ]
                     ],
                     [
-                        '_id' => [
+                        'entity_id' => [
                             'order' => 'desc'
                         ]
                     ]
@@ -226,7 +226,7 @@ class SortTest extends TestCase
                         ]
                     ],
                     [
-                        '_id' => [
+                        'entity_id' => [
                             'order' => 'desc'
                         ]
                     ]
@@ -255,7 +255,7 @@ class SortTest extends TestCase
                         ]
                     ],
                     [
-                        '_id' => [
+                        'entity_id' => [
                             'order' => 'desc'
                         ]
                     ]
@@ -284,7 +284,7 @@ class SortTest extends TestCase
                         ]
                     ],
                     [
-                        '_id' => [
+                        'entity_id' => [
                             'order' => 'desc'
                         ]
                     ]

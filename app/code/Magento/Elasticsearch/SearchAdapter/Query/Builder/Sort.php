@@ -124,7 +124,7 @@ class Sort
 
         if (!empty($sorts)) {
             $sorts[] = [
-                '_id' => [
+                'entity_id' => [
                     'order' => 'desc'
                 ]
             ];
