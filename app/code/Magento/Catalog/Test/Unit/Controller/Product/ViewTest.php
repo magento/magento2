@@ -27,6 +27,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Responsible for testing product view action on a strorefront.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ViewTest extends TestCase
 {
