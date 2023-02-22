@@ -92,7 +92,6 @@ class File extends Http implements NotCacheableInterface
         if (!$dir->isExist($this->fileOptions['filePath'])) {
             throw new InvalidArgumentException("File '{$this->fileOptions['filePath']}' does not exists.");
         }
-        $this->setFileHeaders();
     }
 
     /**
@@ -100,11 +99,26 @@ class File extends Http implements NotCacheableInterface
      */
     public function sendResponse()
     {
+        $dir = $this->filesystem->getDirectoryWrite($this->fileOptions['directoryCode']);
+        $filePath = $this->fileOptions['filePath'];
+        $contentType = $this->fileOptions['contentType']
+            ?? $dir->stat($filePath)['mimeType']
+            ?? $this->mime->getMimeType($dir->getAbsolutePath($filePath));
+        $contentLength = $this->fileOptions['contentLength']
+            ?? $dir->stat($filePath)['size'];
+        $fileName = $this->fileOptions['fileName']
+            ?? basename($filePath);
+        $this->response->setHttpResponseCode(200);
+        $this->response->setHeader('Content-type', $contentType, true)
+            ->setHeader('Content-Length', $contentLength)
+            ->setHeader('Content-Disposition', 'attachment; filename="' . $fileName . '"', true)
+            ->setHeader('Pragma', 'public', true)
+            ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
+            ->setHeader('Last-Modified', date('r'), true);
+
         $this->response->sendHeaders();
 
         if (!$this->request->isHead()) {
-            $dir = $this->filesystem->getDirectoryWrite($this->fileOptions['directoryCode']);
-            $filePath = $this->fileOptions['filePath'];
             $stream = $dir->openFile($filePath, 'r');
             while (!$stream->eof()) {
                 // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
@@ -142,31 +156,5 @@ class File extends Http implements NotCacheableInterface
     public function clearHeader($name)
     {
         return $this->response->clearHeader($name);
-    }
-
-    /**
-     * Set appropriate headers for the file attachment
-     *
-     * @return void
-     * @throws \Magento\Framework\Exception\FileSystemException
-     */
-    private function setFileHeaders(): void
-    {
-        $dir = $this->filesystem->getDirectoryWrite($this->fileOptions['directoryCode']);
-        $filePath = $this->fileOptions['filePath'];
-        $contentType = $this->fileOptions['contentType']
-            ?? $dir->stat($filePath)['mimeType']
-            ?? $this->mime->getMimeType($dir->getAbsolutePath($filePath));
-        $contentLength = $this->fileOptions['contentLength']
-            ?? $dir->stat($filePath)['size'];
-        $fileName = $this->fileOptions['fileName']
-            ?? basename($filePath);
-        $this->response->setHttpResponseCode(200);
-        $this->response->setHeader('Content-type', $contentType, true)
-            ->setHeader('Content-Length', $contentLength)
-            ->setHeader('Content-Disposition', 'attachment; filename="' . $fileName . '"', true)
-            ->setHeader('Pragma', 'public', true)
-            ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
-            ->setHeader('Last-Modified', date('r'), true);
     }
 }
