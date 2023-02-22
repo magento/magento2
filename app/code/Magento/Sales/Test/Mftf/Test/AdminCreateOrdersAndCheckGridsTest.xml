@@ -6,7 +6,7 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateOrdersAndCheckGridsTest">
         <annotations>
             <stories value="Create orders and check grids"/>
@@ -18,7 +18,8 @@
             <group value="sales"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set dev/grid/async_indexing 1" stepKey="enableAsyncIndexing"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{AsyncGridsIndexingConfigData.enable_option}}" stepKey="enableAsyncIndexing"/>
             <magentoCLI command="cache:clean" stepKey="cacheCleanBefore"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct">
@@ -27,7 +28,7 @@
         </before>
 
         <after>
-            <magentoCLI command="config:set dev/grid/async_indexing 0" stepKey="disableAsyncIndexing"/>
+            <magentoCLI command="config:set {{AsyncGridsIndexingConfigData.disable_option}}" stepKey="disableAsyncIndexing"/>
             <magentoCLI command="cache:clean" stepKey="cacheCleanAfter"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
@@ -46,7 +47,7 @@
             <requiredEntity createDataKey="createGuestCartOne"/>
         </updateData>
 
-        <magentoCLI command="cron:run" stepKey="runCronOne"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronOne"/>
 
         <createData entity="Invoice" stepKey="invoiceOrderOne">
             <requiredEntity createDataKey="createGuestCartOne"/>
@@ -68,7 +69,7 @@
             <requiredEntity createDataKey="createGuestCartOne"/>
         </createData>
 
-        <magentoCLI command="cron:run" stepKey="runCronTwo"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronTwo"/>
 
         <createData entity="GuestCart" stepKey="createGuestCartThree"/>
         <createData entity="SimpleCartItem" stepKey="addCartItemThree">
@@ -94,7 +95,7 @@
             <requiredEntity createDataKey="createGuestCartTwo"/>
         </createData>
 
-        <magentoCLI command="cron:run" stepKey="runCronThree"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronThree"/>
 
         <createData entity="Invoice" stepKey="invoiceOrderTwo">
             <requiredEntity createDataKey="createGuestCartTwo"/>
@@ -108,29 +109,32 @@
             <requiredEntity createDataKey="createGuestCartTwo"/>
         </createData>
 
-        <magentoCLI command="cron:run" stepKey="runCronFour"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronFour"/>
 
         <createData entity="CreditMemo" stepKey="refundOrderThree">
             <requiredEntity createDataKey="createGuestCartThree"/>
         </createData>
 
-        <magentoCLI command="cron:run" stepKey="runCronFive"/>
-        <magentoCLI command="cron:run" stepKey="runCronSix"/>
-        <magentoCLI command="cron:run" stepKey="runCronSeven"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronFive"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronSix"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronSeven"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronEight"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronNine"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronTen"/>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
-        <waitForPageLoad time="60" stepKey="waitForGrid"/>
+        <waitForPageLoad time="30" stepKey="waitForGrid"/>
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
-
-        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createGuestCartOne.return$)}}" stepKey="getOrderOneId"/>
-        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createGuestCartTwo.return$)}}" stepKey="getOrderTwoId"/>
-        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createGuestCartThree.return$)}}" stepKey="getOrderThreeId"/>
 
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderOne">
             <argument name="entityId" value="$createGuestCartOne.return$"/>
         </actionGroup>
+
+        <waitForPageLoad time="30" stepKey="waitForPageLoadOne"/>
+
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderIdOne"/>
 
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageOne"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask1" after="openInvoicesTabOrdersPageOne"/>
@@ -145,6 +149,10 @@
             <argument name="entityId" value="$createGuestCartTwo.return$"/>
         </actionGroup>
 
+        <waitForPageLoad time="30" stepKey="waitForPageLoadTwo"/>
+
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderIdTwo"/>
+
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageTwo"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask2" after="openInvoicesTabOrdersPageTwo"/>
         <waitForElementVisible selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvoicesTabOpenedTwo"/>
@@ -158,6 +166,10 @@
             <argument name="entityId" value="$createGuestCartThree.return$"/>
         </actionGroup>
 
+        <waitForPageLoad time="30" stepKey="waitForPageLoadThree"/>
+
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderIdThree"/>
+
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageThree"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask3" after="openInvoicesTabOrdersPageThree"/>
         <waitForElementVisible selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvoicesTabOpenedThree"/>
@@ -166,5 +178,30 @@
         <seeElement selector="{{AdminOrderShipmentsTabSection.viewShipment}}" stepKey="seeForShipmentTabOpenedThree"/>
         <actionGroup ref="AdminGoToCreditMemoTabActionGroup" stepKey="goToCreditMemoTabThree"/>
         <see selector="{{AdminOrderCreditMemosTabSection.gridRowCell('1', 'Status')}}" userInput="Refunded" stepKey="seeCreditMemoStatusInGridThree"/>
+
+
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdOne">
+            <argument name="orderId" value="{$grabOrderIdOne}"/>
+        </actionGroup>
+
+        <waitForPageLoad time="30" stepKey="waitForGridOne"/>
+
+        <see selector="{{AdminDataGridTableSection.gridCell('1', 'Status')}}" userInput="Closed" stepKey="seeOrderClosedInGridOne"/>
+
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdTwo">
+            <argument name="orderId" value="{$grabOrderIdTwo}"/>
+        </actionGroup>
+
+        <waitForPageLoad time="30" stepKey="waitForGridTwo"/>
+
+        <see selector="{{AdminDataGridTableSection.gridCell('1', 'Status')}}" userInput="Closed" stepKey="seeOrderClosedInGridTwo"/>
+
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdThree">
+            <argument name="orderId" value="{$grabOrderIdThree}"/>
+        </actionGroup>
+
+        <waitForPageLoad time="30" stepKey="waitForGridThree"/>
+
+        <see selector="{{AdminDataGridTableSection.gridCell('1', 'Status')}}" userInput="Closed" stepKey="seeOrderClosedInGridThree"/>
     </test>
 </tests>
