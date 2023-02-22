@@ -9,7 +9,9 @@
     <type name="Magento\Framework\App\Cache\Tag\Strategy\Factory">
         <arguments>
             <argument name="customStrategies" xsi:type="array">
-                <item name="Magento\Framework\App\Config\ValueInterface" xsi:type="object">\Magento\DirectoryGraphQl\Model\Cache\Tag\Strategy\CurrencyConfig</item>
+                <item name="Magento\Framework\App\Config\ValueInterface" xsi:type="object">
+                    Magento\DirectoryGraphQl\Model\Cache\Tag\Strategy\CurrencyConfig
+                </item>
             </argument>
         </arguments>
     </type>

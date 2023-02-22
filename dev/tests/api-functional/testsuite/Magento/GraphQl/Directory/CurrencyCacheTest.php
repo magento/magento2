@@ -501,13 +501,13 @@ class CurrencyCacheTest extends GraphQLPageCacheAbstract
 
         // Query second store currency
         $secondStoreCode = 'second_store_view';
-        $responseThirdStore = $this->graphQlQueryWithResponseHeaders(
+        $responseSecondStore = $this->graphQlQueryWithResponseHeaders(
             $query,
             [],
             '',
             ['Store' => $secondStoreCode]
         );
-        $secondStoreCacheId = $responseThirdStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $secondStoreCacheId = $responseSecondStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS at the 1st time
         $secondStoreResponse = $this->assertCacheMissAndReturnResponse(
             $query,

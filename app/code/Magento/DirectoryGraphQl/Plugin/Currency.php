@@ -13,7 +13,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Directory\Model\Currency as CurrencyModel;
 
 /**
- * Currency plugin
+ * Currency plugin triggers clean page cache and provides currency cache identities
  */
 class Currency implements IdentityInterface
 {
@@ -33,7 +33,7 @@ class Currency implements IdentityInterface
     }
 
     /**
-     * Add graphql store config tag to the store group cache identities.
+     * Trigger clean cache by tags after save rates
      *
      * @param CurrencyModel $subject
      * @param CurrencyModel $result
