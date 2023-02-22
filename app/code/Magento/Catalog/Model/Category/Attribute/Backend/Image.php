@@ -136,11 +136,12 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $attributeName = $this->getAttribute()->getName();
         $value = $object->getData($attributeName);
 
+        /** @var StoreInterface $store */
+        $store = $this->storeManager->getStore();
+        $baseMediaDir = $store->getBaseMediaDir();
+
         if ($this->isTmpFileAvailable($value) && $imageName = $this->getUploadedImageName($value)) {
             try {
-                /** @var StoreInterface $store */
-                $store = $this->storeManager->getStore();
-                $baseMediaDir = $store->getBaseMediaDir();
                 $newImgRelativePath = $this->imageUploader->moveFileFromTmp($imageName, true);
                 $value[0]['url'] = '/' . $baseMediaDir . '/' . $newImgRelativePath;
                 $value[0]['name'] = $value[0]['url'];
@@ -156,7 +157,12 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         if ($imageName = $this->getUploadedImageName($value)) {
             if (!$this->fileResidesOutsideCategoryDir($value)) {
-                $imageName = $this->checkUniqueImageName($imageName);
+                if($this->isTmpFileAvailable($value)) {
+                    $imageName = $this->checkUniqueImageName($imageName);
+                } else {
+                    $value[0]['name'] = "/" . $baseMediaDir . parse_url($value[0]['url'], PHP_URL_PATH);
+                    $imageName = $this->getUploadedImageName($value);
+                }
             }
             $object->setData($this->additionalData . $attributeName, $value);
             $object->setData($attributeName, $imageName);
