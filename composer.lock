@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e311d5a0ac66042f5d4c839f64996e87",
+    "content-hash": "bd4b64caee2131de1c4337fb3f8211a5",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -10737,16 +10737,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "4.2.0",
+            "version": "4.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "062c1bbabbe8f6bc1aba2f5fc84751997c36f7f5"
+                "reference": "9ba3321df1dbfebd4bf2e502f76880d05fa38a57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/062c1bbabbe8f6bc1aba2f5fc84751997c36f7f5",
-                "reference": "062c1bbabbe8f6bc1aba2f5fc84751997c36f7f5",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/9ba3321df1dbfebd4bf2e502f76880d05fa38a57",
+                "reference": "9ba3321df1dbfebd4bf2e502f76880d05fa38a57",
                 "shasum": ""
             },
             "require": {
@@ -10772,7 +10772,7 @@
                 "mustache/mustache": "~2.5",
                 "nikic/php-parser": "^4.4",
                 "php": ">=8.1",
-                "php-webdriver/webdriver": "^1.9.0",
+                "php-webdriver/webdriver": "^1.9.0 <1.14.0",
                 "spomky-labs/otphp": "^10.0",
                 "symfony/console": "^4.4||^5.4",
                 "symfony/dotenv": "^5.3",
@@ -10826,9 +10826,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/4.2.0"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/4.2.1"
             },
-            "time": "2023-02-13T18:01:18+00:00"
+            "time": "2023-02-22T18:01:48+00:00"
         },
         {
             "name": "mustache/mustache",
@@ -13950,5 +13950,5 @@
         "lib-libxml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
