@@ -9,6 +9,7 @@
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
+            "laminas/laminas-dependency-plugin": true,
             "magento/*": true,
             "php-http/discovery": true
         },
@@ -67,9 +68,9 @@
         "laminas/laminas-validator": "^2.23",
         "league/flysystem": "^2.4",
         "league/flysystem-aws-s3-v3": "^2.4",
-        "magento/composer": "^1.9.0-beta2",
+        "magento/composer": "^1.9.0",
         "magento/composer-dependency-version-audit-plugin": "^0.1",
-        "magento/magento-composer-installer": ">=0.4.0-beta1",
+        "magento/magento-composer-installer": ">=0.4.0",
         "magento/zend-cache": "^1.16",
         "magento/zend-db": "^1.16",
         "magento/zend-pdf": "^1.16",
