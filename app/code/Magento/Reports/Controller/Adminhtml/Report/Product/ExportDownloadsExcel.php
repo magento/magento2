@@ -1,21 +1,29 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Reports\Controller\Adminhtml\Report\Product;
 
-class ExportDownloadsExcel extends \Magento\Reports\Controller\Adminhtml\Report\Product
+/**
+ * Exporting list of product in Excel format.
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
+class ExportDownloadsExcel extends Product
 {
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Reports::report_products';
+    public const ADMIN_RESOURCE = 'Magento_Reports::report_products';
 
     /**
      * Export products downloads report to XLS format
@@ -33,6 +41,6 @@ class ExportDownloadsExcel extends \Magento\Reports\Controller\Adminhtml\Report\
             $fileName
         );
 
-        return $this->_fileFactory->create($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content, DirectoryList::VAR_DIR);
     }
 }
