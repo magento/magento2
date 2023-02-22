@@ -23,9 +23,7 @@ class CountryConfig implements StrategyInterface
      */
     private $countryConfigPaths = [
         'general/locale/code',
-        'general/country/allow',
-        'general/region/display_all',
-        'general/region/state_required'
+        'general/country/allow'
     ];
 
     /**
