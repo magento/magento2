@@ -224,6 +224,8 @@ class MassOnTheFlyTest extends TestCase
 
             if ($exception !== null) {
                 $indexerInterface->expects($this->any())
+                    ->method('isScheduled')->willReturn(true);
+                $indexerInterface->expects($this->any())
                     ->method('setScheduled')->with(false)->willThrowException($exception);
             } else {
                 $indexerInterface->expects($this->any())
