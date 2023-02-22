@@ -228,6 +228,8 @@ class StaticFieldTest extends TestCase
                         return 'float';
                     } elseif ($type === 'keyword') {
                         return 'string';
+                    } elseif ($type === 'integer') {
+                        return 'integer';
                     } else {
                         return $complexType;
                     }
@@ -276,6 +278,10 @@ class StaticFieldTest extends TestCase
                         'type' => 'string',
                         'index' => 'no',
                     ],
+                    'entity_id' => [
+                        'type' => 'integer',
+                        'index' => 'no',
+                    ],
                 ],
             ],
             [
@@ -302,6 +308,10 @@ class StaticFieldTest extends TestCase
                     ],
                     'store_id' => [
                         'type' => 'string',
+                        'index' => 'no',
+                    ],
+                    'entity_id' => [
+                        'type' => 'integer',
                         'index' => 'no',
                     ],
                 ],
@@ -332,6 +342,10 @@ class StaticFieldTest extends TestCase
                         'type' => 'string',
                         'index' => 'no',
                     ],
+                    'entity_id' => [
+                        'type' => 'integer',
+                        'index' => 'no',
+                    ],
                 ],
             ],
             [
@@ -352,6 +366,10 @@ class StaticFieldTest extends TestCase
                     ],
                     'store_id' => [
                         'type' => 'string',
+                        'index' => 'no',
+                    ],
+                    'entity_id' => [
+                        'type' => 'integer',
                         'index' => 'no',
                     ],
                 ],
@@ -382,6 +400,10 @@ class StaticFieldTest extends TestCase
                         'type' => 'string',
                         'index' => 'no',
                     ],
+                    'entity_id' => [
+                        'type' => 'integer',
+                        'index' => 'no',
+                    ],
                 ],
             ],
             [
@@ -398,6 +420,10 @@ class StaticFieldTest extends TestCase
                 [
                     'store_id' => [
                         'type' => 'string',
+                        'index' => 'no',
+                    ],
+                    'entity_id' => [
+                        'type' => 'integer',
                         'index' => 'no',
                     ],
                 ],
