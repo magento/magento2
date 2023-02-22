@@ -19,15 +19,14 @@ use Magento\Framework\Pricing\Render\Amount;
 use Magento\Framework\Pricing\Render\RendererPool;
 use Magento\Framework\View\TemplateEngine\Php;
 use Magento\Framework\View\TemplateEnginePool;
+use Magento\Tax\Helper\Data;
 use Magento\Tax\Model\Config as TaxConfig;
 use Magento\Tax\Test\Fixture\CustomerTaxClass as CustomerTaxClassFixture;
 use Magento\Tax\Test\Fixture\ProductTaxClass as ProductTaxClassFixture;
 use Magento\Tax\Test\Fixture\TaxRate as TaxRateFixture;
 use Magento\Tax\Test\Fixture\TaxRule as TaxRuleFixture;
-use Magento\TestFramework\Fixture\AppIsolation;
-use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\Config as ConfigFixture;
 use Magento\TestFramework\Fixture\DataFixture;
-use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -160,10 +159,22 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
     }
 
     #[
-        AppIsolation(true),
-        DbIsolation(false),
-        Config(TaxConfig::CONFIG_XML_PATH_PRICE_INCLUDES_TAX, 0),
-        Config(TaxConfig::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE, 3),
+        ConfigFixture(TaxConfig::CONFIG_XML_PATH_PRICE_INCLUDES_TAX, 0, 'store', 'default'),
+        ConfigFixture(TaxConfig::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE, 3, 'store', 'default'),
+        DataFixture(
+            TaxRateFixture::class,
+            [],
+            'rate'
+        ),
+        DataFixture(
+            TaxRuleFixture::class,
+            [
+                'customer_tax_class_ids' => [3],
+                'product_tax_class_ids' => [2],
+                'tax_rate_ids' => ['$rate.id$']
+            ],
+            'rule'
+        ),
         DataFixture(CategoryFixture::class, as: 'category'),
         DataFixture(
             ProductFixture::class,
@@ -178,24 +189,7 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
                     ]
                 ]
             ]
-        ),
-        DataFixture(CustomerTaxClassFixture::class, as: 'customerTax'),
-        DataFixture(ProductTaxClassFixture::class, as: 'productTax'),
-        DataFixture(
-            TaxRateFixture::class,
-            [],
-            'rate'
-        ),
-        DataFixture(
-            TaxRuleFixture::class,
-            [
-                'customer_tax_class_ids' => ['$customerTax.id$'],
-                'product_tax_class_ids' => ['$productTax.id$'],
-                'tax_rate_ids' => ['$rate.id$']
-            ],
-            'rule'
         )
-
     ]
     public function testRenderAmountMinimalProductWithTierPricesShouldShowMinTierPriceWithTaxes()
     {
