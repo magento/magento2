@@ -16,6 +16,7 @@
             <useCaseId value="ACP2E-1367" />
             <testCaseId value="AC-7106" />
             <group value="sales"/>
+            <group value="async_operations" />
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
@@ -47,8 +48,7 @@
             <requiredEntity createDataKey="createGuestCartOne"/>
         </updateData>
 
-        <magentoCLI command="cron:run --group=default" stepKey="runCronOne"/>
-        <wait stepKey="waitForRunCronOne" time="60" />
+        <magentoCron groups="default" stepKey="runCronOne"/>
 
         <createData entity="Invoice" stepKey="invoiceOrderOne">
             <requiredEntity createDataKey="createGuestCartOne"/>
@@ -70,8 +70,7 @@
             <requiredEntity createDataKey="createGuestCartOne"/>
         </createData>
 
-        <magentoCLI command="cron:run --group=default" stepKey="runCronTwo"/>
-        <wait stepKey="waitForRunCronTwo" time="60" />
+        <magentoCron groups="default" stepKey="runCronTwo"/>
 
         <createData entity="GuestCart" stepKey="createGuestCartThree"/>
         <createData entity="SimpleCartItem" stepKey="addCartItemThree">
@@ -97,8 +96,7 @@
             <requiredEntity createDataKey="createGuestCartTwo"/>
         </createData>
 
-        <magentoCLI command="cron:run --group=default" stepKey="runCronThree"/>
-        <wait stepKey="waitForRunCronThree" time="60" />
+        <magentoCron groups="default" stepKey="runCronThree"/>
 
         <createData entity="Invoice" stepKey="invoiceOrderTwo">
             <requiredEntity createDataKey="createGuestCartTwo"/>
@@ -112,15 +110,13 @@
             <requiredEntity createDataKey="createGuestCartTwo"/>
         </createData>
 
-        <magentoCLI command="cron:run --group=default" stepKey="runCronFour"/>
-        <wait stepKey="waitForRunCronFour" time="60" />
+        <magentoCron groups="default" stepKey="runCronFour"/>
 
         <createData entity="CreditMemo" stepKey="refundOrderThree">
             <requiredEntity createDataKey="createGuestCartThree"/>
         </createData>
 
-        <magentoCLI command="cron:run --group=default" stepKey="runCronFive"/>
-        <wait stepKey="waitForRunCronFive" time="60" />
+        <magentoCron groups="default" stepKey="runCronFive"/>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
