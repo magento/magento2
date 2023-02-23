@@ -39,7 +39,7 @@ class FileFactory
     /**
      * @param ResponseInterface $response
      * @param Filesystem $filesystem
-     * @param \Magento\Framework\App\Response\FileFactory $fileResponseFactory
+     * @param \Magento\Framework\App\Response\FileFactory|null $fileResponseFactory
      */
     public function __construct(
         \Magento\Framework\App\ResponseInterface $response,
@@ -101,7 +101,7 @@ class FileFactory
             }
         }
         return $this->fileResponseFactory->create([
-            'fileOptions' => [
+            'options' => [
                 'filePath' => $file,
                 'fileName' => $fileName,
                 'contentType' => $contentType,
