@@ -9,6 +9,7 @@ namespace Magento\CatalogRule\Model\Indexer;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
 use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
 use Magento\CatalogRule\Model\ResourceModel\Rule\Collection as RuleCollection;
@@ -168,6 +169,11 @@ class IndexBuilder
     private $productLoader;
 
     /**
+     * @var ProductCollectionFactory
+     */
+    private $productCollectionFactory;
+
+    /**
      * @param RuleCollectionFactory $ruleCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param ResourceConnection $resource
@@ -188,6 +194,7 @@ class IndexBuilder
      * @param ProductLoader|null $productLoader
      * @param TableSwapper|null $tableSwapper
      * @param TimezoneInterface|null $localeDate
+     * @param ProductCollectionFactory|null $productCollectionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -211,7 +218,8 @@ class IndexBuilder
         ActiveTableSwitcher $activeTableSwitcher = null,
         ProductLoader $productLoader = null,
         TableSwapper $tableSwapper = null,
-        TimezoneInterface $localeDate = null
+        TimezoneInterface $localeDate = null,
+        ProductCollectionFactory $productCollectionFactory = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -253,6 +261,8 @@ class IndexBuilder
             ObjectManager::getInstance()->get(TableSwapper::class);
         $this->localeDate = $localeDate ??
             ObjectManager::getInstance()->get(TimezoneInterface::class);
+        $this->productCollectionFactory = $productCollectionFactory ??
+            ObjectManager::getInstance()->get(ProductCollectionFactory::class);
     }
 
     /**
@@ -497,13 +507,20 @@ class IndexBuilder
      */
     private function applyRules(RuleCollection $ruleCollection, Product $product): void
     {
+        /** @var \Magento\CatalogRule\Model\Rule $rule */
         foreach ($ruleCollection as $rule) {
-            if (!$rule->validate($product)) {
-                continue;
-            }
-
+            $productCollection = $this->productCollectionFactory->create();
+            $productCollection->addIdFilter($product->getId());
+            $rule->getConditions()->collectValidatedAttributes($productCollection);
+            $validationResult = [];
             $websiteIds = array_intersect($product->getWebsiteIds(), $rule->getWebsiteIds());
-            $this->assignProductToRule($rule, $product->getId(), $websiteIds);
+            foreach ($websiteIds as $websiteId) {
+                $defaultGroupId = $this->storeManager->getWebsite($websiteId)->getDefaultGroupId();
+                $defaultStoreId = $this->storeManager->getGroup($defaultGroupId)->getDefaultStoreId();
+                $product->setStoreId($defaultStoreId);
+                $validationResult[$websiteId] = $rule->validate($product);
+            }
+            $this->assignProductToRule($rule, $product->getId(), array_keys(array_filter($validationResult)));
         }
 
         $this->cleanProductPriceIndex([$product->getId()]);
