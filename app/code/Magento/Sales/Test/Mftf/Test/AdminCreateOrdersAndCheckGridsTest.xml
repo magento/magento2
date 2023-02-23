@@ -14,7 +14,7 @@
             <description value="Create orders, invoices, shipments and credit memos and check async grids"/>
             <severity value="AVERAGE"/>
             <useCaseId value="ACP2E-1367" />
-            <testCaseId value="AC-7106" />
+            <testCaseId value="_AC-7106" />
             <group value="sales"/>
         </annotations>
         <before>
