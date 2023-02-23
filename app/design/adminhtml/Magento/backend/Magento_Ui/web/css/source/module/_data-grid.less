@@ -263,6 +263,15 @@ body._in-resize {
         &:last-child {
             border-right-style: @data-grid-td__border-outer-style;
         }
+        
+        //  Action select data grid styles (can be action-select-secondary in future)
+        .action-select-wrap {
+            position: static;
+
+            &._active {
+                position: relative;
+            }
+        }
 
 
         .action-select {
