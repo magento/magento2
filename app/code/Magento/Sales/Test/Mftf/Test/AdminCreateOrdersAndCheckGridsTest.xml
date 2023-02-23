@@ -14,12 +14,17 @@
             <description value="Create orders, invoices, shipments and credit memos and check async grids"/>
             <severity value="AVERAGE"/>
             <useCaseId value="ACP2E-1367" />
-            <testCaseId value="_AC-7106" />
+            <testCaseId value="AC-7106" />
             <group value="sales"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <magentoCLI command="config:set {{AsyncGridsIndexingConfigData.enable_option}}" stepKey="enableAsyncIndexing"/>
+            <magentoCLI command="config:set system/cron/default/schedule_generate_every 1" stepKey="CronDefaultGenerateEveryBefore" />
+            <magentoCLI command="config:set system/cron/default/schedule_ahead_for 4" stepKey="CronDefaultScheduleAheadBefore" />
+            <magentoCLI command="config:set system/cron/default/schedule_lifetime 2" stepKey="CronDefaultScheduleLifetimeBefore" />
+            <magentoCLI command="config:set system/cron/default/use_separate_process 1" stepKey="CronDefaultUseSeparateProcessBefore" />
+
             <magentoCLI command="cache:clean" stepKey="cacheCleanBefore"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct">
@@ -29,6 +34,10 @@
 
         <after>
             <magentoCLI command="config:set {{AsyncGridsIndexingConfigData.disable_option}}" stepKey="disableAsyncIndexing"/>
+            <magentoCLI command="config set system/cron/default/schedule_generate_every 15" stepKey="CronDefaultGenerateEveryAfter" />
+            <magentoCLI command="config:set system/cron/default/schedule_ahead_for 20" stepKey="CronDefaultScheduleAheadAfter" />
+            <magentoCLI command="config:set system/cron/default/schedule_lifetime 15" stepKey="CronDefaultScheduleLifetimeAfter" />
+            <magentoCLI command="config:set system/cron/default/use_separate_process 0" stepKey="CronDefaultUseSeparateProcessAfter" />
             <magentoCLI command="cache:clean" stepKey="cacheCleanAfter"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
