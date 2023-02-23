@@ -41,6 +41,9 @@
             <createData entity="SalesRuleNoCouponWithFixedDiscount" stepKey="createSalesRule"/>
         </before>
         <after>
+            <!-- Set flat rate to default value -->
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="disableFlatRate"/>
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
             <!-- Disable Free Shipping -->
             <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
             <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
