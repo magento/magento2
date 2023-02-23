@@ -82,7 +82,7 @@ class MassOnTheFlyTest extends TestCase
     protected $indexReg;
 
     /**
-     * @return ResponseInterface
+     * @var ResponseInterface
      */
     protected $response;
 
