@@ -10,6 +10,7 @@
     <test name="AdminSimpleProductGifWithUnusedTransparencyImageTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Using a GIF image with transparency color declared but not used as a product main image should not prevent the product grid from being rendered properly"/>
             <title value="Using a GIF image with transparency color declared but not used as a product image"/>
             <description value="Using a GIF image with transparency color declared but not used as a product main image should not prevent the product grid from being rendered properly"/>
             <severity value="CRITICAL"/>
