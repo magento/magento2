@@ -266,6 +266,36 @@ class FileTest extends TestCase
         $this->getModel($options)->sendResponse();
     }
 
+    public function testSetHeader(): void
+    {
+        $model = $this->getModel();
+        $this->responseMock->expects($this->once())
+            ->method('setHeader')
+            ->with('Content-type', 1024, true)
+            ->willReturnSelf();
+        $this->assertSame($model, $model->setHeader('Content-type', 1024, true));
+    }
+
+    public function testGetHeader(): void
+    {
+        $model = $this->getModel();
+        $this->responseMock->expects($this->once())
+            ->method('getHeader')
+            ->with('Content-type')
+            ->willReturn(2048);
+        $this->assertEquals(2048, $model->getHeader('Content-type'));
+    }
+
+    public function testClearHeader(): void
+    {
+        $model = $this->getModel();
+        $this->responseMock->expects($this->once())
+            ->method('clearHeader')
+            ->with('Content-type')
+            ->willReturnSelf();
+        $this->assertSame($model, $model->clearHeader('Content-type'));
+    }
+
     private function getModel(array $options = []): File
     {
         return new File(

@@ -152,6 +152,7 @@ class File extends Http implements NotCacheableInterface
      */
     public function clearHeader($name)
     {
-        return $this->response->clearHeader($name);
+        $this->response->clearHeader($name);
+        return $this;
     }
 }
