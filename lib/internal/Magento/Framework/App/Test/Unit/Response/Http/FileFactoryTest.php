@@ -135,7 +135,7 @@ class FileFactoryTest extends TestCase
         $this->fileResponseFactory->expects($this->once())
             ->method('create')
             ->with([
-                'fileOptions' => [
+                'options' => [
                     'filePath' => $file,
                     'fileName' => 'fileName',
                     'contentType' => 'application/octet-stream',
@@ -173,7 +173,7 @@ class FileFactoryTest extends TestCase
         $this->fileResponseFactory->expects($this->once())
             ->method('create')
             ->with([
-                'fileOptions' => [
+                'options' => [
                     'filePath' => $file,
                     'fileName' => 'fileName',
                     'contentType' => 'application/octet-stream',
