@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCartPriceRuleMultiCustomerActionGroup">
+        <annotations>
+            <description>Goes to the Admin Cart Price Rule grid page. Adds Rule Name, select Websites and Customer Groups.</description>
+        </annotations>
+        <arguments>
+            <argument name="ruleName"/>
+        </arguments>
+
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
+        <waitForPageLoad stepKey="waitForPriceList"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleName}}" stepKey="waitRuleNameFieldAppeared"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ruleName.name}}" stepKey="fillRuleName"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{ruleName.websites}}" stepKey="selectWebsites"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" parameterArray="[{{ruleName.customerGroups}}]" stepKey="selectCustomerGroup"/>
+        <wait time="3" stepKey="waitForCustomerGroups"/>
+    </actionGroup>
+</actionGroups>
