@@ -117,6 +117,11 @@
         </createData>
 
         <magentoCron groups="default" stepKey="runCronFive"/>
+        <comment userInput="Preserve BIC" stepKey="runCronSix"/>
+        <comment userInput="Preserve BIC" stepKey="runCronSeven"/>
+        <comment userInput="Preserve BIC" stepKey="runCronEight"/>
+        <comment userInput="Preserve BIC" stepKey="runCronNine"/>
+
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
@@ -132,7 +137,7 @@
             <argument name="entityId" value="$createGuestCartOne.return$"/>
         </actionGroup>
 
-        <wait time="30" stepKey="waitOne"/>
+        <wait time="30" stepKey="waitForPageLoadOne"/>
 
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageOne"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask1" after="openInvoicesTabOrdersPageOne"/>
@@ -147,7 +152,7 @@
             <argument name="entityId" value="$createGuestCartTwo.return$"/>
         </actionGroup>
 
-        <wait time="30" stepKey="waitTwo"/>
+        <wait time="30" stepKey="waitForPageLoadTwo"/>
 
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageTwo"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask2" after="openInvoicesTabOrdersPageTwo"/>
@@ -162,7 +167,7 @@
             <argument name="entityId" value="$createGuestCartThree.return$"/>
         </actionGroup>
 
-        <wait time="30" stepKey="waitThree"/>
+        <wait time="30" stepKey="waitForPageLoadThree"/>
 
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageThree"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask3" after="openInvoicesTabOrdersPageThree"/>
