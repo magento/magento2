@@ -62,6 +62,8 @@
             <requiredEntity createDataKey="createGuestCartOne"/>
         </createData>
 
+        <magentoCLI command="cron:run --group=default" stepKey="runCronTwo"/>
+
         <createData entity="GuestCart" stepKey="createGuestCartTwo"/>
         <createData entity="SimpleCartItem" stepKey="addCartItemTwo">
             <requiredEntity createDataKey="createGuestCartTwo"/>
@@ -74,11 +76,13 @@
             <requiredEntity createDataKey="createGuestCartTwo"/>
         </updateData>
 
+        <magentoCLI command="cron:run --group=default" stepKey="runCronThree"/>
+
         <createData entity="Shipment" stepKey="shipOrderOne">
             <requiredEntity createDataKey="createGuestCartOne"/>
         </createData>
 
-        <magentoCLI command="cron:run --group=default" stepKey="runCronTwo"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronFour"/>
 
         <createData entity="GuestCart" stepKey="createGuestCartThree"/>
         <createData entity="SimpleCartItem" stepKey="addCartItemThree">
@@ -92,19 +96,27 @@
             <requiredEntity createDataKey="createGuestCartThree"/>
         </updateData>
 
+        <wait time="60" stepKey="wait1" />
+
+        <magentoCLI command="cron:run --group=default" stepKey="runCronFive"/>
+
         <createData entity="CreditMemo" stepKey="refundOrderOne">
             <requiredEntity createDataKey="createGuestCartOne"/>
         </createData>
+
+        <magentoCLI command="cron:run --group=default" stepKey="runCronSix"/>
 
         <createData entity="Invoice" stepKey="invoiceOrderThree">
             <requiredEntity createDataKey="createGuestCartThree"/>
         </createData>
 
+        <magentoCLI command="cron:run --group=default" stepKey="runCronSeven"/>
+
         <createData entity="Shipment" stepKey="shipOrderTwo">
             <requiredEntity createDataKey="createGuestCartTwo"/>
         </createData>
 
-        <magentoCLI command="cron:run --group=default" stepKey="runCronThree"/>
+        <magentoCLI command="cron:run --group=default" stepKey="runCronEight"/>
 
         <createData entity="Invoice" stepKey="invoiceOrderTwo">
             <requiredEntity createDataKey="createGuestCartTwo"/>
@@ -118,17 +130,14 @@
             <requiredEntity createDataKey="createGuestCartTwo"/>
         </createData>
 
-        <magentoCLI command="cron:run --group=default" stepKey="runCronFour"/>
-
         <createData entity="CreditMemo" stepKey="refundOrderThree">
             <requiredEntity createDataKey="createGuestCartThree"/>
         </createData>
 
-        <magentoCLI command="cron:run --group=default" stepKey="runCronFive"/>
-        <magentoCLI command="cron:run --group=default" stepKey="runCronSix"/>
-        <magentoCLI command="cron:run --group=default" stepKey="runCronSeven"/>
-        <magentoCLI command="cron:run --group=default" stepKey="runCronEight"/>
         <magentoCLI command="cron:run --group=default" stepKey="runCronNine"/>
+
+        <wait time="60" stepKey="wait2" />
+
         <magentoCLI command="cron:run --group=default" stepKey="runCronTen"/>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
