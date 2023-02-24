@@ -20,7 +20,6 @@ use Magento\Tax\Test\Fixture\TaxRate as TaxRateFixture;
 use Magento\Tax\Test\Fixture\TaxRule as TaxRuleFixture;
 use Magento\TestFramework\Fixture\Config as ConfigFixture;
 use Magento\TestFramework\Fixture\DataFixture;
-use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
@@ -252,18 +251,21 @@ class CheckProductPriceTest extends TestCase
     }
 
     /**
-     * Assert that price html contain "As low as" label and expected price amount.
+     * Assert that price html contain "As low as" label and expected price amount with taxes
      *
      * @param string $priceHtml
      * @param float $expectedPriceWithTaxes
      * @param float $expectedPriceWithoutTaxes
      * @return void
      */
-    private function assertAsLowAsPriceWithTaxes(string $priceHtml, float $expectedPriceWithTaxes, float $expectedPriceWithoutTaxes): void
-    {
+    private function assertAsLowAsPriceWithTaxes(
+        string $priceHtml,
+        float $expectedPriceWithTaxes,
+        float $expectedPriceWithoutTaxes
+    ): void {
         $this->assertMatchesRegularExpression(
             sprintf(
-                '/<span class="price-label">As low as<\/span> (.)+<span.*data-price-amount="%s".*>\\$%01.2f<\/span>(.)+<span class="price">\$%01.2f<\/span>/',
+                '/<span class="price-label">As low as<\/span>(.)+<span.*data-price-amount="%s".*>\\$%01.2f<\/span>(.)+<span class="price">\$%01.2f<\/span>/',//phpcs:ignore
                 $expectedPriceWithTaxes,
                 $expectedPriceWithTaxes,
                 $expectedPriceWithoutTaxes
