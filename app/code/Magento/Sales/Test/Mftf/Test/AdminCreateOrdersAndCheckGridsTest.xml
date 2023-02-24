@@ -34,7 +34,7 @@
 
         <after>
             <magentoCLI command="config:set {{AsyncGridsIndexingConfigData.disable_option}}" stepKey="disableAsyncIndexing"/>
-            <magentoCLI command="config set system/cron/default/schedule_generate_every 15" stepKey="CronDefaultGenerateEveryAfter" />
+            <magentoCLI command="config:set system/cron/default/schedule_generate_every 15" stepKey="CronDefaultGenerateEveryAfter" />
             <magentoCLI command="config:set system/cron/default/schedule_ahead_for 20" stepKey="CronDefaultScheduleAheadAfter" />
             <magentoCLI command="config:set system/cron/default/schedule_lifetime 15" stepKey="CronDefaultScheduleLifetimeAfter" />
             <magentoCLI command="config:set system/cron/default/use_separate_process 0" stepKey="CronDefaultUseSeparateProcessAfter" />
