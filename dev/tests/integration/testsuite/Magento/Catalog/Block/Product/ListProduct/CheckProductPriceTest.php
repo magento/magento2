@@ -9,9 +9,18 @@ namespace Magento\Catalog\Block\Product\ListProduct;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Block\Product\ListProduct;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Customer\Model\Group;
 use Magento\Customer\Model\Session;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Tax\Model\Config as TaxConfig;
+use Magento\Tax\Test\Fixture\TaxRate as TaxRateFixture;
+use Magento\Tax\Test\Fixture\TaxRule as TaxRuleFixture;
+use Magento\TestFramework\Fixture\Config as ConfigFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
@@ -243,6 +252,27 @@ class CheckProductPriceTest extends TestCase
     }
 
     /**
+     * Assert that price html contain "As low as" label and expected price amount.
+     *
+     * @param string $priceHtml
+     * @param float $expectedPriceWithTaxes
+     * @param float $expectedPriceWithoutTaxes
+     * @return void
+     */
+    private function assertAsLowAsPriceWithTaxes(string $priceHtml, float $expectedPriceWithTaxes, float $expectedPriceWithoutTaxes): void
+    {
+        $this->assertMatchesRegularExpression(
+            sprintf(
+                '/<span class="price-label">As low as<\/span> (.)+<span.*data-price-amount="%s".*>\\$%01.2f<\/span>(.)+<span class="price">\$%01.2f<\/span>/',
+                $expectedPriceWithTaxes,
+                $expectedPriceWithTaxes,
+                $expectedPriceWithoutTaxes
+            ),
+            $priceHtml
+        );
+    }
+
+    /**
      * Assert that price html contain expected final price amount.
      *
      * @param string $priceHtml
@@ -306,5 +336,45 @@ class CheckProductPriceTest extends TestCase
         $categoryProductsBlock = $page->getLayout()->getBlock('category.products');
 
         return $categoryProductsBlock->getChildBlock('product_list');
+    }
+
+    #[
+        ConfigFixture(TaxConfig::CONFIG_XML_PATH_PRICE_INCLUDES_TAX, 0, 'store', 'default'),
+        ConfigFixture(TaxConfig::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE, 3, 'store', 'default'),
+        DataFixture(
+            TaxRateFixture::class,
+            [],
+            'rate'
+        ),
+        DataFixture(
+            TaxRuleFixture::class,
+            [
+                'customer_tax_class_ids' => [3],
+                'product_tax_class_ids' => [2],
+                'tax_rate_ids' => ['$rate.id$']
+            ],
+            'rule'
+        ),
+        DataFixture(CategoryFixture::class, as: 'category'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'sku' => 'simple-product-tax-both',
+                'category_ids' => ['1', '$category.id$'],
+                'tier_prices' => [
+                    [
+                        'customer_group_id' => Group::NOT_LOGGED_IN_ID,
+                        'qty' => 2,
+                        'value' => 5
+                    ]
+                ]
+            ]
+        )
+    ]
+    public function testRenderAmountMinimalProductWithTierPricesShouldShowMinTierPriceWithTaxes()
+    {
+        $priceHtml = $this->getProductPriceHtml('simple-product-tax-both');
+        $this->assertFinalPrice($priceHtml, 10.00);
+        $this->assertAsLowAsPriceWithTaxes($priceHtml, 5.500001, 5.00);
     }
 }

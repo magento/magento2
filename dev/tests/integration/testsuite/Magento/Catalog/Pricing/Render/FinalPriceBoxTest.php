@@ -6,28 +6,17 @@
 
 namespace Magento\Catalog\Pricing\Render;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Pricing\Price\FinalPrice;
-use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
-use Magento\Catalog\Test\Fixture\Product as ProductFixture;
-use Magento\Customer\Model\Group;
-use Magento\Framework\App\Area;
-use Magento\Framework\App\State;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Pricing\Render\Amount;
+use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Framework\Pricing\Render\RendererPool;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Pricing\Render\Amount;
+use Magento\Framework\App\State;
+use Magento\Framework\App\Area;
 use Magento\Framework\View\TemplateEngine\Php;
 use Magento\Framework\View\TemplateEnginePool;
-use Magento\Tax\Helper\Data;
-use Magento\Tax\Model\Config as TaxConfig;
-use Magento\Tax\Test\Fixture\CustomerTaxClass as CustomerTaxClassFixture;
-use Magento\Tax\Test\Fixture\ProductTaxClass as ProductTaxClassFixture;
-use Magento\Tax\Test\Fixture\TaxRate as TaxRateFixture;
-use Magento\Tax\Test\Fixture\TaxRule as TaxRuleFixture;
-use Magento\TestFramework\Fixture\Config as ConfigFixture;
-use Magento\TestFramework\Fixture\DataFixture;
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -108,7 +97,8 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
 
         $this->rendererPool->setData(
             [
-                'default' => [
+                'default' =>
+                    [
                         'default_amount_render_class' => Amount::class,
                         'default_amount_render_template' => 'Magento_Catalog::product/price/amount/default.phtml'
                     ]
@@ -156,44 +146,5 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
     public function testProductSetDifferentStorePricesWithoutTierPriceShouldNotShowAsLowAs()
     {
         $this->assertEmpty($this->finalPriceBox->renderAmountMinimal());
-    }
-
-    #[
-        ConfigFixture(TaxConfig::CONFIG_XML_PATH_PRICE_INCLUDES_TAX, 0, 'store', 'default'),
-        ConfigFixture(TaxConfig::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE, 3, 'store', 'default'),
-        DataFixture(
-            TaxRateFixture::class,
-            [],
-            'rate'
-        ),
-        DataFixture(
-            TaxRuleFixture::class,
-            [
-                'customer_tax_class_ids' => [3],
-                'product_tax_class_ids' => [2],
-                'tax_rate_ids' => ['$rate.id$']
-            ],
-            'rule'
-        ),
-        DataFixture(CategoryFixture::class, as: 'category'),
-        DataFixture(
-            ProductFixture::class,
-            [
-                'sku' => 'tier_prices',
-                'category_ids' => ['1', '$category.id$'],
-                'tier_prices' => [
-                    [
-                        'customer_group_id' => Group::NOT_LOGGED_IN_ID,
-                        'qty' => 2,
-                        'value' => 5
-                    ]
-                ]
-            ]
-        )
-    ]
-    public function testRenderAmountMinimalProductWithTierPricesShouldShowMinTierPriceWithTaxes()
-    {
-        $result = $this->finalPriceBox->renderAmountMinimal();
-        $this->assertStringContainsString('$5.00', $result);
     }
 }
