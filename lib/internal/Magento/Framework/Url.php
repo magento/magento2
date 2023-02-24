@@ -1014,7 +1014,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $value
      * @return string
      * @deprecated 101.0.0
-     * @see https://github.com/magento-commerce/magento2ce/commit/6729b6e01368248abc33300208eb292c95050203
+     * @see https://github.com/magento/magento2/commit/6729b6e01368248abc33300208eb292c95050203
      */
     public function escape($value)
     {
@@ -1166,7 +1166,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @return \Magento\Framework\Url\ModifierInterface
      * @deprecated 101.0.0
-     * @see https://github.com/magento-commerce/magento2ce/commit/6729b6e01368248abc33300208eb292c95050203
+     * @see https://github.com/magento/magento2/commit/6729b6e01368248abc33300208eb292c95050203
      */
     private function getUrlModifier()
     {
@@ -1184,7 +1184,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @return Escaper
      * @deprecated 101.0.0
-     * @see https://github.com/magento-commerce/magento2ce/commit/6729b6e01368248abc33300208eb292c95050203
+     * @see https://github.com/magento/magento2/commit/6729b6e01368248abc33300208eb292c95050203
      */
     private function getEscaper()
     {
