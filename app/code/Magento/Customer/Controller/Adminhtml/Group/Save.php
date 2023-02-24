@@ -91,9 +91,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
                 ? [] : $this->getRequest()->getParam('customer_group_excluded_websites');
             $resultRedirect = $this->resultRedirectFactory->create();
             try {
-                $requestCode = $this->getRequest()->getParam('code');
-                $customerGroupCode = is_string($requestCode) ? trim($requestCode) : $requestCode;
-
+                $customerGroupCode = trim((string)$this->getRequest()->getParam('code'));
                 if ($id !== null) {
                     $customerGroup = $this->groupRepository->getById((int)$id);
                     $customerGroupCode = $customerGroupCode ?: $customerGroup->getCode();
