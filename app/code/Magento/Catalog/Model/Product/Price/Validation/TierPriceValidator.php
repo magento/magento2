@@ -475,6 +475,7 @@ class TierPriceValidator
             $item = array_shift($items);
 
             if (!$item) {
+                $this->customerGroupsByCode[$code] = false;
                 return false;
             }
 
@@ -482,6 +483,7 @@ class TierPriceValidator
             $itemId = $item->getId();
 
             if ($itemCode !== $code) {
+                $this->customerGroupsByCode[$code] = false;
                 return false;
             }
 
