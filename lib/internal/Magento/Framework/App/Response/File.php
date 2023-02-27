@@ -54,6 +54,8 @@ class File extends Http implements NotCacheableInterface
         'contentLength' => null,
         // Whether to remove the file after it is sent to the client
         'remove' => false,
+        // Whether to send the file as attachment
+        'attachment' => true
     ];
 
     /**
@@ -116,13 +118,15 @@ class File extends Http implements NotCacheableInterface
         }
 
         $this->response->setHttpResponseCode(200);
-        $this->response->setHeader('Content-Type', $this->options['contentType'], $forceHeaders)
-            ->setHeader('Content-Length', $this->options['contentLength'], $forceHeaders)
-            ->setHeader(
+        if ($this->options['attachment']) {
+            $this->response->setHeader(
                 'Content-Disposition',
                 'attachment; filename="' . $this->options['fileName'] . '"',
                 $forceHeaders
-            )
+            );
+        }
+        $this->response->setHeader('Content-Type', $this->options['contentType'], $forceHeaders)
+            ->setHeader('Content-Length', $this->options['contentLength'], $forceHeaders)
             ->setHeader('Pragma', 'public', $forceHeaders)
             ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', $forceHeaders)
             ->setHeader('Last-Modified', date('r'), $forceHeaders);
@@ -225,6 +229,7 @@ class File extends Http implements NotCacheableInterface
      */
     private function afterFileIsSent(): void
     {
+        $this->response->clearBody();
         if ($this->options['remove']) {
             $dir = $this->filesystem->getDirectoryWrite($this->options['directoryCode']);
             $dir->delete($this->options['filePath']);

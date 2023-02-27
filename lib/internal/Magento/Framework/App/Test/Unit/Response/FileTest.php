@@ -180,9 +180,9 @@ class FileTest extends TestCase
         $this->responseMock->expects($this->exactly(6))
             ->method('setHeader')
             ->withConsecutive(
+                ['Content-Disposition', 'attachment; filename="' . $fileName . '"', true],
                 ['Content-Type', $fileMimetype, true],
                 ['Content-Length', $fileSize, true],
-                ['Content-Disposition', 'attachment; filename="' . $fileName . '"', true],
                 ['Pragma', 'public', true],
                 ['Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true],
                 [
@@ -255,9 +255,9 @@ class FileTest extends TestCase
         $this->responseMock->expects($this->exactly(6))
             ->method('setHeader')
             ->withConsecutive(
+                ['Content-Disposition', 'attachment; filename="' . $fileName . '"', true],
                 ['Content-Type', $fileMimetype, true],
                 ['Content-Length', $fileSize, true],
-                ['Content-Disposition', 'attachment; filename="' . $fileName . '"', true],
                 ['Pragma', 'public', true],
                 ['Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true],
                 [
@@ -283,9 +283,9 @@ class FileTest extends TestCase
         $this->responseMock->expects($this->exactly(6))
             ->method('setHeader')
             ->withConsecutive(
+                ['Content-Disposition', 'attachment; filename="' . $fileName . '"', false],
                 ['Content-Type', $fileMimetype, false],
                 ['Content-Length', $fileSize, false],
-                ['Content-Disposition', 'attachment; filename="' . $fileName . '"', false],
                 ['Pragma', 'public', false],
                 ['Cache-Control', 'must-revalidate, post-check=0, pre-check=0', false],
                 [
