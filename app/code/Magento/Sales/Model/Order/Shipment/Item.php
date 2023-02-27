@@ -7,6 +7,7 @@
 namespace Magento\Sales\Model\Order\Shipment;
 
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\ShipmentItemInterface;
 use Magento\Sales\Model\AbstractModel;
 
@@ -136,7 +137,9 @@ class Item extends AbstractModel implements ShipmentItemInterface
             } else {
                 $this->_orderItem = $this->_orderItemFactory->create()->load($this->getOrderItemId());
             }
+            $this->loadChildren();
         }
+
         return $this->_orderItem;
     }
 
@@ -145,7 +148,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      *
      * @param float $qty
      * @return \Magento\Sales\Model\Order\Shipment\Item
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function setQty($qty)
     {
@@ -157,7 +160,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Applying qty to order item
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function register()
     {
@@ -377,6 +380,25 @@ class Item extends AbstractModel implements ShipmentItemInterface
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
-
     //@codeCoverageIgnoreEnd
+
+    /**
+     * @return void
+     */
+    private function loadChildren(): void
+    {
+        $collection = $this->_orderItem->getOrder()->getItemsCollection();
+        $collection->filterByParent($this->_orderItem->getItemId());
+
+        if ($collection->count()) {
+            $this->_orderItem->setData('has_children', true);
+
+            /** @var \Magento\Sales\Model\Order\Item $childItem */
+            foreach ($collection as $childItem) {
+                if ($childItem->getItemId() != $this->_orderItem->getItemId()) {
+                    $this->_orderItem->addChildItem($childItem);
+                }
+            }
+        }
+    }
 }
