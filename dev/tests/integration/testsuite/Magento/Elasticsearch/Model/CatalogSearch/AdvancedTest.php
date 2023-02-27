@@ -17,7 +17,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Check catalog Advanced Search process with Elasticsearch enabled.
+ * Check catalog Advanced Search
  */
 class AdvancedTest extends TestCase
 {
@@ -58,7 +58,6 @@ class AdvancedTest extends TestCase
      * Check that Advanced Search does NOT return products that do NOT have search visibility.
      *
      * @magentoDbIsolation disabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch7
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_two_child_products.php
      * @return void
      */
@@ -76,7 +75,7 @@ class AdvancedTest extends TestCase
     }
 
     /**
-     * Do Elasticsearch query and assert results.
+     * Do search query and assert results.
      *
      * @param int $count
      * @return void

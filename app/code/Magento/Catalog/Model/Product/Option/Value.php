@@ -10,10 +10,9 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Pricing\Price\BasePrice;
-use Magento\Catalog\Pricing\Price\CalculateCustomOptionCatalogRule;
-use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Catalog product option select type model
@@ -33,20 +32,22 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     /**
      * Option type percent
      */
-    const TYPE_PERCENT = 'percent';
+    public const TYPE_PERCENT = 'percent';
 
     /**#@+
      * Constants
      */
-    const KEY_TITLE = 'title';
-    const KEY_SORT_ORDER = 'sort_order';
-    const KEY_PRICE = 'price';
-    const KEY_PRICE_TYPE = 'price_type';
-    const KEY_SKU = 'sku';
-    const KEY_OPTION_TYPE_ID = 'option_type_id';
+    public const KEY_TITLE = 'title';
+    public const KEY_SORT_ORDER = 'sort_order';
+    public const KEY_PRICE = 'price';
+    public const KEY_PRICE_TYPE = 'price_type';
+    public const KEY_SKU = 'sku';
+    public const KEY_OPTION_TYPE_ID = 'option_type_id';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var array
+     */
     protected $_values = [];
 
     /**
@@ -60,8 +61,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     protected $_option;
 
     /**
-     * Value collection factory
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory
      */
     protected $_valueCollectionFactory;
@@ -72,11 +71,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     private $customOptionPriceCalculator;
 
     /**
-     * @var CalculateCustomOptionCatalogRule
-     */
-    private $calculateCustomOptionCatalogRule;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory $valueCollectionFactory
@@ -84,7 +78,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param CustomOptionPriceCalculator|null $customOptionPriceCalculator
-     * @param CalculateCustomOptionCatalogRule|null $calculateCustomOptionCatalogRule
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -93,14 +86,11 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        CustomOptionPriceCalculator $customOptionPriceCalculator = null,
-        CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule = null
+        CustomOptionPriceCalculator $customOptionPriceCalculator = null
     ) {
         $this->_valueCollectionFactory = $valueCollectionFactory;
         $this->customOptionPriceCalculator = $customOptionPriceCalculator
             ?? ObjectManager::getInstance()->get(CustomOptionPriceCalculator::class);
-        $this->calculateCustomOptionCatalogRule = $calculateCustomOptionCatalogRule
-            ?? ObjectManager::getInstance()->get(CalculateCustomOptionCatalogRule::class);
 
         parent::__construct(
             $context,
@@ -264,16 +254,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     public function getPrice($flag = false)
     {
         if ($flag) {
-            $catalogPriceValue = $this->calculateCustomOptionCatalogRule->execute(
-                $this->getProduct(),
-                (float)$this->getData(self::KEY_PRICE),
-                $this->getPriceType() === self::TYPE_PERCENT
-            );
-            if ($catalogPriceValue!==null) {
-                return $catalogPriceValue;
-            } else {
-                return $this->customOptionPriceCalculator->getOptionPriceByPriceCode($this, BasePrice::PRICE_CODE);
-            }
+            return $this->customOptionPriceCalculator->getOptionPriceByPriceCode($this);
         }
         return $this->_getData(self::KEY_PRICE);
     }

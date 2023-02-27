@@ -247,7 +247,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
                         $this->_processDocInstructions($appInfoNode, $tagValue);
                         break;
                     default:
-                        $nodeValue = trim($tagValue);
+                        $nodeValue = $tagValue !== null ? trim($tagValue) : '';
                         $simpleTextNode = $this->_getDom()->createElement(self::APP_INF_NS . ':' . $tagName);
                         $simpleTextNode->appendChild($this->_getDom()->createTextNode($nodeValue));
                         $appInfoNode->appendChild($simpleTextNode);
@@ -336,7 +336,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      */
     protected function _processRequiredAnnotation($annotation, $documentation, \DOMElement $appInfoNode)
     {
-        if (!preg_match("/{{$annotation}:.+}/Ui", $documentation)) {
+        if (!$documentation || !preg_match("/{{$annotation}:.+}/Ui", $documentation)) {
             $annotationNode = $this->_getDom()->createElement(self::APP_INF_NS . ':' . $annotation);
             $appInfoNode->appendChild($annotationNode);
         }
@@ -384,7 +384,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      */
     protected function _processDocInstructions(\DOMElement $appInfoNode, $tagValue)
     {
-        if (preg_match('/(input|output):(.+)/', $tagValue, $docMatches)) {
+        if ($tagValue && preg_match('/(input|output):(.+)/', $tagValue, $docMatches)) {
             $docInstructionsNode = $this->_getDom()->createElement(self::APP_INF_NS . ':docInstructions');
             $directionNode = $this->_getDom()->createElement(self::APP_INF_NS . ':' . $docMatches[1]);
             $directionValueNode = $this->_getDom()->createElement(self::APP_INF_NS . ':' . $docMatches[2]);
@@ -403,7 +403,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      */
     protected function _processSeeLink(\DOMElement $appInfoNode, $tagValue)
     {
-        if (preg_match('|([http://]?.+):(.+):(.+)|i', $tagValue, $matches)) {
+        if ($tagValue && preg_match('|([http://]?.+):(.+):(.+)|i', $tagValue, $matches)) {
             $seeLink = ['url' => $matches[1], 'title' => $matches[2], 'for' => $matches[3]];
             $seeLinkNode = $this->_getDom()->createElement(self::APP_INF_NS . ':seeLink');
             foreach (['url', 'title', 'for'] as $subNodeName) {
@@ -453,8 +453,8 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
         $callInfoRegExp = '/([a-z].+):(returned|requiredInput):(yes|no|always|conditionally)/i';
         if (preg_match($callInfoRegExp, $tagValue)) {
             list($callName, $direction, $condition) = explode(':', $tagValue);
-            $condition = strtolower($condition);
-            if (preg_match('/allCallsExcept\(([a-zA-Z].+)\)/', $callName, $calls)) {
+            $condition = $condition !== null ? strtolower($condition) : '';
+            if ($callName && preg_match('/allCallsExcept\(([a-zA-Z].+)\)/', $callName, $calls)) {
                 $callInfo[$direction][$condition] = [
                     'allCallsExcept' => $calls[1],
                 ];

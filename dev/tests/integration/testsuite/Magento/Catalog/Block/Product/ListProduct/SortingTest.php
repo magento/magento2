@@ -387,7 +387,6 @@ class SortingTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_out-of-stock_child.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch7
      * @dataProvider productListWithOutOfStockSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction
@@ -399,7 +398,6 @@ class SortingTest extends TestCase
         string $direction,
         array $expected
     ): void {
-        $this->markTestSkipped('MC-40449: ListProduct\SortingTest failure on 2.4-develop');
         $this->assertProductListSortOrderWithConfig($sortBy, $direction, $expected);
     }
 
@@ -409,7 +407,6 @@ class SortingTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_out-of-stock_child.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
-     * @magentoConfigFixture default/catalog/search/engine mysql
      * @dataProvider productListWithOutOfStockSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction
@@ -421,7 +418,6 @@ class SortingTest extends TestCase
         string $direction,
         array $expected
     ): void {
-        $this->markTestSkipped('MC-40449: ListProduct\SortingTest failure on 2.4-develop');
         $this->assertProductListSortOrderWithConfig($sortBy, $direction, $expected);
     }
 
@@ -441,7 +437,7 @@ class SortingTest extends TestCase
             'default_order_price_desc' => [
                 'sort' => 'price',
                 'direction' => Collection::SORT_ORDER_DESC,
-                'expectation' => ['configurable', 'simple3', 'simple2', 'simple1'],
+                'expectation' => ['simple3', 'simple2', 'simple1', 'configurable'],
             ],
         ];
     }

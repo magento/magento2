@@ -20,6 +20,7 @@
             <group value="checkout"/>
             <group value="tax"/>
             <group value="weee"/>
+            <group value="cloud_smoke"/>
         </annotations>
 
         <before>

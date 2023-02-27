@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Analytics\Test\Unit\Model\Connector;
 
+use Laminas\Http\Request;
+use Laminas\Http\Response;
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Config\Backend\Baseurl\SubscriptionUpdateHandler;
 use Magento\Analytics\Model\Connector\Http\ClientInterface;
@@ -14,7 +16,6 @@ use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Analytics\Model\Connector\UpdateCommand;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\FlagManager;
-use Magento\Framework\HTTP\ZendClient;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -102,17 +103,19 @@ class UpdateCommandTest extends TestCase
             ->method('getToken')
             ->willReturn($token);
 
+        $response = new Response();
+        $response->setStatusCode(Response::STATUS_CODE_200);
         $this->httpClientMock->expects($this->once())
             ->method('request')
             ->with(
-                ZendClient::PUT,
+                Request::METHOD_PUT,
                 $configVal,
                 [
                     'url' => $url,
                     'new-url' => $configVal,
                     'access-token' => $token
                 ]
-            )->willReturn(new \Zend_Http_Response(200, []));
+            )->willReturn($response);
 
         $this->responseResolverMock->expects($this->once())
             ->method('getResult')

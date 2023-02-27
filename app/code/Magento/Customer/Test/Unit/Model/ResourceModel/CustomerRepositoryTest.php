@@ -232,10 +232,10 @@ class CustomerRepositoryTest extends TestCase
                 'setFailuresNum',
                 'setFirstFailure',
                 'setLockExpires',
-                'setGroupId'
+                'setGroupId',
             ]
         )
-            ->onlyMethods(['getId', 'setId', 'getAttributeSetId', 'getDataModel', 'save'])
+            ->onlyMethods(['getId', 'setId', 'getAttributeSetId', 'getDataModel', 'save', 'setOrigData'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -275,10 +275,13 @@ class CustomerRepositoryTest extends TestCase
             ->willReturn($customerId);
         $this->customer
             ->method('__toArray')
-            ->willReturnOnConsecutiveCalls(['group_id' => 1], []);
-        $customerModel->expects($this->once())
-            ->method('setGroupId')
-            ->with(1);
+            ->willReturnOnConsecutiveCalls(['firstname' => 'firstname', 'group_id' => 1], []);
+        $customerModel->expects($this->exactly(2))
+            ->method('setOrigData')
+            ->withConsecutive(
+                ['firstname', 'firstname'],
+                ['group_id', 1]
+            );
         $this->customerRegistry->expects($this->atLeastOnce())
             ->method('retrieve')
             ->with($customerId)

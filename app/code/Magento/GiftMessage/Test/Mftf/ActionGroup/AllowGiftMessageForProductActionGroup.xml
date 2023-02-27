@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AllowGiftMessageForProductActionGroup">
+        <annotations>
+            <description>Sets Allow Gift Message For a product</description>
+        </annotations>
+        <arguments>
+            <argument name="allowGiftMsg" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductGridSection.productCollapsibleColumns('closed','Gift Options')}}" dependentSelector="{{AdminProductGridSection.productCollapsibleColumns('closed','Gift Options')}}" visible="true" stepKey="expandGiftOptions"/>
+        <scrollTo selector="{{AdminProductGridSection.allowGiftMessageCheckbox}}" x="-200" y="-200" stepKey="scrollToUncheckUseConfigSettings"/>
+        <uncheckOption selector="{{AdminProductGridSection.allowGiftMessageCheckbox}}" stepKey="uncheckUseConfigSettings"/>
+        <conditionalClick selector="{{AdminProductGridSection.allowGiftMessageToggle(allowGiftMsg)}}" dependentSelector="{{AdminProductGridSection.allowGiftMessageToggle(allowGiftMsg)}}" visible="true" stepKey="setTheValue"/>
+    </actionGroup>
+</actionGroups>

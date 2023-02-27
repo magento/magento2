@@ -58,6 +58,9 @@
             <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="deleteDirectory" stepKey="deleteImportImagesFilesDirectoryS3" after="deleteImportFilesDirectoryS3">
                 <argument name="path">var/import/images/test_image_duplication</argument>
             </helper>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache" after="deleteImportImagesFilesDirectoryS3">
+                <argument name="tags" value=""/>
+            </actionGroup>
 
             <!-- Disable AWS S3 Remote Storage & Delete Local Data -->
             <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage" after="logoutFromAdmin"/>
