@@ -13,6 +13,7 @@ use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\Response\File;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Driver\File\Mime;
 use Magento\Framework\Session\Config\ConfigInterface;
@@ -101,33 +102,28 @@ class FileTest extends TestCase
     public function testSendResponseWithMissingFilePath(): void
     {
         $options = [];
-        $directory = $this->getMockForAbstractClass(WriteInterface::class);
-        $this->filesystemMock->expects($this->once())
-            ->method('getDirectoryWrite')
-            ->with(DirectoryList::ROOT)
-            ->willReturn($directory);
-        $this->expectExceptionMessage('File path is required.');
+        $this->expectExceptionMessage('File name is required.');
         $this->getModel($options)->sendResponse();
     }
 
     public function testSendResponseWithFileThatDoesNotExist(): void
     {
         $options = [
-            'filePath' => 'path/to/file'
+            'filePath' => 'path/to/file.pdf'
         ];
-        $directory = $this->getMockForAbstractClass(WriteInterface::class);
+        $directory = $this->getMockForAbstractClass(ReadInterface::class);
         $this->filesystemMock->expects($this->once())
-            ->method('getDirectoryWrite')
+            ->method('getDirectoryRead')
             ->with(DirectoryList::ROOT)
             ->willReturn($directory);
         $directory->expects($this->once())
             ->method('isExist')
             ->willReturn(false);
-        $this->expectExceptionMessage("File 'path/to/file' does not exists.");
+        $this->expectExceptionMessage("File 'path/to/file.pdf' does not exists.");
         $this->getModel($options)->sendResponse();
     }
 
-    public function testSendResponseWithFilePathOnly(): void
+    public function testSendResponseWithFilePath(): void
     {
         $fileSize = 1024;
         $filePath = 'path/to/file.pdf';
@@ -140,7 +136,7 @@ class FileTest extends TestCase
         $options = [
             'filePath' => $filePath
         ];
-        $directory = $this->getMockForAbstractClass(WriteInterface::class);
+        $directory = $this->getMockForAbstractClass(ReadInterface::class);
         $directory->expects($this->once())
             ->method('isExist')
             ->with($filePath)
@@ -153,7 +149,8 @@ class FileTest extends TestCase
             ->method('stat')
             ->with($filePath)
             ->willReturn($stat);
-        $directory->expects($this->never())
+        $writeDirectory = $this->getMockForAbstractClass(WriteInterface::class);
+        $writeDirectory->expects($this->never())
             ->method('delete')
             ->with($filePath);
         $stream = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\File\WriteInterface::class);
@@ -166,10 +163,14 @@ class FileTest extends TestCase
             ->willReturn(true);
         $stream->expects($this->once())
             ->method('close');
-        $this->filesystemMock->expects($this->once())
-            ->method('getDirectoryWrite')
+        $this->filesystemMock->expects($this->exactly(2))
+            ->method('getDirectoryRead')
             ->with(DirectoryList::ROOT)
             ->willReturn($directory);
+        $this->filesystemMock->expects($this->never())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::ROOT)
+            ->willReturn($writeDirectory);
         $this->mimeMock->expects($this->once())
             ->method('getMimeType')
             ->willReturn($fileMimetype);
@@ -179,7 +180,7 @@ class FileTest extends TestCase
         $this->responseMock->expects($this->exactly(6))
             ->method('setHeader')
             ->withConsecutive(
-                ['Content-type', $fileMimetype, true],
+                ['Content-Type', $fileMimetype, true],
                 ['Content-Length', $fileSize, true],
                 ['Content-Disposition', 'attachment; filename="' . $fileName . '"', true],
                 ['Pragma', 'public', true],
@@ -210,7 +211,7 @@ class FileTest extends TestCase
             'filePath' => $filePath,
             'remove' => true
         ];
-        $directory = $this->getMockForAbstractClass(WriteInterface::class);
+        $directory = $this->getMockForAbstractClass(ReadInterface::class);
         $directory->expects($this->once())
             ->method('isExist')
             ->with($filePath)
@@ -223,7 +224,8 @@ class FileTest extends TestCase
             ->method('stat')
             ->with($filePath)
             ->willReturn($stat);
-        $directory->expects($this->once())
+        $writeDirectory = $this->getMockForAbstractClass(WriteInterface::class);
+        $writeDirectory->expects($this->once())
             ->method('delete')
             ->with($filePath);
         $stream = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\File\WriteInterface::class);
@@ -236,10 +238,14 @@ class FileTest extends TestCase
             ->willReturn(true);
         $stream->expects($this->once())
             ->method('close');
+        $this->filesystemMock->expects($this->exactly(2))
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::ROOT)
+            ->willReturn($directory);
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::ROOT)
-            ->willReturn($directory);
+            ->willReturn($writeDirectory);
         $this->mimeMock->expects($this->once())
             ->method('getMimeType')
             ->willReturn($fileMimetype);
@@ -249,7 +255,7 @@ class FileTest extends TestCase
         $this->responseMock->expects($this->exactly(6))
             ->method('setHeader')
             ->withConsecutive(
-                ['Content-type', $fileMimetype, true],
+                ['Content-Type', $fileMimetype, true],
                 ['Content-Length', $fileSize, true],
                 ['Content-Disposition', 'attachment; filename="' . $fileName . '"', true],
                 ['Pragma', 'public', true],
@@ -266,34 +272,123 @@ class FileTest extends TestCase
         $this->getModel($options)->sendResponse();
     }
 
+    public function testSendResponseWithRawContent(): void
+    {
+        $fileMimetype = 'application/octet-stream';
+        $fileSize = 18;
+        $fileName = 'file.pdf';
+        $options = [
+            'fileName' => $fileName,
+        ];
+        $this->responseMock->expects($this->exactly(6))
+            ->method('setHeader')
+            ->withConsecutive(
+                ['Content-Type', $fileMimetype, false],
+                ['Content-Length', $fileSize, false],
+                ['Content-Disposition', 'attachment; filename="' . $fileName . '"', false],
+                ['Pragma', 'public', false],
+                ['Cache-Control', 'must-revalidate, post-check=0, pre-check=0', false],
+                [
+                    'Last-Modified',
+                    $this->callback(fn (string $str) => preg_match('/\+|\-\d{4}$/', $str) !== false),
+                    false
+                ],
+            )
+            ->willReturnSelf();
+        $this->responseMock->expects($this->once())
+            ->method('getContent')
+            ->willReturn('Bienvenue à Paris');
+        $this->getModel($options)->sendResponse();
+    }
+
     public function testSetHeader(): void
     {
-        $model = $this->getModel();
+        $options = [
+            'filePath' => 'path/to/file.pdf'
+        ];
+        $model = $this->getModel($options);
         $this->responseMock->expects($this->once())
             ->method('setHeader')
-            ->with('Content-type', 1024, true)
+            ->with('Content-Type', 1024, true)
             ->willReturnSelf();
-        $this->assertSame($model, $model->setHeader('Content-type', 1024, true));
+        $this->assertSame($model, $model->setHeader('Content-Type', 1024, true));
     }
 
     public function testGetHeader(): void
     {
-        $model = $this->getModel();
+        $options = [
+            'filePath' => 'path/to/file.pdf'
+        ];
+        $model = $this->getModel($options);
         $this->responseMock->expects($this->once())
             ->method('getHeader')
-            ->with('Content-type')
+            ->with('Content-Type')
             ->willReturn(2048);
-        $this->assertEquals(2048, $model->getHeader('Content-type'));
+        $this->assertEquals(2048, $model->getHeader('Content-Type'));
     }
 
     public function testClearHeader(): void
     {
-        $model = $this->getModel();
+        $options = [
+            'filePath' => 'path/to/file.pdf'
+        ];
+        $model = $this->getModel($options);
         $this->responseMock->expects($this->once())
             ->method('clearHeader')
-            ->with('Content-type')
+            ->with('Content-Type')
             ->willReturnSelf();
-        $this->assertSame($model, $model->clearHeader('Content-type'));
+        $this->assertSame($model, $model->clearHeader('Content-Type'));
+    }
+
+    public function testSetBody(): void
+    {
+        $options = [
+            'filePath' => 'path/to/file.pdf'
+        ];
+        $model = $this->getModel($options);
+        $this->responseMock->expects($this->once())
+            ->method('setBody')
+            ->with('Hello World')
+            ->willReturnSelf();
+        $this->assertSame($model, $model->setBody('Hello World'));
+    }
+
+    public function testAppendBody(): void
+    {
+        $options = [
+            'filePath' => 'path/to/file.pdf'
+        ];
+        $model = $this->getModel($options);
+        $this->responseMock->expects($this->once())
+            ->method('appendBody')
+            ->with('Hello World')
+            ->willReturnSelf();
+        $this->assertSame($model, $model->appendBody('Hello World'));
+    }
+
+    public function testGetContent(): void
+    {
+        $options = [
+            'filePath' => 'path/to/file.pdf'
+        ];
+        $model = $this->getModel($options);
+        $this->responseMock->expects($this->once())
+            ->method('getContent')
+            ->willReturn('Hello World');
+        $this->assertEquals('Hello World', $model->getContent());
+    }
+
+    public function testSetContent(): void
+    {
+        $options = [
+            'filePath' => 'path/to/file.pdf'
+        ];
+        $model = $this->getModel($options);
+        $this->responseMock->expects($this->once())
+            ->method('setContent')
+            ->with('Hello World')
+            ->willReturnSelf();
+        $this->assertSame($model, $model->setContent('Hello World'));
     }
 
     private function getModel(array $options = []): File
