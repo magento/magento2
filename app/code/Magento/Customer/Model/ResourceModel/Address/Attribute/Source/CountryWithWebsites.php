@@ -120,16 +120,16 @@ class CountryWithWebsites extends Table
                 $allowedCountries = array_unique(array_merge([], ...$allowedCountries));
             } else {
                 // Address can be added only for the allowed country list.
-                $storeId = null;
+                $websiteId = null;
                 $customerId = $this->request->getParam('parent_id') ?? null;
                 if ($customerId) {
                     $customer = $this->customerRepository->getById($customerId);
-                    $storeId = $customer->getStoreId();
+                    $websiteId = $customer->getWebsiteId();
                 }
 
                 $allowedCountries = $this->allowedCountriesReader->getAllowedCountries(
                     ScopeInterface::SCOPE_WEBSITE,
-                    $storeId
+                    $websiteId
                 );
             }
 
