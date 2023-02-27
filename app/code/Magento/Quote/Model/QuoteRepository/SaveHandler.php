@@ -118,9 +118,8 @@ class SaveHandler
         }
 
         $this->processShippingAssignment($quote);
-        $this->quoteResourceModel->save($quote);
         $quote = $quote->collectTotals();
-        $this->quoteResourceModel->save($quote);
+        $quote = $this->quoteResourceModel->save($quote);
 
         return $quote;
     }
