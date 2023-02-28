@@ -33,10 +33,10 @@ class CompositeTagGenerator implements TagGeneratorInterface
      */
     public function generateTags(ValueInterface $config): array
     {
-        $tags = [];
+        $tagsArray = [];
         foreach ($this->tagGenerators as $tagGenerator) {
-            $tags = array_merge($tags, $tagGenerator->generateTags($config));
+            $tagsArray[] = $tagGenerator->generateTags($config);
         }
-        return $tags;
+        return array_merge(...$tagsArray);
     }
 }

@@ -5,11 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\StoreGraphQl\Model\Cache\Tag\Strategy;
+namespace Magento\Store\Model\Config\Cache\Tag\Strategy;
 
 use Magento\Framework\App\Cache\Tag\StrategyInterface;
 use Magento\Framework\App\Config\ValueInterface;
-use Magento\Store\Model\Config\Cache\Tag\Strategy\TagGeneratorInterface;
 
 /**
  * Produce cache tags for store config.
@@ -17,10 +16,13 @@ use Magento\Store\Model\Config\Cache\Tag\Strategy\TagGeneratorInterface;
 class StoreConfig implements StrategyInterface
 {
     /**
-     * @var \Magento\Store\Model\Config\Cache\Tag\Strategy\TagGeneratorInterface
+     * @var TagGeneratorInterface
      */
     private $tagGenerator;
 
+    /**
+     * @param TagGeneratorInterface $tagGenerator
+     */
     public function __construct(
         TagGeneratorInterface $tagGenerator
     ) {
