@@ -197,7 +197,7 @@ class CountriesCacheTest extends GraphQLPageCacheAbstract
         $this->assertArrayHasKey('countries', $defaultStoreResponseHit['body']);
         $defaultStoreResponseHitResult = $defaultStoreResponseHit['body']['countries'];
         $this->assertCount(1, $defaultStoreResponseHitResult);
-        $this->assertArrayHasKey('US', $defaultStoreResponseHitResult[0]['id']);
+        $this->assertEquals('US', $defaultStoreResponseHitResult[0]['id']);
 
         // Query test store countries after test store country config is changed
         // Verify we obtain a cache MISS at the 2nd time
