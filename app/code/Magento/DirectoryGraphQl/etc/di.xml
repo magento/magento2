@@ -6,11 +6,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Framework\App\Cache\Tag\Strategy\Factory">
+    <type name="Magento\Store\Model\Config\Cache\Tag\Strategy\CompositeTagGenerator">
         <arguments>
-            <argument name="customStrategies" xsi:type="array">
-                <item name="Magento\Framework\App\Config\ValueInterface" xsi:type="object">
-                    Magento\DirectoryGraphQl\Model\Cache\Tag\Strategy\CurrencyConfig
+            <argument name="tagGenerators" xsi:type="array">
+                <item name="currency_tag_generator" xsi:type="object">
+                    Magento\DirectoryGraphQl\Model\Cache\Tag\Strategy\Config\CurrencyTagGenerator
                 </item>
             </argument>
         </arguments>

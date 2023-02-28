@@ -5,18 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\DirectoryGraphQl\Model\Cache\Tag\Strategy;
+namespace Magento\DirectoryGraphQl\Model\Cache\Tag\Strategy\Config;
 
 use Magento\DirectoryGraphQl\Model\Resolver\Currency\Identity;
-use Magento\Framework\App\Cache\Tag\StrategyInterface;
 use Magento\Framework\App\Config\ValueInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Config\Cache\Tag\Strategy\TagGeneratorInterface;
 
 /**
- * Produce cache tags for currency config.
+ * Generator that generates cache tags for currency configuration
  */
-class CurrencyConfig implements StrategyInterface
+class CurrencyTagGenerator implements TagGeneratorInterface
 {
     /**
      * @var string[]
@@ -45,31 +45,23 @@ class CurrencyConfig implements StrategyInterface
     /**
      * @inheritdoc
      */
-    public function getTags($object): array
+    public function generateTags(ValueInterface $config): array
     {
-        if (!is_object($object)) {
-            throw new \InvalidArgumentException('Provided argument is not an object');
-        }
-
-        if ($object instanceof ValueInterface
-            && in_array($object->getPath(), $this->currencyConfigPaths)
-            && $object->isValueChanged()
-        ) {
-            if ($object->getScope() == ScopeInterface::SCOPE_WEBSITES) {
-                $website = $this->storeManager->getWebsite($object->getScopeId());
+        if (in_array($config->getPath(), $this->currencyConfigPaths)) {
+            if ($config->getScope() == ScopeInterface::SCOPE_WEBSITES) {
+                $website = $this->storeManager->getWebsite($config->getScopeId());
                 $storeIds = $website->getStoreIds();
-            } elseif ($object->getScope() == ScopeInterface::SCOPE_STORES) {
-                $storeIds = [$object->getScopeId()];
+            } elseif ($config->getScope() == ScopeInterface::SCOPE_STORES) {
+                $storeIds = [$config->getScopeId()];
             } else {
                 $storeIds = array_keys($this->storeManager->getStores());
             }
-            $ids = [];
+            $tags = [];
             foreach ($storeIds as $storeId) {
-                $ids[] = sprintf('%s_%s', Identity::CACHE_TAG, $storeId);
+                $tags[] = sprintf('%s_%s', Identity::CACHE_TAG, $storeId);
             }
-            return $ids;
+            return $tags;
         }
-
         return [];
     }
 }
