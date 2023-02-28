@@ -243,7 +243,7 @@ class AbstractBlockTest extends TestCase
             ->with('view_block_abstract_to_html_before', ['block' => $this->block]);
         $this->scopeConfigMock
             ->method('getValue')
-            ->with('advanced/modules_disable_output', ScopeInterface::SCOPE_STORE)
+            ->with('advanced/modules_disable_output/' . $moduleName, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
 
         $this->assertSame('', $this->block->toHtml());
@@ -273,7 +273,7 @@ class AbstractBlockTest extends TestCase
             ->method('dispatch');
         $this->scopeConfigMock
             ->method('getValue')
-            ->with('advanced/modules_disable_output', ScopeInterface::SCOPE_STORE)
+            ->with('advanced/modules_disable_output/' . $moduleName, ScopeInterface::SCOPE_STORE)
             ->willReturn(false);
         $this->cacheStateMock->expects($this->any())
             ->method('isEnabled')
