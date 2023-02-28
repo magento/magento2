@@ -659,8 +659,8 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $this->_eventManager->dispatch('view_block_abstract_to_html_before', ['block' => $this]);
 
         if (static::$disabledModules === null) {
-            static::$disabledModules = $this->_scopeConfig->getValue(
-                'advanced/modules_disable_output',
+            static::$disabledModules[$this->getModuleName()] = $this->_scopeConfig->getValue(
+                'advanced/modules_disable_output/' . $this->getModuleName(),
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             ) ?? [];
         }
