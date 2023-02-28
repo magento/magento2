@@ -42,9 +42,6 @@
                 </field>
                 <field id="shipping_policy_content" translate="label" type="textarea" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Shipping Policy</label>
-                    <depends>
-                        <field id="enable_shipping_policy">1</field>
-                    </depends>
                 </field>
             </group>
         </section>
