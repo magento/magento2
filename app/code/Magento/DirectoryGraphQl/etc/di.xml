@@ -12,14 +12,8 @@
                 <item name="currency_tag_generator" xsi:type="object">
                     Magento\DirectoryGraphQl\Model\Cache\Tag\Strategy\Config\CurrencyTagGenerator
                 </item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\App\Cache\Tag\Strategy\Factory">
-        <arguments>
-            <argument name="customStrategies" xsi:type="array">
-                <item name="Magento\Framework\App\Config\ValueInterface" xsi:type="object">
-                    Magento\DirectoryGraphQl\Model\Cache\Tag\Strategy\CountryConfig
+                <item name="country_tag_generator" xsi:type="object">
+                    Magento\DirectoryGraphQl\Model\Cache\Tag\Strategy\Config\CountryTagGenerator
                 </item>
             </argument>
         </arguments>
