@@ -128,7 +128,7 @@ class FixerIoApiLayer implements ImportInterface
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         set_time_limit(0);
         try {
-            $response = $this->getServiceResponse($url, $accessKey);
+            $response = $this->getServiceResponse($url);
         } finally {
             ini_restore('max_execution_time');
         }
