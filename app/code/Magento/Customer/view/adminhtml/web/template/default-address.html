@@ -38,13 +38,13 @@
                 </if>
                 <text args="address.country"></text>
                 <if args="address.telephone">
-                    <br>T: <a attr="href: 'tel:' + address.telephone" text="address.telephone"></a>
+                    <br><translate args="'T'"></translate>: <a attr="href: 'tel:' + address.telephone" text="address.telephone"></a>
                 </if>
                 <if args="address.fax">
-                    <br>F: <text args="address.fax"></text>
+                    <br><translate args="'F'"></translate>: <text args="address.fax"></text>
                 </if>
                 <if args="address.vat_id">
-                    <br>VAT: <text args="address.vat_id"></text>
+                    <br><translate args="'VAT'"></translate>: <text args="address.vat_id"></text>
                 </if>
             </div>
             <translate args="notExistsMessage" if="_.isEmpty($data.address)"></translate>
