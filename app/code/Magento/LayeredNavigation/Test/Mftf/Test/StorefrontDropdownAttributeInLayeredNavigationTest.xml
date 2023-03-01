@@ -17,7 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-36326"/>
             <group value="layeredNavigation"/>
-            <group value="layeredNavigationAttribute"/>
             <group value="catalog"/>
             <group value="SearchEngine"/>
             <group value="pr_exclude"/>
