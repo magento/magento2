@@ -20,16 +20,6 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 class UrlResolverCacheTest extends GraphQlAbstract
 {
     /**
-     * @inheritdoc
-     */
-    protected function setUp(): void
-    {
-        $this->markTestSkipped(
-            'This test will stay skipped until DEVOPS-4924 is resolved'
-        );
-    }
-
-    /**
      * Tests that X-Magento-tags and cache debug headers are correct for product urlResolver
      *
      * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php

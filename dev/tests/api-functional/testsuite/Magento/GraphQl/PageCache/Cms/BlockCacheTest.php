@@ -18,16 +18,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class BlockCacheTest extends GraphQlAbstract
 {
     /**
-     * @inheritdoc
-     */
-    protected function setUp(): void
-    {
-        $this->markTestSkipped(
-            'This test will stay skipped until DEVOPS-4924 is resolved'
-        );
-    }
-
-    /**
      * Test that X-Magento-Tags are correct
      *
      * @magentoApiDataFixture Magento/Cms/_files/block.php
@@ -145,7 +135,7 @@ class BlockCacheTest extends GraphQlAbstract
     {
         $identifiersString = implode(',', $identifiers);
         $query = <<<QUERY
-    { 
+    {
         cmsBlocks(identifiers: ["$identifiersString"]) {
             items {
                 title

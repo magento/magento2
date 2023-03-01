@@ -18,16 +18,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class CacheTagTest extends GraphQlAbstract
 {
     /**
-     * @inheritdoc
-     */
-    protected function setUp(): void
-    {
-        $this->markTestSkipped(
-            'This test will stay skipped until DEVOPS-4924 is resolved'
-        );
-    }
-
-    /**
      * Test if Magento cache tags and debug headers for products are generated properly
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php

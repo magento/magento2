@@ -16,16 +16,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class CartCacheTest extends GraphQlAbstract
 {
-    /**
-     * @inheritdoc
-     */
-    protected function setUp(): void
-    {
-        $this->markTestSkipped(
-            'This test will stay skipped until DEVOPS-4924 is resolved'
-        );
-    }
-
     public function testCartIsNotCached()
     {
         $qty = 2;
@@ -75,7 +65,7 @@ QUERY;
     {
         $addProductToCartQuery =
             <<<QUERY
-        mutation {  
+        mutation {
         addSimpleProductsToCart(
           input: {
             cart_id: "{$maskedCartId}"

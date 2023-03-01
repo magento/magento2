@@ -27,9 +27,6 @@ class PageCacheTest extends GraphQlAbstract
      */
     protected function setUp(): void
     {
-        $this->markTestSkipped(
-            'This test will stay skipped until DEVOPS-4924 is resolved'
-        );
         $this->pageByIdentifier = Bootstrap::getObjectManager()->get(GetPageByIdentifier::class);
     }
 
@@ -140,8 +137,8 @@ class PageCacheTest extends GraphQlAbstract
     private function getPageQuery(int $pageId): string
     {
         $query = <<<QUERY
-{   
-    cmsPage(id: $pageId) {    
+{
+    cmsPage(id: $pageId) {
         title
    	    url_key
         content
