@@ -1,7 +1,7 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 type Query {
-    storeConfig : StoreConfig @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\StoreConfigResolver") @doc(description: "Return details about the store's configuration.") @cache(cacheable: false)
+    storeConfig : StoreConfig @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\StoreConfigResolver") @doc(description: "Return details about the store's configuration.") @cache(cacheIdentity: "Magento\\StoreGraphQl\\Model\\Resolver\\Store\\ConfigIdentity")
     availableStores(
         useCurrentGroup: Boolean @doc(description: "Filter store views by the current store group.")
     ): [StoreConfig] @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\AvailableStoresResolver") @doc(description: "Get a list of available store views and their config information.")
