@@ -1,24 +1,25 @@
 {
     "name": "magento/module-offline-payments",
     "description": "N/A",
-    "config": {
-        "sort-packages": true
-    },
-    "require": {
-        "php": "~7.4.0||~8.1.0",
-        "magento/framework": "*",
-        "magento/module-checkout": "*",
-        "magento/module-payment": "*",
-        "magento/module-quote": "*"
-    },
-    "suggest": {
-        "magento/module-config": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
+    "version": "100.4.3",
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "103.0.*",
+        "magento/module-checkout": "100.4.*",
+        "magento/module-payment": "100.4.*",
+        "magento/module-quote": "101.2.*"
+    },
+    "suggest": {
+        "magento/module-config": "101.2.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -28,3 +29,4 @@
         }
     }
 }
+

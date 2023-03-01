@@ -18,6 +18,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\Data\Form\FormKey;
 
 class ImsConfig extends Config
 {
@@ -59,24 +60,32 @@ class ImsConfig extends Config
     private BackendUrlInterface $backendUrl;
 
     /**
+     * @var FormKey
+     */
+    private FormKey $formKey;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param UrlInterface $url
      * @param WriterInterface $writer
      * @param EncryptorInterface $encryptor
      * @param BackendUrlInterface $backendUrl
+     * @param FormKey $formKey
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         UrlInterface $url,
         WriterInterface $writer,
         EncryptorInterface $encryptor,
-        BackendUrlInterface $backendUrl
+        BackendUrlInterface $backendUrl,
+        FormKey $formKey
     ) {
         parent::__construct($scopeConfig, $url);
         $this->writer = $writer;
         $this->encryptor = $encryptor;
         $this->scopeConfig = $scopeConfig;
         $this->backendUrl = $backendUrl;
+        $this->formKey = $formKey;
     }
 
     /**
@@ -180,17 +189,11 @@ class ImsConfig extends Config
     /**
      * Get Token validation url
      *
-     * @param string $code
-     * @param string $tokenType
      * @return string
      */
-    public function getValidateTokenUrl(string $code, string $tokenType): string
+    public function getValidateTokenUrl(): string
     {
-        return str_replace(
-            ['#{token}', '#{client_id}', '#{token_type}'],
-            [$code, $this->getApiKey(), $tokenType],
-            $this->scopeConfig->getValue(self::XML_PATH_VALIDATE_TOKEN_URL)
-        );
+        return $this->scopeConfig->getValue(self::XML_PATH_VALIDATE_TOKEN_URL);
     }
 
     /**
@@ -253,11 +256,12 @@ class ImsConfig extends Config
         }
 
         return str_replace(
-            ['#{client_id}', '#{redirect_uri}', '#{scope}', '#{locale}'],
+            ['#{client_id}', '#{redirect_uri}', '#{scope}', '#{state}', '#{locale}'],
             [
                 $clientId,
                 $this->getAdminAdobeImsCallBackUrl(),
                 $this->getScopes(),
+                $this->formKey->getFormKey(),
                 $this->getLocale()
             ],
             $this->scopeConfig->getValue(self::XML_PATH_ADMIN_AUTH_URL_PATTERN)
@@ -272,11 +276,12 @@ class ImsConfig extends Config
     public function getAdminAdobeImsReAuthUrl(): string
     {
         return str_replace(
-            ['#{client_id}', '#{redirect_uri}', '#{scope}', '#{locale}'],
+            ['#{client_id}', '#{redirect_uri}', '#{scope}', '#{state}', '#{locale}'],
             [
                 $this->getApiKey(),
                 $this->getAdminAdobeImsReAuthCallBackUrl(),
                 $this->getScopes(),
+                $this->formKey->getFormKey(),
                 $this->getLocale()
             ],
             $this->scopeConfig->getValue(self::XML_PATH_ADMIN_REAUTH_URL_PATTERN)
@@ -345,16 +350,11 @@ class ImsConfig extends Config
     /**
      * Get BackendLogout URL
      *
-     * @param string $accessToken
      * @return string
      */
-    public function getBackendLogoutUrl(string $accessToken) : string
+    public function getBackendLogoutUrl() : string
     {
-        return str_replace(
-            ['#{access_token}', '#{client_secret}', '#{client_id}'],
-            [$accessToken, $this->getPrivateKey(), $this->getApiKey()],
-            $this->scopeConfig->getValue(self::XML_PATH_ADMIN_LOGOUT_URL)
-        );
+        return $this->scopeConfig->getValue(self::XML_PATH_ADMIN_LOGOUT_URL);
     }
 
     /**

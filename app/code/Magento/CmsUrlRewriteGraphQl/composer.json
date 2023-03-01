@@ -2,22 +2,23 @@
     "name": "magento/module-cms-url-rewrite-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
-    "require": {
-        "php": "~7.4.0||~8.1.0",
-        "magento/framework": "*",
-        "magento/module-cms": "*",
-        "magento/module-store": "*",
-        "magento/module-url-rewrite-graph-ql": "*",
-        "magento/module-cms-graph-ql": "*"
-    },
-    "suggest": {
-        "magento/module-cms-url-rewrite": "*",
-        "magento/module-catalog-graph-ql": "*"
-    },
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "100.4.3",
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "103.0.*",
+        "magento/module-cms": "104.0.*",
+        "magento/module-store": "101.1.*",
+        "magento/module-url-rewrite-graph-ql": "100.4.*",
+        "magento/module-cms-graph-ql": "100.4.*"
+    },
+    "suggest": {
+        "magento/module-cms-url-rewrite": "100.4.*",
+        "magento/module-catalog-graph-ql": "100.4.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -27,3 +28,4 @@
         }
     }
 }
+

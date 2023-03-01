@@ -75,7 +75,6 @@ class ImsOrganizationService
                     __('User is not a member of configured Adobe Organization.')
                 );
             }
-
         } catch (\Exception $exception) {
             throw new AdobeImsOrganizationAuthorizationException(
                 __('Organization Membership check can\'t be performed')

@@ -38,25 +38,35 @@ class ImsConnectionTest extends TestCase
      */
     private $adminImsConnection;
 
+    /**
+     * @var Json|mixed|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $json;
+
+    /**
+     * @var ImsConfig|mixed|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $adminImsConfigMock;
+
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $adminImsConfigMock = $this->createMock(ImsConfig::class);
-        $adminImsConfigMock
+        $this->adminImsConfigMock = $this->createMock(ImsConfig::class);
+        $this->adminImsConfigMock
             ->method('getAuthUrl')
             ->willReturn(self::AUTH_URL);
 
         $this->curlFactory = $this->createMock(CurlFactory::class);
 
-        $json = $this->createMock(Json::class);
+        $this->json = $this->createMock(Json::class);
 
         $this->adminImsConnection = $objectManagerHelper->getObject(
             ImsConnection::class,
             [
                 'curlFactory' => $this->curlFactory,
-                'adminImsConfig' => $adminImsConfigMock,
-                'json' => $json,
+                'adminImsConfig' => $this->adminImsConfigMock,
+                'json' => $this->json,
             ]
         );
     }
@@ -91,5 +101,32 @@ class ImsConnectionTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Could not connect to Adobe IMS Service: invalid_scope.');
         $this->adminImsConnection->auth();
+    }
+
+    /**
+     * Token validate test
+     *
+     * @return void
+     */
+    public function testValidateToken(): void
+    {
+        $this->adminImsConfigMock->method('getValidateTokenUrl')
+            ->willReturn('https://ims-na1-stg1.adobelogin.com/ims/validate_token/v1');
+        $this->adminImsConfigMock->method('getApiKey')
+            ->willReturn('api_key');
+        $curlMock = $this->createMock(Curl::class);
+        $curlMock->expects($this->once())
+            ->method('post')
+            ->willReturn(null);
+        $curlMock->method('getBody')
+            ->willReturn('{"valid":1}');
+        $curlMock->method('getStatus')
+            ->willReturn(302);
+        $this->json->method('unserialize')
+            ->with('{"valid":1}')
+            ->willReturn(['valid' => true]);
+        $this->curlFactory->method('create')
+            ->willReturn($curlMock);
+        $this->assertTrue($this->adminImsConnection->validateToken('valid_token'));
     }
 }
