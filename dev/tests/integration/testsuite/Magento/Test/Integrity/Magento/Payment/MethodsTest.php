@@ -26,7 +26,16 @@ class MethodsTest extends \PHPUnit\Framework\TestCase
      */
     public function testPaymentMethod($code, $methodClass)
     {
-        if (in_array($code, ['free', 'substitution', 'vault', 'payflowpro_cc_vault', 'fake_vault'])) {
+        $skipBlockTemplates = [
+            'free',
+            'substitution',
+            'vault',
+            'payflowpro_cc_vault',
+            'fake_vault',
+            'braintree_cc_vault',
+            'braintree_paypal_vault'
+        ];
+        if (in_array($code, $skipBlockTemplates)) {
             return;
         }
         Bootstrap::getObjectManager()->configure($this->getTestConfiguration());

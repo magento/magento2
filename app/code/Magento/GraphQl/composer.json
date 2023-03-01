@@ -2,22 +2,23 @@
     "name": "magento/module-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
-    "require": {
-        "php": "~7.4.0||~8.1.0",
-        "magento/module-eav": "*",
-        "magento/framework": "*",
-        "magento/module-webapi": "*",
-        "magento/module-new-relic-reporting": "*",
-        "magento/module-authorization": "*",
-        "webonyx/graphql-php": "~14.11.3"
-    },
-    "suggest": {
-        "magento/module-graph-ql-cache": "*"
-    },
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "100.4.4",
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/module-eav": "102.1.*",
+        "magento/framework": "103.0.*",
+        "magento/module-webapi": "100.4.*",
+        "magento/module-new-relic-reporting": "100.4.*",
+        "magento/module-authorization": "100.4.*",
+        "webonyx/graphql-php": "~14.11.3"
+    },
+    "suggest": {
+        "magento/module-graph-ql-cache": "100.4.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -27,3 +28,4 @@
         }
     }
 }
+

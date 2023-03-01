@@ -32,6 +32,7 @@ use Magento\Tax\Model\Config as TaxConfig;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use PHPUnit\Framework\TestCase;
+use Magento\Customer\Model\Session;
 
 /**
  * Test for shipping methods management
@@ -319,10 +320,16 @@ class ShippingMethodManagementTest extends TestCase
         $this->changeCustomerAddress($customer->getDefaultShipping());
 
         $quote = $this->objectManager->get(GetQuoteByReservedOrderId::class)->execute('test01');
+        $addressRepository = $this->objectManager->get(AddressRepositoryInterface::class);
+        $address = $addressRepository->getById(1);
+        $address->setIsDefaultShipping(true);
+        $customer->setAddresses([$address]);
+        $customerSession = $this->objectManager->get(Session::class);
+        $customerSession->loginById($customer->getId());
 
         /** @var ShippingMethodManagementInterface $shippingEstimation */
         $shippingEstimation = $this->objectManager->get(ShippingMethodManagementInterface::class);
-        $result = $shippingEstimation->estimateByAddressId($quote->getId(), $customer->getDefaultShipping());
+        $result = $shippingEstimation->estimateByAddressId($quote->getId(), (int)$customer->getDefaultShipping());
 
         $this->assertEquals(6.05, $result[0]->getPriceInclTax());
         $this->assertEquals(5.0, $result[0]->getPriceExclTax());
