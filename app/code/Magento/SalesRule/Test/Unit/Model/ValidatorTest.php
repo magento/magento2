@@ -714,7 +714,7 @@ class ValidatorTest extends TestCase
             ->getMock();
         $cartExtensionMock = $this->getMockBuilder(CartExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getShippingAssignments'])
+            ->addMethods(['getShippingAssignments'])
             ->getMockForAbstractClass();
 
         $quoteMock->method('getStore')

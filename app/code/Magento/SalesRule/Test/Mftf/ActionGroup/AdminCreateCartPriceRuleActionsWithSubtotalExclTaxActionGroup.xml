@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCartPriceRuleActionsWithSubtotalExclTaxActionGroup" extends="AdminCreateCartPriceRuleActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateCartPriceRuleActionGroup. Removes 'fillDiscountAmount'. Adds sub total excl tax conditions for free shipping to a Cart Price Rule.</description>
+        </annotations>
+        <arguments>
+            <argument name="ruleName"/>
+        </arguments>
+        <remove keyForRemoval="fillDiscountAmount"/>
+        <!-- Expand the conditions section -->
+        <grabTextFrom selector="{{AdminCartPriceRulesFormSection.ruleName}}" after="fillRuleName" stepKey="getSubtotalRule"/>
+        <click selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" stepKey="openConditionsSection" after="selectActionType"/>
+        <click selector="#conditions__1__children>li:nth-child(1)>span:nth-child(1) a" after="openConditionsSection" stepKey="addFirstCondition"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelect}}" userInput="{{ruleName.condition1}}" after="addFirstCondition" stepKey="selectCondition1"/>
+        <waitForPageLoad after="selectCondition1" stepKey="waitForConditionLoad"/>
+        <click selector="{{AdminCartPriceRulesFormSection.condition(ruleName.ruleToChange1)}}" after="waitForConditionLoad" stepKey="clickToChooseOption"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.conditionsOperator}}" userInput="{{ruleName.rule1}}" after="clickToChooseOption" stepKey="setOperatorType"/>
+        <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" after="setOperatorType" stepKey="clickEllipsis"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1')}}" userInput="{{ruleName.subtotal}}" after="clickEllipsis" stepKey="fillSubtotalParameter"/>
+        <click selector="{{AdminCartPriceRulesFormSection.discardSubsequentRules}}" after="fillSubtotalParameter" stepKey="clickDiscardSubsequentRules"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.freeShipping}}" userInput="{{ruleName.simple_free_shipping}}" after="clickDiscardSubsequentRules" stepKey="selectForMatchingItemsOnly"/>
+    </actionGroup>
+</actionGroups>
