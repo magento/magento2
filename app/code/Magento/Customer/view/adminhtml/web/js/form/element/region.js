@@ -23,8 +23,8 @@ define([
 
             if (parseFloat(value)) {
                 this.source.set(this.regionScope, this.indexedOptions[value].label);
-            } else if(value === undefined) {
-                this.source.set(this.regionScope,"");
+            } else if (value === undefined) {
+                this.source.set(this.regionScope,'');
             }
         }
     });
