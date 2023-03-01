@@ -19,7 +19,7 @@ use Magento\TestFramework\Config\Model\ConfigStorage;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test Coutries query cache
+ * Test Countries query cache
  */
 class CountriesCacheTest extends GraphQLPageCacheAbstract
 {

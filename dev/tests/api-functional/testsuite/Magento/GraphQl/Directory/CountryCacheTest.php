@@ -402,13 +402,13 @@ class CountryCacheTest extends GraphQLPageCacheAbstract
         );
 
         // Query second store DE country after the country config of its associated second website is changed
-        $responsesecondStoreDeCountry = $this->graphQlQueryWithResponseHeaders(
+        $responseSecondStoreDeCountry = $this->graphQlQueryWithResponseHeaders(
             $this->getQuery('DE'),
             [],
             '',
             ['Store' => $secondStoreCode]
         );
-        $secondStoreDeCountryCacheId = $responsesecondStoreDeCountry['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $secondStoreDeCountryCacheId = $responseSecondStoreDeCountry['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS at the 1st time, the cache is purged
         $secondStoreDeCountryResponse = $this->assertCacheMissAndReturnResponse(
             $this->getQuery('DE'),
