@@ -8,16 +8,13 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminEditCustomerWithAssociatedNewsletterQueueTest">
+    <test name="AdminEditCustomerWithAssociatedNewsletterQueueNewTest">
         <annotations>
-            <stories value="Edit customer if there is associated newsletter queue"/>
-            <title value="Edit customer if there is associated newsletter queue"/>
-            <description value="Edit customer if there is associated newsletter queue"/>
+            <stories value="Edit customer if there is associated newsletter queue new"/>
+            <title value="Edit customer if there is associated newsletter queue new"/>
+            <description value="Edit customer if there is associated newsletter queue new"/>
             <severity value="BLOCKER"/>
             <group value="customer"/>
-            <skip>
-                <issueId value="DEPRECATED">Use AdminEditCustomerWithAssociatedNewsletterQueueNewTest instead</issueId>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
@@ -64,7 +61,7 @@
             <argument name="name" value="{{_defaultNewsletter.name}}"/>
             <argument name="subject" value="{{_defaultNewsletter.subject}}"/>
         </actionGroup>
-        <actionGroup ref="AdminQueueNewsletterActionGroup" stepKey="addNewsletterToQueue">
+        <actionGroup ref="AdminCreateQueueNewsletterActionGroup" stepKey="addNewsletterToQueue">
             <argument name="startAt" value="Dec 21, 2022 11:04:20 AM"/>
         </actionGroup>
 
