@@ -46,6 +46,7 @@ use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Newsletter\Model\SubscriptionManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Save customer action.
@@ -68,6 +69,11 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
      * @var AddressRegistry
      */
     private $addressRegistry;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * Constructor
@@ -99,6 +105,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
      * @param JsonFactory $resultJsonFactory
      * @param SubscriptionManagerInterface $subscriptionManager
      * @param AddressRegistry|null $addressRegistry
+     * @param StoreManagerInterface|null $storeManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -128,7 +135,8 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
         ForwardFactory $resultForwardFactory,
         JsonFactory $resultJsonFactory,
         SubscriptionManagerInterface $subscriptionManager,
-        AddressRegistry $addressRegistry = null
+        AddressRegistry $addressRegistry = null,
+        ?StoreManagerInterface $storeManager = null
     ) {
         parent::__construct(
             $context,
@@ -159,6 +167,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
         );
         $this->subscriptionManager = $subscriptionManager;
         $this->addressRegistry = $addressRegistry ?: ObjectManager::getInstance()->get(AddressRegistry::class);
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -249,6 +258,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
      * @param array $extractedCustomerData
      * @return array
      * @deprecated 102.0.1 must be removed because addresses are save separately for now
+     * @see \Magento\Customer\Controller\Adminhtml\Address\Save
      */
     protected function saveDefaultFlags(array $addressIdList, array &$extractedCustomerData)
     {
@@ -291,6 +301,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
      * @param array $extractedCustomerData
      * @return array
      * @deprecated 102.0.1 addresses are saved separately for now
+     * @see \Magento\Customer\Controller\Adminhtml\Address\Save
      */
     protected function _extractCustomerAddressData(array &$extractedCustomerData)
     {
@@ -358,6 +369,13 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                             " is not related to the customer's associated website."));
                     }
                 }
+
+                $storeId = $customer->getStoreId();
+                if (empty($storeId)) {
+                    $website = $this->storeManager->getWebsite($customer->getWebsiteId());
+                    $storeId = current($website->getStoreIds());
+                }
+                $this->storeManager->setCurrentStore($storeId);
 
                 // Save customer
                 if ($customerId) {
@@ -465,6 +483,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
      *
      * @return EmailNotificationInterface
      * @deprecated 100.1.0
+     * @see no alternative
      */
     private function getEmailNotification()
     {
