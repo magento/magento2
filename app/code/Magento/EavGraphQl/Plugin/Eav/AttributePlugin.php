@@ -13,7 +13,7 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Event\ManagerInterface;
 
 /**
- * Currency plugin triggers clean page cache and provides currency cache identities
+ * EAV plugin runs page cache clean and provides peoper EAV identities.
  */
 class AttributePlugin implements IdentityInterface
 {
@@ -59,6 +59,9 @@ class AttributePlugin implements IdentityInterface
         return $result;
     }
 
+    /**
+     * @inheirtdoc
+     */
     public function getIdentities()
     {
         return $this->identities;
