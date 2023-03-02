@@ -8,12 +8,11 @@ declare(strict_types=1);
 namespace Magento\EavGraphQl\Plugin\Eav;
 
 use Magento\Eav\Model\Entity\Attribute;
-use Magento\Eav\Model\Entity\Attribute as EavAttribute;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Event\ManagerInterface;
 
 /**
- * EAV plugin runs page cache clean and provides peoper EAV identities.
+ * EAV plugin runs page cache clean and provides proper EAV identities.
  */
 class AttributePlugin implements IdentityInterface
 {
@@ -38,25 +37,54 @@ class AttributePlugin implements IdentityInterface
     }
 
     /**
-     * Clean cache by relevant tags.
+     * Clean cache by relevant tags after entity save.
      *
      * @param Attribute $subject
      * @param Attribute $result
      * @return Attribute
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave(
         Attribute $subject,
         Attribute $result
     ): Attribute
     {
+        if (!$subject->isObjectNew()) {
+            $this->triggerCacheClean($subject);
+        }
+        return $result;
+    }
+
+    /**
+     * Clean cache by relevant tags after entity is deleted and afterDelete
+     * handler is executed.
+     *
+     * @param Attribute $subject
+     * @param Attribute $result
+     * @return Attribute
+     */
+    public function afterAfterDelete(
+        Attribute $subject,
+        Attribute $result
+    ) : Attribute
+    {
+        $this->triggerCacheClean($subject);
+        return $result;
+    }
+
+    /**
+     * Trigger cache clean event in event manager.
+     *
+     * @param Attribute $entity
+     * @return void
+     */
+    private function triggerCacheClean(Attribute $entity): void
+    {
         $this->identities[] = sprintf(
             "%s_%s",
-            EavAttribute::CACHE_TAG,
-            $subject->getAttributeCode()
+            Attribute::CACHE_TAG,
+            $entity->getAttributeCode()
         );
         $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this]);
-        return $result;
     }
 
     /**

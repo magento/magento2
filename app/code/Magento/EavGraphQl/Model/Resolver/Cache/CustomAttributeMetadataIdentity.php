@@ -24,6 +24,8 @@ class CustomAttributeMetadataIdentity implements IdentityInterface
                     $item['attribute_code']
                 );
             }
+        } else {
+            return [];
         }
         return $identities;
     }
