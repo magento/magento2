@@ -160,6 +160,39 @@ class NewsletterTest extends TestCase
 
         $this->assertSame($this->model, $this->model->initForm());
     }
+    
+    /**
+     * Test getSubscriberStatusChangedDate
+     */
+    public function testGetSubscriberStatusChangedDate()
+    {
+        $customerId = 999;
+        $websiteId = 1;
+        $storeId = 1;
+        $isSubscribed = true;
+
+        $this->registryMock->method('registry')->with(RegistryConstants::CURRENT_CUSTOMER_ID)
+            ->willReturn($customerId);
+
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer->method('getWebsiteId')->willReturn($websiteId);
+        $customer->method('getStoreId')->willReturn($storeId);
+        $customer->method('getId')->willReturn($customerId);
+        $this->customerRepository->method('getById')->with($customerId)->willReturn($customer);
+
+        $subscriberMock = $this->getMockBuilder(Subscriber::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['loadByCustomer', 'getChangeStatusAt', 'isSubscribed', 'getData'])
+            ->getMock();
+
+        $subscriberMock->method('loadByCustomer')->with($customerId, $websiteId)->willReturnSelf();
+        $subscriberMock->method('getChangeStatusAt')->willReturn('');
+        $subscriberMock->method('isSubscribed')->willReturn($isSubscribed);
+        $subscriberMock->method('getData')->willReturn([]);
+        $this->subscriberFactoryMock->expects($this->once())->method('create')->willReturn($subscriberMock);
+
+        $this->assertEquals('', $this->model->getStatusChangedDate());
+    }
 
     /**
      * Test to initialize the form
