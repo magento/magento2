@@ -23,11 +23,13 @@ class CustomAttributeMetadataIdentity implements IdentityInterface
         $identities = [EavAttribute::CACHE_TAG];
         if (isset($resolvedData['items']) && !empty($resolvedData['items'])) {
             foreach ($resolvedData['items'] as $item) {
-                $identities[] = sprintf(
-                    "%s_%s",
-                    EavAttribute::CACHE_TAG,
-                    $item['attribute_code']
-                );
+                if (is_array($item)) {
+                    $identities[] = sprintf(
+                        "%s_%s",
+                        EavAttribute::CACHE_TAG,
+                        $item['attribute_code']
+                    );
+                }
             }
         } else {
             return [];
