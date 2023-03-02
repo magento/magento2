@@ -89,7 +89,7 @@
         <click selector="{{AdminOrdersGridSection.changeOrderStatus('Cancel')}}" stepKey="clickOnCancel"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersFilters1"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
         <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
             <argument name="orderId" value="$orderNumber"/>
             <argument name="status" value="Canceled"/>
