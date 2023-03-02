@@ -77,7 +77,11 @@ class AttributesJoiner
                     ($spreadFragmentNode = $resolveInfo->fragments[$field->name->value])) {
 
                     foreach ($spreadFragmentNode->selectionSet->selections as $spreadNode) {
-                        if (isset($spreadNode->selectionSet->selections)) {
+                        if (isset($spreadNode->selectionSet->selections)
+                            && $spreadNode->kind === NodeKind::INLINE_FRAGMENT) {
+                            $fragmentFields[] = $this->addInlineFragmentFields($resolveInfo, $spreadNode);
+                        } elseif (isset($spreadNode->selectionSet->selections)
+                            && $spreadNode->kind !== NodeKind::INLINE_FRAGMENT) {
                             $fragmentFields[] = $this->getQueryFields($spreadNode, $resolveInfo);
                         } else {
                             $selectedFields[] = $spreadNode->name->value;
