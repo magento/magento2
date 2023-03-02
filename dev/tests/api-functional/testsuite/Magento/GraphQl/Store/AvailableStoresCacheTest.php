@@ -337,6 +337,7 @@ class AvailableStoresCacheTest extends GraphQLPageCacheAbstract
      *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCachePurgedWithWebsiteScopeConfigChange(): void
     {
@@ -558,6 +559,479 @@ class AvailableStoresCacheTest extends GraphQLPageCacheAbstract
 
         // Query available stores of second store's website (second website) and store group
         // after default configuration is changed
+        // Verify we obtain a cache MISS at the 2nd time
+        $this->assertCacheMissAndReturnResponse(
+            $currentStoreGroupQuery,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCurrentStoreGroupCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+        // Verify we obtain a cache HIT at the 3rd time
+        $this->assertCacheHitAndReturnResponse(
+            $currentStoreGroupQuery,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCurrentStoreGroupCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+    }
+
+    /**
+     * Store change triggers purging only the cache of the changed store.
+     *
+     * Test stores set up:
+     *      STORE - WEBSITE - STORE GROUP
+     *      default - base - main_website_store
+     *      second_store_view - second - second_store
+     *      third_store_view - second - third_store
+     *
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testCachePurgedWithStoreChange(): void
+    {
+        $this->changeToTwoWebsitesThreeStoreGroupsThreeStores();
+        $query = $this->getQuery();
+
+        // Query available stores of default store's website
+        $responseDefaultStore = $this->graphQlQueryWithResponseHeaders($query);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseDefaultStore['headers']);
+        $defaultStoreCacheId = $responseDefaultStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        // Verify we obtain a cache MISS at the 1st time
+        $this->assertCacheMissAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+
+        // Query available stores of second store's website (second website) and any store groups of the website
+        $secondStoreCode = 'second_store_view';
+        $responseSecondStore = $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            ['Store' => $secondStoreCode]
+        );
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseSecondStore['headers']);
+        $secondStoreCacheId = $responseSecondStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $this->assertNotEquals($secondStoreCacheId, $defaultStoreCacheId);
+        // Verify we obtain a cache MISS at the 1st time
+        $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+
+        // Query available stores of second store's website (second website) and store group
+        $currentStoreGroupQuery = $this->getQuery('true');
+        $responseSecondStoreCurrentStoreGroup = $this->graphQlQueryWithResponseHeaders(
+            $currentStoreGroupQuery,
+            [],
+            '',
+            ['Store' => $secondStoreCode]
+        );
+        $this->assertArrayHasKey(
+            CacheIdCalculator::CACHE_ID_HEADER,
+            $responseSecondStoreCurrentStoreGroup['headers']
+        );
+        $secondStoreCurrentStoreGroupCacheId =
+            $responseSecondStoreCurrentStoreGroup['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $this->assertNotEquals($secondStoreCurrentStoreGroupCacheId, $defaultStoreCacheId);
+        // Verify we obtain a cache MISS at the 1st time
+        $this->assertCacheMissAndReturnResponse(
+            $currentStoreGroupQuery,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCurrentStoreGroupCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+
+        // Change third store name
+        /** @var Store $store */
+        $store = $this->objectManager->create(Store::class);
+        $store->load('third_store_view', 'code');
+        $thirdStoreName = 'Third Store View';
+        $thirdStoreNewName = $thirdStoreName . ' 2';
+        $store->setName($thirdStoreNewName);
+        $store->save();
+
+        // Query available stores of default store's website after 3rd store is changed
+        // Verify we obtain a cache HIT at the 2nd time
+        $this->assertCacheHitAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+
+        // Query available stores of second store's website (second website) and any store groups of the website
+        // after 3rd store is changed
+        // Verify we obtain a cache MISS at the 2nd time
+        $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+        // Verify we obtain a cache HIT at the 3rd time
+        $this->assertCacheHitAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+
+        // Query available stores of second store's website (second website) and store group
+        // after 3rd store is changed
+        // Verify we obtain a cache HIT at the 2nd time
+        $this->assertCacheHitAndReturnResponse(
+            $currentStoreGroupQuery,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCurrentStoreGroupCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+
+        // Change second store name
+        /** @var Store $store */
+        $store = $this->objectManager->create(Store::class);
+        $store->load($secondStoreCode, 'code');
+        $secondStoreName = 'Second Store View';
+        $secondStoreNewName = $secondStoreName . ' 2';
+        $store->setName($secondStoreNewName);
+        $store->save();
+
+        // Query available stores of default store's website after 2nd store is changed
+        // Verify we obtain a cache HIT at the 3rd time
+        $this->assertCacheHitAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+
+        // Query available stores of second store's website (second website) and any store groups of the website
+        // after 2nd store group is changed
+        // Verify we obtain a cache MISS at the 4th time
+        $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+        // Verify we obtain a cache HIT at the 5th time
+        $this->assertCacheHitAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+
+        // Query available stores of second store's website (second website) and store group
+        // after 2nd store is changed
+        // Verify we obtain a cache MISS at the 3rd time
+        $this->assertCacheMissAndReturnResponse(
+            $currentStoreGroupQuery,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCurrentStoreGroupCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+        // Verify we obtain a cache HIT at the 4th time
+        $this->assertCacheHitAndReturnResponse(
+            $currentStoreGroupQuery,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCurrentStoreGroupCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+    }
+
+    /**
+     * Store group change triggers purging only the cache of the stores associated with the changed store group.
+     *
+     * Test stores set up:
+     *      STORE - WEBSITE - STORE GROUP
+     *      default - base - main_website_store
+     *      second_store_view - second - second_store
+     *      third_store_view - second - third_store
+     *
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testCachePurgedWithStoreGroupChange(): void
+    {
+        $this->changeToTwoWebsitesThreeStoreGroupsThreeStores();
+        $query = $this->getQuery();
+
+        // Query available stores of default store's website
+        $responseDefaultStore = $this->graphQlQueryWithResponseHeaders($query);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseDefaultStore['headers']);
+        $defaultStoreCacheId = $responseDefaultStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        // Verify we obtain a cache MISS at the 1st time
+        $this->assertCacheMissAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+
+        // Query available stores of second store's website (second website) and any store groups of the website
+        $secondStoreCode = 'second_store_view';
+        $responseSecondStore = $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            ['Store' => $secondStoreCode]
+        );
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseSecondStore['headers']);
+        $secondStoreCacheId = $responseSecondStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $this->assertNotEquals($secondStoreCacheId, $defaultStoreCacheId);
+        // Verify we obtain a cache MISS at the 1st time
+        $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+
+        // Query available stores of second store's website (second website) and store group
+        $currentStoreGroupQuery = $this->getQuery('true');
+        $responseSecondStoreCurrentStoreGroup = $this->graphQlQueryWithResponseHeaders(
+            $currentStoreGroupQuery,
+            [],
+            '',
+            ['Store' => $secondStoreCode]
+        );
+        $this->assertArrayHasKey(
+            CacheIdCalculator::CACHE_ID_HEADER,
+            $responseSecondStoreCurrentStoreGroup['headers']
+        );
+        $secondStoreCurrentStoreGroupCacheId =
+            $responseSecondStoreCurrentStoreGroup['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $this->assertNotEquals($secondStoreCurrentStoreGroupCacheId, $defaultStoreCacheId);
+        // Verify we obtain a cache MISS at the 1st time
+        $this->assertCacheMissAndReturnResponse(
+            $currentStoreGroupQuery,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCurrentStoreGroupCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+
+        // Change third store group name
+        /** @var Group $storeGroup */
+        $storeGroup = $this->objectManager->create(Group::class);
+        $storeGroup->load('third_store', 'code');
+        $thirdStoreGroupName = 'Third store group';
+        $thirdStoreGroupNewName = $thirdStoreGroupName . ' 2';
+        $storeGroup->setName($thirdStoreGroupNewName);
+        $storeGroup->save();
+
+        // Query available stores of default store's website after 3rd store group is changed
+        // Verify we obtain a cache HIT at the 2nd time
+        $this->assertCacheHitAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+
+        // Query available stores of second store's website (second website) and any store groups of the website
+        // after 3rd store group is changed
+        // Verify we obtain a cache MISS at the 2nd time
+        $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+        // Verify we obtain a cache HIT at the 3rd time
+        $this->assertCacheHitAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+
+        // Query available stores of second store's website (second website) and store group
+        // after 3rd store group is changed
+        // Verify we obtain a cache HIT at the 2nd time
+        $this->assertCacheHitAndReturnResponse(
+            $currentStoreGroupQuery,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCurrentStoreGroupCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+
+        // Change second store group name
+        /** @var Group $storeGroup */
+        $storeGroup = $this->objectManager->create(Group::class);
+        $storeGroup->load('second_store', 'code');
+        $secondStoreGroupName = 'Second store group';
+        $secondStoreGroupNewName = $secondStoreGroupName . ' 2';
+        $storeGroup->setName($secondStoreGroupNewName);
+        $storeGroup->save();
+
+        // Query available stores of default store's website after 2nd store group is changed
+        // Verify we obtain a cache HIT at the 3rd time
+        $this->assertCacheHitAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+
+        // Query available stores of second store's website (second website) and any store groups of the website
+        // after 2nd store group is changed
+        // Verify we obtain a cache MISS at the 4th time
+        $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+        // Verify we obtain a cache HIT at the 5th time
+        $this->assertCacheHitAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+
+        // Query available stores of second store's website (second website) and store group
+        // after 2nd store group is changed
+        // Verify we obtain a cache MISS at the 3rd time
+        $this->assertCacheMissAndReturnResponse(
+            $currentStoreGroupQuery,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCurrentStoreGroupCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+        // Verify we obtain a cache HIT at the 4th time
+        $this->assertCacheHitAndReturnResponse(
+            $currentStoreGroupQuery,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCurrentStoreGroupCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+    }
+
+    /**
+     * Store website change triggers purging only the cache of the stores associated with the changed store website.
+     *
+     * Test stores set up:
+     *      STORE - WEBSITE - STORE GROUP
+     *      default - base - main_website_store
+     *      second_store_view - second - second_store
+     *      third_store_view - second - third_store
+     *
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testCachePurgedWithWebsiteChange(): void
+    {
+        $this->changeToTwoWebsitesThreeStoreGroupsThreeStores();
+        $query = $this->getQuery();
+
+        // Query available stores of default store's website
+        $responseDefaultStore = $this->graphQlQueryWithResponseHeaders($query);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseDefaultStore['headers']);
+        $defaultStoreCacheId = $responseDefaultStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        // Verify we obtain a cache MISS at the 1st time
+        $this->assertCacheMissAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+
+        // Query available stores of second store's website and any store groups of the website
+        $secondStoreCode = 'second_store_view';
+        $responseSecondStore = $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            ['Store' => $secondStoreCode]
+        );
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseSecondStore['headers']);
+        $secondStoreCacheId = $responseSecondStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $this->assertNotEquals($secondStoreCacheId, $defaultStoreCacheId);
+        // Verify we obtain a cache MISS at the 1st time
+        $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+
+        // Query available stores of second store's website and store group
+        $currentStoreGroupQuery = $this->getQuery('true');
+        $responseSecondStoreCurrentStoreGroup = $this->graphQlQueryWithResponseHeaders(
+            $currentStoreGroupQuery,
+            [],
+            '',
+            ['Store' => $secondStoreCode]
+        );
+        $this->assertArrayHasKey(
+            CacheIdCalculator::CACHE_ID_HEADER,
+            $responseSecondStoreCurrentStoreGroup['headers']
+        );
+        $secondStoreCurrentStoreGroupCacheId =
+            $responseSecondStoreCurrentStoreGroup['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $this->assertNotEquals($secondStoreCurrentStoreGroupCacheId, $defaultStoreCacheId);
+        // Verify we obtain a cache MISS at the 1st time
+        $this->assertCacheMissAndReturnResponse(
+            $currentStoreGroupQuery,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCurrentStoreGroupCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+
+        // Change second store website name
+        /** @var Website $website */
+        $website = $this->objectManager->create(Website::class);
+        $website->load('second', 'code');
+        $secondStoreWebsiteName = 'Second Test Website';
+        $secondStoreWebsiteNewName = $secondStoreWebsiteName . ' 2';
+        $website->setName($secondStoreWebsiteNewName);
+        $website->save();
+
+        // Query available stores of default store's website after second website is changed
+        // Verify we obtain a cache HIT at the 2nd time
+        $this->assertCacheHitAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]
+        );
+
+        // Query available stores of second store's website (second website) and any store groups of the website
+        // after second website is changed
+        // Verify we obtain a cache MISS at the 2nd time
+        $this->assertCacheMissAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+        // Verify we obtain a cache HIT at the 3rd time
+        $this->assertCacheHitAndReturnResponse(
+            $query,
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
+                'Store' => $secondStoreCode
+            ]
+        );
+
+        // Query available stores of second store's website (second website) and store group
+        // after second website is changed
         // Verify we obtain a cache MISS at the 2nd time
         $this->assertCacheMissAndReturnResponse(
             $currentStoreGroupQuery,
