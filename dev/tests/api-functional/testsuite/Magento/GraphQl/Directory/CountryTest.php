@@ -10,7 +10,7 @@ namespace Magento\GraphQl\Directory;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test the GraphQL endpoint's Coutries query
+ * Test the GraphQL endpoint's Countries query
  */
 class CountryTest extends GraphQlAbstract
 {
