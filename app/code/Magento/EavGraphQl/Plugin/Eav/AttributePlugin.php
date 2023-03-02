@@ -41,12 +41,10 @@ class AttributePlugin implements IdentityInterface
      *
      * @param Attribute $subject
      * @param Attribute $result
+     *
      * @return Attribute
      */
-    public function afterSave(
-        Attribute $subject,
-        Attribute $result
-    ): Attribute
+    public function afterSave(Attribute $subject, Attribute $result): Attribute
     {
         if (!$subject->isObjectNew()) {
             $this->triggerCacheClean($subject);
@@ -55,17 +53,14 @@ class AttributePlugin implements IdentityInterface
     }
 
     /**
-     * Clean cache by relevant tags after entity is deleted and afterDelete
-     * handler is executed.
+     * Clean cache by relevant tags after entity is deleted and afterDelete handler is executed.
      *
      * @param Attribute $subject
      * @param Attribute $result
+     *
      * @return Attribute
      */
-    public function afterAfterDelete(
-        Attribute $subject,
-        Attribute $result
-    ) : Attribute
+    public function afterAfterDelete(Attribute $subject, Attribute $result) : Attribute
     {
         $this->triggerCacheClean($subject);
         return $result;
@@ -88,7 +83,7 @@ class AttributePlugin implements IdentityInterface
     }
 
     /**
-     * @inheirtdoc
+     * @inheritDoc
      */
     public function getIdentities()
     {

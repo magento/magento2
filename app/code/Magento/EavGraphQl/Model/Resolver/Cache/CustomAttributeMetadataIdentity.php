@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
 namespace Magento\EavGraphQl\Model\Resolver\Cache;
 
@@ -11,7 +16,7 @@ use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 class CustomAttributeMetadataIdentity implements IdentityInterface
 {
     /**
-     * @inheirtdoc
+     * @inheritDoc
      */
     public function getIdentities(array $resolvedData): array
     {
