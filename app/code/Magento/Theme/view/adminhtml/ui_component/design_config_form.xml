@@ -56,7 +56,7 @@
             </settings>
             <field name="head_shortcut_icon" formElement="imageUploader">
                 <settings>
-                    <notice translate="true">Not all browsers support all these formats!</notice>
+                    <notice translate="true">Not all browsers support all these formats! Note: ICO file type is supported by ImageMagik adapter that can be set from Store / Configuration / Developer / Image Processing Settings.</notice>
                     <label translate="true">Favicon Icon</label>
                     <componentType>imageUploader</componentType>
                 </settings>

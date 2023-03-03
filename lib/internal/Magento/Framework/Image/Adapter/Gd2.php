@@ -364,7 +364,7 @@ class Gd2 extends AbstractAdapter
      */
     public function checkAlpha($fileName)
     {
-        return (ord(file_get_contents($fileName, false, null, 25, 1)) & 6 & 4) == 4;
+        return (ord(file_get_contents((string)$fileName, false, null, 25, 1)) & 6 & 4) == 4;
     }
 
     /**
@@ -538,8 +538,8 @@ class Gd2 extends AbstractAdapter
         } elseif ($this->getWatermarkPosition() == self::POSITION_STRETCH) {
             $watermark = $this->createWaterMark($watermark, $this->_imageSrcWidth, $this->_imageSrcHeight);
         } elseif ($this->getWatermarkPosition() == self::POSITION_CENTER) {
-            $positionX = $this->_imageSrcWidth / 2 - imagesx($watermark) / 2;
-            $positionY = $this->_imageSrcHeight / 2 - imagesy($watermark) / 2;
+            $positionX = (int) ($this->_imageSrcWidth / 2 - imagesx($watermark) / 2);
+            $positionY = (int) ($this->_imageSrcHeight / 2 - imagesy($watermark) / 2);
             $this->imagecopymergeWithAlphaFix(
                 $this->_imageHandler,
                 $watermark,
@@ -822,7 +822,7 @@ class Gd2 extends AbstractAdapter
      */
     protected function _createImageFromText($text)
     {
-        $width = imagefontwidth($this->_fontSize) * strlen($text);
+        $width = imagefontwidth($this->_fontSize) * strlen((string)$text);
         $height = imagefontheight($this->_fontSize);
 
         $this->_createEmptyImage($width, $height);

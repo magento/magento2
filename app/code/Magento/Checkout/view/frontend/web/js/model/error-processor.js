@@ -24,7 +24,7 @@ define([
             messageContainer = messageContainer || globalMessageList;
 
             if (response.status == 401) { //eslint-disable-line eqeqeq
-                this.reloadPage(url.build('customer/account/login/'));
+                this.redirectTo(url.build('customer/account/login/'));
             } else {
                 try {
                     error = JSON.parse(response.responseText);
@@ -38,9 +38,9 @@ define([
         },
 
         /**
-         * Method to reload page
+         * Method to redirect by requested URL.
          */
-        reloadPage: function (redirectUrl) {
+        redirectTo: function (redirectUrl) {
             window.location.replace(redirectUrl);
         }
     };

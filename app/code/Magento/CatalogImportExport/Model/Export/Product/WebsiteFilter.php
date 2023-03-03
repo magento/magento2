@@ -27,6 +27,7 @@ class WebsiteFilter implements ProductFilterInterface
         }
 
         $collection->addWebsiteFilter($filters[self::NAME]);
+        $collection->setFlag(self::NAME . '_filter_applied');
 
         return $collection;
     }

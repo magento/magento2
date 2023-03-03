@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProductGraphQl\Model\Resolver\Product\Price;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
-use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Framework\Pricing\SaleableInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface;
 use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
+use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\Amount\BaseFactory;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Provides product prices for configurable products
@@ -23,6 +25,11 @@ class Provider implements ProviderInterface
      * @var ConfigurableOptionsProviderInterface
      */
     private $optionsProvider;
+
+    /**
+     * @var BaseFactory
+     */
+    private $amountFactory;
 
     /**
      * @var array
@@ -42,11 +49,14 @@ class Provider implements ProviderInterface
 
     /**
      * @param ConfigurableOptionsProviderInterface $optionsProvider
+     * @param BaseFactory $amountFactory
      */
     public function __construct(
-        ConfigurableOptionsProviderInterface $optionsProvider
+        ConfigurableOptionsProviderInterface $optionsProvider,
+        BaseFactory $amountFactory
     ) {
         $this->optionsProvider = $optionsProvider;
+        $this->amountFactory = $amountFactory;
     }
 
     /**
@@ -109,7 +119,7 @@ class Provider implements ProviderInterface
             }
         }
 
-        return $this->minimalPrice[$code][$product->getId()];
+        return $this->minimalPrice[$code][$product->getId()] ?? $this->amountFactory->create(['amount' => null]);
     }
 
     /**
@@ -132,6 +142,6 @@ class Provider implements ProviderInterface
             }
         }
 
-        return $this->maximalPrice[$code][$product->getId()];
+        return $this->maximalPrice[$code][$product->getId()] ?? $this->amountFactory->create(['amount' => null]);
     }
 }

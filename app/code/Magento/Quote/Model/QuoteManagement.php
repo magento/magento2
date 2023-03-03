@@ -24,6 +24,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Payment\Model\Method\AbstractMethod;
@@ -32,8 +33,8 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address\ToOrder as ToOrderConverter;
 use Magento\Quote\Model\Quote\Address\ToOrderAddress as ToOrderAddressConverter;
-use Magento\Quote\Model\Quote as QuoteEntity;
 use Magento\Quote\Model\Quote\AddressFactory;
+use Magento\Quote\Model\Quote as QuoteEntity;
 use Magento\Quote\Model\Quote\Item\ToOrderItem as ToOrderItemConverter;
 use Magento\Quote\Model\Quote\Payment\ToOrderPayment as ToOrderPaymentConverter;
 use Magento\Quote\Model\ResourceModel\Quote\Item;
@@ -51,6 +52,10 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class QuoteManagement implements CartManagementInterface
 {
+    private const LOCK_PREFIX = 'PLACE_ORDER_';
+
+    private const LOCK_TIMEOUT = 10;
+
     /**
      * @var EventManager
      */
@@ -152,6 +157,11 @@ class QuoteManagement implements CartManagementInterface
     protected $quoteFactory;
 
     /**
+     * @var LockManagerInterface
+     */
+    private $lockManager;
+
+    /**
      * @var QuoteIdMaskFactory
      */
     private $quoteIdMaskFactory;
@@ -201,6 +211,7 @@ class QuoteManagement implements CartManagementInterface
      * @param AddressRepositoryInterface|null $addressRepository
      * @param RequestInterface|null $request
      * @param RemoteAddress $remoteAddress
+     * @param LockManagerInterface $lockManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -227,7 +238,8 @@ class QuoteManagement implements CartManagementInterface
         QuoteIdMaskFactory $quoteIdMaskFactory = null,
         AddressRepositoryInterface $addressRepository = null,
         RequestInterface $request = null,
-        RemoteAddress $remoteAddress = null
+        RemoteAddress $remoteAddress = null,
+        LockManagerInterface $lockManager = null
     ) {
         $this->eventManager = $eventManager;
         $this->submitQuoteValidator = $submitQuoteValidator;
@@ -257,6 +269,8 @@ class QuoteManagement implements CartManagementInterface
             ->get(RequestInterface::class);
         $this->remoteAddress = $remoteAddress ?: ObjectManager::getInstance()
             ->get(RemoteAddress::class);
+        $this->lockManager = $lockManager ?: ObjectManager::getInstance()
+            ->get(LockManagerInterface::class);
     }
 
     /**
@@ -324,7 +338,7 @@ class QuoteManagement implements CartManagementInterface
             $customerActiveQuote->setIsActive(0);
             $this->quoteRepository->save($customerActiveQuote);
 
-        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (NoSuchEntityException $e) {
         }
 
@@ -412,7 +426,9 @@ class QuoteManagement implements CartManagementInterface
         if ($quote->getCheckoutMethod() === self::METHOD_GUEST || !$customerId) {
             $quote->setCustomerId(null);
             $billingAddress = $quote->getBillingAddress();
-            $quote->setCustomerEmail($billingAddress ? $billingAddress->getEmail() : null);
+            if (!$quote->getCustomerEmail()) {
+                $quote->setCustomerEmail($billingAddress ? $billingAddress->getEmail() : null);
+            }
             if ($quote->getCustomerFirstname() === null
                 && $quote->getCustomerLastname() === null
                 && $billingAddress
@@ -424,8 +440,9 @@ class QuoteManagement implements CartManagementInterface
                 }
             }
             $quote->setCustomerIsGuest(true);
-            $groupId = $customer ? $customer->getGroupId() : GroupInterface::NOT_LOGGED_IN_ID;
-            $quote->setCustomerGroupId($groupId);
+            $quote->setCustomerGroupId(
+                $quote->getCustomerId() ? $customer->getGroupId() : GroupInterface::NOT_LOGGED_IN_ID
+            );
         }
 
         $remoteAddress = $this->remoteAddress->getRemoteAddress();
@@ -581,17 +598,13 @@ class QuoteManagement implements CartManagementInterface
         $order->setCustomerFirstname($quote->getCustomerFirstname());
         $order->setCustomerMiddlename($quote->getCustomerMiddlename());
         $order->setCustomerLastname($quote->getCustomerLastname());
-
         if ($quote->getOrigOrderId()) {
             $order->setEntityId($quote->getOrigOrderId());
         }
-
         if ($quote->getReservedOrderId()) {
             $order->setIncrementId($quote->getReservedOrderId());
         }
-
         $this->submitQuoteValidator->validateOrder($order);
-
         $this->eventManager->dispatch(
             'sales_model_service_quote_submit_before',
             [
@@ -599,7 +612,15 @@ class QuoteManagement implements CartManagementInterface
                 'quote' => $quote
             ]
         );
+
+        $lockedName = self::LOCK_PREFIX . $quote->getId();
+        if ($this->lockManager->isLocked($lockedName)) {
+            throw new LocalizedException(__(
+                'A server error stopped your order from being placed. Please try to place your order again.'
+            ));
+        }
         try {
+            $this->lockManager->lock($lockedName, self::LOCK_TIMEOUT);
             $order = $this->orderManagement->place($order);
             $quote->setIsActive(false);
             $this->eventManager->dispatch(
@@ -610,7 +631,9 @@ class QuoteManagement implements CartManagementInterface
                 ]
             );
             $this->quoteRepository->save($quote);
+            $this->lockManager->unlock($lockedName);
         } catch (\Exception $e) {
+            $this->lockManager->unlock($lockedName);
             $this->rollbackAddresses($quote, $order, $e);
             throw $e;
         }
@@ -622,12 +645,13 @@ class QuoteManagement implements CartManagementInterface
      *
      * @param Quote $quote
      * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _prepareCustomerQuote($quote)
     {
-        /** @var Quote $quote */
         $billing = $quote->getBillingAddress();
         $shipping = $quote->isVirtual() ? null : $quote->getShippingAddress();
 
@@ -645,7 +669,7 @@ class QuoteManagement implements CartManagementInterface
                 if ($defaultShipping) {
                     try {
                         $shippingAddress = $this->addressRepository->getById($defaultShipping);
-                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+                        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                     } catch (LocalizedException $e) {
                         // no address
                     }
@@ -679,7 +703,7 @@ class QuoteManagement implements CartManagementInterface
                 if ($defaultBilling) {
                     try {
                         $billingAddress = $this->addressRepository->getById($defaultBilling);
-                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+                        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                     } catch (LocalizedException $e) {
                         // no address
                     }
@@ -700,6 +724,13 @@ class QuoteManagement implements CartManagementInterface
                 $billing->setCustomerAddressData($billingAddress);
                 $this->addressesToSync[] = $billingAddress->getId();
                 $billing->setCustomerAddressId($billingAddress->getId());
+
+                // Admin order: `Same As Billing Address`- when new billing address saved in address book
+                if ($shipping !== null
+                    && !$shipping->getCustomerAddressId()
+                    && $shipping->getSameAsBilling()) {
+                    $shipping->setCustomerAddressId($billingAddress->getId());
+                }
             }
         }
         if ($shipping && !$shipping->getCustomerId() && !$hasDefaultBilling) {

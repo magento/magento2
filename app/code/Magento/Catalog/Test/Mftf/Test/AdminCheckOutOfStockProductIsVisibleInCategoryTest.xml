@@ -18,6 +18,8 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
+             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+
             <!--Set Display out of stock product-->
             <magentoCLI stepKey="setDisplayOutOfStockProduct" command="config:set cataloginventory/options/show_out_of_stock 1" />
             <!-- Login as admin -->

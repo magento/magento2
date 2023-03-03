@@ -9,7 +9,7 @@ Catalog module provides API filtering that allows to limit product selection wit
 ## Structure
 
   [Learn about a typical file structure for a Magento 2 module]
-  (https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html).
+  (https://developer.adobe.com/commerce/php/development/build/component-file-structure/).
 
 ## Observer
 This module observes the following events:
