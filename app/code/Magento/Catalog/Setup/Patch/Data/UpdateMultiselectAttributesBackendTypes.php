@@ -9,13 +9,15 @@ namespace Magento\Catalog\Setup\Patch\Data;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\NonTransactionableInterface;
 
-class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface
+class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface, NonTransactionableInterface
 {
     private const BATCH_SIZE = 10000;
 
@@ -115,7 +117,12 @@ class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface
             $selectForInsert->reset(Select::COLUMNS);
             $selectForInsert->columns($columnNames);
             $connection->query(
-                $connection->insertFromSelect($selectForInsert, $textTable, $columnNames)
+                $connection->insertFromSelect(
+                    $selectForInsert,
+                    $textTable,
+                    $columnNames,
+                    AdapterInterface::INSERT_ON_DUPLICATE
+                )
             );
             $selectForDelete = clone $select;
             $selectForDelete->reset(Select::COLUMNS);
