@@ -31,6 +31,8 @@ class StatusLabel
      */
     private $maskStatusesMapping;
 
+    private static $statusLabels = [];
+
     /**
      * @param StatusFactory $orderStatusFactory
      * @param State $state
@@ -56,14 +58,18 @@ class StatusLabel
      */
     public function getStatusFrontendLabel(?string $code, string $area, int $storeId = null): ?string
     {
-        $code = $this->maskStatusForArea($area, $code);
-        $status = $this->orderStatusFactory->create()->load($code);
+        $cacheKey = $code . $area . ($storeId??'0');
+        if (!isset(self::$statusLabels[$cacheKey])) {
+            $code = $this->maskStatusForArea($area, $code);
+            $status = $this->orderStatusFactory->create()->load($code);
 
-        if ($area === Area::AREA_ADMINHTML) {
-            return $status->getLabel();
+            if ($area === Area::AREA_ADMINHTML) {
+                self::$statusLabels[$cacheKey] = (string) $status->getLabel();
+            } else {
+                self::$statusLabels[$cacheKey] = (string) $status->getStoreLabel($storeId);
+            }
         }
-
-        return (string) $status->getStoreLabel($storeId);
+        return self::$statusLabels[$cacheKey];
     }
 
     /**
