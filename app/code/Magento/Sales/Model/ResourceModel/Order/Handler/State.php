@@ -24,6 +24,7 @@ class State
     public function check(Order $order)
     {
         $currentState = $order->getState();
+        $currentStatus = $order->getStatus();
         if ($currentState == Order::STATE_NEW && $order->getIsInProcess()) {
             $order->setState(Order::STATE_PROCESSING)
                 ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_PROCESSING));
@@ -42,6 +43,9 @@ class State
                 $order->setState(Order::STATE_COMPLETE)
                     ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_COMPLETE));
             }
+        }
+        if ($currentState != $order->getState() || $currentStatus != $order->getStatus()) {
+            $order->addStatusHistoryComment('');
         }
         return $this;
     }
