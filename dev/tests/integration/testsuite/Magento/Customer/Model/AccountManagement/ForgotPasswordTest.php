@@ -7,11 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model\AccountManagement;
 
+use Magento\Catalog\Helper\Data;
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\AccountManagement;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
@@ -40,8 +49,8 @@ class ForgotPasswordTest extends TestCase
     /** @var StoreManagerInterface */
     private $storeManager;
 
-    /** @var CustomerRepositoryInterface */
-    private $customerRepository;
+    /** @var DataFixtureStorage */
+    private $fixtures;
 
     /**
      * @inheritdoc
@@ -54,7 +63,7 @@ class ForgotPasswordTest extends TestCase
         $this->accountManagement = $this->objectManager->get(AccountManagementInterface::class);
         $this->transportBuilder = $this->objectManager->get(TransportBuilderMock::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
-        $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
+        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -73,15 +82,32 @@ class ForgotPasswordTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     *
      * @return void
+     * @throws LocalizedException
      */
+    #[
+        Config(Data::XML_PATH_PRICE_SCOPE, Data::PRICE_SCOPE_WEBSITE),
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store3'),
+        DataFixture(
+            Customer::class,
+            [
+                'store_id' => '$store2.id$',
+                'website_id' => '1',
+                'addresses' => [[]]
+            ],
+            as: 'customer'
+        )
+    ]
     public function testResetPasswordFlowStorefront(): void
     {
-        // Forgot password section
-        $email = 'customer@example.com';
-        $customerId = (int)$this->customerRepository->get($email)->getId();
+        // Forgot password section;
+        $customer = $this->fixtures->get('customer');
+        $email = $customer->getEmail();
+        $customer->getId();
+        $customerId = (int)$customer->getId();
         $result = $this->accountManagement->initiatePasswordReset($email, AccountManagement::EMAIL_RESET);
         $message = $this->transportBuilder->getSentMessage();
         $messageContent = $message->getBody()->getParts()[0]->getRawContent();
@@ -89,13 +115,13 @@ class ForgotPasswordTest extends TestCase
         $this->assertEquals(1, Xpath::getElementsCountForXpath($this->newPasswordLinkPath, $messageContent));
 
         // Send reset password link
-        $websiteId = (int)$this->storeManager->getWebsite('base')->getId();
-        $this->accountManagement->initiatePasswordReset($email, AccountManagement::EMAIL_RESET, $websiteId);
+        $defaultWebsiteId = (int)$this->storeManager->getWebsite('base')->getId();
+        $this->accountManagement->initiatePasswordReset($email, AccountManagement::EMAIL_RESET, $defaultWebsiteId);
 
         // login with old credentials
         $this->assertEquals(
             $customerId,
-            $this->accountManagement->authenticate($email, 'password')->getId()
+            (int)$this->accountManagement->authenticate($email, 'password')->getId()
         );
 
         // Change password
