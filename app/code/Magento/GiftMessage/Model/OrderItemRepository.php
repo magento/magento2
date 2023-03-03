@@ -119,8 +119,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
      */
     public function saveForOrder(OrderInterface $order, int $orderItemId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage)
     {
-        $orderId = $order->getId();
-
         /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
         if (!$orderItem = $order->getItemById($orderItemId)) {
             throw new NoSuchEntityException(
@@ -165,5 +163,4 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
 
         return $this->saveForOrder($order, (int) $orderItemId, $giftMessage);
     }
-
 }

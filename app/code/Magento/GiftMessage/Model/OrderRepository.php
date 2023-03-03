@@ -77,7 +77,7 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
     /**
      * @inheritdoc
      */
-    public function getByOrder(OrderInterface $order) 
+    public function getByOrder(OrderInterface $order)
     {
         if (!$this->helper->isMessagesAllowed('order', $order, $this->storeManager->getStore())) {
             throw new NoSuchEntityException(

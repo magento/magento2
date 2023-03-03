@@ -45,7 +45,11 @@ interface OrderItemRepositoryInterface
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function saveForOrder(OrderInterface $order, int $orderItemId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage);
+    public function saveForOrder(
+        OrderInterface $order,
+        int $orderItemId,
+        \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage
+    );
 
     /**
      * Set the gift message for a specified item in a specified order.
