@@ -19,8 +19,6 @@ use Magento\Sales\Api\Data\OrderInterface;
 class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterface
 {
     /**
-     * Order factory.
-     *
      * @var \Magento\Sales\Model\OrderFactory
      */
     protected $orderFactory;
@@ -33,8 +31,6 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
     protected $storeManager;
 
     /**
-     * Gift message save model.
-     *
      * @var \Magento\GiftMessage\Model\Save
      */
     protected $giftMessageSaveModel;
@@ -47,8 +43,6 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
     protected $helper;
 
     /**
-     * Message factory.
-     *
      * @var \Magento\GiftMessage\Model\MessageFactory
      */
     protected $messageFactory;

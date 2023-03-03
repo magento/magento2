@@ -136,6 +136,8 @@ class OrderGet
     }
 
     /**
+     * Get gift message for orders
+     *
      * @param \Magento\Sales\Api\OrderRepositoryInterface $subject
      * @param \Magento\Sales\Model\ResourceModel\Order\Collection $resultOrder
      * @return \Magento\Sales\Model\ResourceModel\Order\Collection

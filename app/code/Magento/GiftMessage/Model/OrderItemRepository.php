@@ -18,8 +18,6 @@ use Magento\Sales\Api\Data\OrderInterface;
 class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositoryInterface
 {
     /**
-     * Order factory.
-     *
      * @var \Magento\Sales\Model\OrderFactory
      */
     protected $orderFactory;
@@ -46,8 +44,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
     protected $helper;
 
     /**
-     * Message factory.
-     *
      * @var \Magento\GiftMessage\Model\MessageFactory
      */
     protected $messageFactory;
@@ -117,8 +113,11 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
     /**
      * @inheritdoc
      */
-    public function saveForOrder(OrderInterface $order, int $orderItemId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage)
-    {
+    public function saveForOrder(
+        OrderInterface $order,
+        int $orderItemId,
+        \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage
+    ) {
         /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
         if (!$orderItem = $order->getItemById($orderItemId)) {
             throw new NoSuchEntityException(
