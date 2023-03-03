@@ -6,8 +6,6 @@
 
 /**
  * Adminhtml tax rates grid item renderer country
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\TaxImportExport\Block\Adminhtml\Rate\Grid\Renderer;
 

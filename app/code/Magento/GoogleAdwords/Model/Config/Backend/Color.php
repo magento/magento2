@@ -1,22 +1,22 @@
 <?php
 /**
- * Google AdWords Color Backend model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleAdwords\Model\Config\Backend;
 
+use Laminas\Validator\ValidatorInterface;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Color extends \Magento\GoogleAdwords\Model\Config\Backend\AbstractConversion
+class Color extends AbstractConversion
 {
     /**
      * Validation rule conversion color
      *
-     * @return \Zend_Validate_Interface|null
+     * @return ValidatorInterface|null
      */
     protected function _getValidationRulesBeforeSave()
     {

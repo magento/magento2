@@ -82,7 +82,8 @@ class Reviews implements ResolverInterface
         $reviewsCollection = $this->customerReviewsDataProvider->getData(
             (int) $context->getUserId(),
             $args['currentPage'],
-            $args['pageSize']
+            $args['pageSize'],
+            (int) $context->getExtensionAttributes()->getStore()->getId()
         );
 
         return $this->aggregatedReviewsDataProvider->getData($reviewsCollection);

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Email\Model\Template;
 
 use Exception;
+use Magento\Backend\Model\Url as BackendModelUrl;
 use Magento\Cms\Block\Block;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -69,12 +70,14 @@ class Filter extends Template
     /**
      * @var bool
      * @deprecated SID is not being used as query parameter anymore.
+     * @see storeDirective
      */
     protected $_useSessionInUrl = false;
 
     /**
      * @var array
      * @deprecated 101.0.4 Use the new Directive Processor interfaces
+     * @see applyModifiers
      */
     protected $_modifiers = ['nl2br' => ''];
 
@@ -281,6 +284,7 @@ class Filter extends Template
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @deprecated SID query parameter is not used in URLs anymore.
+     * @see setUseSessionInUrl
      */
     public function setUseSessionInUrl($flag)
     {
@@ -585,7 +589,9 @@ class Filter extends Template
          * Pass extra parameter to distinguish stores urls for property Magento\Framework\Url $cacheUrl
          * in multi-store environment
          */
-        $this->urlModel->setScope($this->_storeManager->getStore());
+        if (!$this->urlModel instanceof BackendModelUrl) {
+            $this->urlModel->setScope($this->_storeManager->getStore());
+        }
         $params['_escape_params'] = $this->_storeManager->getStore()->getCode();
 
         return $this->urlModel->getUrl($path, $params);
@@ -638,7 +644,7 @@ class Filter extends Template
      */
     protected function getTransParameters($value)
     {
-        if (preg_match(self::TRANS_DIRECTIVE_REGEX, $value, $matches) !== 1) {
+        if ($value === null || preg_match(self::TRANS_DIRECTIVE_REGEX, $value, $matches) !== 1) {
             return ['', []];  // malformed directive body; return without breaking list
         }
         // phpcs:disable Magento2.Functions.DiscouragedFunction
@@ -688,10 +694,11 @@ class Filter extends Template
      * @param string $default assumed modifier if none present
      * @return array
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
+     * @see explodeModifiers
      */
     protected function explodeModifiers($value, $default = null)
     {
-        $parts = explode('|', $value, 2);
+        $parts = $value !== null ? explode('|', $value, 2) : [];
         if (2 === count($parts)) {
             return $parts;
         }
@@ -707,10 +714,12 @@ class Filter extends Template
      * @param string $modifiers
      * @return string
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
+     * @see applyModifiers
      */
     protected function applyModifiers($value, $modifiers)
     {
-        foreach (explode('|', $modifiers) as $part) {
+        $modifiersParts = $modifiers !== null ? explode('|', $modifiers) : [];
+        foreach ($modifiersParts as $part) {
             if (empty($part)) {
                 continue;
             }
@@ -735,6 +744,7 @@ class Filter extends Template
      * @param string $type
      * @return string
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
+     * @see modifierEscape
      */
     public function modifierEscape($value, $type = 'html')
     {
