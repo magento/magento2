@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
-
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="SimpleTwo" stepKey="createProduct"/>
             <magentoCron stepKey="runCronIndex" groups="index"/>
 
@@ -29,6 +29,7 @@
         </before>
         <after>
             <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <deleteData createDataKey="createProduct" stepKey="deletedProduct"/>
 
             <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
