@@ -11,6 +11,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Sales\Api\Data\OrderInterface;
 
 /**
  * Order gift message repository object.
@@ -76,11 +77,8 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
     /**
      * @inheritdoc
      */
-    public function get($orderId)
+    public function getByOrder(OrderInterface $order) 
     {
-        /** @var \Magento\Sales\Api\Data\OrderInterface $order */
-        $order = $this->orderFactory->create()->load($orderId);
-
         if (!$this->helper->isMessagesAllowed('order', $order, $this->storeManager->getStore())) {
             throw new NoSuchEntityException(
                 __("Either no order exists with this ID or gift message isn't allowed.")
@@ -95,6 +93,16 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
         }
 
         return $this->messageFactory->create()->load($messageId);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function get($orderId)
+    {
+        /** @var \Magento\Sales\Api\Data\OrderInterface $order */
+        $order = $this->orderFactory->create()->load($orderId);
+        return $this->getByOrder($order);
     }
 
     /**

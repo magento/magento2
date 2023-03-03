@@ -84,7 +84,7 @@ class OrderGet
 
         try {
             /** @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
-            $giftMessage = $this->giftMessageOrderRepository->get($order->getEntityId());
+            $giftMessage = $this->giftMessageOrderRepository->getByOrder($order);
         } catch (NoSuchEntityException $e) {
             return $order;
         }
@@ -116,8 +116,8 @@ class OrderGet
 
                 try {
                     /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
-                    $giftMessage = $this->giftMessageOrderItemRepository->get(
-                        $order->getEntityId(),
+                    $giftMessage = $this->giftMessageOrderItemRepository->getByOrder(
+                        $order,
                         $orderItem->getItemId()
                     );
                 } catch (NoSuchEntityException $e) {

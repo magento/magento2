@@ -10,6 +10,7 @@ namespace Magento\GiftMessage\Model;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
+use Magento\Sales\Api\Data\OrderInterface;
 
 /**
  * Order item gift message repository object.
@@ -22,13 +23,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
      * @var \Magento\Sales\Model\OrderFactory
      */
     protected $orderFactory;
-
-    /**
-     * Cached orders data.
-     *
-     * @var \Magento\Sales\Api\Data\OrderInterface[]
-     */
-    private $orders;
 
     /**
      * Store manager interface.
@@ -82,10 +76,10 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
     /**
      * @inheritdoc
      */
-    public function get($orderId, $orderItemId)
+    public function getByOrder(OrderInterface $order, int $orderItemId)
     {
         /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
-        if (!$orderItem = $this->getItemById($orderId, $orderItemId)) {
+        if (!$orderItem = $order->getItemById($orderItemId)) {
             throw new NoSuchEntityException(
                 __('No item with the provided ID was found in the Order. Verify the ID and try again.')
             );
@@ -113,13 +107,22 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
     /**
      * @inheritdoc
      */
-    public function save($orderId, $orderItemId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage)
+    public function get($orderId, $orderItemId)
     {
         /** @var \Magento\Sales\Api\Data\OrderInterface $order */
         $order = $this->orderFactory->create()->load($orderId);
+        return $this->getByOrder($order, $orderItemId);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function saveForOrder(OrderInterface $order, int $orderItemId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage)
+    {
+        $orderId = $order->getId();
 
         /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
-        if (!$orderItem = $this->getItemById($orderId, $orderItemId)) {
+        if (!$orderItem = $order->getItemById($orderItemId)) {
             throw new NoSuchEntityException(
                 __('No item with the provided ID was found in the Order. Verify the ID and try again.')
             );
@@ -143,7 +146,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
         $this->giftMessageSaveModel->setGiftmessages($message);
         try {
             $this->giftMessageSaveModel->saveAllInOrder();
-            unset($this->orders[$orderId]);
         } catch (\Exception $e) {
             throw new CouldNotSaveException(
                 __('The gift message couldn\'t be added to the "%1" order.', $e->getMessage()),
@@ -154,25 +156,14 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
     }
 
     /**
-     * Get order item by id
-     *
-     * @param int $orderId
-     * @param int $orderItemId
-     * @return \Magento\Sales\Api\Data\OrderItemInterface|bool
+     * @inheritdoc
      */
-    protected function getItemById($orderId, $orderItemId)
+    public function save($orderId, $orderItemId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage)
     {
-        if (!isset($this->orders[$orderId])) {
-            $this->orders[$orderId] = $this->orderFactory->create()->load($orderId);
-        }
-        /** @var \Magento\Sales\Api\Data\OrderInterface $item */
-        $order = $this->orders[$orderId];
-        /** @var \Magento\Sales\Api\Data\OrderItemInterface $item */
-        $item = $order->getItemById($orderItemId);
+        /** @var \Magento\Sales\Api\Data\OrderInterface $order */
+        $order = $this->orderFactory->create()->load($orderId);
 
-        if ($item !== null) {
-            return $item;
-        }
-        return false;
+        return $this->saveForOrder($order, (int) $orderItemId, $giftMessage);
     }
+
 }

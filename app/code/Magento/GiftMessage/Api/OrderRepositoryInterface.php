@@ -5,6 +5,8 @@
  */
 namespace Magento\GiftMessage\Api;
 
+use Magento\Sales\Api\Data\OrderInterface;
+
 /**
  * Interface OrderRepositoryInterface
  * @api
@@ -12,6 +14,15 @@ namespace Magento\GiftMessage\Api;
  */
 interface OrderRepositoryInterface
 {
+    /**
+     * Return the gift message for a specified order.
+     *
+     * @param OrderInterface $order The order.
+     * @return \Magento\GiftMessage\Api\Data\MessageInterface Gift message.
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getByOrder(OrderInterface $order);
+
     /**
      * Return the gift message for a specified order.
      *
