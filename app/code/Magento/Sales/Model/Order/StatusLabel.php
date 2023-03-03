@@ -31,6 +31,9 @@ class StatusLabel
      */
     private $maskStatusesMapping;
 
+    /**
+     * @var array
+     */
     private static $statusLabels = [];
 
     /**
@@ -90,7 +93,7 @@ class StatusLabel
     /**
      * Retrieve status label for detected area
      *
-     * @param $code
+     * @param string $code
      * @return string|null
      */
     public function getStatusLabel($code)
