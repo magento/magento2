@@ -11,8 +11,8 @@
 $width = (int)$block->getWidth();
 $paddingBottom = $block->getRatio() * 100;
 ?>
-<span class="product-image-container product-image-container-<?= /* @noEscape */ $block->getProductId() ?>">
-    <span class="product-image-wrapper">
+<span class="product-image-container product-image-container-<?= /* @noEscape */ $block->getProductId() ?>" style="width: <?= $width; ?>px">
+    <span class="product-image-wrapper" style="padding-bottom: <?= $paddingBottom; ?>%">
         <img class="<?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
             <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
                 <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtml($value) ?>"
@@ -21,31 +21,6 @@ $paddingBottom = $block->getRatio() * 100;
             loading="lazy"
             width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
             height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
-            alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"/></span>
+            alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"/>
+    </span>
 </span>
-<?php
-$styles = <<<STYLE
-.product-image-container-{$block->getProductId()} {
-    width: {$width}px;
-}
-.product-image-container-{$block->getProductId()} span.product-image-wrapper {
-    padding-bottom: {$paddingBottom}%;
-}
-STYLE;
-//In case a script was using "style" attributes of these elements
-$script = <<<SCRIPT
-prodImageContainers = document.querySelectorAll(".product-image-container-{$block->getProductId()}");
-for (var i = 0; i < prodImageContainers.length; i++) {
-    prodImageContainers[i].style.width = "{$width}px";
-}
-prodImageContainersWrappers = document.querySelectorAll(
-    ".product-image-container-{$block->getProductId()}  span.product-image-wrapper"
-);
-for (var i = 0; i < prodImageContainersWrappers.length; i++) {
-    prodImageContainersWrappers[i].style.paddingBottom = "{$paddingBottom}%";
-}
-SCRIPT;
-
-?>
-<?= /* @noEscape */ $secureRenderer->renderTag('style', [], $styles, false) ?>
-<?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $script, false) ?>
