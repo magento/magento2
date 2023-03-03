@@ -189,8 +189,8 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      *
      * @return bool
      */
-    private function isUseApplicationLock()
+    private function isUseApplicationLock(): bool
     {
-        return $this->configReader->get($this->useApplicationLockConfig) ?: false;
+        return (bool) ($this->configReader->get($this->useApplicationLockConfig) ?? true);
     }
 }
