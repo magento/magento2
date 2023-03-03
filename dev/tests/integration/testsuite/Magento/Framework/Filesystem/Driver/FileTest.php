@@ -1,7 +1,5 @@
 <?php
 /**
- * Test for \Magento\Framework\Filesystem\Driver\File
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
