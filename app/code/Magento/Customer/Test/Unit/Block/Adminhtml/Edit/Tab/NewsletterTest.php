@@ -50,8 +50,6 @@ class NewsletterTest extends TestCase
     private $contextMock;
 
     /**
-     * Store manager
-     *
      * @var StoreManagerInterface|MockObject
      */
     private $storeManager;
