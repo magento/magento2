@@ -27,31 +27,6 @@ use Magento\WishlistGraphQl\Mapper\WishlistDataMapper;
 class AddProductsToWishlist implements ResolverInterface
 {
     /**
-     * @var AddProductsToWishlistModel
-     */
-    private $addProductsToWishlist;
-
-    /**
-     * @var WishlistDataMapper
-     */
-    private $wishlistDataMapper;
-
-    /**
-     * @var WishlistConfig
-     */
-    private $wishlistConfig;
-
-    /**
-     * @var WishlistResourceModel
-     */
-    private $wishlistResource;
-
-    /**
-     * @var WishlistFactory
-     */
-    private $wishlistFactory;
-
-    /**
      * @param WishlistResourceModel $wishlistResource
      * @param WishlistFactory $wishlistFactory
      * @param WishlistConfig $wishlistConfig
@@ -59,17 +34,12 @@ class AddProductsToWishlist implements ResolverInterface
      * @param WishlistDataMapper $wishlistDataMapper
      */
     public function __construct(
-        WishlistResourceModel $wishlistResource,
-        WishlistFactory $wishlistFactory,
-        WishlistConfig $wishlistConfig,
-        AddProductsToWishlistModel $addProductsToWishlist,
-        WishlistDataMapper $wishlistDataMapper
+        private readonly WishlistResourceModel $wishlistResource,
+        private readonly WishlistFactory $wishlistFactory,
+        private readonly WishlistConfig $wishlistConfig,
+        private readonly AddProductsToWishlistModel $addProductsToWishlist,
+        private readonly WishlistDataMapper $wishlistDataMapper
     ) {
-        $this->wishlistResource = $wishlistResource;
-        $this->wishlistFactory = $wishlistFactory;
-        $this->wishlistConfig = $wishlistConfig;
-        $this->addProductsToWishlist = $addProductsToWishlist;
-        $this->wishlistDataMapper = $wishlistDataMapper;
     }
 
     /**

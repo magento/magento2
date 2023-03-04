@@ -26,40 +26,17 @@ use Magento\WishlistGraphQl\Mapper\WishlistDataMapper;
 class CustomerWishlists implements ResolverInterface
 {
     /**
-     * @var WishlistDataMapper
-     */
-    private $wishlistDataMapper;
-
-    /**
-     * @var WishlistConfig
-     */
-    private $wishlistConfig;
-
-    /**
-     * @var WishlistCollectionFactory
-     */
-    private $wishlistCollectionFactory;
-
-    /**
-     * @var WishlistFactory
-     */
-    private $wishlistFactory;
-
-    /**
      * @param WishlistDataMapper $wishlistDataMapper
      * @param WishlistConfig $wishlistConfig
      * @param WishlistCollectionFactory $wishlistCollectionFactory
      * @param WishlistFactory $wishlistFactory
      */
     public function __construct(
-        WishlistDataMapper $wishlistDataMapper,
-        WishlistConfig $wishlistConfig,
-        WishlistCollectionFactory $wishlistCollectionFactory,
-        WishlistFactory $wishlistFactory = null
+        private readonly WishlistDataMapper $wishlistDataMapper,
+        private readonly WishlistConfig $wishlistConfig,
+        private readonly WishlistCollectionFactory $wishlistCollectionFactory,
+        private ?WishlistFactory $wishlistFactory = null
     ) {
-        $this->wishlistDataMapper = $wishlistDataMapper;
-        $this->wishlistConfig = $wishlistConfig;
-        $this->wishlistCollectionFactory = $wishlistCollectionFactory;
         $this->wishlistFactory = $wishlistFactory ?:
             ObjectManager::getInstance()->get(WishlistFactory::class);
     }

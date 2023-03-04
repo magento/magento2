@@ -25,25 +25,13 @@ class Text implements CustomizableOptionValueInterface
     private const OPTION_TYPE = 'custom-option';
 
     /**
-     * @var PriceUnitLabel
-     */
-    private $priceUnitLabel;
-
-    /**
-     * @var Uid
-     */
-    private $uidEncoder;
-
-    /**
      * @param PriceUnitLabel $priceUnitLabel
      * @param Uid $uidEncoder
      */
     public function __construct(
-        PriceUnitLabel $priceUnitLabel,
-        Uid $uidEncoder
+        private readonly PriceUnitLabel $priceUnitLabel,
+        private readonly Uid $uidEncoder
     ) {
-        $this->priceUnitLabel = $priceUnitLabel;
-        $this->uidEncoder = $uidEncoder;
     }
 
     /**

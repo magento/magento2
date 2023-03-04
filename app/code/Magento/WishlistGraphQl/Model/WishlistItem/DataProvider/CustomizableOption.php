@@ -22,25 +22,13 @@ class CustomizableOption
     private const OPTION_TYPE = 'custom-option';
 
     /**
-     * @var CustomizableOptionValueInterface
-     */
-    private $customizableOptionValue;
-
-    /**
-     * @var Uid
-     */
-    private $uidEncoder;
-
-    /**
      * @param CustomizableOptionValueInterface $customOptionValueDataProvider
      * @param Uid $uidEncoder
      */
     public function __construct(
-        CustomizableOptionValueInterface $customOptionValueDataProvider,
-        Uid $uidEncoder
+        private readonly CustomizableOptionValueInterface $customizableOptionValue,
+        private readonly Uid $uidEncoder
     ) {
-        $this->customizableOptionValue = $customOptionValueDataProvider;
-        $this->uidEncoder = $uidEncoder;
     }
 
     /**

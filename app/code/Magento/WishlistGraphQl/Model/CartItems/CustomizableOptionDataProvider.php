@@ -17,25 +17,13 @@ use Magento\Framework\GraphQl\Query\Uid;
 class CustomizableOptionDataProvider implements CartItemsRequestDataProviderInterface
 {
     /**
-     * @var ProductCustomOptionRepositoryInterface
-     */
-    private $productCustomOptionRepository;
-
-    /** 
-     * @var Uid 
-     */
-    private $uidEncoder;
-
-    /**
      * @param ProductCustomOptionRepositoryInterface $productCustomOptionRepository
      * @param Uid $uidEncoder
      */
     public function __construct(
-        ProductCustomOptionRepositoryInterface $productCustomOptionRepository,
-        Uid $uidEncoder
+        private readonly ProductCustomOptionRepositoryInterface $productCustomOptionRepository,
+        private readonly Uid $uidEncoder
     ) {
-        $this->productCustomOptionRepository = $productCustomOptionRepository;
-        $this->uidEncoder = $uidEncoder;
     }
 
     /**

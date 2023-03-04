@@ -28,31 +28,6 @@ use Magento\WishlistGraphQl\Model\UpdateWishlistItem;
 class UpdateProductsInWishlist implements ResolverInterface
 {
     /**
-     * @var UpdateWishlistItem
-     */
-    private $updateWishlistItem;
-
-    /**
-     * @var WishlistDataMapper
-     */
-    private $wishlistDataMapper;
-
-    /**
-     * @var WishlistConfig
-     */
-    private $wishlistConfig;
-
-    /**
-     * @var WishlistResourceModel
-     */
-    private $wishlistResource;
-
-    /**
-     * @var WishlistFactory
-     */
-    private $wishlistFactory;
-
-    /**
      * @param WishlistResourceModel $wishlistResource
      * @param WishlistFactory $wishlistFactory
      * @param WishlistConfig $wishlistConfig
@@ -60,17 +35,12 @@ class UpdateProductsInWishlist implements ResolverInterface
      * @param WishlistDataMapper $wishlistDataMapper
      */
     public function __construct(
-        WishlistResourceModel $wishlistResource,
-        WishlistFactory $wishlistFactory,
-        WishlistConfig $wishlistConfig,
-        UpdateWishlistItem $updateWishlistItem,
-        WishlistDataMapper $wishlistDataMapper
+        private readonly WishlistResourceModel $wishlistResource,
+        private readonly WishlistFactory $wishlistFactory,
+        private readonly WishlistConfig $wishlistConfig,
+        private readonly UpdateWishlistItem $updateWishlistItem,
+        private readonly WishlistDataMapper $wishlistDataMapper
     ) {
-        $this->wishlistResource = $wishlistResource;
-        $this->wishlistFactory = $wishlistFactory;
-        $this->wishlistConfig = $wishlistConfig;
-        $this->updateWishlistItem = $updateWishlistItem;
-        $this->wishlistDataMapper = $wishlistDataMapper;
     }
 
     /**
