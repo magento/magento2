@@ -55,7 +55,12 @@ class DataFixture implements ParserInterface
             $args = $attribute->getArguments();
             $alias = $args['as'] ?? $args[2] ?? null;
             $count = $args['count'] ?? $args[4] ?? 1;
-            $id = $count > 1 ? 1 : '';
+            /* Use null if we are only generating one set of date.
+             * The reson is that an empty string is not a valid numeric string, and will warn if
+             * https://wiki.php.net/rfc/saner-inc-dec-operators is accepted.
+             * However, null will hapilly get cast to the empty string for concatenation and then incremented to 1 with no warnings
+             */
+            $id = $count > 1 ? 1 : null;
             do {
                 $fixtures[] = [
                     'name' => $alias !== null ? ($alias.($id++)) : null,
