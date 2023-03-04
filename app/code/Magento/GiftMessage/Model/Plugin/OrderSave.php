@@ -104,7 +104,7 @@ class OrderSave
                     try {
                         $this->giftMessageOrderItemRepository->saveForOrder(
                             $order,
-                            $orderItem->getItemId(),
+                            (int) $orderItem->getItemId(),
                             $giftMessage
                         );
                     } catch (\Exception $e) {
