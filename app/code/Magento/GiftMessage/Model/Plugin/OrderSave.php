@@ -71,7 +71,7 @@ class OrderSave
             /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
             $giftMessage = $extensionAttributes->getGiftMessage();
             try {
-                $this->giftMessageOrderRepository->save($order->getEntityId(), $giftMessage);
+                $this->giftMessageOrderRepository->saveForOrder($order, $giftMessage);
             } catch (\Exception $e) {
                 throw new CouldNotSaveException(
                     __('The gift message couldn\'t be added to the "%1" order.', $e->getMessage()),
@@ -102,8 +102,8 @@ class OrderSave
                     /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
                     $giftMessage = $extensionAttribute->getGiftMessage();
                     try {
-                        $this->giftMessageOrderItemRepository->save(
-                            $order->getEntityId(),
+                        $this->giftMessageOrderItemRepository->saveForOrder(
+                            $order,
                             $orderItem->getItemId(),
                             $giftMessage
                         );

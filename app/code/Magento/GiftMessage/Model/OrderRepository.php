@@ -100,10 +100,8 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
     /**
      * @inheritdoc
      */
-    public function save($orderId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage)
+    public function saveForOrder(OrderInterface $order, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage)
     {
-        /** @var \Magento\Sales\Api\Data\OrderInterface $order */
-        $order = $this->orderFactory->create()->load($orderId);
         if (!$order->getEntityId()) {
             throw new NoSuchEntityException(__('No order exists with this ID. Verify your information and try again.'));
         }
@@ -122,7 +120,7 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
         }
 
         $message = [];
-        $message[$orderId] = [
+        $message[$order->getEntityId()] = [
             'type' => 'order',
             $giftMessage::CUSTOMER_ID => $giftMessage->getCustomerId(),
             $giftMessage::SENDER => $giftMessage->getSender(),
@@ -140,5 +138,15 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
             );
         }
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function save($orderId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage)
+    {
+        /** @var \Magento\Sales\Api\Data\OrderInterface $order */
+        $order = $this->orderFactory->create()->load($orderId);
+        return $this->saveForOrder($order, $giftMessage);
     }
 }
