@@ -24,8 +24,6 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
     protected $orderFactory;
 
     /**
-     * Store manager interface.
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;

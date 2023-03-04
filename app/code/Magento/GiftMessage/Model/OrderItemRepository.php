@@ -23,15 +23,11 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
     protected $orderFactory;
 
     /**
-     * Store manager interface.
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * Gift message save model.
-     *
      * @var \Magento\GiftMessage\Model\Save
      */
     protected $giftMessageSaveModel;
