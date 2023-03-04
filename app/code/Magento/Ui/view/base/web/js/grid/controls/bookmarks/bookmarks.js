@@ -447,7 +447,6 @@ define([
          */
         saveState: function () {
             this.store('current');
-
             return this;
         },
 
@@ -553,7 +552,7 @@ define([
          */
         onActiveIndexChange: function () {
             this.activeView = this.getActiveView();
-
+            this.updateActiveView();
             this.store('activeIndex');
         },
 

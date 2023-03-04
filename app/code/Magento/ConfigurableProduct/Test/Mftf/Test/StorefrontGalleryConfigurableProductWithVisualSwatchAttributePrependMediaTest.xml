@@ -115,7 +115,7 @@
             </actionGroup>
             <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForDeleteSuccessMessage"/>
             <see selector="{{AdminMessagesSection.success}}" userInput="A total of 4 record(s) have been deleted." stepKey="seeDeleteSuccessMessage"/>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductGridFilters"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearProductGridFilters"/>
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteProductVisualSwatchAttribute">
                 <argument name="ProductAttribute" value="$createVisualSwatchAttribute$"/>
             </actionGroup>

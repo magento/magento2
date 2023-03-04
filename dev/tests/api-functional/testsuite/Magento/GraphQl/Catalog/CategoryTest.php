@@ -12,11 +12,13 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
@@ -281,9 +283,9 @@ QUERY;
         $this->assertCount(6, $response['category']['children']);
     }
 
-    /**
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category with:{"name":"Category 1.2"} as:category
-     */
+    #[
+        DataFixture(CategoryFixture::class, ['name' => 'Category 1.2'], 'category'),
+    ]
     public function testGetCategoryById()
     {
         $categoryId = $this->fixtures->get('category')->getId();
@@ -300,9 +302,9 @@ QUERY;
         self::assertEquals($categoryId, $response['category']['id']);
     }
 
-    /**
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category with:{"is_active":false} as:category
-     */
+    #[
+        DataFixture(CategoryFixture::class, ['is_active' => false], 'category'),
+    ]
     public function testGetDisabledCategory()
     {
         $this->expectException(\Exception::class);
@@ -411,6 +413,8 @@ QUERY;
           }
         }
         name
+        new_from_date
+        new_to_date
         options_container
         price {
           minimalPrice {
@@ -846,6 +850,8 @@ QUERY;
             'short_description',
             'country_of_manufacture',
             'gift_message_available',
+            'new_from_date',
+            'new_to_date',
             'options_container',
             'special_price'
         ];

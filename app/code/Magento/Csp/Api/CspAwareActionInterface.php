@@ -11,6 +11,8 @@ use Magento\Framework\App\ActionInterface;
 
 /**
  * Interface for controllers that can provide route-specific CSPs.
+ *
+ * @api
  */
 interface CspAwareActionInterface extends ActionInterface
 {

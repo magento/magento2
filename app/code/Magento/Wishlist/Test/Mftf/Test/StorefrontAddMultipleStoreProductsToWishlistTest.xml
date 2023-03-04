@@ -33,6 +33,7 @@
             <actionGroup ref="CreateCustomStoreViewActionGroup" stepKey="createCustomStoreView">
                 <argument name="storeGroupName" value="$$storeGroup.group[name]$$"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
 
         <after>
@@ -45,6 +46,7 @@
                 <argument name="storeGroupName" value="$$storeGroup.group[name]$$"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearWebsitesGridFilter"/>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <!--Clear products filter-->
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>

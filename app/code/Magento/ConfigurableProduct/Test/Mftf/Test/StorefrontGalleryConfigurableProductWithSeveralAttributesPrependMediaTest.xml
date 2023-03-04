@@ -150,7 +150,7 @@
             </actionGroup>
             <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForDeleteSuccessMessage"/>
             <see selector="{{AdminMessagesSection.success}}" userInput="A total of 5 record(s) have been deleted." stepKey="seeDeleteSuccessMessage"/>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductGridFilters"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearProductGridFilters"/>
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteProductAttributeB">
                 <argument name="ProductAttribute" value="$createDropdownAttribute$"/>
             </actionGroup>
