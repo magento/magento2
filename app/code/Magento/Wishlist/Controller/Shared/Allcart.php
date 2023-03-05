@@ -22,27 +22,15 @@ use Magento\Wishlist\Model\ItemCarrier;
 class Allcart extends Action implements HttpPostActionInterface
 {
     /**
-     * @var WishlistProvider
-     */
-    protected $wishlistProvider;
-
-    /**
-     * @var ItemCarrier
-     */
-    protected $itemCarrier;
-
-    /**
      * @param Context $context
      * @param WishlistProvider $wishlistProvider
      * @param ItemCarrier $itemCarrier
      */
     public function __construct(
         Context $context,
-        WishlistProvider $wishlistProvider,
-        ItemCarrier $itemCarrier
+        protected readonly WishlistProvider $wishlistProvider,
+        protected readonly ItemCarrier $itemCarrier
     ) {
-        $this->wishlistProvider = $wishlistProvider;
-        $this->itemCarrier = $itemCarrier;
         parent::__construct($context);
     }
 

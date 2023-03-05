@@ -8,30 +8,27 @@ namespace Magento\Wishlist\Controller\Index;
 use Magento\Framework\App\Action;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\View\Result\Page;
+use Magento\Wishlist\Controller\AbstractIndex;
+use Magento\Wishlist\Controller\WishlistProviderInterface;
 
-class Index extends \Magento\Wishlist\Controller\AbstractIndex
+class Index extends AbstractIndex
 {
     /**
-     * @var \Magento\Wishlist\Controller\WishlistProviderInterface
-     */
-    protected $wishlistProvider;
-
-    /**
      * @param Action\Context $context
-     * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
+     * @param WishlistProviderInterface $wishlistProvider
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
+        protected readonly WishlistProviderInterface $wishlistProvider
     ) {
-        $this->wishlistProvider = $wishlistProvider;
         parent::__construct($context);
     }
 
     /**
      * Display customer wishlist
      *
-     * @return \Magento\Framework\View\Result\Page
+     * @return Page
      * @throws NotFoundException
      */
     public function execute()
@@ -39,7 +36,7 @@ class Index extends \Magento\Wishlist\Controller\AbstractIndex
         if (!$this->wishlistProvider->getWishlist()) {
             throw new NotFoundException(__('Page not found.'));
         }
-        /** @var \Magento\Framework\View\Result\Page resultPage */
+        /** @var Page resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
         return $resultPage;
     }

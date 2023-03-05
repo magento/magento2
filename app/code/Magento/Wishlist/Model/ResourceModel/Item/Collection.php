@@ -5,13 +5,41 @@
  */
 namespace Magento\Wishlist\Model\ResourceModel\Item;
 
+use DateTime;
+use DateTimeZone;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Entity\Attribute;
+use Magento\Catalog\Model\Entity\AttributeFactory;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ResourceModel\ConfigFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\ResourceModel\StockStatusFilterInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\State;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\Profiler;
+use Magento\Framework\Stdlib\DateTime\DateTime as FrameworkDateTime;
+use Magento\Sales\Helper\Admin;
 use Magento\Sales\Model\ConfigInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Wishlist\Model\Config;
+use Magento\Wishlist\Model\Item;
+use Magento\Wishlist\Model\ResourceModel\Item as ResourceItem;
+use Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory;
 use Magento\Wishlist\Model\ResourceModel\Item\Product\CollectionBuilderInterface;
+use Magento\Wishlist\Model\Wishlist;
+use Psr\Log\LoggerInterface;
 
 /**
  * Wishlist item collection
@@ -21,7 +49,7 @@ use Magento\Wishlist\Model\ResourceModel\Item\Product\CollectionBuilderInterface
  * @api
  * @since 100.0.2
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Product Visibility Filter to product collection flag
@@ -82,64 +110,57 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Adminhtml sales
      *
-     * @var \Magento\Sales\Helper\Admin
+     * @var Admin
      */
     protected $_adminhtmlSales = null;
 
     /**
-     * Catalog inventory data
-     *
-     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
-     */
-    protected $stockConfiguration = null;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var FrameworkDateTime
      */
     protected $_date;
 
     /**
-     * @var \Magento\Wishlist\Model\Config
+     * @var Config
      */
     protected $_wishlistConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Visibility
+     * @var Visibility
      */
     protected $_productVisibility;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     protected $_coreResource;
 
     /**
-     * @var \Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_optionCollectionFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @var ProductCollectionFactory
      */
     protected $_productCollectionFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\ConfigFactory
+     * @var ConfigFactory
      */
     protected $_catalogConfFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Entity\AttributeFactory
+     * @var AttributeFactory
      */
     protected $_catalogAttrFactory;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var State
      */
     protected $_appState;
 
@@ -150,24 +171,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $metadataPool;
 
     /**
-     * @var TableMaintainer
-     */
-    private $tableMaintainer;
-
-    /**
-     * @var ConfigInterface
-     */
-    private $salesConfig;
-    /**
-     * @var CollectionBuilderInterface
-     */
-    private $productCollectionBuilder;
-    /**
-     * @var StockStatusFilterInterface
-     */
-    private $stockStatusFilter;
-
-    /**
      * Whether product table is joined in select
      *
      * @var bool
@@ -175,24 +178,24 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     private $isProductTableJoined = false;
 
     /**
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
-     * @param \Magento\Sales\Helper\Admin $adminhtmlSales
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Wishlist\Model\Config $wishlistConfig
-     * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
-     * @param \Magento\Framework\App\ResourceConnection $coreResource
-     * @param \Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory $optionCollectionFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Catalog\Model\ResourceModel\ConfigFactory $catalogConfFactory
-     * @param \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory
-     * @param \Magento\Wishlist\Model\ResourceModel\Item $resource
-     * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
+     * @param EntityFactory $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param StockConfigurationInterface $stockConfiguration
+     * @param Admin $adminhtmlSales
+     * @param StoreManagerInterface $storeManager
+     * @param FrameworkDateTime $date
+     * @param Config $wishlistConfig
+     * @param Visibility $productVisibility
+     * @param ResourceConnection $coreResource
+     * @param CollectionFactory $optionCollectionFactory
+     * @param ProductCollectionFactory $productCollectionFactory
+     * @param ConfigFactory $catalogConfFactory
+     * @param AttributeFactory $catalogAttrFactory
+     * @param ResourceItem $resource
+     * @param State $appState
+     * @param AdapterInterface|null $connection
      * @param TableMaintainer|null $tableMaintainer
      * @param ConfigInterface|null $salesConfig
      * @param CollectionBuilderInterface|null $productCollectionBuilder
@@ -200,30 +203,29 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
-        \Magento\Sales\Helper\Admin $adminhtmlSales,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Wishlist\Model\Config $wishlistConfig,
-        \Magento\Catalog\Model\Product\Visibility $productVisibility,
-        \Magento\Framework\App\ResourceConnection $coreResource,
-        \Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory $optionCollectionFactory,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Catalog\Model\ResourceModel\ConfigFactory $catalogConfFactory,
-        \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory,
-        \Magento\Wishlist\Model\ResourceModel\Item $resource,
-        \Magento\Framework\App\State $appState,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        TableMaintainer $tableMaintainer = null,
-        ConfigInterface $salesConfig = null,
-        ?CollectionBuilderInterface $productCollectionBuilder = null,
-        ?StockStatusFilterInterface $stockStatusFilter = null
+        EntityFactory $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        protected ?StockConfigurationInterface $stockConfiguration = null,
+        Admin $adminhtmlSales,
+        StoreManagerInterface $storeManager,
+        FrameworkDateTime $date,
+        Config $wishlistConfig,
+        Visibility $productVisibility,
+        ResourceConnection $coreResource,
+        CollectionFactory $optionCollectionFactory,
+        ProductCollectionFactory $productCollectionFactory,
+        ConfigFactory $catalogConfFactory,
+        AttributeFactory $catalogAttrFactory,
+        ResourceItem $resource,
+        State $appState,
+        AdapterInterface $connection = null,
+        private ?TableMaintainer $tableMaintainer = null,
+        private ?ConfigInterface $salesConfig = null,
+        private ?CollectionBuilderInterface $productCollectionBuilder = null,
+        private ?StockStatusFilterInterface $stockStatusFilter = null
     ) {
-        $this->stockConfiguration = $stockConfiguration;
         $this->_adminhtmlSales = $adminhtmlSales;
         $this->_storeManager = $storeManager;
         $this->_date = $date;
@@ -251,7 +253,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function _construct()
     {
-        $this->_init(\Magento\Wishlist\Model\Item::class, \Magento\Wishlist\Model\ResourceModel\Item::class);
+        $this->_init(Item::class, ResourceItem::class);
         $this->addFilterToMap('store_id', 'main_table.store_id');
     }
 
@@ -264,8 +266,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function getMetadataPool()
     {
         if ($this->metadataPool == null) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+            $this->metadataPool = ObjectManager::getInstance()
+                ->get(MetadataPool::class);
         }
         return $this->metadataPool;
     }
@@ -299,11 +301,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _assignOptions()
     {
         $itemIds = array_keys($this->_items);
-        /* @var $optionCollection \Magento\Wishlist\Model\ResourceModel\Item\Option\Collection */
+        /* @var $optionCollection Option\Collection */
         $optionCollection = $this->_optionCollectionFactory->create();
         $optionCollection->addItemFilter($itemIds);
 
-        /* @var $item \Magento\Wishlist\Model\Item */
+        /* @var $item Item */
         foreach ($this as $item) {
             $item->setOptions($optionCollection->getOptionsByItem($item));
         }
@@ -320,12 +322,12 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _assignProducts()
     {
-        \Magento\Framework\Profiler::start(
+        Profiler::start(
             'WISHLIST:' . __METHOD__,
             ['group' => 'WISHLIST', 'method' => __METHOD__]
         );
 
-        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
+        /** @var ProductCollection $productCollection */
         $productCollection = $this->_productCollectionFactory->create();
 
         if ($this->_productVisible) {
@@ -348,7 +350,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
         $checkInStock = $this->_productInStock && !$this->stockConfiguration->isShowOutOfStock();
 
-        /** @var \Magento\Wishlist\Model\Item $item */
+        /** @var Item $item */
         foreach ($this as $item) {
             $product = $productCollection->getItemById($item->getProductId());
             if ($product) {
@@ -366,7 +368,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             }
         }
 
-        \Magento\Framework\Profiler::stop('WISHLIST:' . __METHOD__);
+        Profiler::stop('WISHLIST:' . __METHOD__);
 
         return $this;
     }
@@ -419,10 +421,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Add filter by wishlist object
      *
-     * @param \Magento\Wishlist\Model\Wishlist $wishlist
+     * @param Wishlist $wishlist
      * @return $this
      */
-    public function addWishlistFilter(\Magento\Wishlist\Model\Wishlist $wishlist)
+    public function addWishlistFilter(Wishlist $wishlist)
     {
         $this->addFieldToFilter('wishlist_id', $wishlist->getId());
         return $this;
@@ -487,7 +489,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function resetSortOrder()
     {
-        $this->getSelect()->reset(\Magento\Framework\DB\Select::ORDER);
+        $this->getSelect()->reset(Select::ORDER);
         return $this;
     }
 
@@ -558,15 +560,15 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
         $filter = [];
 
-        $gmtOffset = (new \DateTimeZone(date_default_timezone_get()))->getOffset(new \DateTime());
+        $gmtOffset = (new DateTimeZone(date_default_timezone_get()))->getOffset(new DateTime());
         if (isset($constraints['from'])) {
-            $lastDay = new \DateTime();
+            $lastDay = new DateTime();
             $lastDay->modify('-' . $gmtOffset . ' second')->modify('-' . $constraints['from'] . ' day');
             $filter['to'] = $lastDay;
         }
 
         if (isset($constraints['to'])) {
-            $firstDay = new \DateTime();
+            $firstDay = new DateTime();
             $firstDay->modify('-' . $gmtOffset . ' second')->modify('-' . ((int)($constraints['to']) + 1) . ' day');
             $filter['from'] = $firstDay;
         }
@@ -588,10 +590,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         if (!$this->_isProductNameJoined) {
             $entityTypeId = $this->_catalogConfFactory->create()->getEntityTypeId();
-            /** @var \Magento\Catalog\Model\Entity\Attribute $attribute */
+            /** @var Attribute $attribute */
             $attribute = $this->_catalogAttrFactory->create()->loadByCode($entityTypeId, 'name');
 
-            $storeId = $this->_storeManager->getStore(\Magento\Store\Model\Store::ADMIN_CODE)->getId();
+            $storeId = $this->_storeManager->getStore(Store::ADMIN_CODE)->getId();
 
             $entityMetadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
             $linkField = $entityMetadata->getLinkField();

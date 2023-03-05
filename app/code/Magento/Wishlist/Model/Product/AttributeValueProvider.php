@@ -15,17 +15,11 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductColl
 class AttributeValueProvider
 {
     /**
-     * @var ProductCollectionFactory
-     */
-    private $productCollectionFactory;
-
-    /**
      * @param ProductCollectionFactory $productCollectionFactory
      */
     public function __construct(
-        ProductCollectionFactory $productCollectionFactory
+        private readonly ProductCollectionFactory $productCollectionFactory
     ) {
-        $this->productCollectionFactory = $productCollectionFactory;
     }
 
     /**

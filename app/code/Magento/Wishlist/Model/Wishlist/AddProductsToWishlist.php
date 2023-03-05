@@ -17,6 +17,7 @@ use Magento\Wishlist\Model\Wishlist;
 use Magento\Wishlist\Model\Wishlist\BuyRequest\BuyRequestBuilder;
 use Magento\Wishlist\Model\Wishlist\Data\WishlistItem;
 use Magento\Wishlist\Model\Wishlist\Data\WishlistOutput;
+use Throwable;
 
 /**
  * Adding products to wishlist
@@ -36,33 +37,15 @@ class AddProductsToWishlist
     private $errors = [];
 
     /**
-     * @var BuyRequestBuilder
-     */
-    private $buyRequestBuilder;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
-     * @var WishlistResourceModel
-     */
-    private $wishlistResource;
-
-    /**
      * @param ProductRepositoryInterface $productRepository
      * @param BuyRequestBuilder $buyRequestBuilder
      * @param WishlistResourceModel $wishlistResource
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
-        BuyRequestBuilder $buyRequestBuilder,
-        WishlistResourceModel $wishlistResource
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly BuyRequestBuilder $buyRequestBuilder,
+        private readonly WishlistResourceModel $wishlistResource
     ) {
-        $this->productRepository = $productRepository;
-        $this->buyRequestBuilder = $buyRequestBuilder;
-        $this->wishlistResource = $wishlistResource;
     }
 
     /**
@@ -125,7 +108,7 @@ class AddProductsToWishlist
             }
         } catch (LocalizedException $exception) {
             $this->addError($exception->getMessage());
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->addError(
                 __(
                     'Could not add the product with SKU "%sku" to the wishlist:: %message',

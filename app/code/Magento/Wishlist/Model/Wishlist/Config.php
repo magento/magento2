@@ -18,17 +18,11 @@ class Config
     const XML_PATH_WISHLIST_ACTIVE = 'wishlist/general/active';
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig
+        private readonly ScopeConfigInterface $scopeConfig
     ) {
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**

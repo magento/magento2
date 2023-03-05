@@ -5,37 +5,35 @@
  */
 namespace Magento\Wishlist\Controller\Index;
 
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\View\Result\Page;
+use Magento\Wishlist\Controller\AbstractIndex;
 
-class Share extends \Magento\Wishlist\Controller\AbstractIndex
+class Share extends AbstractIndex
 {
     /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $customerSession;
-
-    /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param Context $context
+     * @param Session $customerSession
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Customer\Model\Session $customerSession
+        Context $context,
+        protected readonly Session $customerSession
     ) {
-        $this->customerSession = $customerSession;
         parent::__construct($context);
     }
 
     /**
      * Prepare wishlist for share
      *
-     * @return void|\Magento\Framework\View\Result\Page
+     * @return void|Page
      */
     public function execute()
     {
         if ($this->customerSession->authenticate()) {
-            /** @var \Magento\Framework\View\Result\Page $resultPage */
+            /** @var Page $resultPage */
             $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
             return $resultPage;
         }

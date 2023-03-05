@@ -13,23 +13,13 @@ namespace Magento\Wishlist\Model\Wishlist\Data;
 class Error
 {
     /**
-     * @var string
-     */
-    private $message;
-
-    /**
-     * @var string
-     */
-    private $code;
-
-    /**
      * @param string $message
      * @param string $code
      */
-    public function __construct(string $message, string $code)
-    {
-        $this->message = $message;
-        $this->code = $code;
+    public function __construct(
+        private readonly string $message,
+        private readonly string $code
+    ){
     }
 
     /**

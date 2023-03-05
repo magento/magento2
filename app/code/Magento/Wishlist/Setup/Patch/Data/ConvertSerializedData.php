@@ -6,9 +6,12 @@
 namespace Magento\Wishlist\Setup\Patch\Data;
 
 use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\DB\FieldDataConversionException;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\DB\Select\QueryModifierFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
@@ -18,42 +21,18 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
-     * @var FieldDataConverterFactory
-     */
-    private $fieldDataConverterFactory;
-
-    /**
-     * @var QueryModifierFactory
-     */
-    private $queryModifierFactory;
-
-    /**
-     * @var QueryGenerator
-     */
-    private $queryGenerator;
-
-    /**
      * ConvertSerializedData constructor.
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      * @param QueryModifierFactory $queryModifierFactory
      * @param QueryGenerator $queryGenerator
      */
     public function __construct(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
-        FieldDataConverterFactory $fieldDataConverterFactory,
-        QueryModifierFactory $queryModifierFactory,
-        QueryGenerator $queryGenerator
+        private readonly ModuleDataSetupInterface $moduleDataSetup,
+        private readonly FieldDataConverterFactory $fieldDataConverterFactory,
+        private readonly QueryModifierFactory $queryModifierFactory,
+        private readonly QueryGenerator $queryGenerator
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
-        $this->fieldDataConverterFactory = $fieldDataConverterFactory;
-        $this->queryModifierFactory = $queryModifierFactory;
-        $this->queryGenerator = $queryGenerator;
     }
 
     /**
@@ -91,8 +70,8 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
     /**
      * Convert serialized whishlist item data.
      *
-     * @throws \Magento\Framework\DB\FieldDataConversionException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws FieldDataConversionException
+     * @throws LocalizedException
      */
     private function convertSerializedData()
     {

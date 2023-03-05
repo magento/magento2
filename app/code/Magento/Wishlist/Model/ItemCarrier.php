@@ -6,6 +6,8 @@
  */
 namespace Magento\Wishlist\Model;
 
+use Exception;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Checkout\Helper\Cart as CartHelper;
 use Magento\Checkout\Model\Cart;
@@ -27,51 +29,6 @@ use Magento\Wishlist\Helper\Data as WishlistHelper;
 class ItemCarrier
 {
     /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $customerSession;
-
-    /**
-     * @var LocaleQuantityProcessor
-     */
-    protected $quantityProcessor;
-
-    /**
-     * @var \Magento\Checkout\Model\Cart
-     */
-    protected $cart;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var \Magento\Wishlist\Helper\Data
-     */
-    protected $helper;
-
-    /**
-     * @var \Magento\Checkout\Helper\Cart
-     */
-    protected $cartHelper;
-
-    /**
-     * @var \Magento\Framework\UrlInterface
-     */
-    protected $urlBuilder;
-
-    /**
-     * @var \Magento\Framework\Message\ManagerInterface
-     */
-    protected $messageManager;
-
-    /**
-     * @var \Magento\Framework\App\Response\RedirectInterface
-     */
-    protected $redirector;
-
-    /**
      * @param Session $customerSession
      * @param LocaleQuantityProcessor $quantityProcessor
      * @param Cart $cart
@@ -83,25 +40,16 @@ class ItemCarrier
      * @param RedirectInterface $redirector
      */
     public function __construct(
-        Session $customerSession,
-        LocaleQuantityProcessor $quantityProcessor,
-        Cart $cart,
-        Logger $logger,
-        WishlistHelper $helper,
-        CartHelper $cartHelper,
-        UrlInterface $urlBuilder,
-        MessageManager $messageManager,
-        RedirectInterface $redirector
+        protected readonly Session $customerSession,
+        protected readonly LocaleQuantityProcessor $quantityProcessor,
+        protected readonly Cart $cart,
+        protected readonly Logger $logger,
+        protected readonly WishlistHelper $helper,
+        protected readonly CartHelper $cartHelper,
+        protected readonly UrlInterface $urlBuilder,
+        protected readonly MessageManager $messageManager,
+        protected readonly RedirectInterface $redirector
     ) {
-        $this->customerSession = $customerSession;
-        $this->quantityProcessor = $quantityProcessor;
-        $this->cart = $cart;
-        $this->logger = $logger;
-        $this->helper = $helper;
-        $this->cartHelper = $cartHelper;
-        $this->urlBuilder = $urlBuilder;
-        $this->messageManager = $messageManager;
-        $this->redirector = $redirector;
     }
 
     /**
@@ -126,7 +74,7 @@ class ItemCarrier
         $collection = $wishlist->getItemCollection()->setVisibilityFilter();
 
         foreach ($collection as $item) {
-            /** @var $item \Magento\Wishlist\Model\Item */
+            /** @var $item Item */
             try {
                 $disableAddToCart = $item->getProduct()->getDisableAddToCart();
                 $item->unsProduct();
@@ -154,7 +102,7 @@ class ItemCarrier
                 if ($cartItem) {
                     $cart->getQuote()->deleteItem($cartItem);
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->critical($e);
                 $messages[] = __('We can\'t add this item to your shopping cart right now.');
             }
@@ -195,14 +143,14 @@ class ItemCarrier
             // save wishlist model for setting date of last update
             try {
                 $wishlist->save();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addErrorMessage(__('We can\'t update the Wish List right now.'));
                 $redirectUrl = $indexUrl;
             }
 
             $products = [];
             foreach ($addedProducts as $product) {
-                /** @var $product \Magento\Catalog\Model\Product */
+                /** @var $product Product */
                 $products[] = '"' . $product->getName() . '"';
             }
 

@@ -21,41 +21,17 @@ use Magento\Wishlist\Model\WishlistFactory;
 class AddToCart implements ObserverInterface
 {
     /**
-     * @var \Magento\Checkout\Model\Session
-     */
-    protected $checkoutSession;
-
-    /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $customerSession;
-
-    /**
-     * @var \Magento\Wishlist\Model\WishlistFactory
-     */
-    protected $wishlistFactory;
-
-    /**
-     * @var \Magento\Framework\Message\ManagerInterface
-     */
-    protected $messageManager;
-
-    /**
      * @param CheckoutSession $checkoutSession
      * @param CustomerSession $customerSession
      * @param WishlistFactory $wishlistFactory
      * @param ManagerInterface $messageManager
      */
     public function __construct(
-        CheckoutSession $checkoutSession,
-        CustomerSession $customerSession,
-        WishlistFactory $wishlistFactory,
-        ManagerInterface $messageManager
+        protected readonly CheckoutSession $checkoutSession,
+        protected readonly CustomerSession $customerSession,
+        protected readonly WishlistFactory $wishlistFactory,
+        protected readonly ManagerInterface $messageManager
     ) {
-        $this->checkoutSession = $checkoutSession;
-        $this->customerSession = $customerSession;
-        $this->wishlistFactory = $wishlistFactory;
-        $this->messageManager = $messageManager;
     }
 
     /**

@@ -5,7 +5,9 @@
  */
 namespace Magento\Wishlist\Model\Config\Source;
 
-class Summary implements \Magento\Framework\Option\ArrayInterface
+use Magento\Framework\Option\ArrayInterface;
+
+class Summary implements ArrayInterface
 {
     /**
      * @return array

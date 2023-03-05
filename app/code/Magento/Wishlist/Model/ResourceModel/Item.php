@@ -11,11 +11,15 @@
  */
 namespace Magento\Wishlist\Model\ResourceModel;
 
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Wishlist\Model\Item as ModelItem;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Item extends AbstractDb
 {
     /**
      * Initialize connection and define main table
@@ -30,7 +34,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Load item by wishlist, product and shared stores
      *
-     * @param \Magento\Wishlist\Model\Item $object
+     * @param ModelItem $object
      * @param int $wishlistId
      * @param int $productId
      * @param array $sharedStores
@@ -58,7 +62,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * {@inheritdoc}
      */
-    public function save(\Magento\Framework\Model\AbstractModel $object)
+    public function save(AbstractModel $object)
     {
         $hasDataChanges = $object->hasDataChanges();
         $object->setIsOptionsSaved(false);

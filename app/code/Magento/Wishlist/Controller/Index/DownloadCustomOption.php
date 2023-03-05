@@ -7,42 +7,41 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Controller\Index;
 
+use Exception;
+use Magento\Catalog\Model\Product\Option as ProductOption;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\App\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\Controller\Result\Forward;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Wishlist\Controller\AbstractIndex;
+use Magento\Wishlist\Model\Item\Option;
 
 /**
  * Class DownloadCustomOption. Represents request-flow logic for option's file download
  */
-class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex implements HttpGetActionInterface
+class DownloadCustomOption extends AbstractIndex implements HttpGetActionInterface
 {
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @var FileFactory
      */
     protected $_fileResponseFactory;
-
-    /**
-     * Json Serializer Instance
-     *
-     * @var Json
-     */
-    private $json;
 
     /**
      * Constructor method
      *
      * @param Action\Context $context
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileResponseFactory
+     * @param FileFactory $fileResponseFactory
      * @param Json|null $json
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileResponseFactory,
-        Json $json = null
+        FileFactory $fileResponseFactory,
+        private ?Json $json = null
     ) {
         $this->_fileResponseFactory = $fileResponseFactory;
         $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
@@ -52,17 +51,17 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex im
     /**
      * Custom options download action
      *
-     * @return \Magento\Framework\Controller\Result\Forward
+     * @return Forward
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
         $option = $this->_objectManager->create(
-            \Magento\Wishlist\Model\Item\Option::class
+            Option::class
         )->load(
             $this->getRequest()->getParam('id')
         );
-        /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
+        /** @var Forward $resultForward */
         $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
         if (!$option->getId()) {
             $resultForward->forward('noroute');
@@ -81,7 +80,7 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex im
                 return $resultForward;
             }
         }
-        $productOption = $this->_objectManager->create(\Magento\Catalog\Model\Product\Option::class)->load($optionId);
+        $productOption = $this->_objectManager->create(ProductOption::class)->load($optionId);
 
         if (!$productOption ||
             !$productOption->getId() ||
@@ -104,7 +103,7 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex im
                     $info['type']
                 );
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $resultForward->forward('noroute');
             return $resultForward;
         }

@@ -5,6 +5,11 @@
  */
 namespace Magento\Wishlist\Model;
 
+use Magento\Catalog\Model\Attribute\Config as AttributeConfig;
+use Magento\Catalog\Model\Config as CatalogConfig;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+
 /**
  * @api
  * @since 100.0.2
@@ -20,16 +25,6 @@ class Config
     const SHARING_TEXT_LIMIT = 255;
 
     /**
-     * @var \Magento\Catalog\Model\Config
-     */
-    private $catalogConfig;
-
-    /**
-     * @var \Magento\Catalog\Model\Attribute\Config
-     */
-    private $attributeConfig;
-
-    /**
      * Number of emails allowed for sharing wishlist
      *
      * @var int
@@ -42,27 +37,25 @@ class Config
     private $sharignTextLimit;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
+     * @param ScopeConfigInterface $scopeConfig
+     * @param CatalogConfig $catalogConfig
+     * @param AttributeConfig $attributeConfig
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Catalog\Model\Attribute\Config $attributeConfig
+        ScopeConfigInterface $scopeConfig,
+        private readonly CatalogConfig $catalogConfig,
+        private readonly AttributeConfig $attributeConfig
     ) {
         $emailLimitInConfig = (int)$scopeConfig->getValue(
             self::XML_PATH_SHARING_EMAIL_LIMIT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
         $textLimitInConfig = (int)$scopeConfig->getValue(
             self::XML_PATH_SHARING_TEXT_LIMIT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
         $this->sharingEmailLimit = $emailLimitInConfig ?: self::SHARING_EMAIL_LIMIT;
         $this->sharignTextLimit = $textLimitInConfig ?: self::SHARING_TEXT_LIMIT;
-        $this->catalogConfig = $catalogConfig;
-        $this->attributeConfig = $attributeConfig;
     }
 
     /**

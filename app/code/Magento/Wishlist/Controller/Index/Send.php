@@ -6,104 +6,76 @@
  */
 namespace Magento\Wishlist\Controller\Index;
 
+use Exception;
 use Magento\Captcha\Helper\Data as CaptchaHelper;
 use Magento\Captcha\Model\DefaultModel as CaptchaModel;
 use Magento\Captcha\Observer\CaptchaStringResolver;
+use Magento\Customer\Helper\View;
 use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Session\Generic as WishlistSession;
+use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\Framework\Validator\EmailAddress;
 use Magento\Framework\Validator\ValidateException;
 use Magento\Framework\Validator\ValidatorChain;
 use Magento\Framework\View\Result\Layout as ResultLayout;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Wishlist\Controller\AbstractIndex;
+use Magento\Wishlist\Controller\WishlistProviderInterface;
+use Magento\Wishlist\Model\Config;
 
 /**
  * Class Send Email Wishlist Controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\HttpPostActionInterface
+class Send extends AbstractIndex implements Action\HttpPostActionInterface
 {
     /**
-     * @var Escaper
-     */
-    private $escaper;
-
-    /**
-     * @var \Magento\Customer\Helper\View
+     * @var View
      */
     protected $_customerHelperView;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\StateInterface
-     */
-    protected $inlineTranslation;
-
-    /**
-     * @var \Magento\Framework\Mail\Template\TransportBuilder
+     * @var TransportBuilder
      */
     protected $_transportBuilder;
 
     /**
-     * @var \Magento\Wishlist\Model\Config
+     * @var Config
      */
     protected $_wishlistConfig;
 
     /**
-     * @var \Magento\Wishlist\Controller\WishlistProviderInterface
-     */
-    protected $wishlistProvider;
-
-    /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     protected $_customerSession;
 
     /**
-     * @var \Magento\Framework\Data\Form\FormKey\Validator
+     * @var Validator
      */
     protected $_formKeyValidator;
 
     /**
-     * @var WishlistSession
-     */
-    protected $wishlistSession;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var CaptchaHelper
-     */
-    private $captchaHelper;
-
-    /**
-     * @var CaptchaStringResolver
-     */
-    private $captchaStringResolver;
-
-    /**
      * @param Action\Context $context
-     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
-     * @param \Magento\Wishlist\Model\Config $wishlistConfig
-     * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
-     * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @param \Magento\Customer\Helper\View $customerHelperView
+     * @param Validator $formKeyValidator
+     * @param Session $customerSession
+     * @param WishlistProviderInterface $wishlistProvider
+     * @param Config $wishlistConfig
+     * @param TransportBuilder $transportBuilder
+     * @param StateInterface $inlineTranslation
+     * @param View $customerHelperView
      * @param WishlistSession $wishlistSession
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
@@ -114,30 +86,25 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
-        \Magento\Wishlist\Model\Config $wishlistConfig,
-        \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
-        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        \Magento\Customer\Helper\View $customerHelperView,
-        WishlistSession $wishlistSession,
-        ScopeConfigInterface $scopeConfig,
-        StoreManagerInterface $storeManager,
-        ?CaptchaHelper $captchaHelper = null,
-        ?CaptchaStringResolver $captchaStringResolver = null,
-        Escaper $escaper = null
+        Validator $formKeyValidator,
+        Session $customerSession,
+        protected readonly WishlistProviderInterface $wishlistProvider,
+        Config $wishlistConfig,
+        TransportBuilder $transportBuilder,
+        protected readonly StateInterface $inlineTranslation,
+        View $customerHelperView,
+        protected readonly WishlistSession $wishlistSession,
+        protected readonly ScopeConfigInterface $scopeConfig,
+        protected readonly StoreManagerInterface $storeManager,
+        private ?CaptchaHelper $captchaHelper = null,
+        private ?CaptchaStringResolver $captchaStringResolver = null,
+        private ?Escaper $escaper = null
     ) {
         $this->_formKeyValidator = $formKeyValidator;
         $this->_customerSession = $customerSession;
-        $this->wishlistProvider = $wishlistProvider;
         $this->_wishlistConfig = $wishlistConfig;
         $this->_transportBuilder = $transportBuilder;
-        $this->inlineTranslation = $inlineTranslation;
         $this->_customerHelperView = $customerHelperView;
-        $this->wishlistSession = $wishlistSession;
-        $this->scopeConfig = $scopeConfig;
-        $this->storeManager = $storeManager;
         $this->captchaHelper = $captchaHelper ?: ObjectManager::getInstance()->get(CaptchaHelper::class);
         $this->captchaStringResolver = $captchaStringResolver ?: ObjectManager::getInstance()->get(
             CaptchaStringResolver::class
@@ -151,7 +118,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
     /**
      * Share wishlist
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return Redirect
      * @throws NotFoundException|ValidateException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -159,7 +126,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $captchaForName = 'share_wishlist_form';
         /** @var CaptchaModel $captchaModel */
@@ -222,7 +189,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
             $resultRedirect->setPath('*/*/share');
             return $resultRedirect;
         }
-        /** @var \Magento\Framework\View\Result\Layout $resultLayout */
+        /** @var ResultLayout $resultLayout */
         $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
         $this->addLayoutHandles($resultLayout);
         $this->inlineTranslation->suspend();
@@ -242,11 +209,11 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
                     $transport = $this->_transportBuilder->setTemplateIdentifier(
                         $this->scopeConfig->getValue(
                             'wishlist/email/email_template',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                            ScopeInterface::SCOPE_STORE
                         )
                     )->setTemplateOptions(
                         [
-                            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+                            'area' => Area::AREA_FRONTEND,
                             'store' => $this->storeManager->getStore()->getStoreId(),
                         ]
                     )->setTemplateVars(
@@ -262,7 +229,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
                     )->setFrom(
                         $this->scopeConfig->getValue(
                             'wishlist/email/email_identity',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                            ScopeInterface::SCOPE_STORE
                         )
                     )->addTo(
                         $email
@@ -272,7 +239,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
 
                     $sent++;
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $wishlist->setShared($wishlist->getShared() + $sent);
                 $wishlist->save();
                 throw $e;
@@ -286,7 +253,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
             $this->messageManager->addSuccessMessage(__('Your wish list has been shared.'));
             $resultRedirect->setPath('*/*', ['wishlist_id' => $wishlist->getId()]);
             return $resultRedirect;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->inlineTranslation->resume();
             $this->messageManager->addErrorMessage($e->getMessage());
             $this->wishlistSession->setSharingForm($this->getRequest()->getPostValue());
@@ -301,7 +268,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
      * Add 'wishlist_email_rss' layout handle.
      * Add 'wishlist_email_items' layout handle.
      *
-     * @param \Magento\Framework\View\Result\Layout $resultLayout
+     * @param ResultLayout $resultLayout
      * @return void
      */
     protected function addLayoutHandles(ResultLayout $resultLayout)
@@ -316,7 +283,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
      * Retrieve RSS link content (html)
      *
      * @param int $wishlistId
-     * @param \Magento\Framework\View\Result\Layout $resultLayout
+     * @param ResultLayout $resultLayout
      */
     protected function getRssLink($wishlistId, ResultLayout $resultLayout)
     {
@@ -331,7 +298,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
     /**
      * Retrieve wishlist items content (html)
      *
-     * @param \Magento\Framework\View\Result\Layout $resultLayout
+     * @param ResultLayout $resultLayout
      * @return string
      */
     protected function getWishlistItems(ResultLayout $resultLayout)

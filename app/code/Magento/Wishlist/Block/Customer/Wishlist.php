@@ -9,13 +9,23 @@
  */
 namespace Magento\Wishlist\Block\Customer;
 
+use Magento\Catalog\Block\Product\Context as ProductContext;
+use Magento\Catalog\Helper\Product\ConfigurationPool;
+use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Framework\App\Http\Context;
+use Magento\Framework\Data\Helper\PostHelper;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Wishlist\Block\AbstractBlock;
+use Magento\Wishlist\Model\Item;
+use Magento\Wishlist\Model\ResourceModel\Item\Collection;
+
 /**
  * Wishlist block customer items.
  *
  * @api
  * @since 100.0.2
  */
-class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
+class Wishlist extends AbstractBlock
 {
     /**
      * List of product options rendering configurations by product type
@@ -25,40 +35,30 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     protected $_optionsCfg = [];
 
     /**
-     * @var \Magento\Catalog\Helper\Product\ConfigurationPool
+     * @var ConfigurationPool
      */
     protected $_helperPool;
 
     /**
-     * @var  \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @var  Collection
      * @since 101.1.1
      */
     protected $_collection;
 
     /**
-     * @var \Magento\Customer\Helper\Session\CurrentCustomer
-     */
-    protected $currentCustomer;
-
-    /**
-     * @var \Magento\Framework\Data\Helper\PostHelper
-     */
-    protected $postDataHelper;
-
-    /**
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool
-     * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
-     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
+     * @param ProductContext $context
+     * @param Context $httpContext
+     * @param ConfigurationPool $helperPool
+     * @param CurrentCustomer $currentCustomer
+     * @param PostHelper $postDataHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool,
-        \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
-        \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
+        ProductContext $context,
+        Context $httpContext,
+        ConfigurationPool $helperPool,
+        protected readonly CurrentCustomer $currentCustomer,
+        protected readonly PostHelper $postDataHelper,
         array $data = []
     ) {
         parent::__construct(
@@ -67,14 +67,12 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
             $data
         );
         $this->_helperPool = $helperPool;
-        $this->currentCustomer = $currentCustomer;
-        $this->postDataHelper = $postDataHelper;
     }
 
     /**
      * Add wishlist conditions to collection
      *
-     * @param  \Magento\Wishlist\Model\ResourceModel\Item\Collection $collection
+     * @param  Collection $collection
      * @return $this
      */
     protected function _prepareCollection($collection)
@@ -101,7 +99,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * Retrieve Wishlist Product Items collection
      *
-     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @return Collection
      * @since 101.1.1
      */
     public function getWishlistItems()
@@ -131,12 +129,12 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
             )->setFrameLength(
                 $this->_scopeConfig->getValue(
                     'design/pagination/pagination_frame',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    ScopeInterface::SCOPE_STORE
                 )
             )->setJump(
                 $this->_scopeConfig->getValue(
                     'design/pagination/pagination_frame_skip',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    ScopeInterface::SCOPE_STORE
                 )
             )->setLimit(
                 $this->getLimit()
@@ -211,10 +209,10 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * Returns html for showing item options
      *
-     * @param \Magento\Wishlist\Model\Item $item
+     * @param Item $item
      * @return string
      */
-    public function getDetailsHtml(\Magento\Wishlist\Model\Item $item)
+    public function getDetailsHtml(Item $item)
     {
         $cfg = $this->getOptionsRenderCfg($item->getProduct()->getTypeId());
         if (!$cfg) {
@@ -244,10 +242,10 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * Returns qty to show visually to user
      *
-     * @param \Magento\Wishlist\Model\Item $item
+     * @param Item $item
      * @return float
      */
-    public function getAddToCartQty(\Magento\Wishlist\Model\Item $item)
+    public function getAddToCartQty(Item $item)
     {
         $qty = $this->getQty($item);
         return $qty ? $qty : 1;

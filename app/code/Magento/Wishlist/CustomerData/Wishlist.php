@@ -5,9 +5,19 @@
  */
 namespace Magento\Wishlist\CustomerData;
 
+use Magento\Catalog\Helper\Image;
+use Magento\Catalog\Helper\ImageFactory;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ViewInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\Pricing\Render;
+use Magento\Wishlist\Block\Customer\Sidebar;
+use Magento\Wishlist\Helper\Data;
+use Magento\Wishlist\Model\Item;
 
 /**
  * Wishlist section
@@ -20,50 +30,21 @@ class Wishlist implements SectionSourceInterface
     const SIDEBAR_ITEMS_NUMBER = 3;
 
     /**
-     * @var \Magento\Wishlist\Helper\Data
-     */
-    protected $wishlistHelper;
-
-    /**
-     * @var \Magento\Catalog\Helper\ImageFactory
-     */
-    protected $imageHelperFactory;
-
-    /**
-     * @var \Magento\Framework\App\ViewInterface
-     */
-    protected $view;
-
-    /**
-     * @var \Magento\Wishlist\Block\Customer\Sidebar
-     */
-    protected $block;
-
-    /**
-     * @var \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface
-     */
-    private $itemResolver;
-
-    /**
-     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
-     * @param \Magento\Wishlist\Block\Customer\Sidebar $block
-     * @param \Magento\Catalog\Helper\ImageFactory $imageHelperFactory
-     * @param \Magento\Framework\App\ViewInterface $view
-     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface|null $itemResolver
+     * @param Data $wishlistHelper
+     * @param Sidebar $block
+     * @param ImageFactory $imageHelperFactory
+     * @param ViewInterface $view
+     * @param ItemResolverInterface|null $itemResolver
      */
     public function __construct(
-        \Magento\Wishlist\Helper\Data $wishlistHelper,
-        \Magento\Wishlist\Block\Customer\Sidebar $block,
-        \Magento\Catalog\Helper\ImageFactory $imageHelperFactory,
-        \Magento\Framework\App\ViewInterface $view,
-        \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface $itemResolver = null
+        protected readonly Data $wishlistHelper,
+        protected readonly Sidebar $block,
+        protected readonly ImageFactory $imageHelperFactory,
+        protected readonly ViewInterface $view,
+        private ?ItemResolverInterface $itemResolver = null
     ) {
-        $this->wishlistHelper = $wishlistHelper;
-        $this->imageHelperFactory = $imageHelperFactory;
-        $this->block = $block;
-        $this->view = $view;
         $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface::class
+            ItemResolverInterface::class
         );
     }
 
@@ -93,7 +74,7 @@ class Wishlist implements SectionSourceInterface
      * Create button label based on wishlist item quantity
      *
      * @param int $count
-     * @return \Magento\Framework\Phrase|null
+     * @return Phrase|null
      */
     protected function createCounter($count)
     {
@@ -128,10 +109,10 @@ class Wishlist implements SectionSourceInterface
     /**
      * Retrieve wishlist item data
      *
-     * @param \Magento\Wishlist\Model\Item $wishlistItem
+     * @param Item $wishlistItem
      * @return array
      */
-    protected function getItemData(\Magento\Wishlist\Model\Item $wishlistItem)
+    protected function getItemData(Item $wishlistItem)
     {
         $product = $wishlistItem->getProduct();
         return [
@@ -143,7 +124,7 @@ class Wishlist implements SectionSourceInterface
             'product_price' => $this->block->getProductPriceHtml(
                 $product,
                 'wishlist_configured_price',
-                \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+                Render::ZONE_ITEM_LIST,
                 ['item' => $wishlistItem]
             ),
             'product_is_saleable_and_visible' => $product->isSaleable() && $product->isVisibleInSiteVisibility(),
@@ -156,12 +137,12 @@ class Wishlist implements SectionSourceInterface
     /**
      * Retrieve product image data
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return array
      */
     protected function getImageData($product)
     {
-        /** @var \Magento\Catalog\Helper\Image $helper */
+        /** @var Image $helper */
         $helper = $this->imageHelperFactory->create()
             ->init($product, 'wishlist_sidebar_block');
 

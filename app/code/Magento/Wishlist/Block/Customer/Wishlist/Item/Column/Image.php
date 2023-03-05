@@ -7,10 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Block\Customer\Wishlist\Item\Column;
 
+use Magento\Catalog\Block\Product\Context as ProductContext;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
+use Magento\Framework\App\Http\Context;
 use Magento\Framework\View\ConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
+use Magento\Wishlist\Block\Customer\Wishlist\Item\Column;
+use Magento\Wishlist\Model\Item;
 
 /**
  * Wishlist block customer item cart column
@@ -18,26 +23,23 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
  * @api
  * @since 100.0.2
  */
-class Image extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
+class Image extends Column
 {
-    /** @var ItemResolverInterface */
-    private $itemResolver;
-
     /**
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Framework\App\Http\Context $httpContext
+     * @param ProductContext $context
+     * @param Context $httpContext
      * @param array $data
      * @param ConfigInterface|null $config
      * @param UrlBuilder|null $urlBuilder
      * @param ItemResolverInterface|null $itemResolver
      */
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Framework\App\Http\Context $httpContext,
+        ProductContext $context,
+        Context $httpContext,
         array $data = [],
         ConfigInterface $config = null,
         UrlBuilder $urlBuilder = null,
-        ItemResolverInterface $itemResolver = null
+        private ?ItemResolverInterface $itemResolver = null
     ) {
         $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(ItemResolverInterface::class);
         parent::__construct(
@@ -52,10 +54,10 @@ class Image extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
     /**
      * Identify the product from which thumbnail should be taken.
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return Product
      * @since 101.0.5
      */
-    public function getProductForThumbnail(\Magento\Wishlist\Model\Item $item) : \Magento\Catalog\Model\Product
+    public function getProductForThumbnail(Item $item): Product
     {
         return $this->itemResolver->getFinalProduct($item);
     }

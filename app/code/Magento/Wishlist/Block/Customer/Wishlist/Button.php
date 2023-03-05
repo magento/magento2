@@ -11,36 +11,42 @@
  */
 namespace Magento\Wishlist\Block\Customer\Wishlist;
 
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Wishlist\Helper\Data;
+use Magento\Wishlist\Model\Config;
+use Magento\Wishlist\Model\Wishlist;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Button extends \Magento\Framework\View\Element\Template
+class Button extends Template
 {
     /**
      * Wishlist config
      *
-     * @var \Magento\Wishlist\Model\Config
+     * @var Config
      */
     protected $_wishlistConfig;
 
     /**
      * Wishlist data
      *
-     * @var \Magento\Wishlist\Helper\Data
+     * @var Data
      */
     protected $_wishlistData = null;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Wishlist\Helper\Data $wishlistData
-     * @param \Magento\Wishlist\Model\Config $wishlistConfig
+     * @param Context $context
+     * @param Data $wishlistData
+     * @param Config $wishlistConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Wishlist\Helper\Data $wishlistData,
-        \Magento\Wishlist\Model\Config $wishlistConfig,
+        Context $context,
+        Data $wishlistData,
+        Config $wishlistConfig,
         array $data = []
     ) {
         $this->_wishlistData = $wishlistData;
@@ -51,7 +57,7 @@ class Button extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve current wishlist
      *
-     * @return \Magento\Wishlist\Model\Wishlist
+     * @return Wishlist
      */
     public function getWishlist()
     {
@@ -61,7 +67,7 @@ class Button extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve wishlist config
      *
-     * @return \Magento\Wishlist\Model\Config
+     * @return Config
      */
     public function getConfig()
     {

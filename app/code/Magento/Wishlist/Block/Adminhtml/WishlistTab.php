@@ -5,6 +5,7 @@
  */
 namespace Magento\Wishlist\Block\Adminhtml;
 
+use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
 use Magento\Backend\Block\Template\Context;
 use Magento\Ui\Component\Layout\Tabs\TabWrapper;
@@ -35,8 +36,11 @@ class WishlistTab extends TabWrapper implements TabInterface
      * @param Registry $registry
      * @param array $data
      */
-    public function __construct(Context $context, Registry $registry, array $data = [])
-    {
+    public function __construct(
+        Context $context,
+        Registry $registry,
+        array $data = []
+    ) {
         $this->coreRegistry = $registry;
         parent::__construct($context, $data);
     }
@@ -52,7 +56,7 @@ class WishlistTab extends TabWrapper implements TabInterface
     /**
      * Return Tab label
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTabLabel()
     {

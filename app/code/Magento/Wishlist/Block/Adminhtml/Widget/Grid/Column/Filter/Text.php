@@ -5,7 +5,9 @@
  */
 namespace Magento\Wishlist\Block\Adminhtml\Widget\Grid\Column\Filter;
 
-class Text extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Text
+use Magento\Backend\Block\Widget\Grid\Column\Filter\Text as BackendText;
+
+class Text extends BackendText
 {
     /**
      * Override abstract method

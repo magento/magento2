@@ -6,13 +6,15 @@
 
 namespace Magento\Wishlist\Block\Catalog\Product\View\AddTo;
 
+use Magento\Catalog\Block\Product\View;
+
 /**
  * Product view wishlist block
  *
  * @api
  * @since 100.1.1
  */
-class Wishlist extends \Magento\Catalog\Block\Product\View
+class Wishlist extends View
 {
     /**
      * Return wishlist widget options json

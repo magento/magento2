@@ -5,9 +5,13 @@
  */
 namespace Magento\Wishlist\Pricing\ConfiguredPrice;
 
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
+use Magento\Catalog\Model\Product\Option\Type\DefaultType;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
+use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Price\AbstractPrice;
+use Magento\Wishlist\Model\Item\Option;
 
 /**
  * Pricing configuration of wishlist product.
@@ -27,9 +31,9 @@ class ConfigurableProduct extends AbstractPrice
     /**
      * Get Configured Price Amount object by price type.
      *
-     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @return AmountInterface
      */
-    public function getConfiguredAmount(): \Magento\Framework\Pricing\Amount\AmountInterface
+    public function getConfiguredAmount(): AmountInterface
     {
         return $this
             ->getProduct()
@@ -41,9 +45,9 @@ class ConfigurableProduct extends AbstractPrice
     /**
      * Get Configured Regular Price Amount object by price type.
      *
-     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @return AmountInterface
      */
-    public function getConfiguredRegularAmount(): \Magento\Framework\Pricing\Amount\AmountInterface
+    public function getConfiguredRegularAmount(): AmountInterface
     {
         return $this
             ->getProduct()
@@ -58,9 +62,9 @@ class ConfigurableProduct extends AbstractPrice
     public function getValue()
     {
         $price = $this->getProduct()->getPriceInfo()->getPrice(self::PRICE_CODE)->getValue();
-        /** @var \Magento\Catalog\Model\Product $product */
+        /** @var Product $product */
         $product = parent::getProduct();
-        /** @var \Magento\Wishlist\Model\Item\Option $configurableCustomOption */
+        /** @var Option $configurableCustomOption */
         $configurableCustomOption = $product->getCustomOption('option_ids');
         $customPrice = 0;
         if ($configurableCustomOption && $configurableCustomOption->getValue()) {
@@ -70,7 +74,7 @@ class ConfigurableProduct extends AbstractPrice
                 $option = $configurableProduct->getOptionById($optionId);
                 if ($option) {
                     $itemOption = $item->getOptionByCode('option_' . $option->getId());
-                    /** @var $group \Magento\Catalog\Model\Product\Option\Type\DefaultType */
+                    /** @var $group DefaultType */
                     $group = $option->groupFactory($option->getType())
                         ->setOption($option);
                     $customPrice += $group->getOptionPrice($itemOption->getValue(), $price);
@@ -97,10 +101,10 @@ class ConfigurableProduct extends AbstractPrice
      */
     public function getProduct()
     {
-        /** @var \Magento\Catalog\Model\Product $product */
+        /** @var Product $product */
         $product = parent::getProduct();
 
-        /** @var \Magento\Wishlist\Model\Item\Option $customOption */
+        /** @var Option $customOption */
         $customOption = $product->getCustomOption('simple_product');
 
         return $customOption ? ($customOption->getProduct() ?? $product) : $product;

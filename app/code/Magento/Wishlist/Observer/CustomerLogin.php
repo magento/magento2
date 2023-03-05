@@ -17,16 +17,11 @@ use Magento\Wishlist\Helper\Data;
 class CustomerLogin implements ObserverInterface
 {
     /**
-     * @var \Magento\Wishlist\Helper\Data
-     */
-    protected $wishlistData;
-
-    /**
      * @param Data $wishlistData
      */
-    public function __construct(Data $wishlistData)
-    {
-        $this->wishlistData = $wishlistData;
+    public function __construct(
+        protected readonly Data $wishlistData
+    ) {
     }
 
     /**

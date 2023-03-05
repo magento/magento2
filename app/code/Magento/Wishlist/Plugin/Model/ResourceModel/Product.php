@@ -19,17 +19,11 @@ use Magento\Wishlist\Model\WishlistCleaner;
 class Product
 {
     /**
-     * @var WishlistCleaner
-     */
-    private $wishlistCleaner;
-
-    /**
      * @param WishlistCleaner $wishlistCleaner
      */
     public function __construct(
-        WishlistCleaner $wishlistCleaner
+        private readonly WishlistCleaner $wishlistCleaner
     ) {
-        $this->wishlistCleaner = $wishlistCleaner;
     }
 
     /**

@@ -17,16 +17,11 @@ use Magento\Customer\Model\Session;
 class CustomerLogout implements ObserverInterface
 {
     /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $customerSession;
-
-    /**
      * @param Session $customerSession
      */
-    public function __construct(Session $customerSession)
-    {
-        $this->customerSession = $customerSession;
+    public function __construct(
+        protected readonly Session $customerSession
+    ) {
     }
 
     /**

@@ -1,9 +1,12 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
+
 namespace Magento\Wishlist\Setup\Patch\Data;
 
 use Magento\Framework\DB\Query\Generator;
@@ -12,6 +15,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Psr\Log\LoggerInterface;
+use Throwable;
 
 /**
  * Class Clean Up Data Removes unused data
@@ -24,26 +28,6 @@ class WishlistDataCleanUp implements DataPatchInterface
     private const BATCH_SIZE = 1000;
 
     /**
-     * @var ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
-     * @var Generator
-     */
-    private $queryGenerator;
-
-    /**
-     * @var Json
-     */
-    private $json;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * RemoveData constructor.
      * @param Json $json
      * @param Generator $queryGenerator
@@ -51,15 +35,11 @@ class WishlistDataCleanUp implements DataPatchInterface
      * @param LoggerInterface $logger
      */
     public function __construct(
-        Json $json,
-        Generator $queryGenerator,
-        ModuleDataSetupInterface $moduleDataSetup,
-        LoggerInterface $logger
+        private readonly Json $json,
+        private readonly Generator $queryGenerator,
+        private readonly ModuleDataSetupInterface $moduleDataSetup,
+        private readonly LoggerInterface $logger
     ) {
-        $this->json = $json;
-        $this->queryGenerator = $queryGenerator;
-        $this->moduleDataSetup = $moduleDataSetup;
-        $this->logger = $logger;
     }
 
     /**
@@ -69,7 +49,7 @@ class WishlistDataCleanUp implements DataPatchInterface
     {
         try {
             $this->cleanWishlistItemOptionTable();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->logger->warning(
                 'Wishlist module WishlistDataCleanUp patch experienced an error and could not be completed.'
                 . ' Please submit a support ticket or email us at security@magento.com.'
@@ -118,7 +98,7 @@ class WishlistDataCleanUp implements DataPatchInterface
                         ['value' => $rowValue],
                         ['option_id = ?' => $optionRow['option_id']]
                     );
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     $rowErrorFlag = true;
                     continue;
                 }

@@ -5,16 +5,19 @@
  */
 namespace Magento\Wishlist\Block\Catalog\Product\ProductList\Item\AddTo;
 
+use Magento\Catalog\Block\Product\ProductList\Item\Block;
+use Magento\Wishlist\Helper\Data;
+
 /**
  * Add product to wishlist
  *
  * @api
  * @since 100.1.1
  */
-class Wishlist extends \Magento\Catalog\Block\Product\ProductList\Item\Block
+class Wishlist extends Block
 {
     /**
-     * @return \Magento\Wishlist\Helper\Data
+     * @return Data
      * @since 100.1.1
      */
     public function getWishlistHelper()

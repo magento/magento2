@@ -6,10 +6,18 @@
 namespace Magento\Wishlist\Model\Item;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
 use Magento\Wishlist\Model\Item;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Wishlist\Model\ResourceModel\Item\Option as ResourceOption;
+use Psr\Log\LoggerInterface;
 
 /**
  * Item option model
@@ -18,8 +26,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
  * @api
  * @since 100.0.2
  */
-class Option extends \Magento\Framework\Model\AbstractModel implements
-    \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
+class Option extends AbstractModel implements OptionInterface
 {
     /**
      * @var Item
@@ -32,36 +39,25 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
     protected $_product;
 
     /**
-     * @var ProductRepositoryInterface
-     */
-    protected $productRepository;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param Context $context
+     * @param Registry $registry
      * @param ProductRepositoryInterface $productRepository
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
      * @param array $data
-     * @param \Psr\Log\LoggerInterface|null $logger
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        ProductRepositoryInterface $productRepository,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        protected readonly ProductRepositoryInterface $productRepository,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = [],
-        \Psr\Log\LoggerInterface $logger = null
+        private ?LoggerInterface $logger = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->productRepository = $productRepository;
-        $this->logger = $logger ?? ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
+        $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -71,7 +67,7 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Wishlist\Model\ResourceModel\Item\Option::class);
+        $this->_init(ResourceOption::class);
     }
 
     /**
