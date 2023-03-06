@@ -7,8 +7,6 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg;
 
 /**
  * Images manage controller for Cms WYSIWYG editor
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class Images extends \Magento\Backend\App\Action
 {

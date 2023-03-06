@@ -7,8 +7,6 @@ namespace Magento\Captcha\Model\ResourceModel;
 
 /**
  * Log Attempts resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

@@ -15,8 +15,6 @@ use Magento\Widget\Block\BlockInterface;
 
 /**
  * Cms Static Block Widget
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 class Block extends \Magento\Framework\View\Element\Template implements BlockInterface, IdentityInterface
 {
