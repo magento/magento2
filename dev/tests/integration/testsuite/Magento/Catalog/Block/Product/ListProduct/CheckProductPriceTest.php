@@ -345,8 +345,7 @@ class CheckProductPriceTest extends TestCase
         ConfigFixture(TaxConfig::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE, 3, 'store', 'default'),
         DataFixture(
             TaxRateFixture::class,
-            [],
-            'rate'
+            as: 'rate'
         ),
         DataFixture(
             TaxRuleFixture::class,
