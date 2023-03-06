@@ -52,9 +52,6 @@ class MinimalTierPriceCalculator implements MinimalPriceCalculatorInterface
      */
     public function getAmount(SaleableInterface $saleableItem)
     {
-        $value = $this->getValue($saleableItem);
-        return $value === null ? null : $this->lowestTierPrice;
-
         $this->lowestTierPrice = null;
         /** @var TierPrice $price */
         $tierPrice = $saleableItem->getPriceInfo()->getPrice(TierPrice::PRICE_CODE);
