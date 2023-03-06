@@ -19,7 +19,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\Bootstrap as TestFrameworkBootstrap;
 
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -38,7 +37,6 @@ class NewAccountEmailTemplateTest extends \PHPUnit\Framework\TestCase
 
     protected $storeData = array();
 
-
     /**
      * Set up
      */
@@ -48,12 +46,15 @@ class NewAccountEmailTemplateTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->config = $this->objectManager->get(ScopeConfigInterface::class);
-        $this->storeData['name'] = $this->config->getValue('general/store_information/name', ScopeInterface::SCOPE_STORES);
-        $this->storeData['phone'] = $this->config->getValue('general/store_information/phone', ScopeInterface::SCOPE_STORES);
-        $this->storeData['city'] = $this->config->getValue('general/store_information/city', ScopeInterface::SCOPE_STORES);
-        $this->storeData['country'] = $this->config->getValue('general/store_information/country_id', ScopeInterface::SCOPE_STORES);
+        $this->storeData['name'] = $this->config->getValue(
+            'general/store_information/name', ScopeInterface::SCOPE_STORES);
+        $this->storeData['phone'] = $this->config->getValue(
+            'general/store_information/phone', ScopeInterface::SCOPE_STORES);
+        $this->storeData['city'] = $this->config->getValue(
+            'general/store_information/city', ScopeInterface::SCOPE_STORES);
+        $this->storeData['country'] = $this->config->getValue(
+            'general/store_information/country_id', ScopeInterface::SCOPE_STORES);
     }
-
 
     /**
      * @magentoConfigFixture current_store general/store_information/name TestStore
@@ -65,7 +66,7 @@ class NewAccountEmailTemplateTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture default_store general/store_information/zip 78739
      * @magentoConfigFixture default_store general/store_information/country_id US
      * @magentoConfigFixture default_store general/store_information/region_id 57
-     * @magentoDataFixture Magento/Email/Model/_files/email_template_new_user_welcome.php
+     * @magentoDataFixture Magento/Email/Model/_files/email_template.php
      */
     public function testNewAccountEmailTemplate(): void
     {
@@ -74,9 +75,9 @@ class NewAccountEmailTemplateTest extends \PHPUnit\Framework\TestCase
         $config = Bootstrap::getObjectManager()
             ->get(MutableScopeConfigInterface::class);
         $config->setValue(
-            'admin/emails/new_user_notification_template',
+            'admin/emails/email_template',
             $this->getCustomEmailTemplateId(
-                'admin_emails_new_user_notification_template'
+                'template_fixture'
             )
         );
 
@@ -112,7 +113,6 @@ class NewAccountEmailTemplateTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString("US", $storeText);
 
     }
-
 
     /**
      * Return email template id by origin template code
