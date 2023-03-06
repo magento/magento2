@@ -6,8 +6,6 @@
 
 /**
  * Review statuses collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Review\Model\ResourceModel\Review\Status;
 

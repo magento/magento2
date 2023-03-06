@@ -11,7 +11,6 @@ namespace Magento\Review\Model\Rating;
  * @method string getEntityCode()
  * @method \Magento\Review\Model\Rating\Entity setEntityCode(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
  */
 class Entity extends \Magento\Framework\Model\AbstractModel

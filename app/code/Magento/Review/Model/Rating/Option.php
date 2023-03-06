@@ -18,7 +18,6 @@ namespace Magento\Review\Model\Rating;
  * @method int getPosition()
  * @method \Magento\Review\Model\Rating\Option setPosition(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
  * @since 100.0.2
  */

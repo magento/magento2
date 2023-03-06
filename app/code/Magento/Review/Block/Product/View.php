@@ -11,7 +11,6 @@ use Magento\Review\Model\ResourceModel\Review\Collection as ReviewCollection;
 /**
  * Product Reviews Page
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class View extends \Magento\Catalog\Block\Product\View

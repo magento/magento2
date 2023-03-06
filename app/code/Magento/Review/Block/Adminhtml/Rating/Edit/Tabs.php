@@ -7,8 +7,6 @@ namespace Magento\Review\Block\Adminhtml\Rating\Edit;
 
 /**
  * Admin rating left menu
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {

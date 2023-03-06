@@ -7,8 +7,6 @@ namespace Magento\Review\Model\ResourceModel\Rating\Grid;
 
 /**
  * Rating grid collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Review\Model\ResourceModel\Rating\Collection
 {

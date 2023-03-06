@@ -7,8 +7,6 @@ namespace Magento\Review\Block\Adminhtml\Rating\Edit;
 
 /**
  * Rating edit form block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {

@@ -9,8 +9,6 @@ namespace Magento\Review\Model\Rating\Option;
  * Rating vote model
  *
  * @api
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
  * @since 100.0.2
  */
