@@ -201,10 +201,6 @@ define([
                 addressFlat = uiRegistry.get('checkoutProvider').shippingAddress;
                 address = addressConverter.formAddressDataToQuoteAddress(addressFlat);
                 selectShippingAddress(address);
-
-                if (quote.shippingMethod()) {
-                    setShippingInformationAction();
-                }
             }
         },
 
