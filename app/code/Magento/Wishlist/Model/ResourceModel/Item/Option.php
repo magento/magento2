@@ -6,8 +6,6 @@
 
 /**
  * Wishlist item option resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Wishlist\Model\ResourceModel\Item;
 

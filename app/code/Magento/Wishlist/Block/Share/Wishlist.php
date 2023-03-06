@@ -6,8 +6,6 @@
 
 /**
  * Wishlist block shared items
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Wishlist\Block\Share;
 
