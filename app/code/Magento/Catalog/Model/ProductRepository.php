@@ -618,11 +618,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                             $product->getStoreId()
                         )
                     ) {
-                        if ($attributeCode === ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY) {
-                            $product->setData($attributeCode, false);
-                        } else {
-                            $product->unsetData($attributeCode);
-                        }
+                        $product->unsetData($attributeCode);
                         $hasDataChanged = true;
                     }
                 }
