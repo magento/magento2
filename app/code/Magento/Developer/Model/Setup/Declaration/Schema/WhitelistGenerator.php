@@ -17,6 +17,7 @@ use Magento\Framework\Setup\Declaration\Schema\Declaration\ReaderComposite;
 use Magento\Framework\Setup\Declaration\Schema\Declaration\TableElement\ElementNameResolver;
 use Magento\Framework\Setup\Declaration\Schema\Diff\Diff;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Schema;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\Setup\Declaration\Schema\SchemaConfig;
 use Magento\Framework\Setup\JsonPersistor;
 
@@ -192,6 +193,9 @@ class WhitelistGenerator
         $elementType = 'index';
         if (!empty($tableData[$elementType])) {
             foreach ($tableData[$elementType] as $tableElementData) {
+                if (!isset($tableElementData['column'])) {
+                    continue;
+                }
                 $indexName = $this->elementNameResolver->getFullIndexName(
                     $table,
                     $tableElementData['column'],
@@ -201,9 +205,30 @@ class WhitelistGenerator
             }
         }
 
+        $constraintName = $this->getConstraintName($schema, $table, $tableData);
+        if ($constraintName) {
+            $declaredStructure += $constraintName;
+        }
+
+        return $declaredStructure;
+    }
+
+    /**
+     * @param Schema $schema
+     * @param Table $table
+     * @param array $tableData
+     * @return array
+     */
+    private function getConstraintName(Schema $schema, Table $table, array $tableData): array
+    {
+        $declaredStructure = [];
+
         $elementType = 'constraint';
         if (!empty($tableData[$elementType])) {
             foreach ($tableData[$elementType] as $tableElementData) {
+                if (!isset($tableElementData['referenceTable'])) {
+                    continue;
+                }
                 if ($tableElementData['type'] === 'foreign') {
                     $referenceTable = $schema->getTableByName($tableElementData['referenceTable']);
                     $column = $table->getColumnByName($tableElementData['column']);
@@ -216,6 +241,9 @@ class WhitelistGenerator
                             $referenceColumn
                         ) : null;
                 } else {
+                    if (!isset($tableElementData['column'])) {
+                        continue;
+                    }
                     $constraintName = $this->elementNameResolver->getFullIndexName(
                         $table,
                         $tableElementData['column'],
