@@ -75,6 +75,14 @@ class ShippingBuilder
     }
 
     /**
+     * @return OrderInterface
+     */
+    private function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
      * @return ShippingInterface|null
      */
     public function create()
