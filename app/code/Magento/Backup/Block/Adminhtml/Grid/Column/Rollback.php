@@ -6,8 +6,6 @@
 
 /**
  * Grid column block that is displayed only if rollback allowed
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backup\Block\Adminhtml\Grid\Column;
 

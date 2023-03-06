@@ -6,8 +6,6 @@
 
 /**
  * Backup types option array
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backup\Model\Grid;
 

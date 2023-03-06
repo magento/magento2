@@ -7,8 +7,6 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
 /**
  * Adminhtml catalog product bundle items tab block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {

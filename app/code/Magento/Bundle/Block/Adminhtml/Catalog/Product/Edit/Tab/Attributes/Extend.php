@@ -8,8 +8,6 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes;
 
 /**
  * Bundle Extended Attributes Block.
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element
 {

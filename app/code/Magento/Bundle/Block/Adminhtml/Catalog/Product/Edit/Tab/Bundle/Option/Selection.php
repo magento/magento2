@@ -7,8 +7,6 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option;
 
 /**
  * Bundle selection renderer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Selection extends \Magento\Backend\Block\Widget
 {

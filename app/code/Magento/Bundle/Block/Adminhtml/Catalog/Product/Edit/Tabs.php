@@ -7,8 +7,6 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit;
 
 /**
  * Adminhtml product edit tabs
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Tabs extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs
 {

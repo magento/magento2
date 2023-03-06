@@ -7,8 +7,6 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option;
 
 /**
  * Bundle selection product block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Search extends \Magento\Backend\Block\Widget
 {
