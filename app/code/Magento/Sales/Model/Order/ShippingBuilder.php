@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShippingInterface;
 use Magento\Sales\Api\Data\ShippingInterfaceFactory;
 use Magento\Sales\Api\Data\TotalInterface;
@@ -19,12 +20,7 @@ use Magento\Sales\Model\OrderFactory;
 class ShippingBuilder
 {
     /**
-     * @var int|null
-     */
-    private $orderId = null;
-
-    /**
-     * @var Order
+     * @var OrderInterface
      */
     private $order;
 
@@ -66,7 +62,16 @@ class ShippingBuilder
      */
     public function setOrderId($orderId)
     {
-        $this->orderId = $orderId;
+        $this->order = $this->orderFactory->create()->load($orderId);
+    }
+
+    /**
+     * @param OrderInterface $order
+     * @return void
+     */
+    public function setOrder(OrderInterface $order)
+    {
+        $this->order = $order;
     }
 
     /**
@@ -75,28 +80,18 @@ class ShippingBuilder
     public function create()
     {
         $shipping = null;
-        if ($this->getOrderId()) {
-            $this->order = $this->orderFactory->create()->load($this->getOrderId());
-            if ($this->order->getEntityId()) {
-                /** @var ShippingInterface $shipping */
-                $shipping = $this->shippingFactory->create();
-                $shippingAddress = $this->order->getShippingAddress();
-                if ($shippingAddress) {
-                    $shipping->setAddress($shippingAddress);
-                }
-                $shipping->setMethod($this->order->getShippingMethod());
-                $shipping->setTotal($this->getTotal());
+        $order = $this->getOrder();
+        if ($order && $order->getEntityId()) {
+            /** @var ShippingInterface $shipping */
+            $shipping = $this->shippingFactory->create();
+            $shippingAddress = $order->getShippingAddress();
+            if ($shippingAddress) {
+                $shipping->setAddress($shippingAddress);
             }
+            $shipping->setMethod($order->getShippingMethod());
+            $shipping->setTotal($this->getTotal());
         }
         return $shipping;
-    }
-
-    /**
-     * @return int|null
-     */
-    private function getOrderId()
-    {
-        return $this->orderId;
     }
 
     /**

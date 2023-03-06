@@ -302,7 +302,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         }
         /** @var ShippingAssignmentInterface $shippingAssignment */
         $shippingAssignments = $this->getShippingAssignmentBuilderDependency();
-        $shippingAssignments->setOrderId($order->getEntityId());
+        $shippingAssignments->setOrder($order);
         $extensionAttributes->setShippingAssignments($shippingAssignments->create());
         $order->setExtensionAttributes($extensionAttributes);
     }

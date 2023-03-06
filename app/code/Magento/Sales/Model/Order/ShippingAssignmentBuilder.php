@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShippingAssignmentInterface;
 use Magento\Sales\Api\Data\ShippingAssignmentInterfaceFactory;
 use Magento\Sales\Model\OrderFactory;
@@ -31,9 +32,9 @@ class ShippingAssignmentBuilder
     private $shippingBuilderFactory;
 
     /**
-     * @var int|null
+     * @var OrderInterface
      */
-    private $orderId = null;
+    private $order;
 
     /**
      * ShippingAssignment constructor.
@@ -58,15 +59,24 @@ class ShippingAssignmentBuilder
      */
     public function setOrderId($orderId)
     {
-        $this->orderId = $orderId;
+        $this->order = $this->orderFactory->create()->load($orderId);
     }
 
     /**
-     * @return int|null
+     * @param OrderInterface $order
+     * @return void
      */
-    private function getOrderId()
+    public function setOrder(OrderInterface $order)
     {
-        return $this->orderId;
+        $this->order = $order;
+    }
+
+    /**
+     * @return OrderInterface
+     */
+    private function getOrder()
+    {
+        return $this->order;
     }
 
     /**
@@ -75,13 +85,12 @@ class ShippingAssignmentBuilder
     public function create()
     {
         $shippingAssignments = null;
-        if ($this->getOrderId()) {
-            $order = $this->orderFactory->create()->load($this->getOrderId());
+        if ($order = $this->getOrder()) {
             /** @var ShippingAssignmentInterface $shippingAssignment */
             $shippingAssignment =  $this->shippingAssignmentFactory->create();
 
             $shipping = $this->shippingBuilderFactory->create();
-            $shipping->setOrderId($this->getOrderId());
+            $shipping->setOrder($order);
             $shippingAssignment->setShipping($shipping->create());
             $shippingAssignment->setItems($order->getItems());
             $shippingAssignment->setStockId($order->getStockId());
