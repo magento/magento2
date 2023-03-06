@@ -9,8 +9,6 @@ use Magento\Backend\App\Action;
 
 /**
  * Adminhtml account controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class Account extends Action
 {

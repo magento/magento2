@@ -10,8 +10,6 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 /**
  * Adminhtml dashboard tab abstract
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
 {

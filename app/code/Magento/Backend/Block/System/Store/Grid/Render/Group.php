@@ -7,8 +7,6 @@ namespace Magento\Backend\Block\System\Store\Grid\Render;
 
 /**
  * Store render group
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Group extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {

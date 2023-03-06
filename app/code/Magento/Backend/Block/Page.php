@@ -6,8 +6,6 @@
 
 /**
  * Adminhtml page
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backend\Block;
 

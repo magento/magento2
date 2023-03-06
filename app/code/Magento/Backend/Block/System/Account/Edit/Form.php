@@ -10,8 +10,6 @@ use Magento\Framework\Locale\OptionInterface;
 
 /**
  * Adminhtml edit admin user account form
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {

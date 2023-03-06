@@ -9,8 +9,6 @@ use Magento\Framework\Data\Form;
 
 /**
  * Form element widget block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Element extends \Magento\Backend\Block\Template
 {

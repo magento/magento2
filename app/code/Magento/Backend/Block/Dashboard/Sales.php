@@ -15,7 +15,6 @@ use Magento\Reports\Model\ResourceModel\Order\CollectionFactory;
  * Adminhtml dashboard sales statistics bar
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Sales extends Bar

@@ -7,8 +7,6 @@ namespace Magento\Backend\Block\System\Cache;
 
 /**
  * Cache management edit page
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Edit extends \Magento\Backend\Block\Widget
 {

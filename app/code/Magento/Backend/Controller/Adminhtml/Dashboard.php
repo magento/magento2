@@ -6,8 +6,6 @@
 
 /**
  * Dashboard admin controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backend\Controller\Adminhtml;
 

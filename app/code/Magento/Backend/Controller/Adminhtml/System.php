@@ -9,8 +9,6 @@ use Magento\Backend\App\AbstractAction;
 
 /**
  * System admin controller
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 abstract class System extends AbstractAction
 {

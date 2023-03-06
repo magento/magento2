@@ -8,8 +8,6 @@ namespace Magento\Backend\Block\System\Store\Edit;
 /**
  * Adminhtml store edit form
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 abstract class AbstractForm extends \Magento\Backend\Block\Widget\Form\Generic

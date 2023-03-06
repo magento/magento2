@@ -12,7 +12,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  * "Reset to Defaults" button renderer
  *
  * @deprecated 100.1.6
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Reset extends \Magento\Config\Block\System\Config\Form\Field
 {

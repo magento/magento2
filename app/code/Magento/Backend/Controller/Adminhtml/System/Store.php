@@ -13,7 +13,6 @@ use Magento\Framework\Filesystem;
 /**
  * Store controller
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 abstract class Store extends Action

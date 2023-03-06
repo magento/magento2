@@ -9,8 +9,6 @@ use Magento\Backend\Block\Widget\Accordion;
 
 /**
  * Accordion item
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Item extends \Magento\Backend\Block\Widget
 {

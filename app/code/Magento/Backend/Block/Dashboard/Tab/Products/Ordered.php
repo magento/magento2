@@ -8,7 +8,6 @@ namespace Magento\Backend\Block\Dashboard\Tab\Products;
 /**
  * Adminhtml dashboard most ordered products grid
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Ordered extends \Magento\Backend\Block\Dashboard\Grid
