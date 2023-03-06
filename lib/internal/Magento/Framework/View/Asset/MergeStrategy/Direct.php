@@ -18,16 +18,16 @@ use Magento\Framework\View\Url\CssResolver;
  */
 class Direct implements MergeStrategyInterface
 {
-    /**#@+
+    /**
      * Delimiters for merging files of various content type
      */
-    const MERGE_DELIMITER_JS = ';';
+    private const MERGE_DELIMITER_JS = ';';
 
-    const MERGE_DELIMITER_EMPTY = '';
+    private const MERGE_DELIMITER_EMPTY = '';
 
-    /**#@-*/
-
-    /**#@-*/
+    /**
+     * @var Filesystem
+     */
     private $filesystem;
 
     /**
