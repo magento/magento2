@@ -21,9 +21,9 @@ class MinimalTierPriceCalculator implements MinimalPriceCalculatorInterface
     private $calculator;
 
     /**
-     * @var null
+     * @var AmountInterface|null
      */
-    private $lowestTierPrice;
+    private $lowestTierPrice = null;
 
     /**
      * @param CalculatorInterface $calculator
