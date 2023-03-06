@@ -9,52 +9,47 @@ namespace Magento\Catalog\Model\Product\Price;
 use Magento\Catalog\Api\Data\TierPriceInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Tier price factory.
- */
 class TierPriceFactory
 {
     /**
-     * Tier price factory.
-     *
      * @var \Magento\Catalog\Api\Data\TierPriceInterfaceFactory
      */
     private $tierPriceFactory;
 
     /**
-     * Tier price persistence.
-     *
      * @var TierPricePersistence
      */
     private $tierPricePersistence;
 
     /**
-     * Customer group repository.
-     *
      * @var \Magento\Customer\Api\GroupRepositoryInterface
      */
     private $customerGroupRepository;
 
     /**
-     * All groups value.
-     *
      * @var string
      */
     private $allGroupsValue = 'all groups';
 
     /**
-     * All groups ID.
-     *
      * @var int
      */
     private $allGroupsId = 1;
 
     /**
-     * Customer groups by code.
-     *
      * @var array
      */
     private $customerGroupsByCode = [];
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var \Magento\Framework\Api\FilterBuilder
+     */
+    private $filterBuilder;
 
     /**
      * TierPriceBuilder constructor.
@@ -100,7 +95,8 @@ class TierPriceFactory
         $price->setCustomerGroup(
             $rawPrice['all_groups'] == $this->allGroupsId
             ? $this->allGroupsValue
-            : $this->customerGroupRepository->getById($rawPrice['customer_group_id'])->getCode()
+            : ($rawPrice['customer_group_code']
+                ?? $this->customerGroupRepository->getById($rawPrice['customer_group_id'])->getCode())
         );
         $price->setQuantity($rawPrice['qty']);
 
@@ -121,7 +117,9 @@ class TierPriceFactory
             'all_groups' => $this->retrievePriceForAllGroupsValue($price),
             'customer_group_id' => $this->retrievePriceForAllGroupsValue($price) === $this->allGroupsId
                 ? 0
-                : $this->retrieveGroupValue(strtolower($price->getCustomerGroup())),
+                : $this->retrieveGroupValue(
+                    $price->getCustomerGroup() === null ? '' : strtolower($price->getCustomerGroup())
+                ),
             'qty' => $price->getQuantity(),
             'value' => $price->getPriceType() === TierPriceInterface::PRICE_TYPE_FIXED
                 ? $price->getPrice()
@@ -141,6 +139,10 @@ class TierPriceFactory
      */
     private function retrievePriceForAllGroupsValue(TierPriceInterface $price)
     {
+        if ($price->getCustomerGroup() === null) {
+            return 0;
+        }
+
         return strcasecmp($price->getCustomerGroup(), $this->allGroupsValue) === 0 ? $this->allGroupsId : 0;
     }
 

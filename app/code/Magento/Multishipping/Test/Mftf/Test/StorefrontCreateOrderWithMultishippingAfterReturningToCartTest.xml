@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCreateOrderWithMultishippingAfterReturningToCartTest">
+        <annotations>
+            <features value="Multishipping"/>
+            <stories value="Checkout with multiple addresses."/>
+            <title value="Checkout with multiple addresses after returning on cart page during checkout."/>
+            <description value="Verify customer able to checkout with multiple addresses after returning to cart page and continue checkout with browser 'back' button."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-39583"/>
+            <useCaseId value="MC-36425"/>
+            <group value="multishipping"/>
+        </annotations>
+
+        <before>
+            <!--Create test data.-->
+            <createData entity="SimpleProduct2" stepKey="product"/>
+            <createData entity="Simple_US_Customer_Two_Addresses" stepKey="customer"/>
+            <!--Set up configuration.-->
+            <actionGroup ref="CliEnableFreeShippingMethodActionGroup" stepKey="enableFreeShipping"/>
+            <actionGroup ref="CliEnableFlatRateShippingMethodActionGroup" stepKey="enableFlatRateShipping"/>
+            <actionGroup ref="CliEnableCheckMoneyOrderPaymentMethodActionGroup" stepKey="enableCheckMoneyOrderPaymentMethod"/>
+        </before>
+
+        <after>
+            <!--Clean up test data, revert configuration.-->
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <actionGroup ref="CliDisableFreeShippingMethodActionGroup" stepKey="disableFreeShipping"/>
+        </after>
+
+        <!--Add product to cart and proceed to multishipping checkout. -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="navigateToProductPage">
+            <argument name="productUrl" value="$product.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$product.name$"/>
+            <argument name="productQty" value="2"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <actionGroup ref="CheckingWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
+        <actionGroup ref="SelectMultiShippingInfoActionGroup" stepKey="checkoutWithMultipleShipping"/>
+        <waitForPageLoad stepKey="waitForShippingInfoPage"/>
+        <!--Open cart page before place order.-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="navigateToCartPage"/>
+        <waitForPageLoad stepKey="waitForCartPageLoad"/>
+        <!--Go back to continue checkout with multiple addresses again.-->
+        <moveBack stepKey="navigateBackToMultishippingCheckout"/>
+        <actionGroup ref="StorefrontSelectMultipleAddressesOnCheckoutActionGroup" stepKey="selectAddresses"/>
+        <actionGroup ref="StorefrontNavigateToShippingInformationPageActionGroup" stepKey="navigateToShippingInformationPage"/>
+        <actionGroup ref="SelectMultiShippingInfoActionGroup" stepKey="checkoutWithMultipleShippingAgain"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPaymentAgain"/>
+        <actionGroup ref="SelectBillingInfoActionGroup" stepKey="checkoutWithPaymentMethodAgain"/>
+        <actionGroup ref="ReviewOrderForMultiShipmentActionGroup" stepKey="reviewOrderForMultiShipment">
+            <argument name="totalNameForFirstOrder" value="Shipping &amp; Handling"/>
+            <argument name="totalPositionForFirstOrder" value="1"/>
+            <argument name="totalNameForSecondOrder" value="Shipping &amp; Handling"/>
+            <argument name="totalPositionForSecondOrder" value="2"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPlaceOrderPageLoad"/>
+        <actionGroup ref="StorefrontPlaceOrderForMultipleAddressesActionGroup" stepKey="placeOrder">
+            <argument name="firstOrderPosition" value="1"/>
+            <argument name="secondOrderPosition" value="2"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -15,6 +15,8 @@
             <argument name="filterPlaceholder" type="string"/>
         </arguments>
 
+        <waitForPageLoad stepKey="waitVisibleFilter"/>
+        <waitForElementVisible selector="{{AdminProductGridFilterSection.enabledFilters}}" stepKey="waitForRequest"/>
         <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="{{filterPlaceholder}}" stepKey="seeFilter"/>
     </actionGroup>
 </actionGroups>

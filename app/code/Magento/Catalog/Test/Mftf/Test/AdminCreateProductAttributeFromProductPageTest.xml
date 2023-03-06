@@ -38,6 +38,9 @@
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteCreatedAttribute">
                 <argument name="ProductAttribute" value="newProductAttribute"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -52,8 +55,12 @@
         <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
 
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="fillProductQty"/>
-        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="selectStockStatus"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQty">
+            <argument name="productQty" value="100"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="selectStockStatus">
+             <argument name="stockStatus" value="In Stock"/>
+        </actionGroup>
 
         <!-- Create New Product Attribute -->
         <click selector="{{AdminProductFormSection.addAttributeBtn}}" stepKey="clickOnAddAttribute"/>
@@ -88,7 +95,6 @@
         <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="saveTheProduct"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
 
-        <!--Run Re-Index task -->
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
             <argument name="indices" value=""/>
         </actionGroup>
@@ -111,13 +117,15 @@
         <see selector="{{AdminProductAttributeGridSection.isComparableColumn}}" userInput="Yes" stepKey="seeComparableColumn"/>
 
         <!--Verify Product Attribute is present in Category Store Front Page -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="goToStorefrontPage"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForProductFrontPageToLoad"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="clickOnCategory"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <click selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="openSearchedProduct"/>
         <waitForPageLoad  stepKey="waitForProductToLoad1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductNameInStoreFront"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductNameInStoreFront">
+            <argument name="value" value="{{SimpleProduct.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{SimpleProduct.price}}" stepKey="seeProductPriceInStoreFront"/>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSkuInStoreFront">
             <argument name="productSku" value="{{SimpleProduct.sku}}"/>
@@ -127,12 +135,16 @@
         <see selector="{{StorefrontProductMoreInformationSection.attributeValue}}"  userInput="{{ProductAttributeOption8.value}}" stepKey="seeAttributeValue"/>
 
         <!--Verify Product Attribute present in search page -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="goToStorefrontPage1"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToStorefrontPage1"/>
         <waitForPageLoad stepKey="waitForProductFrontPageToLoad1"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{ProductAttributeOption8.value}}" stepKey="fillAttribute"/>
-        <waitForPageLoad stepKey="waitForSearchTextBox"/>
-        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
-        <waitForPageLoad stepKey="waitForSearch"/>
-        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductNameInCategoryPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillAttribute">
+            <argument name="phrase" value="{{ProductAttributeOption8.value}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductNameInCategoryPage">
+            <argument name="productName" value="{{SimpleProduct.name}}"/>
+        </actionGroup>
     </test>
 </tests>

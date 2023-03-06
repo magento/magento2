@@ -17,6 +17,9 @@
     <preference for="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface" type="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProvider" />
     <preference for="Magento\ConfigurableProduct\Model\AttributeOptionProviderInterface" type="Magento\ConfigurableProduct\Model\AttributeOptionProvider" />
     <preference for="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface" type="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilder" />
+    <preference for="Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\OptionsIndexerInterface" type="Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\OptionsIndexer" />
+    <preference for="Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\OptionsSelectBuilderInterface" type="Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\OptionsSelectBuilder" />
+    <preference for="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsFilterInterface" type="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsCompositeFilter" />
 
     <type name="Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option">
         <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct" sortOrder="50" />
@@ -33,6 +36,13 @@
     <type name="Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend">
         <plugin name="ConfigurableProduct::skipValidation" type="Magento\ConfigurableProduct\Plugin\Model\Attribute\Backend\AttributeValidation"/>
     </type>
+    <type name="Magento\ConfigurableProduct\Plugin\Model\Attribute\Backend\AttributeValidation">
+        <arguments>
+            <argument name="unskippableAttributes" xsi:type="array">
+                <item name="custom_layout_update" xsi:type="string">custom_layout_update</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface">
         <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\AttributeMapper\Plugin" sortOrder="50" />
     </type>
@@ -47,7 +57,7 @@
     <type name="Magento\Sales\Model\ResourceModel\Report\Bestsellers">
         <arguments>
             <argument name="ignoredProductTypes" xsi:type="array">
-                <item name="configurable" xsi:type="const">\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE</item>
+                <item name="configurable" xsi:type="const">Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE</item>
             </argument>
         </arguments>
     </type>
@@ -198,6 +208,13 @@
         <arguments>
             <argument name="tableStrategy" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy</argument>
             <argument name="connectionName" xsi:type="string">indexer</argument>
+            <argument name="baseSelectProcessor" xsi:type="object">Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\BaseStockStatusSelectProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\OptionsSelectBuilder">
+        <arguments>
+            <argument name="selectProcessor" xsi:type="object">Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\BaseStockStatusSelectProcessor</argument>
+            <argument name="connectionName" xsi:type="string">indexer</argument>
         </arguments>
     </type>
     <type name="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Product">
@@ -263,5 +280,8 @@
         <arguments>
             <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Json</argument>
         </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
+        <plugin name="updateStockChangedAuto" type="Magento\ConfigurableProduct\Model\Plugin\UpdateStockChangedAuto" />
     </type>
 </config>

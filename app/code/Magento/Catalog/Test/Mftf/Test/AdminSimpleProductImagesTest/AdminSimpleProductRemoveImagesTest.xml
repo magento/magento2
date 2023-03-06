@@ -11,11 +11,11 @@
         <annotations>
             <features value="Catalog"/>
             <stories value="Add/remove images and videos for all product types and category"/>
-            <title value="Admin should be able to remove Product Images assigned as Base, Small and Thumbnail from Simple Product"/>
+            <title value="Remove Product Images assigned as Base, Small and Thumbnail from Simple Product"/>
             <description value="Admin should be able to remove Product Images assigned as Base, Small and Thumbnail from Simple Product"/>
-            <severity value="BLOCKER"/>
-            <testCaseId value="MC-191"/>
-            <group value="Catalog"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-25383"/>
+            <group value="catalog"/>
         </annotations>
 
         <before>
@@ -29,6 +29,7 @@
         <after>
             <deleteData createDataKey="category" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
@@ -36,20 +37,23 @@
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
-            <argument name="product" value="$$product$$"/>
+            <argument name="product" value="$product$"/>
         </actionGroup>
-        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProduct"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="openProduct"/>
 
         <!-- Set url key -->
-        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
-        <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="$$product.name$$" stepKey="fillUrlKey"/>
+        <comment userInput="BIC workaround" stepKey="openSeoSection"/>
+        <comment userInput="BIC workaround" stepKey="fillUrlKey"/>
 
         <!-- Expand images section -->
-        <click selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="expandImages"/>
+        <actionGroup ref="AdminOpenProductImagesSectionActionGroup" stepKey="expandImages"/>
 
         <!-- Upload and set Base image -->
-        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="adobe-base.jpg" stepKey="attach1"/>
-        <waitForPageLoad stepKey="waitForUpload1"/>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="attach1">
+            <argument name="image" value="TestImageAdobe"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForUpload1"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="waitForOpenImageDetails1"/>
         <click selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="openImageDetails1"/>
         <waitForPageLoad stepKey="waitForSlideout1"/>
         <conditionalClick selector="{{AdminProductImagesSection.roleBase}}" dependentSelector="{{AdminProductImagesSection.isBaseSelected}}" visible="false" stepKey="base1"/>
@@ -60,8 +64,11 @@
         <waitForPageLoad stepKey="waitForHide1"/>
 
         <!-- Upload and set Small image -->
-        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="adobe-small.jpg" stepKey="attach2"/>
-        <waitForPageLoad stepKey="waitForUpload2"/>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="attach2">
+            <argument name="image" value="AdobeSmallImage"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForUpload2"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.nthProductImage('2')}}" stepKey="waitForOpenImageDetails2"/>
         <click selector="{{AdminProductImagesSection.nthProductImage('2')}}" stepKey="openImageDetails2"/>
         <waitForPageLoad stepKey="waitForSlideout2"/>
         <conditionalClick selector="{{AdminProductImagesSection.roleBase}}" dependentSelector="{{AdminProductImagesSection.isBaseSelected}}" visible="true" stepKey="base2"/>
@@ -72,8 +79,11 @@
         <waitForPageLoad stepKey="waitForHide2"/>
 
         <!-- Upload and set Thumbnail image -->
-        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="adobe-thumb.jpg" stepKey="attach3"/>
-        <waitForPageLoad stepKey="waitForUpload3"/>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="attach3">
+            <argument name="image" value="AdobeThumbImage"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForUpload3"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.nthProductImage('3')}}" stepKey="waitForOpenImageDetails3"/>
         <click selector="{{AdminProductImagesSection.nthProductImage('3')}}" stepKey="openImageDetails3"/>
         <waitForPageLoad stepKey="waitForSlideout3"/>
         <conditionalClick selector="{{AdminProductImagesSection.roleBase}}" dependentSelector="{{AdminProductImagesSection.isBaseSelected}}" visible="true" stepKey="base3"/>
@@ -87,12 +97,12 @@
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
 
         <!-- Go to the product page and see the Base image -->
-        <amOnPage url="$$product.name$$.html" stepKey="goToProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($product.custom_attributes[url_key]$)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="wait4"/>
         <seeElement selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="seeBase"/>
 
         <!-- Go to the category page and see the Small image -->
-        <amOnPage url="$$category.name$$.html" stepKey="goToCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($category.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage"/>
         <waitForPageLoad stepKey="wait3"/>
         <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/adobe-small')}}" stepKey="seeThumb"/>
 
@@ -100,7 +110,7 @@
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex2"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid2"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku2">
-            <argument name="product" value="$$product$$"/>
+            <argument name="product" value="$product$"/>
         </actionGroup>
         <seeElement selector="{{AdminProductGridSection.productThumbnailBySrc('/adobe-thumb')}}" stepKey="seeBaseInGrid"/>
 
@@ -108,12 +118,13 @@
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex3"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid3"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku3">
-            <argument name="product" value="$$product$$"/>
+            <argument name="product" value="$product$"/>
         </actionGroup>
-        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProduct3"/>
-        <click selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="expandImages2"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="openProduct3"/>
+        <actionGroup ref="AdminOpenProductImagesSectionActionGroup" stepKey="expandImages2"/>
 
         <!-- Remove all images -->
+        <waitForElementVisible selector="{{AdminProductImagesSection.nthRemoveImageBtn('1')}}" stepKey="waitForRemoveImageButtonVisible"/>
         <click selector="{{AdminProductImagesSection.nthRemoveImageBtn('1')}}" stepKey="removeImage1"/>
         <click selector="{{AdminProductImagesSection.nthRemoveImageBtn('2')}}" stepKey="removeImage2"/>
         <click selector="{{AdminProductImagesSection.nthRemoveImageBtn('3')}}" stepKey="removeImage3"/>
@@ -123,19 +134,19 @@
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex4"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid4"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku4">
-            <argument name="product" value="$$product$$"/>
+            <argument name="product" value="$product$"/>
         </actionGroup>
         <dontSeeElement selector="{{AdminProductGridSection.productThumbnailBySrc('/adobe-thumb')}}" stepKey="dontSeeBaseInGrid"/>
         <seeElement selector="{{AdminProductGridSection.productThumbnailBySrc('/placeholder/thumbnail')}}" stepKey="seePlaceholderThumb"/>
 
         <!-- Check category page for placeholder -->
-        <amOnPage url="$$category.name$$.html" stepKey="goToCategoryPage2"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($category.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage2"/>
         <waitForPageLoad stepKey="wait7"/>
         <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/adobe-small')}}" stepKey="dontSeeThumb"/>
         <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('placeholder/small_image')}}" stepKey="seePlaceholderSmall"/>
 
         <!-- Check product page for placeholder -->
-        <amOnPage url="$$product.name$$.html" stepKey="goToProductPage2"/>
+        <amOnPage url="{{StorefrontProductPage.url($product.custom_attributes[url_key]$)}}" stepKey="goToProductPage2"/>
         <waitForPageLoad stepKey="wait8"/>
         <dontSeeElement selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="dontSeeBase"/>
         <seeElement selector="{{StorefrontProductMediaSection.imageFile('placeholder/image')}}" stepKey="seePlaceholderBase"/>

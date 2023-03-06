@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontCheckVatIdAtAccountCreateWithMultishipmentTest">
+        <annotations>
+            <features value="Multishipment"/>
+            <stories value="Checking vat id field at account create page  with 'Check Out with Multiple Addresses'"/>
+            <title value="Checking vat id field at account create page  with 'Check Out with Multiple Addresses'"/>
+            <description value="'VAT Number' field should be available at create account page  if 'Show VAT Number on Storefront' is Yes"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-40397"/>
+            <group value="Multishipment"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set customer/create_account/vat_frontend_visibility 1" stepKey="showVatNumberOnStorefrontYes"/>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <magentoCLI command="config:set customer/create_account/vat_frontend_visibility 0" stepKey="showVatNumberOnStorefrontNo"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfter"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteproduct"/>
+        </after>
+        <!-- Add product to the cart -->
+        <amOnPage url="$$product.custom_attributes[url_key]$$.html" stepKey="goToProductPage"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$$product.name$$"/>
+        </actionGroup>
+        <!-- Check Out with Multiple Addresses -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <waitForElementVisible selector="{{MultishippingSection.shippingMultipleCheckout}}" stepKey="waitMultipleAddressShippingButton"/>
+        <click selector="{{MultishippingSection.shippingMultipleCheckout}}" stepKey="clickToMultipleAddressShippingButton"/>
+        <!--Create an account-->
+        <waitForElementVisible selector="{{AdminCreateUserSection.createAnAccountButtonForCustomer}}" stepKey="waitCreateAnAccountButton"/>
+        <click selector="{{AdminCreateUserSection.createAnAccountButtonForCustomer}}" stepKey="clickOnCreateAnAccountButton"/>
+        <waitForPageLoad stepKey="waitForCreateAccountPageToLoad"/>
+        <!--Check the VAT Number field-->
+        <seeElement selector="{{StorefrontCustomerAddressSection.vatId}}" stepKey="assertVatIdField"/>
+    </test>
+</tests>

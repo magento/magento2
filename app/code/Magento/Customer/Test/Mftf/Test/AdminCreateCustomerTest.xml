@@ -15,33 +15,40 @@
             <title value="Admin should be able to create a customer"/>
             <description value="Admin should be able to create a customer"/>
             <severity value="BLOCKER"/>
-            <testCaseId value="MAGETWO-72095"/>
+            <testCaseId value="MC-28500"/>
             <group value="customer"/>
             <group value="create"/>
+            <group value="cloud_smoke"/>
         </annotations>
+
         <before>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexCustomerGrid">
-                <argument name="indices" value="customer_grid"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexCustomerGrid"/>
         </before>
+
         <after>
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearCustomersFilter"/>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
+        <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="navigateToCustomers"/>
         <waitForPageLoad stepKey="waitForLoad1"/>
+        <conditionalClick selector="{{AdminCustomerFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerFiltersSection.clearAll}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForPageLoad stepKey="waitForFiltersClear"/>
         <click selector="{{AdminCustomerGridMainActionsSection.addNewCustomer}}" stepKey="clickCreateCustomer"/>
         <fillField userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminCustomerAccountInformationSection.firstName}}" stepKey="fillFirstName"/>
         <fillField userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminCustomerAccountInformationSection.lastName}}" stepKey="fillLastName"/>
         <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerAccountInformationSection.email}}" stepKey="fillEmail"/>
         <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
         <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
-        <reloadPage stepKey="reloadPage"/>
-        <waitForPageLoad stepKey="waitForLoad2"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForLoad2"/>
+
         <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="openFilter"/>
         <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerFiltersSection.emailInput}}" stepKey="filterEmail"/>
         <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="applyFilter"/>

@@ -170,7 +170,7 @@ class ProductTest extends AbstractController
         $this->dispatch(sprintf('catalog/product/gallery/id/%s', $product->getEntityId()));
 
         $this->assertStringContainsString(
-            'http://localhost/pub/media/catalog/product/',
+            'http://localhost/media/catalog/product/',
             $this->getResponse()->getBody()
         );
         $this->assertStringContainsString($this->getProductImageFile(), $this->getResponse()->getBody());

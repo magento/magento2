@@ -48,13 +48,13 @@ class AttributeLoaderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configMock = $this->createMock(Config::class, [], [], '', false);
+        $this->configMock = $this->createMock(Config::class);
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->entityMock = $this->createMock(AbstractEntity::class, [], [], '', false);
-        $this->entityTypeMock = $this->createMock(Type::class, [], [], '', false);
+        $this->entityMock = $this->createMock(AbstractEntity::class);
+        $this->entityTypeMock = $this->createMock(Type::class);
         $this->attributeLoader = new AttributeLoader(
             $this->configMock,
             $this->objectManagerMock

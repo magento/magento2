@@ -9,8 +9,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Operation abstract class
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractModel extends \Magento\Framework\DataObject
 {
@@ -56,15 +54,17 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         array $data = []
     ) {
         $this->_logger = $logger;
-        $this->_varDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->_varDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
         parent::__construct($data);
     }
 
     /**
      * Log debug data to file.
+     *
      * Log file dir: var/log/import_export/%Y/%m/%d/%time%_%operation_type%_%entity_type%.log
      *
      * @param mixed $debugData
+     *
      * @return $this
      */
     public function addLogComment($debugData)
@@ -91,9 +91,11 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     {
         $trace = '';
         $lineNumber = 1;
+
         foreach ($this->_logTrace as &$info) {
-            $trace .= $lineNumber++ . ': ' . $info . "\n";
+            $trace .= ($lineNumber++) . ': ' . $info . "\n";
         }
+
         return $trace;
     }
 }

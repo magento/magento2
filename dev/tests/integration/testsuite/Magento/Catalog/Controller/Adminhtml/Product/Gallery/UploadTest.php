@@ -24,12 +24,12 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 class UploadTest extends AbstractBackendController
 {
     /**
-     * @inheritdoc
+     * @var string
      */
     protected $resource = 'Magento_Catalog::products';
 
     /**
-     * @inheritdoc
+     * @var string
      */
     protected $uri = 'backend/catalog/product_gallery/upload';
 
@@ -87,9 +87,9 @@ class UploadTest extends AbstractBackendController
         $this->assertEquals($jsonBody['url'], $expectation['url']);
         $this->assertArrayNotHasKey('error', $jsonBody);
         $this->assertArrayNotHasKey('errorcode', $jsonBody);
-        $this->assertFileExists(
+        $this->assertTrue($this->mediaDirectory->isExist(
             $this->getFileAbsolutePath($expectation['tmp_media_path'])
-        );
+        ));
     }
 
     /**
@@ -108,7 +108,7 @@ class UploadTest extends AbstractBackendController
                     'name' => 'magento_image.jpg',
                     'type' => 'image/jpeg',
                     'file' => '/m/a/magento_image.jpg.tmp',
-                    'url' => 'http://localhost/pub/media/tmp/catalog/product/m/a/magento_image.jpg',
+                    'url' => 'http://localhost/media/tmp/catalog/product/m/a/magento_image.jpg',
                     'tmp_media_path' => '/m/a/magento_image.jpg',
                 ],
             ],
@@ -122,7 +122,7 @@ class UploadTest extends AbstractBackendController
                     'name' => 'product_image.png',
                     'type' => 'image/png',
                     'file' => '/p/r/product_image.png.tmp',
-                    'url' => 'http://localhost/pub/media/tmp/catalog/product/p/r/product_image.png',
+                    'url' => 'http://localhost/media/tmp/catalog/product/p/r/product_image.png',
                     'tmp_media_path' => '/p/r/product_image.png',
                 ],
             ],
@@ -136,7 +136,7 @@ class UploadTest extends AbstractBackendController
                     'name' => 'magento_image.gif',
                     'type' => 'image/gif',
                     'file' => '/m/a/magento_image.gif.tmp',
-                    'url' => 'http://localhost/pub/media/tmp/catalog/product/m/a/magento_image.gif',
+                    'url' => 'http://localhost/media/tmp/catalog/product/m/a/magento_image.gif',
                     'tmp_media_path' => '/m/a/magento_image.gif',
                 ],
             ],
@@ -198,7 +198,7 @@ class UploadTest extends AbstractBackendController
                     'current_path' => '/../../../../_files',
                 ],
                 'expectation' => [
-                    'message' => 'Wrong file size.',
+                    'message' => 'Something went wrong while saving the file(s).',
                     'errorcode' => 0,
                     'tmp_media_path' => '/m/a/magento_empty.jpg',
                 ],
@@ -206,10 +206,23 @@ class UploadTest extends AbstractBackendController
             'upload_without_image' => [
                 'file' => [],
                 'expectation' => [
-                    'message' => '$_FILES array is empty',
+                    'message' => 'Something went wrong while saving the file(s).',
                     'errorcode' => 0,
                 ],
             ],
+            'upload_wrong_png' => [
+                'file' => [
+                    'copy_file' => true,
+                    'name' => 'magento_wrong.png',
+                    'type' => 'image/png',
+                    'current_path' => '/../../../../_files',
+                ],
+                'expectation' => [
+                    'message' => 'Something went wrong while saving the file(s).',
+                    'errorcode' => 0,
+                    'tmp_media_path' => '/m/w/magento_wrong.png',
+                ],
+            ]
         ];
     }
 

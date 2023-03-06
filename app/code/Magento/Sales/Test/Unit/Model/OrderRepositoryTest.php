@@ -13,8 +13,8 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Api\Data\PaymentAdditionalInfoInterface;
 use Magento\Payment\Api\Data\PaymentAdditionalInfoInterfaceFactory;
-use Magento\Sales\Api\Data\OrderExtension;
 use Magento\Sales\Api\Data\OrderExtensionFactory;
+use Magento\Sales\Api\Data\OrderExtensionInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
@@ -29,6 +29,7 @@ use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\Tax\Api\Data\OrderTaxDetailsInterface;
 use Magento\Tax\Api\OrderTaxManagementInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -111,7 +112,7 @@ class OrderRepositoryTest extends TestCase
                 'collectionProcessor' => $this->collectionProcessor,
                 'orderExtensionFactory' => $this->orderExtensionFactoryMock,
                 'orderTaxManagement' => $this->orderTaxManagementMock,
-                'paymentAdditionalInfoFactory' => $this->paymentAdditionalInfoFactory
+                'paymentAdditionalInfoFactory' => $this->paymentAdditionalInfoFactory,
             ]
         );
     }
@@ -138,18 +139,7 @@ class OrderRepositoryTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setKey', 'setValue'])->getMockForAbstractClass();
 
-        $extensionAttributes = $this->getMockBuilder(OrderExtension::class)
-            ->addMethods(
-                [
-                    'getShippingAssignments',
-                    'setShippingAssignments',
-                    'setConvertingFromQuote',
-                    'setAppliedTaxes',
-                    'setItemAppliedTaxes',
-                    'setPaymentAdditionalInfo'
-                ]
-            )
-            ->getMock();
+        $extensionAttributes = $this->getOrderExtensionMock();
         $shippingAssignmentBuilder = $this->createMock(
             ShippingAssignmentBuilder::class
         );
@@ -188,9 +178,7 @@ class OrderRepositoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $orderEntity = $this->createMock(Order::class);
-        $extensionAttributes = $this->getMockBuilder(OrderExtension::class)
-            ->addMethods(['getShippingAssignments'])
-            ->getMock();
+        $extensionAttributes = $this->getOrderExtensionMock();
         $shippingAssignment = $this->getMockBuilder(ShippingAssignment::class)
             ->disableOriginalConstructor()
             ->setMethods(['getShipping'])
@@ -230,18 +218,7 @@ class OrderRepositoryTest extends TestCase
         $paymentMock = $this->getMockBuilder(OrderPaymentInterface::class)
             ->disableOriginalConstructor()->getMockForAbstractClass();
         $paymentMock->expects($this->once())->method('getAdditionalInformation')->willReturn($paymentInfo);
-        $orderExtension = $this->getMockBuilder(OrderExtension::class)
-            ->setMethods(
-                [
-                    'getShippingAssignments',
-                    'setAppliedTaxes',
-                    'setConvertingFromQuote',
-                    'setItemAppliedTaxes',
-                    'setPaymentAdditionalInfo'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $orderExtension = $this->getOrderExtensionMock();
         $orderExtension->expects($this->once())->method('getShippingAssignments')->willReturn(true);
         $orderExtension->expects($this->once())->method('setAppliedTaxes')->with($appliedTaxes);
         $orderExtension->expects($this->once())->method('setConvertingFromQuote')->with(true);
@@ -265,5 +242,31 @@ class OrderRepositoryTest extends TestCase
             ->willReturn($orderTaxDetailsMock);
 
         $this->orderRepository->get($orderId);
+    }
+
+    /**
+     * Buld order extension mock.
+     *
+     * @return MockObject
+     */
+    private function getOrderExtensionMock(): MockObject
+    {
+        $mockBuilder = $this->getMockBuilder(OrderExtensionInterface::class)->disableOriginalConstructor();
+        try {
+            $mockBuilder
+                ->addMethods(
+                    [
+                        'getShippingAssignments',
+                        'setAppliedTaxes',
+                        'setConvertingFromQuote',
+                        'setItemAppliedTaxes',
+                        'setPaymentAdditionalInfo'
+                    ]
+                );
+        } catch (RuntimeException $e) {
+            // Order extension already generated.
+        }
+
+        return $mockBuilder->getMockForAbstractClass();
     }
 }

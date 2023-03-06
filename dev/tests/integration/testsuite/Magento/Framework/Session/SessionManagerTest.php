@@ -115,6 +115,9 @@ namespace Magento\Framework\Session {
          */
         private $appState;
 
+        /**
+         * @inheritdoc
+         */
         protected function setUp(): void
         {
             $this->sessionName = 'frontEndSession';
@@ -250,8 +253,6 @@ namespace Magento\Framework\Session {
             $this->model->destroy();
         }
 
-        /**
-         */
         public function testStartAreaNotSet()
         {
             $this->expectException(\Magento\Framework\Exception\SessionException::class);
@@ -283,17 +284,23 @@ namespace Magento\Framework\Session {
             $this->model->start();
         }
 
-        public function testConstructor()
+        /**
+         * @param string $saveMethod
+         * @dataProvider dataConstructor
+         *
+         * @return void
+         */
+        public function testConstructor(string $saveMethod): void
         {
             global $mockPHPFunctions;
             $mockPHPFunctions = true;
 
             $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
             $deploymentConfigMock->method('get')
-                ->willReturnCallback(function ($configPath) {
+                ->willReturnCallback(function ($configPath) use ($saveMethod) {
                     switch ($configPath) {
                         case Config::PARAM_SESSION_SAVE_METHOD:
-                            return 'db';
+                            return $saveMethod;
                         case Config::PARAM_SESSION_CACHE_LIMITER:
                             return 'private_no_expire';
                         case Config::PARAM_SESSION_SAVE_PATH:
@@ -313,13 +320,13 @@ namespace Magento\Framework\Session {
                     'sessionConfig' => $sessionConfig,
                 ]
             );
-            $this->assertEquals('db', $sessionConfig->getOption('session.save_handler'));
+            $this->assertEquals($saveMethod, $sessionConfig->getOption('session.save_handler'));
             $this->assertEquals('private_no_expire', $sessionConfig->getOption('session.cache_limiter'));
             $this->assertEquals('explicit_save_path', $sessionConfig->getOption('session.save_path'));
             $this->assertArrayHasKey('session.use_only_cookies', self::$isIniSetInvoked);
             $this->assertEquals('1', self::$isIniSetInvoked['session.use_only_cookies']);
             foreach ($sessionConfig->getOptions() as $option => $value) {
-                if ($option=='session.save_handler') {
+                if ($option === 'session.save_handler' && $value !== 'memcached') {
                     $this->assertArrayNotHasKey('session.save_handler', self::$isIniSetInvoked);
                 } else {
                     $this->assertArrayHasKey($option, self::$isIniSetInvoked);
@@ -327,6 +334,19 @@ namespace Magento\Framework\Session {
                 }
             }
             $this->assertTrue(self::$isSessionSetSaveHandlerInvoked);
+        }
+
+        /**
+         * @return array
+         */
+        public function dataConstructor(): array
+        {
+            return [
+                [Config::PARAM_SESSION_SAVE_METHOD =>'db'],
+                [Config::PARAM_SESSION_SAVE_METHOD =>'redis'],
+                [Config::PARAM_SESSION_SAVE_METHOD =>'memcached'],
+                [Config::PARAM_SESSION_SAVE_METHOD =>'user'],
+            ];
         }
 
         private function initializeModel(): void

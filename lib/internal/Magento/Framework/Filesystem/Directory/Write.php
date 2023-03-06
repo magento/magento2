@@ -3,9 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Filesystem\Directory;
 
+use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem\DriverInterface;
@@ -36,7 +38,7 @@ class Write extends Read implements WriteInterface
         \Magento\Framework\Filesystem\File\WriteFactory $fileFactory,
         DriverInterface $driver,
         $path,
-        $createPermissions = null,
+        ?int $createPermissions = null,
         ?PathValidatorInterface $pathValidator = null
     ) {
         parent::__construct($fileFactory, $driver, $path, $pathValidator);
@@ -54,6 +56,7 @@ class Write extends Read implements WriteInterface
      */
     protected function assertWritable($path)
     {
+        $this->validatePath($path);
         if ($this->isWritable($path) === false) {
             $path = $this->getAbsolutePath($path);
             throw new FileSystemException(new Phrase('The path "%1" is not writable.', [$path]));
@@ -109,6 +112,7 @@ class Write extends Read implements WriteInterface
     public function renameFile($path, $newPath, WriteInterface $targetDirectory = null)
     {
         $this->validatePath($path);
+        $this->validatePath($newPath);
         $this->assertIsFile($path);
         $targetDirectory = $targetDirectory ?: $this;
         if (!$targetDirectory->isExist($this->driver->getParentDirectory($newPath))) {
@@ -116,7 +120,7 @@ class Write extends Read implements WriteInterface
         }
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         $absoluteNewPath = $targetDirectory->getAbsolutePath($newPath);
-        return $this->driver->rename($absolutePath, $absoluteNewPath, $targetDirectory->driver);
+        return $this->driver->rename($absolutePath, $absoluteNewPath, $targetDirectory->getDriver());
     }
 
     /**
@@ -132,6 +136,7 @@ class Write extends Read implements WriteInterface
     public function copyFile($path, $destination, WriteInterface $targetDirectory = null)
     {
         $this->validatePath($path);
+        $this->validatePath($destination);
         $this->assertIsFile($path);
 
         $targetDirectory = $targetDirectory ?: $this;
@@ -157,6 +162,7 @@ class Write extends Read implements WriteInterface
     public function createSymlink($path, $destination, WriteInterface $targetDirectory = null)
     {
         $this->validatePath($path);
+        $this->validatePath($destination);
         $targetDirectory = $targetDirectory ?: $this;
         $parentDirectory = $this->driver->getParentDirectory($destination);
         if (!$targetDirectory->isExist($parentDirectory)) {
@@ -234,8 +240,9 @@ class Write extends Read implements WriteInterface
         foreach ($entitiesList as $entityPath) {
             if ($this->driver->isFile($entityPath)) {
                 try {
+                    $this->validatePath($entityPath);
                     $this->driver->deleteFile($entityPath);
-                } catch (FileSystemException $e) {
+                } catch (FileSystemException | ValidatorException $e) {
                     $exceptionMessages[] = $e->getMessage();
                 }
             }
@@ -344,12 +351,27 @@ class Write extends Read implements WriteInterface
      * @param string $path
      * @param string $content
      * @param string|null $mode
+     * @param bool $lock
      * @return int The number of bytes that were written.
      * @throws FileSystemException|ValidatorException
      */
-    public function writeFile($path, $content, $mode = 'w+')
+    public function writeFile($path, $content, $mode = 'w+', bool $lock = false)
     {
-        return $this->openFile($path, $mode)->write($content);
+        $this->validatePath($path);
+        $file = $this->openFile($path, $mode);
+        try {
+            if ($lock) {
+                $file->lock();
+            }
+            $result = $file->write($content);
+        } finally {
+            if ($lock) {
+                $file->unlock();
+            }
+        }
+        $file->close();
+
+        return $result;
     }
 
     /**

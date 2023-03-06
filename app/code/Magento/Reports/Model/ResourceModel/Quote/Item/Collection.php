@@ -7,7 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Reports\Model\ResourceModel\Quote\Item;
 
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ObjectManager;
+use Magento\Reports\Model\Product\DataRetriever as ProductDataRetriever;
 
 /**
  * Collection of Magento\Quote\Model\Quote\Item
@@ -50,6 +51,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $orderResource;
 
     /**
+     * @var ProductDataRetriever
+     */
+    private $productDataRetriever;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -59,6 +65,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Sales\Model\ResourceModel\Order\Collection $orderResource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @param ProductDataRetriever|null $productDataRetriever
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -69,7 +78,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Customer\Model\ResourceModel\Customer $customerResource,
         \Magento\Sales\Model\ResourceModel\Order\Collection $orderResource,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
+        ?ProductDataRetriever $productDataRetriever = null
     ) {
         parent::__construct(
             $entityFactory,
@@ -82,6 +92,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $this->productResource = $productResource;
         $this->customerResource = $customerResource;
         $this->orderResource = $orderResource;
+        $this->productDataRetriever = $productDataRetriever
+            ?? ObjectManager::getInstance()->get(ProductDataRetriever::class);
     }
 
     /**
@@ -109,7 +121,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
         $quoteItemsSelect->reset()
             ->from(['main_table' => $this->getTable('quote_item')], '')
-            ->columns('main_table.product_id')
+            ->columns(['main_table.product_id', 'main_table.name'])
             ->columns(['carts' => new \Zend_Db_Expr('COUNT(main_table.item_id)')])
             ->columns('quote.base_to_global_rate')
             ->joinInner(
@@ -225,7 +237,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         foreach ($items as $item) {
             $productIds[] = $item->getProductId();
         }
-        $productData = $this->getProductData($productIds);
+        $productData = $this->productDataRetriever->execute($productIds);
         $orderData = $this->getOrdersData($productIds);
         foreach ($items as $item) {
             $item->setId($item->getProductId());

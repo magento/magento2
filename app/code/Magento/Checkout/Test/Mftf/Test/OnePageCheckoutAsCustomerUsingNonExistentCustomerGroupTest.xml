@@ -66,8 +66,8 @@
         <actionGroup ref="FillShippingZipForm" stepKey="fillShippingZipForm">
             <argument name="address" value="US_Address_CA"/>
         </actionGroup>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
-        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
 
         <!-- Check that error does not appear and shipping methods are available to select -->
         <dontSee selector="{{CheckoutCartMessageSection.errorMessage}}" userInput="No such entity with id = $$createCustomerGroup.id$$" stepKey="assertErrorMessage"/>
@@ -79,26 +79,30 @@
         <click selector="{{CheckoutShippingSection.shipHereButton(UK_Not_Default_Address.street[0])}}" stepKey="clickShipHere"/>
 
         <!-- Click next button to open payment section -->
-        <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNext"/>
-        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShipmentPageLoad"/>
 
         <!-- Select payment solution -->
         <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution" />
 
         <!-- Check order summary in checkout -->
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton"/>
-        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="waitForPaymentSectionLoaded"/>
+        <comment userInput="BIC workaround" stepKey="waitForPlaceOrderButton"/>
+        <comment userInput="BIC workaround" stepKey="clickPlaceOrderButton"/>
+        <comment userInput="BIC workaround" stepKey="orderIsSuccessfullyPlaced"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
 
         <!-- Login as admin -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Open created order in backend -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
-            <argument name="orderId" value="$grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="goToOrders"/>
+        <comment userInput="BIC workaround" stepKey="waitForOrdersPageLoad"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
 
         <!-- Assert order total -->

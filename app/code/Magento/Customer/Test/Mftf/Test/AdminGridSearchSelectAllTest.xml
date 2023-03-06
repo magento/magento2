@@ -29,7 +29,7 @@
             <deleteData createDataKey="secondCustomer" stepKey="deleteSecondCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomerPage"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomerPage"/>
         <!-- search Admin Data Grid By Keyword -->
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="$$secondCustomer.email$$" stepKey="fillKeywordSearchFieldWithSecondCustomerEmail"/>

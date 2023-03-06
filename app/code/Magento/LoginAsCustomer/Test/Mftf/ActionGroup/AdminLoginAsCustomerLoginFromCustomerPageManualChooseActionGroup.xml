@@ -14,16 +14,17 @@
         </annotations>
         <arguments>
             <argument name="customerId" type="string"/>
-            <argument name="storeViewName" type="string" defaultValue="default"/>
+            <argument name="storeName" type="string" defaultValue="default"/>
         </arguments>
 
         <amOnPage url="{{AdminEditCustomerPage.url(customerId)}}" stepKey="gotoCustomerPage"/>
         <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
         <click selector="{{AdminCustomerMainActionsSection.loginAsCustomer}}" stepKey="clickLoginAsCustomerLink"/>
-        <see selector="{{AdminConfirmationModalSection.title}}" userInput="Login as Customer: Select Store View" stepKey="seeModal"/>
-         <see selector="{{AdminConfirmationModalSection.message}}" userInput="Actions taken while in &quot;Login as Customer&quot; will affect actual customer data." stepKey="seeModalMessage"/>
-        <selectOption selector="{{AdminLoginAsCustomerConfirmationModalSection.storeView}}" userInput="{{storeViewName}}" stepKey="selectStoreView"/>
+        <see selector="{{AdminConfirmationModalSection.title}}" userInput="Login as Customer: Select Store" stepKey="seeModal"/>
+        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Actions taken while in &quot;Login as Customer&quot; will affect actual customer data." stepKey="seeModalMessage"/>
+        <selectOption selector="{{AdminLoginAsCustomerConfirmationModalSection.store}}" userInput="{{storeName}}" stepKey="selectStore"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickLogin"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear" />
         <switchToNextTab stepKey="switchToNewTab"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>

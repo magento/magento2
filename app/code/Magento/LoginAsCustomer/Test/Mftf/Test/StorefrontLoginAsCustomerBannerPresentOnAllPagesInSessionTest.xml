@@ -20,9 +20,7 @@
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
                         stepKey="enableLoginAsCustomer"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushConfigCache">
-                <argument name="tags" value="config"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushConfigCache"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -33,15 +31,14 @@
         <after>
             <closeTab stepKey="closeLoginAsCustomerTab"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-
+            <!-- Customer Log Out -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
                         stepKey="disableLoginAsCustomer"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushConfigCache">
-                <argument name="tags" value="config"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushConfigCache"/>
         </after>
 
         <!-- Admin Login as Customer from Customer page and assert notification banner -->
@@ -60,7 +57,7 @@
         </actionGroup>
 
         <!-- Go to category page and assert notification banner -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage"/>
         <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerOnCategoryPage">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
         </actionGroup>
@@ -84,17 +81,17 @@
         </actionGroup>
 
         <!-- Proceed to checkout and assert notification banner -->
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
-        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
         <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerOnCheckoutPage">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
         </actionGroup>
 
         <!-- Assert notification banner before place order -->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
-        <waitForElementVisible selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterClickNext"/>
+        <comment userInput="BIC workaround" stepKey="waitForNextButton"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <comment userInput="BIC workaround" stepKey="waitForLoadingMaskAfterClickNext"/>
         <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerBeforePlaceOrder">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
         </actionGroup>

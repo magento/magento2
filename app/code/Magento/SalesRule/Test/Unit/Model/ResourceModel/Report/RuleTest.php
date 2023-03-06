@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel\Report;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Select\SelectRenderer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Model\FlagFactory;
 use Magento\SalesRule\Model\ResourceModel\Report\Rule;
+use Magento\SalesRule\Model\ResourceModel\Report\Rule\Createdat;
 use Magento\SalesRule\Model\ResourceModel\Report\Rule\CreatedatFactory;
 use Magento\SalesRule\Model\ResourceModel\Report\Rule\UpdatedatFactory;
 use PHPUnit\Framework\TestCase;
@@ -84,14 +84,20 @@ class RuleTest extends TestCase
             [$this, 'fetchAllCallback']
         );
 
-        $resourceMock = $this->createMock(ResourceConnection::class);
-        $resourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
-        $resourceMock->expects($this->once())->method('getTableName')->willReturn(self::TABLE_NAME);
-
         $flagFactory = $this->createMock(FlagFactory::class);
-        $createdatFactoryMock = $this->createPartialMock(
+
+        $createdatResourceModel = $this->createConfiguredMock(
+            Createdat::class,
+            [
+                'getConnection' => $connectionMock,
+                'getMainTable' => self::TABLE_NAME,
+            ]
+        );
+        $createdatFactoryMock = $this->createConfiguredMock(
             CreatedatFactory::class,
-            ['create']
+            [
+                'create' => $createdatResourceModel
+            ]
         );
         $updatedatFactoryMock = $this->createPartialMock(
             UpdatedatFactory::class,
@@ -102,7 +108,6 @@ class RuleTest extends TestCase
         $model = $objectHelper->getObject(
             Rule::class,
             [
-                'resource' => $resourceMock,
                 'reportsFlagFactory' => $flagFactory,
                 'createdatFactory' => $createdatFactoryMock,
                 'updatedatFactory' => $updatedatFactoryMock

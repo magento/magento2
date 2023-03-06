@@ -8,19 +8,27 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Bundle;
 
 use Magento\Bundle\Model\Product\OptionList;
+use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
+use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 
 /**
  * Test querying Bundle products
  */
 class BundleProductViewTest extends GraphQlAbstract
 {
-    const KEY_PRICE_TYPE_FIXED = 'FIXED';
-    const KEY_PRICE_TYPE_DYNAMIC = 'DYNAMIC';
+    private const KEY_PRICE_TYPE_FIXED = 'FIXED';
+    private const KEY_PRICE_TYPE_DYNAMIC = 'DYNAMIC';
 
     /**
      * @magentoApiDataFixture Magento/Bundle/_files/product_1.php
@@ -38,7 +46,6 @@ class BundleProductViewTest extends GraphQlAbstract
            type_id
            id
            name
-           attribute_set_id
            ... on PhysicalProductInterface {
              weight
            }
@@ -54,7 +61,21 @@ class BundleProductViewTest extends GraphQlAbstract
               required
               type
               position
-              sku              
+              sku
+              price_range{
+                  maximum_price {
+                    final_price {
+                      currency
+                      value
+                    }
+                  }
+                  minimum_price {
+                    final_price {
+                      currency
+                      value
+                    }
+                  }
+              }
               options {
                 id
                 quantity
@@ -74,7 +95,7 @@ class BundleProductViewTest extends GraphQlAbstract
             }
            }
        }
-   }   
+   }
 }
 QUERY;
 
@@ -94,6 +115,9 @@ QUERY;
             $this->assertEquals('PRICE_RANGE', $response['products']['items'][0]['price_view']);
         }
         $this->assertBundleBaseFields($bundleProduct, $response['products']['items'][0]);
+        $product = $response['products']['items'][0]['items'][0];
+        $this->assertEquals(10, $product['price_range']['maximum_price']['final_price']['value']);
+        $this->assertEquals(10, $product['price_range']['minimum_price']['final_price']['value']);
 
         $this->assertBundleProductOptions($bundleProduct, $response['products']['items'][0]);
         $this->assertNotEmpty(
@@ -118,7 +142,6 @@ QUERY;
            type_id
            id
            name
-           attribute_set_id
            ... on PhysicalProductInterface {
              weight
            }
@@ -134,7 +157,7 @@ QUERY;
               required
               type
               position
-              sku              
+              sku
               options {
                 id
                 quantity
@@ -154,7 +177,7 @@ QUERY;
             }
            }
        }
-   }   
+   }
 }
 QUERY;
 
@@ -189,7 +212,7 @@ QUERY;
         }
         $this->assertBundleBaseFields($bundleProduct, $response['products']['items'][0]);
 
-        $this->assertBundleProductOptions($bundleProduct, $response['products']['items'][0]);
+        $this->assertBundleProductOptions($bundleProduct, $response['products']['items'][0], false);
         $this->assertNotEmpty(
             $response['products']['items'][0]['items'],
             "Precondition failed: 'items' must not be empty"
@@ -207,8 +230,7 @@ QUERY;
             ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
             ['response_field' => 'id', 'expected_value' => $product->getId()],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
-            ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
-             ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
+            ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
             ['response_field' => 'dynamic_price', 'expected_value' => !(bool)$product->getPriceType()],
             ['response_field' => 'dynamic_weight', 'expected_value' => !(bool)$product->getWeightType()],
             ['response_field' => 'dynamic_sku', 'expected_value' => !(bool)$product->getSkuType()]
@@ -220,8 +242,9 @@ QUERY;
     /**
      * @param ProductInterface $product
      * @param  array $actualResponse
+     * @param bool $isChildVisible
      */
-    private function assertBundleProductOptions($product, $actualResponse)
+    private function assertBundleProductOptions($product, $actualResponse, $isChildVisible = true)
     {
         $this->assertNotEmpty(
             $actualResponse['items'],
@@ -257,19 +280,26 @@ QUERY;
                 'position' => $bundleProductLink->getPosition(),
                 'is_default' => (bool)$bundleProductLink->getIsDefault(),
                  'price_type' => self::KEY_PRICE_TYPE_FIXED,
-                'can_change_quantity' => $bundleProductLink->getCanChangeQuantity(),
-                'label' => $childProduct->getName()
+                'can_change_quantity' => $bundleProductLink->getCanChangeQuantity()
             ]
         );
-        $this->assertResponseFields(
-            $actualResponse['items'][0]['options'][0]['product'],
-            [
-                'id' => $childProduct->getId(),
-                'name' => $childProduct->getName(),
-                'type_id' => $childProduct->getTypeId(),
-                'sku' => $bundleProductLink->getSku()
-            ]
+        $this->assertEquals(
+            $isChildVisible ? $childProduct->getName() : null,
+            $actualResponse['items'][0]['options'][0]['label']
         );
+        if ($isChildVisible) {
+            $this->assertResponseFields(
+                $actualResponse['items'][0]['options'][0]['product'],
+                [
+                    'id' => $childProduct->getId(),
+                    'name' => $childProduct->getName(),
+                    'type_id' => $childProduct->getTypeId(),
+                    'sku' => $childProduct->getSku()
+                ]
+            );
+        } else {
+            $this->assertNull($actualResponse['items'][0]['options'][0]['product']);
+        }
     }
 
     /**
@@ -416,5 +446,139 @@ QUERY;
             'GraphQL response contains errors: Cannot query field "qty" on type "ProductInterface".'
         );
         $this->graphQlQuery($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Bundle/_files/product_1.php
+     */
+    public function testBundleProductWithDisabledProductOption()
+    {
+        /** @var StoreManagerInterface $storeManager */
+        $storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $storeIdDefault = $storeManager->getDefaultStoreView()->getId();
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $simpleProduct = $productRepository->get('simple', false, $storeIdDefault, true);
+        $simpleProduct->setStatus(ProductStatus::STATUS_DISABLED);
+        $simpleProduct->setStoreIds([$storeIdDefault]);
+        $productRepository->save($simpleProduct);
+
+        $productSku = 'bundle-product';
+        $query
+            = <<<QUERY
+{
+   products(filter: {sku: {eq: "{$productSku}"}})
+   {
+       items{
+           sku
+           type_id
+           id
+           name
+           ... on PhysicalProductInterface {
+             weight
+           }
+           ... on BundleProduct {
+           dynamic_sku
+            dynamic_price
+            dynamic_weight
+            price_view
+            ship_bundle_items
+            items {
+              option_id
+              title
+              required
+              type
+              position
+              sku
+              options {
+                id
+                quantity
+                position
+                is_default
+                price
+                price_type
+                can_change_quantity
+                label
+                product {
+                  id
+                  name
+                  sku
+                  type_id
+                   }
+                }
+            }
+           }
+       }
+   }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertEmpty($response['products']['items']);
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['price' => 10], 'p1'),
+        DataFixture(ProductFixture::class, ['price' => 20], 'p2'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$p1$']], 'opt1'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$p2$']], 'opt2'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['id' => 3, 'sku' => '4bundle-product','_options' => ['$opt1$', '$opt2$']],
+            '4bundle-product'
+        ),
+        DataFixture(
+            BundleProductFixture::class,
+            ['id' => 4, 'sku' => '5bundle-product','_options' => ['$opt1$', '$opt2$']],
+            '5bundle-product'
+        ),
+    ]
+    public function testBundleProductHavingSKUAsNextBundleProductId()
+    {
+
+        $productSku = '4bundle-product';
+        $query
+            = <<<QUERY
+{
+   products(filter: {sku: {eq: "{$productSku}"}})
+   {
+       items{
+            id
+           type_id
+           name
+           sku
+           ... on BundleProduct {
+            items {
+              option_id
+              title
+              required
+              type
+              position
+              sku
+              options {
+                id
+                quantity
+                position
+                is_default
+                price
+                price_type
+                can_change_quantity
+                label
+                product {
+                  id
+                  name
+                  sku
+                  type_id
+                   }
+                }
+            }
+           }
+       }
+   }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertNotEmpty($response['products']['items']);
     }
 }

@@ -11,16 +11,20 @@
     <suite name="MediaGalleryUiSuite">
         <before>
             <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG" />
+            <magentoCLI command="config:set {{MediaGalleryConfigDataEnabled.path}} {{MediaGalleryConfigDataEnabled.value}}" stepKey="enableEnhancedMediaGallery"/>
+            <magentoCLI command="config:set {{MediaGalleryRenditionsDataEnabled.path}} {{MediaGalleryRenditionsDataEnabled.value}}" stepKey="enableMediaGalleryRenditions"/>
+
+            <!-- Create Media Gallery Directories for `catalog/category` and `wysiwyg` -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="enableEnhancedMediaGallery">
-                <argument name="enabled" value="1"/>
-            </actionGroup>
-            <actionGroup ref="AdminMediaGalleryRenditionsEnableActionGroup" stepKey="enableMediaGalleryRenditions"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
+            <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromCategoryImage"/>
+            <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPage"/>
+            <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </before>
         <after>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery"/>
+            <magentoCLI command="config:set {{MediaGalleryRenditionsDataDisabled.path}} {{MediaGalleryRenditionsDataDisabled.value}}" stepKey="disableMediaGalleryRenditions"/>
+            <magentoCLI command="config:set {{MediaGalleryConfigDataDisabled.path}} {{MediaGalleryConfigDataDisabled.value}}" stepKey="disableEnhancedMediaGallery"/>
             <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="enableWYSIWYG" />
         </after>
         <include>

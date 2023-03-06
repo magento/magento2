@@ -36,10 +36,12 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
             </actionGroup>
         </before>
 
@@ -50,11 +52,14 @@
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
@@ -64,8 +69,9 @@
             <argument name="Customer" value="CustomerEntityOne"/>
         </actionGroup>
         <!--Sign Out-->
-        <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="customerOnLogoutPage"/>
-        <waitForPageLoad stepKey="waitLogoutCustomer"/>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logout"/>
+        <comment userInput="BIC workaround" stepKey="customerOnLogoutPage"/>
+        <comment userInput="BIC workaround" stepKey="waitLogoutCustomer"/>
         <!--Create new Account with the same email address. (unchecked Sign Up for Newsletter checkbox)-->
         <actionGroup ref="StorefrontCreateNewAccountNewsletterUncheckedActionGroup" stepKey="createNewAccountNewsletterUnchecked">
             <argument name="Customer" value="CustomerEntityOne"/>

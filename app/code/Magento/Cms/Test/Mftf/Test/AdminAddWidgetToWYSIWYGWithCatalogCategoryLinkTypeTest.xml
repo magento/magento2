@@ -21,14 +21,14 @@
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
             <actionGroup ref="ConfigAdminAccountSharingActionGroup" stepKey="allowAdminShareAccount"/>
         </before>
         <!--Main test-->
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToPage"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE"/>
         <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
         <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
         <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
@@ -44,20 +44,21 @@
         <see selector="{{WidgetSection.InsertWidgetBtnEnabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetEnabled" />
         <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="Category Link Block Template" stepKey="selectTemplate" />
         <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectCategoryBtn" />
-        <waitForLoadingMaskToDisappear stepKey="wait3"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandRootCategory}}" stepKey="expandRootCategory" />
+        <waitForPageLoad stepKey="wait3"/>
+        <waitForElementVisible selector="{{AdminCategorySidebarTreeSection.expandCategoryByName('Default Category')}}" stepKey="waitForDefaultCategory"/>
+        <conditionalClick selector="{{AdminCategorySidebarTreeSection.expandCategoryByName('Default Category')}}" dependentSelector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" visible="false" stepKey="expandRootCategory"/>
         <waitForElementVisible selector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" stepKey="expandWait" />
         <click selector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" stepKey="selectPreCreateCategory" />
         <waitForElementNotVisible selector="{{WidgetSection.SelectCategoryTitle}}" stepKey="waitForSlideoutCloses1" />
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
-        <waitForElementNotVisible selector="{{WidgetSection.InsertWidgetTitle}}" stepKey="waitForSlideOutCloses2" />
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSlideOutCloses2"/>
         <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
-        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
-        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
-        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
-        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandButtonMenu"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSplitButtonMenuVisible"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSavePage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSuccessMessage"/>
         <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
         <waitForPageLoad stepKey="wait5" />
         <see userInput="Hello CMS Page!" stepKey="seeContent"/>

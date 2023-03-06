@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Controller\Adminhtml;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -17,8 +19,9 @@ use Magento\Framework\DataObjectFactory as ObjectFactory;
 use Magento\Framework\Api\DataObjectHelper;
 
 /**
- * Class Index
+ * Class \Magento\Customer\Controller\Adminhtml\Index
  *
+ * @api
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -289,9 +292,8 @@ abstract class Index extends \Magento\Backend\App\Action
     protected function _addSessionErrorMessages($messages)
     {
         $messages = (array)$messages;
-        $session = $this->_getSession();
 
-        $callback = function ($error) use ($session) {
+        $callback = function ($error) {
             if (!$error instanceof Error) {
                 $error = new Error($error);
             }

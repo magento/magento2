@@ -42,13 +42,8 @@
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
 
-            <!--TODO: REMOVE AFTER FIX MC-21717 -->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value="full_page"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Go to the tax rule page and delete the row we created-->
@@ -80,28 +75,27 @@
             <argument name="Customer" value="$$multiple_address_customer$$"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.name$$)}}" stepKey="onCategoryPage1"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage1"/>
         <waitForPageLoad stepKey="waitForCatalogPageLoad1"/>
-        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct1"/>
+        <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct1"/>
         <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addToCart1"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded1"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$simpleproduct1.name$$ to your shopping cart." stepKey="seeAddedToCartMessage1"/>
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity1"/>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart1"/>
-
-        <click stepKey="selectFirstShippingMethod1" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
+        <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFirstShippingMethod1"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNextOnShippingMethodLoad1"/>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <waitForElement stepKey="waitForPlaceOrderButton1" selector="{{CheckoutPaymentSection.placeOrder}}" time="30"/>
         <see stepKey="seeBillingAddressIsCorrect1" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_NY.street[0]}}"/>
-        <click stepKey="clickPlaceOrderButton1" selector="{{CheckoutPaymentSection.placeOrder}}"/>
-        <waitForPageLoad stepKey="waitForOrderSuccessPage1"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrderButton1"/>
+        <comment userInput="BIC workaround" stepKey="waitForOrderSuccessPage1"/>
         <see stepKey="seeSuccessMessage1" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:"/>
 
-        <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.name$$)}}" stepKey="onCategoryPage2"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage2"/>
         <waitForPageLoad stepKey="waitForCatalogPageLoad2"/>
-        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct2"/>
+        <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct2"/>
         <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addToCart2"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded2"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$simpleproduct1.name$$ to your shopping cart." stepKey="seeAddedToCartMessage2"/>
@@ -112,14 +106,14 @@
         <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodLoader}}" time="30" stepKey="waitForShippingMethodLoaderNotVisible"/>
         <waitForElementVisible selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" time="30" stepKey="waitForShippingMethodRadioToBeVisible"/>
         <waitForPageLoad stepKey="waitForPageLoad23"/>
-        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod2"/>
+        <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFirstShippingMethod2"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNextOnShippingMethodLoad2"/>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton2"/>
+        <comment userInput="BIC workaround" stepKey="waitForPlaceOrderButton2"/>
         <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_NY.street[0]}}" stepKey="seeBillingAddressIsCorrect2"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton2"/>
-        <waitForPageLoad stepKey="waitForOrderSuccessPage2"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrderButton2"/>
+        <comment userInput="BIC workaround" stepKey="waitForOrderSuccessPage2"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="seeSuccessMessage2"/>
     </test>
 </tests>

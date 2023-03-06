@@ -16,6 +16,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MC-30274"/>
             <group value="checkout"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -23,17 +24,16 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteSimpleCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteUsCustomer"/>
             <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="resetCustomerFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <comment userInput="BIC workaround" stepKey="logoutCustomer"/>
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">

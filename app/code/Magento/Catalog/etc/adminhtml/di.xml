@@ -94,6 +94,7 @@
             <argument name="collectionFactory" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\ProductCollectionFactory</argument>
             <argument name="modifiersPool" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Listing\Modifier\Pool</argument>
         </arguments>
+        <plugin name="add_show_total_records_to_catalog_product_data" type="Magento\Catalog\Plugin\Ui\DataProvider\Product\ProductDataProvider"/>
     </type>
     <type name="Magento\Catalog\Model\Product\Action">
         <plugin name="invalidate_pagecache_after_update_product_attributes" type="Magento\Catalog\Plugin\Model\Product\Action\UpdateAttributesFlushCache"/>
@@ -279,6 +280,14 @@
         <arguments>
             <argument name="mappings" xsi:type="array">
                 <item name="datetime" xsi:type="string">date</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced">
+        <arguments>
+            <argument name="disableScopeChangeList" xsi:type="array">
+                <item name="sku" xsi:type="string">sku</item>
+                <item name="media_gallery" xsi:type="string">media_gallery</item>
             </argument>
         </arguments>
     </type>

@@ -6,6 +6,7 @@
 namespace Magento\Newsletter\Model;
 
 use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -97,8 +98,11 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      */
     public function getProcessedTemplateAreaDataProvider()
     {
+        $designTheme = Bootstrap::getObjectManager()
+            ->get(DesignInterface::class)
+            ->getConfigurationDesignTheme('adminhtml');
         return [
-            'backend' => ['adminhtml', 'Magento/backend']
+            'backend' => ['adminhtml', $designTheme]
         ];
     }
 
@@ -140,17 +144,17 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      */
-    public function testLegacyTemplateFromDbLoadsInLegacyMode()
+    public function testLegacyTemplateFromDbLoadsInStrictMode()
     {
         $objectManager = Bootstrap::getObjectManager();
 
         $this->_model->setTemplateType(TemplateTypesInterface::TYPE_HTML);
         $templateText = '{{var store.isSaveAllowed()}} - {{template config_path="foobar"}}';
         $this->_model->setTemplateText($templateText);
+        $this->_model->setTemplateId('abc');
 
         $template = $objectManager->create(\Magento\Email\Model\Template::class);
         $templateData = [
-            'is_legacy' => '1',
             'template_code' => 'some_unique_code',
             'template_type' => TemplateTypesInterface::TYPE_HTML,
             'template_text' => '{{var this.template_code}}'
@@ -170,7 +174,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             'frontend',
             [$this->_model, 'getProcessedTemplate']
         );
-        self::assertEquals('1 - some_unique_code - 1 - some_unique_code', $processedTemplate);
+        self::assertEquals(' - some_unique_code -  - some_unique_code', $processedTemplate);
     }
 
     /**
@@ -184,6 +188,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->_model->setTemplateType(TemplateTypesInterface::TYPE_HTML);
         $templateText = '{{var store.isSaveAllowed()}} - {{template config_path="foobar"}}';
         $this->_model->setTemplateText($templateText);
+        $this->_model->setTemplateId('abc');
 
         $template = $objectManager->create(\Magento\Email\Model\Template::class);
         $templateData = [
@@ -206,6 +211,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             'frontend',
             [$this->_model, 'getProcessedTemplate']
         );
-        self::assertEquals('1 - some_unique_code -  - some_unique_code', $processedTemplate);
+        self::assertEquals(' - some_unique_code -  - some_unique_code', $processedTemplate);
     }
 }

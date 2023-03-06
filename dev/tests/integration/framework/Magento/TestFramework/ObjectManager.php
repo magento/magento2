@@ -23,16 +23,17 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
     /**
      * @var array
      */
-    protected $persistedInstances = [
-        \Magento\Framework\App\ResourceConnection::class,
-        \Magento\Framework\Config\Scope::class,
-        \Magento\Framework\ObjectManager\RelationsInterface::class,
-        \Magento\Framework\ObjectManager\ConfigInterface::class,
-        \Magento\Framework\Interception\DefinitionInterface::class,
-        \Magento\Framework\ObjectManager\DefinitionInterface::class,
-        \Magento\Framework\Session\Config::class,
-        \Magento\Framework\ObjectManager\Config\Mapper\Dom::class,
-    ];
+    protected $persistedInstances = [];
+
+    /**
+     * Set list of instances that should be persistent.
+     *
+     * @param array $persistedInstances
+     */
+    public function setPersistedInstances(array $persistedInstances): void
+    {
+        $this->persistedInstances = $persistedInstances;
+    }
 
     /**
      * Clear InstanceManager cache.
@@ -85,10 +86,12 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
      *
      * @param mixed $instance
      * @param string $className
+     * @param bool $forPreference Resolve preference for class
      * @return void
      */
-    public function addSharedInstance($instance, $className)
+    public function addSharedInstance($instance, $className, $forPreference = false)
     {
+        $className  = $forPreference ? $this->_config->getPreference($className) : $className;
         $this->_sharedInstances[$className] = $instance;
     }
 
@@ -96,10 +99,12 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
      * Remove shared instance.
      *
      * @param string $className
+     * @param bool $forPreference Resolve preference for class
      * @return void
      */
-    public function removeSharedInstance($className)
+    public function removeSharedInstance($className, $forPreference = false)
     {
+        $className  = $forPreference ? $this->_config->getPreference($className) : $className;
         unset($this->_sharedInstances[$className]);
     }
 
@@ -115,6 +120,8 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
     }
 
     /**
+     * Get object factory
+     *
      * @return \Magento\Framework\ObjectManager\FactoryInterface|\Magento\Framework\ObjectManager\Factory\Factory
      */
     public function getFactory()

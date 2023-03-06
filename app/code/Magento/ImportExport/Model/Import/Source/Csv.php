@@ -5,19 +5,20 @@
  */
 namespace Magento\ImportExport\Model\Import\Source;
 
+use Magento\Framework\Filesystem\Directory\Read as DirectoryRead;
+use Magento\Framework\Filesystem\File\ReadInterface as FileReadInterface;
+
 /**
  * CSV import adapter
  */
 class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
 {
     /**
-     * @var \Magento\Framework\Filesystem\File\Write
+     * @var FileReadInterface
      */
     protected $_file;
 
     /**
-     * Delimiter.
-     *
      * @var string
      */
     protected $_delimiter = ',';
@@ -28,27 +29,47 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
     protected $_enclosure = '';
 
     /**
+     * @var string
+     */
+    private string $filePath;
+
+    /**
+     * @var array
+     */
+    private static array $openFiles;
+
+    /**
      * Open file and detect column names
      *
      * There must be column names in the first line
      *
-     * @param string $file
-     * @param \Magento\Framework\Filesystem\Directory\Read $directory
+     * @param string|FileReadInterface $file
+     * @param DirectoryRead $directory
      * @param string $delimiter
      * @param string $enclosure
      * @throws \LogicException
      */
     public function __construct(
         $file,
-        \Magento\Framework\Filesystem\Directory\Read $directory,
+        DirectoryRead $directory,
         $delimiter = ',',
         $enclosure = '"'
     ) {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         register_shutdown_function([$this, 'destruct']);
-        try {
-            $this->_file = $directory->openFile($directory->getRelativePath($file), 'r');
-        } catch (\Magento\Framework\Exception\FileSystemException $e) {
-            throw new \LogicException("Unable to open file: '{$file}'");
+        if ($file instanceof FileReadInterface) {
+            $this->filePath = '';
+            $this->_file = $file;
+            $this->_file->seek(0);
+        } else {
+            try {
+                $this->filePath = $directory->getRelativePath($file);
+                $this->_file = $directory->openFile($this->filePath, 'r');
+                $this->_file->seek(0);
+                self::$openFiles[$this->filePath] = true;
+            } catch (\Magento\Framework\Exception\FileSystemException $e) {
+                throw new \LogicException("Unable to open file: '{$file}'");
+            }
         }
         if ($delimiter) {
             $this->_delimiter = $delimiter;
@@ -64,8 +85,9 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
      */
     public function destruct()
     {
-        if (is_object($this->_file)) {
+        if (is_object($this->_file) && !empty(self::$openFiles[$this->filePath])) {
             $this->_file->close();
+            unset(self::$openFiles[$this->filePath]);
         }
     }
 
@@ -79,7 +101,7 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
         $parsed = $this->_file->readCsv(0, $this->_delimiter, $this->_enclosure);
         if (is_array($parsed) && count($parsed) != $this->_colQty) {
             foreach ($parsed as $element) {
-                if (strpos($element, "'") !== false) {
+                if ($element && strpos($element, "'") !== false) {
                     $this->_foundWrongQuoteFlag = true;
                     break;
                 }
@@ -95,6 +117,7 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->_file->seek(0);

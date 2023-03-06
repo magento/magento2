@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="SaveAndContinueEditCmsPageActionGroup">
         <annotations>
-            <description>Clicks on the Save and Continue button.</description>
+            <description>DEPRECATED. Use AdminSaveAndContinueEditCmsPageActionGroup instead. Clicks on the Save and Continue button.</description>
         </annotations>
 
         <waitForElementVisible time="10" selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="waitForSaveAndContinueVisibility"/>

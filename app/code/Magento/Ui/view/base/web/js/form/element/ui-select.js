@@ -760,7 +760,7 @@ define([
          *
          * @param {Object} event - mousemove event
          */
-        onDelegatedMouseMouve: function (event) {
+        onDelegatedMouseMove: function (event) {
             var target = $(event.currentTarget).closest(this.visibleOptionSelector)[0];
 
             if (this.isCursorPositionChange(event) || this.hoveredElement === target) {
@@ -953,7 +953,7 @@ define([
 
             if (this.isTabKey(event)) {
                 if (!this.filterOptionsFocus() && this.listVisible() && this.filterOptions) {
-                    this.cacheUiSelect.blur();
+                    this.cacheUiSelect.trigger('blur');
                     this.filterOptionsFocus(true);
                     this.cleanHoveredElement();
 
@@ -1145,7 +1145,7 @@ define([
             $(this.rootList).on(
                 'mousemove',
                 targetSelector,
-                this.onDelegatedMouseMouve.bind(this)
+                this.onDelegatedMouseMove.bind(this)
             );
         },
 

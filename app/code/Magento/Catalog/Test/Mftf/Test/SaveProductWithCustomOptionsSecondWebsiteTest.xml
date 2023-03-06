@@ -34,6 +34,7 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
         </before>
@@ -43,18 +44,23 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteTestWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!--Create a Simple Product with Custom Options -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToCatalogProductGrid"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
-        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="clickAddProductDropdown"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickAddSimpleProduct">
+            <argument name="productType" value="simple"/>
+        </actionGroup>
         <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
         <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
         <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
-        <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillQuantity">
+            <argument name="productQty" value="{{_defaultProduct.quantity}}"/>
+        </actionGroup>
 
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses2"/>
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
@@ -76,7 +82,7 @@
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Radio Option', '2')}}" userInput="option 3" stepKey="fillOptionValueTitle3"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice('Radio Option', '2')}}" userInput="7" stepKey="fillOptionValuePrice3"/>
 
-        <!--Save the product with custom options -->
+        <!-- Save the product with custom options -->
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeProductSavedMessage"/>
 
@@ -87,7 +93,13 @@
         <waitForLoadingMaskToDisappear stepKey="waitForProductPagetoSaveAgain"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageAgain"/>
 
+        <!-- Verify the product's custom options -->
+        <waitForElement selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="waitForSection"/>
+        <executeJS function="return document.evaluate(&quot;{{AdminProductCustomizableOptionsSection.customizableOptions}}&quot;, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.getBoundingClientRect().y" stepKey="sectionPosition"/>
+        <executeJS function="return document.querySelector(&quot;{{AdminHeaderSection.pageMainActions}}&quot;).getBoundingClientRect().height" stepKey="floatingHeaderHeight"/>
+        <executeJS function="window.scrollTo({top: {$sectionPosition}-{$floatingHeaderHeight}})" stepKey="scrollToOptions"/>
         <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomOptionsSection2"/>
+        <waitForElementVisible selector=".admin__dynamic-rows[data-index='values'] tr.data-row" stepKey="waitForRowsToBeVisible"/>
         <seeNumberOfElements selector=".admin__dynamic-rows[data-index='values'] tr.data-row" userInput="3" stepKey="see4RowsOfOptions"/>
     </test>
 </tests>

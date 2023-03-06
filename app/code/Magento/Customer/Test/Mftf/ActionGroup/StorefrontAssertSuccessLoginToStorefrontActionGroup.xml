@@ -15,7 +15,7 @@
         <arguments>
             <argument name="Customer" type="entity"/>
         </arguments>
-        
-        <see stepKey="assertWelcome" userInput="{{Customer.firstname}}" selector="{{StorefrontPanelHeaderSection.customerWelcome}}" after="clickSignInAccountButton"/>
+
+        <waitForText stepKey="assertWelcome" userInput="{{Customer.firstname}}" selector="{{StorefrontPanelHeaderSection.customerWelcome}}" after="clickSignInAccountButton"/>
     </actionGroup>
 </actionGroups>

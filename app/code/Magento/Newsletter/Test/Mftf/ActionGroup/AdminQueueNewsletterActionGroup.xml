@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+
+    <actionGroup name="AdminQueueNewsletterActionGroup">
+        <annotations>
+            <description>
+                Sends Newsletter template to queue:
+                Clicks the Queue Newsletter action.
+                Sets Queue Date Start.
+                Selects needed Store view if applicable.
+                Clicks the Save and Resume button.
+            </description>
+        </annotations>
+        <arguments>
+            <argument name="startAt" type="string"/>
+            <argument name="storeView" type="string" defaultValue="Default Store View"/>
+        </arguments>
+
+        <click selector="{{AdminNewsletterGridMainActionsSection.action}}" stepKey="clickActionDropdown"/>
+        <click selector="{{AdminNewsletterGridMainActionsSection.queueNewsletterOption}}" stepKey="cliclkQueueNewsletterOption"/>
+        <fillField selector="{{QueueInformationSection.queueStartFrom}}" userInput="{{startAt}}" stepKey="setDate"/>
+        <conditionalClick selector="{{QueueInformationSection.subscriberFromOption(storeView)}}" dependentSelector="{{QueueInformationSection.subscriberFromOption(storeView)}}" visible="true" stepKey="setStoreview"/>
+        <click selector="{{AdminNewsletterMainActionsSection.saveAndResumeButton}}" stepKey="clickSaveAndResumeButton"/>
+        <see userInput="You saved the newsletter queue." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

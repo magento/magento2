@@ -1,65 +1,50 @@
 <?xml version="1.0"?>
 <!--
 /**
+ * Representation of Webapi module in System Configuration (Magento admin panel).
+ *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <section id="graphql" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
-            <label>GraphQL</label>
-            <tab>service</tab>
-            <resource>Magento_Integration::config_oauth</resource>
-            <group id="cors" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1">
-                <label>CORS Settings</label>
-                <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" canRestore="1">
-                    <label>CORS Headers Enabled</label>
+        <section id="webapi">
+            <group id="graphql_validation" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>GraphQl Input Limits</label>
+                <field id="input_limit_enabled" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>Enable Input Limits</label>
+                    <config_path>graphql/validation/input_limit_enabled</config_path>
                 </field>
-
-                <field id="allowed_origins" translate="label" type="text" sortOrder="10" showInDefault="1" canRestore="1">
-                    <label>Allowed origins</label>
-                    <comment>The Access-Control-Allow-Origin response header indicates whether the response can be shared with requesting code from the given origin. Fill this field with one or more origins (comma separated) or use '*' to allow access from all origins.</comment>
+                <field id="maximum_page_size" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Maximum Page Size</label>
+                    <comment>Maximum number of items allowed in a paginated search result.</comment>
+                    <config_path>graphql/validation/maximum_page_size</config_path>
                     <depends>
-                        <field id="graphql/cors/enabled">1</field>
+                        <field id="input_limit_enabled">1</field>
                     </depends>
                 </field>
-
-                <field id="allowed_methods" translate="label" type="text" sortOrder="20" showInDefault="1" canRestore="1">
-                    <label>Allowed methods</label>
-                    <comment>The Access-Control-Allow-Methods response header specifies the method or methods allowed when accessing the resource in response to a preflight request. Use comma separated methods (e.g. GET,POST)</comment>
-                    <depends>
-                        <field id="graphql/cors/enabled">1</field>
-                    </depends>
-                </field>
-
-                <field id="allowed_headers" translate="label" type="text" sortOrder="30" showInDefault="1" canRestore="1">
-                    <label>Allowed headers</label>
-                    <comment>The Access-Control-Allow-Headers response header is used in response to a preflight request which includes the Access-Control-Request-Headers to indicate which HTTP headers can be used during the actual request. Use comma separated headers.</comment>
-                    <depends>
-                        <field id="graphql/cors/enabled">1</field>
-                    </depends>
-                </field>
-
-                <field id="max_age" translate="label" type="text" sortOrder="40" showInDefault="1" canRestore="1">
-                    <label>Max Age</label>
-                    <validate>validate-digits</validate>
-                    <comment>The Access-Control-Max-Age response header indicates how long the results of a preflight request (that is the information contained in the Access-Control-Allow-Methods and Access-Control-Allow-Headers headers) can be cached.</comment>
-                    <depends>
-                        <field id="graphql/cors/enabled">1</field>
-                    </depends>
-                </field>
-
-                <field id="allow_credentials" translate="label" type="select" sortOrder="50" showInDefault="1" canRestore="1">
-                    <label>Credentials Allowed</label>
+            </group>
+            <group id="graphql_session" translate="label" type="text" sortOrder="20" showInDefault="0" showInWebsite="0" showInStore="0">
+                <label>GraphQl Session Management</label>
+                <field id="disabled" translate="label" type="select" sortOrder="20" showInDefault="0" showInWebsite="0" showInStore="0">
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>The Access-Control-Allow-Credentials response header tells browsers whether to expose the response to frontend code when the request's credentials mode is include.</comment>
-                    <depends>
-                        <field id="graphql/cors/enabled">1</field>
-                    </depends>
+                    <label>Disable session</label>
+                    <config_path>graphql/session/disable</config_path>
+                </field>
+            </group>
+        </section>
+        <section id="web_api">
+            <group id="graphql" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>GraphQl</label>
+                <field id="include_dynamic_attributes_as_entity_type_fields" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Include dynamic attributes as entity type fields</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>web_api/graphql/include_dynamic_attributes_as_entity_type_fields</config_path>
                 </field>
             </group>
         </section>
     </system>
 </config>
+

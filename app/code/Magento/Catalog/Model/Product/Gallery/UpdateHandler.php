@@ -77,26 +77,23 @@ class UpdateHandler extends CreateHandler
     {
         $filesToDelete = [];
         $recordsToDelete = [];
-        $picturesInOtherStores = [];
         $imagesToDelete = [];
-
-        foreach ($this->resourceModel->getProductImages($product, $this->extractStoreIds($product)) as $image) {
-            $picturesInOtherStores[$image['filepath']] = true;
+        $imagesToNotDelete = [];
+        foreach ($images as $image) {
+            if (empty($image['removed'])) {
+                $imagesToNotDelete[] = $image['file'];
+            }
         }
 
-        foreach ($images as &$image) {
+        foreach ($images as $image) {
             if (!empty($image['removed'])) {
                 if (!empty($image['value_id'])) {
-                    if (preg_match('/\.\.(\\\|\/)/', $image['file'])) {
-                        continue;
-                    }
                     $recordsToDelete[] = $image['value_id'];
-                    $imagesToDelete[] = $image['file'];
-                    $catalogPath = $this->mediaConfig->getBaseMediaPath();
-                    $isFile = $this->mediaDirectory->isFile($catalogPath . $image['file']);
-                    // only delete physical files if they are not used by any other products and if this file exist
-                    if ($isFile && !($this->resourceModel->countImageUses($image['file']) > 1)) {
-                        $filesToDelete[] = ltrim($image['file'], '/');
+                    if (!in_array($image['file'], $imagesToNotDelete)) {
+                        $imagesToDelete[] = $image['file'];
+                        if ($this->canDeleteImage($image['file'])) {
+                            $filesToDelete[] = ltrim($image['file'], '/');
+                        }
                     }
                 }
             }
@@ -105,6 +102,20 @@ class UpdateHandler extends CreateHandler
         $this->deleteMediaAttributeValues($product, $imagesToDelete);
         $this->resourceModel->deleteGallery($recordsToDelete);
         $this->removeDeletedImages($filesToDelete);
+    }
+
+    /**
+     * Check if image exists and is not used by any other products
+     *
+     * @param string $file
+     * @return bool
+     */
+    private function canDeleteImage(string $file): bool
+    {
+        $catalogPath = $this->mediaConfig->getBaseMediaPath();
+        $filePath = $this->mediaDirectory->getRelativePath($catalogPath . $file);
+        return $this->mediaDirectory->isFile($filePath)
+            && $this->resourceModel->countImageUses($file) <= 1;
     }
 
     /**

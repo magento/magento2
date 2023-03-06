@@ -260,6 +260,7 @@ class MagentoStyleTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $formatter = $this->getMockBuilder(OutputFormatter::class)
+            ->disableOriginalClone()
             ->disableOriginalConstructor()
             ->getMock();
         $input = $this->getMockBuilder(InputInterface::class)

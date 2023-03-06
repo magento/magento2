@@ -18,6 +18,7 @@ use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Order\Email\SenderBuilderFactory;
+use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
@@ -92,6 +93,11 @@ abstract class AbstractSenderTest extends TestCase
      */
     protected $loggerMock;
 
+    /**
+     * @var Emulation|MockObject
+     */
+    protected $appEmulator;
+
     public function stepMockSetup()
     {
         $this->senderMock = $this->getMockBuilder(Sender::class)
@@ -154,6 +160,11 @@ abstract class AbstractSenderTest extends TestCase
         $this->globalConfig = $this->createPartialMock(Config::class, ['getValue']);
 
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+
+        $this->appEmulator = $this->getMockBuilder(Emulation::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['startEnvironmentEmulation', 'stopEnvironmentEmulation'])
+            ->getMock();
     }
 
     /**
@@ -192,7 +203,9 @@ abstract class AbstractSenderTest extends TestCase
     {
         $this->identityContainerMock = $this->getMockBuilder($identityMockClassName)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId'])
+            ->onlyMethods(
+                ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId', 'getCopyMethod']
+            )
             ->getMock();
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')

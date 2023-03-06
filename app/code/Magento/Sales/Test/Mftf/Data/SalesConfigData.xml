@@ -24,4 +24,20 @@
     <entity name="DisableMinimumOrderCheck" type="active">
         <data key="value">0</data>
     </entity>
+    <entity name="EnableMinimumOrderAmountConfigData">
+        <data key="path">sales/minimum_order/active</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableMinimumOrderAmountConfigData">
+        <data key="path">sales/minimum_order/active</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="SetMinimumOrderAmount100ConfigData">
+        <data key="path">sales/minimum_order/amount</data>
+        <data key="value">100</data>
+    </entity>
+    <entity name="SetDefaultMinimumOrderAmountConfigData">
+        <data key="path">sales/minimum_order/amount</data>
+        <data key="value">0</data>
+    </entity>
 </entities>

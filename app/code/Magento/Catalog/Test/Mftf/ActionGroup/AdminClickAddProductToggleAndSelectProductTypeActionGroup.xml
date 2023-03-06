@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminClickAddProductToggleAndSelectProductTypeActionGroup">
+        <annotations>
+            <description>Click Add Product Toggle and select product type.</description>
+        </annotations>
+        <arguments>
+            <argument name="productType" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
+        <click selector="{{AdminProductGridActionSection.addTypeProduct(productType)}}" stepKey="clickAddProduct"/>
+        <waitForPageLoad stepKey="waitForFormToLoad"/>
+    </actionGroup>
+</actionGroups>

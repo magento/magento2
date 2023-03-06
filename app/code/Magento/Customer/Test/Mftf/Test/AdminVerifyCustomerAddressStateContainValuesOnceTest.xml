@@ -21,6 +21,7 @@
         </annotations>
         <before>
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="firstCustomer"/>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
@@ -31,9 +32,7 @@
             <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-
-        <!-- Go to Customers > All Customers.-->
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
 
         <!--Select created customer, Click Edit mode-->
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPageWithAddresses">

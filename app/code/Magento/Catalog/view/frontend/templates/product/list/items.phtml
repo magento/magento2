@@ -287,7 +287,7 @@ $_item = null;
                                                         </form>
                                                     <?php endif; ?>
                                                 <?php else:?>
-                                                    <?php if ($_item->getIsSalable()):?>
+                                                    <?php if ($_item->isAvailable()):?>
                                                         <div class="stock available">
                                                             <span><?= $block->escapeHtml(__('In stock')) ?></span>
                                                         </div>

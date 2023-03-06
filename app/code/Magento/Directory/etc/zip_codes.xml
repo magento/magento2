@@ -6,19 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Directory:etc/zip_codes.xsd">
-    <zip countryCode="DZ">
+    <zip countryCode="AD">
         <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="AS">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="AR">
-        <codes>
-            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+            <code id="pattern_1" active="true" example="AD100">^AD\d{3}$</code>
         </codes>
     </zip>
     <zip countryCode="AM">
@@ -26,14 +16,30 @@
             <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
         </codes>
     </zip>
-    <zip countryCode="AU">
+    <zip countryCode="AR">
         <codes>
             <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+            <code id="pattern_2" active="true" example="A1234BCD">^[a-zA-z]{1}[0-9]{4}[a-zA-z]{3}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="AS">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
         </codes>
     </zip>
     <zip countryCode="AT">
         <codes>
             <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="AU">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="AX">
+        <codes>
+            <code id="pattern_1" active="true" example="22123">^22\d{3}$</code>
         </codes>
     </zip>
     <zip countryCode="AZ">
@@ -42,14 +48,19 @@
             <code id="pattern_2" active="true" example="123456">^[0-9]{6}$</code>
         </codes>
     </zip>
+    <zip countryCode="BA">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="BB">
+        <codes>
+            <code id="pattern_1" active="true" example="BB12345">^(BB\d{5})?$</code>
+        </codes>
+    </zip>
     <zip countryCode="BD">
         <codes>
             <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="BY">
-        <codes>
-            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
         </codes>
     </zip>
     <zip countryCode="BE">
@@ -57,9 +68,24 @@
             <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
         </codes>
     </zip>
-    <zip countryCode="BA">
+    <zip countryCode="BG">
         <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="BH">
+        <codes>
+            <code id="pattern_1" active="true" example="323">^((1[0-2]|[1-9])\d{2})?$</code>
+        </codes>
+    </zip>
+    <zip countryCode="BM">
+        <codes>
+            <code id="pattern_1" active="true" example="MA 02">^[A-Z]{2}[ ]?[A-Z0-9]{2}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="BN">
+        <codes>
+            <code id="pattern_1" active="true" example="AB1234">^[a-zA-z]{2}[0-9]{4}$</code>
         </codes>
     </zip>
     <zip countryCode="BR">
@@ -68,25 +94,36 @@
             <code id="pattern_2" active="true" example="12345-678">^[0-9]{5}\-[0-9]{3}$</code>
         </codes>
     </zip>
-    <zip countryCode="BN">
+    <zip countryCode="BY">
         <codes>
-            <code id="pattern_1" active="true" example="AB1234">^[a-zA-z]{2}[0-9]{4}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="BG">
-        <codes>
-            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
         </codes>
     </zip>
     <zip countryCode="CA">
         <codes>
             <code id="pattern_1" active="true" example="A1B 2C3">^[a-zA-z]{1}[0-9]{1}[a-zA-z]{1}\s[0-9]{1}[a-zA-z]{1}[0-9]{1}$</code>
             <code id="pattern_2" active="true" example="A1B2C3">^[a-zA-z]{1}[0-9]{1}[a-zA-z]{1}[0-9]{1}[a-zA-z]{1}[0-9]{1}$</code>
+            <code id="pattern_3" active="true" example="A1B">^[a-zA-z]{1}[0-9]{1}[a-zA-z]{1}$</code>
         </codes>
     </zip>
-    <zip countryCode="IC">
+    <zip countryCode="CC">
         <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+            <code id="pattern_1" active="true" example="6799">^6799$</code>
+        </codes>
+    </zip>
+    <zip countryCode="CH">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="CK">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^\d{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="CL">
+        <codes>
+            <code id="pattern_1" active="true" example="1234567">^\d{7}$</code>
         </codes>
     </zip>
     <zip countryCode="CN">
@@ -94,7 +131,12 @@
             <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
         </codes>
     </zip>
-    <zip countryCode="HR">
+    <zip countryCode="CR">
+        <codes>
+            <code id="pattern_1" active="true" example="12345 or 123-1234">^\d{4,5}|\d{3}-\d{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="CS">
         <codes>
             <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
         </codes>
@@ -102,6 +144,16 @@
     <zip countryCode="CU">
         <codes>
             <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="CV">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^\d{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="CX">
+        <codes>
+            <code id="pattern_1" active="true" example="6798">^6798$</code>
         </codes>
     </zip>
     <zip countryCode="CY">
@@ -114,9 +166,29 @@
             <code id="pattern_1" active="true" example="123 45">^[0-9]{3}\s[0-9]{2}$</code>
         </codes>
     </zip>
+    <zip countryCode="DE">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
     <zip countryCode="DK">
         <codes>
             <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="DO">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^\d{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="DZ">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="EC">
+        <codes>
+            <code id="pattern_1" active="true" example="A1234B or AB123456 or 123456">^([A-Z]\d{4}[A-Z]|(?:[A-Z]{2})?\d{6})?$</code>
         </codes>
     </zip>
     <zip countryCode="EE">
@@ -124,279 +196,9 @@
             <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
         </codes>
     </zip>
-    <zip countryCode="FI">
+    <zip countryCode="EG">
         <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="FR">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="GF">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="GE">
-        <codes>
-            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="DE">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="GR">
-        <codes>
-            <code id="pattern_1" active="true" example="123 45">^[0-9]{3}\s[0-9]{2}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="GL">
-        <codes>
-            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="GP">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="GU">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="GG">
-        <codes>
-            <code id="pattern_1" active="true" example="AB1 2CD">^[a-zA-Z]{2}[0-9]{1}\s[0-9]{1}[a-zA-Z]{2}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="HU">
-        <codes>
-            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="IS">
-        <codes>
-            <code id="pattern_1" active="true" example="123">^[0-9]{3}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="IN">
-        <codes>
-            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="ID">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="IL">
-        <codes>
-            <code id="pattern_1" active="true" example="6687865">^[0-9]{7}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="IT">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="JP">
-        <codes>
-            <code id="pattern_1" active="true" example="123-4567">^[0-9]{3}-[0-9]{4}$</code>
-            <code id="pattern_2" active="true" example="1234567">^[0-9]{7}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="JE">
-        <codes>
-            <code id="pattern_1" active="true" example="AB1 2CD">^[a-zA-Z]{2}[0-9]{1}\s[0-9]{1}[a-zA-Z]{2}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="KZ">
-        <codes>
-            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="KE">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="KR">
-        <codes>
-            <code id="pattern_1" active="true" example="123-456">^[0-9]{3}-[0-9]{3}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="KG">
-        <codes>
-            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="LV">
-        <codes>
-            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="LI">
-        <codes>
-            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="LT">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="LU">
-        <codes>
-            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="MK">
-        <codes>
-            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="MG">
-        <codes>
-            <code id="pattern_1" active="true" example="123">^[0-9]{3}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="MY">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="MV">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-            <code id="pattern_2" active="true" example="1234">^[0-9]{4}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="MT">
-        <codes>
-            <code id="pattern_1" active="true" example="ABC 1234">^[a-zA-Z]{3}\s[0-9]{4}$</code>
-            <code id="pattern_2" active="true" example="ABC 123">^[a-zA-Z]{3}\s[0-9]{3}$</code>
-            <code id="pattern_3" active="true" example="ABC 12">^[a-zA-Z]{3}\s[0-9]{2}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="MH">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="MQ">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="MX">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="MD">
-        <codes>
-            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="MC">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="MN">
-        <codes>
-            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="MA">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="NL">
-        <codes>
-            <code id="pattern_1" active="true" example="1234 AB/1234AB">^[1-9][0-9]{3}\s?[a-zA-Z]{2}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="NO">
-        <codes>
-            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="PK">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="PH">
-        <codes>
-            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="PL">
-        <codes>
-            <code id="pattern_1" active="true" example="12-345">^[0-9]{2}-[0-9]{3}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="PT">
-        <codes>
-            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
-            <code id="pattern_2" active="true" example="1234-567">^[0-9]{4}-[0-9]{3}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="PR">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="RE">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="RO">
-        <codes>
-            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="RU">
-        <codes>
-            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="MP">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="CS">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="SG">
-        <codes>
-            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="SK">
-        <codes>
-            <code id="pattern_1" active="true" example="123 45">^[0-9]{3}\s[0-9]{2}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="SI">
-        <codes>
-            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="ZA">
-        <codes>
-            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+            <code id="pattern_1" active="true" example="12345">^\d{5}$</code>
         </codes>
     </zip>
     <zip countryCode="ES">
@@ -404,53 +206,32 @@
             <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
         </codes>
     </zip>
-    <zip countryCode="XY">
+    <zip countryCode="ET">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^\d{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="FI">
         <codes>
             <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
         </codes>
     </zip>
-    <zip countryCode="SZ">
+    <zip countryCode="FK">
         <codes>
-            <code id="pattern_1" active="true" example="A123">^[a-zA-Z]{1}[0-9]{3}$</code>
+            <code id="pattern_1" active="true" example="FIQQ 1ZZ">^FIQQ 1ZZ$</code>
         </codes>
     </zip>
-    <zip countryCode="SE">
+    <zip countryCode="FM">
         <codes>
-            <code id="pattern_1" active="true" example="123 45">^[0-9]{3}\s[0-9]{2}$</code>
+            <code id="pattern_1" active="true" example="96941">^(9694[1-4])([ \-]\d{4})?$</code>
         </codes>
     </zip>
-    <zip countryCode="CH">
+    <zip countryCode="FO">
         <codes>
-            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+            <code id="pattern_1" active="true" example="123">^\d{3}$</code>
         </codes>
     </zip>
-    <zip countryCode="TW">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-            <code id="pattern_2" active="true" example="123">^[0-9]{3}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="TJ">
-        <codes>
-            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="TH">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="TR">
-        <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="TM">
-        <codes>
-            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
-        </codes>
-    </zip>
-    <zip countryCode="UA">
+    <zip countryCode="FR">
         <codes>
             <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
         </codes>
@@ -463,6 +244,533 @@
             <code id="pattern_4" active="true" example="AB1C 2DF">^[a-zA-Z]{2}[0-9]{1}[a-zA-Z]{1}\s?[0-9]{1}[a-zA-Z]{2}$</code>
             <code id="pattern_5" active="true" example="A12 3BC">^[a-zA-Z]{1}[0-9]{2}\s?[0-9]{1}[a-zA-Z]{2}$</code>
             <code id="pattern_6" active="true" example="A1 2BC">^[a-zA-Z]{1}[0-9]{1}\s?[0-9]{1}[a-zA-Z]{2}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="GE">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="GF">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="GG">
+        <codes>
+            <code id="pattern_1" active="true" example="GY10 2AB">^[gG][yY]([1-9]|10)\s?[0-9]{1}[a-zA-Z]{2}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="GH">
+        <codes>
+            <code id="pattern_1" active="true" example="GA18400">^[A-Z][A-Z0-9]\d{3,5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="GL">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="GN">
+        <codes>
+            <code id="pattern_1" active="true" example="123">^\d{3}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="GP">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="GR">
+        <codes>
+            <code id="pattern_1" active="true" example="123 45">^[0-9]{3}\s[0-9]{2}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="GS">
+        <codes>
+            <code id="pattern_1" active="true" example="SIQQ 1ZZ">^SIQQ 1ZZ$</code>
+        </codes>
+    </zip>
+    <zip countryCode="GT">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^\d{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="GU">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="GW">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^\d{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="HM">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^\d{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="HN">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^(?:\d{5})?$</code>
+        </codes>
+    </zip>
+    <zip countryCode="HR">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="HT">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^\d{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="HU">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="IC">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="ID">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="IL">
+        <codes>
+            <code id="pattern_1" active="true" example="6687865">^[0-9]{7}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="IM">
+        <codes>
+            <code id="pattern_1" active="true" example="IM1 1AD">^IM\d[\dA-Z]?[ ]?\d[ABD-HJLN-UW-Z]{2}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="IN">
+        <codes>
+            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="IO">
+        <codes>
+            <code id="pattern_1" active="true" example="BBND 1ZZ">^BBND 1ZZ$</code>
+        </codes>
+    </zip>
+    <zip countryCode="IS">
+        <codes>
+            <code id="pattern_1" active="true" example="123">^[0-9]{3}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="IQ">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^\d{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="IT">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="JE">
+        <codes>
+            <code id="pattern_1" active="true" example="JE2 4PJ">^[jJ][eE][1-5]{1}\s?[0-9]{1}[a-zA-Z]{2}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="JO">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^\d{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="JP">
+        <codes>
+            <code id="pattern_1" active="true" example="123-4567">^[0-9]{3}-[0-9]{4}$</code>
+            <code id="pattern_2" active="true" example="1234567">^[0-9]{7}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="KE">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="KG">
+        <codes>
+            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="KR">
+        <codes>
+            <code id="pattern_1" active="true" example="123-456">^[0-9]{3}-[0-9]{3}$</code>
+            <code id="pattern_2" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="KH">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^\d{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="KW">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^\d{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="KZ">
+        <codes>
+            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="LA">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^\d{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="LB">
+        <codes>
+            <code id="pattern_1" active="true" example="1234 5678">^(\d{4}([ ]?\d{4})?)?$</code>
+        </codes>
+    </zip>
+    <zip countryCode="LI">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="LK">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^\d{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="LT">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="LU">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="LV">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="MA">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="MC">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="MD">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="ME">
+        <codes>
+            <code id="pattern_1" active="true" example="81101">^8\d{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="MG">
+        <codes>
+            <code id="pattern_1" active="true" example="123">^[0-9]{3}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="MH">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="MK">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="MN">
+        <codes>
+            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="MP">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="MS">
+        <codes>
+            <code id="pattern_1" active="true" example="MSR1250">^MSR\s?\d{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="MQ">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="MT">
+        <codes>
+            <code id="pattern_1" active="true" example="ABC 1234">^[a-zA-Z]{3}\s[0-9]{4}$</code>
+            <code id="pattern_2" active="true" example="ABC 123">^[a-zA-Z]{3}\s[0-9]{3}$</code>
+            <code id="pattern_3" active="true" example="ABC 12">^[a-zA-Z]{3}\s[0-9]{2}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="MU">
+        <codes>
+            <code id="pattern_1" active="true" example="A1201 or 80110">^([AR]|[0-9])\d{4,5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="MV">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+            <code id="pattern_2" active="true" example="1234">^[0-9]{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="MX">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="MY">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="NC">
+        <codes>
+            <code id="pattern_1" active="true" example="98800">^988\d{2}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="NE">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^\d{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="NF">
+        <codes>
+            <code id="pattern_1" active="true" example="2899">^2899$</code>
+        </codes>
+    </zip>
+    <zip countryCode="NG">
+        <codes>
+            <code id="pattern_1" active="true" example="123456">^(\d{6})?$</code>
+        </codes>
+    </zip>
+    <zip countryCode="NI">
+        <codes>
+            <code id="pattern_1" active="true" example="22500">^\d{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="NL">
+        <codes>
+            <code id="pattern_1" active="true" example="1234 AB/1234AB">^[1-9][0-9]{3}\s?[a-zA-Z]{2}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="NO">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="NP">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^\d{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="NZ">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^\d{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="OM">
+        <codes>
+            <code id="pattern_1" active="true" example="PC 123 or 123">^(PC )?\d{3}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="PA">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^\d{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="PF">
+        <codes>
+            <code id="pattern_1" active="true" example="98701">^987\d{2}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="PG">
+        <codes>
+            <code id="pattern_1" active="true" example="123">^\d{3}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="PH">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="PK">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="PL">
+        <codes>
+            <code id="pattern_1" active="true" example="12-345">^[0-9]{2}-[0-9]{3}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="PM">
+        <codes>
+            <code id="pattern_1" active="true" example="97500">^9[78]5\d{2}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="PN">
+        <codes>
+            <code id="pattern_1" active="true" example="PCRN 1ZZ">^PCRN 1ZZ$</code>
+        </codes>
+    </zip>
+    <zip countryCode="PR">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="PT">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+            <code id="pattern_2" active="true" example="1234-567">^[0-9]{4}-[0-9]{3}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="PW">
+        <codes>
+            <code id="pattern_1" active="true" example="96939 or 96940">^(?:96939|96940)$</code>
+        </codes>
+    </zip>
+    <zip countryCode="PY">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^\d{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="RE">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="RO">
+        <codes>
+            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="RS">
+        <codes>
+            <code id="pattern_1" active="true" example="123456">^\d{6}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="RU">
+        <codes>
+            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="SA">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^\d{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="SE">
+        <codes>
+            <code id="pattern_1" active="true" example="123 45">^[0-9]{3}\s[0-9]{2}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="SG">
+        <codes>
+            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="SI">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="SK">
+        <codes>
+            <code id="pattern_1" active="true" example="123 45">^[0-9]{3}\s[0-9]{2}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="SH">
+        <codes>
+            <code id="pattern_1" active="true" example="ASCN 1ZZ">^(ASCN|STHL) 1ZZ$</code>
+        </codes>
+    </zip>
+    <zip countryCode="SJ">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^\d{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="SM">
+        <codes>
+            <code id="pattern_1" active="true" example="47890">^4789\d$</code>
+        </codes>
+    </zip>
+    <zip countryCode="SN">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^\d{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="SO">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^\d{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="SZ">
+        <codes>
+            <code id="pattern_1" active="true" example="A123">^[a-zA-Z]{1}[0-9]{3}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="TC">
+        <codes>
+            <code id="pattern_1" active="true" example="TKCA 1ZZ">^TKCA 1ZZ$</code>
+        </codes>
+    </zip>
+    <zip countryCode="TH">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="TJ">
+        <codes>
+            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="TM">
+        <codes>
+            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="TN">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^\d{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="TR">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="TT">
+        <codes>
+            <code id="pattern_1" active="true" example="120110">^\d{6}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="TW">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+            <code id="pattern_2" active="true" example="123">^[0-9]{3}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="UA">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
         </codes>
     </zip>
     <zip countryCode="US">
@@ -481,9 +789,49 @@
             <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
         </codes>
     </zip>
+    <zip countryCode="VA">
+        <codes>
+            <code id="pattern_1" active="true" example="00120">^00120$</code>
+        </codes>
+    </zip>
+    <zip countryCode="VE">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^\d{4}$</code>
+        </codes>
+    </zip>
     <zip countryCode="VI">
         <codes>
             <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="WF">
+        <codes>
+            <code id="pattern_1" active="true" example="98601">^986\d{2}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="XK">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^\d{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="XY">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="YT">
+        <codes>
+            <code id="pattern_1" active="true" example="97601">^976\d{2}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="ZA">
+        <codes>
+            <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+        </codes>
+    </zip>
+    <zip countryCode="ZM">
+        <codes>
+            <code id="pattern_1" active="true" example="12345">^\d{5}$</code>
         </codes>
     </zip>
 </config>

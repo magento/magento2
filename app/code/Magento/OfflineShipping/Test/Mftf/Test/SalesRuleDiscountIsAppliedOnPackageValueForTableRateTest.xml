@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="SalesRuleDiscountIsAppliedOnPackageValueForTableRateTest">
+        <annotations>
+            <features value="Shipping"/>
+            <stories value="Offline Shipping Methods"/>
+            <title value="SalesRule Discount Is Applied On PackageValue For TableRate"/>
+            <description value="SalesRule Discount Is Applied On PackageValue For TableRate"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-38271"/>
+            <group value="shipping"/>
+        </annotations>
+        <before>
+            <!-- Add simple product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="price">13.00</field>
+            </createData>
+
+            <!-- Create cart price rule -->
+            <createData entity="ActiveSalesRuleForNotLoggedIn" stepKey="createCartPriceRule"/>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createCartPriceRule"/>
+            </createData>
+
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Go to Stores > Configuration > Sales > Shipping Methods -->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+
+            <!-- Switch to Website scope -->
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreView">
+                <argument name="website" value="_defaultWebsite"/>
+            </actionGroup>
+
+            <!-- Enable Table Rate method and save config -->
+            <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="enableTableRatesShippingMethod"/>
+
+            <!-- Uncheck Use Default checkbox for Default Condition -->
+            <uncheckOption selector="{{AdminShippingMethodTableRatesSection.carriersTableRateConditionName}}" stepKey="disableUseDefaultCondition"/>
+
+            <!-- Make sure you have Condition Price vs. Destination -->
+            <selectOption selector="{{AdminShippingMethodTableRatesSection.condition}}" userInput="{{TableRateShippingMethodConfig.package_value_with_discount}}" stepKey="setCondition"/>
+
+            <!-- Import file and save config -->
+            <attachFile selector="{{AdminShippingMethodTableRatesSection.importFile}}" userInput="usa_tablerates.csv" stepKey="attachFileForImport"/>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigs"/>
+        </before>
+        <after>
+            <!-- Go to Stores > Configuration > Sales > Shipping Methods -->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+
+            <!-- Switch to Website scope -->
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreView">
+                <argument name="website" value="_defaultWebsite"/>
+            </actionGroup>
+
+            <!-- Check Use Default checkbox for Default Condition and Active -->
+            <checkOption selector="{{AdminShippingMethodTableRatesSection.carriersTableRateConditionName}}" stepKey="enableUseDefaultCondition"/>
+            <checkOption selector="{{AdminShippingMethodTableRatesSection.enabledUseSystemValue}}" stepKey="enableUseDefaultActive"/>
+
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigs"/>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Remove simple product-->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+
+            <!-- Delete sales rule -->
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
+
+        </after>
+        <!-- Add simple product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+
+        <!-- Assert that table rate value is correct for US -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckout"/>
+        <waitForElement time="30" selector="{{CheckoutCartSummarySection.estimateShippingAndTaxForm}}" stepKey="waitForEstimateShippingAndTaxForm"/>
+        <waitForElement time="30" selector="{{CheckoutCartSummarySection.shippingMethodForm}}" stepKey="waitForShippingMethodForm"/>
+        <conditionalClick selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUSCountry"/>
+        <waitForPageLoad stepKey="waitForSelectCountry"/>
+        <see selector="{{CheckoutCartSummarySection.shippingPrice}}" userInput="$5.99" stepKey="seeShippingForUS"/>
+
+        <!-- Apply Coupon -->
+        <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="applyDiscount">
+            <argument name="coupon" value="$$createCouponForCartPriceRule$$"/>
+        </actionGroup>
+
+        <see selector="{{CheckoutCartSummarySection.shippingPrice}}" userInput="$7.99" stepKey="seeShippingForUSWithDiscount"/>
+    </test>
+</tests>

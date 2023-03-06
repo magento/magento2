@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="SearchByEmailInCustomerGridTest">
+    <test name="SearchByEmailInCustomerGridTest" deprecated="Test is covered with multiple other scenarios">
         <annotations>
             <features value="Customer"/>
             <stories value="Customer grid search"/>
@@ -16,7 +16,11 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-17985"/>
             <useCaseId value="MC-17947"/>
+            <skip>
+                <issueId value="Test is deprecated" />
+            </skip>
             <group value="customer"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createFirstCustomer"/>
@@ -26,12 +30,12 @@
         <after>
             <deleteData createDataKey="createFirstCustomer" stepKey="deleteFirstCustomer"/>
             <deleteData createDataKey="createSecondCustomer" stepKey="deleteSecondCustomer"/>
-            <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
+            <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
             <actionGroup ref="AdminResetFilterInCustomerAddressGrid" stepKey="clearCustomerGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Step 1: Go to Customers > All Customers-->
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
         <!--Step 2: On Customers grid page search customer by keyword-->
         <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchCustomer">
             <argument name="keyword" value="$$createSecondCustomer.email$$"/>
