@@ -6,23 +6,27 @@
 
 namespace Magento\Widget\Model\ResourceModel\Widget\Instance\Options;
 
+use Magento\Framework\Option\ArrayInterface;
+use Magento\Theme\Model\ResourceModel\Theme\CollectionFactory;
+use Magento\Widget\Model\Widget\Instance;
+
 /**
  * Widget Instance Theme Id Options
  *
  * @deprecated 100.1.7 created new class that correctly loads theme options and whose name follows naming convention
  * @see \Magento\Widget\Model\ResourceModel\Widget\Instance\Options\Themes
  */
-class ThemeId implements \Magento\Framework\Option\ArrayInterface
+class ThemeId implements ArrayInterface
 {
     /**
-     * @var \Magento\Widget\Model\Widget\Instance
+     * @var Instance
      */
     protected $_resourceModel;
 
     /**
-     * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $widgetResourceModel
+     * @param CollectionFactory $widgetResourceModel
      */
-    public function __construct(\Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $widgetResourceModel)
+    public function __construct(CollectionFactory $widgetResourceModel)
     {
         $this->_resourceModel = $widgetResourceModel->create();
     }

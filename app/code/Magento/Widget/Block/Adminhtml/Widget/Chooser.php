@@ -11,42 +11,45 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget;
 
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Button;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\Factory;
+use Magento\Framework\Data\Form\Element\Fieldset;
+use Magento\Framework\DataObject;
+use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * Chooser widget block.
  */
-class Chooser extends \Magento\Backend\Block\Template
+class Chooser extends Template
 {
     /**
-     * @var \Magento\Framework\Data\Form\Element\Factory
+     * @var Factory
      */
     protected $_elementFactory;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
+     * @var EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
-     * @var SecureHtmlRenderer
-     */
-    private $secureRenderer;
-
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Framework\Data\Form\Element\Factory $elementFactory
+     * @param Context $context
+     * @param EncoderInterface $jsonEncoder
+     * @param Factory $elementFactory
      * @param array $data
      * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Framework\Data\Form\Element\Factory $elementFactory,
+        Context $context,
+        EncoderInterface $jsonEncoder,
+        Factory $elementFactory,
         array $data = [],
-        ?SecureHtmlRenderer $secureRenderer = null
+        private ?SecureHtmlRenderer $secureRenderer = null
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_elementFactory = $elementFactory;
@@ -67,7 +70,7 @@ class Chooser extends \Magento\Backend\Block\Template
     /**
      * Chooser form element getter
      *
-     * @return \Magento\Framework\Data\Form\Element\AbstractElement
+     * @return AbstractElement
      */
     public function getElement()
     {
@@ -77,16 +80,16 @@ class Chooser extends \Magento\Backend\Block\Template
     /**
      * Convert Array config to Object
      *
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     public function getConfig()
     {
-        if ($this->_getData('config') instanceof \Magento\Framework\DataObject) {
+        if ($this->_getData('config') instanceof DataObject) {
             return $this->_getData('config');
         }
 
         $configArray = $this->_getData('config');
-        $config = new \Magento\Framework\DataObject();
+        $config = new DataObject();
         $this->setConfig($config);
         if (!is_array($configArray)) {
             return $this->_getData('config');
@@ -148,7 +151,7 @@ class Chooser extends \Magento\Backend\Block\Template
     protected function _toHtml()
     {
         $element = $this->getElement();
-        /* @var $fieldset \Magento\Framework\Data\Form\Element\Fieldset */
+        /* @var $fieldset Fieldset */
         $fieldset = $element->getForm()->getElement($this->getFieldsetId());
         $chooserId = $this->getUniqId();
         $config = $this->getConfig();
@@ -172,7 +175,7 @@ class Chooser extends \Magento\Backend\Block\Template
 
         $buttons = $config->getButtons();
         $chooseButton = $this->getLayout()->createBlock(
-            \Magento\Backend\Block\Widget\Button::class
+            Button::class
         )->setType(
             'button'
         )->setId(

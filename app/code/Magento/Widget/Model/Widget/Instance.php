@@ -5,33 +5,53 @@
  */
 namespace Magento\Widget\Model\Widget;
 
+use Magento\Catalog\Model\Product\Type;
+use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Config\Dom\ValidationSchemaException;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Math\Random;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Simplexml\Element;
+use Magento\Framework\View\DesignInterface;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\FileSystem as ViewFileSystem;
 use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
+use Magento\Widget\Helper\Conditions;
+use Magento\Widget\Model\Config\Reader;
+use Magento\Widget\Model\NamespaceResolver;
+use Magento\Widget\Model\ResourceModel\Widget\Instance as ResourceWidgetInstance;
+use Magento\Widget\Model\Widget;
 
 /**
  * Widget Instance Model
  *
  * @api
  * @method string getTitle()
- * @method \Magento\Widget\Model\Widget\Instance setTitle(string $value)
- * @method \Magento\Widget\Model\Widget\Instance setStoreIds(string $value)
- * @method \Magento\Widget\Model\Widget\Instance setWidgetParameters(string|array $value)
+ * @method Instance setTitle(string $value)
+ * @method Instance setStoreIds(string $value)
+ * @method Instance setWidgetParameters(string|array $value)
  * @method int getSortOrder()
- * @method \Magento\Widget\Model\Widget\Instance setSortOrder(int $value)
- * @method \Magento\Widget\Model\Widget\Instance setThemeId(int $value)
+ * @method Instance setSortOrder(int $value)
+ * @method Instance setThemeId(int $value)
  * @method int getThemeId()
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
-class Instance extends \Magento\Framework\Model\AbstractModel
+class Instance extends AbstractModel
 {
     public const SPECIFIC_ENTITIES = 'specific';
 
@@ -79,22 +99,22 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     protected $_eventPrefix = 'widget_widget_instance';
 
     /**
-     * @var \Magento\Framework\View\FileSystem
+     * @var ViewFileSystem
      */
     protected $_viewFileSystem;
 
     /**
-     * @var \Magento\Widget\Model\Widget
+     * @var Widget
      */
     protected $_widgetModel;
 
     /**
-     * @var \Magento\Widget\Model\NamespaceResolver
+     * @var NamespaceResolver
      */
     protected $_namespaceResolver;
 
     /**
-     * @var \Magento\Framework\App\Cache\TypeListInterface
+     * @var TypeListInterface
      */
     protected $_cacheTypeList;
 
@@ -104,87 +124,67 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     protected $_relatedCacheTypes;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Type
+     * @var Type
      * @since 101.0.4
      */
     protected $_productType;
 
     /**
-     * @var \Magento\Widget\Model\Config\Reader
+     * @var Reader
      * @since 101.0.4
      */
     protected $_reader;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     protected $_escaper;
 
     /**
-     * @var \Magento\Framework\Math\Random
-     */
-    protected $mathRandom;
-
-    /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var ReadInterface
      */
     protected $_directory;
 
     /**
-     * @var \Magento\Widget\Helper\Conditions
-     */
-    protected $conditionsHelper;
-
-    /**
-     * @var Json
-     */
-    private $serializer;
-
-    /**
-     * @var ValidatorFactory
-     */
-    private $xmlValidatorFactory;
-
-    /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\View\FileSystem $viewFileSystem
-     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\Catalog\Model\Product\Type $productType
-     * @param \Magento\Widget\Model\Config\Reader $reader
-     * @param \Magento\Widget\Model\Widget $widgetModel
-     * @param \Magento\Widget\Model\NamespaceResolver $namespaceResolver
-     * @param \Magento\Framework\Math\Random $mathRandom
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Widget\Helper\Conditions $conditionsHelper
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param Escaper $escaper
+     * @param ViewFileSystem $viewFileSystem
+     * @param TypeListInterface $cacheTypeList
+     * @param Type $productType
+     * @param Reader $reader
+     * @param Widget $widgetModel
+     * @param NamespaceResolver $namespaceResolver
+     * @param Random $mathRandom
+     * @param Filesystem $filesystem
+     * @param Conditions $conditionsHelper
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
      * @param array $relatedCacheTypes
      * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param Json|null $serializer
      * @param ValidatorFactory|null $xmlValidatorFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\View\FileSystem $viewFileSystem,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
-        \Magento\Catalog\Model\Product\Type $productType,
-        \Magento\Widget\Model\Config\Reader $reader,
-        \Magento\Widget\Model\Widget $widgetModel,
-        \Magento\Widget\Model\NamespaceResolver $namespaceResolver,
-        \Magento\Framework\Math\Random $mathRandom,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Widget\Helper\Conditions $conditionsHelper,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        Escaper $escaper,
+        ViewFileSystem $viewFileSystem,
+        TypeListInterface $cacheTypeList,
+        Type $productType,
+        Reader $reader,
+        Widget $widgetModel,
+        NamespaceResolver $namespaceResolver,
+        protected readonly Random $mathRandom,
+        Filesystem $filesystem,
+        protected readonly Conditions $conditionsHelper,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $relatedCacheTypes = [],
         array $data = [],
-        Json $serializer = null,
-        ValidatorFactory $xmlValidatorFactory = null
+        private ?Json $serializer = null,
+        private ?ValidatorFactory $xmlValidatorFactory = null
     ) {
         $this->_escaper = $escaper;
         $this->_viewFileSystem = $viewFileSystem;
@@ -193,8 +193,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         $this->_productType = $productType;
         $this->_reader = $reader;
         $this->_widgetModel = $widgetModel;
-        $this->mathRandom = $mathRandom;
-        $this->conditionsHelper = $conditionsHelper;
         $this->_directory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_namespaceResolver = $namespaceResolver;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
@@ -210,7 +208,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init(\Magento\Widget\Model\ResourceModel\Widget\Instance::class);
+        $this->_init(ResourceWidgetInstance::class);
         $this->_layoutHandles = [
             'anchor_categories' => self::ANCHOR_CATEGORY_LAYOUT_HANDLE,
             'notanchor_categories' => self::NOTANCHOR_CATEGORY_LAYOUT_HANDLE,
@@ -290,7 +288,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
             if (array_key_exists('show_pager', $parameters) && !array_key_exists('page_var_name', $parameters)) {
                 $parameters['page_var_name'] = 'p' . $this->mathRandom->getRandomString(
                     5,
-                    \Magento\Framework\Math\Random::CHARS_LOWERS
+                    Random::CHARS_LOWERS
                 );
             }
 
@@ -305,7 +303,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     /**
      * Validate widget instance data
      *
-     * @return \Magento\Framework\Phrase|bool
+     * @return Phrase|bool
      */
     public function validate()
     {
@@ -391,7 +389,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     {
         //TODO Shouldn't we get "area" from theme model which we can load using "theme_id"?
         if (!$this->_getData('area')) {
-            return \Magento\Framework\View\DesignInterface::DEFAULT_AREA;
+            return DesignInterface::DEFAULT_AREA;
         }
         return $this->_getData('area');
     }
@@ -636,7 +634,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
             [
                 'area' => $this->getArea(),
                 'themeId' => $this->getThemeId(),
-                'module' => \Magento\Framework\View\Element\AbstractBlock::extractModuleName($this->getType())
+                'module' => AbstractBlock::extractModuleName($this->getType())
             ]
         );
         // phpcs:ignore Magento2.Functions.DiscouragedFunction

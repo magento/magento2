@@ -8,33 +8,31 @@ declare(strict_types=1);
 
 namespace Magento\Widget\Model\ResourceModel\Layout;
 
+use Closure;
+use Magento\Framework\View\Model\Layout\Merge;
+
 class Plugin
 {
     /**
-     * @var Update
-     */
-    private $update;
-
-    /**
      * @param Update $update
      */
-    public function __construct(Update $update)
-    {
-        $this->update = $update;
+    public function __construct(
+        private readonly Update $update
+    ) {
     }
 
     /**
      * Around update
      *
-     * @param \Magento\Framework\View\Model\Layout\Merge $subject
+     * @param Merge $subject
      * @param callable $proceed
      * @param string $handle
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundGetDbUpdateString(
-        \Magento\Framework\View\Model\Layout\Merge $subject,
-        \Closure $proceed,
+        Merge $subject,
+        Closure $proceed,
         $handle
     ) {
         return $this->update->fetchUpdatesByHandle($handle, $subject->getTheme(), $subject->getScope());

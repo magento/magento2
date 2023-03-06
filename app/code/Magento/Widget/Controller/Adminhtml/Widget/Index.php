@@ -5,9 +5,13 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\Registry;
+use Magento\Widget\Model\Widget\Config;
 
-class Index extends \Magento\Backend\App\Action implements HttpPostActionInterface
+class Index extends Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -15,24 +19,24 @@ class Index extends \Magento\Backend\App\Action implements HttpPostActionInterfa
     public const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Widget\Model\Widget\Config
+     * @var Config
      */
     protected $_widgetConfig;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Widget\Model\Widget\Config $widgetConfig
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param Context $context
+     * @param Config $widgetConfig
+     * @param Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Widget\Model\Widget\Config $widgetConfig,
-        \Magento\Framework\Registry $coreRegistry
+        Context $context,
+        Config $widgetConfig,
+        Registry $coreRegistry
     ) {
         $this->_widgetConfig = $widgetConfig;
         $this->_coreRegistry = $coreRegistry;

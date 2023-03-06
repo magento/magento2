@@ -5,6 +5,13 @@
  */
 namespace Magento\Widget\Model\Layout;
 
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Widget\Model\ResourceModel\Layout\Update as ResourceUpdate;
+
 /**
  * Layout Update model class
  *
@@ -12,27 +19,27 @@ namespace Magento\Widget\Model\Layout;
  * @method int getLayoutLinkId() getLayoutLinkId()
  * @method string getUpdatedAt() getUpdatedAt()
  * @method string getXml() getXml()
- * @method \Magento\Widget\Model\Layout\Update setIsTemporary() setIsTemporary(int $isTemporary)
- * @method \Magento\Widget\Model\Layout\Update setHandle() setHandle(string $handle)
- * @method \Magento\Widget\Model\Layout\Update setXml() setXml(string $xml)
- * @method \Magento\Widget\Model\Layout\Update setStoreId() setStoreId(int $storeId)
- * @method \Magento\Widget\Model\Layout\Update setThemeId() setThemeId(int $themeId)
- * @method \Magento\Widget\Model\Layout\Update setUpdatedAt() setUpdatedAt(string $updateDateTime)
+ * @method Update setIsTemporary() setIsTemporary(int $isTemporary)
+ * @method Update setHandle() setHandle(string $handle)
+ * @method Update setXml() setXml(string $xml)
+ * @method Update setStoreId() setStoreId(int $storeId)
+ * @method Update setThemeId() setThemeId(int $themeId)
+ * @method Update setUpdatedAt() setUpdatedAt(string $updateDateTime)
  */
-class Update extends \Magento\Framework\Model\AbstractModel
+class Update extends AbstractModel
 {
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -45,6 +52,6 @@ class Update extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Widget\Model\ResourceModel\Layout\Update::class);
+        $this->_init(ResourceUpdate::class);
     }
 }

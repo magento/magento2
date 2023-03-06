@@ -11,7 +11,10 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
-class Template extends \Magento\Backend\Block\Widget
+use Magento\Backend\Block\Widget;
+use Magento\Framework\View\Element\Html\Select;
+
+class Template extends Widget
 {
     /**
      * Prepare html output
@@ -28,7 +31,7 @@ class Template extends \Magento\Backend\Block\Widget
             $html .= $widgetTemplate['label'];
         } else {
             $html = $this->getLayout()->createBlock(
-                \Magento\Framework\View\Element\Html\Select::class
+                Select::class
             )->setName(
                 'template'
             )->setClass(

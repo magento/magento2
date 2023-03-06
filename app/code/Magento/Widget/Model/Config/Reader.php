@@ -5,7 +5,13 @@
  */
 namespace Magento\Widget\Model\Config;
 
-class Reader extends \Magento\Framework\Config\Reader\Filesystem
+use Magento\Framework\Config\Dom;
+use Magento\Framework\Config\FileResolverInterface;
+use Magento\Framework\Config\Reader\Filesystem;
+use Magento\Framework\Config\SchemaLocatorInterface;
+use Magento\Framework\Config\ValidationStateInterface;
+
+class Reader extends Filesystem
 {
     /**
      * List of identifier attributes for merging
@@ -21,23 +27,23 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
     ];
 
     /**
-     * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
+     * @param FileResolverInterface $fileResolver
      * @param Converter $converter
-     * @param \Magento\Framework\Config\SchemaLocatorInterface $schemaLocator
-     * @param \Magento\Framework\Config\ValidationStateInterface $validationState
+     * @param SchemaLocatorInterface $schemaLocator
+     * @param ValidationStateInterface $validationState
      * @param string $fileName
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
      */
     public function __construct(
-        \Magento\Framework\Config\FileResolverInterface $fileResolver,
+        FileResolverInterface $fileResolver,
         Converter $converter,
-        \Magento\Framework\Config\SchemaLocatorInterface $schemaLocator,
-        \Magento\Framework\Config\ValidationStateInterface $validationState,
+        SchemaLocatorInterface $schemaLocator,
+        ValidationStateInterface $validationState,
         $fileName = 'widget.xml',
         $idAttributes = [],
-        $domDocumentClass = \Magento\Framework\Config\Dom::class,
+        $domDocumentClass = Dom::class,
         $defaultScope = 'global'
     ) {
         parent::__construct(

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
@@ -31,27 +32,21 @@ class MassDelete extends Action implements HttpPostActionInterface
     const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
 
     /**
-     * @var DeleteWidgetById
-     */
-    private $deleteWidgetById;
-
-    /**
      * @param Context $context
      * @param DeleteWidgetById $deleteWidgetById
      */
     public function __construct(
         Context $context,
-        DeleteWidgetById $deleteWidgetById
+        private readonly DeleteWidgetById $deleteWidgetById
     ) {
         parent::__construct($context);
-        $this->deleteWidgetById = $deleteWidgetById;
     }
 
     /**
      * Execute action
      *
      * @return Redirect
-     * @throws \Exception
+     * @throws Exception
      */
     public function execute(): Redirect
     {

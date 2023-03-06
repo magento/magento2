@@ -6,6 +6,10 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
+use Magento\Framework\App\State;
+use Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container;
+use Magento\Widget\Model\Widget\Instance;
+
 class Blocks extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
 {
     /**
@@ -15,12 +19,12 @@ class Blocks extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
      */
     public function renderPageContainers()
     {
-        /* @var $widgetInstance \Magento\Widget\Model\Widget\Instance */
+        /* @var $widgetInstance Instance */
         $widgetInstance = $this->_initWidgetInstance();
         $layout = $this->getRequest()->getParam('layout');
         $selected = $this->getRequest()->getParam('selected', null);
         $blocksChooser = $this->_view->getLayout()->createBlock(
-            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container::class
+            Container::class
         )->setValue(
             $selected
         )->setArea(
@@ -43,7 +47,7 @@ class Blocks extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
     public function execute()
     {
         $this->_objectManager->get(
-            \Magento\Framework\App\State::class
+            State::class
         )->emulateAreaCode(
             'frontend',
             [$this, 'renderPageContainers']

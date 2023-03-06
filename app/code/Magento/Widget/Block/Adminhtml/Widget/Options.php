@@ -5,13 +5,26 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form\Element\Dependence;
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\Fieldset;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Option\ArrayPool;
+use Magento\Framework\Registry;
+use Magento\Widget\Model\Widget;
+use Magento\Framework\Data\Form as FormData;
+
 /**
  * WYSIWYG widget options form
  *
  * @api
  * @since 100.0.2
  */
-class Options extends \Magento\Backend\Block\Widget\Form\Generic
+class Options extends Generic
 {
     /**
      * Element type used by default if configuration is omitted
@@ -20,29 +33,29 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_defaultElementType = 'text';
 
     /**
-     * @var \Magento\Widget\Model\Widget
+     * @var Widget
      */
     protected $_widget;
 
     /**
-     * @var \Magento\Framework\Option\ArrayPool
+     * @var ArrayPool
      */
     protected $_sourceModelPool;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Framework\Option\ArrayPool $sourceModelPool
-     * @param \Magento\Widget\Model\Widget $widget
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param ArrayPool $sourceModelPool
+     * @param Widget $widget
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Framework\Option\ArrayPool $sourceModelPool,
-        \Magento\Widget\Model\Widget $widget,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        ArrayPool $sourceModelPool,
+        Widget $widget,
         array $data = []
     ) {
         $this->_sourceModelPool = $sourceModelPool;
@@ -68,14 +81,14 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Form getter/instantiation
      *
-     * @return \Magento\Framework\Data\Form
+     * @return FormData
      */
     public function getForm()
     {
-        if ($this->_form instanceof \Magento\Framework\Data\Form) {
+        if ($this->_form instanceof FormData) {
             return $this->_form;
         }
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var FormData $form */
         $form = $this->_formFactory->create();
         $this->setForm($form);
         return $form;
@@ -84,11 +97,11 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Fieldset getter/instantiation
      *
-     * @return \Magento\Framework\Data\Form\Element\Fieldset
+     * @return Fieldset
      */
     public function getMainFieldset()
     {
-        if ($this->_getData('main_fieldset') instanceof \Magento\Framework\Data\Form\Element\Fieldset) {
+        if ($this->_getData('main_fieldset') instanceof Fieldset) {
             return $this->_getData('main_fieldset');
         }
         $mainFieldsetHtmlId = 'options_fieldset' . hash('sha256', $this->getWidgetType());
@@ -100,7 +113,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         $this->setData('main_fieldset', $fieldset);
 
         // add dependence javascript block
-        $block = $this->getLayout()->createBlock(\Magento\Backend\Block\Widget\Form\Element\Dependence::class);
+        $block = $this->getLayout()->createBlock(Dependence::class);
         $this->setChild('form_after', $block);
 
         return $fieldset;
@@ -109,14 +122,14 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Add fields to main fieldset based on specified widget type
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return $this
      */
     public function addFields()
     {
         // get configuration node and translation helper
         if (!$this->getWidgetType()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify a Widget Type.'));
+            throw new LocalizedException(__('Please specify a Widget Type.'));
         }
         $config = $this->_widget->getConfigAsObject($this->getWidgetType());
         if (!$config->getParameters()) {
@@ -132,8 +145,8 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Add field to Options form based on parameter configuration
      *
-     * @param \Magento\Framework\DataObject $parameter
-     * @return \Magento\Framework\Data\Form\Element\AbstractElement
+     * @param DataObject $parameter
+     * @return AbstractElement
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -212,7 +225,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
                 '',
                 ['data' => $helper->getData()]
             );
-            if ($helperBlock instanceof \Magento\Framework\DataObject) {
+            if ($helperBlock instanceof DataObject) {
                 $helperBlock->setConfig(
                     $helper->getData()
                 )->setFieldsetId(

@@ -6,7 +6,11 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
-class Products extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
+use Magento\Backend\Block\Widget\Grid\Serializer;
+use Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser;
+use Magento\Widget\Controller\Adminhtml\Widget\Instance;
+
+class Products extends Instance
 {
     /**
      * Products chooser Action (Ajax request)
@@ -18,7 +22,7 @@ class Products extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
         $selected = $this->getRequest()->getParam('selected', '');
         $productTypeId = $this->getRequest()->getParam('product_type_id', '');
         $chooser = $this->_view->getLayout()->createBlock(
-            \Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser::class
+            Chooser::class
         )->setName(
             $this->mathRandom->getUniqueHash('products_grid_')
         )->setUseMassaction(
@@ -28,9 +32,9 @@ class Products extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
         )->setSelectedProducts(
             explode(',', $selected)
         );
-        /* @var $serializer \Magento\Backend\Block\Widget\Grid\Serializer */
+        /* @var $serializer Serializer */
         $serializer = $this->_view->getLayout()->createBlock(
-            \Magento\Backend\Block\Widget\Grid\Serializer::class,
+            Serializer::class,
             '',
             [
                 'data' => [

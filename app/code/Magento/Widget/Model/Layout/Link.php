@@ -5,17 +5,20 @@
  */
 namespace Magento\Widget\Model\Layout;
 
+use Magento\Framework\Model\AbstractModel;
+use Magento\Widget\Model\ResourceModel\Layout\Link as ResourceLink;
+
 /**
  * Layout Link model class
  *
  * @method int getStoreId()
  * @method int getThemeId()
  * @method int getLayoutUpdateId()
- * @method \Magento\Widget\Model\Layout\Link setStoreId($id)
- * @method \Magento\Widget\Model\Layout\Link setThemeId($id)
- * @method \Magento\Widget\Model\Layout\Link setLayoutUpdateId($id)
+ * @method Link setStoreId($id)
+ * @method Link setThemeId($id)
+ * @method Link setLayoutUpdateId($id)
  */
-class Link extends \Magento\Framework\Model\AbstractModel
+class Link extends AbstractModel
 {
     /**
      * Layout Update model initialization
@@ -24,6 +27,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Widget\Model\ResourceModel\Layout\Link::class);
+        $this->_init(ResourceLink::class);
     }
 }

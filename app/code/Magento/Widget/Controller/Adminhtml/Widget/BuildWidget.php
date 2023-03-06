@@ -6,9 +6,12 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Widget\Model\Widget;
 
-class BuildWidget extends \Magento\Backend\App\Action implements HttpPostActionInterface
+class BuildWidget extends Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -16,17 +19,17 @@ class BuildWidget extends \Magento\Backend\App\Action implements HttpPostActionI
     const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
 
     /**
-     * @var \Magento\Widget\Model\Widget
+     * @var Widget
      */
     protected $_widget;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Widget\Model\Widget $widget
+     * @param Context $context
+     * @param Widget $widget
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Widget\Model\Widget $widget
+        Context $context,
+        Widget $widget
     ) {
         $this->_widget = $widget;
         parent::__construct($context);

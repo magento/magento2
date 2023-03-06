@@ -5,35 +5,41 @@
  */
 namespace Magento\Widget\Model\ResourceModel\Layout\Link;
 
+use DateInterval;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Widget\Model\Layout\Link;
+use Magento\Widget\Model\ResourceModel\Layout\Link as ResourceLink;
+use Psr\Log\LoggerInterface;
+
 /**
  * Layout update collection model
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param DateTime $dateTime
      * @param mixed $connection
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
+     * @param AbstractDb $resource
+     * @param EntityFactory $entityFactory
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        EntityFactory $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        protected readonly DateTime $dateTime,
+        AdapterInterface $connection = null,
+        AbstractDb $resource = null
     ) {
-        $this->dateTime = $dateTime;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
@@ -45,7 +51,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         parent::_construct();
-        $this->_init(\Magento\Widget\Model\Layout\Link::class, \Magento\Widget\Model\ResourceModel\Layout\Link::class);
+        $this->_init(Link::class, ResourceLink::class);
     }
 
     /**
@@ -102,7 +108,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function addUpdatedDaysBeforeFilter($days)
     {
         $datetime = new \DateTime('now', new \DateTimeZone('UTC'));
-        $storeInterval = new \DateInterval('P' . $days . 'D');
+        $storeInterval = new DateInterval('P' . $days . 'D');
         $datetime->sub($storeInterval);
         $formattedDate = $this->dateTime->formatDate($datetime->getTimestamp());
 

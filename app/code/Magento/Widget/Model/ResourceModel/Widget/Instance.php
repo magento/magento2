@@ -7,6 +7,8 @@
 namespace Magento\Widget\Model\ResourceModel\Widget;
 
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Widget\Model\Widget\Instance as WidgetInstance;
 
 /**
  * Widget Instance Resource Model
@@ -14,7 +16,7 @@ use Magento\Framework\Model\AbstractModel;
  * @api
  * @since 100.0.2
  */
-class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Instance extends AbstractDb
 {
     /**
      * Define main table
@@ -29,7 +31,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Perform actions after object load
      *
-     * @param \Magento\Widget\Model\Widget\Instance $object
+     * @param WidgetInstance $object
      * @return $this
      */
     protected function _afterLoad(AbstractModel $object)
@@ -49,7 +51,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Perform actions after object save
      *
-     * @param \Magento\Widget\Model\Widget\Instance $object
+     * @param WidgetInstance $object
      * @return $this
      */
     protected function _afterSave(AbstractModel $object)
@@ -107,7 +109,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Prepare and save layout updates data
      *
-     * @param \Magento\Widget\Model\Widget\Instance $widgetInstance
+     * @param WidgetInstance $widgetInstance
      * @param array $pageGroupData
      * @return string[] of inserted layout updates ids
      */
@@ -167,7 +169,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * Collect page ids and layout update ids and set to object for further delete
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
      */
     protected function _beforeDelete(AbstractModel $object)
@@ -194,7 +196,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * Delete layout updates by layout update ids collected in _beforeSave
      *
-     * @param \Magento\Widget\Model\Widget\Instance $object
+     * @param WidgetInstance $object
      * @return $this
      */
     protected function _afterDelete(AbstractModel $object)

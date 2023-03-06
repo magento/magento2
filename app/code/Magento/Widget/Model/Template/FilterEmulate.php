@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Widget\Model\Template;
 
+use Exception;
+use Magento\Framework\App\Area;
+
 /**
  * Class FilterEmulate
  *
@@ -20,7 +23,7 @@ class FilterEmulate extends Filter
      * @param string[] $construction
      *
      * @return mixed|string
-     * @throws \Exception
+     * @throws Exception
      */
     public function widgetDirective($construction)
     {
@@ -33,12 +36,12 @@ class FilterEmulate extends Filter
      * @param string $value
      *
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function filterDirective($value) : string
     {
         return $this->_appState->emulateAreaCode(
-            \Magento\Framework\App\Area::AREA_FRONTEND,
+            Area::AREA_FRONTEND,
             [$this, 'filter'],
             [$value]
         );

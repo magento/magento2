@@ -5,7 +5,9 @@
  */
 namespace Magento\Widget\Model\Config;
 
-class Data extends \Magento\Framework\Config\Data\Scoped
+use Magento\Framework\Config\Data\Scoped;
+
+class Data extends Scoped
 {
     /**
      * Scope priority loading scheme

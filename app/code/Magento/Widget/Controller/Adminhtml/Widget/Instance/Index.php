@@ -7,8 +7,9 @@
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
-class Index extends \Magento\Widget\Controller\Adminhtml\Widget\Instance implements HttpGetActionInterface
+class Index extends Instance implements HttpGetActionInterface
 {
     /**
      * Widget Instances Grid

@@ -6,13 +6,15 @@
 
 namespace Magento\Widget\Block\Adminhtml;
 
+use Magento\Backend\Block\Widget\Form\Container;
+
 /**
  * WYSIWYG widget plugin main block
  *
  * @api
  * @since 100.0.2
  */
-class Widget extends \Magento\Backend\Block\Widget\Form\Container
+class Widget extends Container
 {
     /**
      * @inheritdoc

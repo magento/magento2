@@ -5,17 +5,20 @@
  */
 namespace Magento\Widget\Model\Widget\Instance;
 
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Option\ArrayInterface;
+
 class OptionsFactory
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -25,7 +28,7 @@ class OptionsFactory
      *
      * @param string $type
      * @param array $data
-     * @return \Magento\Framework\Option\ArrayInterface
+     * @return ArrayInterface
      */
     public function create($type, array $data = [])
     {

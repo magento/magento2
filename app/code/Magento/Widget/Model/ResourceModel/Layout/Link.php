@@ -5,10 +5,12 @@
  */
 namespace Magento\Widget\Model\ResourceModel\Layout;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
  * Layout Link resource model
  */
-class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Link extends AbstractDb
 {
     /**
      * Define main table

@@ -18,25 +18,13 @@ use Magento\Widget\Model\Widget\Instance as WidgetInstance;
 class DeleteWidgetById
 {
     /**
-     * @var InstanceResourceModel
-     */
-    private $resourceModel;
-
-    /**
-     * @var WidgetInstanceFactory|WidgetInstance
-     */
-    private $instanceFactory;
-
-    /**
      * @param InstanceResourceModel $resourceModel
      * @param WidgetInstanceFactory $instanceFactory
      */
     public function __construct(
-        InstanceResourceModel $resourceModel,
-        WidgetInstanceFactory $instanceFactory
+        private readonly InstanceResourceModel $resourceModel,
+        private readonly WidgetInstanceFactory $instanceFactory
     ) {
-        $this->resourceModel = $resourceModel;
-        $this->instanceFactory = $instanceFactory;
     }
 
     /**
