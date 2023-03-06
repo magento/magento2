@@ -236,30 +236,29 @@ class AdminAccount
     }
 
     /**
-     * Gets the "Administrators" role id, the special role created by data fixture in Authorization module.
+     * Gets an administrators role id, the special role created by data fixture in Authorization module.
      *
-     * @return int The id of the Administrators role
-     * @throws \Exception If Administrators role not found or problem connecting with database.
+     * @return int The id of an administrators role
+     * @throws \Exception If an administrators role not found or problem connecting with database.
      */
     private function retrieveAdministratorsRoleId()
     {
-        // Get Administrators role id to use as parent_id
+        // Get an administrators role id to use as parent_id
         $administratorsRoleData = [
             'parent_id'  => 0,
             'tree_level' => 1,
             'role_type' => Group::ROLE_TYPE,
             'user_id' => 0,
             'user_type' => UserContextInterface::USER_TYPE_ADMIN,
-            'role_name' => 'Administrators',
         ];
         $result = $this->connection->fetchRow(
             'SELECT * FROM ' . $this->getTableName('authorization_role') . ' ' .
             'WHERE parent_id = :parent_id AND tree_level = :tree_level AND role_type = :role_type AND ' .
-            'user_id = :user_id AND user_type = :user_type AND role_name = :role_name',
+            'user_id = :user_id AND user_type = :user_type ORDER BY sort_order DESC',
             $administratorsRoleData
         );
         if (empty($result)) {
-            throw new \Exception('No Administrators role was found, data fixture needs to be run');
+            throw new \Exception('No administrators role was found, data fixture needs to be run');
         } else {
             // Found at least one, use first
             return $result['role_id'];
