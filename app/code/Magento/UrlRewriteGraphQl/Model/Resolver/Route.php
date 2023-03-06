@@ -1,13 +1,17 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\UrlRewriteGraphQl\Model\Resolver;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Query\Uid;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
@@ -58,15 +62,21 @@ class Route extends AbstractEntityUrl implements ResolverInterface
         );
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         if ($resultArray) {
-            $result = [];
-            if (isset($resultArray['type'])) {
+            try {
                 $result = $this->entityDataProviderComposite->getData(
                     $resultArray['type'],
                     (int)$resultArray['id'],
                     $info,
                     $storeId
                 );
+            } catch (NoSuchEntityException $th) {
+                // Disabled Entities are expected to throw a NoSuchEntityException.
+                return null;
+            } catch (GraphQlNoSuchEntityException $th) {
+                // Disabled Entities are expected to throw a NoSuchEntityException.
+                return null;
             }
+
             $result['redirect_code'] = $resultArray['redirect_code'];
             $result['relative_url'] = $resultArray['relative_url'];
             $result['type'] = $resultArray['type'];
