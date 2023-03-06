@@ -37,16 +37,6 @@ class StoreConfig implements ResolverInterface
     ];
 
     /**
-     * @var Data
-     */
-    private $weeeHelper;
-
-    /**
-     * @var TaxHelper
-     */
-    private $taxHelper;
-
-    /**
      * @var array
      */
     private $computedFptSettings = [];
@@ -55,10 +45,10 @@ class StoreConfig implements ResolverInterface
      * @param Data $weeeHelper
      * @param TaxHelper $taxHelper
      */
-    public function __construct(Data $weeeHelper, TaxHelper $taxHelper)
-    {
-        $this->weeeHelper = $weeeHelper;
-        $this->taxHelper = $taxHelper;
+    public function __construct(
+        private Data $weeeHelper,
+        private TaxHelper $taxHelper
+    ) {
     }
 
     /**
