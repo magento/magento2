@@ -17,7 +17,6 @@ define([
     'mage/translate',
     'uiRegistry',
     'Magento_Checkout/js/model/shipping-address/form-popup-state',
-    'Magento_Checkout/js/action/set-shipping-information',
     'Magento_Checkout/js/model/quote'
 ], function (
     $,
@@ -29,9 +28,7 @@ define([
     defaultValidator,
     $t,
     uiRegistry,
-    formPopUpState,
-    setShippingInformationAction,
-    quote
+    formPopUpState
 ) {
     'use strict';
 
