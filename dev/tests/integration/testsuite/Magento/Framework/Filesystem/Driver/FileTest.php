@@ -1,7 +1,5 @@
 <?php
 /**
- * Test for \Magento\Framework\Filesystem\Driver\File
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -172,6 +170,18 @@ class FileTest extends TestCase
     {
         $path = $this->absolutePath . 'foo/file_three.txt';
         $this->assertEquals(0, $this->driver->filePutContents($path, ''));
+    }
+
+    /**
+     * Delete a not existing file
+     *
+     * @return void
+     * @throws FileSystemException
+     */
+    public function testDeleteFileEdge(): void
+    {
+        $path = $this->absolutePath . 'foo/file_four.txt';
+        $this->assertEquals(true, $this->driver->deleteFile($path));
     }
 
     /**
