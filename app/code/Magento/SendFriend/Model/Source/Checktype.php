@@ -6,8 +6,6 @@
 
 /**
  * Send to a Friend Limit sending by Source
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\SendFriend\Model\Source;
 

@@ -6,8 +6,6 @@
 
 /**
  * Shipment view form
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Shipping\Block\Adminhtml\View;
 

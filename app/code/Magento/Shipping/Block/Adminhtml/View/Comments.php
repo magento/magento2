@@ -6,8 +6,6 @@
 
 /**
  * Adminhtml sales shipment comment view block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Shipping\Block\Adminhtml\View;
 

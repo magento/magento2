@@ -8,8 +8,6 @@ namespace Magento\SendFriend\Model\ResourceModel\SendFriend;
 /**
  * SendFriend log resource collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  * @api
  * @since 100.0.2
  */

@@ -7,8 +7,6 @@ namespace Magento\SalesRule\Model\ResourceModel\Report\Rule;
 
 /**
  * Rule report resource model with aggregation by updated at
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Updatedat extends \Magento\SalesRule\Model\ResourceModel\Report\Rule\Createdat
 {
