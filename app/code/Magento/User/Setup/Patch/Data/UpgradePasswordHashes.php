@@ -8,24 +8,19 @@ namespace Magento\User\Setup\Patch\Data;
 
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 class UpgradePasswordHashes implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
      * PatchInitial constructor.
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+        private readonly ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**

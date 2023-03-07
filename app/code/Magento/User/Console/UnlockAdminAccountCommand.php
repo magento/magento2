@@ -24,21 +24,15 @@ class UnlockAdminAccountCommand extends Command
     public const USER_ID = 'user_id';
 
     /**
-     * @var AdminUser
-     */
-    private $adminUser;
-
-    /**
      * @inheritdoc
      *
      * @param AdminUser $adminUser
      * @param ?string $name
      */
     public function __construct(
-        AdminUser $adminUser,
+        private readonly AdminUser $adminUser,
         $name = null
     ) {
-        $this->adminUser = $adminUser;
         parent::__construct($name);
     }
 

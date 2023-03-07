@@ -6,10 +6,13 @@
  */
 namespace Magento\User\Controller\Adminhtml\User\Role;
 
+use Magento\Authorization\Model\Role as AuthorizationRole;
+use Magento\User\Controller\Adminhtml\User\Role;
+
 /**
  * Class EditRole
  */
-class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
+class EditRole extends Role
 {
     /**
      * Edit role action
@@ -89,10 +92,10 @@ class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
     /**
      * Restore general information Form Data from Session and save one in Registry
      *
-     * @param \Magento\Authorization\Model\Role $role
+     * @param AuthorizationRole $role
      * @return $this
      */
-    protected function restoreFormDataFromSession(\Magento\Authorization\Model\Role $role)
+    protected function restoreFormDataFromSession(AuthorizationRole $role)
     {
         $data = $this->_getSession()->getData(SaveRole::ROLE_EDIT_FORM_DATA_SESSION_KEY, true);
         if (!empty($data['rolename'])) {

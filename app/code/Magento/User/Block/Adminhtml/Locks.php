@@ -6,13 +6,15 @@
 
 namespace Magento\User\Block\Adminhtml;
 
+use Magento\Backend\Block\Widget\Grid\Container;
+
 /**
  * Locked administrators page
  *
  * @api
  * @since 100.0.2
  */
-class Locks extends \Magento\Backend\Block\Widget\Grid\Container
+class Locks extends Container
 {
     /**
      * {@inheritdoc}

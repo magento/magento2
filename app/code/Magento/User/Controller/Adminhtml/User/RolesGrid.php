@@ -6,7 +6,10 @@
  */
 namespace Magento\User\Controller\Adminhtml\User;
 
-class RolesGrid extends \Magento\User\Controller\Adminhtml\User
+use Magento\User\Controller\Adminhtml\User;
+use Magento\User\Model\User as ModelUser;
+
+class RolesGrid extends User
 {
     /**
      * @return void
@@ -14,7 +17,7 @@ class RolesGrid extends \Magento\User\Controller\Adminhtml\User
     public function execute()
     {
         $userId = $this->getRequest()->getParam('user_id');
-        /** @var \Magento\User\Model\User $model */
+        /** @var ModelUser $model */
         $model = $this->_userFactory->create();
 
         if ($userId) {

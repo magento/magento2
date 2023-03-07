@@ -6,10 +6,13 @@
 
 namespace Magento\User\Observer\Backend;
 
+use DateInterval;
+use DateTime;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\User\Model\Backend\Config\ObserverConfig;
@@ -26,55 +29,6 @@ use Magento\User\Model\UserFactory;
 class AuthObserver implements ObserverInterface
 {
     /**
-     * Backend configuration interface
-     *
-     * @var ObserverConfig
-     */
-    protected $observerConfig;
-
-    /**
-     * Admin user resource model
-     *
-     * @var ResourceUser
-     */
-    protected $userResource;
-
-    /**
-     * Backend url interface
-     *
-     * @var UrlInterface
-     */
-    protected $url;
-
-    /**
-     * Backend authorization session
-     *
-     * @var Session
-     */
-    protected $authSession;
-
-    /**
-     * Factory class for user model
-     *
-     * @var UserFactory
-     */
-    protected $userFactory;
-
-    /**
-     * Encryption model
-     *
-     * @var EncryptorInterface
-     */
-    protected $encryptor;
-
-    /**
-     * Message manager interface
-     *
-     * @var ManagerInterface
-     */
-    protected $messageManager;
-
-    /**
      * @param ObserverConfig $observerConfig
      * @param ResourceUser $userResource
      * @param UrlInterface $url
@@ -84,21 +38,14 @@ class AuthObserver implements ObserverInterface
      * @param ManagerInterface $messageManager
      */
     public function __construct(
-        ObserverConfig $observerConfig,
-        ResourceUser $userResource,
-        UrlInterface $url,
-        Session $authSession,
-        UserFactory $userFactory,
-        EncryptorInterface $encryptor,
-        ManagerInterface $messageManager
+        protected readonly ObserverConfig $observerConfig,
+        protected readonly ResourceUser $userResource,
+        protected readonly UrlInterface $url,
+        protected readonly Session $authSession,
+        protected readonly UserFactory $userFactory,
+        protected readonly EncryptorInterface $encryptor,
+        protected readonly ManagerInterface $messageManager
     ) {
-        $this->observerConfig = $observerConfig;
-        $this->userResource = $userResource;
-        $this->url = $url;
-        $this->authSession = $authSession;
-        $this->userFactory = $userFactory;
-        $this->encryptor = $encryptor;
-        $this->messageManager = $messageManager;
     }
 
     /**
@@ -106,7 +53,7 @@ class AuthObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function execute(EventObserver $observer)
     {
@@ -123,8 +70,8 @@ class AuthObserver implements ObserverInterface
         // check whether user is locked
         $lockExpires = $user->getLockExpires();
         if ($lockExpires) {
-            $lockExpires = new \DateTime($lockExpires);
-            if ($lockExpires > new \DateTime()) {
+            $lockExpires = new DateTime($lockExpires);
+            if ($lockExpires > new DateTime()) {
                 throw new UserLockedException(
                     __(
                         'The account sign-in was incorrect or your account is disabled temporarily. '
@@ -158,7 +105,7 @@ class AuthObserver implements ObserverInterface
      */
     private function _updateLockingInformation($user)
     {
-        $now = new \DateTime();
+        $now = new DateTime();
         $lockThreshold = $this->observerConfig->getAdminLockThreshold();
         $maxFailures = $this->observerConfig->getMaxFailures();
         if (!($lockThreshold && $maxFailures)) {
@@ -167,12 +114,12 @@ class AuthObserver implements ObserverInterface
         $failuresNum = (int)$user->getFailuresNum() + 1;
         /** @noinspection PhpAssignmentInConditionInspection */
         if ($firstFailureDate = $user->getFirstFailure()) {
-            $firstFailureDate = new \DateTime($firstFailureDate);
+            $firstFailureDate = new DateTime($firstFailureDate);
         }
 
         $newFirstFailureDate = false;
         $updateLockExpires = false;
-        $lockThreshInterval = new \DateInterval('PT' . $lockThreshold.'S');
+        $lockThreshInterval = new DateInterval('PT' . $lockThreshold.'S');
         // set first failure date when this is first failure or last first failure expired
         if (1 === $failuresNum
             || !$firstFailureDate

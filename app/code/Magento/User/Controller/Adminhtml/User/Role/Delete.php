@@ -6,25 +6,29 @@
  */
 namespace Magento\User\Controller\Adminhtml\User\Role;
 
+use Exception;
+use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\User\Controller\Adminhtml\User\Role;
+use Magento\User\Model\User as ModelUser;
 
 /**
  * User roles delete action.
  */
-class Delete extends \Magento\User\Controller\Adminhtml\User\Role implements HttpPostActionInterface
+class Delete extends Role implements HttpPostActionInterface
 {
     /**
      * Remove role action.
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return Redirect
      */
     public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $rid = (int)$this->getRequest()->getParam('rid', false);
-        /** @var \Magento\User\Model\User $currentUser */
+        /** @var ModelUser $currentUser */
         $currentUser = $this->_userFactory->create()->setId($this->_authSession->getUser()->getId());
 
         if (in_array($rid, $currentUser->getRoles())) {
@@ -42,7 +46,7 @@ class Delete extends \Magento\User\Controller\Adminhtml\User\Role implements Htt
         try {
             $role->delete();
             $this->messageManager->addSuccess(__('You deleted the role.'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addError(__('An error occurred while deleting this role.'));
         }
 

@@ -5,7 +5,12 @@
  */
 namespace Magento\User\Controller\Adminhtml;
 
-abstract class User extends \Magento\Backend\App\AbstractAction
+use Magento\Backend\App\AbstractAction;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+use Magento\User\Model\UserFactory;
+
+abstract class User extends AbstractAction
 {
     /**
      * Authorization level of a basic admin session
@@ -17,26 +22,26 @@ abstract class User extends \Magento\Backend\App\AbstractAction
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry;
 
     /**
      * User model factory
      *
-     * @var \Magento\User\Model\UserFactory
+     * @var UserFactory
      */
     protected $_userFactory;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\User\Model\UserFactory $userFactory
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param UserFactory $userFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\User\Model\UserFactory $userFactory
+        Context $context,
+        Registry $coreRegistry,
+        UserFactory $userFactory
     ) {
         parent::__construct($context);
         $this->_coreRegistry = $coreRegistry;

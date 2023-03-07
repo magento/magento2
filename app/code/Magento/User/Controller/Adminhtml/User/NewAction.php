@@ -6,7 +6,9 @@
  */
 namespace Magento\User\Controller\Adminhtml\User;
 
-class NewAction extends \Magento\User\Controller\Adminhtml\User
+use Magento\User\Controller\Adminhtml\User;
+
+class NewAction extends User
 {
     /**
      * @return void

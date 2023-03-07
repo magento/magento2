@@ -6,14 +6,18 @@
  */
 namespace Magento\User\Controller\Adminhtml\Auth;
 
+use Exception;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Validator\ValidateException;
 use Magento\Framework\Validator\ValidatorChain;
 use Magento\Security\Model\SecurityManager;
 use Magento\Backend\App\Action\Context;
+use Magento\User\Model\ResourceModel\User\Collection;
 use Magento\User\Model\Spi\NotificationExceptionInterface;
+use Magento\User\Model\User;
 use Magento\User\Model\UserFactory;
 use Magento\User\Model\ResourceModel\User\CollectionFactory;
 use Magento\Framework\Validator\EmailAddress;
@@ -31,28 +35,6 @@ use Magento\User\Model\Spi\NotificatorInterface;
 class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
-     * @var SecurityManager
-     */
-    protected $securityManager;
-
-    /**
-     * @var NotificatorInterface
-     */
-    private $notificator;
-
-    /**
-     * User model factory
-     *
-     * @var CollectionFactory
-     */
-    private $userCollectionFactory;
-
-    /**
-     * @var Data
-     */
-    private $backendDataHelper;
-
-    /**
      * @param Context $context
      * @param UserFactory $userFactory
      * @param SecurityManager $securityManager
@@ -63,13 +45,12 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
     public function __construct(
         Context $context,
         UserFactory $userFactory,
-        SecurityManager $securityManager,
-        CollectionFactory $userCollectionFactory = null,
-        Data $backendDataHelper = null,
-        ?NotificatorInterface $notificator = null
+        protected readonly SecurityManager $securityManager,
+        private ?CollectionFactory $userCollectionFactory = null,
+        private ?Data $backendDataHelper = null,
+        private ?NotificatorInterface $notificator = null
     ) {
         parent::__construct($context, $userFactory);
-        $this->securityManager = $securityManager;
         $this->userCollectionFactory = $userCollectionFactory ?:
                 ObjectManager::getInstance()->get(CollectionFactory::class);
         $this->backendDataHelper = $backendDataHelper ?:
@@ -92,7 +73,7 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
         $email = (string)$this->getRequest()->getParam('email');
         $params = $this->getRequest()->getParams();
 
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if (!empty($email) && !empty($params)) {
             // Validate received data to be an email address
@@ -106,7 +87,7 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
                     $this->messageManager->addErrorMessage($exception->getMessage());
                     return $resultRedirect->setPath('admin');
                 }
-                /** @var $collection \Magento\User\Model\ResourceModel\User\Collection */
+                /** @var $collection Collection */
                 $collection = $this->userCollectionFactory->create();
                 $collection->addFieldToFilter('email', $email);
                 $collection->load(false);
@@ -114,7 +95,7 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
                 try {
                     if ($collection->getSize() > 0) {
                         foreach ($collection as $item) {
-                            /** @var \Magento\User\Model\User $user */
+                            /** @var User $user */
                             $user = $this->_userFactory->create()->load($item->getId());
                             if ($user->getId()) {
                                 $newPassResetToken = $this->backendDataHelper->generateResetPasswordLinkToken();
@@ -125,7 +106,7 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
                             break;
                         }
                     }
-                } catch (\Exception $exception) {
+                } catch (Exception $exception) {
                     $this->messageManager->addExceptionMessage(
                         $exception,
                         __('We\'re unable to send the password reset email.')

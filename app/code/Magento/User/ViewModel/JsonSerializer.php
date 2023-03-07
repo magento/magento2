@@ -8,23 +8,20 @@ declare(strict_types=1);
 
 namespace Magento\User\ViewModel;
 
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
+
 /**
  * JsonSerializer
  */
-class JsonSerializer implements \Magento\Framework\View\Element\Block\ArgumentInterface
+class JsonSerializer implements ArgumentInterface
 {
-
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @param Json $serializer
      */
-    private $serializer;
-
-    /**
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
-     */
-    public function __construct(\Magento\Framework\Serialize\Serializer\Json $serializer)
-    {
-        $this->serializer = $serializer;
+    public function __construct(
+        private readonly Json $serializer
+    ) {
     }
 
     /**

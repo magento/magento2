@@ -9,6 +9,7 @@ namespace Magento\User\Controller\Adminhtml;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Backend\App\AbstractAction;
 use Magento\Backend\App\Action\Context;
+use Magento\User\Model\User as ModelUser;
 use Magento\User\Model\UserFactory;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -57,7 +58,7 @@ abstract class Auth extends AbstractAction
             throw new LocalizedException(__('Please correct the password reset token.'));
         }
 
-        /** @var $user \Magento\User\Model\User */
+        /** @var ModelUser $user  */
         $user = $this->_userFactory->create()->load($userId);
         if (!$user->getId()) {
             throw new LocalizedException(

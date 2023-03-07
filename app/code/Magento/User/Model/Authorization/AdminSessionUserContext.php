@@ -24,8 +24,9 @@ class AdminSessionUserContext implements UserContextInterface
      *
      * @param AdminSession $adminSession
      */
-    public function __construct(AdminSession $adminSession)
-    {
+    public function __construct(
+        AdminSession $adminSession
+    ) {
         $this->_adminSession = $adminSession;
     }
 

@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\User\Model\Backend\Config;
 
+use Magento\Backend\App\ConfigInterface;
+
 /**
  * User backend observer helper class
  *
@@ -36,21 +38,13 @@ class ObserverConfig
     private const XML_ADMIN_SECURITY_LOCKOUT_FAILURES = 'admin/security/lockout_failures';
 
     /**
-     * Backend configuration interface
-     *
-     * @var \Magento\Backend\App\ConfigInterface
-     */
-    protected $backendConfig;
-
-    /**
      * Constructor
      *
-     * @param \Magento\Backend\App\ConfigInterface $backendConfig
+     * @param ConfigInterface $backendConfig
      */
     public function __construct(
-        \Magento\Backend\App\ConfigInterface $backendConfig
+        protected readonly ConfigInterface $backendConfig
     ) {
-        $this->backendConfig = $backendConfig;
     }
 
     /**

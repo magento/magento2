@@ -6,6 +6,17 @@
 
 namespace Magento\User\Block\Role\Tab;
 
+use Magento\Authorization\Model\Acl\AclRetriever;
+use Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory;
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form;
+use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Framework\Acl\AclResource\ProviderInterface;
+use Magento\Framework\Acl\RootResource;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
+use Magento\Integration\Helper\Data as IntegrationHelper;
 use Magento\User\Controller\Adminhtml\User\Role\SaveRole;
 
 /**
@@ -14,7 +25,7 @@ use Magento\User\Controller\Adminhtml\User\Role\SaveRole;
  * @api
  * @since 100.0.2
  */
-class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Edit extends Form implements TabInterface
 {
     /**
      * @var string
@@ -24,34 +35,34 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     /**
      * Root ACL Resource
      *
-     * @var \Magento\Framework\Acl\RootResource
+     * @var RootResource
      */
     protected $_rootResource;
 
     /**
-     * @var \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_rulesCollectionFactory;
 
     /**
      * Acl builder
      *
-     * @var \Magento\Authorization\Model\Acl\AclRetriever
+     * @var AclRetriever
      */
     protected $_aclRetriever;
 
     /**
-     * @var \Magento\Framework\Acl\AclResource\ProviderInterface
+     * @var ProviderInterface
      */
     protected $_aclResourceProvider;
 
     /**
-     * @var \Magento\Integration\Helper\Data
+     * @var IntegrationHelper
      */
     protected $_integrationData;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      * @since 100.1.0
      */
     protected $coreRegistry = null;
@@ -59,21 +70,21 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     /**
      * Constructor
      *
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Authorization\Model\Acl\AclRetriever $aclRetriever
-     * @param \Magento\Framework\Acl\RootResource $rootResource
-     * @param \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory $rulesCollectionFactory
-     * @param \Magento\Framework\Acl\AclResource\ProviderInterface $aclResourceProvider
-     * @param \Magento\Integration\Helper\Data $integrationData
+     * @param Context $context
+     * @param AclRetriever $aclRetriever
+     * @param RootResource $rootResource
+     * @param CollectionFactory $rulesCollectionFactory
+     * @param ProviderInterface $aclResourceProvider
+     * @param IntegrationHelper $integrationData
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Authorization\Model\Acl\AclRetriever $aclRetriever,
-        \Magento\Framework\Acl\RootResource $rootResource,
-        \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory $rulesCollectionFactory,
-        \Magento\Framework\Acl\AclResource\ProviderInterface $aclResourceProvider,
-        \Magento\Integration\Helper\Data $integrationData,
+        Context $context,
+        AclRetriever $aclRetriever,
+        RootResource $rootResource,
+        CollectionFactory $rulesCollectionFactory,
+        ProviderInterface $aclResourceProvider,
+        IntegrationHelper $integrationData,
         array $data = []
     ) {
         $this->_aclRetriever = $aclRetriever;
@@ -87,12 +98,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     /**
      * Set core registry
      *
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param Registry $coreRegistry
      * @return void
      * @deprecated 100.1.0
      * @since 100.1.0
      */
-    public function setCoreRegistry(\Magento\Framework\Registry $coreRegistry)
+    public function setCoreRegistry(Registry $coreRegistry)
     {
         $this->coreRegistry = $coreRegistry;
     }
@@ -100,14 +111,14 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     /**
      * Get core registry
      *
-     * @return \Magento\Framework\Registry
+     * @return Registry
      * @deprecated 100.1.0
      * @since 100.1.0
      */
     public function getCoreRegistry()
     {
-        if (!($this->coreRegistry instanceof \Magento\Framework\Registry)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Registry::class);
+        if (!($this->coreRegistry instanceof Registry)) {
+            return ObjectManager::getInstance()->get(Registry::class);
         } else {
             return $this->coreRegistry;
         }
@@ -116,7 +127,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     /**
      * Get tab label
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTabLabel()
     {
@@ -168,7 +179,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     /**
      * Get selected resources
      *
-     * @return array|mixed|\string[]
+     * @return array|mixed|string[]
      * @since 100.1.0
      */
     public function getSelectedResources()
