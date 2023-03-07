@@ -7,8 +7,6 @@ namespace Magento\Customer\Controller\Adminhtml\System\Config;
 
 /**
  * VAT validation controller
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 abstract class Validatevat extends \Magento\Backend\App\Action
 {

@@ -7,8 +7,6 @@ namespace Magento\Customer\Block\Adminhtml\Form\Element;
 
 /**
  * Customer Widget Form File Element Block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class File extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
