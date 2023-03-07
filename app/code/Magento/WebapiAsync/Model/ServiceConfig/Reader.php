@@ -8,10 +8,15 @@ declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Model\ServiceConfig;
 
+use Magento\Framework\Config\Dom;
+use Magento\Framework\Config\FileResolverInterface;
+use Magento\Framework\Config\Reader\Filesystem;
+use Magento\Framework\Config\ValidationStateInterface;
+
 /**
  * Service config data reader.
  */
-class Reader extends \Magento\Framework\Config\Reader\Filesystem
+class Reader extends Filesystem
 {
     /**
      * List of id attributes for merge
@@ -24,23 +29,23 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
     ];
 
     /**
-     * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
+     * @param FileResolverInterface $fileResolver
      * @param Converter $converter
      * @param SchemaLocator $schemaLocator
-     * @param \Magento\Framework\Config\ValidationStateInterface $validationState
+     * @param ValidationStateInterface $validationState
      * @param string $fileName
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
      */
     public function __construct(
-        \Magento\Framework\Config\FileResolverInterface $fileResolver,
+        FileResolverInterface $fileResolver,
         Converter $converter,
         SchemaLocator $schemaLocator,
-        \Magento\Framework\Config\ValidationStateInterface $validationState,
+        ValidationStateInterface $validationState,
         $fileName = 'webapi_async.xml',
         $idAttributes = [],
-        $domDocumentClass = \Magento\Framework\Config\Dom::class,
+        $domDocumentClass = Dom::class,
         $defaultScope = 'global'
     ) {
         parent::__construct(

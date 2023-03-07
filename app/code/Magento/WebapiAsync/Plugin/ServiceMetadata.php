@@ -8,37 +8,23 @@ declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Plugin;
 
+use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Webapi\Rest\Request;
+use Magento\Webapi\Model\Config;
 use Magento\Webapi\Model\Config\Converter as WebapiConverter;
 use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterface;
+use Magento\Webapi\Model\ServiceMetadata as ModelServiceMetadata;
 use Magento\WebapiAsync\Controller\Rest\AsynchronousSchemaRequestProcessor;
+use Magento\WebapiAsync\Model\ServiceConfig;
 use Magento\WebapiAsync\Model\ServiceConfig\Converter;
 
 class ServiceMetadata
 {
     /**
-     * @var \Magento\Webapi\Model\Config
-     */
-    private $webapiConfig;
-    /**
-     * @var \Magento\WebapiAsync\Model\ServiceConfig
-     */
-    private $serviceConfig;
-    /**
-     * @var AsynchronousSchemaRequestProcessor
-     */
-    private $asynchronousSchemaRequestProcessor;
-    /**
-     * @var \Magento\Framework\Webapi\Rest\Request
-     */
-    private $request;
-    /**
-     * @var \Magento\Framework\Reflection\TypeProcessor
-     */
-    private $typeProcessor;
-    /**
      * @var array
      */
     private $responseDefinitionReplacement;
+
     /**
      * @var array
      */
@@ -49,31 +35,28 @@ class ServiceMetadata
     /**
      * ServiceMetadata constructor.
      *
-     * @param \Magento\Webapi\Model\Config $webapiConfig
-     * @param \Magento\WebapiAsync\Model\ServiceConfig $serviceConfig
+     * @param Config $webapiConfig
+     * @param ServiceConfig $serviceConfig
+     * @param Request $request
      * @param AsynchronousSchemaRequestProcessor $asynchronousSchemaRequestProcessor
+     * @param TypeProcessor $typeProcessor
      */
     public function __construct(
-        \Magento\Webapi\Model\Config $webapiConfig,
-        \Magento\WebapiAsync\Model\ServiceConfig $serviceConfig,
-        \Magento\Framework\Webapi\Rest\Request $request,
-        AsynchronousSchemaRequestProcessor $asynchronousSchemaRequestProcessor,
-        \Magento\Framework\Reflection\TypeProcessor $typeProcessor
+        private readonly Config $webapiConfig,
+        private readonly ServiceConfig $serviceConfig,
+        private readonly Request $request,
+        private readonly AsynchronousSchemaRequestProcessor $asynchronousSchemaRequestProcessor,
+        private readonly TypeProcessor $typeProcessor
     ) {
-        $this->webapiConfig = $webapiConfig;
-        $this->serviceConfig = $serviceConfig;
-        $this->request = $request;
-        $this->asynchronousSchemaRequestProcessor = $asynchronousSchemaRequestProcessor;
-        $this->typeProcessor = $typeProcessor;
     }
 
     /**
-     * @param \Magento\Webapi\Model\ServiceMetadata $subject
+     * @param ModelServiceMetadata $subject
      * @param array $result
      * @return array
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function afterGetServicesConfig(\Magento\Webapi\Model\ServiceMetadata $subject, array $result)
+    public function afterGetServicesConfig(ModelServiceMetadata $subject, array $result)
     {
         if ($this->asynchronousSchemaRequestProcessor->canProcess($this->request)) {
             $synchronousOnlyServiceMethods = $this->getSynchronousOnlyServiceMethods($subject);
@@ -123,10 +106,10 @@ class ServiceMetadata
     /**
      * Get a list of all service methods that cannot be executed asynchronously.
      *
-     * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
+     * @param ModelServiceMetadata $serviceMetadata
      * @return array
      */
-    private function getSynchronousOnlyServiceMethods(\Magento\Webapi\Model\ServiceMetadata $serviceMetadata)
+    private function getSynchronousOnlyServiceMethods(ModelServiceMetadata $serviceMetadata)
     {
         $synchronousOnlyServiceMethods = [];
         $services = $this->serviceConfig->getServices()[Converter::KEY_SERVICES] ?? [];
@@ -156,15 +139,15 @@ class ServiceMetadata
     /**
      * Get service methods associated with routes that can't be processed as asynchronous.
      *
-     * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
+     * @param ModelServiceMetadata $serviceMetadata
      * @return array
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function getSynchronousOnlyRoutesAsServiceMethods(
-        \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
+        ModelServiceMetadata $serviceMetadata
     ) {
         $synchronousOnlyServiceMethods = [];
-        $serviceRoutes = $this->webapiConfig->getServices()[\Magento\Webapi\Model\Config\Converter::KEY_ROUTES];
+        $serviceRoutes = $this->webapiConfig->getServices()[WebapiConverter::KEY_ROUTES];
         foreach ($serviceRoutes as $serviceRoutePath => $serviceRouteMethods) {
             foreach ($serviceRouteMethods as $serviceRouteMethod => $serviceRouteMethodData) {
                 // Check if the HTTP method associated with the route is not able to be async.
@@ -183,16 +166,16 @@ class ServiceMetadata
     }
 
     /**
-     * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
+     * @param ModelServiceMetadata $serviceMetadata
      * @param array $synchronousOnlyServiceMethods
      * @param $serviceInterface
      * @param $serviceMethod
      */
     private function appendSynchronousOnlyServiceMethodsWithInterface(
-        \Magento\Webapi\Model\ServiceMetadata $serviceMetadata,
-        array &$synchronousOnlyServiceMethods,
-        $serviceInterface,
-        $serviceMethod
+        ModelServiceMetadata $serviceMetadata,
+        array                &$synchronousOnlyServiceMethods,
+                             $serviceInterface,
+                             $serviceMethod
     ) {
         foreach ($this->getServiceVersions($serviceInterface) as $serviceVersion) {
             $serviceName = $serviceMetadata->getServiceName($serviceInterface, $serviceVersion);

@@ -28,38 +28,9 @@ use Magento\Webapi\Controller\Rest\Router\Route;
 class InputParamsResolver
 {
     /**
-     * @var RestRequest
-     */
-    private $request;
-    /**
-     * @var ParamsOverrider
-     */
-    private $paramsOverrider;
-    /**
      * @var ServiceInputProcessor
      */
     private $serviceInputProcessor;
-    /**
-     * @var Router
-     */
-    private $router;
-    /**
-     * @var RequestValidator
-     */
-    private $requestValidator;
-    /**
-     * @var WebapiInputParamsResolver
-     */
-    private $inputParamsResolver;
-    /**
-     * @var bool
-     */
-    private $isBulk;
-
-    /**
-     * @var InputArraySizeLimitValue|null
-     */
-    private $inputArraySizeLimitValue;
 
     /**
      * Initialize dependencies.
@@ -74,22 +45,16 @@ class InputParamsResolver
      * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
      */
     public function __construct(
-        RestRequest $request,
-        ParamsOverrider $paramsOverrider,
+        private readonly RestRequest $request,
+        private readonly ParamsOverrider $paramsOverrider,
         ServiceInputProcessor $inputProcessor,
-        Router $router,
-        RequestValidator $requestValidator,
-        WebapiInputParamsResolver $inputParamsResolver,
-        bool $isBulk = false,
-        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
+        private readonly Router $router,
+        private readonly RequestValidator $requestValidator,
+        private readonly WebapiInputParamsResolver $inputParamsResolver,
+        private bool $isBulk = false,
+        private ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
     ) {
-        $this->request = $request;
-        $this->paramsOverrider = $paramsOverrider;
         $this->serviceInputProcessor = $inputProcessor;
-        $this->router = $router;
-        $this->requestValidator = $requestValidator;
-        $this->inputParamsResolver = $inputParamsResolver;
-        $this->isBulk = $isBulk;
         $this->inputArraySizeLimitValue = $inputArraySizeLimitValue ?? ObjectManager::getInstance()
                 ->get(InputArraySizeLimitValue::class);
     }

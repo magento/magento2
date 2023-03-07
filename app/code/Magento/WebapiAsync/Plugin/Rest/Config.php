@@ -24,16 +24,11 @@ class Config
     private const ASYNC_PROCESSOR_PATH = "/\/async\/V\d\//";
 
     /**
-     * @var ServiceConfig
-     */
-    public $serviceConfig;
-
-    /**
      * @param ServiceConfig $serviceConfig
      */
-    public function __construct(ServiceConfig $serviceConfig)
-    {
-        $this->serviceConfig = $serviceConfig;
+    public function __construct(
+        public readonly ServiceConfig $serviceConfig
+    ) {
     }
 
     /**
