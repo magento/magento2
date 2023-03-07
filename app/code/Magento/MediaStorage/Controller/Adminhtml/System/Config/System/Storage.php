@@ -6,8 +6,6 @@
 
 /**
  * Adminhtml account controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\MediaStorage\Controller\Adminhtml\System\Config\System;
 

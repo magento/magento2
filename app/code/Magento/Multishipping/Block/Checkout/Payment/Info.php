@@ -6,8 +6,6 @@
 
 /**
  * Multishipping checkout payment information data
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Multishipping\Block\Checkout\Payment;
 
