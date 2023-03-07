@@ -10,7 +10,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 /**
  * Subtotal Total Row Renderer
  *
- * @author Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals
