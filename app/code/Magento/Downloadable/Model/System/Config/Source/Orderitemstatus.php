@@ -7,8 +7,6 @@ namespace Magento\Downloadable\Model\System\Config\Source;
 
 /**
  * Downloadable Order Item Status Source
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Orderitemstatus implements \Magento\Framework\Option\ArrayInterface
 {

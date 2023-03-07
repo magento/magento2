@@ -6,8 +6,6 @@
 
 /**
  * Downloadable checkout success page
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Downloadable\Block\Checkout;
 

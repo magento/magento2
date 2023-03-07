@@ -8,7 +8,6 @@ namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Download
 /**
  * Adminhtml catalog product downloadable items tab links section
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @deprecated 100.3.1 in favor of new class which adds grid links
