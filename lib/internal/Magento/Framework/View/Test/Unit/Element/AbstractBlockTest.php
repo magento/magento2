@@ -263,13 +263,13 @@ class AbstractBlockTest extends TestCase
         $expectsDispatchEvent,
         $expectedResult
     ) {
-        $moduleName = 'Test';
+        $moduleName = 'Test_Module';
         $cacheKey = 'testKey';
         $this->block->setData('cache_key', $cacheKey);
         $this->block->setData('module_name', $moduleName);
         $this->block->setData('cache_lifetime', $cacheLifetime);
 
-        $this->eventManagerMock->expects($expectsDispatchEvent)
+        $this->eventManagerMock
             ->method('dispatch');
         $this->scopeConfigMock
             ->method('getValue')
