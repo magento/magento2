@@ -11,8 +11,6 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * Adminhtml sales create order product search grid product name column renderer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Product extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {

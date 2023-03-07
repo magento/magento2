@@ -11,7 +11,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Adminhtml sales order create sidebar recently view block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Pviewed extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
