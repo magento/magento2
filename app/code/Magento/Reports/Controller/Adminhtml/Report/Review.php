@@ -6,8 +6,6 @@
 
 /**
  * Review reports admin controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 

@@ -7,8 +7,6 @@ namespace Magento\Reports\Block\Product;
 
 /**
  * Reports Recently Products Abstract Block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractProduct
 {

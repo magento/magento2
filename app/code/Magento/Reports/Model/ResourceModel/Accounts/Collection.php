@@ -6,8 +6,6 @@
 
 /**
  * New Accounts Report collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Accounts;
 

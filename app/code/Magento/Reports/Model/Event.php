@@ -21,7 +21,6 @@ namespace Magento\Reports\Model;
  * @method int getStoreId()
  * @method \Magento\Reports\Model\Event setStoreId(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */
