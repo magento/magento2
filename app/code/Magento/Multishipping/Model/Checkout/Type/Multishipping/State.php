@@ -10,8 +10,6 @@ use Magento\Multishipping\Model\Checkout\Type\Multishipping;
 
 /**
  * Multishipping checkout state model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class State extends \Magento\Framework\DataObject
 {

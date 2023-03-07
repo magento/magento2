@@ -6,8 +6,6 @@
 
 /**
  * Multi Shipping urls helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Multishipping\Helper;
 

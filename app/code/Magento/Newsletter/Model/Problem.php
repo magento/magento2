@@ -17,8 +17,6 @@ namespace Magento\Newsletter\Model;
  * @method string getProblemErrorText()
  * @method \Magento\Newsletter\Model\Problem setProblemErrorText(string $value)
  *
- * @author     Magento Core Team <core@magentocommerce.com>
- *
  * @api
  * @since 100.0.2
  */

@@ -8,8 +8,6 @@ namespace Magento\Newsletter\Model\ResourceModel\Queue;
 /**
  * Newsletter queue collection.
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  * @api
  * @since 100.0.2
  */

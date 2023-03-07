@@ -15,7 +15,6 @@ use Magento\Store\Model\ScopeInterface;
  * Mustishipping checkout shipping
  *
  * @api
- * @author     Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Shipping extends \Magento\Sales\Block\Items\AbstractItems
