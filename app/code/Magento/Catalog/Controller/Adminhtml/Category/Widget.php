@@ -9,8 +9,6 @@ use Magento\Framework\View\Element\BlockInterface;
 
 /**
  * Catalog category widgets controller for CMS WYSIWYG
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 abstract class Widget extends \Magento\Backend\App\Action
 {

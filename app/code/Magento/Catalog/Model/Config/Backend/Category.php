@@ -7,8 +7,6 @@ namespace Magento\Catalog\Model\Config\Backend;
 
 /**
  * Config category field backend
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Category extends \Magento\Framework\App\Config\Value
 {

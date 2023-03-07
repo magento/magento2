@@ -24,8 +24,6 @@ use Magento\Framework\View\DesignInterface;
  * Catalog Custom Category design Model
  *
  * @api
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

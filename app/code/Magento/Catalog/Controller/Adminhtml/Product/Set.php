@@ -7,8 +7,6 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 /**
  * Adminhtml entity sets controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class Set extends \Magento\Backend\App\Action
 {

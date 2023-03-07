@@ -6,8 +6,6 @@
 
 /**
  * Catalog Product List Sortable allowed sortable attributes source
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Config\Source;
 

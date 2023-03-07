@@ -12,7 +12,6 @@ use Magento\Catalog\Model\Product\Option\Value;
 /**
  * Product options block
  *
- * @author Magento Core Team <core@magentocommerce.com>
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2

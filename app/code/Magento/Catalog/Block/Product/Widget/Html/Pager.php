@@ -6,8 +6,6 @@
 
 /**
  * New products widget pager block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Product\Widget\Html;
 

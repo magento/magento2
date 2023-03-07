@@ -12,8 +12,6 @@ use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
  * Backend model for set of EAV attributes with 'frontend_input' equals 'price'.
  *
  * @api
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
