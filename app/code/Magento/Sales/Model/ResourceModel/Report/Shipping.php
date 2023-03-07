@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\ResourceModel\Report;
 
 /**
  * Shipping report resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Shipping extends AbstractReport
 {

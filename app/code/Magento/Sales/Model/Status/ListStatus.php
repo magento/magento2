@@ -9,8 +9,6 @@ namespace Magento\Sales\Model\Status;
  * Service model for managing statuses information. Statuses are just records with code, message and any
  * additional data. The model helps to keep track and manipulate statuses, that different modules want to set
  * to owner object of this model.
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class ListStatus
 {

@@ -8,8 +8,6 @@ namespace Magento\SalesRule\Model\ResourceModel\Report\Rule;
 
 /**
  * Rule report resource model with aggregation by created at
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
 {

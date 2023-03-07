@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\ResourceModel\Report\Order;
 
 /**
  * Order entity resource model with aggregation by updated at
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Updatedat extends Createdat
 {

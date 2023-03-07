@@ -7,8 +7,6 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 /**
  * "Manage Coupons Codes" Tab
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Coupons extends \Magento\Framework\View\Element\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {

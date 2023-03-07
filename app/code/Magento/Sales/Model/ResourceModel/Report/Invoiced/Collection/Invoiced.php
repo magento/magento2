@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\ResourceModel\Report\Invoiced\Collection;
 
 /**
  * Sales report invoiced collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Invoiced extends Order
 {

@@ -7,8 +7,6 @@ namespace Magento\SalesRule\Model\ResourceModel\Report;
 
 /**
  * Rule report resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Rule extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
 {

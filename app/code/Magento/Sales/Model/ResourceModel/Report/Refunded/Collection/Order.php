@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\ResourceModel\Report\Refunded\Collection;
 
 /**
  * Sales report refunded collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Order extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
 {

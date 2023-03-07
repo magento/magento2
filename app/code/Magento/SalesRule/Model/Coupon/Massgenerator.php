@@ -7,8 +7,6 @@ namespace Magento\SalesRule\Model\Coupon;
 
 /**
  * SalesRule Mass Coupon Generator
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
     \Magento\SalesRule\Model\Coupon\CodegeneratorInterface

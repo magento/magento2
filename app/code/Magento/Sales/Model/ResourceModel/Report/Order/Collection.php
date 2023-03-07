@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\ResourceModel\Report\Order;
 
 /**
  * Report order collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
 {
