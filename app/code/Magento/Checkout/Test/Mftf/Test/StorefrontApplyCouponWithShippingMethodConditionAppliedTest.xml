@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontApplyCouponWithShippingMethodConditionAppliedTest">
+        <annotations>
+            <features value="Shipping"/>
+            <stories value="Cart price rules"/>
+            <title value="Assert that coupon applied for shipping methods cart price rule"/>
+            <description value="Coupon should applied correctly on checkout for shipping methods cart price rule"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-2044"/>
+            <group value="shipping"/>
+            <group value="SalesRule"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+
+            <actionGroup ref="AdminOpenNewCartPriceRuleFormPageActionGroup" stepKey="createCartPriceRule"/>
+            <actionGroup ref="AdminCartPriceRuleFillMainInfoActionGroup" stepKey="selectCustomCustomerGroup">
+                <argument name="name" value="{{ActiveSalesRuleWithPercentPriceDiscountCoupon.name}}"/>
+                <argument name="description" value="{{ActiveSalesRuleWithPercentPriceDiscountCoupon.description}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCartPriceRuleFillCouponInfoActionGroup" stepKey="fillCartPriceRuleCouponInfo">
+                <argument name="couponCode" value="{{ActiveSalesRuleWithPercentPriceDiscountCoupon.coupon_code}}"/>
+                <argument name="userPerCoupon" value="1"/>
+                <argument name="userPerCustomer" value="1"/>
+            </actionGroup>
+            <actionGroup ref="AdminCartPriceRuleFillShippingConditionActionGroup" stepKey="setCartAttributeConditionForCartPriceRule"/>
+            <actionGroup ref="AdminCartPriceRuleSaveActionGroup" stepKey="saveCartPriceRule"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+                <argument name="ruleName" value="{{ActiveSalesRuleWithPercentPriceDiscountCoupon.name}}"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToProductPage">
+            <argument name="productUrlKey" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$createProduct$" />
+            <argument name="productCount" value="1" />
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <waitForElement time="30" selector="{{CheckoutCartSummarySection.estimateShippingAndTaxForm}}" stepKey="waitForEstimateShippingAndTaxForm"/>
+        <waitForElement time="30" selector="{{CheckoutCartSummarySection.shippingMethodForm}}" stepKey="waitForShippingMethodForm"/>
+        <!-- Apply Discount Coupon to the Order -->
+        <actionGroup ref="StorefrontShoppingCartClickApplyDiscountButtonActionGroup" stepKey="clickApplyButton"/>
+        <actionGroup ref="StorefrontShoppingCartFillCouponCodeFieldActionGroup" stepKey="fillDiscountCodeField">
+            <argument name="discountCode" value="{{ActiveSalesRuleWithPercentPriceDiscountCoupon.coupon_code}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontShoppingCartClickApplyDiscountButtonActionGroup" stepKey="clickApplyDiscountButton"/>
+        <actionGroup ref="AssertMessageCustomerChangeAccountInfoActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value='You used coupon code "{{ActiveSalesRuleWithPercentPriceDiscountCoupon.coupon_code}}".'/>
+        </actionGroup>
+    </test>
+</tests>
