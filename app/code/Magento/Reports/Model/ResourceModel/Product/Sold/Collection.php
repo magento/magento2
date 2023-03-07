@@ -6,8 +6,6 @@
 
 /**
  * Report Sold Products collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Product\Sold;
 

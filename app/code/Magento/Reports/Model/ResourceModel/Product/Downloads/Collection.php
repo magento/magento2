@@ -9,8 +9,6 @@ namespace Magento\Reports\Model\ResourceModel\Product\Downloads;
 /**
  * Product Downloads Report collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  * @api
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)

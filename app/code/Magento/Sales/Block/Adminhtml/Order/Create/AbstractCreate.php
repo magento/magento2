@@ -12,7 +12,6 @@ use Magento\Catalog\Pricing\Price\FinalPrice;
 /**
  * Adminhtml sales order create abstract block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractCreate extends \Magento\Backend\Block\Widget

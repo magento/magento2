@@ -6,8 +6,6 @@
 
 /**
  * Most viewed product report aggregate resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Report\Product;
 
