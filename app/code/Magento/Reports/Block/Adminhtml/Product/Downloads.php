@@ -7,8 +7,6 @@ namespace Magento\Reports\Block\Adminhtml\Product;
 
 /**
  * Adminhtml product downloads report
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Downloads extends \Magento\Backend\Block\Widget\Grid\Container
 {

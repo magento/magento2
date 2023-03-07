@@ -7,8 +7,6 @@ namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
 
 /**
  * Adminhtml Report Products Reviews renderer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Product extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {

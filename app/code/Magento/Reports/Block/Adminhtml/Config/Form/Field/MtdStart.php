@@ -9,8 +9,6 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Dashboard Month-To-Date Day starts Field Renderer
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class MtdStart extends \Magento\Config\Block\System\Config\Form\Field
 {

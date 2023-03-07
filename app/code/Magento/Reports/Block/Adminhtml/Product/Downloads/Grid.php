@@ -7,8 +7,6 @@ namespace Magento\Reports\Block\Adminhtml\Product\Downloads;
 
 /**
  * Adminhtml product downloads report grid
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {

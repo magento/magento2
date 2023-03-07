@@ -9,7 +9,6 @@ namespace Magento\Reports\Block\Adminhtml\Filter;
 /**
  * Adminhtml report filter form
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */
