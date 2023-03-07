@@ -6,9 +6,6 @@
 
 /**
  * Product quote initializer plugin
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  */
 namespace Magento\GroupedProduct\Model\Sales\AdminOrder\Product\Quote\Plugin;
 
