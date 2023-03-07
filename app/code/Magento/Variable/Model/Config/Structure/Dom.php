@@ -8,19 +8,16 @@ declare(strict_types=1);
 
 namespace Magento\Variable\Model\Config\Structure;
 
+use DOMDocument;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\Dom as ConfigDom;
 use Magento\Framework\Config\ValidationStateInterface;
 
 /**
  * Filter dom structure to required components only
  */
-class Dom extends \Magento\Framework\Config\Dom
+class Dom extends ConfigDom
 {
-    /**
-     * @var AvailableVariables
-     */
-    private $structureConfig;
-
     /**
      * @var array
      */
@@ -42,10 +39,9 @@ class Dom extends \Magento\Framework\Config\Dom
         $typeAttributeName = null,
         $schemaFile = null,
         $errorFormat = self::ERROR_FORMAT_DEFAULT,
-        AvailableVariables $availableVariables = null
+        private ?AvailableVariables $availableVariables = null
     ) {
-        $this->structureConfig = $availableVariables
-            ?: ObjectManager::getInstance()->get(AvailableVariables::class);
+        $this->structureConfig = $availableVariables ?: ObjectManager::getInstance()->get(AvailableVariables::class);
         parent::__construct($xml, $validationState, $idAttributes, $typeAttributeName, $schemaFile, $errorFormat);
     }
 
@@ -75,7 +71,7 @@ class Dom extends \Magento\Framework\Config\Dom
     /**
      * Filter DOMDocument elements and keep only allowed
      *
-     * @param \DOMDocument $dom
+     * @param DOMDocument $dom
      * @param string $tag
      * @param array $ids
      */
