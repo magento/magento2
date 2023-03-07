@@ -20,7 +20,6 @@ class MinimalTierPriceCalculator implements MinimalPriceCalculatorInterface
      */
     private $calculator;
 
-
     /**
      * @param CalculatorInterface $calculator
      */
@@ -48,22 +47,16 @@ class MinimalTierPriceCalculator implements MinimalPriceCalculatorInterface
      */
     public function getAmount(SaleableInterface $saleableItem)
     {
-        $lowestTierPrice = null;
+        $minPrice = null;
         /** @var TierPrice $price */
         $tierPrice = $saleableItem->getPriceInfo()->getPrice(TierPrice::PRICE_CODE);
         $tierPriceList = $tierPrice->getTierPriceList();
-        $finalPrice = $saleableItem->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
 
-        $minPrice = $finalPrice;
-        foreach ($tierPriceList as $tierPrice) {
-            /** @var AmountInterface $price */
-            $price = $tierPrice['price'];
-            if ($minPrice > $price->getValue()) {
-                $minPrice = $price->getValue();
-                $lowestTierPrice = $price;
-            }
+        if (count($tierPriceList)) {
+            usort($tierPriceList, fn ($tier1, $tier2) => $tier1['price']->getValue() <=> $tier2['price']->getValue());
+            $minPrice = array_shift($tierPriceList)['price'];
         }
 
-        return $lowestTierPrice;
+        return $minPrice;
     }
 }
