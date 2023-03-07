@@ -10,8 +10,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Customer Show Customer Model
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Customer extends \Magento\Framework\App\Config\Value
 {

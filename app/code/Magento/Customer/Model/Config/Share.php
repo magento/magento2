@@ -7,8 +7,6 @@ namespace Magento\Customer\Model\Config;
 
 /**
  * Customer sharing config model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Share extends \Magento\Framework\App\Config\Value implements \Magento\Framework\Option\ArrayInterface
 {

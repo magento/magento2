@@ -7,8 +7,6 @@ namespace Magento\Customer\Model\Customer\Attribute\Backend;
 
 /**
  * Customer default shipping address backend
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Shipping extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {

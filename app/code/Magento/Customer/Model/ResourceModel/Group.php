@@ -10,8 +10,6 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 
 /**
  * Customer group resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Group extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb
 {

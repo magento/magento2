@@ -7,8 +7,6 @@ namespace Magento\Customer\Model\Customer\Attribute\Source;
 
 /**
  * Customer store attribute source
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
