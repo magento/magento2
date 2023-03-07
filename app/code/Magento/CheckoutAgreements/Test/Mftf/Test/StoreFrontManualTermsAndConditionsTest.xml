@@ -52,10 +52,6 @@
             <deleteData createDataKey="testCategory" stepKey="deleteTestCategory"/>
             <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
             <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
-            <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openTermToDelete">
-                <argument name="termName" value="{{newHtmlTerm.checkboxText}}"/>
-            </actionGroup>
-            <actionGroup ref="AdminTermsConditionsDeleteTermByNameActionGroup" stepKey="deleteOpenedTerm"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <!--Go to product page-->
@@ -76,7 +72,7 @@
         </actionGroup>
         <!-- SelectCash On Delivery payment method -->
         <click selector="{{StorefrontCheckoutPaymentMethodsSection.cashOnDelivery}}" stepKey="selectCashOnDeliveryMethod"/>
-         <!-- Verify Address is present-->
+        <!-- Verify Address is present-->
         <actionGroup ref="CheckBillingAddressInCheckoutActionGroup" stepKey="checkBillingAddressOnBillingPage">
             <argument name="customerVar" value="Simple_US_Customer_NY" />
             <argument name="customerAddressVar" value="US_Address_NY" />
@@ -113,8 +109,7 @@
         <!--Check-box with text for Terms and Condition is presented-->
         <seeElement selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" stepKey="seeTermInCheckoutagain"/>
         <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementButton}}" userInput="{{newHtmlTerm.checkboxText}}" stepKey="seeTermtextInCheckoutagain"/>
-        <!-- Verify Checkbox is not checked-->
-        <dontSeeCheckboxIsChecked selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckboxcheck($$newHtmlTerm.checkboxText$$)}}" stepKey="checkboxNotChecked"/>
+        <seeCheckboxIsChecked selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckboxcheck(newHtmlTerm.checkboxText)}}" stepKey="checkbox"/>
         <!-- Click PLace Order Again-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="PlaceOrder"/>
         <!--This is a required field." message is appeared under check-box -->
