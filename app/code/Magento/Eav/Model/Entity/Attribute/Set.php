@@ -13,8 +13,6 @@
  * @method \Magento\Eav\Model\Entity\Attribute\Set setAttributeSetName(string $value)
  * @method int getSortOrder()
  * @method \Magento\Eav\Model\Entity\Attribute\Set setSortOrder(int $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Eav\Model\Entity\Attribute;
 

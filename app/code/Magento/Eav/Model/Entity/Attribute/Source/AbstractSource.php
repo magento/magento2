@@ -10,7 +10,6 @@ namespace Magento\Eav\Model\Entity\Attribute\Source;
  * Entity/Attribute/Model - attribute selection source abstract
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 100.0.2
  */

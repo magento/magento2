@@ -28,7 +28,6 @@ use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
  *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -9,8 +9,6 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * EAV Entity Attribute Select Data Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
 {

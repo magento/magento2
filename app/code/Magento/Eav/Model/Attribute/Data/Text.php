@@ -10,8 +10,6 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * EAV Entity Attribute Text Data Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
 {

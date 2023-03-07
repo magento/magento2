@@ -9,8 +9,6 @@ use Magento\Framework\Filesystem\ExtendedDriverInterface;
 
 /**
  * EAV Entity Attribute Image File Data Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Image extends \Magento\Eav\Model\Attribute\Data\File
 {

@@ -11,8 +11,6 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Eav Form Fieldset Resource Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Fieldset extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

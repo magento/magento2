@@ -6,8 +6,6 @@
 
 /**
  * Entity/Attribute/Model - attribute frontend abstract
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Eav\Model\Entity\Attribute\Frontend;
 

@@ -9,8 +9,6 @@
  *
  * @method \Magento\Eav\Model\Attribute\Data\AbstractData|null getDataModel()
  * Get data model linked to attribute or null.
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Eav\Model;
 

@@ -8,8 +8,6 @@ namespace Magento\Eav\Model;
 
 /**
  * EAV Entity Attribute Data Factory
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class AttributeDataFactory
 {
