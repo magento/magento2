@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item;
 
 /**
  * Flat sales order creditmemo items collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection
 {

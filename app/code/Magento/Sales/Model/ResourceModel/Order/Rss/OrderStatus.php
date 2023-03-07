@@ -9,8 +9,6 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * Order Rss Resource Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class OrderStatus
 {
