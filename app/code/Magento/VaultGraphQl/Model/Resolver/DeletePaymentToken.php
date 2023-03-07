@@ -22,25 +22,13 @@ use Magento\Vault\Api\PaymentTokenRepositoryInterface;
 class DeletePaymentToken implements ResolverInterface
 {
     /**
-     * @var PaymentTokenManagementInterface
-     */
-    private $paymentTokenManagement;
-
-    /**
-     * @var PaymentTokenRepositoryInterface
-     */
-    private $paymentTokenRepository;
-
-    /**
      * @param PaymentTokenManagementInterface $paymentTokenManagement
      * @param PaymentTokenRepositoryInterface $paymentTokenRepository
      */
     public function __construct(
-        PaymentTokenManagementInterface $paymentTokenManagement,
-        PaymentTokenRepositoryInterface $paymentTokenRepository
+        private readonly PaymentTokenManagementInterface $paymentTokenManagement,
+        private readonly PaymentTokenRepositoryInterface $paymentTokenRepository
     ) {
-        $this->paymentTokenManagement = $paymentTokenManagement;
-        $this->paymentTokenRepository = $paymentTokenRepository;
     }
 
     /**
