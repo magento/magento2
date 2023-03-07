@@ -9,8 +9,6 @@ namespace Magento\ConfigurableProduct\Model\ResourceModel\Indexer\Stock;
 
 /**
  * CatalogInventory Configurable Products Stock Status Indexer Resource Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;

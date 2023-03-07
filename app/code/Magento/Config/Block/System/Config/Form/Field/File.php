@@ -6,8 +6,6 @@
 
 /**
  * File config field renderer
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Config\Block\System\Config\Form\Field;
 

@@ -10,7 +10,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 /**
  * Core Resource Resource Model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */

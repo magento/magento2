@@ -6,8 +6,6 @@
 
 /**
  * System configuration shipping methods allow all countries select
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Config\Block\System\Config\Form\Field\Select;
 

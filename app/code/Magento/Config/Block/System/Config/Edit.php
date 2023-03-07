@@ -6,8 +6,6 @@
 
 /**
  * Config edit page
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Config\Block\System\Config;
 

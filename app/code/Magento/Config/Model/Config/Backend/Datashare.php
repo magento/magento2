@@ -6,8 +6,6 @@
 
 /**
  * Config category field backend
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Config\Model\Config\Backend;
 

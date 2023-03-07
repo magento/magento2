@@ -6,8 +6,6 @@
 
 /**
  * System config image field backend model for Zend PDF generator
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Config\Model\Config\Backend\Image;
 

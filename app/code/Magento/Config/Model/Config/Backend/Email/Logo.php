@@ -6,8 +6,6 @@
 
 /**
  * Backend model for uploading transactional emails custom logo image
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Config\Model\Config\Backend\Email;
 

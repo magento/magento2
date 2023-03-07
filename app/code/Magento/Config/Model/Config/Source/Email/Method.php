@@ -6,8 +6,6 @@
 
 /**
  * Source for email send method
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Config\Model\Config\Source\Email;
 
