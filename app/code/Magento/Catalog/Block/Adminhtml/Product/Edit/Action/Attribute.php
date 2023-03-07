@@ -6,8 +6,6 @@
 
 /**
  * Adminhtml catalog product action attribute update
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action;
 
