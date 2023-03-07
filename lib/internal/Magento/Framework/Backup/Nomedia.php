@@ -7,8 +7,6 @@ namespace Magento\Framework\Backup;
 
 /**
  * Class to work system backup that excludes media folder
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Nomedia extends \Magento\Framework\Backup\Media
 {

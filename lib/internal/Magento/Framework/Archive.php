@@ -11,8 +11,6 @@ use Magento\Framework\Archive\Tar;
 
 /**
  * Class to work with archives
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Archive
 {

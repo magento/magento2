@@ -11,8 +11,6 @@ use RecursiveIteratorIterator;
 
 /**
  * Filesystem helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Helper
 {

@@ -20,8 +20,6 @@ use Magento\Framework\Phrase;
 
 /**
  * Rollback worker for rolling back via local filesystem
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Fs extends AbstractRollback
 {

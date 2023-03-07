@@ -12,8 +12,6 @@ namespace Magento\Framework\DB\Statement;
  * way to the query.
  * Most used properties and methods are defined in interface. Specific things for concrete DB adapter can be
  * transmitted using 'addtional' property (\Magento\Framework\DataObject) as a container.
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Parameter
 {
