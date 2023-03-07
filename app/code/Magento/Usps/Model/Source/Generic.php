@@ -14,11 +14,6 @@ use Magento\Usps\Model\Carrier;
 class Generic implements GenericInterface
 {
     /**
-     * @var \Magento\Usps\Model\Carrier
-     */
-    protected $shippingUsps;
-
-    /**
      * Carrier code
      *
      * @var string
@@ -26,11 +21,11 @@ class Generic implements GenericInterface
     protected $code = '';
 
     /**
-     * @param \Magento\Usps\Model\Carrier $shippingUsps
+     * @param Carrier $shippingUsps
      */
-    public function __construct(Carrier $shippingUsps)
-    {
-        $this->shippingUsps = $shippingUsps;
+    public function __construct(
+        protected readonly Carrier $shippingUsps
+    ) {
     }
 
     /**
