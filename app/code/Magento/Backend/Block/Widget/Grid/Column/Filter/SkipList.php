@@ -11,7 +11,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 class SkipList extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCondition()
     {

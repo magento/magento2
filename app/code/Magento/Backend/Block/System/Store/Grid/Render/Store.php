@@ -11,7 +11,7 @@ namespace Magento\Backend\Block\System\Store\Grid\Render;
 class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function render(\Magento\Framework\DataObject $row)
     {

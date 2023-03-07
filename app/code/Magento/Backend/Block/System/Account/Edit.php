@@ -14,6 +14,8 @@ namespace Magento\Backend\Block\System\Account;
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
+     * Initialise the page
+     *
      * @return void
      */
     protected function _construct()
@@ -28,6 +30,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Return a Phrase for the header text
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()

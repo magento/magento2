@@ -60,6 +60,8 @@ class Page extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Returns true if we are running in single store mode
+     *
      * @return bool
      */
     public function isSingleStoreMode()

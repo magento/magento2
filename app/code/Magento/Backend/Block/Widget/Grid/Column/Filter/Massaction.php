@@ -11,7 +11,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 class Massaction extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Checkbox
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCondition()
     {

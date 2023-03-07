@@ -14,8 +14,6 @@ namespace Magento\Backend\Model\Search;
 class Order extends \Magento\Framework\DataObject
 {
     /**
-     * Adminhtml data
-     *
      * @var \Magento\Backend\Helper\Data
      */
     protected $_adminhtmlData = null;

@@ -17,5 +17,5 @@ abstract class Account extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::myaccount';
+    public const ADMIN_RESOURCE = 'Magento_Backend::myaccount';
 }

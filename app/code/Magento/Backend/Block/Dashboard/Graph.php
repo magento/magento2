@@ -14,32 +14,24 @@ namespace Magento\Backend\Block\Dashboard;
  */
 class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 {
-    const API_URL = 'https://image-charts.com/chart';
+    public const API_URL = 'https://image-charts.com/chart';
 
     /**
-     * All series
-     *
      * @var array
      */
     protected $_allSeries = [];
 
     /**
-     * Axis labels
-     *
      * @var array
      */
     protected $_axisLabels = [];
 
     /**
-     * Axis maps
-     *
      * @var array
      */
     protected $_axisMaps = [];
 
     /**
-     * Data rows
-     *
      * @var array
      */
     protected $_dataRows = [];

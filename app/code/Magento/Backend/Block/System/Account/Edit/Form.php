@@ -13,7 +13,7 @@ use Magento\Framework\Locale\OptionInterface;
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
-    const IDENTITY_VERIFICATION_PASSWORD_FIELD = 'current_password';
+    public const IDENTITY_VERIFICATION_PASSWORD_FIELD = 'current_password';
 
     /**
      * @var \Magento\Backend\Model\Auth\Session

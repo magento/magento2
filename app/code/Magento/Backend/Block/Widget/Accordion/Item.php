@@ -18,6 +18,8 @@ class Item extends \Magento\Backend\Block\Widget
     protected $_accordion;
 
     /**
+     * Set accordion objet and return self
+     *
      * @param Accordion $accordion
      * @return $this
      */
@@ -28,6 +30,8 @@ class Item extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return the target for this item
+     *
      * @return string
      */
     public function getTarget()
@@ -36,6 +40,8 @@ class Item extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return the HTML title for this item
+     *
      * @return string
      */
     public function getTitle()
@@ -50,6 +56,8 @@ class Item extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return the HTML content for this item
+     *
      * @return null|string
      */
     public function getContent()
@@ -65,6 +73,8 @@ class Item extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get the CSS class for this item
+     *
      * @return string
      */
     public function getClass()
@@ -77,6 +87,8 @@ class Item extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return formatted HTML
+     *
      * @return string
      */
     protected function _toHtml()

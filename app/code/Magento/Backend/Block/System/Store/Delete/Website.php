@@ -11,7 +11,7 @@ namespace Magento\Backend\Block\System\Store\Delete;
 class Website extends \Magento\Backend\Block\Template
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function _prepareLayout()
     {

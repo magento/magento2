@@ -35,8 +35,6 @@ class Extended extends \Magento\Backend\Block\Widget
     protected $_template = 'Magento_Backend::widget/grid/massaction_extended.phtml';
 
     /**
-     * Backend data
-     *
      * @var \Magento\Backend\Helper\Data
      */
     protected $_backendData = null;

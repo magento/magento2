@@ -16,7 +16,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
     /**
      * full day is 86400, we need 23 hours:59 minutes:59 seconds = 86399
      */
-    const END_OF_DAY_IN_SECONDS = 86399;
+    public const END_OF_DAY_IN_SECONDS = 86399;
 
     /**
      * @inheritdoc

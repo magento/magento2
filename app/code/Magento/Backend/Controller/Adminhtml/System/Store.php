@@ -22,11 +22,9 @@ abstract class Store extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::store';
+    public const ADMIN_RESOURCE = 'Magento_Backend::store';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;

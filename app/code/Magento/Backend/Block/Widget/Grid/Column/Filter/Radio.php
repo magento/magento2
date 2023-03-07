@@ -11,6 +11,8 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 class Radio extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     /**
+     * Return array of options
+     *
      * @return array
      */
     protected function _getOptions()
@@ -23,7 +25,7 @@ class Radio extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCondition()
     {

@@ -11,6 +11,8 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     /**
+     * Return formatted HTML
+     *
      * @return string
      */
     public function getHtml()
@@ -19,6 +21,8 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
     }
 
     /**
+     * Return an array of options
+     *
      * @return array
      */
     protected function _getOptions()
@@ -31,6 +35,8 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
     }
 
     /**
+     * Return expression for SQL 'where' clause
+     *
      * @return array
      */
     public function getCondition()
@@ -40,6 +46,5 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
         } else {
             return [['neq' => $this->getColumn()->getValue()], ['is' => new \Zend_Db_Expr('NULL')]];
         }
-        // return array('like'=>'%'.$this->getValue().'%');
     }
 }
