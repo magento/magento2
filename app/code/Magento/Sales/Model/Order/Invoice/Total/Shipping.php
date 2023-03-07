@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\Order\Invoice\Total;
 
 /**
  * Order invoice shipping total calculation model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Shipping extends AbstractTotal
 {

@@ -6,9 +6,6 @@
 
 /**
  * Product quote initializer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  */
 namespace Magento\Sales\Model\AdminOrder\Product\Quote;
 

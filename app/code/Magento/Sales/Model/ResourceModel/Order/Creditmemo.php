@@ -14,8 +14,6 @@ use Magento\Sales\Model\Spi\CreditmemoResourceInterface;
 
 /**
  * Flat sales order creditmemo resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Creditmemo extends SalesResource implements CreditmemoResourceInterface
 {

@@ -12,7 +12,6 @@ use Magento\Framework\Serialize\SerializerInterface;
  * Configuration class for ordered items
  * @api
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 abstract class Ordered extends \Magento\Framework\App\Config\Base

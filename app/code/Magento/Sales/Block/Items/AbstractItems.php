@@ -10,7 +10,6 @@ use Magento\Sales\ViewModel\ItemRendererTypeResolverInterface;
 /**
  * Abstract block for display sales (quote/order/invoice etc.) items
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class AbstractItems extends \Magento\Framework\View\Element\Template

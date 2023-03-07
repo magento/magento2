@@ -17,7 +17,6 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 /**
  * Flat sales order resource
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Order extends SalesResource implements OrderResourceInterface

@@ -13,8 +13,6 @@ use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 
 /**
  * Adminhtml sales transactions controller
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 abstract class Transactions extends \Magento\Backend\App\Action
 {
