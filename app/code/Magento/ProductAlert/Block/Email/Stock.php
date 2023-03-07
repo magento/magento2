@@ -7,8 +7,6 @@ namespace Magento\ProductAlert\Block\Email;
 
 /**
  * ProductAlert email back in stock grid
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Stock extends \Magento\ProductAlert\Block\Email\AbstractEmail
 {

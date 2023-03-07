@@ -6,8 +6,6 @@
 
 /**
  * Simple product data view
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 
 namespace Magento\ProductVideo\Block\Product\View;

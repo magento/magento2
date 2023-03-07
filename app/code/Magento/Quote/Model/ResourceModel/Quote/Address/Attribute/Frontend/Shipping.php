@@ -7,8 +7,6 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Address\Attribute\Frontend;
 
 /**
  * Quote address attribute frontend shipping resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Shipping extends \Magento\Quote\Model\ResourceModel\Quote\Address\Attribute\Frontend
 {

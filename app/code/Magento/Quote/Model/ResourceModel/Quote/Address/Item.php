@@ -9,8 +9,6 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
 
 /**
  * Quote address item resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Item extends AbstractDb
 {

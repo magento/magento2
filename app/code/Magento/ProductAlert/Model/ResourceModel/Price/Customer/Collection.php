@@ -7,8 +7,6 @@ namespace Magento\ProductAlert\Model\ResourceModel\Price\Customer;
 
 /**
  * ProductAlert Price Customer collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collection
 {

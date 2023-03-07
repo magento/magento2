@@ -7,8 +7,6 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Address;
 
 /**
  * Quote addresses collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection
 {
