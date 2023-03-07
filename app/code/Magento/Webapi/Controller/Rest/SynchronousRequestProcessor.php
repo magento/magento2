@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Webapi\Controller\Rest;
 
+use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\Framework\Webapi\Rest\Request;
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Framework\Webapi\Rest\Response\FieldsFilter;
@@ -22,36 +24,6 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
     const PROCESSOR_PATH = "/^\\/V\\d+/";
 
     /**
-     * @var RestResponse
-     */
-    private $response;
-
-    /**
-     * @var InputParamsResolver
-     */
-    private $inputParamsResolver;
-
-    /**
-     * @var ServiceOutputProcessor
-     */
-    private $serviceOutputProcessor;
-
-    /**
-     * @var FieldsFilter
-     */
-    private $fieldsFilter;
-
-    /**
-     * @var \Magento\Framework\App\DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * Initial dependencies
      *
      * @param \Magento\Framework\Webapi\Rest\Response $response
@@ -62,25 +34,19 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
     public function __construct(
-        RestResponse $response,
-        InputParamsResolver $inputParamsResolver,
-        ServiceOutputProcessor $serviceOutputProcessor,
-        FieldsFilter $fieldsFilter,
-        DeploymentConfig $deploymentConfig,
-        ObjectManagerInterface $objectManager
+        private readonly RestResponse $response,
+        private readonly InputParamsResolver $inputParamsResolver,
+        private readonly ServiceOutputProcessor $serviceOutputProcessor,
+        private readonly FieldsFilter $fieldsFilter,
+        private readonly DeploymentConfig $deploymentConfig,
+        private readonly ObjectManagerInterface $objectManager
     ) {
-        $this->response = $response;
-        $this->inputParamsResolver = $inputParamsResolver;
-        $this->serviceOutputProcessor = $serviceOutputProcessor;
-        $this->fieldsFilter = $fieldsFilter;
-        $this->deploymentConfig = $deploymentConfig;
-        $this->objectManager = $objectManager;
     }
 
     /**
      *  {@inheritdoc}
      */
-    public function process(\Magento\Framework\Webapi\Rest\Request $request)
+    public function process(Request $request)
     {
         $inputParams = $this->inputParamsResolver->resolve();
 
@@ -90,7 +56,7 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
         $service = $this->objectManager->get($serviceClassName);
 
         /**
-         * @var \Magento\Framework\Api\AbstractExtensibleObject $outputData
+         * @var AbstractExtensibleObject $outputData
          */
         $outputData = call_user_func_array([$service, $serviceMethodName], $inputParams);
         $outputData = $this->serviceOutputProcessor->process(
@@ -111,7 +77,7 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function canProcess(\Magento\Framework\Webapi\Rest\Request $request)
+    public function canProcess(Request $request)
     {
         if (preg_match(self::PROCESSOR_PATH, $request->getPathInfo()) === 1) {
             return true;

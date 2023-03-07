@@ -26,16 +26,6 @@ use Magento\Integration\Helper\Oauth\Data as OauthHelper;
 class TokenUserContext implements UserContextInterface
 {
     /**
-     * @var Request
-     */
-    protected $request;
-
-    /**
-     * @var Token
-     */
-    protected $tokenFactory;
-
-    /**
      * @var int
      */
     protected $userId;
@@ -49,11 +39,6 @@ class TokenUserContext implements UserContextInterface
      * @var bool
      */
     protected $isRequestProcessed;
-
-    /**
-     * @var IntegrationServiceInterface
-     */
-    protected $integrationService;
 
     /**
      * @var UserTokenReaderInterface
@@ -78,18 +63,15 @@ class TokenUserContext implements UserContextInterface
      * @param UserTokenValidatorInterface|null $tokenValidator
      */
     public function __construct(
-        Request $request,
-        TokenFactory $tokenFactory,
-        IntegrationServiceInterface $integrationService,
+        protected readonly Request $request,
+        protected readonly TokenFactory $tokenFactory,
+        private readonly IntegrationServiceInterface $integrationService,
         DateTime $dateTime = null,
         Date $date = null,
         OauthHelper $oauthHelper = null,
         ?UserTokenReaderInterface $tokenReader = null,
         ?UserTokenValidatorInterface $tokenValidator = null
     ) {
-        $this->request = $request;
-        $this->tokenFactory = $tokenFactory;
-        $this->integrationService = $integrationService;
         $this->userTokenReader = $tokenReader ?? ObjectManager::getInstance()->get(UserTokenReaderInterface::class);
         $this->userTokenValidator = $tokenValidator
             ?? ObjectManager::getInstance()->get(UserTokenValidatorInterface::class);

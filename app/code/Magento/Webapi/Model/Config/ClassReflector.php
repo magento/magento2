@@ -5,9 +5,13 @@
  */
 namespace Magento\Webapi\Model\Config;
 
+use InvalidArgumentException;
 use Laminas\Code\Reflection\ClassReflection;
 use Laminas\Code\Reflection\MethodReflection;
+use Laminas\Code\Reflection\ParameterReflection;
+use LogicException;
 use Magento\Framework\Reflection\TypeProcessor;
+use ReflectionException;
 
 /**
  * Config class reflector
@@ -22,8 +26,9 @@ class ClassReflector
     /**
      * @param TypeProcessor $typeProcessor
      */
-    public function __construct(TypeProcessor $typeProcessor)
-    {
+    public function __construct(
+        TypeProcessor $typeProcessor
+    ){
         $this->_typeProcessor = $typeProcessor;
     }
 
@@ -60,7 +65,7 @@ class ClassReflector
      *     ),
      *     ...
      * )</pre>
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function reflectClassMethods($className, $methods)
     {
@@ -81,13 +86,13 @@ class ClassReflector
      *
      * @param MethodReflection $method
      * @return array
-     * @throws \InvalidArgumentException
-     * @throws \ReflectionException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
     public function extractMethodData(MethodReflection $method)
     {
         $methodData = ['documentation' => $this->extractMethodDescription($method), 'interface' => []];
-        /** @var \Laminas\Code\Reflection\ParameterReflection $parameter */
+        /** @var ParameterReflection $parameter */
         foreach ($method->getParameters() as $parameter) {
             $parameterData = [
                 'type' => $this->_typeProcessor->register($this->_typeProcessor->getParamType($parameter)),
@@ -120,7 +125,7 @@ class ClassReflector
      *
      * @param MethodReflection $method
      * @return string
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     protected function extractMethodDescription(MethodReflection $method)
     {
@@ -131,7 +136,7 @@ class ClassReflector
 
         $docBlock = $methodReflection->getDocBlock();
         if (!$docBlock) {
-            throw new \LogicException(
+            throw new LogicException(
                 'The docBlock of the method ' .
                 $method->getDeclaringClass()->getName() . '::' . $method->getName() . ' is empty.'
             );
@@ -144,7 +149,7 @@ class ClassReflector
      *
      * @param string $className
      * @return string
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function extractClassDescription($className)
     {

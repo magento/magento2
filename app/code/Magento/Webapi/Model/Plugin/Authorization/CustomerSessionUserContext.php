@@ -5,6 +5,7 @@
  */
 namespace Magento\Webapi\Model\Plugin\Authorization;
 
+use Magento\Customer\Model\Authorization\CustomerSessionUserContext as AuthorizationCustomerSessionUserContext;
 use Magento\Framework\App\RequestInterface;
 
 /**
@@ -13,31 +14,26 @@ use Magento\Framework\App\RequestInterface;
 class CustomerSessionUserContext
 {
     /**
-     * @var RequestInterface
-     */
-    private $request;
-
-    /**
      * Initialize dependencies.
      *
      * @param RequestInterface $request
      */
-    public function __construct(RequestInterface $request)
-    {
-        $this->request = $request;
+    public function __construct(
+        private readonly RequestInterface $request
+    ) {
     }
 
     /**
      * Allow only AJAX requests when customers access web APIs.
      *
-     * @param \Magento\Customer\Model\Authorization\CustomerSessionUserContext $userContext
+     * @param AuthorizationCustomerSessionUserContext $userContext
      * @param int|null $result
      * @return int|null
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetUserId(
-        \Magento\Customer\Model\Authorization\CustomerSessionUserContext $userContext,
+        AuthorizationCustomerSessionUserContext $userContext,
         $result
     ) {
         return $this->request->isXmlHttpRequest() ? $result : null;

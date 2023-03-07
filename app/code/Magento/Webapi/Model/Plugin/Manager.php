@@ -5,12 +5,13 @@
  */
 namespace Magento\Webapi\Model\Plugin;
 
+use Magento\Integration\Api\IntegrationServiceInterface;
 use Magento\Integration\Model\ConfigBasedIntegrationManager;
 use Magento\Integration\Api\AuthorizationServiceInterface as IntegrationAuthorizationInterface;
 use Magento\Integration\Model\IntegrationConfig;
 
 /**
- * Plugin for @see \Magento\Integration\Model\ConfigBasedIntegrationManager model to manage resource permissions of
+ * Plugin for @see ConfigBasedIntegrationManager model to manage resource permissions of
  * integration installed from config file
  */
 class Manager
@@ -18,37 +19,23 @@ class Manager
     /**
      * Integration service
      *
-     * @var \Magento\Integration\Api\IntegrationServiceInterface
+     * @var IntegrationServiceInterface
      */
     protected $_integrationService;
-
-    /**
-     * @var IntegrationAuthorizationInterface
-     */
-    protected $integrationAuthorizationService;
-
-    /**
-     * API Integration config
-     *
-     * @var IntegrationConfig
-     */
-    protected $integrationConfig;
 
     /**
      * Construct Setup plugin instance
      *
      * @param IntegrationAuthorizationInterface $integrationAuthorizationService
-     * @param \Magento\Integration\Api\IntegrationServiceInterface $integrationService
+     * @param IntegrationServiceInterface $integrationService
      * @param IntegrationConfig $integrationConfig
      */
     public function __construct(
-        IntegrationAuthorizationInterface $integrationAuthorizationService,
-        \Magento\Integration\Api\IntegrationServiceInterface $integrationService,
-        IntegrationConfig $integrationConfig
+        protected readonly IntegrationAuthorizationInterface $integrationAuthorizationService,
+        IntegrationServiceInterface $integrationService,
+        protected readonly IntegrationConfig $integrationConfig
     ) {
-        $this->integrationAuthorizationService = $integrationAuthorizationService;
         $this->_integrationService = $integrationService;
-        $this->integrationConfig = $integrationConfig;
     }
 
     /**

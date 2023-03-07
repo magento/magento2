@@ -5,10 +5,12 @@
  */
 namespace Magento\Webapi\Model\Config;
 
+use Magento\Framework\Config\Reader\Filesystem;
+
 /**
  * Service config data reader.
  */
-class Reader extends \Magento\Framework\Config\Reader\Filesystem
+class Reader extends Filesystem
 {
     /**
      * List of id attributes for merge

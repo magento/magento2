@@ -18,19 +18,9 @@ use Magento\Framework\Api\SimpleDataObjectConverter;
 class ParamsOverrider
 {
     /**
-     * @var ParamOverriderInterface[]
-     */
-    private $paramOverriders;
-
-    /**
      * @var MethodsMap
      */
     private $methodsMap;
-
-    /**
-     * @var SimpleDataObjectConverter
-     */
-    private $dataObjectConverter;
 
     /**
      * Initialize dependencies
@@ -39,10 +29,9 @@ class ParamsOverrider
      * @param SimpleDataObjectConverter|null $dataObjectConverter
      */
     public function __construct(
-        array $paramOverriders = [],
-        SimpleDataObjectConverter $dataObjectConverter = null
+        private readonly array $paramOverriders = [],
+        private ?SimpleDataObjectConverter $dataObjectConverter = null
     ) {
-        $this->paramOverriders = $paramOverriders;
         $this->dataObjectConverter = $dataObjectConverter
             ?? ObjectManager::getInstance()->get(SimpleDataObjectConverter::class);
     }
@@ -234,14 +223,14 @@ class ParamsOverrider
     /**
      * The getter function to get MethodsMap object
      *
-     * @return \Magento\Framework\Reflection\MethodsMap
+     * @return MethodsMap
      *
      * @deprecated 100.1.0
      */
     private function getMethodsMap()
     {
         if ($this->methodsMap === null) {
-            $this->methodsMap = \Magento\Framework\App\ObjectManager::getInstance()
+            $this->methodsMap = ObjectManager::getInstance()
                 ->get(MethodsMap::class);
         }
         return $this->methodsMap;

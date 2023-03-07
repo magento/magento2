@@ -5,12 +5,14 @@
  */
 namespace Magento\Webapi\Model\Config;
 
+use Magento\Framework\Config\SchemaLocatorInterface;
 use Magento\Framework\Module\Dir;
+use Magento\Framework\Module\Dir\Reader as DirReader;
 
 /**
  * Web API config schema locator.
  */
-class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
+class SchemaLocator implements SchemaLocatorInterface
 {
     /**
      * Path to corresponding XSD file with validation rules for merged config
@@ -27,9 +29,9 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
     protected $_perFileSchema = null;
 
     /**
-     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * @param DirReader $moduleReader
      */
-    public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
+    public function __construct(DirReader $moduleReader)
     {
         $this->_schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Webapi') . '/webapi_merged.xsd';
         $this->_perFileSchema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Webapi') . '/webapi.xsd';

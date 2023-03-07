@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Webapi\Model\Plugin;
 
+use Closure;
+use Magento\Framework\Authorization;
 use Magento\Integration\Api\AuthorizationServiceInterface as AuthorizationService;
 
 /**
@@ -19,16 +21,16 @@ class GuestAuthorization
     /**
      * Check if resource for which access is needed has anonymous permissions defined in webapi config.
      *
-     * @param \Magento\Framework\Authorization $subject
-     * @param \Closure $proceed
+     * @param Authorization $subject
+     * @param Closure $proceed
      * @param string $resource
      * @param string $privilege
      * @return bool Is resource permission "anonymous", to allow any user access without further checks in parent method
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundIsAllowed(
-        \Magento\Framework\Authorization $subject,
-        \Closure $proceed,
+        Authorization $subject,
+        Closure $proceed,
         $resource,
         $privilege = null
     ) {

@@ -7,9 +7,13 @@
  */
 namespace Magento\Webapi\Model\Soap;
 
+use Locale;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Escaper;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Webapi\Exception;
 
 /**
  * Webapi Fault Model for Soap.
@@ -45,11 +49,6 @@ class Fault
     /**#@-*/
 
     /**
-     * @var Escaper
-     */
-    private $escaper;
-
-    /**
      * @var string
      */
     protected $_soapFaultCode;
@@ -83,7 +82,7 @@ class Fault
     protected $_details = [];
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
     protected $_request;
 
@@ -93,14 +92,9 @@ class Fault
     protected $_soapServer;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface
+     * @var ResolverInterface
      */
     protected $_localeResolver;
-
-    /**
-     * @var \Magento\Framework\App\State
-     */
-    protected $appState;
 
     /**
      * @var null|string
@@ -113,20 +107,20 @@ class Fault
     protected $message;
 
     /**
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      * @param Server $soapServer
-     * @param \Magento\Framework\Webapi\Exception $exception
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param Exception $exception
+     * @param ResolverInterface $localeResolver
      * @param State $appState
      * @param Escaper|null $escaper
      */
     public function __construct(
-        \Magento\Framework\App\RequestInterface $request,
+        RequestInterface $request,
         Server $soapServer,
-        \Magento\Framework\Webapi\Exception $exception,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        State $appState,
-        Escaper $escaper = null
+        Exception $exception,
+        ResolverInterface $localeResolver,
+        protected readonly State $appState,
+        private ?Escaper $escaper = null
     ) {
         $this->_soapFaultCode = $exception->getOriginator();
         $this->_parameters = $exception->getDetails();
@@ -136,7 +130,6 @@ class Fault
         $this->_request = $request;
         $this->_soapServer = $soapServer;
         $this->_localeResolver = $localeResolver;
-        $this->appState = $appState;
         $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
             Escaper::class
         );
@@ -221,7 +214,7 @@ class Fault
      */
     public function getLanguage()
     {
-        return \Locale::getPrimaryLanguage($this->_localeResolver->getLocale());
+        return Locale::getPrimaryLanguage($this->_localeResolver->getLocale());
     }
 
     /**

@@ -18,26 +18,6 @@ use Magento\Framework\Webapi\Request;
 class OauthUserContext implements UserContextInterface
 {
     /**
-     * @var Request
-     */
-    protected $request;
-
-    /**
-     * @var IntegrationServiceInterface
-     */
-    protected $integrationService;
-
-    /**
-     * @var OauthService
-     */
-    protected $oauthService;
-
-    /**
-     * @var  OauthRequestHelper
-     */
-    protected $oauthHelper;
-
-    /**
      * @var int
      */
     protected $integrationId;
@@ -51,15 +31,11 @@ class OauthUserContext implements UserContextInterface
      * @param OauthRequestHelper $oauthHelper
      */
     public function __construct(
-        Request $request,
-        IntegrationServiceInterface $integrationService,
-        OauthService $oauthService,
-        OauthRequestHelper $oauthHelper
+        protected readonly Request $request,
+        protected readonly IntegrationServiceInterface $integrationService,
+        protected readonly OauthService $oauthService,
+        protected readonly OauthRequestHelper $oauthHelper
     ) {
-        $this->request = $request;
-        $this->integrationService = $integrationService;
-        $this->oauthService = $oauthService;
-        $this->oauthHelper = $oauthHelper;
     }
 
     /**
