@@ -34,41 +34,6 @@ use Magento\Vault\Model\VaultPaymentInterface;
 class TokensConfigProvider
 {
     /**
-     * @var PaymentTokenRepositoryInterface
-     */
-    private $paymentTokenRepository;
-
-    /**
-     * @var FilterBuilder
-     */
-    private $filterBuilder;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var SessionManagerInterface
-     */
-    private $session;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var TokenUiComponentProviderInterface[]
-     */
-    private $tokenUiComponentProviders;
-
-    /**
-     * @var DateTimeFactory
-     */
-    private $dateTimeFactory;
-
-    /**
      * @var Data
      */
     private $paymentDataHelper;
@@ -95,21 +60,14 @@ class TokensConfigProvider
      * @param TokenUiComponentProviderInterface[] $tokenUiComponentProviders
      */
     public function __construct(
-        SessionManagerInterface $session,
-        PaymentTokenRepositoryInterface $paymentTokenRepository,
-        FilterBuilder $filterBuilder,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        StoreManagerInterface $storeManager,
-        DateTimeFactory $dateTimeFactory,
-        array $tokenUiComponentProviders = []
+        private readonly SessionManagerInterface $session,
+        private readonly PaymentTokenRepositoryInterface $paymentTokenRepository,
+        private readonly FilterBuilder $filterBuilder,
+        private readonly SearchCriteriaBuilder $searchCriteriaBuilder,
+        private readonly StoreManagerInterface $storeManager,
+        private readonly DateTimeFactory $dateTimeFactory,
+        private array $tokenUiComponentProviders = []
     ) {
-        $this->paymentTokenRepository = $paymentTokenRepository;
-        $this->filterBuilder = $filterBuilder;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->session = $session;
-        $this->storeManager = $storeManager;
-        $this->tokenUiComponentProviders = $tokenUiComponentProviders;
-        $this->dateTimeFactory = $dateTimeFactory;
     }
 
     /**

@@ -5,6 +5,7 @@
  */
 namespace Magento\Vault\Model\ResourceModel;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Vault\Setup\InstallSchema;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
 
@@ -51,7 +52,7 @@ class PaymentToken extends AbstractDb
      * @param string $paymentMethodCode
      * @param int $customerId Customer ID.
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getByGatewayToken($token, $paymentMethodCode, $customerId = 0)
     {
@@ -75,7 +76,7 @@ class PaymentToken extends AbstractDb
      * @param string $hash Public hash.
      * @param int $customerId Customer ID.
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getByPublicHash($hash, $customerId = 0)
     {

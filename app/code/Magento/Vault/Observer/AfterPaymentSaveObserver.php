@@ -23,25 +23,13 @@ class AfterPaymentSaveObserver implements ObserverInterface
     const PAYMENT_OBJECT_DATA_KEY = 'payment';
 
     /**
-     * @var PaymentTokenManagementInterface
-     */
-    protected $paymentTokenManagement;
-
-    /**
-     * @var EncryptorInterface
-     */
-    protected $encryptor;
-
-    /**
      * @param PaymentTokenManagementInterface $paymentTokenManagement
      * @param EncryptorInterface $encryptor
      */
     public function __construct(
-        PaymentTokenManagementInterface $paymentTokenManagement,
-        EncryptorInterface $encryptor
+        protected readonly PaymentTokenManagementInterface $paymentTokenManagement,
+        protected readonly EncryptorInterface $encryptor
     ) {
-        $this->paymentTokenManagement = $paymentTokenManagement;
-        $this->encryptor = $encryptor;
     }
 
     /**

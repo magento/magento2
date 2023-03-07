@@ -6,9 +6,11 @@
 namespace Magento\Vault\Model\Method;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Store\Model\Store;
 
 class NullPaymentProvider implements MethodInterface
 {
@@ -281,7 +283,7 @@ class NullPaymentProvider implements MethodInterface
      * Retrieve payment information model object
      *
      * @return InfoInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      *
      * @deprecated 100.1.0
      */
@@ -307,7 +309,7 @@ class NullPaymentProvider implements MethodInterface
      * Validate payment method information object
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      *
      */
     public function validate()
@@ -323,7 +325,7 @@ class NullPaymentProvider implements MethodInterface
      * @return $this
      *
      */
-    public function order(\Magento\Payment\Model\InfoInterface $payment, $amount)
+    public function order(InfoInterface $payment, $amount)
     {
         return $this;
     }
@@ -336,7 +338,7 @@ class NullPaymentProvider implements MethodInterface
      * @return $this
      *
      */
-    public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
+    public function authorize(InfoInterface $payment, $amount)
     {
         return $this;
     }
@@ -349,7 +351,7 @@ class NullPaymentProvider implements MethodInterface
      * @return $this
      *
      */
-    public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
+    public function capture(InfoInterface $payment, $amount)
     {
         return $this;
     }
@@ -362,7 +364,7 @@ class NullPaymentProvider implements MethodInterface
      * @return $this
      *
      */
-    public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
+    public function refund(InfoInterface $payment, $amount)
     {
         return $this;
     }
@@ -374,7 +376,7 @@ class NullPaymentProvider implements MethodInterface
      * @return $this
      *
      */
-    public function cancel(\Magento\Payment\Model\InfoInterface $payment)
+    public function cancel(InfoInterface $payment)
     {
         return $this;
     }
@@ -386,7 +388,7 @@ class NullPaymentProvider implements MethodInterface
      * @return $this
      *
      */
-    public function void(\Magento\Payment\Model\InfoInterface $payment)
+    public function void(InfoInterface $payment)
     {
         return $this;
     }
@@ -406,7 +408,7 @@ class NullPaymentProvider implements MethodInterface
      *
      * @param InfoInterface $payment
      * @return false
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      *
      */
     public function acceptPayment(InfoInterface $payment)
@@ -419,7 +421,7 @@ class NullPaymentProvider implements MethodInterface
      *
      * @param InfoInterface $payment
      * @return false
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      *
      */
     public function denyPayment(InfoInterface $payment)
@@ -431,7 +433,7 @@ class NullPaymentProvider implements MethodInterface
      * Retrieve information from payment configuration
      *
      * @param string $field
-     * @param int|string|null|\Magento\Store\Model\Store $storeId
+     * @param int|string|null|Store $storeId
      *
      * @return mixed
      */

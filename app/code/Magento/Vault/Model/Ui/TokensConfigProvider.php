@@ -24,21 +24,6 @@ class TokensConfigProvider implements ConfigProviderInterface
     private static $vaultCode = 'vault';
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var TokenUiComponentProviderInterface[]
-     */
-    private $tokenUiComponentProviders;
-
-    /**
-     * @var CustomerTokenManagement
-     */
-    private $customerTokenManagement;
-
-    /**
      * @var PaymentMethodListInterface
      */
     private $vaultPaymentList;
@@ -51,13 +36,10 @@ class TokensConfigProvider implements ConfigProviderInterface
      * @param TokenUiComponentProviderInterface[] $tokenUiComponentProviders
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        CustomerTokenManagement $customerTokenManagement,
-        array $tokenUiComponentProviders = []
+        private readonly StoreManagerInterface $storeManager,
+        private readonly CustomerTokenManagement $customerTokenManagement,
+        private readonly array $tokenUiComponentProviders = []
     ) {
-        $this->storeManager = $storeManager;
-        $this->tokenUiComponentProviders = $tokenUiComponentProviders;
-        $this->customerTokenManagement = $customerTokenManagement;
     }
 
     /**
