@@ -17,11 +17,9 @@ use Magento\Framework\App\ObjectManager;
  */
 class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
-    const RATING_STATUS_APPROVED = 'Approved';
+    public const RATING_STATUS_APPROVED = 'Approved';
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;

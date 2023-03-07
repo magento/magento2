@@ -24,11 +24,11 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     /**
      * rating entity codes
      */
-    const ENTITY_PRODUCT_CODE = 'product';
+    public const ENTITY_PRODUCT_CODE = 'product';
 
-    const ENTITY_PRODUCT_REVIEW_CODE = 'product_review';
+    public const ENTITY_PRODUCT_REVIEW_CODE = 'product_review';
 
-    const ENTITY_REVIEW_CODE = 'review';
+    public const ENTITY_REVIEW_CODE = 'review';
 
     /**
      * @var \Magento\Review\Model\Rating\OptionFactory

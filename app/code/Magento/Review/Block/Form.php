@@ -20,8 +20,6 @@ use Magento\Review\Model\ResourceModel\Rating\Collection as RatingCollection;
 class Form extends \Magento\Framework\View\Element\Template
 {
     /**
-     * Review data
-     *
      * @var \Magento\Review\Helper\Data
      */
     protected $_reviewData = null;

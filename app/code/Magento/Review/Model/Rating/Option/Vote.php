@@ -15,6 +15,8 @@ namespace Magento\Review\Model\Rating\Option;
 class Vote extends \Magento\Framework\Model\AbstractModel
 {
     /**
+     * Initialise the class
+     *
      * @return void
      */
     protected function _construct()

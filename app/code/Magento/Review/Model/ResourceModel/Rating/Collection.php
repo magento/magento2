@@ -24,7 +24,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_ratingCollectionF;
 
     /**
-     * Add store data flag
      * @var bool
      */
     protected $_addStoreDataFlag = false;

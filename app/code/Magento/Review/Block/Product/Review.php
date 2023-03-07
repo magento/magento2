@@ -17,8 +17,6 @@ use Magento\Framework\View\Element\Template;
 class Review extends Template implements IdentityInterface
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;

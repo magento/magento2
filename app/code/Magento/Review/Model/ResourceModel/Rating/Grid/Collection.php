@@ -11,8 +11,6 @@ namespace Magento\Review\Model\ResourceModel\Rating\Grid;
 class Collection extends \Magento\Review\Model\ResourceModel\Rating\Collection
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
