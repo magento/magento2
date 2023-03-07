@@ -150,8 +150,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     {
         $status = $this->getData('status');
         if ($this->isUseApplicationLock()) {
-            if (
-                $status == \Magento\Framework\Mview\View\StateInterface::STATUS_WORKING &&
+            if ($status == \Magento\Framework\Mview\View\StateInterface::STATUS_WORKING &&
                 !$this->lockManager->isLocked($this->lockPrefix . $this->getViewId())
             ) {
                 return \Magento\Framework\Mview\View\StateInterface::STATUS_IDLE;
