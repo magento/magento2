@@ -10,8 +10,6 @@ use Magento\Framework\Escaper;
 
 /**
  * Form textarea element.
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Textarea extends AbstractElement
 {

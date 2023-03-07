@@ -2,8 +2,6 @@
 /**
  * JavaScript helper
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */

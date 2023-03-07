@@ -6,8 +6,6 @@
 
 /**
  * Form Input/Output Escape HTML entities Filter
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Data\Form\Filter;
 

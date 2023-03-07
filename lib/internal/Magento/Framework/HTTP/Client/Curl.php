@@ -11,7 +11,6 @@ namespace Magento\Framework\HTTP\Client;
 /**
  * Class to work with HTTP protocol using curl library
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @api
  */

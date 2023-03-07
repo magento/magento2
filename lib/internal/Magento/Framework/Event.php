@@ -6,8 +6,6 @@
 
 /**
  * Event object and dispatcher
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework;
 

@@ -6,8 +6,6 @@
 
 /**
  * Csv parse
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\File;
 

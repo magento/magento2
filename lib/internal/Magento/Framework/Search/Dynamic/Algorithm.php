@@ -8,7 +8,6 @@ namespace Magento\Framework\Search\Dynamic;
 /**
  * Algorithm for layer value filter
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */

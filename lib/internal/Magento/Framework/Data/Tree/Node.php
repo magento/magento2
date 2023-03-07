@@ -12,7 +12,6 @@ use Magento\Framework\Data\Tree\Node\Collection;
  * Data tree node
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Node extends \Magento\Framework\DataObject
