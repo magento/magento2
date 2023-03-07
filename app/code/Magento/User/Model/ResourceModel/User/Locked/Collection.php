@@ -20,5 +20,7 @@ class Collection extends \Magento\User\Model\ResourceModel\User\Collection
     {
         parent::_initSelect();
         $this->addFieldToFilter('lock_expires', ['notnull' => true]);
+
+        return $this;
     }
 }

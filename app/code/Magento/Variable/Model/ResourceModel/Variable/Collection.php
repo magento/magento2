@@ -11,8 +11,6 @@ namespace Magento\Variable\Model\ResourceModel\Variable;
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
-     * Store Id
-     *
      * @var int
      */
     protected $_storeId = 0;

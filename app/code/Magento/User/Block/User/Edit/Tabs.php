@@ -27,6 +27,8 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     }
 
     /**
+     * Add tabs to the HTML
+     *
      * @return $this
      */
     protected function _beforeToHtml()
