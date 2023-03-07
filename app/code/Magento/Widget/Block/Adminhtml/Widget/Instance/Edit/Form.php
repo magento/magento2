@@ -6,8 +6,6 @@
 
 /**
  * Widget Instance edit form
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit;
 

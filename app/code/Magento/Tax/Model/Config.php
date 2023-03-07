@@ -6,8 +6,6 @@
 
 /**
  * Configuration paths storage
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Model;
 

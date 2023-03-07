@@ -6,8 +6,6 @@
 
 /**
  * Tax rule controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Controller\Adminhtml;
 

@@ -6,8 +6,6 @@
 
 /**
  * Admin product tax class add form
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 declare(strict_types=1);
 

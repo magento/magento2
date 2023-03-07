@@ -6,8 +6,6 @@
 
 /**
  * Admin tax rule content block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Block\Adminhtml;
 

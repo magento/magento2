@@ -8,8 +8,6 @@
  * Tax Rate Title Model
  *
  * @method int getTaxCalculationRateId()
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Model\Calculation\Rate;
 

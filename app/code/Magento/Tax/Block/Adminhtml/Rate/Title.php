@@ -10,8 +10,6 @@ use Magento\Tax\Controller\RegistryConstants;
 
 /**
  * Tax Rate Titles Renderer
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 class Title extends \Magento\Framework\View\Element\Template
 {

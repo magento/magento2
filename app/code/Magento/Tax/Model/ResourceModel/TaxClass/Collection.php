@@ -6,8 +6,6 @@
 
 /**
  * Tax class collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Model\ResourceModel\TaxClass;
 

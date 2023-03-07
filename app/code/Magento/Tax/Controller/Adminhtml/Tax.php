@@ -10,8 +10,6 @@ use Magento\Framework\Exception\InputException;
 
 /**
  * Adminhtml common tax class controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class Tax extends \Magento\Backend\App\Action
 {

@@ -6,8 +6,6 @@
 
 /**
  * Price display type source model
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Model\System\Config\Source\Tax\Display;
 

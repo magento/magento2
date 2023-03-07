@@ -7,8 +7,6 @@ namespace Magento\Tax\Model\ResourceModel;
 
 /**
  * Tax class resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class TaxClass extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
