@@ -9,8 +9,6 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Backend model for shipping table rates CSV importing
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Tablerate extends \Magento\Framework\App\Config\Value
 {

@@ -6,8 +6,6 @@
 
 /**
  * Free shipping model
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\OfflineShipping\Model\Carrier;
 

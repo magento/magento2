@@ -7,8 +7,6 @@ namespace Magento\Paypal\Block\Hosted\Pro;
 
 /**
  * Hosted Pro iframe block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Iframe extends \Magento\Paypal\Block\Iframe
 {

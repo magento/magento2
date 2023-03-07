@@ -7,8 +7,6 @@ namespace Magento\Paypal\Model\Payflow;
 
 /**
  * Payflow Link request model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Request extends \Magento\Framework\DataObject
 {
