@@ -19,7 +19,7 @@ use \Magento\Framework\Serialize\Serializer\Json;
  */
 class Edit extends \Magento\Backend\Block\Widget
 {
-    const DEFAULT_SECTION_BLOCK = \Magento\Config\Block\System\Config\Form::class;
+    public const DEFAULT_SECTION_BLOCK = \Magento\Config\Block\System\Config\Form::class;
 
     /**
      * Form block class name
@@ -118,6 +118,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return search parameters in JSON format
+     *
      * @return string
      * @since 101.1.0
      */

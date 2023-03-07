@@ -19,8 +19,6 @@ namespace Magento\Config\Block\System\Config;
 class Tabs extends \Magento\Backend\Block\Widget
 {
     /**
-     * Tabs
-     *
      * @var \Magento\Config\Model\Config\Structure\Element\Iterator
      */
     protected $_tabs;

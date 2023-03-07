@@ -16,6 +16,8 @@ namespace Magento\Config\Model\Config\Backend;
 class Datashare extends \Magento\Framework\App\Config\Value
 {
     /**
+     * Do nothing after save
+     *
      * @return $this
      */
     public function afterSave()
