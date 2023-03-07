@@ -6,8 +6,6 @@
 
 /**
  * Catalog product abstract price backend attribute model with customer group specific
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\GroupPrice;
 

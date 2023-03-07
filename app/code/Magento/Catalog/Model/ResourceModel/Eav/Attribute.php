@@ -24,7 +24,6 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * @method bool getIsUsedForPriceRules()
  * @method int setIsUsedForPriceRules(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

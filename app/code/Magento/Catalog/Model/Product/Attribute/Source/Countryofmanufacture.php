@@ -6,8 +6,6 @@
 
 /**
  * Catalog product country attribute source
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
 

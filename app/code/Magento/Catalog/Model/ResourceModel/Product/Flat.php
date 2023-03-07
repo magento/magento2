@@ -10,8 +10,6 @@ use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderIn
 
 /**
  * Catalog Product Flat resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements DefaultAttributesProvider
 {

@@ -10,8 +10,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Product image attribute backend
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Image extends AbstractBackend
 {

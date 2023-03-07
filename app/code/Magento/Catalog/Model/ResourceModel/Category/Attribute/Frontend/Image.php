@@ -7,8 +7,6 @@ namespace Magento\Catalog\Model\ResourceModel\Category\Attribute\Frontend;
 
 /**
  * Category image attribute frontend
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
 {

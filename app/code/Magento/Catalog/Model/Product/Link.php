@@ -19,7 +19,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection as Produ
  * @method int getLinkTypeId()
  * @method \Magento\Catalog\Model\Product\Link setLinkTypeId(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */

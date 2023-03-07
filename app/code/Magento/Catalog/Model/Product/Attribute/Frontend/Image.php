@@ -6,8 +6,6 @@
 
 /**
  * Product image attribute frontend
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 
 namespace Magento\Catalog\Model\Product\Attribute\Frontend;

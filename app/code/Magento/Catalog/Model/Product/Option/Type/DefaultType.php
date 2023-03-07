@@ -18,7 +18,6 @@ use Magento\Catalog\Model\Product\Option\Value;
  * Catalog product option default type
  *
  * @api
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2

@@ -7,8 +7,6 @@ namespace Magento\Catalog\Model\ResourceModel\Category\Attribute;
 
 /**
  * Catalog category EAV additional attribute resource collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
 {

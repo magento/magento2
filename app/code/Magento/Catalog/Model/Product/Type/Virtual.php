@@ -6,8 +6,6 @@
 
 /**
  * Virtual product type implementation
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Product\Type;
 
