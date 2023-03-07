@@ -8,35 +8,33 @@ namespace Magento\Weee\Pricing\Render;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\Template;
+use Magento\Store\Model\Store;
+use Magento\Tax\Helper\Data as TaxHelper;
+use Magento\Tax\Pricing\Render\Adjustment as PricingRenderAdjustment;
+use Magento\Weee\Helper\Data as WeeeHelper;
 use Magento\Weee\Model\Tax;
+use Magento\Weee\Pricing\Adjustment as PricingAdjustment;
+use Magento\Weee\Pricing\TaxAdjustment as PricingTaxAdjestment;
 
 /**
  * Weee Price Adjustment that overrides part of the Tax module's Adjustment
  */
-class TaxAdjustment extends \Magento\Tax\Pricing\Render\Adjustment
+class TaxAdjustment extends PricingRenderAdjustment
 {
-    /**
-     * Weee helper
-     *
-     * @var \Magento\Weee\Helper\Data
-     */
-    protected $weeeHelper;
-
     /**
      * @param Template\Context $context
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Tax\Helper\Data $helper
-     * @param \Magento\Weee\Helper\Data $weeeHelper
+     * @param TaxHelper $helper
+     * @param WeeeHelper $weeeHelper
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Tax\Helper\Data $helper,
-        \Magento\Weee\Helper\Data $weeeHelper,
+        TaxHelper $helper,
+        protected WeeeHelper $weeeHelper,
         array $data = []
     ) {
-        $this->weeeHelper = $weeeHelper;
         parent::__construct($context, $priceCurrency, $helper, $data);
     }
 
@@ -48,11 +46,11 @@ class TaxAdjustment extends \Magento\Tax\Pricing\Render\Adjustment
     public function getDefaultExclusions()
     {
         $exclusions = parent::getDefaultExclusions();
-        $exclusions[] = \Magento\Weee\Pricing\TaxAdjustment::ADJUSTMENT_CODE;
+        $exclusions[] = PricingTaxAdjestment::ADJUSTMENT_CODE;
 
         // Determine if the Weee amount should be excluded from the price
         if ($this->typeOfDisplay([Tax::DISPLAY_EXCL_DESCR_INCL, Tax::DISPLAY_EXCL])) {
-            $exclusions[] = \Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE;
+            $exclusions[] = PricingAdjustment::ADJUSTMENT_CODE;
         }
 
         return $exclusions;
@@ -62,7 +60,7 @@ class TaxAdjustment extends \Magento\Tax\Pricing\Render\Adjustment
      * Returns display type for price accordingly to current zone
      *
      * @param int|int[]|null $compareTo
-     * @param \Magento\Store\Model\Store|null $store
+     * @param Store|null $store
      * @return bool|int
      */
     protected function typeOfDisplay($compareTo = null, $store = null)

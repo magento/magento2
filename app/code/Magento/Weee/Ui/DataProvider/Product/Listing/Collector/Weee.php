@@ -7,6 +7,7 @@
 namespace Magento\Weee\Ui\DataProvider\Product\Listing\Collector;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
 use Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorInterface;
@@ -29,49 +30,19 @@ class Weee implements ProductRenderCollectorInterface
     const KEY_ADJUSTMENT = "weee_adjustment";
 
     /**
-     * @var Data
-     */
-    private $weeeHelper;
-
-    /**
-     * @var PriceCurrencyInterface
-     */
-    private $priceCurrency;
-
-    /**
-     * @var WeeeAdjustmentAttributeInterfaceFactory
-     */
-    private $weeeAdjustmentAttributeFactory;
-
-    /**
-     * @var FormattedPriceInfoBuilder
-     */
-    private $formattedPriceInfoBuilder;
-
-    /**
-     * @var \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterfaceFactory
-     */
-    private $priceInfoExtensionFactory;
-
-    /**
      * @param Data $weeeHelper
      * @param PriceCurrencyInterface $priceCurrency
      * @param WeeeAdjustmentAttributeInterfaceFactory $weeeAdjustmentAttributeFactory
-     * @param \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterfaceFactory $priceInfoExtensionFactory
+     * @param PriceInfoExtensionInterfaceFactory $priceInfoExtensionFactory
      * @param FormattedPriceInfoBuilder $formattedPriceInfoBuilder
      */
     public function __construct(
-        Data $weeeHelper,
-        PriceCurrencyInterface $priceCurrency,
-        WeeeAdjustmentAttributeInterfaceFactory $weeeAdjustmentAttributeFactory,
-        \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterfaceFactory $priceInfoExtensionFactory,
-        FormattedPriceInfoBuilder $formattedPriceInfoBuilder
+        private Data $weeeHelper,
+        private PriceCurrencyInterface $priceCurrency,
+        private WeeeAdjustmentAttributeInterfaceFactory $weeeAdjustmentAttributeFactory,
+        private PriceInfoExtensionInterfaceFactory $priceInfoExtensionFactory,
+        private FormattedPriceInfoBuilder $formattedPriceInfoBuilder
     ) {
-        $this->weeeHelper = $weeeHelper;
-        $this->priceCurrency = $priceCurrency;
-        $this->weeeAdjustmentAttributeFactory = $weeeAdjustmentAttributeFactory;
-        $this->formattedPriceInfoBuilder = $formattedPriceInfoBuilder;
-        $this->priceInfoExtensionFactory = $priceInfoExtensionFactory;
     }
 
     /**

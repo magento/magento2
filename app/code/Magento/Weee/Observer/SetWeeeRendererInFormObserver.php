@@ -5,48 +5,41 @@
  */
 namespace Magento\Weee\Observer;
 
+use Magento\Framework\Data\Form;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Weee\Block\Renderer\Weee\Tax as RendererWeeeTax;
+use Magento\Weee\Model\Tax;
 
 class SetWeeeRendererInFormObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Weee\Model\Tax
-     */
-    protected $weeeTax;
-
-    /**
-     * @var \Magento\Framework\View\LayoutInterface
-     */
-    protected $layout;
-
-    /**
-     * @param \Magento\Framework\View\LayoutInterface $layout
-     * @param \Magento\Weee\Model\Tax $weeeTax
+     * @param LayoutInterface $layout
+     * @param Tax $weeeTax
      */
     public function __construct(
-        \Magento\Framework\View\LayoutInterface $layout,
-        \Magento\Weee\Model\Tax $weeeTax
+        protected LayoutInterface $layout,
+        protected Tax $weeeTax
     ) {
-        $this->layout = $layout;
-        $this->weeeTax = $weeeTax;
     }
 
     /**
      * Assign custom renderer for product create/edit form weee attribute element
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return $this
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var Form $form */
         $form = $observer->getEvent()->getForm();
 
         $attributes = $this->weeeTax->getWeeeAttributeCodes(true);
         foreach ($attributes as $code) {
             $weeeTax = $form->getElement($code);
             if ($weeeTax) {
-                $weeeTax->setRenderer($this->layout->createBlock(\Magento\Weee\Block\Renderer\Weee\Tax::class));
+                $weeeTax->setRenderer($this->layout->createBlock(RendererWeeeTax::class));
             }
         }
 

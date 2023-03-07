@@ -5,10 +5,14 @@
  */
 namespace Magento\Weee\Block\Adminhtml\Items\Price;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn;
 use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
 use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\Item;
 use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
+use Magento\Tax\Block\Adminhtml\Items\Price\Renderer as ItemsPriceRenderer;
+use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Weee\Block\Item\Price\Renderer as ItemPriceRenderer;
 
 /**
@@ -17,24 +21,24 @@ use Magento\Weee\Block\Item\Price\Renderer as ItemPriceRenderer;
  * @api
  * @since 100.0.2
  */
-class Renderer extends \Magento\Tax\Block\Adminhtml\Items\Price\Renderer
+class Renderer extends ItemsPriceRenderer
 {
     /**
-     * @var \Magento\Weee\Block\Item\Price\Renderer
+     * @var ItemPriceRenderer
      */
     protected $itemPriceRenderer;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn $defaultColumnRenderer
-     * @param \Magento\Tax\Helper\Data $taxHelper
+     * @param Context $context
+     * @param DefaultColumn $defaultColumnRenderer
+     * @param TaxHelper $taxHelper
      * @param ItemPriceRenderer $itemPriceRenderer
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn $defaultColumnRenderer,
-        \Magento\Tax\Helper\Data $taxHelper,
+        Context $context,
+        DefaultColumn $defaultColumnRenderer,
+        TaxHelper $taxHelper,
         ItemPriceRenderer $itemPriceRenderer,
         array $data = []
     ) {

@@ -6,13 +6,21 @@
 
 namespace Magento\Weee\Block\Renderer\Weee;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget;
+use Magento\Backend\Block\Widget\Button;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Directory\Model\Config\Source\Country;
+use Magento\Directory\Model\Currency;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Registry;
 
 /**
  * Adminhtml weee tax item renderer
  */
-class Tax extends \Magento\Backend\Block\Widget implements
-    \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Tax extends Widget implements RendererInterface
 {
     /**
      * @var AbstractElement|null
@@ -37,32 +45,32 @@ class Tax extends \Magento\Backend\Block\Widget implements
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Directory\Model\Config\Source\Country
+     * @var Country
      */
     protected $_sourceCountry;
 
     /**
-     * @var \Magento\Directory\Helper\Data
+     * @var DirectoryHelper
      */
     protected $_directoryHelper;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Directory\Model\Config\Source\Country $sourceCountry
-     * @param \Magento\Directory\Helper\Data $directoryHelper
-     * @param \Magento\Framework\Registry $registry
+     * @param Context $context
+     * @param Country $sourceCountry
+     * @param DirectoryHelper $directoryHelper
+     * @param Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Directory\Model\Config\Source\Country $sourceCountry,
-        \Magento\Directory\Helper\Data $directoryHelper,
-        \Magento\Framework\Registry $registry,
+        Context        $context,
+        Country $sourceCountry,
+        DirectoryHelper $directoryHelper,
+        Registry $registry,
         array $data = []
     ) {
         $this->_sourceCountry = $sourceCountry;
@@ -72,7 +80,7 @@ class Tax extends \Magento\Backend\Block\Widget implements
     }
 
     /**
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     public function getProduct()
     {
@@ -96,12 +104,12 @@ class Tax extends \Magento\Backend\Block\Widget implements
     {
         $this->addChild(
             'add_button',
-            \Magento\Backend\Block\Widget\Button::class,
+            Button::class,
             ['label' => __('Add Tax'), 'data_attribute' => ['action' => 'add-fpt-item'], 'class' => 'add']
         );
         $this->addChild(
             'delete_button',
-            \Magento\Backend\Block\Widget\Button::class,
+            Button::class,
             [
                 'label' => __('Delete Tax'),
                 'data_attribute' => ['action' => 'delete-fpt-item'],
@@ -207,7 +215,7 @@ class Tax extends \Magento\Backend\Block\Widget implements
                 $website = $this->_storeManager->getStore($storeId)->getWebsite();
                 $websites[$website->getId()] = [
                     'name' => $website->getName(),
-                    'currency' => $website->getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE),
+                    'currency' => $website->getConfig(Currency::XML_PATH_CURRENCY_BASE),
                 ];
             } else {
                 foreach ($this->_storeManager->getWebsites() as $website) {
@@ -216,7 +224,7 @@ class Tax extends \Magento\Backend\Block\Widget implements
                     }
                     $websites[$website->getId()] = [
                         'name' => $website->getName(),
-                        'currency' => $website->getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE),
+                        'currency' => $website->getConfig(Currency::XML_PATH_CURRENCY_BASE),
                     ];
                 }
             }

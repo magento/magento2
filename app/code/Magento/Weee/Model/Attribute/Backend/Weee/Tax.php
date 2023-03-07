@@ -7,49 +7,58 @@ declare(strict_types=1);
 
 namespace Magento\Weee\Model\Attribute\Backend\Weee;
 
+use Magento\Catalog\Helper\Data as CatalogHelper;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Backend\Price;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Directory\Model\CurrencyFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
+use Magento\Framework\Locale\FormatInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax as ResourceWeeeTax;
 
 /**
  * Class with fixed product taxes.
  */
-class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
+class Tax extends Price
 {
     /**
-     * @var \Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax
+     * @var ResourceWeeeTax
      */
     protected $_attributeTax;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Directory\Helper\Data
+     * @var DirectoryHelper
      */
     protected $_directoryHelper;
 
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
-     * @param \Magento\Directory\Helper\Data $directoryHelper
-     * @param \Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax $attributeTax
+     * @param CurrencyFactory $currencyFactory
+     * @param StoreManagerInterface $storeManager
+     * @param CatalogHelper $catalogData
+     * @param ScopeConfigInterface $config
+     * @param FormatInterface $localeFormat
+     * @param DirectoryHelper $directoryHelper
+     * @param ResourceWeeeTax $attributeTax
      * @param ScopeOverriddenValue|null $scopeOverriddenValue
      */
     public function __construct(
-        \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Framework\Locale\FormatInterface $localeFormat,
-        \Magento\Directory\Helper\Data $directoryHelper,
-        \Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax $attributeTax,
+        CurrencyFactory $currencyFactory,
+        StoreManagerInterface $storeManager,
+        CatalogHelper $catalogData,
+        ScopeConfigInterface $config,
+        FormatInterface $localeFormat,
+        DirectoryHelper $directoryHelper,
+        ResourceWeeeTax $attributeTax,
         ScopeOverriddenValue $scopeOverriddenValue = null
     ) {
         $this->_directoryHelper = $directoryHelper;
@@ -74,15 +83,15 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
     public static function getBackendModelName()
     {
         // phpcs:enable Magento2.Functions.StaticFunction
-        return \Magento\Weee\Model\Attribute\Backend\Weee\Tax::class;
+        return Tax::class;
     }
 
     /**
      * Validate data
      *
-     * @param   \Magento\Catalog\Model\Product $object
-     * @return  $this
-     * @throws  \Magento\Framework\Exception\LocalizedException
+     * @param Product $object
+     * @return $this
+     * @throws LocalizedException
      */
     public function validate($object)
     {
@@ -113,8 +122,8 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
     /**
      * Assign WEEE taxes to product data
      *
-     * @param   \Magento\Catalog\Model\Product $object
-     * @return  $this
+     * @param Product $object
+     * @return $this
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function afterLoad($object)

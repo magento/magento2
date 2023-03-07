@@ -6,9 +6,13 @@
 namespace Magento\Weee\Block\Item\Price;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Sales\Model\Order\CreditMemo\Item as CreditMemoItem;
 use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\Item as OrderItem;
+use Magento\Tax\Block\Item\Price\Renderer as ItemPriceRenderer;
+use Magento\Tax\Helper\Data as TaxHelper;
+use Magento\Weee\Helper\Data as WeeeHelper;
 use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 
 /**
@@ -18,28 +22,22 @@ use Magento\Weee\Model\Tax as WeeeDisplayConfig;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
-class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
+class Renderer extends ItemPriceRenderer
 {
     /**
-     * @var \Magento\Weee\Helper\Data
-     */
-    protected $weeeHelper;
-
-    /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Tax\Helper\Data $taxHelper
+     * @param Context $context
+     * @param TaxHelper $taxHelper
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Weee\Helper\Data $weeeHelper
+     * @param WeeeHelper $weeeHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Tax\Helper\Data $taxHelper,
+        Context $context,
+        TaxHelper $taxHelper,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Weee\Helper\Data $weeeHelper,
+        protected WeeeHelper $weeeHelper,
         array $data = []
     ) {
-        $this->weeeHelper = $weeeHelper;
         $data['weeeHelper'] = $this->weeeHelper;
         parent::__construct($context, $taxHelper, $priceCurrency, $data);
         $this->_isScopePrivate = true;

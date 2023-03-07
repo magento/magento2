@@ -6,7 +6,10 @@
 
 namespace Magento\Weee\Plugin\Ui\DataProvider;
 
+use Magento\Catalog\Ui\DataProvider\Product\Listing\DataProvider;
+use Magento\Checkout\CustomerData\Cart;
 use Magento\Framework\App\Config;
+use Magento\Weee\Model\Config as WeeeConfig;
 
 /**
  * Provide param on front, which says the current set of weee settings
@@ -14,31 +17,26 @@ use Magento\Framework\App\Config;
 class WeeeSettings
 {
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * WeeeSettings constructor.
      * @param Config $config
      */
-    public function __construct(Config $config)
-    {
-        $this->config = $config;
+    public function __construct(
+        private Config $config
+    ) {
     }
 
     /**
      * Add weee data to result
      *
-     * @param \Magento\Checkout\CustomerData\Cart $subject
+     * @param Cart $subject
      * @param array $result
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetData(\Magento\Catalog\Ui\DataProvider\Product\Listing\DataProvider $subject, $result)
+    public function afterGetData(DataProvider $subject, $result)
     {
         $result['displayWeee'] = $this->config
-            ->getValue(\Magento\Weee\Model\Config::XML_PATH_FPT_DISPLAY_PRODUCT_LIST);
+            ->getValue(WeeeConfig::XML_PATH_FPT_DISPLAY_PRODUCT_LIST);
 
         return $result;
     }

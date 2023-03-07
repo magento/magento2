@@ -6,6 +6,7 @@
 
 namespace Magento\Weee\Setup\Patch\Data;
 
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Quote\Setup\QuoteSetup;
 use Magento\Quote\Setup\QuoteSetupFactory;
 use Magento\Sales\Setup\SalesSetup;
@@ -20,34 +21,16 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 class InitQuoteAndOrderAttributes implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
-     * @var QuoteSetupFactory
-     */
-    private $quoteSetupFactory;
-
-    /**
-     * @var SalesSetupFactory
-     */
-    private $salesSetupFactory;
-
-    /**
      * InitQuoteAndOrderAttributes constructor.
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param QuoteSetupFactory $quoteSetupFactory
      * @param SalesSetupFactory $salesSetupFactory
      */
     public function __construct(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
-        QuoteSetupFactory $quoteSetupFactory,
-        SalesSetupFactory $salesSetupFactory
+        private ModuleDataSetupInterface $moduleDataSetup,
+        private QuoteSetupFactory $quoteSetupFactory,
+        private SalesSetupFactory $salesSetupFactory
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
-        $this->quoteSetupFactory = $quoteSetupFactory;
-        $this->salesSetupFactory = $salesSetupFactory;
     }
 
     /**

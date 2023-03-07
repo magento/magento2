@@ -6,18 +6,30 @@
 namespace Magento\Weee\Model;
 
 use Magento\Catalog\Model\Product;
+use Magento\Customer\Model\Session;
+use Magento\Eav\Model\Entity\AttributeFactory;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\DataObject;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Registry;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
+use Magento\Tax\Helper\Data;
 use Magento\Tax\Model\Calculation;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Catalog\Model\Product\Type;
+use Magento\Tax\Model\CalculationFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
  */
-class Tax extends \Magento\Framework\Model\AbstractModel
+class Tax extends AbstractModel
 {
     /**
      * Including FPT only
@@ -47,86 +59,66 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     /**
      * Tax data
      *
-     * @var \Magento\Tax\Helper\Data
+     * @var Data
      */
     protected $_taxData = null;
 
     /**
-     * @var \Magento\Eav\Model\Entity\AttributeFactory
+     * @var AttributeFactory
      */
     protected $_attributeFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Tax\Model\CalculationFactory
+     * @var CalculationFactory
      */
     protected $_calculationFactory;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     protected $_customerSession;
 
     /**
-     * Weee config
-     *
-     * @var \Magento\Weee\Model\Config
-     */
-    protected $weeeConfig;
-
-    /**
-     * @var PriceCurrencyInterface
-     */
-    protected $priceCurrency;
-
-    /**
-     * @var AccountManagementInterface
-     */
-    protected $accountManagement;
-
-    /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Tax\Model\CalculationFactory $calculationFactory
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param Context $context
+     * @param Registry $registry
+     * @param AttributeFactory $attributeFactory
+     * @param StoreManagerInterface $storeManager
+     * @param CalculationFactory $calculationFactory
+     * @param Session $customerSession
      * @param AccountManagementInterface $accountManagement
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Weee\Model\ResourceModel\Tax $resource
+     * @param Data $taxData
+     * @param ResourceModel\Tax $resource
      * @param Config $weeeConfig
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Tax\Model\CalculationFactory $calculationFactory,
-        \Magento\Customer\Model\Session $customerSession,
-        AccountManagementInterface $accountManagement,
-        \Magento\Tax\Helper\Data $taxData,
-        \Magento\Weee\Model\ResourceModel\Tax $resource,
-        \Magento\Weee\Model\Config $weeeConfig,
-        PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        AttributeFactory $attributeFactory,
+        StoreManagerInterface $storeManager,
+        CalculationFactory $calculationFactory,
+        Session $customerSession,
+        protected AccountManagementInterface $accountManagement,
+        Data $taxData,
+        ResourceModel\Tax $resource,
+        protected Config $weeeConfig,
+        protected PriceCurrencyInterface $priceCurrency,
+        AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_attributeFactory = $attributeFactory;
         $this->_storeManager = $storeManager;
         $this->_calculationFactory = $calculationFactory;
         $this->_customerSession = $customerSession;
-        $this->accountManagement = $accountManagement;
         $this->_taxData = $taxData;
-        $this->weeeConfig = $weeeConfig;
-        $this->priceCurrency = $priceCurrency;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -137,13 +129,13 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Weee\Model\ResourceModel\Tax::class);
+        $this->_init(ResourceModel\Tax::class);
     }
 
     /**
      * @param Product $product
-     * @param null|false|\Magento\Framework\DataObject $shipping
-     * @param null|false|\Magento\Framework\DataObject $billing
+     * @param null|false|DataObject $shipping
+     * @param null|false|DataObject $billing
      * @param Website $website
      * @param bool $calculateTax
      * @return float
@@ -171,8 +163,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @param Product $product
-     * @param null|false|\Magento\Framework\DataObject $shipping
-     * @param null|false|\Magento\Framework\DataObject $billing
+     * @param null|false|DataObject $shipping
+     * @param null|false|DataObject $billing
      * @param Website $website
      * @return float
      */
@@ -211,8 +203,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve Wee tax attribute codes
      *
-     * @param  null|string|bool|int|Store $store
-     * @param  bool $forceEnabled
+     * @param null|string|bool|int|Store $store
+     * @param bool $forceEnabled
      * @return array
      */
     public function getWeeeTaxAttributeCodes($store = null, $forceEnabled = false)
@@ -229,12 +221,12 @@ class Tax extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @param Product $product
-     * @param null|false|\Magento\Quote\Model\Quote\Address $shipping
-     * @param null|false|\Magento\Quote\Model\Quote\Address $billing
+     * @param null|false|Address $shipping
+     * @param null|false|Address $billing
      * @param Website $website
      * @param bool $calculateTax
      * @param bool $round
-     * @return \Magento\Framework\DataObject[]
+     * @return DataObject[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -249,7 +241,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     ) {
         $result = [];
         $websiteId = null;
-        /** @var \Magento\Store\Model\Store $store */
+        /** @var Store $store */
         $store = null;
         if (!$website) {
             $store = $product->getStore();
@@ -268,7 +260,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
             return $result;
         }
 
-        /** @var \Magento\Tax\Model\Calculation $calculator */
+        /** @var Calculation $calculator */
         $calculator = $this->_calculationFactory->create();
 
         $customerId = $this->_customerSession->getCustomerId();
@@ -284,10 +276,10 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                 $shippingAddressArray = $this->_customerSession->getDefaultTaxShippingAddress();
                 $billingAddressArray = $this->_customerSession->getDefaultTaxBillingAddress();
                 if (!empty($billingAddressArray)) {
-                    $billing = new \Magento\Framework\DataObject($billingAddressArray);
+                    $billing = new DataObject($billingAddressArray);
                 }
                 if (!empty($shippingAddressArray)) {
-                    $shipping = new \Magento\Framework\DataObject($shippingAddressArray);
+                    $shipping = new DataObject($shippingAddressArray);
                 }
                 $customerTaxClass = $this->_customerSession->getCustomerTaxClassId();
             }
@@ -317,7 +309,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                 $amount = $value;
                 $amountExclTax = $value;
                 if ($calculateTax && $this->weeeConfig->isTaxable($store)) {
-                    /** @var \Magento\Tax\Model\Calculation $calculator */
+                    /** @var Calculation $calculator */
                     $defaultPercent = $calculator->getRate(
                         $defaultRateRequest->setProductClassId($product->getTaxClassId())
                     );
@@ -358,7 +350,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                     }
                 }
 
-                $one = new \Magento\Framework\DataObject();
+                $one = new DataObject();
                 $one->setName(
                     $attribute['label_value'] ? __($attribute['label_value']) : __($attribute['frontend_label'])
                 )

@@ -29,31 +29,6 @@ class Weee extends AbstractModifier
     const FORM_ELEMENT_WEEE = 'weee';
 
     /**
-     * @var LocatorInterface
-     */
-    protected $locator;
-
-    /**
-     * @var SourceCountry
-     */
-    protected $sourceCountry;
-
-    /**
-     * @var DirectoryHelper
-     */
-    protected $directoryHelper;
-
-    /**
-     * @var EavAttributeFactory
-     */
-    protected $eavAttributeFactory;
-
-    /**
-     * @var WebsiteManager
-     */
-    protected $websiteManager;
-
-    /**
      * @var array
      */
     private $countries;
@@ -71,17 +46,12 @@ class Weee extends AbstractModifier
      * @param WebsiteManager $websiteManager
      */
     public function __construct(
-        LocatorInterface $locator,
-        SourceCountry $sourceCountry,
-        DirectoryHelper $directoryHelper,
-        EavAttributeFactory $eavAttributeFactory,
-        WebsiteManager $websiteManager
+        protected LocatorInterface $locator,
+        protected SourceCountry $sourceCountry,
+        protected DirectoryHelper $directoryHelper,
+        protected EavAttributeFactory $eavAttributeFactory,
+        protected WebsiteManager $websiteManager
     ) {
-        $this->locator = $locator;
-        $this->sourceCountry = $sourceCountry;
-        $this->directoryHelper = $directoryHelper;
-        $this->eavAttributeFactory = $eavAttributeFactory;
-        $this->websiteManager = $websiteManager;
     }
 
     /**

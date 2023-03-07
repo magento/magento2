@@ -5,57 +5,41 @@
  */
 namespace Magento\Weee\Observer;
 
+use Exception;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Registry;
+use Magento\Tax\Helper\Data as TaxHelper;
+use Magento\Weee\Helper\Data as WeeeHelper;
 
 class GetPriceConfigurationObserver implements ObserverInterface
 {
     /**
-     * Tax data
-     *
-     * @var \Magento\Tax\Helper\Data
-     */
-    protected $taxData;
-
-    /**
-     * Weee data
-     *
-     * @var \Magento\Weee\Helper\Data
-     */
-    protected $weeeData;
-
-    /**
-     * @var \Magento\Framework\Registry
-     */
-    protected $registry;
-
-    /**
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Weee\Helper\Data $weeeData
-     * @param \Magento\Tax\Helper\Data $taxData
+     * @param Registry $registry
+     * @param WeeeHelper $weeeData
+     * @param TaxHelper $taxData
      */
     public function __construct(
-        \Magento\Framework\Registry $registry,
-        \Magento\Weee\Helper\Data $weeeData,
-        \Magento\Tax\Helper\Data $taxData
+        protected Registry $registry,
+        protected WeeeHelper $weeeData,
+        protected TaxHelper $taxData
     ) {
-        $this->registry = $registry;
-        $this->taxData = $taxData;
-        $this->weeeData = $weeeData;
     }
 
     /**
      * Modify the options config for the front end to resemble the weee final price
      *
-     * @param   \Magento\Framework\Event\Observer $observer
-     * @return  $this
+     * @param Observer $observer
+     * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         if ($this->weeeData->isEnabled()) {
             $priceConfigObj = $observer->getData('configObj');
             try {
-                /** @var \Magento\Catalog\Model\Product $product */
+                /** @var Product $product */
                 $product = $this->registry->registry('current_product');
                 $weeeAttributesForBundle = $this->weeeData->getWeeeAttributesForBundle($product);
                 $priceConfig = $this->recurConfigAndInsertWeeePrice(
@@ -65,7 +49,7 @@ class GetPriceConfigurationObserver implements ObserverInterface
                     $weeeAttributesForBundle
                 );
                 $priceConfigObj->setConfig($priceConfig);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return $this;
             }
         }
@@ -75,10 +59,10 @@ class GetPriceConfigurationObserver implements ObserverInterface
     /**
      * Recurse through the config array and insert the weee price
      *
-     * @param  array $input
-     * @param  string $searchKey
-     * @param  string $calcPrice
-     * @param  array $weeeAttributesForBundle
+     * @param array $input
+     * @param string $searchKey
+     * @param string $calcPrice
+     * @param array $weeeAttributesForBundle
      * @return array
      */
     private function recurConfigAndInsertWeeePrice($input, $searchKey, $calcPrice, $weeeAttributesForBundle = null)
@@ -112,9 +96,9 @@ class GetPriceConfigurationObserver implements ObserverInterface
     /**
      * Insert the weee price for bundle product
      *
-     * @param  array $holder
-     * @param  int|string $key
-     * @param  array $weeeAttributesForBundle
+     * @param array $holder
+     * @param int|string $key
+     * @param array $weeeAttributesForBundle
      * @return array
      */
     private function insertWeeePrice($holder, $key, $weeeAttributesForBundle)
@@ -141,8 +125,8 @@ class GetPriceConfigurationObserver implements ObserverInterface
     /**
      * Returns which product price to use as a basis for the Weee's final price
      *
-     * @param  int|null $storeId
-     * @param  array|null $weeeAttributesForBundle
+     * @param int|null $storeId
+     * @param array|null $weeeAttributesForBundle
      * @return string
      */
     protected function getWhichCalcPriceToUse($storeId = null, $weeeAttributesForBundle = null)

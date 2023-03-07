@@ -5,60 +5,48 @@
  */
 namespace Magento\Weee\Observer;
 
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Registry;
+use Magento\Tax\Helper\Data as TaxHelper;
+use Magento\Weee\Helper\Data as WeeeHelper;
 
 class UpdateProductOptionsObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Weee\Helper\Data
-     */
-    protected $weeeData = null;
-
-    /**
-     * @var \Magento\Framework\Registry
-     */
-    protected $registry;
-
-    /**
-     * @var \Magento\Tax\Helper\Data
-     */
-    protected $taxData;
-
-    /**
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Weee\Helper\Data $weeeData
-     * @param \Magento\Tax\Helper\Data $taxData
+     * @param Registry $registry
+     * @param WeeeHelper $weeeData
+     * @param TaxHelper $taxData
      */
     public function __construct(
-        \Magento\Framework\Registry $registry,
-        \Magento\Weee\Helper\Data $weeeData,
-        \Magento\Tax\Helper\Data $taxData
+        protected Registry $registry,
+        protected ?WeeeHelper $weeeData,
+        protected TaxHelper $taxData
     ) {
-        $this->weeeData = $weeeData;
-        $this->registry = $registry;
-        $this->taxData = $taxData;
     }
 
     /**
      * Change default JavaScript templates for options rendering
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $response = $observer->getEvent()->getResponseObject();
         $options = $response->getAdditionalOptions();
 
-        /** @var \Magento\Catalog\Model\Product $product */
+        /** @var Product $product */
         $product = $this->registry->registry('current_product');
         if (!$product) {
             return $this;
         }
 
         // if the Weee module is enabled, then only do processing on bundle products
-        if ($this->weeeData->isEnabled() && $product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
+        if ($this->weeeData->isEnabled() && $product->getTypeId() == Type::TYPE_BUNDLE) {
             if ($this->taxData->priceIncludesTax() && $this->taxData->displayPriceExcludingTax()) {
                 // the Tax module might have set up a default, but we will re-decide which calcPrice field to use
                 unset($options['optionTemplate']);
@@ -105,7 +93,7 @@ class UpdateProductOptionsObserver implements ObserverInterface
     /**
      * Returns which product price to show (before listing the individual Weee amounts, if applicable)
      *
-     * @param  int|null $storeId
+     * @param int|null $storeId
      * @return string
      */
     protected function getWhichCalcPriceToUse($storeId = null)

@@ -28,40 +28,17 @@ class Website
     private $websites;
 
     /**
-     * @var LocatorInterface
-     */
-    private $locator;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var DirectoryHelper
-     */
-    private $directoryHelper;
-
-    /**
-     * @var Data
-     */
-    private $catalogHelper;
-
-    /**
      * @param LocatorInterface $locator
      * @param StoreManagerInterface $storeManager
      * @param DirectoryHelper $directoryHelper
      * @param Data|null $catalogHelper
      */
     public function __construct(
-        LocatorInterface $locator,
-        StoreManagerInterface $storeManager,
-        DirectoryHelper $directoryHelper,
-        Data $catalogHelper = null
+        private LocatorInterface $locator,
+        private StoreManagerInterface $storeManager,
+        private DirectoryHelper $directoryHelper,
+        private ?Data $catalogHelper = null
     ) {
-        $this->locator = $locator;
-        $this->storeManager = $storeManager;
-        $this->directoryHelper = $directoryHelper;
         $this->catalogHelper = $catalogHelper ?: ObjectManager::getInstance()->get(Data::class);
     }
 

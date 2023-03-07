@@ -5,26 +5,32 @@
  */
 namespace Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee;
 
+use Magento\Catalog\Model\Product;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Catalog product WEEE tax backend attribute model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Tax extends AbstractDb
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Context $context
+     * @param StoreManagerInterface $storeManager
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        Context $context,
+        StoreManagerInterface $storeManager,
         $connectionName = null
     ) {
         $this->_storeManager = $storeManager;
@@ -44,8 +50,8 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Load product data
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
+     * @param Product $product
+     * @param AbstractAttribute $attribute
      * @return array
      */
     public function loadProductData($product, $attribute)
@@ -77,8 +83,8 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Delete product data
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
+     * @param Product $product
+     * @param AbstractAttribute $attribute
      * @return $this
      */
     public function deleteProductData($product, $attribute)
@@ -99,7 +105,7 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Insert product data
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param array $data
      * @return $this
      */

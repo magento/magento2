@@ -32,11 +32,6 @@ class Weee extends AbstractTotal
     public const ITEM_TYPE = 'weee';
 
     /**
-     * @var WeeHelper
-     */
-    protected $weeeData;
-
-    /**
      * @var \Magento\Store\Model\Store
      */
     protected $_store;
@@ -70,20 +65,13 @@ class Weee extends AbstractTotal
     protected $weeeBaseTotalExclTax;
 
     /**
-     * @var PriceCurrencyInterface
-     */
-    protected $priceCurrency;
-
-    /**
      * @param WeeHelper $weeeData
      * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
-        WeeHelper $weeeData,
-        PriceCurrencyInterface $priceCurrency
+        protected WeeHelper $weeeData,
+        protected PriceCurrencyInterface $priceCurrency
     ) {
-        $this->priceCurrency = $priceCurrency;
-        $this->weeeData = $weeeData;
         $this->setCode('weee');
         $this->weeeCodeToItemMap = [];
     }

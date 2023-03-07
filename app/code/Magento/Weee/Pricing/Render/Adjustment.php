@@ -6,23 +6,21 @@
 
 namespace Magento\Weee\Pricing\Render;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\Render\AbstractAdjustment;
 use Magento\Framework\View\Element\Template;
+use Magento\Store\Model\Store;
+use Magento\Weee\Helper\Data as WeeeHelper;
 use Magento\Weee\Model\Tax;
+use Magento\Weee\Pricing\Adjustment as PricingAdjustment;
+use Magento\Weee\Pricing\TaxAdjustment as PricingTaxAdjustment;
 
 /**
  * Weee Price Adjustment that handles Weee specific amount and its display
  */
 class Adjustment extends AbstractAdjustment
 {
-    /**
-     * Weee helper
-     *
-     * @var \Magento\Weee\Helper\Data
-     */
-    protected $weeeHelper;
-
     /**
      * @var float
      */
@@ -33,16 +31,15 @@ class Adjustment extends AbstractAdjustment
      *
      * @param Template\Context $context
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Weee\Helper\Data $weeeHelper
+     * @param WeeeHelper $weeeHelper
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Weee\Helper\Data $weeeHelper,
+        protected WeeeHelper $weeeHelper,
         array $data = []
     ) {
-        $this->weeeHelper = $weeeHelper;
         parent::__construct($context, $priceCurrency, $data);
     }
 
@@ -53,7 +50,7 @@ class Adjustment extends AbstractAdjustment
     {
         $weeeAmount = $this->amountRender->getAmount()->getAdjustmentAmount($this->getAdjustmentCode());
         $weeeTaxAmount =
-            $this->amountRender->getAmount()->getAdjustmentAmount(\Magento\Weee\Pricing\TaxAdjustment::ADJUSTMENT_CODE);
+            $this->amountRender->getAmount()->getAdjustmentAmount(PricingTaxAdjustment::ADJUSTMENT_CODE);
 
         $this->finalAmount = $this->amountRender->getDisplayValue();
 
@@ -80,7 +77,7 @@ class Adjustment extends AbstractAdjustment
      */
     public function getAdjustmentCode()
     {
-        return \Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE;
+        return PricingAdjustment::ADJUSTMENT_CODE;
     }
 
     /**
@@ -125,7 +122,7 @@ class Adjustment extends AbstractAdjustment
     /**
      * Obtain Weee tax attributes
      *
-     * @return array|\Magento\Framework\DataObject[]
+     * @return array|DataObject[]
      */
     public function getWeeeTaxAttributes()
     {
@@ -135,10 +132,10 @@ class Adjustment extends AbstractAdjustment
     /**
      * Render Weee tax attributes name
      *
-     * @param \Magento\Framework\DataObject $attribute
+     * @param DataObject $attribute
      * @return string
      */
-    public function renderWeeeTaxAttributeName(\Magento\Framework\DataObject $attribute)
+    public function renderWeeeTaxAttributeName(DataObject $attribute)
     {
         return $attribute->getData('name');
     }
@@ -146,10 +143,10 @@ class Adjustment extends AbstractAdjustment
     /**
      * Render Weee tax attributes value
      *
-     * @param \Magento\Framework\DataObject $attribute
+     * @param DataObject $attribute
      * @return string
      */
-    public function renderWeeeTaxAttribute(\Magento\Framework\DataObject $attribute)
+    public function renderWeeeTaxAttribute(DataObject $attribute)
     {
         return $this->convertAndFormatCurrency($attribute->getData('amount'));
     }
@@ -157,10 +154,10 @@ class Adjustment extends AbstractAdjustment
     /**
      * Render Weee tax attributes value with tax
      *
-     * @param \Magento\Framework\DataObject $attribute
+     * @param DataObject $attribute
      * @return string
      */
-    public function renderWeeeTaxAttributeWithTax(\Magento\Framework\DataObject $attribute)
+    public function renderWeeeTaxAttributeWithTax(DataObject $attribute)
     {
         return $this->convertAndFormatCurrency(
             $attribute->getData('amount_excl_tax') + $attribute->getData('tax_amount')
@@ -170,10 +167,10 @@ class Adjustment extends AbstractAdjustment
     /**
      * Render Weee tax attributes value without tax
      *
-     * @param \Magento\Framework\DataObject $attribute
+     * @param DataObject $attribute
      * @return string
      */
-    public function renderWeeeTaxAttributeWithoutTax(\Magento\Framework\DataObject $attribute)
+    public function renderWeeeTaxAttributeWithoutTax(DataObject $attribute)
     {
         $price = $attribute->getData('amount_excl_tax');
         return ($price > 0) ? $this->convertAndFormatCurrency($price): $this->convertAndFormatCurrency(0);
@@ -183,7 +180,7 @@ class Adjustment extends AbstractAdjustment
      * Returns display type for price accordingly to current zone
      *
      * @param int|int[]|null $compareTo
-     * @param \Magento\Store\Model\Store|null $store
+     * @param Store|null $store
      * @return bool|int
      */
     protected function typeOfDisplay($compareTo = null, $store = null)
@@ -194,7 +191,7 @@ class Adjustment extends AbstractAdjustment
     /**
      * Get Weee attributes for display
      *
-     * @return \Magento\Framework\DataObject[]
+     * @return DataObject[]
      */
     protected function getWeeeAttributesForDisplay()
     {

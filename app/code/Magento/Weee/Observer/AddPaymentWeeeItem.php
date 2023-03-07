@@ -7,6 +7,7 @@ namespace Magento\Weee\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Payment\Model\Cart;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Weee\Helper\Data;
 
@@ -16,25 +17,13 @@ use Magento\Weee\Helper\Data;
 class AddPaymentWeeeItem implements ObserverInterface
 {
     /**
-     * @var Data
-     */
-    private $weeeData;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param Data $weeeData
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        Data $weeeData,
-        StoreManagerInterface $storeManager
+        private Data $weeeData,
+        private StoreManagerInterface $storeManager
     ) {
-        $this->weeeData = $weeeData;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -49,7 +38,7 @@ class AddPaymentWeeeItem implements ObserverInterface
             return;
         }
 
-        /** @var \Magento\Payment\Model\Cart $cart */
+        /** @var Cart $cart */
         $cart = $observer->getEvent()->getCart();
         $salesEntity = $cart->getSalesModel();
 

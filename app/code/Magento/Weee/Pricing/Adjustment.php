@@ -11,6 +11,8 @@ use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Weee\Helper\Data as WeeeHelper;
+use Magento\Weee\Model\Tax;
+use Magento\Tax\Pricing\Adjustment as PricingAdjustment;
 
 /**
  * Weee pricing adjustment
@@ -23,36 +25,17 @@ class Adjustment implements AdjustmentInterface
     const ADJUSTMENT_CODE = 'weee';
 
     /**
-     * Weee helper
-     *
-     * @var WeeeHelper
-     */
-    protected $weeeHelper;
-
-    /**
-     * Sort order
-     *
-     * @var int|null
-     */
-    protected $sortOrder;
-
-    /**
-     * @var PriceCurrencyInterface
-     */
-    protected $priceCurrency;
-
-    /**
      * Constructor
      *
      * @param WeeeHelper $weeeHelper
      * @param PriceCurrencyInterface $priceCurrency
      * @param int $sortOrder
      */
-    public function __construct(WeeeHelper $weeeHelper, PriceCurrencyInterface $priceCurrency, $sortOrder = null)
-    {
-        $this->weeeHelper = $weeeHelper;
-        $this->priceCurrency = $priceCurrency;
-        $this->sortOrder = $sortOrder;
+    public function __construct(
+        protected WeeeHelper $weeeHelper,
+        protected PriceCurrencyInterface $priceCurrency,
+        protected $sortOrder = null
+    ) {
     }
 
     /**
@@ -85,9 +68,9 @@ class Adjustment implements AdjustmentInterface
     {
         return $this->weeeHelper->typeOfDisplay(
             [
-                \Magento\Weee\Model\Tax::DISPLAY_INCL,
-                \Magento\Weee\Model\Tax::DISPLAY_INCL_DESCR,
-                \Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL,
+                Tax::DISPLAY_INCL,
+                Tax::DISPLAY_INCL_DESCR,
+                Tax::DISPLAY_EXCL_DESCR_INCL,
             ]
         );
     }
@@ -131,7 +114,7 @@ class Adjustment implements AdjustmentInterface
     public function isExcludedWith($adjustmentCode)
     {
         return (($adjustmentCode == self::ADJUSTMENT_CODE) ||
-            ($adjustmentCode == \Magento\Tax\Pricing\Adjustment::ADJUSTMENT_CODE));
+            ($adjustmentCode == PricingAdjustment::ADJUSTMENT_CODE));
     }
 
     /**
