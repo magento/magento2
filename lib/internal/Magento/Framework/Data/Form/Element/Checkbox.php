@@ -9,8 +9,6 @@ use Magento\Framework\Escaper;
 
 /**
  * Form checkbox element
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Checkbox extends AbstractElement
 {

@@ -8,8 +8,6 @@
  * Form editable select element
  *
  * Element allows inline modification of textual data within select
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Data\Form\Element;
 
