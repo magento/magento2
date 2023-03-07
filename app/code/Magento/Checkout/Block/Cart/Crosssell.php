@@ -24,7 +24,6 @@ use Magento\Quote\Model\Quote\Item\RelatedProducts;
  * Cart crosssell list
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

@@ -6,8 +6,6 @@
 
 /**
  * Catalog Rule Product Aggregated Price per date Resource Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CatalogRule\Model\ResourceModel\Rule\Product;
 

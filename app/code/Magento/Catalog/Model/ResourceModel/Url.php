@@ -7,8 +7,6 @@ namespace Magento\Catalog\Model\ResourceModel;
 
 /**
  * Catalog url rewrite resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Catalog\Api\Data\CategoryInterface;

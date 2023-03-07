@@ -14,7 +14,6 @@ use Magento\Sales\Api\PaymentFailuresInterface;
 /**
  * Checkout default helper
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper

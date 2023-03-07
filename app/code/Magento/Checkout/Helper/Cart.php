@@ -7,8 +7,6 @@ namespace Magento\Checkout\Helper;
 
 /**
  * Shopping cart helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Cart extends \Magento\Framework\Url\Helper\Data
 {

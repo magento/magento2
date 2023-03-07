@@ -21,8 +21,6 @@
  * @method \Magento\CatalogRule\Model\Rule\Product\Price setLatestStartDate(string $value)
  * @method string getEarliestEndDate()
  * @method \Magento\CatalogRule\Model\Rule\Product\Price setEarliestEndDate(string $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CatalogRule\Model\Rule\Product;
 

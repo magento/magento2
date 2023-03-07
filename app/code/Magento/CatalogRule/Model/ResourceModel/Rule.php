@@ -6,8 +6,6 @@
 
 /**
  * Catalog rules resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CatalogRule\Model\ResourceModel;
 

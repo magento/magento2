@@ -6,8 +6,6 @@
 
 /**
  * Backend Catalog Price Rules controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo;
 

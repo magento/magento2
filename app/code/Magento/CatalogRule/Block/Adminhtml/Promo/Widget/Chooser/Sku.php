@@ -6,8 +6,6 @@
 
 /**
  * Adminhtml sales order create search products block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser;
 

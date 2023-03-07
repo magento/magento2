@@ -9,8 +9,6 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Catalog product link resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
