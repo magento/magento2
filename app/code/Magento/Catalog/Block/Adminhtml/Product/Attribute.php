@@ -7,8 +7,6 @@ namespace Magento\Catalog\Block\Adminhtml\Product;
 
 /**
  * Adminhtml catalog product attributes block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Attribute extends \Magento\Backend\Block\Widget\Grid\Container
 {

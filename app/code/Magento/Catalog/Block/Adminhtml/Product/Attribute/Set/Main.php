@@ -5,9 +5,6 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set;
 
-/**
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 use Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface;
 
 /**

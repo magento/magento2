@@ -6,8 +6,6 @@
 
 /**
  * Category form image field helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Helper;
 

@@ -6,8 +6,6 @@
 
 /**
  * Catalog Custom Options Config Renderer
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Config;
 

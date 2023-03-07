@@ -6,8 +6,6 @@
 
 /**
  * description
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar;
 

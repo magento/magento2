@@ -6,8 +6,6 @@
 
 /**
  * Adminhtml catalog product sets main page toolbar
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar;
 

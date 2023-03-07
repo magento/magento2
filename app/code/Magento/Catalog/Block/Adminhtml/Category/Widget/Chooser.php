@@ -6,8 +6,6 @@
 
 /**
  * Category chooser for Wysiwyg CMS widget
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Widget;
 

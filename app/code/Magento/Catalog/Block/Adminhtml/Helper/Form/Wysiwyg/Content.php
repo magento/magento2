@@ -6,8 +6,6 @@
 
 /**
  * Textarea attribute WYSIWYG content
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Helper\Form\Wysiwyg;
 

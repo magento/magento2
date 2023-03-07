@@ -6,8 +6,6 @@
 
 /**
  * Catalog textarea attribute WYSIWYG button
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Helper\Form;
 

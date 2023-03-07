@@ -6,8 +6,6 @@
 
 /**
  * Base block for rendering category and product forms
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml;
 

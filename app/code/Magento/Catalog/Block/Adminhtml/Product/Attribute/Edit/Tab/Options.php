@@ -9,8 +9,6 @@
  *
  * @method \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Options setReadOnly(bool $value)
  * @method null|bool getReadOnly()
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
