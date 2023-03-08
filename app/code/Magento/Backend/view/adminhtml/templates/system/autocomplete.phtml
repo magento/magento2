@@ -3,13 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
 ?>
 <ul class="dropdown-menu">
     <?php foreach ($items as $item) : ?>
-    <li id="<?= $block->escapeHtmlAttr($item['id']) ?>" class="item">
-        <a href="<?= $block->escapeUrl($item['url']) ?>" class="title"><?= $block->escapeHtml($item['name']) ?></a>
-        <div class="type"><?= $block->escapeHtml($item['type']) ?></div>
-        <?= $block->escapeHtml($item['description']) ?>
+    <li id="<?= $escaper->escapeHtmlAttr($item['id']) ?>" class="item">
+        <a href="<?= $escaper->escapeUrl($item['url']) ?>" class="title"><?= $escaper->escapeHtml($item['name']) ?></a>
+        <div class="type"><?= $escaper->escapeHtml($item['type']) ?></div>
+        <?= $escaper->escapeHtml($item['description']) ?>
     </li>
     <?php endforeach ?>
 </ul>

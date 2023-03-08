@@ -3,11 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
 ?>
 <div class="actions">
     <button
         <?php $block->getUiId(); ?>
         class="action-login action-primary">
-        <span><?= $block->escapeHtml(__('Sign in')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Sign in')) ?></span>
     </button>
 </div>

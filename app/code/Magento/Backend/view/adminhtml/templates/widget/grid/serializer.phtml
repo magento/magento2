@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
-<?php
-/**
- * @var $block \Magento\Backend\Block\Widget\Grid\Serializer
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- */
-?>
-<?php
+declare(strict_types=1);
+
+use Magento\Backend\Block\Widget\Grid\Serializer;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/** @var Escaper $escaper */
+/** @var Serializer $block */
+/** @var SecureHtmlRenderer $secureRenderer */
+
 // phpcs:ignore
 $_id = 'id_' . md5(microtime());
 ?>
@@ -24,13 +26,13 @@ $_id = 'id_' . md5(microtime());
         Event.observe(window, "load", function(){
             var serializeInput  = document.createElement('input');
             serializeInput.type = 'hidden';
-            serializeInput.name = '{$block->escapeJs($block->getInputElementName())}';
+            serializeInput.name = '{$escaper->escapeJs($block->getInputElementName())}';
             serializeInput.id   = '{$_id}';
             try {
-                document.getElementById('{$block->escapeJs($formId)}').appendChild(serializeInput);
+                document.getElementById('{$escaper->escapeJs($formId)}').appendChild(serializeInput);
                 new serializerController('{$_id}', {$block->getDataAsJSON()}, {$block->getColumnInputNames(true)},
-                 {$block->escapeJs($block->getGridBlock()->getJsObjectName())},
-                 '{$block->escapeJs($block->getReloadParamName())}');
+                 {$escaper->escapeJs($block->getGridBlock()->getJsObjectName())},
+                 '{$escaper->escapeJs($block->getReloadParamName())}');
             } catch(e) {
                 //Error add serializer
             }
@@ -40,15 +42,15 @@ script;
     ?>
     <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php else:?>
-<input type="hidden" name="<?= $block->escapeHtmlAttr($block->getInputElementName()) ?>"  value=""
+<input type="hidden" name="<?= $escaper->escapeHtmlAttr($block->getInputElementName()) ?>"  value=""
        id="<?= /* @noEscape */ $_id ?>" />
     <?php $scriptString = <<<script
     require([
         'mage/adminhtml/grid'
     ], function(){
         new serializerController('{$_id}', {$block->getDataAsJSON()}, {$block->getColumnInputNames(true)},
-         {$block->escapeJs($block->getGridBlock()->getJsObjectName())},
-         '{$block->escapeJs($block->getReloadParamName())}');
+         {$escaper->escapeJs($block->getGridBlock()->getJsObjectName())},
+         '{$escaper->escapeJs($block->getReloadParamName())}');
     });
 script;
     ?>
