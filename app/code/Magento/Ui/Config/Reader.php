@@ -12,6 +12,7 @@ use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
+use Magento\Ui\Config\Reader\Dom as ReaderDom;
 
 /**
  * UI Component configuration reader
@@ -26,38 +27,6 @@ class Reader implements ReaderInterface
     private $idAttributes = ['/' => 'name'];
 
     /**
-     * @var Reader\Definition
-     */
-    private $definitionReader;
-
-    /**
-     * @var ReaderFactory
-     */
-    private $readerFactory;
-
-    /**
-     * @var FileResolverInterface
-     */
-    private $fileResolver;
-
-    /**
-     * @var ConfigConverter
-     */
-    private $converter;
-
-    /**
-     * @var Reader\DomFactory
-     */
-    private $readerDomFactory;
-
-    /**
-     * The name of file that stores Ui configuration
-     *
-     * @var string
-     */
-    private $fileName;
-
-    /**
      * Reader constructor.
      *
      * @param string $fileName
@@ -69,20 +38,14 @@ class Reader implements ReaderInterface
      * @param array $idAttributes
      */
     public function __construct(
-        $fileName,
-        FileResolverInterface $fileResolver,
-        ConfigConverter $converter,
-        Reader\Definition $definitionReader,
-        ReaderFactory $readerFactory,
-        Reader\DomFactory $readerDomFactory,
+        private $fileName,
+        private readonly FileResolverInterface $fileResolver,
+        private readonly ConfigConverter $converter,
+        private readonly Reader\Definition $definitionReader,
+        private readonly ReaderFactory $readerFactory,
+        private readonly Reader\DomFactory $readerDomFactory,
         array $idAttributes = []
     ) {
-        $this->fileName = $fileName;
-        $this->fileResolver = $fileResolver;
-        $this->converter = $converter;
-        $this->definitionReader = $definitionReader;
-        $this->readerFactory = $readerFactory;
-        $this->readerDomFactory = $readerDomFactory;
         $this->idAttributes = array_replace($this->idAttributes, $idAttributes);
     }
 
@@ -113,7 +76,7 @@ class Reader implements ReaderInterface
      */
     private function readFiles($fileList)
     {
-        /** @var \Magento\Ui\Config\Reader\Dom $configMerger */
+        /** @var ReaderDom $configMerger */
         $configMerger = null;
         $output = [];
         foreach ($fileList as $key => $content) {

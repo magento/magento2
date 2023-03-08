@@ -18,11 +18,6 @@ use Magento\Framework\View\Element\Template\Context;
 class Button extends Template implements ControlInterface
 {
     /**
-     * @var Random
-     */
-    private $random;
-
-    /**
      * @var SecureHtmlRenderer
      */
     private $secureRenderer;
@@ -36,7 +31,7 @@ class Button extends Template implements ControlInterface
     public function __construct(
         Context $context,
         array $data = [],
-        ?Random $random = null,
+        private ?Random $random = null,
         ?SecureHtmlRenderer $htmlRenderer = null
     ) {
         parent::__construct($context, $data);

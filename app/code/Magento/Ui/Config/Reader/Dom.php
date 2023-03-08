@@ -5,6 +5,10 @@
  */
 namespace Magento\Ui\Config\Reader;
 
+use DOMElement;
+use DOMNode;
+use DOMNodeList;
+use DOMXPath;
 use Magento\Framework\Config\SchemaLocatorInterface;
 use Magento\Framework\Config\ValidationStateInterface;
 use Magento\Ui\Config\Converter;
@@ -16,14 +20,7 @@ use Magento\Framework\Config\Dom as ConfigDom;
 class Dom extends ConfigDom
 {
     /**
-     * Id attribute list
-     *
-     * @var array
-     */
-    private $idAttributes = [];
-
-    /**
-     * @var \DOMXPath
+     * @var DOMXPath
      */
     private $domXPath;
 
@@ -33,11 +30,6 @@ class Dom extends ConfigDom
      * @var string
      */
     private $schemaFile;
-
-    /**
-     * @var SchemaLocatorInterface
-     */
-    private $schemaLocator;
 
     /**
      * Dom constructor
@@ -52,8 +44,8 @@ class Dom extends ConfigDom
     public function __construct(
         $xml,
         ValidationStateInterface $validationState,
-        SchemaLocatorInterface $schemaLocator,
-        array $idAttributes = [],
+        private readonly SchemaLocatorInterface $schemaLocator,
+        private array $idAttributes = [],
         $typeAttributeName = null,
         $errorFormat = ConfigDom::ERROR_FORMAT_DEFAULT
     ) {
@@ -62,7 +54,6 @@ class Dom extends ConfigDom
             ? $schemaLocator->getPerFileSchema() : null;
 
         parent::__construct($xml, $validationState, $idAttributes, $typeAttributeName, $this->schemaFile, $errorFormat);
-        $this->schemaLocator = $schemaLocator;
     }
 
     /**
@@ -74,18 +65,18 @@ class Dom extends ConfigDom
     public function merge($xml)
     {
         $dom = $this->_initDom($xml);
-        $this->domXPath = new \DOMXPath($this->getDom());
+        $this->domXPath = new DOMXPath($this->getDom());
         $this->nestedMerge($this->getDom()->documentElement, $dom->childNodes);
     }
 
     /**
      * Merge nested xml nodes
      *
-     * @param \DOMNode $contextNode
-     * @param \DOMNodeList $insertedNodes
+     * @param DOMNode $contextNode
+     * @param DOMNodeList $insertedNodes
      * @return void
      */
-    private function nestedMerge(\DOMNode $contextNode, \DOMNodeList $insertedNodes)
+    private function nestedMerge(DOMNode $contextNode, DOMNodeList $insertedNodes)
     {
         foreach ($insertedNodes as $insertedItem) {
             switch ($insertedItem->nodeType) {
@@ -117,11 +108,11 @@ class Dom extends ConfigDom
     /**
      * Merge node to matched root elements
      *
-     * @param \DOMNodeList $rootMatchList
-     * @param \DOMElement $insertedItem
+     * @param DOMNodeList $rootMatchList
+     * @param DOMElement $insertedItem
      * @return void
      */
-    private function processMatchedNodes(\DOMNodeList $rootMatchList, \DOMElement $insertedItem)
+    private function processMatchedNodes(DOMNodeList $rootMatchList, DOMElement $insertedItem)
     {
         foreach ($rootMatchList as $rootItem) {
             if ($this->_isTextNode($insertedItem) && $this->_isTextNode($rootItem)) {
@@ -136,10 +127,10 @@ class Dom extends ConfigDom
     /**
      * Create XPath from node
      *
-     * @param \DOMNode $node
+     * @param DOMNode $node
      * @return string
      */
-    private function createXPath(\DOMNode $node)
+    private function createXPath(DOMNode $node)
     {
         $parentXPath = '';
         $currentXPath = $node->getNodePath() ?? '';
@@ -170,11 +161,11 @@ class Dom extends ConfigDom
     /**
      * Append $insertedNode to $contextNode
      *
-     * @param \DOMNode $insertedNode
-     * @param \DOMNode $contextNode
+     * @param DOMNode $insertedNode
+     * @param DOMNode $contextNode
      * @return void
      */
-    private function appendNode(\DOMNode $insertedNode, \DOMNode $contextNode)
+    private function appendNode(DOMNode $insertedNode, DOMNode $contextNode)
     {
         $importNode = $this->getDom()->importNode($insertedNode, true);
         if (in_array($importNode->localName, [Converter::ARGUMENT_KEY, Converter::SETTINGS_KEY])) {
@@ -187,18 +178,18 @@ class Dom extends ConfigDom
     /**
      * Append node to context node in correct position
      *
-     * @param \DOMNode $contextNode
-     * @param \DOMNode $importNode
+     * @param DOMNode $contextNode
+     * @param DOMNode $importNode
      * @return void
      */
-    private function appendNodeToContext(\DOMNode $contextNode, \DOMNode $importNode)
+    private function appendNodeToContext(DOMNode $contextNode, DOMNode $importNode)
     {
         if (!$contextNode->hasChildNodes()) {
             $contextNode->appendChild($importNode);
             return;
         }
         $childContextNode = null;
-        /** @var \DOMNode $child */
+        /** @var DOMNode $child */
         foreach ($contextNode->childNodes as $child) {
             if ($child->nodeType != XML_ELEMENT_NODE) {
                 continue;

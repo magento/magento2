@@ -26,16 +26,11 @@ class Config
     const XML_PATH_KEY = 'dev/js/session_storage_key';
 
     /**
-     * @var ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
      * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(ScopeConfigInterface $scopeConfig)
-    {
-        $this->scopeConfig = $scopeConfig;
+    public function __construct(
+        protected readonly ScopeConfigInterface $scopeConfig
+    ) {
     }
 
     /**

@@ -7,37 +7,20 @@ namespace Magento\Ui\Controller\Adminhtml\Export;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Model\Export\ConvertToXml;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Ui\Component\MassAction\Filter;
 use Psr\Log\LoggerInterface;
+use Throwable;
 
 /**
  * Class Render
  */
 class GridToXml extends Action
 {
-    /**
-     * @var ConvertToXml
-     */
-    protected $converter;
-
-    /**
-     * @var FileFactory
-     */
-    protected $fileFactory;
-
-    /**
-     * @var Filter
-     */
-    private $filter;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
     /**
      * @param Context $context
      * @param ConvertToXml $converter
@@ -47,14 +30,12 @@ class GridToXml extends Action
      */
     public function __construct(
         Context $context,
-        ConvertToXml $converter,
-        FileFactory $fileFactory,
-        Filter $filter = null,
-        LoggerInterface $logger = null
+        protected readonly ConvertToXml $converter,
+        protected readonly FileFactory $fileFactory,
+        private ?Filter $filter = null,
+        private ?LoggerInterface $logger = null
     ) {
         parent::__construct($context);
-        $this->converter = $converter;
-        $this->fileFactory = $fileFactory;
         $this->filter = $filter ?: ObjectManager::getInstance()->get(Filter::class);
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
@@ -62,8 +43,8 @@ class GridToXml extends Action
     /**
      * Export data provider to XML
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Magento\Framework\App\ResponseInterface
+     * @throws LocalizedException
+     * @return ResponseInterface
      */
     public function execute()
     {
@@ -88,7 +69,7 @@ class GridToXml extends Action
                         $dataProviderConfig['aclResource']
                     );
                 }
-            } catch (\Throwable $exception) {
+            } catch (Throwable $exception) {
                 $this->logger->critical($exception);
 
                 return false;

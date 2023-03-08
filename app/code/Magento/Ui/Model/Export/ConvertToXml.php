@@ -26,34 +26,14 @@ class ConvertToXml
     protected $directory;
 
     /**
-     * @var MetadataProvider
-     */
-    protected $metadataProvider;
-
-    /**
-     * @var ExcelFactory
-     */
-    protected $excelFactory;
-
-    /**
      * @var array
      */
     protected $options;
 
     /**
-     * @var SearchResultIteratorFactory
-     */
-    protected $iteratorFactory;
-
-    /**
      * @var array
      */
     protected $fields;
-
-    /**
-     * @var Filter
-     */
-    protected $filter;
 
     /**
      * @param Filesystem $filesystem
@@ -65,16 +45,12 @@ class ConvertToXml
      */
     public function __construct(
         Filesystem $filesystem,
-        Filter $filter,
-        MetadataProvider $metadataProvider,
-        ExcelFactory $excelFactory,
-        SearchResultIteratorFactory $iteratorFactory
+        protected readonly Filter $filter,
+        protected readonly MetadataProvider $metadataProvider,
+        protected readonly ExcelFactory $excelFactory,
+        protected readonly SearchResultIteratorFactory $iteratorFactory
     ) {
-        $this->filter = $filter;
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->metadataProvider = $metadataProvider;
-        $this->excelFactory = $excelFactory;
-        $this->iteratorFactory = $iteratorFactory;
     }
 
     /**

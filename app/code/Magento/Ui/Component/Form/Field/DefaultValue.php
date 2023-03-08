@@ -10,33 +10,21 @@ namespace Magento\Ui\Component\Form\Field;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Ui\Component\Form\Field;
 
 /**
  * Field class has dynamic default value based on  System Configuration path
  */
-class DefaultValue extends \Magento\Ui\Component\Form\Field
+class DefaultValue extends Field
 {
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @var string
-     */
-    private $path;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface $storeManager
-     */
-    private $storeManager;
-
     /**
      * DefaultValue constructor.
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param string $path
      * @param array $components
      * @param array $data
@@ -44,16 +32,13 @@ class DefaultValue extends \Magento\Ui\Component\Form\Field
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        string $path = '',
+        private readonly ScopeConfigInterface $scopeConfig,
+        private readonly StoreManagerInterface $storeManager,
+        private string $path = '',
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
-        $this->scopeConfig = $scopeConfig;
-        $this->storeManager = $storeManager;
-        $this->path = $path;
     }
 
     /**
@@ -66,7 +51,7 @@ class DefaultValue extends \Magento\Ui\Component\Form\Field
         if (empty($this->_data['config']['default'])) {
             $this->_data['config']['default'] = $this->scopeConfig->getValue(
                 $this->path,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $store
             );
         }

@@ -5,6 +5,8 @@
  */
 namespace Magento\Ui\Component\Wysiwyg;
 
+use Magento\Framework\DataObject;
+
 /**
  * Interface ConfigInterface
  *
@@ -15,7 +17,7 @@ interface ConfigInterface
     /**
      * Return WYSIWYG configuration
      *
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     public function getConfig();
 }

@@ -22,11 +22,6 @@ use Magento\Framework\App\ObjectManager;
 class Handle extends AbstractAction implements HttpGetActionInterface
 {
     /**
-     * @var ContextFactory
-     */
-    private $contextFactory;
-
-    /**
      * @param Context $context
      * @param UiComponentFactory $factory
      * @param ContextFactory|null $contextFactory
@@ -34,7 +29,7 @@ class Handle extends AbstractAction implements HttpGetActionInterface
     public function __construct(
         Context $context,
         UiComponentFactory $factory,
-        ContextFactory $contextFactory = null
+        private ?ContextFactory $contextFactory = null
     ) {
         parent::__construct($context, $factory);
         $this->contextFactory = $contextFactory

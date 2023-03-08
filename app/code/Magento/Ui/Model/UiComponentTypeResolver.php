@@ -22,16 +22,11 @@ class UiComponentTypeResolver
     const DEFAULT_CONTENT_TYPE = 'text/html';
 
     /**
-     * @var array
-     */
-    private $uiComponentTypeMap = [];
-
-    /**
      * @param array $uiComponentTypeMap
      */
-    public function __construct(array $uiComponentTypeMap)
-    {
-        $this->uiComponentTypeMap = $uiComponentTypeMap;
+    public function __construct(
+        private readonly array $uiComponentTypeMap = []
+    ) {
     }
 
     /**

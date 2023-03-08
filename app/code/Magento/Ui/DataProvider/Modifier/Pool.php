@@ -11,32 +11,21 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Class Pool
  */
-class Pool implements \Magento\Ui\DataProvider\Modifier\PoolInterface
+class Pool implements PoolInterface
 {
-    /**
-     * @var array
-     */
-    protected $modifiers = [];
-
     /**
      * @var array
      */
     protected $modifiersInstances = [];
 
     /**
-     * @var ModifierFactory
-     */
-    protected $factory;
-
-    /**
      * @param ModifierFactory $factory
      * @param array $modifiers
      */
     public function __construct(
-        ModifierFactory $factory,
-        array $modifiers = []
+        protected readonly ModifierFactory $factory,
+        protected array $modifiers = []
     ) {
-        $this->factory = $factory;
         $this->modifiers = $this->sort($modifiers);
     }
 

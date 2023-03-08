@@ -18,18 +18,14 @@ use Magento\Framework\View\Element\UiComponentFactory;
 abstract class AbstractAction extends Action implements UiActionInterface
 {
     /**
-     * @var UiComponentFactory
-     */
-    protected $factory;
-
-    /**
      * @param Context $context
      * @param UiComponentFactory $factory
      */
-    public function __construct(Context $context, UiComponentFactory $factory)
-    {
+    public function __construct(
+        Context $context,
+        protected readonly UiComponentFactory $factory
+    ) {
         parent::__construct($context);
-        $this->factory = $factory;
     }
 
     /**

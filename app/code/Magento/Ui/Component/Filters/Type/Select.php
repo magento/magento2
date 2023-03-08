@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\Component\Filters\Type;
 
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -29,14 +30,9 @@ class Select extends AbstractFilter
     protected $wrappedComponent;
 
     /**
-     * @var OptionSourceInterface
-     */
-    protected $optionsProvider;
-
-    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
+     * @param FilterBuilder $filterBuilder
      * @param FilterModifier $filterModifier
      * @param OptionSourceInterface|null $optionsProvider
      * @param array $components
@@ -45,13 +41,12 @@ class Select extends AbstractFilter
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder,
+        FilterBuilder $filterBuilder,
         FilterModifier $filterModifier,
-        OptionSourceInterface $optionsProvider = null,
+        protected ?OptionSourceInterface $optionsProvider = null,
         array $components = [],
         array $data = []
     ) {
-        $this->optionsProvider = $optionsProvider;
         parent::__construct($context, $uiComponentFactory, $filterBuilder, $filterModifier, $components, $data);
     }
 

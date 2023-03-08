@@ -7,28 +7,27 @@ namespace Magento\Ui\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Component\AbstractComponent;
 use Magento\Ui\Model\UiComponentGenerator;
 
 /**
  * This block is wrapper for UI component, this done in order to save compatibility with old widgets mechanism
  */
-class Wrapper extends \Magento\Framework\View\Element\Template
+class Wrapper extends Template
 {
-    /**
-     * @var UiComponentGenerator
-     */
-    private $uiComponentGenerator;
-
     /**
      * Wrapper constructor.
      * @param Template\Context $context
      * @param UiComponentGenerator $uiComponentGenerator
      * @param array $data
      */
-    public function __construct(Template\Context $context, UiComponentGenerator $uiComponentGenerator, array $data = [])
+    public function __construct(
+        Template\Context $context,
+        private readonly UiComponentGenerator $uiComponentGenerator,
+        array $data = []
+    )
     {
         parent::__construct($context, $data);
-        $this->uiComponentGenerator = $uiComponentGenerator;
     }
 
     /**
@@ -86,7 +85,7 @@ class Wrapper extends \Magento\Framework\View\Element\Template
      */
     public function renderApp($data = [])
     {
-        /** @var \Magento\Ui\Component\AbstractComponent $uiComponent */
+        /** @var AbstractComponent $uiComponent */
         $uiComponent = $this->uiComponentGenerator
             ->generateUiComponent($this->getData('uiComponent'), $this->getLayout());
         $this->injectDataInDataSource($uiComponent, $this->getData());

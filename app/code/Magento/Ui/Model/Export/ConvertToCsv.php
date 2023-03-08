@@ -19,21 +19,6 @@ class ConvertToCsv
     protected $directory;
 
     /**
-     * @var MetadataProvider
-     */
-    protected $metadataProvider;
-
-    /**
-     * @var int|null
-     */
-    protected $pageSize = null;
-
-    /**
-     * @var Filter
-     */
-    protected $filter;
-
-    /**
      * @param Filesystem $filesystem
      * @param Filter $filter
      * @param MetadataProvider $metadataProvider
@@ -42,14 +27,11 @@ class ConvertToCsv
      */
     public function __construct(
         Filesystem $filesystem,
-        Filter $filter,
-        MetadataProvider $metadataProvider,
-        $pageSize = 200
+        protected readonly Filter $filter,
+        protected readonly MetadataProvider $metadataProvider,
+        protected $pageSize = 200
     ) {
-        $this->filter = $filter;
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->metadataProvider = $metadataProvider;
-        $this->pageSize = $pageSize;
     }
 
     /**

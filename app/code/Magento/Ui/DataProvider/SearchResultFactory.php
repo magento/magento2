@@ -22,47 +22,23 @@ use Magento\Framework\EntityManager\HydratorInterface;
 class SearchResultFactory
 {
     /**
-     * @var HydratorInterface
-     */
-    private $hydrator;
-
-    /**
-     * @var DocumentFactory
-     */
-    private $documentFactory;
-
-    /**
-     * @var BaseSearchResultFactory
-     */
-    private $searchResultFactory;
-
-    /**
-     * @var AttributeValueFactory
-     */
-    private $attributeValueFactory;
-
-    /**
      * @param HydratorInterface $hydrator
      * @param DocumentFactory $documentFactory
      * @param BaseSearchResultFactory $searchResultFactory
      * @param AttributeValueFactory $attributeValueFactory
      */
     public function __construct(
-        HydratorInterface $hydrator,
-        DocumentFactory $documentFactory,
-        BaseSearchResultFactory $searchResultFactory,
-        AttributeValueFactory $attributeValueFactory
+        private readonly HydratorInterface $hydrator,
+        private readonly DocumentFactory $documentFactory,
+        private readonly BaseSearchResultFactory $searchResultFactory,
+        private readonly AttributeValueFactory $attributeValueFactory
     ) {
-        $this->hydrator = $hydrator;
-        $this->documentFactory = $documentFactory;
-        $this->searchResultFactory = $searchResultFactory;
-        $this->attributeValueFactory = $attributeValueFactory;
     }
 
     /**
      * @param array $items
      * @param int $totalCount
-     * @param SearchCriteriaInterface SearchCriteriaInterface $searchCriteria
+     * @param SearchCriteriaInterface|SearchCriteriaInterface $searchCriteria
      * @param string $idFieldName
      * @return SearchResultInterface
      * @since 101.1.0

@@ -6,7 +6,9 @@
 
 namespace Magento\Ui\Config\Reader;
 
+use Magento\Framework\Config\Dom as ConfigDom;
 use Magento\Framework\Config\Dom\ValidationException;
+use Magento\Framework\Config\Reader\Filesystem;
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
@@ -14,7 +16,7 @@ use Magento\Framework\Phrase;
 /**
  * UI Component definition config reader
  */
-class Definition extends \Magento\Framework\Config\Reader\Filesystem implements ReaderInterface
+class Definition extends Filesystem implements ReaderInterface
 {
     /**
      * Load configuration scope
@@ -43,7 +45,7 @@ class Definition extends \Magento\Framework\Config\Reader\Filesystem implements 
      */
     private function readFiles($fileList)
     {
-        /** @var \Magento\Framework\Config\Dom $configMerger */
+        /** @var ConfigDom $configMerger */
         $configMerger = null;
         foreach ($fileList as $key => $content) {
             try {

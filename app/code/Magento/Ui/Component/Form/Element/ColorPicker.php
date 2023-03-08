@@ -26,28 +26,19 @@ class ColorPicker extends AbstractElement
     const DEFAULT_MODE = 'full';
 
     /**
-     * Provides color picker modes configuration
-     *
-     * @var ColorModesProvider
-     */
-    private $modesProvider;
-
-    /**
      * Constructor
      *
      * @param ContextInterface $context
      * @param ColorModesProvider $modesProvider
-     * @param UiComponentFactory $uiComponentFactory
      * @param UiComponentInterface[] $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
-        ColorModesProvider $modesProvider,
+        private readonly ColorModesProvider $modesProvider,
         array $components = [],
         array $data = []
     ) {
-        $this->modesProvider = $modesProvider;
         parent::__construct($context, $components, $data);
     }
 

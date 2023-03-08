@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\Config\Converter;
 
+use DOMNode;
 use Magento\Framework\View\Element\UiComponent\Config\Converter;
 use Magento\Ui\Config\ConverterInterface;
 
@@ -16,7 +17,7 @@ class HtmlContent implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert(\DOMNode $node, array $data)
+    public function convert(DOMNode $node, array $data)
     {
         $items = [];
         /** @var \DOMElement $node */

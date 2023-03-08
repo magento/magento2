@@ -5,8 +5,14 @@
  */
 namespace Magento\Ui\Controller\Index;
 
+use Exception;
+use Laminas\Http\AbstractMessage;
+use Laminas\Http\Response;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\Result\Json as ResultJson;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Model\UiComponentTypeResolver;
@@ -24,38 +30,8 @@ use Magento\Framework\Controller\ResultInterface;
  * @SuppressWarnings(PHPMD.AllPurposeAction)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Render extends \Magento\Framework\App\Action\Action
+class Render extends Action
 {
-    /**
-     * @var Context
-     */
-    private $context;
-
-    /**
-     * @var UiComponentFactory
-     */
-    private $uiComponentFactory;
-
-    /**
-     * @var UiComponentTypeResolver
-     */
-    private $contentTypeResolver;
-
-    /**
-     * @var JsonFactory
-     */
-    private $resultJsonFactory;
-
-    /**
-     * @var Escaper
-     */
-    private $escaper;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
     /**
      * @var AuthorizationInterface
      */
@@ -71,16 +47,14 @@ class Render extends \Magento\Framework\App\Action\Action
      * @param LoggerInterface|null $logger
      */
     public function __construct(
-        Context $context,
-        UiComponentFactory $uiComponentFactory,
-        ?UiComponentTypeResolver $contentTypeResolver = null,
-        JsonFactory $resultJsonFactory = null,
-        Escaper $escaper = null,
-        LoggerInterface $logger = null
+        private readonly Context $context,
+        private readonly UiComponentFactory $uiComponentFactory,
+        private ?UiComponentTypeResolver $contentTypeResolver = null,
+        private ?JsonFactory $resultJsonFactory = null,
+        private ?Escaper $escaper = null,
+        private ?LoggerInterface $logger = null
     ) {
         parent::__construct($context);
-        $this->context = $context;
-        $this->uiComponentFactory = $uiComponentFactory;
         $this->authorization = $context->getAuthorization();
         $this->contentTypeResolver = $contentTypeResolver
             ?? ObjectManager::getInstance()->get(UiComponentTypeResolver::class);
@@ -109,11 +83,11 @@ class Render extends \Magento\Framework\App\Action\Action
                 $this->getResponse()->setHeader('Content-Type', $contentType, true);
                 return $this->getResponse();
             } else {
-                /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+                /** @var ResultJson $resultJson */
                 $resultJson = $this->resultJsonFactory->create();
                 $resultJson->setStatusHeader(
-                    \Laminas\Http\Response::STATUS_CODE_403,
-                    \Laminas\Http\AbstractMessage::VERSION_11,
+                    Response::STATUS_CODE_403,
+                    AbstractMessage::VERSION_11,
                     'Forbidden'
                 );
                 return $resultJson->setData(
@@ -123,32 +97,32 @@ class Render extends \Magento\Framework\App\Action\Action
                     ]
                 );
             }
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->logger->critical($e);
             $result = [
                 'error' => $this->escaper->escapeHtml($e->getMessage()),
                 'errorcode' => $this->escaper->escapeHtml($e->getCode())
             ];
-            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            /** @var ResultJson $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             $resultJson->setStatusHeader(
-                \Laminas\Http\Response::STATUS_CODE_400,
-                \Laminas\Http\AbstractMessage::VERSION_11,
+                Response::STATUS_CODE_400,
+                AbstractMessage::VERSION_11,
                 'Bad Request'
             );
 
             return $resultJson->setData($result);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->critical($e);
             $result = [
                 'error' => __('UI component could not be rendered because of system exception'),
                 'errorcode' => $this->escaper->escapeHtml($e->getCode())
             ];
-            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            /** @var ResultJson $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             $resultJson->setStatusHeader(
-                \Laminas\Http\Response::STATUS_CODE_400,
-                \Laminas\Http\AbstractMessage::VERSION_11,
+                Response::STATUS_CODE_400,
+                AbstractMessage::VERSION_11,
                 'Bad Request'
             );
 

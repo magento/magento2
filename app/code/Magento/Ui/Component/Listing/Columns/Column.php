@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\Component\Listing\Columns;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
@@ -26,13 +27,6 @@ class Column extends AbstractComponent implements ColumnInterface
     protected $wrappedComponent;
 
     /**
-     * Factory for UI Component
-     *
-     * @var UiComponentFactory
-     */
-    protected $uiComponentFactory;
-
-    /**
      * Constructor
      *
      * @param ContextInterface $context
@@ -42,11 +36,10 @@ class Column extends AbstractComponent implements ColumnInterface
      */
     public function __construct(
         ContextInterface $context,
-        UiComponentFactory $uiComponentFactory,
+        protected readonly UiComponentFactory $uiComponentFactory,
         array $components = [],
         array $data = []
     ) {
-        $this->uiComponentFactory = $uiComponentFactory;
         parent::__construct($context, $components, $data);
     }
 
@@ -64,7 +57,7 @@ class Column extends AbstractComponent implements ColumnInterface
      * Prepare component configuration
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function prepare()
     {

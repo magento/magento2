@@ -5,6 +5,9 @@
  */
 namespace Magento\Ui\Config;
 
+use DOMDocument;
+use DOMNode;
+use InvalidArgumentException;
 use Magento\Framework\Config\ConverterInterface as ConfigConverterInterface;
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\View\Layout\Argument\Parser;
@@ -51,29 +54,9 @@ class Converter implements ConfigConverterInterface
     const CLASS_ATTRIBUTE_KEY = 'class';
 
     /**
-     * @var Parser
-     */
-    private $argumentParser;
-
-    /**
      * @var array
      */
     private $schemaMap = [];
-
-    /**
-     * @var ReaderInterface
-     */
-    private $reader;
-
-    /**
-     * @var ParserInterface
-     */
-    private $parser;
-
-    /**
-     * @var ConverterUtils
-     */
-    private $converterUtils;
 
     /**
      * @param Parser $argumentParser
@@ -82,24 +65,20 @@ class Converter implements ConfigConverterInterface
      * @param ConverterUtils $converterUtils
      */
     public function __construct(
-        Parser $argumentParser,
-        ParserInterface $parser,
-        ReaderInterface $reader,
-        ConverterUtils $converterUtils
+        private readonly Parser $argumentParser,
+        private readonly ParserInterface $parser,
+        private readonly ReaderInterface $reader,
+        private readonly ConverterUtils $converterUtils
     ) {
-        $this->argumentParser = $argumentParser;
-        $this->reader = $reader;
-        $this->parser = $parser;
-        $this->converterUtils = $converterUtils;
     }
 
     /**
      * Convert nodes and child nodes to array
      *
-     * @param \DOMNode $node
+     * @param DOMNode $node
      * @return array|string
      */
-    private function toArray(\DOMNode $node)
+    private function toArray(DOMNode $node)
     {
         $result = [];
         $attributes = [];
@@ -121,7 +100,7 @@ class Converter implements ConfigConverterInterface
             default:
                 if ($node->localName === static::ARGUMENT_KEY) {
                     if (!isset($attributes[static::NAME_ATTRIBUTE_KEY])) {
-                        throw new \InvalidArgumentException(
+                        throw new InvalidArgumentException(
                             'Attribute "' . static::NAME_ATTRIBUTE_KEY . '" is absent in the attributes node.'
                         );
                     }
@@ -146,7 +125,7 @@ class Converter implements ConfigConverterInterface
     /**
      * Convert configuration to array
      *
-     * @param \DOMDocument|null $source
+     * @param DOMDocument|null $source
      * @return array
      */
     public function convert($source)
@@ -165,10 +144,10 @@ class Converter implements ConfigConverterInterface
     /**
      * Convert and parse node to array according to definition.map.xml
      *
-     * @param \DOMNode $node
+     * @param DOMNode $node
      * @return array
      */
-    private function convertNode(\DOMNode $node)
+    private function convertNode(DOMNode $node)
     {
         $resultComponent = [];
         if (empty($node->localName)
@@ -224,11 +203,11 @@ class Converter implements ConfigConverterInterface
     }
 
     /**
-     * @param \DOMNode $node
+     * @param DOMNode $node
      * @param array $childResult
      * @return array
      */
-    private function processChildResult(\DOMNode $node, array $childResult)
+    private function processChildResult(DOMNode $node, array $childResult)
     {
         $result = [];
         if ($node->parentNode !== null) {
@@ -243,10 +222,10 @@ class Converter implements ConfigConverterInterface
     /**
      * Convert child nodes of $node
      *
-     * @param \DOMNode $node
+     * @param DOMNode $node
      * @return array
      */
-    private function convertChildNodes(\DOMNode $node)
+    private function convertChildNodes(DOMNode $node)
     {
         $arguments = [];
         $childResult = [];

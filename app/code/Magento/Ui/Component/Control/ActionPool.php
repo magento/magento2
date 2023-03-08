@@ -22,25 +22,11 @@ class ActionPool implements ActionPoolInterface
     const ACTIONS_PAGE_TOOLBAR = 'page.actions.toolbar';
 
     /**
-     * Render context
-     *
-     * @var Context
-     */
-    protected $context;
-
-    /**
      * Actions pool
      *
      * @var Item[]
      */
     protected $items;
-
-    /**
-     * Button factory
-     *
-     * @var ItemFactory
-     */
-    protected $itemFactory;
 
     /**
      * @var AbstractBlock
@@ -53,10 +39,10 @@ class ActionPool implements ActionPoolInterface
      * @param Context $context
      * @param ItemFactory $itemFactory
      */
-    public function __construct(Context $context, ItemFactory $itemFactory)
-    {
-        $this->context = $context;
-        $this->itemFactory = $itemFactory;
+    public function __construct(
+        protected readonly Context $context,
+        protected readonly ItemFactory $itemFactory
+    ) {
     }
 
     /**
@@ -120,9 +106,9 @@ class ActionPool implements ActionPoolInterface
     /**
      * Add html block
      *
-     * @param  string $type
-     * @param  string $name
-     * @param  array $arguments
+     * @param string $type
+     * @param string $name
+     * @param array $arguments
      * @return void
      */
     public function addHtmlBlock($type, $name = '', array $arguments = [])
@@ -144,7 +130,7 @@ class ActionPool implements ActionPoolInterface
     protected function createContainer($key, UiComponentInterface $view)
     {
         $container = $this->context->getPageLayout()->createBlock(
-            \Magento\Ui\Component\Control\Container::class,
+            Container::class,
             'container-' . $view->getName() . '-' . $key,
             [
                 'data' => [

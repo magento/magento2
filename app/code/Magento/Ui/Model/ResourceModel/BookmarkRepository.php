@@ -6,12 +6,19 @@
 
 namespace Magento\Ui\Model\ResourceModel;
 
+use Exception;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\Api\SortOrder;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Api\BookmarkRepositoryInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Ui\Api\Data\BookmarkInterface;
+use Magento\Ui\Api\Data\BookmarkInterfaceFactory;
+use Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory;
 use Magento\Ui\Model\ResourceModel\Bookmark\Collection;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -25,41 +32,17 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class BookmarkRepository implements BookmarkRepositoryInterface
 {
     /**
-     * @var \Magento\Ui\Api\Data\BookmarkInterfaceFactory
-     */
-    protected $bookmarkFactory;
-
-    /**
-     * @var \Magento\Ui\Model\ResourceModel\Bookmark
-     */
-    protected $bookmarkResourceModel;
-
-    /**
-     * @var \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory
-     */
-    protected $searchResultsFactory;
-
-    /**
-     * @var CollectionProcessorInterface
-     */
-    private $collectionProcessor;
-
-    /**
-     * @param \Magento\Ui\Api\Data\BookmarkInterfaceFactory $bookmarkFactory
+     * @param BookmarkInterfaceFactory $bookmarkFactory
      * @param Bookmark $bookmarkResourceModel
-     * @param \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactory
+     * @param BookmarkSearchResultsInterfaceFactory $searchResultsFactory
      * @param CollectionProcessorInterface | null $collectionProcessor
      */
     public function __construct(
-        \Magento\Ui\Api\Data\BookmarkInterfaceFactory $bookmarkFactory,
-        \Magento\Ui\Model\ResourceModel\Bookmark $bookmarkResourceModel,
-        \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactory,
-        CollectionProcessorInterface $collectionProcessor = null
+        protected readonly BookmarkInterfaceFactory $bookmarkFactory,
+        protected readonly Bookmark $bookmarkResourceModel,
+        protected readonly BookmarkSearchResultsInterfaceFactory $searchResultsFactory,
+        private ?CollectionProcessorInterface $collectionProcessor = null
     ) {
-
-        $this->bookmarkResourceModel = $bookmarkResourceModel;
-        $this->bookmarkFactory = $bookmarkFactory;
-        $this->searchResultsFactory = $searchResultsFactory;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
@@ -74,7 +57,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
     {
         try {
             $this->bookmarkResourceModel->save($bookmark);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new CouldNotSaveException(__($exception->getMessage()));
         }
         return $bookmark;
@@ -103,15 +86,15 @@ class BookmarkRepository implements BookmarkRepositoryInterface
      * Retrieve bookmarks matching the specified criteria.
      *
      * @param SearchCriteriaInterface $searchCriteria
-     * @return \Magento\Framework\Api\SearchResultsInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return SearchResultsInterface
+     * @throws LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
 
-        /** @var \Magento\Ui\Model\ResourceModel\Bookmark\Collection $collection */
+        /** @var Collection $collection */
         $collection = $this->bookmarkFactory->create()->getCollection();
         $this->collectionProcessor->process($searchCriteria, $collection);
         $searchResults->setTotalCount($collection->getSize());
@@ -137,7 +120,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
     {
         try {
             $this->bookmarkResourceModel->delete($bookmark);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new CouldNotDeleteException(__($exception->getMessage()));
         }
         return true;
@@ -163,7 +146,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
      * @param Collection $collection
      * @return void
      * @deprecated 101.0.0
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws InputException
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
     {
@@ -182,7 +165,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
     private function getCollectionProcessor()
     {
         if (!$this->collectionProcessor) {
-            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            $this->collectionProcessor = ObjectManager::getInstance()->get(
                 CollectionProcessorInterface::class
             );
         }

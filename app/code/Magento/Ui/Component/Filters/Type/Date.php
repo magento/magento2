@@ -6,6 +6,7 @@
 
 namespace Magento\Ui\Component\Filters\Type;
 
+use DateTime;
 use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
 
 /**
@@ -128,9 +129,9 @@ class Date extends AbstractFilter
      * @param int $hour
      * @param int $minute
      * @param int $second
-     * @return \DateTime
+     * @return DateTime|null
      */
-    private function convertDatetime(string $value, int $hour = 0, int $minute = 0, int $second = 0): ?\DateTime
+    private function convertDatetime(string $value, int $hour = 0, int $minute = 0, int $second = 0): ?DateTime
     {
         $value = $this->getData('config/options/showsTime')
             ? $this->wrappedComponent->convertDatetime(

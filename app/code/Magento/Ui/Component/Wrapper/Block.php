@@ -18,11 +18,6 @@ class Block extends AbstractComponent implements BlockWrapperInterface
     const NAME = 'blockWrapper';
 
     /**
-     * @var BlockInterface
-     */
-    protected $block;
-
-    /**
      * Constructor
      *
      * @param ContextInterface $context
@@ -32,11 +27,10 @@ class Block extends AbstractComponent implements BlockWrapperInterface
      */
     public function __construct(
         ContextInterface $context,
-        BlockInterface $block,
+        protected readonly BlockInterface $block,
         array $components = [],
         array $data = []
     ) {
-        $this->block = $block;
         parent::__construct($context, $components, $data);
     }
 

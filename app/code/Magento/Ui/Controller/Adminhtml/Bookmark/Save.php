@@ -5,16 +5,21 @@
  */
 namespace Magento\Ui\Controller\Adminhtml\Bookmark;
 
+use InvalidArgumentException;
+use LogicException;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Json\DecoderInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Api\BookmarkManagementInterface;
 use Magento\Ui\Api\BookmarkRepositoryInterface;
 use Magento\Ui\Api\Data\BookmarkInterface;
 use Magento\Ui\Api\Data\BookmarkInterfaceFactory;
 use Magento\Ui\Controller\Adminhtml\AbstractAction;
+use RuntimeException;
 
 /**
  * Bookmark Save action
@@ -33,37 +38,6 @@ class Save extends AbstractAction implements HttpPostActionInterface
     public const VIEWS_IDENTIFIER = 'views';
 
     /**
-     * @var BookmarkRepositoryInterface
-     */
-    protected $bookmarkRepository;
-
-    /**
-     * @var BookmarkManagementInterface
-     */
-    protected $bookmarkManagement;
-
-    /**
-     * @var BookmarkInterfaceFactory
-     */
-    protected $bookmarkFactory;
-
-    /**
-     * @var UserContextInterface
-     */
-    protected $userContext;
-
-    /**
-     * @var DecoderInterface
-     * @deprecated 101.1.0
-     */
-    protected $jsonDecoder;
-
-    /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
-     */
-    private $serializer;
-
-    /**
      * @param Context $context
      * @param UiComponentFactory $factory
      * @param BookmarkRepositoryInterface $bookmarkRepository
@@ -71,35 +45,30 @@ class Save extends AbstractAction implements HttpPostActionInterface
      * @param BookmarkInterfaceFactory $bookmarkFactory
      * @param UserContextInterface $userContext
      * @param DecoderInterface $jsonDecoder
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @throws \RuntimeException
+     * @param Json|null $serializer
+     * @throws RuntimeException
      */
     public function __construct(
         Context $context,
         UiComponentFactory $factory,
-        BookmarkRepositoryInterface $bookmarkRepository,
-        BookmarkManagementInterface $bookmarkManagement,
-        BookmarkInterfaceFactory $bookmarkFactory,
-        UserContextInterface $userContext,
-        DecoderInterface $jsonDecoder,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        protected readonly BookmarkRepositoryInterface $bookmarkRepository,
+        protected readonly BookmarkManagementInterface $bookmarkManagement,
+        protected readonly BookmarkInterfaceFactory $bookmarkFactory,
+        protected readonly UserContextInterface $userContext,
+        protected readonly DecoderInterface $jsonDecoder,
+        private ?Json $serializer = null
     ) {
         parent::__construct($context, $factory);
-        $this->bookmarkRepository = $bookmarkRepository;
-        $this->bookmarkManagement = $bookmarkManagement;
-        $this->bookmarkFactory = $bookmarkFactory;
-        $this->userContext = $userContext;
-        $this->jsonDecoder = $jsonDecoder;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
+            ->get(Json::class);
     }
 
     /**
      * Action for AJAX request
      *
      * @return void
-     * @throws \InvalidArgumentException
-     * @throws \LogicException
+     * @throws InvalidArgumentException
+     * @throws LogicException
      */
     public function execute()
     {
@@ -110,7 +79,7 @@ class Save extends AbstractAction implements HttpPostActionInterface
         $bookmark = $this->bookmarkFactory->create();
         $jsonData = $this->_request->getParam('data');
         if (!$jsonData) {
-            throw new \InvalidArgumentException('Invalid parameter "data"');
+            throw new InvalidArgumentException('Invalid parameter "data"');
         }
         $data = $this->serializer->unserialize($jsonData);
         $action = key($data);
@@ -143,7 +112,7 @@ class Save extends AbstractAction implements HttpPostActionInterface
                 break;
 
             default:
-                throw new \LogicException(__('Unsupported bookmark action.'));
+                throw new LogicException(__('Unsupported bookmark action.'));
         }
     }
 

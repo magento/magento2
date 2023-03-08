@@ -5,6 +5,8 @@
  */
 namespace Magento\Ui\Config\Argument;
 
+use DOMNode;
+
 /**
  * Convert node to array
  *
@@ -16,8 +18,8 @@ interface ParserInterface
      * Parse xml node to array
      *
      * @param array $data
-     * @param \DOMNode $node
+     * @param DOMNode $node
      * @return array
      */
-    public function parse(array $data, \DOMNode $node);
+    public function parse(array $data, DOMNode $node);
 }

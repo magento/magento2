@@ -19,16 +19,6 @@ use Magento\Ui\Controller\Adminhtml\AbstractAction;
 class Delete extends AbstractAction
 {
     /**
-     * @var BookmarkRepositoryInterface
-     */
-    protected $bookmarkRepository;
-
-    /**
-     * @var BookmarkManagementInterface
-     */
-    private $bookmarkManagement;
-
-    /**
      * @param Context $context
      * @param UiComponentFactory $factory
      * @param BookmarkRepositoryInterface $bookmarkRepository
@@ -37,12 +27,10 @@ class Delete extends AbstractAction
     public function __construct(
         Context $context,
         UiComponentFactory $factory,
-        BookmarkRepositoryInterface $bookmarkRepository,
-        BookmarkManagementInterface $bookmarkManagement
+        protected readonly BookmarkRepositoryInterface $bookmarkRepository,
+        private readonly BookmarkManagementInterface $bookmarkManagement
     ) {
         parent::__construct($context, $factory);
-        $this->bookmarkRepository = $bookmarkRepository;
-        $this->bookmarkManagement = $bookmarkManagement;
     }
 
     /**

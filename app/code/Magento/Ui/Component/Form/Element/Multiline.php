@@ -23,13 +23,6 @@ class Multiline extends AbstractElement
     const DATA_TYPE = 'text';
 
     /**
-     * UI component factory
-     *
-     * @var UiComponentFactory
-     */
-    protected $uiComponentFactory;
-
-    /**
      * Constructor
      *
      * @param ContextInterface $context
@@ -39,11 +32,10 @@ class Multiline extends AbstractElement
      */
     public function __construct(
         ContextInterface $context,
-        UiComponentFactory $uiComponentFactory,
+        protected readonly UiComponentFactory $uiComponentFactory,
         array $components = [],
         array $data = []
     ) {
-        $this->uiComponentFactory = $uiComponentFactory;
         parent::__construct($context, $components, $data);
     }
 

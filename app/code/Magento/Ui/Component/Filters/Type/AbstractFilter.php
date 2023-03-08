@@ -36,21 +36,6 @@ abstract class AbstractFilter extends AbstractComponent
     protected $filterData;
 
     /**
-     * @var UiComponentFactory
-     */
-    protected $uiComponentFactory;
-
-    /**
-     * @var FilterBuilder
-     */
-    protected $filterBuilder;
-
-    /**
-     * @var FilterModifier
-     */
-    protected $filterModifier;
-
-    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param FilterBuilder $filterBuilder
@@ -60,17 +45,14 @@ abstract class AbstractFilter extends AbstractComponent
      */
     public function __construct(
         ContextInterface $context,
-        UiComponentFactory $uiComponentFactory,
-        FilterBuilder $filterBuilder,
-        FilterModifier $filterModifier,
+        protected readonly UiComponentFactory $uiComponentFactory,
+        protected readonly FilterBuilder $filterBuilder,
+        protected readonly FilterModifier $filterModifier,
         array $components = [],
         array $data = []
     ) {
-        $this->uiComponentFactory = $uiComponentFactory;
-        $this->filterBuilder = $filterBuilder;
         parent::__construct($context, $components, $data);
         $this->filterData = $this->getContext()->getFiltersParams();
-        $this->filterModifier = $filterModifier;
     }
 
     /**

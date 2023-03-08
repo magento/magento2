@@ -30,34 +30,14 @@ use Magento\Ui\Component\MassAction\Filter;
 class MetadataProvider
 {
     /**
-     * @var Filter
-     */
-    protected $filter;
-
-    /**
      * @var array
      */
     protected $columns;
 
     /**
-     * @var TimezoneInterface
-     */
-    protected $localeDate;
-
-    /**
      * @var string
      */
     protected $locale;
-
-    /**
-     * @var string
-     */
-    protected $dateFormat;
-
-    /**
-     * @var array
-     */
-    protected $data;
 
     /**
      * @param Filter $filter
@@ -67,17 +47,13 @@ class MetadataProvider
      * @param array $data
      */
     public function __construct(
-        Filter $filter,
-        TimezoneInterface $localeDate,
+        protected readonly Filter $filter,
+        protected readonly TimezoneInterface $localeDate,
         ResolverInterface $localeResolver,
-        $dateFormat = 'M j, Y h:i:s A',
-        array $data = []
+        protected $dateFormat = 'M j, Y h:i:s A',
+        protected readonly array $data = []
     ) {
-        $this->filter = $filter;
-        $this->localeDate = $localeDate;
         $this->locale = $localeResolver->getLocale();
-        $this->dateFormat = $dateFormat;
-        $this->data = $data;
     }
 
     /**

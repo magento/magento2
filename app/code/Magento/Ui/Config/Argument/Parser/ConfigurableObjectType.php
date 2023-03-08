@@ -5,6 +5,8 @@
  */
 namespace Magento\Ui\Config\Argument\Parser;
 
+use DOMNode;
+use InvalidArgumentException;
 use Magento\Ui\Config\Argument\ParserInterface;
 
 /**
@@ -13,27 +15,22 @@ use Magento\Ui\Config\Argument\ParserInterface;
 class ConfigurableObjectType implements ParserInterface
 {
     /**
-     * @var ParserInterface
-     */
-    private $argumentParser;
-
-    /**
      * @param ParserInterface $argumentParser
      */
-    public function __construct(ParserInterface $argumentParser)
-    {
-        $this->argumentParser = $argumentParser;
+    public function __construct(
+        public readonly ParserInterface $argumentParser
+    ) {
     }
 
     /**
      * @inheritdoc
-     * @throws \InvalidArgumentException if array arguments isn't passed
+     * @throws InvalidArgumentException if array arguments isn't passed
      */
-    public function parse(array $data, \DOMNode $node)
+    public function parse(array $data, DOMNode $node)
     {
         $arguments = isset($data['argument']) ? $data['argument'] : [];
         if (!is_array($arguments)) {
-            throw new \InvalidArgumentException('Array arguments are expected.');
+            throw new InvalidArgumentException('Array arguments are expected.');
         }
         $result = [];
         foreach ($arguments as $argumentKey => $argumentData) {

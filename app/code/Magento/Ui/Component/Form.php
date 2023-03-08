@@ -19,11 +19,6 @@ class Form extends AbstractComponent
     const NAME = 'form';
 
     /**
-     * @var FilterBuilder
-     */
-    protected $filterBuilder;
-
-    /**
      * @param ContextInterface $context
      * @param FilterBuilder $filterBuilder
      * @param UiComponentInterface[] $components
@@ -31,11 +26,10 @@ class Form extends AbstractComponent
      */
     public function __construct(
         ContextInterface $context,
-        FilterBuilder $filterBuilder,
+        protected readonly FilterBuilder $filterBuilder,
         array $components = [],
         array $data = []
     ) {
-        $this->filterBuilder = $filterBuilder;
         parent::__construct(
             $context,
             $components,

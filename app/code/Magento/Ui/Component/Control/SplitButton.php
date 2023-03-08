@@ -33,23 +33,17 @@ class SplitButton extends Button
     private $secureRenderer;
 
     /**
-     * @var Random
-     */
-    private $random;
-
-    /**
      * @inheritDoc
      */
     public function __construct(
         Context $context,
         array $data = [],
-        ?Random $random = null,
+        private ?Random $random = null,
         ?SecureHtmlRenderer $htmlRenderer = null
     ) {
         $random = $random ?? ObjectManager::getInstance()->get(Random::class);
         $htmlRenderer = $htmlRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
         parent::__construct($context, $data, $random, $htmlRenderer);
-        $this->random = $random;
         $this->secureRenderer = $htmlRenderer;
     }
 

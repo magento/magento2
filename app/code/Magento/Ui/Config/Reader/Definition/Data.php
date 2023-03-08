@@ -6,6 +6,7 @@
 namespace Magento\Ui\Config\Reader\Definition;
 
 use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Config\DataInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Ui\Config\Converter;
 use Magento\Framework\Data\Argument\InterpreterInterface;
@@ -15,7 +16,7 @@ use Magento\Ui\Config\Reader\DefinitionFactory;
 /**
  * Read UI Component definition configuration data ang evaluate arguments
  */
-class Data implements \Magento\Framework\Config\DataInterface
+class Data implements DataInterface
 {
     const CACHE_ID = 'ui_component_configuration_definition_data';
 
@@ -29,31 +30,9 @@ class Data implements \Magento\Framework\Config\DataInterface
     private $data = [];
 
     /**
-     * @var ReaderFactory
-     */
-    private $readerFactory;
-
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
-
-    /**
      * @var string
      */
     private $cacheId;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
-     * Argument interpreter.
-     *
-     * @var InterpreterInterface
-     */
-    private $argumentInterpreter;
 
     /**
      * @param DefinitionFactory $readerFactory
@@ -62,15 +41,11 @@ class Data implements \Magento\Framework\Config\DataInterface
      * @param InterpreterInterface $argumentInterpreter
      */
     public function __construct(
-        DefinitionFactory $readerFactory,
-        CacheInterface $cache,
-        SerializerInterface $serializer,
-        InterpreterInterface $argumentInterpreter
+        private readonly DefinitionFactory $readerFactory,
+        private readonly CacheInterface $cache,
+        private readonly SerializerInterface $serializer,
+        private readonly InterpreterInterface $argumentInterpreter
     ) {
-        $this->readerFactory = $readerFactory;
-        $this->cache = $cache;
-        $this->serializer = $serializer;
-        $this->argumentInterpreter = $argumentInterpreter;
         $this->cacheId = static::CACHE_ID;
         $this->initData();
     }

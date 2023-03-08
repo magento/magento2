@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\DataProvider\Modifier;
 
+use InvalidArgumentException;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -13,20 +14,13 @@ use Magento\Framework\ObjectManagerInterface;
 class ModifierFactory
 {
     /**
-     * Object Manager
-     *
-     * @var ObjectManagerInterface
-     */
-    protected $objectManager;
-
-    /**
      * Construct
      *
      * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(ObjectManagerInterface $objectManager)
-    {
-        $this->objectManager = $objectManager;
+    public function __construct(
+        protected readonly ObjectManagerInterface $objectManager
+    ) {
     }
 
     /**
@@ -35,14 +29,14 @@ class ModifierFactory
      * @param string $className
      * @param array $data
      * @return ModifierInterface
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function create($className, array $data = [])
     {
         $model = $this->objectManager->create($className, $data);
 
         if (!$model instanceof ModifierInterface) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Type "' . $className . '" is not instance on ' . ModifierInterface::class
             );
         }

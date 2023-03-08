@@ -5,10 +5,12 @@
  */
 namespace Magento\Ui\Block\Component\StepsWizard;
 
+use Magento\Framework\View\Element\Template;
+
 /**
  * Abstract block for multi-step wizard UI
  */
-abstract class StepAbstract extends \Magento\Framework\View\Element\Template implements StepInterface
+abstract class StepAbstract extends Template implements StepInterface
 {
     /**
      * @inheritdoc

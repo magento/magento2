@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\Component;
 
+use JsonSerializable;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
@@ -15,24 +16,18 @@ class Action extends AbstractComponent
     const NAME = 'action';
 
     /**
-     * @var array|\JsonSerializable
-     */
-    protected $actions;
-
-    /**
      * @param ContextInterface $context
      * @param array $components
      * @param array $data
-     * @param array|\JsonSerializable $actions
+     * @param array|JsonSerializable $actions
      */
     public function __construct(
         ContextInterface $context,
         array $components = [],
         array $data = [],
-        $actions = null
+        protected $actions = null
     ) {
         parent::__construct($context, $components, $data);
-        $this->actions = $actions;
     }
 
     /**

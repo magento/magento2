@@ -5,13 +5,14 @@
  */
 namespace Magento\Ui\Config\Reader;
 
+use Magento\Framework\Config\SchemaLocatorInterface;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\Dir\Reader;
 
 /**
  * Config schema locator interface
  */
-class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
+class SchemaLocator implements SchemaLocatorInterface
 {
     /**
      * Path to corresponding XSD file with validation rules for config (per-file)

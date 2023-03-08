@@ -5,6 +5,8 @@
  */
 namespace Magento\Ui\Config;
 
+use DOMNode;
+
 /**
  * Utility methods for converters
  */
@@ -13,10 +15,10 @@ class ConverterUtils
     /**
      * Retrieve component name
      *
-     * @param \DOMNode $node
+     * @param DOMNode $node
      * @return string
      */
-    public function getComponentName(\DOMNode $node)
+    public function getComponentName(DOMNode $node)
     {
         $result = $node->localName;
         if (!$node->hasAttributes()) {
@@ -37,10 +39,10 @@ class ConverterUtils
      *
      * If $node has 'settings', 'formElements' node in any parent node that it is not UiComponent
      *
-     * @param \DOMNode $node
+     * @param DOMNode $node
      * @return boolean
      */
-    public function isUiComponent(\DOMNode $node)
+    public function isUiComponent(DOMNode $node)
     {
         if (in_array($node->localName, [Converter::SETTINGS_KEY, 'formElements'])) {
             return false;

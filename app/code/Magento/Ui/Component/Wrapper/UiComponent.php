@@ -18,18 +18,6 @@ use Magento\Framework\View\Element\Template\Context as TemplateContext;
 class UiComponent extends Template implements ContainerInterface
 {
     /**
-     * Ui component
-     *
-     * @var UiComponentInterface
-     */
-    protected $component;
-
-    /**
-     * @var BlockFactory
-     */
-    protected $blockWrapperFactory;
-
-    /**
      * Constructor
      *
      * @param TemplateContext $context
@@ -39,12 +27,10 @@ class UiComponent extends Template implements ContainerInterface
      */
     public function __construct(
         TemplateContext $context,
-        UiComponentInterface $component,
-        BlockFactory $blockWrapperFactory,
+        protected readonly UiComponentInterface $component,
+        protected readonly BlockFactory $blockWrapperFactory,
         array $data = []
     ) {
-        $this->component = $component;
-        $this->blockWrapperFactory = $blockWrapperFactory;
         $this->setNameInLayout($this->component->getName());
         parent::__construct($context, $data);
     }

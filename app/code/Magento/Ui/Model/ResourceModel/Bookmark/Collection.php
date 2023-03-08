@@ -6,6 +6,8 @@
 namespace Magento\Ui\Model\ResourceModel\Bookmark;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Ui\Model\Bookmark as ModelBookmark;
+use Magento\Ui\Model\ResourceModel\Bookmark as ResourceBookmark;
 
 /**
  * Bookmark Collection
@@ -19,6 +21,6 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Ui\Model\Bookmark::class, \Magento\Ui\Model\ResourceModel\Bookmark::class);
+        $this->_init(ModelBookmark::class, ResourceBookmark::class);
     }
 }

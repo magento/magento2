@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\Component\Form\Element;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\Sanitizer;
@@ -19,17 +20,6 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\Sanitizer;
 abstract class AbstractOptionsField extends AbstractElement
 {
     /**
-     * @var array|OptionSourceInterface|null
-     * @since 100.1.0
-     */
-    protected $options;
-
-    /**
-     * @var Sanitizer
-     */
-    private $sanitizer;
-
-    /**
      * Constructor
      *
      * @param ContextInterface $context
@@ -40,13 +30,12 @@ abstract class AbstractOptionsField extends AbstractElement
      */
     public function __construct(
         ContextInterface $context,
-        $options = null,
+        protected $options = null,
         array $components = [],
         array $data = [],
-        ?Sanitizer $sanitizer = null
+        private ?Sanitizer $sanitizer = null
     ) {
-        $this->options = $options;
-        $this->sanitizer = $sanitizer ?? \Magento\Framework\App\ObjectManager::getInstance()->get(Sanitizer::class);
+        $this->sanitizer = $sanitizer ?? ObjectManager::getInstance()->get(Sanitizer::class);
         parent::__construct($context, $components, $data);
     }
 

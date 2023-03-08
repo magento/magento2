@@ -5,6 +5,9 @@
  */
 namespace Magento\Ui\Config\Reader\DefinitionMap;
 
+use DOMDocument;
+use DOMNode;
+use InvalidArgumentException;
 use Magento\Framework\Config\ConverterInterface;
 use Magento\Framework\View\Layout\Argument\Parser;
 
@@ -34,27 +37,22 @@ class Converter implements ConverterInterface
     const NAME_ATTRIBUTE_KEY = 'name';
 
     /**
-     * @var Parser
-     */
-    private $argumentParser;
-
-    /**
      * Converter constructor.
      *
      * @param Parser $argumentParser
      */
-    public function __construct(Parser $argumentParser)
-    {
-        $this->argumentParser = $argumentParser;
+    public function __construct(
+        private readonly Parser $argumentParser
+    ) {
     }
 
     /**
      * Transform Xml to array
      *
-     * @param \DOMNode $node
+     * @param DOMNode $node
      * @return array|string
      */
-    private function toArray(\DOMNode $node)
+    private function toArray(DOMNode $node)
     {
         $result = [];
         $attributes = [];
@@ -78,7 +76,7 @@ class Converter implements ConverterInterface
             default:
                 if ($node->localName === static::ARGUMENT_KEY) {
                     if (!isset($attributes[static::NAME_ATTRIBUTE_KEY])) {
-                        throw new \InvalidArgumentException(
+                        throw new InvalidArgumentException(
                             'Attribute "' . static::NAME_ATTRIBUTE_KEY . '" is absent in the attributes node.'
                         );
                     }
@@ -98,10 +96,10 @@ class Converter implements ConverterInterface
     /**
      * Retrieve component name
      *
-     * @param \DOMNode $node
+     * @param DOMNode $node
      * @return string
      */
-    private function getComponentName(\DOMNode $node)
+    private function getComponentName(DOMNode $node)
     {
         $result = $node->localName;
         if (!$node->hasAttributes()) {
@@ -120,7 +118,7 @@ class Converter implements ConverterInterface
     /**
      * Convert configuration
      *
-     * @param \DOMDocument|null $source
+     * @param DOMDocument|null $source
      * @return array
      */
     public function convert($source)
@@ -167,10 +165,10 @@ class Converter implements ConverterInterface
     /**
      * Convert child nodes of $node
      *
-     * @param \DOMNode $node
+     * @param DOMNode $node
      * @return array
      */
-    private function convertChildNodes(\DOMNode $node)
+    private function convertChildNodes(DOMNode $node)
     {
         $arguments = [];
         $childResult = [];

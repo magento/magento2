@@ -5,12 +5,14 @@
  */
 namespace Magento\Ui\Config\Reader\Template;
 
+use Magento\Framework\Config\SchemaLocatorInterface;
 use Magento\Framework\Module\Dir;
+use Magento\Framework\Module\Dir\Reader as DirReader;
 
 /**
  * Config schema locator interface
  */
-class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
+class SchemaLocator implements SchemaLocatorInterface
 {
     /**
      * Path to corresponding XSD file with validation rules for merged config
@@ -20,9 +22,9 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
     private $schema;
 
     /**
-     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * @param DirReader $moduleReader
      */
-    public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
+    public function __construct(DirReader $moduleReader)
     {
         $this->schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Ui') . '/' . 'ui_template.xsd';
     }
