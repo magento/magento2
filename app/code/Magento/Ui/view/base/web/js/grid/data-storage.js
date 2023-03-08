@@ -189,6 +189,7 @@ define([
             result = {
                 items: this.getByIds(request.ids),
                 totalRecords: request.totalRecords,
+                showTotalRecords: request.showTotalRecords,
                 errorMessage: request.errorMessage
             };
 
@@ -218,6 +219,7 @@ define([
                 ids: this.getIds(data.items),
                 params: params,
                 totalRecords: data.totalRecords,
+                showTotalRecords: data.showTotalRecords,
                 errorMessage: data.errorMessage
             });
 

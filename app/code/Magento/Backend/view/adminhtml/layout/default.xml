@@ -63,7 +63,7 @@
                     <block class="Magento\Backend\Block\Page\Footer" name="version" as="version" />
                     <block class="Magento\Framework\View\Element\Template" name="privacyPolicy" as="privacyPolicy" template="Magento_Backend::page/privacyPolicy.phtml">
                         <arguments>
-                            <argument name="privacypolicy_url" xsi:type="string">https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf</argument>
+                            <argument name="privacypolicy_url" xsi:type="string">https://www.adobe.com/privacy/policy.html</argument>
                         </arguments>
                     </block>
                     <block class="Magento\Framework\View\Element\Template" name="report" as="report" template="Magento_Backend::page/report.phtml">

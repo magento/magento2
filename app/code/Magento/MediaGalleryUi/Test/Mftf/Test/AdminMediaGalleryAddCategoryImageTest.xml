@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
-            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -29,9 +29,10 @@
                 <argument name="category" value="$$category$$"/>
             </actionGroup>
             <actionGroup ref="AdminOpenMediaGalleryTinyMceActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilter"/>
             <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
             <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
-            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
         </after>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
@@ -39,8 +40,8 @@
             <argument name="category" value="$$category$$"/>
         </actionGroup>
         <actionGroup ref="AdminOpenMediaGalleryTinyMceActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+        <comment userInput="BIC workaround" stepKey="waitForPageLoad"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilter"/>
         <actionGroup ref="AdminMediaGalleryExpandFolderActionGroup" stepKey="expandCatalogFolder">
             <argument name="fieldId" value="catalog"/>
         </actionGroup>

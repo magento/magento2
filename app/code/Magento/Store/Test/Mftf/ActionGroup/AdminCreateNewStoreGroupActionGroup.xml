@@ -28,6 +28,7 @@
         <fillField selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" userInput="{{storeGroupCode}}" stepKey="enterStoreGroupCode"/>
         <selectOption selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" userInput="Default Category" stepKey="chooseRootCategory"/>
         <click selector="{{AdminStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreGroup"/>
+        <waitForPageLoad stepKey="waitForSuccess"/>
         <waitForElementVisible selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" stepKey="waitForStoreGridReload"/>
         <see userInput="You saved the store." stepKey="seeSavedMessage"/>
     </actionGroup>

@@ -20,8 +20,8 @@
         <data key="is_wysiwyg_enabled">true</data>
         <data key="is_visible_in_advanced_search">true</data>
         <data key="is_visible_on_front">true</data>
-        <data key="is_filterable">true</data>
-        <data key="is_filterable_in_search">true</data>
+        <data key="is_filterable">false</data>
+        <data key="is_filterable_in_search">false</data>
         <data key="used_in_product_listing">true</data>
         <data key="is_used_for_promo_rules">true</data>
         <data key="is_comparable">true</data>
@@ -227,8 +227,8 @@
         <data key="is_visible">true</data>
         <data key="is_visible_in_advanced_search">true</data>
         <data key="is_visible_on_front">true</data>
-        <data key="is_filterable">true</data>
-        <data key="is_filterable_in_search">true</data>
+        <data key="is_filterable">false</data>
+        <data key="is_filterable_in_search">false</data>
         <data key="used_in_product_listing">true</data>
         <data key="is_used_for_promo_rules">true</data>
         <data key="is_comparable">true</data>
@@ -321,6 +321,22 @@
         <data key="option3_admin" unique="suffix">opt3Admin</data>
         <data key="option3_frontend" unique="suffix">opt3Front</data>
     </entity>
+    <entity name="visualSwatchProductAttribute" extends="newProductAttribute" type="ProductAttribute">
+        <data key="frontend_input">swatch_visual</data>
+        <data key="frontend_input_admin">Visual Swatch</data>
+        <data key="is_required_admin">No</data>
+        <data key="option1_admin" unique="suffix">opt1Admin</data>
+        <data key="option1_store" unique="suffix">opt1Front</data>
+    </entity>
+    <entity name="textSwatchProductAttribute" extends="newProductAttribute" type="ProductAttribute">
+        <data key="frontend_input">text_visual</data>
+        <data key="frontend_input_admin">Text Swatch</data>
+        <data key="is_required_admin">No</data>
+        <data key="swatchStore" unique="suffix">opt1swatch</data>
+        <data key="store" unique="suffix">opt1store</data>
+        <data key="SwatchAdmin" unique="suffix">opt1SwatchAdmin</data>
+        <data key="admin" unique="suffix">opt1Admin</data>
+    </entity>
     <entity name="dropdownProductAttributeWithQuote" extends="productAttributeWysiwyg" type="ProductAttribute">
         <data key="frontend_input">select</data>
         <data key="frontend_input_admin">Dropdown</data>
@@ -340,8 +356,8 @@
         <data key="is_wysiwyg_enabled">true</data>
         <data key="is_visible_in_advanced_search">true</data>
         <data key="is_visible_on_front">true</data>
-        <data key="is_filterable">true</data>
-        <data key="is_filterable_in_search">true</data>
+        <data key="is_filterable">false</data>
+        <data key="is_filterable_in_search">false</data>
         <data key="used_in_product_listing">true</data>
         <data key="is_used_for_promo_rules">true</data>
         <data key="is_comparable">true</data>

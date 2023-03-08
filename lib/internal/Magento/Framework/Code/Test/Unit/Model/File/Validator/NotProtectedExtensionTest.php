@@ -55,7 +55,7 @@ class NotProtectedExtensionTest extends TestCase
     {
         $property = new \ReflectionProperty(
             NotProtectedExtension::class,
-            '_messageTemplates'
+            'messageTemplates'
         );
         $property->setAccessible(true);
         $defaultMess = [

@@ -15,6 +15,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Context;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Paypal\Block\Billing\Agreements;
@@ -31,7 +32,7 @@ use PHPUnit\Framework\TestCase;
 class AgreementsTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Element\Context|MockObject
+     * @var Context|MockObject
      */
     private $context;
 
@@ -117,10 +118,10 @@ class AgreementsTest extends TestCase
         $this->context->expects($this->once())->method('getScopeConfig')->willReturn($this->scopeConfig);
         $this->cache = $this->getMockForAbstractClass(CacheInterface::class, [], '', false);
         $this->context->expects($this->once())->method('getCache')->willReturn($this->cache);
-        $this->agreementCollection = $this->getMockBuilder(
-            CollectionFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+        $this->agreementCollection = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
         $this->helper = $this->createMock(Data::class);
         $objectManager = new ObjectManager($this);
 
@@ -129,12 +130,15 @@ class AgreementsTest extends TestCase
             [
                 'context' => $this->context,
                 'agreementCollection' => $this->agreementCollection,
-                'helper' => $this->helper,
+                'helper' => $this->helper
             ]
         );
     }
 
-    public function testGetBillingAgreements()
+    /**
+     * @return void
+     */
+    public function testGetBillingAgreements(): void
     {
         $collection = $this->createMock(Collection::class);
         $this->agreementCollection->expects($this->once())->method('create')->willReturn($collection);
@@ -145,7 +149,10 @@ class AgreementsTest extends TestCase
         $this->block->getBillingAgreements();
     }
 
-    public function testGetItemValueCreatedAt()
+    /**
+     * @return void
+     */
+    public function testGetItemValueCreatedAt(): void
     {
         $this->escaper->expects($this->once())->method('escapeHtml');
         $item = $this->createMock(Agreement::class);
@@ -153,7 +160,10 @@ class AgreementsTest extends TestCase
         $this->block->getItemValue($item, 'created_at');
     }
 
-    public function testGetItemValueCreatedAtNoData()
+    /**
+     * @return void
+     */
+    public function testGetItemValueCreatedAtNoData(): void
     {
         $this->escaper->expects($this->once())->method('escapeHtml');
         $item = $this->createMock(Agreement::class);
@@ -161,7 +171,10 @@ class AgreementsTest extends TestCase
         $this->block->getItemValue($item, 'created_at');
     }
 
-    public function testGetItemValueUpdatedAt()
+    /**
+     * @return void
+     */
+    public function testGetItemValueUpdatedAt(): void
     {
         $this->escaper->expects($this->once())->method('escapeHtml');
         $item = $this->createMock(Agreement::class);
@@ -169,7 +182,10 @@ class AgreementsTest extends TestCase
         $this->block->getItemValue($item, 'updated_at');
     }
 
-    public function testGetItemValueUpdatedAtNoData()
+    /**
+     * @return void
+     */
+    public function testGetItemValueUpdatedAtNoData(): void
     {
         $this->escaper->expects($this->once())->method('escapeHtml');
         $item = $this->createMock(Agreement::class);
@@ -177,7 +193,10 @@ class AgreementsTest extends TestCase
         $this->block->getItemValue($item, 'updated_at');
     }
 
-    public function testGetItemValueEditUrl()
+    /**
+     * @return void
+     */
+    public function testGetItemValueEditUrl(): void
     {
         $this->escaper->expects($this->once())->method('escapeHtml');
         $item = $this->getMockBuilder(Agreement::class)
@@ -192,7 +211,10 @@ class AgreementsTest extends TestCase
         $this->block->getItemValue($item, 'edit_url');
     }
 
-    public function testGetItemPaymentMethodLabel()
+    /**
+     * @return void
+     */
+    public function testGetItemPaymentMethodLabel(): void
     {
         $this->escaper->expects($this->once())->method('escapeHtml')->with('label', null);
         $item = $this->getMockBuilder(Agreement::class)
@@ -203,7 +225,10 @@ class AgreementsTest extends TestCase
         $this->block->getItemValue($item, 'payment_method_label');
     }
 
-    public function testGetItemStatus()
+    /**
+     * @return void
+     */
+    public function testGetItemStatus(): void
     {
         $this->escaper->expects($this->once())->method('escapeHtml')->with('status', null);
         $item = $this->createMock(Agreement::class);
@@ -211,7 +236,10 @@ class AgreementsTest extends TestCase
         $this->block->getItemValue($item, 'status');
     }
 
-    public function testGetItemDefault()
+    /**
+     * @return void
+     */
+    public function testGetItemDefault(): void
     {
         $this->escaper->expects($this->once())->method('escapeHtml')->with('value', null);
         $item = $this->createMock(Agreement::class);
@@ -219,7 +247,10 @@ class AgreementsTest extends TestCase
         $this->block->getItemValue($item, 'default');
     }
 
-    public function testGetWizardPaymentMethodOptions()
+    /**
+     * @return void
+     */
+    public function testGetWizardPaymentMethodOptions(): void
     {
         $method1 = $this->createPartialMock(
             \Magento\Paypal\Model\Method\Agreement::class,
@@ -247,17 +278,18 @@ class AgreementsTest extends TestCase
         $this->assertEquals(['code1' => 'title1', 'code3' => 'title3'], $this->block->getWizardPaymentMethodOptions());
     }
 
-    public function testToHtml()
+    /**
+     * @return void
+     */
+    public function testToHtml(): void
     {
-        $this->eventManager
-            ->expects($this->at(0))
-            ->method('dispatch')
-            ->with('view_block_abstract_to_html_before', ['block' => $this->block]);
         $transport = new DataObject(['html' => '']);
         $this->eventManager
-            ->expects($this->at(1))
             ->method('dispatch')
-            ->with('view_block_abstract_to_html_after', ['block' => $this->block, 'transport' => $transport]);
+            ->withConsecutive(
+                ['view_block_abstract_to_html_before', ['block' => $this->block]],
+                ['view_block_abstract_to_html_after', ['block' => $this->block, 'transport' => $transport]]
+            );
         $this->scopeConfig
             ->expects($this->once())
             ->method('getValue')

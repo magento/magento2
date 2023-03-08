@@ -7,6 +7,7 @@ namespace Magento\Framework\MessageQueue\Publisher\Config;
 
 /**
  * Instances of this class represent config items declared in etc/queue_publisher.xsd
+ * @api
  */
 interface PublisherConfigItemInterface
 {

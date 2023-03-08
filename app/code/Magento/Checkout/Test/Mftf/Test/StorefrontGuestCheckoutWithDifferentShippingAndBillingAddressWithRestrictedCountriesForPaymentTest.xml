@@ -21,6 +21,8 @@
         </annotations>
 
         <before>
+             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+
             <magentoCLI command="config:set {{BankTransferEnableConfigData.path}} {{BankTransferEnableConfigData.value}}" stepKey="enableBankTransfer"/>
             <magentoCLI command="config:set payment/checkmo/allowspecific 1" stepKey="allowSpecificValue"/>
             <magentoCLI command="config:set payment/checkmo/specificcountry GB" stepKey="allowBankTransferOnlyForGB"/>

@@ -41,6 +41,9 @@ class TemporaryStorageTest extends TestCase
      */
     private $config;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->tableName = 'some_table_name';
@@ -69,7 +72,10 @@ class TemporaryStorageTest extends TestCase
         );
     }
 
-    public function testStoreDocumentsFromSelect()
+    /**
+     * @return void
+     */
+    public function testStoreDocumentsFromSelect(): void
     {
         $sql = 'some SQL query';
 
@@ -97,7 +103,10 @@ class TemporaryStorageTest extends TestCase
         $this->assertEquals($table, $result);
     }
 
-    public function testStoreDocuments()
+    /**
+     * @return void
+     */
+    public function testStoreDocuments(): void
     {
         $documentId = 312432;
         $documentValue = 1.235123;
@@ -127,7 +136,10 @@ class TemporaryStorageTest extends TestCase
         $this->assertEquals($result, $table);
     }
 
-    public function testStoreApiDocuments()
+    /**
+     * @return void
+     */
+    public function testStoreApiDocuments(): void
     {
         $documentId = 312432;
         $documentValue = 1.235123;
@@ -157,7 +169,10 @@ class TemporaryStorageTest extends TestCase
         $this->assertEquals($result, $table);
     }
 
-    public function testNoDropIfNotPersistent()
+    /**
+     * @return void
+     */
+    public function testNoDropIfNotPersistent(): void
     {
         $this->createTemporaryTable(false);
 
@@ -171,7 +186,7 @@ class TemporaryStorageTest extends TestCase
     /**
      * @return Table|MockObject
      */
-    private function createTemporaryTable($persistentConnection = true)
+    private function createTemporaryTable($persistentConnection = true): MockObject
     {
         $this->config->expects($this->any())
             ->method('get')
@@ -182,30 +197,27 @@ class TemporaryStorageTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $tableInteractionCount = 0;
         if ($persistentConnection) {
             $this->adapter->expects($this->once())
                 ->method('dropTemporaryTable');
-            $tableInteractionCount++;
         }
-        $table->expects($this->at($tableInteractionCount))
+        $table
             ->method('addColumn')
-            ->with(
-                TemporaryStorage::FIELD_ENTITY_ID,
-                Table::TYPE_INTEGER,
-                10,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true],
-                'Entity ID'
-            );
-        $tableInteractionCount++;
-        $table->expects($this->at($tableInteractionCount))
-            ->method('addColumn')
-            ->with(
-                'score',
-                Table::TYPE_DECIMAL,
-                [32, 16],
-                ['unsigned' => true, 'nullable' => true],
-                'Score'
+            ->withConsecutive(
+                [
+                    TemporaryStorage::FIELD_ENTITY_ID,
+                    Table::TYPE_INTEGER,
+                    10,
+                    ['unsigned' => true, 'nullable' => false, 'primary' => true],
+                    'Entity ID'
+                ],
+                [
+                    'score',
+                    Table::TYPE_DECIMAL,
+                    [32, 16],
+                    ['unsigned' => true, 'nullable' => true],
+                    'Score'
+                ]
             );
         $table->expects($this->once())
             ->method('setOption')

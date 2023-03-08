@@ -17,7 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-28817"/>
             <group value="ConfigurableProduct"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="categoryHandle" before="simple1Handle"/>

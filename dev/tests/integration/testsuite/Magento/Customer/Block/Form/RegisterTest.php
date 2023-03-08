@@ -6,7 +6,9 @@
 namespace Magento\Customer\Block\Form;
 
 use Magento\Customer\Block\DataProviders\AddressAttributeData;
+use Magento\Customer\ViewModel\Address\RegionProvider;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\ButtonLockManager;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -28,6 +30,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             ->setTemplate('Magento_Customer::form/register.phtml')
             ->setShowAddressFields(true);
         $this->setAttributeDataProvider($block);
+        $this->setRegionProvider($block);
+        $this->setButtonLockManager($block);
 
         $this->assertStringContainsString('title="Company"', $block->toHtml());
     }
@@ -40,11 +44,12 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     public function testTelephoneDefault(): void
     {
         /** @var \Magento\Customer\Block\Widget\Company $block */
-        $block = Bootstrap::getObjectManager()->create(
-            Register::class
-        )->setTemplate('Magento_Customer::form/register.phtml')
-        ->setShowAddressFields(true);
+        $block = Bootstrap::getObjectManager()->create(Register::class)
+            ->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true);
         $this->setAttributeDataProvider($block);
+        $this->setRegionProvider($block);
+        $this->setButtonLockManager($block);
 
         $this->assertStringContainsString('title="Phone&#x20;Number"', $block->toHtml());
     }
@@ -57,11 +62,12 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     public function testFaxDefault(): void
     {
         /** @var \Magento\Customer\Block\Widget\Company $block */
-        $block = Bootstrap::getObjectManager()->create(
-            Register::class
-        )->setTemplate('Magento_Customer::form/register.phtml')
-        ->setShowAddressFields(true);
+        $block = Bootstrap::getObjectManager()->create(Register::class)
+            ->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true);
         $this->setAttributeDataProvider($block);
+        $this->setRegionProvider($block);
+        $this->setButtonLockManager($block);
 
         $this->assertStringNotContainsString('title="Fax"', $block->toHtml());
     }
@@ -81,11 +87,12 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $model->save();
 
         /** @var \Magento\Customer\Block\Widget\Company $block */
-        $block = Bootstrap::getObjectManager()->create(
-            Register::class
-        )->setTemplate('Magento_Customer::form/register.phtml')
-        ->setShowAddressFields(true);
+        $block = Bootstrap::getObjectManager()->create(Register::class)
+            ->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true);
         $this->setAttributeDataProvider($block);
+        $this->setRegionProvider($block);
+        $this->setButtonLockManager($block);
 
         $this->assertStringNotContainsString('title="Company"', $block->toHtml());
     }
@@ -105,11 +112,12 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $model->save();
 
         /** @var \Magento\Customer\Block\Widget\Company $block */
-        $block = Bootstrap::getObjectManager()->create(
-            Register::class
-        )->setTemplate('Magento_Customer::form/register.phtml')
-        ->setShowAddressFields(true);
+        $block = Bootstrap::getObjectManager()->create(Register::class)
+            ->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true);
         $this->setAttributeDataProvider($block);
+        $this->setRegionProvider($block);
+        $this->setButtonLockManager($block);
 
         $this->assertStringNotContainsString('title="Phone&#x20;Number"', $block->toHtml());
     }
@@ -129,11 +137,12 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $model->save();
 
         /** @var \Magento\Customer\Block\Widget\Company $block */
-        $block = Bootstrap::getObjectManager()->create(
-            Register::class
-        )->setTemplate('Magento_Customer::form/register.phtml')
-        ->setShowAddressFields(true);
+        $block = Bootstrap::getObjectManager()->create(Register::class)
+            ->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true);
         $this->setAttributeDataProvider($block);
+        $this->setRegionProvider($block);
+        $this->setButtonLockManager($block);
 
         $this->assertStringContainsString('title="Fax"', $block->toHtml());
     }
@@ -144,11 +153,12 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     public function testCityWithStoreLabel(): void
     {
         /** @var \Magento\Customer\Block\Form\Register $block */
-        $block = Bootstrap::getObjectManager()->create(
-            Register::class
-        )->setTemplate('Magento_Customer::form/register.phtml')
+        $block = Bootstrap::getObjectManager()->create(Register::class)
+            ->setTemplate('Magento_Customer::form/register.phtml')
             ->setShowAddressFields(true);
         $this->setAttributeDataProvider($block);
+        $this->setRegionProvider($block);
+        $this->setButtonLockManager($block);
 
         $this->assertStringNotContainsString('title="City"', $block->toHtml());
         $this->assertStringContainsString('title="Suburb"', $block->toHtml());
@@ -174,5 +184,40 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     {
         $attributeData = Bootstrap::getObjectManager()->get(AddressAttributeData::class);
         $block->setAttributeData($attributeData);
+    }
+
+    /**
+     * Set Region Provider View Model.
+     *
+     * @param Template $block
+     * @return void
+     */
+    private function setRegionProvider(Template $block): void
+    {
+        $regionProvider = Bootstrap::getObjectManager()->create(RegionProvider::class);
+        $block->setRegionProvider($regionProvider);
+    }
+
+    /**
+     * Set Button Lock Manager View Model
+     *
+     * @param Template $block
+     * @return void
+     */
+    private function setButtonLockManager(Template $block): void
+    {
+        $code = 'customer_create_form_submit';
+        $buttonLock = $this->getMockBuilder(\Magento\ReCaptchaUi\Model\ButtonLock::class)
+            ->disableOriginalConstructor()
+            ->disableAutoload()
+            ->setMethods(['isDisabled', 'getCode'])
+            ->getMock();
+        $buttonLock->expects($this->any())->method('getCode')->willReturn($code);
+        $buttonLock->expects($this->any())->method('isDisabled')->willReturn(false);
+        $buttonLockManager = Bootstrap::getObjectManager()->create(
+            ButtonLockManager::class,
+            ['buttonLockPool' => [$code => $buttonLock]]
+        );
+        $block->setButtonLockManager($buttonLockManager);
     }
 }

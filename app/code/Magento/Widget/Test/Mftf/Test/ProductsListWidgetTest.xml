@@ -17,6 +17,7 @@
             <testCaseId value="MAGETWO-97041"/>
             <group value="Widget"/>
             <group value="WYSIWYGDisabled"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>

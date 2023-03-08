@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!--Create Product via API-->
             <createData entity="SimpleProduct2" stepKey="Product"/>
 
@@ -106,6 +106,7 @@
         </before>
 
         <after>
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="Product" stepKey="deleteProduct"/>
             <deleteData createDataKey="Customer" stepKey="deleteCustomer"/>

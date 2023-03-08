@@ -93,4 +93,44 @@ MUTATION;
             $addProductToCustomerCartResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER]
         );
     }
+
+    /**
+     * Tests that cache id header resets to the one for guest when a customer token is revoked
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     */
+    public function testCacheIdHeaderAfterRevokeToken()
+    {
+        // Get the guest cache id
+        $guestCartResponse = $this->graphQlMutationWithResponseHeaders('mutation{createEmptyCart}');
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $guestCartResponse['headers']);
+        $guestCacheId = $guestCartResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+
+        // Get the customer cache id and token to send to the revoke mutation
+        $generateToken = <<<MUTATION
+mutation{
+  generateCustomerToken(email:"customer@example.com", password:"password")
+  {token}
+}
+MUTATION;
+        $tokenResponse = $this->graphQlMutationWithResponseHeaders($generateToken);
+        $this->assertArrayHasKey('generateCustomerToken', $tokenResponse['body']);
+        $customerToken = $tokenResponse['body']['generateCustomerToken']['token'];
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $tokenResponse['headers']);
+        $customerCacheId = $tokenResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $this->assertNotEquals($customerCacheId, $guestCacheId);
+
+        // Revoke the token and check that it returns the guest cache id
+        $revokeCustomerToken = "mutation{revokeCustomerToken{result}}";
+        $revokeResponse = $this->graphQlMutationWithResponseHeaders(
+            $revokeCustomerToken,
+            [],
+            '',
+            ['Authorization' => 'Bearer ' . $customerToken]
+        );
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $revokeResponse['headers']);
+        $revokeCacheId = $revokeResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $this->assertEquals($guestCacheId, $revokeCacheId);
+    }
 }

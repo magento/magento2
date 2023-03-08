@@ -188,7 +188,7 @@ class ReorderTest extends GraphQlAbstract
     }
 
     /**
-     * Assert that simple product is not available.
+     * Assert that simple product is not available
      */
     private function assertProductNotAvailable()
     {
@@ -196,7 +196,9 @@ class ReorderTest extends GraphQlAbstract
         $expectedResponse = [
             'userInputErrors' => [
                 [
-                    'path' => ['orderNumber'],
+                    'path' => [
+                        'orderNumber'
+                    ],
                     'code' => 'NOT_SALABLE',
                 ],
             ],

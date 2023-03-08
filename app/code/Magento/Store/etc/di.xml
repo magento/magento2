@@ -174,6 +174,11 @@
         <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Session\SessionMaxSizeConfig">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Session\SidResolver">
         <arguments>
         <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
@@ -449,6 +454,22 @@
             <argument name="rules" xsi:type="array">
                 <item name="name" xsi:type="object">Magento\Store\Model\Validation\StoreNameValidator</item>
                 <item name="code" xsi:type="object">Magento\Store\Model\Validation\StoreCodeValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Cache\Tag\Strategy\Factory">
+        <arguments>
+            <argument name="customStrategies" xsi:type="array">
+                <item name="Magento\Framework\App\Config\ValueInterface" xsi:type="object">
+                    Magento\Store\Model\Config\Cache\Tag\Strategy\StoreConfig
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\Config\Cache\Tag\Strategy\StoreConfig">
+        <arguments>
+            <argument name="tagGenerator" xsi:type="object">
+                Magento\Store\Model\Config\Cache\Tag\Strategy\CompositeTagGenerator
             </argument>
         </arguments>
     </type>
