@@ -9,7 +9,9 @@
  */
 namespace Magento\TaxImportExport\Block\Adminhtml\Rate;
 
-class ImportExportHeader extends \Magento\Backend\Block\Widget
+use Magento\Backend\Block\Widget;
+
+class ImportExportHeader extends Widget
 {
     /**
      * Block's template

@@ -5,11 +5,14 @@
  */
 namespace Magento\TaxImportExport\Block\Adminhtml\Rate;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget;
+
 /**
  * @api
  * @since 100.0.2
  */
-class ImportExport extends \Magento\Backend\Block\Widget
+class ImportExport extends Widget
 {
     /**
      * @var string
@@ -17,10 +20,10 @@ class ImportExport extends \Magento\Backend\Block\Widget
     protected $_template = 'Magento_TaxImportExport::importExport.phtml';
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param Context $context
      * @param array $data
      */
-    public function __construct(\Magento\Backend\Block\Template\Context $context, array $data = [])
+    public function __construct(Context $context, array $data = [])
     {
         parent::__construct($context, $data);
         $this->setUseContainer(true);
