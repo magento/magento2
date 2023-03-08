@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
- /** @var $block \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content */
+use Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Content $block */
 ?>
-
-<div class="media-gallery-modal" data-mage-init='{"mediabrowser": <?= $block->escapeHtml($block->getFilebrowserSetupObject()) ?>}'>
+<div class="media-gallery-modal" data-mage-init='{"mediabrowser": <?= $escaper->escapeHtml($block->getFilebrowserSetupObject()) ?>}'>
     <div class="page-main-actions">
         <div class="page-actions">
             <div class="page-actions-inner">

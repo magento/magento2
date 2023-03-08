@@ -3,21 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Tree $block */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
-?>
+use Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Tree;
+use Magento\Framework\Escaper;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
-<?php
-/** Magento\Framework\Json\Helper\Data $jsonHelper */
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var Tree $block */
+/** @var Data $jsonHelper */
 $jsonHelper = $block->getData('jsonHelper');
 ?>
 <div class="tree-panel" >
     <div class="categories-side-col">
         <div class="tree-actions">
-            <a id="collapseAll"><?= $block->escapeHtml(__('Collapse All')) ?></a>
+            <a id="collapseAll"><?= $escaper->escapeHtml(__('Collapse All')) ?></a>
             <span class="separator">|</span>
-            <a id="expandAll"><?= $block->escapeHtml(__('Expand All')) ?></a>
+            <a id="expandAll"><?= $escaper->escapeHtml(__('Expand All')) ?></a>
         </div>
         <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
             'onclick',
@@ -30,7 +34,7 @@ $jsonHelper = $block->getData('jsonHelper');
             '#div.tree-actions a#expandAll'
         ) ?>
     </div>
-    <div data-role="tree" data-mage-init='<?= $block->escapeHtml(
+    <div data-role="tree" data-mage-init='<?= $escaper->escapeHtml(
         $jsonHelper->jsonEncode($block->getTreeWidgetOptions())
     ) ?>'>
     </div>
