@@ -3,19 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
+declare(strict_types=1);
 
-<?php
-/**
- * @var \Magento\Framework\Pricing\Render\PriceBox $block
- * @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter
- */
-/** @var \Magento\Bundle\Pricing\Price\TierPrice $tierPriceModel */
+use Magento\Bundle\Pricing\Price\TierPrice;
+use Magento\Framework\Escaper;
+use Magento\Framework\Locale\LocaleFormatter;
+use Magento\Framework\Pricing\Render\PriceBox;
+
+/** @var Escaper $escaper */
+/** @var PriceBox $block */
+/** @var LocaleFormatter $localeFormatter */
+/** @var TierPrice $tierPriceModel */
 $tierPriceModel = $block->getPrice();
 $tierPrices = $tierPriceModel->getTierPriceList();
 ?>
 <?php if (count($tierPrices)):?>
-    <ul class="<?= $block->escapeHtmlAttr(($block->hasListClass() ? $block->getListClass() : 'prices-tier items')) ?>">
+    <ul class="<?= $escaper->escapeHtmlAttr(($block->hasListClass() ? $block->getListClass() : 'prices-tier items')) ?>">
         <?php foreach ($tierPrices as $index => $price): ?>
             <li class="item">
                 <?= /* @noEscape */ __(
