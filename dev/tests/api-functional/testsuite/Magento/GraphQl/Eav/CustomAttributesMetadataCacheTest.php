@@ -25,6 +25,7 @@ class CustomAttributesMetadataCacheTest extends GraphQLPageCacheAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/dropdown_attribute.php
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      *
      * @return void
      */
@@ -56,6 +57,8 @@ class CustomAttributesMetadataCacheTest extends GraphQLPageCacheAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/dropdown_attribute.php
      * @magentoApiDataFixture Magento/Store/_files/store.php
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     *
      * @return void
      */
     public function testCacheDifferentStores()
@@ -127,6 +130,7 @@ class CustomAttributesMetadataCacheTest extends GraphQLPageCacheAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/dropdown_attribute.php
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      *
      * @return void
      */
