@@ -3,16 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\Checkout\Block\Item\Price\Renderer;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Renderer $block */
 
 // phpcs:disable Magento2.Templates.ThisInTemplate
-
-/** @var $block \Magento\Checkout\Block\Item\Price\Renderer */
 ?>
 <?php $_item = $block->getItem() ?>
 <div class="price-container">
-    <span class="price-label"><?= $block->escapeHtml(__('Price')) ?></span>
+    <span class="price-label"><?= $escaper->escapeHtml(__('Price')) ?></span>
     <span class="price-wrapper">
-        <?= $block->escapeHtml(
+        <?= $escaper->escapeHtml(
             $this->helper(Magento\Checkout\Helper\Data::class)->formatPrice($_item->getCalculationPrice()),
             ['span']
         ) ?>

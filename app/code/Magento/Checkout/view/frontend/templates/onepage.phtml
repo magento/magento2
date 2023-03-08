@@ -3,16 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var $block \Magento\Checkout\Block\Onepage */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+use Magento\Checkout\Block\Onepage;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/** @var Escaper $escaper */
+/** @var Onepage $block */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
-
 <div id="checkout" data-bind="scope:'checkout'" class="checkout-container">
     <div id="checkout-loader" data-role="checkout-loader" class="loading-mask" data-mage-init='{"checkoutLoader": {}}'>
         <div class="loader">
-            <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif')) ?>"
-                 alt="<?= $block->escapeHtmlAttr(__('Loading...')) ?>">
+            <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/loader-1.gif')) ?>"
+                 alt="<?= $escaper->escapeHtmlAttr(__('Loading...')) ?>">
         </div>
     </div>
     <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("position: absolute;", "#checkout-loader img") ?>
@@ -38,8 +43,8 @@ script;
             'mage/url',
             'Magento_Ui/js/block-loader'
         ], function(url, blockLoader) {
-            blockLoader("{$block->escapeJs($block->escapeUrl($block->getViewFileUrl('images/loader-1.gif')))}");
-            return url.setBaseUrl('{$block->escapeJs($block->escapeUrl($block->getBaseUrl()))}');
+            blockLoader("{$escaper->escapeJs($escaper->escapeUrl($block->getViewFileUrl('images/loader-1.gif')))}");
+            return url.setBaseUrl('{$escaper->escapeJs($escaper->escapeUrl($block->getBaseUrl()))}');
         })
 script;
     ?>

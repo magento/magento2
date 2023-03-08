@@ -3,9 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
+use Magento\Checkout\Block\Shipping\Price;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Price $block */
+$shippingPrice = $block->getShippingPrice();
 ?>
-<?php /** @var $block \Magento\Checkout\Block\Shipping\Price */ ?>
-
-<?php $shippingPrice = $block->getShippingPrice(); ?>
-<?= $block->escapeHtml($shippingPrice) ?>
+<?= $escaper->escapeHtml($shippingPrice) ?>

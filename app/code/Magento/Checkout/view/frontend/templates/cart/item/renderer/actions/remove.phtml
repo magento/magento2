@@ -3,14 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var $block \Magento\Checkout\Block\Cart\Item\Renderer\Actions\Remove */
+use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Remove;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Remove $block */
 ?>
 <a href="#"
-   title="<?= $block->escapeHtml(__('Remove item')) ?>"
+   title="<?= $escaper->escapeHtml(__('Remove item')) ?>"
    class="action action-delete"
    data-post='<?= /* @noEscape */ $block->getDeletePostJson() ?>'>
     <span>
-        <?= $block->escapeHtml(__('Remove item')) ?>
+        <?= $escaper->escapeHtml(__('Remove item')) ?>
     </span>
 </a>

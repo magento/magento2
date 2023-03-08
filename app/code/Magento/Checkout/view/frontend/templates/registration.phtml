@@ -3,8 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var $block \Magento\Checkout\Block\Registration */
+use Magento\Checkout\Block\Registration;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Registration $block */
 ?>
 <div id="registration" data-bind="scope:'registration'">
     <br />
@@ -18,8 +23,8 @@
                             "component": "Magento_Checkout/js/view/registration",
                             "config": {
                                 "registrationUrl":
-                                    "<?= $block->escapeJs($block->escapeUrl($block->getCreateAccountUrl())) ?>",
-                                "email": "<?= $block->escapeJs($block->getEmailAddress()) ?>"
+                                    "<?= $escaper->escapeJs($escaper->escapeUrl($block->getCreateAccountUrl())) ?>",
+                                "email": "<?= $escaper->escapeJs($block->getEmailAddress()) ?>"
                             },
                             "children": {
                                 "errors": {
