@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var $block \Magento\AdminNotification\Block\System\Messages */
+use Magento\AdminNotification\Block\System\Messages;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Messages $block */
+$lastCritical = $block->getLastCritical();
 ?>
-
-<?php $lastCritical = $block->getLastCritical();?>
 <div id="system_messages"
      class="message-system<?php if ($lastCritical) : ?>
      message-system-unread<?php endif; ?>">
@@ -15,18 +19,20 @@
         <?php if ($lastCritical) : ?>
             <ul class="message-system-list">
                 <li class="message message-warning error">
-                    <?= $block->escapeHtml($lastCritical->getText()) ?>
+                    <?= $escaper->escapeHtml($lastCritical->getText()) ?>
                 </li>
             </ul>
         <?php endif; ?>
         <div class="message-system-short">
             <span class="message-system-short-label">
-                <?= $block->escapeHtml(__('System Messages:')) ?>
+                <?= $escaper->escapeHtml(__('System Messages:')) ?>
             </span>
 
             <?php if ($block->getCriticalCount()) : ?>
                 <div class="message message-warning error">
-                    <a class="message-link" href="#" title="<?= $block->escapeHtml(__('Critical System Messages')) ?>">
+                    <a class="message-link"
+                       href="#"
+                       title="<?= $escaper->escapeHtml(__('Critical System Messages')) ?>">
                         <?= (int) $block->getCriticalCount() ?>
                     </a>
                 </div>
@@ -34,12 +40,15 @@
 
             <?php if ($block->getMajorCount()) : ?>
                <div class="message message-warning warning">
-                   <a class="message-link" href="#" title="<?= $block->escapeHtml(__('Major System Messages')) ?>">
+                   <a class="message-link" href="#" title="<?= $escaper->escapeHtml(__('Major System Messages')) ?>">
                        <?= (int) $block->getMajorCount() ?>
                    </a>
                </div>
             <?php endif; ?>
         </div>
-        <div id="message-system-all" title="<?= $block->escapeHtml(__('System messages')) ?>" data-mage-init='<?= $block->escapeHtml($block->getSystemMessageDialogJson()) ?>'></div>
+        <div id="message-system-all"
+             title="<?= $escaper->escapeHtml(__('System messages')) ?>"
+             data-mage-init='<?= $escaper->escapeHtml($block->getSystemMessageDialogJson()) ?>'>
+        </div>
     </div>
 </div>
