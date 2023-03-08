@@ -5,18 +5,22 @@
  */
 namespace Magento\Theme\Model\Layout\Source;
 
-class Layout implements \Magento\Framework\Option\ArrayInterface
+use Magento\Framework\Option\ArrayInterface;
+use Magento\Theme\Model\Layout\Config;
+
+class Layout implements ArrayInterface
 {
     /**
-     * @var \Magento\Theme\Model\Layout\Config
+     * @var Config
      */
     protected $_config;
 
     /**
-     * @param \Magento\Theme\Model\Layout\Config $config
+     * @param Config $config
      */
-    public function __construct(\Magento\Theme\Model\Layout\Config $config)
-    {
+    public function __construct(
+        Config $config
+    ) {
         $this->_config = $config;
     }
 

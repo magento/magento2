@@ -5,6 +5,11 @@
  */
 namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content;
 
+use Magento\Backend\Block\Media\Uploader as MediaUploader;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\File\Size;
+use Magento\Theme\Helper\Storage as StorageHelper;
+
 /**
  * Files uploader block
  *
@@ -12,7 +17,7 @@ namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Uploader extends \Magento\Backend\Block\Media\Uploader
+class Uploader extends MediaUploader
 {
     /**
      * Path to uploader template
@@ -22,20 +27,20 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
     protected $_template = 'Magento_Theme::browser/content/uploader.phtml';
 
     /**
-     * @var \Magento\Theme\Helper\Storage
+     * @var StorageHelper
      */
     protected $_storageHelper;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\File\Size $fileSize
-     * @param \Magento\Theme\Helper\Storage $storageHelper
+     * @param Context $context
+     * @param Size $fileSize
+     * @param StorageHelper $storageHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\File\Size $fileSize,
-        \Magento\Theme\Helper\Storage $storageHelper,
+        Context $context,
+        Size $fileSize,
+        StorageHelper $storageHelper,
         array $data = []
     ) {
         $this->_storageHelper = $storageHelper;
@@ -45,7 +50,7 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
     /**
      * Prepare layout
      *
-     * @return \Magento\Backend\Block\Media\Uploader
+     * @return MediaUploader
      */
     protected function _prepareLayout()
     {
@@ -56,7 +61,7 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
     /**
      * Return storage helper
      *
-     * @return \Magento\Theme\Helper\Storage
+     * @return StorageHelper
      */
     public function getHelperStorage()
     {

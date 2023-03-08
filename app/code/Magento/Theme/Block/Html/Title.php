@@ -27,11 +27,6 @@ class Title extends Template
     private const XML_PATH_HEADER_TRANSLATE_TITLE = 'design/header/translate_title';
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * Own page title to display on the page
      *
      * @var string
@@ -47,11 +42,10 @@ class Title extends Template
      */
     public function __construct(
         Template\Context $context,
-        ScopeConfigInterface $scopeConfig,
+        private readonly ScopeConfigInterface $scopeConfig,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**

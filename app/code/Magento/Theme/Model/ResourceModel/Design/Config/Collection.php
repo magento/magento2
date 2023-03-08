@@ -17,11 +17,6 @@ use Psr\Log\LoggerInterface;
 class Collection extends ConfigCollection
 {
     /**
-     * @var \Magento\Theme\Model\Design\Config\ValueProcessor
-     */
-    protected $valueProcessor;
-
-    /**
      * @param EntityFactoryInterface $entityFactory
      * @param LoggerInterface $logger
      * @param FetchStrategyInterface $fetchStrategy
@@ -35,11 +30,10 @@ class Collection extends ConfigCollection
         LoggerInterface $logger,
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
-        ValueProcessor $valueProcessor,
+        protected readonly ValueProcessor $valueProcessor,
         AdapterInterface $connection = null,
         AbstractDb $resource = null
     ) {
-        $this->valueProcessor = $valueProcessor;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 

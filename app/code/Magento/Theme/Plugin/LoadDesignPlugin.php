@@ -19,25 +19,13 @@ use Magento\Framework\View\DesignLoader;
 class LoadDesignPlugin
 {
     /**
-     * @var DesignLoader
-     */
-    private $designLoader;
-
-    /**
-     * @var MessageManagerInterface
-     */
-    private $messageManager;
-
-    /**
      * @param DesignLoader $designLoader
      * @param MessageManagerInterface $messageManager
      */
     public function __construct(
-        DesignLoader $designLoader,
-        MessageManagerInterface $messageManager
+        private readonly DesignLoader $designLoader,
+        private readonly MessageManagerInterface $messageManager
     ) {
-        $this->designLoader = $designLoader;
-        $this->messageManager = $messageManager;
     }
 
     /**

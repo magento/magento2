@@ -8,16 +8,11 @@ namespace Magento\Theme\Model\Design\Config;
 class MetadataProvider implements MetadataProviderInterface
 {
     /**
-     * @var array
-     */
-    protected $metadata;
-
-    /**
      * @param array $metadata
      */
-    public function __construct(array $metadata)
-    {
-        $this->metadata = $metadata;
+    public function __construct(
+        protected readonly array $metadata
+    ) {
     }
 
     /**

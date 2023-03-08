@@ -6,6 +6,7 @@
 namespace Magento\Theme\Model\Theme\Plugin;
 
 use Magento\Framework\App\ActionInterface;
+use Magento\Theme\Model\Theme as ModelTheme;
 use Magento\Theme\Model\Theme\Registration as ThemeRegistration;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
@@ -22,31 +23,6 @@ use Magento\Framework\Config\Theme;
 class Registration
 {
     /**
-     * @var ThemeRegistration
-     */
-    protected $themeRegistration;
-
-    /**
-     * @var ThemeCollection
-     */
-    protected $themeCollection;
-
-    /**
-     * @var ThemeLoader
-     */
-    protected $themeLoader;
-
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var AppState
-     */
-    protected $appState;
-
-    /**
      * @param ThemeRegistration $themeRegistration
      * @param ThemeCollection $themeCollection
      * @param ThemeLoader $themeLoader
@@ -54,17 +30,12 @@ class Registration
      * @param AppState $appState
      */
     public function __construct(
-        ThemeRegistration $themeRegistration,
-        ThemeCollection $themeCollection,
-        ThemeLoader $themeLoader,
-        LoggerInterface $logger,
-        AppState $appState
+        protected readonly ThemeRegistration $themeRegistration,
+        protected readonly ThemeCollection $themeCollection,
+        protected readonly ThemeLoader $themeLoader,
+        protected readonly LoggerInterface $logger,
+        protected readonly AppState $appState
     ) {
-        $this->themeRegistration = $themeRegistration;
-        $this->themeCollection = $themeCollection;
-        $this->themeLoader = $themeLoader;
-        $this->logger = $logger;
-        $this->appState = $appState;
     }
 
     /**
@@ -96,9 +67,9 @@ class Registration
     protected function updateThemeData()
     {
         $themesFromConfig = $this->themeCollection->loadData();
-        /** @var \Magento\Theme\Model\Theme $themeFromConfig */
+        /** @var ModelTheme $themeFromConfig */
         foreach ($themesFromConfig as $themeFromConfig) {
-            /** @var \Magento\Theme\Model\Theme $themeFromDb */
+            /** @var ModelTheme $themeFromDb */
             $themeFromDb = $this->themeLoader->getThemeByFullPath(
                 $themeFromConfig->getArea()
                 . Theme::THEME_PATH_SEPARATOR

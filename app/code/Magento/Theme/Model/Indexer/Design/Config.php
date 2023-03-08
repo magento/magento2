@@ -5,9 +5,11 @@
  */
 namespace Magento\Theme\Model\Indexer\Design;
 
+use ArrayObject;
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\Indexer\FieldsetPool;
 use Magento\Framework\Indexer\HandlerPool;
+use Magento\Theme\Model\ResourceModel\Design\Config\Scope\Collection as DesignConfigScopeCollection;
 use Magento\Theme\Model\ResourceModel\Design\Config\Scope\CollectionFactory;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
@@ -16,26 +18,6 @@ use Magento\Framework\Indexer\SaveHandlerFactory;
 
 class Config implements ActionInterface
 {
-    /**
-     * @var CollectionFactory
-     */
-    protected $collectionFactory;
-
-    /**
-     * @var SaveHandlerFactory
-     */
-    protected $saveHandlerFactory;
-
-    /**
-     * @var StructureFactory
-     */
-    protected $structureFactory;
-
-    /**
-     * @var IndexerInterface
-     */
-    protected $saveHandler;
-
     /**
      * @var array
      */
@@ -47,19 +29,9 @@ class Config implements ActionInterface
     protected $searchable = [];
 
     /**
-     * @var FieldsetPool
+     * @var IndexerInterface
      */
-    protected $fieldsetPool;
-
-    /**
-     * @var HandlerPool
-     */
-    protected $handlerPool;
-
-    /**
-     * @var array
-     */
-    private $data = [];
+    protected $saveHandler;
 
     /**
      * Config constructor
@@ -72,19 +44,13 @@ class Config implements ActionInterface
      * @param array $data
      */
     public function __construct(
-        StructureFactory $structureFactory,
-        SaveHandlerFactory $saveHandlerFactory,
-        FieldsetPool $fieldsetPool,
-        HandlerPool $handlerPool,
-        CollectionFactory $collectionFactory,
-        $data = []
+        protected readonly StructureFactory $structureFactory,
+        protected readonly SaveHandlerFactory $saveHandlerFactory,
+        protected readonly FieldsetPool $fieldsetPool,
+        protected readonly HandlerPool $handlerPool,
+        protected readonly CollectionFactory $collectionFactory,
+        private $data = []
     ) {
-        $this->structureFactory = $structureFactory;
-        $this->saveHandlerFactory = $saveHandlerFactory;
-        $this->fieldsetPool = $fieldsetPool;
-        $this->handlerPool = $handlerPool;
-        $this->collectionFactory = $collectionFactory;
-        $this->data = $data;
     }
 
     /**
@@ -95,13 +61,13 @@ class Config implements ActionInterface
      */
     protected function execute(array $ids = [])
     {
-        /** @var \Magento\Theme\Model\ResourceModel\Design\Config\Scope\Collection $collection */
+        /** @var DesignConfigScopeCollection $collection */
         $collection = $this->collectionFactory->create();
         $this->prepareFields();
         if (!count($ids)) {
             $this->getSaveHandler()->cleanIndex([]);
         }
-        $this->getSaveHandler()->deleteIndex([], new \ArrayObject($ids));
+        $this->getSaveHandler()->deleteIndex([], new ArrayObject($ids));
         $this->getSaveHandler()->saveIndex([], $collection);
     }
 

@@ -5,16 +5,19 @@
  */
 namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content;
 
+use Magento\Backend\Block\Template;
+use Magento\Theme\Model\Wysiwyg\Storage;
+
 /**
  * Files files block
  *
  * @api
  * @method
  *  \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Files setStorage(\Magento\Theme\Model\Wysiwyg\Storage $storage)
- * @method \Magento\Theme\Model\Wysiwyg\Storage getStorage()
+ * @method Storage getStorage()
  * @since 100.0.2
  */
-class Files extends \Magento\Backend\Block\Template
+class Files extends Template
 {
     /**
      * Files list

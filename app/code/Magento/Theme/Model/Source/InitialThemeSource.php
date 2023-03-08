@@ -19,27 +19,6 @@ use Magento\Theme\Model\ResourceModel\ThemeFactory;
 class InitialThemeSource implements ConfigSourceInterface
 {
     /**
-     * A deployment config.
-     *
-     * @var DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
-     * A theme factory.
-     *
-     * @var ThemeFactory
-     */
-    private $themeFactory;
-
-    /**
-     * A data object factory.
-     *
-     * @var DataObjectFactory
-     */
-    private $dataObjectFactory;
-
-    /**
      * Array with theme data.
      *
      * @var array
@@ -52,13 +31,10 @@ class InitialThemeSource implements ConfigSourceInterface
      * @param DataObjectFactory $dataObjectFactory A data object factory
      */
     public function __construct(
-        DeploymentConfig $deploymentConfig,
-        ThemeFactory $themeFactory,
-        DataObjectFactory $dataObjectFactory
+        private readonly DeploymentConfig $deploymentConfig,
+        private readonly ThemeFactory $themeFactory,
+        private readonly DataObjectFactory $dataObjectFactory
     ) {
-        $this->deploymentConfig = $deploymentConfig;
-        $this->themeFactory = $themeFactory;
-        $this->dataObjectFactory = $dataObjectFactory;
     }
 
     /**

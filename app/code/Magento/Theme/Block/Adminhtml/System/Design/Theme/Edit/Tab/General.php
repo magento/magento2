@@ -5,16 +5,28 @@
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Model\Session;
 use Magento\Framework\App\Area;
+use Magento\Framework\Data\Form as FormData;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\File\Size;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab;
+use Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\Image;
 use Magento\Theme\Model\Theme\Collection;
+use Magento\Theme\Model\Theme\Collection as ThemeCollection;
 
 /**
  * Theme form, general tab
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
-class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab
+class General extends AbstractTab
 {
     /**
      * Whether theme is editable
@@ -24,26 +36,26 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
     protected $_isThemeEditable = false;
 
     /**
-     * @var \Magento\Framework\File\Size
+     * @var Size
      */
     protected $_fileSize;
 
     /**
      * Constructor
      *
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\File\Size $fileSize
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param ObjectManagerInterface $objectManager
+     * @param Size $fileSize
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\File\Size $fileSize,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        ObjectManagerInterface $objectManager,
+        Size $fileSize,
         array $data = []
     ) {
         $this->_fileSize = $fileSize;
@@ -57,8 +69,8 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Backend\Model\Session $session */
-        $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
+        /** @var Session $session */
+        $session = $this->_objectManager->get(Session::class);
         $formDataFromSession = $session->getThemeData();
         $this->_isThemeEditable = $this->_getCurrentTheme()->isEditable();
         /** @var ThemeInterface $currentTheme */
@@ -71,7 +83,7 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
         }
         $this->setIsThemeExist(isset($formData['theme_id']));
 
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var FormData $form */
         $form = $this->_formFactory->create();
         $this->_addThemeFieldset($form, $formData, $currentTheme);
         if (!$this->getIsThemeExist()) {
@@ -86,7 +98,7 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
     /**
      * Add theme fieldset
      *
-     * @param \Magento\Framework\Data\Form $form
+     * @param FormData $form
      * @param array $formData
      * @param ThemeInterface $theme
      * @return $this
@@ -102,10 +114,10 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
         }
 
         /** @var Collection $themesCollections */
-        $themesCollections = $this->_objectManager->create(\Magento\Theme\Model\Theme\Collection::class);
+        $themesCollections = $this->_objectManager->create(ThemeCollection::class);
 
-        /** @var \Magento\Framework\Json\Helper\Data $helper */
-        $helper = $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class);
+        /** @var JsonHelper $helper */
+        $helper = $this->_objectManager->get(JsonHelper::class);
 
         $themesCollections->addConstraint(Collection::CONSTRAINT_AREA, Area::AREA_FRONTEND);
         $onChangeScript = sprintf(
@@ -118,7 +130,7 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
         );
 
         /** @var ThemeInterface $parentTheme */
-        $parentTheme = $this->_objectManager->create(\Magento\Framework\View\Design\ThemeInterface::class);
+        $parentTheme = $this->_objectManager->create(ThemeInterface::class);
         if (!empty($formData['parent_id'])) {
             $parentTheme->load($formData['parent_id']);
         }
@@ -241,14 +253,14 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      */
     protected function _getAdditionalElementTypes()
     {
-        $element = \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\Image::class;
+        $element = Image::class;
         return ['image' => $element];
     }
 
     /**
      * Prepare label for tab
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTabLabel()
     {
@@ -303,7 +315,7 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
     /**
      * Get note string for theme's preview image
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     protected function _getPreviewImageNote()
     {

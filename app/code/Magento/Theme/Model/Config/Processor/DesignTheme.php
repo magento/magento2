@@ -5,6 +5,8 @@
  */
 namespace Magento\Theme\Model\Config\Processor;
 
+use DomainException;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\View\Design\Theme\ListInterface;
@@ -19,25 +21,13 @@ use Magento\Framework\View\DesignInterface;
 class DesignTheme implements PreProcessorInterface
 {
     /**
-     * @var ArrayManager
-     */
-    private $arrayManager;
-
-    /**
-     * @var ListInterface
-     */
-    private $themeList;
-
-    /**
      * @param ArrayManager $arrayManager
      * @param ListInterface $themeList
      */
     public function __construct(
-        ArrayManager $arrayManager,
-        ListInterface $themeList
+        private readonly ArrayManager $arrayManager,
+        private readonly ListInterface $themeList
     ) {
-        $this->arrayManager = $arrayManager;
-        $this->themeList = $themeList;
     }
 
     /**
@@ -50,7 +40,7 @@ class DesignTheme implements PreProcessorInterface
     public function process(array $config)
     {
         foreach ($config as $scope => &$item) {
-            if ($scope === \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
+            if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
                 $item = $this->changeThemeFullPathToIdentifier($item);
             } else {
                 foreach ($item as &$scopeItems) {
@@ -78,7 +68,7 @@ class DesignTheme implements PreProcessorInterface
                 // workaround for case when db is not available
                 try {
                     $theme = $this->themeList->getThemeByFullPath($themeIdentifier);
-                } catch (\DomainException $domainException) {
+                } catch (DomainException $domainException) {
                     $theme = null;
                 }
             }

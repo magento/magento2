@@ -6,32 +6,23 @@
 
 namespace Magento\Theme\Observer;
 
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\Config\Customization;
 use Magento\Theme\Model\Theme;
 
 class CheckThemeIsAssignedObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Theme\Model\Config\Customization
-     */
-    protected $themeConfig;
-
-    /**
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    protected $eventDispatcher;
-
-    /**
-     * @param \Magento\Theme\Model\Config\Customization $themeConfig
-     * @param \Magento\Framework\Event\ManagerInterface $eventDispatcher
+     * @param Customization $themeConfig
+     * @param ManagerInterface $eventDispatcher
      */
     public function __construct(
-        \Magento\Theme\Model\Config\Customization $themeConfig,
-        \Magento\Framework\Event\ManagerInterface $eventDispatcher
+        protected readonly Customization $themeConfig,
+        protected readonly ManagerInterface $eventDispatcher
     ) {
-        $this->themeConfig = $themeConfig;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -43,8 +34,8 @@ class CheckThemeIsAssignedObserver implements ObserverInterface
     public function execute(EventObserver $observer)
     {
         $theme = $observer->getEvent()->getData('theme');
-        if ($theme instanceof \Magento\Framework\View\Design\ThemeInterface) {
-            /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+        if ($theme instanceof ThemeInterface) {
+            /** @var ThemeInterface $theme */
             if ($this->themeConfig->isThemeAssignedToStore($theme)) {
                 $this->eventDispatcher->dispatch('assigned_theme_changed', ['theme' => $theme]);
             }

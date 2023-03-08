@@ -19,20 +19,14 @@ use Magento\Framework\App\ScopeResolverPool;
 class Scope extends Template
 {
     /**
-     * @var ScopeResolverPool
-     */
-    private $scopeResolverPool;
-
-    /**
      * @param Context $context
      * @param ScopeResolverPool $scopeResolverPool
      */
     public function __construct(
         Context $context,
-        ScopeResolverPool $scopeResolverPool
+        private readonly ScopeResolverPool $scopeResolverPool
     ) {
         parent::__construct($context);
-        $this->scopeResolverPool = $scopeResolverPool;
     }
 
     /**

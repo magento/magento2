@@ -5,12 +5,15 @@
  */
 namespace Magento\Theme\Model\ResourceModel\Theme\Grid;
 
+use Magento\Framework\App\Area;
+use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
+
 /**
  * Theme grid collection
  * @deprecated 101.0.0
  * @see \Magento\Theme\Ui\Component\Theme\DataProvider\SearchResult
  */
-class Collection extends \Magento\Theme\Model\ResourceModel\Theme\Collection
+class Collection extends ThemeCollection
 {
     /**
      * Add area filter
@@ -19,8 +22,8 @@ class Collection extends \Magento\Theme\Model\ResourceModel\Theme\Collection
      */
     protected function _initSelect()
     {
-        \Magento\Theme\Model\ResourceModel\Theme\Collection::_initSelect();
-        $this->filterVisibleThemes()->addAreaFilter(\Magento\Framework\App\Area::AREA_FRONTEND)->addParentTitle();
+        ThemeCollection::_initSelect();
+        $this->filterVisibleThemes()->addAreaFilter(Area::AREA_FRONTEND)->addParentTitle();
         return $this;
     }
 }

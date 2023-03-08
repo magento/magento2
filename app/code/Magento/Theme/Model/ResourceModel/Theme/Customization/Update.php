@@ -5,10 +5,12 @@
  */
 namespace Magento\Theme\Model\ResourceModel\Theme\Customization;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
  * Theme customization link resource model
  */
-class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Update extends AbstractDb
 {
     /**
      * Resource initialization

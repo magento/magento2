@@ -5,10 +5,12 @@
  */
 namespace Magento\Theme\Model\Layout\Config;
 
+use Magento\Framework\Config\Reader\Filesystem;
+
 /**
  * Page layout config reader
  */
-class Reader extends \Magento\Framework\Config\Reader\Filesystem
+class Reader extends Filesystem
 {
     /**
      * List of identifier attributes for merging

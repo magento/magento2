@@ -6,7 +6,16 @@
 namespace Magento\Theme\Model\Design\Backend;
 
 use Magento\Config\Model\Config\Backend\Serialized\ArraySerialized;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\DesignInterface;
 
 /**
  * Validate Eav Model before save.
@@ -16,31 +25,31 @@ class Exceptions extends ArraySerialized
     /**
      * Design package instance
      *
-     * @var \Magento\Framework\View\DesignInterface
+     * @var DesignInterface
      */
     protected $_design = null;
 
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\Framework\View\DesignInterface $design
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param ScopeConfigInterface $config
+     * @param TypeListInterface $cacheTypeList
+     * @param DesignInterface $design
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
      * @param Json|null $serializer
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
-        \Magento\Framework\View\DesignInterface $design,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        ScopeConfigInterface $config,
+        TypeListInterface $cacheTypeList,
+        DesignInterface $design,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = [],
         Json $serializer = null
     ) {
@@ -61,7 +70,7 @@ class Exceptions extends ArraySerialized
      * Validate value
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * if there is no field value, search value is empty or regular expression is not valid
      */
     public function beforeSave()
@@ -75,7 +84,7 @@ class Exceptions extends ArraySerialized
             // Validate that all values have come
             foreach (['search', 'value'] as $fieldName) {
                 if (!isset($row[$fieldName])) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
+                    throw new LocalizedException(
                         __('%1 does not contain field \'%2\'', $this->getData('field_config/fieldset'), $fieldName)
                     );
                 }
@@ -88,7 +97,7 @@ class Exceptions extends ArraySerialized
             }
 
             // Validate the theme value
-            $design->setDesignTheme($row['value'], \Magento\Framework\App\Area::AREA_FRONTEND);
+            $design->setDesignTheme($row['value'], Area::AREA_FRONTEND);
 
             // Compose regular exception pattern
             $exceptions[$rowKey]['regexp'] = $this->_composeRegexp($row['search']);
@@ -104,7 +113,7 @@ class Exceptions extends ArraySerialized
      * @param string $search
      * @return string
      *
-     * @throws \Magento\Framework\Exception\LocalizedException on invalid regular expression
+     * @throws LocalizedException on invalid regular expression
      */
     protected function _composeRegexp($search)
     {
@@ -117,7 +126,7 @@ class Exceptions extends ArraySerialized
 
         // Find out - whether user wanted to enter regexp or normal string.
         if ($this->_isRegexp($search)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid regular expression: "%1".', $search));
+            throw new LocalizedException(__('Invalid regular expression: "%1".', $search));
         }
 
         return '/' . preg_quote($search, '/') . '/i';

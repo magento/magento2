@@ -9,57 +9,66 @@
  */
 namespace Magento\Theme\Model;
 
+use Magento\Config\Model\ResourceModel\Config\Data\Collection as ResourceConfigDataCollection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\App\Config\ValueInterface;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\DesignInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Config
 {
     /**
-     * @var \Magento\Framework\App\Config\Storage\WriterInterface
+     * @var WriterInterface
      */
     protected $_configWriter;
 
     /**
-     * @var \Magento\Framework\App\Config\ValueInterface
+     * @var ValueInterface
      */
     protected $_configData;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * Application event manager
      *
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     protected $_eventManager;
 
     /**
-     * @var \Magento\Framework\Cache\FrontendInterface
+     * @var FrontendInterface
      */
     protected $_configCache;
 
     /**
-     * @var \Magento\Framework\Cache\FrontendInterface
+     * @var FrontendInterface
      */
     protected $_layoutCache;
 
     /**
-     * @param \Magento\Framework\App\Config\ValueInterface $configData
-     * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Cache\FrontendInterface $configCache
-     * @param \Magento\Framework\Cache\FrontendInterface $layoutCache
+     * @param ValueInterface $configData
+     * @param WriterInterface $configWriter
+     * @param StoreManagerInterface $storeManager
+     * @param ManagerInterface $eventManager
+     * @param FrontendInterface $configCache
+     * @param FrontendInterface $layoutCache
      */
     public function __construct(
-        \Magento\Framework\App\Config\ValueInterface $configData,
-        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Cache\FrontendInterface $configCache,
-        \Magento\Framework\Cache\FrontendInterface $layoutCache
+        ValueInterface $configData,
+        WriterInterface $configWriter,
+        StoreManagerInterface $storeManager,
+        ManagerInterface $eventManager,
+        FrontendInterface $configCache,
+        FrontendInterface $layoutCache
     ) {
         $this->_configData = $configData;
         $this->_configWriter = $configWriter;
@@ -72,7 +81,7 @@ class Config
     /**
      * Assign theme to the stores
      *
-     * @param \Magento\Framework\View\Design\ThemeInterface $theme
+     * @param ThemeInterface $theme
      * @param array $stores
      * @param string $scope
      * @return $this
@@ -80,7 +89,7 @@ class Config
     public function assignToStore(
         $theme,
         array $stores = [],
-        $scope = \Magento\Store\Model\ScopeInterface::SCOPE_STORES
+        $scope = ScopeInterface::SCOPE_STORES
     ) {
         $isReassigned = false;
 
@@ -110,7 +119,7 @@ class Config
      *
      * @param string $scope
      * @param string $configPath
-     * @return \Magento\Config\Model\ResourceModel\Config\Data\Collection
+     * @return ResourceConfigDataCollection
      */
     protected function _getAssignedScopesCollection($scope, $configPath)
     {
@@ -134,7 +143,7 @@ class Config
      */
     protected function _unassignThemeFromStores($themeId, $stores, $scope, &$isReassigned)
     {
-        $configPath = \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID;
+        $configPath = DesignInterface::XML_PATH_THEME_ID;
         foreach ($this->_getAssignedScopesCollection($scope, $configPath) as $config) {
             if ($config->getValue() == $themeId && !in_array($config->getScopeId(), $stores)) {
                 $this->_configWriter->delete($configPath, $scope, $config->getScopeId());
@@ -155,7 +164,7 @@ class Config
      */
     protected function _assignThemeToStores($themeId, $stores, $scope, &$isReassigned)
     {
-        $configPath = \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID;
+        $configPath = DesignInterface::XML_PATH_THEME_ID;
         if (count($stores) > 0) {
             foreach ($stores as $storeId) {
                 $this->_configWriter->save($configPath, $themeId, $scope, $storeId);
@@ -174,7 +183,7 @@ class Config
      */
     protected function _assignThemeToDefaultScope($themeId, &$isReassigned)
     {
-        $configPath = \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID;
+        $configPath = DesignInterface::XML_PATH_THEME_ID;
         $this->_configWriter->save($configPath, $themeId, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
         $isReassigned = true;
         return $this;

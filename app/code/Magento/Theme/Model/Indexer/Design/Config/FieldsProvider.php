@@ -6,22 +6,17 @@
 namespace Magento\Theme\Model\Indexer\Design\Config;
 
 use Magento\Framework\Indexer\FieldsetInterface;
+use Magento\Framework\Indexer\Handler\DefaultHandler;
 use Magento\Theme\Model\Design\Config\MetadataProviderInterface;
 
 class FieldsProvider implements FieldsetInterface
 {
     /**
-     * @var MetadataProviderInterface
-     */
-    protected $metadataProvider;
-
-    /**
      * @param MetadataProviderInterface $metadataProvider
      */
     public function __construct(
-        MetadataProviderInterface $metadataProvider
+        protected readonly MetadataProviderInterface $metadataProvider
     ) {
-        $this->metadataProvider = $metadataProvider;
     }
 
     /**
@@ -52,7 +47,7 @@ class FieldsProvider implements FieldsetInterface
                 $fields[$itemName] = [
                     'name' => $itemName,
                     'origin' => 'value',
-                    'handler' => \Magento\Framework\Indexer\Handler\DefaultHandler::class,
+                    'handler' => DefaultHandler::class,
                     'type' => 'searchable',
                 ];
             }

@@ -6,6 +6,10 @@
 
 namespace Magento\Theme\Block\Html;
 
+use Magento\Framework\Data\Collection;
+use Magento\Framework\View\Element\Template;
+use Magento\Store\Model\ScopeInterface;
+
 /**
  * Html pager block
  *
@@ -13,7 +17,7 @@ namespace Magento\Theme\Block\Html;
  * @api
  * @since 100.0.2
  */
-class Pager extends \Magento\Framework\View\Element\Template
+class Pager extends Template
 {
     /**
      * Current template name
@@ -23,7 +27,7 @@ class Pager extends \Magento\Framework\View\Element\Template
     protected $_template = 'Magento_Theme::html/pager.phtml';
 
     /**
-     * @var \Magento\Framework\Data\Collection
+     * @var Collection
      */
     protected $_collection;
 
@@ -168,7 +172,7 @@ class Pager extends \Magento\Framework\View\Element\Template
     /**
      * Set collection for pagination
      *
-     * @param  \Magento\Framework\Data\Collection $collection
+     * @param Collection $collection
      * @return $this
      */
     public function setCollection($collection)
@@ -187,7 +191,7 @@ class Pager extends \Magento\Framework\View\Element\Template
     /**
      * Returns data collection
      *
-     * @return \Magento\Framework\Data\Collection
+     * @return Collection
      */
     public function getCollection()
     {
@@ -777,7 +781,7 @@ class Pager extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'design/pagination/anchor_text_for_previous',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -790,7 +794,7 @@ class Pager extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'design/pagination/anchor_text_for_next',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 

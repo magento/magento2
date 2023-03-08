@@ -5,6 +5,13 @@
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
 
+use Magento\Backend\Block\Widget\Form\Renderer\Fieldset;
+use Magento\Framework\Data\Form as FormData;
+use Magento\Framework\Phrase;
+use Magento\Framework\View\Design\Theme\Customization\File\Js as CustomizationFileJs;
+use Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab;
+use Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File;
+
 /**
  * Theme form, Js editor tab
  *
@@ -12,7 +19,7 @@ namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @since 100.0.2
  */
-class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab
+class Js extends AbstractTab
 {
     /**
      * Create a form element with necessary controls
@@ -21,7 +28,7 @@ class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstrac
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var FormData $form */
         $form = $this->_formFactory->create();
         $this->setForm($form);
         $this->_addThemeJsFieldset();
@@ -40,10 +47,10 @@ class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstrac
         $themeFieldset = $form->addFieldset('theme_js', ['legend' => __('Theme JavaScript')]);
         $customization = $this->_getCurrentTheme()->getCustomization();
         $customJsFiles = $customization->getFilesByType(
-            \Magento\Framework\View\Design\Theme\Customization\File\Js::TYPE
+            CustomizationFileJs::TYPE
         );
 
-        /** @var $jsFieldsetRenderer \Magento\Backend\Block\Widget\Form\Renderer\Fieldset */
+        /** @var Fieldset $jsFieldsetRenderer */
         $jsFieldsetRenderer = $this->getChildBlock('theme_edit_tabs_tab_js_tab_content');
         $jsFieldsetRenderer->setJsFiles($customization->generateFileInfo($customJsFiles));
 
@@ -81,14 +88,14 @@ class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstrac
      */
     protected function _getAdditionalElementTypes()
     {
-        $fileElement = \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File::class;
+        $fileElement = File::class;
         return ['js_files' => $fileElement];
     }
 
     /**
      * Return Tab label
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTabLabel()
     {
@@ -111,7 +118,7 @@ class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstrac
     /**
      * Get note string for js file to Upload
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     protected function _getUploadJsFileNote()
     {

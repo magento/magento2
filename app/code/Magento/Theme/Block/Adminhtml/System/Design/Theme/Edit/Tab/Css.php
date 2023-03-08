@@ -5,61 +5,73 @@
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Button;
+use Magento\Backend\Model\Session;
+use Magento\Framework\Data\Form as FormData;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Encryption\UrlCoder;
+use Magento\Framework\File\Size;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab;
+use Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File as FormElementFile;
+use Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\Links;
 use Magento\Theme\Helper\Storage;
+use Magento\Theme\Model\Theme\Customization\File\CustomCss;
+use Magento\Theme\Model\Theme\File;
+use Magento\Theme\Model\Uploader\Service;
+use Magento\Theme\Model\Wysiwyg\Storage as WysiwygStorage;
 
 /**
  * Theme form, Css editor tab
  *
  * @api
- * @method \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css setFiles(array $files)
+ * @method Css setFiles(array $files)
  * @method array getFiles()
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @since 100.0.2
  */
-class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab
+class Css extends AbstractTab
 {
     /**
      * Uploader service
      *
-     * @var \Magento\Theme\Model\Uploader\Service
+     * @var Service
      */
     protected $_uploaderService;
 
     /**
      * Theme custom css file
      *
-     * @var \Magento\Theme\Model\Theme\File
+     * @var File
      */
     protected $_customCssFile;
 
     /**
-     * @var \Magento\Framework\Encryption\UrlCoder
-     */
-    protected $urlCoder;
-
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Theme\Model\Uploader\Service $uploaderService
-     * @param \Magento\Framework\Encryption\UrlCoder $urlCoder
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param ObjectManagerInterface $objectManager
+     * @param Service $uploaderService
+     * @param UrlCoder $urlCoder
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Theme\Model\Uploader\Service $uploaderService,
-        \Magento\Framework\Encryption\UrlCoder $urlCoder,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        ObjectManagerInterface $objectManager,
+        Service $uploaderService,
+        protected readonly UrlCoder $urlCoder,
         array $data = []
     ) {
         parent::__construct($context, $registry, $formFactory, $objectManager, $data);
         $this->_uploaderService = $uploaderService;
-        $this->urlCoder = $urlCoder;
     }
 
     /**
@@ -69,21 +81,21 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var FormData $form */
         $form = $this->_formFactory->create();
         $this->setForm($form);
         $this->_addThemeCssFieldset();
 
         $customFiles = $this->_getCurrentTheme()->getCustomization()->getFilesByType(
-            \Magento\Theme\Model\Theme\Customization\File\CustomCss::TYPE
+            CustomCss::TYPE
         );
         $this->_customCssFile = reset($customFiles);
         $this->_addCustomCssFieldset();
 
         $formData['custom_css_content'] = $this->_customCssFile ? $this->_customCssFile->getContent() : null;
 
-        /** @var $session \Magento\Backend\Model\Session */
-        $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
+        /** @var Session $session */
+        $session = $this->_objectManager->get(Session::class);
         $cssFileContent = $session->getThemeCustomCssData();
         if ($cssFileContent) {
             $formData['custom_css_content'] = $cssFileContent;
@@ -109,7 +121,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
         $this->_addElementTypes($themeFieldset);
 
         $links = [];
-        /** @var \Magento\Framework\View\Asset\LocalInterface $asset */
+        /** @var LocalInterface $asset */
         foreach ($this->getFiles() as $fileId => $asset) {
             $links[$fileId] = [
                 'href'      => $this->getDownloadUrl($fileId, $this->_getCurrentTheme()->getId()),
@@ -178,9 +190,9 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
         }
         $themeFieldset->addField('css_download_button', 'button', $downloadButtonConfig);
 
-        /** @var $imageButton \Magento\Backend\Block\Widget\Button */
+        /** @var Button $imageButton */
         $imageButton = $this->getLayout()->createBlock(
-            \Magento\Backend\Block\Widget\Button::class
+            Button::class
         )->setData(
             [
                 'id' => 'css_images_manager',
@@ -191,7 +203,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
                     [
                         'target_element_id' => 'custom_css_content',
                         Storage::PARAM_THEME_ID => $this->_getCurrentTheme()->getId(),
-                        Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE
+                        Storage::PARAM_CONTENT_TYPE => WysiwygStorage::TYPE_IMAGE
                     ]
                 ) . "', null, null,'" . $this->escapeJs(
                     __('Upload Images')
@@ -205,9 +217,9 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
             ['label' => __("Images Assets"), 'text' => $imageButton->toHtml()]
         );
 
-        /** @var $fontButton \Magento\Backend\Block\Widget\Button */
+        /** @var Button $fontButton */
         $fontButton = $this->getLayout()->createBlock(
-            \Magento\Backend\Block\Widget\Button::class
+            Button::class
         )->setData(
             [
                 'id' => 'css_fonts_manager',
@@ -218,7 +230,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
                     [
                         'target_element_id' => 'custom_css_content',
                         Storage::PARAM_THEME_ID => $this->_getCurrentTheme()->getId(),
-                        Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT
+                        Storage::PARAM_CONTENT_TYPE => WysiwygStorage::TYPE_FONT
                     ]
                 ) . "', null, null,'" . $this->escapeJs(
                     __('Upload Fonts')
@@ -252,7 +264,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
             __('Allowed file types *.css.'),
             __('This file will replace the current custom.css file and can\'t be more than 2 MB.'),
         ];
-        $maxFileSize = $this->_objectManager->get(\Magento\Framework\File\Size::class)->getMaxFileSizeInMb();
+        $maxFileSize = $this->_objectManager->get(Size::class)->getMaxFileSizeInMb();
         if ($maxFileSize) {
             $messages[] = __('Max file size to upload %1M', $maxFileSize);
         } else {
@@ -269,15 +281,15 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
      */
     protected function _getAdditionalElementTypes()
     {
-        $linksElement = \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\Links::class;
-        $fileElement = \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File::class;
+        $linksElement = Links::class;
+        $fileElement = FormElementFile::class;
         return ['links' => $linksElement, 'css_file' => $fileElement];
     }
 
     /**
      * Return Tab label
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTabLabel()
     {

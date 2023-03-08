@@ -7,22 +7,29 @@ namespace Magento\Theme\Model;
 
 use Magento\Framework\App\DesignInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\View\DesignInterface as ViewDesignInterface;
+use Magento\Theme\Model\ResourceModel\Design as ResourceDesign;
 
 /**
  * Design settings change model
  *
  * @method int getStoreId()
- * @method \Magento\Theme\Model\Design setStoreId(int $value)
+ * @method Design setStoreId(int $value)
  * @method string getDesign()
- * @method \Magento\Theme\Model\Design setDesign(string $value)
+ * @method Design setDesign(string $value)
  * @method string getDateFrom()
- * @method \Magento\Theme\Model\Design setDateFrom(string $value)
+ * @method Design setDateFrom(string $value)
  * @method string getDateTo()
- * @method \Magento\Theme\Model\Design setDateTo(string $value)
+ * @method Design setDateTo(string $value)
  */
 class Design extends AbstractModel implements IdentityInterface, DesignInterface
 {
@@ -48,39 +55,34 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
     protected $_cacheTag = self::CACHE_TAG;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @var TimezoneInterface
      */
     protected $_localeDate;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var DateTime
      */
     protected $_dateTime;
 
     /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param Context $context
+     * @param Registry $registry
+     * @param TimezoneInterface $localeDate
+     * @param DateTime $dateTime
      * @param AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param AbstractDb $resourceCollection
      * @param array $data
      * @param SerializerInterface $serializer
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        Context $context,
+        Registry $registry,
+        TimezoneInterface $localeDate,
+        DateTime $dateTime,
         AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        AbstractDb $resourceCollection = null,
         array $data = [],
-        SerializerInterface $serializer = null
+        private ?SerializerInterface $serializer = null
     ) {
         $this->_localeDate = $localeDate;
         $this->_dateTime = $dateTime;
@@ -95,7 +97,7 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Theme\Model\ResourceModel\Design::class);
+        $this->_init(ResourceDesign::class);
     }
 
     /**
@@ -135,10 +137,10 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
     /**
      * Apply design change from self data into specified design package instance
      *
-     * @param \Magento\Framework\View\DesignInterface $packageInto
+     * @param ViewDesignInterface $packageInto
      * @return $this
      */
-    public function changeDesign(\Magento\Framework\View\DesignInterface $packageInto)
+    public function changeDesign(ViewDesignInterface $packageInto)
     {
         $design = $this->getDesign();
         if ($design) {

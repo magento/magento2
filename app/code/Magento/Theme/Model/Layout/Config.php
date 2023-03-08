@@ -5,6 +5,9 @@
  */
 namespace Magento\Theme\Model\Layout;
 
+use Magento\Framework\Config\DataInterface;
+use Magento\Framework\DataObject;
+
 /**
  * Page layout config model
  */
@@ -18,24 +21,25 @@ class Config
     protected $_pageLayouts;
 
     /**
-     * @var \Magento\Framework\Config\DataInterface
+     * @var DataInterface
      */
     protected $_dataStorage;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Config\DataInterface $dataStorage
+     * @param DataInterface $dataStorage
      */
-    public function __construct(\Magento\Framework\Config\DataInterface $dataStorage)
-    {
+    public function __construct(
+        DataInterface $dataStorage
+    ) {
         $this->_dataStorage = $dataStorage;
     }
 
     /**
      * Initialize page layouts list
      *
-     * @return \Magento\Theme\Model\Layout\Config
+     * @return Config
      */
     protected function _initPageLayouts()
     {
@@ -43,7 +47,7 @@ class Config
             $this->_pageLayouts = [];
             foreach ($this->_dataStorage->get(null) as $layoutCode => $layoutConfig) {
                 $layoutConfig['label'] = __($layoutConfig['label']);
-                $this->_pageLayouts[$layoutCode] = new \Magento\Framework\DataObject($layoutConfig);
+                $this->_pageLayouts[$layoutCode] = new DataObject($layoutConfig);
             }
         }
         return $this;
@@ -52,7 +56,7 @@ class Config
     /**
      * Retrieve available page layouts
      *
-     * @return \Magento\Framework\DataObject[]
+     * @return DataObject[]
      */
     public function getPageLayouts()
     {
@@ -64,7 +68,7 @@ class Config
      * Retrieve page layout by code
      *
      * @param string $layoutCode
-     * @return \Magento\Framework\DataObject|boolean
+     * @return DataObject|boolean
      */
     public function getPageLayout($layoutCode)
     {

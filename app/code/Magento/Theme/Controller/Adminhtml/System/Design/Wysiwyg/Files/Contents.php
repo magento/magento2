@@ -6,7 +6,11 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 
-class Contents extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
+use Exception;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
+
+class Contents extends Files
 {
     /**
      * Contents action
@@ -21,10 +25,10 @@ class Contents extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg
             $this->_view->renderLayout();
 
             $this->_getSession()->setStoragePath($this->storage->getCurrentPath());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
             $this->getResponse()->representJson(
-                $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
+                $this->_objectManager->get(JsonHelper::class)->jsonEncode($result)
             );
         }
     }

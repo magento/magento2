@@ -6,29 +6,29 @@
 
 namespace Magento\Theme\Model\ResourceModel;
 
-use Magento\Framework\Stdlib\DateTime;
+use DateTime;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime as FrameworkDateTime;
+use Zend_Db_Expr;
 
 /**
  * Design Change Resource Model
  */
-class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Design extends AbstractDb
 {
     /**
-     * @var DateTime
-     */
-    protected $dateTime;
-
-    /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param DateTime $dateTime
+     * @param Context $context
+     * @param FrameworkDateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        DateTime $dateTime,
+        Context $context,
+        protected readonly FrameworkDateTime $dateTime,
         $connectionName = null
     ) {
-        $this->dateTime = $dateTime;
         parent::__construct($context, $connectionName);
     }
 
@@ -45,11 +45,11 @@ class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Perform actions before object save
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    public function _beforeSave(AbstractModel $object)
     {
         if ($date = $object->getDateFrom()) {
             $object->setDateFrom($this->dateTime->formatDate($date));
@@ -65,10 +65,10 @@ class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         if ($object->getDateFrom() !== null
             && $object->getDateTo() !== null
-            && (new \DateTime($object->getDateFrom()))->getTimestamp()
-            > (new \DateTime($object->getDateTo()))->getTimestamp()
+            && (new DateTime($object->getDateFrom()))->getTimestamp()
+            > (new DateTime($object->getDateTo()))->getTimestamp()
         ) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The start date can\'t follow the end date.')
             );
         }
@@ -81,16 +81,16 @@ class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         );
 
         if ($check) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The date range for this design change overlaps another design change for the specified store.')
             );
         }
 
         if ($object->getDateFrom() === null) {
-            $object->setDateFrom(new \Zend_Db_Expr('null'));
+            $object->setDateFrom(new Zend_Db_Expr('null'));
         }
         if ($object->getDateTo() === null) {
-            $object->setDateTo(new \Zend_Db_Expr('null'));
+            $object->setDateTo(new Zend_Db_Expr('null'));
         }
 
         parent::_beforeSave($object);

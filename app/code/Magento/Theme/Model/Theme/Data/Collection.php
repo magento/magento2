@@ -6,16 +6,18 @@
 namespace Magento\Theme\Model\Theme\Data;
 
 use Magento\Framework\View\Design\Theme\ListInterface;
+use Magento\Theme\Model\Theme\Collection as ThemeCollection;
+use Magento\Theme\Model\Theme\Data as ThemeData;
 
 /**
  * Theme filesystem data collection
  */
-class Collection extends \Magento\Theme\Model\Theme\Collection implements ListInterface
+class Collection extends ThemeCollection implements ListInterface
 {
     /**
      * Model of collection item
      *
      * @var string
      */
-    protected $_itemObjectClass = \Magento\Theme\Model\Theme\Data::class;
+    protected $_itemObjectClass = ThemeData::class;
 }

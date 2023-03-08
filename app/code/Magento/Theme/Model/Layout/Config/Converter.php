@@ -7,7 +7,9 @@
  */
 namespace Magento\Theme\Model\Layout\Config;
 
-class Converter implements \Magento\Framework\Config\ConverterInterface
+use Magento\Framework\Config\ConverterInterface;
+
+class Converter implements ConverterInterface
 {
     /**
      * {@inheritdoc}

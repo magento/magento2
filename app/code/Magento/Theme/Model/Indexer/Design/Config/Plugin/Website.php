@@ -5,6 +5,7 @@
  */
 namespace Magento\Theme\Model\Indexer\Design\Config\Plugin;
 
+use Closure;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Store\Model\Website as StoreWebsite;
 use Magento\Theme\Model\Data\Design\Config;
@@ -12,28 +13,22 @@ use Magento\Theme\Model\Data\Design\Config;
 class Website
 {
     /**
-     * @var IndexerRegistry
-     */
-    protected $indexerRegistry;
-
-    /**
      * @param IndexerRegistry $indexerRegistry
      */
     public function __construct(
-        IndexerRegistry $indexerRegistry
+        protected readonly IndexerRegistry $indexerRegistry
     ) {
-        $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
      * Invalidate design config grid indexer on website creation
      *
      * @param StoreWebsite $subject
-     * @param \Closure $proceed
+     * @param Closure $proceed
      * @return StoreWebsite
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(StoreWebsite $subject, \Closure $proceed)
+    public function aroundSave(StoreWebsite $subject, Closure $proceed)
     {
         $isObjectNew = $subject->getId() == 0;
         $result = $proceed();

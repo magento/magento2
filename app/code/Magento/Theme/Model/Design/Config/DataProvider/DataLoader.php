@@ -12,33 +12,15 @@ use Magento\Theme\Api\DesignConfigRepositoryInterface;
 class DataLoader
 {
     /**
-     * @var RequestInterface
-     */
-    protected $request;
-
-    /**
-     * @var DesignConfigRepositoryInterface
-     */
-    protected $designConfigRepository;
-
-    /**
-     * @var DataPersistorInterface
-     */
-    protected $dataPersistor;
-
-    /**
      * @param RequestInterface $request
      * @param DesignConfigRepositoryInterface $designConfigRepository
      * @param DataPersistorInterface $dataPersistor
      */
     public function __construct(
-        RequestInterface $request,
-        DesignConfigRepositoryInterface $designConfigRepository,
-        DataPersistorInterface $dataPersistor
+        protected readonly RequestInterface $request,
+        protected readonly DesignConfigRepositoryInterface $designConfigRepository,
+        protected readonly DataPersistorInterface $dataPersistor
     ) {
-        $this->request = $request;
-        $this->designConfigRepository = $designConfigRepository;
-        $this->dataPersistor = $dataPersistor;
     }
 
     /**

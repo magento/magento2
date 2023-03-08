@@ -5,39 +5,46 @@
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
+use Magento\Theme\Model\Theme;
+
 /**
  * Theme form tab abstract block
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
-abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form\Generic implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+abstract class AbstractTab extends Generic implements TabInterface
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param ObjectManagerInterface $objectManager
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        ObjectManagerInterface $objectManager,
         array $data = []
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
@@ -47,7 +54,7 @@ abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form\Generic im
     /**
      * Get theme that is edited currently
      *
-     * @return \Magento\Theme\Model\Theme
+     * @return Theme
      */
     protected function _getCurrentTheme()
     {

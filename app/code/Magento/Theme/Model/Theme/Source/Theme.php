@@ -19,16 +19,11 @@ use Magento\Framework\View\Design\Theme\Label;
 class Theme extends AbstractSource
 {
     /**
-     * @var Label
-     */
-    protected $themeLabel;
-
-    /**
      * @param Label $themeLabel
      */
-    public function __construct(Label $themeLabel)
-    {
-        $this->themeLabel = $themeLabel;
+    public function __construct(
+        protected readonly Label $themeLabel
+    ) {
     }
 
     /**

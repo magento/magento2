@@ -5,27 +5,27 @@
  */
 namespace Magento\Theme\Model\Theme;
 
-class FileProvider implements \Magento\Framework\View\Design\Theme\FileProviderInterface
+use Magento\Framework\View\Design\Theme\File\CollectionInterface;
+use Magento\Framework\View\Design\Theme\FileProviderInterface;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory;
+
+class FileProvider implements FileProviderInterface
 {
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory
+     * @param CollectionFactory $fileFactory
      */
-    protected $fileFactory;
-
-    /**
-     * @param \Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory $fileFactory
-     */
-    public function __construct(\Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory $fileFactory)
-    {
-        $this->fileFactory = $fileFactory;
+    public function __construct(
+        protected readonly CollectionFactory $fileFactory
+    ) {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getItems(\Magento\Framework\View\Design\ThemeInterface $theme, array $filters = [])
+    public function getItems(ThemeInterface $theme, array $filters = [])
     {
-        /** @var \Magento\Framework\View\Design\Theme\File\CollectionInterface $themeFiles */
+        /** @var CollectionInterface $themeFiles */
         $themeFiles = $this->fileFactory->create();
         $themeFiles->addThemeFilter($theme);
         foreach ($filters as $field => $value) {

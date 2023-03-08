@@ -5,7 +5,14 @@
  */
 namespace Magento\Theme\Block\Html;
 
+use Magento\Cms\Model\Block;
 use Magento\Customer\Model\Context;
+use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Html page footer block
@@ -13,7 +20,7 @@ use Magento\Customer\Model\Context;
  * @api
  * @since 100.0.2
  */
-class Footer extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
+class Footer extends Template implements IdentityInterface
 {
     /**
      * Copyright information
@@ -30,21 +37,15 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
     private $miscellaneousHtml;
 
     /**
-     * @var \Magento\Framework\App\Http\Context
-     */
-    protected $httpContext;
-
-    /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\App\Http\Context $httpContext
+     * @param TemplateContext $context
+     * @param HttpContext $httpContext
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\App\Http\Context $httpContext,
+        TemplateContext $context,
+        protected readonly HttpContext $httpContext,
         array $data = []
     ) {
-        $this->httpContext = $httpContext;
         parent::__construct($context, $data);
     }
 
@@ -57,7 +58,7 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
     {
         $this->addData(
             [
-                'cache_tags' => [\Magento\Store\Model\Store::CACHE_TAG, \Magento\Cms\Model\Block::CACHE_TAG],
+                'cache_tags' => [Store::CACHE_TAG, Block::CACHE_TAG],
             ]
         );
     }
@@ -90,7 +91,7 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
         if (!$this->_copyright) {
             $this->_copyright = $this->_scopeConfig->getValue(
                 'design/footer/copyright',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
         }
         return __($this->_copyright);
@@ -107,7 +108,7 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
         if ($this->miscellaneousHtml === null) {
             $this->miscellaneousHtml = $this->_scopeConfig->getValue(
                 'design/footer/absolute_footer',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
         }
         return $this->miscellaneousHtml;
@@ -120,7 +121,7 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
      */
     public function getIdentities()
     {
-        return [\Magento\Store\Model\Store::CACHE_TAG, \Magento\Cms\Model\Block::CACHE_TAG];
+        return [Store::CACHE_TAG, Block::CACHE_TAG];
     }
 
     /**

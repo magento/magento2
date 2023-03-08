@@ -6,6 +6,7 @@
 namespace Magento\Theme\Model\Design\Config\Plugin;
 
 use Magento\Config\App\Config\Source\DumpConfigSourceAggregated;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Framework\View\DesignInterface;
@@ -18,30 +19,18 @@ use Magento\Framework\View\DesignInterface;
  * As a result of Magento\Config\App\Config\Source\DumpConfigSourceAggregated expected
  * to be shared between environments where IDs can not be used, we need
  * to change theme id to full path value what can be used as an identifier.
- * @see \Magento\Config\App\Config\Source\DumpConfigSourceAggregated
+ * @see DumpConfigSourceAggregated
  */
 class Dump
 {
-    /**
-     * @var ListInterface
-     */
-    private $themeList;
-
-    /**
-     * @var ArrayManager
-     */
-    private $arrayManager;
-
     /**
      * @param ListInterface $themeList
      * @param ArrayManager $arrayManager
      */
     public function __construct(
-        ListInterface $themeList,
-        ArrayManager $arrayManager
+        private readonly ListInterface $themeList,
+        private readonly ArrayManager $arrayManager
     ) {
-        $this->themeList = $themeList;
-        $this->arrayManager = $arrayManager;
     }
 
     /**
@@ -56,7 +45,7 @@ class Dump
     public function afterGet(DumpConfigSourceAggregated $subject, $result)
     {
         foreach ($result as $scope => &$item) {
-            if ($scope === \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
+            if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
                 $item = $this->changeThemeIdToFullPath($item);
             } else {
                 foreach ($item as &$scopeItems) {

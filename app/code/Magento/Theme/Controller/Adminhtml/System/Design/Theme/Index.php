@@ -7,12 +7,13 @@
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
 /**
  * Class Index
  * @deprecated 100.2.0
  */
-class Index extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme implements HttpGetActionInterface
+class Index extends Theme implements HttpGetActionInterface
 {
     /**
      * Index action

@@ -5,7 +5,9 @@
  */
 namespace Magento\Theme\Model\Design\Theme;
 
-class Label extends \Magento\Framework\View\Design\Theme\Label
+use Magento\Framework\View\Design\Theme\Label as DesignThemeLabel;
+
+class Label extends DesignThemeLabel
 {
     /**
      * Return labels collection array

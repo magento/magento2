@@ -5,6 +5,7 @@
  */
 namespace Magento\Theme\Block\Html;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Template;
 
@@ -14,7 +15,7 @@ use Magento\Framework\View\Element\Template;
  * @api
  * @since 100.0.2
  */
-class Breadcrumbs extends \Magento\Framework\View\Element\Template
+class Breadcrumbs extends Template
 {
     /**
      * Current template name
@@ -45,11 +46,6 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
     protected $_cacheKeyInfo;
 
     /**
-     * @var Json
-     */
-    private $serializer;
-
-    /**
      * @param Template\Context $context
      * @param array $data
      * @param Json|null $serializer
@@ -57,11 +53,11 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
     public function __construct(
         Template\Context $context,
         array $data = [],
-        Json $serializer = null
+        private ?Json $serializer = null
     ) {
         parent::__construct($context, $data);
         $this->serializer =
-            $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+            $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**

@@ -20,21 +20,6 @@ use Magento\Framework\App\ScopeResolverPool;
 class Edit extends Action
 {
     /**
-     * @var ResultPageFactory
-     */
-    protected $resultPageFactory;
-
-    /**
-     * @var ScopeValidator
-     */
-    protected $scopeValidator;
-
-    /**
-     * @var ScopeResolverPool
-     */
-    protected $scopeResolverPool;
-
-    /**
      * @param Context $context
      * @param ResultPageFactory $resultPageFactory
      * @param ScopeValidator $scopeValidator
@@ -42,13 +27,10 @@ class Edit extends Action
      */
     public function __construct(
         Context $context,
-        ResultPageFactory $resultPageFactory,
-        ScopeValidator $scopeValidator,
-        ScopeResolverPool $scopeResolverPool
+        protected readonly ResultPageFactory $resultPageFactory,
+        protected readonly ScopeValidator $scopeValidator,
+        protected readonly ScopeResolverPool $scopeResolverPool
     ) {
-        $this->resultPageFactory = $resultPageFactory;
-        $this->scopeValidator = $scopeValidator;
-        $this->scopeResolverPool = $scopeResolverPool;
         parent::__construct($context);
     }
 

@@ -5,6 +5,7 @@
  */
 namespace Magento\Theme\Model\Config;
 
+use Exception;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Theme\Model\ResourceModel\Theme as ThemeResourceModel;
@@ -28,13 +29,6 @@ use Magento\Theme\Model\Theme\Registration;
 class Importer implements ImporterInterface
 {
     /**
-     * Collection of themes from the filesystem.
-     *
-     * @var ThemeFilesystemCollection
-     */
-    private $themeFilesystemCollection;
-
-    /**
      * Factory of themes collection from the DB.
      *
      * @var CollectionFactory
@@ -49,28 +43,19 @@ class Importer implements ImporterInterface
     private $themeRegistration;
 
     /**
-     * Resource model of theme.
-     *
-     * @var ThemeResourceModel
-     */
-    private $themeResourceModel;
-
-    /**
      * @param ThemeFilesystemCollection $themeFilesystemCollection The collection of themes from the filesystem
      * @param CollectionFactory $collectionFactory The factory of themes collection from the DB
      * @param Registration $registration The registrar of themes registers themes in the DB
      * @param ThemeResourceModel $themeResourceModel The resource model of theme
      */
     public function __construct(
-        ThemeFilesystemCollection $themeFilesystemCollection,
+        private readonly ThemeFilesystemCollection $themeFilesystemCollection,
         CollectionFactory $collectionFactory,
         Registration $registration,
-        ThemeResourceModel $themeResourceModel
+        private readonly ThemeResourceModel $themeResourceModel
     ) {
-        $this->themeFilesystemCollection = $themeFilesystemCollection;
         $this->themeCollectionFactory = $collectionFactory;
         $this->themeRegistration = $registration;
-        $this->themeResourceModel = $themeResourceModel;
     }
 
     /**
@@ -100,7 +85,7 @@ class Importer implements ImporterInterface
                     $this->themeResourceModel->delete($theme);
                 }
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new InvalidTransitionException(__('%1', $exception->getMessage()), $exception);
         }
 

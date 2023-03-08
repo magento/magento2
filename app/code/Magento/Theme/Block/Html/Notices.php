@@ -5,19 +5,23 @@
  */
 namespace Magento\Theme\Block\Html;
 
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\ScopeInterface;
+
 /**
  * Html page notices block
  *
  * @api
  * @since 100.0.2
  */
-class Notices extends \Magento\Framework\View\Element\Template
+class Notices extends Template
 {
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param Context $context
      * @param array $data
      */
-    public function __construct(\Magento\Framework\View\Element\Template\Context $context, array $data = [])
+    public function __construct(Context $context, array $data = [])
     {
         parent::__construct($context, $data);
     }
@@ -31,7 +35,7 @@ class Notices extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'web/browser_capabilities/javascript',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -44,7 +48,7 @@ class Notices extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'web/browser_capabilities/local_storage',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -57,7 +61,7 @@ class Notices extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'design/head/demonotice',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 }

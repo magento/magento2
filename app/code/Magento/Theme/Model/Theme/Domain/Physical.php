@@ -9,41 +9,48 @@
  */
 namespace Magento\Theme\Model\Theme\Domain;
 
-class Physical implements \Magento\Framework\View\Design\Theme\Domain\PhysicalInterface
+use Magento\Framework\App\Area;
+use Magento\Framework\View\Design\Theme\Domain\PhysicalInterface;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\CopyService;
+use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
+use Magento\Theme\Model\ThemeFactory;
+
+class Physical implements PhysicalInterface
 {
     /**
      * Physical theme model instance
      *
-     * @var \Magento\Framework\View\Design\ThemeInterface
+     * @var ThemeInterface
      */
     protected $_theme;
 
     /**
-     * @var \Magento\Theme\Model\ThemeFactory
+     * @var ThemeFactory
      */
     protected $_themeFactory;
 
     /**
-     * @var \Magento\Theme\Model\CopyService
+     * @var CopyService
      */
     protected $_themeCopyService;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection
+     * @var ThemeCollection
      */
     protected $_themeCollection;
 
     /**
-     * @param \Magento\Framework\View\Design\ThemeInterface $theme
-     * @param \Magento\Theme\Model\ThemeFactory $themeFactory
-     * @param \Magento\Theme\Model\CopyService $themeCopyService
-     * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection
+     * @param ThemeInterface $theme
+     * @param ThemeFactory $themeFactory
+     * @param CopyService $themeCopyService
+     * @param ThemeCollection $themeCollection
      */
     public function __construct(
-        \Magento\Framework\View\Design\ThemeInterface $theme,
-        \Magento\Theme\Model\ThemeFactory $themeFactory,
-        \Magento\Theme\Model\CopyService $themeCopyService,
-        \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection
+        ThemeInterface $theme,
+        ThemeFactory $themeFactory,
+        CopyService $themeCopyService,
+        ThemeCollection $themeCollection
     ) {
         $this->_theme = $theme;
         $this->_themeFactory = $themeFactory;
@@ -54,8 +61,8 @@ class Physical implements \Magento\Framework\View\Design\Theme\Domain\PhysicalIn
     /**
      * Create theme customization
      *
-     * @param \Magento\Framework\View\Design\ThemeInterface $theme
-     * @return \Magento\Framework\View\Design\ThemeInterface
+     * @param ThemeInterface $theme
+     * @return ThemeInterface
      */
     public function createVirtualTheme($theme)
     {
@@ -64,9 +71,9 @@ class Physical implements \Magento\Framework\View\Design\Theme\Domain\PhysicalIn
         $themeData['theme_id'] = null;
         $themeData['theme_path'] = null;
         $themeData['theme_title'] = $this->_getVirtualThemeTitle($theme);
-        $themeData['type'] = \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL;
+        $themeData['type'] = ThemeInterface::TYPE_VIRTUAL;
 
-        /** @var $themeCustomization \Magento\Framework\View\Design\ThemeInterface */
+        /** @var ThemeInterface $themeCustomization */
         $themeCustomization = $this->_themeFactory->create()->setData($themeData);
         $themeCustomization->getThemeImage()->createPreviewImageCopy($theme);
         $themeCustomization->save();
@@ -79,15 +86,15 @@ class Physical implements \Magento\Framework\View\Design\Theme\Domain\PhysicalIn
     /**
      * Get virtual theme title
      *
-     * @param \Magento\Framework\View\Design\ThemeInterface $theme
+     * @param ThemeInterface $theme
      * @return string
      */
     protected function _getVirtualThemeTitle($theme)
     {
         $themeCopyCount = $this->_themeCollection->addAreaFilter(
-            \Magento\Framework\App\Area::AREA_FRONTEND
+            Area::AREA_FRONTEND
         )->addTypeFilter(
-            \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL
+            ThemeInterface::TYPE_VIRTUAL
         )->addFilter(
             'parent_id',
             $theme->getId()

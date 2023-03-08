@@ -5,13 +5,15 @@
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit;
 
+use Magento\Backend\Block\Widget\Tabs as WidgetTabs;
+
 /**
  * Theme editor tab container
  *
  * @api
  * @since 100.0.2
  */
-class Tabs extends \Magento\Backend\Block\Widget\Tabs
+class Tabs extends WidgetTabs
 {
     /**
      * Initialize tabs and define tabs block settings

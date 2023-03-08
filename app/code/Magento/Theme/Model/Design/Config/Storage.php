@@ -7,6 +7,7 @@ namespace Magento\Theme\Model\Design\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
+use Magento\Framework\DB\Transaction;
 use Magento\Theme\Api\Data\DesignConfigInterface;
 use Magento\Framework\DB\TransactionFactory;
 use Magento\Framework\App\Config\ValueInterface;
@@ -16,36 +17,6 @@ use Magento\Theme\Model\Design\BackendModelFactory;
 class Storage
 {
     /**
-     * @var \Magento\Framework\DB\TransactionFactory
-     */
-    protected $transactionFactory;
-
-    /**
-     * @var \Magento\Theme\Model\Design\BackendModelFactory
-     */
-    protected $backendModelFactory;
-
-    /**
-     * @var \Magento\Theme\Model\Design\Config\ValueChecker
-     */
-    protected $valueChecker;
-
-    /**
-     * @var ConfigFactory
-     */
-    protected $configFactory;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * @var ValueProcessor
-     */
-    protected $valueProcessor;
-
-    /**
      * @param TransactionFactory $transactionFactory
      * @param BackendModelFactory $backendModelFactory
      * @param ValueChecker $valueChecker
@@ -54,19 +25,13 @@ class Storage
      * @param ValueProcessor $valueProcessor
      */
     public function __construct(
-        TransactionFactory $transactionFactory,
-        BackendModelFactory $backendModelFactory,
-        ValueChecker $valueChecker,
-        ConfigFactory $configFactory,
-        ScopeConfigInterface $scopeConfig,
-        ValueProcessor $valueProcessor
+        protected readonly TransactionFactory $transactionFactory,
+        protected readonly BackendModelFactory $backendModelFactory,
+        protected readonly ValueChecker $valueChecker,
+        protected readonly ConfigFactory $configFactory,
+        protected readonly ScopeConfigInterface $scopeConfig,
+        protected readonly ValueProcessor $valueProcessor
     ) {
-        $this->transactionFactory = $transactionFactory;
-        $this->backendModelFactory = $backendModelFactory;
-        $this->valueChecker = $valueChecker;
-        $this->configFactory = $configFactory;
-        $this->scopeConfig = $scopeConfig;
-        $this->valueProcessor = $valueProcessor;
     }
 
     /**
@@ -106,9 +71,9 @@ class Storage
     public function save(DesignConfigInterface $designConfig)
     {
         $fieldsData = $designConfig->getExtensionAttributes()->getDesignConfigData();
-        /* @var $saveTransaction \Magento\Framework\DB\Transaction */
+        /* @var Transaction $saveTransaction */
         $saveTransaction = $this->transactionFactory->create();
-        /* @var $deleteTransaction \Magento\Framework\DB\Transaction */
+        /* @var Transaction $deleteTransaction */
         $deleteTransaction = $this->transactionFactory->create();
         foreach ($fieldsData as $fieldData) {
             /** @var ValueInterface|Value $backendModel */
@@ -145,7 +110,7 @@ class Storage
     public function delete(DesignConfigInterface $designConfig)
     {
         $fieldsData = $designConfig->getExtensionAttributes()->getDesignConfigData();
-        /* @var $deleteTransaction \Magento\Framework\DB\Transaction */
+        /* @var $deleteTransaction Transaction */
         $deleteTransaction = $this->transactionFactory->create();
         foreach ($fieldsData as $fieldData) {
             /** @var ValueInterface|Value $backendModel */

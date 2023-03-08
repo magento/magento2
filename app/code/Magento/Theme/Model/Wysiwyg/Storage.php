@@ -8,9 +8,19 @@ namespace Magento\Theme\Model\Wysiwyg;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\Io\File as IoFile;
+use Magento\Framework\Image\AdapterFactory;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Url\DecoderInterface;
+use Magento\Framework\Url\EncoderInterface;
 use Magento\MediaStorage\Model\File\Uploader;
+use Magento\Theme\Helper\Storage as ThemeStorageHelper;
+use Magento\Theme\Model\Wysiwyg\Storage as WysiwygStorage;
+use Psr\Log\LoggerInterface;
 
 /**
  * Theme wysiwyg storage model
@@ -56,17 +66,17 @@ class Storage
     /**
      * Storage helper
      *
-     * @var \Magento\Theme\Helper\Storage
+     * @var ThemeStorageHelper
      */
     protected $_helper;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\Image\AdapterFactory
+     * @var AdapterFactory
      */
     protected $_imageFactory;
 
@@ -76,56 +86,35 @@ class Storage
     protected $mediaWriteDirectory;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface
-     */
-    protected $urlEncoder;
-
-    /**
-     * @var \Magento\Framework\Url\DecoderInterface
-     */
-    protected $urlDecoder;
-    /**
-     * @var \Magento\Framework\Filesystem\Io\File|null
-     */
-    private $file;
-
-    /**
-     * @var DriverInterface
-     */
-    private $filesystemDriver;
-
-    /**
      * Initialize dependencies
      *
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Theme\Helper\Storage $helper
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\Image\AdapterFactory $imageFactory
-     * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
-     * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
-     * @param \Magento\Framework\Filesystem\Io\File|null $file
+     * @param Filesystem $filesystem
+     * @param ThemeStorageHelper $helper
+     * @param ObjectManagerInterface $objectManager
+     * @param AdapterFactory $imageFactory
+     * @param EncoderInterface $urlEncoder
+     * @param DecoderInterface $urlDecoder
+     * @param IoFile|null $file
      * @param DriverInterface|null $filesystemDriver
      *
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     public function __construct(
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Theme\Helper\Storage $helper,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\Image\AdapterFactory $imageFactory,
-        \Magento\Framework\Url\EncoderInterface $urlEncoder,
-        \Magento\Framework\Url\DecoderInterface $urlDecoder,
-        \Magento\Framework\Filesystem\Io\File $file = null,
-        DriverInterface $filesystemDriver = null
+        Filesystem $filesystem,
+        ThemeStorageHelper $helper,
+        ObjectManagerInterface $objectManager,
+        AdapterFactory $imageFactory,
+        protected readonly EncoderInterface $urlEncoder,
+        protected readonly DecoderInterface $urlDecoder,
+        private ?IoFile $file = null,
+        private ?DriverInterface $filesystemDriver = null
     ) {
         $this->mediaWriteDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->_helper = $helper;
         $this->_objectManager = $objectManager;
         $this->_imageFactory = $imageFactory;
-        $this->urlEncoder = $urlEncoder;
-        $this->urlDecoder = $urlDecoder;
         $this->file = $file ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Filesystem\Io\File::class
+            IoFile::class
         );
         $this->filesystemDriver = $filesystemDriver ?: ObjectManager::getInstance()
             ->get(DriverInterface::class);
@@ -185,8 +174,8 @@ class Storage
             $image->keepAspectRatio(true);
             $image->resize(self::THUMBNAIL_WIDTH, self::THUMBNAIL_HEIGHT);
             $image->save($this->mediaWriteDirectory->getAbsolutePath($thumbnailPath));
-        } catch (\Magento\Framework\Exception\FileSystemException $e) {
-            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+        } catch (FileSystemException $e) {
+            $this->_objectManager->get(LoggerInterface::class)->critical($e);
             return false;
         }
 
@@ -237,7 +226,7 @@ class Storage
      * Delete file
      *
      * @param string $file
-     * @return \Magento\Theme\Model\Wysiwyg\Storage
+     * @return WysiwygStorage
      */
     public function deleteFile($file)
     {

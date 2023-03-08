@@ -32,11 +32,6 @@ class Customization
     protected $_design;
 
     /**
-     * @var ThemeProviderInterface
-     */
-    protected $themeProvider;
-
-    /**
      * Theme customizations which are assigned to store views or as default
      *
      * @var array
@@ -51,10 +46,6 @@ class Customization
      * @see self::_prepareThemeCustomizations()
      */
     protected $_unassignedTheme;
-    /**
-     * @var StoreUserAgentThemeResolver|mixed|null
-     */
-    private $storeThemesResolver;
 
     /**
      * @param StoreManagerInterface $storeManager
@@ -65,12 +56,11 @@ class Customization
     public function __construct(
         StoreManagerInterface $storeManager,
         DesignInterface $design,
-        ThemeProviderInterface $themeProvider,
-        ?StoreThemesResolverInterface $storeThemesResolver = null
+        protected readonly ThemeProviderInterface $themeProvider,
+        private ?StoreThemesResolverInterface $storeThemesResolver = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_design = $design;
-        $this->themeProvider = $themeProvider;
         $this->storeThemesResolver = $storeThemesResolver
             ?? ObjectManager::getInstance()->get(StoreThemesResolverInterface::class);
     }
@@ -195,7 +185,7 @@ class Customization
         $this->_assignedTheme = [];
         $this->_unassignedTheme = [];
 
-        /** @var $theme ThemeInterface */
+        /** @var ThemeInterface $theme */
         foreach ($themeCollection as $theme) {
             if (isset($assignedThemes[$theme->getId()])) {
                 $theme->setAssignedStores($assignedThemes[$theme->getId()]);

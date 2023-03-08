@@ -10,17 +10,11 @@ use Magento\Theme\Model\Design\BackendModelFactory;
 class ValueProcessor
 {
     /**
-     * @var BackendModelFactory
-     */
-    protected $backendModelFactory;
-
-    /**
      * @param BackendModelFactory $backendModelFactory
      */
     public function __construct(
-        BackendModelFactory $backendModelFactory
+        protected readonly BackendModelFactory $backendModelFactory
     ) {
-        $this->backendModelFactory = $backendModelFactory;
     }
 
     /**

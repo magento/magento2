@@ -14,33 +14,15 @@ use Magento\Framework\App\ScopeFallbackResolverInterface;
 class ValueChecker
 {
     /**
-     * @var ScopeFallbackResolverInterface
-     */
-    protected $fallbackResolver;
-
-    /**
-     * @var AppConfig
-     */
-    protected $appConfig;
-
-    /**
-     * @var ValueProcessor
-     */
-    protected $valueProcessor;
-
-    /**
      * @param ScopeFallbackResolverInterface $fallbackResolver
      * @param AppConfig $appConfig
-     * @param \Magento\Theme\Model\Design\Config\ValueProcessor $valueProcessor
+     * @param ValueProcessor $valueProcessor
      */
     public function __construct(
-        ScopeFallbackResolverInterface $fallbackResolver,
-        AppConfig $appConfig,
-        ValueProcessor $valueProcessor
+        protected readonly ScopeFallbackResolverInterface $fallbackResolver,
+        protected readonly AppConfig $appConfig,
+        protected readonly ValueProcessor $valueProcessor
     ) {
-        $this->fallbackResolver = $fallbackResolver;
-        $this->appConfig = $appConfig;
-        $this->valueProcessor = $valueProcessor;
     }
 
     /**

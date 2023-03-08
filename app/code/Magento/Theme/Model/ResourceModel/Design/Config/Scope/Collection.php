@@ -7,36 +7,19 @@ namespace Magento\Theme\Model\ResourceModel\Design\Config\Scope;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeTreeProviderInterface;
+use Magento\Framework\Data\Collection as DataCollection;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\DataObject;
 use Magento\Theme\Model\Design\Config\MetadataProviderInterface;
 use Magento\Theme\Model\Design\Config\ValueProcessor;
+use Magento\Theme\Model\ResourceModel\Design\Config\Scope\Collection as DesignConfigScopeCollection;
 
 /**
  * Data collection
  *
  */
-class Collection extends \Magento\Framework\Data\Collection
+class Collection extends DataCollection
 {
-    /**
-     * @var ScopeTreeProviderInterface
-     */
-    protected $scopeTree;
-
-    /**
-     * @var MetadataProviderInterface
-     */
-    protected $metadataProvider;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    protected $appConfig;
-
-    /**
-     * @var ValueProcessor
-     */
-    protected $valueProcessor;
-
     /**
      * Collection constructor
      *
@@ -48,16 +31,12 @@ class Collection extends \Magento\Framework\Data\Collection
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
-        ScopeTreeProviderInterface $scopeTree,
-        MetadataProviderInterface $metadataProvider,
-        ScopeConfigInterface $appConfig,
-        ValueProcessor $valueProcessor
+        protected readonly ScopeTreeProviderInterface $scopeTree,
+        protected readonly MetadataProviderInterface $metadataProvider,
+        protected readonly ScopeConfigInterface $appConfig,
+        protected readonly ValueProcessor $valueProcessor
     ) {
         parent::__construct($entityFactory);
-        $this->scopeTree = $scopeTree;
-        $this->metadataProvider = $metadataProvider;
-        $this->appConfig = $appConfig;
-        $this->valueProcessor = $valueProcessor;
     }
 
     /**
@@ -65,7 +44,7 @@ class Collection extends \Magento\Framework\Data\Collection
      *
      * @param bool $printQuery
      * @param bool $logQuery
-     * @return \Magento\Theme\Model\ResourceModel\Design\Config\Scope\Collection
+     * @return DesignConfigScopeCollection
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -130,7 +109,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
         $result = array_merge($result, $this->getScopeData($websiteScope, $groupScope, $storeScope));
 
-        $this->_addItem(new \Magento\Framework\DataObject($result));
+        $this->_addItem(new DataObject($result));
     }
 
     /**

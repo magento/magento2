@@ -11,32 +11,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ThemeUninstaller
 {
     /**
-     * @var ThemePackageInfo
-     */
-    private $themePackageInfo;
-
-    /**
-     * @var Remove
-     */
-    private $remove;
-
-    /**
-     * @var ThemeProvider
-     */
-    private $themeProvider;
-
-    /**
      * Constructor
      *
      * @param ThemePackageInfo $themePackageInfo
      * @param Remove $remove
      * @param ThemeProvider $themeProvider
      */
-    public function __construct(ThemePackageInfo $themePackageInfo, Remove $remove, ThemeProvider $themeProvider)
-    {
-        $this->themePackageInfo = $themePackageInfo;
-        $this->remove = $remove;
-        $this->themeProvider = $themeProvider;
+    public function __construct(
+        private readonly ThemePackageInfo $themePackageInfo,
+        private readonly Remove $remove,
+        private readonly ThemeProvider $themeProvider
+    ) {
     }
 
     /**

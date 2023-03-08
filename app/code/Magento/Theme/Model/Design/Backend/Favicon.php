@@ -5,6 +5,7 @@
  */
 namespace Magento\Theme\Model\Design\Backend;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 
 class Favicon extends Image
@@ -19,7 +20,7 @@ class Favicon extends Image
      * Return path to directory for upload file
      *
      * @return string
-     * @throw \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _getUploadDir()
     {

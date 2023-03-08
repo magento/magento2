@@ -6,6 +6,7 @@
 
 namespace Magento\Theme\Model\Design\Config\FileUploader;
 
+use Exception;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\MediaStorage\Model\File\UploaderFactory;
@@ -25,31 +26,11 @@ use Magento\Store\Model\StoreManagerInterface;
 class FileProcessor
 {
     /**
-     * @var UploaderFactory
-     */
-    protected $uploaderFactory;
-
-    /**
-     * @var BackendModelFactory
-     */
-    protected $backendModelFactory;
-
-    /**
-     * @var MetadataProvider
-     */
-    protected $metadataProvider;
-
-    /**
      * Media Directory object (writable).
      *
      * @var WriteInterface
      */
     protected $mediaDirectory;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
 
     /**
      * @var string
@@ -64,23 +45,19 @@ class FileProcessor
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        UploaderFactory $uploaderFactory,
-        BackendModelFactory $backendModelFactory,
-        MetadataProvider $metadataProvider,
+        protected readonly UploaderFactory $uploaderFactory,
+        protected readonly BackendModelFactory $backendModelFactory,
+        protected readonly MetadataProvider $metadataProvider,
         Filesystem $filesystem,
-        StoreManagerInterface $storeManager
+        protected readonly StoreManagerInterface $storeManager
     ) {
-        $this->uploaderFactory = $uploaderFactory;
-        $this->backendModelFactory = $backendModelFactory;
-        $this->metadataProvider = $metadataProvider;
-        $this->storeManager = $storeManager;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
     }
 
     /**
      * Save file to temp media directory
      *
-     * @param  string $fileId
+     * @param string $fileId
      *
      * @return array
      */
@@ -89,7 +66,7 @@ class FileProcessor
         try {
             $result = $this->save($fileId, $this->getAbsoluteTmpMediaPath());
             $result['url'] = $this->getTmpMediaUrl($result['file']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }
         return $result;

@@ -11,18 +11,23 @@
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element;
 
-class Links extends \Magento\Framework\Data\Form\Element\AbstractElement
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\Data\Form\Element\Factory;
+use Magento\Framework\Escaper;
+
+class Links extends AbstractElement
 {
     /**
-     * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Framework\Escaper $escaper
+     * @param Factory $factoryElement
+     * @param CollectionFactory $factoryCollection
+     * @param Escaper $escaper
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Data\Form\Element\Factory $factoryElement,
-        \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Framework\Escaper $escaper,
+        Factory $factoryElement,
+        CollectionFactory $factoryCollection,
+        Escaper $escaper,
         $data = []
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);

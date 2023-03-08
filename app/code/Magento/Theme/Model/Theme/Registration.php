@@ -8,6 +8,8 @@ namespace Magento\Theme\Model\Theme;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory;
+use Magento\Theme\Model\Theme\Data\Collection as ThemeDataCollection;
 
 /**
  * Theme registration model class
@@ -15,7 +17,7 @@ use Magento\Framework\View\Design\ThemeInterface;
 class Registration
 {
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -49,12 +51,12 @@ class Registration
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory  $collectionFactory
-     * @param \Magento\Theme\Model\Theme\Data\Collection                       $filesystemCollection
+     * @param CollectionFactory $collectionFactory
+     * @param ThemeDataCollection $filesystemCollection
      */
     public function __construct(
-        \Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory $collectionFactory,
-        \Magento\Theme\Model\Theme\Data\Collection $filesystemCollection
+        CollectionFactory $collectionFactory,
+        ThemeDataCollection $filesystemCollection
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_themeCollection = $filesystemCollection;
@@ -83,8 +85,8 @@ class Registration
      *
      * Second param is optional and is used to prevent circular references in inheritance chain
      *
-     * @param   ThemeInterface &$theme
-     * @param   array           $inheritanceChain
+     * @param ThemeInterface &$theme
+     * @param array $inheritanceChain
      * @return  $this
      *
      * @throws  LocalizedException
@@ -156,7 +158,7 @@ class Registration
     public function checkPhysicalThemes()
     {
         $themes = $this->_collectionFactory->create()->addTypeFilter(ThemeInterface::TYPE_PHYSICAL);
-        /** @var $theme ThemeInterface */
+        /** @var ThemeInterface $theme */
         foreach ($themes as $theme) {
             if (!$this->_themeCollection->hasTheme($theme)) {
                 $theme->setType(ThemeInterface::TYPE_VIRTUAL)->save();
@@ -176,7 +178,7 @@ class Registration
             list($parentType, $childType) = $typesSequence;
             $collection = $this->_collectionFactory->create();
             $collection->addTypeRelationFilter($parentType, $childType);
-            /** @var $theme ThemeInterface */
+            /** @var ThemeInterface $theme */
             foreach ($collection as $theme) {
                 $parentId = $this->_getResetParentId($theme);
                 if ($theme->getParentId() != $parentId) {

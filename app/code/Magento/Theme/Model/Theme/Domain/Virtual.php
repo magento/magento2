@@ -9,50 +9,56 @@
  */
 namespace Magento\Theme\Model\Theme\Domain;
 
-class Virtual implements \Magento\Framework\View\Design\Theme\Domain\VirtualInterface
+use Magento\Framework\View\Design\Theme\Domain\VirtualInterface;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\Config\Customization;
+use Magento\Theme\Model\CopyService;
+use Magento\Theme\Model\ThemeFactory;
+
+class Virtual implements VirtualInterface
 {
     /**
      * Virtual theme model instance
      *
-     * @var \Magento\Framework\View\Design\ThemeInterface
+     * @var ThemeInterface
      */
     protected $_theme;
 
     /**
-     * @var \Magento\Theme\Model\ThemeFactory $themeFactory
+     * @var ThemeFactory $themeFactory
      */
     protected $_themeFactory;
 
     /**
      * Staging theme model instance
      *
-     * @var \Magento\Framework\View\Design\ThemeInterface
+     * @var ThemeInterface
      */
     protected $_stagingTheme;
 
     /**
-     * @var \Magento\Theme\Model\CopyService
+     * @var CopyService
      */
     protected $_themeCopyService;
 
     /**
      * Theme customization config
      *
-     * @var \Magento\Theme\Model\Config\Customization
+     * @var Customization
      */
     protected $_customizationConfig;
 
     /**
-     * @param \Magento\Framework\View\Design\ThemeInterface $theme
-     * @param \Magento\Theme\Model\ThemeFactory $themeFactory
-     * @param \Magento\Theme\Model\CopyService $themeCopyService
-     * @param \Magento\Theme\Model\Config\Customization $customizationConfig
+     * @param ThemeInterface $theme
+     * @param ThemeFactory $themeFactory
+     * @param CopyService $themeCopyService
+     * @param Customization $customizationConfig
      */
     public function __construct(
-        \Magento\Framework\View\Design\ThemeInterface $theme,
-        \Magento\Theme\Model\ThemeFactory $themeFactory,
-        \Magento\Theme\Model\CopyService $themeCopyService,
-        \Magento\Theme\Model\Config\Customization $customizationConfig
+        ThemeInterface $theme,
+        ThemeFactory $themeFactory,
+        CopyService $themeCopyService,
+        Customization $customizationConfig
     ) {
         $this->_theme = $theme;
         $this->_themeFactory = $themeFactory;
@@ -63,7 +69,7 @@ class Virtual implements \Magento\Framework\View\Design\Theme\Domain\VirtualInte
     /**
      * Get 'staging' theme
      *
-     * @return \Magento\Framework\View\Design\ThemeInterface
+     * @return ThemeInterface
      */
     public function getStagingTheme()
     {
@@ -80,11 +86,11 @@ class Virtual implements \Magento\Framework\View\Design\Theme\Domain\VirtualInte
     /**
      * Get 'physical' theme
      *
-     * @return \Magento\Framework\View\Design\ThemeInterface
+     * @return ThemeInterface
      */
     public function getPhysicalTheme()
     {
-        /** @var $parentTheme \Magento\Framework\View\Design\ThemeInterface */
+        /** @var ThemeInterface $parentTheme */
         $parentTheme = $this->_theme->getParentTheme();
         while ($parentTheme && !$parentTheme->isPhysical()) {
             $parentTheme = $parentTheme->getParentTheme();
@@ -110,7 +116,7 @@ class Virtual implements \Magento\Framework\View\Design\Theme\Domain\VirtualInte
     /**
      * Create 'staging' theme associated with current 'virtual' theme
      *
-     * @return \Magento\Framework\View\Design\ThemeInterface
+     * @return ThemeInterface
      */
     protected function _createStagingTheme()
     {
@@ -122,7 +128,7 @@ class Virtual implements \Magento\Framework\View\Design\Theme\Domain\VirtualInte
                 'theme_title' => sprintf('%s - Staging', $this->_theme->getThemeTitle()),
                 'preview_image' => $this->_theme->getPreviewImage(),
                 'is_featured' => $this->_theme->getIsFeatured(),
-                'type' => \Magento\Framework\View\Design\ThemeInterface::TYPE_STAGING,
+                'type' => ThemeInterface::TYPE_STAGING,
             ]
         );
         $stagingTheme->save();

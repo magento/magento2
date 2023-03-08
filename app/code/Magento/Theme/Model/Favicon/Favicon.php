@@ -5,12 +5,21 @@
  */
 namespace Magento\Theme\Model\Favicon;
 
+use Magento\Config\Model\Config\Backend\Image\Favicon as ImageFavicon;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Page\FaviconInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Favicon implementation
  */
-class Favicon implements \Magento\Framework\View\Page\FaviconInterface
+class Favicon implements FaviconInterface
 {
     /**
      * @var string
@@ -18,40 +27,22 @@ class Favicon implements \Magento\Framework\View\Page\FaviconInterface
     protected $faviconFile;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database
-     */
-    protected $fileStorageDatabase;
-
-    /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var ReadInterface
      */
     protected $mediaDirectory;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDatabase
-     * @param \Magento\Framework\Filesystem $filesystem
+     * @param StoreManagerInterface $storeManager
+     * @param ScopeConfigInterface $scopeConfig
+     * @param Database $fileStorageDatabase
+     * @param Filesystem $filesystem
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDatabase,
-        \Magento\Framework\Filesystem $filesystem
+        protected readonly StoreManagerInterface $storeManager,
+        protected readonly ScopeConfigInterface $scopeConfig,
+        protected readonly Database $fileStorageDatabase,
+        Filesystem $filesystem
     ) {
-        $this->storeManager = $storeManager;
-        $this->scopeConfig = $scopeConfig;
-        $this->fileStorageDatabase = $fileStorageDatabase;
         $this->mediaDirectory = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
     }
 
@@ -79,14 +70,14 @@ class Favicon implements \Magento\Framework\View\Page\FaviconInterface
      */
     protected function prepareFaviconFile()
     {
-        $folderName = \Magento\Config\Model\Config\Backend\Image\Favicon::UPLOAD_DIR;
+        $folderName = ImageFavicon::UPLOAD_DIR;
         $scopeConfig = $this->scopeConfig->getValue(
             'design/head/shortcut_icon',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
         $path = $folderName . '/' . $scopeConfig;
         $faviconUrl = $this->storeManager->getStore()
-                ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $path;
+                ->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . $path;
 
         if ($scopeConfig !== null && $this->checkIsFile($path)) {
             return $faviconUrl;

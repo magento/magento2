@@ -30,16 +30,6 @@ class BackendModelFactory extends ValueFactory
     protected $metadata = [];
 
     /**
-     * @var MetadataProvider
-     */
-    protected $metadataProvider;
-
-    /**
-     * @var CollectionFactory
-     */
-    protected $collectionFactory;
-
-    /**
      * @var array
      */
     protected $backendTypes = [];
@@ -51,11 +41,9 @@ class BackendModelFactory extends ValueFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        MetadataProvider $metadataProvider,
-        CollectionFactory $collectionFactory
+        protected readonly MetadataProvider $metadataProvider,
+        protected readonly CollectionFactory $collectionFactory
     ) {
-        $this->metadataProvider = $metadataProvider;
-        $this->collectionFactory = $collectionFactory;
         parent::__construct($objectManager);
     }
 

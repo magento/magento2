@@ -5,11 +5,16 @@
  */
 namespace Magento\Theme\Model\ResourceModel\Theme\File;
 
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\View\Design\Theme\File\CollectionInterface as ThemeFileCollectionInterface;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\ResourceModel\Theme\File as ResourceThemeFile;
+use Magento\Theme\Model\Theme\File as ModelThemeFile;
+
 /**
  * Theme files collection
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection implements
-    \Magento\Framework\View\Design\Theme\File\CollectionInterface
+class Collection extends AbstractCollection implements ThemeFileCollectionInterface
 {
     /**
      * Collection initialization
@@ -18,7 +23,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Theme\Model\Theme\File::class, \Magento\Theme\Model\ResourceModel\Theme\File::class);
+        $this->_init(ModelThemeFile::class, ResourceThemeFile::class);
     }
 
     /**
@@ -50,10 +55,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Filter out files that do not belong to a theme
      *
-     * @param \Magento\Framework\View\Design\ThemeInterface $theme
+     * @param ThemeInterface $theme
      * @return $this
      */
-    public function addThemeFilter(\Magento\Framework\View\Design\ThemeInterface $theme)
+    public function addThemeFilter(ThemeInterface $theme)
     {
         $this->addFieldToFilter('theme_id', $theme->getId());
         return $this;

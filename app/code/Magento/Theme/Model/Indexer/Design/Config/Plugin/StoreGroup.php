@@ -12,17 +12,11 @@ use Magento\Theme\Model\Data\Design\Config;
 class StoreGroup
 {
     /**
-     * @var IndexerRegistry
-     */
-    protected $indexerRegistry;
-
-    /**
      * @param IndexerRegistry $indexerRegistry
      */
     public function __construct(
-        IndexerRegistry $indexerRegistry
+        protected readonly IndexerRegistry $indexerRegistry
     ) {
-        $this->indexerRegistry = $indexerRegistry;
     }
 
     /**

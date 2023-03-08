@@ -7,6 +7,9 @@
 namespace Magento\Theme\Block\Html;
 
 use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Html page header block
@@ -14,26 +17,20 @@ use Magento\Framework\Escaper;
  * @api
  * @since 100.0.2
  */
-class Header extends \Magento\Framework\View\Element\Template
+class Header extends Template
 {
-    /**
-     * @var Escaper
-     */
-    private $escaper;
-
     /**
      * Constructor
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param Magento\Framework\Escaper $escaper
+     * @param Context $context
+     * @param Escaper $escaper
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Escaper $escaper,
+        Context $context,
+        private readonly Escaper $escaper,
         array $data = []
     ) {
-        $this->escaper = $escaper;
         parent::__construct($context, $data);
     }
 
@@ -54,7 +51,7 @@ class Header extends \Magento\Framework\View\Element\Template
         if (empty($this->_data['welcome'])) {
             $this->_data['welcome'] = $this->_scopeConfig->getValue(
                 'design/header/welcome',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
         }
         return $this->escaper->escapeQuote(__($this->_data['welcome'])->render(), true);

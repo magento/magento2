@@ -5,12 +5,20 @@
  */
 namespace Magento\Theme\Model\ResourceModel\Theme;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\Data\Collection as DataCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\View\Design\Theme\Label\ListInterface as ThemeLabelListInterface;
+use Magento\Framework\View\Design\Theme\ListInterface as ThemeListInterface;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\ResourceModel\Theme as ResourceTheme;
+use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
+use Magento\Theme\Model\Theme as ModelTheme;
+
 /**
  * Theme collection
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection implements
-    \Magento\Framework\View\Design\Theme\Label\ListInterface,
-    \Magento\Framework\View\Design\Theme\ListInterface
+class Collection extends AbstractCollection implements ThemeLabelListInterface, ThemeListInterface
 {
     /**
      * Default page size
@@ -29,7 +37,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Theme\Model\Theme::class, \Magento\Theme\Model\ResourceModel\Theme::class);
+        $this->_init(ModelTheme::class, ResourceTheme::class);
     }
 
     /**
@@ -53,7 +61,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $area
      * @return $this
      */
-    public function addAreaFilter($area = \Magento\Framework\App\Area::AREA_FRONTEND)
+    public function addAreaFilter($area = Area::AREA_FRONTEND)
     {
         $this->getSelect()->where('main_table.area=?', $area);
         return $this;
@@ -103,8 +111,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         $this->addTypeFilter(
             [
-                \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL,
-                \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL,
+                ThemeInterface::TYPE_PHYSICAL,
+                ThemeInterface::TYPE_VIRTUAL,
             ]
         );
         return $this;
@@ -134,7 +142,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get theme from DB by area and theme_path
      *
      * @param string $fullPath
-     * @return \Magento\Theme\Model\Theme
+     * @return ModelTheme
      */
     public function getThemeByFullPath($fullPath)
     {
@@ -160,15 +168,15 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Update all child themes relations
      *
-     * @param \Magento\Framework\View\Design\ThemeInterface $themeModel
+     * @param ThemeInterface $themeModel
      * @return $this
      */
-    public function updateChildRelations(\Magento\Framework\View\Design\ThemeInterface $themeModel)
+    public function updateChildRelations(ThemeInterface $themeModel)
     {
         $parentThemeId = $themeModel->getParentId();
         $this->addFieldToFilter('parent_id', ['eq' => $themeModel->getId()])->load();
 
-        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+        /** @var ThemeInterface $theme */
         foreach ($this->getItems() as $theme) {
             $theme->setParentId($parentThemeId)->save();
         }
@@ -185,12 +193,12 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function filterPhysicalThemes(
         $page = null,
-        $pageSize = \Magento\Theme\Model\ResourceModel\Theme\Collection::DEFAULT_PAGE_SIZE
+        $pageSize = ThemeCollection::DEFAULT_PAGE_SIZE
     ) {
         $this->addAreaFilter(
-            \Magento\Framework\App\Area::AREA_FRONTEND
+            Area::AREA_FRONTEND
         )->addTypeFilter(
-            \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL
+            ThemeInterface::TYPE_PHYSICAL
         );
         if ($page) {
             $this->setPageSize($pageSize)->setCurPage($page);
@@ -206,8 +214,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @return $this
      */
     public function filterThemeCustomizations(
-        $area = \Magento\Framework\App\Area::AREA_FRONTEND,
-        $type = \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL
+        $area = Area::AREA_FRONTEND,
+        $type = ThemeInterface::TYPE_VIRTUAL
     ) {
         $this->addAreaFilter($area)->addTypeFilter($type);
         return $this;
@@ -228,7 +236,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function loadRegisteredThemes()
     {
         $this->_reset()->clear();
-        return $this->setOrder('theme_title', \Magento\Framework\Data\Collection::SORT_ORDER_ASC)
-            ->filterVisibleThemes()->addAreaFilter(\Magento\Framework\App\Area::AREA_FRONTEND);
+        return $this->setOrder('theme_title', DataCollection::SORT_ORDER_ASC)
+            ->filterVisibleThemes()->addAreaFilter(Area::AREA_FRONTEND);
     }
 }

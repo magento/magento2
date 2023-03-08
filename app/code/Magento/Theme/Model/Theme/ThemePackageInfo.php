@@ -5,8 +5,11 @@
  */
 namespace Magento\Theme\Model\Theme;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Theme\Model\Theme;
 
 /**
  * Maps package name to full theme path, and vice versa
@@ -14,41 +17,24 @@ use Magento\Framework\Filesystem\Directory\ReadFactory;
 class ThemePackageInfo
 {
     /**
-     * @var ComponentRegistrar
-     */
-    private $componentRegistrar;
-
-    /**
-     * @var ReadFactory
-     */
-    private $readDirFactory;
-
-    /**
      * @var array
      */
     private $packageNameToFullPathMap = [];
-
-    /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
-     */
-    private $serializer;
 
     /**
      * Initialize dependencies.
      *
      * @param ComponentRegistrar $componentRegistrar
      * @param ReadFactory $readDirFactory
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param Json|null $serializer
      */
     public function __construct(
-        ComponentRegistrar $componentRegistrar,
-        ReadFactory $readDirFactory,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        private readonly ComponentRegistrar $componentRegistrar,
+        private readonly ReadFactory $readDirFactory,
+        private ?Json $serializer = null
     ) {
-        $this->componentRegistrar = $componentRegistrar;
-        $this->readDirFactory = $readDirFactory;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
+            ->get(Json::class);
     }
 
     /**
@@ -94,7 +80,7 @@ class ThemePackageInfo
     private function initializeMap()
     {
         $themePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::THEME);
-        /** @var \Magento\Theme\Model\Theme $theme */
+        /** @var Theme $theme */
         foreach ($themePaths as $fullThemePath => $themeDir) {
             $themeDirRead = $this->readDirFactory->create($themeDir);
             if ($themeDirRead->isExist('composer.json')) {

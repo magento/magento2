@@ -5,9 +5,19 @@
  */
 namespace Magento\Theme\Model\Theme;
 
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
 use Magento\Framework\View\Design\Theme\Customization\FileInterface as CustomizationFileInterface;
+use Magento\Framework\View\Design\Theme\Customization\FileServiceFactory;
 use Magento\Framework\View\Design\Theme\FileInterface;
+use Magento\Framework\View\Design\Theme\FlyweightFactory;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\ResourceModel\Theme\File as ResourceThemeFile;
+use UnexpectedValueException;
 
 /**
  * Theme files model class
@@ -29,12 +39,12 @@ class File extends AbstractModel implements FileInterface
     protected $_eventObject = 'file';
 
     /**
-     * @var \Magento\Framework\View\Design\ThemeInterface
+     * @var ThemeInterface
      */
     protected $_theme;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\Customization\FileServiceFactory
+     * @var FileServiceFactory
      */
     protected $_fileServiceFactory;
 
@@ -44,26 +54,26 @@ class File extends AbstractModel implements FileInterface
     protected $_fileService;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\FlyweightFactory
+     * @var FlyweightFactory
      */
     protected $_themeFactory;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory
-     * @param \Magento\Framework\View\Design\Theme\Customization\FileServiceFactory $fileServiceFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param FlyweightFactory $themeFactory
+     * @param FileServiceFactory $fileServiceFactory
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory,
-        \Magento\Framework\View\Design\Theme\Customization\FileServiceFactory $fileServiceFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        FlyweightFactory $themeFactory,
+        FileServiceFactory $fileServiceFactory,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_themeFactory = $themeFactory;
@@ -78,7 +88,7 @@ class File extends AbstractModel implements FileInterface
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Theme\Model\ResourceModel\Theme\File::class);
+        $this->_init(ResourceThemeFile::class);
     }
 
     /**
@@ -96,14 +106,14 @@ class File extends AbstractModel implements FileInterface
      * {@inheritdoc}
      *
      * @return CustomizationFileInterface
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function getCustomizationService()
     {
         if (!$this->_fileService && $this->hasData('file_type')) {
             $this->_fileService = $this->_fileServiceFactory->create($this->getData('file_type'));
         } elseif (!$this->_fileService) {
-            throw new \UnexpectedValueException('Type of file is empty');
+            throw new UnexpectedValueException('Type of file is empty');
         }
         return $this->_fileService;
     }
@@ -111,7 +121,7 @@ class File extends AbstractModel implements FileInterface
     /**
      * {@inheritdoc}
      */
-    public function setTheme(\Magento\Framework\View\Design\ThemeInterface $theme)
+    public function setTheme(ThemeInterface $theme)
     {
         $this->_theme = $theme;
         $this->setData('theme_id', $theme->getId());
@@ -122,13 +132,13 @@ class File extends AbstractModel implements FileInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getTheme()
     {
         $theme = $this->_themeFactory->create($this->getData('theme_id'));
         if (!$theme) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Theme id should be set'));
+            throw new LocalizedException(__('Theme id should be set'));
         }
         return $theme;
     }

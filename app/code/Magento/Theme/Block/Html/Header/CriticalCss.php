@@ -19,25 +19,13 @@ use Magento\Framework\View\Asset\File\NotFoundException;
 class CriticalCss implements ArgumentInterface
 {
     /**
-     * @var Repository
-     */
-    private $assetRepo;
-
-    /**
-     * @var $filePath
-     */
-    private $filePath;
-
-    /**
      * @param Repository $assetRepo
      * @param string $filePath
      */
     public function __construct(
-        Repository $assetRepo,
-        string $filePath = ''
+        private readonly Repository $assetRepo,
+        private readonly string $filePath = ''
     ) {
-        $this->assetRepo = $assetRepo;
-        $this->filePath = $filePath;
     }
 
     /**

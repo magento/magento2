@@ -6,6 +6,7 @@
 
 namespace Magento\Theme\Console\Command;
 
+use Exception;
 use Magento\Framework\App\Cache;
 use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Framework\App\ObjectManager;
@@ -13,6 +14,7 @@ use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\DependencyChecker;
+use Magento\Framework\Console\Cli;
 use Magento\Theme\Model\Theme\Data\Collection;
 use Magento\Theme\Model\Theme\ThemePackageInfo;
 use Magento\Theme\Model\Theme\ThemeUninstaller;
@@ -41,122 +43,37 @@ class ThemeUninstallCommand extends Command
     const INPUT_KEY_CLEAR_STATIC_CONTENT = 'clear-static-content';
 
     /**
-     * Composer general dependency checker
-     *
-     * @var DependencyChecker
-     */
-    private $dependencyChecker;
-
-    /**
-     * Root composer.json information
-     *
-     * @var ComposerInformation
-     */
-    private $composer;
-
-    /**
-     * Theme collection in filesystem
-     *
-     * @var Collection
-     */
-    private $themeCollection;
-
-    /**
-     * System cache model
-     *
-     * @var Cache
-     */
-    private $cache;
-
-    /**
-     * Cleaning up application state service
-     *
-     * @var CleanupFiles
-     */
-    private $cleanupFiles;
-
-    /**
-     * BackupRollback factory
-     *
-     * @var BackupRollbackFactory
-     */
-    private $backupRollbackFactory;
-
-    /**
-     * Theme Validator
-     *
-     * @var ThemeValidator
-     */
-    private $themeValidator;
-
-    /**
-     * Package name finder
-     *
-     * @var ThemePackageInfo
-     */
-    private $themePackageInfo;
-
-    /**
-     * Theme Uninstaller
-     *
-     * @var ThemeUninstaller
-     */
-    private $themeUninstaller;
-
-    /**
-     * Theme Dependency Checker
-     *
-     * @var ThemeDependencyChecker
-     */
-    private $themeDependencyChecker;
-
-    /**
-     * @var MaintenanceModeEnabler
-     */
-    private $maintenanceModeEnabler;
-
-    /**
      * Constructor
      *
-     * @param Cache $cache
-     * @param CleanupFiles $cleanupFiles
-     * @param ComposerInformation $composer
+     * @param Cache $cache System cache model
+     * @param CleanupFiles $cleanupFiles Cleaning up application state service
+     * @param ComposerInformation $composer Root composer.json information
      * @param MaintenanceMode $maintenanceMode deprecated, use $maintenanceModeEnabler instead
-     * @param DependencyChecker $dependencyChecker
-     * @param Collection $themeCollection
-     * @param BackupRollbackFactory $backupRollbackFactory
-     * @param ThemeValidator $themeValidator
-     * @param ThemePackageInfo $themePackageInfo
-     * @param ThemeUninstaller $themeUninstaller
-     * @param ThemeDependencyChecker $themeDependencyChecker
+     * @param DependencyChecker $dependencyChecker Composer general dependency checker
+     * @param Collection $themeCollection Theme collection in filesystem
+     * @param BackupRollbackFactory $backupRollbackFactory BackupRollback factory
+     * @param ThemeValidator $themeValidator Theme Validator
+     * @param ThemePackageInfo $themePackageInfo Package name finder
+     * @param ThemeUninstaller $themeUninstaller Theme Uninstaller
+     * @param ThemeDependencyChecker $themeDependencyChecker Theme Dependency Checker
      * @param MaintenanceModeEnabler $maintenanceModeEnabler
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        Cache $cache,
-        CleanupFiles $cleanupFiles,
-        ComposerInformation $composer,
-        MaintenanceMode $maintenanceMode,
-        DependencyChecker $dependencyChecker,
-        Collection $themeCollection,
-        BackupRollbackFactory $backupRollbackFactory,
-        ThemeValidator $themeValidator,
-        ThemePackageInfo $themePackageInfo,
-        ThemeUninstaller $themeUninstaller,
-        ThemeDependencyChecker $themeDependencyChecker,
-        MaintenanceModeEnabler $maintenanceModeEnabler = null
+        private readonly Cache $cache,
+        private readonly CleanupFiles $cleanupFiles,
+        private readonly ComposerInformation $composer,
+        private readonly MaintenanceMode $maintenanceMode,
+        private readonly DependencyChecker $dependencyChecker,
+        private readonly Collection $themeCollection,
+        private readonly BackupRollbackFactory $backupRollbackFactory,
+        private readonly ThemeValidator $themeValidator,
+        private readonly ThemePackageInfo $themePackageInfo,
+        private readonly ThemeUninstaller $themeUninstaller,
+        private readonly ThemeDependencyChecker $themeDependencyChecker,
+        private ?MaintenanceModeEnabler $maintenanceModeEnabler = null
     ) {
-        $this->cache = $cache;
-        $this->cleanupFiles = $cleanupFiles;
-        $this->composer = $composer;
-        $this->dependencyChecker = $dependencyChecker;
-        $this->themeCollection = $themeCollection;
-        $this->backupRollbackFactory = $backupRollbackFactory;
-        $this->themeValidator = $themeValidator;
-        $this->themePackageInfo = $themePackageInfo;
-        $this->themeUninstaller = $themeUninstaller;
-        $this->themeDependencyChecker = $themeDependencyChecker;
         $this->maintenanceModeEnabler =
             $maintenanceModeEnabler ?: ObjectManager::getInstance()->get(MaintenanceModeEnabler::class);
         parent::__construct();
@@ -201,7 +118,7 @@ class ThemeUninstallCommand extends Command
         if (!empty($messages)) {
             $output->writeln($messages);
             // we must have an exit code higher than zero to indicate something was wrong
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            return Cli::RETURN_FAILURE;
         }
         $messages = array_merge(
             $messages,
@@ -215,7 +132,7 @@ class ThemeUninstallCommand extends Command
                 . PHP_EOL . implode(PHP_EOL, $messages)
             );
             // we must have an exit code higher than zero to indicate something was wrong
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            return Cli::RETURN_FAILURE;
         }
 
         $result = $this->maintenanceModeEnabler->executeInMaintenanceMode(
@@ -231,12 +148,12 @@ class ThemeUninstallCommand extends Command
                     $this->themeUninstaller->uninstallCode($output, $themePaths);
 
                     $this->cleanup($input, $output);
-                    return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
-                } catch (\Exception $e) {
+                    return Cli::RETURN_SUCCESS;
+                } catch (Exception $e) {
                     $output->writeln('<error>' . $e->getMessage() . '</error>');
                     $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
                     // we must have an exit code higher than zero to indicate something was wrong
-                    return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+                    return Cli::RETURN_FAILURE;
                 }
             },
             $output,

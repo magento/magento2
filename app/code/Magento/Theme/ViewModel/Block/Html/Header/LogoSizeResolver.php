@@ -27,17 +27,11 @@ class LogoSizeResolver implements LogoSizeResolverInterface, ArgumentInterface
     private const XML_PATH_DESIGN_HEADER_LOGO_HEIGHT = 'design/header/logo_height';
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig
+        private readonly ScopeConfigInterface $scopeConfig
     ) {
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**

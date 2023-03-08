@@ -5,10 +5,12 @@
  */
 namespace Magento\Theme\Model\ResourceModel;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
  * Theme resource model
  */
-class Theme extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Theme extends AbstractDb
 {
     /**
      * Resource initialization

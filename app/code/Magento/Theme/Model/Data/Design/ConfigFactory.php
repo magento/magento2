@@ -24,36 +24,6 @@ use Magento\Store\Model\ScopeInterface;
 class ConfigFactory
 {
     /**
-     * @var DesignConfigInterfaceFactory
-     */
-    protected $designConfigFactory;
-
-    /**
-     * @var MetadataProviderInterface
-     */
-    protected $metadataProvider;
-
-    /**
-     * @var DesignConfigDataInterfaceFactory
-     */
-    protected $designConfigDataFactory;
-
-    /**
-     * @var DesignConfigExtensionFactory
-     */
-    protected $configExtensionFactory;
-
-    /**
-     * @var ScopeValidatorInterface
-     */
-    protected $scopeValidator;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
      * @param DesignConfigInterfaceFactory $designConfigFactory
      * @param MetadataProviderInterface $metadataProvider
      * @param DesignConfigDataInterfaceFactory $designConfigDataFactory
@@ -62,19 +32,13 @@ class ConfigFactory
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        DesignConfigInterfaceFactory $designConfigFactory,
-        MetadataProviderInterface $metadataProvider,
-        DesignConfigDataInterfaceFactory $designConfigDataFactory,
-        DesignConfigExtensionFactory $configExtensionFactory,
-        ScopeValidatorInterface $scopeValidator,
-        StoreManagerInterface $storeManager
+        protected readonly DesignConfigInterfaceFactory $designConfigFactory,
+        protected readonly MetadataProviderInterface $metadataProvider,
+        protected readonly DesignConfigDataInterfaceFactory $designConfigDataFactory,
+        protected readonly DesignConfigExtensionFactory $configExtensionFactory,
+        protected readonly ScopeValidatorInterface $scopeValidator,
+        protected readonly StoreManagerInterface $storeManager
     ) {
-        $this->designConfigFactory = $designConfigFactory;
-        $this->metadataProvider = $metadataProvider;
-        $this->designConfigDataFactory = $designConfigDataFactory;
-        $this->configExtensionFactory = $configExtensionFactory;
-        $this->scopeValidator = $scopeValidator;
-        $this->storeManager = $storeManager;
     }
 
     /**

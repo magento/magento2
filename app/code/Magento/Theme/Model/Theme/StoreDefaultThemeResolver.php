@@ -11,6 +11,7 @@ use Magento\Framework\App\Area;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 use Magento\Theme\Model\ResourceModel\Theme\CollectionFactory;
 
 /**
@@ -21,14 +22,6 @@ use Magento\Theme\Model\ResourceModel\Theme\CollectionFactory;
 class StoreDefaultThemeResolver implements StoreThemesResolverInterface
 {
     /**
-     * @var CollectionFactory
-     */
-    private $themeCollectionFactory;
-    /**
-     * @var DesignInterface
-     */
-    private $design;
-    /**
      * @var ThemeInterface[]
      */
     private $registeredThemes;
@@ -38,11 +31,9 @@ class StoreDefaultThemeResolver implements StoreThemesResolverInterface
      * @param DesignInterface $design
      */
     public function __construct(
-        CollectionFactory $themeCollectionFactory,
-        DesignInterface $design
+        private readonly CollectionFactory $themeCollectionFactory,
+        private readonly DesignInterface $design
     ) {
-        $this->design = $design;
-        $this->themeCollectionFactory = $themeCollectionFactory;
     }
 
     /**
@@ -77,7 +68,7 @@ class StoreDefaultThemeResolver implements StoreThemesResolverInterface
     {
         if ($this->registeredThemes === null) {
             $this->registeredThemes = [];
-            /** @var \Magento\Theme\Model\ResourceModel\Theme\Collection $collection */
+            /** @var ThemeCollection $collection */
             $collection = $this->themeCollectionFactory->create();
             $themes = $collection->loadRegisteredThemes();
             /** @var ThemeInterface $theme */

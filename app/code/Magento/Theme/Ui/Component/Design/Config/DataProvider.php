@@ -9,6 +9,7 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiComponentDataProvider;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -17,14 +18,8 @@ use Magento\Store\Model\StoreManagerInterface;
  * @api
  * @since 100.1.0
  */
-class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
+class DataProvider extends UiComponentDataProvider
 {
-    /**
-     * @var StoreManagerInterface
-     * @since 100.1.0
-     */
-    protected $storeManager;
-
     /**
      * @param string $name
      * @param string $primaryFieldName
@@ -46,7 +41,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
         SearchCriteriaBuilder $searchCriteriaBuilder,
         RequestInterface $request,
         FilterBuilder $filterBuilder,
-        StoreManagerInterface $storeManager,
+        protected readonly StoreManagerInterface $storeManager,
         array $meta = [],
         array $data = []
     ) {
@@ -61,7 +56,6 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
             $meta,
             $data
         );
-        $this->storeManager = $storeManager;
     }
 
     /**
