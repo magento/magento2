@@ -3,14 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\CatalogSearch\Helper\Data;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 
- /** @var \Magento\CatalogSearch\Helper\Data $helper */
-$helper = $this->helper(\Magento\CatalogSearch\Helper\Data::class);
+/** @var Data $helper */
+$helper = $this->helper(Data::class);
 ?>
 <div class="nested">
-    <a class="action advanced" href="<?= $block->escapeUrl($helper->getAdvancedSearchUrl()) ?>" data-action="advanced-search">
-        <?= $block->escapeHtml(__('Advanced Search')) ?>
+    <a class="action advanced" href="<?= $escaper->escapeUrl($helper->getAdvancedSearchUrl()) ?>" data-action="advanced-search">
+        <?= $escaper->escapeHtml(__('Advanced Search')) ?>
     </a>
 </div>
