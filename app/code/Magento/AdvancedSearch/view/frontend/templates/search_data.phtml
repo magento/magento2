@@ -3,22 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * @var \Magento\AdvancedSearch\Block\SearchData $block
- * @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter
- */
-?>
-<?php
-/** @var \Magento\Search\Model\QueryResult[] $data */
+use Magento\AdvancedSearch\Block\SearchData;
+use Magento\Framework\Escaper;
+use Magento\Framework\Locale\LocaleFormatter;
+use Magento\Search\Model\QueryResult;
+
+/** @var Escaper $escaper */
+/** @var LocaleFormatter $localeFormatter */
+/** @var SearchData $block */
+/** @var QueryResult[] $data */
 $data = $block->getItems();
-if (count($data)): ?>
+?>
+<?php if (count($data)): ?>
     <dl class="block">
-        <dt class="title"><?= $block->escapeHtml(__($block->getTitle())) ?></dt>
+        <dt class="title"><?= $escaper->escapeHtml(__($block->getTitle())) ?></dt>
         <?php foreach ($data as $additionalInfo): ?>
             <dd class="item">
-                <a href="<?= $block->escapeUrl($block->getLink($additionalInfo->getQueryText())) ?>"
-                    ><?= $block->escapeHtml($additionalInfo->getQueryText()) ?></a>
+                <a href="<?= $escaper->escapeUrl($block->getLink($additionalInfo->getQueryText())) ?>"
+                    ><?= $escaper->escapeHtml($additionalInfo->getQueryText()) ?></a>
                 <?php if ($block->isShowResultsCount()): ?>
                     <span class="count">
                         <?= /* @noEscape */ $localeFormatter->formatNumber((int)$additionalInfo->getResultsCount()) ?>
