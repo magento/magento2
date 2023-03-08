@@ -252,7 +252,6 @@ class AbstractBlockTest extends TestCase
     /**
      * @param string|bool $cacheLifetime
      * @param string|bool $dataFromCache
-     * @param InvokedCount $expectsDispatchEvent
      * @param string $expectedResult
      * @return void
      * @dataProvider getCacheLifetimeDataProvider
@@ -260,7 +259,6 @@ class AbstractBlockTest extends TestCase
     public function testGetCacheLifetimeViaToHtml(
         $cacheLifetime,
         $dataFromCache,
-        $expectsDispatchEvent,
         $expectedResult
     ) {
         $moduleName = 'Test_Module';
@@ -302,31 +300,26 @@ class AbstractBlockTest extends TestCase
             [
                 'cacheLifetime' => null,
                 'dataFromCache' => 'dataFromCache',
-                'expectsDispatchEvent' => $this->exactly(2),
                 'expectedResult' => '',
             ],
             [
                 'cacheLifetime' => false,
                 'dataFromCache' => 'dataFromCache',
-                'expectsDispatchEvent' => $this->exactly(2),
                 'expectedResult' => '',
             ],
             [
                 'cacheLifetime' => 120,
                 'dataFromCache' => 'dataFromCache',
-                'expectsDispatchEvent' => $this->exactly(2),
                 'expectedResult' => 'dataFromCache',
             ],
             [
                 'cacheLifetime' => '120string',
                 'dataFromCache' => 'dataFromCache',
-                'expectsDispatchEvent' => $this->exactly(2),
                 'expectedResult' => 'dataFromCache',
             ],
             [
                 'cacheLifetime' => 120,
                 'dataFromCache' => false,
-                'expectsDispatchEvent' => $this->exactly(2),
                 'expectedResult' => '',
             ],
         ];
