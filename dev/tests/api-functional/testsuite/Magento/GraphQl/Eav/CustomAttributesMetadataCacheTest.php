@@ -104,7 +104,7 @@ class CustomAttributesMetadataCacheTest extends GraphQLPageCacheAbstract
         $options = $response['body']['customAttributeMetadata']['items'][0]['attribute_options'];
         $this->assertOptionValuesPerStore($storeOptions, 'default', $stores, $options);
 
-        $response = $this->assertCacheHitAndReturnResponse($query, []);
+        $response = $this->assertCacheHitAndReturnResponse($query, ['Store' => 'default']);
         $options = $response['body']['customAttributeMetadata']['items'][0]['attribute_options'];
         $this->assertOptionValuesPerStore($storeOptions, 'default', $stores, $options);
     }
