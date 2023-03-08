@@ -22,12 +22,11 @@ class ConfigProvider implements ConfigProviderInterface
      */
     public function __construct(
         private readonly Config $variableConfig
-    ){
+    ) {
     }
 
    /**
-    * {@inheritdoc}
-    *
+    * @inheritdoc
     */
     public function getConfig(DataObject $config): DataObject
     {

@@ -19,6 +19,11 @@ use Magento\Framework\Config\ValidationStateInterface;
 class Dom extends ConfigDom
 {
     /**
+     * @var AvailableVariables
+     */
+    private $structureConfig;
+
+    /**
      * @var array
      */
     private $filters;
@@ -39,7 +44,7 @@ class Dom extends ConfigDom
         $typeAttributeName = null,
         $schemaFile = null,
         $errorFormat = self::ERROR_FORMAT_DEFAULT,
-        private ?AvailableVariables $availableVariables = null
+        ?AvailableVariables $availableVariables = null
     ) {
         $this->structureConfig = $availableVariables ?: ObjectManager::getInstance()->get(AvailableVariables::class);
         parent::__construct($xml, $validationState, $idAttributes, $typeAttributeName, $schemaFile, $errorFormat);

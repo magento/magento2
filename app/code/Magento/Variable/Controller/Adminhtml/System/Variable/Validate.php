@@ -6,6 +6,8 @@
  */
 namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
@@ -16,7 +18,7 @@ use Magento\Variable\Controller\Adminhtml\System\Variable;
  * @api
  * @since 100.0.2
  */
-class Validate extends Variable
+class Validate extends Variable implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Validate Action

@@ -10,6 +10,7 @@ use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\View\Element\Template;
 use Magento\Variable\Block\System\Variable\Edit as SystemVariableEdit;
 use Magento\Variable\Controller\Adminhtml\System\Variable;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
  * Display Variables edit form page
@@ -17,7 +18,7 @@ use Magento\Variable\Controller\Adminhtml\System\Variable;
  * @api
  * @since 100.0.2
  */
-class Edit extends Variable
+class Edit extends Variable implements HttpGetActionInterface
 {
     /**
      * Edit Action

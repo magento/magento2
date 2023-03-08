@@ -20,8 +20,6 @@ use Magento\Variable\Model\Variable;
 class Edit extends Container
 {
     /**
-     * Core registry
-     *
      * @var Registry
      */
     protected $_coreRegistry = null;
@@ -66,6 +64,7 @@ class Edit extends Container
 
     /**
      * Prepare layout.
+     *
      * Adding save_and_continue button
      *
      * @return $this
@@ -93,6 +92,7 @@ class Edit extends Container
      * Return form HTML
      *
      * @return string
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
      */
     public function getFormHtml()
     {

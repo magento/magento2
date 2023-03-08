@@ -6,6 +6,7 @@
  */
 namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Variable\Controller\Adminhtml\System\Variable;
 use Magento\Variable\Model\Source\Variables;
@@ -17,7 +18,7 @@ use Magento\Variable\Model\Variable as ModelVariable;
  * @api
  * @since 100.0.2
  */
-class WysiwygPlugin extends Variable
+class WysiwygPlugin extends Variable implements HttpGetActionInterface
 {
     /**
      * WYSIWYG Plugin Action

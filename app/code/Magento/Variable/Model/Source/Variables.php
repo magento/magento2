@@ -17,8 +17,8 @@ class Variables implements ArrayInterface
     /**
      * Variable types
      */
-    const DEFAULT_VARIABLE_TYPE = "default";
-    const CUSTOM_VARIABLE_TYPE = "custom";
+    public const DEFAULT_VARIABLE_TYPE = "default";
+    public const CUSTOM_VARIABLE_TYPE = "custom";
 
     /**
      * Assoc array of configuration variables.

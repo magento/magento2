@@ -8,6 +8,7 @@ namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
 use Exception;
 use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Variable\Controller\Adminhtml\System\Variable;
 
 /**
@@ -16,7 +17,7 @@ use Magento\Variable\Controller\Adminhtml\System\Variable;
  * @api
  * @since 100.0.2
  */
-class Save extends Variable
+class Save extends Variable implements HttpPostActionInterface
 {
     /**
      * Save Action

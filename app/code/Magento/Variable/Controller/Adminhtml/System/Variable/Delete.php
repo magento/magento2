@@ -8,9 +8,10 @@ namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
 use Exception;
 use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Variable\Controller\Adminhtml\System\Variable;
 
-class Delete extends Variable
+class Delete extends Variable implements HttpPostActionInterface
 {
     /**
      * Delete Action

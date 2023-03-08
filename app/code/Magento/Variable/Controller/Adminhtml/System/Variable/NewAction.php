@@ -7,6 +7,7 @@
 namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
 use Magento\Backend\Model\View\Result\Forward;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Variable\Controller\Adminhtml\System\Variable;
 
 /**
@@ -15,7 +16,7 @@ use Magento\Variable\Controller\Adminhtml\System\Variable;
  * @api
  * @since 100.0.2
  */
-class NewAction extends Variable
+class NewAction extends Variable implements HttpGetActionInterface
 {
     /**
      * New Action (forward to edit action)

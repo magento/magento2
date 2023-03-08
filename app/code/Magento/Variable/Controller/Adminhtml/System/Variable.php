@@ -25,11 +25,9 @@ abstract class Variable extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Variable::variable';
+    public const ADMIN_RESOURCE = 'Magento_Variable::variable';
 
     /**
-     * Core registry
-     *
      * @var Registry
      */
     protected $_coreRegistry;
@@ -77,7 +75,7 @@ abstract class Variable extends Action
     {
         $variableId = $this->getRequest()->getParam('variable_id', null);
         $storeId = (int)$this->getRequest()->getParam('store', 0);
-        /* @var $variable ModelVariable */
+        /* @var ModelVariable $variable */
         $variable = $this->_objectManager->create(ModelVariable::class);
         if ($variableId) {
             $variable->setStoreId($storeId)->load($variableId);

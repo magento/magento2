@@ -17,8 +17,6 @@ use Magento\Variable\Model\Variable as ModelVariable;
 class Collection extends AbstractCollection
 {
     /**
-     * Store Id
-     *
      * @var int
      */
     protected $_storeId = 0;
