@@ -15,21 +15,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 class File
 {
     /**
-     * @var ResourceInterface
-     */
-    private $translateResource;
-
-    /**
-     * @var ResolverInterface
-     */
-    private $localeResolver;
-
-    /**
-     * @var Json
-     */
-    private $jsonSerializer;
-
-    /**
      * Initialize dependencies
      *
      * @param ResourceInterface $translateResource
@@ -37,13 +22,10 @@ class File
      * @param Json $jsonSerializer
      */
     public function __construct(
-        ResourceInterface $translateResource,
-        ResolverInterface $localeResolver,
-        Json $jsonSerializer
+        private readonly ResourceInterface $translateResource,
+        private readonly ResolverInterface $localeResolver,
+        private readonly Json $jsonSerializer
     ) {
-        $this->translateResource = $translateResource;
-        $this->localeResolver = $localeResolver;
-        $this->jsonSerializer = $jsonSerializer;
     }
 
     /**

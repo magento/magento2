@@ -22,24 +22,9 @@ use Magento\Store\Model\Store;
 class StringUtils extends AbstractDb
 {
     /**
-     * @var Escaper
-     */
-    private $escaper;
-
-    /**
      * @var ResolverInterface
      */
     protected $_localeResolver;
-
-    /**
-     * @var ScopeResolverInterface
-     */
-    protected $scopeResolver;
-
-    /**
-     * @var null|string
-     */
-    protected $scope;
 
     /**
      * @param Context $context
@@ -52,15 +37,12 @@ class StringUtils extends AbstractDb
     public function __construct(
         Context $context,
         ResolverInterface $localeResolver,
-        ScopeResolverInterface $scopeResolver,
-        Escaper $escaper,
+        protected readonly ScopeResolverInterface $scopeResolver,
+        private readonly Escaper $escaper,
         $connectionName = null,
-        $scope = null
+        protected $scope = null
     ) {
         $this->_localeResolver = $localeResolver;
-        $this->scopeResolver = $scopeResolver;
-        $this->escaper = $escaper;
-        $this->scope = $scope;
         parent::__construct($context, $connectionName);
     }
 

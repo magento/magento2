@@ -39,27 +39,13 @@ class Config extends FrameworkJsConfig
     const DICTIONARY_FILE_NAME = 'js-translation.json';
 
     /**
-     * Core store config
-     *
-     * @var ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * Patterns to match strings for translation
-     *
-     * @var string[]
-     */
-    protected $patterns;
-
-    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param string[] $patterns
      */
-    public function __construct(ScopeConfigInterface $scopeConfig, array $patterns)
-    {
-        $this->scopeConfig = $scopeConfig;
-        $this->patterns = $patterns;
+    public function __construct(
+        protected readonly ScopeConfigInterface $scopeConfig,
+        protected readonly array $patterns
+    ) {
         parent::__construct(
             $this->scopeConfig->getValue(self::XML_PATH_STRATEGY) == self::DICTIONARY_STRATEGY,
             self::DICTIONARY_FILE_NAME

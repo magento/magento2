@@ -5,9 +5,10 @@
  */
 namespace Magento\Translation\Model\Js\Config\Source;
 
+use Magento\Framework\Option\ArrayInterface;
 use Magento\Translation\Model\Js\Config;
 
-class Strategy implements \Magento\Framework\Option\ArrayInterface
+class Strategy implements ArrayInterface
 {
     /**
      * {@inheritdoc}
