@@ -7,6 +7,7 @@
 namespace Magento\Tax\Ui\DataProvider\Product\Listing\Collector;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
@@ -33,41 +34,17 @@ class Tax implements ProductRenderCollectorInterface
     const KEY_ADJUSTMENT_REGULAR_PRICE = "regular_price";
 
     /**
-     * @var PriceCurrencyInterface
-     */
-    private $priceCurrency;
-
-    /**
-     * @var \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterface
-     */
-    private $priceInfoExtensionFactory;
-
-    /**
-     * @var PriceInfoInterfaceFactory
-     */
-    private $priceInfoFactory;
-
-    /**
-     * @var FormattedPriceInfoBuilder
-     */
-    private $formattedPriceInfoBuilder;
-
-    /**
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterfaceFactory $priceInfoExtensionFactory
+     * @param PriceInfoExtensionInterfaceFactory $priceInfoExtensionFactory
      * @param PriceInfoInterfaceFactory $priceInfoFactory
      * @param FormattedPriceInfoBuilder $formattedPriceInfoBuilder
      */
     public function __construct(
-        PriceCurrencyInterface $priceCurrency,
-        \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterfaceFactory $priceInfoExtensionFactory,
-        PriceInfoInterfaceFactory $priceInfoFactory,
-        FormattedPriceInfoBuilder $formattedPriceInfoBuilder
+        private readonly PriceCurrencyInterface $priceCurrency,
+        private readonly PriceInfoExtensionInterfaceFactory $priceInfoExtensionFactory,
+        private readonly PriceInfoInterfaceFactory $priceInfoFactory,
+        private readonly FormattedPriceInfoBuilder $formattedPriceInfoBuilder
     ) {
-        $this->priceCurrency = $priceCurrency;
-        $this->priceInfoExtensionFactory = $priceInfoExtensionFactory;
-        $this->priceInfoFactory = $priceInfoFactory;
-        $this->formattedPriceInfoBuilder = $formattedPriceInfoBuilder;
     }
 
     /**

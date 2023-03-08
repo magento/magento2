@@ -9,7 +9,14 @@
  */
 namespace Magento\Tax\Block\Sales\Order;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Sales\Block\Adminhtml\Order\Invoice\Totals as InvoiceTotals;
+use Magento\Sales\Block\Order\Totals as OrderTotals;
 use Magento\Sales\Model\Order;
+use Magento\Store\Model\Store;
+use Magento\Tax\Model\Config as TaxConfig;
 
 /**
  *  Tax totals modification block.
@@ -17,12 +24,12 @@ use Magento\Sales\Model\Order;
  * @api
  * @since 100.0.2
  */
-class Tax extends \Magento\Framework\View\Element\Template
+class Tax extends Template
 {
     /**
      * Tax configuration model
      *
-     * @var \Magento\Tax\Model\Config
+     * @var TaxConfig
      */
     protected $_config;
 
@@ -32,18 +39,18 @@ class Tax extends \Magento\Framework\View\Element\Template
     protected $_order;
 
     /**
-     * @var \Magento\Framework\DataObject
+     * @var DataObject
      */
     protected $_source;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Tax\Model\Config $taxConfig
+     * @param Context $context
+     * @param TaxConfig $taxConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Tax\Model\Config $taxConfig,
+        Context $context,
+        TaxConfig $taxConfig,
         array $data = []
     ) {
         $this->_config = $taxConfig;
@@ -63,7 +70,7 @@ class Tax extends \Magento\Framework\View\Element\Template
     /**
      * Get data (totals) source model
      *
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     public function getSource()
     {
@@ -73,11 +80,11 @@ class Tax extends \Magento\Framework\View\Element\Template
     /**
      * Initialize all order totals relates with tax
      *
-     * @return \Magento\Tax\Block\Sales\Order\Tax
+     * @return Tax
      */
     public function initTotals()
     {
-        /** @var $parent \Magento\Sales\Block\Adminhtml\Order\Invoice\Totals */
+        /** @var InvoiceTotals $parent */
         $parent = $this->getParentBlock();
         $this->_order = $parent->getOrder();
         $this->_source = $parent->getSource();
@@ -100,11 +107,11 @@ class Tax extends \Magento\Framework\View\Element\Template
      * Add tax total string
      *
      * @param string $after
-     * @return \Magento\Tax\Block\Sales\Order\Tax
+     * @return Tax
      */
     protected function _addTax($after = 'discount')
     {
-        $taxTotal = new \Magento\Framework\DataObject(['code' => 'tax', 'block_name' => $this->getNameInLayout()]);
+        $taxTotal = new DataObject(['code' => 'tax', 'block_name' => $this->getNameInLayout()]);
         $totals = $this->getParentBlock()->getTotals();
         if (isset($totals['grand_total_incl'])) {
             $this->getParentBlock()->addTotal($taxTotal, 'grand_total');
@@ -116,7 +123,7 @@ class Tax extends \Magento\Framework\View\Element\Template
     /**
      * Get order store object
      *
-     * @return \Magento\Store\Model\Store
+     * @return Store
      */
     public function getStore()
     {
@@ -163,7 +170,7 @@ class Tax extends \Magento\Framework\View\Element\Template
 
             $subtotalIncl = max(0, $subtotalIncl);
             $baseSubtotalIncl = max(0, $baseSubtotalIncl);
-            $totalExcl = new \Magento\Framework\DataObject(
+            $totalExcl = new DataObject(
                 [
                     'code' => 'subtotal_excl',
                     'value' => $subtotal,
@@ -171,7 +178,7 @@ class Tax extends \Magento\Framework\View\Element\Template
                     'label' => __('Subtotal (Excl.Tax)'),
                 ]
             );
-            $totalIncl = new \Magento\Framework\DataObject(
+            $totalIncl = new DataObject(
                 [
                     'code' => 'subtotal_incl',
                     'value' => $subtotalIncl,
@@ -214,7 +221,7 @@ class Tax extends \Magento\Framework\View\Element\Template
     protected function _initShipping()
     {
         $store = $this->_order->getStore();
-        /** @var \Magento\Sales\Block\Order\Totals $parent */
+        /** @var OrderTotals $parent */
         $parent = $this->getParentBlock();
         $shipping = $parent->getTotal('shipping');
         if (!$shipping) {
@@ -235,7 +242,7 @@ class Tax extends \Magento\Framework\View\Element\Template
 
             $couponDescription = $this->getCouponDescription();
 
-            $totalExcl = new \Magento\Framework\DataObject(
+            $totalExcl = new DataObject(
                 [
                     'code' => 'shipping',
                     'value' => $shipping,
@@ -243,7 +250,7 @@ class Tax extends \Magento\Framework\View\Element\Template
                     'label' => __('Shipping & Handling (Excl.Tax)') . $couponDescription,
                 ]
             );
-            $totalIncl = new \Magento\Framework\DataObject(
+            $totalIncl = new DataObject(
                 [
                     'code' => 'shipping_incl',
                     'value' => $shippingIncl,
@@ -304,7 +311,7 @@ class Tax extends \Magento\Framework\View\Element\Template
             $baseGrandtotalExcl = $baseGrandtotal - $this->_source->getBaseTaxAmount();
             $grandtotalExcl = max($grandtotalExcl, 0);
             $baseGrandtotalExcl = max($baseGrandtotalExcl, 0);
-            $totalExcl = new \Magento\Framework\DataObject(
+            $totalExcl = new DataObject(
                 [
                     'code' => 'grand_total',
                     'strong' => true,
@@ -313,7 +320,7 @@ class Tax extends \Magento\Framework\View\Element\Template
                     'label' => __('Grand Total (Excl.Tax)'),
                 ]
             );
-            $totalIncl = new \Magento\Framework\DataObject(
+            $totalIncl = new DataObject(
                 [
                     'code' => 'grand_total_incl',
                     'strong' => true,
@@ -368,7 +375,7 @@ class Tax extends \Magento\Framework\View\Element\Template
     {
         $couponDescription = "";
 
-        /** @var \Magento\Sales\Block\Order\Totals $parent */
+        /** @var OrderTotals $parent */
         $parent = $this->getParentBlock();
         $couponCode = $parent->getSource()
             ->getCouponCode();

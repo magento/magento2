@@ -7,11 +7,14 @@
 
 namespace Magento\Tax\Model\TaxClass;
 
+use Exception;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\InputException;
@@ -19,86 +22,43 @@ use Magento\Framework\Exception\LocalizedException as ModelException;
 use Magento\Framework\Validator\NotEmpty;
 use Magento\Framework\Validator\ValidateException;
 use Magento\Framework\Validator\ValidatorChain;
+use Magento\Tax\Api\Data\TaxClassInterface;
+use Magento\Tax\Api\Data\TaxClassSearchResultsInterfaceFactory;
 use Magento\Tax\Api\TaxClassManagementInterface;
+use Magento\Tax\Api\TaxClassRepositoryInterface;
 use Magento\Tax\Model\ClassModel;
 use Magento\Tax\Model\ClassModelRegistry;
+use Magento\Tax\Model\ResourceModel\TaxClass as ResourceTaxClass;
 use Magento\Tax\Model\ResourceModel\TaxClass\Collection as TaxClassCollection;
 use Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory as TaxClassCollectionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
+class Repository implements TaxClassRepositoryInterface
 {
     public const CLASS_ID_NOT_ALLOWED = 'class_id is not expected for this request.';
-
-    /**
-     * @var TaxClassCollectionFactory
-     */
-    protected $taxClassCollectionFactory;
-
-    /**
-     * @var \Magento\Tax\Api\Data\TaxClassSearchResultsInterfaceFactory
-     */
-    protected $searchResultsFactory;
-
-    /**
-     * @var ClassModelRegistry
-     */
-    protected $classModelRegistry;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
-
-    /**
-     * @var FilterBuilder
-     */
-    protected $filterBuilder;
-
-    /**
-     * @var \Magento\Tax\Model\ResourceModel\TaxClass
-     */
-    protected $taxClassResource;
-
-    /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
-     */
-    protected $joinProcessor;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
-     */
-    private $collectionProcessor;
 
     /**
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
      * @param TaxClassCollectionFactory $taxClassCollectionFactory
-     * @param \Magento\Tax\Api\Data\TaxClassSearchResultsInterfaceFactory $searchResultsFactory
+     * @param TaxClassSearchResultsInterfaceFactory $searchResultsFactory
      * @param ClassModelRegistry $classModelRegistry
-     * @param \Magento\Tax\Model\ResourceModel\TaxClass $taxClassResource
-     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
-     * @param CollectionProcessorInterface $collectionProcessor
+     * @param ResourceTaxClass $taxClassResource
+     * @param JoinProcessorInterface $joinProcessor
+     * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        FilterBuilder $filterBuilder,
-        TaxClassCollectionFactory $taxClassCollectionFactory,
-        \Magento\Tax\Api\Data\TaxClassSearchResultsInterfaceFactory $searchResultsFactory,
-        ClassModelRegistry $classModelRegistry,
-        \Magento\Tax\Model\ResourceModel\TaxClass $taxClassResource,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        protected readonly SearchCriteriaBuilder $searchCriteriaBuilder,
+        protected readonly FilterBuilder $filterBuilder,
+        protected readonly TaxClassCollectionFactory $taxClassCollectionFactory,
+        protected readonly TaxClassSearchResultsInterfaceFactory $searchResultsFactory,
+        protected readonly ClassModelRegistry $classModelRegistry,
+        protected readonly ResourceTaxClass $taxClassResource,
+        protected readonly JoinProcessorInterface $joinProcessor,
+        private ?CollectionProcessorInterface $collectionProcessor = null
     ) {
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->filterBuilder = $filterBuilder;
-        $this->taxClassCollectionFactory = $taxClassCollectionFactory;
-        $this->searchResultsFactory = $searchResultsFactory;
-        $this->classModelRegistry = $classModelRegistry;
-        $this->taxClassResource = $taxClassResource;
-        $this->joinProcessor = $joinProcessor;
         $this->collectionProcessor = $collectionProcessor
             ?: ObjectManager::getInstance()->get(CollectionProcessor::class);
     }
@@ -106,7 +66,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(\Magento\Tax\Api\Data\TaxClassInterface $taxClass)
+    public function save(TaxClassInterface $taxClass)
     {
         if ($taxClass->getClassId()) {
             $originalTaxClassModel = $this->get($taxClass->getClassId());
@@ -146,14 +106,14 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function delete(\Magento\Tax\Api\Data\TaxClassInterface $taxClass)
+    public function delete(TaxClassInterface $taxClass)
     {
         $taxClassId = $taxClass->getClassId();
         try {
             $this->taxClassResource->delete($taxClass);
         } catch (CouldNotDeleteException $e) {
             throw $e;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
         $this->classModelRegistry->remove($taxClassId);
@@ -172,11 +132,11 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
     /**
      * Validate TaxClass Data
      *
-     * @param \Magento\Tax\Api\Data\TaxClassInterface $taxClass
+     * @param TaxClassInterface $taxClass
      * @return void
      * @throws InputException|ValidateException
      */
-    protected function validateTaxClassData(\Magento\Tax\Api\Data\TaxClassInterface $taxClass)
+    protected function validateTaxClassData(TaxClassInterface $taxClass)
     {
         $exception = new InputException();
 
@@ -210,7 +170,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria)
     {
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);

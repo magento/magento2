@@ -6,8 +6,12 @@
 
 namespace Magento\Tax\Model;
 
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -27,11 +31,6 @@ use Magento\Tax\Model\ResourceModel\Calculation\Rule\CollectionFactory;
 class TaxRuleRepository implements TaxRuleRepositoryInterface
 {
     /**
-     * @var TaxRuleRegistry
-     */
-    protected $taxRuleRegistry;
-
-    /**
      * @var TaxRuleSearchResultsInterfaceFactory
      */
     protected $taxRuleSearchResultsFactory;
@@ -42,49 +41,25 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
     protected $taxRuleModelFactory;
 
     /**
-     * @var CollectionFactory
-     */
-    protected $collectionFactory;
-
-    /**
-     * @var ResourceRule
-     */
-    protected $resource;
-
-    /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
-     */
-    protected $joinProcessor;
-
-    /**
-     * @var CollectionProcessorInterface
-     */
-    private $collectionProcessor;
-
-    /**
      * @param TaxRuleRegistry $taxRuleRegistry
      * @param TaxRuleSearchResultsInterfaceFactory $searchResultsFactory
      * @param RuleFactory $ruleFactory
      * @param CollectionFactory $collectionFactory
      * @param ResourceRule $resource
-     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
+     * @param JoinProcessorInterface $joinProcessor
      * @param CollectionProcessorInterface | null $collectionProcessor
      */
     public function __construct(
-        TaxRuleRegistry $taxRuleRegistry,
+        protected readonly TaxRuleRegistry $taxRuleRegistry,
         TaxRuleSearchResultsInterfaceFactory $searchResultsFactory,
         RuleFactory $ruleFactory,
-        CollectionFactory $collectionFactory,
-        ResourceRule $resource,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        protected readonly CollectionFactory $collectionFactory,
+        protected readonly ResourceRule $resource,
+        protected readonly JoinProcessorInterface $joinProcessor,
+        private ?CollectionProcessorInterface $collectionProcessor = null
     ) {
-        $this->taxRuleRegistry = $taxRuleRegistry;
         $this->taxRuleSearchResultsFactory = $searchResultsFactory;
         $this->taxRuleModelFactory = $ruleFactory;
-        $this->collectionFactory = $collectionFactory;
-        $this->resource = $resource;
-        $this->joinProcessor = $joinProcessor;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
@@ -141,7 +116,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria)
     {
         $searchResults = $this->taxRuleSearchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
@@ -162,7 +137,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
      * @param Collection $collection
      * @return void
      * @deprecated 100.2.0
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws InputException
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
     {
@@ -226,7 +201,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
     private function getCollectionProcessor()
     {
         if (!$this->collectionProcessor) {
-            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            $this->collectionProcessor = ObjectManager::getInstance()->get(
                 'Magento\Tax\Model\Api\SearchCriteria\TaxRuleCollectionProcessor'
             );
         }

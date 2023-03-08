@@ -5,6 +5,9 @@
  */
 namespace Magento\Tax\Block\Adminhtml\Items\Price;
 
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
+use Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn;
 use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
 use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\Item;
@@ -18,24 +21,14 @@ use Magento\Tax\Helper\Data as TaxHelper;
  * @api
  * @since 100.0.2
  */
-class Renderer extends \Magento\Backend\Block\Template
+class Renderer extends Template
 {
     /**
-     * @var \Magento\Tax\Helper\Data
+     * @var TaxHelper
      * @deprecated 100.3.0
      * Marked as deprecated as it is unused.
      */
     protected $taxHelper;
-
-    /**
-     * @var \Magento\Tax\Block\Item\Price\Renderer
-     */
-    protected $itemPriceRenderer;
-
-    /**
-     * @var \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn
-     */
-    protected $defaultColumnRenderer;
 
     /**
      * @var Item|QuoteItem|InvoiceItem|CreditmemoItem
@@ -43,22 +36,20 @@ class Renderer extends \Magento\Backend\Block\Template
     protected $item;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn $defaultColumnRenderer
+     * @param Context $context
+     * @param DefaultColumn $defaultColumnRenderer
      * @param TaxHelper $taxHelper
      * @param ItemPriceRenderer $itemPriceRenderer
      * @param array $data
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn $defaultColumnRenderer,
+        Context $context,
+        protected readonly DefaultColumn $defaultColumnRenderer,
         TaxHelper $taxHelper,
-        ItemPriceRenderer $itemPriceRenderer,
+        protected readonly ItemPriceRenderer $itemPriceRenderer,
         array $data = []
     ) {
-        $this->defaultColumnRenderer = $defaultColumnRenderer;
-        $this->itemPriceRenderer = $itemPriceRenderer;
         $this->itemPriceRenderer->setZone('sales');
         parent::__construct($context, $data);
     }

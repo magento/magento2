@@ -5,18 +5,21 @@
  */
 namespace Magento\Tax\Block\Grid\Renderer;
 
+use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
+use Magento\Framework\DataObject;
+
 /**
  * Provides tax rates codes for each tax rule in the grid.
  */
-class Codes extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Codes extends AbstractRenderer
 {
     /**
      * Renders rates codes grid column
      *
-     * @param \Magento\Framework\DataObject $row
+     * @param DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\DataObject $row)
+    public function render(DataObject $row)
     {
         $ratesCodes = $row->getTaxRatesCodes();
 

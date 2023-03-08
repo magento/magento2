@@ -6,6 +6,7 @@
 
 namespace Magento\Tax\Pricing;
 
+use Magento\Catalog\Helper\Data as CatalogHelper;
 use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Tax\Helper\Data as TaxHelper;
@@ -21,32 +22,15 @@ class Adjustment implements AdjustmentInterface
     const ADJUSTMENT_CODE = 'tax';
 
     /**
-     * @var TaxHelper
-     */
-    protected $taxHelper;
-
-    /**
-     * \Magento\Catalog\Helper\Data
-     *
-     * @var CatalogHelper
-     */
-    protected $catalogHelper;
-
-    /**
-     * @var int|null
-     */
-    protected $sortOrder;
-
-    /**
      * @param TaxHelper $taxHelper
-     * @param \Magento\Catalog\Helper\Data $catalogHelper
+     * @param CatalogHelper $catalogHelper
      * @param int|null $sortOrder
      */
-    public function __construct(TaxHelper $taxHelper, \Magento\Catalog\Helper\Data $catalogHelper, $sortOrder = null)
-    {
-        $this->taxHelper = $taxHelper;
-        $this->catalogHelper = $catalogHelper;
-        $this->sortOrder = $sortOrder;
+    public function __construct(
+        protected readonly TaxHelper $taxHelper,
+        protected CatalogHelper $catalogHelper,
+        protected $sortOrder = null
+    ) {
     }
 
     /**

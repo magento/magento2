@@ -9,7 +9,14 @@
  */
 namespace Magento\Tax\Model\ResourceModel;
 
-class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+use Magento\Framework\DataObject;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Tax\Helper\Data as TaxHelper;
+
+class Calculation extends AbstractDb
 {
     /**
      * Store ISO 3166-1 alpha-2 USA country code
@@ -24,25 +31,25 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_ratesCache = [];
 
     /**
-     * @var \Magento\Tax\Helper\Data
+     * @var TaxHelper
      */
     protected $_taxData;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Context $context
+     * @param TaxHelper $taxData
+     * @param StoreManagerInterface $storeManager
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Tax\Helper\Data $taxData,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        Context $context,
+        TaxHelper $taxData,
+        StoreManagerInterface $storeManager,
         $connectionName = null
     ) {
         $this->_taxData = $taxData;
@@ -78,8 +85,8 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Retrieve distinct calculation
      *
-     * @param  string $field
-     * @param  int $ruleId
+     * @param string $field
+     * @param int $ruleId
      * @return array
      */
     public function getCalculationsById($field, $ruleId)
@@ -93,7 +100,7 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Get tax rate information: calculation process data and tax rate
      *
-     * @param \Magento\Framework\DataObject $request
+     * @param DataObject $request
      * @return array
      */
     public function getRateInfo($request)
@@ -108,7 +115,7 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Get tax rate for specific tax rate request
      *
-     * @param \Magento\Framework\DataObject $request
+     * @param DataObject $request
      * @return int
      */
     public function getRate($request)
@@ -119,7 +126,7 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Retrieve Calculation Process
      *
-     * @param \Magento\Framework\DataObject $request
+     * @param DataObject $request
      * @param array|null $rates
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -256,7 +263,7 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * Notice that productClassId due to optimization can be array of ids.
      *
-     * @param \Magento\Framework\DataObject $request
+     * @param DataObject $request
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -387,17 +394,17 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
 
             $select->order(
-                'priority ' . \Magento\Framework\DB\Select::SQL_ASC
+                'priority ' . Select::SQL_ASC
             )->order(
-                'tax_calculation_rule_id ' . \Magento\Framework\DB\Select::SQL_ASC
+                'tax_calculation_rule_id ' . Select::SQL_ASC
             )->order(
-                'tax_country_id ' . \Magento\Framework\DB\Select::SQL_DESC
+                'tax_country_id ' . Select::SQL_DESC
             )->order(
-                'tax_region_id ' . \Magento\Framework\DB\Select::SQL_DESC
+                'tax_region_id ' . Select::SQL_DESC
             )->order(
-                'tax_postcode ' . \Magento\Framework\DB\Select::SQL_DESC
+                'tax_postcode ' . Select::SQL_DESC
             )->order(
-                'value ' . \Magento\Framework\DB\Select::SQL_DESC
+                'value ' . Select::SQL_DESC
             );
 
             $fetchResult = $this->getConnection()->fetchAll($select);
@@ -454,7 +461,7 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Retrieve rate ids
      *
-     * @param \Magento\Framework\DataObject $request
+     * @param DataObject $request
      * @return array
      */
     public function getRateIds($request)

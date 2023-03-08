@@ -5,6 +5,7 @@
  */
 namespace Magento\Tax\Model;
 
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Session;
 use Magento\Tax\Api\TaxAddressManagerInterface;
@@ -15,18 +16,11 @@ use Magento\Tax\Api\TaxAddressManagerInterface;
 class TaxAddressManager implements TaxAddressManagerInterface
 {
     /**
-     * Customer session model.
-     *
-     * @var Session
+     * @param Session $customerSession Customer session model.
      */
-    private $customerSession;
-
-    /**
-     * @param Session $customerSession
-     */
-    public function __construct(Session $customerSession)
-    {
-        $this->customerSession = $customerSession;
+    public function __construct(
+        private readonly Session $customerSession
+    ) {
     }
 
     /**
@@ -60,7 +54,7 @@ class TaxAddressManager implements TaxAddressManagerInterface
     /**
      * Set default Tax Shipping and Billing addresses into customer session after login.
      *
-     * @param \Magento\Customer\Api\Data\AddressInterface[] $addresses
+     * @param AddressInterface[] $addresses
      * @return void
      */
     public function setDefaultAddressAfterLogIn(array $addresses)

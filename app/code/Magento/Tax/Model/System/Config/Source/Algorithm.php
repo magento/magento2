@@ -5,7 +5,10 @@
  */
 namespace Magento\Tax\Model\System\Config\Source;
 
-class Algorithm implements \Magento\Framework\Option\ArrayInterface
+use Magento\Framework\Option\ArrayInterface;
+use Magento\Tax\Model\Calculation;
+
+class Algorithm implements ArrayInterface
 {
     /**
      * @var array
@@ -18,9 +21,9 @@ class Algorithm implements \Magento\Framework\Option\ArrayInterface
     public function __construct()
     {
         $this->_options = [
-            ['value' => \Magento\Tax\Model\Calculation::CALC_UNIT_BASE, 'label' => __('Unit Price')],
-            ['value' => \Magento\Tax\Model\Calculation::CALC_ROW_BASE, 'label' => __('Row Total')],
-            ['value' => \Magento\Tax\Model\Calculation::CALC_TOTAL_BASE, 'label' => __('Total')],
+            ['value' => Calculation::CALC_UNIT_BASE, 'label' => __('Unit Price')],
+            ['value' => Calculation::CALC_ROW_BASE, 'label' => __('Row Total')],
+            ['value' => Calculation::CALC_TOTAL_BASE, 'label' => __('Total')],
         ];
     }
 

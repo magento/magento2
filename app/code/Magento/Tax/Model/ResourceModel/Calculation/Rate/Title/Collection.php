@@ -5,12 +5,17 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Calculation\Rate\Title;
 
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Tax\Model\Calculation\Rate\Title as ModelCalculationRateTitle;
+use Magento\Tax\Model\ResourceModel\Calculation\Rate\Title as ResourceCalculationRateTitle;
+use Magento\Tax\Model\ResourceModel\Calculation\Rate\Title\Collection as CalculationRateTitleCollection;
+
 /**
  * Tax Rate Title Collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Resource initialization
@@ -20,8 +25,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            \Magento\Tax\Model\Calculation\Rate\Title::class,
-            \Magento\Tax\Model\ResourceModel\Calculation\Rate\Title::class
+            ModelCalculationRateTitle::class,
+            ResourceCalculationRateTitle::class
         );
     }
 
@@ -29,7 +34,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add rate id filter
      *
      * @param int $rateId
-     * @return \Magento\Tax\Model\ResourceModel\Calculation\Rate\Title\Collection
+     * @return CalculationRateTitleCollection
      */
     public function loadByRateId($rateId)
     {

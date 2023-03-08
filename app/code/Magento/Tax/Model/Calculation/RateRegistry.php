@@ -13,13 +13,6 @@ use Magento\Tax\Model\Calculation\RateFactory as TaxRateModelFactory;
 class RateRegistry
 {
     /**
-     * Tax rate model factory
-     *
-     * @var  TaxRateModelFactory
-     */
-    private $taxRateModelFactory;
-
-    /**
      * Tax rate models
      *
      * @var TaxRateModel[]
@@ -29,12 +22,11 @@ class RateRegistry
     /**
      * Constructor
      *
-     * @param TaxRateModelFactory $taxModelRateFactory
+     * @param TaxRateModelFactory $taxModelRateFactory Tax rate model factory
      */
     public function __construct(
-        TaxRateModelFactory $taxModelRateFactory
+        private readonly TaxRateModelFactory $taxModelRateFactory
     ) {
-        $this->taxRateModelFactory = $taxModelRateFactory;
     }
 
     /**

@@ -8,56 +8,32 @@
 namespace Magento\Tax\Model\Sales\Order;
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory;
 use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterfaceFactory as TaxDetailsDataObjectFactory;
 use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface as AppliedTax;
 use Magento\Sales\Model\Order\Tax\Item;
+use Magento\Tax\Api\Data\OrderTaxDetailsInterfaceFactory;
+use Magento\Tax\Api\Data\OrderTaxDetailsItemInterface;
+use Magento\Tax\Api\Data\OrderTaxDetailsItemInterfaceFactory;
+use Magento\Tax\Api\OrderTaxManagementInterface;
 
-class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
+class TaxManagement implements OrderTaxManagementInterface
 {
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory
-     */
-    protected $orderItemTaxFactory;
-
-    /**
-     * @var \Magento\Sales\Model\OrderFactory
-     */
-    protected $orderFactory;
-
-    /**
-     * @var \Magento\Tax\Api\Data\OrderTaxDetailsInterfaceFactory
-     */
-    protected $orderTaxDetailsDataObjectFactory;
-
-    /**
-     * @var \Magento\Tax\Api\Data\OrderTaxDetailsItemInterfaceFactory
-     */
-    protected $itemDataObjectFactory;
-
-    /**
-     * @var TaxDetailsDataObjectFactory
-     */
-    protected $appliedTaxDataObjectFactory;
-
-    /**
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory $orderItemTaxFactory
-     * @param \Magento\Tax\Api\Data\OrderTaxDetailsInterfaceFactory $orderTaxDetailsDataObjectFactory
-     * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterfaceFactory $itemDataObjectFactory
+     * @param OrderFactory $orderFactory
+     * @param ItemFactory $orderItemTaxFactory
+     * @param OrderTaxDetailsInterfaceFactory $orderTaxDetailsDataObjectFactory
+     * @param OrderTaxDetailsItemInterfaceFactory $itemDataObjectFactory
      * @param TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory
      */
     public function __construct(
-        \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory $orderItemTaxFactory,
-        \Magento\Tax\Api\Data\OrderTaxDetailsInterfaceFactory $orderTaxDetailsDataObjectFactory,
-        \Magento\Tax\Api\Data\OrderTaxDetailsItemInterfaceFactory $itemDataObjectFactory,
-        TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory
+        protected readonly OrderFactory $orderFactory,
+        protected readonly ItemFactory $orderItemTaxFactory,
+        protected readonly OrderTaxDetailsInterfaceFactory $orderTaxDetailsDataObjectFactory,
+        protected readonly OrderTaxDetailsItemInterfaceFactory $itemDataObjectFactory,
+        protected readonly TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory
     ) {
-        $this->orderFactory = $orderFactory;
-        $this->orderItemTaxFactory = $orderItemTaxFactory;
-        $this->orderTaxDetailsDataObjectFactory = $orderTaxDetailsDataObjectFactory;
-        $this->itemDataObjectFactory = $itemDataObjectFactory;
-        $this->appliedTaxDataObjectFactory = $appliedTaxDataObjectFactory;
     }
 
     /**
@@ -92,7 +68,7 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
      * Aggregate item applied taxes to get order applied taxes
      *
      * @param TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory
-     * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[] $items
+     * @param OrderTaxDetailsItemInterface[] $items
      * @return AppliedTax[]
      */
     protected function aggregateAppliedTaxes(TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory, $items)

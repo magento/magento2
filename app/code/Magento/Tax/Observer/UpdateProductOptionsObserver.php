@@ -6,41 +6,30 @@
 
 namespace Magento\Tax\Observer;
 
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Registry;
+use Magento\Tax\Helper\Data as TaxHelper;
 
 class UpdateProductOptionsObserver implements ObserverInterface
 {
     /**
-     * Tax data
-     *
-     * @var \Magento\Tax\Helper\Data
-     */
-    protected $taxData;
-
-    /**
-     * @var \Magento\Framework\Registry
-     */
-    protected $registry;
-
-    /**
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Framework\Registry $registry
+     * @param TaxHelper $taxData Tax data
+     * @param Registry $registry
      */
     public function __construct(
-        \Magento\Tax\Helper\Data $taxData,
-        \Magento\Framework\Registry $registry
+        protected readonly TaxHelper $taxData,
+        protected readonly Registry $registry
     ) {
-        $this->taxData = $taxData;
-        $this->registry = $registry;
     }
 
     /**
      * Change default JavaScript templates for options rendering
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return $this
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $response = $observer->getEvent()->getResponseObject();
         $options = $response->getAdditionalOptions();

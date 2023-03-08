@@ -5,12 +5,18 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Sales\Order\Tax;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Tax\Model\ResourceModel\Sales\Order\Tax as ResourceSalesOrderTax;
+use Magento\Tax\Model\ResourceModel\Sales\Order\Tax\Collection as SalesOrderTaxCollection;
+use Magento\Tax\Model\Sales\Order\Tax as ModelSalesOrderTax;
+
 /**
  * Order Tax Collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Resource initialization
@@ -20,16 +26,16 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            \Magento\Tax\Model\Sales\Order\Tax::class,
-            \Magento\Tax\Model\ResourceModel\Sales\Order\Tax::class
+            ModelSalesOrderTax::class,
+            ResourceSalesOrderTax::class
         );
     }
 
     /**
      * Retrieve order tax collection by order identifier
      *
-     * @param \Magento\Framework\DataObject $order
-     * @return \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\Collection
+     * @param DataObject $order
+     * @return SalesOrderTaxCollection
      */
     public function loadByOrder($order)
     {

@@ -9,72 +9,55 @@
  */
 namespace Magento\Tax\Block\Adminhtml\Rule\Edit;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Framework\Data\Form as FormData;
+use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Magento\Tax\Api\Data\TaxRuleInterface;
 use Magento\Tax\Api\TaxClassManagementInterface;
+use Magento\Tax\Api\TaxClassRepositoryInterface;
+use Magento\Tax\Api\TaxRuleRepositoryInterface;
+use Magento\Tax\Model\Rate\Source;
+use Magento\Tax\Model\TaxClass\Source\Customer;
+use Magento\Tax\Model\TaxClass\Source\Product;
 
 /**
  * @api
  * @since 100.0.2
  */
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
+class Form extends Generic
 {
     /**
-     * @var \Magento\Tax\Model\Rate\Source
-     */
-    protected $rateSource;
-
-    /**
-     * @var \Magento\Framework\Data\Form\FormKey
+     * @var FormKey
      */
     protected $formKey;
 
     /**
-     * @var \Magento\Tax\Api\TaxRuleRepositoryInterface
-     */
-    protected $ruleService;
-
-    /**
-     * @var \Magento\Tax\Api\TaxClassRepositoryInterface
-     */
-    protected $taxClassService;
-
-    /**
-     * @var \Magento\Tax\Model\TaxClass\Source\Customer
-     */
-    protected $customerTaxClassSource;
-
-    /**
-     * @var \Magento\Tax\Model\TaxClass\Source\Product
-     */
-    protected $productTaxClassSource;
-
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Tax\Model\Rate\Source $rateSource
-     * @param \Magento\Tax\Api\TaxRuleRepositoryInterface $ruleService
-     * @param \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassService
-     * @param \Magento\Tax\Model\TaxClass\Source\Customer $customerTaxClassSource
-     * @param \Magento\Tax\Model\TaxClass\Source\Product $productTaxClassSource
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param Source $rateSource
+     * @param TaxRuleRepositoryInterface $ruleService
+     * @param TaxClassRepositoryInterface $taxClassService
+     * @param Customer $customerTaxClassSource
+     * @param Product $productTaxClassSource
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Tax\Model\Rate\Source $rateSource,
-        \Magento\Tax\Api\TaxRuleRepositoryInterface $ruleService,
-        \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassService,
-        \Magento\Tax\Model\TaxClass\Source\Customer $customerTaxClassSource,
-        \Magento\Tax\Model\TaxClass\Source\Product $productTaxClassSource,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        protected readonly Source $rateSource,
+        protected readonly TaxRuleRepositoryInterface $ruleService,
+        protected readonly TaxClassRepositoryInterface $taxClassService,
+        protected readonly Customer $customerTaxClassSource,
+        protected readonly Product $productTaxClassSource,
         array $data = []
     ) {
-        $this->rateSource = $rateSource;
         $this->formKey = $context->getFormKey();
-        $this->ruleService = $ruleService;
-        $this->taxClassService = $taxClassService;
-        $this->customerTaxClassSource = $customerTaxClassSource;
-        $this->productTaxClassSource = $productTaxClassSource;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -103,10 +86,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $taxRuleId = $this->_coreRegistry->registry('tax_rule_id');
         try {
             $taxRule = $this->ruleService->get($taxRuleId);
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+        } catch (NoSuchEntityException $e) {
             /** Tax rule not found */
         }
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var FormData $form */
         $form = $this->_formFactory->create(
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
@@ -343,7 +326,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Extract tax rule data in a format which is
      *
-     * @param \Magento\Tax\Api\Data\TaxRuleInterface $taxRule
+     * @param TaxRuleInterface $taxRule
      * @return array
      */
     protected function extractTaxRuleData($taxRule)

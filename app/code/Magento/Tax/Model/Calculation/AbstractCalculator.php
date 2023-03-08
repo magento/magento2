@@ -6,13 +6,17 @@
 namespace Magento\Tax\Model\Calculation;
 
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
+use Magento\Framework\DataObject;
+use Magento\Tax\Api\Data\AppliedTaxInterface;
 use Magento\Tax\Api\Data\AppliedTaxInterfaceFactory;
+use Magento\Tax\Api\Data\AppliedTaxRateInterface;
 use Magento\Tax\Api\Data\AppliedTaxRateInterfaceFactory;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
 use Magento\Tax\Api\Data\TaxDetailsItemInterface;
 use Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory;
 use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\Calculation;
+use Magento\Tax\Model\Config as TaxConfig;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -28,23 +32,6 @@ abstract class AbstractCalculator
 
     const KEY_TAX_BEFORE_DISCOUNT_DELTA_ROUNDING = 'tax_before_discount';
     /**#@-*/
-
-    /**#@-*/
-    protected $taxDetailsItemDataObjectFactory;
-
-    /**
-     * Tax calculation tool
-     *
-     * @var Calculation
-     */
-    protected $calculationTool;
-
-    /**
-     * Store id
-     *
-     * @var int
-     */
-    protected $storeId;
 
     /**
      * Customer tax class id
@@ -75,13 +62,6 @@ abstract class AbstractCalculator
     protected $billingAddress;
 
     /**
-     * Tax configuration object
-     *
-     * @var \Magento\Tax\Model\Config
-     */
-    protected $config;
-
-    /**
      * Address rate request
      *
      * Request object contain:
@@ -91,7 +71,7 @@ abstract class AbstractCalculator
      *  customer_class_id (->getCustomerClassId())
      *  store (->getStore())
      *
-     * @var \Magento\Framework\DataObject
+     * @var DataObject
      */
     private $addressRateRequest = null;
 
@@ -116,44 +96,28 @@ abstract class AbstractCalculator
     protected $taxClassManagement;
 
     /**
-     * @var AppliedTaxInterfaceFactory
-     */
-    protected $appliedTaxDataObjectFactory;
-
-    /**
-     * @var AppliedTaxRateInterfaceFactory
-     */
-    protected $appliedTaxRateDataObjectFactory;
-
-    /**
      * Constructor
      *
      * @param TaxClassManagementInterface $taxClassService
      * @param TaxDetailsItemInterfaceFactory $taxDetailsItemDataObjectFactory
      * @param AppliedTaxInterfaceFactory $appliedTaxDataObjectFactory
      * @param AppliedTaxRateInterfaceFactory $appliedTaxRateDataObjectFactory
-     * @param Calculation $calculationTool
-     * @param \Magento\Tax\Model\Config $config
-     * @param int $storeId
-     * @param \Magento\Framework\DataObject $addressRateRequest
+     * @param Calculation $calculationTool Tax calculation tool
+     * @param TaxConfig $config Tax configuration object
+     * @param int $storeId Store id
+     * @param null|DataObject $addressRateRequest
      */
     public function __construct(
         TaxClassManagementInterface $taxClassService,
-        TaxDetailsItemInterfaceFactory $taxDetailsItemDataObjectFactory,
-        AppliedTaxInterfaceFactory $appliedTaxDataObjectFactory,
-        AppliedTaxRateInterfaceFactory $appliedTaxRateDataObjectFactory,
-        Calculation $calculationTool,
-        \Magento\Tax\Model\Config $config,
-        $storeId,
-        \Magento\Framework\DataObject $addressRateRequest = null
+        protected readonly TaxDetailsItemInterfaceFactory $taxDetailsItemDataObjectFactory,
+        protected readonly AppliedTaxInterfaceFactory $appliedTaxDataObjectFactory,
+        protected readonly AppliedTaxRateInterfaceFactory $appliedTaxRateDataObjectFactory,
+        protected readonly Calculation $calculationTool,
+        protected readonly TaxConfig $config,
+        protected $storeId,
+        ?DataObject $addressRateRequest = null
     ) {
         $this->taxClassManagement = $taxClassService;
-        $this->taxDetailsItemDataObjectFactory = $taxDetailsItemDataObjectFactory;
-        $this->appliedTaxDataObjectFactory = $appliedTaxDataObjectFactory;
-        $this->appliedTaxRateDataObjectFactory = $appliedTaxRateDataObjectFactory;
-        $this->calculationTool = $calculationTool;
-        $this->config = $config;
-        $this->storeId = $storeId;
         $this->addressRateRequest = $addressRateRequest;
     }
 
@@ -251,7 +215,7 @@ abstract class AbstractCalculator
      *  customer_class_id (->getCustomerClassId())
      *  store (->getStore())
      *
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     protected function getAddressRateRequest()
     {
@@ -298,7 +262,7 @@ abstract class AbstractCalculator
      *          'percent' => 5.3,
      *      ],
      *  ]
-     * @return \Magento\Tax\Api\Data\AppliedTaxInterface
+     * @return AppliedTaxInterface
      */
     protected function getAppliedTax($rowTax, $appliedRate)
     {
@@ -307,7 +271,7 @@ abstract class AbstractCalculator
         $appliedTaxDataObject->setPercent($appliedRate['percent']);
         $appliedTaxDataObject->setTaxRateKey($appliedRate['id']);
 
-        /** @var  \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $rateDataObjects */
+        /** @var AppliedTaxRateInterface[] $rateDataObjects */
         $rateDataObjects = [];
         foreach ($appliedRate['rates'] as $rate) {
             //Skipped position, priority and rule_id
@@ -347,11 +311,11 @@ abstract class AbstractCalculator
      *          ],
      *      ],
      *  ]
-     * @return \Magento\Tax\Api\Data\AppliedTaxInterface[]
+     * @return AppliedTaxInterface[]
      */
     protected function getAppliedTaxes($rowTax, $totalTaxRate, $appliedRates)
     {
-        /** @var \Magento\Tax\Api\Data\AppliedTaxInterface[] $appliedTaxes */
+        /** @var AppliedTaxInterface[] $appliedTaxes */
         $appliedTaxes = [];
         $totalAppliedAmount = 0;
         foreach ($appliedRates as $appliedRate) {
@@ -377,7 +341,7 @@ abstract class AbstractCalculator
             $appliedTaxDataObject->setPercent($appliedRate['percent']);
             $appliedTaxDataObject->setTaxRateKey($appliedRate['id']);
 
-            /** @var  \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $rateDataObjects */
+            /** @var  AppliedTaxRateInterface[] $rateDataObjects */
             $rateDataObjects = [];
             foreach ($appliedRate['rates'] as $rate) {
                 //Skipped position, priority and rule_id

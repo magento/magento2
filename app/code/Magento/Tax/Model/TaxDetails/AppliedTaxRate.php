@@ -6,6 +6,7 @@
 namespace Magento\Tax\Model\TaxDetails;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Tax\Api\Data\AppliedTaxRateExtensionInterface;
 use Magento\Tax\Api\Data\AppliedTaxRateInterface;
 
 /**
@@ -81,7 +82,7 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Tax\Api\Data\AppliedTaxRateExtensionInterface|null
+     * @return AppliedTaxRateExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -91,10 +92,10 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Tax\Api\Data\AppliedTaxRateExtensionInterface $extensionAttributes
+     * @param AppliedTaxRateExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\Tax\Api\Data\AppliedTaxRateExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(AppliedTaxRateExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

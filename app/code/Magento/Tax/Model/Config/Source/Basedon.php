@@ -5,7 +5,9 @@
  */
 namespace Magento\Tax\Model\Config\Source;
 
-class Basedon implements \Magento\Framework\Option\ArrayInterface
+use Magento\Framework\Option\ArrayInterface;
+
+class Basedon implements ArrayInterface
 {
     /**
      * @return array

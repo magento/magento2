@@ -8,11 +8,22 @@ namespace Magento\Tax\Model\Sales\Total\Quote;
 use Magento\Customer\Api\Data\AddressInterfaceFactory as CustomerAddressFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory as CustomerAddressRegionFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Phrase;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address\Total as QuoteAddressTotal;
+use Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory;
+use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
+use Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
+use Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory;
+use Magento\Tax\Api\Data\TaxDetailsInterface;
+use Magento\Tax\Api\TaxCalculationInterface;
+use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Tax\Model\Calculation;
+use Magento\Tax\Model\Config as TaxConfig;
 
 /**
  * Tax totals calculation model
@@ -30,14 +41,14 @@ class Tax extends CommonTaxCollector
     /**
      * Tax module helper
      *
-     * @var \Magento\Tax\Helper\Data
+     * @var TaxHelper
      */
     protected $_taxData;
 
     /**
      * Tax configuration object
      *
-     * @var \Magento\Tax\Model\Config
+     * @var TaxConfig
      */
     protected $_config;
 
@@ -49,33 +60,28 @@ class Tax extends CommonTaxCollector
     protected $_discountTaxCompensationes = [];
 
     /**
-     * @var Json
-     */
-    private $serializer;
-
-    /**
      * Class constructor
      *
-     * @param \Magento\Tax\Model\Config $taxConfig
-     * @param \Magento\Tax\Api\TaxCalculationInterface $taxCalculationService
-     * @param \Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory $quoteDetailsDataObjectFactory
-     * @param \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory $quoteDetailsItemDataObjectFactory
-     * @param \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory $taxClassKeyDataObjectFactory
+     * @param TaxConfig $taxConfig
+     * @param TaxCalculationInterface $taxCalculationService
+     * @param QuoteDetailsInterfaceFactory $quoteDetailsDataObjectFactory
+     * @param QuoteDetailsItemInterfaceFactory $quoteDetailsItemDataObjectFactory
+     * @param TaxClassKeyInterfaceFactory $taxClassKeyDataObjectFactory
      * @param CustomerAddressFactory $customerAddressFactory
      * @param CustomerAddressRegionFactory $customerAddressRegionFactory
-     * @param \Magento\Tax\Helper\Data $taxData
+     * @param TaxHelper $taxData
      * @param Json $serializer
      */
     public function __construct(
-        \Magento\Tax\Model\Config $taxConfig,
-        \Magento\Tax\Api\TaxCalculationInterface $taxCalculationService,
-        \Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory $quoteDetailsDataObjectFactory,
-        \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory $quoteDetailsItemDataObjectFactory,
-        \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory $taxClassKeyDataObjectFactory,
+        TaxConfig $taxConfig,
+        TaxCalculationInterface $taxCalculationService,
+        QuoteDetailsInterfaceFactory $quoteDetailsDataObjectFactory,
+        QuoteDetailsItemInterfaceFactory $quoteDetailsItemDataObjectFactory,
+        TaxClassKeyInterfaceFactory $taxClassKeyDataObjectFactory,
         CustomerAddressFactory $customerAddressFactory,
         CustomerAddressRegionFactory $customerAddressRegionFactory,
-        \Magento\Tax\Helper\Data $taxData,
-        Json $serializer = null
+        TaxHelper $taxData,
+        private ?Json $serializer = null
     ) {
         $this->setCode('tax');
         $this->_taxData = $taxData;
@@ -94,16 +100,16 @@ class Tax extends CommonTaxCollector
     /**
      * Collect tax totals for quote address
      *
-     * @param \Magento\Quote\Model\Quote $quote
+     * @param Quote $quote
      * @param ShippingAssignmentInterface $shippingAssignment
-     * @param Address\Total $total
+     * @param QuoteAddressTotal $total
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function collect(
-        \Magento\Quote\Model\Quote $quote,
-        \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
-        \Magento\Quote\Model\Quote\Address\Total $total
+        Quote $quote,
+        ShippingAssignmentInterface $shippingAssignment,
+        QuoteAddressTotal $total
     ) {
         $this->clearValues($total);
         if (!$shippingAssignment->getItems()) {
@@ -143,10 +149,10 @@ class Tax extends CommonTaxCollector
     /**
      * Clear tax related total values in address
      *
-     * @param Address\Total $total
+     * @param QuoteAddressTotal $total
      * @return void
      */
-    protected function clearValues(Address\Total $total)
+    protected function clearValues(QuoteAddressTotal $total)
     {
         $total->setTotalAmount('subtotal', 0);
         $total->setBaseTotalAmount('subtotal', 0);
@@ -175,9 +181,9 @@ class Tax extends CommonTaxCollector
      * Call tax calculation service to get tax details on the quote and items
      *
      * @param ShippingAssignmentInterface $shippingAssignment
-     * @param Address\Total $total
+     * @param QuoteAddressTotal $total
      * @param bool $useBaseCurrency
-     * @return \Magento\Tax\Api\Data\TaxDetailsInterface
+     * @return TaxDetailsInterface
      */
     protected function getQuoteTaxDetails($shippingAssignment, $total, $useBaseCurrency)
     {
@@ -214,13 +220,13 @@ class Tax extends CommonTaxCollector
     /**
      * Map extra taxables associated with quote
      *
-     * @param \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory $itemDataObjectFactory
+     * @param QuoteDetailsItemInterfaceFactory $itemDataObjectFactory
      * @param Address $address
      * @param bool $useBaseCurrency
-     * @return \Magento\Tax\Api\Data\QuoteDetailsItemInterface[]
+     * @return QuoteDetailsItemInterface[]
      */
     public function mapQuoteExtraTaxables(
-        \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory $itemDataObjectFactory,
+        QuoteDetailsItemInterfaceFactory $itemDataObjectFactory,
         Address $address,
         $useBaseCurrency
     ) {
@@ -256,20 +262,20 @@ class Tax extends CommonTaxCollector
     /**
      * Process everything other than product or shipping, save the result in quote
      *
-     * @param Address\Total $total
+     * @param QuoteAddressTotal $total
      * @param array $itemsByType
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function processExtraTaxables(Address\Total $total, array $itemsByType)
+    protected function processExtraTaxables(QuoteAddressTotal $total, array $itemsByType)
     {
         $extraTaxableDetails = [];
         foreach ($itemsByType as $itemType => $itemTaxDetails) {
             if ($itemType != self::ITEM_TYPE_PRODUCT && $itemType != self::ITEM_TYPE_SHIPPING) {
                 foreach ($itemTaxDetails as $itemCode => $itemTaxDetail) {
-                    /** @var \Magento\Tax\Api\Data\TaxDetailsInterface $taxDetails */
+                    /** @var TaxDetailsInterface $taxDetails */
                     $taxDetails = $itemTaxDetail[self::KEY_ITEM];
-                    /** @var \Magento\Tax\Api\Data\TaxDetailsInterface $baseTaxDetails */
+                    /** @var TaxDetailsInterface $baseTaxDetails */
                     $baseTaxDetails = $itemTaxDetail[self::KEY_BASE_ITEM];
 
                     $appliedTaxes = $taxDetails->getAppliedTaxes();
@@ -309,13 +315,13 @@ class Tax extends CommonTaxCollector
     /**
      * Add tax totals information to address object
      *
-     * @param \Magento\Quote\Model\Quote $quote
-     * @param Address\Total $total
+     * @param Quote $quote
+     * @param QuoteAddressTotal $total
      * @return array|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
+    public function fetch(Quote $quote, QuoteAddressTotal $total)
     {
         $totals = [];
         $store = $quote->getStore();
@@ -371,13 +377,13 @@ class Tax extends CommonTaxCollector
     /**
      * Adds minimal tax information to the "total" data structure
      *
-     * @param \Magento\Quote\Model\Quote $quote
-     * @param Address\Total $total
+     * @param Quote $quote
+     * @param QuoteAddressTotal $total
      * @return null
      */
     protected function enhanceTotalData(
-        \Magento\Quote\Model\Quote $quote,
-        \Magento\Quote\Model\Quote\Address\Total $total
+        Quote $quote,
+        QuoteAddressTotal $total
     ) {
         $taxAmount = 0;
         $shippingTaxAmount = 0;
@@ -389,7 +395,7 @@ class Tax extends CommonTaxCollector
             $computeSubtotalInclTax = false;
         }
 
-        /** @var \Magento\Quote\Model\Quote\Address $address */
+        /** @var Address $address */
         foreach ($quote->getAllAddresses() as $address) {
             $taxAmount += $address->getTaxAmount();
             $shippingTaxAmount += $address->getShippingTaxAmount();
@@ -410,9 +416,9 @@ class Tax extends CommonTaxCollector
      *
      * This method can be used for changing totals collect sort order
      *
-     * @param   array $config
-     * @param   store $store
-     * @return  array
+     * @param array $config
+     * @param store $store
+     * @return array
      */
     public function processConfigArray($config, $store)
     {
@@ -431,7 +437,7 @@ class Tax extends CommonTaxCollector
     /**
      * Get Tax label
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getLabel()
     {

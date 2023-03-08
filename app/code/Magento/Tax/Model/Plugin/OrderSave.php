@@ -7,43 +7,39 @@
 
 namespace Magento\Tax\Model\Plugin;
 
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order\Tax\Item;
+use Magento\Sales\Model\Order\Tax\ItemFactory;
 use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxExtension;
+use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface;
+use Magento\Tax\Api\Data\OrderTaxDetailsItemInterface;
+use Magento\Tax\Model\Sales\Order\Tax;
+use Magento\Tax\Model\Sales\Order\TaxFactory;
 
 class OrderSave
 {
     /**
-     * @var \Magento\Tax\Model\Sales\Order\TaxFactory
-     */
-    protected $orderTaxFactory;
-
-    /**
-     * @var \Magento\Sales\Model\Order\Tax\ItemFactory
-     */
-    protected $taxItemFactory;
-
-    /**
-     * @param \Magento\Tax\Model\Sales\Order\TaxFactory $orderTaxFactory
-     * @param \Magento\Sales\Model\Order\Tax\ItemFactory $taxItemFactory
+     * @param TaxFactory $orderTaxFactory
+     * @param ItemFactory $taxItemFactory
      */
     public function __construct(
-        \Magento\Tax\Model\Sales\Order\TaxFactory $orderTaxFactory,
-        \Magento\Sales\Model\Order\Tax\ItemFactory $taxItemFactory
+        protected readonly TaxFactory $orderTaxFactory,
+        protected readonly ItemFactory $taxItemFactory
     ) {
-        $this->orderTaxFactory = $orderTaxFactory;
-        $this->taxItemFactory = $taxItemFactory;
     }
 
     /**
      * Save order tax
      *
-     * @param \Magento\Sales\Api\OrderRepositoryInterface $subject
-     * @param \Magento\Sales\Api\Data\OrderInterface $order
-     * @return \Magento\Sales\Api\Data\OrderInterface
+     * @param OrderRepositoryInterface $subject
+     * @param OrderInterface $order
+     * @return OrderInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave(
-        \Magento\Sales\Api\OrderRepositoryInterface $subject,
-        \Magento\Sales\Api\Data\OrderInterface $order
+        OrderRepositoryInterface $subject,
+        OrderInterface $order
     ) {
         $this->saveOrderTax($order);
         return $order;
@@ -52,14 +48,14 @@ class OrderSave
     /**
      * Save order tax
      *
-     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     * @param OrderInterface $order
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
      */
-    protected function saveOrderTax(\Magento\Sales\Api\Data\OrderInterface $order)
+    protected function saveOrderTax(OrderInterface $order)
     {
         $extensionAttribute = $order->getExtensionAttributes();
         if (!$extensionAttribute ||
@@ -68,13 +64,13 @@ class OrderSave
             return;
         }
 
-        /** @var \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[]|null $taxes */
+        /** @var OrderTaxDetailsAppliedTaxInterface[]|null $taxes */
         $taxes = $extensionAttribute->getAppliedTaxes();
         if ($taxes == null) {
             $taxes = [];
         }
 
-        /** @var \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[]|null $taxesForItems */
+        /** @var OrderTaxDetailsItemInterface[]|null $taxesForItems */
         $taxesForItems = $extensionAttribute->getItemAppliedTaxes();
         if ($taxesForItems == null) {
             $taxesForItems = [];
@@ -161,7 +157,7 @@ class OrderSave
                             'base_real_amount' => $baseRealAmount,
                         ];
 
-                        /** @var $orderTax \Magento\Tax\Model\Sales\Order\Tax */
+                        /** @var Tax $orderTax */
                         $orderTax = $this->orderTaxFactory->create();
                         $result = $orderTax->setData($data)->save();
 
@@ -195,7 +191,7 @@ class OrderSave
                                         'real_base_amount' => $quoteItemId['real_base_amount'],
                                         'taxable_item_type' => $quoteItemId['item_type'],
                                     ];
-                                    /** @var $taxItem \Magento\Sales\Model\Order\Tax\Item */
+                                    /** @var Item $taxItem */
                                     $taxItem = $this->taxItemFactory->create();
                                     $taxItem->setData($data)->save();
                                 }

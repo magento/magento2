@@ -6,7 +6,10 @@
 
 namespace Magento\Tax\Plugin\Ui\DataProvider;
 
+use Magento\Catalog\Ui\DataProvider\Product\Listing\DataProvider;
+use Magento\Checkout\CustomerData\Cart as CustomerDataCart;
 use Magento\Framework\App\Config;
+use Magento\Tax\Model\Config as TaxConfig;
 
 /**
  * Plugin on Data Provider for frontend ui components (Components are responsible
@@ -16,31 +19,26 @@ use Magento\Framework\App\Config;
 class TaxSettings
 {
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * TaxSettings constructor.
      * @param Config $config
      */
-    public function __construct(Config $config)
-    {
-        $this->config = $config;
+    public function __construct(
+        private readonly Config $config
+    ) {
     }
 
     /**
      * Add tax data to result
      *
-     * @param \Magento\Checkout\CustomerData\Cart $subject
+     * @param CustomerDataCart $subject
      * @param array $result
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetData(\Magento\Catalog\Ui\DataProvider\Product\Listing\DataProvider $subject, $result)
+    public function afterGetData(DataProvider $subject, $result)
     {
         $result['displayTaxes'] = $this->config
-            ->getValue(\Magento\Tax\Model\Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE);
+            ->getValue(TaxConfig::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE);
 
         return $result;
     }

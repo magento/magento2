@@ -5,12 +5,17 @@
  */
 namespace Magento\Tax\Block\Checkout;
 
+use Magento\Checkout\Block\Total\DefaultTotal;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Sales\Model\ConfigInterface;
+use Magento\Tax\Model\Config as TaxConfig;
 
 /**
  * Subtotal Total Row Renderer
  */
-class Grandtotal extends \Magento\Checkout\Block\Total\DefaultTotal
+class Grandtotal extends DefaultTotal
 {
     /**
      * Path to template file
@@ -20,25 +25,25 @@ class Grandtotal extends \Magento\Checkout\Block\Total\DefaultTotal
     protected $_template = 'Magento_Tax::checkout/grandtotal.phtml';
 
     /**
-     * @var \Magento\Tax\Model\Config
+     * @var TaxConfig
      */
     protected $_taxConfig;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param Context $context
+     * @param CustomerSession $customerSession
+     * @param CheckoutSession $checkoutSession
      * @param ConfigInterface $salesConfig
-     * @param \Magento\Tax\Model\Config $taxConfig
+     * @param TaxConfig $taxConfig
      * @param array $layoutProcessors
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession,
+        Context $context,
+        CustomerSession $customerSession,
+        CheckoutSession $checkoutSession,
         ConfigInterface $salesConfig,
-        \Magento\Tax\Model\Config $taxConfig,
+        TaxConfig $taxConfig,
         array $layoutProcessors = [],
         array $data = []
     ) {

@@ -6,28 +6,33 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rule;
 
+use Magento\Backend\Model\Session;
+use Magento\Backend\Model\View\Result\Page as ResultPage;
+use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Tax\Controller\Adminhtml\Rule;
 
-class Edit extends \Magento\Tax\Controller\Adminhtml\Rule implements HttpGetActionInterface
+class Edit extends Rule implements HttpGetActionInterface
 {
     /**
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
+     * @return ResultPage|ResultRedirect
      */
     public function execute()
     {
         $taxRuleId = $this->getRequest()->getParam('rule');
         $this->_coreRegistry->register('tax_rule_id', $taxRuleId);
-        /** @var \Magento\Backend\Model\Session $backendSession */
-        $backendSession = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
+        /** @var Session $backendSession */
+        $backendSession = $this->_objectManager->get(Session::class);
         if ($taxRuleId) {
             try {
                 $taxRule = $this->ruleService->get($taxRuleId);
                 $pageTitle = sprintf("%s", $taxRule->getCode());
-            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            } catch (NoSuchEntityException $e) {
                 $backendSession->unsRuleData();
                 $this->messageManager->addError(__('This rule no longer exists.'));
-                /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+                /** @var ResultRedirect $resultRedirect */
                 $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
                 return $resultRedirect->setPath('tax/*/');
             }

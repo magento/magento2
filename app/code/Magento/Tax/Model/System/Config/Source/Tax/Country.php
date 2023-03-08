@@ -5,7 +5,9 @@
  */
 namespace Magento\Tax\Model\System\Config\Source\Tax;
 
-class Country extends \Magento\Directory\Model\Config\Source\Country
+use Magento\Directory\Model\Config\Source\Country as ConfigSourceCountry;
+
+class Country extends ConfigSourceCountry
 {
     /**
      * @var array

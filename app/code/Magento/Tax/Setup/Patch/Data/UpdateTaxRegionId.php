@@ -6,8 +6,11 @@
 
 namespace Magento\Tax\Setup\Patch\Data;
 
+use Magento\Directory\Model\Region;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Api\Search\SearchCriteriaFactory;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Tax\Api\Data\TaxRateInterface;
 use Magento\Tax\Api\TaxRateRepositoryInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
@@ -17,42 +20,18 @@ use Magento\Tax\Setup\TaxSetupFactory;
 class UpdateTaxRegionId implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
-     * @var TaxRateRepositoryInterface
-     */
-    private $taxRateRepository;
-
-    /**
-     * @var SearchCriteriaFactory
-     */
-    private $searchCriteriaFactory;
-
-    /**
-     * @var RegionFactory
-     */
-    private $regionFactory;
-
-    /**
      * UpdateTaxRegionId constructor.
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param TaxRateRepositoryInterface $taxRateRepository
      * @param SearchCriteriaFactory $searchCriteriaFactory
      * @param RegionFactory $regionFactory
      */
     public function __construct(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
-        TaxRateRepositoryInterface $taxRateRepository,
-        SearchCriteriaFactory $searchCriteriaFactory,
-        \Magento\Directory\Model\RegionFactory $regionFactory
+        private readonly ModuleDataSetupInterface $moduleDataSetup,
+        private readonly TaxRateRepositoryInterface $taxRateRepository,
+        private readonly SearchCriteriaFactory $searchCriteriaFactory,
+        private readonly RegionFactory $regionFactory
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
-        $this->taxRateRepository = $taxRateRepository;
-        $this->searchCriteriaFactory = $searchCriteriaFactory;
-        $this->regionFactory = $regionFactory;
     }
 
     /**
@@ -64,11 +43,11 @@ class UpdateTaxRegionId implements DataPatchInterface, PatchVersionInterface
 
         //Update the tax_region_id
         $taxRateList = $this->taxRateRepository->getList($this->searchCriteriaFactory->create());
-        /** @var \Magento\Tax\Api\Data\TaxRateInterface $taxRateData */
+        /** @var TaxRateInterface $taxRateData */
         foreach ($taxRateList->getItems() as $taxRateData) {
             $regionCode = $this->parseRegionFromTaxCode($taxRateData->getCode());
             if ($regionCode) {
-                /** @var \Magento\Directory\Model\Region $region */
+                /** @var Region $region */
                 $region = $this->regionFactory->create();
                 $region->loadByCode($regionCode, $taxRateData->getTaxCountryId());
                 if ($taxRateData->getTaxPostcode() === null) {

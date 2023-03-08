@@ -11,7 +11,11 @@
  */
 namespace Magento\Tax\Model\ResourceModel\TaxClass;
 
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Tax\Model\ClassModel as ModelClassModel;
+use Magento\Tax\Model\ResourceModel\TaxClass as ResourceTaxClass;
+
+class Collection extends AbstractCollection
 {
     /**
      * Resource initialization
@@ -20,7 +24,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function _construct()
     {
-        $this->_init(\Magento\Tax\Model\ClassModel::class, \Magento\Tax\Model\ResourceModel\TaxClass::class);
+        $this->_init(ModelClassModel::class, ResourceTaxClass::class);
     }
 
     /**

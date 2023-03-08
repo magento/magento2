@@ -6,45 +6,31 @@
 
 namespace Magento\Tax\Model\TaxClass\Source;
 
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\StateException;
 use Magento\Tax\Api\TaxClassManagementInterface;
+use Magento\Tax\Api\TaxClassRepositoryInterface;
 use Magento\Tax\Model\ClassModel;
 
 /**
  * Customer tax class source model.
  */
-class Customer extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
+class Customer extends AbstractSource
 {
-    /**
-     * @var \Magento\Tax\Api\TaxClassRepositoryInterface
-     */
-    protected $taxClassRepository;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
-
-    /**
-     * @var \Magento\Framework\Api\FilterBuilder
-     */
-    protected $filterBuilder;
-
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
+     * @param TaxClassRepositoryInterface $taxClassRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FilterBuilder $filterBuilder
      */
     public function __construct(
-        \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder
+        protected readonly TaxClassRepositoryInterface $taxClassRepository,
+        protected readonly SearchCriteriaBuilder $searchCriteriaBuilder,
+        protected readonly FilterBuilder $filterBuilder
     ) {
-        $this->taxClassRepository = $taxClassRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->filterBuilder = $filterBuilder;
     }
 
     /**

@@ -6,6 +6,7 @@
 
 namespace Magento\Tax\Model;
 
+use Magento\Framework\DataObject;
 use Magento\Tax\Api\TaxRateRepositoryInterface;
 use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\Api\AbstractServiceCollection;
@@ -13,6 +14,7 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Tax\Api\Data\TaxRateInterface as TaxRate;
+use Magento\Tax\Model\Calculation\Rate\Converter;
 
 /**
  * Tax rate collection for a grid backed by Services
@@ -26,11 +28,6 @@ class TaxRateCollection extends AbstractServiceCollection
     protected $taxRateRepository;
 
     /**
-     * @var \Magento\Tax\Model\Calculation\Rate\Converter
-     */
-    protected $rateConverter;
-
-    /**
      * Initialize dependencies.
      *
      * @param EntityFactory $entityFactory
@@ -38,7 +35,7 @@ class TaxRateCollection extends AbstractServiceCollection
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SortOrderBuilder $sortOrderBuilder
      * @param TaxRateRepositoryInterface $rateService
-     * @param \Magento\Tax\Model\Calculation\Rate\Converter $rateConverter
+     * @param Converter $rateConverter
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -46,11 +43,10 @@ class TaxRateCollection extends AbstractServiceCollection
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SortOrderBuilder $sortOrderBuilder,
         TaxRateRepositoryInterface $rateService,
-        \Magento\Tax\Model\Calculation\Rate\Converter $rateConverter
+        protected readonly Converter $rateConverter
     ) {
         parent::__construct($entityFactory, $filterBuilder, $searchCriteriaBuilder, $sortOrderBuilder);
         $this->taxRateRepository = $rateService;
-        $this->rateConverter = $rateConverter;
     }
 
     /**
@@ -74,11 +70,11 @@ class TaxRateCollection extends AbstractServiceCollection
      * Creates a collection item that represents a tax rate for the tax rates grid.
      *
      * @param TaxRate $taxRate Input data for creating the item.
-     * @return \Magento\Framework\DataObject Collection item that represents a tax rate
+     * @return DataObject Collection item that represents a tax rate
      */
     protected function createTaxRateCollectionItem(TaxRate $taxRate)
     {
-        $collectionItem = new \Magento\Framework\DataObject();
+        $collectionItem = new DataObject();
         $collectionItem->setTaxCalculationRateId($taxRate->getId());
         $collectionItem->setCode($taxRate->getCode());
         $collectionItem->setTaxCountryId($taxRate->getTaxCountryId());

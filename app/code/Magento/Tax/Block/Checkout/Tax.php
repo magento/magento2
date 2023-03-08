@@ -9,20 +9,24 @@
  */
 namespace Magento\Tax\Block\Checkout;
 
+use Magento\Checkout\Block\Total\DefaultTotal;
 use Magento\Checkout\Helper\Data as CheckoutHelper;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Sales\Model\ConfigInterface;
 
 /**
  * Class for manage tax amount.
  */
-class Tax extends \Magento\Checkout\Block\Total\DefaultTotal
+class Tax extends DefaultTotal
 {
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param Context $context
+     * @param CustomerSession $customerSession
+     * @param CheckoutSession $checkoutSession
      * @param ConfigInterface $salesConfig
      * @param array $layoutProcessors
      * @param array $data
@@ -30,9 +34,9 @@ class Tax extends \Magento\Checkout\Block\Total\DefaultTotal
      * @param TaxHelper|null $taxHelper
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession,
+        Context $context,
+        CustomerSession $customerSession,
+        CheckoutSession $checkoutSession,
         ConfigInterface $salesConfig,
         array $layoutProcessors = [],
         array $data = [],

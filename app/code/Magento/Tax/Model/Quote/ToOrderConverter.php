@@ -5,9 +5,11 @@
  */
 namespace Magento\Tax\Model\Quote;
 
+use Magento\Sales\Api\Data\OrderExtensionFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Quote\Model\Quote\Address\ToOrder as QuoteAddressToOrder;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
+use Magento\Sales\Model\Order;
 
 class ToOrderConverter
 {
@@ -17,17 +19,11 @@ class ToOrderConverter
     protected $quoteAddress;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderExtensionFactory
-     */
-    protected $orderExtensionFactory;
-
-    /**
-     * @param \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionFactory
+     * @param OrderExtensionFactory $orderExtensionFactory
      */
     public function __construct(
-        \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionFactory
+        protected readonly OrderExtensionFactory $orderExtensionFactory
     ) {
-        $this->orderExtensionFactory = $orderExtensionFactory;
     }
 
     /**
@@ -51,7 +47,7 @@ class ToOrderConverter
      */
     public function afterConvert(QuoteAddressToOrder $subject, OrderInterface $order)
     {
-        /** @var \Magento\Sales\Model\Order $order */
+        /** @var Order $order */
         $taxes = $this->quoteAddress->getAppliedTaxes();
         $extensionAttributes = $order->getExtensionAttributes();
         if ($extensionAttributes == null) {

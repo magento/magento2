@@ -11,10 +11,19 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Report;
 
-class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Sales\Model\ResourceModel\Report;
+use Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection;
+use Psr\Log\LoggerInterface;
+use Zend_Db_Expr;
+
+class Collection extends AbstractCollection
 {
     /**
-     * @var \Zend_Db_Expr
+     * @var Zend_Db_Expr
      */
     protected $_periodFormat;
 
@@ -31,20 +40,20 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
     protected $_selectedColumns = [];
 
     /**
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\ResourceModel\Report $resource
+     * @param EntityFactory $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param Report $resource
      * @param mixed $connection
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\ResourceModel\Report $resource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        EntityFactory $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        Report $resource,
+        AdapterInterface $connection = null
     ) {
         $resource->init($this->_aggregationTable);
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);

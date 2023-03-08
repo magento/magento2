@@ -5,12 +5,16 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Calculation;
 
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Tax\Model\Calculation as ModelCalculation;
+use Magento\Tax\Model\ResourceModel\Calculation as ResourceCalculation;
+
 /**
  * Tax Calculation Collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Resource initialization
@@ -19,6 +23,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Tax\Model\Calculation::class, \Magento\Tax\Model\ResourceModel\Calculation::class);
+        $this->_init(ModelCalculation::class, ResourceCalculation::class);
     }
 }

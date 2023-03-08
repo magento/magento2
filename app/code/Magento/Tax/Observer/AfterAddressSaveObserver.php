@@ -19,47 +19,17 @@ use Magento\Tax\Helper\Data;
 class AfterAddressSaveObserver implements ObserverInterface
 {
     /**
-     * @var Data
-     */
-    protected $taxHelper;
-
-    /**
-     * Module manager
-     *
-     * @var Manager
-     */
-    private $moduleManager;
-
-    /**
-     * Cache config
-     *
-     * @var Config
-     */
-    private $cacheConfig;
-
-    /**
-     * Manager to save data in customer session.
-     *
-     * @var TaxAddressManagerInterface
-     */
-    private $addressManager;
-
-    /**
      * @param Data $taxHelper
-     * @param Manager $moduleManager
-     * @param Config $cacheConfig
-     * @param TaxAddressManagerInterface $addressManager
+     * @param Manager $moduleManager Module manager
+     * @param Config $cacheConfig Cache config
+     * @param TaxAddressManagerInterface $addressManager Manager to save data in customer session.
      */
     public function __construct(
-        Data $taxHelper,
-        Manager $moduleManager,
-        Config $cacheConfig,
-        TaxAddressManagerInterface $addressManager
+        protected readonly Data $taxHelper,
+        private readonly Manager $moduleManager,
+        private readonly Config $cacheConfig,
+        private readonly TaxAddressManagerInterface $addressManager
     ) {
-        $this->taxHelper = $taxHelper;
-        $this->moduleManager = $moduleManager;
-        $this->cacheConfig = $cacheConfig;
-        $this->addressManager = $addressManager;
     }
 
     /**
@@ -75,7 +45,7 @@ class AfterAddressSaveObserver implements ObserverInterface
             && $this->cacheConfig->isEnabled()
             && $this->taxHelper->isCatalogPriceDisplayAffectedByTax()
         ) {
-            /** @var $customerAddress Address */
+            /** @var Address $customerAddress */
             $address = $observer->getCustomerAddress();
             $this->addressManager->setDefaultAddressAfterSave($address);
         }

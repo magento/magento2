@@ -20,61 +20,27 @@ use Magento\Tax\Model\Calculation;
 class ContextPlugin
 {
     /**
-     * @var Session
-     */
-    protected $customerSession;
-
-    /**
-     * @var HttpContext
-     */
-    protected $httpContext;
-
-    /**
-     * @var TaxHelper
-     */
-    protected $taxHelper;
-
-    /**
      * @var Calculation
      */
     protected $taxCalculation;
-
-    /**
-     * Module manager
-     *
-     * @var ModuleManager
-     */
-    private $moduleManager;
-
-    /**
-     * Cache config
-     *
-     * @var PageCacheConfig
-     */
-    private $cacheConfig;
 
     /**
      * @param Session $customerSession
      * @param HttpContext $httpContext
      * @param Calculation $calculation
      * @param TaxHelper $taxHelper
-     * @param ModuleManager $moduleManager
-     * @param PageCacheConfig $cacheConfig
+     * @param ModuleManager $moduleManager Module manager
+     * @param PageCacheConfig $cacheConfig Cache config
      */
     public function __construct(
-        Session $customerSession,
-        HttpContext $httpContext,
+        protected readonly Session $customerSession,
+        protected readonly HttpContext $httpContext,
         Calculation $calculation, //phpcs:ignore Magento2.Classes.DiscouragedDependencies
-        TaxHelper $taxHelper,
-        ModuleManager $moduleManager,
-        PageCacheConfig $cacheConfig
+        protected readonly TaxHelper $taxHelper,
+        private readonly ModuleManager $moduleManager,
+        private readonly PageCacheConfig $cacheConfig
     ) {
-        $this->customerSession = $customerSession;
-        $this->httpContext = $httpContext;
         $this->taxCalculation = $calculation;
-        $this->taxHelper = $taxHelper;
-        $this->moduleManager = $moduleManager;
-        $this->cacheConfig = $cacheConfig;
     }
 
     /**

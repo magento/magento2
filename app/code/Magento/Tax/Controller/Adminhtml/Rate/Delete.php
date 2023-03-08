@@ -6,21 +6,25 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
+use Exception;
+use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Tax\Controller\Adminhtml\Rate;
 
-class Delete extends \Magento\Tax\Controller\Adminhtml\Rate implements HttpPostActionInterface
+class Delete extends Rate implements HttpPostActionInterface
 {
     /**
      * Delete Rate and Data
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect|void
+     * @return ResultRedirect|void
      */
     public function execute()
     {
         if ($rateId = $this->getRequest()->getParam('rate')) {
-            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            /** @var ResultRedirect $resultRedirect */
             $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
             try {
                 $this->_taxRateRepository->deleteById($rateId);
@@ -32,9 +36,9 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rate implements HttpPostA
                     __('We can\'t delete this rate because of an incorrect rate ID.')
                 );
                 return $resultRedirect->setPath("tax/*/");
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError(__('Something went wrong deleting this rate.'));
             }
 

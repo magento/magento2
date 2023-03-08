@@ -5,25 +5,31 @@
  */
 namespace Magento\Tax\Model\Sales\Pdf;
 
-class Tax extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
+use Magento\Sales\Model\Order\Pdf\Total\DefaultTotal;
+use Magento\Tax\Helper\Data as TaxHelper;
+use Magento\Tax\Model\Calculation;
+use Magento\Tax\Model\Config;
+use Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory;
+
+class Tax extends DefaultTotal
 {
     /**
-     * @var \Magento\Tax\Model\Config
+     * @var Config
      */
     protected $_taxConfig;
 
     /**
-     * @param \Magento\Tax\Helper\Data $taxHelper
-     * @param \Magento\Tax\Model\Calculation $taxCalculation
-     * @param \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $ordersFactory
-     * @param \Magento\Tax\Model\Config $taxConfig
+     * @param TaxHelper $taxHelper
+     * @param Calculation $taxCalculation
+     * @param CollectionFactory $ordersFactory
+     * @param Config $taxConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Tax\Helper\Data $taxHelper,
-        \Magento\Tax\Model\Calculation $taxCalculation,
-        \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $ordersFactory,
-        \Magento\Tax\Model\Config $taxConfig,
+        TaxHelper $taxHelper,
+        Calculation $taxCalculation,
+        CollectionFactory $ordersFactory,
+        Config $taxConfig,
         array $data = []
     ) {
         $this->_taxConfig = $taxConfig;

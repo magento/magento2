@@ -5,21 +5,26 @@
  */
 namespace Magento\Tax\Model\Sales\Order;
 
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Tax\Api\Data\AppliedTaxRateInterface;
+use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxExtensionInterface;
+use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface;
+use Magento\Tax\Model\ResourceModel\Sales\Order\Tax as ResourceSalesOrderTax;
+
 /**
  * @method int getOrderId()
- * @method \Magento\Tax\Model\Sales\Order\Tax setOrderId(int $value)
+ * @method Tax setOrderId(int $value)
  * @method int getPriority()
- * @method \Magento\Tax\Model\Sales\Order\Tax setPriority(int $value)
+ * @method Tax setPriority(int $value)
  * @method int getPosition()
- * @method \Magento\Tax\Model\Sales\Order\Tax setPosition(int $value)
+ * @method Tax setPosition(int $value)
  * @method int getProcess()
- * @method \Magento\Tax\Model\Sales\Order\Tax setProcess(int $value)
+ * @method Tax setProcess(int $value)
  * @method float getBaseRealAmount()
- * @method \Magento\Tax\Model\Sales\Order\Tax setBaseRealAmount(float $value)
+ * @method Tax setBaseRealAmount(float $value)
  * @codeCoverageIgnore
  */
-class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface
+class Tax extends AbstractExtensibleModel implements OrderTaxDetailsAppliedTaxInterface
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely
@@ -37,7 +42,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Tax\Model\ResourceModel\Sales\Order\Tax::class);
+        $this->_init(ResourceSalesOrderTax::class);
     }
 
     /**
@@ -137,7 +142,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      *
-     * @return \Magento\Tax\Api\Data\AppliedTaxRateInterface[]
+     * @return AppliedTaxRateInterface[]
      */
     public function getRates()
     {
@@ -146,7 +151,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      *
-     * @param \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $rates
+     * @param AppliedTaxRateInterface[] $rates
      * @return $this
      */
     public function setRates($rates)
@@ -157,7 +162,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxExtensionInterface|null
+     * @return OrderTaxDetailsAppliedTaxExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -167,11 +172,11 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxExtensionInterface $extensionAttributes
+     * @param OrderTaxDetailsAppliedTaxExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxExtensionInterface $extensionAttributes
+        OrderTaxDetailsAppliedTaxExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

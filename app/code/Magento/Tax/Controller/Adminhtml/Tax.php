@@ -6,14 +6,18 @@
 
 namespace Magento\Tax\Controller\Adminhtml;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\Exception\InputException;
+use Magento\Tax\Api\Data\TaxClassInterfaceFactory;
+use Magento\Tax\Api\TaxClassRepositoryInterface;
 
 /**
  * Adminhtml common tax class controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class Tax extends \Magento\Backend\App\Action
+abstract class Tax extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -23,27 +27,21 @@ abstract class Tax extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Magento_Tax::manage_tax';
 
     /**
-     * @var \Magento\Tax\Api\TaxClassRepositoryInterface
+     * @var TaxClassRepositoryInterface
      */
     protected $taxClassRepository;
 
     /**
-     * @var \Magento\Tax\Api\Data\TaxClassInterfaceFactory
-     */
-    protected $taxClassDataObjectFactory;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassService
-     * @param \Magento\Tax\Api\Data\TaxClassInterfaceFactory $taxClassDataObjectFactory
+     * @param Context $context
+     * @param TaxClassRepositoryInterface $taxClassService
+     * @param TaxClassInterfaceFactory $taxClassDataObjectFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassService,
-        \Magento\Tax\Api\Data\TaxClassInterfaceFactory $taxClassDataObjectFactory
+        Context $context,
+        TaxClassRepositoryInterface $taxClassService,
+        protected readonly TaxClassInterfaceFactory $taxClassDataObjectFactory
     ) {
         $this->taxClassRepository = $taxClassService;
-        $this->taxClassDataObjectFactory = $taxClassDataObjectFactory;
         parent::__construct($context);
     }
 
@@ -52,7 +50,7 @@ abstract class Tax extends \Magento\Backend\App\Action
      *
      * @param string $className
      * @return string processed class name
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws InputException
      */
     protected function _processClassName($className)
     {

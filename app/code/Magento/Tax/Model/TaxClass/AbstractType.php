@@ -9,10 +9,14 @@
  */
 namespace Magento\Tax\Model\TaxClass;
 
-abstract class AbstractType extends \Magento\Framework\DataObject implements Type\TypeInterface
+use Magento\Framework\DataObject;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Tax\Model\Calculation\Rule as CalculationRule;
+
+abstract class AbstractType extends DataObject implements Type\TypeInterface
 {
     /**
-     * @var \Magento\Tax\Model\Calculation\Rule
+     * @var CalculationRule
      */
     protected $_calculationRule;
 
@@ -24,10 +28,10 @@ abstract class AbstractType extends \Magento\Framework\DataObject implements Typ
     protected $_classType;
 
     /**
-     * @param \Magento\Tax\Model\Calculation\Rule $calculationRule
+     * @param CalculationRule $calculationRule
      * @param array $data
      */
-    public function __construct(\Magento\Tax\Model\Calculation\Rule $calculationRule, array $data = [])
+    public function __construct(CalculationRule $calculationRule, array $data = [])
     {
         parent::__construct($data);
         $this->_calculationRule = $calculationRule;
@@ -36,7 +40,7 @@ abstract class AbstractType extends \Magento\Framework\DataObject implements Typ
     /**
      * Get Collection of Tax Rules that are assigned to this tax class
      *
-     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * @return AbstractCollection
      */
     public function getAssignedToRules()
     {

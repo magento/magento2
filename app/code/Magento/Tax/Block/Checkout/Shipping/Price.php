@@ -5,36 +5,35 @@
  */
 namespace Magento\Tax\Block\Checkout\Shipping;
 
+use Magento\Checkout\Block\Shipping\Price as ShippingPrice;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Class Price
  * @deprecated 100.1.0
  */
-class Price extends \Magento\Checkout\Block\Shipping\Price
+class Price extends ShippingPrice
 {
     /**
-     * @var \Magento\Tax\Helper\Data
-     */
-    protected $taxHelper;
-
-    /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param Context $context
+     * @param CustomerSession $customerSession
+     * @param CheckoutSession $checkoutSession
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Tax\Helper\Data $taxHelper
+     * @param TaxHelper $taxHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession,
+        Context $context,
+        CustomerSession $customerSession,
+        CheckoutSession $checkoutSession,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Tax\Helper\Data $taxHelper,
+        protected readonly TaxHelper $taxHelper,
         array $data = []
     ) {
-        $this->taxHelper = $taxHelper;
         parent::__construct(
             $context,
             $customerSession,

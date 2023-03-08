@@ -7,6 +7,7 @@ namespace Magento\Tax\Block\Item\Price;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\Render as PricingRender;
+use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
 use Magento\Sales\Model\Order\CreditMemo\Item as CreditMemoItem;
@@ -21,13 +22,8 @@ use Magento\Tax\Helper\Data as TaxHelper;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
-class Renderer extends \Magento\Framework\View\Element\Template
+class Renderer extends Template
 {
-    /**
-     * @var \Magento\Tax\Helper\Data
-     */
-    protected $taxHelper;
-
     /**
      * @var QuoteItem|OrderItem|InvoiceItem|CreditMemoItem
      */
@@ -46,11 +42,6 @@ class Renderer extends \Magento\Framework\View\Element\Template
     protected $zone = null;
 
     /**
-     * @var PriceCurrencyInterface
-     */
-    protected $priceCurrency;
-
-    /**
      * @param Context $context
      * @param TaxHelper $taxHelper
      * @param PriceCurrencyInterface $priceCurrency
@@ -58,12 +49,10 @@ class Renderer extends \Magento\Framework\View\Element\Template
      */
     public function __construct(
         Context $context,
-        TaxHelper $taxHelper,
-        PriceCurrencyInterface $priceCurrency,
+        protected readonly TaxHelper $taxHelper,
+        protected readonly PriceCurrencyInterface $priceCurrency,
         array $data = []
     ) {
-        $this->priceCurrency = $priceCurrency;
-        $this->taxHelper = $taxHelper;
         if (isset($data['zone'])) {
             $this->zone = $data['zone'];
         }

@@ -6,19 +6,24 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
+use Exception;
+use Magento\Backend\Model\Session;
+use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Tax\Controller\Adminhtml\Rate;
 
-class Save extends \Magento\Tax\Controller\Adminhtml\Rate
+class Save extends Rate
 {
     /**
      * Save Rate and Data
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return ResultRedirect
      */
     public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var ResultRedirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $ratePost = $this->getRequest()->getPostValue();
         if ($ratePost) {
@@ -37,10 +42,10 @@ class Save extends \Magento\Tax\Controller\Adminhtml\Rate
 
                 $this->messageManager->addSuccess(__('You saved the tax rate.'));
                 return $resultRedirect->setPath('*/*/');
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData($ratePost);
+            } catch (LocalizedException $e) {
+                $this->_objectManager->get(Session::class)->setFormData($ratePost);
                 $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             }
             return $resultRedirect->setUrl($this->_redirect->getRedirectUrl($this->getUrl('*')));

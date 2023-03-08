@@ -11,10 +11,17 @@
  */
 namespace Magento\Tax\Block\Adminhtml\Rate\Toolbar;
 
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Button\ButtonList;
+use Magento\Backend\Block\Widget\Button\Item;
+use Magento\Backend\Block\Widget\Button\ToolbarInterface;
+use Magento\Backend\Block\Widget\ContainerInterface;
+
 /**
  * Rate toolbar block
  */
-class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\ContainerInterface
+class Save extends Template implements ContainerInterface
 {
     /**
      * @var string
@@ -22,29 +29,17 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     protected $_template = 'Magento_Tax::toolbar/rate/save.phtml';
 
     /**
-     * @var \Magento\Backend\Block\Widget\Button\ButtonList
-     */
-    protected $buttonList;
-
-    /**
-     * @var \Magento\Backend\Block\Widget\Button\ToolbarInterface
-     */
-    protected $toolbar;
-
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Block\Widget\Button\ButtonList $buttonList
-     * @param \Magento\Backend\Block\Widget\Button\ToolbarInterface $toolbar
+     * @param Context $context
+     * @param ButtonList $buttonList
+     * @param ToolbarInterface $toolbar
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Block\Widget\Button\ButtonList $buttonList,
-        \Magento\Backend\Block\Widget\Button\ToolbarInterface $toolbar,
+        Context $context,
+        protected readonly ButtonList $buttonList,
+        protected readonly ToolbarInterface $toolbar,
         array $data = []
     ) {
-        $this->buttonList = $buttonList;
-        $this->toolbar = $toolbar;
         parent::__construct($context, $data);
     }
 
@@ -156,10 +151,10 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     /**
      * Check whether button rendering is allowed in current context
      *
-     * @param \Magento\Backend\Block\Widget\Button\Item $item
+     * @param Item $item
      * @return bool
      */
-    public function canRender(\Magento\Backend\Block\Widget\Button\Item $item)
+    public function canRender(Item $item)
     {
         return !$item->isDeleted();
     }

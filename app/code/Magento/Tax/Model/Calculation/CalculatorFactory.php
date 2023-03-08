@@ -6,7 +6,9 @@
 
 namespace Magento\Tax\Model\Calculation;
 
+use InvalidArgumentException;
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
+use Magento\Framework\ObjectManagerInterface;
 
 class CalculatorFactory
 {
@@ -26,18 +28,13 @@ class CalculatorFactory
     const CALC_TOTAL_BASE = 'TOTAL_BASE_CALCULATION';
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    protected $objectManager;
-
-    /**
      * Constructor
      *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
-    {
-        $this->objectManager = $objectManager;
+    public function __construct(
+        protected readonly ObjectManagerInterface $objectManager
+    ) {
     }
 
     /**
@@ -49,8 +46,8 @@ class CalculatorFactory
      * @param CustomerAddress $shippingAddress
      * @param null|int $customerTaxClassId
      * @param null|int $customerId
-     * @return \Magento\Tax\Model\Calculation\AbstractCalculator
-     * @throws \InvalidArgumentException
+     * @return AbstractCalculator
+     * @throws InvalidArgumentException
      */
     public function create(
         $type,
@@ -62,18 +59,18 @@ class CalculatorFactory
     ) {
         switch ($type) {
             case self::CALC_UNIT_BASE:
-                $className = \Magento\Tax\Model\Calculation\UnitBaseCalculator::class;
+                $className = UnitBaseCalculator::class;
                 break;
             case self::CALC_ROW_BASE:
-                $className = \Magento\Tax\Model\Calculation\RowBaseCalculator::class;
+                $className = RowBaseCalculator::class;
                 break;
             case self::CALC_TOTAL_BASE:
-                $className = \Magento\Tax\Model\Calculation\TotalBaseCalculator::class;
+                $className = TotalBaseCalculator::class;
                 break;
             default:
-                throw new \InvalidArgumentException('Unknown calculation type: ' . $type);
+                throw new InvalidArgumentException('Unknown calculation type: ' . $type);
         }
-        /** @var \Magento\Tax\Model\Calculation\AbstractCalculator $calculator */
+        /** @var AbstractCalculator $calculator */
         $calculator = $this->objectManager->create($className, ['storeId' => $storeId]);
         if (null != $shippingAddress) {
             $calculator->setShippingAddress($shippingAddress);

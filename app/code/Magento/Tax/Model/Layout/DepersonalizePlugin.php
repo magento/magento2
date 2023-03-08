@@ -18,16 +18,6 @@ use Magento\PageCache\Model\DepersonalizeChecker;
 class DepersonalizePlugin
 {
     /**
-     * @var DepersonalizeChecker
-     */
-    private $depersonalizeChecker;
-
-    /**
-     * @var CustomerSession
-     */
-    private $customerSession;
-
-    /**
      * @var array
      */
     private $defaultTaxShippingAddress;
@@ -47,11 +37,9 @@ class DepersonalizePlugin
      * @param CustomerSession $customerSession
      */
     public function __construct(
-        DepersonalizeChecker $depersonalizeChecker,
-        CustomerSession $customerSession
+        private readonly DepersonalizeChecker $depersonalizeChecker,
+        private readonly CustomerSession $customerSession
     ) {
-        $this->depersonalizeChecker = $depersonalizeChecker;
-        $this->customerSession = $customerSession;
     }
 
     /**

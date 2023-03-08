@@ -6,27 +6,32 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
+use Magento\Backend\Model\Session;
+use Magento\Backend\Model\View\Result\Page as ResultPage;
+use Magento\Tax\Block\Adminhtml\Rate\Form;
+use Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save as ToolbarSave;
+use Magento\Tax\Controller\Adminhtml\Rate;
 use Magento\Tax\Controller\RegistryConstants;
 
-class Add extends \Magento\Tax\Controller\Adminhtml\Rate
+class Add extends Rate
 {
     /**
      * Show Add Form
      *
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return ResultPage
      */
     public function execute()
     {
         $this->_coreRegistry->register(
             RegistryConstants::CURRENT_TAX_RATE_FORM_DATA,
-            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getFormData(true)
+            $this->_objectManager->get(Session::class)->getFormData(true)
         );
 
         $resultPage = $this->initResultPage();
         $layout = $resultPage->getLayout();
-        $toolbarSaveBlock = $layout->createBlock(\Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save::class)
+        $toolbarSaveBlock = $layout->createBlock(ToolbarSave::class)
             ->assign('header', __('Add New Tax Rate'))
-            ->assign('form', $layout->createBlock(\Magento\Tax\Block\Adminhtml\Rate\Form::class, 'tax_rate_form'));
+            ->assign('form', $layout->createBlock(Form::class, 'tax_rate_form'));
 
         $resultPage->addBreadcrumb(__('Manage Tax Rates'), __('Manage Tax Rates'), $this->getUrl('tax/rate'))
             ->addBreadcrumb(__('New Tax Rate'), __('New Tax Rate'))

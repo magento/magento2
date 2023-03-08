@@ -11,17 +11,20 @@
  */
 namespace Magento\Tax\Model\Calculation;
 
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Tax\Model\Calculation\Rate as ModelCalculationRate;
+
 class RateFactory
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -30,10 +33,10 @@ class RateFactory
      * Create new tax rate model
      *
      * @param array $arguments
-     * @return \Magento\Tax\Model\Calculation\Rate
+     * @return ModelCalculationRate
      */
     public function create(array $arguments = [])
     {
-        return $this->_objectManager->create(\Magento\Tax\Model\Calculation\Rate::class, $arguments);
+        return $this->_objectManager->create(ModelCalculationRate::class, $arguments);
     }
 }

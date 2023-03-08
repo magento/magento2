@@ -6,7 +6,9 @@
 
 namespace Magento\Tax\Setup\Patch\Data;
 
+use Magento\Catalog\Model\Product;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 use Magento\Tax\Setup\TaxSetup;
@@ -19,26 +21,14 @@ use Magento\Tax\Setup\TaxSetupFactory;
 class UpdateTaxClassAttributeVisibility implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
-     * @var TaxSetupFactory
-     */
-    private $taxSetupFactory;
-
-    /**
      * UpdateTaxClassAttributeVisibility constructor.
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param TaxSetupFactory $taxSetupFactory
      */
     public function __construct(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
-        TaxSetupFactory $taxSetupFactory
+        private readonly ModuleDataSetupInterface $moduleDataSetup,
+        private readonly TaxSetupFactory $taxSetupFactory
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
-        $this->taxSetupFactory = $taxSetupFactory;
     }
 
     /**
@@ -53,7 +43,7 @@ class UpdateTaxClassAttributeVisibility implements DataPatchInterface, PatchVers
 
          //Update the tax_class_id attribute in the 'catalog_eav_attribute' table
         $taxSetup->updateAttribute(
-            \Magento\Catalog\Model\Product::ENTITY,
+            Product::ENTITY,
             'tax_class_id',
             'is_visible_in_advanced_search',
             false

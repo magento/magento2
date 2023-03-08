@@ -5,33 +5,31 @@
  */
 namespace Magento\Tax\Block\Adminhtml\Frontend\Region;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
-class Updater extends \Magento\Config\Block\System\Config\Form\Field
+class Updater extends Field
 {
     /**
-     * @var \Magento\Directory\Helper\Data
+     * @var DirectoryHelper
      */
     protected $_directoryHelper;
 
     /**
-     * @var SecureHtmlRenderer
-     */
-    private $secureRenderer;
-
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Directory\Helper\Data $directoryHelper
+     * @param Context $context
+     * @param DirectoryHelper $directoryHelper
      * @param array $data
      * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Directory\Helper\Data $directoryHelper,
+        Context $context,
+        DirectoryHelper $directoryHelper,
         array $data = [],
-        ?SecureHtmlRenderer $secureRenderer = null
+        private ?SecureHtmlRenderer $secureRenderer = null
     ) {
         $this->_directoryHelper = $directoryHelper;
         parent::__construct($context, $data);

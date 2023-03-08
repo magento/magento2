@@ -5,7 +5,9 @@
  */
 namespace Magento\Tax\Model\Config\Price;
 
-class IncludePrice extends \Magento\Framework\App\Config\Value
+use Magento\Framework\App\Config\Value;
+
+class IncludePrice extends Value
 {
     /**
      * @return $this

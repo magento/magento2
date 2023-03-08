@@ -7,13 +7,23 @@
 namespace Magento\Tax\Model;
 
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Tax\Api\Data\TaxClassExtensionInterface;
+use Magento\Tax\Api\Data\TaxClassInterface;
+use Magento\Tax\Model\ResourceModel\TaxClass as ResourceTaxClass;
+use Magento\Tax\Model\TaxClass\Factory;
 
 /**
  * Tax class model
  */
-class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Tax\Api\Data\TaxClassInterface
+class ClassModel extends AbstractExtensibleModel implements TaxClassInterface
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely
@@ -34,28 +44,28 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
     const TAX_CLASS_TYPE_PRODUCT = 'PRODUCT';
 
     /**
-     * @var \Magento\Tax\Model\TaxClass\Factory
+     * @var Factory
      */
     protected $_classFactory;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param Context $context
+     * @param Registry $registry
+     * @param ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param TaxClass\Factory $classFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        Context $context,
+        Registry $registry,
+        ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Tax\Model\TaxClass\Factory $classFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Factory $classFactory,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -75,7 +85,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      */
     public function _construct()
     {
-        $this->_init(\Magento\Tax\Model\ResourceModel\TaxClass::class);
+        $this->_init(ResourceTaxClass::class);
     }
 
     /**
@@ -117,7 +127,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      * Validate tax class can be deleted
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function beforeDelete()
     {
@@ -188,7 +198,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Tax\Api\Data\TaxClassExtensionInterface|null
+     * @return TaxClassExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -198,10 +208,10 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Tax\Api\Data\TaxClassExtensionInterface $extensionAttributes
+     * @param TaxClassExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxClassExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(TaxClassExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

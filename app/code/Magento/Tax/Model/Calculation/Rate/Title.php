@@ -13,9 +13,12 @@
  */
 namespace Magento\Tax\Model\Calculation\Rate;
 
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Tax\Api\Data\TaxRateTitleExtensionInterface;
 use Magento\Tax\Api\Data\TaxRateTitleInterface;
+use Magento\Tax\Model\ResourceModel\Calculation\Rate\Title as ResourceCalculationRateTitle;
 
-class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRateTitleInterface
+class Title extends AbstractExtensibleModel implements TaxRateTitleInterface
 {
     /**#@+
      *
@@ -30,7 +33,7 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Tax\Model\ResourceModel\Calculation\Rate\Title::class);
+        $this->_init(ResourceCalculationRateTitle::class);
     }
 
     /**
@@ -87,7 +90,7 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Tax\Api\Data\TaxRateTitleExtensionInterface|null
+     * @return TaxRateTitleExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -97,10 +100,10 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Tax\Api\Data\TaxRateTitleExtensionInterface $extensionAttributes
+     * @param TaxRateTitleExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxRateTitleExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(TaxRateTitleExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

@@ -23,8 +23,11 @@ use Magento\Tax\Api\Data\TaxRateInterface;
 use Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory;
 use Magento\Tax\Api\TaxRateRepositoryInterface;
 use Magento\Tax\Model\Api\SearchCriteria\TaxRateCollectionProcessor;
+use Magento\Tax\Model\Calculation\Rate as ModelCalculationRate;
 use Magento\Tax\Model\Calculation\Rate\Converter;
+use Magento\Tax\Model\ResourceModel\Calculation\Rate as ResourceCalculationRate;
 use Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection;
+use Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection as CalculationRateCollection;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -34,84 +37,33 @@ class RateRepository implements TaxRateRepositoryInterface
     public const MESSAGE_TAX_RATE_ID_IS_NOT_ALLOWED = 'id is not expected for this request.';
 
     /**
-     * Tax rate model and tax rate data object converter
-     *
-     * @var  Converter
-     */
-    protected $converter;
-
-    /**
-     * Tax rate registry
-     *
-     * @var  RateRegistry
-     */
-    protected $rateRegistry;
-
-    /**
-     * @var TaxRuleSearchResultsInterfaceFactory
-     */
-    private $taxRateSearchResultsFactory;
-
-    /**
-     * @var RateFactory
-     */
-    private $rateFactory;
-
-    /**
-     * @var \Magento\Directory\Model\CountryFactory
-     */
-    protected $countryFactory;
-
-    /**
-     * @var \Magento\Directory\Model\RegionFactory
-     */
-    protected $regionFactory;
-
-    /**
-     * @var \Magento\Tax\Model\ResourceModel\Calculation\Rate
+     * @var ResourceCalculationRate
      */
     protected $resourceModel;
 
     /**
-     * @var JoinProcessorInterface
-     */
-    protected $joinProcessor;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
-     */
-    private $collectionProcessor;
-
-    /**
-     * @param Converter $converter
-     * @param RateRegistry $rateRegistry
+     * @param Converter $converter Tax rate model and tax rate data object converter
+     * @param RateRegistry $rateRegistry Tax rate registry
      * @param TaxRuleSearchResultsInterfaceFactory $taxRateSearchResultsFactory
      * @param RateFactory $rateFactory
      * @param CountryFactory $countryFactory
      * @param RegionFactory $regionFactory
-     * @param \Magento\Tax\Model\ResourceModel\Calculation\Rate $rateResource
+     * @param ResourceCalculationRate $rateResource
      * @param JoinProcessorInterface $joinProcessor
      * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
-        Converter $converter,
-        RateRegistry $rateRegistry,
-        TaxRuleSearchResultsInterfaceFactory $taxRateSearchResultsFactory,
-        RateFactory $rateFactory,
-        CountryFactory $countryFactory,
-        RegionFactory $regionFactory,
-        \Magento\Tax\Model\ResourceModel\Calculation\Rate $rateResource,
-        JoinProcessorInterface $joinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        protected readonly Converter $converter,
+        protected readonly RateRegistry $rateRegistry,
+        private readonly TaxRuleSearchResultsInterfaceFactory $taxRateSearchResultsFactory,
+        private readonly RateFactory $rateFactory,
+        protected readonly CountryFactory $countryFactory,
+        protected readonly RegionFactory $regionFactory,
+        ResourceCalculationRate $rateResource,
+        protected readonly JoinProcessorInterface $joinProcessor,
+        private ?CollectionProcessorInterface $collectionProcessor = null
     ) {
-        $this->converter = $converter;
-        $this->rateRegistry = $rateRegistry;
-        $this->taxRateSearchResultsFactory = $taxRateSearchResultsFactory;
-        $this->rateFactory = $rateFactory;
-        $this->countryFactory = $countryFactory;
-        $this->regionFactory = $regionFactory;
         $this->resourceModel = $rateResource;
-        $this->joinProcessor = $joinProcessor;
         $this->collectionProcessor = $collectionProcessor
             ?? ObjectManager::getInstance()->get(
                 // phpcs:ignore Magento2.PHP.LiteralNamespaces
@@ -171,7 +123,7 @@ class RateRepository implements TaxRateRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        /** @var \Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection $collection */
+        /** @var CalculationRateCollection $collection */
         $collection = $this->rateFactory->create()->getCollection();
         $this->joinProcessor->process($collection);
         $collection->joinRegionTable();
@@ -179,7 +131,7 @@ class RateRepository implements TaxRateRepositoryInterface
         $this->collectionProcessor->process($searchCriteria, $collection);
         $taxRate = [];
 
-        /** @var \Magento\Tax\Model\Calculation\Rate $taxRateModel */
+        /** @var ModelCalculationRate $taxRateModel */
         foreach ($collection as $taxRateModel) {
             $taxRate[] = $taxRateModel;
         }

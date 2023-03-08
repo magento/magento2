@@ -5,7 +5,9 @@
  */
 namespace Magento\Tax\Model\Sales\Pdf;
 
-class Subtotal extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
+use Magento\Sales\Model\Order\Pdf\Total\DefaultTotal;
+
+class Subtotal extends DefaultTotal
 {
     /**
      * Get array of arrays with totals information for display in PDF

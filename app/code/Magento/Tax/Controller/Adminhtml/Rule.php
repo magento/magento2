@@ -12,9 +12,15 @@
 namespace Magento\Tax\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Page as ResultPage;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Registry;
+use Magento\Tax\Api\Data\TaxRuleInterface;
+use Magento\Tax\Api\Data\TaxRuleInterfaceFactory;
+use Magento\Tax\Api\TaxRuleRepositoryInterface;
 
-abstract class Rule extends \Magento\Backend\App\Action
+abstract class Rule extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -26,42 +32,30 @@ abstract class Rule extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Tax\Api\TaxRuleRepositoryInterface
-     */
-    protected $ruleService;
-
-    /**
-     * @var \Magento\Tax\Api\Data\TaxRuleInterfaceFactory
-     */
-    protected $taxRuleDataObjectFactory;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Tax\Api\TaxRuleRepositoryInterface $ruleService
-     * @param \Magento\Tax\Api\Data\TaxRuleInterfaceFactory $taxRuleDataObjectFactory
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param TaxRuleRepositoryInterface $ruleService
+     * @param TaxRuleInterfaceFactory $taxRuleDataObjectFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Tax\Api\TaxRuleRepositoryInterface $ruleService,
-        \Magento\Tax\Api\Data\TaxRuleInterfaceFactory $taxRuleDataObjectFactory
+        Context $context,
+        Registry $coreRegistry,
+        protected readonly TaxRuleRepositoryInterface $ruleService,
+        protected readonly TaxRuleInterfaceFactory $taxRuleDataObjectFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
-        $this->ruleService = $ruleService;
-        $this->taxRuleDataObjectFactory = $taxRuleDataObjectFactory;
         parent::__construct($context);
     }
 
     /**
      * Initialize action
      *
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return ResultPage
      */
     protected function initResultPage()
     {
@@ -76,7 +70,7 @@ abstract class Rule extends \Magento\Backend\App\Action
      * Initialize tax rule service object with form data.
      *
      * @param array $postData
-     * @return \Magento\Tax\Api\Data\TaxRuleInterface
+     * @return TaxRuleInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function populateTaxRule($postData)

@@ -7,52 +7,40 @@ namespace Magento\Tax\Model\TaxClass\Type;
 
 use Magento\Customer\Api\Data\GroupInterface as CustomerGroup;
 use Magento\Customer\Api\GroupRepositoryInterface as CustomerGroupRepository;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Phrase;
+use Magento\Tax\Model\Calculation\Rule as CalculationRule;
+use Magento\Tax\Model\ClassModel as TaxClassModel;
+use Magento\Tax\Model\TaxClass\AbstractType as TaxClassAbstractType;
 
 /**
  * Customer Tax Class
  */
-class Customer extends \Magento\Tax\Model\TaxClass\AbstractType
+class Customer extends TaxClassAbstractType
 {
-    /**
-     * @var CustomerGroupRepository
-     */
-    protected $customerGroupRepository;
-
-    /**
-     * @var \Magento\Framework\Api\FilterBuilder
-     */
-    protected $filterBuilder;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
-
     /**
      * Class Type
      *
      * @var string
      */
-    protected $_classType = \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER;
+    protected $_classType = TaxClassModel::TAX_CLASS_TYPE_CUSTOMER;
 
     /**
-     * @param \Magento\Tax\Model\Calculation\Rule $calculationRule
+     * @param CalculationRule $calculationRule
      * @param CustomerGroupRepository $customerGroupRepository
-     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FilterBuilder $filterBuilder
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param array $data
      */
     public function __construct(
-        \Magento\Tax\Model\Calculation\Rule $calculationRule,
-        CustomerGroupRepository $customerGroupRepository,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        CalculationRule $calculationRule,
+        protected readonly CustomerGroupRepository $customerGroupRepository,
+        protected readonly FilterBuilder $filterBuilder,
+        protected readonly SearchCriteriaBuilder $searchCriteriaBuilder,
         array $data = []
     ) {
         parent::__construct($calculationRule, $data);
-        $this->customerGroupRepository = $customerGroupRepository;
-        $this->filterBuilder = $filterBuilder;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -75,7 +63,7 @@ class Customer extends \Magento\Tax\Model\TaxClass\AbstractType
     /**
      * Get Name of Objects that use this Tax Class Type
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getObjectTypeName()
     {

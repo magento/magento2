@@ -12,28 +12,24 @@ use Magento\Framework\Validator\AbstractValidator;
 use Magento\Framework\Validator\NotEmpty;
 use Magento\Framework\Validator\ValidateException;
 use Magento\Framework\Validator\ValidatorChain;
+use Magento\Tax\Model\Calculation\Rule as ModelCalculationRule;
 use Magento\Tax\Model\ClassModel as TaxClassModel;
 use Magento\Tax\Model\ClassModelRegistry;
 
 class Validator extends AbstractValidator
 {
     /**
-     * @var ClassModelRegistry
-     */
-    protected $classModelRegistry;
-
-    /**
      * @param ClassModelRegistry $classModelRegistry
      */
-    public function __construct(ClassModelRegistry $classModelRegistry)
-    {
-        $this->classModelRegistry = $classModelRegistry;
+    public function __construct(
+        protected readonly ClassModelRegistry $classModelRegistry
+    ) {
     }
 
     /**
      * Validate rule model
      *
-     * @param \Magento\Tax\Model\Calculation\Rule $value
+     * @param ModelCalculationRule $value
      * @return boolean
      * @throws ValidateException If validation of $value is impossible
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
