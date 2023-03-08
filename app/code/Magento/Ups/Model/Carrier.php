@@ -26,6 +26,8 @@ use Magento\Framework\HTTP\ClientFactory;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Measure\Length;
 use Magento\Framework\Measure\Weight;
+use Magento\Framework\Simplexml\Config as SimplexmlConfig;
+use Magento\Framework\Simplexml\Element as SimplexmlElement;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
@@ -41,6 +43,7 @@ use Magento\Shipping\Model\Rate\ResultFactory as RateFactory;
 use Magento\Shipping\Model\Shipment\Request as Shipment;
 use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Shipping\Model\Simplexml\ElementFactory;
+use Magento\Shipping\Model\Tracking\Result as TrackingResult;
 use Magento\Shipping\Model\Tracking\Result\ErrorFactory as TrackErrorFactory;
 use Magento\Shipping\Model\Tracking\Result\StatusFactory as TrackStatusFactory;
 use Magento\Shipping\Model\Tracking\ResultFactory as TrackFactory;
@@ -146,11 +149,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     protected $_logger;
 
     /**
-     * @var Config
-     */
-    protected $configHelper;
-
-    /**
      * @var string[]
      */
     protected $_debugReplacePrivateDataKeys = [
@@ -158,11 +156,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         'Password',
         'AccessLicenseNumber',
     ];
-
-    /**
-     * @var AsyncClientInterface
-     */
-    private $asyncHttpClient;
 
     /**
      * @var ProxyDeferredFactory
@@ -212,10 +205,10 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         Data $directoryData,
         StockRegistryInterface $stockRegistry,
         FormatInterface $localeFormat,
-        Config $configHelper,
+        protected readonly Config $configHelper,
         ClientFactory $httpClientFactory,
         array $data = [],
-        ?AsyncClientInterface $asyncHttpClient = null,
+        private ?AsyncClientInterface $asyncHttpClient = null,
         ?ProxyDeferredFactory $proxyDeferredFactory = null
     ) {
         parent::__construct(
@@ -237,7 +230,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $data
         );
         $this->_localeFormat = $localeFormat;
-        $this->configHelper = $configHelper;
         $this->asyncHttpClient = $asyncHttpClient ?? ObjectManager::getInstance()->get(AsyncClientInterface::class);
         $this->deferredProxyFactory = $proxyDeferredFactory
             ?? ObjectManager::getInstance()->get(ProxyDeferredFactory::class);
@@ -916,7 +908,7 @@ XMLRequest;
         $costArr = [];
         $priceArr = [];
         if ($xmlResponse !== null && strlen(trim($xmlResponse)) > 0) {
-            $xml = new \Magento\Framework\Simplexml\Config();
+            $xml = new SimplexmlConfig();
             $xml->loadString($xmlResponse);
             $arr = $xml->getXpath("//RatingServiceSelectionResponse/Response/ResponseStatusCode/text()");
             $success = (int)$arr[0];
@@ -986,23 +978,23 @@ XMLRequest;
     /**
      * Processing rate for ship element
      *
-     * @param \Magento\Framework\Simplexml\Element $shipElement
+     * @param SimplexmlElement $shipElement
      * @param array $allowedMethods
      * @param array $allowedCurrencies
      * @param array $costArr
      * @param array $priceArr
      * @param bool $negotiatedActive
-     * @param \Magento\Framework\Simplexml\Config $xml
+     * @param SimplexmlConfig $xml
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processShippingRateForItem(
-        \Magento\Framework\Simplexml\Element $shipElement,
+        SimplexmlElement $shipElement,
         array $allowedMethods,
         array $allowedCurrencies,
         array &$costArr,
         array &$priceArr,
         bool $negotiatedActive,
-        \Magento\Framework\Simplexml\Config $xml
+        SimplexmlConfig $xml
     ): void {
         $code = (string)$shipElement->Service->Code;
         if (in_array($code, $allowedMethods)) {
@@ -1251,7 +1243,7 @@ XMLAuth;
         $packageProgress = [];
 
         if ($xmlResponse) {
-            $xml = new \Magento\Framework\Simplexml\Config();
+            $xml = new SimplexmlConfig();
             $xml->loadString($xmlResponse);
             $arr = $xml->getXpath("//TrackResponse/Response/ResponseStatusCode/text()");
             $success = (int)$arr[0][0];
@@ -1311,16 +1303,16 @@ XMLAuth;
     /**
      * Process tracking info from activity tag
      *
-     * @param \Magento\Framework\Simplexml\Element $activityTag
+     * @param SimplexmlElement $activityTag
      * @param int $index
      * @param array $resultArr
      * @param array $packageProgress
      */
     private function processActivityTagInfo(
-        \Magento\Framework\Simplexml\Element $activityTag,
-        int &$index,
-        array &$resultArr,
-        array &$packageProgress
+        SimplexmlElement $activityTag,
+        int              &$index,
+        array            &$resultArr,
+        array            &$packageProgress
     ) {
         $addressArr = [];
         if (isset($activityTag->ActivityLocation->Address->City)) {
@@ -1380,7 +1372,7 @@ XMLAuth;
     public function getResponse()
     {
         $statuses = '';
-        if ($this->_result instanceof \Magento\Shipping\Model\Tracking\Result) {
+        if ($this->_result instanceof TrackingResult) {
             $trackings = $this->_result->getAllTrackings();
             if ($trackings) {
                 foreach ($trackings as $tracking) {
@@ -1650,7 +1642,7 @@ XMLAuth;
         $itemsDesc = [];
         $itemsShipment = $items;
         foreach ($itemsShipment as $itemShipment) {
-            $item = new \Magento\Framework\DataObject();
+            $item = new DataObject();
             $item->setData($itemShipment);
             $itemsDesc[] = $item->getName();
         }

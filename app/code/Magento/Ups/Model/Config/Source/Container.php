@@ -8,7 +8,7 @@ namespace Magento\Ups\Model\Config\Source;
 /**
  * Class Container
  */
-class Container extends \Magento\Ups\Model\Config\Source\Generic
+class Container extends Generic
 {
     /**
      * Carrier code

@@ -8,7 +8,7 @@ namespace Magento\Ups\Model\Config\Source;
 /**
  * Class Freemethod
  */
-class Freemethod extends \Magento\Ups\Model\Config\Source\Method
+class Freemethod extends Method
 {
     /**
      * {@inheritdoc}

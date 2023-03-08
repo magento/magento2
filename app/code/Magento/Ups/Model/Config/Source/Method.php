@@ -8,7 +8,7 @@ namespace Magento\Ups\Model\Config\Source;
 /**
  * Class Method
  */
-class Method extends \Magento\Ups\Model\Config\Source\Generic
+class Method extends Generic
 {
     /**
      * Carrier code

@@ -8,7 +8,7 @@ namespace Magento\Ups\Model\Config\Source;
 /**
  * Class OriginShipment
  */
-class OriginShipment extends \Magento\Ups\Model\Config\Source\Generic
+class OriginShipment extends Generic
 {
     /**
      * Carrier code
