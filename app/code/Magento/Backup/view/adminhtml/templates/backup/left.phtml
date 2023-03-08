@@ -3,5 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
 ?>
-<h3><?= $block->escapeHtml(__('Create Backup')) ?></h3>
+<h3><?= $escaper->escapeHtml(__('Create Backup')) ?></h3>
