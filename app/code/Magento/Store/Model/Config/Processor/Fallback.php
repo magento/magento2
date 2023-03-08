@@ -111,6 +111,13 @@ class Fallback implements PostProcessorInterface
         array $websitesConfig
     ) {
         $result = [];
+
+        foreach ($websitesConfig as $websiteCode => $webConfiguration) {
+            if (!isset($websitesConfig[strtolower($websiteCode)])) {
+                $websitesConfig[strtolower($websiteCode)] = $webConfiguration;
+                unset($websitesConfig[$websiteCode]);
+            }
+        }
         foreach ((array)$this->websiteData as $website) {
             $code = $website['code'];
             $id = $website['website_id'];
@@ -136,6 +143,12 @@ class Fallback implements PostProcessorInterface
     ) {
         $result = [];
 
+        foreach ($storesConfig as $storeCode => $storeConfiguration) {
+            if (!isset($storesConfig[strtolower($storeCode)])) {
+                $storesConfig[strtolower($storeCode)] = $storeConfiguration;
+                unset($storesConfig[$storeCode]);
+            }
+        }
         foreach ((array)$this->storeData as $store) {
             $code = $store['code'];
             $id = $store['store_id'];

@@ -78,7 +78,7 @@ class FallbackTest extends TestCase
         $result = $this->fallback->process(
             [
                 'stores' => [
-                    'two' => [
+                    'TWO' => [
                         'checkout' => [
                             'options' => ['guest_checkout' => 0]
                         ]
