@@ -5,6 +5,8 @@
  */
 namespace Magento\UrlRewrite\Model\Exception;
 
+use Exception;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Phrase;
 
 /**
@@ -13,22 +15,20 @@ use Magento\Framework\Phrase;
  * @api
  * @since 101.0.0
  */
-class UrlAlreadyExistsException extends \Magento\Framework\Exception\AlreadyExistsException
+class UrlAlreadyExistsException extends AlreadyExistsException
 {
     /**
-     * @var array
-     */
-    private $urls = [];
-
-    /**
-     * @param \Magento\Framework\Phrase $phrase
-     * @param \Exception $cause
+     * @param Phrase|null $phrase
+     * @param Exception|null $cause
      * @param int $code
      * @param array $urls
      */
-    public function __construct(Phrase $phrase = null, \Exception $cause = null, $code = 0, array $urls = [])
-    {
-        $this->urls = $urls;
+    public function __construct(
+        Phrase $phrase = null,
+        Exception $cause = null,
+        $code = 0,
+        private readonly array $urls = []
+    ) {
         if ($phrase === null) {
             $phrase = __('URL key for specified store already exists');
         }

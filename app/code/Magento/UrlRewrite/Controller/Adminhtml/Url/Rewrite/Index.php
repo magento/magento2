@@ -7,8 +7,9 @@
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
-class Index extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implements HttpGetActionInterface
+class Index extends Rewrite implements HttpGetActionInterface
 {
     /**
      * Show URL rewrites index page

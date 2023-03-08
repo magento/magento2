@@ -5,13 +5,17 @@
  */
 namespace Magento\UrlRewrite\Block\Catalog\Product;
 
+use Magento\Catalog\Block\Adminhtml\Product\Grid as CatalogProductGrid;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\DataObject;
+
 /**
  * Products grid for URL rewrites editing
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
-class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
+class Grid extends CatalogProductGrid
 {
     /**
      * Disable massaction
@@ -69,7 +73,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     /**
      * Return row url for js event handlers
      *
-     * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $row
+     * @param Product|DataObject $row
      * @return string
      */
     public function getRowUrl($row)

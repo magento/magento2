@@ -9,6 +9,7 @@ namespace Magento\UrlRewrite\Setup\Patch\Data;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
@@ -19,26 +20,14 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
-     * @var FieldDataConverterFactory
-     */
-    private $fieldDataConverterFactory;
-
-    /**
      * ConvertSerializedDataToJson constructor.
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      */
     public function __construct(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
-        FieldDataConverterFactory $fieldDataConverterFactory
+        private readonly ModuleDataSetupInterface $moduleDataSetup,
+        private readonly FieldDataConverterFactory $fieldDataConverterFactory
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
-        $this->fieldDataConverterFactory = $fieldDataConverterFactory;
     }
 
     /**

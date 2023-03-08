@@ -7,7 +7,12 @@
  */
 namespace Magento\UrlRewrite\Model\ResourceModel;
 
-class UrlRewrite extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+use Magento\Framework\DB\Select;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Store\Model\Store;
+use Magento\UrlRewrite\Model\UrlRewrite as ModelUrlRewrite;
+
+class UrlRewrite extends AbstractDb
 {
     /**
      * Define main table
@@ -37,20 +42,20 @@ class UrlRewrite extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $field
      * @param mixed $value
-     * @param \Magento\UrlRewrite\Model\UrlRewrite $object
-     * @return \Magento\Framework\DB\Select
+     * @param ModelUrlRewrite $object
+     * @return Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {
-        /** @var $select \Magento\Framework\DB\Select */
+        /** @var Select $select */
         $select = parent::_getLoadSelect($field, $value, $object);
 
         if ($object->getStoreId() !== null) {
             $select->where(
                 'store_id IN(?)',
-                [\Magento\Store\Model\Store::DEFAULT_STORE_ID, $object->getStoreId()]
+                [Store::DEFAULT_STORE_ID, $object->getStoreId()]
             );
-            $select->order('store_id ' . \Magento\Framework\DB\Select::SQL_DESC);
+            $select->order('store_id ' . Select::SQL_DESC);
             $select->limit(1);
         }
 

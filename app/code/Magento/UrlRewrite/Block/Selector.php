@@ -5,7 +5,10 @@
  */
 namespace Magento\UrlRewrite\Block;
 
-class Selector extends \Magento\Backend\Block\Template
+use Magento\Backend\Block\Template;
+use Magento\Framework\Phrase;
+
+class Selector extends Template
 {
     /**
      * List of available modes from source model
@@ -48,7 +51,7 @@ class Selector extends \Magento\Backend\Block\Template
     /**
      * Label getter
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getSelectorLabel()
     {

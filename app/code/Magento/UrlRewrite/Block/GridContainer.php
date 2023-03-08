@@ -6,6 +6,9 @@
 
 namespace Magento\UrlRewrite\Block;
 
+use Magento\Backend\Block\Widget\Context;
+use Magento\Backend\Block\Widget\Grid\Container;
+
 /**
  * Url rewrite grid container class
  *
@@ -13,7 +16,7 @@ namespace Magento\UrlRewrite\Block;
  * @deprecated 102.0.0 Moved to UI component implementation
  * @since 100.0.2
  */
-class GridContainer extends \Magento\Backend\Block\Widget\Grid\Container
+class GridContainer extends Container
 {
     /**
      * Part for generating appropriate grid block name
@@ -23,18 +26,18 @@ class GridContainer extends \Magento\Backend\Block\Widget\Grid\Container
     protected $_controller = 'url_rewrite';
 
     /**
-     * @var \Magento\UrlRewrite\Block\Selector
+     * @var Selector
      */
     protected $_urlrewriteSelector;
 
     /**
-     * @param \Magento\Backend\Block\Widget\Context $context
+     * @param Context $context
      * @param Selector $urlrewriteSelector
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\UrlRewrite\Block\Selector $urlrewriteSelector,
+        Context $context,
+        Selector $urlrewriteSelector,
         array $data = []
     ) {
         $this->_urlrewriteSelector = $urlrewriteSelector;

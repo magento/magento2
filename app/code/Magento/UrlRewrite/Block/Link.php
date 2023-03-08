@@ -13,7 +13,9 @@
  */
 namespace Magento\UrlRewrite\Block;
 
-class Link extends \Magento\Framework\View\Element\AbstractBlock
+use Magento\Framework\View\Element\AbstractBlock;
+
+class Link extends AbstractBlock
 {
     /**
      * Render output
