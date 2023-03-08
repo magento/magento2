@@ -3,17 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
+declare(strict_types=1);
 
-<?php
-/** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $block */
+use Magento\Catalog\Pricing\Render\FinalPriceBox;
+use Magento\Framework\Escaper;
+use Magento\Framework\Pricing\Price\PriceInterface;
+
+/** @var Escaper $escaper */
+/** @var FinalPriceBox $block */
 
 /** ex: \Magento\Catalog\Pricing\Price\RegularPrice */
-/** @var \Magento\Framework\Pricing\Price\PriceInterface $priceModel */
+/** @var PriceInterface $priceModel */
 $priceModel = $block->getPriceType('regular_price');
 
 /** ex: \Magento\Catalog\Pricing\Price\FinalPrice */
-/** @var \Magento\Framework\Pricing\Price\PriceInterface $finalPriceModel */
+/** @var PriceInterface $finalPriceModel */
 $finalPriceModel = $block->getPriceType('final_price');
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 $schema = ($block->getZone() == 'item_view') ? true : false;
@@ -48,7 +52,7 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
 
 <?php if ($block->showMinimalPrice()) :?>
     <?php if ($block->getUseLinkForAsLowAs()) :?>
-        <a href="<?= $block->escapeUrl($block->getSaleableItem()->getProductUrl()) ?>" class="minimal-price-link">
+        <a href="<?= $escaper->escapeUrl($block->getSaleableItem()->getProductUrl()) ?>" class="minimal-price-link">
             <?= /* @noEscape */ $block->renderAmountMinimal() ?>
         </a>
     <?php else :?>

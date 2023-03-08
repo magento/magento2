@@ -3,32 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
-<?php
+declare(strict_types=1);
+
+use Magento\Catalog\Block\Product\ProductList\Toolbar;
+use Magento\Framework\Escaper;
+use Magento\Framework\Locale\LocaleFormatter;
+
 /**
  * Product list toolbar
  *
- * @var \Magento\Catalog\Block\Product\ProductList\Toolbar $block
- * @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter
+ * @var Toolbar $block
+ * @var LocaleFormatter $localeFormatter
+ * @var Escaper $escaper
  */
 ?>
 <div class="field limiter">
     <label class="label" for="limiter">
-        <span><?= $block->escapeHtml(__('Show')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Show')) ?></span>
     </label>
     <div class="control">
         <select id="limiter" data-role="limiter" class="limiter-options">
             <?php foreach ($block->getAvailableLimit() as $_key => $_limit):?>
-                <option value="<?= $block->escapeHtmlAttr($_key) ?>"
+                <option value="<?= $escaper->escapeHtmlAttr($_key) ?>"
                     <?php if ($block->isLimitCurrent($_key)):?>
                         selected="selected"
                     <?php endif ?>>
-                    <?= $block->escapeHtml(
+                    <?= $escaper->escapeHtml(
                         is_numeric($_limit) ? $localeFormatter->formatNumber((int) $_limit) : $_limit
                     ) ?>
                 </option>
             <?php endforeach; ?>
         </select>
     </div>
-    <span class="limiter-text"><?= $block->escapeHtml(__('per page')) ?></span>
+    <span class="limiter-text"><?= $escaper->escapeHtml(__('per page')) ?></span>
 </div>

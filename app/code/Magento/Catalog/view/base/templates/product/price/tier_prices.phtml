@@ -3,23 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
+declare(strict_types=1);
 
-<?php
+use Magento\Catalog\Pricing\Price\TierPrice;
+use Magento\Catalog\Pricing\Render\PriceBox;
+use Magento\Framework\Escaper;
+use Magento\Framework\Locale\LocaleFormatter;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 // phpcs:disable Magento2.Templates.ThisInTemplate
 // phpcs:disable Generic.WhiteSpace.ScopeIndent
 
-/** @var \Magento\Catalog\Pricing\Render\PriceBox $block */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
-/** @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter*/
-/** @var \Magento\Catalog\Pricing\Price\TierPrice $tierPriceModel */
+/** @var Escaper $escaper */
+/** @var PriceBox $block */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var LocaleFormatter $localeFormatter*/
+/** @var TierPrice $tierPriceModel */
 $tierPriceModel = $block->getPrice();
 $tierPrices = $tierPriceModel->getTierPriceList();
 $msrpShowOnGesture = $block->getPriceType('msrp_price')->isShowPriceOnGesture();
 $product = $block->getSaleableItem();
 ?>
 <?php if (count($tierPrices)): ?>
-    <ul class="<?= $block->escapeHtmlAttr(($block->hasListClass() ? $block->getListClass(): 'prices-tier items')) ?>">
+    <ul class="<?= $escaper->escapeHtmlAttr(($block->hasListClass() ? $block->getListClass(): 'prices-tier items')) ?>">
         <?php foreach ($tierPrices as $index => $price): ?>
             <li class="item">
                 <?php
@@ -56,16 +62,16 @@ $product = $block->getSaleableItem();
                         $tierPriceData['qty'] = $price['price_qty'];
                     }
                     ?>
-                    <?= $block->escapeHtml(__('Buy %1 for: ', $price['price_qty'])) ?>
+                    <?= $escaper->escapeHtml(__('Buy %1 for: ', $price['price_qty'])) ?>
                     <a href="#"
-                       id="<?= $block->escapeHtmlAttr($popupId) ?>"
-                       data-tier-price="<?= $block->escapeHtml($block->jsonEncode($tierPriceData)) ?>">
-                        <?= $block->escapeHtml(__('Click for price')) ?>
+                       id="<?= $escaper->escapeHtmlAttr($popupId) ?>"
+                       data-tier-price="<?= $escaper->escapeHtml($block->jsonEncode($tierPriceData)) ?>">
+                        <?= $escaper->escapeHtml(__('Click for price')) ?>
                     </a>
                     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                         'onclick',
                         'event.preventDefault()',
-                        'a#' . $block->escapeHtmlAttr($popupId)
+                        'a#' . $escaper->escapeHtmlAttr($popupId)
                     ) ?>
                 <?php else:
                     $priceAmountBlock = $block->renderAmount(

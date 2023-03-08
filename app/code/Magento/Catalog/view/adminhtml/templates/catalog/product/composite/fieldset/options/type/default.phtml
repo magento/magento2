@@ -3,13 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Options $block */
 ?>
-<?php /* @var $block \Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options */ ?>
 <?php $option = $block->getOption(); ?>
 <div class="admin__field field">
     <label class="admin__field-label label">
         <span>
-            <?= $block->escapeHtml($option->getTitle()) ?>
+            <?= $escaper->escapeHtml($option->getTitle()) ?>
         </span>
     </label>
 </div>

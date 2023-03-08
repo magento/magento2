@@ -3,21 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Text;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Text $block */
 
 // phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
 ?>
-<?php /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Text */ ?>
 <script id="custom-option-text-type-template" type="text/x-magento-template">
     <div id="product_option_<%- data.option_id %>_type_<%- data.group %>" class="fieldset">
         <table class="data-table">
             <thead>
             <tr>
                 <?php if ($block->getCanReadPrice() !== false) : ?>
-                <th class="type-price"><?= $block->escapeHtml(__('Price')) ?></th>
-                <th class="type-type"><?= $block->escapeHtml(__('Price Type')) ?></th>
+                <th class="type-price"><?= $escaper->escapeHtml(__('Price')) ?></th>
+                <th class="type-type"><?= $escaper->escapeHtml(__('Price Type')) ?></th>
                 <?php endif; ?>
-                <th class="type-sku"><?= $block->escapeHtml(__('SKU')) ?></th>
-                <th class="type-last last"><?= $block->escapeHtml(__('Max Characters')) ?></th>
+                <th class="type-sku"><?= $escaper->escapeHtml(__('SKU')) ?></th>
+                <th class="type-last last"><?= $escaper->escapeHtml(__('Max Characters')) ?></th>
             </tr>
             </thead>
             <tr>

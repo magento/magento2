@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
 $blockId = $block->getId();
 ?>
 <div id="product_composite_configure"
-     class="product-configure-popup product-configure-popup-<?= $block->escapeHtmlAttr($blockId) ?>">
+     class="product-configure-popup product-configure-popup-<?= $escaper->escapeHtmlAttr($blockId) ?>">
     <iframe name="product_composite_configure_iframe" id="product_composite_configure_iframe"></iframe>
 
     <form action="" method="post" id="product_composite_configure_form" enctype="multipart/form-data"
@@ -24,7 +29,7 @@ $blockId = $block->getId();
             </div>
         </div>
         <input type="hidden" name="as_js_varname" value="iFrameResponse" />
-        <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>" />
+        <input type="hidden" name="form_key" value="<?= $escaper->escapeHtmlAttr($block->getFormKey()) ?>" />
     </form>
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
         'onsubmit',

@@ -3,10 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-use Magento\Catalog\Helper\Data;
+declare(strict_types=1);
 
-/** @var \Magento\Backend\Block\Template $block */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+use Magento\Backend\Block\Template;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
 
 <?php
@@ -215,7 +220,7 @@ function switchDefaultValueField()
 script;
 foreach ($jsonHelper->getAttributeHiddenFields() as $type => $fields):
             $scriptString .= <<<script
-            case '{$block->escapeJs($type)}':
+            case '{$escaper->escapeJs($type)}':
                 var isFrontTabHidden = false;
 script;
     foreach ($fields as $one):
@@ -234,7 +239,7 @@ script;
         elseif ($one == '_scope'):
             $scriptString .= 'scopeVisibility = false;';
         else:
-            $scriptString .= "setRowVisibility('" . $block->escapeJs($one) . "', false);";
+            $scriptString .= "setRowVisibility('" . $escaper->escapeJs($one) . "', false);";
         endif;
     endforeach;
     $scriptString .= <<<script

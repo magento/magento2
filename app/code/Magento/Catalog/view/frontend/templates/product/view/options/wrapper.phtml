@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var $block Magento\Catalog\Block\Product\View */
-?>
-<?php
+use Magento\Catalog\Block\Product\View;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var View $block */
 $required = '';
+
 if ($block->hasRequiredOptions()) {
-    $required = ' data-hasrequired="' . $block->escapeHtmlAttr(__('* Required Fields')) . '"';
+    $required = ' data-hasrequired="' . $escaper->escapeHtmlAttr(__('* Required Fields')) . '"';
 }
 ?>
 <div class="product-options-wrapper" id="product-options-wrapper"<?= /* @noEscape */ $required ?>>

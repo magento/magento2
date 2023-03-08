@@ -3,7 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var Magento\Catalog\Block\Widget\Link $block */
+use Magento\Catalog\Block\Widget\Link;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Link $block */
 ?>
-<?= $block->escapeHtml($block->getHref()) ?>
+<?= $escaper->escapeHtml($block->getHref()) ?>

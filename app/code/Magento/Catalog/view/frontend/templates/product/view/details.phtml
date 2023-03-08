@@ -3,9 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Catalog\Block\Product\View\Details $block */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+use Magento\Catalog\Block\Product\View\Details;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/** @var Escaper $escaper */
+/** @var Details $block */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
 <?php if ($detailedInfoGroup = $block->getGroupSortedChildNames('detailed_info', 'getChildHtml')):?>
     <div class="product info detailed">
@@ -22,24 +28,24 @@
                 $label = $block->getChildData($alias, 'title');
                 ?>
                 <div class="data item title <?= !$hideTabContent ? 'active' : ''?>"
-                     data-role="collapsible" id="tab-label-<?= $block->escapeHtmlAttr($alias) ?>">
+                     data-role="collapsible" id="tab-label-<?= $escaper->escapeHtmlAttr($alias) ?>">
                     <a class="data switch"
                        tabindex="-1"
                        data-toggle="trigger"
-                       href="#<?= $block->escapeUrl($alias) ?>"
-                       id="tab-label-<?= $block->escapeHtmlAttr($alias) ?>-title">
+                       href="#<?= $escaper->escapeUrl($alias) ?>"
+                       id="tab-label-<?= $escaper->escapeHtmlAttr($alias) ?>-title">
                         <?= /* @noEscape */ $label ?>
                     </a>
                 </div>
                 <div class="data item content"
-                     aria-labelledby="tab-label-<?= $block->escapeHtmlAttr($alias) ?>-title"
-                     id="<?= $block->escapeHtmlAttr($alias) ?>" data-role="content">
+                     aria-labelledby="tab-label-<?= $escaper->escapeHtmlAttr($alias) ?>-title"
+                     id="<?= $escaper->escapeHtmlAttr($alias) ?>" data-role="content">
                     <?= /* @noEscape */ $html ?>
                 </div>
                 <?= $hideTabContent
                     ? /* @noEscape */ $secureRenderer->renderStyleAsTag(
                         'display: none;',
-                        '#' . $block->escapeHtmlAttr($alias)
+                        '#' . $escaper->escapeHtmlAttr($alias)
                     )
                     : '' ?>
                 <?php $hideTabContent = true; ?>

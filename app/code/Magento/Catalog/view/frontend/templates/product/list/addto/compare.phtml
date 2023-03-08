@@ -3,14 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var $block Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare */
+use Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Compare $block */
 ?>
 <a href="#"
    class="action tocompare"
-   title="<?= $block->escapeHtml(__('Add to Compare')) ?>"
-   aria-label="<?= $block->escapeHtml(__('Add to Compare')) ?>"
+   title="<?= $escaper->escapeHtml(__('Add to Compare')) ?>"
+   aria-label="<?= $escaper->escapeHtml(__('Add to Compare')) ?>"
    data-post='<?= /* @noEscape */ $block->getCompareHelper()->getPostDataParams($block->getProduct()) ?>'
    role="button">
-    <span><?= $block->escapeHtml(__('Add to Compare')) ?></span>
+    <span><?= $escaper->escapeHtml(__('Add to Compare')) ?></span>
 </a>

@@ -3,8 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/* @var $block \Magento\Catalog\Block\Product\View\Options */
+use Magento\Catalog\Block\Product\View\Options;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Options $block */
 ?>
 
 <?php $_options = $block->decorateArray($block->getOptions()) ?>
@@ -16,7 +21,7 @@
             "priceOptions": {
                 "optionConfig": <?= /* @noEscape */ $block->getJsonConfig() ?>,
                 "controlContainer": ".field",
-                "priceHolderSelector": "[data-product-id='<?= $block->escapeHtml($_productId) ?>'][data-role=priceBox]"
+                "priceHolderSelector": "[data-product-id='<?= $escaper->escapeHtml($_productId) ?>'][data-role=priceBox]"
             }
         }
     }

@@ -3,22 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Options $block */
+$options = $block->decorateArray($block->getOptions());
 ?>
-
-<?php /* @var $block \Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options */ ?>
-<?php $options = $block->decorateArray($block->getOptions()); ?>
 <?php if (count($options)) :?>
-
     <?= $block->getChildHtml('options_js') ?>
 
     <fieldset id="product_composite_configure_fields_options"
               class="fieldset admin__fieldset <?= $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
         <legend class="legend admin__legend">
-            <span><?= $block->escapeHtml(__('Custom Options')) ?></span>
+            <span><?= $escaper->escapeHtml(__('Custom Options')) ?></span>
         </legend><br>
         <?php foreach ($options as $option) :?>
             <?= $block->getOptionHtml($option) ?>
         <?php endforeach;?>
     </fieldset>
-
 <?php endif; ?>

@@ -3,27 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-?>
-<?php
-/**
- * @var $block \Magento\Backend\Block\Widget\Form\Container
- */
+use Magento\Backend\Block\Widget\Form\Container;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Container $block */
 ?>
 <?= /* @noEscape */ $block->getFormInitScripts() ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions attribute-popup-actions" <?= /* @noEscape */ $block->getUiId('content-header') ?>>
     <?= $block->getButtonsHtml('header') ?>
 </div>
 
-<form id="edit_form" class="admin__scope-old edit-form" action="<?= $block->escapeHtml($block->getSaveUrl()) ?>" method="post">
-    <input name="form_key" type="hidden" value="<?= $block->escapeHtml($block->getFormKey()) ?>" />
+<form id="edit_form" class="admin__scope-old edit-form" action="<?= $escaper->escapeHtml($block->getSaveUrl()) ?>" method="post">
+    <input name="form_key" type="hidden" value="<?= $escaper->escapeHtml($block->getFormKey()) ?>" />
     <?= $block->getChildHtml('form') ?>
 </form>
 <script type="text/x-magento-init">
     {
         "#edit_form": {
             "Magento_Catalog/catalog/product/edit/attribute": {
-                "validationUrl": "<?= $block->escapeJs($block->escapeUrl($block->getValidationUrl())) ?>"
+                "validationUrl": "<?= $escaper->escapeJs($escaper->escapeUrl($block->getValidationUrl())) ?>"
             }
         }
     }
