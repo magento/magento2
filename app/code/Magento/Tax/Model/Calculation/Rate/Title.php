@@ -19,11 +19,13 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
      *
      * Tax rate field key.
      */
-    const KEY_STORE_ID = 'store_id';
-    const KEY_VALUE_ID = 'value';
+    public const KEY_STORE_ID = 'store_id';
+    public const KEY_VALUE_ID = 'value';
     /**#@-*/
 
     /**
+     * Initialise the model
+     *
      * @return void
      */
     protected function _construct()
@@ -32,6 +34,8 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
     }
 
     /**
+     * Delete a rate with specified ID
+     *
      * @param int $rateId
      * @return $this
      */
@@ -41,9 +45,10 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
         return $this;
     }
 
+    // @codeCoverageIgnoreStart
+
     /**
-     * @codeCoverageIgnoreStart
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getStoreId()
     {
@@ -51,7 +56,7 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getValue()
     {
@@ -83,7 +88,7 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
     // @codeCoverageIgnoreEnd
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
      * @return \Magento\Tax\Api\Data\TaxRateTitleExtensionInterface|null
      */
@@ -93,7 +98,7 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
      * @param \Magento\Tax\Api\Data\TaxRateTitleExtensionInterface $extensionAttributes
      * @return $this

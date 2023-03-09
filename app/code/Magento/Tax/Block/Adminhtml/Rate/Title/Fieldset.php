@@ -35,6 +35,8 @@ class Fieldset extends \Magento\Framework\Data\Form\Element\Fieldset
     }
 
     /**
+     * Get title formatted in HTML
+     *
      * @return string
      */
     public function getBasicChildrenHtml()

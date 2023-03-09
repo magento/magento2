@@ -105,6 +105,8 @@ class Renderer extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return the store ID
+     *
      * @return int|null|string
      */
     public function getStoreId()
@@ -200,8 +202,7 @@ class Renderer extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get item price in display currency or order currency depending
-     * on item type
+     * Get item price in display currency or order currency depending on item type
      *
      * @return float
      */

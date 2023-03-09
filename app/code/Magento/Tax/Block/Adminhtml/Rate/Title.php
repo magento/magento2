@@ -90,6 +90,8 @@ class Title extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return all the stores
+     *
      * @return mixed
      */
     public function getStores()

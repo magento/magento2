@@ -19,11 +19,9 @@ abstract class Rule extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Tax::manage_tax';
+    public const ADMIN_RESOURCE = 'Magento_Tax::manage_tax';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;

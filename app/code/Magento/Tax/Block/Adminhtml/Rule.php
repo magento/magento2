@@ -16,6 +16,8 @@ namespace Magento\Tax\Block\Adminhtml;
 class Rule extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()
