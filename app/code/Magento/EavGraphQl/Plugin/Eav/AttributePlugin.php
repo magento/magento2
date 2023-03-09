@@ -28,8 +28,9 @@ class AttributePlugin
             $result,
             [
                 sprintf(
-                    "%s_%s",
+                    "%s_%s_%s",
                     Attribute::CACHE_TAG,
+                    $subject->getEntityType()->getEntityTypeCode(),
                     $subject->getAttributeCode()
                 )
             ]
