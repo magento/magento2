@@ -272,7 +272,7 @@ class AwsS3 implements RemoteDriverInterface
 
         try {
             $this->adapter->write($path, $content, new Config($config));
-            return ($this->adapter->fileSize($path)->fileSize() !== NULL)??true;
+            return ($this->adapter->fileSize($path)->fileSize() !== null)??true;
 
         } catch (FlysystemFilesystemException | UnableToRetrieveMetadata $e) {
             $this->logger->error($e->getMessage());
