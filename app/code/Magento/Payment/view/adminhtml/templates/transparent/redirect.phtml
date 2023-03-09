@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Payment\Block\Transparent\Redirect $block */
+use Magento\Framework\Escaper;
+use Magento\Payment\Block\Transparent\Redirect;
+
+/** @var Escaper $escaper */
+/** @var Redirect $block */
 $params = $block->getPostParams();
 $redirectUrl = $block->getRedirectUrl();
 ?>
 <html>
 <head></head>
 <body onload="document.forms['proxy_form'].submit()">
-<form id="proxy_form" action="<?= $block->escapeUrl($redirectUrl) ?>"
+<form id="proxy_form" action="<?= $escaper->escapeUrl($redirectUrl) ?>"
       method="POST" hidden enctype="application/x-www-form-urlencoded" class="no-display">
     <?php foreach ($params as $name => $value):?>
-        <input value="<?= $block->escapeHtmlAttr($value) ?>" name="<?= $block->escapeHtmlAttr($name) ?>" type="hidden"/>
+        <input value="<?= $escaper->escapeHtmlAttr($value) ?>" name="<?= $escaper->escapeHtmlAttr($name) ?>" type="hidden"/>
     <?php endforeach?>
 </form>
 </body>
