@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Eav;
 
+use Magento\Eav\Model\AttributeRepository;
 use Magento\GraphQl\PageCache\GraphQLPageCacheAbstract;
+use Magento\Store\Model\StoreRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class CustomAttributesMetadataCacheTest extends GraphQLPageCacheAbstract
@@ -17,6 +19,9 @@ class CustomAttributesMetadataCacheTest extends GraphQLPageCacheAbstract
      */
     private $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -64,10 +69,10 @@ class CustomAttributesMetadataCacheTest extends GraphQLPageCacheAbstract
     public function testCacheDifferentStores()
     {
         $query = $this->getAttributeQuery("dropdown_attribute", "catalog_product");
-        /** @var \Magento\Eav\Model\AttributeRepository $eavAttributeRepo */
-        $eavAttributeRepo = $this->objectManager->get(\Magento\Eav\Model\AttributeRepository::class);
-        /** @var \Magento\Store\Model\StoreRepository $storeRepo */
-        $storeRepo = $this->objectManager->get(\Magento\Store\Model\StoreRepository::class);
+        /** @var AttributeRepository $eavAttributeRepo */
+        $eavAttributeRepo = $this->objectManager->get(AttributeRepository::class);
+        /** @var StoreRepository $storeRepo */
+        $storeRepo = $this->objectManager->get(StoreRepository::class);
 
         $stores = $storeRepo->getList();
         $attribute = $eavAttributeRepo->get("catalog_product", "dropdown_attribute");
@@ -151,8 +156,8 @@ class CustomAttributesMetadataCacheTest extends GraphQLPageCacheAbstract
         );
         // assert cache hit on second query
         $this->assertCacheHitAndReturnResponse($query, []);
-        /** @var \Magento\Eav\Model\AttributeRepository $eavAttributeRepo */
-        $eavAttributeRepo = $this->objectManager->get(\Magento\Eav\Model\AttributeRepository::class);
+        /** @var AttributeRepository $eavAttributeRepo */
+        $eavAttributeRepo = $this->objectManager->get(AttributeRepository::class);
         $attribute = $eavAttributeRepo->get("catalog_product", "dropdown_attribute");
         $attribute->setIsRequired(1);
         $eavAttributeRepo->save($attribute);
@@ -171,6 +176,37 @@ class CustomAttributesMetadataCacheTest extends GraphQLPageCacheAbstract
         );
     }
 
+    /**
+     * Test cache invalidation when queried for attribute data of different entity types.
+     * Required for GraphQL FPC use-case since there is no attribute ID provided in the result.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/dropdown_attribute.php
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     *
+     * @return void
+     */
+    public function testCacheInvalidationMultiEntitySameCode()
+    {
+        $queryProduct = $this->getAttributeQuery("name", "catalog_product");
+        $queryCategory = $this->getAttributeQuery("name", "catalog_category");
+        // precache both product and category response
+        $this->assertCacheMissAndReturnResponse($queryProduct, []);
+        $this->assertCacheMissAndReturnResponse($queryCategory, []);
+        $eavAttributeRepo = $this->objectManager->get(AttributeRepository::class);
+        $attribute = $eavAttributeRepo->get("catalog_product", "name");
+        $eavAttributeRepo->save($attribute);
+        // assert that product is invalidated for the same code but category is not touched
+        $this->assertCacheMissAndReturnResponse($queryProduct, []);
+        $this->assertCacheHitAndReturnResponse($queryCategory, []);
+    }
+
+    /**
+     * Prepare and return GraphQL query for given entity type and code.
+     *
+     * @param string $code
+     * @param string $entityType
+     * @return string
+     */
     private function getAttributeQuery(string $code, string $entityType) : string
     {
         return <<<QUERY
