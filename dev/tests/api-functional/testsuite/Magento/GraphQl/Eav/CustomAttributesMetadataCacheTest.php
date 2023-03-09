@@ -180,7 +180,6 @@ class CustomAttributesMetadataCacheTest extends GraphQLPageCacheAbstract
      * Test cache invalidation when queried for attribute data of different entity types.
      * Required for GraphQL FPC use-case since there is no attribute ID provided in the result.
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/dropdown_attribute.php
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      *
      * @return void
