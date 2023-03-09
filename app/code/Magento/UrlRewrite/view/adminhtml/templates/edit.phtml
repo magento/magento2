@@ -3,8 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\UrlRewrite\Block\Edit $block */
+use Magento\Framework\Escaper;
+use Magento\UrlRewrite\Block\Edit;
+
+/** @var Escaper $escaper */
+/** @var Edit $block */
 ?>
 <?= $block->getChildHtml() ?>
 <?php if ($block->getChildBlock('form')) : ?>
@@ -12,7 +17,7 @@
     {
         "#edit_form": {
             "Magento_UrlRewrite/js/url-rewrite-validation" : {
-                "url": "<?= $block->escapeUrl($block->getValidationUrl()) ?>"
+                "url": "<?= $escaper->escapeUrl($block->getValidationUrl()) ?>"
             }
         }
     }
