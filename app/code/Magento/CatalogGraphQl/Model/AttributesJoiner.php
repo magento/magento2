@@ -61,6 +61,7 @@ class AttributesJoiner
      *
      * @param FieldNode $fieldNode
      * @param ResolveInfo $resolveInfo
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @return string[]
      */
     public function getQueryFields(FieldNode $fieldNode, ResolveInfo $resolveInfo): array
