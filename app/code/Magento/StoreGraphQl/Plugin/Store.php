@@ -23,6 +23,23 @@ class Store
      */
     public function afterGetIdentities(\Magento\Store\Model\Store $subject, array $result): array
     {
-        return array_merge($result, [sprintf('%s_%s', ConfigIdentity::CACHE_TAG, $subject->getId())]);
+        $result[] = sprintf('%s_%s', ConfigIdentity::CACHE_TAG, $subject->getId());
+        if ($subject->isObjectNew()) {
+            $websiteId = $subject->getWebsiteId();
+            if ($websiteId !== null) {
+                $result[] = sprintf('%s_%s', ConfigIdentity::CACHE_TAG, 'website_' . $websiteId);
+                $storeGroupId = $subject->getStoreGroupId();
+                if ($storeGroupId !== null) {
+                    $result[] = sprintf(
+                        '%s_%s',
+                        ConfigIdentity::CACHE_TAG,
+                        'website_' . $websiteId . 'group_' . $storeGroupId
+                    );
+                }
+            }
+
+        }
+
+        return $result;
     }
 }
