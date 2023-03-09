@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
-<?php
-/** @var $block \Magento\ImportExport\Block\Adminhtml\Import\Edit\Before */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\ImportExport\Block\Adminhtml\Import\Edit\Before;
+
+/** @var Escaper $escaper */
+/** @var Before $block */
+/** @var SecureHtmlRenderer $secureRenderer */
 $fieldNameSourceFile = \Magento\ImportExport\Model\Import::FIELD_NAME_SOURCE_FILE;
-$uploaderErrorMessage = $block->escapeHtml(
+$uploaderErrorMessage = $escaper->escapeHtml(
     __('Content of uploaded file was changed, please re-upload the file')
 );
 ?>
@@ -51,7 +56,7 @@ require([
          * Base url
          * @type {string}
          */
-        sampleFilesBaseUrl: '{$block->escapeJs($block->getUrl('*/*/download/', ['filename' => 'entity-name']))}',
+        sampleFilesBaseUrl: '{$escaper->escapeJs($block->getUrl('*/*/download/', ['filename' => 'entity-name']))}',
 
         /**
         * Loaded file last modified
@@ -258,7 +263,7 @@ require([
         postToFrameProcessResponse: function(response) {
             if ('object' != typeof(response)) {
                 alert({
-                    content: '{$block->escapeHtml(__('Invalid response'))}'
+                    content: '{$escaper->escapeHtml(__('Invalid response'))}'
                 });
 
                 return false;

@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Backend\Block\Template $block */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
-?>
+use Magento\Backend\Block\Template;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
-<?php $scriptString = <<<script
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var SecureHtmlRenderer $secureRenderer */
+
+$scriptString = <<<script
 require([
     'Magento_Ui/js/modal/alert',
     'prototype'
@@ -48,7 +53,7 @@ require([
          */
         getFilter: function() {
             if ($('entity') && \$F('entity')) {
-                var url    = "{$block->escapeJs($block->getUrl('*/*/getFilter'))}";
+                var url    = "{$escaper->escapeJs($block->getUrl('*/*/getFilter'))}";
                 var entity = \$F('entity');
                 if (entity != this.previousGridEntity) {
                     this.previousGridEntity = entity;
@@ -93,7 +98,7 @@ require([
             form.action   = oldAction;
         } else {
             alert({
-                content: '{$block->escapeHtml(__('Invalid data'))}'
+                content: '{$escaper->escapeHtml(__('Invalid data'))}'
             });
         }
     };

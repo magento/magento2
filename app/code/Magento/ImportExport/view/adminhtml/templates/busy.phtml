@@ -3,14 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
 ?>
 <div class="fieldset">
     <div class="legend">
-        <span><?= $block->escapeHtml(__('Status')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Status')) ?></span>
     </div><br>
     <div class="messages">
         <div class="message message-success success">
-            <div><?= $block->escapeHtml($block->getStatusMessage()) ?></div>
+            <div><?= $escaper->escapeHtml($block->getStatusMessage()) ?></div>
         </div>
     </div>
 </div>

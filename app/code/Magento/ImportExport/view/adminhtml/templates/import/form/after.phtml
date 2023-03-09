@@ -3,15 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\ImportExport\Block\Adminhtml\Form\After $block */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\ImportExport\Block\Adminhtml\Form\After;
+
+/** @var Escaper $escaper */
+/** @var After $block */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
-
 <div class="entry-edit fieldset" id="import_validation_container">
     <div class="entry-edit-head legend">
         <span class="icon-head head-edit-form fieldset-legend"
-            id="import_validation_container_header"><?= $block->escapeHtml(__('Validation Results')) ?></span>
+            id="import_validation_container_header"><?= $escaper->escapeHtml(__('Validation Results')) ?></span>
     </div><br>
     <div id="import_validation_messages" class="fieldset"><!-- --></div>
 </div>
