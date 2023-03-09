@@ -84,9 +84,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _getWidgetSelectOptions()
     {
+        $options = [];
+
         foreach ($this->_getAvailableWidgets(true) as $data) {
             $options[$data['type']] = $data['name'];
         }
+
         return $options;
     }
 
