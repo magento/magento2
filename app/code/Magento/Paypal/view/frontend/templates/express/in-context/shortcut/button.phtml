@@ -3,13 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * @var \Magento\Paypal\Block\Express\InContext\Minicart\SmartButton $block
- */
+use Magento\Framework\Escaper;
+use Magento\Paypal\Block\Express\InContext\Minicart\SmartButton;
+
+/** @var Escaper $escaper */
+/** @var SmartButton $block */
 $widget = $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonDecode($block->getJsInitParams());
 $widgetConfig = $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($widget['Magento_Paypal/js/in-context/button']);
 ?>
 <div data-mage-init='{"Magento_Paypal/js/in-context/button":<?= /* @noEscape */ $widgetConfig ?>}'
-     class="paypal checkout paypal-logo <?= $block->escapeHtml($block->getContainerId()) ?>-container">
+     class="paypal checkout paypal-logo <?= $escaper->escapeHtml($block->getContainerId()) ?>-container">
 </div>

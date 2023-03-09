@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * @var $block \Magento\Paypal\Block\Express\Review
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Paypal\Block\Express\Review;
+
+/** @var Escaper $escaper */
+/** @var Review $block */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
 <div id="shipping-method-container">
     <?php if ($block->getCanEditShippingMethod() || !$block->getCurrentShippingRate()): ?>
@@ -16,15 +20,15 @@
             <select name="shipping_method" id="shipping_method" class="required-entry">
                 <?php if (!$currentRate): ?>
                     <option value="">
-                        <?= $block->escapeHtml(__('Please select a shipping method...')) ?>
+                        <?= $escaper->escapeHtml(__('Please select a shipping method...')) ?>
                     </option>
                 <?php endif; ?>
                 <?php foreach ($groups as $code => $rates): ?>
                     <optgroup id="group_<?= /* @noEscape */ $code ?>"
-                              label="<?= $block->escapeHtml($block->getCarrierName($code)) ?>">
+                              label="<?= $escaper->escapeHtml($block->getCarrierName($code)) ?>">
                         <?php foreach ($rates as $rate): ?>
                             <option
-                                value="<?= $block->escapeHtml($block->renderShippingRateValue($rate)) ?>"
+                                value="<?= $escaper->escapeHtml($block->renderShippingRateValue($rate)) ?>"
                                     <?= ($currentRate === $rate) ? ' selected="selected"' : '' ?>>
                                 <?= /* @noEscape */ $block->renderShippingRateOption($rate) ?>
                             </option>
@@ -39,7 +43,7 @@
         <?php else: ?>
             <p>
                 <strong>
-                    <?= $block->escapeHtml(__('Sorry, no quotes are available for this order right now.')) ?>
+                    <?= $escaper->escapeHtml(__('Sorry, no quotes are available for this order right now.')) ?>
                 </strong>
             </p>
         <?php endif; ?>
@@ -52,7 +56,7 @@
     <?php endif; ?>
 </div>
 <div id="shipping_method_update">
-    <p><?= $block->escapeHtml(__('Please update order data to get shipping methods and rates')) ?></p>
+    <p><?= $escaper->escapeHtml(__('Please update order data to get shipping methods and rates')) ?></p>
 </div>
 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
     'display:none',

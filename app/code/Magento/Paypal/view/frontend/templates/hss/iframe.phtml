@@ -3,13 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * @var \Magento\Paypal\Block\Payflow\Link\Iframe $block
- */
+use Magento\Framework\Escaper;
+use Magento\Paypal\Block\Payflow\Link\Iframe;
+
+/** @var Escaper $escaper */
+/** @var Iframe $block */
 ?>
 <div id="iframe-warning" class="message notice">
-    <div><?= $block->escapeHtml(__('Please do not refresh the page until you complete payment.')) ?></div>
+    <div><?= $escaper->escapeHtml(__('Please do not refresh the page until you complete payment.')) ?></div>
 </div>
 <iframe id="hss-iframe" data-container="paypal-iframe" class="paypal iframe" scrolling="no" frameborder="0" border="0"
-        src="<?= $block->escapeUrl($block->getFrameActionUrl()) ?>" height="610" width="100%"></iframe>
+        src="<?= $escaper->escapeUrl($block->getFrameActionUrl()) ?>" height="610" width="100%"></iframe>

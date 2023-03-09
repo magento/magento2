@@ -3,19 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * @var \Magento\Paypal\Block\Payflow\Advanced\Iframe $block
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Paypal\Block\Payflow\Advanced\Iframe;
+
+/** @var Escaper $escaper */
+/** @var Iframe $block */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
 <html>
 <head>
 </head>
 <body>
-<form id="token_form" method="GET" action="<?= $block->escapeUrl($block->getTransactionUrl()) ?>">
-    <input type="hidden" name="SECURETOKEN" value="<?= $block->escapeHtml($block->getSecureToken()) ?>"/>
-    <input type="hidden" name="SECURETOKENID" value="<?= $block->escapeHtml($block->getSecureTokenId()) ?>"/>
+<form id="token_form" method="GET" action="<?= $escaper->escapeUrl($block->getTransactionUrl()) ?>">
+    <input type="hidden" name="SECURETOKEN" value="<?= $escaper->escapeHtml($block->getSecureToken()) ?>"/>
+    <input type="hidden" name="SECURETOKENID" value="<?= $escaper->escapeHtml($block->getSecureTokenId()) ?>"/>
     <input type="hidden" name="MODE" value="<?= /* @noEscape */ $block->isTestMode() ? 'TEST' : 'LIVE' ?>"/>
 </form>
 <?php $scriptString = <<<script
