@@ -3,27 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
-<?php
-/** @var \Magento\Framework\View\Element\Template $block */
-/** @var \Magento\Framework\Escaper $escaper */
-/** @var \Magento\GoogleGtag\ViewModel\Adwords $adsViewModel */
+declare(strict_types=1);
 
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Magento\GoogleGtag\ViewModel\Adwords;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var Adwords $adsViewModel */
 $adsViewModel = $block->getViewModel();
 ?>
-
 <?php if ($adsViewModel->isGoogleAdwordsConfigurable() && $adsViewModel->isGoogleAdwordsActive()): ?>
-    <?php $conversionId = $block->escapeHtml($adsViewModel->getConversionId()); ?>
-    <?php $conversionLabel = $block->escapeHtml($adsViewModel->getConversionLabel()); ?>
+    <?php $conversionId = $escaper->escapeHtml($adsViewModel->getConversionId()); ?>
+    <?php $conversionLabel = $escaper->escapeHtml($adsViewModel->getConversionLabel()); ?>
     <?php $gtagSiteSrc = $adsViewModel->getConversionGtagGlobalSiteTagSrc(); ?>
     <!-- BEGIN GOOGLE ADWORDS CODE -->
     <script type="text/x-magento-init">
     {
         "*": {
             "Magento_GoogleGtag/js/google-adwords": {
-                "conversionId": "<?= $block->escapeHtml($conversionId);  ?>",
-                "gtagSiteSrc": "<?= $block->escapeHtml($gtagSiteSrc);  ?>",
-                "conversionLabel": "<?= $block->escapeHtml($conversionLabel);  ?>"
+                "conversionId": "<?= $escaper->escapeHtml($conversionId);  ?>",
+                "gtagSiteSrc": "<?= $escaper->escapeHtml($gtagSiteSrc);  ?>",
+                "conversionLabel": "<?= $escaper->escapeHtml($conversionLabel);  ?>"
             }
         }
     }
