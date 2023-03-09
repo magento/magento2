@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * @var Magento\Vault\Block\Form $block
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- */
-$code = $block->escapeHtml($block->getMethodCode());
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Vault\Block\Form;
+
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var Form $block */
+$code = $escaper->escapeHtml($block->getMethodCode());
 ?>
 <fieldset data-mage-init='{
         "Magento_Vault/js/vault": {
