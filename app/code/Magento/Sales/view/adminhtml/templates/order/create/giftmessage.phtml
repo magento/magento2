@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * @var \Magento\Sales\Block\Adminhtml\Order\Create\Giftmessage $block
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- */
-?>
-<?php /** @var \Magento\GiftMessage\Helper\Message $giftMessageHelper */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\GiftMessage\Helper\Message;
+use Magento\Sales\Block\Adminhtml\Order\Create\Giftmessage;
+
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var Giftmessage $block */
+/** @var Message $giftMessageHelper */
 $giftMessageHelper = $block->getData('giftMessageHelper');
 ?>
 <?php if ($giftMessageHelper->isMessagesAllowed('main', $block->getQuote(), $block->getStoreId())): ?>
@@ -17,12 +21,12 @@ $giftMessageHelper = $block->getData('giftMessageHelper');
     <div id="order-giftmessage" class="giftmessage-order-create">
         <fieldset class="admin__fieldset">
             <legend class="admin__legend">
-                <span><?= $block->escapeHtml(__('Gift Message for the Entire Order')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Gift Message for the Entire Order')) ?></span>
             </legend>
             <br>
             <?php if ($giftMessageHelper->isMessagesAllowed('main', $block->getQuote(), $block->getStoreId())): ?>
                 <p>
-                    <?= $block->escapeHtml(
+                    <?= $escaper->escapeHtml(
                         __('Leave this box blank if you don\'t want to leave a gift message for the entire order.')
                     ) ?>
                 </p>

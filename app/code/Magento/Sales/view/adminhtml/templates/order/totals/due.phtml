@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
 <?php if ($block->getCanDisplayTotalDue()): ?>
 <tr id="total-due">
-    <td class="label"><strong><?= $block->escapeHtml(__('Total Due')) ?></strong></td>
+    <td class="label"><strong><?= $escaper->escapeHtml(__('Total Due')) ?></strong></td>
 
     <td class="emph"><?= /* @noEscape */ $block->displayPriceAttribute('total_due', true) ?></td>
 </tr>

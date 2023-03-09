@@ -3,19 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+
+$_shipment = $block->getShipment();
+$_order    = $block->getOrder();
 ?>
-<?php $_shipment = $block->getShipment() ?>
-<?php $_order    = $block->getOrder() ?>
 <?php if ($_shipment && $_order) : ?>
     <table class="email-items">
         <thead>
             <tr>
                 <th class="item-info">
-                    <?= $block->escapeHtml(__('Items')) ?>
+                    <?= $escaper->escapeHtml(__('Items')) ?>
                 </th>
                 <th class="item-qty">
-                    <?= $block->escapeHtml(__('Qty')) ?>
+                    <?= $escaper->escapeHtml(__('Qty')) ?>
                 </th>
             </tr>
         </thead>

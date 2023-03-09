@@ -3,22 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * @var \Magento\Sales\Block\Adminhtml\Order\Create\Comment $block
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Sales\Block\Adminhtml\Order\Create\Comment;
+
+/** @var Escaper $escaper */
+/** @var Comment $block */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
-
 <div class="admin__field field-comment">
     <label for="order-comment" class="admin__field-label">
-        <span><?= $block->escapeHtml(__('Order Comments')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Order Comments')) ?></span>
     </label>
     <div class="admin__field-control">
         <textarea
             id="order-comment"
             name="order[comment][customer_note]"
-            class="admin__control-textarea"><?= $block->escapeHtml($block->getCommentNote()) ?></textarea>
+            class="admin__control-textarea"><?= $escaper->escapeHtml($block->getCommentNote()) ?></textarea>
     </div>
 </div>
 <?php $scriptString = <<<script

@@ -3,7 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
-<?php /** @var $block \Magento\Sales\Block\Order\Info */ ?>
+declare(strict_types=1);
 
-<span class="order-status"><?= $block->escapeHtml($block->getOrder()->getStatusLabel()) ?></span>
+use Magento\Framework\Escaper;
+use Magento\Sales\Block\Order\Info;
+
+/** @var Escaper $escaper */
+/** @var Info $block */
+?>
+<span class="order-status"><?= $escaper->escapeHtml($block->getOrder()->getStatusLabel()) ?></span>

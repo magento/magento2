@@ -3,13 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Sales\Block\Adminhtml\Order\Create\Form $block */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Sales\Block\Adminhtml\Order\Create\Form;
+
+/** @var Escaper $escaper */
+/** @var Form $block */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
-<form id="edit_form" data-order-config='<?= $block->escapeHtml($block->getOrderDataJson()) ?>'
-      data-load-base-url="<?= $block->escapeUrl($block->getLoadBlockUrl()) ?>"
-      action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" enctype="multipart/form-data">
+<form id="edit_form" data-order-config='<?= $escaper->escapeHtml($block->getOrderDataJson()) ?>'
+      data-load-base-url="<?= $escaper->escapeUrl($block->getLoadBlockUrl()) ?>"
+      action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>" method="post" enctype="multipart/form-data">
     <?= $block->getBlockHtml('formkey') ?>
     <div id="order-message">
         <?= $block->getChildHtml('message') ?>

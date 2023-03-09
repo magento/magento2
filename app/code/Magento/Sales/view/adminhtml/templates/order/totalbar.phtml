@@ -3,8 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
 
 // @deprecated
+
 $totals = $block->getTotals();
 ?>
 <?php if ($totals && count($totals) > 0) : ?>
@@ -14,8 +20,8 @@ $totals = $block->getTotals();
         <td <?php if ($total['grand']) :
             ?>class="grand-total"<?php
             endif; ?>>
-            <?= $block->escapeHtml($total['label']) ?><br />
-            <?= $block->escapeHtml($total['value']) ?>
+            <?= $escaper->escapeHtml($total['label']) ?><br />
+            <?= $escaper->escapeHtml($total['value']) ?>
         </td>
     <?php endforeach; ?>
     </tr>

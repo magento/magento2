@@ -3,15 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Form\Account
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Sales\Block\Adminhtml\Order\Create\Form\Account;
+
+/** @var Escaper $escaper */
+/** @var Account $block */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
-
-<div class="admin__page-section-title <?= $block->escapeHtmlAttr($block->getHeaderCssClass()) ?>">
-    <span class="title"><?= $block->escapeHtml($block->getHeaderText()) ?></span>
+<div class="admin__page-section-title <?= $escaper->escapeHtmlAttr($block->getHeaderCssClass()) ?>">
+    <span class="title"><?= $escaper->escapeHtml($block->getHeaderText()) ?></span>
     <div class="actions"></div>
 </div>
 <div id="customer_account_fields" class="admin__page-section-content">

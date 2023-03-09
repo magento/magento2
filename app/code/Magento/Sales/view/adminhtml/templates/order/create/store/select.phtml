@@ -3,9 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/* @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Store\Select */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Sales\Block\Adminhtml\Order\Create\Store\Select;
+
+/** @var Escaper $escaper */
+/** @var Select $block */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
 <div class="store-scope form-inline">
     <div class="admin__fieldset tree-store-scope">
@@ -19,7 +25,7 @@
                         <?php $showWebsite = true; ?>
                         <div class="admin__field field-website_label">
                             <label class="admin__field-label" for="">
-                                <span><?= $block->escapeHtml($_website->getName()) ?></span>
+                                <span><?= $escaper->escapeHtml($_website->getName()) ?></span>
                             </label>
                             <div class="admin__field-control">
                                 <div class="admin__field admin__field-option">
@@ -36,7 +42,7 @@
                         <?php $showGroup = true; ?>
                         <div class="admin__field field-group_label">
                             <label class="admin__field-label" for="">
-                                <span><?= $block->escapeHtml($_group->getName()) ?></span>
+                                <span><?= $escaper->escapeHtml($_group->getName()) ?></span>
                             </label>
                             <div class="admin__field-control"></div>
                         </div>
@@ -44,7 +50,7 @@
 
                     <div class="admin__field field-store_label">
                         <label class="admin__field-label" for="">
-                            <span><?= $block->escapeHtml($_group->getName()) ?></span>
+                            <span><?= $escaper->escapeHtml($_group->getName()) ?></span>
                         </label>
                         <div class="admin__field-control">
                             <div class="nested">
@@ -52,7 +58,7 @@
                                     <input type="radio"
                                            id="store_<?= (int) $_store->getId() ?>" class="admin__control-radio"/>
                                     <label class="admin__field-label" for="store_<?= (int) $_store->getId() ?>">
-                                        <?= $block->escapeHtml($_store->getName()) ?>
+                                        <?= $escaper->escapeHtml($_store->getName()) ?>
                                     </label>
                                     <?= /* @noEscape*/ $secureRenderer->renderEventListenerAsTag(
                                         'onclick',

@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * @var $block \Magento\Sales\Block\Adminhtml\Order\Totals\Tax
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Sales\Block\Adminhtml\Order\Totals\Tax;
+use Magento\Sales\Model\Order\Invoice;
 
-/** @var $_source \Magento\Sales\Model\Order\Invoice */
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var Tax $block */
+/** @var Invoice $_source */
 $_source    = $block->getSource();
 $_order     = $block->getOrder();
 $_fullInfo  = $block->getFullTaxInfo();
@@ -19,7 +23,6 @@ $taxHelper = $block->getData('taxHelper');
 /** @var \Magento\Framework\Math\Random $randomHelper */
 $randomHelper = $block->getData('randomHelper');
 ?>
-
 <?php if ($block->displayFullSummary() && $_fullInfo): ?>
 <tr class="summary-total">
 <?php else: ?>
@@ -28,9 +31,9 @@ $randomHelper = $block->getData('randomHelper');
     <td class="label">
         <div class="summary-collapse" tabindex="0">
             <?php if ($taxHelper->displayFullSummary()): ?>
-                <?= $block->escapeHtml(__('Total Tax')) ?>
+                <?= $escaper->escapeHtml(__('Total Tax')) ?>
             <?php else: ?>
-                <?= $block->escapeHtml(__('Tax')) ?>
+                <?= $escaper->escapeHtml(__('Tax')) ?>
             <?php endif;?>
         </div>
     </td>
@@ -64,10 +67,10 @@ $randomHelper = $block->getData('randomHelper');
                     class="summary-details<?= ($isTop ? ' summary-details-first' : '') ?>">
                     <?php if ($rate['percent'] !== null): ?>
                         <td class="admin__total-mark">
-                            <?= $block->escapeHtml($rate['title']) ?> (<?= (float)$rate['percent'] ?>%)<br />
+                            <?= $escaper->escapeHtml($rate['title']) ?> (<?= (float)$rate['percent'] ?>%)<br />
                         </td>
                     <?php else: ?>
-                        <td class="admin__total-mark"><?= $block->escapeHtml($rate['title']) ?><br /></td>
+                        <td class="admin__total-mark"><?= $escaper->escapeHtml($rate['title']) ?><br /></td>
                     <?php endif; ?>
                     <?php if ($isFirst): ?>
                         <td rowspan="<?= count($rates) ?>">
@@ -96,10 +99,10 @@ $randomHelper = $block->getData('randomHelper');
                 class="summary-details<?= ($isTop ? ' summary-details-first' : '') ?>">
                 <?php if ($info['percent'] !== null): ?>
                     <td class="admin__total-mark">
-                        <?= $block->escapeHtml($info['title']) ?> (<?= (float)$info['percent'] ?>%)<br />
+                        <?= $escaper->escapeHtml($info['title']) ?> (<?= (float)$info['percent'] ?>%)<br />
                     </td>
                 <?php else: ?>
-                    <td class="admin__total-mark"><?= $block->escapeHtml($info['title']) ?><br /></td>
+                    <td class="admin__total-mark"><?= $escaper->escapeHtml($info['title']) ?><br /></td>
                 <?php endif; ?>
                     <td><?= /* @noEscape */ $block->displayAmount($amount, $baseAmount) ?></td>
             </tr>

@@ -3,19 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
+$_source  = $block->getSource();
+$block->setPriceDataObject($_source);
 ?>
-<?php $_source  = $block->getSource() ?>
-<?php $block->setPriceDataObject($_source) ?>
-
 <tr id="grand-totals">
     <td class="label">
         <strong>
         <?php if ($block->getGrandTotalTitle()): ?>
-            <?= $block->escapeHtml($block->getGrandTotalTitle()) ?>
+            <?= $escaper->escapeHtml($block->getGrandTotalTitle()) ?>
         <?php else: ?>
-            <?= $block->escapeHtml(__('Grand Total')) ?>
+            <?= $escaper->escapeHtml(__('Grand Total')) ?>
         <?php endif; ?>
         </strong>
     </td>

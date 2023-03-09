@@ -3,11 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer $block */
+use Magento\Framework\Escaper;
+use Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer;
+
+/** @var Escaper $escaper */
+/** @var DefaultRenderer $block */
 $_item = $block->getItem();
 ?>
-<span class="price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
+<span class="price-excluding-tax" data-label="<?= $escaper->escapeHtml(__('Excl. Tax')) ?>">
     <span class="cart-price">
         <?= /* @noEscape */ $block->getOrder()->formatPrice($block->getItem()->getPrice()) ?>
     </span>
