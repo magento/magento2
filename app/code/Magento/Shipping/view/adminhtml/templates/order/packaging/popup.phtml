@@ -3,22 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Shipping\Block\Adminhtml\Order\Packaging;
+
+/** @var Escaper $escaper */
+/** @var Packaging $block */
+/** @var SecureHtmlRenderer $secureRenderer */
+
 //phpcs:disable PSR2.Methods.FunctionCallSignature.SpaceBeforeOpenBracket
 //phpcs:disable Magento2.Security.IncludeFile.FoundIncludeFile
 
-/**
- * @var $block \Magento\Shipping\Block\Adminhtml\Order\Packaging
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- */
-?>
-<?php
 $shippingMethod = $block->getShipment()->getOrder()->getShippingMethod();
 $sizeSource = $block->getSourceSizeModel()->toOptionArray();
 $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 0;
-?>
 
-<?php $scriptString = <<<script
-
+$scriptString = <<<script
     require([
         "jquery",
         "prototype",
@@ -37,7 +39,7 @@ $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 
             packaging.sendCreateLabelRequest();
         });
         packaging.setLabelCreatedCallback(function(response){
-            setLocation("{$block->escapeJs($block->getUrl(
+            setLocation("{$escaper->escapeJs($block->getUrl(
                 'sales/order/view',
                 ['order_id' => $block->getShipment()->getOrderId()]
             ))}");
@@ -61,23 +63,23 @@ $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 
         });
         jQuery('#packaging_window').modal({
             type: 'slide',
-            title: '{$block->escapeJs(__('Create Packages'))}',
+            title: '{$escaper->escapeJs(__('Create Packages'))}',
             buttons: [{
-                text: '{$block->escapeJs(__('Cancel'))}',
+                text: '{$escaper->escapeJs(__('Cancel'))}',
                 'class': 'action-secondary',
                 click: function () {
                     packaging.cancelPackaging();
                     this.closeModal();
                     }
                 }, {
-                text: '{$block->escapeJs(__('Save'))}',
+                text: '{$escaper->escapeJs(__('Save'))}',
                 'attr': {'disabled':'disabled', 'data-action':'save-packages'},
                 'class': 'action-primary _disabled',
                 click: function () {
                     packaging.confirmPackaging();
                     }
                 }, {
-                    text: '{$block->escapeJs(__('Add Package'))}',
+                    text: '{$escaper->escapeJs(__('Add Package'))}',
                     'attr': {'data-action':'add-packages'},
                     'class': 'action-secondary',
                     click: function () {

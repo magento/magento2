@@ -3,12 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Shipping\Block\Tracking\Link;
+
+/** @var Escaper $escaper */
+/** @var Link $block */
+$order = $block->getOrder();
 ?>
-<?php /** @var $block \Magento\Shipping\Block\Tracking\Link */ ?>
-<?php $order = $block->getOrder() ?>
-<a href="#" class="action track" title="<?= $block->escapeHtmlAttr($block->getLabel()) ?>"
+<a href="#" class="action track" title="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"
    data-mage-init='{"popupWindow": {
-        "windowURL":"<?= $block->escapeUrl($block->getWindowUrl($order)) ?>",
+        "windowURL":"<?= $escaper->escapeUrl($block->getWindowUrl($order)) ?>",
         "windowName":"trackorder",
         "width":800,
         "height":600,
@@ -17,5 +23,5 @@
         "resizable":1,
         "scrollbars":1
     }}'>
-    <span><?= $block->escapeHtml($block->getLabel()) ?></span>
+    <span><?= $escaper->escapeHtml($block->getLabel()) ?></span>
 </a>

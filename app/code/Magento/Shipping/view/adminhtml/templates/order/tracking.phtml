@@ -3,14 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Shipping\Block\Adminhtml\Order\Tracking;
+
+/** @var Escaper $escaper */
+/** @var Tracking $block */
+/** @var SecureHtmlRenderer $secureRenderer */
 
 // phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
-/**
- * @var $block Magento\Shipping\Block\Adminhtml\Order\Tracking
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- */
-?>
-<?php $scriptString = <<<script
+
+$scriptString = <<<script
 
 require(['prototype'], function(){
 
@@ -76,7 +81,7 @@ script;
                     class="select admin__control-select carrier"
                     disabled="disabled">
                 <?php foreach ($block->getCarriers() as $_code => $_name): ?>
-                    <option value="<?= $block->escapeHtmlAttr($_code) ?>"><?= $block->escapeHtml($_name) ?></option>
+                    <option value="<?= $escaper->escapeHtmlAttr($_code) ?>"><?= $escaper->escapeHtml($_name) ?></option>
                 <?php endforeach; ?>
             </select>
         </td>
@@ -101,7 +106,7 @@ script;
                 type="button"
                 class="action-default action-delete"
                 onclick="trackingControl.deleteRow(event);return false">
-                <span><?= $block->escapeHtml(__('Delete')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Delete')) ?></span>
             </button>
         </td>
     </tr>
@@ -111,10 +116,10 @@ script;
     <table class="data-table admin__control-table" id="tracking_numbers_table">
         <thead>
         <tr class="headings">
-            <th class="col-carrier"><?= $block->escapeHtml(__('Carrier')) ?></th>
-            <th class="col-title"><?= $block->escapeHtml(__('Title')) ?></th>
-            <th class="col-number"><?= $block->escapeHtml(__('Number')) ?></th>
-            <th class="col-delete"><?= $block->escapeHtml(__('Action')) ?></th>
+            <th class="col-carrier"><?= $escaper->escapeHtml(__('Carrier')) ?></th>
+            <th class="col-title"><?= $escaper->escapeHtml(__('Title')) ?></th>
+            <th class="col-number"><?= $escaper->escapeHtml(__('Number')) ?></th>
+            <th class="col-delete"><?= $escaper->escapeHtml(__('Action')) ?></th>
         </tr>
         </thead>
         <tfoot>
