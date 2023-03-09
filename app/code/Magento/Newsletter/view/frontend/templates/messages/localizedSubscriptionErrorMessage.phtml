@@ -3,7 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Framework\View\Element\Template $block */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
 ?>
-<?= $block->escapeHtml(__($block->getData('message')), ['a']); ?>
+<?= $escaper->escapeHtml(__($block->getData('message')), ['a']); ?>

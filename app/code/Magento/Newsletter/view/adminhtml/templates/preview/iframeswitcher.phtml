@@ -3,9 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Backend\Block\Page $block */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+use Magento\Backend\Block\Page;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/** @var Escaper $escaper */
+/** @var Page $block */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
 <div id="preview" class="cms-revision-preview">
     <div class="toolbar">
@@ -20,7 +26,7 @@
         id="preview_iframe"
         class="preview_iframe"
         frameborder="0"
-        title="<?= $block->escapeHtmlAttr(__('Preview')) ?>"
+        title="<?= $escaper->escapeHtmlAttr(__('Preview')) ?>"
         width="100%"
         sandbox="allow-forms allow-pointer-lock allow-same-origin"
     >

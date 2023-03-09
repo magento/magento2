@@ -3,9 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/* @var $block \Magento\Newsletter\Block\Adminhtml\Queue\Edit */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Newsletter\Block\Adminhtml\Queue\Edit;
+
+/** @var Escaper $escaper */
+/** @var Edit $block */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
     <?= $block->getBackButtonHtml() ?>
@@ -19,11 +25,11 @@
     <?php endif ?>
 </div>
 
-<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="queue_edit_form">
+<form action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>" method="post" id="queue_edit_form">
     <?= $block->getBlockHtml('formkey') ?>
     <?= $block->getChildHtml('form') ?>
 </form>
-<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_queue_preview_form"
+<form action="<?= $escaper->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_queue_preview_form"
       target="_blank">
     <?= $block->getBlockHtml('formkey') ?>
     <div class="no-display">

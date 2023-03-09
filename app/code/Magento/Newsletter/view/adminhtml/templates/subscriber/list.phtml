@@ -3,22 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Newsletter\Block\Adminhtml\Subscriber $block */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Newsletter\Block\Adminhtml\Subscriber;
+
+/** @var Escaper $escaper */
+/** @var Subscriber $block */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
 <?= $block->getChildHtml('grid') ?>
 <?php if (count($block->getQueueAsOptions())>0 && $block->getShowQueueAdd()): ?>
 <div class="form-buttons">
     <select id="queueList" name="queue">
     <?php foreach ($block->getQueueAsOptions() as $_queue): ?>
-        <option value="<?= $block->escapeHtmlAttr($_queue['value']) ?>">
-            <?= $block->escapeHtml($_queue['label']) ?> #<?= $block->escapeHtml($_queue['value']) ?>
+        <option value="<?= $escaper->escapeHtmlAttr($_queue['value']) ?>">
+            <?= $escaper->escapeHtml($_queue['label']) ?> #<?= $escaper->escapeHtml($_queue['value']) ?>
         </option>
     <?php endforeach; ?>
     </select>
     <button type="button" class="scalable" id="addToQueue">
-        <span><span><span><?= $block->escapeHtml(__('Add to Queue')) ?></span></span></span>
+        <span><span><span><?= $escaper->escapeHtml(__('Add to Queue')) ?></span></span></span>
     </button>
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
         'onclick',
