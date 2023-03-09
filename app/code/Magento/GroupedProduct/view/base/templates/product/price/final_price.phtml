@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * Template for displaying grouped product price
- */
-?>
-<?php
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+
 $minProduct = $block->getSaleableItem()
     ->getPriceInfo()
     ->getPrice(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)
@@ -27,7 +27,7 @@ if ($minProduct) {
 <div class="price-box">
     <?php if ($minProduct && \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW != $block->getZone()) : ?>
     <p class="minimal-price">
-        <span class="price-label"><?= $block->escapeHtml(__('Starting at')) ?></span><?= $amountRender->toHtml() ?>
+        <span class="price-label"><?= $escaper->escapeHtml(__('Starting at')) ?></span><?= $amountRender->toHtml() ?>
     </p>
     <?php endif ?>
 </div>
