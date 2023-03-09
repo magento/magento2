@@ -3,7 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Framework\View\Element\Template $block */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
 ?>
-<?= $block->escapeHtml(__('You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.', $block->getData('url')), ['a']);
+<?= $escaper->escapeHtml(__('You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.', $block->getData('url')), ['a']);

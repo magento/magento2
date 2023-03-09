@@ -3,8 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/* @var $block \Magento\Customer\Block\CustomerScopeData */
+use Magento\Customer\Block\CustomerScopeData;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var CustomerScopeData $block */
 ?>
 <script type="text/x-magento-init">
     {
@@ -14,7 +19,7 @@
                     "website-rule": {
                         "Magento_Customer/js/invalidation-rules/website-rule": {
                             "scopeConfig": {
-                                "websiteId": "<?= $block->escapeJs($block->getWebsiteId()) ?>"
+                                "websiteId": "<?= $escaper->escapeJs($block->getWebsiteId()) ?>"
                             }
                         }
                     }

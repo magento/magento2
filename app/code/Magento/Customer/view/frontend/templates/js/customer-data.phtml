@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\Customer\Block\CustomerData;
 use Magento\Customer\ViewModel\Customer\Data;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
 
-/** @var \Magento\Customer\Block\CustomerData $block */
-
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+/** @var Escaper $escaper */
+/** @var CustomerData $block */
 /** @var Data $viewModel */
 $viewModel = $block->getViewModel() ?? ObjectManager::getInstance()->get(Data::class);
 $customerDataUrl = $block->getCustomerDataUrl('customer/account/updateSession');
@@ -18,11 +21,11 @@ $expirableSectionNames = $block->getExpirableSectionNames();
     {
         "*": {
             "Magento_Customer/js/customer-data": {
-                "sectionLoadUrl": "<?= $block->escapeJs($block->getCustomerDataUrl('customer/section/load')) ?>",
+                "sectionLoadUrl": "<?= $escaper->escapeJs($block->getCustomerDataUrl('customer/section/load')) ?>",
                 "expirableSectionLifetime": <?= (int)$block->getExpirableSectionLifetime() ?>,
                 "expirableSectionNames": <?= /* @noEscape */ $viewModel->jsonEncode($expirableSectionNames) ?>,
-                "cookieLifeTime": "<?= $block->escapeJs($block->getCookieLifeTime()) ?>",
-                "updateSessionUrl": "<?= $block->escapeJs($customerDataUrl) ?>",
+                "cookieLifeTime": "<?= $escaper->escapeJs($block->getCookieLifeTime()) ?>",
+                "updateSessionUrl": "<?= $escaper->escapeJs($customerDataUrl) ?>",
                 "isLoggedIn": "<?= /* @noEscape */ $viewModel->isLoggedIn() ?>"
             }
         }

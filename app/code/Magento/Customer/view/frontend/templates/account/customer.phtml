@@ -3,8 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var Magento\Customer\Block\Account\Customer $block */
+use Magento\Customer\Block\Account\Customer;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Customer $block */
 ?>
 <?php if ($block->customerLoggedIn()) : ?>
     <li class="customer-welcome">
@@ -19,7 +24,7 @@
                     class="action switch"
                     tabindex="-1"
                     data-action="customer-menu-toggle">
-                <span><?= $block->escapeHtml(__('Change')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Change')) ?></span>
             </button>
         </span>
         <script type="text/x-magento-init">
