@@ -79,7 +79,7 @@ abstract class ImportResult extends Import
                     $this->renderErrorMessages->renderMessages($errorAggregator)
                 );
             } catch (\Exception $e) {
-                foreach ($this->renderErrorMessages->getErrorMessages($errorAggregator) as $errorMessage) {
+                foreach ($this->getErrorMessages($errorAggregator) as $errorMessage) {
                     $resultBlock->addError($errorMessage);
                 }
             }

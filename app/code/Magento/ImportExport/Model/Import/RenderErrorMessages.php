@@ -120,7 +120,7 @@ class RenderErrorMessages
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @return array
      */
-    public function getErrorMessages(ProcessingErrorAggregatorInterface $errorAggregator)
+    public function getErrorMessages(ProcessingErrorAggregatorInterface $errorAggregator): array
     {
         $messages = [];
         $rowMessages = $errorAggregator->getRowsGroupedByErrorCode([], [AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION]);
@@ -136,7 +136,7 @@ class RenderErrorMessages
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @return ProcessingError[]
      */
-    public function getSystemExceptions(ProcessingErrorAggregatorInterface $errorAggregator)
+    public function getSystemExceptions(ProcessingErrorAggregatorInterface $errorAggregator): array
     {
         return $errorAggregator->getErrorsByCode([AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION]);
     }
@@ -147,7 +147,7 @@ class RenderErrorMessages
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @return string
      */
-    public function createErrorReport(ProcessingErrorAggregatorInterface $errorAggregator)
+    public function createErrorReport(ProcessingErrorAggregatorInterface $errorAggregator): string
     {
         $this->historyModel->loadLastInsertItem();
         $sourceFile = $this->reportHelper->getReportAbsolutePath($this->historyModel->getImportedFile());
@@ -166,7 +166,7 @@ class RenderErrorMessages
      * @param string $fileName
      * @return string
      */
-    public function createDownloadUrlImportHistoryFile($fileName)
+    public function createDownloadUrlImportHistoryFile($fileName): string
     {
         return $this->backendUrl->getUrl(self::IMPORT_HISTORY_FILE_DOWNLOAD_ROUTE, ['filename' => $fileName]);
     }
