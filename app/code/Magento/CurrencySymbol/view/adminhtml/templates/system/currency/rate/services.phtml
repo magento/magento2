@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
-<?php
-/**
- * @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Services
- */
+declare(strict_types=1);
+
+use Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Services;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Services $block */
 ?>
 <div class="admin__field">
-    <label class="admin__field-label"><span><?= $block->escapeHtml(__('Import Service')) ?></span></label>
+    <label class="admin__field-label"><span><?= $escaper->escapeHtml(__('Import Service')) ?></span></label>
     <div class="admin__field-control">
         <?= $block->getChildHtml('import_services') ?>
     </div>

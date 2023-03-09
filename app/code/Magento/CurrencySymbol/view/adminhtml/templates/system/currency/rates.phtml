@@ -3,14 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
-<?php
-/**
- * @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currency
- */
-?>
+declare(strict_types=1);
 
-<form action="<?= $block->escapeUrl($block->getImportFormAction()) ?>" method="post" class="import-service">
+use Magento\CurrencySymbol\Block\Adminhtml\System\Currency;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Currency $block */
+?>
+<form action="<?= $escaper->escapeUrl($block->getImportFormAction()) ?>" method="post" class="import-service">
     <?= $block->getBlockHtml('formkey') ?>
     <fieldset class="admin__fieldset admin__fieldset-import-service">
         <?= $block->getServicesHtml() ?>
