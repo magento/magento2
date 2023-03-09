@@ -211,7 +211,8 @@ class ConfirmTest extends TestCase
                 'customerRepository' => $this->customerRepositoryMock,
                 'addressHelper' => $this->addressHelperMock,
                 'urlFactory' => $urlFactoryMock,
-                'customerLogger' => $this->customerLoggerMock
+                'customerLogger' => $this->customerLoggerMock,
+                'cookieMetadataManager' => $objectManagerHelper->getObject(PhpCookieManager::class),
             ]
         );
     }
