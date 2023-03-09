@@ -3,15 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/**
- * @var $block \Magento\OfflinePayments\Block\Info\Purchaseorder
- */
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\OfflinePayments\Block\Info\Purchaseorder;
+
+/** @var Escaper $escaper */
+/** @var Purchaseorder $block */
 $paymentTitle = $block->getMethod()->getConfigData('title', $block->getInfo()->getOrder()->getStoreId());
 ?>
-<div class="order-payment-method-name"><?= $block->escapeHtml($paymentTitle) ?></div>
+<div class="order-payment-method-name"><?= $escaper->escapeHtml($paymentTitle) ?></div>
 <table class="data-table admin__table-secondary">
     <tr>
-        <th><?= $block->escapeHtml(__('Purchase Order Number')) ?>:</th>
-        <td><?= $block->escapeHtml($block->getInfo()->getPoNumber()) ?></td>
+        <th><?= $escaper->escapeHtml(__('Purchase Order Number')) ?>:</th>
+        <td><?= $escaper->escapeHtml($block->getInfo()->getPoNumber()) ?></td>
     </tr>
 </table>

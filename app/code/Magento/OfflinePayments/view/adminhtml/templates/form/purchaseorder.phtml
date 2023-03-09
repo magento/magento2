@@ -3,20 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * @var $block \Magento\OfflinePayments\Block\Form\Purchaseorder
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\OfflinePayments\Block\Form\Purchaseorder;
+
+/** @var Escaper $escaper */
+/** @var Purchaseorder $block */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
-<fieldset class="admin__fieldset payment-method" id="payment_form_<?= $block->escapeHtml($block->getMethodCode()) ?>">
+<fieldset class="admin__fieldset payment-method" id="payment_form_<?= $escaper->escapeHtml($block->getMethodCode()) ?>">
     <div class="admin__field _required">
         <label for="po_number" class="admin__field-label">
-            <span><?= $block->escapeHtml(__('Purchase Order Number')) ?></span>
+            <span><?= $escaper->escapeHtml(__('Purchase Order Number')) ?></span>
         </label>
         <div class="admin__field-control">
             <input type="text" id="po_number" name="payment[po_number]"
-                   title="<?= $block->escapeHtml(__("Purchase Order Number")) ?>"
+                   title="<?= $escaper->escapeHtml(__("Purchase Order Number")) ?>"
                    class="required-entry admin__control-text"
                    value="<?= /* @noEscape */ $block->getInfoData('po_number') ?>"/>
         </div>
@@ -24,5 +28,5 @@
 </fieldset>
 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
     "display:none",
-    'fieldset#payment_form_' . $block->escapeJs($block->getMethodCode())
+    'fieldset#payment_form_' . $escaper->escapeJs($block->getMethodCode())
 ) ?>

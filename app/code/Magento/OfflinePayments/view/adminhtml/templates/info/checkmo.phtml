@@ -3,21 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * @var $block \Magento\OfflinePayments\Block\Info\Checkmo
- */
+use Magento\Framework\Escaper;
+use Magento\OfflinePayments\Block\Info\Checkmo;
+
+/** @var Escaper $escaper */
+/** @var Checkmo $block */
 $paymentTitle = $block->getMethod()->getConfigData('title', $block->getInfo()->getOrder()->getStoreId());
 ?>
-<?= $block->escapeHtml($paymentTitle) ?>
+<?= $escaper->escapeHtml($paymentTitle) ?>
 <?php if ($block->getInfo()->getAdditionalInformation()) : ?>
     <?php if ($block->getPayableTo()) : ?>
-        <br /><?= $block->escapeHtml(__('Make Check payable to: %1', $block->getPayableTo())) ?>
+        <br /><?= $escaper->escapeHtml(__('Make Check payable to: %1', $block->getPayableTo())) ?>
     <?php endif; ?>
     <?php if ($block->getMailingAddress()) : ?>
-        <label><?= $block->escapeHtml(__('Send Check to:')) ?></label>
+        <label><?= $escaper->escapeHtml(__('Send Check to:')) ?></label>
         <div class="checkmo-mailing-address">
-            <?= /* @noEscape */ nl2br($block->escapeHtml($block->getMailingAddress())) ?>
+            <?= /* @noEscape */ nl2br($escaper->escapeHtml($block->getMailingAddress())) ?>
         </div>
     <?php endif; ?>
 <?php endif; ?>

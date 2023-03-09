@@ -3,9 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/**
- * @var $block \Magento\OfflinePayments\Block\Info\Purchaseorder
- */
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\OfflinePayments\Block\Info\Purchaseorder;
+
+/** @var Escaper $escaper */
+/** @var Purchaseorder $block */
 ?>
-<?= $block->escapeHtml(__('Purchase Order Number: %1', $block->getInfo()->getPoNumber())) ?>
+<?= $escaper->escapeHtml(__('Purchase Order Number: %1', $block->getInfo()->getPoNumber())) ?>
     {{pdf_row_separator}}
