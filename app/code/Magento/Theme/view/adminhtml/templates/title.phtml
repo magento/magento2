@@ -3,16 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * @var $block \Magento\Theme\Block\Html\Title
- */
-$titleIdHtml = ($block->getTitleId()) ? ' id="' . $block->escapeHtmlAttr($block->getTitleId()) . '"' : '';
+use Magento\Framework\Escaper;
+use Magento\Theme\Block\Html\Title;
+
+/** @var Escaper $escaper */
+/** @var Title $block */
+$titleIdHtml = ($block->getTitleId()) ? ' id="' . $escaper->escapeHtmlAttr($block->getTitleId()) . '"' : '';
 $titleClass = ($block->getTitleClass()) ? ' ' . $block->getTitleClass() : '';
 $title = $block->getPageTitle();
 ?>
-
-<div class="page-title-wrapper<?= $block->escapeHtmlAttr($titleClass) ?>">
-    <h1 class="page-title"<?= /* @noEscape */ $titleIdHtml ?>><?= $block->escapeHtml($title) ?></h1>
+<div class="page-title-wrapper<?= $escaper->escapeHtmlAttr($titleClass) ?>">
+    <h1 class="page-title"<?= /* @noEscape */ $titleIdHtml ?>><?= $escaper->escapeHtml($title) ?></h1>
     <?= $block->getChildHtml() ?>
 </div>

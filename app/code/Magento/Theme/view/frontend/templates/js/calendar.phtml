@@ -3,18 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
-/** @var \Magento\Framework\View\Element\Html\Calendar $block */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Html\Calendar;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
-/**
- * Calendar localization script. Should be put into page header.
- *
- * @see \Magento\Framework\View\Element\Html\Calendar
- */
-?>
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var Calendar $block */
 
-<?php $intFirstDay = (int)$firstDay;
+/** Calendar localization script. Should be put into page header. */
+
+$intFirstDay = (int)$firstDay;
 $scriptString = <<<script
 
 require([
@@ -28,16 +29,16 @@ require([
             dayNamesMin: {$days['abbreviated']},
             monthNames: {$months['wide']},
             monthNamesShort: {$months['abbreviated']},
-            infoTitle: '{$block->escapeJs(__('About the calendar'))}',
+            infoTitle: '{$escaper->escapeJs(__('About the calendar'))}',
             firstDay: {$intFirstDay},
-            closeText: '{$block->escapeJs(__('Close'))}',
-            currentText: '{$block->escapeJs(__('Go Today'))}',
-            prevText: '{$block->escapeJs(__('Previous'))}',
-            nextText: '{$block->escapeJs(__('Next'))}',
-            weekHeader: '{$block->escapeJs(__('WK'))}',
-            timeText: '{$block->escapeJs(__('Time'))}',
-            hourText: '{$block->escapeJs(__('Hour'))}',
-            minuteText: '{$block->escapeJs(__('Minute'))}',
+            closeText: '{$escaper->escapeJs(__('Close'))}',
+            currentText: '{$escaper->escapeJs(__('Go Today'))}',
+            prevText: '{$escaper->escapeJs(__('Previous'))}',
+            nextText: '{$escaper->escapeJs(__('Next'))}',
+            weekHeader: '{$escaper->escapeJs(__('WK'))}',
+            timeText: '{$escaper->escapeJs(__('Time'))}',
+            hourText: '{$escaper->escapeJs(__('Hour'))}',
+            minuteText: '{$escaper->escapeJs(__('Minute'))}',
             dateFormat: "D, d M yy", // $.datepicker.RFC_2822
             showOn: 'button',
             showAnim: '',

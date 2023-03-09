@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
-/**
- * @var Magento\Framework\View\Element\Template $block
- */
-?>
+declare(strict_types=1);
 
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var Template $block */
+?>
 <div class="cookie-status-message" id="cookie-status">
-    <?= $block->escapeHtml(__('The store will not work correctly when cookies are disabled.')); ?>
+    <?= $escaper->escapeHtml(__('The store will not work correctly when cookies are disabled.')); ?>
 </div>
 <?php
 $script = 'document.querySelector("#cookie-status").style.display = "none";';

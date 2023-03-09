@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * @var $block \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js;
+
+/** @var Escaper $escaper */
+/** @var Js $block */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
 <?= $block->getFormHtml() ?>
 
@@ -26,7 +30,7 @@ require([
         dataType: 'json',
         replaceFileInput: false,
         sequentialUploads: true,
-        url: '{$block->escapeJs($block->getJsUploadUrl())}',
+        url: '{$escaper->escapeJs($block->getJsUploadUrl())}',
 
         /**
          * Add data

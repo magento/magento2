@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/* @var $block \Magento\Theme\Block\Adminhtml\Design\Config\Edit\Scope */
+use Magento\Framework\Escaper;
+use Magento\Theme\Block\Adminhtml\Design\Config\Edit\Scope;
+
+/** @var Escaper $escaper */
+/* @var Scope $block */
 ?>
-
 <div class="store-view">
-    <span class="store-switcher-label"><?= $block->escapeHtml(__('Scope:')) ?></span>
-    <span class="store-switcher-value"><?= $block->escapeHtml($block->getScopeTitle()) ?></span>
+    <span class="store-switcher-label"><?= $escaper->escapeHtml(__('Scope:')) ?></span>
+    <span class="store-switcher-value"><?= $escaper->escapeHtml($block->getScopeTitle()) ?></span>
 </div>

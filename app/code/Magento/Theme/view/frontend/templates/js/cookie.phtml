@@ -3,23 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * Cookie settings initialization script
- *
- * @var $block \Magento\Framework\View\Element\Js\Cookie
- */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Js\Cookie;
+
+/** @var Escaper $escaper */
+/** @var Cookie $block */
+
+/** Cookie settings initialization script */
 ?>
-
 <script type="text/x-magento-init">
     {
         "*": {
             "mage/cookies": {
                 "expires": null,
-                "path": "<?= $block->escapeJs($block->getPath()) ?>",
-                "domain": "<?= $block->escapeJs($block->getDomain()) ?>",
+                "path": "<?= $escaper->escapeJs($block->getPath()) ?>",
+                "domain": "<?= $escaper->escapeJs($block->getDomain()) ?>",
                 "secure": <?= $block->getSessionConfig()->getCookieSecure() ? 'true' : 'false'; ?>,
-                "lifetime": "<?= $block->escapeJs($block->getLifetime()) ?>"
+                "lifetime": "<?= $escaper->escapeJs($block->getLifetime()) ?>"
             }
         }
     }

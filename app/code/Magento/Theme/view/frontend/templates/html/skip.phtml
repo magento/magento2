@@ -3,13 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
 
 $target = $block->getTarget();
 $label = $block->getLabel();
 ?>
-<a class="action skip <?= $block->escapeHtmlAttr($target) ?>"
-   href="#<?= $block->escapeHtmlAttr($target) ?>">
+<a class="action skip <?= $escaper->escapeHtmlAttr($target) ?>"
+   href="#<?= $escaper->escapeHtmlAttr($target) ?>">
     <span>
-        <?= $block->escapeHtml($label) ?>
+        <?= $escaper->escapeHtml($label) ?>
     </span>
 </a>
