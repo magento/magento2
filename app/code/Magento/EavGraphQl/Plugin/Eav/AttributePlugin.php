@@ -20,7 +20,7 @@ class AttributePlugin
      * @param Attribute $subject
      * @param array $result
      *
-     * @return Attribute
+     * @return string[]
      */
     public function afterGetIdentities(Attribute $subject, array $result): array
     {

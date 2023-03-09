@@ -110,12 +110,13 @@ class CustomAttributesMetadataCacheTest extends GraphQLPageCacheAbstract
     }
 
     /**
-     * Per-store assertion helper method.
+     * Assert attribute option labels for each store provided.
      *
-     * @param $storeOptions
-     * @param $storeCode
-     * @param $stores
-     * @param $options
+     * @param array $storeOptions
+     * @param string $storeCode
+     * @param \Magento\Store\Api\Data\StoreInterface[] $stores
+     * @param array $options
+     *
      * @return void
      */
     private function assertOptionValuesPerStore($storeOptions, $storeCode, $stores, $options)
