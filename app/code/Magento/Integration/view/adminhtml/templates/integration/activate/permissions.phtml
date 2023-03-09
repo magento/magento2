@@ -7,8 +7,13 @@
  *
  * @var \Magento\Backend\Block\Widget\Form\Container $block
  */
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
 ?>
-<div><p><?= $block->escapeHtml(__('The integration you selected asks you to approve access to the following:')) ?></p></div>
+<div><p><?= $escaper->escapeHtml(__('The integration you selected asks you to approve access to the following:')) ?></p></div>
 <div id="integration-activate-permissions-tabs">
     <?= $block->getChildHtml('tabs') ?>
 </div>

@@ -7,5 +7,10 @@
  *
  * @var \Magento\Backend\Block\Template $block
  */
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
 ?>
-<div><p><?= $block->escapeHtml(__("Please setup or sign in into your 3rd party account to complete setup of this integration.")) ?></p></div>
+<div><p><?= $escaper->escapeHtml(__("Please setup or sign in into your 3rd party account to complete setup of this integration.")) ?></p></div>
