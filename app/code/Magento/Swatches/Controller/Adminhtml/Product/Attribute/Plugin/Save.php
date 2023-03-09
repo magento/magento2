@@ -17,17 +17,11 @@ use Magento\Swatches\Model\ConvertSwatchAttributeFrontendInput;
 class Save
 {
     /**
-     * @var ConvertSwatchAttributeFrontendInput
-     */
-    private $convertSwatchAttributeFrontendInput;
-
-    /**
      * @param ConvertSwatchAttributeFrontendInput $convertSwatchAttributeFrontendInput
      */
     public function __construct(
-        ConvertSwatchAttributeFrontendInput $convertSwatchAttributeFrontendInput
+        private readonly ConvertSwatchAttributeFrontendInput $convertSwatchAttributeFrontendInput
     ) {
-        $this->convertSwatchAttributeFrontendInput = $convertSwatchAttributeFrontendInput;
     }
 
     /**

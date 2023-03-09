@@ -5,13 +5,17 @@
  */
 namespace Magento\Swatches\Model\ResourceModel\Swatch;
 
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Swatches\Model\ResourceModel\Swatch as ResourceSwatch;
+use Magento\Swatches\Model\Swatch as ModelSwatch;
+
 /**
  * @codeCoverageIgnore
  * Swatch Resource Collection
  * @api
  * @since 100.0.2
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Standard collection initialization
@@ -20,7 +24,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Swatches\Model\Swatch::class, \Magento\Swatches\Model\ResourceModel\Swatch::class);
+        $this->_init(ModelSwatch::class, ResourceSwatch::class);
     }
 
     /**

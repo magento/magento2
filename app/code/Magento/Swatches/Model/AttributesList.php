@@ -5,7 +5,9 @@
  */
 namespace Magento\Swatches\Model;
 
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\ConfigurableProduct\Model\AttributesListInterface;
+use Magento\Swatches\Helper\Data as SwatchHelper;
 
 /**
  * @api
@@ -14,25 +16,13 @@ use Magento\ConfigurableProduct\Model\AttributesListInterface;
 class AttributesList implements AttributesListInterface
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
-     */
-    protected $collectionFactory;
-
-    /**
-     * @var \Magento\Swatches\Helper\Data
-     */
-    protected $dataHelper;
-
-    /**
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
-     * @param \Magento\Swatches\Helper\Data $dataHelper
+     * @param CollectionFactory $collectionFactory
+     * @param SwatchHelper $dataHelper
      */
     public function __construct(
-        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory,
-        \Magento\Swatches\Helper\Data $dataHelper
+        protected readonly CollectionFactory $collectionFactory,
+        protected readonly SwatchHelper $dataHelper
     ) {
-        $this->collectionFactory = $collectionFactory;
-        $this->dataHelper = $dataHelper;
     }
 
     /**

@@ -9,50 +9,37 @@ namespace Magento\Swatches\Setup\Patch\Data;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
-/**
- * Class ConvertAdditionalDataToJson
- * @package Magento\Swatches\Setup\Patch
- */
 class ConvertAdditionalDataToJson implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
-     * @var FieldDataConverterFactory
-     */
-    private $fieldDataConverterFactory;
-
-    /**
      * ConvertAdditionalDataToJson constructor.
      * @param FieldDataConverterFactory $fieldDataConverterFactory
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        FieldDataConverterFactory $fieldDataConverterFactory,
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+        private readonly FieldDataConverterFactory $fieldDataConverterFactory,
+        private readonly ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
-        $this->fieldDataConverterFactory = $fieldDataConverterFactory;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
         $this->moduleDataSetup->getConnection()->startSetup();
         $this->convertAddDataToJson();
         $this->moduleDataSetup->getConnection()->endSetup();
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -62,7 +49,7 @@ class ConvertAdditionalDataToJson implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -70,7 +57,7 @@ class ConvertAdditionalDataToJson implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

@@ -21,31 +21,20 @@ use Magento\Swatches\Helper\Data;
 class OptionManagement
 {
     /**
-     * @var AttributeRepository
-     */
-    private $attributeRepository;
-    /**
-     * @var Data
-     */
-    private $swatchHelper;
-
-    /**
      * @param AttributeRepository $attributeRepository
      * @param Data $swatchHelper
      */
     public function __construct(
-        AttributeRepository $attributeRepository,
-        Data $swatchHelper
+        private readonly AttributeRepository $attributeRepository,
+        private readonly Data $swatchHelper
     ) {
-        $this->attributeRepository = $attributeRepository;
-        $this->swatchHelper = $swatchHelper;
     }
 
     /**
      * Add swatch value to the attribute option
      *
      * @param CatalogOptionManagement $subject
-     * @param string $attributeCode
+     * @param null|string $attributeCode
      * @param AttributeOptionInterface $option
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

@@ -5,6 +5,10 @@
  */
 namespace Magento\Swatches\Model\Plugin;
 
+use Magento\Catalog\Model\Product as ModelProduct;
+use Magento\Catalog\Model\Product\Type as ProductType;
+use Magento\Swatches\Model\Swatch;
+
 /**
  * Class Product for changing image roles list
  */
@@ -13,17 +17,17 @@ class Product
     /**
      * Unset swatch image role if product is not simple
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param ModelProduct $product
      * @param array|string $imageRoles
      * @return array
      */
-    public function afterGetMediaAttributes(\Magento\Catalog\Model\Product $product, $imageRoles)
+    public function afterGetMediaAttributes(ModelProduct $product, $imageRoles)
     {
-        if ($product->getTypeId() !== \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
-            && $product->getTypeId() !== \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
+        if ($product->getTypeId() !== ProductType::TYPE_SIMPLE
+            && $product->getTypeId() !== ProductType::TYPE_VIRTUAL
         ) {
             if (is_array($imageRoles)) {
-                unset($imageRoles[\Magento\Swatches\Model\Swatch::SWATCH_IMAGE_NAME]);
+                unset($imageRoles[Swatch::SWATCH_IMAGE_NAME]);
             }
         }
 

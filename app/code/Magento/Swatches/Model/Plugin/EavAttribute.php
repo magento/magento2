@@ -8,9 +8,13 @@ namespace Magento\Swatches\Model\Plugin;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Swatches\Helper\Data as SwatchHelper;
 use Magento\Swatches\Model\ResourceModel\Swatch as SwatchResource;
+use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory;
 use Magento\Swatches\Model\Swatch;
+use Magento\Swatches\Model\SwatchFactory;
 
 /**
  * Plugin model for Catalog Resource Attribute
@@ -19,7 +23,7 @@ use Magento\Swatches\Model\Swatch;
  */
 class EavAttribute
 {
-    const DEFAULT_STORE_ID = 0;
+    private const DEFAULT_STORE_ID = 0;
 
     /**
      * @var SwatchResource
@@ -29,7 +33,7 @@ class EavAttribute
     /**
      * Base option title used for string operations to detect is option already exists or new
      */
-    const BASE_OPTION_TITLE = 'option';
+    private const BASE_OPTION_TITLE = 'option';
 
     /**
      * Prefix added to option value added through API
@@ -37,19 +41,9 @@ class EavAttribute
     private const API_OPTION_PREFIX = 'id_';
 
     /**
-     * @var \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory
+     * @var CollectionFactory
      */
     protected $swatchCollectionFactory;
-
-    /**
-     * @var \Magento\Swatches\Model\SwatchFactory
-     */
-    protected $swatchFactory;
-
-    /**
-     * @var \Magento\Swatches\Helper\Data
-     */
-    protected $swatchHelper;
 
     /**
      * Array which contains links for new created attributes for swatches
@@ -66,29 +60,20 @@ class EavAttribute
     protected $isSwatchExists;
 
     /**
-     * Serializer from arrays to string.
-     *
-     * @var Json
-     */
-    private $serializer;
-
-    /**
-     * @param \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory
-     * @param \Magento\Swatches\Model\SwatchFactory $swatchFactory
-     * @param \Magento\Swatches\Helper\Data $swatchHelper
-     * @param Json|null $serializer
+     * @param CollectionFactory $collectionFactory
+     * @param SwatchFactory $swatchFactory
+     * @param SwatchHelper $swatchHelper
+     * @param Json|null $serializer Serializer from arrays to string.
      * @param SwatchResource|null $swatchResource
      */
     public function __construct(
-        \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory,
-        \Magento\Swatches\Model\SwatchFactory $swatchFactory,
-        \Magento\Swatches\Helper\Data $swatchHelper,
-        Json $serializer = null,
+        protected readonly CollectionFactory $collectionFactory,
+        protected readonly SwatchFactory $swatchFactory,
+        protected readonly SwatchHelper $swatchHelper,
+        private ?Json $serializer = null,
         SwatchResource $swatchResource = null
     ) {
         $this->swatchCollectionFactory = $collectionFactory;
-        $this->swatchFactory = $swatchFactory;
-        $this->swatchHelper = $swatchHelper;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->create(Json::class);
         $this->swatchResource = $swatchResource ?: ObjectManager::getInstance()->create(SwatchResource::class);
     }
@@ -113,7 +98,7 @@ class EavAttribute
      * Swatch save operations
      *
      * @param Attribute $attribute
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return void
      */
     public function afterAfterSave(Attribute $attribute)
@@ -164,7 +149,7 @@ class EavAttribute
      * Prepare attribute for conversion from any swatch type to dropdown
      *
      * @param Attribute $attribute
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return void
      */
     protected function convertSwatchToDropdown(Attribute $attribute)
@@ -188,7 +173,7 @@ class EavAttribute
      *
      * @param Attribute $attribute
      * @return Attribute
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function processSwatchOptions(Attribute $attribute)
     {
@@ -294,7 +279,7 @@ class EavAttribute
      *
      * @param array $attributeOptions
      * @param int|null $swatchType
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function cleanEavAttributeOptionSwatchValues(array $attributeOptions, int $swatchType = null)
     {
@@ -309,7 +294,7 @@ class EavAttribute
      * Cleaning the text type of swatch option values after switching.
      *
      * @param array $attributeOptions
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function cleanTextSwatchValuesAfterSwitch(array $attributeOptions)
     {
@@ -361,7 +346,7 @@ class EavAttribute
                         $swatch,
                         $optionId,
                         $storeId,
-                        \Magento\Swatches\Model\Swatch::SWATCH_TYPE_TEXTUAL,
+                        Swatch::SWATCH_TYPE_TEXTUAL,
                         $value
                     );
                     $this->isSwatchExists = null;
@@ -456,7 +441,7 @@ class EavAttribute
         }
         $defaultValue = $attribute->getData('default/0');
         if (!empty($defaultValue)) {
-            /** @var \Magento\Swatches\Model\Swatch $swatch */
+            /** @var Swatch $swatch */
             $swatch = $this->swatchFactory->create();
             $swatch->getResource()->saveDefaultSwatchOption(
                 $attribute->getId(),

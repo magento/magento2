@@ -6,6 +6,8 @@
 
 namespace Magento\Swatches\Setup\Patch\Data;
 
+use Magento\Framework\DB\Select;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Store\Model\Store;
 use Magento\Swatches\Model\Swatch;
 use Zend_Db;
@@ -14,39 +16,31 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
-/**
- * Class UpdateAdminTextSwatchValues
- * @package Magento\Swatches\Setup\Patch
- */
 class UpdateAdminTextSwatchValues implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
      * UpdateAdminTextSwatchValues constructor.
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+        private readonly ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
         $this->moduleDataSetup->getConnection()->startSetup();
         $this->updateAdminTextSwatchValues();
         $this->moduleDataSetup->getConnection()->endSetup();
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -56,7 +50,7 @@ class UpdateAdminTextSwatchValues implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -64,7 +58,7 @@ class UpdateAdminTextSwatchValues implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
@@ -97,7 +91,7 @@ class UpdateAdminTextSwatchValues implements DataPatchInterface, PatchVersionInt
              * where s.store_id = 0 and s.`type` = 0 and s.value = ""
              */
 
-            /** @var \Magento\Framework\DB\Select $select */
+            /** @var Select $select */
             $select = $connection
                 ->select()
                 ->joinLeft(

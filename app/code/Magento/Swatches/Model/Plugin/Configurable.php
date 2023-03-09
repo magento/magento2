@@ -8,29 +8,20 @@ namespace Magento\Swatches\Model\Plugin;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProductType;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection;
+use Magento\Eav\Model\Config;
+use Magento\Swatches\Helper\Data as SwatchHelper;
+use Magento\Swatches\Model\SwatchFactory;
 
 class Configurable
 {
     /**
-     * @var \Magento\Eav\Model\Config|\Magento\Swatches\Model\SwatchFactory
-     */
-    private $eavConfig;
-
-    /**
-     * @var \Magento\Swatches\Helper\Data
-     */
-    private $swatchHelper;
-
-    /**
-     * @param \Magento\Swatches\Model\SwatchFactory $eavConfig
-     * @param \Magento\Swatches\Helper\Data $swatchHelper
+     * @param Config|SwatchFactory $eavConfig
+     * @param SwatchHelper $swatchHelper
      */
     public function __construct(
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Swatches\Helper\Data $swatchHelper
+        private readonly Config $eavConfig,
+        private readonly SwatchHelper $swatchHelper
     ) {
-        $this->eavConfig = $eavConfig;
-        $this->swatchHelper = $swatchHelper;
     }
 
     /**

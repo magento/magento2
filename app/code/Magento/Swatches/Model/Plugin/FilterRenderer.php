@@ -5,52 +5,47 @@
  */
 namespace Magento\Swatches\Model\Plugin;
 
-/**
- * Class FilterRenderer
- */
+use Closure;
+use Magento\Catalog\Model\Layer\Filter\FilterInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\LayoutInterface;
+use Magento\LayeredNavigation\Block\Navigation\FilterRenderer as NavigationFilterRenderer;
+use Magento\Swatches\Block\LayeredNavigation\RenderLayered;
+use Magento\Swatches\Helper\Data as SwatchHelper;
+
 class FilterRenderer
 {
-    /**
-     * @var \Magento\Framework\View\LayoutInterface
-     */
-    protected $layout;
-
     /**
      * Path to RenderLayered Block
      *
      * @var string
      */
-    protected $block = \Magento\Swatches\Block\LayeredNavigation\RenderLayered::class;
+    protected $block = RenderLayered::class;
 
     /**
-     * @var \Magento\Swatches\Helper\Data
-     */
-    protected $swatchHelper;
-
-    /**
-     * @param \Magento\Framework\View\LayoutInterface $layout
-     * @param \Magento\Swatches\Helper\Data $swatchHelper
+     * @param LayoutInterface $layout
+     * @param SwatchHelper $swatchHelper
      */
     public function __construct(
-        \Magento\Framework\View\LayoutInterface $layout,
-        \Magento\Swatches\Helper\Data $swatchHelper
+        protected readonly LayoutInterface $layout,
+        protected readonly SwatchHelper $swatchHelper
     ) {
-        $this->layout = $layout;
-        $this->swatchHelper = $swatchHelper;
     }
 
     /**
+     * If filter has an attribute model and is a swatch add block to html
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @param \Magento\LayeredNavigation\Block\Navigation\FilterRenderer $subject
-     * @param \Closure $proceed
-     * @param \Magento\Catalog\Model\Layer\Filter\FilterInterface $filter
+     * @param NavigationFilterRenderer $subject
+     * @param Closure $proceed
+     * @param FilterInterface $filter
      * @return mixed
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function aroundRender(
-        \Magento\LayeredNavigation\Block\Navigation\FilterRenderer $subject,
-        \Closure $proceed,
-        \Magento\Catalog\Model\Layer\Filter\FilterInterface $filter
+        NavigationFilterRenderer $subject,
+        Closure $proceed,
+        FilterInterface $filter
     ) {
         if ($filter->hasAttributeModel()) {
             if ($this->swatchHelper->isSwatchAttribute($filter->getAttributeModel())) {

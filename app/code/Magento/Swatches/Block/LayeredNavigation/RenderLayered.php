@@ -11,11 +11,13 @@ use Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\Attribute\Option;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Swatches\Helper\Data;
 use Magento\Swatches\Helper\Media;
 use Magento\Theme\Block\Html\Pager;
+use RuntimeException;
 
 /**
  * Class RenderLayered Render Swatches at Layered Navigation
@@ -28,7 +30,7 @@ class RenderLayered extends Template
     /**
      * For `Filterable (with results)` setting
      */
-    const FILTERABLE_WITH_RESULTS = '1';
+    private const FILTERABLE_WITH_RESULTS = '1';
 
     /**
      * Path to template file.
@@ -38,34 +40,9 @@ class RenderLayered extends Template
     protected $_template = 'Magento_Swatches::product/layered/renderer.phtml';
 
     /**
-     * @var \Magento\Eav\Model\Attribute
-     */
-    protected $eavAttribute;
-
-    /**
      * @var AbstractFilter
      */
     protected $filter;
-
-    /**
-     * @var AttributeFactory
-     */
-    protected $layerAttribute;
-
-    /**
-     * @var Data
-     */
-    protected $swatchHelper;
-
-    /**
-     * @var Media
-     */
-    protected $mediaHelper;
-
-    /**
-     * @var Pager
-     */
-    private $htmlPagerBlock;
 
     /**
      * @param Context $context
@@ -78,17 +55,13 @@ class RenderLayered extends Template
      */
     public function __construct(
         Context $context,
-        Attribute $eavAttribute,
-        AttributeFactory $layerAttribute,
-        Data $swatchHelper,
-        Media $mediaHelper,
+        protected Attribute $eavAttribute,
+        protected readonly AttributeFactory $layerAttribute,
+        protected readonly Data $swatchHelper,
+        protected readonly Media $mediaHelper,
         array $data = [],
-        ?Pager $htmlPagerBlock = null
+        private ?Pager $htmlPagerBlock = null
     ) {
-        $this->eavAttribute = $eavAttribute;
-        $this->layerAttribute = $layerAttribute;
-        $this->swatchHelper = $swatchHelper;
-        $this->mediaHelper = $mediaHelper;
         $this->htmlPagerBlock = $htmlPagerBlock ?? ObjectManager::getInstance()->get(Pager::class);
 
         parent::__construct($context, $data);
@@ -97,12 +70,12 @@ class RenderLayered extends Template
     /**
      * Set filter and attribute objects
      *
-     * @param \Magento\Catalog\Model\Layer\Filter\AbstractFilter $filter
+     * @param AbstractFilter $filter
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    public function setSwatchFilter(\Magento\Catalog\Model\Layer\Filter\AbstractFilter $filter)
+    public function setSwatchFilter(AbstractFilter $filter)
     {
         $this->filter = $filter;
         $this->eavAttribute = $filter->getAttributeModel();
@@ -118,7 +91,7 @@ class RenderLayered extends Template
     public function getSwatchData()
     {
         if (false === $this->eavAttribute instanceof Attribute) {
-            throw new \RuntimeException('Magento_Swatches: RenderLayered: Attribute has not been set.');
+            throw new RuntimeException('Magento_Swatches: RenderLayered: Attribute has not been set.');
         }
 
         $attributeOptions = [];

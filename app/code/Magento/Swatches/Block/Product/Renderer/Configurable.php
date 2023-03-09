@@ -10,9 +10,12 @@ use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Product as CatalogProduct;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
+use Magento\ConfigurableProduct\Block\Product\View\Type\Configurable as ProductViewTypeConfigurable;
 use Magento\ConfigurableProduct\Helper\Data;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as ConfigurableAttribute;
 use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Stdlib\ArrayUtils;
@@ -30,33 +33,33 @@ use Magento\Swatches\Model\SwatchAttributesProvider;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable implements
-    \Magento\Framework\DataObject\IdentityInterface
+class Configurable extends ProductViewTypeConfigurable implements IdentityInterface
 {
     /**
      * Path to template file with Swatch renderer.
      */
-    const SWATCH_RENDERER_TEMPLATE = 'Magento_Swatches::product/view/renderer.phtml';
+    private const SWATCH_RENDERER_TEMPLATE = 'Magento_Swatches::product/view/renderer.phtml';
 
     /**
      * Path to default template file with standard Configurable renderer.
      */
-    const CONFIGURABLE_RENDERER_TEMPLATE = 'Magento_ConfigurableProduct::product/view/type/options/configurable.phtml';
+    private const CONFIGURABLE_RENDERER_TEMPLATE =
+        'Magento_ConfigurableProduct::product/view/type/options/configurable.phtml';
 
     /**
      * Action name for ajax request
      */
-    const MEDIA_CALLBACK_ACTION = 'swatches/ajax/media';
+    private const MEDIA_CALLBACK_ACTION = 'swatches/ajax/media';
 
     /**
      * Name of swatch image for json config
      */
-    const SWATCH_IMAGE_NAME = 'swatchImage';
+    private const SWATCH_IMAGE_NAME = 'swatchImage';
 
     /**
      * Name of swatch thumbnail for json config
      */
-    const SWATCH_THUMBNAIL_NAME = 'swatchThumb';
+    private const SWATCH_THUMBNAIL_NAME = 'swatchThumb';
 
     /**
      * Config path which contains number of swatches per product
@@ -69,33 +72,14 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     protected $product;
 
     /**
-     * @var SwatchData
-     */
-    protected $swatchHelper;
-
-    /**
-     * @var Media
-     */
-    protected $swatchMediaHelper;
-
-    /**
      * Indicate if product has one or more Swatch attributes
      *
      * @deprecated 100.1.0 unused
+     * @see Configurable::isProductHasSwatchAttribute
      *
      * @var boolean
      */
     protected $isProductHasSwatchAttribute;
-
-    /**
-     * @var SwatchAttributesProvider
-     */
-    private $swatchAttributesProvider;
-
-    /**
-     * @var UrlBuilder
-     */
-    private $imageUrlBuilder;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -122,14 +106,12 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
         CurrentCustomer $currentCustomer,
         PriceCurrencyInterface $priceCurrency,
         ConfigurableAttributeData $configurableAttributeData,
-        SwatchData $swatchHelper,
-        Media $swatchMediaHelper,
+        protected readonly SwatchData $swatchHelper,
+        protected readonly Media $swatchMediaHelper,
         array $data = [],
-        SwatchAttributesProvider $swatchAttributesProvider = null,
-        UrlBuilder $imageUrlBuilder = null
+        private ?SwatchAttributesProvider $swatchAttributesProvider = null,
+        private ?UrlBuilder $imageUrlBuilder = null
     ) {
-        $this->swatchHelper = $swatchHelper;
-        $this->swatchMediaHelper = $swatchMediaHelper;
         $this->swatchAttributesProvider = $swatchAttributesProvider
             ?: ObjectManager::getInstance()->get(SwatchAttributesProvider::class);
         $this->imageUrlBuilder = $imageUrlBuilder ?? ObjectManager::getInstance()->get(UrlBuilder::class);
@@ -251,6 +233,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * Init isProductHasSwatchAttribute.
      *
      * @deprecated 100.2.0 Method isProductHasSwatchAttribute() is used instead of this.
+     * @see Configurable::isProductHasSwatchAttribute
      *
      * @codeCoverageIgnore
      * @return void
@@ -382,7 +365,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      *
      * @param Product $childProduct
      * @param string $imageType
-     * @return string
+     * @return string|void
      */
     protected function getSwatchProductImage(Product $childProduct, $imageType)
     {
@@ -422,7 +405,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     {
         $ids = [];
         foreach ($this->getAllowProducts() as $product) {
-            /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
+            /** @var ConfigurableAttribute $attribute */
             foreach ($this->helper->getAllowAttributes($this->getProduct()) as $attribute) {
                 $productAttribute = $attribute->getProductAttribute();
                 $productAttributeId = $productAttribute->getId();
@@ -474,7 +457,9 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
 
     /**
      * @inheritDoc
+     *
      * @deprecated 100.1.5 Now is used _toHtml() directly
+     * @see Configurable::_toHtml()
      */
     protected function getHtmlOutput()
     {
@@ -499,7 +484,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     public function getIdentities()
     {
-        if ($this->product instanceof \Magento\Framework\DataObject\IdentityInterface) {
+        if ($this->product instanceof IdentityInterface) {
             return $this->product->getIdentities();
         } else {
             return [];
