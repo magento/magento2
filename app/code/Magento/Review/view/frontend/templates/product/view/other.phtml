@@ -3,10 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Review\Block\Product\View\Other $block */
+use Magento\Framework\Escaper;
+use Magento\Review\Block\Product\View\Other;
+
+/** @var Escaper $escaper */
+/** @var Other $block */
 ?>
 <?php $_product = $block->getProduct(); ?>
 <div class="actions">
-    <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>" class="action back"><span><?= $block->escapeHtml(__('Back to Main Product Info')) ?></span></a>
+    <a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>" class="action back"><span><?= $escaper->escapeHtml(__('Back to Main Product Info')) ?></span></a>
 </div>

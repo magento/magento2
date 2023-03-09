@@ -3,27 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * @var \Magento\Review\Block\Customer\View $block
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Review\Block\Customer\View;
 
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var View $block */
 $product = $block->getProductData();
 ?>
 <?php if ($product->getId()): ?>
 <div class="customer-review view">
     <div class="product-details">
         <div class="product-media">
-            <a class="product-photo" href="<?= $block->escapeUrl($product->getProductUrl()) ?>">
+            <a class="product-photo" href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>">
                 <?php /* customer_account_product_review_page */ ?>
                 <?= $block->getImage($block->getProductData(), 'customer_account_product_review_page')->toHtml() ?>
             </a>
         </div>
         <div class="product-info">
-            <h2 class="product-name"><?= $block->escapeHtml($product->getName()) ?></h2>
+            <h2 class="product-name"><?= $escaper->escapeHtml($product->getName()) ?></h2>
             <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
-                <span class="rating-average-label"><?= $block->escapeHtml(__('Average Customer Rating:')) ?></span>
+                <span class="rating-average-label"><?= $escaper->escapeHtml(__('Average Customer Rating:')) ?></span>
                 <?= $block->getReviewsSummaryHtml($product) ?>
             <?php endif; ?>
         </div>
@@ -32,7 +35,7 @@ $product = $block->getProductData();
     <div class="review-details">
         <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
             <div class="title">
-                <strong><?= $block->escapeHtml(__('Your Review')) ?></strong>
+                <strong><?= $escaper->escapeHtml(__('Your Review')) ?></strong>
             </div>
             <div class="customer-review-rating">
                 <?php foreach ($block->getRating() as $_rating): ?>
@@ -41,10 +44,10 @@ $product = $block->getProductData();
                         <?php $ratingId = $_rating->getRatingId() ?>
                         <div class="rating-summary item">
                             <span class="rating-label">
-                                <span><?= $block->escapeHtml($_rating->getRatingCode()) ?></span>
+                                <span><?= $escaper->escapeHtml($_rating->getRatingCode()) ?></span>
                             </span>
-                            <div class="rating-result <?= $block->escapeHtml($_rating->getRatingCode()) ?>"
-                                 id="rating-div-<?= $block->escapeHtml($ratingId) ?>"
+                            <div class="rating-result <?= $escaper->escapeHtml($_rating->getRatingCode()) ?>"
+                                 id="rating-div-<?= $escaper->escapeHtml($ratingId) ?>"
                                  title="<?= /* @noEscape */ $rating ?>%">
                                 <span>
                                     <span><?= /* @noEscape */ $rating ?>%</span>
@@ -62,20 +65,20 @@ $product = $block->getProductData();
             </div>
         <?php endif; ?>
 
-        <div class="review-title"><?= $block->escapeHtml($block->getReviewData()->getTitle()) ?></div>
+        <div class="review-title"><?= $escaper->escapeHtml($block->getReviewData()->getTitle()) ?></div>
         <div class="review-content">
-            <?= /* @noEscape */ nl2br($block->escapeHtml($block->getReviewData()->getDetail())) ?>
+            <?= /* @noEscape */ nl2br($escaper->escapeHtml($block->getReviewData()->getDetail())) ?>
         </div>
         <div class="review-date">
-            <?= $block->escapeHtml(__('Submitted on %1', '<time class="date">' .
+            <?= $escaper->escapeHtml(__('Submitted on %1', '<time class="date">' .
                 $block->dateFormat($block->getReviewData()->getCreatedAt()) . '</time>'), ['time']) ?>
         </div>
     </div>
 </div>
 <div class="actions-toolbar">
     <div class="secondary">
-        <a class="action back" href="<?= $block->escapeUrl($block->getBackUrl()) ?>">
-            <span><?= $block->escapeHtml(__('Back to My Reviews')) ?></span>
+        <a class="action back" href="<?= $escaper->escapeUrl($block->getBackUrl()) ?>">
+            <span><?= $escaper->escapeHtml(__('Back to My Reviews')) ?></span>
         </a>
     </div>
 </div>

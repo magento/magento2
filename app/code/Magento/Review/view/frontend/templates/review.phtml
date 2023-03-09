@@ -3,8 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Review\Block\Product\Review $block */
+use Magento\Framework\Escaper;
+use Magento\Review\Block\Product\Review;
+
+/** @var Escaper $escaper */
+/** @var Review $block */
 ?>
 <div id="product-review-container" data-role="product-review"></div>
 <?= $block->getChildHtml() ?>
@@ -13,7 +18,7 @@
     {
         "*": {
             "Magento_Review/js/process-reviews": {
-                "productReviewUrl": "<?= $block->escapeJs($block->getProductReviewUrl()) ?>",
+                "productReviewUrl": "<?= $escaper->escapeJs($block->getProductReviewUrl()) ?>",
                 "reviewsTabSelector": "#tab-label-reviews"
             }
         }
