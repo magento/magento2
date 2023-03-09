@@ -3,20 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-// phpcs:disable Magento2.Templates.ThisInTemplate
+use Magento\Framework\Escaper;
+use Magento\Framework\Pricing\Render;
+use Magento\Weee\Block\Item\Price\Renderer;
 
-/** @var $block \Magento\Weee\Block\Item\Price\Renderer */
-
+/** @var Escaper $escaper */
+/** @var Renderer $block */
 $item = $block->getItem();
 
 // ensure we use the zone for the shopping cart / minicart
 $originalZone = $block->getZone();
-$block->setZone(\Magento\Framework\Pricing\Render::ZONE_CART);
+$block->setZone(Render::ZONE_CART);
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
 ?>
 
 <?php if ($block->displayPriceInclTax() || $block->displayBothPrices()) : ?>
-    <span class="price-including-tax" data-label="<?= $block->escapeHtmlAttr(__('Incl. Tax')) ?>">
+    <span class="price-including-tax" data-label="<?= $escaper->escapeHtmlAttr(__('Incl. Tax')) ?>">
     <?php if ($block->displayPriceWithWeeeDetails()) : ?>
         <span class="minicart-tax-total">
     <?php else : ?>
@@ -29,7 +34,7 @@ $block->setZone(\Magento\Framework\Pricing\Render::ZONE_CART);
         <?php if ($this->helper(\Magento\Weee\Helper\Data::class)->getApplied($item)) : ?>
             <span class="minicart-tax-info">
             <?php foreach ($this->helper(\Magento\Weee\Helper\Data::class)->getApplied($item) as $tax) : ?>
-                <span class="weee" data-label="<?= $block->escapeHtmlAttr($tax['title']) ?>">
+                <span class="weee" data-label="<?= $escaper->escapeHtmlAttr($tax['title']) ?>">
                     <?= /* @noEscape */ $block->formatPrice($tax['amount_incl_tax'], true, true) ?>
                 </span>
             <?php endforeach; ?>
@@ -37,7 +42,7 @@ $block->setZone(\Magento\Framework\Pricing\Render::ZONE_CART);
 
             <?php if ($block->displayFinalPrice()) : ?>
                 <span class="minicart-tax-total">
-                    <span class="weee" data-label="<?= $block->escapeHtmlAttr(__('Total Incl. Tax')) ?>">
+                    <span class="weee" data-label="<?= $escaper->escapeHtmlAttr(__('Total Incl. Tax')) ?>">
                         <?= /* @noEscape */ $block->formatPrice($block->getFinalUnitDisplayPriceInclTax()) ?>
                     </span>
                 </span>
@@ -48,7 +53,7 @@ $block->setZone(\Magento\Framework\Pricing\Render::ZONE_CART);
 <?php endif; ?>
 
 <?php if ($block->displayPriceExclTax() || $block->displayBothPrices()) : ?>
-    <span class="price-excluding-tax" data-label="<?= $block->escapeHtmlAttr(__('Excl. Tax')) ?>">
+    <span class="price-excluding-tax" data-label="<?= $escaper->escapeHtmlAttr(__('Excl. Tax')) ?>">
     <?php if ($block->displayPriceWithWeeeDetails()) : ?>
         <span class="minicart-tax-total">
     <?php else : ?>
@@ -61,7 +66,7 @@ $block->setZone(\Magento\Framework\Pricing\Render::ZONE_CART);
         <?php if ($this->helper(\Magento\Weee\Helper\Data::class)->getApplied($item)) : ?>
             <span class="minicart-tax-info">
             <?php foreach ($this->helper(\Magento\Weee\Helper\Data::class)->getApplied($item) as $tax) : ?>
-                <span class="weee" data-label="<?= $block->escapeHtmlAttr($tax['title']) ?>">
+                <span class="weee" data-label="<?= $escaper->escapeHtmlAttr($tax['title']) ?>">
                     <?= /* @noEscape */ $block->formatPrice($tax['amount'], true, true) ?>
                 </span>
             <?php endforeach; ?>
@@ -69,7 +74,7 @@ $block->setZone(\Magento\Framework\Pricing\Render::ZONE_CART);
 
             <?php if ($block->displayFinalPrice()) : ?>
                 <span class="minicart-tax-total">
-                    <span class="weee" data-label="<?= $block->escapeHtmlAttr(__('Total')) ?>">
+                    <span class="weee" data-label="<?= $escaper->escapeHtmlAttr(__('Total')) ?>">
                         <?= /* @noEscape */ $block->formatPrice($block->getFinalUnitDisplayPriceExclTax()) ?>
                     </span>
                 </span>
