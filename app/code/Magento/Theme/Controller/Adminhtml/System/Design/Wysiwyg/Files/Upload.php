@@ -6,7 +6,11 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 
-class Upload extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
+use Exception;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
+
+class Upload extends Files
 {
     /**
      * Files upload action
@@ -18,11 +22,11 @@ class Upload extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\F
         try {
             $path = $this->storage->getCurrentPath();
             $result = $this->_getStorage()->uploadFile($path);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }
         $this->getResponse()->representJson(
-            $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
+            $this->_objectManager->get(JsonHelper::class)->jsonEncode($result)
         );
     }
 }

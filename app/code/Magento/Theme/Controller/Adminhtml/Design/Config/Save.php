@@ -5,8 +5,10 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\Design\Config;
 
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Theme\Model\DesignConfigRepository;
 use Magento\Backend\App\Action\Context;
@@ -19,21 +21,6 @@ use Magento\Theme\Model\Data\Design\ConfigFactory;
 class Save extends Action
 {
     /**
-     * @var DesignConfigRepository
-     */
-    protected $designConfigRepository;
-
-    /**
-     * @var ConfigFactory
-     */
-    protected $configFactory;
-
-    /**
-     * @var DataPersistorInterface
-     */
-    protected $dataPersistor;
-
-    /**
      * @param Context $context
      * @param DesignConfigRepository $designConfigRepository
      * @param ConfigFactory $configFactory
@@ -41,13 +28,10 @@ class Save extends Action
      */
     public function __construct(
         Context $context,
-        DesignConfigRepository $designConfigRepository,
-        ConfigFactory $configFactory,
-        DataPersistorInterface $dataPersistor
+        protected readonly DesignConfigRepository $designConfigRepository,
+        protected readonly ConfigFactory $configFactory,
+        protected readonly DataPersistorInterface $dataPersistor
     ) {
-        $this->designConfigRepository = $designConfigRepository;
-        $this->configFactory = $configFactory;
-        $this->dataPersistor = $dataPersistor;
         parent::__construct($context);
     }
 
@@ -62,7 +46,7 @@ class Save extends Action
     }
 
     /**
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return ResultRedirect
      *
      * @throws NotFoundException
      */
@@ -95,7 +79,7 @@ class Save extends Action
             foreach ($messages as $message) {
                 $this->messageManager->addErrorMessage(__('%1', $message));
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 __('Something went wrong while saving this configuration:') . ' ' . $e->getMessage()

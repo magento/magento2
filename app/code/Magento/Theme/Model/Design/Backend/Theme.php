@@ -5,14 +5,23 @@
  */
 namespace Magento\Theme\Model\Design\Backend;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Framework\View\DesignInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class Theme extends Value
 {
     /**
      * Design package instance
      *
-     * @var \Magento\Framework\View\DesignInterface
+     * @var DesignInterface
      */
     protected $_design = null;
 
@@ -26,23 +35,23 @@ class Theme extends Value
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\Framework\View\DesignInterface $design
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param ScopeConfigInterface $config
+     * @param TypeListInterface $cacheTypeList
+     * @param DesignInterface $design
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
-        \Magento\Framework\View\DesignInterface $design,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        ScopeConfigInterface $config,
+        TypeListInterface $cacheTypeList,
+        DesignInterface $design,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_design = $design;
@@ -58,7 +67,7 @@ class Theme extends Value
     {
         if ('' != $this->getValue()) {
             $design = clone $this->_design;
-            $design->setDesignTheme($this->getValue(), \Magento\Framework\App\Area::AREA_FRONTEND);
+            $design->setDesignTheme($this->getValue(), Area::AREA_FRONTEND);
         }
         return parent::beforeSave();
     }
@@ -74,7 +83,7 @@ class Theme extends Value
         $types = array_keys(
             $this->_config->getValue(
                 self::XML_PATH_INVALID_CACHES,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             )
         );
         if ($forceInvalidate || $this->isValueChanged()) {

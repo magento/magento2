@@ -9,7 +9,9 @@
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element;
 
-class File extends \Magento\Framework\Data\Form\Element\File
+use Magento\Framework\Data\Form\Element\File as FormElementFile;
+
+class File extends FormElementFile
 {
     /**
      * Additional html attributes

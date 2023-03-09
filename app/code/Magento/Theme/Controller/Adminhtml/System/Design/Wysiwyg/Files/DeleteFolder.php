@@ -6,7 +6,11 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 
-class DeleteFolder extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
+use Exception;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
+
+class DeleteFolder extends Files
 {
     /**
      * Delete folder action
@@ -18,10 +22,10 @@ class DeleteFolder extends \Magento\Theme\Controller\Adminhtml\System\Design\Wys
         try {
             $path = $this->storage->getCurrentPath();
             $this->_getStorage()->deleteDirectory($path);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
             $this->getResponse()->representJson(
-                $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
+                $this->_objectManager->get(JsonHelper::class)->jsonEncode($result)
             );
         }
     }

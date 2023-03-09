@@ -8,10 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\Theme\Ui\Component\Theme\DataProvider;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult as DataProviderSearchResult;
+
 /**
  * Theme search result
  */
-class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
+class SearchResult extends DataProviderSearchResult
 {
     /**
      * {@inheritdoc}
@@ -35,10 +39,10 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
     {
         parent::_initSelect();
         $this
-            ->addFieldToFilter('main_table.area', \Magento\Framework\App\Area::AREA_FRONTEND)
+            ->addFieldToFilter('main_table.area', Area::AREA_FRONTEND)
             ->addFieldToFilter('main_table.type', ['in' => [
-                \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL,
-                \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL,
+                ThemeInterface::TYPE_PHYSICAL,
+                ThemeInterface::TYPE_VIRTUAL,
             ]])
         ;
 

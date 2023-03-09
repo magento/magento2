@@ -7,6 +7,7 @@ namespace Magento\Theme\Model\Design\Config;
 
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Model\ResourceModel\Design\Config\Collection;
 use Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory;
 use Magento\Ui\DataProvider\AbstractDataProvider;
@@ -24,16 +25,6 @@ class DataProvider extends AbstractDataProvider
      * @var Collection
      */
     protected $collection;
-
-    /**
-     * @var DataProvider\DataLoader
-     */
-    protected $dataLoader;
-
-    /**
-     * @var DataProvider\MetadataLoader
-     */
-    private $metadataLoader;
 
     /**
      * @var SettingChecker
@@ -64,8 +55,8 @@ class DataProvider extends AbstractDataProvider
         $name,
         $primaryFieldName,
         $requestFieldName,
-        DataProvider\DataLoader $dataLoader,
-        DataProvider\MetadataLoader $metadataLoader,
+        protected readonly DataProvider\DataLoader $dataLoader,
+        private readonly DataProvider\MetadataLoader $metadataLoader,
         CollectionFactory $configCollectionFactory,
         array $meta = [],
         array $data = []
@@ -77,11 +68,8 @@ class DataProvider extends AbstractDataProvider
             $meta,
             $data
         );
-        $this->dataLoader = $dataLoader;
-        $this->metadataLoader = $metadataLoader;
 
         $this->collection = $configCollectionFactory->create();
-
         $this->meta = array_merge($this->meta, $this->metadataLoader->getData());
     }
 
@@ -163,7 +151,7 @@ class DataProvider extends AbstractDataProvider
      */
     private function getSearchEngineRobotsMetadata($scope, array $fields = [])
     {
-        if ($scope == \Magento\Store\Model\ScopeInterface::SCOPE_STORES) {
+        if ($scope == ScopeInterface::SCOPE_STORES) {
             $resetToDefaultsData = [
                 'arguments' => [
                     'data' => [

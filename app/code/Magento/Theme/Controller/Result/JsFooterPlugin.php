@@ -21,16 +21,11 @@ class JsFooterPlugin
     private const XML_PATH_DEV_MOVE_JS_TO_BOTTOM = 'dev/js/move_script_to_bottom';
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(ScopeConfigInterface $scopeConfig)
-    {
-        $this->scopeConfig = $scopeConfig;
+    public function __construct(
+        private readonly ScopeConfigInterface $scopeConfig
+    ) {
     }
 
     /**

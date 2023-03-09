@@ -6,6 +6,11 @@
 
 namespace Magento\Theme\Block\Html\Header;
 
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\ViewModel\Block\Html\Header\LogoPathResolverInterface;
 
 /**
@@ -14,7 +19,7 @@ use Magento\Theme\ViewModel\Block\Html\Header\LogoPathResolverInterface;
  * @api
  * @since 100.0.2
  */
-class Logo extends \Magento\Framework\View\Element\Template
+class Logo extends Template
 {
     /**
      * Current template name
@@ -24,18 +29,18 @@ class Logo extends \Magento\Framework\View\Element\Template
     protected $_template = 'Magento_Theme::html/header/logo.phtml';
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @var Database
      */
     protected $_fileStorageHelper;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageHelper
+     * @param Context $context
+     * @param Database $fileStorageHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageHelper,
+        Context $context,
+        Database $fileStorageHelper,
         array $data = []
     ) {
         $this->_fileStorageHelper = $fileStorageHelper;
@@ -81,7 +86,7 @@ class Logo extends \Magento\Framework\View\Element\Template
         if (empty($this->_data['logo_alt'])) {
             $this->_data['logo_alt'] = $this->_scopeConfig->getValue(
                 'design/header/logo_alt',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
         }
         return $this->_data['logo_alt'];
@@ -97,7 +102,7 @@ class Logo extends \Magento\Framework\View\Element\Template
         if (empty($this->_data['logo_width'])) {
             $this->_data['logo_width'] = $this->_scopeConfig->getValue(
                 'design/header/logo_width',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
         }
         return (int)$this->_data['logo_width'];
@@ -113,7 +118,7 @@ class Logo extends \Magento\Framework\View\Element\Template
         if (empty($this->_data['logo_height'])) {
             $this->_data['logo_height'] = $this->_scopeConfig->getValue(
                 'design/header/logo_height',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
         }
         return (int)$this->_data['logo_height'];
@@ -133,7 +138,7 @@ class Logo extends \Magento\Framework\View\Element\Template
             $path = $logoPathResolver->getPath();
         }
         $logoUrl = $this->_urlBuilder
-                ->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]) . $path;
+                ->getBaseUrl(['_type' => UrlInterface::URL_TYPE_MEDIA]) . $path;
 
         if ($path !== null && $this->_isFile($path)) {
             $url = $logoUrl;

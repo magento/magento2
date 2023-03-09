@@ -6,7 +6,10 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 
-class OnInsert extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
+use Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
+use Magento\Theme\Helper\Storage;
+
+class OnInsert extends Files
 {
     /**
      * Fire when select image
@@ -15,8 +18,8 @@ class OnInsert extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg
      */
     public function execute()
     {
-        /** @var $helperStorage \Magento\Theme\Helper\Storage */
-        $helperStorage = $this->_objectManager->get(\Magento\Theme\Helper\Storage::class);
+        /** @var Storage $helperStorage */
+        $helperStorage = $this->_objectManager->get(Storage::class);
         $this->getResponse()->setBody($helperStorage->getRelativeUrl());
     }
 }

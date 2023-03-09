@@ -6,12 +6,23 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
+use Exception;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Design\Theme\Customization\File\Js;
+use Magento\Framework\View\Design\Theme\FlyweightFactory;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Controller\Adminhtml\System\Design\Theme;
+use Magento\Theme\Model\Theme as ModelTheme;
+use Magento\Theme\Model\Theme\Customization\File\CustomCss;
+use Magento\Theme\Model\Theme\SingleFile;
+use Psr\Log\LoggerInterface;
+
 /**
  * Class Save use to save Theme data
  * @SuppressWarnings(PHPMD.AllPurposeAction)
  * @deprecated 100.2.0
  */
-class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
+class Save extends Theme
 {
     /**
      * Save action
@@ -27,30 +38,30 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
         $removeJsFiles = (array)$this->getRequest()->getParam('js_removed_files');
         $reorderJsFiles = array_keys($this->getRequest()->getParam('js_order', []));
 
-        /** @var $themeFactory \Magento\Framework\View\Design\Theme\FlyweightFactory */
-        $themeFactory = $this->_objectManager->get(\Magento\Framework\View\Design\Theme\FlyweightFactory::class);
-        /** @var $cssService \Magento\Theme\Model\Theme\Customization\File\CustomCss */
-        $cssService = $this->_objectManager->get(\Magento\Theme\Model\Theme\Customization\File\CustomCss::class);
-        /** @var $singleFile \Magento\Theme\Model\Theme\SingleFile */
+        /** @var FlyweightFactory $themeFactory */
+        $themeFactory = $this->_objectManager->get(FlyweightFactory::class);
+        /** @var CustomCss $cssService */
+        $cssService = $this->_objectManager->get(CustomCss::class);
+        /** @var SingleFile $singleFile */
         $singleFile = $this->_objectManager->create(
-            \Magento\Theme\Model\Theme\SingleFile::class,
+            SingleFile::class,
             ['fileService' => $cssService]
         );
         try {
             if ($this->getRequest()->getPostValue()) {
-                /** @var $theme \Magento\Theme\Model\Theme */
+                /** @var ModelTheme $theme */
                 if (!empty($themeData['theme_id'])) {
                     $theme = $themeFactory->create($themeData['theme_id']);
                 } else {
                     $parentTheme = $themeFactory->create($themeData['parent_id']);
                     $theme = $parentTheme->getDomainModel(
-                        \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL
+                        ThemeInterface::TYPE_PHYSICAL
                     )->createVirtualTheme(
                         $parentTheme
                     );
                 }
                 if ($theme && !$theme->isEditable()) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('This theme is not editable.'));
+                    throw new LocalizedException(__('This theme is not editable.'));
                 }
                 $theme->addData(
                     $this->extractMutableData($themeData)
@@ -59,25 +70,25 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
                     $theme->getThemeImage()->removePreviewImage();
                 }
                 $theme->getThemeImage()->uploadPreviewImage('preview');
-                $theme->setType(\Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL);
+                $theme->setType(ThemeInterface::TYPE_VIRTUAL);
                 $theme->save();
                 $customization = $theme->getCustomization();
                 $customization->reorder(
-                    \Magento\Framework\View\Design\Theme\Customization\File\Js::TYPE,
+                    Js::TYPE,
                     $reorderJsFiles
                 );
                 $customization->delete($removeJsFiles);
                 $singleFile->update($theme, $customCssData);
                 $this->messageManager->addSuccess(__('You saved the theme.'));
             }
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_getSession()->setThemeData($themeData);
             $this->_getSession()->setThemeCustomCssData($customCssData);
             $redirectBack = true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addError('The theme was not saved');
-            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            $this->_objectManager->get(LoggerInterface::class)->critical($e);
         }
         $redirectBack
             //phpstan:ignore

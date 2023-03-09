@@ -34,24 +34,9 @@ use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
 class File extends BackendFile
 {
     /**
-     * @var UrlInterface
-     */
-    protected $urlBuilder;
-
-    /**
      * @var Mime
      */
     private $mime;
-
-    /**
-     * @var IoFileSystem
-     */
-    private $ioFileSystem;
-
-    /**
-     * @var Database
-     */
-    private $databaseHelper;
 
     /**
      * @param Context $context
@@ -77,12 +62,12 @@ class File extends BackendFile
         UploaderFactory $uploaderFactory,
         RequestDataInterface $requestData,
         Filesystem $filesystem,
-        UrlInterface $urlBuilder,
+        protected readonly UrlInterface $urlBuilder,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = [],
-        Database $databaseHelper = null,
-        IoFileSystem $ioFileSystem = null
+        private ?Database $databaseHelper = null,
+        private ?IoFileSystem $ioFileSystem = null
     ) {
         parent::__construct(
             $context,
@@ -96,7 +81,6 @@ class File extends BackendFile
             $resourceCollection,
             $data
         );
-        $this->urlBuilder = $urlBuilder;
         $this->databaseHelper = $databaseHelper ?: ObjectManager::getInstance()->get(Database::class);
         $this->ioFileSystem = $ioFileSystem ?: ObjectManager::getInstance()->get(IoFileSystem::class);
     }

@@ -16,41 +16,16 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class ThemeValidator
 {
-
-    /**
-     * Store Manager
-     *
-     * @var StoreManagerInterface $storeManager
-     */
-    private $storeManager;
-
-    /**
-     * Provider for themes registered in db
-     *
-     * @var ThemeProviderInterface $themeProvider
-     */
-    private $themeProvider;
-
-    /**
-     * Configuration Data
-     *
-     * @var ValueInterface $configData
-     */
-    private $configData;
-
     /**
      * @param StoreManagerInterface $storeManager
      * @param ThemeProviderInterface $themeProvider
      * @param ValueInterface $configData
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        ThemeProviderInterface $themeProvider,
-        ValueInterface $configData
+        private readonly StoreManagerInterface $storeManager,
+        private readonly ThemeProviderInterface $themeProvider,
+        private readonly ValueInterface $configData
     ) {
-        $this->storeManager = $storeManager;
-        $this->themeProvider = $themeProvider;
-        $this->configData = $configData;
     }
 
     /**

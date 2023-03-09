@@ -7,10 +7,15 @@ namespace Magento\Theme\Controller\Result;
 
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Serialize\Serializer\Json as SerializerJson;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Translate\Inline\ParserInterface;
 use Magento\Framework\Translate\InlineInterface;
 use Magento\Framework\Session\Config\ConfigInterface;
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 /**
  * Plugin for putting messages to cookies
@@ -25,65 +30,23 @@ class MessagePlugin
     public const MESSAGES_COOKIES_NAME = 'mage-messages';
 
     /**
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface
-     */
-    private $cookieManager;
-
-    /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     */
-    private $cookieMetadataFactory;
-
-    /**
-     * @var \Magento\Framework\Message\ManagerInterface
-     */
-    private $messageManager;
-
-    /**
-     * @var \Magento\Framework\View\Element\Message\InterpretationStrategyInterface
-     */
-    private $interpretationStrategy;
-
-    /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
-     */
-    private $serializer;
-
-    /**
-     * @var InlineInterface
-     */
-    private $inlineTranslate;
-
-    /**
-     * @var ConfigInterface
-     */
-    protected $sessionConfig;
-
-    /**
-     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
-     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param CookieManagerInterface $cookieManager
+     * @param CookieMetadataFactory $cookieMetadataFactory
+     * @param ManagerInterface $messageManager
+     * @param InterpretationStrategyInterface $interpretationStrategy
+     * @param SerializerJson $serializer
      * @param InlineInterface $inlineTranslate
      * @param ConfigInterface $sessionConfig
      */
     public function __construct(
-        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
-        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy,
-        \Magento\Framework\Serialize\Serializer\Json $serializer,
-        InlineInterface $inlineTranslate,
-        ConfigInterface $sessionConfig
+        private readonly CookieManagerInterface $cookieManager,
+        private readonly CookieMetadataFactory $cookieMetadataFactory,
+        private readonly ManagerInterface $messageManager,
+        private readonly InterpretationStrategyInterface $interpretationStrategy,
+        private readonly SerializerJson $serializer,
+        private readonly InlineInterface $inlineTranslate,
+        protected readonly ConfigInterface $sessionConfig
     ) {
-        $this->cookieManager = $cookieManager;
-        $this->cookieMetadataFactory = $cookieMetadataFactory;
-        $this->messageManager = $messageManager;
-        $this->serializer = $serializer;
-        $this->interpretationStrategy = $interpretationStrategy;
-        $this->inlineTranslate = $inlineTranslate;
-        $this->sessionConfig = $sessionConfig;
     }
 
     /**

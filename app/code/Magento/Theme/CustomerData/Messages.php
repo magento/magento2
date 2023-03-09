@@ -18,36 +18,17 @@ use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 class Messages implements SectionSourceInterface
 {
     /**
-     * Manager messages
-     *
-     * @var MessageManager
-     */
-    protected $messageManager;
-
-    /**
-     * @var InterpretationStrategyInterface
-     */
-    private $interpretationStrategy;
-
-    /**
-     * @var MessagesProviderInterface
-     */
-    private $messageProvider;
-
-    /**
      * Constructor
      *
-     * @param MessageManager $messageManager
+     * @param MessageManager $messageManager Manager messages
      * @param InterpretationStrategyInterface $interpretationStrategy
      * @param MessagesProviderInterface|null $messageProvider
      */
     public function __construct(
-        MessageManager $messageManager,
-        InterpretationStrategyInterface $interpretationStrategy,
-        ?MessagesProviderInterface $messageProvider = null
+        protected readonly MessageManager $messageManager,
+        private readonly InterpretationStrategyInterface $interpretationStrategy,
+        private ?MessagesProviderInterface $messageProvider = null
     ) {
-        $this->messageManager = $messageManager;
-        $this->interpretationStrategy = $interpretationStrategy;
         $this->messageProvider = $messageProvider
             ?? ObjectManager::getInstance()->get(MessagesProviderInterface::class);
     }

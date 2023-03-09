@@ -6,6 +6,7 @@
 
 namespace Magento\Theme\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Theme\Api\Data\DesignConfigInterface;
 use Magento\Theme\Api\DesignConfigRepositoryInterface;
@@ -13,28 +14,14 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Theme\Model\Data\Design\Config as DesignConfig;
 use Magento\Theme\Model\Design\Config\Storage as ConfigStorage;
+use Magento\Theme\Model\Design\Config\Validator;
 
 class DesignConfigRepository implements DesignConfigRepositoryInterface
 {
     /**
-     * @var \Magento\Framework\App\Config\ReinitableConfigInterface
-     */
-    protected $reinitableConfig;
-
-    /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry
-     */
-    protected $indexerRegistry;
-
-    /**
-     * @var \Magento\Theme\Model\Design\Config\Storage
-     */
-    protected $configStorage;
-
-    /**
      * Design config validator
      *
-     * @var \Magento\Theme\Model\Design\Config\Validator
+     * @var Validator
      */
     private $validator;
 
@@ -44,13 +31,10 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
      * @param IndexerRegistry $indexerRegistry
      */
     public function __construct(
-        ConfigStorage $configStorage,
-        ReinitableConfigInterface $reinitableConfig,
-        IndexerRegistry $indexerRegistry
+        protected readonly ConfigStorage $configStorage,
+        protected readonly ReinitableConfigInterface $reinitableConfig,
+        protected readonly IndexerRegistry $indexerRegistry
     ) {
-        $this->reinitableConfig = $reinitableConfig;
-        $this->indexerRegistry = $indexerRegistry;
-        $this->configStorage = $configStorage;
     }
 
     /**
@@ -63,8 +47,8 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
     private function getValidator()
     {
         if (null === $this->validator) {
-            $this->validator =\Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Theme\Model\Design\Config\Validator::class
+            $this->validator = ObjectManager::getInstance()->get(
+                Validator::class
             );
         }
         return $this->validator;

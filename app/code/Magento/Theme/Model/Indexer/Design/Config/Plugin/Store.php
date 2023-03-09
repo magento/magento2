@@ -12,16 +12,11 @@ use Magento\Theme\Model\Data\Design\Config;
 class Store
 {
     /**
-     * @var IndexerRegistry
-     */
-    protected $indexerRegistry;
-
-    /**
      * @param IndexerRegistry $indexerRegistry
      */
-    public function __construct(IndexerRegistry $indexerRegistry)
-    {
-        $this->indexerRegistry = $indexerRegistry;
+    public function __construct(
+        protected readonly IndexerRegistry $indexerRegistry
+    ) {
     }
 
     /**

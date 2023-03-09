@@ -14,25 +14,13 @@ use Magento\Store\Model\ScopeInterface;
 class Plugin
 {
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    protected $eventManager;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
      * @param EventManager $eventManager
      * @param StoreManager $storeManager
      */
     public function __construct(
-        EventManager $eventManager,
-        StoreManager $storeManager
+        protected readonly EventManager $eventManager,
+        protected readonly StoreManager $storeManager
     ) {
-        $this->eventManager = $eventManager;
-        $this->storeManager = $storeManager;
     }
 
     /**

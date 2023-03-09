@@ -6,6 +6,7 @@
 namespace Magento\Theme\Model\Data\Design;
 
 use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\Theme\Api\Data\DesignConfigExtensionInterface;
 use Magento\Theme\Api\Data\DesignConfigInterface;
 
 class Config extends AbstractExtensibleObject implements DesignConfigInterface
@@ -58,7 +59,7 @@ class Config extends AbstractExtensibleObject implements DesignConfigInterface
     /**
      * @inheritDoc
      */
-    public function setExtensionAttributes(\Magento\Theme\Api\Data\DesignConfigExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(DesignConfigExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

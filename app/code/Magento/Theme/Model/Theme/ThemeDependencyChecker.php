@@ -6,6 +6,7 @@
 
 namespace Magento\Theme\Model\Theme;
 
+use Magento\Theme\Model\Theme\Data as ThemeData;
 use Magento\Theme\Model\Theme\Data\Collection as ThemeCollection;
 
 /**
@@ -14,27 +15,6 @@ use Magento\Theme\Model\Theme\Data\Collection as ThemeCollection;
 class ThemeDependencyChecker
 {
     /**
-     * Theme Collection
-     *
-     * @var ThemeCollection
-     */
-    private $themeCollection;
-
-    /**
-     * Provider for themes registered in db
-     *
-     * @var ThemeProvider
-     */
-    private $themeProvider;
-
-    /**
-     * Package name finder
-     *
-     * @var ThemePackageInfo
-     */
-    private $themePackageInfo;
-
-    /**
      * Constructor
      *
      * @param ThemeCollection $themeCollection
@@ -42,13 +22,10 @@ class ThemeDependencyChecker
      * @param ThemePackageInfo $themePackageInfo,
      */
     public function __construct(
-        ThemeCollection $themeCollection,
-        ThemeProvider $themeProvider,
-        ThemePackageInfo $themePackageInfo
+        private readonly ThemeCollection $themeCollection,
+        private readonly ThemeProvider $themeProvider,
+        private readonly ThemePackageInfo $themePackageInfo
     ) {
-        $this->themeCollection = $themeCollection;
-        $this->themeProvider = $themeProvider;
-        $this->themePackageInfo = $themePackageInfo;
     }
 
     /**
@@ -117,7 +94,7 @@ class ThemeDependencyChecker
         $map = [];
         $this->themeCollection->resetConstraints();
         $this->themeCollection->clear();
-        /** @var \Magento\Theme\Model\Theme\Data $theme */
+        /** @var ThemeData $theme */
         foreach ($this->themeCollection as $theme) {
             if ($theme->getParentTheme()) {
                 $map[$theme->getParentTheme()->getFullPath()][] = $theme->getFullPath();

@@ -6,8 +6,10 @@
 namespace Magento\Theme\Ui\Component\Design\Config\SearchRobots;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\Form\Field;
 
 /**
@@ -24,16 +26,11 @@ class ResetButton extends Field
     const XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS = 'design/search_engine_robots/default_custom_instructions';
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * ResetButton constructor
      *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param \Magento\Framework\View\Element\UiComponentInterface[] $components
+     * @param UiComponentInterface[] $components
      * @param array $data
      * @param ScopeConfigInterface $scopeConfig
      */
@@ -42,9 +39,8 @@ class ResetButton extends Field
         UiComponentFactory $uiComponentFactory,
         $components,
         array $data,
-        ScopeConfigInterface $scopeConfig
+        private readonly ScopeConfigInterface $scopeConfig
     ) {
-        $this->scopeConfig = $scopeConfig;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -65,7 +61,7 @@ class ResetButton extends Field
      * Add js listener to reset button
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @since 100.1.9
      */
     public function prepare()

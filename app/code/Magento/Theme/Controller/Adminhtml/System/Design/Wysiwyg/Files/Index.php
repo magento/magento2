@@ -6,7 +6,9 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 
-class Index extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
+use Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
+
+class Index extends Files
 {
     /**
      * Index action

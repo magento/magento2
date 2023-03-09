@@ -6,12 +6,14 @@
 
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element;
 
+use Magento\Framework\Data\Form\Element\Image as FormElementImage;
+
 /**
  * Image form element that generates correct thumbnail image URL for theme preview image
  *
  * @method \Magento\Theme\Model\Theme getTheme()
  */
-class Image extends \Magento\Framework\Data\Form\Element\Image
+class Image extends FormElementImage
 {
     /**
      * Get image preview url

@@ -8,8 +8,13 @@
 namespace Magento\Theme\Model\Uploader;
 
 use Magento\Framework\Convert\DataSize;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\File\Size;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\DirectoryList;
+use Magento\MediaStorage\Model\File\Uploader;
+use Magento\MediaStorage\Model\File\UploaderFactory;
 
 class Service
 {
@@ -21,33 +26,26 @@ class Service
     protected $_filePath;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var ReadInterface
      */
     protected $_tmpDirectory;
 
     /**
      * File size
      *
-     * @var \Magento\Framework\File\Size
+     * @var Size
      */
     protected $_fileSize;
 
     /**
-     * Data size converter
-     *
-     * @var \Magento\Framework\Convert\DataSize
-     */
-    protected $dataSize;
-
-    /**
      * File uploader
      *
-     * @var \Magento\MediaStorage\Model\File\Uploader
+     * @var Uploader
      */
     protected $_uploader;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Uploader
+     * @var Uploader
      */
     protected $_uploaderFactory;
 
@@ -64,23 +62,22 @@ class Service
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\File\Size $fileSize
-     * @param \Magento\Framework\Convert\DataSize $dataSize
-     * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
+     * @param Filesystem $filesystem
+     * @param Size $fileSize
+     * @param DataSize $dataSize
+     * @param UploaderFactory $uploaderFactory
      * @param array $uploadLimits keys are 'css' and 'js' for file type, values defines maximum file size, example: 2M
      */
     public function __construct(
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\File\Size $fileSize,
-        \Magento\Framework\Convert\DataSize $dataSize,
-        \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
+        Filesystem $filesystem,
+        Size $fileSize,
+        protected readonly DataSize $dataSize,
+        UploaderFactory $uploaderFactory,
         array $uploadLimits = []
     ) {
         $this->_tmpDirectory = $filesystem->getDirectoryRead(DirectoryList::SYS_TMP);
         $this->_fileSize = $fileSize;
         $this->_uploaderFactory = $uploaderFactory;
-        $this->dataSize = $dataSize;
         if (isset($uploadLimits['css'])) {
             $this->_cssUploadLimit = $uploadLimits['css'];
         }
@@ -94,11 +91,11 @@ class Service
      *
      * @param string $file - Key in the $_FILES array
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function uploadCssFile($file)
     {
-        /** @var $fileUploader \Magento\MediaStorage\Model\File\Uploader */
+        /** @var Uploader $fileUploader */
         $fileUploader = $this->_uploaderFactory->create(['fileId' => $file]);
         $fileUploader->setAllowedExtensions(['css']);
         $fileUploader->setAllowRenameFiles(true);
@@ -106,7 +103,7 @@ class Service
 
         $isValidFileSize = $this->_validateFileSize($fileUploader->getFileSize(), $this->getCssUploadMaxSize());
         if (!$isValidFileSize) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The CSS file must be less than %1M.', $this->getCssUploadMaxSizeInMb())
             );
         }
@@ -120,11 +117,11 @@ class Service
      *
      * @param string $file - Key in the $_FILES array
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function uploadJsFile($file)
     {
-        /** @var $fileUploader \Magento\MediaStorage\Model\File\Uploader */
+        /** @var Uploader $fileUploader */
         $fileUploader = $this->_uploaderFactory->create(['fileId' => $file]);
         $fileUploader->setAllowedExtensions(['js']);
         $fileUploader->setAllowRenameFiles(true);
@@ -132,7 +129,7 @@ class Service
 
         $isValidFileSize = $this->_validateFileSize($fileUploader->getFileSize(), $this->getJsUploadMaxSize());
         if (!$isValidFileSize) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The JS file must be less than %1M.', $this->getJsUploadMaxSizeInMb())
             );
         }

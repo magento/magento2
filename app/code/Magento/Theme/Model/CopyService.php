@@ -10,7 +10,18 @@
 namespace Magento\Theme\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\View\Design\Theme\Customization\Path;
+use Magento\Framework\View\Design\Theme\FileFactory;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\Theme\File;
+use Magento\Widget\Model\Layout\Link;
+use Magento\Widget\Model\Layout\Update as ModelLayoutUpdate;
+use Magento\Widget\Model\Layout\UpdateFactory;
+use Magento\Widget\Model\ResourceModel\Layout\Link\Collection as ResourceLayoutLinkCollection;
+use Magento\Widget\Model\ResourceModel\Layout\Update\Collection as ResourceLayoutUpdateCollection;
 
 class CopyService
 {
@@ -20,45 +31,45 @@ class CopyService
     protected $_directory;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\FileFactory
+     * @var FileFactory
      */
     protected $_fileFactory;
 
     /**
-     * @var \Magento\Widget\Model\Layout\Link
+     * @var Link
      */
     protected $_link;
 
     /**
-     * @var \Magento\Widget\Model\Layout\UpdateFactory
+     * @var UpdateFactory
      */
     protected $_updateFactory;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     protected $_eventManager;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\Customization\Path
+     * @var Path
      */
     protected $_customizationPath;
 
     /**
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\View\Design\Theme\FileFactory $fileFactory
-     * @param \Magento\Widget\Model\Layout\Link $link
-     * @param \Magento\Widget\Model\Layout\UpdateFactory $updateFactory
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\View\Design\Theme\Customization\Path $customization
+     * @param Filesystem $filesystem
+     * @param FileFactory $fileFactory
+     * @param Link $link
+     * @param UpdateFactory $updateFactory
+     * @param ManagerInterface $eventManager
+     * @param Path $customization
      */
     public function __construct(
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\View\Design\Theme\FileFactory $fileFactory,
-        \Magento\Widget\Model\Layout\Link $link,
-        \Magento\Widget\Model\Layout\UpdateFactory $updateFactory,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\View\Design\Theme\Customization\Path $customization
+        Filesystem $filesystem,
+        FileFactory $fileFactory,
+        Link $link,
+        UpdateFactory $updateFactory,
+        ManagerInterface $eventManager,
+        Path $customization
     ) {
         $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->_fileFactory = $fileFactory;
@@ -91,13 +102,13 @@ class CopyService
      */
     protected function _copyDatabaseCustomization(ThemeInterface $source, ThemeInterface $target)
     {
-        /** @var $themeFile \Magento\Theme\Model\Theme\File */
+        /** @var File $themeFile */
         foreach ($target->getCustomization()->getFiles() as $themeFile) {
             $themeFile->delete();
         }
-        /** @var $newFile \Magento\Theme\Model\Theme\File */
+        /** @var File $newFile */
         foreach ($source->getCustomization()->getFiles() as $themeFile) {
-            /** @var $newThemeFile \Magento\Theme\Model\Theme\File */
+            /** @var File $newThemeFile */
             $newThemeFile = $this->_fileFactory->create();
             $newThemeFile->setData(
                 [
@@ -122,17 +133,17 @@ class CopyService
     protected function _copyLayoutCustomization(ThemeInterface $source, ThemeInterface $target)
     {
         $update = $this->_updateFactory->create();
-        /** @var $targetUpdates \Magento\Widget\Model\ResourceModel\Layout\Update\Collection */
+        /** @var ResourceLayoutUpdateCollection $targetUpdates */
         $targetUpdates = $update->getCollection();
         $targetUpdates->addThemeFilter($target->getId());
         $targetUpdates->delete();
 
-        /** @var $sourceCollection \Magento\Widget\Model\ResourceModel\Layout\Link\Collection */
+        /** @var ResourceLayoutLinkCollection $sourceCollection */
         $sourceCollection = $this->_link->getCollection();
         $sourceCollection->addThemeFilter($source->getId());
-        /** @var $layoutLink \Magento\Widget\Model\Layout\Link */
+        /** @var $layoutLink Link */
         foreach ($sourceCollection as $layoutLink) {
-            /** @var $update \Magento\Widget\Model\Layout\Update */
+            /** @var ModelLayoutUpdate $update */
             $update = $this->_updateFactory->create();
             $update->load($layoutLink->getLayoutUpdateId());
             if ($update->getId()) {

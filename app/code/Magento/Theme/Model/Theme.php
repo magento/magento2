@@ -5,9 +5,23 @@
  */
 namespace Magento\Theme\Model;
 
+use InvalidArgumentException;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Design\Theme\Customization;
+use Magento\Framework\View\Design\Theme\CustomizationFactory;
+use Magento\Framework\View\Design\Theme\Domain\Factory;
+use Magento\Framework\View\Design\Theme\FlyweightFactory;
+use Magento\Framework\View\Design\Theme\Image;
+use Magento\Framework\View\Design\Theme\ImageFactory;
+use Magento\Framework\View\Design\Theme\Validator;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
+use Magento\Theme\Model\Theme\Domain\Staging;
+use Magento\Theme\Model\Theme\Domain\Virtual;
 
 /**
  * Theme model class
@@ -33,7 +47,7 @@ use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInterface
+class Theme extends AbstractModel implements ThemeInterface
 {
     /**
      * {@inheritdoc}
@@ -50,39 +64,34 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     protected $_eventObject = 'theme';
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\FlyweightFactory
+     * @var FlyweightFactory
      */
     protected $_themeFactory;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\Domain\Factory
+     * @var Factory
      */
     protected $_domainFactory;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\ImageFactory
+     * @var ImageFactory
      */
     protected $_imageFactory;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\Validator
+     * @var Validator
      */
     protected $_validator;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\Customization
+     * @var Customization
      */
     protected $_customization;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\CustomizationFactory
+     * @var CustomizationFactory
      */
     protected $_customFactory;
-
-    /**
-     * @var ThemeFactory
-     */
-    private $themeModelFactory;
 
     /**
      * @var ThemeInterface[]
@@ -92,31 +101,31 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory
-     * @param \Magento\Framework\View\Design\Theme\Domain\Factory $domainFactory
-     * @param \Magento\Framework\View\Design\Theme\ImageFactory $imageFactory
-     * @param \Magento\Framework\View\Design\Theme\Validator $validator
-     * @param \Magento\Framework\View\Design\Theme\CustomizationFactory $customizationFactory
-     * @param \Magento\Theme\Model\ResourceModel\Theme $resource
-     * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param FlyweightFactory $themeFactory
+     * @param Factory $domainFactory
+     * @param ImageFactory $imageFactory
+     * @param Validator $validator
+     * @param CustomizationFactory $customizationFactory
+     * @param ResourceModel\Theme|null $resource
+     * @param ThemeCollection|null $resourceCollection
      * @param array $data
-     * @param ThemeFactory $themeModelFactory
+     * @param ThemeFactory|null $themeModelFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory,
-        \Magento\Framework\View\Design\Theme\Domain\Factory $domainFactory,
-        \Magento\Framework\View\Design\Theme\ImageFactory $imageFactory,
-        \Magento\Framework\View\Design\Theme\Validator $validator,
-        \Magento\Framework\View\Design\Theme\CustomizationFactory $customizationFactory,
-        \Magento\Theme\Model\ResourceModel\Theme $resource = null,
+        Context $context,
+        Registry $registry,
+        FlyweightFactory $themeFactory,
+        Factory $domainFactory,
+        ImageFactory $imageFactory,
+        Validator $validator,
+        CustomizationFactory $customizationFactory,
+        ResourceModel\Theme $resource = null,
         ThemeCollection $resourceCollection = null,
         array $data = [],
-        ThemeFactory $themeModelFactory = null
+        private ?ThemeFactory $themeModelFactory = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_themeFactory = $themeFactory;
@@ -135,13 +144,13 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Theme\Model\ResourceModel\Theme::class);
+        $this->_init(ResourceModel\Theme::class);
     }
 
     /**
      * Get theme image model
      *
-     * @return \Magento\Framework\View\Design\Theme\Image
+     * @return Image
      */
     public function getThemeImage()
     {
@@ -149,7 +158,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * @return \Magento\Framework\View\Design\Theme\Customization
+     * @return Customization
      */
     public function getCustomization()
     {
@@ -305,13 +314,13 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * Get one of theme domain models
      *
      * @param int|null $type
-     * @return \Magento\Theme\Model\Theme\Domain\Virtual|\Magento\Theme\Model\Theme\Domain\Staging
-     * @throws \InvalidArgumentException
+     * @return Virtual|Staging
+     * @throws InvalidArgumentException
      */
     public function getDomainModel($type = null)
     {
         if ($type !== null && $type != $this->getType()) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
                     'Invalid domain model "%s" requested for theme "%s" of type "%s"',
                     $type,
@@ -328,13 +337,13 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * Validate theme data
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _validate()
     {
         if (!$this->_validator->validate($this)) {
             $messages = $this->_validator->getErrorMessages();
-            throw new \Magento\Framework\Exception\LocalizedException(__(implode(PHP_EOL, reset($messages))));
+            throw new LocalizedException(__(implode(PHP_EOL, reset($messages))));
         }
         return $this;
     }
@@ -429,7 +438,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     /**
      * Create Theme instance
      *
-     * @return \Magento\Theme\Model\Theme
+     * @return Theme
      */
     private function createThemeInstance()
     {

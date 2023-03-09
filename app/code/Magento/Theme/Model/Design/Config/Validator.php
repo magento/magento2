@@ -19,25 +19,15 @@ use \Magento\Framework\Filter\Template\Tokenizer\Parameter as ParameterTokenizer
 class Validator
 {
     /**
-     * @var string[]
-     */
-    private $fields = [];
-
-    /**
-     * @var TemplateFactory
-     */
-    private $templateFactory;
-
-    /**
      * Initialize dependencies.
      *
      * @param TemplateFactory $templateFactory
      * @param string[] $fields
      */
-    public function __construct(TemplateFactory $templateFactory, $fields = [])
-    {
-        $this->templateFactory = $templateFactory;
-        $this->fields = $fields;
+    public function __construct(
+        private readonly TemplateFactory $templateFactory,
+        private $fields = []
+    ) {
     }
 
     /**

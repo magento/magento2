@@ -16,21 +16,13 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 class SessionConfig implements ArgumentInterface
 {
     /**
-     * Session config
-     *
-     * @var ConfigInterface
-     */
-    private $sessionConfig;
-
-    /**
      * Constructor
      *
      * @param ConfigInterface $sessionConfig
      */
     public function __construct(
-        ConfigInterface $sessionConfig
+        private readonly ConfigInterface $sessionConfig
     ) {
-        $this->sessionConfig = $sessionConfig;
     }
     /**
      * Get session.cookie_secure

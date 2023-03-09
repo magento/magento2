@@ -19,27 +19,15 @@ use Magento\Theme\Model\Data\Design\Config;
 class RecurringData implements InstallDataInterface
 {
     /**
-     * Theme registration
-     *
-     * @var Registration
-     */
-    private $themeRegistration;
-
-    /**
-     * @var IndexerRegistry
-     */
-    private $indexerRegistry;
-
-    /**
      * Init
      *
      * @param Registration $themeRegistration
      * @param IndexerRegistry $indexerRegistry
      */
-    public function __construct(Registration $themeRegistration, IndexerRegistry $indexerRegistry)
-    {
-        $this->themeRegistration = $themeRegistration;
-        $this->indexerRegistry = $indexerRegistry;
+    public function __construct(
+        private readonly Registration $themeRegistration,
+        private readonly IndexerRegistry $indexerRegistry
+    ) {
     }
 
     /**

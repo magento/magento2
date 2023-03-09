@@ -20,11 +20,6 @@ use Magento\Framework\Search\Request\Dimension;
 class IndexerHandler extends Grid
 {
     /**
-     * @var FlatScopeResolver
-     */
-    private $flatScopeResolver;
-
-    /**
      * @param IndexStructureInterface $indexStructure
      * @param ResourceConnection $resource
      * @param Batch $batch
@@ -38,7 +33,7 @@ class IndexerHandler extends Grid
         ResourceConnection $resource,
         Batch $batch,
         IndexScopeResolver $indexScopeResolver,
-        FlatScopeResolver $flatScopeResolver,
+        private readonly FlatScopeResolver $flatScopeResolver,
         array $data,
         $batchSize = 100
     ) {
@@ -51,8 +46,6 @@ class IndexerHandler extends Grid
             $data,
             $batchSize
         );
-
-        $this->flatScopeResolver = $flatScopeResolver;
     }
 
     /**

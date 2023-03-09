@@ -6,6 +6,11 @@
 
 namespace Magento\Theme\Model\Url\Plugin;
 
+use Magento\Framework\App\View\Deployment\Version;
+use Magento\Framework\Url\ScopeInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Url\ConfigInterface;
+
 /**
  * Plugin that activates signing of static file URLs with corresponding deployment version
  */
@@ -22,46 +27,34 @@ class Signature
     const SIGNATURE_TEMPLATE = 'version%s';
 
     /**
-     * @var \Magento\Framework\View\Url\ConfigInterface
-     */
-    private $config;
-
-    /**
-     * @var \Magento\Framework\App\View\Deployment\Version
-     */
-    private $deploymentVersion;
-
-    /**
-     * @param \Magento\Framework\View\Url\ConfigInterface $config
-     * @param \Magento\Framework\App\View\Deployment\Version $deploymentVersion
+     * @param ConfigInterface $config
+     * @param Version $deploymentVersion
      */
     public function __construct(
-        \Magento\Framework\View\Url\ConfigInterface $config,
-        \Magento\Framework\App\View\Deployment\Version $deploymentVersion
+        private readonly ConfigInterface $config,
+        private readonly Version $deploymentVersion
     ) {
-        $this->config = $config;
-        $this->deploymentVersion = $deploymentVersion;
     }
 
     /**
      * Append signature to rendered base URL for static view files
      *
-     * @param \Magento\Framework\Url\ScopeInterface $subject
+     * @param ScopeInterface $subject
      * @param string $baseUrl
      * @param string $type
      * @param null $secure
      * @return string
-     * @see \Magento\Framework\Url\ScopeInterface::getBaseUrl()
+     * @see ScopeInterface::getBaseUrl
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetBaseUrl(
-        \Magento\Framework\Url\ScopeInterface $subject,
+        ScopeInterface $subject,
         $baseUrl,
-        $type = \Magento\Framework\UrlInterface::URL_TYPE_LINK,
+        $type = UrlInterface::URL_TYPE_LINK,
         $secure = null
     ) {
-        if ($type == \Magento\Framework\UrlInterface::URL_TYPE_STATIC && $this->isUrlSignatureEnabled()) {
+        if ($type == UrlInterface::URL_TYPE_STATIC && $this->isUrlSignatureEnabled()) {
             $baseUrl .= $this->renderUrlSignature() . '/';
         }
         return $baseUrl;

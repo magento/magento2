@@ -9,27 +9,31 @@
  */
 namespace Magento\Theme\Model\Theme\Domain;
 
-class Staging implements \Magento\Framework\View\Design\Theme\Domain\StagingInterface
+use Magento\Framework\View\Design\Theme\Domain\StagingInterface;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\CopyService;
+
+class Staging implements StagingInterface
 {
     /**
      * Staging theme model instance
      *
-     * @var \Magento\Framework\View\Design\ThemeInterface
+     * @var ThemeInterface
      */
     protected $_theme;
 
     /**
-     * @var \Magento\Theme\Model\CopyService
+     * @var CopyService
      */
     protected $_themeCopyService;
 
     /**
-     * @param \Magento\Framework\View\Design\ThemeInterface $theme
-     * @param \Magento\Theme\Model\CopyService $themeCopyService
+     * @param ThemeInterface $theme
+     * @param CopyService $themeCopyService
      */
     public function __construct(
-        \Magento\Framework\View\Design\ThemeInterface $theme,
-        \Magento\Theme\Model\CopyService $themeCopyService
+        ThemeInterface $theme,
+        CopyService $themeCopyService
     ) {
         $this->_theme = $theme;
         $this->_themeCopyService = $themeCopyService;
@@ -38,7 +42,7 @@ class Staging implements \Magento\Framework\View\Design\Theme\Domain\StagingInte
     /**
      * Copy changes from 'staging' theme
      *
-     * @return \Magento\Framework\View\Design\Theme\Domain\StagingInterface
+     * @return StagingInterface
      */
     public function updateFromStagingTheme()
     {

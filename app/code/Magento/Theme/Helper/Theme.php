@@ -9,29 +9,37 @@
  */
 namespace Magento\Theme\Helper;
 
-class Theme extends \Magento\Framework\App\Helper\AbstractHelper
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\Layout\ProcessorFactory;
+use Magento\Framework\View\Layout\ProcessorInterface;
+
+class Theme extends AbstractHelper
 {
     /**
      * Layout merge factory
      *
-     * @var \Magento\Framework\View\Layout\ProcessorFactory
+     * @var ProcessorFactory
      */
     protected $_layoutProcessorFactory;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository
+     * @var Repository
      */
     protected $_assetRepo;
 
     /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\View\Layout\ProcessorFactory $layoutProcessorFactory
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @param Context $context
+     * @param ProcessorFactory $layoutProcessorFactory
+     * @param Repository $assetRepo
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\View\Layout\ProcessorFactory $layoutProcessorFactory,
-        \Magento\Framework\View\Asset\Repository $assetRepo
+        Context $context,
+        ProcessorFactory $layoutProcessorFactory,
+        Repository $assetRepo
     ) {
         $this->_layoutProcessorFactory = $layoutProcessorFactory;
         $this->_assetRepo = $assetRepo;
@@ -45,12 +53,12 @@ class Theme extends \Magento\Framework\App\Helper\AbstractHelper
      * array('Magento_Catalog::widgets.css' => \Magento\Framework\View\Asset\LocalInterface)
      * The array will be sorted by keys
      *
-     * @param \Magento\Framework\View\Design\ThemeInterface $theme
-     * @return \Magento\Framework\View\Asset\LocalInterface[]
+     * @param ThemeInterface $theme
+     * @return LocalInterface[]
      */
     public function getCssAssets($theme)
     {
-        /** @var $layoutProcessor \Magento\Framework\View\Layout\ProcessorInterface */
+        /** @var ProcessorInterface $layoutProcessor */
         $layoutProcessor = $this->_layoutProcessorFactory->create(['theme' => $theme]);
         $layoutElement = $layoutProcessor->getFileLayoutUpdatesXml();
 

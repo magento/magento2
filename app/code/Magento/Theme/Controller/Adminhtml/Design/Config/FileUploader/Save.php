@@ -19,12 +19,6 @@ use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
 class Save extends Action
 {
     /**
-     * @var FileProcessor
-     * @since 100.1.0
-     */
-    protected $fileProcessor;
-
-    /**
      * Authorization level
      */
     const ADMIN_RESOURCE = 'Magento_Theme::theme';
@@ -35,10 +29,9 @@ class Save extends Action
      */
     public function __construct(
         Context $context,
-        FileProcessor $fileProcessor
+        protected readonly FileProcessor $fileProcessor
     ) {
         parent::__construct($context);
-        $this->fileProcessor = $fileProcessor;
     }
 
     /**

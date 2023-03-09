@@ -37,16 +37,6 @@ class Topmenu extends Template implements IdentityInterface
     protected $_menu;
 
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
-     * @var TreeFactory
-     */
-    private $treeFactory;
-
-    /**
      * @param Template\Context $context
      * @param NodeFactory $nodeFactory
      * @param TreeFactory $treeFactory
@@ -54,13 +44,11 @@ class Topmenu extends Template implements IdentityInterface
      */
     public function __construct(
         Template\Context $context,
-        NodeFactory $nodeFactory,
-        TreeFactory $treeFactory,
+        private readonly NodeFactory $nodeFactory,
+        private readonly TreeFactory $treeFactory,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->nodeFactory = $nodeFactory;
-        $this->treeFactory = $treeFactory;
     }
 
     /**
@@ -120,7 +108,7 @@ class Topmenu extends Template implements IdentityInterface
     {
         $total = $items->count();
         foreach ($items as $item) {
-            /** @var $item Menu\Item */
+            /** @var Menu\Item $item */
             if ($item->hasChildren()) {
                 $total += $this->_countItems($item->getChildren());
             }

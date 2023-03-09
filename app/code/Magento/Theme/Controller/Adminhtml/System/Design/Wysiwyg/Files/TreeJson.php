@@ -6,7 +6,13 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 
-class TreeJson extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
+use Exception;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree;
+use Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
+use Psr\Log\LoggerInterface;
+
+class TreeJson extends Files
 {
     /**
      * Tree json action
@@ -18,15 +24,15 @@ class TreeJson extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg
         try {
             $this->getResponse()->representJson(
                 $this->_view->getLayout()->createBlock(
-                    \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree::class
+                    Tree::class
                 )->getTreeJson(
                     $this->_getStorage()->getTreeArray()
                 )
             );
-        } catch (\Exception $e) {
-            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+        } catch (Exception $e) {
+            $this->_objectManager->get(LoggerInterface::class)->critical($e);
             $this->getResponse()->representJson(
-                $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode([])
+                $this->_objectManager->get(JsonHelper::class)->jsonEncode([])
             );
         }
     }

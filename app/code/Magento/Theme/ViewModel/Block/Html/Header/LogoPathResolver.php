@@ -18,17 +18,11 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 class LogoPathResolver implements LogoPathResolverInterface, ArgumentInterface
 {
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig
+        private readonly ScopeConfigInterface $scopeConfig
     ) {
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**

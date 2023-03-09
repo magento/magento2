@@ -5,6 +5,12 @@
  */
 namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files;
 
+use Magento\Backend\Block\Widget\Container;
+use Magento\Backend\Block\Widget\Context;
+use Magento\Framework\DataObject;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Theme\Helper\Storage as StorageHelper;
+
 /**
  * Files content block
  *
@@ -12,31 +18,25 @@ namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Content extends \Magento\Backend\Block\Widget\Container
+class Content extends Container
 {
     /**
-     * @var \Magento\Theme\Helper\Storage
+     * @var StorageHelper
      */
     protected $_storageHelper;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data
-     */
-    protected $jsonHelper;
-
-    /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Theme\Helper\Storage $storageHelper
-     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param Context $context
+     * @param StorageHelper $storageHelper
+     * @param JsonHelper $jsonHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Theme\Helper\Storage $storageHelper,
-        \Magento\Framework\Json\Helper\Data $jsonHelper,
+        Context $context,
+        StorageHelper $storageHelper,
+        protected readonly JsonHelper $jsonHelper,
         array $data = []
     ) {
-        $this->jsonHelper = $jsonHelper;
         $this->_storageHelper = $storageHelper;
         parent::__construct($context, $data);
     }
@@ -116,7 +116,7 @@ class Content extends \Magento\Backend\Block\Widget\Container
      */
     public function getFilebrowserSetupObject()
     {
-        $setupObject = new \Magento\Framework\DataObject();
+        $setupObject = new DataObject();
 
         $setupObject->setData(
             [

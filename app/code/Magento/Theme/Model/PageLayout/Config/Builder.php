@@ -26,33 +26,9 @@ class Builder implements BuilderInterface
     const CACHE_KEY_LAYOUTS = 'THEME_LAYOUTS_FILES_MERGED';
 
     /**
-     * @var ConfigFactory
-     */
-    protected $configFactory;
-
-    /**
-     * @var Aggregated
-     */
-    protected $fileCollector;
-
-    /**
-     * @var Collection
-     */
-    protected $themeCollection;
-
-    /**
      * @var array
      */
     private $configFiles = [];
-
-    /**
-     * @var Layout|null
-     */
-    private $cacheModel;
-    /**
-     * @var SerializerInterface|null
-     */
-    private $serializer;
 
     /**
      * @param ConfigFactory $configFactory
@@ -62,15 +38,12 @@ class Builder implements BuilderInterface
      * @param SerializerInterface|null $serializer
      */
     public function __construct(
-        ConfigFactory $configFactory,
-        Aggregated $fileCollector,
-        Collection $themeCollection,
-        ?Layout $cacheModel = null,
-        ?SerializerInterface $serializer = null
+        protected readonly ConfigFactory $configFactory,
+        protected readonly Aggregated $fileCollector,
+        protected readonly Collection $themeCollection,
+        private ?Layout $cacheModel = null,
+        private ?SerializerInterface $serializer = null
     ) {
-        $this->configFactory = $configFactory;
-        $this->fileCollector = $fileCollector;
-        $this->themeCollection = $themeCollection;
         $this->themeCollection->setItemObjectClass(Data::class);
         $this->cacheModel = $cacheModel
             ?? ObjectManager::getInstance()->get(Layout::class);

@@ -9,27 +9,34 @@
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme;
 
+use Magento\Backend\Block\Widget\Context;
+use Magento\Backend\Block\Widget\Form\Container;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Theme\Model\Theme;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Edit extends \Magento\Backend\Block\Widget\Form\Container
+class Edit extends Container
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param Context $context
+     * @param Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Framework\Registry $registry,
+        Context $context,
+        Registry $registry,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
@@ -39,7 +46,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Prepare layout
      *
-     * @return \Magento\Framework\View\Element\AbstractBlock
+     * @return AbstractBlock
      */
     protected function _prepareLayout()
     {
@@ -51,7 +58,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             $this->getLayout()->getBlock('page.title')->setPageTitle($this->getHeaderText());
         }
 
-        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+        /** @var ThemeInterface $theme */
         $theme = $this->_getCurrentTheme();
         if ($theme) {
             if ($theme->isEditable()) {
@@ -98,7 +105,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getHeaderText()
     {
-        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+        /** @var ThemeInterface $theme */
         $theme = $this->_getCurrentTheme();
         if ($theme->getId()) {
             $header = __('Theme: %1', $theme->getThemeTitle());
@@ -111,7 +118,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Get current theme
      *
-     * @return \Magento\Theme\Model\Theme
+     * @return Theme
      */
     protected function _getCurrentTheme()
     {

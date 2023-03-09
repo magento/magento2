@@ -9,29 +9,34 @@
  */
 namespace Magento\Theme\Model\Theme;
 
+use Magento\Framework\View\Design\Theme\Customization\FileInterface;
+use Magento\Framework\View\Design\Theme\FileInterface as ThemeFileInterface;
+use Magento\Framework\View\Design\ThemeInterface;
+
 class SingleFile
 {
     /**
-     * @var \Magento\Framework\View\Design\Theme\Customization\FileInterface
+     * @var FileInterface
      */
     protected $_fileService;
 
     /**
-     * @param \Magento\Framework\View\Design\Theme\Customization\FileInterface $fileService
+     * @param FileInterface $fileService
      */
-    public function __construct(\Magento\Framework\View\Design\Theme\Customization\FileInterface $fileService)
-    {
+    public function __construct(
+        FileInterface $fileService
+    ) {
         $this->_fileService = $fileService;
     }
 
     /**
      * Creates or updates custom single file which belong to a selected theme
      *
-     * @param \Magento\Framework\View\Design\ThemeInterface $themeModel
+     * @param ThemeInterface $themeModel
      * @param string $fileContent
-     * @return \Magento\Framework\View\Design\Theme\FileInterface
+     * @return ThemeFileInterface
      */
-    public function update(\Magento\Framework\View\Design\ThemeInterface $themeModel, $fileContent)
+    public function update(ThemeInterface $themeModel, $fileContent)
     {
         $customFiles = $themeModel->getCustomization()->getFilesByType($this->_fileService->getType());
         $customCss = reset($customFiles);

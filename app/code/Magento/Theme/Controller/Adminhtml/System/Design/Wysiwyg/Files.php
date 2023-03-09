@@ -9,7 +9,13 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg;
 
-abstract class Files extends \Magento\Backend\App\Action
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Theme\Helper\Storage as ThemeStorageHelper;
+use Magento\Theme\Model\Wysiwyg\Storage;
+
+abstract class Files extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -19,37 +25,31 @@ abstract class Files extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Magento_Theme::theme';
 
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @var FileFactory
      */
     protected $_fileFactory;
 
     /**
-     * @var \Magento\Theme\Helper\Storage
-     */
-    protected $storage;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Theme\Helper\Storage $storage
+     * @param Context $context
+     * @param FileFactory $fileFactory
+     * @param ThemeStorageHelper $storage
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Theme\Helper\Storage $storage
+        Context $context,
+        FileFactory $fileFactory,
+        protected readonly ThemeStorageHelper $storage
     ) {
         $this->_fileFactory = $fileFactory;
-        $this->storage = $storage;
         parent::__construct($context);
     }
 
     /**
      * Get storage
      *
-     * @return \Magento\Theme\Model\Wysiwyg\Storage
+     * @return Storage
      */
     protected function _getStorage()
     {
-        return $this->_objectManager->get(\Magento\Theme\Model\Wysiwyg\Storage::class);
+        return $this->_objectManager->get(Storage::class);
     }
 }

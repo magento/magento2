@@ -7,12 +7,21 @@
 namespace Magento\Theme\Model\View;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Design\Theme\FlyweightFactory;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Theme\Model\Theme;
+use Magento\Theme\Model\ThemeFactory;
 
 /**
  * Keeps design settings for current request
  */
-class Design implements \Magento\Framework\View\DesignInterface
+class Design implements DesignInterface
 {
     /**
      * Package area
@@ -24,7 +33,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     /**
      * Package theme
      *
-     * @var \Magento\Theme\Model\Theme
+     * @var Theme
      */
     protected $_theme;
 
@@ -39,37 +48,32 @@ class Design implements \Magento\Framework\View\DesignInterface
     /**
      * Store list manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\FlyweightFactory
+     * @var FlyweightFactory
      */
     protected $_flyweightFactory;
 
     /**
-     * @var \Magento\Theme\Model\ThemeFactory
+     * @var ThemeFactory
      */
     protected $_themeFactory;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     private $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface
+     * @var ResolverInterface
      */
     protected $_locale;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    protected $objectManager;
-
-    /**
-     * @var \Magento\Framework\App\State
+     * @var State
      */
     protected $_appState;
 
@@ -79,21 +83,21 @@ class Design implements \Magento\Framework\View\DesignInterface
     private $_themes;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $flyweightFactory
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Theme\Model\ThemeFactory $themeFactory
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\App\State $appState
+     * @param StoreManagerInterface $storeManager
+     * @param FlyweightFactory $flyweightFactory
+     * @param ScopeConfigInterface $scopeConfig
+     * @param ThemeFactory $themeFactory
+     * @param ObjectManagerInterface $objectManager
+     * @param State $appState
      * @param array $themes
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\View\Design\Theme\FlyweightFactory $flyweightFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Theme\Model\ThemeFactory $themeFactory,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\App\State $appState,
+        StoreManagerInterface $storeManager,
+        FlyweightFactory $flyweightFactory,
+        ScopeConfigInterface $scopeConfig,
+        ThemeFactory $themeFactory,
+        protected readonly ObjectManagerInterface $objectManager,
+        State $appState,
         array $themes
     ) {
         $this->_storeManager = $storeManager;
@@ -102,7 +106,6 @@ class Design implements \Magento\Framework\View\DesignInterface
         $this->_scopeConfig = $scopeConfig;
         $this->_appState = $appState;
         $this->_themes = $themes;
-        $this->objectManager = $objectManager;
     }
 
     /**
@@ -135,7 +138,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     /**
      * Set theme path
      *
-     * @param \Magento\Framework\View\Design\ThemeInterface|string $theme
+     * @param ThemeInterface|string $theme
      * @param string $area
      * @return $this
      */
@@ -147,7 +150,7 @@ class Design implements \Magento\Framework\View\DesignInterface
             $area = $this->getArea();
         }
 
-        if ($theme instanceof \Magento\Framework\View\Design\ThemeInterface) {
+        if ($theme instanceof ThemeInterface) {
             $this->_theme = $theme;
         } else {
             $this->_theme = $this->_flyweightFactory->create($theme, $area);
@@ -221,7 +224,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     /**
      * Design theme model getter
      *
-     * @return \Magento\Theme\Model\Theme
+     * @return Theme
      */
     public function getDesignTheme()
     {
@@ -234,7 +237,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     /**
      * {@inheritdoc}
      */
-    public function getThemePath(\Magento\Framework\View\Design\ThemeInterface $theme)
+    public function getThemePath(ThemeInterface $theme)
     {
         $themePath = $theme->getThemePath();
         if (!$themePath) {
@@ -256,16 +259,16 @@ class Design implements \Magento\Framework\View\DesignInterface
     public function getLocale()
     {
         if (null === $this->_locale) {
-            $this->_locale = $this->objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
+            $this->_locale = $this->objectManager->get(ResolverInterface::class);
         }
         return $this->_locale->getLocale();
     }
 
     /**
-     * @param \Magento\Framework\Locale\ResolverInterface $locale
+     * @param ResolverInterface $locale
      * @return $this
      */
-    public function setLocale(\Magento\Framework\Locale\ResolverInterface $locale)
+    public function setLocale(ResolverInterface $locale)
     {
         $this->_locale = $locale;
         return $this;

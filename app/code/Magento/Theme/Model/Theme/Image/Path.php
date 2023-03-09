@@ -7,12 +7,18 @@
 namespace Magento\Theme\Model\Theme\Image;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface as DirectoryReadInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Asset\Repository as AssetRepository;
+use Magento\Framework\View\Design\Theme\Image\PathInterface as ImagePathInterface;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Theme Image Path
  */
-class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
+class Path implements ImagePathInterface
 {
     /**
      * Default theme preview image
@@ -20,35 +26,23 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
     public const DEFAULT_PREVIEW_IMAGE = 'Magento_Theme::theme/default_preview.jpg';
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var DirectoryReadInterface
      */
     protected $mediaDirectory;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository
-     */
-    protected $assetRepo;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
      * Initialize dependencies
      *
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Filesystem $filesystem
+     * @param AssetRepository $assetRepo
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        Filesystem $filesystem,
+        protected readonly AssetRepository $assetRepo,
+        protected readonly StoreManagerInterface $storeManager
     ) {
         $this->mediaDirectory = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        $this->assetRepo = $assetRepo;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -59,7 +53,7 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
      */
     public function getPreviewImageUrl(ThemeInterface $theme)
     {
-        return $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA)
+        return $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA)
                 . self::PREVIEW_DIRECTORY_PATH . '/' . $theme->getPreviewImage();
     }
 

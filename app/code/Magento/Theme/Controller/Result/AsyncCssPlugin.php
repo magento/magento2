@@ -13,6 +13,7 @@ use Magento\Framework\App\Response\Http;
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\View\Result\Layout;
+use RuntimeException;
 
 /**
  * Plugin for asynchronous CSS loading.
@@ -22,16 +23,11 @@ class AsyncCssPlugin
     private const XML_PATH_USE_CSS_CRITICAL_PATH = 'dev/css/use_css_critical_path';
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(ScopeConfigInterface $scopeConfig)
-    {
-        $this->scopeConfig = $scopeConfig;
+    public function __construct(
+        private ScopeConfigInterface $scopeConfig
+    ) {
     }
 
     /**
@@ -91,7 +87,7 @@ class AsyncCssPlugin
             $content = str_replace($style, '', $content);
 
             if (!preg_match('@href=("|\')(.*?)\1@', $style, $hrefAttribute)) {
-                throw new \RuntimeException("Invalid link {$style} syntax provided");
+                throw new RuntimeException("Invalid link {$style} syntax provided");
             }
             $href = $hrefAttribute[2];
 

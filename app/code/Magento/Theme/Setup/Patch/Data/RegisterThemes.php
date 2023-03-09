@@ -6,6 +6,7 @@
 
 namespace Magento\Theme\Setup\Patch\Data;
 
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Theme\Model\Theme\Registration;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
@@ -18,25 +19,14 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 class RegisterThemes implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-    /**
-     * @var Registration
-     */
-    private $themeRegistration;
-
-    /**
      * RegisterThemes constructor.
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param Registration $themeRegistration
      */
     public function __construct(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
-        Registration $themeRegistration
+        private readonly ModuleDataSetupInterface $moduleDataSetup,
+        private readonly Registration $themeRegistration
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
-        $this->themeRegistration = $themeRegistration;
     }
 
     /**

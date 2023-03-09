@@ -6,32 +6,36 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 
-class DeleteFiles extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
+use Exception;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
+
+class DeleteFiles extends Files
 {
     /**
      * Delete file from media storage
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function execute()
     {
         try {
             if (!$this->getRequest()->isPost()) {
-                throw new \Exception('Wrong request');
+                throw new Exception('Wrong request');
             }
             $files = $this->_objectManager->get(
-                \Magento\Framework\Json\Helper\Data::class
+                JsonHelper::class
             )->jsonDecode(
                 $this->getRequest()->getParam('files')
             );
             foreach ($files as $file) {
                 $this->_getStorage()->deleteFile($file);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
             $this->getResponse()->representJson(
-                $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
+                $this->_objectManager->get(JsonHelper::class)->jsonEncode($result)
             );
         }
     }

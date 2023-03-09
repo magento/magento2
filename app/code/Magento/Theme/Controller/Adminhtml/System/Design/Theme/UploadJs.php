@@ -7,13 +7,23 @@
 
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
+use Exception;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Framework\View\Design\Theme\Customization;
+use Magento\Framework\View\Design\Theme\Customization\File\Js as CustomizationFileJs;
+use Magento\Framework\View\Design\Theme\CustomizationInterface;
+use Magento\Framework\View\Design\Theme\FlyweightFactory;
+use Magento\Theme\Controller\Adminhtml\System\Design\Theme;
+use Magento\Theme\Model\Uploader\Service;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class UploadJs
  * @deprecated 101.0.0
  */
-class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme implements HttpGetActionInterface
+class UploadJs extends Theme implements HttpGetActionInterface
 {
     /**
      * Upload js file
@@ -23,16 +33,16 @@ class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme i
     public function execute()
     {
         $themeId = $this->getRequest()->getParam('id');
-        /** @var $serviceModel \Magento\Theme\Model\Uploader\Service */
-        $serviceModel = $this->_objectManager->get(\Magento\Theme\Model\Uploader\Service::class);
-        /** @var $themeFactory \Magento\Framework\View\Design\Theme\FlyweightFactory */
-        $themeFactory = $this->_objectManager->get(\Magento\Framework\View\Design\Theme\FlyweightFactory::class);
-        /** @var $jsService \Magento\Framework\View\Design\Theme\Customization\File\Js */
-        $jsService = $this->_objectManager->get(\Magento\Framework\View\Design\Theme\Customization\File\Js::class);
+        /** @var Service $serviceModel */
+        $serviceModel = $this->_objectManager->get(Service::class);
+        /** @var FlyweightFactory $themeFactory */
+        $themeFactory = $this->_objectManager->get(FlyweightFactory::class);
+        /** @var CustomizationFileJs $jsService */
+        $jsService = $this->_objectManager->get(CustomizationFileJs::class);
         try {
             $theme = $themeFactory->create($themeId);
             if (!$theme) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __('We cannot find a theme with id "%1".', $themeId)
                 );
             }
@@ -43,23 +53,23 @@ class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme i
             $jsFile->setData('content', $jsFileData['content']);
             $jsFile->save();
 
-            /** @var $customization \Magento\Framework\View\Design\Theme\Customization */
+            /** @var Customization $customization */
             $customization = $this->_objectManager->create(
-                \Magento\Framework\View\Design\Theme\CustomizationInterface::class,
+                CustomizationInterface::class,
                 ['theme' => $theme]
             );
             $customJsFiles = $customization->getFilesByType(
-                \Magento\Framework\View\Design\Theme\Customization\File\Js::TYPE
+                CustomizationFileJs::TYPE
             );
             $result = ['error' => false, 'files' => $customization->generateFileInfo($customJsFiles)];
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = ['error' => true, 'message' => __('We can\'t upload the JS file right now.')];
-            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            $this->_objectManager->get(LoggerInterface::class)->critical($e);
         }
         $this->getResponse()->representJson(
-            $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
+            $this->_objectManager->get(JsonHelper::class)->jsonEncode($result)
         );
     }
 }

@@ -19,25 +19,15 @@ use Magento\Theme\Model\ResourceModel\Theme\CollectionFactory;
 class StoreUserAgentThemeResolver implements StoreThemesResolverInterface
 {
     private const XML_PATH_THEME_USER_AGENT = 'design/theme/ua_regexp';
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-    /**
-     * @var Json
-     */
-    private $serializer;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param Json $serializer
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        Json $serializer
+        private readonly ScopeConfigInterface $scopeConfig,
+        private readonly Json $serializer
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->serializer = $serializer;
     }
 
     /**

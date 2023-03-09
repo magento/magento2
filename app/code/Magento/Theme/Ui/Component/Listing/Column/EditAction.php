@@ -18,11 +18,6 @@ use Magento\Ui\Component\Listing\Columns\Column;
 class EditAction extends Column
 {
     /**
-     * @var UrlInterface
-     */
-    protected $urlBuilder;
-
-    /**
      * Constructor
      *
      * @param ContextInterface $context
@@ -34,11 +29,10 @@ class EditAction extends Column
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        UrlInterface $urlBuilder,
+        protected readonly UrlInterface $urlBuilder,
         array $components = [],
         array $data = []
     ) {
-        $this->urlBuilder = $urlBuilder;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 

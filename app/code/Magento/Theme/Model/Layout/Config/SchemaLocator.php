@@ -8,8 +8,9 @@
 namespace Magento\Theme\Model\Layout\Config;
 
 use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Config\SchemaLocatorInterface;
 
-class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
+class SchemaLocator implements SchemaLocatorInterface
 {
     /**
      * Path to corresponding XSD file with validation rules for merged config

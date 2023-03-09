@@ -13,41 +13,17 @@ use Magento\Store\Model\StoreManagerInterface;
 class MetadataLoader
 {
     /**
-     * @var RequestInterface
-     */
-    protected $request;
-
-    /**
-     * @var ScopeFallbackResolverInterface
-     */
-    protected $scopeFallbackResolver;
-
-    /**
-     * @var DesignConfigRepositoryInterface
-     */
-    protected $designConfigRepository;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
      * @param RequestInterface $request
      * @param ScopeFallbackResolverInterface $scopeFallbackResolver
      * @param DesignConfigRepositoryInterface $designConfigRepository
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        RequestInterface $request,
-        ScopeFallbackResolverInterface $scopeFallbackResolver,
-        DesignConfigRepositoryInterface $designConfigRepository,
-        StoreManagerInterface $storeManager
+        protected readonly RequestInterface $request,
+        protected readonly ScopeFallbackResolverInterface $scopeFallbackResolver,
+        protected readonly DesignConfigRepositoryInterface $designConfigRepository,
+        protected readonly StoreManagerInterface $storeManager
     ) {
-        $this->request = $request;
-        $this->scopeFallbackResolver = $scopeFallbackResolver;
-        $this->designConfigRepository = $designConfigRepository;
-        $this->storeManager = $storeManager;
     }
 
     /**

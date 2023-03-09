@@ -5,10 +5,12 @@
  */
 namespace Magento\Theme\Model\ResourceModel\Design;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
  * Config Design resource model
  */
-class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Config extends AbstractDb
 {
     /**
      * Initialize resource model

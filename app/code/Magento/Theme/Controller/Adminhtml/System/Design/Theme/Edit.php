@@ -6,11 +6,19 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
+use Exception;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css;
+use Magento\Theme\Controller\Adminhtml\System\Design\Theme;
+use Magento\Theme\Helper\Theme as ThemeHelper;
+use Psr\Log\LoggerInterface;
+
 /**
  * Class Edit
  * @deprecated 100.2.0
  */
-class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
+class Edit extends Theme
 {
     /**
      * Edit theme
@@ -20,32 +28,32 @@ class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
     public function execute()
     {
         $themeId = (int)$this->getRequest()->getParam('id');
-        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
-        $theme = $this->_objectManager->create(\Magento\Framework\View\Design\ThemeInterface::class);
+        /** @var ThemeInterface $theme */
+        $theme = $this->_objectManager->create(ThemeInterface::class);
         try {
-            $theme->setType(\Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL);
+            $theme->setType(ThemeInterface::TYPE_VIRTUAL);
             if ($themeId && (!$theme->load($themeId)->getId() || !$theme->isVisible())) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('We cannot find theme "%1".', $themeId));
+                throw new LocalizedException(__('We cannot find theme "%1".', $themeId));
             }
             $this->_coreRegistry->register('current_theme', $theme);
 
             $this->_view->loadLayout();
-            /** @var $tab \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css */
+            /** @var Css $tab */
             $tab = $this->_view->getLayout()->getBlock('theme_edit_tabs_tab_css_tab');
             if ($tab && $tab->canShowTab()) {
-                /** @var $helper \Magento\Theme\Helper\Theme */
-                $helper = $this->_objectManager->get(\Magento\Theme\Helper\Theme::class);
+                /** @var ThemeHelper $helper */
+                $helper = $this->_objectManager->get(ThemeHelper::class);
                 $files = $helper->getCssAssets($theme);
                 $tab->setFiles($files);
             }
             $this->_setActiveMenu('Magento_Theme::system_design_theme');
             $this->_view->renderLayout();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('adminhtml/*/');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addError(__('We cannot find the theme.'));
-            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            $this->_objectManager->get(LoggerInterface::class)->critical($e);
             $this->_redirect('adminhtml/*/');
         }
     }

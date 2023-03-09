@@ -5,12 +5,15 @@
  */
 namespace Magento\Theme\Model\Theme;
 
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\Theme;
+
 /**
  * Data model for themes
  *
- * @method \Magento\Framework\View\Design\ThemeInterface setArea(string $area)
+ * @method ThemeInterface setArea(string $area)
  */
-class Data extends \Magento\Theme\Model\Theme
+class Data extends Theme
 {
     /**
      * {@inheritdoc}

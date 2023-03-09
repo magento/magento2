@@ -5,6 +5,15 @@
  */
 namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files;
 
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Phrase;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Url\EncoderInterface;
+use Magento\Theme\Helper\Storage;
+use RuntimeException;
+
 /**
  * Files tree block
  *
@@ -12,42 +21,31 @@ namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Tree extends \Magento\Backend\Block\Template
+class Tree extends Template
 {
     /**
-     * @var \Magento\Theme\Helper\Storage
+     * @var Storage
      */
     protected $_storageHelper;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface
-     */
-    protected $urlEncoder;
-
-    /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
-     */
-    private $serializer;
-
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Theme\Helper\Storage $storageHelper
-     * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
+     * @param Context $context
+     * @param Storage $storageHelper
+     * @param EncoderInterface $urlEncoder
      * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @throws \RuntimeException
+     * @param Json|null $serializer
+     * @throws RuntimeException
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Theme\Helper\Storage $storageHelper,
-        \Magento\Framework\Url\EncoderInterface $urlEncoder,
+        Context $context,
+        Storage $storageHelper,
+        protected readonly EncoderInterface $urlEncoder,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        private ?Json $serializer = null
     ) {
         $this->_storageHelper = $storageHelper;
-        $this->urlEncoder = $urlEncoder;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
+            ->get(Json::class);
         parent::__construct($context, $data);
     }
 
@@ -75,7 +73,7 @@ class Tree extends \Magento\Backend\Block\Template
     /**
      * Get root node name of tree
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getRootNodeName()
     {

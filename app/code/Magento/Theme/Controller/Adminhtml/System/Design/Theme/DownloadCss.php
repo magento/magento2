@@ -6,6 +6,8 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
+use Exception;
+use InvalidArgumentException;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Response\Http\FileFactory;
@@ -29,11 +31,6 @@ use Psr\Log\LoggerInterface;
 class DownloadCss extends Theme implements HttpGetActionInterface
 {
     /**
-     * @var Escaper
-     */
-    private $escaper;
-
-    /**
      * DownloadCss constructor.
      * @param Context $context
      * @param Registry $coreRegistry
@@ -48,7 +45,7 @@ class DownloadCss extends Theme implements HttpGetActionInterface
         FileFactory $fileFactory,
         Repository $assetRepo,
         Filesystem $appFileSystem,
-        Escaper $escaper = null
+        private ?Escaper $escaper = null
     ) {
         $this->escaper = $escaper ?? $context->getObjectManager()->get(Escaper::class);
         parent::__construct($context, $coreRegistry, $fileFactory, $assetRepo, $appFileSystem);
@@ -64,14 +61,14 @@ class DownloadCss extends Theme implements HttpGetActionInterface
         $themeId = $this->getRequest()->getParam('theme_id');
         $file = $this->getRequest()->getParam('file');
 
-        /** @var $urlDecoder DecoderInterface */
+        /** @var DecoderInterface $urlDecoder */
         $urlDecoder = $this->_objectManager->get(DecoderInterface::class);
         $fileId = $urlDecoder->decode($file);
         try {
-            /** @var $theme ThemeInterface */
+            /** @var ThemeInterface $theme */
             $theme = $this->_objectManager->create(ThemeInterface::class)->load($themeId);
             if (!$theme->getId()) {
-                throw new \InvalidArgumentException(sprintf('Theme not found: "%d".', $themeId));
+                throw new InvalidArgumentException(sprintf('Theme not found: "%d".', $themeId));
             }
             $asset = $this->_assetRepo->createAsset($fileId, ['themeModel' => $theme]);
             $relPath = $this->_appFileSystem->getDirectoryRead(DirectoryList::ROOT)
@@ -85,11 +82,11 @@ class DownloadCss extends Theme implements HttpGetActionInterface
                 ],
                 DirectoryList::ROOT
             );
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->messageManager->addException($e, __('Theme not found: "%1".', $this->escaper->escapeHtml($themeId)));
             $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
             $this->_objectManager->get(LoggerInterface::class)->critical($e);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addException($e, __('File not found: "%1".', $this->escaper->escapeHtml($fileId)));
             $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
             $this->_objectManager->get(LoggerInterface::class)->critical($e);

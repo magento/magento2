@@ -5,33 +5,26 @@
  */
 namespace Magento\Theme\Model\Theme;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
+use Magento\Theme\Model\ResourceModel\Theme\CollectionFactory;
+use Magento\Theme\Model\Theme;
+use Magento\Theme\Model\ThemeFactory;
 
 /**
  * Provide data for theme grid and for theme edit page
  */
-class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProviderInterface
+class ThemeProvider implements ThemeProviderInterface
 {
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory
-     */
-    protected $collectionFactory;
-
-    /**
-     * @var \Magento\Theme\Model\ThemeFactory
-     */
-    protected $themeFactory;
-
-    /**
-     * @var \Magento\Framework\App\CacheInterface
-     */
-    protected $cache;
-
-    /**
-     * @var \Magento\Framework\View\Design\ThemeInterface[]
+     * @var ThemeInterface[]
      */
     private $themes;
 
@@ -46,27 +39,19 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     private $deploymentConfig;
 
     /**
-     * @var Json
-     */
-    private $serializer;
-
-    /**
      * ThemeProvider constructor.
      *
-     * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $collectionFactory
-     * @param \Magento\Theme\Model\ThemeFactory $themeFactory
-     * @param \Magento\Framework\App\CacheInterface $cache
-     * @param Json $serializer
+     * @param CollectionFactory $collectionFactory
+     * @param ThemeFactory $themeFactory
+     * @param CacheInterface $cache
+     * @param Json|null $serializer
      */
     public function __construct(
-        \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $collectionFactory,
-        \Magento\Theme\Model\ThemeFactory $themeFactory,
-        \Magento\Framework\App\CacheInterface $cache,
-        Json $serializer = null
+        protected readonly CollectionFactory $collectionFactory,
+        protected readonly ThemeFactory $themeFactory,
+        protected readonly CacheInterface $cache,
+        private ?Json $serializer = null
     ) {
-        $this->collectionFactory = $collectionFactory;
-        $this->themeFactory = $themeFactory;
-        $this->cache = $cache;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
@@ -103,10 +88,10 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      * @inheritdoc
      */
     public function getThemeCustomizations(
-        $area = \Magento\Framework\App\Area::AREA_FRONTEND,
-        $type = \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL
+        $area = Area::AREA_FRONTEND,
+        $type = ThemeInterface::TYPE_VIRTUAL
     ) {
-        /** @var $themeCollection \Magento\Theme\Model\ResourceModel\Theme\Collection */
+        /** @var $themeCollection ThemeCollection */
         $themeCollection = $this->collectionFactory->create();
         $themeCollection->addAreaFilter($area)->addTypeFilter($type);
         return $themeCollection;
@@ -139,7 +124,7 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      * Load Theme model from cache
      *
      * @param string $cacheId
-     * @return \Magento\Theme\Model\Theme|null
+     * @return Theme|null
      */
     private function loadThemeFromCache($cacheId)
     {
@@ -156,11 +141,11 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     /**
      * Save Theme model to the cache
      *
-     * @param \Magento\Theme\Model\Theme $theme
+     * @param Theme $theme
      * @param string $cacheId
      * @return void
      */
-    private function saveThemeToCache(\Magento\Theme\Model\Theme $theme, $cacheId)
+    private function saveThemeToCache(Theme $theme, $cacheId)
     {
         $themeData = $this->serializer->serialize($theme->toArray());
         $this->cache->save($themeData, $cacheId);

@@ -8,38 +8,25 @@ namespace Magento\Theme\Observer;
 
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Design\Theme\ImageFactory;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\Config\Customization;
 use Magento\Theme\Model\Theme;
+use Magento\Widget\Model\ResourceModel\Layout\Update\Collection;
 
 class CleanThemeRelatedContentObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Framework\View\Design\Theme\ImageFactory
-     */
-    protected $themeImageFactory;
-
-    /**
-     * @var \Magento\Widget\Model\ResourceModel\Layout\Update\Collection
-     */
-    protected $updateCollection;
-
-    /**
-     * @var \Magento\Theme\Model\Config\Customization
-     */
-    protected $themeConfig;
-
-    /**
-     * @param \Magento\Framework\View\Design\Theme\ImageFactory $themeImageFactory
-     * @param \Magento\Widget\Model\ResourceModel\Layout\Update\Collection $updateCollection
-     * @param \Magento\Theme\Model\Config\Customization $themeConfig
+     * @param ImageFactory $themeImageFactory
+     * @param Collection $updateCollection
+     * @param Customization $themeConfig
      */
     public function __construct(
-        \Magento\Framework\View\Design\Theme\ImageFactory $themeImageFactory,
-        \Magento\Widget\Model\ResourceModel\Layout\Update\Collection $updateCollection,
-        \Magento\Theme\Model\Config\Customization $themeConfig
+        protected readonly ImageFactory $themeImageFactory,
+        protected readonly Collection $updateCollection,
+        protected readonly Customization $themeConfig
     ) {
-        $this->themeImageFactory = $themeImageFactory;
-        $this->updateCollection = $updateCollection;
-        $this->themeConfig = $themeConfig;
     }
 
     /**
@@ -47,17 +34,17 @@ class CleanThemeRelatedContentObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function execute(EventObserver $observer)
     {
         $theme = $observer->getEvent()->getData('theme');
-        if (!($theme instanceof \Magento\Framework\View\Design\ThemeInterface)) {
+        if (!($theme instanceof ThemeInterface)) {
             return;
         }
-        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+        /** @var $theme ThemeInterface */
         if ($this->themeConfig->isThemeAssignedToStore($theme)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Theme isn\'t deletable.'));
+            throw new LocalizedException(__('Theme isn\'t deletable.'));
         }
         $this->themeImageFactory->create(['theme' => $theme])->removePreviewImage();
         $this->updateCollection->addThemeFilter($theme->getId())->delete();

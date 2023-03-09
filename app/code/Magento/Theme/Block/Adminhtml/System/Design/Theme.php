@@ -5,13 +5,16 @@
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design;
 
+use Magento\Backend\Block\Widget\Grid\Container;
+use Magento\Framework\Phrase;
+
 /**
  *  Container for theme grid
  *
  * @api
  * @since 100.0.2
  */
-class Theme extends \Magento\Backend\Block\Widget\Grid\Container
+class Theme extends Container
 {
     /**
      * Initialize grid container and prepare controls
@@ -33,7 +36,7 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Container
     /**
      * Prepare header for container
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getHeaderText()
     {

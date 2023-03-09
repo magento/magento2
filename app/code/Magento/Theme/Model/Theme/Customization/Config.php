@@ -9,7 +9,10 @@
  */
 namespace Magento\Theme\Model\Theme\Customization;
 
-class Config implements \Magento\Framework\View\Design\Theme\Customization\ConfigInterface
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\View\Design\Theme\Customization\ConfigInterface;
+
+class Config implements ConfigInterface
 {
     /**
      * XML path to definitions of customization services
@@ -17,16 +20,11 @@ class Config implements \Magento\Framework\View\Design\Theme\Customization\Confi
     const XML_PATH_CUSTOM_FILES = 'theme/customization';
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @param ScopeConfigInterface $config
      */
-    protected $config;
-
-    /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     */
-    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $config)
-    {
-        $this->config = $config;
+    public function __construct(
+        protected readonly ScopeConfigInterface $config
+    ) {
     }
 
     /**
