@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\Model;
 
+use DomainException;
 use Magento\Framework\App\Config;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\WebsiteInterface;
@@ -15,6 +16,7 @@ use Magento\Store\Model\WebsiteFactory;
 use Magento\Store\Model\WebsiteRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class WebsiteRepositoryTest extends TestCase
 {
@@ -38,18 +40,21 @@ class WebsiteRepositoryTest extends TestCase
      */
     private $appConfigMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->websiteFactoryMock =
             $this->getMockBuilder(WebsiteFactory::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->getMock();
         $this->websiteCollectionFactoryMock =
             $this->getMockBuilder(CollectionFactory::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->getMock();
         $this->model = $objectManager->getObject(
             WebsiteRepository::class,
@@ -64,19 +69,25 @@ class WebsiteRepositoryTest extends TestCase
         $this->initDistroList();
     }
 
-    private function initDistroList()
+    /**
+     * @return void
+     */
+    private function initDistroList(): void
     {
-        $repositoryReflection = new \ReflectionClass($this->model);
+        $repositoryReflection = new ReflectionClass($this->model);
         $deploymentProperty = $repositoryReflection->getProperty('appConfig');
         $deploymentProperty->setAccessible(true);
         $deploymentProperty->setValue($this->model, $this->appConfigMock);
     }
 
-    public function testGetDefault()
+    /**
+     * @return void
+     */
+    public function testGetDefault(): void
     {
         $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->addMethods([])
             ->getMockForAbstractClass();
         $this->appConfigMock->expects($this->once())
             ->method('get')
@@ -91,7 +102,7 @@ class WebsiteRepositoryTest extends TestCase
                     'is_default' => 0
                 ]
             ]);
-        $this->websiteFactoryMock->expects($this->at(0))
+        $this->websiteFactoryMock
             ->method('create')
             ->willReturn($websiteMock);
 
@@ -100,12 +111,15 @@ class WebsiteRepositoryTest extends TestCase
         $this->assertEquals($websiteMock, $website);
     }
 
-    public function testGetDefaultIsSeveral()
+    /**
+     * @return void
+     */
+    public function testGetDefaultIsSeveral(): void
     {
-        $this->expectException(\DomainException::class);
+        $this->expectException(DomainException::class);
         $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->addMethods([])
             ->getMockForAbstractClass();
         $this->appConfigMock->expects($this->once())
             ->method('get')
@@ -129,13 +143,16 @@ class WebsiteRepositoryTest extends TestCase
         );
     }
 
-    public function testGetDefaultIsZero()
+    /**
+     * @return void
+     */
+    public function testGetDefaultIsZero(): void
     {
-        $this->expectException(\DomainException::class);
+        $this->expectException(DomainException::class);
         $this->expectExceptionMessage('The default website isn\'t defined. Set the website and try again.');
         $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->addMethods([])
             ->getMockForAbstractClass();
         $this->appConfigMock->expects($this->once())
             ->method('get')

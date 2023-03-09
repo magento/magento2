@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model\Quote\Item;
 
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -58,6 +59,10 @@ class CartItemPersisterTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/simple_product_disabled.php
      *
      * @return void
+     * @throws InputException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     * @throws CouldNotSaveException
      */
     public function testSaveDisabledItem(): void
     {
@@ -71,9 +76,31 @@ class CartItemPersisterTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Quote/_files/quote_for_configurable_product.php
+     * @magentoDbIsolation enabled
+     *
+     * @return void
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    public function testSaveWithConfigurableProductWithoutException(): void
+    {
+        $quote = $this->quoteFactory->create();
+        $item = $this->itemFactory->create();
+        $item->setSku('simple_1')->setQty(1);
+        $this->model->save($quote, $item);
+    }
+
+    /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
      *
      * @return void
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function testSaveQuoteItemWithoutQty(): void
     {
@@ -86,6 +113,10 @@ class CartItemPersisterTest extends TestCase
 
     /**
      * @return void
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function testSaveQuoteItemWithNotExistingProduct(): void
     {
@@ -102,6 +133,10 @@ class CartItemPersisterTest extends TestCase
 
     /**
      * @return void
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function testUpdateNotExistingQuoteItem(): void
     {
@@ -120,6 +155,10 @@ class CartItemPersisterTest extends TestCase
      * @magentoDataFixture Magento/Checkout/_files/quote_with_taxable_product_and_customer.php
      *
      * @return void
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function testUpdateQuoteItemMoreQty(): void
     {

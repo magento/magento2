@@ -10,17 +10,18 @@ use Magento\Framework\App\State;
 
 class Helper
 {
-    /**#@+
+    /**
      * Scheduled structure array indexes
      */
-    const SCHEDULED_STRUCTURE_INDEX_TYPE = 0;
-    const SCHEDULED_STRUCTURE_INDEX_ALIAS = 1;
-    const SCHEDULED_STRUCTURE_INDEX_PARENT_NAME = 2;
-    const SCHEDULED_STRUCTURE_INDEX_SIBLING_NAME = 3;
-    const SCHEDULED_STRUCTURE_INDEX_IS_AFTER = 4;
-    /**#@-*/
+    public const SCHEDULED_STRUCTURE_INDEX_TYPE = 0;
+    public const SCHEDULED_STRUCTURE_INDEX_ALIAS = 1;
+    public const SCHEDULED_STRUCTURE_INDEX_PARENT_NAME = 2;
+    public const SCHEDULED_STRUCTURE_INDEX_SIBLING_NAME = 3;
+    public const SCHEDULED_STRUCTURE_INDEX_IS_AFTER = 4;
 
-    /**#@-*/
+    /**
+     * @var int
+     */
     protected $counter = 0;
 
     /**
@@ -126,7 +127,7 @@ class Helper
         if ($scheduledStructure->hasStructureElement($name)) {
             $scheduledStructure->setStructureElementData($name, []);
             foreach ($scheduledStructure->getPaths() as $potentialChild => $childPath) {
-                if (0 === strpos($childPath, "{$path}/")) {
+                if (0 === strpos($childPath ?? '', "{$path}/")) {
                     $scheduledStructure->unsetPathElement($potentialChild);
                     $scheduledStructure->unsetStructureElement($potentialChild);
                 }

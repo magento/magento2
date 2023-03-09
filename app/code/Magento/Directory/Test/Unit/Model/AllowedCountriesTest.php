@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Directory\Test\Unit\Model;
 
+use Magento\Customer\Model\Config\Share;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
@@ -33,10 +34,18 @@ class AllowedCountriesTest extends TestCase
     private $allowedCountriesReader;
 
     /**
+     * @var Share|MockObject
+     */
+    private $shareConfigMock;
+
+    /**
      * Test setUp
      */
     protected function setUp(): void
     {
+        $this->shareConfigMock = $this->getMockBuilder(Share::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
@@ -99,5 +108,36 @@ class AllowedCountriesTest extends TestCase
             ['AM' => 'AM'],
             $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, 0)
         );
+    }
+
+    /**
+     * Test for getAllowedCountries with global scope
+     */
+    public function testGetAllowedCountriesWithGlobalScope()
+    {
+        $expectedFilter = 1;
+        $expectedScope = ScopeInterface::SCOPE_WEBSITES;
+
+        $this->shareConfigMock->expects($this->once())
+            ->method('isGlobalScope')
+            ->willReturn(true);
+        if ($this->shareConfigMock->isGlobalScope()) {
+
+            $websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
+            $websiteMock->expects($this->once())
+                ->method('getId')
+                ->willReturn($expectedFilter);
+
+            $this->scopeConfigMock->expects($this->once())
+                ->method('getValue')
+                ->with(AllowedCountries::ALLOWED_COUNTRIES_PATH, 'website', $websiteMock->getId())
+                ->willReturn('AM');
+
+            //$scopeCode should have single valued array only eg:[1]
+            $this->assertEquals(
+                ['AM' => 'AM'],
+                $this->allowedCountriesReader->getAllowedCountries($expectedScope, [$expectedFilter])
+            );
+        }
     }
 }

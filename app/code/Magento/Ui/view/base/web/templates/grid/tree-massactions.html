@@ -12,7 +12,7 @@
         <ul class="action-menu" each="data: actions, as: 'action'" css="_active: opened">
             <li css="_visible: $data.visible, _parent: $data.actions">
                 <span class="action-menu-item" translate="label" click="$parent.applyAction.bind($parent, type)"></span>
-                <render args="name: $parent.submenuTemplate, data: $parent" if="$data.actions"/>
+                <render args="name: $parent.submenuTemplate, data: $parent" if="$data.actions"></render>
             </li>
         </ul>
     </div>

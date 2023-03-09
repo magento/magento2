@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="SimplefreeshippingoptionsTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Creating Sales Rule"/>
+            <title value="Test the simple free shipping options as default it should select Please select option"/>
+            <description value="Test the simple free shipping options as default it should select Please select option  "/>
+            <severity value="MAJOR"/>
+            <group value="SalesRule"/>
+        </annotations>
+
+        <before>
+            <!-- Login to admin panel -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--navigate to cart price rule -->
+        </before>
+
+        <after>
+            <!-- Delete sales rule -->
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="cleanUpRule">
+                <argument name="ruleName" value="Cart Price Rule"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromBackend"/>
+        </after>
+
+        <!--Create cart price rule as per data and verify Free shipping options-->
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.name}}" stepKey="fillRuleName"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.description}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.description}}" stepKey="fillDescription"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.websites}}" stepKey="selectWebsites"/>
+        <actionGroup ref="SelectRetailerCustomerGroupActionGroup" stepKey="selectRetailerCustomerGroup"/>    
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.coupon_type}}" stepKey="selectCouponType"/>
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="scrollToActionsHeader"/>
+        <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
+            <argument name="rule" value="CartPriceRuleConditionAndFreeShippingApplied"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateCartPriceRuleLabelsSectionActionGroup" stepKey="createActiveCartPriceRuleLabelsSection">
+            <argument name="rule" value="CartPriceRuleConditionAndFreeShippingApplied"/>
+        </actionGroup>
+        <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="seeAssertCartPriceRuleSuccessSaveMessage"/>
+        
+        <!--Search created cart price rule in grid-->
+        <actionGroup ref="AdminFilterCartPriceRuleActionGroup" stepKey="searchCreatedCartPriceRuleInGrid">
+            <argument name="ruleName" value="CartPriceRuleConditionAndFreeShippingApplied.name"/>
+        </actionGroup>
+
+        <!--Go to cart price rule form page and verify Free shipping options-->
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.actionsHeader}}" visible="true" stepKey="clickExpandActions"/>
+        <see selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.simple_action}}" stepKey="seeActionApplyType"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.discount_amount}}" stepKey="seeDiscountAmount"/>
+        <seeOptionIsSelected selector="{{AdminCartPriceRulesFormSection.freeShipping}}" userInput="Please Select" stepKey="selectFreeShippingType"/>
+    </test>
+</tests>

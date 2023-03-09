@@ -5,12 +5,18 @@
  */
 namespace Magento\TestFramework\Annotation;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Application;
+use Magento\TestFramework\Fixture\ParserInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
+
 class AppArea
 {
-    const ANNOTATION_NAME = 'magentoAppArea';
+    public const ANNOTATION_NAME = 'magentoAppArea';
 
     /**
-     * @var \Magento\TestFramework\Application
+     * @var Application
      */
     private $_application;
 
@@ -30,9 +36,9 @@ class AppArea
     ];
 
     /**
-     * @param \Magento\TestFramework\Application $application
+     * @param Application $application
      */
-    public function __construct(\Magento\TestFramework\Application $application)
+    public function __construct(Application $application)
     {
         $this->_application = $application;
     }
@@ -42,7 +48,7 @@ class AppArea
      *
      * @param array $annotations
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _getTestAppArea($annotations)
     {
@@ -71,11 +77,25 @@ class AppArea
     /**
      * Start test case event observer
      *
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param TestCase $test
+     * @throws LocalizedException
      */
-    public function startTest(\PHPUnit\Framework\TestCase $test)
+    public function startTest(TestCase $test)
     {
-        $area = $this->_getTestAppArea($test->getAnnotations());
+        $values = [];
+        try {
+            $values = $this->parse($test);
+        } catch (\Throwable $exception) {
+            ExceptionHandler::handle(
+                'Unable to parse fixtures',
+                get_class($test),
+                $test->getName(false),
+                $exception
+            );
+        }
+
+        $area = $values[0]['area'] ?? Application::DEFAULT_APP_AREA;
+
         if ($this->_application->getArea() !== $area) {
             $this->_application->reinitialize();
 
@@ -83,5 +103,36 @@ class AppArea
                 $this->_application->loadArea($area);
             }
         }
+    }
+
+    /**
+     * Returns AppArea fixtures configuration
+     *
+     * @param TestCase $test
+     * @return array
+     * @throws LocalizedException
+     */
+    private function parse(TestCase $test): array
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $parsers = $objectManager
+            ->create(
+                \Magento\TestFramework\Annotation\Parser\Composite::class,
+                [
+                    'parsers' => [
+                        $objectManager->get(\Magento\TestFramework\Annotation\Parser\AppArea::class),
+                        $objectManager->get(\Magento\TestFramework\Fixture\Parser\AppArea::class)
+                    ]
+                ]
+            );
+        $values = $parsers->parse($test, ParserInterface::SCOPE_METHOD)
+            ?: $parsers->parse($test, ParserInterface::SCOPE_CLASS);
+
+        if (count($values) > 1) {
+            throw new LocalizedException(
+                __('Only one "@magentoAppArea" annotation is allowed per test')
+            );
+        }
+        return $values;
     }
 }

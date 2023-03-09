@@ -25,6 +25,7 @@ define([
         },
         qty: 1,
         price: 0,
+        priceType: '',
 
         /**
          * Initialize
@@ -41,14 +42,15 @@ define([
 
             if (priceBox.priceBox('option') &&
                 priceBox.priceBox('option').prices &&
-                priceBox.priceBox('option').prices.finalPrice
+                (priceBox.priceBox('option').prices.finalPrice || priceBox.priceBox('option').prices.basePrice)
             ) {
-                this.price = priceBox.priceBox('option').prices.finalPrice.amount;
+                this.priceType = priceBox.priceBox('option').prices.finalPrice ? 'finalPrice' : 'basePrice';
+                this.price = priceBox.priceBox('option').prices[this.priceType].amount;
             }
 
             $(this.qtyFieldSelector).on('change', this._onQtyChange.bind(this));
 
-            this._updateAmount();
+            priceBox.trigger('updatePrice');
 
             return this;
         },
@@ -74,7 +76,7 @@ define([
          * @private
          */
         _onPriceChange: function (event, data) {
-            this.price = data.finalPrice.amount;
+            this.price = data[this.priceType].amount;
             this._updateAmount();
         },
 

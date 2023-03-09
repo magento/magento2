@@ -60,8 +60,8 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
     {
         $attribute = $this->loadAttribute($entityType, (string)$attributeCode);
 
-        $label = trim($option->getLabel() ?: '');
-        if (empty($label)) {
+        $label = trim((string)$option->getLabel());
+        if ($label === '') {
             throw new InputException(__('The attribute option label is empty. Enter the value and try again.'));
         }
 
@@ -93,8 +93,8 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         if (empty($optionId)) {
             throw new InputException(__('The option id is empty. Enter the value and try again.'));
         }
-        $label = trim($option->getLabel() ?: '');
-        if (empty($label)) {
+        $label = trim((string)$option->getLabel());
+        if ($label === '') {
             throw new InputException(__('The attribute option label is empty. Enter the value and try again.'));
         }
         if ($attribute->getSource()->getOptionText($optionId) === false) {
@@ -135,7 +135,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         AttributeOptionInterface $option,
         $optionId
     ): AttributeOptionInterface {
-        $optionLabel = trim($option->getLabel());
+        $optionLabel = $option->getLabel() !== null ? trim($option->getLabel()) : '';
         $options = [];
         $options['value'][$optionId][0] = $optionLabel;
         $options['order'][$optionId] = $option->getSortOrder();
@@ -275,7 +275,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         EavAttributeInterface $attribute,
         AttributeOptionInterface $option
     ) : string {
-        $label = trim($option->getLabel());
+        $label = $option->getLabel() !== null ? trim($option->getLabel()) : '';
         $optionId = $attribute->getSource()->getOptionId($label);
         if ($optionId) {
             $option->setValue($optionId);

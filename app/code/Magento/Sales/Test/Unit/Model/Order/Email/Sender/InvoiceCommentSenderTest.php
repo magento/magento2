@@ -27,11 +27,6 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
     protected $invoiceMock;
 
     /**
-     * @var Invoice|MockObject
-     */
-    private $invoiceResource;
-
-    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -60,12 +55,15 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
             $this->senderBuilderFactoryMock,
             $this->loggerMock,
             $this->addressRenderer,
-            $this->eventManagerMock
+            $this->eventManagerMock,
+            $this->appEmulator
         );
     }
 
     public function testSendFalse()
     {
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->stepAddressFormat($this->addressMock);
         $result = $this->sender->send($this->invoiceMock);
         $this->assertFalse($result);
@@ -110,7 +108,8 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
                     ]
                 ]
             );
-
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->stepSendWithoutSendCopy();
         $result = $this->sender->send($this->invoiceMock, true, $comment);
         $this->assertTrue($result);
@@ -158,6 +157,8 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
                     ]
                 ]
             );
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->stepSendWithCallSendCopyTo();
         $result = $this->sender->send($this->invoiceMock, false, $comment);
         $this->assertTrue($result);
@@ -199,6 +200,8 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
                     ]
                 ]
             );
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->assertFalse($this->sender->send($this->invoiceMock));
     }
 }

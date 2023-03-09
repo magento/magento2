@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminResetDataGridToDefaultViewActionGroup">
+        <annotations>
+            <description>Resets an Admin Grid page to the 'Default View'.</description>
+        </annotations>
+        <arguments>
+            <argument name="index" type="string" defaultValue="1"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{AdminDataGridHeaderSection.bookmarkToggleByIndex(index)}}" stepKey="waitForViewBookmarks"/>
+        <click selector="{{AdminDataGridHeaderSection.bookmarkToggleByIndex(index)}}" stepKey="openViewBookmarks"/>
+        <click selector="{{AdminDataGridHeaderSection.bookmarkOptionByIndex(index, DefaultGridView.name)}}" stepKey="selectDefaultGridView"/>
+        <waitForPageLoad stepKey="waitForGridReset"/>
+        <see selector="{{AdminDataGridHeaderSection.bookmarkToggleByIndex(index)}}" userInput="{{DefaultGridView.name}}" stepKey="seeDefaultViewSelected"/>
+    </actionGroup>
+</actionGroups>

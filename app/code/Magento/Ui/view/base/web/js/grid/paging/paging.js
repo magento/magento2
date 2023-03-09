@@ -20,6 +20,7 @@ define([
             template: 'ui/grid/paging/paging',
             totalTmpl: 'ui/grid/paging-total',
             totalRecords: 0,
+            showTotalRecords: true,
             pages: 1,
             current: 1,
             selectProvider: 'ns = ${ $.ns }, index = ids',
@@ -36,6 +37,7 @@ define([
             imports: {
                 totalSelected: '${ $.selectProvider }:totalSelected',
                 totalRecords: '${ $.provider }:data.totalRecords',
+                showTotalRecords: '${ $.provider }:data.showTotalRecords',
                 filters: '${ $.provider }:params.filters',
                 keywordUpdated: '${ $.provider }:params.keywordUpdated'
             },
@@ -59,6 +61,7 @@ define([
                 'pages': 'onPagesChange',
                 'pageSize': 'onPageSizeChange',
                 'totalRecords': 'updateCounter',
+                'showTotalRecords': 'updateShowTotalRecords',
                 '${ $.provider }:params.filters': 'goFirst',
                 '${ $.provider }:params.search': 'onSearchUpdate'
             },
@@ -91,6 +94,7 @@ define([
                 .track([
                     'totalSelected',
                     'totalRecords',
+                    'showTotalRecords',
                     'pageSize',
                     'pages',
                     'current'
@@ -228,6 +232,16 @@ define([
         updateCounter: function () {
             this.pages = Math.ceil(this.totalRecords / this.pageSize) || 1;
 
+            return this;
+        },
+
+        /**
+         * Updates show total records flag.
+         */
+        updateShowTotalRecords: function () {
+            if (this.showTotalRecords === undefined) {
+                this.showTotalRecords = true;
+            }
             return this;
         },
 

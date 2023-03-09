@@ -11,7 +11,6 @@ var config = {
             'translateInline':        'mage/translate-inline',
             'sticky':                 'mage/sticky',
             'tabs':                   'mage/tabs',
-            'zoom':                   'mage/zoom',
             'collapsible':            'mage/collapsible',
             'dropdownDialog':         'mage/dropdown',
             'dropdown':               'mage/dropdowns',
@@ -41,9 +40,6 @@ var config = {
         mixins: {
             'Magento_Theme/js/view/breadcrumbs': {
                 'Magento_Theme/js/view/add-home-breadcrumb': true
-            },
-            'jquery/ui-modules/dialog': {
-                'jquery/patches/jquery-ui': true
             }
         }
     }

@@ -48,7 +48,8 @@ define([
             tierPriceBlockSelector: '[data-role="tier-price-block"]',
             tierPriceTemplate: '',
             selectorProduct: '.product-info-main',
-            selectorProductPrice: '[data-role=priceBox]'
+            selectorProductPrice: '[data-role=priceBox]',
+            qtyInfo: '#qty'
         },
 
         /**
@@ -75,6 +76,7 @@ define([
             this._configureForValues();
 
             $(this.element).trigger('configurable.initialized');
+            $(this.options.qtyInfo).on('input', this._reloadPrice.bind(this));
         },
 
         /**
@@ -432,7 +434,9 @@ define([
                 allowedOptions = [],
                 indexKey,
                 allowedProductMinPrice,
-                allowedProductsAllMinPrice;
+                allowedProductsAllMinPrice,
+                canDisplayOutOfStockProducts = false,
+                filteredSalableProducts;
 
             this._clearSelect(element);
             element.options[0] = new Option('', '');
@@ -494,7 +498,7 @@ define([
                         options[i].label = options[i].initialLabel;
 
                         if (optionPriceDiff !== 0) {
-                            options[i].label += ' ' + priceUtils.formatPrice(
+                            options[i].label += ' ' + priceUtils.formatPriceLocale(
                                 optionPriceDiff,
                                 this.options.priceFormat,
                                 true
@@ -506,11 +510,17 @@ define([
                         options[i].allowedProducts = allowedProducts;
                         element.options[index] = new Option(this._getOptionLabel(options[i]), options[i].id);
 
+                        if (this.options.spConfig.canDisplayShowOutOfStockStatus) {
+                            filteredSalableProducts = $(this.options.spConfig.salable[attributeId][options[i].id]).
+                            filter(options[i].allowedProducts);
+                            canDisplayOutOfStockProducts = filteredSalableProducts.length === 0;
+                        }
+
                         if (typeof options[i].price !== 'undefined') {
                             element.options[index].setAttribute('price', options[i].price);
                         }
 
-                        if (allowedProducts.length === 0) {
+                        if (allowedProducts.length === 0 || canDisplayOutOfStockProducts) {
                             element.options[index].disabled = true;
                         }
 

@@ -26,30 +26,49 @@ use PHPUnit\Framework\TestCase;
  */
 class SynchronizerTest extends TestCase
 {
-    /** @var Synchronizer */
+    /**
+     * @var Synchronizer
+     */
     protected $model;
 
-    /** @var ObjectManagerHelper */
+    /**
+     * @var ObjectManagerHelper
+     */
     protected $objectManagerHelper;
 
-    /** @var Session|MockObject */
+    /**
+     * @var Session|MockObject
+     */
     protected $sessionMock;
 
-    /** @var Visitor|MockObject */
+    /**
+     * @var Visitor|MockObject
+     */
     protected $visitorMock;
 
-    /** @var ProductFrontendActionFactory|MockObject */
+    /**
+     * @var ProductFrontendActionFactory|MockObject
+     */
     protected $productFrontendActionFactoryMock;
 
-    /** @var EntityManager|MockObject */
+    /**
+     * @var EntityManager|MockObject
+     */
     protected $entityManagerMock;
 
-    /** @var MockObject */
+    /**
+     * @var MockObject
+     */
     protected $collectionFactoryMock;
 
-    /** @var MockObject */
+    /**
+     * @var MockObject
+     */
     protected $frontendStorageConfigurationPoolMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->sessionMock = $this->getMockBuilder(Session::class)
@@ -58,18 +77,16 @@ class SynchronizerTest extends TestCase
         $this->visitorMock = $this->getMockBuilder(Visitor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productFrontendActionFactoryMock = $this
-            ->getMockBuilder(ProductFrontendActionFactory::class)
+        $this->productFrontendActionFactoryMock = $this->getMockBuilder(ProductFrontendActionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->entityManagerMock = $this->getMockBuilder(EntityManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->collectionFactoryMock = $this
-            ->getMockBuilder(CollectionFactory::class)
+        $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->frontendStorageConfigurationPoolMock = $this
             ->getMockBuilder(FrontendStorageConfigurationPool::class)
@@ -90,21 +107,24 @@ class SynchronizerTest extends TestCase
         );
     }
 
-    public function testFilterProductActions()
+    /**
+     * @inheritDoc
+     */
+    public function testFilterProductActions(): void
     {
         $typeId = 'recently_compared_product';
         $productsData = [
             'website-1-1' => [
                 'added_at' => 12,
-                'product_id' => 1,
+                'product_id' => 1
             ],
             'website-1-2' => [
                 'added_at' => 13,
-                'product_id' => '2',
+                'product_id' => '2'
             ],
             'website-2-3' => [
                 'added_at' => 14,
-                'product_id' => 3,
+                'product_id' => 3
             ]
         ];
         $frontendConfiguration = $this->getMockForAbstractClass(FrontendStorageConfigurationInterface::class);
@@ -139,12 +159,9 @@ class SynchronizerTest extends TestCase
         $collection->expects($this->once())
             ->method('addFilterByUserIdentities')
             ->with(1, 34);
-        $collection->expects($this->at(1))
+        $collection
             ->method('addFieldToFilter')
-            ->with('type_id', $typeId);
-        $collection->expects($this->at(2))
-            ->method('addFieldToFilter')
-            ->with('product_id', [1, 2]);
+            ->withConsecutive(['type_id', $typeId], ['product_id', [1, 2]]);
         $iterator = new \IteratorIterator(new \ArrayIterator([$frontendAction]));
         $collection->expects($this->once())
             ->method('getIterator')

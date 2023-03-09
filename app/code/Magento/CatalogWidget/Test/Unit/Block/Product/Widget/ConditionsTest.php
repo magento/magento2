@@ -223,6 +223,7 @@ class ConditionsTest extends TestCase
         $this->contextMock->expects($this->once())->method('getEnginePool')->willReturn($templateEnginePoolMock);
         $templateEnginePoolMock->expects($this->once())->method('get')->willReturn($templateEngineMock);
         $templateEngineMock->expects($this->once())->method('render')->willReturn('html');
+        $resolverMock->method('getTemplateFileName')->willReturn('');
 
         $this->widgetConditions = $this->objectManagerHelper->getObject(
             Conditions::class,

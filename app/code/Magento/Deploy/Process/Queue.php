@@ -47,11 +47,6 @@ class Queue
     private $inProgress = [];
 
     /**
-     * @var Package[]
-     */
-    private $failed = [];
-
-    /**
      * @var int
      */
     private $maxProcesses;
@@ -167,7 +162,7 @@ class Queue
      * Process jobs
      *
      * @return int
-     * @throws \RuntimeException
+     * @throws TimeoutException
      */
     public function process()
     {
@@ -198,13 +193,8 @@ class Queue
 
         $this->awaitForAllProcesses();
 
-        $failedPackages = array_merge($this->failed, $packages);
-        if (!empty($failedPackages)) {
-            throw new \RuntimeException(
-                'The following packages have failed to deploy '
-                .PHP_EOL
-                .implode(PHP_EOL, array_keys($failedPackages))
-            );
+        if (!empty($packages)) {
+            throw new TimeoutException('Not all packages are deployed.');
         }
 
         return $returnStatus;
@@ -287,12 +277,7 @@ class Queue
     {
         while ($this->inProgress && $this->checkTimeout()) {
             foreach ($this->inProgress as $name => $package) {
-                $isDeployed = $this->isDeployed($package);
-
-                if ($isDeployed === false) {
-                    $this->failed[$package->getPath()]= $this->packages[$package->getPath()];
-                    unset($this->inProgress[$name]);
-                } elseif ($isDeployed) {
+                if ($this->isDeployed($package)) {
                     unset($this->inProgress[$name]);
                 }
             }
@@ -366,15 +351,12 @@ class Queue
 
             // process child process
             $this->inProgress = [];
-            $isDeployed = $this->deployPackageService->deploy($package, $this->options, true);
+            $this->deployPackageService->deploy($package, $this->options, true);
             // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
-            exit((int)!$isDeployed);
+            exit(0);
         } else {
-            $isDeployed = $this->deployPackageService->deploy($package, $this->options);
-            if ($isDeployed === false) {
-                $this->failed[$package->getPath()]= $this->packages[$package->getPath()];
-            }
-            return $isDeployed;
+            $this->deployPackageService->deploy($package, $this->options);
+            return true;
         }
     }
 
@@ -382,9 +364,9 @@ class Queue
      * Checks if package is deployed.
      *
      * @param Package $package
-     * @return null|bool
+     * @return bool
      */
-    private function isDeployed(Package $package): ?bool
+    private function isDeployed(Package $package)
     {
         if ($this->isCanBeParalleled()) {
             if ($package->getState() === null) {
@@ -393,7 +375,7 @@ class Queue
                 // When $pid comes back as null the child process for this package has not yet started; prevents both
                 // hanging until timeout expires (which was behaviour in 2.2.x) and the type error from strict_types
                 if ($pid === null) {
-                    return null;
+                    return false;
                 }
 
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -424,10 +406,10 @@ class Queue
                         "Error encountered checking child process status (PID: $pid): $strerror (errno: $errno)"
                     );
                 }
-                return null;
+                return false;
             }
         }
-        return (bool)$package->getState();
+        return $package->getState();
     }
 
     /**

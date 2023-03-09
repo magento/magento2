@@ -74,7 +74,6 @@ class SimpleDirectiveTest extends TestCase
     public function testParametersAreParsed()
     {
         $filter = $this->objectManager->create(Template::class);
-        $filter->setStrictMode(false);
 
         $processor = $this->createWithProcessorsAndFilters(
             ['mydir' => $this->objectManager->create(MyDirProcessor::class)],
