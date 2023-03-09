@@ -3,22 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Wishlist\Block\Customer\Sidebar $block */
-?>
-<?php
+use Magento\Framework\Escaper;
+use Magento\Wishlist\Block\Customer\Sidebar;
+
+/** @var Escaper $escaper */
+/** @var Sidebar $block */
 $wishlstViewModel = $block->getData('wishlistDataViewModel');
 ?>
 <?php if ($wishlstViewModel->isAllow()): ?>
     <div class="block block-wishlist" data-bind="scope: 'wishlist'">
         <div class="block-title">
-            <strong role="heading" aria-level="2"><?= $block->escapeHtml($block->getTitle()) ?></strong>
+            <strong role="heading" aria-level="2"><?= $escaper->escapeHtml($block->getTitle()) ?></strong>
             <!-- ko if: wishlist().counter -->
             <span data-bind="text: wishlist().counter" class="counter"></span>
             <!-- /ko -->
         </div>
         <div class="block-content">
-            <strong class="subtitle"><?= $block->escapeHtml(__('Last Added Items')) ?></strong>
+            <strong class="subtitle"><?= $escaper->escapeHtml(__('Last Added Items')) ?></strong>
             <!-- ko if: wishlist().counter -->
                 <ol class="product-items no-display"
                     id="wishlist-sidebar"
@@ -42,23 +45,23 @@ $wishlstViewModel = $block->getData('wishlistDataViewModel');
                                         <a href="#"
                                            data-bind="attr: {'data-post': add_to_cart_params}"
                                            class="action tocart primary">
-                                            <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                                            <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
                                         </a>
                                         <!-- /ko -->
                                         <!-- ko ifnot: product_has_required_options -->
                                             <button type="button"
                                                     class="action tocart primary"
                                                     data-bind="attr: {'data-post': add_to_cart_params}">
-                                                <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                                                <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
                                             </button>
                                         <!-- /ko -->
                                     </div>
                                     <!-- /ko -->
                                     <div class="actions-secondary">
                                         <a href="#"  data-bind="attr: {'data-post': delete_item_params}"
-                                           title="<?= $block->escapeHtmlAttr(__('Remove This Item')) ?>"
+                                           title="<?= $escaper->escapeHtmlAttr(__('Remove This Item')) ?>"
                                            class="btn-remove action delete">
-                                            <span><?= $block->escapeHtml(__('Remove This Item')) ?></span>
+                                            <span><?= $escaper->escapeHtml(__('Remove This Item')) ?></span>
                                         </a>
                                     </div>
                                 </div>
@@ -69,15 +72,15 @@ $wishlstViewModel = $block->getData('wishlistDataViewModel');
                 <div class="actions-toolbar no-display" data-bind="css: {'no-display': null}">
                     <div class="primary">
                         <a class="action details"
-                           href="<?= $block->escapeUrl($wishlstViewModel->getListUrl()) ?>"
-                           title="<?= $block->escapeHtmlAttr(__('Go to Wish List')) ?>">
-                            <span><?= $block->escapeHtml(__('Go to Wish List')) ?></span>
+                           href="<?= $escaper->escapeUrl($wishlstViewModel->getListUrl()) ?>"
+                           title="<?= $escaper->escapeHtmlAttr(__('Go to Wish List')) ?>">
+                            <span><?= $escaper->escapeHtml(__('Go to Wish List')) ?></span>
                         </a>
                     </div>
                 </div>
             <!-- /ko -->
             <!-- ko ifnot: wishlist().counter -->
-                <div class="empty"><?= $block->escapeHtml(__('You have no items in your wish list.')) ?></div>
+                <div class="empty"><?= $escaper->escapeHtml(__('You have no items in your wish list.')) ?></div>
             <!-- /ko -->
         </div>
     </div>

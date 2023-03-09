@@ -3,12 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Wishlist\Block\Customer\Wishlist\Button $block */
+use Magento\Framework\Escaper;
+use Magento\Wishlist\Block\Customer\Wishlist\Button;
+
+/** @var Escaper $escaper */
+/** @var Button $block */
 ?>
-
 <?php if ($block->getWishlist()->getItemsCount()) : ?>
-    <button type="submit" name="do" title="<?= $block->escapeHtmlAttr(__('Update Wish List')) ?>" class="action update">
-        <span><?= $block->escapeHtml(__('Update Wish List')) ?></span>
+    <button type="submit"
+            name="do"
+            title="<?= $escaper->escapeHtmlAttr(__('Update Wish List')) ?>"
+            class="action update">
+        <span><?= $escaper->escapeHtml(__('Update Wish List')) ?></span>
     </button>
 <?php endif;?>

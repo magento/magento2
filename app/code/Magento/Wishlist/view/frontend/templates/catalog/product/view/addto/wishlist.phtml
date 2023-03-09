@@ -3,14 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Wishlist\Block\Catalog\Product\View\AddTo\Wishlist $block */
+use Magento\Framework\Escaper;
+use Magento\Wishlist\Block\Catalog\Product\View\AddTo\Wishlist;
+
+/** @var Escaper $escaper */
+/** @var Wishlist $block */
 ?>
 <?php if ($block->isWishListAllowed()) : ?>
     <a href="#"
        class="action towishlist"
        data-post='<?= /* @noEscape */ $block->getWishlistParams() ?>'
-       data-action="add-to-wishlist"><span><?= $block->escapeHtml(__('Add to Wish List')) ?></span></a>
+       data-action="add-to-wishlist"><span><?= $escaper->escapeHtml(__('Add to Wish List')) ?></span></a>
 <?php endif; ?>
 <script type="text/x-magento-init">
     {
