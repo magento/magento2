@@ -138,7 +138,6 @@ class WhitelistGenerator
         //We need to load whitelist file and update it with new revision of code.
         // phpcs:disable Magento2.Functions.DiscouragedFunction
         if (file_exists($whiteListFileName)) {
-            // phpcs:disable Magento2.Functions.DiscouragedFunction
             $content = json_decode(file_get_contents($whiteListFileName), true);
         }
 
@@ -203,9 +202,22 @@ class WhitelistGenerator
             }
         }
 
-        $constraintName = $this->getConstraintName($schema, $tableName, $tableData);
-        if ($constraintName) {
-            $declaredStructure += $constraintName;
+        $elementType = 'constraint';
+        if (!empty($tableData[$elementType])) {
+            foreach ($tableData[$elementType] as $tableElementData) {
+                if ($tableElementData['type'] === 'foreign' && isset($tableElementData['referenceTable'])) {
+                    $constraintName = $this->getConstraintName($schema, $tableName, $tableElementData);
+                } else {
+                    $constraintName = $this->elementNameResolver->getFullIndexName(
+                        $table,
+                        $tableElementData['column'] ?? [],
+                        $tableElementData['type'] ?? null
+                    );
+                }
+                if ($constraintName) {
+                    $declaredStructure[$elementType][$constraintName] = true;
+                }
+            }
         }
 
         return $declaredStructure;
@@ -216,42 +228,27 @@ class WhitelistGenerator
      *
      * @param Schema $schema
      * @param string $tableName
-     * @param array $tableData
-     * @return array
+     * @param array $tableElementData
+     * @return string|null
      */
-    private function getConstraintName(Schema $schema, string $tableName, array $tableData): array
+    private function getConstraintName(Schema $schema, string $tableName, array $tableElementData): ?string
     {
-        $declaredStructure = [];
         $table = $schema->getTableByName($tableName);
 
-        $elementType = 'constraint';
-        if (!empty($tableData[$elementType])) {
-            foreach ($tableData[$elementType] as $tableElementData) {
-                if ($tableElementData['type'] === 'foreign' && isset($tableElementData['referenceTable'])) {
-                    $referenceTable = $schema->getTableByName($tableElementData['referenceTable']);
-                    $column = $table->getColumnByName($tableElementData['column']);
-                    $referenceColumn = $referenceTable->getColumnByName($tableElementData['referenceColumn']);
-                    $constraintName = ($column !== false && $referenceColumn !== false) ?
-                        $this->elementNameResolver->getFullFKName(
-                            $table,
-                            $column,
-                            $referenceTable,
-                            $referenceColumn
-                        ) : null;
-                } else {
-                    $constraintName = $this->elementNameResolver->getFullIndexName(
-                        $table,
-                        $tableElementData['column'] ?? [],
-                        $tableElementData['type']
-                    );
-                }
-                if ($constraintName) {
-                    $declaredStructure[$elementType][$constraintName] = true;
-                }
-            }
-        }
+        $referenceTable = isset($tableElementData['referenceTable'])
+            ? $schema->getTableByName($tableElementData['referenceTable']) : false;
+        $column = isset($tableElementData['column'])
+            ? $table->getColumnByName($tableElementData['column']) : false;
+        $referenceColumn = isset($tableElementData['referenceColumn'])
+            ? $referenceTable->getColumnByName($tableElementData['referenceColumn']) : false;
 
-        return $declaredStructure;
+        return ($column !== false && $referenceColumn !== false && $referenceTable !== false) ?
+            $this->elementNameResolver->getFullFKName(
+                $table,
+                $column,
+                $referenceTable,
+                $referenceColumn
+            ) : null;
     }
 
     /**
