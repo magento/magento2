@@ -35,7 +35,10 @@ class NewAccountEmailTemplateTest extends \PHPUnit\Framework\TestCase
      */
     private $config;
 
-    protected $storeData = array();
+    /**
+     * @var array
+     */
+    protected $storeData = [];
 
     /**
      * Set up
@@ -47,13 +50,21 @@ class NewAccountEmailTemplateTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->config = $this->objectManager->get(ScopeConfigInterface::class);
         $this->storeData['name'] = $this->config->getValue(
-            'general/store_information/name', ScopeInterface::SCOPE_STORES);
+            'general/store_information/name',
+            ScopeInterface::SCOPE_STORES
+        );
         $this->storeData['phone'] = $this->config->getValue(
-            'general/store_information/phone', ScopeInterface::SCOPE_STORES);
+            'general/store_information/phone',
+            ScopeInterface::SCOPE_STORES
+        );
         $this->storeData['city'] = $this->config->getValue(
-            'general/store_information/city', ScopeInterface::SCOPE_STORES);
+            'general/store_information/city',
+            ScopeInterface::SCOPE_STORES
+        );
         $this->storeData['country'] = $this->config->getValue(
-            'general/store_information/country_id', ScopeInterface::SCOPE_STORES);
+            'general/store_information/country_id',
+            ScopeInterface::SCOPE_STORES
+        );
     }
 
     /**
@@ -111,7 +122,6 @@ class NewAccountEmailTemplateTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString("5124666492", $storeText);
         $this->assertStringContainsString("Austin", $storeText);
         $this->assertStringContainsString("US", $storeText);
-
     }
 
     /**
