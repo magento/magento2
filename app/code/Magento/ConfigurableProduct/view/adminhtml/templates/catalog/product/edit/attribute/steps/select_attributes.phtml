@@ -3,20 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+use Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/** @var Escaper $escaper */
+/** @var SelectAttributes $block */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
 <div class="select-attributes-block <?= /* @noEscape */ $block->getData('config/dataScope') ?>"
      data-role="select-attributes-step">
     <div class="select-attributes-actions" data-type="skipKO">
         <?= /* @noEscape */  $block->getAddNewAttributeButton() ?>
     </div>
-    <h2 class="steps-wizard-title"><?= $block->escapeHtml(
+    <h2 class="steps-wizard-title"><?= $escaper->escapeHtml(
         __('Step 1: Select Attributes')
     ); ?></h2>
     <div class="selected-attributes" data-bind="scope: '<?= /* @noEscape */  $block->getComponentName() ?>'">
-        <?= $block->escapeHtml(
+        <?= $escaper->escapeHtml(
             __('Selected Attributes:')
         ); ?>
         <span data-bind="text: selectedAttributes() || '--'"></span>

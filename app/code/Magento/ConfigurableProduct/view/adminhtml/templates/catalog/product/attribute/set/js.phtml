@@ -4,11 +4,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
-?>
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
-<?php $scriptString = <<<script
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
+
+$scriptString = <<<script
 
 require([
     "Magento_Ui/js/modal/alert",
@@ -30,7 +34,7 @@ editSet.submit = editSet.submit.wrap(function(original) {
     if (editSet.currentNode){
         if (ConfigurableNodeExists(editSet.currentNode)) {
             alert({
-                content: '{$block->escapeJs(
+                content: '{$escaper->escapeJs(
                     __('This group contains attributes used in configurable products. ' .
                         'Please move these attributes to another group and try again.')
                 )}'
@@ -44,7 +48,7 @@ editSet.submit = editSet.submit.wrap(function(original) {
 editSet.rightBeforeAppend = editSet.rightBeforeAppend.wrap(function(original, tree, nodeThis, node, newParent) {
     if (node.attributes.is_configurable == 1) {
         alert({
-            content: '{$block->escapeJs(
+            content: '{$escaper->escapeJs(
                 __('This attribute is used in configurable products. You cannot remove it from the attribute set.')
             )}'
         });
@@ -56,7 +60,7 @@ editSet.rightBeforeAppend = editSet.rightBeforeAppend.wrap(function(original, tr
 editSet.rightBeforeInsert = editSet.rightBeforeInsert.wrap(function(original, tree, nodeThis, node, newParent) {
     if (node.attributes.is_configurable == 1) {
         alert({
-            content: '{$block->escapeJs(
+            content: '{$escaper->escapeJs(
                 __('This attribute is used in configurable products. You cannot remove it from the attribute set.')
             )}'
         });

@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk;
+use Magento\Framework\Escaper;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var Bulk $block */
+/** @var Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
 
 // phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
-/* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
-?>
-
-<?php
-/** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
-$jsonHelper = $block->getData('jsonHelper');
 ?>
 <div data-bind="scope: '<?= /* @noEscape */  $block->getComponentName() ?>'" data-role="bulk-step">
-    <h2 class="steps-wizard-title"><?= $block->escapeHtml(__('Step 3: Bulk Images, Price and Quantity')) ?></h2>
+    <h2 class="steps-wizard-title"><?= $escaper->escapeHtml(__('Step 3: Bulk Images, Price and Quantity')) ?></h2>
     <div class="steps-wizard-info">
         <?= /* @noEscape */ __(
             'Based on your selections %1 new products will be created. ' .
@@ -26,7 +31,7 @@ $jsonHelper = $block->getData('jsonHelper');
     <div data-bind="with: sections().images" class="steps-wizard-section">
         <div data-role="section">
             <div class="steps-wizard-section-title">
-                <span><?= $block->escapeHtml(__('Images')); ?></span>
+                <span><?= $escaper->escapeHtml(__('Images')); ?></span>
             </div>
 
             <ul class="steps-wizard-section-list">
@@ -38,7 +43,7 @@ $jsonHelper = $block->getData('jsonHelper');
                                value="single"
                                data-bind="checked:type">
                         <label for="apply-single-set-radio" class="admin__field-label">
-                            <span><?= $block->escapeHtml(__('Apply single set of images to all SKUs')); ?></span>
+                            <span><?= $escaper->escapeHtml(__('Apply single set of images to all SKUs')); ?></span>
                         </label>
                     </div>
                 </li>
@@ -50,7 +55,7 @@ $jsonHelper = $block->getData('jsonHelper');
                                value="each"
                                data-bind="checked:type">
                         <label for="apply-unique-images-radio" class="admin__field-label">
-                            <span><?= $block->escapeHtml(__('Apply unique images by attribute to each SKU')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Apply unique images by attribute to each SKU')) ?></span>
                         </label>
                     </div>
                 </li>
@@ -63,7 +68,7 @@ $jsonHelper = $block->getData('jsonHelper');
                                checked
                                data-bind="checked:type">
                         <label for="skip-images-uploading-radio" class="admin__field-label">
-                            <span><?= $block->escapeHtml(__('Skip image uploading at this time')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Skip image uploading at this time')) ?></span>
                         </label>
                     </div>
                 </li>
@@ -75,13 +80,13 @@ $jsonHelper = $block->getData('jsonHelper');
                 <div data-role="gallery"
                      class="gallery"
                      data-images="[]"
-                     data-types="<?= $block->escapeHtmlAttr($jsonHelper->jsonEncode(
+                     data-types="<?= $escaper->escapeHtmlAttr($jsonHelper->jsonEncode(
                          $block->getImageTypes()
                      )) ?>">
                     <div class="image image-placeholder">
                         <div data-role="uploader" class="uploader">
                             <div class="image-browse">
-                                <span><?= $block->escapeHtml(__('Browse Files...')) ?></span>
+                                <span><?= $escaper->escapeHtml(__('Browse Files...')) ?></span>
                                 <input type="file"
                                        id=""
                                        name="image"
@@ -92,17 +97,17 @@ $jsonHelper = $block->getData('jsonHelper');
                             </div>
                         </div>
                         <div class="product-image-wrapper">
-                            <p class="image-placeholder-text"><?= $block->escapeHtml(__(
+                            <p class="image-placeholder-text"><?= $escaper->escapeHtml(__(
                                 'Browse to find or drag image here'
                             )) ?></p>
                         </div>
                     </div>
 
                     <?php foreach ($block->getImageTypes() as $typeData): ?>
-                        <input name="<?= $block->escapeHtml($typeData['name']) ?>"
-                               class="image-<?= $block->escapeHtml($typeData['code']) ?>"
+                        <input name="<?= $escaper->escapeHtml($typeData['name']) ?>"
+                               class="image-<?= $escaper->escapeHtml($typeData['code']) ?>"
                                type="hidden"
-                               value="<?= $block->escapeHtml($typeData['value']) ?>"/>
+                               value="<?= $escaper->escapeHtml($typeData['value']) ?>"/>
                     <?php endforeach; ?>
 
                     <script data-template="uploader" type="text/x-magento-template">
@@ -149,12 +154,12 @@ $jsonHelper = $block->getData('jsonHelper');
                                     <button type="button"
                                             class="action-remove"
                                             data-role="delete-button"
-                                            title="<?= $block->escapeHtml(__('Remove image')) ?>">
-                                        <span><?= $block->escapeHtml(__('Remove image')) ?></span>
+                                            title="<?= $escaper->escapeHtml(__('Remove image')) ?>">
+                                        <span><?= $escaper->escapeHtml(__('Remove image')) ?></span>
                                     </button>
                                     <div class="draggable-handle"></div>
                                 </div>
-                                <div class="image-fade"><span><?= $block->escapeHtml(__('Hidden')) ?></span></div>
+                                <div class="image-fade"><span><?= $escaper->escapeHtml(__('Hidden')) ?></span></div>
                             </div>
                             <div class="item-description">
                                 <div class="item-title" data-role="img-title"><%- data.label %></div>
@@ -165,9 +170,9 @@ $jsonHelper = $block->getData('jsonHelper');
                             </div>
                             <ul class="item-roles" data-role="roles-labels">
                                 <?php foreach ($block->getMediaAttributes() as $attribute):?>
-                                    <li data-role-code="<?= $block->escapeHtml($attribute->getAttributeCode()) ?>"
+                                    <li data-role-code="<?= $escaper->escapeHtml($attribute->getAttributeCode()) ?>"
                                         class="item-role item-role-<?=
-                                        $block->escapeHtml($attribute->getAttributeCode()) ?>">
+                                        $escaper->escapeHtml($attribute->getAttributeCode()) ?>">
                                         <?= /* @noEscape */ $attribute->getFrontendLabel() ?>
                                     </li>
                                 <?php endforeach; ?>
@@ -188,14 +193,14 @@ $jsonHelper = $block->getData('jsonHelper');
                                     <button type="button"
                                             class="action-remove"
                                             data-role="delete-button"
-                                            title="<?= $block->escapeHtml(__('Remove image')) ?>">
-                                        <span><?= $block->escapeHtml(__('Remove image')) ?></span>
+                                            title="<?= $escaper->escapeHtml(__('Remove image')) ?>">
+                                        <span><?= $escaper->escapeHtml(__('Remove image')) ?></span>
                                     </button>
 
                                     <div class="draggable-handle"></div>
                                 </div>
 
-                                <div class="image-fade"><span><?= $block->escapeHtml(__('Hidden')) ?></span></div>
+                                <div class="image-fade"><span><?= $escaper->escapeHtml(__('Hidden')) ?></span></div>
                             </div>
                             <!--<ul class="item-roles">
                                 <li class="item-role item-role-base">Base</li>
@@ -218,7 +223,7 @@ $jsonHelper = $block->getData('jsonHelper');
                             <fieldset class="admin__fieldset fieldset-image-panel">
                                 <div class="admin__field field-image-description">
                                     <label class="admin__field-label" for="image-description">
-                                        <span><?= $block->escapeHtml(__('Alt Text')) ?></span>
+                                        <span><?= $escaper->escapeHtml(__('Alt Text')) ?></span>
                                     </label>
 
                                     <div class="admin__field-control">
@@ -232,7 +237,7 @@ $jsonHelper = $block->getData('jsonHelper');
 
                                 <div class="admin__field field-image-role">
                                     <label class="admin__field-label">
-                                        <span><?= $block->escapeHtml(__('Role')); ?></span>
+                                        <span><?= $escaper->escapeHtml(__('Role')); ?></span>
                                     </label>
                                     <div class="admin__field-control">
                                         <ul class="multiselect-alt">
@@ -245,9 +250,9 @@ $jsonHelper = $block->getData('jsonHelper');
                                                                data-role="type-selector"
                                                                type="checkbox"
                                                                value="<?=
-                                                                $block->escapeHtml($attribute->getAttributeCode()) ?>"
+                                                                $escaper->escapeHtml($attribute->getAttributeCode()) ?>"
                                                         />
-                                                        <?= $block->escapeHtml($attribute->getFrontendLabel()); ?>
+                                                        <?= $escaper->escapeHtml($attribute->getFrontendLabel()); ?>
                                                     </label>
                                                 </li>
                                             <?php endforeach; ?>
@@ -257,19 +262,19 @@ $jsonHelper = $block->getData('jsonHelper');
 
                                 <div class="admin__field admin__field-inline field-image-size" data-role="size">
                                     <label class="admin__field-label">
-                                        <span><?= $block->escapeHtml(__('Image Size')); ?></span>
+                                        <span><?= $escaper->escapeHtml(__('Image Size')); ?></span>
                                     </label>
                                     <div class="admin__field-value"
-                                         data-message="<?= $block->escapeHtml(__('{size}'));?>"></div>
+                                         data-message="<?= $escaper->escapeHtml(__('{size}'));?>"></div>
                                 </div>
 
                                 <div class="admin__field admin__field-inline field-image-resolution"
                                      data-role="resolution">
                                     <label class="admin__field-label">
-                                        <span><?= $block->escapeHtml(__('Image Resolution')); ?></span>
+                                        <span><?= $escaper->escapeHtml(__('Image Resolution')); ?></span>
                                     </label>
                                     <div class="admin__field-value"
-                                         data-message="<?= $block->escapeHtml(__('{width}^{height} px'));?>"></div>
+                                         data-message="<?= $escaper->escapeHtml(__('{width}^{height} px'));?>"></div>
                                 </div>
 
                                 <div class="admin__field field-image-hide">
@@ -284,7 +289,7 @@ $jsonHelper = $block->getData('jsonHelper');
                                             <% if (data.disabled == 1) { %>checked="checked"<% } %> />
 
                                             <label for="hide-from-product-page" class="admin__field-label">
-                                                <?= $block->escapeHtml(__('Hide from Product Page')); ?>
+                                                <?= $escaper->escapeHtml(__('Hide from Product Page')); ?>
                                             </label>
                                         </div>
                                     </div>
@@ -299,7 +304,7 @@ $jsonHelper = $block->getData('jsonHelper');
                 <fieldset class="admin__fieldset bulk-attribute-values">
                     <div class="admin__field _required">
                         <label class="admin__field-label" for="apply-images-attributes">
-                            <span><?= $block->escapeHtml(__('Select attribute')); ?></span>
+                            <span><?= $escaper->escapeHtml(__('Select attribute')); ?></span>
                         </label>
                         <div class="admin__field-control">
                             <select
@@ -309,7 +314,7 @@ $jsonHelper = $block->getData('jsonHelper');
                                 options: $parent.attributes,
                                 optionsText: 'label',
                                 value: attribute,
-                                optionsCaption: '<?= $block->escapeHtml(__("Select")); ?>'
+                                optionsCaption: '<?= $escaper->escapeHtml(__("Select")); ?>'
                                 ">
                             </select>
                         </div>
@@ -326,13 +331,13 @@ $jsonHelper = $block->getData('jsonHelper');
                         <div data-role="gallery"
                              class="gallery"
                              data-images="[]"
-                             data-types="<?= $block->escapeHtmlAttr(
+                             data-types="<?= $escaper->escapeHtmlAttr(
                                  $jsonHelper->jsonEncode($block->getImageTypes())
                              ) ?>">
                             <div class="image image-placeholder">
                                 <div data-role="uploader" class="uploader">
                                     <div class="image-browse">
-                                        <span><?= $block->escapeHtml(__('Browse Files...')); ?></span>
+                                        <span><?= $escaper->escapeHtml(__('Browse Files...')); ?></span>
                                         <input type="file" name="image" multiple="multiple"
                                                data-url="<?=
                                                /* @noEscape */ $block->getUrl('catalog/product_gallery/upload') ?>" />
@@ -340,7 +345,7 @@ $jsonHelper = $block->getData('jsonHelper');
                                 </div>
                                 <div class="product-image-wrapper">
                                     <p class="image-placeholder-text">
-                                        <?= $block->escapeHtml(__('Browse to find or drag image here')); ?>
+                                        <?= $escaper->escapeHtml(__('Browse to find or drag image here')); ?>
                                     </p>
                                 </div>
                                 <div class="spinner">
@@ -350,10 +355,10 @@ $jsonHelper = $block->getData('jsonHelper');
                             </div>
 
                             <?php foreach ($block->getImageTypes() as $typeData): ?>
-                                <input name="<?= $block->escapeHtml($typeData['name']) ?>"
-                                       class="image-<?= $block->escapeHtml($typeData['code']) ?>"
+                                <input name="<?= $escaper->escapeHtml($typeData['name']) ?>"
+                                       class="image-<?= $escaper->escapeHtml($typeData['code']) ?>"
                                        type="hidden"
-                                       value="<?= $block->escapeHtml($typeData['value']) ?>"/>
+                                       value="<?= $escaper->escapeHtml($typeData['value']) ?>"/>
                             <?php endforeach; ?>
 
                             <script data-template="uploader" type="text/x-magento-template">
@@ -402,12 +407,12 @@ $jsonHelper = $block->getData('jsonHelper');
                                             <button type="button"
                                                     class="action-remove"
                                                     data-role="delete-button"
-                                                    title="<?= $block->escapeHtml(__('Remove image')) ?>">
-                                                <span><?= $block->escapeHtml(__('Remove image')); ?></span>
+                                                    title="<?= $escaper->escapeHtml(__('Remove image')) ?>">
+                                                <span><?= $escaper->escapeHtml(__('Remove image')); ?></span>
                                             </button>
                                             <div class="draggable-handle"></div>
                                         </div>
-                                        <div class="image-fade"><span><?= $block->escapeHtml(__('Hidden')); ?></span>
+                                        <div class="image-fade"><span><?= $escaper->escapeHtml(__('Hidden')); ?></span>
                                         </div>
                                     </div>
                                     <div class="item-description">
@@ -419,11 +424,11 @@ $jsonHelper = $block->getData('jsonHelper');
                                     </div>
                                     <ul class="item-roles" data-role="roles-labels">
                                         <?php foreach ($block->getMediaAttributes() as $attribute):?>
-                                            <li data-role-code="<?= $block->escapeHtml($attribute->getAttributeCode())
+                                            <li data-role-code="<?= $escaper->escapeHtml($attribute->getAttributeCode())
                                             ?>"
                                                 class="item-role item-role-<?=
-                                                $block->escapeHtml($attribute->getAttributeCode()) ?>">
-                                                <?= $block->escapeHtml($attribute->getFrontendLabel()) ?>
+                                                $escaper->escapeHtml($attribute->getAttributeCode()) ?>">
+                                                <?= $escaper->escapeHtml($attribute->getFrontendLabel()) ?>
                                             </li>
                                         <?php endforeach; ?>
                                     </ul>
@@ -442,12 +447,12 @@ $jsonHelper = $block->getData('jsonHelper');
                                             <button type="button"
                                                     class="action-remove"
                                                     data-role="delete-button"
-                                                    title="<?= $block->escapeHtml(__('Remove image')) ?>">
-                                                <span><?= $block->escapeHtml(__('Remove image')) ?></span>
+                                                    title="<?= $escaper->escapeHtml(__('Remove image')) ?>">
+                                                <span><?= $escaper->escapeHtml(__('Remove image')) ?></span>
                                             </button>
                                             <div class="draggable-handle"></div>
                                         </div>
-                                        <div class="image-fade"><span><?= $block->escapeHtml(__('Hidden')) ?></span>
+                                        <div class="image-fade"><span><?= $escaper->escapeHtml(__('Hidden')) ?></span>
                                         </div>
                                     </div>
                                     <!--<ul class="item-roles">
@@ -472,7 +477,7 @@ $jsonHelper = $block->getData('jsonHelper');
                                     <fieldset class="admin__fieldset fieldset-image-panel">
                                         <div class="admin__field field-image-description">
                                             <label class="admin__field-label" for="image-description">
-                                                <span><?= $block->escapeHtml(__('Alt Text'));?></span>
+                                                <span><?= $escaper->escapeHtml(__('Alt Text'));?></span>
                                             </label>
 
                                             <div class="admin__field-control">
@@ -486,7 +491,7 @@ $jsonHelper = $block->getData('jsonHelper');
 
                                         <div class="admin__field field-image-role">
                                             <label class="admin__field-label">
-                                                <span><?= $block->escapeHtml(__('Role'));?></span>
+                                                <span><?= $escaper->escapeHtml(__('Role'));?></span>
                                             </label>
                                             <div class="admin__field-control">
                                                 <ul class="multiselect-alt">
@@ -497,9 +502,9 @@ $jsonHelper = $block->getData('jsonHelper');
                                                                        data-role="type-selector"
                                                                        type="checkbox"
                                                                 // @codingStandardsIgnoreLine
-                                                                value="<?= $block->escapeHtmlAttr($attribute->getAttributeCode()) ?>"
+                                                                value="<?= $escaper->escapeHtmlAttr($attribute->getAttributeCode()) ?>"
                                                                 />
-                                                                <?= $block->escapeHtml($attribute->getFrontendLabel())?>
+                                                                <?= $escaper->escapeHtml($attribute->getFrontendLabel())?>
                                                             </label>
                                                         </li>
                                                     <?php endforeach; ?>
@@ -509,19 +514,19 @@ $jsonHelper = $block->getData('jsonHelper');
 
                                         <div class="admin__field admin__field-inline field-image-size" data-role="size">
                                             <label class="admin__field-label">
-                                                <span><?= $block->escapeHtml(__('Image Size')); ?></span>
+                                                <span><?= $escaper->escapeHtml(__('Image Size')); ?></span>
                                             </label>
                                             <div class="admin__field-value"
-                                                 data-message="<?= $block->escapeHtml(__('{size}')); ?>"></div>
+                                                 data-message="<?= $escaper->escapeHtml(__('{size}')); ?>"></div>
                                         </div>
 
                                         <div class="admin__field admin__field-inline field-image-resolution"
                                              data-role="resolution">
                                             <label class="admin__field-label">
-                                                <span><?= $block->escapeHtml(__('Image Resolution')); ?></span>
+                                                <span><?= $escaper->escapeHtml(__('Image Resolution')); ?></span>
                                             </label>
                                             <div class="admin__field-value"
-                                                 data-message="<?= $block->escapeHtml(__('{width}^{height} px')); ?>">
+                                                 data-message="<?= $escaper->escapeHtml(__('{width}^{height} px')); ?>">
                                             </div>
                                         </div>
 
@@ -538,7 +543,7 @@ $jsonHelper = $block->getData('jsonHelper');
                                                     <% if (data.disabled == 1) { %>checked="checked"<% } %> />
 
                                                     <label for="hide-from-product-page" class="admin__field-label">
-                                                        <?= $block->escapeHtml(__('Hide from Product Page')); ?>
+                                                        <?= $escaper->escapeHtml(__('Hide from Product Page')); ?>
                                                     </label>
                                                 </div>
                                             </div>
@@ -557,7 +562,7 @@ $jsonHelper = $block->getData('jsonHelper');
     <div data-bind="with: sections().price" class="steps-wizard-section">
         <div data-role="section">
             <div class="steps-wizard-section-title">
-                <span><?= $block->escapeHtml(__('Price')); ?></span>
+                <span><?= $escaper->escapeHtml(__('Price')); ?></span>
             </div>
             <ul class="steps-wizard-section-list">
                 <li>
@@ -569,7 +574,7 @@ $jsonHelper = $block->getData('jsonHelper');
                                data-bind="checked:type" />
                         <label for="apply-single-price-radio"
                                class="admin__field-label">
-                            <span><?= $block->escapeHtml(__('Apply single price to all SKUs')); ?></span>
+                            <span><?= $escaper->escapeHtml(__('Apply single price to all SKUs')); ?></span>
                         </label>
                     </div>
                 </li>
@@ -582,7 +587,7 @@ $jsonHelper = $block->getData('jsonHelper');
                                data-bind="checked:type" />
                         <label for="apply-unique-prices-radio"
                                class="admin__field-label">
-                            <span><?= $block->escapeHtml(__('Apply unique prices by attribute to each SKU')); ?></span>
+                            <span><?= $escaper->escapeHtml(__('Apply unique prices by attribute to each SKU')); ?></span>
                         </label>
                     </div>
                 </li>
@@ -595,7 +600,7 @@ $jsonHelper = $block->getData('jsonHelper');
                                checked
                                data-bind="checked:type" />
                         <label for="skip-pricing-radio" class="admin__field-label">
-                            <span><?= $block->escapeHtml(__('Skip price at this time')); ?></span>
+                            <span><?= $escaper->escapeHtml(__('Skip price at this time')); ?></span>
                         </label>
                     </div>
                 </li>
@@ -604,7 +609,7 @@ $jsonHelper = $block->getData('jsonHelper');
                 <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
                     <div class="admin__field _required">
                         <label for="apply-single-price-input" class="admin__field-label">
-                            <span><?= $block->escapeHtml(__('Price')); ?></span>
+                            <span><?= $escaper->escapeHtml(__('Price')); ?></span>
                         </label>
                         <div class="admin__field-control">
                             <div class="currency-addon">
@@ -621,7 +626,7 @@ $jsonHelper = $block->getData('jsonHelper');
                 <fieldset class="admin__fieldset bulk-attribute-values">
                     <div class="admin__field _required">
                         <label for="select-each-price" class="admin__field-label">
-                            <span><?= $block->escapeHtml(__('Select attribute')); ?></span>
+                            <span><?= $escaper->escapeHtml(__('Select attribute')); ?></span>
                         </label>
                         <div class="admin__field-control">
                             <select id="select-each-price" class="admin__control-select" data-bind="
@@ -661,7 +666,7 @@ $jsonHelper = $block->getData('jsonHelper');
     <div data-bind="with: sections().quantity" class="steps-wizard-section">
         <div data-role="section">
             <div class="steps-wizard-section-title">
-                <span><?= $block->escapeHtml(__('Quantity')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Quantity')) ?></span>
             </div>
             <ul class="steps-wizard-section-list">
                 <li>
@@ -672,7 +677,7 @@ $jsonHelper = $block->getData('jsonHelper');
                                value="single"
                                data-bind="checked: type" />
                         <label for="apply-single-inventory-radio" class="admin__field-label">
-                            <span><?= $block->escapeHtml(__('Apply single quantity to each SKUs')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Apply single quantity to each SKUs')) ?></span>
                         </label>
                     </div>
                 </li>
@@ -684,7 +689,7 @@ $jsonHelper = $block->getData('jsonHelper');
                                value="each"
                                data-bind="checked: type" />
                         <label for="apply-unique-inventory-radio" class="admin__field-label">
-                            <span><?= $block->escapeHtml(__('Apply unique quantity by attribute to each SKU')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Apply unique quantity by attribute to each SKU')) ?></span>
                         </label>
                     </div>
                 </li>
@@ -697,7 +702,7 @@ $jsonHelper = $block->getData('jsonHelper');
                                checked
                                data-bind="checked: type" />
                         <label for="skip-inventory-radio" class="admin__field-label">
-                            <span><?= $block->escapeHtml(__('Skip quantity at this time')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Skip quantity at this time')) ?></span>
                         </label>
                     </div>
                 </li>
@@ -707,7 +712,7 @@ $jsonHelper = $block->getData('jsonHelper');
                 <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
                     <div class="admin__field _required">
                         <label for="apply-single-inventory-input" class="admin__field-label">
-                            <span><?= $block->escapeHtml(__('Quantity')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Quantity')) ?></span>
                         </label>
                         <div class="admin__field-control">
                             <input type="text"
@@ -723,7 +728,7 @@ $jsonHelper = $block->getData('jsonHelper');
                 <fieldset class="admin__fieldset bulk-attribute-values">
                     <div class="admin__field _required">
                         <label for="apply-single-price-input-qty" class="admin__field-label">
-                            <span><?= $block->escapeHtml(__('Select attribute')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Select attribute')) ?></span>
                         </label>
                         <div class="admin__field-control">
                             <select id="apply-single-price-input-qty" class="admin__control-select" data-bind="
