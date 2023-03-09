@@ -3,20 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Sales\Model\Order;
+use Magento\Tax\Block\Item\Price\Renderer;
+
+/** @var Escaper $escaper */
+/** @var Renderer $block */
+$_item = $block->getItem();
+
+/** @var Order $_order */
+$_order = $_item->getOrder();
 
 // phpcs:disable Magento2.Templates.ThisInTemplate
 ?>
-<?php
-/** @var \Magento\Tax\Block\Item\Price\Renderer $block */
-
-$_item = $block->getItem();
-/** @var \Magento\Sales\Model\Order $_order */
-$_order = $_item->getOrder();
-?>
-
 <?php if ($block->displayPriceExclTax() || $block->displayBothPrices()) : ?>
     <?php if ($block->displayBothPrices()) : ?>
-        <span class="label"><?= $block->escapeHtml(__('Excl. Tax')) ?>:</span>
+        <span class="label"><?= $escaper->escapeHtml(__('Excl. Tax')) ?>:</span>
     <?php endif; ?>
     <?= /* @noEscape */ $_order->formatPrice($_item->getRowTotal()) ?>
 <?php endif; ?>
@@ -24,7 +28,7 @@ $_order = $_item->getOrder();
 
 <?php if ($block->displayPriceInclTax() || $block->displayBothPrices()) : ?>
     <?php if ($block->displayBothPrices()) : ?>
-        <br /><span class="label"><?= $block->escapeHtml(__('Incl. Tax')) ?>:</span>
+        <br /><span class="label"><?= $escaper->escapeHtml(__('Incl. Tax')) ?>:</span>
     <?php endif; ?>
     <?php $_incl = $this->helper(\Magento\Checkout\Helper\Data::class)->getSubtotalInclTax($_item); ?>
     <?= /* @noEscape */ $_order->formatPrice($_incl) ?>
