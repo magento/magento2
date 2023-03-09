@@ -3,14 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/* @var $block \Magento\Email\Block\Adminhtml\Template\Preview */
+use Magento\Email\Block\Adminhtml\Template\Preview;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Preview $block */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title><?= $block->escapeHtml(__('Email Preview')) ?></title>
+    <title><?= $escaper->escapeHtml(__('Email Preview')) ?></title>
 </head>
 <body>
     <?= $block->getChildHtml('content') ?>
