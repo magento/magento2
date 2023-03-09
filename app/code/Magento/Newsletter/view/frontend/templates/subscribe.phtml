@@ -33,7 +33,10 @@
                 <button class="action subscribe primary"
                         title="<?= $block->escapeHtmlAttr(__('Subscribe')) ?>"
                         type="submit"
-                        aria-label="Subscribe">
+                        aria-label="Subscribe"
+                    <?php if ($block->getButtonLockManager()->isDisabled('newsletter_form_submit')): ?>
+                        disabled="disabled"
+                    <?php endif; ?>>
                     <span><?= $block->escapeHtml(__('Subscribe')) ?></span>
                 </button>
             </div>
