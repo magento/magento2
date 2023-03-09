@@ -48,7 +48,7 @@ define([
                 resourceUrlManager.getUrlForSetShippingInformation(quote),
                 JSON.stringify(payload)
             ).done(
-                function (response) {
+                function () {
                     fullScreenLoader.stopLoader();
                 }
             ).fail(

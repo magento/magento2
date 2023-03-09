@@ -47,10 +47,11 @@ define([
          */
         initObservable: function () {
             var self = this;
-            shippingSaveProcessor.registerProcessor('cart', cartShippingProcessor);
+
             this._super();
 
-            this.selectedShippingMethod.subscribe(function (value) {
+            shippingSaveProcessor.registerProcessor('cart', cartShippingProcessor);
+            this.selectedShippingMethod.subscribe(function () {
                 if (quote.shippingMethod()) {
                     shippingSaveProcessor.saveShippingInformation('cart');
                 }
