@@ -145,11 +145,12 @@
         <moveMouseOver selector="{{StorefrontCategorySidebarSection.expandedSwatchThumbnails('$createVisualSwatchAttribute.frontend_label[0]$','swatch-option')}}" stepKey="hoverOverSwatchAttribute"/>
         <waitForPageLoad stepKey="waitForHoveredImageToLoad"/>
         <seeElement selector="{{StorefrontCategorySidebarSection.swatchThumbnailsImgLayeredNav('swatch_thumb')}}" stepKey="seeSwatchImageOnHover"/>
-
+        <moveMouseOver selector="{{StorefrontMinicartSection.showCart}}" stepKey="moveAwayFromLayeredNav1"/>
         <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle('$createTextSwatchAttribute.frontend_label[0]$')}}" stepKey="expandTextSwatchAttribute"/>
         <moveMouseOver selector="{{StorefrontCategorySidebarSection.swatchTextLayeredNav('${grabTextValue}')}}" stepKey="hoverOverTextAttribute"/>
         <waitForPageLoad stepKey="waitForHoveredTextToLoad"/>
         <seeElement selector="{{StorefrontCategorySidebarSection.swatchTextLayeredNavHover('${grabTextValue}')}}" stepKey="seeSwatchTextOnHover"/>
+        <moveMouseOver selector="{{StorefrontMinicartSection.showCart}}" stepKey="moveAwayFromLayeredNav2"/>
 
         <!-- Verify the swatches on displayed product -->
         <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle('$createVisualSwatchAttribute.frontend_label[0]$')}}" stepKey="expandVisualSwatchAttributeToClick"/>
@@ -159,6 +160,7 @@
         <moveMouseOver selector="{{StorefrontCategorySidebarSection.swatchSelectedInFilteredProd('image')}}" stepKey="hoverOverSwatchImageOnFilteredProduct"/>
         <waitForPageLoad stepKey="waitForHoveredImageToLoadForFilteredProduct"/>
         <seeElement selector="{{StorefrontCategorySidebarSection.swatchThumbnailsImgLayeredNav('swatch_thumb')}}" stepKey="seeSwatchImageOnFilteredProductHover"/>
+        <moveMouseOver selector="{{StorefrontMinicartSection.showCart}}" stepKey="moveAwayFromLayeredNav3"/>
         <click selector="{{StorefrontCategorySidebarSection.removeFilter}}" stepKey="removeFilter"/>
         <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle('$createTextSwatchAttribute.frontend_label[0]$')}}" stepKey="expandTextSwatchAttributeToClick"/>
         <click selector="{{StorefrontCategorySidebarSection.expandedSwatchThumbnails('$createTextSwatchAttribute.frontend_label[0]$','swatch-option')}}" stepKey="clickOverTextAttribute"/>
