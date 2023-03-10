@@ -19,17 +19,11 @@ use Magento\StoreGraphQl\Model\Resolver\Store\ConfigIdentity;
 class ConfigTagGenerator implements TagGeneratorInterface
 {
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        StoreManagerInterface $storeManager
+        private readonly StoreManagerInterface $storeManager
     ) {
-        $this->storeManager = $storeManager;
     }
 
     /**
