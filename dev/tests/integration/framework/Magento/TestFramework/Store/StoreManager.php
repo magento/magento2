@@ -5,6 +5,7 @@
  */
 namespace Magento\TestFramework\Store;
 
+use Magento\Framework\Interception\InterceptorInterface;
 use Magento\TestFramework\App\Config;
 use Magento\TestFramework\ObjectManager;
 
@@ -128,6 +129,9 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
         //In order to restore configFixture values
         $testAppConfig = ObjectManager::getInstance()->get(Config::class);
         $reflection = new \ReflectionClass($testAppConfig);
+        if ($reflection->implementsInterface(InterceptorInterface::class)) {
+            $reflection = $reflection->getParentClass();
+        }
         $dataProperty = $reflection->getProperty('data');
         $dataProperty->setAccessible(true);
         $savedConfig = $dataProperty->getValue($testAppConfig);
