@@ -52,7 +52,13 @@ class AddressTest extends TestCase
      *
      * @var array
      */
-    protected $_attributes = [['attribute_id' => 1, 'attribute_code' => self::ATTRIBUTE_CODE]];
+    protected $_attributes = [
+        [
+            'attribute_id' => 1,
+            'attribute_code' => self::ATTRIBUTE_CODE,
+            'frontend_input' => 'multiselect'
+        ]
+    ];
 
     /**
      * Customer data
@@ -166,8 +172,11 @@ class AddressTest extends TestCase
                 true,
                 true,
                 true,
-                ['_construct']
+                ['_construct', 'getSource']
             );
+
+            $attributeSource = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class);
+            $attribute->expects($this->once())->method('getSource')->willReturn($attributeSource);
             $attributeCollection->addItem($attribute);
         }
 
