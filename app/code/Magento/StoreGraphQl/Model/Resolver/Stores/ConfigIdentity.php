@@ -33,30 +33,33 @@ class ConfigIdentity implements IdentityInterface
     public function getIdentities(array $resolvedData): array
     {
         $ids = [];
-        $storeGroups = [];
+        $storeGroupIds = [];
         $store = null;
+        $storeGroupCount = 0;
         foreach ($resolvedData as $storeConfig) {
             $ids[] = sprintf('%s_%s', StoreConfigIdentity::CACHE_TAG, $storeConfig['id']);
-            try {
-                // Record store groups
-                $store = $this->storeManager->getStore($storeConfig['id']);
-                $storeGroupId = $store->getStoreGroupId();
-                if ($storeGroupId !== null) {
-                    $storeGroups[$storeGroupId] = true;
+            if ($storeGroupCount < 2) {
+                try {
+                    // Record store groups
+                    $store = $this->storeManager->getStore($storeConfig['id']);
+                    $storeGroupId = $store->getStoreGroupId();
+                    if ($storeGroupId !== null && !in_array($storeGroupId, $storeGroupIds)) {
+                        $storeGroupIds[] = $storeGroupId;
+                        $storeGroupCount ++;
+                    }
+                } catch (NoSuchEntityException $e) {
+                    // Do nothing
+                    ;
                 }
-            } catch (NoSuchEntityException $e) {
-                // Do nothing
-                ;
             }
         }
-        $storeGroupCount = count($storeGroups);
         if ($storeGroupCount > 1) { // the resolved stores for any store groups in a website
             $ids[] = sprintf('%s_%s', StoreConfigIdentity::CACHE_TAG, 'website_' . $store->getWebsiteId());
         } elseif ($storeGroupCount == 1) { // the resolved stores for a particular store group in a website
             $ids[] = sprintf(
                 '%s_%s',
                 StoreConfigIdentity::CACHE_TAG,
-                'website_' . $store->getWebsiteId() . 'group_' . array_keys($storeGroups)[0]
+                'website_' . $store->getWebsiteId() . 'group_' . $storeGroupIds[0]
             );
         }
 
