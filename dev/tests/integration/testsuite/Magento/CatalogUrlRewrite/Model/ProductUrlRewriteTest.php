@@ -149,13 +149,15 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
      * @return void
      */
     #[
-        DataFixture(ProductFixture::class, ['sku' => 'simple','name'=>'Simple Url Test Product','visibility' => Visibility::VISIBILITY_NOT_VISIBLE], 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple','name'=>'Simple Url Test Product',
+            'visibility' => Visibility::VISIBILITY_NOT_VISIBLE]),
     ]
     public function testUrlRewriteOnInvisibleProductEdit(array $expectedData): void
     {
         $product = $this->productRepository->get('simple', true, 0, true);
         $productUrlRewriteItems = $this->getEntityRewriteCollection($product->getId())->getItems();
-        $this->assertEmpty($productUrlRewriteItems,'URL key should not be present for "Not visible individually" product');
+        $this->assertEmpty($productUrlRewriteItems,
+            'URL key should not be present for "Not visible individually" product');
 
         //Update visibility and check the database entry
         $product->setVisibility(Visibility::VISIBILITY_BOTH);
@@ -173,7 +175,8 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
         $product = $this->productRepository->save($product);
 
         $productUrlRewriteItems = $this->getEntityRewriteCollection($product->getId())->getItems();
-        $this->assertEmpty($productUrlRewriteItems,'URL key should not be present for "Not visible individually" product');
+        $this->assertEmpty($productUrlRewriteItems,
+            'URL key should not be present for "Not visible individually" product');
     }
 
     /**
