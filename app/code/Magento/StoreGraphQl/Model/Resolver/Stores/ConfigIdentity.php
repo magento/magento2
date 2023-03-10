@@ -50,9 +50,9 @@ class ConfigIdentity implements IdentityInterface
             }
         }
         $storeGroupCount = count($storeGroups);
-        if ($storeGroupCount > 1 && $store !== null) {
+        if ($storeGroupCount > 1) { // the resolved stores for any store groups in a website
             $ids[] = sprintf('%s_%s', StoreConfigIdentity::CACHE_TAG, 'website_' . $store->getWebsiteId());
-        } elseif ($storeGroupCount == 1 && $store !== null) {
+        } elseif ($storeGroupCount == 1) { // the resolved stores for a particular store group in a website
             $ids[] = sprintf(
                 '%s_%s',
                 StoreConfigIdentity::CACHE_TAG,
