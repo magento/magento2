@@ -7,11 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model\ResourceModel;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Security\Model\UserExpirationFactory;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\User\Model\ResourceModel\User as UserResource;
+use Magento\User\Test\Fixture\User as UserDataFixture;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,10 +30,12 @@ class UserExpirationTest extends TestCase
 
     /**
      * @inheritdoc
+     * @throws LocalizedException
      */
     protected function setUp(): void
     {
         $this->userExpirationResource = Bootstrap::getObjectManager()->get(UserExpiration::class);
+        $this->fixtures = DataFixtureStorageManager::getStorage();
     }
 
     /**
@@ -80,6 +86,43 @@ class UserExpirationTest extends TestCase
                 'locale_code' => 'uk_UA',
             ],
         ];
+    }
+
+    /**
+     * Verify user expiration saved with large date.
+     *
+     * @throws LocalizedException
+     * @return void
+     */
+    #[
+        DataFixture(UserDataFixture::class, ['role_id' => 1], 'user')
+    ]
+    public function testLargeExpirationDate(): void
+    {
+        $user = $this->fixtures->get('user');
+        $userId = $user->getDataByKey('user_id');
+
+        // Get date more than 100 years from current date
+        $timeZone = Bootstrap::getObjectManager()->get(TimezoneInterface::class);
+        $initialExpirationDate = $timeZone->date()->modify('+100 years');
+        $expireDate = $timeZone->formatDateTime(
+            $initialExpirationDate,
+            \IntlDateFormatter::MEDIUM,
+            \IntlDateFormatter::MEDIUM
+        );
+
+        // Set Expiration date to the admin user and save
+        $userExpirationFactory = Bootstrap::getObjectManager()->get(UserExpirationFactory::class);
+        $userExpiration = $userExpirationFactory->create();
+        $userExpiration->setExpiresAt($expireDate);
+        $userExpiration->setUserId($userId);
+        $this->userExpirationResource->save($userExpiration);
+
+        // Load admin expiration date from database
+        $loadedUserExpiration = $userExpirationFactory->create();
+        $this->userExpirationResource->load($loadedUserExpiration, $userExpiration->getId());
+
+        self::assertEquals($initialExpirationDate->format('Y-m-d H:i:s'), $loadedUserExpiration->getExpiresAt());
     }
 
     /**
