@@ -62,15 +62,15 @@
 
         <!-- Fill the form and validate message -->
         <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
-            <argument name="status" value="{{EnableFreeOrderStatusCustom.value}}"/>
-            <argument name="label" value="{{EnableFreeOrderStatusCustom.label}}"/>
+            <argument name="status" value="{{defaultOrderStatus.status}}"/>
+            <argument name="label" value="{{defaultOrderStatus.label}}"/>
         </actionGroup>
         <actionGroup ref="AssertOrderStatusFormSaveSuccess" stepKey="seeFormSaveSuccess"/>
 
         <!-- Verify the order status grid page shows the order status we just created -->
         <actionGroup ref="AssertOrderStatusExistsInGrid" stepKey="searchCreatedOrderStatus">
-            <argument name="status" value="{{EnableFreeOrderStatusCustom.value}}"/>
-            <argument name="label" value="{{EnableFreeOrderStatusCustom.label}}"/>
+            <argument name="status" value="{{defaultOrderStatus.status}}"/>
+            <argument name="label" value="{{defaultOrderStatus.label}}"/>
         </actionGroup>
 
         <!-- Assign status to state -->
@@ -113,7 +113,7 @@
 
         <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
             <argument name="orderId" value="$grabOrderNumber"/>
-            <argument name="status" value="{{EnableFreeOrderStatusCustom.label}}"/>
+            <argument name="status" value="{{defaultOrderStatus.label}}"/>
         </actionGroup>
 
         <!-- Open order -->
