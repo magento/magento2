@@ -1064,7 +1064,7 @@ class AvailableStoresCacheTest extends GraphQLPageCacheAbstract
      * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testCachePurgedWithNewStoreWithNewStoreGroupNewWebsite(): void
+    public function testCacheNotPurgedWithNewStoreWithNewStoreGroupNewWebsite(): void
     {
         $this->changeToTwoWebsitesThreeStoreGroupsThreeStores();
         $query = $this->getQuery();
@@ -1264,7 +1264,7 @@ class AvailableStoresCacheTest extends GraphQLPageCacheAbstract
      * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testCachePurgedWithNewStoreWithSecondStoreGroupNewWebsite(): void
+    public function testCacheNotPurgedWithNewStoreWithSecondStoreGroupNewWebsite(): void
     {
         $this->changeToTwoWebsitesThreeStoreGroupsThreeStores();
         $query = $this->getQuery();
