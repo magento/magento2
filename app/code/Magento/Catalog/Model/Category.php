@@ -209,6 +209,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected $metadataService;
 
     /**
+     * @var array
+     */
+    private $flatEnabled = [];
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -288,12 +293,20 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected function _construct()
     {
         // If Flat Index enabled then use it but only on frontend
-        if ($this->flatState->isAvailable()) {
+        if ($this->isEnabledFlat()) {
             $this->_init(\Magento\Catalog\Model\ResourceModel\Category\Flat::class);
             $this->_useFlatResource = true;
         } else {
             $this->_init(\Magento\Catalog\Model\ResourceModel\Category::class);
         }
+    }
+
+    private function isEnabledFlat()
+    {
+        if (!isset($this->flatEnabled[$this->getStoreId()])) {
+            $this->flatEnabled[$this->getStoreId()] = $this->flatState->isAvailable();
+        }
+        return $this->flatEnabled[$this->getStoreId()];
     }
 
     /**
