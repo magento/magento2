@@ -12,6 +12,7 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Security\Model\UserExpirationFactory;
 use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\User\Model\ResourceModel\User as UserResource;
@@ -27,6 +28,11 @@ class UserExpirationTest extends TestCase
      * @var UserExpiration
      */
     private $userExpirationResource;
+
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
 
     /**
      * @inheritdoc
