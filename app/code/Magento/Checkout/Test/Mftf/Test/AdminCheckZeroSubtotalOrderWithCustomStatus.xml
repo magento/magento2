@@ -24,12 +24,6 @@
             <createData entity="SimpleProduct" stepKey="simpleproduct">
                 <requiredEntity createDataKey="simplecategory"/>
             </createData>
-            <createData entity="PaymentMethodsSettingConfig" stepKey="paymentMethodsSettingConfig"/>
-            <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
-            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
-                <argument name="tags" value="config full_page"/>
-            </actionGroup>
-
             <createData entity="ApiSalesRule" stepKey="createCartPriceRule">
                 <field key="discount_amount">100</field>
             </createData>
@@ -37,15 +31,19 @@
                 <requiredEntity createDataKey="createCartPriceRule"/>
             </createData>
 
+            <actionGroup ref="CliEnableFreeShippingMethodActionGroup" stepKey="freeShippingMethodsSettingConfig"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!--      To be removed when BI Changes are allowed      -->
+            <comment userInput="Preserve BIC. PaymentMethodsSettingConfig" stepKey="paymentMethodsSettingConfig"/>
+            <comment userInput="Preserve BIC. CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches" />
         </before>
 
         <after>
+            <magentoCLI command="config:set {{EnableFreeOrderStatusPending.path}} {{EnableFreeOrderStatusPending.value}}" stepKey="disablePaymentMethodsSettingConfig"/>
+            <actionGroup ref="CliDisableFreeShippingMethodActionGroup" stepKey="disableFreeShippingConfig"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="simpleproduct" stepKey="deleteProduct"/>
-            <createData entity="DisablePaymentMethodsSettingConfig" stepKey="disablePaymentMethodsSettingConfig"/>
-            <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
-            <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteSalesRule"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
@@ -54,6 +52,8 @@
                 <argument name="tags" value="config full_page"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!--      To be removed when BI Changes are allowed      -->
+            <comment userInput="Preserving BIC. DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
         </after>
 
         <!-- Go to new order status page -->
@@ -75,16 +75,18 @@
 
         <!-- Assign status to state -->
         <click selector="{{AdminOrderStatusGridSection.assignStatusToStateBtn}}" stepKey="clickAssignStatusBtn"/>
-        <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderStatus}}" userInput="{{EnableFreeOrderStatusCustom.value}}" stepKey="selectOrderStatus"/>
+        <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderStatus}}" userInput="{{defaultOrderStatus.label}}" stepKey="selectOrderStatus"/>
         <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderState}}" userInput="{{OrderState.new}}" stepKey="selectOrderState"/>
         <checkOption selector="{{AdminAssignOrderStatusToStateSection.orderStatusAsDefault}}" stepKey="orderStatusAsDefault"/>
         <uncheckOption selector="{{AdminAssignOrderStatusToStateSection.visibleOnStorefront}}" stepKey="visibleOnStorefront"/>
         <click selector="{{AdminAssignOrderStatusToStateSection.saveStatusAssignment}}" stepKey="clickSaveStatus"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="You assigned the order status." stepKey="seeSuccess"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccess">
+            <argument name="message" value="You assigned the order status." />
+        </actionGroup>
 
         <!-- Prepare data for constraints -->
-        <magentoCLI command="config:set {{EnableFreeOrderStatusCustom.path}} {{EnableFreeOrderStatusCustom.value}}" stepKey="enableNewOrderStatus"/>
-        <magentoCLI command="config:set {{EnableFreeOrderPaymentAction.path}} {{EnableFreeOrderPaymentAction.value}}" stepKey="enableNewOrderPaymentAction"/>
+        <magentoCLI command="config:set {{EnableFreeOrderStatusCustom.path}} {{defaultOrderStatus.status}}" stepKey="enableNewOrderStatus"/>
+        <comment userInput="Preserve BIC. config:set {{EnableFreeOrderPaymentAction.path}} {{EnableFreeOrderPaymentAction.value}}" stepKey="enableNewOrderPaymentAction"/>
         <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
             <argument name="tags" value="config full_page"/>
         </actionGroup>
@@ -94,7 +96,8 @@
             <argument name="product" value="$$simpleproduct$$"/>
         </actionGroup>
 
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="clickToProceedToCheckout"/>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="clickToProceedToCheckout"/>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodSelectorNextButton}}" stepKey="waitForNextButtonVisible" />
 
         <actionGroup ref="ShipmentFormFreeShippingActionGroup" stepKey="shipmentFormFreeShippingActionGroup"/>
 
@@ -121,8 +124,11 @@
             <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
 
-        <!-- Assert invoice button -->
-        <seeElement selector="{{AdminOrderDetailsMainActionsSection.invoiceBtn}}" stepKey="seeInvoiceBtn"/>
+        <!-- Assert Order Status on Order view page -->
+        <comment userInput="Preserve BIC. {{AdminOrderDetailsMainActionsSection.invoiceBtn}}" stepKey="seeInvoiceBtn"/>
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="verifyOrderStatusOnOrderViewPage">
+            <argument name="status" value="{{defaultOrderStatus.label}}" />
+        </actionGroup>
 
     </test>
 </tests>
