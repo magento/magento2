@@ -373,22 +373,6 @@ class AddressMetadataTest extends WebapiAbstract
     }
 
     /**
-     * Remove test attribute
-     */
-    public static function tearDownAfterClass(): void
-    {
-        parent::tearDownAfterClass();
-        /** @var \Magento\Customer\Model\Attribute $attribute */
-        $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Model\Attribute::class
-        );
-        foreach (['custom_attribute1', 'custom_attribute2'] as $attributeCode) {
-            $attribute->loadByCode('customer_address', $attributeCode);
-            $attribute->delete();
-        }
-    }
-
-    /**
      * Set core config data.
      *
      * @param $configOptions
