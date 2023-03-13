@@ -373,7 +373,7 @@
                                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/shipping</item>
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="title" xsi:type="string" translate="true">Shipping</item>
-                                                                    <item name="notCalculatedMessage" xsi:type="string" translate="true">Not yet calculated</item>
+                                                                    <item name="notCalculatedMessage" xsi:type="string" translate="true">Selected shipping method is not available. Please select another shipping method for this order.</item>
                                                                 </item>
                                                             </item>
                                                             <item name="grand-total" xsi:type="array">
