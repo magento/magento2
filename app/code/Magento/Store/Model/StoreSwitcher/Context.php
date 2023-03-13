@@ -15,31 +15,15 @@ use Magento\Store\Api\Data\StoreInterface;
 class Context implements ContextInterface
 {
     /**
-     * @var StoreInterface
-     */
-    private $fromStore;
-    /**
-     * @var StoreInterface
-     */
-    private $targetStore;
-    /**
-     * @var string
-     */
-    private $redirectUrl;
-
-    /**
      * @param StoreInterface $fromStore
      * @param StoreInterface $targetStore
      * @param string $redirectUrl
      */
     public function __construct(
-        StoreInterface $fromStore,
-        StoreInterface $targetStore,
-        string $redirectUrl
+        private readonly StoreInterface $fromStore,
+        private readonly StoreInterface $targetStore,
+        private readonly string $redirectUrl
     ) {
-        $this->fromStore = $fromStore;
-        $this->targetStore = $targetStore;
-        $this->redirectUrl = $redirectUrl;
     }
 
     /**

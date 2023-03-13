@@ -7,7 +7,15 @@
  */
 namespace Magento\Store\Model\ResourceModel\Config\Collection;
 
-class Scoped extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+use Magento\Config\Model\ResourceModel\Config\Data as ResourceConfigData;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Psr\Log\LoggerInterface;
+
+class Scoped extends AbstractCollection
 {
     /**
      * Scope to filter by
@@ -24,23 +32,23 @@ class Scoped extends \Magento\Framework\Model\ResourceModel\Db\Collection\Abstra
     protected $_scopeId;
 
     /**
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Config\Model\ResourceModel\Config\Data $resource
+     * @param EntityFactory $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param EventManagerInterface $eventManager
+     * @param ResourceConfigData $resource
      * @param string $scope
      * @param mixed $connection
      * @param mixed $scopeId
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Config\Model\ResourceModel\Config\Data $resource,
+        EntityFactory $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        EventManagerInterface $eventManager,
+        ResourceConfigData $resource,
         $scope,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        AdapterInterface $connection = null,
         $scopeId = null
     ) {
         $this->_scope = $scope;

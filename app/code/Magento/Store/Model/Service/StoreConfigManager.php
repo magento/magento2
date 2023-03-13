@@ -6,33 +6,20 @@
 
 namespace Magento\Store\Model\Service;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreConfigInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\StoreConfigManagerInterface;
 use Magento\Store\Model\Data\StoreConfig;
 use Magento\Store\Model\Data\StoreConfigFactory;
 use Magento\Store\Model\ResourceModel\Store\CollectionFactory;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
-class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterface
+class StoreConfigManager implements StoreConfigManagerInterface
 {
-    /**
-     * @var CollectionFactory
-     */
-    protected $storeCollectionFactory;
-
-    /**
-     * @var StoreConfigFactory
-     */
-    protected $storeConfigFactory;
-
-    /**
-     * Core store config
-     *
-     * @var ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
     /**
      * Map the setters to config path
      *
@@ -43,22 +30,19 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
         'setBaseCurrencyCode' => 'currency/options/base',
         'setDefaultDisplayCurrencyCode' => 'currency/options/default',
         'setTimezone' => 'general/locale/timezone',
-        'setWeightUnit' => \Magento\Directory\Helper\Data::XML_PATH_WEIGHT_UNIT
+        'setWeightUnit' => DirectoryHelper::XML_PATH_WEIGHT_UNIT
     ];
 
     /**
      * @param CollectionFactory $storeCollectionFactory
-     * @param ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig Core store config
      * @param StoreConfigFactory $storeConfigFactory
      */
     public function __construct(
-        CollectionFactory $storeCollectionFactory,
-        ScopeConfigInterface $scopeConfig,
-        StoreConfigFactory $storeConfigFactory
+        protected readonly CollectionFactory $storeCollectionFactory,
+        protected readonly ScopeConfigInterface $scopeConfig,
+        protected readonly StoreConfigFactory $storeConfigFactory
     ) {
-        $this->storeCollectionFactory = $storeCollectionFactory;
-        $this->scopeConfig = $scopeConfig;
-        $this->storeConfigFactory = $storeConfigFactory;
     }
 
     /**
@@ -99,23 +83,23 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
         foreach ($this->configPaths as $methodName => $configPath) {
             $configValue = $this->scopeConfig->getValue(
                 $configPath,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
+                ScopeInterface::SCOPE_STORES,
                 $store->getCode()
             );
             $storeConfig->$methodName($configValue);
         }
 
-        $storeConfig->setBaseUrl($store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB, false));
-        $storeConfig->setSecureBaseUrl($store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB, true));
-        $storeConfig->setBaseLinkUrl($store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, false));
-        $storeConfig->setSecureBaseLinkUrl($store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, true));
-        $storeConfig->setBaseStaticUrl($store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_STATIC, false));
+        $storeConfig->setBaseUrl($store->getBaseUrl(UrlInterface::URL_TYPE_WEB, false));
+        $storeConfig->setSecureBaseUrl($store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true));
+        $storeConfig->setBaseLinkUrl($store->getBaseUrl(UrlInterface::URL_TYPE_LINK, false));
+        $storeConfig->setSecureBaseLinkUrl($store->getBaseUrl(UrlInterface::URL_TYPE_LINK, true));
+        $storeConfig->setBaseStaticUrl($store->getBaseUrl(UrlInterface::URL_TYPE_STATIC, false));
         $storeConfig->setSecureBaseStaticUrl(
-            $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_STATIC, true)
+            $store->getBaseUrl(UrlInterface::URL_TYPE_STATIC, true)
         );
-        $storeConfig->setBaseMediaUrl($store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA, false));
+        $storeConfig->setBaseMediaUrl($store->getBaseUrl(UrlInterface::URL_TYPE_MEDIA, false));
         $storeConfig->setSecureBaseMediaUrl(
-            $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA, true)
+            $store->getBaseUrl(UrlInterface::URL_TYPE_MEDIA, true)
         );
         return $storeConfig;
     }

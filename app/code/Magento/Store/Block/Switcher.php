@@ -10,11 +10,18 @@
 namespace Magento\Store\Block;
 
 use Magento\Directory\Helper\Data;
+use Magento\Framework\Data\Helper\PostHelper;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Magento\Store\Model\Group;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Url\Helper\Data as UrlHelper;
+use Magento\Store\Model\Store as ModelStore;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Switcher block
@@ -22,7 +29,7 @@ use Magento\Framework\Url\Helper\Data as UrlHelper;
  * @api
  * @since 100.0.2
  */
-class Switcher extends \Magento\Framework\View\Element\Template
+class Switcher extends Template
 {
     /**
      * @var bool
@@ -30,26 +37,21 @@ class Switcher extends \Magento\Framework\View\Element\Template
     protected $_storeInUrl;
 
     /**
-     * @var \Magento\Framework\Data\Helper\PostHelper
+     * @var PostHelper
      */
     protected $_postDataHelper;
 
     /**
-     * @var UrlHelper
-     */
-    private $urlHelper;
-
-    /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
+     * @param TemplateContext $context
+     * @param PostHelper $postDataHelper
      * @param array $data
-     * @param UrlHelper $urlHelper
+     * @param null|UrlHelper $urlHelper
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
+        TemplateContext $context,
+        PostHelper $postDataHelper,
         array $data = [],
-        UrlHelper $urlHelper = null
+        private ?UrlHelper $urlHelper = null
     ) {
         $this->_postDataHelper = $postDataHelper;
         parent::__construct($context, $data);
@@ -116,13 +118,13 @@ class Switcher extends \Magento\Framework\View\Element\Template
             $websiteStores = $this->_storeManager->getWebsite()->getStores();
             $stores = [];
             foreach ($websiteStores as $store) {
-                /* @var $store \Magento\Store\Model\Store */
+                /* @var $store ModelStore */
                 if (!$store->isActive()) {
                     continue;
                 }
                 $localeCode = $this->_scopeConfig->getValue(
                     Data::XML_PATH_DEFAULT_LOCALE,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    ScopeInterface::SCOPE_STORE,
                     $store
                 );
                 $store->setLocaleCode($localeCode);
@@ -154,10 +156,10 @@ class Switcher extends \Magento\Framework\View\Element\Template
             $groups = [];
             $localeCode = $this->_scopeConfig->getValue(
                 Data::XML_PATH_DEFAULT_LOCALE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
             foreach ($rawGroups as $group) {
-                /* @var $group Group */
+                /* @var Group $group */
                 if (!isset($rawStores[$group->getId()])) {
                     continue;
                 }
@@ -187,7 +189,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
     /**
      * Get stores.
      *
-     * @return \Magento\Store\Model\Store[]
+     * @return ModelStore[]
      */
     public function getStores()
     {
@@ -259,11 +261,11 @@ class Switcher extends \Magento\Framework\View\Element\Template
      * @param Store $store
      * @param array $data
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getTargetStorePostData(Store $store, $data = [])
     {
-        $data[\Magento\Store\Model\StoreManagerInterface::PARAM_NAME] = $store->getCode();
+        $data[StoreManagerInterface::PARAM_NAME] = $store->getCode();
         $data['___from_store'] = $this->_storeManager->getStore()->getCode();
 
         $urlOnTargetStore = $store->getCurrentUrl(false);

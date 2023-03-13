@@ -13,6 +13,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreSwitcherInterface;
 use Psr\Log\LoggerInterface;
+use Throwable;
 
 /**
  * Process one time token and build redirect url
@@ -22,39 +23,6 @@ use Psr\Log\LoggerInterface;
  */
 class HashProcessor implements StoreSwitcherInterface
 {
-    /**
-     * @var RequestInterface
-     */
-    private $request;
-    /**
-     * @var RedirectDataPostprocessorInterface
-     */
-    private $postprocessor;
-    /**
-     * @var RedirectDataSerializerInterface
-     */
-    private $dataSerializer;
-    /**
-     * @var ManagerInterface
-     */
-    private $messageManager;
-    /**
-     * @var RedirectDataInterfaceFactory
-     */
-    private $dataFactory;
-    /**
-     * @var ContextInterfaceFactory
-     */
-    private $contextFactory;
-    /**
-     * @var RedirectDataValidator
-     */
-    private $dataValidator;
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
     /**
      * @param RequestInterface $request
      * @param RedirectDataPostprocessorInterface $postprocessor
@@ -66,23 +34,15 @@ class HashProcessor implements StoreSwitcherInterface
      * @param LoggerInterface $logger
      */
     public function __construct(
-        RequestInterface $request,
-        RedirectDataPostprocessorInterface $postprocessor,
-        RedirectDataSerializerInterface $dataSerializer,
-        ManagerInterface $messageManager,
-        ContextInterfaceFactory $contextFactory,
-        RedirectDataInterfaceFactory $dataFactory,
-        RedirectDataValidator $dataValidator,
-        LoggerInterface $logger
+        private readonly RequestInterface $request,
+        private readonly RedirectDataPostprocessorInterface $postprocessor,
+        private readonly RedirectDataSerializerInterface $dataSerializer,
+        private readonly ManagerInterface $messageManager,
+        private readonly ContextInterfaceFactory $contextFactory,
+        private readonly RedirectDataInterfaceFactory $dataFactory,
+        private readonly RedirectDataValidator $dataValidator,
+        private readonly LoggerInterface $logger
     ) {
-        $this->request = $request;
-        $this->postprocessor = $postprocessor;
-        $this->dataSerializer = $dataSerializer;
-        $this->messageManager = $messageManager;
-        $this->contextFactory = $contextFactory;
-        $this->dataFactory = $dataFactory;
-        $this->dataValidator = $dataValidator;
-        $this->logger = $logger;
     }
 
     /**
@@ -125,7 +85,7 @@ class HashProcessor implements StoreSwitcherInterface
                 }
             } catch (LocalizedException $exception) {
                 $this->messageManager->addErrorMessage($exception->getMessage());
-            } catch (\Throwable $exception) {
+            } catch (Throwable $exception) {
                 $this->logger->error($exception);
                 $this->messageManager->addErrorMessage(
                     __('Something went wrong.')

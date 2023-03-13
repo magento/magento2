@@ -9,33 +9,13 @@ namespace Magento\Store\Model\StoreSwitcher;
 
 use Magento\Framework\Encryption\Encryptor;
 use Psr\Log\LoggerInterface;
+use Throwable;
 
 /**
  * Store switcher redirect data collector
  */
 class RedirectDataGenerator
 {
-    /**
-     * @var RedirectDataPreprocessorInterface
-     */
-    private $preprocessor;
-    /**
-     * @var RedirectDataSerializerInterface
-     */
-    private $dataSerializer;
-    /**
-     * @var RedirectDataInterfaceFactory
-     */
-    private $dataFactory;
-    /**
-     * @var Encryptor
-     */
-    private $encryptor;
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
     /**
      * @param Encryptor $encryptor
      * @param RedirectDataPreprocessorInterface $preprocessor
@@ -44,17 +24,12 @@ class RedirectDataGenerator
      * @param LoggerInterface $logger
      */
     public function __construct(
-        Encryptor $encryptor,
-        RedirectDataPreprocessorInterface $preprocessor,
-        RedirectDataSerializerInterface $dataSerializer,
-        RedirectDataInterfaceFactory $dataFactory,
-        LoggerInterface $logger
+        private readonly Encryptor $encryptor,
+        private readonly RedirectDataPreprocessorInterface $preprocessor,
+        private readonly RedirectDataSerializerInterface $dataSerializer,
+        private readonly RedirectDataInterfaceFactory $dataFactory,
+        private readonly LoggerInterface $logger
     ) {
-        $this->preprocessor = $preprocessor;
-        $this->dataSerializer = $dataSerializer;
-        $this->dataFactory = $dataFactory;
-        $this->encryptor = $encryptor;
-        $this->logger = $logger;
     }
 
     /**
@@ -68,7 +43,7 @@ class RedirectDataGenerator
         $data = $this->preprocessor->process($context, []);
         try {
             $dataStr = $this->dataSerializer->serialize($data);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $this->logger->error($exception);
             $dataStr = '';
         }

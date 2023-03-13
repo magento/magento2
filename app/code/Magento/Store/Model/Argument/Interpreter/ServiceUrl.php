@@ -5,7 +5,9 @@
  */
 namespace Magento\Store\Model\Argument\Interpreter;
 
+use InvalidArgumentException;
 use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\Url;
 use Magento\Store\Model\StoreRepository;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -15,49 +17,19 @@ use Magento\Store\Model\StoreManagerInterface;
 class ServiceUrl implements InterpreterInterface
 {
     /**
-     * @var \Magento\Framework\Url
-     */
-    private $url;
-
-    /**
-     * @var string
-     */
-    private $service;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var string
-     */
-    private $version;
-
-    /**
-     * @var StoreRepository
-     */
-    private $storeRepository;
-
-    /**
-     * @param \Magento\Framework\Url $url
+     * @param Url $url
      * @param StoreManagerInterface $storeManager
      * @param StoreRepository $storeRepository
      * @param string $service
      * @param string $version
      */
     public function __construct(
-        \Magento\Framework\Url $url,
-        StoreManagerInterface $storeManager,
-        StoreRepository $storeRepository,
-        $service = "rest",
-        $version = "V1"
+        private readonly Url $url,
+        private readonly StoreManagerInterface $storeManager,
+        private readonly StoreRepository $storeRepository,
+        private $service = "rest",
+        private $version = "V1"
     ) {
-        $this->url = $url;
-        $this->service = $service;
-        $this->storeManager = $storeManager;
-        $this->version = $version;
-        $this->storeRepository = $storeRepository;
     }
 
     /**
@@ -78,12 +50,12 @@ class ServiceUrl implements InterpreterInterface
      *
      * @param array $data
      * @return string
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function evaluate(array $data)
     {
         if (!isset($data['path']) || empty($data['path'])) {
-            throw new \InvalidArgumentException('URL path is missing.');
+            throw new InvalidArgumentException('URL path is missing.');
         }
 
         if (isset($data['service'])) {

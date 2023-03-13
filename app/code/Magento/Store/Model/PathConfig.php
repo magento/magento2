@@ -5,47 +5,35 @@
  */
 namespace Magento\Store\Model;
 
-class PathConfig implements \Magento\Framework\App\Router\PathConfigInterface
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Router\PathConfigInterface;
+use Magento\Framework\Url;
+use Magento\Framework\Url\SecurityInfoInterface;
+
+class PathConfig implements PathConfigInterface
 {
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @var \Magento\Framework\Url\SecurityInfoInterface
-     */
-    private $urlSecurityInfo;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
+     * @param ScopeConfigInterface $scopeConfig
+     * @param SecurityInfoInterface $urlSecurityInfo
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
-        StoreManagerInterface $storeManager
+        private readonly ScopeConfigInterface $scopeConfig,
+        private readonly SecurityInfoInterface $urlSecurityInfo,
+        private readonly StoreManagerInterface $storeManager
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->urlSecurityInfo = $urlSecurityInfo;
-        $this->storeManager = $storeManager;
     }
 
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      * @return string
      */
-    public function getCurrentSecureUrl(\Magento\Framework\App\RequestInterface $request)
+    public function getCurrentSecureUrl(RequestInterface $request)
     {
-        $alias = $request->getAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS) ?: $request->getPathInfo();
+        $alias = $request->getAlias(Url::REWRITE_REQUEST_PATH_ALIAS) ?: $request->getPathInfo();
         return $this->storeManager->getStore()->getBaseUrl('link', true) . ltrim($alias, '/');
     }
 

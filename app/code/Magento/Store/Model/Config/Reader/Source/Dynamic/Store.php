@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Model\Config\Reader\Source\Dynamic;
 
+use DomainException;
 use Magento\Framework\App\Config\Scope\Converter;
 use Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory;
 use Magento\Framework\App\Config\Reader\Source\SourceInterface;
@@ -18,31 +19,6 @@ use Magento\Store\Model\WebsiteFactory;
 class Store implements SourceInterface
 {
     /**
-     * @var ScopedFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var Converter
-     */
-    private $converter;
-
-    /**
-     * @var WebsiteFactory
-     */
-    private $websiteFactory;
-
-    /**
-     * @var Website
-     */
-    private $websiteSource;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param ScopedFactory $collectionFactory
      * @param Converter $converter
      * @param WebsiteFactory $websiteFactory
@@ -50,17 +26,12 @@ class Store implements SourceInterface
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        ScopedFactory $collectionFactory,
-        Converter $converter,
-        WebsiteFactory $websiteFactory,
-        Website $websiteSource,
-        StoreManagerInterface $storeManager
+        private readonly ScopedFactory $collectionFactory,
+        private readonly Converter $converter,
+        private readonly WebsiteFactory $websiteFactory,
+        private readonly Website $websiteSource,
+        private readonly StoreManagerInterface $storeManager
     ) {
-        $this->collectionFactory = $collectionFactory;
-        $this->converter = $converter;
-        $this->websiteFactory = $websiteFactory;
-        $this->websiteSource = $websiteSource;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -85,7 +56,7 @@ class Store implements SourceInterface
                 $this->websiteSource->get($store->getWebsiteId()),
                 $this->converter->convert($config)
             ));
-        } catch (\DomainException $e) {
+        } catch (DomainException $e) {
             return [];
         }
     }

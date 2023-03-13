@@ -13,16 +13,11 @@ namespace Magento\Store\Model\StoreSwitcher;
 class RedirectDataPostprocessorComposite implements RedirectDataPostprocessorInterface
 {
     /**
-     * @var RedirectDataPostprocessorInterface[]
-     */
-    private $processors;
-
-    /**
      * @param RedirectDataPostprocessorInterface[] $processors
      */
-    public function __construct(array $processors = [])
-    {
-        $this->processors = $processors;
+    public function __construct(
+        private readonly array $processors = []
+    ) {
     }
 
     /**

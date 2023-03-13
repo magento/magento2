@@ -5,6 +5,29 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Config\Model\ResourceModel\Config\Data as ConfigData;
+use Magento\Directory\Model\Currency;
+use Magento\Directory\Model\CurrencyFactory;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ScopeInterface as AppScopeInterface;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Store\Api\Data\WebsiteExtensionInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\ResourceModel\Group\Collection as GroupCollection;
+use Magento\Store\Model\ResourceModel\Store\Collection as StoreCollection;
+use Magento\Store\Model\ResourceModel\Store\CollectionFactory as StoreCollectionFactory;
+use Magento\Store\Model\ResourceModel\Website as ResourceWebsite;
+
 /**
  * Core Website model
  *
@@ -16,17 +39,17 @@ namespace Magento\Store\Model;
  * @method int getWebsiteId()
  * @method bool hasWebsiteId()
  * @method int getSortOrder()
- * @method \Magento\Store\Model\Website setSortOrder($value)
+ * @method Website setSortOrder($value)
  * @method int getIsDefault()
- * @method \Magento\Store\Model\Website setIsDefault($value)
+ * @method Website setIsDefault($value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Website extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Framework\DataObject\IdentityInterface,
-    \Magento\Framework\App\ScopeInterface,
-    \Magento\Store\Api\Data\WebsiteInterface
+class Website extends AbstractExtensibleModel implements
+    IdentityInterface,
+    AppScopeInterface,
+    WebsiteInterface
 {
     const ENTITY = 'store_website';
 
@@ -57,7 +80,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * Website Group Collection array
      *
-     * @var \Magento\Store\Model\Store[]
+     * @var Store[]
      */
     protected $_groups;
 
@@ -106,7 +129,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * Website default group
      *
-     * @var \Magento\Store\Model\Store
+     * @var Store
      */
     protected $_defaultGroup;
 
@@ -130,17 +153,12 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     private $_isReadOnly = false;
 
     /**
-     * @var \Magento\Config\Model\ResourceModel\Config\Data
+     * @var ConfigData
      */
     protected $_configDataResource;
 
     /**
-     * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
-     */
-    protected $storeListFactory;
-
-    /**
-     * @var \Magento\Store\Model\GroupFactory
+     * @var GroupFactory
      */
     protected $_storeGroupFactory;
 
@@ -155,54 +173,49 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     protected $_storeManager;
 
     /**
-     * @var \Magento\Directory\Model\CurrencyFactory
+     * @var CurrencyFactory
      */
     protected $_currencyFactory;
 
     /**
-     * @var \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface
-     */
-    private $pillPut;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     private $_coreConfig;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Config\Model\ResourceModel\Config\Data $configDataResource
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
-     * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeListFactory
-     * @param \Magento\Store\Model\GroupFactory $storeGroupFactory
-     * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
+     * @param ConfigData $configDataResource
+     * @param ScopeConfigInterface $coreConfig
+     * @param CollectionFactory $storeListFactory
+     * @param GroupFactory $storeGroupFactory
+     * @param WebsiteFactory $websiteFactory
+     * @param StoreManagerInterface $storeManager
+     * @param CurrencyFactory $currencyFactory
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
-     * @param \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface|null $pillPut
+     * @param PoisonPillPutInterface|null $pillPut
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
-        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-        \Magento\Config\Model\ResourceModel\Config\Data $configDataResource,
-        \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
-        \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeListFactory,
-        \Magento\Store\Model\GroupFactory $storeGroupFactory,
-        \Magento\Store\Model\WebsiteFactory $websiteFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
+        ConfigData $configDataResource,
+        ScopeConfigInterface $coreConfig,
+        protected readonly CollectionFactory $storeListFactory,
+        GroupFactory $storeGroupFactory,
+        WebsiteFactory $websiteFactory,
+        StoreManagerInterface $storeManager,
+        CurrencyFactory $currencyFactory,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null
+        private ?PoisonPillPutInterface $pillPut = null
     ) {
         parent::__construct(
             $context,
@@ -215,13 +228,12 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
         );
         $this->_configDataResource = $configDataResource;
         $this->_coreConfig = $coreConfig;
-        $this->storeListFactory = $storeListFactory;
         $this->_storeGroupFactory = $storeGroupFactory;
         $this->_websiteFactory = $websiteFactory;
         $this->_storeManager = $storeManager;
         $this->_currencyFactory = $currencyFactory;
-        $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface::class);
+        $this->pillPut = $pillPut ?: ObjectManager::getInstance()
+            ->get(PoisonPillPutInterface::class);
     }
 
     /**
@@ -231,7 +243,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Store\Model\ResourceModel\Website::class);
+        $this->_init(ResourceWebsite::class);
     }
 
     /**
@@ -261,7 +273,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
         if (!isset($this->_configCache[$path])) {
             $config = $this->_coreConfig->getValue(
                 $path,
-                \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+                ScopeInterface::SCOPE_WEBSITE,
                 $this->getCode()
             );
             if (!$config) {
@@ -315,7 +327,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * Retrieve new (not loaded) Group collection object with website filter
      *
-     * @return \Magento\Store\Model\ResourceModel\Group\Collection
+     * @return GroupCollection
      */
     public function getGroupCollection()
     {
@@ -326,7 +338,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * Retrieve website groups
      *
-     * @return \Magento\Store\Model\Store[]
+     * @return Store[]
      */
     public function getGroups()
     {
@@ -365,7 +377,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * Retrieve default group model
      *
-     * @return \Magento\Store\Model\Store
+     * @return Store
      */
     public function getDefaultGroup()
     {
@@ -422,7 +434,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * Retrieve new (not loaded) Store collection object with website filter
      *
-     * @return \Magento\Store\Model\ResourceModel\Store\Collection
+     * @return StoreCollection
      */
     public function getStoreCollection()
     {
@@ -566,11 +578,11 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     public function beforeDelete()
     {
         $this->_configDataResource->clearScopeData(
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES,
+            ScopeInterface::SCOPE_WEBSITES,
             $this->getId()
         );
         $this->_configDataResource->clearScopeData(
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
+            ScopeInterface::SCOPE_STORES,
             $this->getStoreIds()
         );
         return parent::beforeDelete();
@@ -611,15 +623,15 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     public function getBaseCurrencyCode()
     {
         if ($this->getConfig(
-            \Magento\Store\Model\Store::XML_PATH_PRICE_SCOPE
-        ) == \Magento\Store\Model\Store::PRICE_SCOPE_GLOBAL
+            Store::XML_PATH_PRICE_SCOPE
+        ) == Store::PRICE_SCOPE_GLOBAL
         ) {
             $currencyCode = $this->_coreConfig->getValue(
-                \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
+                Currency::XML_PATH_CURRENCY_BASE,
                 'default'
             );
         } else {
-            $currencyCode = $this->getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE);
+            $currencyCode = $this->getConfig(Currency::XML_PATH_CURRENCY_BASE);
         }
 
         return $currencyCode;
@@ -628,7 +640,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * Retrieve website base currency
      *
-     * @return \Magento\Directory\Model\Currency
+     * @return Currency
      */
     public function getBaseCurrency()
     {
@@ -656,7 +668,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Retrieve default stores select object, select fields website_id, store_id
      *
      * @param bool $withDefault include/exclude default admin website
-     * @return \Magento\Framework\DB\Select
+     * @return Select
      */
     public function getDefaultStoresSelect($withDefault = false)
     {
@@ -693,7 +705,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      */
     public function getScopeType()
     {
-        return \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE;
+        return ScopeInterface::SCOPE_WEBSITE;
     }
 
     /**
@@ -717,7 +729,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @inheritdoc
      */
     public function setExtensionAttributes(
-        \Magento\Store\Api\Data\WebsiteExtensionInterface $extensionAttributes
+        WebsiteExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

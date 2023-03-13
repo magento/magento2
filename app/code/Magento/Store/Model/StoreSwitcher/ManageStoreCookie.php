@@ -20,33 +20,15 @@ use Magento\Store\Model\Store;
 class ManageStoreCookie implements StoreSwitcherInterface
 {
     /**
-     * @var StoreCookieManagerInterface
-     */
-    private $storeCookieManager;
-
-    /**
-     * @var HttpContext
-     */
-    private $httpContext;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param StoreCookieManagerInterface $storeCookieManager
      * @param HttpContext $httpContext
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        StoreCookieManagerInterface $storeCookieManager,
-        HttpContext $httpContext,
-        StoreManagerInterface $storeManager
+        private readonly StoreCookieManagerInterface $storeCookieManager,
+        private readonly HttpContext $httpContext,
+        private readonly StoreManagerInterface $storeManager
     ) {
-        $this->storeCookieManager = $storeCookieManager;
-        $this->httpContext = $httpContext;
-        $this->storeManager = $storeManager;
     }
 
     /**

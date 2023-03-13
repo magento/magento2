@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Model;
 
+use InvalidArgumentException;
 use Magento\Framework\App\ScopeValidatorInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -13,16 +14,11 @@ use Magento\Framework\App\ScopeResolverPool;
 class ScopeValidator implements ScopeValidatorInterface
 {
     /**
-     * @var ScopeResolverPool
-     */
-    protected $scopeResolverPool;
-
-    /**
      * @param ScopeResolverPool $scopeResolverPool
      */
-    public function __construct(ScopeResolverPool $scopeResolverPool)
-    {
-        $this->scopeResolverPool = $scopeResolverPool;
+    public function __construct(
+        protected readonly ScopeResolverPool $scopeResolverPool
+    ) {
     }
 
     /**
@@ -39,7 +35,7 @@ class ScopeValidator implements ScopeValidatorInterface
             if (!$scopeResolver->getScope($scopeId)->getId()) {
                 return false;
             }
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             return false;
         } catch (NoSuchEntityException $e) {
             return false;

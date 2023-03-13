@@ -6,8 +6,12 @@
 namespace Magento\Store\Model\Config;
 
 use Magento\Directory\Helper\Data;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Framework\View\DesignInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Retrieves theme and locale info associated with store-views
@@ -15,33 +19,15 @@ use Magento\Store\Model\ScopeInterface;
 class StoreView
 {
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var \Magento\Framework\View\Design\Theme\ThemeProviderInterface
-     */
-    private $themeProvider;
-
-    /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\View\Design\Theme\ThemeProviderInterface $themeProvider
+     * @param ScopeConfigInterface $scopeConfig
+     * @param StoreManagerInterface $storeManager
+     * @param ThemeProviderInterface $themeProvider
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\View\Design\Theme\ThemeProviderInterface $themeProvider
+        private readonly ScopeConfigInterface $scopeConfig,
+        private readonly StoreManagerInterface $storeManager,
+        private readonly ThemeProviderInterface $themeProvider
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->storeManager = $storeManager;
-        $this->themeProvider = $themeProvider;
     }
 
     /**
@@ -54,7 +40,7 @@ class StoreView
         $stores = $this->storeManager->getStores();
         $localeThemeData = [];
 
-        /** @var \Magento\Store\Api\Data\StoreInterface $store */
+        /** @var StoreInterface $store */
         foreach ($stores as $store) {
             $code = $store->getCode();
             $themeId = $this->scopeConfig->getValue(
@@ -85,7 +71,7 @@ class StoreView
         $stores = $this->storeManager->getStores();
         $locales = [];
 
-        /** @var \Magento\Store\Api\Data\StoreInterface $store */
+        /** @var StoreInterface $store */
         foreach ($stores as $store) {
             $locales[] = $this->scopeConfig->getValue(
                 Data::XML_PATH_DEFAULT_LOCALE,

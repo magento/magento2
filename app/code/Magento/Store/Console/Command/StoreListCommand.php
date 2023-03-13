@@ -6,6 +6,9 @@
  */
 namespace Magento\Store\Console\Command;
 
+use Exception;
+use Magento\Framework\Console\Cli;
+use Magento\Store\Model\StoreManagerInterface;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,17 +21,9 @@ use Symfony\Component\Console\Command\Command;
  */
 class StoreListCommand extends Command
 {
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        private readonly StoreManagerInterface $storeManager
     ) {
-        $this->storeManager = $storeManager;
         parent::__construct();
     }
 
@@ -66,14 +61,14 @@ class StoreListCommand extends Command
 
             $table->render();
 
-            return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
-        } catch (\Exception $e) {
+            return Cli::RETURN_SUCCESS;
+        } catch (Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
                 $output->writeln($e->getTraceAsString());
             }
 
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            return Cli::RETURN_FAILURE;
         }
     }
 }

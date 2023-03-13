@@ -8,6 +8,7 @@ namespace Magento\Store\App\Config\Source;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Store\Model\Config\Importer;
 
 /**
  * Config source. Retrieve all configuration data from files for specified config type
@@ -15,39 +16,15 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 class InitialConfigSource implements ConfigSourceInterface
 {
     /**
-     * The file reader
-     *
-     * @var Reader
-     */
-    private $reader;
-
-    /**
-     * The deployment config reader
-     *
-     * @var DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
-     * The config type
-     *
-     * @var string
-     */
-    private $configType;
-
-    /**
      * @param Reader $reader The file reader
      * @param DeploymentConfig $deploymentConfig The deployment config reader
      * @param string $configType The config type
      */
     public function __construct(
-        Reader $reader,
-        DeploymentConfig $deploymentConfig,
-        $configType
+        private readonly Reader $reader,
+        private readonly DeploymentConfig $deploymentConfig,
+        private $configType
     ) {
-        $this->reader = $reader;
-        $this->deploymentConfig = $deploymentConfig;
-        $this->configType = $configType;
     }
 
     /**
@@ -64,7 +41,7 @@ class InitialConfigSource implements ConfigSourceInterface
         /**
          * Magento store configuration should not be read from file source if database is available
          *
-         * @see \Magento\Store\Model\Config\Importer To import store configs
+         * @see Importer To import store configs
          */
         if ($this->deploymentConfig->isAvailable() || $this->deploymentConfig->isDbAvailable()) {
             return [];

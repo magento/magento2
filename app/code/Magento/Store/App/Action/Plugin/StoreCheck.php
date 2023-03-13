@@ -35,7 +35,7 @@ class StoreCheck
      * @param ActionInterface $subject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @throws \Magento\Framework\Exception\State\InitException
+     * @throws InitException
      */
     public function beforeExecute(ActionInterface $subject)
     {

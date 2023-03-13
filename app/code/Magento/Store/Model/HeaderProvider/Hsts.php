@@ -6,12 +6,14 @@
 
 namespace Magento\Store\Model\HeaderProvider;
 
-use \Magento\Store\Model\Store;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Response\HeaderProvider\AbstractHeaderProvider;
+use Magento\Store\Model\Store;
 
 /**
  * Adds an Strict-Transport-Security (HSTS) header to HTTP responses.
  */
-class Hsts extends \Magento\Framework\App\Response\HeaderProvider\AbstractHeaderProvider
+class Hsts extends AbstractHeaderProvider
 {
     /**
      * Strict-Transport-Security (HSTS) Header name
@@ -28,18 +30,13 @@ class Hsts extends \Magento\Framework\App\Response\HeaderProvider\AbstractHeader
     protected $headerValue = 'max-age=31536000';
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
      * Hsts constructor.
      *
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
-    {
-        $this->scopeConfig = $scopeConfig;
+    public function __construct(
+        protected readonly ScopeConfigInterface $scopeConfig
+    ) {
     }
 
     /**

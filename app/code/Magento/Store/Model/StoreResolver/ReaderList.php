@@ -5,36 +5,26 @@
  */
 namespace Magento\Store\Model\StoreResolver;
 
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreResolver\Group as StoreResolverGroup;
+use Magento\Store\Model\StoreResolver\Store as StoreResolverStore;
+use Magento\Store\Model\StoreResolver\Website as StoreResolverWebsite;
 
 class ReaderList
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    protected $objectManager;
-
-    /**
-     * @var array
-     */
-    protected $resolverMap;
-
-    // @codingStandardsIgnoreStart
-
-    /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param array $resolverMap
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        $resolverMap = [
-            ScopeInterface::SCOPE_WEBSITE => \Magento\Store\Model\StoreResolver\Website::class,
-            ScopeInterface::SCOPE_GROUP => \Magento\Store\Model\StoreResolver\Group::class,
-            ScopeInterface::SCOPE_STORE => \Magento\Store\Model\StoreResolver\Store::class,
+        protected readonly ObjectManagerInterface $objectManager,
+        protected $resolverMap = [
+            ScopeInterface::SCOPE_WEBSITE => StoreResolverWebsite::class,
+            ScopeInterface::SCOPE_GROUP => StoreResolverGroup::class,
+            ScopeInterface::SCOPE_STORE => StoreResolverStore::class,
         ]
     ) {
-        $this->resolverMap = $resolverMap;
-        $this->objectManager = $objectManager;
     }
 
     // @codingStandardsIgnoreEnd

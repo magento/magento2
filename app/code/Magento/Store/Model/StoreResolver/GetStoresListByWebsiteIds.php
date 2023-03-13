@@ -15,16 +15,11 @@ use Magento\Store\Api\StoreWebsiteRelationInterface;
 class GetStoresListByWebsiteIds
 {
     /**
-     * @var StoreWebsiteRelationInterface
-     */
-    private $storeWebsiteRelation;
-
-    /**
      * @param StoreWebsiteRelationInterface $storeWebsiteRelation
      */
-    public function __construct(StoreWebsiteRelationInterface $storeWebsiteRelation)
-    {
-        $this->storeWebsiteRelation = $storeWebsiteRelation;
+    public function __construct(
+        private readonly StoreWebsiteRelationInterface $storeWebsiteRelation
+    ) {
     }
 
     /**

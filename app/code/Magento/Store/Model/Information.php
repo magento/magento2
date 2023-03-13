@@ -43,32 +43,16 @@ class Information
     const XML_PATH_STORE_INFO_VAT_NUMBER = 'general/store_information/merchant_vat_number';
     /**#@-*/
 
-    /**#@-*/
-    protected $renderer;
-
-    /**
-     * @var CountryFactory
-     */
-    protected $countryFactory;
-
-    /**
-     * @var RegionFactory
-     */
-    protected $regionFactory;
-
     /**
      * @param Renderer $renderer
      * @param RegionFactory $regionFactory
      * @param CountryFactory $countryFactory
      */
     public function __construct(
-        Renderer $renderer,
-        RegionFactory $regionFactory,
-        CountryFactory $countryFactory
+        protected readonly Renderer $renderer,
+        protected readonly RegionFactory $regionFactory,
+        protected readonly CountryFactory $countryFactory
     ) {
-        $this->renderer = $renderer;
-        $this->regionFactory = $regionFactory;
-        $this->countryFactory = $countryFactory;
     }
 
     /**

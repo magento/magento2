@@ -15,17 +15,11 @@ use Magento\Framework\App\Config\ValueInterface;
 class CompositeTagGenerator implements TagGeneratorInterface
 {
     /**
-     * @var TagGeneratorInterface[]
-     */
-    private $tagGenerators;
-
-    /**
      * @param TagGeneratorInterface[] $tagGenerators
      */
     public function __construct(
-        array $tagGenerators
+        private readonly array $tagGenerators
     ) {
-        $this->tagGenerators = $tagGenerators;
     }
 
     /**

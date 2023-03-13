@@ -20,17 +20,11 @@ use Magento\Framework\Url\Helper\Data as UrlHelper;
 class CleanTargetUrl implements StoreSwitcherInterface
 {
     /**
-     * @var UrlHelper
-     */
-    private $urlHelper;
-
-    /**
      * @param UrlHelper $urlHelper
      */
     public function __construct(
-        UrlHelper $urlHelper
+        private readonly UrlHelper $urlHelper
     ) {
-        $this->urlHelper = $urlHelper;
     }
 
     /**

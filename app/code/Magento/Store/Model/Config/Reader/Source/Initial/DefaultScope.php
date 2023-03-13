@@ -16,25 +16,13 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class DefaultScope implements SourceInterface
 {
     /**
-     * @var Initial
-     */
-    private $initialConfig;
-
-    /**
-     * @var Converter
-     */
-    private $converter;
-
-    /**
      * @param Initial $initialConfig
      * @param Converter $converter
      */
     public function __construct(
-        Initial $initialConfig,
-        Converter $converter
+        private readonly Initial $initialConfig,
+        private readonly Converter $converter
     ) {
-        $this->initialConfig = $initialConfig;
-        $this->converter = $converter;
     }
 
     /**

@@ -33,34 +33,6 @@ use Magento\Store\Model\StoreSwitcher\RedirectDataGenerator;
 class Redirect extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
-     * @var StoreRepositoryInterface
-     */
-    private $storeRepository;
-
-    /**
-     * @var StoreResolverInterface
-     */
-    private $storeResolver;
-
-    /**
-     * @var HashGenerator
-     */
-    private $hashGenerator;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-    /**
-     * @var RedirectDataGenerator|null
-     */
-    private $redirectDataGenerator;
-    /**
-     * @var ContextInterfaceFactory|null
-     */
-    private $contextFactory;
-
-    /**
      * @param Context $context
      * @param StoreRepositoryInterface $storeRepository
      * @param StoreResolverInterface $storeResolver
@@ -75,19 +47,16 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
      */
     public function __construct(
         Context $context,
-        StoreRepositoryInterface $storeRepository,
-        StoreResolverInterface $storeResolver,
+        private readonly StoreRepositoryInterface $storeRepository,
+        private readonly StoreResolverInterface $storeResolver,
         Generic $session,
         SidResolverInterface $sidResolver,
-        HashGenerator $hashGenerator,
-        StoreManagerInterface $storeManager = null,
-        ?RedirectDataGenerator $redirectDataGenerator = null,
-        ?ContextInterfaceFactory $contextFactory = null
+        private readonly HashGenerator $hashGenerator,
+        private ?StoreManagerInterface $storeManager = null,
+        private ?RedirectDataGenerator $redirectDataGenerator = null,
+        private ?ContextInterfaceFactory $contextFactory = null
     ) {
         parent::__construct($context);
-        $this->storeRepository = $storeRepository;
-        $this->storeResolver = $storeResolver;
-        $this->hashGenerator = $hashGenerator;
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->redirectDataGenerator = $redirectDataGenerator
             ?: ObjectManager::getInstance()->get(RedirectDataGenerator::class);

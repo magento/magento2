@@ -6,6 +6,7 @@
 namespace Magento\Store\Model;
 
 use Magento\Store\Api\StoreManagementInterface;
+use Magento\Store\Model\ResourceModel\Store\Collection as StoreCollection;
 use Magento\Store\Model\ResourceModel\Store\CollectionFactory;
 
 /**
@@ -15,16 +16,11 @@ use Magento\Store\Model\ResourceModel\Store\CollectionFactory;
 class StoreManagement implements StoreManagementInterface
 {
     /**
-     * @var CollectionFactory
-     */
-    protected $storesFactory;
-
-    /**
      * @param CollectionFactory $storesFactory
      */
-    public function __construct(CollectionFactory $storesFactory)
-    {
-        $this->storesFactory = $storesFactory;
+    public function __construct(
+        protected readonly CollectionFactory $storesFactory
+    ) {
     }
 
     /**
@@ -33,7 +29,7 @@ class StoreManagement implements StoreManagementInterface
     public function getCount()
     {
         $stores = $this->storesFactory->create();
-        /** @var \Magento\Store\Model\ResourceModel\Store\Collection $stores */
+        /** @var StoreCollection $stores */
         $stores->setWithoutDefaultFilter();
         return $stores->getSize();
     }

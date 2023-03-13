@@ -6,36 +6,23 @@
 
 namespace Magento\Store\Model\Config;
 
+use Magento\Framework\App\RequestInterface;
+
 /**
  * Placeholder configuration values processor. Replace placeholders in configuration with config values
  */
 class Placeholder
 {
     /**
-     * @var \Magento\Framework\App\RequestInterface
-     */
-    protected $request;
-
-    /**
-     * @var string[]
-     */
-    protected $urlPaths;
-
-    /**
-     * @var string
-     */
-    protected $urlPlaceholder;
-
-    /**
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      * @param string[] $urlPaths
      * @param string $urlPlaceholder
      */
-    public function __construct(\Magento\Framework\App\RequestInterface $request, $urlPaths, $urlPlaceholder)
-    {
-        $this->request        = $request;
-        $this->urlPaths       = $urlPaths;
-        $this->urlPlaceholder = $urlPlaceholder;
+    public function __construct(
+        protected readonly RequestInterface $request,
+        protected $urlPaths,
+        protected $urlPlaceholder
+    ) {
     }
 
     /**

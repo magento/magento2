@@ -5,6 +5,8 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Request\Http;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -13,26 +15,20 @@ use Magento\Store\Model\ScopeInterface;
 class BaseUrlChecker
 {
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * BaseUrlChecker constructor.
      *
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        private readonly ScopeConfigInterface $scopeConfig
     ) {
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**
      * Performs verification.
      *
      * @param array $uri
-     * @param \Magento\Framework\App\Request\Http $request
+     * @param Http $request
      * @return bool
      */
     public function execute($uri, $request)

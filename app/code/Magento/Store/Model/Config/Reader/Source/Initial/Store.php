@@ -5,9 +5,11 @@
  */
 namespace Magento\Store\Model\Config\Reader\Source\Initial;
 
+use Exception;
 use Magento\Framework\App\Config\Initial;
 use Magento\Framework\App\Config\Reader\Source\SourceInterface;
 use Magento\Framework\App\Config\Scope\Converter;
+use Magento\Store\Model\Store as ModelStore;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -16,24 +18,9 @@ use Magento\Store\Model\StoreManagerInterface;
 class Store implements SourceInterface
 {
     /**
-     * @var Initial
-     */
-    private $initialConfig;
-
-    /**
      * @var Website
      */
     private $websiteSource;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var Converter
-     */
-    private $converter;
 
     /**
      * @param Initial $initialConfig
@@ -42,15 +29,12 @@ class Store implements SourceInterface
      * @param Converter $converter
      */
     public function __construct(
-        Initial $initialConfig,
+        private readonly Initial $initialConfig,
         Website $website,
-        StoreManagerInterface $storeManager,
-        Converter $converter
+        private readonly StoreManagerInterface $storeManager,
+        private readonly Converter $converter
     ) {
-        $this->initialConfig = $initialConfig;
         $this->websiteSource = $website;
-        $this->storeManager = $storeManager;
-        $this->converter = $converter;
     }
 
     /**
@@ -62,13 +46,13 @@ class Store implements SourceInterface
     public function get($scopeCode = null)
     {
         try {
-            /** @var \Magento\Store\Model\Store $store */
+            /** @var ModelStore $store */
             $store = $this->storeManager->getStore($scopeCode);
             return $this->converter->convert(array_replace_recursive(
                 $this->websiteSource->get($store->getData('website_code')),
                 $this->initialConfig->getData("stores|{$scopeCode}")
             ));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return [];
         }
     }

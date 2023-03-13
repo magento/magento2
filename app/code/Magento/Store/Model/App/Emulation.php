@@ -9,8 +9,11 @@
  */
 namespace Magento\Store\Model\App;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DesignInterface as AppDesignInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\RendererInterface;
@@ -26,7 +29,7 @@ use Psr\Log\LoggerInterface;
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Emulation extends \Magento\Framework\DataObject
+class Emulation extends DataObject
 {
     /**
      * @var StoreManagerInterface
@@ -51,31 +54,16 @@ class Emulation extends \Magento\Framework\DataObject
     protected $_localeResolver;
 
     /**
-     * @var \Magento\Framework\App\DesignInterface
+     * @var AppDesignInterface
      */
     protected $_design;
 
     /**
-     * @var ConfigInterface
-     */
-    protected $inlineConfig;
-
-    /**
-     * @var StateInterface
-     */
-    protected $inlineTranslation;
-
-    /**
      * Ini
      *
-     * @var \Magento\Framework\DataObject
+     * @var DataObject
      */
     private $initialEnvironmentInfo;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
 
     /**
      * @var DesignInterface
@@ -83,14 +71,9 @@ class Emulation extends \Magento\Framework\DataObject
     private $_viewDesign;
 
     /**
-     * @var RendererInterface
-     */
-    private $phraseRenderer;
-
-    /**
      * @param StoreManagerInterface $storeManager
      * @param DesignInterface $viewDesign
-     * @param \Magento\Framework\App\DesignInterface $design
+     * @param AppDesignInterface $design
      * @param TranslateInterface $translate
      * @param ScopeConfigInterface $scopeConfig
      * @param ConfigInterface $inlineConfig
@@ -104,15 +87,15 @@ class Emulation extends \Magento\Framework\DataObject
     public function __construct(
         StoreManagerInterface $storeManager,
         DesignInterface $viewDesign,
-        \Magento\Framework\App\DesignInterface $design,
+        AppDesignInterface $design,
         TranslateInterface $translate,
         ScopeConfigInterface $scopeConfig,
-        ConfigInterface $inlineConfig,
-        StateInterface $inlineTranslation,
+        protected readonly ConfigInterface $inlineConfig,
+        protected readonly StateInterface $inlineTranslation,
         ResolverInterface $localeResolver,
-        LoggerInterface $logger,
+        private readonly LoggerInterface $logger,
         array $data = [],
-        ?RendererInterface $phraseRenderer = null
+        private ?RendererInterface $phraseRenderer = null
     ) {
         $this->_localeResolver = $localeResolver;
         parent::__construct($data);
@@ -121,9 +104,6 @@ class Emulation extends \Magento\Framework\DataObject
         $this->_design = $design;
         $this->_translate = $translate;
         $this->_scopeConfig = $scopeConfig;
-        $this->inlineConfig = $inlineConfig;
-        $this->inlineTranslation = $inlineTranslation;
-        $this->logger = $logger;
         $this->phraseRenderer = $phraseRenderer
             ?? ObjectManager::getInstance()->get(RendererInterface::class);
     }
@@ -138,7 +118,7 @@ class Emulation extends \Magento\Framework\DataObject
      */
     public function startEnvironmentEmulation(
         $storeId,
-        $area = \Magento\Framework\App\Area::AREA_FRONTEND,
+        $area = Area::AREA_FRONTEND,
         $force = false
     ) {
         // Only allow a single level of emulation
@@ -159,7 +139,7 @@ class Emulation extends \Magento\Framework\DataObject
         $storeTheme = $this->_viewDesign->getConfigurationDesignTheme($area, ['store' => $storeId]);
         $this->_viewDesign->setDesignTheme($storeTheme, $area);
 
-        if ($area == \Magento\Framework\App\Area::AREA_FRONTEND) {
+        if ($area == Area::AREA_FRONTEND) {
             $designChange = $this->_design->loadChange($storeId);
             if ($designChange->getData()) {
                 $this->_viewDesign->setDesignTheme($designChange->getDesign(), $area);
@@ -186,7 +166,7 @@ class Emulation extends \Magento\Framework\DataObject
      *
      * Function restores initial store environment
      *
-     * @return \Magento\Store\Model\App\Emulation
+     * @return Emulation
      */
     public function stopEnvironmentEmulation()
     {
@@ -212,7 +192,7 @@ class Emulation extends \Magento\Framework\DataObject
      */
     public function storeCurrentEnvironmentInfo()
     {
-        $this->initialEnvironmentInfo = new \Magento\Framework\DataObject();
+        $this->initialEnvironmentInfo = new DataObject();
         $this->initialEnvironmentInfo->setInitialTranslateInline(
             $this->inlineTranslation->isEnabled()
         )->setInitialDesign(
@@ -261,7 +241,7 @@ class Emulation extends \Magento\Framework\DataObject
      */
     protected function _restoreInitialLocale(
         $initialLocaleCode,
-        $initialArea = \Magento\Framework\App\Area::AREA_ADMINHTML
+        $initialArea = Area::AREA_ADMINHTML
     ) {
         $this->_localeResolver->setLocale($initialLocaleCode);
         $this->_translate->setLocale($initialLocaleCode);

@@ -19,33 +19,15 @@ use Magento\Store\Api\WebsiteRepositoryInterface;
 class ScopeTreeProvider implements ScopeTreeProviderInterface
 {
     /**
-     * @var WebsiteRepositoryInterface
-     */
-    private $websiteRepository;
-
-    /**
-     * @var GroupRepositoryInterface
-     */
-    private $groupRepository;
-
-    /**
-     * @var StoreRepositoryInterface
-     */
-    private $storeRepository;
-
-    /**
      * @param WebsiteRepositoryInterface $websiteRepository
      * @param GroupRepositoryInterface $groupRepository
      * @param StoreRepositoryInterface $storeRepository
      */
     public function __construct(
-        WebsiteRepositoryInterface $websiteRepository,
-        GroupRepositoryInterface $groupRepository,
-        StoreRepositoryInterface $storeRepository
+        private readonly WebsiteRepositoryInterface $websiteRepository,
+        private readonly GroupRepositoryInterface $groupRepository,
+        private readonly StoreRepositoryInterface $storeRepository
     ) {
-        $this->websiteRepository = $websiteRepository;
-        $this->groupRepository = $groupRepository;
-        $this->storeRepository = $storeRepository;
     }
 
     /**

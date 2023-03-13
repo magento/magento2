@@ -6,31 +6,37 @@
 
 namespace Magento\Store\Model\Resolver;
 
-class Website implements \Magento\Framework\App\ScopeResolverInterface
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\Exception\State\InitException;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website as ModelWebsite;
+
+class Website implements ScopeResolverInterface
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager
     ) {
         $this->_storeManager = $storeManager;
     }
 
     /**
      * {@inheritdoc}
-     * @throws \Magento\Framework\Exception\State\InitException
+     * @throws InitException
      */
     public function getScope($scopeId = null)
     {
         $scope = $this->_storeManager->getWebsite($scopeId);
-        if (!($scope instanceof \Magento\Framework\App\ScopeInterface)) {
-            throw new \Magento\Framework\Exception\State\InitException(
+        if (!($scope instanceof ScopeInterface)) {
+            throw new InitException(
                 __('The scope object is invalid. Verify the scope object and try again.')
             );
         }
@@ -41,7 +47,7 @@ class Website implements \Magento\Framework\App\ScopeResolverInterface
     /**
      * Retrieve a list of available websites
      *
-     * @return \Magento\Store\Model\Website[]
+     * @return ModelWebsite[]
      */
     public function getScopes()
     {

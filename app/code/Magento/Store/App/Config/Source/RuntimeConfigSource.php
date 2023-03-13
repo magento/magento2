@@ -17,16 +17,6 @@ use Magento\Framework\DB\Adapter\TableNotFoundException;
 class RuntimeConfigSource implements ConfigSourceInterface
 {
     /**
-     * @var DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
-     * @var ResourceConnection
-     */
-    private $resourceConnection;
-
-    /**
      * @var AdapterInterface
      */
     private $connection;
@@ -36,11 +26,9 @@ class RuntimeConfigSource implements ConfigSourceInterface
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        DeploymentConfig $deploymentConfig,
-        ResourceConnection $resourceConnection
+        private readonly DeploymentConfig $deploymentConfig,
+        private readonly ResourceConnection $resourceConnection
     ) {
-        $this->deploymentConfig = $deploymentConfig;
-        $this->resourceConnection = $resourceConnection;
     }
 
     /**

@@ -6,6 +6,10 @@
  */
 namespace Magento\Store\Console\Command;
 
+use Exception;
+use Magento\Framework\Console\Cli;
+use Magento\Store\Api\WebsiteManagementInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,14 +23,14 @@ use Symfony\Component\Console\Command\Command;
 class WebsiteListCommand extends Command
 {
     /**
-     * @var \Magento\Store\Api\WebsiteManagementInterface
+     * @var WebsiteManagementInterface
      */
     private $manager;
 
     /**
      */
     public function __construct(
-        \Magento\Store\Api\WebsiteRepositoryInterface $websiteManagement
+        WebsiteRepositoryInterface $websiteManagement
     ) {
         $this->manager = $websiteManagement;
         parent::__construct();
@@ -65,14 +69,14 @@ class WebsiteListCommand extends Command
 
             $table->render();
 
-            return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
-        } catch (\Exception $e) {
+            return Cli::RETURN_SUCCESS;
+        } catch (Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
                 $output->writeln($e->getTraceAsString());
             }
 
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            return Cli::RETURN_FAILURE;
         }
     }
 }

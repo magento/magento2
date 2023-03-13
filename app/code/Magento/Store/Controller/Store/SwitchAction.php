@@ -11,7 +11,10 @@ namespace Magento\Store\Controller\Store;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context as ActionContext;
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
+use Magento\Framework\Stdlib\Cookie\FailureToSendException;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreIsInactiveException;
@@ -30,36 +33,16 @@ use Magento\Store\Controller\Store\SwitchAction\CookieManager;
 class SwitchAction extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
-     * @var StoreCookieManagerInterface
-     */
-    protected $storeCookieManager;
-
-    /**
      * @var HttpContext
      * @deprecated 100.2.5
      */
     protected $httpContext;
 
     /**
-     * @var StoreRepositoryInterface
-     */
-    protected $storeRepository;
-
-    /**
      * @var StoreManagerInterface
      * @deprecated 100.2.5
      */
     protected $storeManager;
-
-    /**
-     * @var StoreSwitcherInterface
-     */
-    private $storeSwitcher;
-
-    /**
-     * @var CookieManager
-     */
-    private $cookieManager;
 
     /**
      * Initialize dependencies.
@@ -74,21 +57,17 @@ class SwitchAction extends Action implements HttpGetActionInterface, HttpPostAct
      */
     public function __construct(
         ActionContext $context,
-        StoreCookieManagerInterface $storeCookieManager,
+        protected readonly StoreCookieManagerInterface $storeCookieManager,
         HttpContext $httpContext,
-        StoreRepositoryInterface $storeRepository,
+        protected readonly StoreRepositoryInterface $storeRepository,
         StoreManagerInterface $storeManager,
-        StoreSwitcherInterface $storeSwitcher,
-        CookieManager $cookieManager
+        private readonly StoreSwitcherInterface $storeSwitcher,
+        private readonly CookieManager $cookieManager
     ) {
         parent::__construct($context);
-        $this->storeCookieManager = $storeCookieManager;
         $this->httpContext = $httpContext;
-        $this->storeRepository = $storeRepository;
         $this->storeManager = $storeManager;
         $this->messageManager = $context->getMessageManager();
-        $this->storeSwitcher = $storeSwitcher;
-        $this->cookieManager = $cookieManager;
     }
 
     /**
@@ -96,9 +75,9 @@ class SwitchAction extends Action implements HttpGetActionInterface, HttpPostAct
      *
      * @return void
      * @throws StoreSwitcher\CannotSwitchStoreException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
-     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
+     * @throws InputException
+     * @throws CookieSizeLimitReachedException
+     * @throws FailureToSendException
      */
     public function execute()
     {

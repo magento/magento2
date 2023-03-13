@@ -8,21 +8,19 @@ namespace Magento\Store\Model;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\Config;
+use Magento\Store\Api\Data\GroupInterface;
+use Magento\Store\Api\GroupRepositoryInterface;
+use Magento\Store\Model\ResourceModel\Group\CollectionFactory as GroupCollectionFactory;
 
 /**
  * Information Expert in store groups handling
  *
  * @package Magento\Store\Model
  */
-class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
+class GroupRepository implements GroupRepositoryInterface
 {
     /**
-     * @var GroupFactory
-     */
-    protected $groupFactory;
-
-    /**
-     * @var \Magento\Store\Api\Data\GroupInterface[]
+     * @var GroupInterface[]
      */
     protected $entities = [];
 
@@ -32,25 +30,18 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
     protected $allLoaded = false;
 
     /**
-     * @var \Magento\Store\Model\ResourceModel\Group\CollectionFactory
-     */
-    protected $groupCollectionFactory;
-
-    /**
      * @var Config
      */
     private $appConfig;
 
     /**
      * @param GroupFactory $groupFactory
-     * @param \Magento\Store\Model\ResourceModel\Group\CollectionFactory $groupCollectionFactory
+     * @param GroupCollectionFactory $groupCollectionFactory
      */
     public function __construct(
-        GroupFactory $groupFactory,
-        \Magento\Store\Model\ResourceModel\Group\CollectionFactory $groupCollectionFactory
+        protected readonly GroupFactory $groupFactory,
+        protected readonly GroupCollectionFactory $groupCollectionFactory
     ) {
-        $this->groupFactory = $groupFactory;
-        $this->groupCollectionFactory = $groupCollectionFactory;
     }
 
     /**

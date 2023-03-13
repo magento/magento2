@@ -6,30 +6,37 @@
 
 namespace Magento\Store\Model\Resolver;
 
-class Store implements \Magento\Framework\App\ScopeResolverInterface
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\Exception\State\InitException;
+use Magento\Store\Model\Store as ModelStore;
+use Magento\Store\Model\StoreManagerInterface;
+
+class Store implements ScopeResolverInterface
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
-    {
+    public function __construct(
+        StoreManagerInterface $storeManager
+    ) {
         $this->_storeManager = $storeManager;
     }
 
     /**
      * {@inheritdoc}
-     * @throws \Magento\Framework\Exception\State\InitException
+     * @throws InitException
      */
     public function getScope($scopeId = null)
     {
         $scope = $this->_storeManager->getStore($scopeId);
-        if (!$scope instanceof \Magento\Framework\App\ScopeInterface) {
-            throw new \Magento\Framework\Exception\State\InitException(
+        if (!$scope instanceof ScopeInterface) {
+            throw new InitException(
                 __('The scope object is invalid. Verify the scope object and try again.')
             );
         }
@@ -40,7 +47,7 @@ class Store implements \Magento\Framework\App\ScopeResolverInterface
     /**
      * Retrieve a list of available stores
      *
-     * @return \Magento\Store\Model\Store[]
+     * @return ModelStore[]
      */
     public function getScopes()
     {

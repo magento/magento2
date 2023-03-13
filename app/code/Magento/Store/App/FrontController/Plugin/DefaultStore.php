@@ -5,8 +5,11 @@
  */
 namespace Magento\Store\App\FrontController\Plugin;
 
-use \Magento\Store\Model\StoreResolver\ReaderList;
-use \Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\FrontController;
+use Magento\Framework\App\RequestInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\StoreResolver\ReaderList;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Plugin to set default store for admin area.
@@ -14,57 +17,34 @@ use \Magento\Store\Model\ScopeInterface;
 class DefaultStore
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var ReaderList
-     */
-    protected $readerList;
-
-    /**
-     * @var string
-     */
-    protected $runMode;
-
-    /**
-     * @var string
-     */
-    protected $scopeCode;
-
-    /**
      * Initialize dependencies.
      *
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param ReaderList $readerList
      * @param string $runMode
      * @param null $scopeCode
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        ReaderList $readerList,
-        $runMode = ScopeInterface::SCOPE_STORE,
-        $scopeCode = null
+        protected readonly StoreManagerInterface $storeManager,
+        protected readonly ReaderList $readerList,
+        protected $runMode = ScopeInterface::SCOPE_STORE,
+        protected $scopeCode = null
     ) {
         $this->runMode = $scopeCode ? $runMode : ScopeInterface::SCOPE_WEBSITE;
-        $this->scopeCode = $scopeCode;
-        $this->readerList = $readerList;
-        $this->storeManager = $storeManager;
     }
 
     /**
      * Set current store for admin area
      *
-     * @param \Magento\Framework\App\FrontController $subject
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param FrontController $subject
+     * @param RequestInterface $request
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeDispatch(
-        \Magento\Framework\App\FrontController $subject,
-        \Magento\Framework\App\RequestInterface $request
+        FrontController $subject,
+        RequestInterface $request
     ) {
         $reader = $this->readerList->getReader($this->runMode);
         $defaultStoreId = $reader->getDefaultStoreId($this->scopeCode);

@@ -22,16 +22,6 @@ use Magento\Store\Model\ResourceModel\Website\AllWebsitesCollectionFactory;
 class Fallback implements PostProcessorInterface
 {
     /**
-     * @var Scopes
-     */
-    private $scopes;
-
-    /**
-     * @var ResourceConnection
-     */
-    private $resourceConnection;
-
-    /**
      * @var array
      */
     private $storeData = [];
@@ -40,21 +30,6 @@ class Fallback implements PostProcessorInterface
      * @var array
      */
     private $websiteData = [];
-
-    /**
-     * @var Store
-     */
-    private $storeResource;
-
-    /**
-     * @var Website
-     */
-    private $websiteResource;
-
-    /**
-     * @var DeploymentConfig
-     */
-    private $deploymentConfig;
 
     /**
      * Fallback constructor.
@@ -66,17 +41,12 @@ class Fallback implements PostProcessorInterface
      * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
-        Scopes $scopes,
-        ResourceConnection $resourceConnection,
-        Store $storeResource,
-        Website $websiteResource,
-        DeploymentConfig $deploymentConfig
+        private readonly Scopes $scopes,
+        private readonly ResourceConnection $resourceConnection,
+        private readonly Store $storeResource,
+        private readonly Website $websiteResource,
+        private readonly DeploymentConfig $deploymentConfig
     ) {
-        $this->scopes = $scopes;
-        $this->resourceConnection = $resourceConnection;
-        $this->storeResource = $storeResource;
-        $this->websiteResource = $websiteResource;
-        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**

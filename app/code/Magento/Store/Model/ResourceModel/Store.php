@@ -5,26 +5,34 @@
  */
 namespace Magento\Store\Model\ResourceModel;
 
+use Magento\Framework\App\Cache\Type\Config as CacheTypeConfig;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context as DbContext;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store as ModelStore;
+
 /**
  * Store Resource Model
  *
  * @api
  * @since 100.0.2
  */
-class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Store extends AbstractDb
 {
     /**
-     * @var \Magento\Framework\App\Cache\Type\Config
+     * @var CacheTypeConfig
      */
     protected $configCache;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
+     * @param DbContext $context
+     * @param CacheTypeConfig $configCacheType
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\App\Cache\Type\Config $configCacheType
+        DbContext $context,
+        CacheTypeConfig $configCacheType
     ) {
         $this->configCache = $configCacheType;
         parent::__construct($context);
@@ -72,10 +80,10 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Update Store Group data after save store
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _afterSave(AbstractModel $object)
     {
         parent::_afterSave($object);
         $this->_updateGroupDefaultStore($object->getGroupId(), $object->getId());
@@ -87,13 +95,13 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Remove configuration data after delete store
      *
-     * @param \Magento\Framework\Model\AbstractModel $model
+     * @param AbstractModel $model
      * @return $this
      */
-    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $model)
+    protected function _afterDelete(AbstractModel $model)
     {
         $where = [
-            'scope = ?' => \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
+            'scope = ?' => ScopeInterface::SCOPE_STORES,
             'scope_id = ?' => $model->getStoreId(),
         ];
 
@@ -134,10 +142,10 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Change store group for store
      *
-     * @param \Magento\Framework\Model\AbstractModel $model
+     * @param AbstractModel $model
      * @return $this
      */
-    protected function _changeGroup(\Magento\Framework\Model\AbstractModel $model)
+    protected function _changeGroup(AbstractModel $model)
     {
         if ($model->getOriginalGroupId() && $model->getGroupId() != $model->getOriginalGroupId()) {
             $connection = $this->getConnection();
@@ -150,7 +158,7 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $storeId = $connection->fetchOne($select);
 
             if ($storeId == $model->getId()) {
-                $bind = ['default_store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID];
+                $bind = ['default_store_id' => ModelStore::DEFAULT_STORE_ID];
                 $where = ['group_id = ?' => $model->getOriginalGroupId()];
                 $this->getConnection()->update($this->getTable('store_group'), $bind, $where);
             }
@@ -177,8 +185,8 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $field
      * @param mixed $value
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return \Magento\Framework\DB\Select
+     * @param AbstractModel $object
+     * @return Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {

@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Model\Config\Reader\Source\Dynamic;
 
+use DomainException;
 use Magento\Framework\App\Config\Scope\Converter;
 use Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory;
 use Magento\Framework\App\Config\Reader\Source\SourceInterface;
@@ -17,41 +18,17 @@ use Magento\Store\Model\WebsiteFactory;
 class Website implements SourceInterface
 {
     /**
-     * @var ScopedFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var Converter
-     */
-    private $converter;
-
-    /**
-     * @var WebsiteFactory
-     */
-    private $websiteFactory;
-
-    /**
-     * @var DefaultScope
-     */
-    private $defaultScope;
-
-    /**
      * @param ScopedFactory $collectionFactory
      * @param Converter $converter
      * @param WebsiteFactory $websiteFactory
      * @param DefaultScope $defaultScope
      */
     public function __construct(
-        ScopedFactory $collectionFactory,
-        Converter $converter,
-        WebsiteFactory $websiteFactory,
-        DefaultScope $defaultScope
+        private readonly ScopedFactory $collectionFactory,
+        private readonly Converter $converter,
+        private readonly WebsiteFactory $websiteFactory,
+        private readonly DefaultScope $defaultScope
     ) {
-        $this->collectionFactory = $collectionFactory;
-        $this->converter = $converter;
-        $this->websiteFactory = $websiteFactory;
-        $this->defaultScope = $defaultScope;
     }
 
     /**
@@ -73,7 +50,7 @@ class Website implements SourceInterface
                 $config[$item->getPath()] = $item->getValue();
             }
             return array_replace_recursive($this->defaultScope->get(), $this->converter->convert($config));
-        } catch (\DomainException $e) {
+        } catch (DomainException $e) {
             return [];
         }
     }

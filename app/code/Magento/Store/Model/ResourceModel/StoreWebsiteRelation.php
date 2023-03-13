@@ -13,17 +13,12 @@ use Magento\Framework\App\ResourceConnection;
 class StoreWebsiteRelation
 {
     /**
-     * @var \Magento\Framework\App\ResourceConnection
-     */
-    private $resource;
-
-    /**
      * StoreWebsiteRelation constructor.
      * @param ResourceConnection $resource
      */
-    public function __construct(ResourceConnection $resource)
-    {
-        $this->resource = $resource;
+    public function __construct(
+        private readonly ResourceConnection $resource
+    ) {
     }
 
     /**

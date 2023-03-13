@@ -9,6 +9,7 @@ namespace Magento\Store\App\Request;
 
 use Magento\Framework\App\Request\PathInfoProcessorInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Router\Base as AppRouterBase;
 
 /**
  * Processes the path and looks for the store in the url and removes it and modifies the path accordingly.
@@ -16,16 +17,11 @@ use Magento\Framework\App\RequestInterface;
 class PathInfoProcessor implements PathInfoProcessorInterface
 {
     /**
-     * @var StorePathInfoValidator
-     */
-    private $storePathInfoValidator;
-
-    /**
      * @param StorePathInfoValidator $storePathInfoValidator
      */
-    public function __construct(StorePathInfoValidator $storePathInfoValidator)
-    {
-        $this->storePathInfoValidator = $storePathInfoValidator;
+    public function __construct(
+        private readonly StorePathInfoValidator $storePathInfoValidator
+    ) {
     }
 
     /**
@@ -45,7 +41,7 @@ class PathInfoProcessor implements PathInfoProcessorInterface
                 $pathInfo = $this->trimStoreCodeFromPathInfo($pathInfo, $storeCode);
             } else {
                 //no route in case we're trying to access a store that has the same code as a direct access
-                $request->setActionName(\Magento\Framework\App\Router\Base::NO_ROUTE);
+                $request->setActionName(AppRouterBase::NO_ROUTE);
             }
         }
 

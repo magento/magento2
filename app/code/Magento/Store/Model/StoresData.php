@@ -7,6 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Store\Model;
 
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Store\Model\StoreResolver\ReaderList;
+
 /**
  * Class that computes and stores into cache the active store ids.
  */
@@ -18,33 +22,15 @@ class StoresData
     const CACHE_TAG = 'store_relations';
 
     /**
-     * @var \Magento\Framework\Cache\FrontendInterface
-     */
-    private $cache;
-
-    /**
-     * @var \Magento\Store\Model\StoreResolver\ReaderList
-     */
-    private $readerList;
-
-    /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
-     */
-    private $serializer;
-
-    /**
-     * @param \Magento\Framework\Cache\FrontendInterface $cache
-     * @param \Magento\Store\Model\StoreResolver\ReaderList $readerList
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param FrontendInterface $cache
+     * @param ReaderList $readerList
+     * @param SerializerInterface $serializer
      */
     public function __construct(
-        \Magento\Framework\Cache\FrontendInterface $cache,
-        \Magento\Store\Model\StoreResolver\ReaderList $readerList,
-        \Magento\Framework\Serialize\SerializerInterface $serializer
+        private readonly FrontendInterface $cache,
+        private readonly ReaderList $readerList,
+        private readonly SerializerInterface $serializer
     ) {
-        $this->cache = $cache;
-        $this->readerList = $readerList;
-        $this->serializer = $serializer;
     }
 
     /**
@@ -70,7 +56,7 @@ class StoresData
                 $cacheKey,
                 [
                     self::CACHE_TAG,
-                    \Magento\Store\Model\Store::CACHE_TAG
+                    Store::CACHE_TAG
                 ]
             );
         }

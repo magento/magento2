@@ -17,16 +17,11 @@ use Magento\Framework\Validator\NotEmptyFactory;
 class StoreNameValidator extends AbstractValidator
 {
     /**
-     * @var NotEmptyFactory
-     */
-    private $notEmptyValidatorFactory;
-
-    /**
      * @param NotEmptyFactory $notEmptyValidatorFactory
      */
-    public function __construct(NotEmptyFactory $notEmptyValidatorFactory)
-    {
-        $this->notEmptyValidatorFactory = $notEmptyValidatorFactory;
+    public function __construct(
+        private readonly NotEmptyFactory $notEmptyValidatorFactory
+    ) {
     }
 
     /**

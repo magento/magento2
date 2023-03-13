@@ -6,12 +6,14 @@
 
 namespace Magento\Store\Model\HeaderProvider;
 
-use \Magento\Store\Model\Store;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Response\HeaderProvider\AbstractHeaderProvider;
+use Magento\Store\Model\Store;
 
 /**
  * Adds an Content-Security-Policy header to HTTP responses.
  */
-class UpgradeInsecure extends \Magento\Framework\App\Response\HeaderProvider\AbstractHeaderProvider
+class UpgradeInsecure extends AbstractHeaderProvider
 {
     /**
      * Upgrade Insecure Requests Header name
@@ -28,18 +30,13 @@ class UpgradeInsecure extends \Magento\Framework\App\Response\HeaderProvider\Abs
     protected $headerValue = 'upgrade-insecure-requests';
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
      * UpgradeInsecure constructor.
      *
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
-    {
-        $this->scopeConfig = $scopeConfig;
+    public function __construct(
+        protected readonly ScopeConfigInterface $scopeConfig
+    ) {
     }
 
     /**

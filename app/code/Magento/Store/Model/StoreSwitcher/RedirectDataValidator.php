@@ -15,18 +15,13 @@ use Magento\Framework\Encryption\Encryptor;
 class RedirectDataValidator
 {
     private const TIMEOUT = 5;
-    /**
-     * @var Encryptor
-     */
-    private $encryptor;
 
     /**
      * @param Encryptor $encryptor
      */
     public function __construct(
-        Encryptor $encryptor
+        private readonly Encryptor $encryptor
     ) {
-        $this->encryptor = $encryptor;
     }
 
     /**

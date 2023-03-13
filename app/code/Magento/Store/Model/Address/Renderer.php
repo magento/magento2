@@ -22,21 +22,6 @@ class Renderer
         "{{var country}}";
 
     /**
-     * @var EventManager
-     */
-    protected $eventManager;
-
-    /**
-     * @var FilterManager
-     */
-    protected $filterManager;
-
-    /**
-     * @var string
-     */
-    private $template;
-
-    /**
      * Constructor
      *
      * @param EventManager $eventManager
@@ -44,13 +29,10 @@ class Renderer
      * @param string $template
      */
     public function __construct(
-        EventManager $eventManager,
-        FilterManager $filterManager,
-        $template = self::DEFAULT_TEMPLATE
+        protected readonly EventManager $eventManager,
+        protected readonly FilterManager $filterManager,
+        private $template = self::DEFAULT_TEMPLATE
     ) {
-        $this->eventManager = $eventManager;
-        $this->filterManager = $filterManager;
-        $this->template = $template;
     }
 
     /**

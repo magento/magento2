@@ -12,6 +12,8 @@ use Magento\Store\Model\ResourceModel\Website\CollectionFactory as WebsiteCollec
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\Store\Model\Store;
+use SplFixedArray;
+use Traversable;
 
 class WebsiteDimensionProvider implements DimensionProviderInterface
 {
@@ -22,34 +24,24 @@ class WebsiteDimensionProvider implements DimensionProviderInterface
     const DIMENSION_NAME = 'ws';
 
     /**
-     * @var WebsiteCollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var \SplFixedArray
+     * @var SplFixedArray
      */
     private $websitesDataIterator;
-
-    /**
-     * @var DimensionFactory
-     */
-    private $dimensionFactory;
 
     /**
      * @param WebsiteCollectionFactory $collectionFactory
      * @param DimensionFactory $dimensionFactory
      */
-    public function __construct(WebsiteCollectionFactory $collectionFactory, DimensionFactory $dimensionFactory)
-    {
-        $this->dimensionFactory = $dimensionFactory;
-        $this->collectionFactory = $collectionFactory;
+    public function __construct(
+        private readonly WebsiteCollectionFactory $collectionFactory,
+        private readonly DimensionFactory $dimensionFactory
+    ) {
     }
 
     /**
-     * @return Dimension[]|\Traversable
+     * @return Dimension[]|Traversable
      */
-    public function getIterator(): \Traversable
+    public function getIterator(): Traversable
     {
         foreach ($this->getWebsites() as $website) {
             yield $this->dimensionFactory->create(self::DIMENSION_NAME, (string)$website);

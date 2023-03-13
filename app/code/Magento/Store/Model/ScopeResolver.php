@@ -16,16 +16,11 @@ use Magento\Framework\App\ScopeTreeProviderInterface;
 class ScopeResolver
 {
     /**
-     * @var ScopeTreeProviderInterface
-     */
-    private $scopeTree;
-
-    /**
      * @param ScopeTreeProviderInterface $scopeTree
      */
-    public function __construct(ScopeTreeProviderInterface $scopeTree)
-    {
-        $this->scopeTree = $scopeTree;
+    public function __construct(
+        private readonly ScopeTreeProviderInterface $scopeTree
+    ) {
     }
 
     /**

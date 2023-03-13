@@ -9,6 +9,9 @@ declare(strict_types=1);
 namespace Magento\Store\Model\System;
 
 use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\DataObject;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Core System Store Model
@@ -16,7 +19,7 @@ use Magento\Framework\Data\OptionSourceInterface;
  * @api
  * @since 100.0.2
  */
-class Store extends \Magento\Framework\DataObject implements OptionSourceInterface
+class Store extends DataObject implements OptionSourceInterface
 {
     /**
      * Website collection
@@ -48,7 +51,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
     private $_isAdminScopeAllowed = true;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -61,10 +64,11 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      * Init model
      * Load Website, Group and Store collections
      *
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
-    {
+    public function __construct(
+        StoreManagerInterface $storeManager
+    ) {
         $this->_storeManager = $storeManager;
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $this->nonEscapableNbspChar = html_entity_decode('&#160;', ENT_NOQUOTES, 'UTF-8');
@@ -440,13 +444,13 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
             $this->_loadStoreCollection();
         } else {
             switch ($type) {
-                case \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE:
+                case ScopeInterface::SCOPE_WEBSITE:
                     $this->_loadWebsiteCollection();
                     break;
-                case \Magento\Store\Model\ScopeInterface::SCOPE_GROUP:
+                case ScopeInterface::SCOPE_GROUP:
                     $this->_loadGroupCollection();
                     break;
-                case \Magento\Store\Model\ScopeInterface::SCOPE_STORE:
+                case ScopeInterface::SCOPE_STORE:
                     $this->_loadStoreCollection();
                     break;
                 default:

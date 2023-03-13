@@ -6,33 +6,26 @@
 
 namespace Magento\Store\Model;
 
+use DomainException;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\ResourceModel\Website\CollectionFactory;
 
 /**
  * Information Expert in store websites handling
  */
-class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
+class WebsiteRepository implements WebsiteRepositoryInterface
 {
     /**
-     * @var WebsiteFactory
-     */
-    protected $factory;
-
-    /**
-     * @var CollectionFactory
-     */
-    protected $websiteCollectionFactory;
-
-    /**
-     * @var \Magento\Store\Api\Data\WebsiteInterface[]
+     * @var WebsiteInterface[]
      */
     protected $entities = [];
 
     /**
-     * @var \Magento\Store\Api\Data\WebsiteInterface[]
+     * @var WebsiteInterface[]
      */
     protected $entitiesById = [];
 
@@ -42,7 +35,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
     protected $allLoaded = false;
 
     /**
-     * @var \Magento\Store\Api\Data\WebsiteInterface[]
+     * @var WebsiteInterface[]
      */
     protected $default;
 
@@ -56,11 +49,9 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
      * @param CollectionFactory $websiteCollectionFactory
      */
     public function __construct(
-        WebsiteFactory $factory,
-        CollectionFactory $websiteCollectionFactory
+        protected readonly WebsiteFactory $factory,
+        protected readonly CollectionFactory $websiteCollectionFactory
     ) {
-        $this->factory = $factory;
-        $this->websiteCollectionFactory = $websiteCollectionFactory;
     }
 
     /**
@@ -156,7 +147,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
                 $this->initDefaultWebsite();
             }
             if (!$this->default) {
-                throw new \DomainException(__("The default website isn't defined. Set the website and try again."));
+                throw new DomainException(__("The default website isn't defined. Set the website and try again."));
             }
         }
 
@@ -199,7 +190,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
         foreach ($websites as $data) {
             if (isset($data['is_default']) && $data['is_default'] == 1) {
                 if ($this->default) {
-                    throw new \DomainException(
+                    throw new DomainException(
                         __(
                             'The default website is invalid. '
                             . 'Make sure no more than one default is defined and try again.'

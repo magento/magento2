@@ -13,31 +13,15 @@ namespace Magento\Store\Model\StoreSwitcher;
 class RedirectData implements RedirectDataInterface
 {
     /**
-     * @var string
-     */
-    private $signature;
-    /**
-     * @var string
-     */
-    private $data;
-    /**
-     * @var int
-     */
-    private $timestamp;
-
-    /**
      * @param string $signature
      * @param string $data
      * @param int $timestamp
      */
     public function __construct(
-        string $signature,
-        string $data,
-        int $timestamp
+        private readonly string $signature,
+        private readonly string $data,
+        private readonly int $timestamp
     ) {
-        $this->signature = $signature;
-        $this->data = $data;
-        $this->timestamp = $timestamp;
     }
 
     /**

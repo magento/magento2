@@ -5,47 +5,58 @@
  */
 namespace Magento\Store\App\FrontController\Plugin;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\FrontController;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseFactory;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\BaseUrlChecker;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Class RequestPreprocessor
  */
 class RequestPreprocessor
 {
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\App\ResponseFactory
+     * @var ResponseFactory
      */
     protected $_responseFactory;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     protected $_url;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Store\Model\BaseUrlChecker
+     * @var BaseUrlChecker
      */
     private $baseUrlChecker;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\UrlInterface $url
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\App\ResponseFactory $responseFactory
+     * @param StoreManagerInterface $storeManager
+     * @param UrlInterface $url
+     * @param ScopeConfigInterface $scopeConfig
+     * @param ResponseFactory $responseFactory
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\ResponseFactory $responseFactory
+        StoreManagerInterface $storeManager,
+        UrlInterface $url,
+        ScopeConfigInterface $scopeConfig,
+        ResponseFactory $responseFactory
     ) {
         $this->_storeManager = $storeManager;
         $this->_url = $url;
@@ -58,21 +69,21 @@ class RequestPreprocessor
      *
      * By default this feature is enabled in configuration.
      *
-     * @param \Magento\Framework\App\FrontController $subject
+     * @param FrontController $subject
      * @param callable $proceed
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      *
-     * @return \Magento\Framework\App\ResponseInterface
+     * @return ResponseInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDispatch(
-        \Magento\Framework\App\FrontController $subject,
+        FrontController $subject,
         \Closure $proceed,
-        \Magento\Framework\App\RequestInterface $request
+        RequestInterface $request
     ) {
         if ($this->isHttpsRedirect($request) || (!$request->isPost() && $this->getBaseUrlChecker()->isEnabled())) {
             $baseUrl = $this->_storeManager->getStore()->getBaseUrl(
-                \Magento\Framework\UrlInterface::URL_TYPE_WEB,
+                UrlInterface::URL_TYPE_WEB,
                 $this->_storeManager->getStore()->isCurrentlySecure()
             );
             if ($baseUrl) {
@@ -84,7 +95,7 @@ class RequestPreprocessor
                     );
                     $redirectCode = (int)$this->_scopeConfig->getValue(
                         'web/url/redirect_to_base',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        ScopeInterface::SCOPE_STORE
                     ) !== 301 ? 302 : 301;
 
                     $response = $this->_responseFactory->create();
@@ -102,14 +113,14 @@ class RequestPreprocessor
     /**
      * Gets base URL checker.
      *
-     * @return \Magento\Store\Model\BaseUrlChecker
+     * @return BaseUrlChecker
      * @deprecated 100.1.0
      */
     private function getBaseUrlChecker()
     {
         if ($this->baseUrlChecker === null) {
-            $this->baseUrlChecker = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Store\Model\BaseUrlChecker::class
+            $this->baseUrlChecker = ObjectManager::getInstance()->get(
+                BaseUrlChecker::class
             );
         }
 
@@ -119,10 +130,10 @@ class RequestPreprocessor
     /**
      * Check is request should be redirected, if https enabled.
      *
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      * @return bool
      */
-    private function isHttpsRedirect(\Magento\Framework\App\RequestInterface $request)
+    private function isHttpsRedirect(RequestInterface $request)
     {
         $result = false;
         if ($this->getBaseUrlChecker()->isFrontendSecure() && $request->isPost() && !$request->isSecure()) {

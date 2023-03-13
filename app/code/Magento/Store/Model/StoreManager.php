@@ -5,19 +5,27 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Profiler;
+use Magento\Store\Api\Data\GroupInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\GroupRepositoryInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Api\StoreWebsiteRelationInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
+use Zend_Cache;
 
 /**
  * Service contract, which manage scopes
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StoreManager implements
-    \Magento\Store\Model\StoreManagerInterface,
-    \Magento\Store\Api\StoreWebsiteRelationInterface
+class StoreManager implements StoreManagerInterface, StoreWebsiteRelationInterface
 {
     /**
      * Application run code
@@ -35,41 +43,9 @@ class StoreManager implements
     const XML_PATH_SINGLE_STORE_MODE_ENABLED = 'general/single_store_mode/enabled';
 
     /**
-     * @var \Magento\Store\Api\StoreRepositoryInterface
-     */
-    protected $storeRepository;
-
-    /**
-     * @var \Magento\Store\Api\GroupRepositoryInterface
-     */
-    protected $groupRepository;
-
-    /**
-     * @var \Magento\Store\Api\WebsiteRepositoryInterface
-     */
-    protected $websiteRepository;
-
-    /**
-     * Scope config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * @var StoreResolverInterface
-     */
-    protected $storeResolver;
-
-    /**
-     * @var \Magento\Framework\Cache\FrontendInterface
-     */
-    protected $cache;
-
-    /**
      * Default store code
      *
-     * @var string|int|\Magento\Store\Api\Data\StoreInterface
+     * @var string|int|StoreInterface
      */
     protected $currentStoreId = null;
 
@@ -81,39 +57,25 @@ class StoreManager implements
     protected $_hasSingleStore;
 
     /**
-     * Flag is single store mode allowed
-     *
-     * @var bool
-     */
-    protected $isSingleStoreAllowed;
-
-    /**
      * StoreManager constructor.
      *
-     * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
-     * @param \Magento\Store\Api\GroupRepositoryInterface $groupRepository
-     * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param StoreRepositoryInterface $storeRepository
+     * @param GroupRepositoryInterface $groupRepository
+     * @param WebsiteRepositoryInterface $websiteRepository
+     * @param ScopeConfigInterface $scopeConfig Scope config
      * @param StoreResolverInterface $storeResolver
-     * @param \Magento\Framework\Cache\FrontendInterface $cache
-     * @param bool $isSingleStoreAllowed
+     * @param FrontendInterface $cache
+     * @param bool $isSingleStoreAllowed Flag is single store mode allowed
      */
     public function __construct(
-        \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
-        \Magento\Store\Api\GroupRepositoryInterface $groupRepository,
-        \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        StoreResolverInterface $storeResolver,
-        \Magento\Framework\Cache\FrontendInterface $cache,
-        $isSingleStoreAllowed = true
+        protected readonly StoreRepositoryInterface $storeRepository,
+        protected readonly GroupRepositoryInterface $groupRepository,
+        protected readonly WebsiteRepositoryInterface $websiteRepository,
+        protected readonly ScopeConfigInterface $scopeConfig,
+        protected readonly StoreResolverInterface $storeResolver,
+        protected readonly FrontendInterface $cache,
+        protected $isSingleStoreAllowed = true
     ) {
-        $this->storeRepository = $storeRepository;
-        $this->websiteRepository = $websiteRepository;
-        $this->groupRepository = $groupRepository;
-        $this->scopeConfig = $scopeConfig;
-        $this->storeResolver = $storeResolver;
-        $this->cache = $cache;
-        $this->isSingleStoreAllowed = $isSingleStoreAllowed;
     }
 
     /**
@@ -156,13 +118,13 @@ class StoreManager implements
     {
         if (!isset($storeId) || '' === $storeId || $storeId === true) {
             if (null === $this->currentStoreId) {
-                \Magento\Framework\Profiler::start('store.resolve');
+                Profiler::start('store.resolve');
                 $this->currentStoreId = $this->storeResolver->getCurrentStoreId();
-                \Magento\Framework\Profiler::stop('store.resolve');
+                Profiler::stop('store.resolve');
             }
             $storeId = $this->currentStoreId;
         }
-        if ($storeId instanceof \Magento\Store\Api\Data\StoreInterface) {
+        if ($storeId instanceof StoreInterface) {
             return $storeId;
         }
 
@@ -237,7 +199,7 @@ class StoreManager implements
     public function reinitStores()
     {
         $this->currentStoreId = null;
-        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, [StoreResolver::CACHE_TAG, Store::CACHE_TAG]);
+        $this->cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, [StoreResolver::CACHE_TAG, Store::CACHE_TAG]);
         $this->scopeConfig->clean();
         $this->storeRepository->clean();
         $this->websiteRepository->clean();
@@ -261,7 +223,7 @@ class StoreManager implements
     {
         if (null === $groupId) {
             $group = $this->groupRepository->get($this->getStore()->getGroupId());
-        } elseif ($groupId instanceof \Magento\Store\Api\Data\GroupInterface) {
+        } elseif ($groupId instanceof GroupInterface) {
             $group = $groupId;
         } else {
             $group = $this->groupRepository->get($groupId);

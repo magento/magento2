@@ -14,13 +14,6 @@ use Magento\Store\Model\ScopeInterface;
 class DataDifferenceCalculator
 {
     /**
-     * The config source to retrieve current config.
-     *
-     * @var ConfigSourceInterface
-     */
-    private $runtimeConfigSource;
-
-    /**
      * Scopes identifier
      *
      * @var string[]
@@ -34,9 +27,9 @@ class DataDifferenceCalculator
     /**
      * @param ConfigSourceInterface $runtimeConfigSource The config source to retrieve current config
      */
-    public function __construct(ConfigSourceInterface $runtimeConfigSource)
-    {
-        $this->runtimeConfigSource = $runtimeConfigSource;
+    public function __construct(
+        private readonly ConfigSourceInterface $runtimeConfigSource
+    ) {
     }
 
     /**

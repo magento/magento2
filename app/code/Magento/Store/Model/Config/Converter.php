@@ -7,10 +7,12 @@
  */
 namespace Magento\Store\Model\Config;
 
+use Magento\Framework\App\Config\Scope\Converter as ConfigScopeConverter;
+
 /**
  * Class Converter.
  */
-class Converter extends \Magento\Framework\App\Config\Scope\Converter
+class Converter extends ConfigScopeConverter
 {
     /**
      * Convert config data

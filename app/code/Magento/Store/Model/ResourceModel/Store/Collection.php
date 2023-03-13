@@ -5,13 +5,18 @@
  */
 namespace Magento\Store\Model\ResourceModel\Store;
 
+use Magento\Framework\DB\Select;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Store\Model\ResourceModel\Store as ResourceStore;
+use Magento\Store\Model\Store as ModelStore;
+
 /**
  * Stores collection
  *
  * @api
  * @since 100.0.2
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Name prefix of events that are dispatched by model
@@ -35,7 +40,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->setFlag('load_default_store', false);
-        $this->_init(\Magento\Store\Model\Store::class, \Magento\Store\Model\ResourceModel\Store::class);
+        $this->_init(ModelStore::class, ResourceStore::class);
     }
 
     /**
@@ -168,13 +173,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         if (!$this->isLoaded()) {
             $this->addOrder(
                 'CASE WHEN main_table.store_id = 0 THEN 0 ELSE 1 END',
-                \Magento\Framework\DB\Select::SQL_ASC
+                Select::SQL_ASC
             )->addOrder(
                 'main_table.sort_order',
-                \Magento\Framework\DB\Select::SQL_ASC
+                Select::SQL_ASC
             )->addOrder(
                 'main_table.name',
-                \Magento\Framework\DB\Select::SQL_ASC
+                Select::SQL_ASC
             );
         }
         return parent::load($printQuery, $logQuery);

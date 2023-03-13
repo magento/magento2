@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Ui\Component\Listing\Column;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -18,20 +19,6 @@ use Magento\Store\Model\StoreManagerInterface as StoreManager;
 class Store extends Column
 {
     /**
-     * Escaper
-     *
-     * @var \Magento\Framework\Escaper
-     */
-    protected $escaper;
-
-    /**
-     * System store
-     *
-     * @var SystemStore
-     */
-    protected $systemStore;
-
-    /**
      * Store manager
      *
      * @var StoreManager
@@ -39,15 +26,10 @@ class Store extends Column
     protected $storeManager;
 
     /**
-     * @var string
-     */
-    protected $storeKey;
-
-    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param SystemStore $systemStore
-     * @param Escaper $escaper
+     * @param SystemStore $systemStore System store
+     * @param Escaper $escaper Escaper
      * @param array $components
      * @param array $data
      * @param string $storeKey
@@ -55,15 +37,12 @@ class Store extends Column
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        SystemStore $systemStore,
-        Escaper $escaper,
+        protected readonly SystemStore $systemStore,
+        protected readonly Escaper $escaper,
         array $components = [],
         array $data = [],
-        $storeKey = 'store_id'
+        protected $storeKey = 'store_id'
     ) {
-        $this->systemStore = $systemStore;
-        $this->escaper = $escaper;
-        $this->storeKey = $storeKey;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -145,8 +124,8 @@ class Store extends Column
     private function getStoreManager()
     {
         if ($this->storeManager === null) {
-            $this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Store\Model\StoreManagerInterface::class);
+            $this->storeManager = ObjectManager::getInstance()
+                ->get(StoreManager::class);
         }
         return $this->storeManager;
     }

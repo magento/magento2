@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Store\Controller\Store;
 
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -21,28 +22,12 @@ use Magento\Store\Model\StoreSwitcher\HashGenerator\HashData;
 /**
  * Builds correct url to target store and performs redirect.
  */
-class SwitchRequest extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
+class SwitchRequest extends Action implements HttpGetActionInterface
 {
-
     /**
      * @var customerSession
      */
     private $customerSession;
-
-    /**
-     * @var CustomerRepositoryInterface
-     */
-    private $customerRepository;
-
-    /**
-     * @var HashGenerator
-     */
-    private $hashGenerator;
-
-    /**
-     * @var DecoderInterface
-     */
-    private $urlDecoder;
 
     /**
      * @param Context $context
@@ -53,16 +38,13 @@ class SwitchRequest extends \Magento\Framework\App\Action\Action implements Http
      */
     public function __construct(
         Context $context,
-        CustomerSession $session,
-        CustomerRepositoryInterface $customerRepository,
-        HashGenerator $hashGenerator,
-        DecoderInterface $urlDecoder
+        private readonly CustomerSession $session,
+        private readonly CustomerRepositoryInterface $customerRepository,
+        private readonly HashGenerator $hashGenerator,
+        private readonly DecoderInterface $urlDecoder
     ) {
         parent::__construct($context);
         $this->customerSession = $session;
-        $this->customerRepository = $customerRepository;
-        $this->hashGenerator = $hashGenerator;
-        $this->urlDecoder = $urlDecoder;
     }
 
     /**

@@ -23,25 +23,13 @@ class StoreCookieManager implements StoreCookieManagerInterface
     const COOKIE_NAME = 'store';
 
     /**
-     * @var CookieMetadataFactory
-     */
-    protected $cookieMetadataFactory;
-
-    /**
-     * @var CookieManagerInterface
-     */
-    protected $cookieManager;
-
-    /**
      * @param CookieMetadataFactory $cookieMetadataFactory
      * @param CookieManagerInterface $cookieManager
      */
     public function __construct(
-        CookieMetadataFactory $cookieMetadataFactory,
-        CookieManagerInterface $cookieManager
+        protected readonly CookieMetadataFactory $cookieMetadataFactory,
+        protected readonly CookieManagerInterface $cookieManager
     ) {
-        $this->cookieMetadataFactory = $cookieMetadataFactory;
-        $this->cookieManager = $cookieManager;
     }
 
     /**

@@ -17,16 +17,11 @@ use Magento\Framework\Validator\RegexFactory;
 class StoreCodeValidator extends AbstractValidator
 {
     /**
-     * @var RegexFactory
-     */
-    private $regexValidatorFactory;
-
-    /**
      * @param RegexFactory $regexValidatorFactory
      */
-    public function __construct(RegexFactory $regexValidatorFactory)
-    {
-        $this->regexValidatorFactory = $regexValidatorFactory;
+    public function __construct(
+        private readonly RegexFactory $regexValidatorFactory
+    ) {
     }
 
     /**

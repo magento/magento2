@@ -68,21 +68,6 @@ class Redirect implements RedirectInterface
     protected $_urlBuilder;
 
     /**
-     * @var Uri
-     */
-    private $uri;
-
-    /**
-     * @var State
-     */
-    private $appState;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * Constructor
      *
      * @param RequestInterface $request
@@ -104,10 +89,10 @@ class Redirect implements RedirectInterface
         SessionManagerInterface $session,
         SidResolverInterface $sidResolver,
         UrlInterface $urlBuilder,
-        Uri $uri = null,
+        private ?Uri $uri = null,
         $canUseSessionIdInParam = true,
-        ?State $appState = null,
-        ?ScopeConfigInterface $scopeConfig = null
+        private ?State $appState = null,
+        private ?ScopeConfigInterface $scopeConfig = null
     ) {
         $this->_canUseSessionIdInParam = $canUseSessionIdInParam;
         $this->_request = $request;
@@ -164,10 +149,10 @@ class Redirect implements RedirectInterface
     /**
      * Set referer url for redirect in response
      *
-     * @param   string $defaultUrl
-     * @return  ActionInterface
+     * @param string $defaultUrl
+     * @return ActionInterface
      *
-     * @throws  NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getRedirectUrl($defaultUrl = null)
     {
@@ -181,10 +166,10 @@ class Redirect implements RedirectInterface
     /**
      * Redirect to error page
      *
-     * @param   string $defaultUrl
-     * @return  string
+     * @param string $defaultUrl
+     * @return string
      *
-     * @throws  NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function error($defaultUrl)
     {

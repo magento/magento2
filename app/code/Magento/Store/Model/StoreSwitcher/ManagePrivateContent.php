@@ -7,6 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Store\Model\StoreSwitcher;
 
+use Exception;
+use Magento\Framework\App\PageCache\Version as PageCacheVersion;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Model\StoreSwitcherInterface;
 use Magento\Store\Api\Data\StoreInterface;
 
@@ -18,25 +22,13 @@ use Magento\Store\Api\Data\StoreInterface;
 class ManagePrivateContent implements StoreSwitcherInterface
 {
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     */
-    private $cookieMetadataFactory;
-
-    /**
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface
-     */
-    private $cookieManager;
-
-    /**
-     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
-     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
+     * @param CookieMetadataFactory $cookieMetadataFactory
+     * @param CookieManagerInterface $cookieManager
      */
     public function __construct(
-        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
-        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
+        private readonly CookieMetadataFactory $cookieMetadataFactory,
+        private readonly CookieManagerInterface $cookieManager
     ) {
-        $this->cookieMetadataFactory = $cookieMetadataFactory;
-        $this->cookieManager = $cookieManager;
     }
 
     /**
@@ -60,11 +52,11 @@ class ManagePrivateContent implements StoreSwitcherInterface
                 ->setHttpOnly(false)
                 ->setSameSite('Lax');
             $this->cookieManager->setPublicCookie(
-                \Magento\Framework\App\PageCache\Version::COOKIE_NAME,
+                PageCacheVersion::COOKIE_NAME,
                 \uniqid('updated-', true),
                 $publicCookieMetadata
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new CannotSwitchStoreException($e);
         }
 

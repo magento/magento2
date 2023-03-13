@@ -5,12 +5,16 @@
  */
 namespace Magento\Store\Model\Config\Importer\Processor;
 
+use Exception;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
+use Magento\Store\Model\Group as ModelGroup;
 use Magento\Store\Model\GroupFactory;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store as ModelStore;
 use Magento\Store\Model\StoreFactory;
+use Magento\Store\Model\Website as ModelWebsite;
 use Magento\Store\Model\WebsiteFactory;
 use Magento\Framework\Event\ManagerInterface;
 
@@ -22,41 +26,6 @@ use Magento\Framework\Event\ManagerInterface;
 class Update implements ProcessorInterface
 {
     /**
-     * The calculator for data differences.
-     *
-     * @var DataDifferenceCalculator
-     */
-    private $dataDifferenceCalculator;
-
-    /**
-     * The factory for website entity.
-     *
-     * @var WebsiteFactory
-     */
-    private $websiteFactory;
-
-    /**
-     * The factory for store entity.
-     *
-     * @var StoreFactory
-     */
-    private $storeFactory;
-
-    /**
-     * The factory for group entity.
-     *
-     * @var GroupFactory
-     */
-    private $groupFactory;
-
-    /**
-     * The event manager.
-     *
-     * @var ManagerInterface
-     */
-    private $eventManager;
-
-    /**
      * @param DataDifferenceCalculator $dataDifferenceCalculator The calculator for data differences
      * @param WebsiteFactory $websiteFactory The factory for website entity
      * @param StoreFactory $storeFactory The factory for store entity
@@ -64,17 +33,12 @@ class Update implements ProcessorInterface
      * @param ManagerInterface $eventManager The event manager
      */
     public function __construct(
-        DataDifferenceCalculator $dataDifferenceCalculator,
-        WebsiteFactory $websiteFactory,
-        StoreFactory $storeFactory,
-        GroupFactory $groupFactory,
-        ManagerInterface $eventManager
+        private readonly DataDifferenceCalculator $dataDifferenceCalculator,
+        private readonly WebsiteFactory $websiteFactory,
+        private readonly StoreFactory $storeFactory,
+        private readonly GroupFactory $groupFactory,
+        private readonly ManagerInterface $eventManager
     ) {
-        $this->dataDifferenceCalculator = $dataDifferenceCalculator;
-        $this->websiteFactory = $websiteFactory;
-        $this->storeFactory = $storeFactory;
-        $this->groupFactory = $groupFactory;
-        $this->eventManager = $eventManager;
     }
 
     /**
@@ -113,7 +77,7 @@ class Update implements ProcessorInterface
                         $this->updateGroups($items, $data);
                 }
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new RuntimeException(__('%1', $exception->getMessage()), $exception);
         }
     }
@@ -221,7 +185,7 @@ class Update implements ProcessorInterface
      *
      * @param array $data The data to be searched in
      * @param string $websiteId The website id
-     * @return \Magento\Store\Model\Website|null
+     * @return ModelWebsite|null
      */
     private function findWebsiteById(array $data, $websiteId)
     {
@@ -243,7 +207,7 @@ class Update implements ProcessorInterface
      *
      * @param array $data The data to be searched in
      * @param string $groupId The group id
-     * @return \Magento\Store\Model\Group|null
+     * @return ModelGroup|null
      */
     private function findGroupById(array $data, $groupId)
     {
@@ -265,7 +229,7 @@ class Update implements ProcessorInterface
      *
      * @param array $data The data to be searched in
      * @param string $storeId The store id
-     * @return \Magento\Store\Model\Store|null
+     * @return ModelStore|null
      */
     private function findStoreById(array $data, $storeId)
     {

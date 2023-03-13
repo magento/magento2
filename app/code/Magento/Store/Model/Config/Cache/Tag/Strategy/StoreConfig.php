@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Store\Model\Config\Cache\Tag\Strategy;
 
+use InvalidArgumentException;
 use Magento\Framework\App\Cache\Tag\StrategyInterface;
 use Magento\Framework\App\Config\ValueInterface;
 
@@ -16,17 +17,11 @@ use Magento\Framework\App\Config\ValueInterface;
 class StoreConfig implements StrategyInterface
 {
     /**
-     * @var TagGeneratorInterface
-     */
-    private $tagGenerator;
-
-    /**
      * @param TagGeneratorInterface $tagGenerator
      */
     public function __construct(
-        TagGeneratorInterface $tagGenerator
+        private readonly TagGeneratorInterface $tagGenerator
     ) {
-        $this->tagGenerator = $tagGenerator;
     }
 
     /**
@@ -35,7 +30,7 @@ class StoreConfig implements StrategyInterface
     public function getTags($object): array
     {
         if (!is_object($object)) {
-            throw new \InvalidArgumentException('Provided argument is not an object');
+            throw new InvalidArgumentException('Provided argument is not an object');
         }
 
         if ($object instanceof ValueInterface && $object->isValueChanged()) {

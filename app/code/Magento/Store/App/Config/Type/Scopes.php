@@ -18,11 +18,6 @@ class Scopes implements ConfigTypeInterface
     public const CONFIG_TYPE = 'scopes';
 
     /**
-     * @var ConfigSourceInterface
-     */
-    private $source;
-
-    /**
      * @var DataObject[]
      */
     private $data;
@@ -49,9 +44,8 @@ class Scopes implements ConfigTypeInterface
      * @param ConfigSourceInterface $source
      */
     public function __construct(
-        ConfigSourceInterface $source
+        private readonly ConfigSourceInterface $source
     ) {
-        $this->source = $source;
     }
 
     /**

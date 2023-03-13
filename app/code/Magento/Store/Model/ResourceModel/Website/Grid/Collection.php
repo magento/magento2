@@ -5,10 +5,12 @@
  */
 namespace Magento\Store\Model\ResourceModel\Website\Grid;
 
+use Magento\Store\Model\ResourceModel\Website\Collection as WebsiteCollection;
+
 /**
  * Grid collection
  */
-class Collection extends \Magento\Store\Model\ResourceModel\Website\Collection
+class Collection extends WebsiteCollection
 {
     /**
      * Join website and store names

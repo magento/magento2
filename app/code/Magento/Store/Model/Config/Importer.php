@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Model\Config;
 
+use Exception;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\Exception\State\InvalidTransitionException;
@@ -20,41 +21,6 @@ use Magento\Store\Model\ResourceModel\Website;
 class Importer implements ImporterInterface
 {
     /**
-     * The data difference calculator.
-     *
-     * @var DataDifferenceCalculator
-     */
-    private $dataDifferenceCalculator;
-
-    /**
-     * The factory for processors.
-     *
-     * @var ProcessorFactory
-     */
-    private $processFactory;
-
-    /**
-     * The manager for operations with store.
-     *
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * The resource of transaction.
-     *
-     * @var Website
-     */
-    private $resource;
-
-    /**
-     * The application cache manager.
-     *
-     * @var CacheInterface
-     */
-    private $cacheManager;
-
-    /**
      * @param DataDifferenceCalculator $dataDifferenceCalculator The factory for data difference calculators
      * @param ProcessorFactory $processFactory The factory for processes
      * @param StoreManagerInterface $storeManager The manager for operations with store
@@ -62,17 +28,12 @@ class Importer implements ImporterInterface
      * @param Website $resource The resource of transaction
      */
     public function __construct(
-        DataDifferenceCalculator $dataDifferenceCalculator,
-        ProcessorFactory $processFactory,
-        StoreManagerInterface $storeManager,
-        CacheInterface $cacheManager,
-        Website $resource
+        private readonly DataDifferenceCalculator $dataDifferenceCalculator,
+        private readonly ProcessorFactory $processFactory,
+        private readonly StoreManagerInterface $storeManager,
+        private readonly CacheInterface $cacheManager,
+        private readonly Website $resource
     ) {
-        $this->dataDifferenceCalculator = $dataDifferenceCalculator;
-        $this->processFactory = $processFactory;
-        $this->storeManager = $storeManager;
-        $this->cacheManager = $cacheManager;
-        $this->resource = $resource;
     }
 
     /**
@@ -108,7 +69,7 @@ class Importer implements ImporterInterface
             foreach ($actions as $action) {
                 $this->processFactory->create($action)->run($data);
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->resource->rollBack();
             $this->reinitStores();
 

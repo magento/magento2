@@ -5,19 +5,16 @@
  */
 namespace Magento\Store\Model\StoreResolver;
 
+use Magento\Store\Api\StoreRepositoryInterface;
+
 class Store implements ReaderInterface
 {
     /**
-     * @var \Magento\Store\Api\StoreRepositoryInterface
+     * @param StoreRepositoryInterface $storeRepository
      */
-    protected $storeRepository;
-
-    /**
-     * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
-     */
-    public function __construct(\Magento\Store\Api\StoreRepositoryInterface $storeRepository)
-    {
-        $this->storeRepository = $storeRepository;
+    public function __construct(
+        protected readonly StoreRepositoryInterface $storeRepository
+    ) {
     }
 
     /**

@@ -9,29 +9,22 @@ namespace Magento\Store\Model;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\Config;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Model\ResourceModel\Store\CollectionFactory;
 
 /**
  * Information Expert in stores handling
  */
-class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
+class StoreRepository implements StoreRepositoryInterface
 {
     /**
-     * @var StoreFactory
-     */
-    protected $storeFactory;
-
-    /**
-     * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
-     */
-    protected $storeCollectionFactory;
-
-    /**
-     * @var \Magento\Store\Api\Data\StoreInterface[]
+     * @var StoreInterface[]
      */
     protected $entities = [];
 
     /**
-     * @var \Magento\Store\Api\Data\StoreInterface[]
+     * @var StoreInterface[]
      */
     protected $entitiesById = [];
 
@@ -47,14 +40,12 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
 
     /**
      * @param StoreFactory $storeFactory
-     * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory
+     * @param CollectionFactory $storeCollectionFactory
      */
     public function __construct(
-        StoreFactory $storeFactory,
-        \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory
+        protected readonly StoreFactory $storeFactory,
+        protected readonly CollectionFactory $storeCollectionFactory
     ) {
-        $this->storeFactory = $storeFactory;
-        $this->storeCollectionFactory = $storeCollectionFactory;
     }
 
     /**

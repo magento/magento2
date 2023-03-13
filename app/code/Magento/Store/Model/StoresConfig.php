@@ -6,27 +6,28 @@
 
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 class StoresConfig
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_config;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param StoreManagerInterface $storeManager
+     * @param ScopeConfigInterface $config
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config
+        StoreManagerInterface $storeManager,
+        ScopeConfigInterface $config
     ) {
         $this->_storeManager = $storeManager;
         $this->_config = $config;
@@ -44,7 +45,7 @@ class StoresConfig
     {
         $stores = $this->_storeManager->getStores(true);
         $storeValues = [];
-        /** @var $store \Magento\Store\Model\Store */
+        /** @var Store $store */
         foreach ($stores as $store) {
             try {
                 $value = $this->_config->getValue($path, ScopeInterface::SCOPE_STORE, $store->getCode());

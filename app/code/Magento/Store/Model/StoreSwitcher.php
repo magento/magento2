@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Store\Model;
 
+use Exception;
+use InvalidArgumentException;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreSwitcher\CannotSwitchStoreException;
 
@@ -22,13 +24,13 @@ class StoreSwitcher implements StoreSwitcherInterface
 
     /**
      * @param StoreSwitcherInterface[] $storeSwitchers
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(array $storeSwitchers)
     {
         foreach ($storeSwitchers as $switcherName => $switcherInstance) {
             if (!$switcherInstance instanceof StoreSwitcherInterface) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     "Store switcher '{$switcherName}' is expected to implement interface "
                     . StoreSwitcherInterface::class
                 );

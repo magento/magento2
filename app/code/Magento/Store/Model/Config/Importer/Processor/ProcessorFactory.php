@@ -24,27 +24,15 @@ class ProcessorFactory
     const TYPE_UPDATE = 'update';
     /**#@-*/
 
-    /**#@-*/
-    private $objectManager;
-
-    /**
-     * List of class names that implement processes.
-     *
-     * @var array
-     * @see ProcessorInterface
-     */
-    private $processors;
-
     /**
      * @param ObjectManagerInterface $objectManager The Object Manager
      * @param array $processors List of class names that implement processes
+     * @see ProcessorInterface
      */
     public function __construct(
-        ObjectManagerInterface $objectManager,
-        array $processors = []
+        private readonly ObjectManagerInterface $objectManager,
+        private readonly array $processors = []
     ) {
-        $this->objectManager = $objectManager;
-        $this->processors = $processors;
     }
 
     /**

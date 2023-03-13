@@ -24,33 +24,15 @@ use Magento\Store\Model\StoreSwitcher\HashGenerator\HashData;
 class HashGenerator
 {
     /**
-     * @var \Magento\Framework\App\DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
-     * @var UrlHelper
-     */
-    private $urlHelper;
-
-    /**
-     * @var UserContextInterface
-     */
-    private $currentUser;
-
-    /**
      * @param DeploymentConfig $deploymentConfig
      * @param UrlHelper $urlHelper
      * @param UserContextInterface $currentUser
      */
     public function __construct(
-        DeploymentConfig $deploymentConfig,
-        UrlHelper $urlHelper,
-        UserContextInterface $currentUser
+        private readonly DeploymentConfig $deploymentConfig,
+        private readonly UrlHelper $urlHelper,
+        private readonly UserContextInterface $currentUser
     ) {
-        $this->deploymentConfig = $deploymentConfig;
-        $this->urlHelper = $urlHelper;
-        $this->currentUser = $currentUser;
     }
 
     /**

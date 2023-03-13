@@ -5,23 +5,49 @@
  */
 namespace Magento\Store\Model;
 
+use Exception;
+use InvalidArgumentException;
 use Laminas\Uri\UriFactory;
 use Laminas\Validator\ValidatorInterface;
 use Magento\Catalog\Model\Category;
+use Magento\Config\Model\ResourceModel\Config\Data as ResourceConfigData;
 use Magento\Directory\Model\Currency;
+use Magento\Directory\Model\Currency\Filter as CurrencyFilter;
+use Magento\Directory\Model\CurrencyFactory;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\App\Cache\Type\Config as CacheTypeConfig;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Http\Context;
+use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ScopeInterface as AppScopeInterface;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\Context as FrameworkContext;
+use Magento\Framework\Registry;
+use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\Url\ModifierInterface;
 use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
 use Magento\Framework\UrlInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database as FileStorageDatabase;
+use Magento\Store\Api\Data\StoreExtensionInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\GroupRepositoryInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Store\Model\ResourceModel\Store as ResourceStore;
 use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\Validation\StoreValidator;
 
 /**
  * Store model
@@ -126,7 +152,7 @@ class Store extends AbstractExtensibleModel implements
     public const DISTRO_STORE_ID = 1;
 
     /**
-     * @var \Magento\Framework\App\Cache\Type\Config
+     * @var CacheTypeConfig
      */
     protected $_configCacheType;
 
@@ -152,7 +178,7 @@ class Store extends AbstractExtensibleModel implements
     protected $_eventObject = 'store';
 
     /**
-     * @var \Magento\Directory\Model\Currency\Filter
+     * @var CurrencyFilter
      */
     protected $_priceFilter;
 
@@ -190,7 +216,7 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Session entity
      *
-     * @var \Magento\Framework\Session\SessionManagerInterface
+     * @var SessionManagerInterface
      */
     protected $_session;
 
@@ -227,7 +253,7 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Url model for current store
      *
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     protected $_url;
 
@@ -237,36 +263,29 @@ class Store extends AbstractExtensibleModel implements
     protected $_isCustomEntryPoint = false;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
     protected $_request;
 
     /**
-     * @var \Magento\Config\Model\ResourceModel\Config\Data
+     * @var ResourceConfigData
      */
     protected $_configDataResource;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @var FileStorageDatabase
      */
     protected $_coreFileStorageDatabase = null;
 
     /**
-     * Filesystem instance
-     *
-     * @var Filesystem
-     */
-    protected $filesystem;
-
-    /**
      * Store Config
      *
-     * @var \Magento\Framework\App\Config\ReinitableConfigInterface
+     * @var ReinitableConfigInterface
      */
     protected $_config;
 
     /**
-     * @var \Magento\Framework\Session\SidResolverInterface
+     * @var SidResolverInterface
      * @deprecated 101.0.5 Not used anymore.
      * @see we don't recommend this approach anymore
      */
@@ -278,29 +297,9 @@ class Store extends AbstractExtensibleModel implements
     protected $_currencyInstalled;
 
     /**
-     * @var \Magento\Framework\App\Http\Context
+     * @var HttpContext
      */
     protected $_httpContext;
-
-    /**
-     * @var \Magento\Directory\Model\CurrencyFactory
-     */
-    protected $currencyFactory;
-
-    /**
-     * @var \Magento\Store\Api\GroupRepositoryInterface
-     */
-    protected $groupRepository;
-
-    /**
-     * @var \Magento\Store\Api\WebsiteRepositoryInterface
-     */
-    protected $websiteRepository;
-
-    /**
-     * @var \Magento\Store\Model\Information
-     */
-    protected $information;
 
     /**
      * @var StoreManagerInterface
@@ -308,85 +307,65 @@ class Store extends AbstractExtensibleModel implements
     private $_storeManager;
 
     /**
-     * @var ModifierInterface
-     */
-    private $urlModifier;
-
-    /**
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    private $eventManager;
-
-    /**
-     * @var \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface
-     */
-    private $pillPut;
-
-    /**
-     * @var \Magento\Store\Model\Validation\StoreValidator
-     */
-    private $modelValidator;
-
-    /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Store\Model\ResourceModel\Store $resource
-     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
-     * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
-     * @param \Magento\Framework\UrlInterface $url
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Config\Model\ResourceModel\Config\Data $configDataResource
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
-     * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Framework\Session\SessionManagerInterface $session
-     * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
+     * @param FrameworkContext $context
+     * @param Registry $registry
+     * @param ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
+     * @param ResourceStore $resource
+     * @param FileStorageDatabase $coreFileStorageDatabase
+     * @param CacheTypeConfig $configCacheType
+     * @param UrlInterface $url
+     * @param RequestInterface $request
+     * @param ResourceConfigData $configDataResource
+     * @param Filesystem $filesystem Filesystem instance
+     * @param ReinitableConfigInterface $config
+     * @param StoreManagerInterface $storeManager
+     * @param SidResolverInterface $sidResolver
+     * @param HttpContext $httpContext
+     * @param SessionManagerInterface $session
+     * @param CurrencyFactory $currencyFactory
      * @param Information $information
      * @param string $currencyInstalled
-     * @param \Magento\Store\Api\GroupRepositoryInterface $groupRepository
-     * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param GroupRepositoryInterface $groupRepository
+     * @param WebsiteRepositoryInterface $websiteRepository
+     * @param AbstractDb|null $resourceCollection
      * @param bool $isCustomEntryPoint
      * @param array $data optional generic object data
-     * @param \Magento\Framework\Event\ManagerInterface|null $eventManager
-     * @param \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface|null $pillPut
-     * @param \Magento\Store\Model\Validation\StoreValidator|null $modelValidator
+     * @param ManagerInterface|null $eventManager
+     * @param PoisonPillPutInterface|null $pillPut
+     * @param StoreValidator|null $modelValidator
      * @param ModifierInterface|null $urlModifier
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
-        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-        \Magento\Store\Model\ResourceModel\Store $resource,
-        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
-        \Magento\Framework\App\Cache\Type\Config $configCacheType,
-        \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Config\Model\ResourceModel\Config\Data $configDataResource,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\App\Config\ReinitableConfigInterface $config,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Session\SidResolverInterface $sidResolver,
-        \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Framework\Session\SessionManagerInterface $session,
-        \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Store\Model\Information $information,
+        FrameworkContext $context,
+        Registry $registry,
+        ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
+        ResourceStore $resource,
+        FileStorageDatabase $coreFileStorageDatabase,
+        CacheTypeConfig $configCacheType,
+        UrlInterface $url,
+        RequestInterface $request,
+        ResourceConfigData $configDataResource,
+        protected readonly Filesystem $filesystem,
+        ReinitableConfigInterface $config,
+        StoreManagerInterface $storeManager,
+        SidResolverInterface $sidResolver,
+        HttpContext $httpContext,
+        SessionManagerInterface $session,
+        protected readonly CurrencyFactory $currencyFactory,
+        protected readonly Information $information,
         $currencyInstalled,
-        \Magento\Store\Api\GroupRepositoryInterface $groupRepository,
-        \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        protected readonly GroupRepositoryInterface $groupRepository,
+        protected readonly WebsiteRepositoryInterface $websiteRepository,
+        AbstractDb $resourceCollection = null,
         $isCustomEntryPoint = false,
         array $data = [],
-        \Magento\Framework\Event\ManagerInterface $eventManager = null,
-        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null,
-        \Magento\Store\Model\Validation\StoreValidator $modelValidator = null,
-        ModifierInterface $urlModifier = null
+        private ?ManagerInterface $eventManager = null,
+        private ?PoisonPillPutInterface $pillPut = null,
+        private ?StoreValidator $modelValidator = null,
+        private ?ModifierInterface $urlModifier = null
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_config = $config;
@@ -395,22 +374,17 @@ class Store extends AbstractExtensibleModel implements
         $this->_request = $request;
         $this->_configDataResource = $configDataResource;
         $this->_isCustomEntryPoint = $isCustomEntryPoint;
-        $this->filesystem = $filesystem;
         $this->_storeManager = $storeManager;
         $this->_sidResolver = $sidResolver;
         $this->_httpContext = $httpContext;
         $this->_session = $session;
-        $this->currencyFactory = $currencyFactory;
-        $this->information = $information;
         $this->_currencyInstalled = $currencyInstalled;
-        $this->groupRepository = $groupRepository;
-        $this->websiteRepository = $websiteRepository;
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()
-            ->get(\Magento\Framework\Event\ManagerInterface::class);
+            ->get(ManagerInterface::class);
         $this->pillPut = $pillPut ?: ObjectManager::getInstance()
-            ->get(\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface::class);
+            ->get(PoisonPillPutInterface::class);
         $this->modelValidator = $modelValidator ?: ObjectManager::getInstance()
-            ->get(\Magento\Store\Model\Validation\StoreValidator::class);
+            ->get(StoreValidator::class);
         $this->urlModifier = $urlModifier ?: ObjectManager::getInstance()->get(ModifierInterface::class);
         parent::__construct(
             $context,
@@ -442,9 +416,9 @@ class Store extends AbstractExtensibleModel implements
     {
         parent::__wakeup();
         $this->_coreFileStorageDatabase = ObjectManager::getInstance()
-            ->get(\Magento\MediaStorage\Helper\File\Storage\Database::class);
+            ->get(FileStorageDatabase::class);
         $this->_config = ObjectManager::getInstance()->get(
-            \Magento\Framework\App\Config\ReinitableConfigInterface::class
+            ReinitableConfigInterface::class
         );
     }
 
@@ -455,13 +429,13 @@ class Store extends AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Store\Model\ResourceModel\Store::class);
+        $this->_init(ResourceStore::class);
     }
 
     /**
      * Retrieve store session object
      *
-     * @return \Magento\Framework\Session\SessionManagerInterface
+     * @return SessionManagerInterface
      */
     protected function _getSession()
     {
@@ -489,7 +463,7 @@ class Store extends AbstractExtensibleModel implements
      * @param string $field
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function load($key, $field = null)
     {
@@ -564,7 +538,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve store website
      *
      * @return Website|bool
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getWebsite()
     {
@@ -581,7 +555,7 @@ class Store extends AbstractExtensibleModel implements
      * @param array $params
      *
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getUrl($route = '', $params = [])
     {
@@ -600,7 +574,7 @@ class Store extends AbstractExtensibleModel implements
      * @param string $type
      * @param boolean|null $secure
      * @return string
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -653,7 +627,7 @@ class Store extends AbstractExtensibleModel implements
                     break;
 
                 default:
-                    throw new \InvalidArgumentException('Invalid base url type');
+                    throw new InvalidArgumentException('Invalid base url type');
             }
 
             if ($url && false !== strpos($url, self::BASE_URL_PLACEHOLDER)) {
@@ -887,7 +861,7 @@ class Store extends AbstractExtensibleModel implements
      * @param string $code
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function setCurrentCurrencyCode($code)
     {
@@ -975,7 +949,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve store current currency
      *
      * @return Currency
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getCurrentCurrency()
     {
@@ -998,7 +972,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve current currency rate
      *
      * @return float
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getCurrentCurrencyRate()
     {
@@ -1009,7 +983,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve root category identifier
      *
      * @return int
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getRootCategoryId()
     {
@@ -1035,7 +1009,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve group model
      *
      * @return Group|bool
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getGroup()
     {
@@ -1059,7 +1033,7 @@ class Store extends AbstractExtensibleModel implements
      * Reinit Stores on after save
      *
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      * @since 100.1.3
      * @deprecated 100.1.3
      * @see we don't recommend this approach anymore
@@ -1150,7 +1124,7 @@ class Store extends AbstractExtensibleModel implements
      * Check if store can be deleted
      *
      * @return boolean
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function isCanDelete()
     {
@@ -1166,7 +1140,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @return boolean
      * @since 100.1.0
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function isDefault()
     {
@@ -1184,7 +1158,7 @@ class Store extends AbstractExtensibleModel implements
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getCurrentUrl($fromStore = true)
     {
@@ -1256,7 +1230,7 @@ class Store extends AbstractExtensibleModel implements
      * Protect delete from non admin area
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function beforeDelete()
     {
@@ -1281,7 +1255,7 @@ class Store extends AbstractExtensibleModel implements
      * Rewrite in order to clear configuration cache
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function afterDelete()
     {
@@ -1331,7 +1305,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve store group name
      *
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getFrontendName()
     {
@@ -1405,7 +1379,7 @@ class Store extends AbstractExtensibleModel implements
      * @inheritdoc
      */
     public function setExtensionAttributes(
-        \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
+        StoreExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

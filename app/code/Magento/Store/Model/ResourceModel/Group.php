@@ -5,13 +5,16 @@
  */
 namespace Magento\Store\Model\ResourceModel;
 
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
  * Store group resource model
  *
  * @api
  * @since 100.0.2
  */
-class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Group extends AbstractDb
 {
     /**
      * Define main table
@@ -26,10 +29,10 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Update default store group for website
      *
-     * @param \Magento\Framework\Model\AbstractModel $model
+     * @param AbstractModel $model
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $model)
+    protected function _afterSave(AbstractModel $model)
     {
         $this->_updateStoreWebsite($model->getId(), $model->getWebsiteId());
         $this->_updateWebsiteDefaultGroup($model->getWebsiteId(), $model->getId());
@@ -78,10 +81,10 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Change store group website
      *
-     * @param \Magento\Framework\Model\AbstractModel $model
+     * @param AbstractModel $model
      * @return $this
      */
-    protected function _changeWebsite(\Magento\Framework\Model\AbstractModel $model)
+    protected function _changeWebsite(AbstractModel $model)
     {
         if ($model->getOriginalWebsiteId() && $model->getWebsiteId() != $model->getOriginalWebsiteId()) {
             $select = $this->getConnection()->select()->from(

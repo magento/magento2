@@ -6,6 +6,7 @@
 
 namespace Magento\Store\Model\Message;
 
+use Magento\Framework\Notification\MessageInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\GroupInterface;
 use Magento\Store\Model\ResourceModel\Group\Collection as GroupCollection;
@@ -13,22 +14,8 @@ use Magento\Store\Model\ResourceModel\Group\Collection as GroupCollection;
 /**
  * System message about not filled required root category for store group
  */
-class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInterface
+class EmptyGroupCategory implements MessageInterface
 {
-    /**
-     * Store group collection.
-     *
-     * @var GroupCollection
-     */
-    private $collection;
-
-    /**
-     * URL builder.
-     *
-     * @var UrlInterface
-     */
-    private $urlBuilder;
-
     /**
      * List of store groups with unassigned root categories.
      *
@@ -41,11 +28,9 @@ class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInter
      * @param UrlInterface $urlBuilder URL builder
      */
     public function __construct(
-        GroupCollection $collection,
-        UrlInterface $urlBuilder
+        private readonly GroupCollection $collection,
+        private readonly UrlInterface $urlBuilder
     ) {
-        $this->collection = $collection;
-        $this->urlBuilder = $urlBuilder;
     }
 
     /**

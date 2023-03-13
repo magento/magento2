@@ -22,43 +22,17 @@ use Magento\Store\Model\Validation\StoreCodeValidator;
 class StorePathInfoValidator
 {
     /**
-     * Store Config
-     *
-     * @var ScopeConfigInterface
-     */
-    private $config;
-
-    /**
-     * @var StoreRepositoryInterface
-     */
-    private $storeRepository;
-
-    /**
-     * @var PathInfo
-     */
-    private $pathInfo;
-
-    /**
-     * @var StoreCodeValidator
-     */
-    private $storeCodeValidator;
-
-    /**
-     * @param ScopeConfigInterface $config
+     * @param ScopeConfigInterface $config Store Config
      * @param StoreRepositoryInterface $storeRepository
      * @param PathInfo $pathInfo
      * @param StoreCodeValidator $storeCodeValidator
      */
     public function __construct(
-        ScopeConfigInterface $config,
-        StoreRepositoryInterface $storeRepository,
-        PathInfo $pathInfo,
-        StoreCodeValidator $storeCodeValidator
+        private readonly ScopeConfigInterface $config,
+        private readonly StoreRepositoryInterface $storeRepository,
+        private readonly PathInfo $pathInfo,
+        private readonly StoreCodeValidator $storeCodeValidator
     ) {
-        $this->config = $config;
-        $this->storeRepository = $storeRepository;
-        $this->pathInfo = $pathInfo;
-        $this->storeCodeValidator = $storeCodeValidator;
     }
 
     /**

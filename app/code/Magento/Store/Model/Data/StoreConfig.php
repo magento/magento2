@@ -5,13 +5,16 @@
  */
 namespace Magento\Store\Model\Data;
 
+use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\Store\Api\Data\StoreConfigExtensionInterface;
+use Magento\Store\Api\Data\StoreConfigInterface;
+
 /**
  * Allows to get and set store config values
  *
  * @codeCoverageIgnore
  */
-class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\Store\Api\Data\StoreConfigInterface
+class StoreConfig extends AbstractExtensibleObject implements StoreConfigInterface
 {
     const KEY_ID = 'id';
     const KEY_CODE = 'code';
@@ -369,7 +372,7 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
     /**
      * @inheritdoc
      *
-     * @return \Magento\Store\Api\Data\StoreConfigExtensionInterface|null
+     * @return StoreConfigExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -379,11 +382,11 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
     /**
      * @inheritdoc
      *
-     * @param \Magento\Store\Api\Data\StoreConfigExtensionInterface $extensionAttributes
+     * @param StoreConfigExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\Store\Api\Data\StoreConfigExtensionInterface $extensionAttributes
+        StoreConfigExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

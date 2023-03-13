@@ -9,21 +9,17 @@ namespace Magento\Store\Model\Resolver;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Exception\State\InitException;
+use Magento\Store\Model\Group as ModelGroup;
 use Magento\Store\Model\StoreManagerInterface;
 
 class Group implements ScopeResolverInterface
 {
     /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
      * @param StoreManagerInterface $storeManager
      */
-    public function __construct(StoreManagerInterface $storeManager)
-    {
-        $this->storeManager = $storeManager;
+    public function __construct(
+        protected readonly StoreManagerInterface $storeManager
+    ) {
     }
 
     /**
@@ -43,7 +39,7 @@ class Group implements ScopeResolverInterface
     /**
      * Retrieve a list of available groups
      *
-     * @return \Magento\Store\Model\Group[]
+     * @return ModelGroup[]
      */
     public function getScopes()
     {

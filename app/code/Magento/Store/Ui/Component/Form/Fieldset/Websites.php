@@ -16,28 +16,20 @@ use Magento\Ui\Component\Form\Fieldset;
 class Websites extends Fieldset
 {
     /**
-     * Store manager
-     *
-     * @var StoreManager
-     */
-    protected $storeManager;
-
-    /**
      * Constructor
      *
      * @param ContextInterface $context
-     * @param StoreManager $storeManager
+     * @param StoreManager $storeManager Store manager
      * @param UiComponentInterface[] $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
-        StoreManager $storeManager,
+        protected readonly StoreManager $storeManager,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $components, $data);
-        $this->storeManager = $storeManager;
     }
 
     /**

@@ -9,6 +9,7 @@ namespace Magento\Store\App\Action\Plugin;
 use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Session\SessionManagerInterface;
@@ -24,41 +25,17 @@ use Magento\Store\Model\StoreManagerInterface;
 class Context
 {
     /**
-     * @var SessionManagerInterface
-     */
-    protected $session;
-
-    /**
-     * @var HttpContext
-     */
-    protected $httpContext;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var StoreCookieManagerInterface
-     */
-    protected $storeCookieManager;
-
-    /**
      * @param SessionManagerInterface $session
      * @param HttpContext $httpContext
      * @param StoreManagerInterface $storeManager
      * @param StoreCookieManagerInterface $storeCookieManager
      */
     public function __construct(
-        SessionManagerInterface $session,
-        HttpContext $httpContext,
-        StoreManagerInterface $storeManager,
-        StoreCookieManagerInterface $storeCookieManager
+        protected readonly SessionManagerInterface $session,
+        protected readonly HttpContext $httpContext,
+        protected readonly StoreManagerInterface $storeManager,
+        protected readonly StoreCookieManagerInterface $storeCookieManager
     ) {
-        $this->session      = $session;
-        $this->httpContext  = $httpContext;
-        $this->storeManager = $storeManager;
-        $this->storeCookieManager = $storeCookieManager;
     }
 
     /**
@@ -132,7 +109,7 @@ class Context
      * @param RequestInterface $request
      * @param StoreInterface $store
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function updateContext(RequestInterface $request, StoreInterface $store)
     {

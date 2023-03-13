@@ -15,33 +15,15 @@ use Magento\Framework\App\Config\Scope\Converter;
 class Website implements SourceInterface
 {
     /**
-     * @var Initial
-     */
-    private $initialConfig;
-
-    /**
-     * @var DefaultScope
-     */
-    private $defaultScope;
-
-    /**
-     * @var Converter
-     */
-    private $converter;
-
-    /**
      * @param Initial $initialConfig
      * @param DefaultScope $defaultScope
      * @param Converter $converter
      */
     public function __construct(
-        Initial $initialConfig,
-        DefaultScope $defaultScope,
-        Converter $converter
+        private readonly Initial $initialConfig,
+        private readonly DefaultScope $defaultScope,
+        private readonly Converter $converter
     ) {
-        $this->initialConfig = $initialConfig;
-        $this->defaultScope = $defaultScope;
-        $this->converter = $converter;
     }
 
     /**

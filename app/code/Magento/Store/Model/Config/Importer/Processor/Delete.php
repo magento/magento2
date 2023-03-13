@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Model\Config\Importer\Processor;
 
+use Exception;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Registry;
@@ -23,49 +24,7 @@ use Magento\Store\Model\WebsiteRepository;
 class Delete implements ProcessorInterface
 {
     /**
-     * The calculator for data differences.
-     *
-     * @var DataDifferenceCalculator
-     */
-    private $dataDifferenceCalculator;
-
-    /**
-     * The repository for websites.
-     *
-     * @var WebsiteRepository
-     */
-    private $websiteRepository;
-
-    /**
-     * The repository for stores.
-     *
-     * @var StoreRepository
-     */
-    private $storeRepository;
-
-    /**
-     * The collection of store groups.
-     *
-     * @var Collection
-     */
-    private $groupCollection;
-
-    /**
-     * The application registry.
-     *
-     * @var Registry
-     */
-    private $registry;
-
-    /**
-     * The event manager.
-     *
-     * @var ManagerInterface
-     */
-    private $eventManager;
-
-    /**
-     * @param Registry $registry The application registry The application registry
+     * @param Registry $registry The application registry
      * @param DataDifferenceCalculator $dataDifferenceCalculator The calculator for data differences
      * @param ManagerInterface $eventManager The event manager
      * @param WebsiteRepository $websiteRepository The repository for websites
@@ -73,19 +32,13 @@ class Delete implements ProcessorInterface
      * @param Collection $groupCollection The collection of store groups
      */
     public function __construct(
-        Registry $registry,
-        DataDifferenceCalculator $dataDifferenceCalculator,
-        ManagerInterface $eventManager,
-        WebsiteRepository $websiteRepository,
-        StoreRepository $storeRepository,
-        Collection $groupCollection
+        private readonly Registry $registry,
+        private readonly DataDifferenceCalculator $dataDifferenceCalculator,
+        private readonly ManagerInterface $eventManager,
+        private readonly WebsiteRepository $websiteRepository,
+        private readonly StoreRepository $storeRepository,
+        private readonly Collection $groupCollection
     ) {
-        $this->registry = $registry;
-        $this->dataDifferenceCalculator = $dataDifferenceCalculator;
-        $this->eventManager = $eventManager;
-        $this->websiteRepository = $websiteRepository;
-        $this->storeRepository = $storeRepository;
-        $this->groupCollection = $groupCollection;
     }
 
     /**
@@ -133,7 +86,7 @@ class Delete implements ProcessorInterface
                         break;
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new RuntimeException(__('%1', $e->getMessage()), $e);
         } finally {
             $this->registry->unregister('isSecureArea');

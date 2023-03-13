@@ -16,17 +16,11 @@ use Magento\Store\Model\Config\Placeholder as ConfigPlaceholder;
 class Placeholder implements PostProcessorInterface
 {
     /**
-     * @var ConfigPlaceholder
-     */
-    private $configPlaceholder;
-
-    /**
-     * Placeholder constructor.
      * @param ConfigPlaceholder $configPlaceholder
      */
-    public function __construct(ConfigPlaceholder $configPlaceholder)
-    {
-        $this->configPlaceholder = $configPlaceholder;
+    public function __construct(
+        private readonly ConfigPlaceholder $configPlaceholder
+    ) {
     }
 
     /**

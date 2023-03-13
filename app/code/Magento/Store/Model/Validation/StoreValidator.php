@@ -17,23 +17,13 @@ use Magento\Framework\Validator\ValidatorInterface;
 class StoreValidator extends AbstractValidator
 {
     /**
-     * @var DataObjectFactory
-     */
-    private $dataObjectValidatorFactory;
-
-    /**
-     * @var ValidatorInterface[]
-     */
-    private $rules;
-
-    /**
      * @param DataObjectFactory $dataObjectValidatorFactory
      * @param ValidatorInterface[] $rules
      */
-    public function __construct(DataObjectFactory $dataObjectValidatorFactory, array $rules = [])
-    {
-        $this->dataObjectValidatorFactory = $dataObjectValidatorFactory;
-        $this->rules = $rules;
+    public function __construct(
+        private readonly DataObjectFactory $dataObjectValidatorFactory,
+        private readonly array $rules = []
+    ) {
     }
 
     /**

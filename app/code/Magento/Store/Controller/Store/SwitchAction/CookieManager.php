@@ -8,7 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\Store\Controller\Store\SwitchAction;
 
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
+use Magento\Framework\Stdlib\Cookie\FailureToSendException;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 
@@ -25,34 +28,22 @@ class CookieManager
     const COOKIE_NAME = 'section_data_clean';
 
     /**
-     * @var CookieMetadataFactory
-     */
-    private $cookieMetadataFactory;
-
-    /**
-     * @var CookieManagerInterface
-     */
-    private $cookieManager;
-
-    /**
      * @param CookieMetadataFactory $cookieMetadataFactory
      * @param CookieManagerInterface $cookieManager
      */
     public function __construct(
-        CookieMetadataFactory $cookieMetadataFactory,
-        CookieManagerInterface $cookieManager
+        private readonly CookieMetadataFactory $cookieMetadataFactory,
+        private readonly CookieManagerInterface $cookieManager
     ) {
-        $this->cookieMetadataFactory = $cookieMetadataFactory;
-        $this->cookieManager = $cookieManager;
     }
 
     /**
      * Set cookie for store
      *
      * @param StoreInterface $targetStore
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
-     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
+     * @throws InputException
+     * @throws CookieSizeLimitReachedException
+     * @throws FailureToSendException
      */
     public function setCookieForStore(StoreInterface $targetStore)
     {

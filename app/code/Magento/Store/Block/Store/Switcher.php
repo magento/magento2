@@ -10,8 +10,14 @@
 namespace Magento\Store\Block\Store;
 
 use Magento\Directory\Helper\Data;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Magento\Store\Model\GroupFactory;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store as ModelStore;
+use Magento\Store\Model\StoreFactory;
 
-class Switcher extends \Magento\Framework\View\Element\Template
+class Switcher extends Template
 {
     /**
      * @var array
@@ -31,27 +37,27 @@ class Switcher extends \Magento\Framework\View\Element\Template
     /**
      * Store factory
      *
-     * @var \Magento\Store\Model\StoreFactory
+     * @var StoreFactory
      */
     protected $_storeFactory;
 
     /**
      * Store group factory
      *
-     * @var \Magento\Store\Model\GroupFactory
+     * @var GroupFactory
      */
     protected $_storeGroupFactory;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Store\Model\GroupFactory $storeGroupFactory
-     * @param \Magento\Store\Model\StoreFactory $storeFactory
+     * @param TemplateContext $context
+     * @param GroupFactory $storeGroupFactory
+     * @param StoreFactory $storeFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Store\Model\GroupFactory $storeGroupFactory,
-        \Magento\Store\Model\StoreFactory $storeFactory,
+        TemplateContext $context,
+        GroupFactory $storeGroupFactory,
+        StoreFactory $storeFactory,
         array $data = []
     ) {
         $this->_storeGroupFactory = $storeGroupFactory;
@@ -85,14 +91,14 @@ class Switcher extends \Magento\Framework\View\Element\Template
         foreach ($groupCollection as $group) {
             $this->_groups[$group->getId()] = $group;
         }
-        /** @var \Magento\Store\Model\Store $store */
+        /** @var ModelStore $store */
         foreach ($storeCollection as $store) {
             if (!$store->isActive()) {
                 continue;
             }
             $store->setLocaleCode($this->_scopeConfig->getValue(
                 Data::XML_PATH_DEFAULT_LOCALE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $store->getId()
             ));
             $this->_stores[$store->getGroupId()][$store->getId()] = $store;
@@ -111,7 +117,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
         $stores = [];
         $localeCode = $this->_scopeConfig->getValue(
             Data::XML_PATH_DEFAULT_LOCALE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
         foreach ($this->_groups as $group) {
             if (!isset($this->_stores[$group->getId()])) {

@@ -24,38 +24,17 @@ class RedirectDataCacheSerializer implements RedirectDataSerializerInterface
     private const CACHE_ID_LENGTH = 32;
 
     /**
-     * @var CacheInterface
-     */
-    private $cache;
-    /**
-     * @var Json
-     */
-    private $json;
-    /**
-     * @var Random
-     */
-    private $random;
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @param Json $json
      * @param Random $random
      * @param CacheInterface $cache
      * @param LoggerInterface $logger
      */
     public function __construct(
-        Json $json,
-        Random $random,
-        CacheInterface $cache,
-        LoggerInterface $logger
+        private readonly Json $json,
+        private readonly Random $random,
+        private readonly CacheInterface $cache,
+        private readonly LoggerInterface $logger
     ) {
-        $this->cache = $cache;
-        $this->json = $json;
-        $this->random = $random;
-        $this->logger = $logger;
     }
 
     /**

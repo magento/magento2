@@ -6,6 +6,7 @@
 
 namespace Magento\Store\Model;
 
+use Magento\Framework\Model\Entity\ScopeInterface as EntityScopeInterface;
 use Magento\Framework\Model\Entity\ScopeProviderInterface;
 use Magento\Store\Model\Store;
 use Magento\Framework\Model\Entity\ScopeFactory;
@@ -15,27 +16,20 @@ use Magento\Framework\Model\Entity\ScopeFactory;
  */
 class DefaultStoreScopeProvider implements ScopeProviderInterface
 {
-
-    /**
-     * @var ScopeFactory
-     */
-    private $scopeFactory;
-
     /**
      * StoreScopeProvider constructor.
      *
      * @param ScopeFactory $scopeFactory
      */
     public function __construct(
-        ScopeFactory $scopeFactory
+        private readonly ScopeFactory $scopeFactory
     ) {
-        $this->scopeFactory = $scopeFactory;
     }
 
     /**
      * @param string $entityType
      * @param array $entityData
-     * @return \Magento\Framework\Model\Entity\ScopeInterface
+     * @return EntityScopeInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getContext($entityType, $entityData = [])

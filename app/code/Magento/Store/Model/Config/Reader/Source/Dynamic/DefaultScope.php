@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Model\Config\Reader\Source\Dynamic;
 
+use DomainException;
 use Magento\Framework\App\Config\Scope\Converter;
 use Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory;
 use Magento\Framework\App\Config\Reader\Source\SourceInterface;
@@ -16,25 +17,13 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class DefaultScope implements SourceInterface
 {
     /**
-     * @var ScopedFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var Converter
-     */
-    private $converter;
-
-    /**
      * @param ScopedFactory $collectionFactory
      * @param Converter $converter
      */
     public function __construct(
-        ScopedFactory $collectionFactory,
-        Converter $converter
+        private readonly ScopedFactory $collectionFactory,
+        private readonly Converter $converter
     ) {
-        $this->collectionFactory = $collectionFactory;
-        $this->converter = $converter;
     }
 
     /**
@@ -49,7 +38,7 @@ class DefaultScope implements SourceInterface
             $collection = $this->collectionFactory->create(
                 ['scope' => ScopeConfigInterface::SCOPE_TYPE_DEFAULT]
             );
-        } catch (\DomainException $e) {
+        } catch (DomainException $e) {
             $collection = [];
         }
         $config = [];

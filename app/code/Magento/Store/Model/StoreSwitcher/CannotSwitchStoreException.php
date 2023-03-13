@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Store\Model\StoreSwitcher;
 
+use Exception;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Phrase;
 
@@ -16,11 +17,11 @@ use Magento\Framework\Phrase;
 class CannotSwitchStoreException extends RuntimeException
 {
     /**
-     * @param \Exception|null $cause
+     * @param Exception|null $cause
      * @param Phrase|null $phrase
      * @param int $code
      */
-    public function __construct(\Exception $cause = null, Phrase $phrase = null, int $code = 0)
+    public function __construct(Exception $cause = null, Phrase $phrase = null, int $code = 0)
     {
         parent::__construct($phrase ?: __('The store cannot be switched.'), $cause, $code);
     }

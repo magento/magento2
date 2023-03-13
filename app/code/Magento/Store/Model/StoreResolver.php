@@ -7,25 +7,24 @@ declare(strict_types=1);
 
 namespace Magento\Store\Model;
 
+use InvalidArgumentException;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\StoreCookieManagerInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\App\Request\StorePathInfoValidator;
+
 /**
  * Class used to resolve store from url path or get parameters or cookie.
  */
-class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
+class StoreResolver implements StoreResolverInterface
 {
     /**
      * Cache tag
      */
     const CACHE_TAG = 'store_relations';
-
-    /**
-     * @var \Magento\Store\Api\StoreRepositoryInterface
-     */
-    protected $storeRepository;
-
-    /**
-     * @var \Magento\Store\Api\StoreCookieManagerInterface
-     */
-    protected $storeCookieManager;
 
     /**
      * @deprecated 101.0.0
@@ -38,55 +37,24 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     protected $readerList;
 
     /**
-     * @var string
-     */
-    protected $runMode;
-
-    /**
-     * @var string
-     */
-    protected $scopeCode;
-
-    /**
-     * @var \Magento\Framework\App\Request\Http
-     */
-    protected $request;
-
-    /**
-     * @var StoresData
-     */
-    private $storesData;
-
-    /**
-     * @var \Magento\Store\App\Request\StorePathInfoValidator
-     */
-    private $storePathInfoValidator;
-
-    /**
-     * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
-     * @param \Magento\Store\Api\StoreCookieManagerInterface $storeCookieManager
-     * @param \Magento\Framework\App\Request\Http $request
-     * @param \Magento\Store\Model\StoresData $storesData
-     * @param \Magento\Store\App\Request\StorePathInfoValidator $storePathInfoValidator
+     * @param StoreRepositoryInterface $storeRepository
+     * @param StoreCookieManagerInterface $storeCookieManager
+     * @param Http $request
+     * @param StoresData $storesData
+     * @param StorePathInfoValidator $storePathInfoValidator
      * @param string|null $runMode
      * @param string|null $scopeCode
      */
     public function __construct(
-        \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
-        \Magento\Store\Api\StoreCookieManagerInterface $storeCookieManager,
-        \Magento\Framework\App\Request\Http $request,
-        \Magento\Store\Model\StoresData $storesData,
-        \Magento\Store\App\Request\StorePathInfoValidator $storePathInfoValidator,
-        $runMode = ScopeInterface::SCOPE_STORE,
-        $scopeCode = null
+        protected readonly StoreRepositoryInterface $storeRepository,
+        protected readonly StoreCookieManagerInterface $storeCookieManager,
+        protected readonly Http $request,
+        private readonly StoresData $storesData,
+        private readonly StorePathInfoValidator $storePathInfoValidator,
+        protected $runMode = ScopeInterface::SCOPE_STORE,
+        protected $scopeCode = null
     ) {
-        $this->storeRepository = $storeRepository;
-        $this->storeCookieManager = $storeCookieManager;
-        $this->request = $request;
-        $this->storePathInfoValidator = $storePathInfoValidator;
-        $this->storesData = $storesData;
         $this->runMode = $scopeCode ? $runMode : ScopeInterface::SCOPE_WEBSITE;
-        $this->scopeCode = $scopeCode;
     }
 
     /**
@@ -100,14 +68,14 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
 
         if (!$storeCode) {
             $storeCode = $this->request->getParam(
-                \Magento\Store\Model\StoreManagerInterface::PARAM_NAME,
+                StoreManagerInterface::PARAM_NAME,
                 $this->storeCookieManager->getStoreCodeFromCookie()
             );
         }
 
         if (is_array($storeCode)) {
             if (!isset($storeCode['_data']['code'])) {
-                throw new \InvalidArgumentException(__('Invalid store parameter.'));
+                throw new InvalidArgumentException(__('Invalid store parameter.'));
             }
             $storeCode = $storeCode['_data']['code'];
         }
@@ -115,7 +83,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         if ($storeCode) {
             try {
                 $store = $this->getRequestedStoreByCode($storeCode);
-            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            } catch (NoSuchEntityException $e) {
                 $store = $this->getDefaultStoreById($defaultStoreId);
             }
 
@@ -143,7 +111,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      *
      * @return array
      * @deprecated 101.0.0
-     * @see \Magento\Store\Model\StoreResolver::getStoresData
+     * @see StoreResolver::getStoresData
      */
     protected function readStoresData() : array
     {
@@ -154,15 +122,15 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * Retrieve active store by code
      *
      * @param string $storeCode
-     * @return \Magento\Store\Api\Data\StoreInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return StoreInterface
+     * @throws NoSuchEntityException
      */
-    protected function getRequestedStoreByCode($storeCode) : \Magento\Store\Api\Data\StoreInterface
+    protected function getRequestedStoreByCode($storeCode): StoreInterface
     {
         try {
             $store = $this->storeRepository->getActiveStoreByCode($storeCode);
         } catch (StoreIsInactiveException $e) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException(__('Requested store is inactive'));
+            throw new NoSuchEntityException(__('Requested store is inactive'));
         }
 
         return $store;
@@ -172,15 +140,15 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * Retrieve active store by code
      *
      * @param int $id
-     * @return \Magento\Store\Api\Data\StoreInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return StoreInterface
+     * @throws NoSuchEntityException
      */
-    protected function getDefaultStoreById($id) : \Magento\Store\Api\Data\StoreInterface
+    protected function getDefaultStoreById($id): StoreInterface
     {
         try {
             $store = $this->storeRepository->getActiveStoreById($id);
         } catch (StoreIsInactiveException $e) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException(__('Default store is inactive'));
+            throw new NoSuchEntityException(__('Default store is inactive'));
         }
 
         return $store;

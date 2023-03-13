@@ -5,13 +5,17 @@
  */
 namespace Magento\Store\Model\ResourceModel\Group;
 
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Store\Model\Group as ModelGroup;
+use Magento\Store\Model\ResourceModel\Group as ResourceGroup;
+
 /**
  * Store group collection
  *
  * @api
  * @since 100.0.2
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Define resource model
@@ -21,7 +25,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->setFlag('load_default_store_group', false);
-        $this->_init(\Magento\Store\Model\Group::class, \Magento\Store\Model\ResourceModel\Group::class);
+        $this->_init(ModelGroup::class, ResourceGroup::class);
     }
 
     /**

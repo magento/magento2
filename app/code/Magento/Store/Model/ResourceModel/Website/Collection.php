@@ -5,13 +5,18 @@
  */
 namespace Magento\Store\Model\ResourceModel\Website;
 
+use Magento\Framework\DB\Select;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Store\Model\ResourceModel\Website as ResourceWebsite;
+use Magento\Store\Model\Website as ModelWebsite;
+
 /**
  * Websites collection
  *
  * @api
  * @since 100.0.2
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Map field to alias
@@ -28,7 +33,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->setFlag('load_default_website', false);
-        $this->_init(\Magento\Store\Model\Website::class, \Magento\Store\Model\ResourceModel\Website::class);
+        $this->_init(ModelWebsite::class, ResourceWebsite::class);
     }
 
     /**
@@ -116,8 +121,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function load($printQuery = false, $logQuery = false)
     {
-        $this->unshiftOrder('main_table.name', \Magento\Framework\DB\Select::SQL_ASC)       // website name SECOND
-            ->unshiftOrder('main_table.sort_order', \Magento\Framework\DB\Select::SQL_ASC); // website sort order FIRST
+        $this->unshiftOrder('main_table.name', Select::SQL_ASC)       // website name SECOND
+            ->unshiftOrder('main_table.sort_order', Select::SQL_ASC); // website sort order FIRST
 
         return parent::load($printQuery, $logQuery);
     }
@@ -144,13 +149,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 'group_table.group_id = store_table.group_id',
                 ['store_id' => 'store_id', 'store_title' => 'name', 'store_code' => 'code']
             );
-            $this->addOrder('group_table.name', \Magento\Framework\DB\Select::SQL_ASC)       // store name
+            $this->addOrder('group_table.name', Select::SQL_ASC)       // store name
                 ->addOrder(
                     'CASE WHEN store_table.store_id = 0 THEN 0 ELSE 1 END',
-                    \Magento\Framework\DB\Select::SQL_ASC
+                    Select::SQL_ASC
                 ) // view is admin
-                ->addOrder('store_table.sort_order', \Magento\Framework\DB\Select::SQL_ASC) // view sort order
-                ->addOrder('store_table.name', \Magento\Framework\DB\Select::SQL_ASC)       // view name
+                ->addOrder('store_table.sort_order', Select::SQL_ASC) // view sort order
+                ->addOrder('store_table.name', Select::SQL_ASC)       // view name
             ;
         }
         return $this;

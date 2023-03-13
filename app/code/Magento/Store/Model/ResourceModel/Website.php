@@ -6,13 +6,19 @@
 
 namespace Magento\Store\Model\ResourceModel;
 
+use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Store\Model\ScopeInterface;
+
 /**
  * Website Resource Model
  *
  * @api
  * @since 100.0.2
  */
-class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Website extends AbstractDb
 {
     /**
      * Define main table
@@ -62,14 +68,14 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Validate website code before object save
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _beforeSave(AbstractModel $object)
     {
         if (!$object->getCode() || !preg_match('/^[a-z]+[a-z0-9_]*$/i', $object->getCode())) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __(
                     'Website code may only contain letters (a-z), numbers (0-9) or underscore (_),'
                     . ' and the first character must be a letter.'
@@ -83,10 +89,10 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Perform actions after object save
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _afterSave(AbstractModel $object)
     {
         if ($object->getIsDefault()) {
             $this->getConnection()->update($this->getMainTable(), ['is_default' => 0]);
@@ -99,13 +105,13 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Remove configuration data after delete website
      *
-     * @param \Magento\Framework\Model\AbstractModel $model
+     * @param AbstractModel $model
      * @return $this
      */
-    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $model)
+    protected function _afterDelete(AbstractModel $model)
     {
         $where = [
-            'scope = ?' => \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES,
+            'scope = ?' => ScopeInterface::SCOPE_WEBSITES,
             'scope_id = ?' => $model->getWebsiteId(),
         ];
 
@@ -120,7 +126,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Select fields website_id, store_id
      *
      * @param bool $includeDefault include/exclude default admin website
-     * @return \Magento\Framework\DB\Select
+     * @return Select
      */
     public function getDefaultStoresSelect($includeDefault = false)
     {

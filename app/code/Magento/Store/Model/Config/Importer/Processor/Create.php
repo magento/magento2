@@ -6,13 +6,17 @@
 
 namespace Magento\Store\Model\Config\Importer\Processor;
 
+use Exception;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
+use Magento\Store\Model\Group as ModelGroup;
 use Magento\Store\Model\GroupFactory;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store as ModelStore;
 use Magento\Store\Model\StoreFactory;
+use Magento\Store\Model\Website as ModelWebsite;
 use Magento\Store\Model\WebsiteFactory;
 
 /**
@@ -20,34 +24,6 @@ use Magento\Store\Model\WebsiteFactory;
  */
 class Create implements ProcessorInterface
 {
-    /**
-     * The calculator for data differences.
-     *
-     * @var DataDifferenceCalculator
-     */
-    private $dataDifferenceCalculator;
-
-    /**
-     * The factory for website entity.
-     *
-     * @var WebsiteFactory
-     */
-    private $websiteFactory;
-
-    /**
-     * The factory for group entity.
-     *
-     * @var GroupFactory
-     */
-    private $groupFactory;
-
-    /**
-     * The factory for store entity.
-     *
-     * @var StoreFactory
-     */
-    private $storeFactory;
-
     /**
      * The event manager.
      *
@@ -67,16 +43,12 @@ class Create implements ProcessorInterface
      * @param StoreFactory $storeFactory The factory for store entity
      */
     public function __construct(
-        DataDifferenceCalculator $dataDifferenceCalculator,
+        private readonly DataDifferenceCalculator $dataDifferenceCalculator,
         ManagerInterface $eventManager,
-        WebsiteFactory $websiteFactory,
-        GroupFactory $groupFactory,
-        StoreFactory $storeFactory
+        private readonly WebsiteFactory $websiteFactory,
+        private readonly GroupFactory $groupFactory,
+        private readonly StoreFactory $storeFactory
     ) {
-        $this->dataDifferenceCalculator = $dataDifferenceCalculator;
-        $this->websiteFactory = $websiteFactory;
-        $this->groupFactory = $groupFactory;
-        $this->storeFactory = $storeFactory;
         $this->eventManager = $eventManager;
     }
 
@@ -119,7 +91,7 @@ class Create implements ProcessorInterface
                         break;
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new RuntimeException(__('%1', $e->getMessage()), $e);
         }
     }
@@ -181,7 +153,7 @@ class Create implements ProcessorInterface
             if (!isset($groupData['root_category_id'])) {
                 $groupData['root_category_id'] = 0;
             }
-            
+
             $group->setData($groupData);
 
             $group->getResource()->save($group);
@@ -236,7 +208,7 @@ class Create implements ProcessorInterface
      *
      * @param array $data The data to be searched in
      * @param string $websiteId The website id
-     * @return \Magento\Store\Model\Website
+     * @return ModelWebsite
      * @throws NotFoundException If website was not detected
      */
     private function detectWebsiteById(array $data, $websiteId)
@@ -258,7 +230,7 @@ class Create implements ProcessorInterface
      *
      * @param array $data The data to be searched in
      * @param string $groupId The group id
-     * @return \Magento\Store\Model\Group
+     * @return ModelGroup
      * @throws NotFoundException If group was not detected
      */
     private function detectGroupById(array $data, $groupId)
@@ -280,7 +252,7 @@ class Create implements ProcessorInterface
      *
      * @param array $data The data to be searched in
      * @param string $storeId The store id
-     * @return \Magento\Store\Model\Store
+     * @return ModelStore
      * @throws NotFoundException If store was not detected
      */
     private function detectStoreById(array $data, $storeId)
