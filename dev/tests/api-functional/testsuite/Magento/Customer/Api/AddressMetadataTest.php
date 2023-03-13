@@ -18,9 +18,9 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class AddressMetadataTest extends WebapiAbstract
 {
-    const SERVICE_NAME = "customerAddressMetadataV1";
-    const SERVICE_VERSION = "V1";
-    const RESOURCE_PATH = "/V1/attributeMetadata/customerAddress";
+    private const SERVICE_NAME = "customerAddressMetadataV1";
+    private const SERVICE_VERSION = "V1";
+    private const RESOURCE_PATH = "/V1/attributeMetadata/customerAddress";
 
     /**
      * @var Config $config
