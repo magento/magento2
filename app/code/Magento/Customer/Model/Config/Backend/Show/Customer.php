@@ -154,8 +154,8 @@ class Customer extends \Magento\Framework\App\Config\Value
                 $attributeObject->save();
             }
         } elseif ($this->getScope() == ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-            $defaulValue = $this->configSource->get(ScopeConfigInterface::SCOPE_TYPE_DEFAULT . '/' . $this->getPath());
-            $valueConfig = $this->getValueConfig($defaulValue === [] ? '' : $defaulValue);
+            $defaultValue = $this->configSource->get(ScopeConfigInterface::SCOPE_TYPE_DEFAULT . '/' . $this->getPath());
+            $valueConfig = $this->getValueConfig($defaultValue === [] ? '' : $defaultValue);
             foreach ($this->_getAttributeObjects() as $attributeObject) {
                 $attributeObject->setData('is_required', $valueConfig['is_required']);
                 $attributeObject->setData('is_visible', $valueConfig['is_visible']);
