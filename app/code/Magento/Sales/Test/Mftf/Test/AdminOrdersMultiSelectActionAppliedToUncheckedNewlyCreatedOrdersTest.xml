@@ -32,9 +32,7 @@
         </before>
 
         <after>
-
-            <!--Remove default flat rate shipping method settings-->
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
             <!--Delete product-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!--Delete customer-->
