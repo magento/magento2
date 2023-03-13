@@ -38,7 +38,7 @@ class AddressTest extends TestCase
     /**
      * Test attribute code
      */
-    const ATTRIBUTE_CODE = 'code1';
+    public const ATTRIBUTE_CODE = 'code1';
 
     /**
      * Websites array (website id => code)
@@ -61,7 +61,7 @@ class AddressTest extends TestCase
     ];
 
     /**
-     * Customer data
+     * Customer details
      *
      * @var array
      */
