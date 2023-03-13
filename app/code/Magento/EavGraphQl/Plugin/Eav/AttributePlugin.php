@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\EavGraphQl\Plugin\Eav;
 
 use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\Api\AttributeInterface;
 
 /**
  * EAV plugin runs page cache clean and provides proper EAV identities.
@@ -31,7 +32,8 @@ class AttributePlugin
                     "%s_%s_%s",
                     Attribute::CACHE_TAG,
                     $subject->getEntityType()->getEntityTypeCode(),
-                    $subject->getAttributeCode()
+                    $subject->getOrigData(AttributeInterface::ATTRIBUTE_CODE)
+                        ?? $subject->getData(AttributeInterface::ATTRIBUTE_CODE)
                 )
             ]
         );
