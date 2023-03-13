@@ -15,6 +15,7 @@
         </annotations>
 
         <!--    [DO NOT USE!] This action group must not be used because it violated Technical guidelines on how to write tests.    -->
+        <!--    Instead use combination of FillGuestCheckoutShippingAddressWithCountryAndStateActionGroup, StorefrontSetShippingMethodActionGroup, StorefrontCheckoutClickNextOnShippingStepActionGroup    -->
 
         <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{CustomerEntityOne.email}}" stepKey="setCustomerEmail"/>
         <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="SetCustomerFirstName"/>
