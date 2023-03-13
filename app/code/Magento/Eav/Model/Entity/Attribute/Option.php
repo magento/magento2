@@ -31,7 +31,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLabel()
     {
@@ -39,7 +39,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getValue()
     {
@@ -47,7 +47,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSortOrder()
     {
@@ -55,7 +55,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsDefault()
     {
@@ -63,7 +63,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getStoreLabels()
     {
@@ -85,7 +85,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
      * Set option value
      *
      * @param string $value
-     * @return string
+     * @return $this
      */
     public function setValue($value)
     {
@@ -104,7 +104,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
     }
 
     /**
-     * set is default
+     * Set is default
      *
      * @param bool $isDefault
      * @return $this
