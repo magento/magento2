@@ -150,5 +150,4 @@ class NewAccountEmailTemplateTest extends \PHPUnit\Framework\TestCase
 
         return $templateId;
     }
-
 }
