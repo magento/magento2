@@ -22,11 +22,6 @@ class DisableSid implements DataPatchInterface, PatchVersionInterface
     const XML_PATH_USE_FRONTEND_SID = 'web/session/use_frontend_sid';
 
     /**
-     * @var \Magento\Framework\App\Config\MutableScopeConfigInterface
-     */
-    private $mutableScopeConfig;
-
-    /**
      * scope type
      */
     const SCOPE_STORE = 'store';
@@ -37,9 +32,8 @@ class DisableSid implements DataPatchInterface, PatchVersionInterface
      * @param MutableScopeConfigInterface $mutableScopeConfig
      */
     public function __construct(
-        MutableScopeConfigInterface $mutableScopeConfig
+        private readonly MutableScopeConfigInterface $mutableScopeConfig
     ) {
-        $this->mutableScopeConfig = $mutableScopeConfig;
     }
 
     /**

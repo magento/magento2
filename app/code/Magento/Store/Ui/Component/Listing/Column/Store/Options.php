@@ -19,16 +19,6 @@ use Magento\Store\Model\System\Store as SystemStore;
 class Options implements OptionSourceInterface
 {
     /**
-     * @var Escaper
-     */
-    protected $escaper;
-
-    /**
-     * @var SystemStore
-     */
-    protected $systemStore;
-
-    /**
      * @var array
      */
     protected $options;
@@ -44,10 +34,10 @@ class Options implements OptionSourceInterface
      * @param SystemStore $systemStore
      * @param Escaper $escaper
      */
-    public function __construct(SystemStore $systemStore, Escaper $escaper)
-    {
-        $this->systemStore = $systemStore;
-        $this->escaper = $escaper;
+    public function __construct(
+        protected readonly SystemStore $systemStore,
+        protected readonly Escaper $escaper
+    ) {
     }
 
     /**

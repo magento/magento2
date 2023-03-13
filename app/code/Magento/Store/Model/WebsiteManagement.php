@@ -6,6 +6,7 @@
 namespace Magento\Store\Model;
 
 use Magento\Store\Api\WebsiteManagementInterface;
+use Magento\Store\Model\ResourceModel\Website\Collection as WebsiteCollection;
 use Magento\Store\Model\ResourceModel\Website\CollectionFactory;
 
 /**
@@ -15,16 +16,11 @@ use Magento\Store\Model\ResourceModel\Website\CollectionFactory;
 class WebsiteManagement implements WebsiteManagementInterface
 {
     /**
-     * @var CollectionFactory
-     */
-    protected $websitesFactory;
-
-    /**
      * @param CollectionFactory $websitesFactory
      */
-    public function __construct(CollectionFactory $websitesFactory)
-    {
-        $this->websitesFactory = $websitesFactory;
+    public function __construct(
+        protected readonly CollectionFactory $websitesFactory
+    ) {
     }
 
     /**
@@ -32,8 +28,8 @@ class WebsiteManagement implements WebsiteManagementInterface
      */
     public function getCount()
     {
+        /** @var WebsiteCollection $websites */
         $websites = $this->websitesFactory->create();
-        /** @var \Magento\Store\Model\ResourceModel\Website\Collection $websites */
         return $websites->getSize();
     }
 }

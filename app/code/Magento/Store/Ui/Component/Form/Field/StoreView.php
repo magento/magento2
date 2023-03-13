@@ -20,30 +20,22 @@ use Magento\Ui\Component\Form\Field;
 class StoreView extends Field
 {
     /**
-     * Store manager
-     *
-     * @var StoreManager
-     */
-    private $storeManager;
-
-    /**
      * StoreView constructor.
      *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param StoreManager $storeManager
+     * @param StoreManager $storeManager Store manager
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        StoreManager $storeManager,
+        private readonly StoreManager $storeManager,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
-        $this->storeManager = $storeManager;
     }
 
     /**
