@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model;
 
 use Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Catalog\Model\Product\Visibility;
 
 /**
  * Catalog config model.
@@ -115,6 +116,11 @@ class Config extends \Magento\Eav\Model\Config
     protected $_configFactory;
 
     /**
+     * @var Visibility
+     */
+    protected $_visibility;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\CacheInterface $cache
@@ -147,6 +153,7 @@ class Config extends \Magento\Eav\Model\Config
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
+        Visibility $visibility,
         SerializerInterface $serializer = null,
         $attributesForPreload = []
     ) {
@@ -157,6 +164,7 @@ class Config extends \Magento\Eav\Model\Config
         $this->_setCollectionFactory = $setCollectionFactory;
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;
+        $this->_visibility = $visibility;
 
         parent::__construct(
             $cache,
@@ -505,5 +513,10 @@ class Config extends \Magento\Eav\Model\Config
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
+    }
+
+    public function getVisibility()
+    {
+        return $this->_visibility;
     }
 }

@@ -348,11 +348,7 @@ abstract class AbstractAction
                 \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
             )->where(
                 $this->connection->getIfNullSql('cpvs.value', 'cpvd.value') . ' IN (?)',
-                [
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
-                ]
+                $this->config->getVisibility()->getVisibleInSiteIds()
             )->columns(
                 [
                     'category_id' => 'cc.entity_id',
@@ -593,11 +589,7 @@ abstract class AbstractAction
             \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
         )->where(
             $this->connection->getIfNullSql('cpvs.value', 'cpvd.value') . ' IN (?)',
-            [
-                \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
-                \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
-                \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
-            ]
+            $this->config->getVisibility()->getVisibleInSiteIds()
         )->where(
             $this->connection->getIfNullSql('ccas.value', 'ccad.value') . ' = ?',
             1
@@ -841,11 +833,7 @@ abstract class AbstractAction
                 \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
             )->where(
                 $this->connection->getIfNullSql('cpvs.value', 'cpvd.value') . ' IN (?)',
-                [
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
-                ]
+                $this->config->getVisibility()->getVisibleInSiteIds()
             )->group(
                 'cp.entity_id'
             )->columns(
