@@ -135,7 +135,7 @@
         </actionGroup>
 
         <!-- Assert Order Status on Order view page -->
-        <comment userInput="Preserve BIC. {{AdminOrderDetailsMainActionsSection.invoiceBtn}}" stepKey="seeInvoiceBtn"/>
+        <comment userInput="Preserve BIC. AdminOrderDetailsMainActionsSection.invoiceBtn" stepKey="seeInvoiceBtn"/>
         <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="verifyOrderStatusOnOrderViewPage">
             <argument name="status" value="{{defaultOrderStatus.label}}" />
         </actionGroup>
