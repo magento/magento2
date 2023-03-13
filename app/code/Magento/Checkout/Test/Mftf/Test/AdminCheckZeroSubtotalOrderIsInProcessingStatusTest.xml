@@ -72,7 +72,7 @@
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextButtonOnShippingPage" />
         <waitForPageLoad stepKey="waitForPaymentLoading"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
-        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+        <seeCurrentUrlMatches regex="~{{CheckoutPage.url}}/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
 
         <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyDiscountCoupon">
             <argument name="discountCode" value="$createCartPriceRuleCoupon.code$"/>
