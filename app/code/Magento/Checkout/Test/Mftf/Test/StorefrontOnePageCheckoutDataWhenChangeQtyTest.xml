@@ -60,7 +60,7 @@
         <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
-        <seeCurrentUrlMatches regex="~{{CheckoutPage.url}}/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
+        <seeCurrentUrlMatches regex="~/checkout/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
 
         <!--Go to cart page, update qty and proceed to checkout-->
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage"/>
