@@ -182,11 +182,14 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     {
         if (!$this->getTotalReviewsCache()) {
             $this->setTotalReviewsCache(
-                $this->_reviewFactory->create()->getTotalReviews($this->getProductData()->getId()),
-                false,
-                $this->_storeManager->getStore()->getId()
+                $this->_reviewFactory->create()->getTotalReviews(
+                    $this->getProductData()->getId(),
+                    false,
+                    $this->_storeManager->getStore()->getId()
+                )
             );
         }
+
         return $this->getTotalReviewsCache();
     }
 

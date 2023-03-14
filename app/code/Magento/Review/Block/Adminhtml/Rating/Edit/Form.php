@@ -11,6 +11,8 @@ namespace Magento\Review\Block\Adminhtml\Rating\Edit;
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
+     * Prepare the form
+     *
      * @return $this
      */
     protected function _prepareForm()

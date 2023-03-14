@@ -71,8 +71,6 @@ class Form extends \Magento\Framework\View\Element\Template
     private $serializer;
 
     /**
-     * Form constructor.
-     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param \Magento\Review\Helper\Data $reviewData
@@ -140,6 +138,8 @@ class Form extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return JavaScript layout object
+     *
      * @return string
      */
     public function getJsLayout()

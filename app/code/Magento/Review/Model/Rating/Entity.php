@@ -16,6 +16,8 @@ namespace Magento\Review\Model\Rating;
 class Entity extends \Magento\Framework\Model\AbstractModel
 {
     /**
+     * Initialise the model
+     *
      * @return void
      */
     protected function _construct()
@@ -24,6 +26,8 @@ class Entity extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Return the ID for the specified code
+     *
      * @param string $entityCode
      * @return int
      */

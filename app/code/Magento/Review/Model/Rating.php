@@ -74,6 +74,8 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     }
 
     /**
+     * Add a vote to an option
+     *
      * @param int $optionId
      * @param int $entityPkValue
      * @return $this
@@ -93,6 +95,8 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     }
 
     /**
+     * Update a vote for an option
+     *
      * @param int $optionId
      * @return $this
      */
@@ -111,7 +115,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     }
 
     /**
-     * retrieve rating options
+     * Retrieve rating options
      *
      * @return array
      */
@@ -142,6 +146,8 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     }
 
     /**
+     * Get summary of review
+     *
      * @param int $reviewId
      * @param bool $onlyForCurrentStore
      * @return array

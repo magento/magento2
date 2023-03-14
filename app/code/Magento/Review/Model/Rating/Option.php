@@ -24,6 +24,8 @@ namespace Magento\Review\Model\Rating;
 class Option extends \Magento\Framework\Model\AbstractModel
 {
     /**
+     * Initialise the model
+     *
      * @return void
      */
     protected function _construct()
@@ -32,6 +34,8 @@ class Option extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Add a vote
+     *
      * @return $this
      */
     public function addVote()
@@ -41,6 +45,8 @@ class Option extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Set the identifier
+     *
      * @param mixed $id
      * @return $this
      */

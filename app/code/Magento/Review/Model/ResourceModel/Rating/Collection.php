@@ -311,7 +311,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         if (is_array($data) && count($data) > 0) {
             foreach ($data as $row) {
                 $item = $this->getItemById($row['rating_id']);
-                $item->setStores(array_merge($item->getStores(), [$row['store_id']]));
+                $stores = $item->getStores();
+                $stores[] = $row['store_id'];
+                $item->setStores(array_unique($stores));
             }
         }
         return $this;
