@@ -11,6 +11,8 @@ namespace Magento\Downloadable\Model\System\Config\Source;
 class Orderitemstatus implements \Magento\Framework\Option\ArrayInterface
 {
     /**
+     * Return option array
+     *
      * @return array
      */
     public function toOptionArray()

@@ -44,8 +44,6 @@ class Downloadable extends Widget implements TabInterface
     protected $blockId = 'downloadableInfo';
 
     /**
-     * Core registry
-     *
      * @var Registry
      */
     protected $_coreRegistry = null;
