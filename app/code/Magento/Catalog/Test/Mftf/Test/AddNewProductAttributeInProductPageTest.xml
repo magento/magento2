@@ -98,6 +98,13 @@
         <!--Click on Go Back button -->
         <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackToGridSimple"/>
 
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid1"/>
+        <actionGroup ref="AdminResetColumnDropDownActionGroup" stepKey="ResetColumnDropdown1"/>
+
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProductOnProductGridPage">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+
         <!-- Select created attribute as an column -->
         <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdown"/>
         <actionGroup ref="CheckAdminProductGridColumnOptionActionGroup" stepKey="checkCreatedAttributeColumn">
@@ -112,6 +119,9 @@
             <argument name="column" value="{{ProductAttributeFrontendLabel.label}}"/>
             <argument name="value" value="value 1 admin"/>
         </actionGroup>
+
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid2"/>
+        <actionGroup ref="AdminResetColumnDropDownActionGroup" stepKey="ResetColumnDropdown2"/>
 
         <!--Verify Product Attribute is present in Category Store Front Page -->
         <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToStorefrontPage"/>
