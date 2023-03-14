@@ -52,6 +52,8 @@
             <deleteData createDataKey="testCategory" stepKey="deleteTestCategory"/>
             <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
             <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
+            <actionGroup ref="CliDisableCheckMoneyOrderPaymentMethodActionGroup" stepKey="disableCheckMoneyOrder"/>
+            <magentoCLI command="config:set {{CashOnDeliveryDisabledConfigData.path}} {{CashOnDeliveryDisabledConfigData.value}}" stepKey="disabledCashOnDelivery"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <!--Go to product page-->
