@@ -37,6 +37,8 @@ class PropertyLocker
     }
 
     /**
+     * Lock form data
+     *
      * @param \Magento\Framework\Data\Form $form
      * @return void
      */

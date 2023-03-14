@@ -29,6 +29,7 @@ class Image extends \Magento\Eav\Model\Attribute\Data\File
         $rules = $this->getAttribute()->getValidateRules();
         $localStorage = !$this->_directory->getDriver() instanceof ExtendedDriverInterface;
         $imageProp = $localStorage
+            // @phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged,Magento2.Functions.DiscouragedFunction.DiscouragedWithAlternative
             ? @getimagesize($value['tmp_name'])
             : $this->_directory->getDriver()->getMetadata($value['tmp_name']);
         $allowImageTypes = ['gif', 'jpg', 'jpeg', 'png'];
@@ -42,8 +43,10 @@ class Image extends \Magento\Eav\Model\Attribute\Data\File
         }
 
         // modify image name
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction.DiscouragedWithAlternative
         $extension = pathinfo($value['name'], PATHINFO_EXTENSION);
         if ($extension !== $imageProp['extension']) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction.DiscouragedWithAlternative
             $value['name'] = pathinfo($value['name'], PATHINFO_FILENAME) . '.' . $imageProp['extension'];
         }
 

@@ -11,8 +11,6 @@ namespace Magento\Eav\Model\ResourceModel\Entity\Attribute\Option;
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
-     * Option value table
-     *
      * @var string
      */
     protected $_optionValueTable;

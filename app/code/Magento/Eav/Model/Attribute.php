@@ -20,21 +20,10 @@ use Magento\Store\Model\Website;
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
-    /**
-     * Name of the module
-     * Override it
-     */
-    //const MODULE_NAME = 'Magento_Eav';
-
-    /**
-     * Name of the module
-     * Override it
-     */
+    /** @var string */
     protected $_eventObject = 'attribute';
 
     /**
-     * Active Website instance
-     *
      * @var Website
      */
     protected $_website;
@@ -186,7 +175,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function afterDelete()
     {
