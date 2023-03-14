@@ -9,15 +9,16 @@ namespace Magento\GraphQl\PageCache\UrlRewrite;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\GraphQl\PageCache\GraphQLPageCacheAbstract;
+use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
-use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 
 /**
  * Test caching works for url resolver.
  */
-class UrlResolverCacheTest extends GraphQlAbstract
+class UrlResolverCacheTest extends GraphQLPageCacheAbstract
 {
     /**
      * Tests that X-Magento-tags and cache debug headers are correct for product urlResolver
@@ -39,14 +40,17 @@ class UrlResolverCacheTest extends GraphQlAbstract
         $expectedTags = ["cat_p", "cat_p_{$product->getId()}", "FPC"];
         $this->assertEquals($expectedTags, $actualTags);
 
-        //cache-debug should be a MISS on first request
-        $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseMiss['headers']);
-        $this->assertEquals('MISS', $responseMiss['headers']['X-Magento-Cache-Debug']);
+        // Obtain the X-Magento-Cache-Id from the response which will be used as the cache key
+        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
+        $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
-        //cache-debug should be a HIT on second request
-        $responseHit = $this->graphQlQueryWithResponseHeaders($urlResolverQuery);
-        $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseHit['headers']);
-        $this->assertEquals('HIT', $responseHit['headers']['X-Magento-Cache-Debug']);
+        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+
+        // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
+        $responseHit = $this->assertCacheHitAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+
         //cached data should be correct
         $this->assertNotEmpty($responseHit['body']);
         $this->assertArrayNotHasKey('errors', $responseHit['body']);

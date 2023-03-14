@@ -9,13 +9,14 @@ namespace Magento\GraphQl\PageCache;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\TestFramework\ObjectManager;
-use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\GraphQl\PageCache\GraphQLPageCacheAbstract;
 
 /**
  * Test the caching works properly for products and categories
  */
-class CacheTagTest extends GraphQlAbstract
+class CacheTagTest extends GraphQLPageCacheAbstract
 {
     /**
      * Test if Magento cache tags and debug headers for products are generated properly
@@ -40,14 +41,16 @@ class CacheTagTest extends GraphQlAbstract
 QUERY;
 
         // Cache-debug should be a MISS when product is queried for first time
-        $responseMiss = $this->graphQlQueryWithResponseHeaders($query);
-        $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseMiss['headers']);
-        $this->assertEquals('MISS', $responseMiss['headers']['X-Magento-Cache-Debug']);
+        // Obtain the X-Magento-Cache-Id from the response which will be used as the cache key
+        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
+        $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
-        // Cache-debug should be a HIT for the second round
-        $responseHit = $this->graphQlQueryWithResponseHeaders($query);
-        $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseHit['headers']);
-        $this->assertEquals('HIT', $responseHit['headers']['X-Magento-Cache-Debug']);
+        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+
+        // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
+        $this->assertCacheHitAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);

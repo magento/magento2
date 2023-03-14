@@ -9,13 +9,13 @@ namespace Magento\GraphQl\PageCache\Cms;
 
 use Magento\Cms\Model\Block;
 use Magento\Cms\Model\BlockRepository;
+use Magento\GraphQl\PageCache\GraphQLPageCacheAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Test the caching works properly for CMS Blocks
  */
-class BlockCacheTest extends GraphQlAbstract
+class BlockCacheTest extends GraphQLPageCacheAbstract
 {
     /**
      * Test that X-Magento-Tags are correct
