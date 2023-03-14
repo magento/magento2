@@ -111,8 +111,8 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
     /**
      * Prepare data index for indexable attributes
      *
-     * @param array $entityIds      the entity ids limitation
-     * @param int $attributeId      the attribute id limitation
+     * @param array $entityIds the entity ids limitation
+     * @param int $attributeId the attribute id limitation
      * @return $this
      */
     abstract protected function _prepareIndex($entityIds = null, $attributeId = null);

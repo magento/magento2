@@ -42,6 +42,8 @@ class Link extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return URL for checkout
+     *
      * @return string
      */
     public function getCheckoutUrl()
@@ -50,6 +52,8 @@ class Link extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return true if Onepage Checkout is disabled
+     *
      * @return bool
      */
     public function isDisabled()
@@ -58,6 +62,8 @@ class Link extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return true if it is possible to use the Onepage Checkout
+     *
      * @return bool
      */
     public function isPossibleOnepageCheckout()

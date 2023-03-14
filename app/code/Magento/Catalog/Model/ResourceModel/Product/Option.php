@@ -24,15 +24,11 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $metadataPool;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Currency factory
-     *
      * @var \Magento\Directory\Model\CurrencyFactory
      */
     protected $_currencyFactory;
@@ -45,8 +41,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_config;
 
     /**
-     * Class constructor
-     *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager

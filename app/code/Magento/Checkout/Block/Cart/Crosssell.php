@@ -132,9 +132,7 @@ class Crosssell extends AbstractProduct
                 if ($lastAddedProduct) {
                     $collection = $this->_getCollection()
                         ->addProductFilter($lastAddedProduct->getData($this->getProductLinkField()));
-                    if (!empty($ninProductIds)) {
-                        $collection->addExcludeProductFilter($ninProductIds);
-                    }
+                    $collection->addExcludeProductFilter($ninProductIds);
                     $collection->setPositionOrder()->load();
 
                     foreach ($collection as $item) {

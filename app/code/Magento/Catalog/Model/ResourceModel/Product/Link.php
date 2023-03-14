@@ -20,14 +20,11 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_attributesTable;
 
     /**
-     * Catalog product relation
-     *
      * @var Relation
      */
     protected $_catalogProductRelation;
 
     /**
-     * Link constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param Relation $catalogProductRelation
      * @param string|null $connectionName

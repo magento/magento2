@@ -4,9 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Catalog rules resource model
- */
 namespace Magento\CatalogRule\Model\ResourceModel;
 
 use Magento\Catalog\Model\Product;
@@ -14,6 +11,8 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
+ * Catalog rules resource model
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
@@ -21,7 +20,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     /**
      * Store number of seconds in a day
      */
-    const SECONDS_IN_DAY = 86400;
+    public const SECONDS_IN_DAY = 86400;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -29,8 +28,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     protected $_logger;
 
     /**
-     * Catalog rule data
-     *
      * @var \Magento\CatalogRule\Helper\Data
      */
     protected $_catalogRuleData = null;
@@ -78,7 +75,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     protected $entityManager;
 
     /**
-     * Rule constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Product\ConditionFactory $conditionFactory
@@ -89,7 +85,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param PriceCurrencyInterface $priceCurrency
-     * @param null $connectionName
+     * @param string $connectionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -130,6 +126,8 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
+     * After delete
+     *
      * @param \Magento\Framework\Model\AbstractModel $rule
      * @return $this
      */
@@ -148,8 +146,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
-     * Get catalog rules product price for specific date, website and
-     * customer group
+     * Get catalog rules product price for specific date, website and customer group
      *
      * @param \DateTimeInterface $date
      * @param int $wId
@@ -169,6 +166,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
 
     /**
      * Retrieve product prices by catalog rule for specific date, website and customer group
+     *
      * Collect data with  product Id => price pairs
      *
      * @param \DateTimeInterface $date
@@ -217,6 +215,8 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
+     * Load rule from the database into the specified object
+     *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @param mixed $value
      * @param string $field
@@ -230,6 +230,8 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
+     * Save the specified object to the database
+     *
      * @param AbstractModel $object
      * @return $this
      * @throws \Exception
@@ -254,6 +256,8 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
+     * Return associated entity map
+     *
      * @return array
      * @deprecated 100.1.0
      */
@@ -268,6 +272,8 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
+     * Return entity manager
+     *
      * @return \Magento\Framework\EntityManager\EntityManager
      * @deprecated 100.1.0
      */

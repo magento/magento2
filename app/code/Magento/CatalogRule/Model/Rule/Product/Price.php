@@ -46,7 +46,7 @@ class Price extends \Magento\Framework\Model\AbstractModel
      * @param string $entityId
      * @param string $customerGroupId
      * @param string $websiteId
-     * @param array $updateFields       the array fields for compare with rule price and update
+     * @param array $updateFields the array fields for compare with rule price and update
      * @param string $websiteDate
      * @return $this
      */
