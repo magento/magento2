@@ -59,7 +59,9 @@
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
         <grabTextFrom selector="{{OrdersGridSection.orderID}}" stepKey="orderNumber"/>
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage1"/>
-        <click selector="{{AdminOrdersGridSection.allCheckbox}}" stepKey="clickSelectAll"/>
+        <scrollToTopOfPage stepKey="scrollToTop" />
+        <waitForElementClickable selector="{{AdminOrdersGridSection.allCheckbox}}" stepKey="waitForSelectAllClickable" />
+        <checkOption selector="{{AdminOrdersGridSection.allCheckbox}}" stepKey="clickSelectAll"/>
         <openNewTab stepKey="openNewTab"/>
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
             <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>

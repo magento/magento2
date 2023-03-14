@@ -41,6 +41,7 @@
 
         <after>
             <magentoCLI command="config:set {{EnableFreeOrderStatusPending.path}} {{EnableFreeOrderStatusPending.value}}" stepKey="disablePaymentMethodsSettingConfig"/>
+            <magentoCLI command="config:set {{EnableFreeOrderPaymentAutomaticInvoiceAction.path}} {{EnableFreeOrderPaymentAutomaticInvoiceAction.value}}" stepKey="enableFreeOrderPaymentAutomaticInvoiceAction"/>
             <actionGroup ref="CliDisableFreeShippingMethodActionGroup" stepKey="disableFreeShippingConfig"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="simpleproduct" stepKey="deleteProduct"/>
@@ -86,7 +87,7 @@
 
         <!-- Prepare data for constraints -->
         <magentoCLI command="config:set {{EnableFreeOrderStatusCustom.path}} {{defaultOrderStatus.status}}" stepKey="enableNewOrderStatus"/>
-        <comment userInput="Preserve BIC. config:set {{EnableFreeOrderPaymentAction.path}} {{EnableFreeOrderPaymentAction.value}}" stepKey="enableNewOrderPaymentAction"/>
+        <magentoCLI command="config:set {{DisableFreeOrderPaymentAutomaticInvoiceAction.path}} {{DisableFreeOrderPaymentAutomaticInvoiceAction.value}}" stepKey="enableNewOrderPaymentAction"/>
         <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
             <argument name="tags" value="config full_page"/>
         </actionGroup>
@@ -135,10 +136,9 @@
         </actionGroup>
 
         <!-- Assert Order Status on Order view page -->
-        <comment userInput="Preserve BIC. AdminOrderDetailsMainActionsSection.invoiceBtn" stepKey="seeInvoiceBtn"/>
+        <waitForElementVisible selector="{{AdminOrderDetailsMainActionsSection.invoiceBtn}}" stepKey="seeInvoiceBtn"/>
         <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="verifyOrderStatusOnOrderViewPage">
             <argument name="status" value="{{defaultOrderStatus.label}}" />
         </actionGroup>
-
     </test>
 </tests>
