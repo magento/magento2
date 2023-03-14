@@ -16,6 +16,8 @@ class Search extends \Magento\Backend\Block\Widget
     protected $_template = 'Magento_Bundle::product/edit/bundle/option/search.phtml';
 
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()

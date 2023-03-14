@@ -14,8 +14,6 @@ namespace Magento\Backup\Model\Config\Source;
 class Type implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * Backup data
-     *
      * @var \Magento\Backup\Helper\Data
      */
     protected $_backupData = null;
@@ -29,7 +27,7 @@ class Type implements \Magento\Framework\Option\ArrayInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function toOptionArray()
     {

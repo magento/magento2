@@ -16,15 +16,11 @@ class Selection extends \Magento\Backend\Block\Widget
     protected $_template = 'Magento_Bundle::product/edit/bundle/option/selection.phtml';
 
     /**
-     * Catalog data
-     *
      * @var \Magento\Catalog\Helper\Data
      */
     protected $_catalogData = null;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
