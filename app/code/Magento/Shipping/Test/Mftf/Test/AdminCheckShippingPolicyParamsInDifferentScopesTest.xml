@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCheckShippingPolicyParamsInDifferentScopes">
+    <test name="AdminCheckShippingPolicyParamsInDifferentScopesTest">
         <annotations>
             <features value="Shipping"/>
             <stories value="Shipping Policy Parameters"/>
@@ -27,9 +27,8 @@
 
         <amOnPage url="{{AdminShippingSettingsPage.url}}" stepKey="goToAdminShippingPage"/>
         <waitForPageLoad stepKey="waitForShippingConfigLoad"/>
-
+        <conditionalClick selector="{{AdminShippingSettingsConfigSection.shippingPolicyParameters}}" dependentSelector="{{AdminShippingSettingsConfigSection.shippingPolicyParametersOpened}}" visible="false" stepKey="openShippingPolicySettings"/>
         <uncheckOption selector="{{AdminShippingSettingsConfigSection.systemValueShippingPolicy}}" stepKey="disableUseDefaultCondition"/>
-
         <selectOption selector="{{AdminShippingSettingsConfigSection.dropdownShippingPolicy}}" userInput="Yes" stepKey="SelectApplyCustomShippingPolicy"/>
 
         <!-- Save the settings -->
@@ -40,7 +39,7 @@
         <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchNewStoreView">
             <argument name="storeViewName" value="{{_defaultStore.name}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminShippingSettingsConfigSection.ShippingPolicy}}" stepKey="seeShippingPolicy"/>
+        <seeElement selector="{{AdminShippingSettingsConfigSection.shippingPolicy}}" stepKey="seeShippingPolicy"/>
 
         <!--Switch to Store view 1-->
         <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchtoDefaultConfig">
@@ -58,7 +57,7 @@
         <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchNewStoreView2">
             <argument name="storeViewName" value="{{_defaultStore.name}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminShippingSettingsConfigSection.ShippingPolicy}}" stepKey="seeShippingPolicy2"/>
+        <seeElement selector="{{AdminShippingSettingsConfigSection.shippingPolicy}}" stepKey="seeShippingPolicy2"/>
 
     </test>
 </tests>
