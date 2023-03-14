@@ -156,6 +156,20 @@ class Processor
     private $documentRoot;
 
     /**
+     * Error diretory
+     *
+     * @var bool
+     */
+    protected $_errorDir;
+
+    /**
+     * Report diretory
+     *
+     * @var bool
+     */
+    protected $_reportDir;
+
+    /**
      * @param Http $response
      * @param Json $serializer
      * @param Escaper $escaper

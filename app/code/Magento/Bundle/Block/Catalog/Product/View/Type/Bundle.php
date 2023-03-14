@@ -36,7 +36,7 @@ class Bundle extends AbstractView
     protected $options;
 
     /**
-     * Catalog product
+     * Catalog product helper
      *
      * @var \Magento\Catalog\Helper\Product
      */
@@ -405,7 +405,7 @@ class Bundle extends AbstractView
      */
     private function processOptions(string $optionId, array $options, DataObject $preConfiguredValues)
     {
-        $preConfiguredQtys = $preConfiguredValues->getData("bundle_option_qty/${optionId}") ?? [];
+        $preConfiguredQtys = $preConfiguredValues->getData("bundle_option_qty/{$optionId}") ?? [];
         $selections = $options[$optionId]['selections'];
         array_walk(
             $selections,

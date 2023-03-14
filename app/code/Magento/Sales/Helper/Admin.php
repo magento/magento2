@@ -166,7 +166,10 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
 
             $internalErrors = libxml_use_internal_errors(true);
 
-            $data = mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8');
+            $data = htmlspecialchars_decode(
+                iconv('UTF-8', 'ISO-8859-1', htmlentities($data, ENT_COMPAT, 'UTF-8')),
+                ENT_QUOTES
+            );
             $domDocument->loadHTML(
                 '<html><body id="' . $wrapperElementId . '">' . $data . '</body></html>'
             );
