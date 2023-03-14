@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Catalog product country attribute source
- */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
 
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\Data\OptionSourceInterface;
 
+/**
+ * Catalog product country attribute source
+ */
 class Countryofmanufacture extends AbstractSource implements OptionSourceInterface
 {
     /**
@@ -20,15 +20,11 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
     protected $_configCacheType;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Country factory
-     *
      * @var \Magento\Directory\Model\CountryFactory
      */
     protected $_countryFactory;
@@ -39,8 +35,6 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
     private $serializer;
 
     /**
-     * Construct
-     *
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType

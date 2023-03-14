@@ -11,8 +11,6 @@ namespace Magento\Catalog\Model\ResourceModel\Category\Attribute;
 class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
 {
     /**
-     * Entity factory
-     *
      * @var \Magento\Eav\Model\EntityFactory
      */
     protected $_eavEntityFactory;
@@ -22,8 +20,8 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
@@ -43,6 +41,7 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
 
     /**
      * Main select object initialization.
+     *
      * Joins catalog/eav_attribute table
      *
      * @return $this

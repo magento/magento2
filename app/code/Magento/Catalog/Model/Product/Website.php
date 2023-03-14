@@ -66,6 +66,7 @@ class Website extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Retrieve product websites
+     *
      * Return array with key as product ID and value array of websites
      *
      * @param int|array $productIds

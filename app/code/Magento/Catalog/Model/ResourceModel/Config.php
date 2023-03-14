@@ -18,22 +18,16 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_entityTypeId;
 
     /**
-     * Store id
-     *
      * @var int
      */
     protected $_storeId = null;
 
     /**
-     * Eav config
-     *
      * @var \Magento\Eav\Model\Config
      */
     protected $_eavConfig;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -79,6 +73,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Return store id.
+     *
      * If is not set return current app store
      *
      * @return integer

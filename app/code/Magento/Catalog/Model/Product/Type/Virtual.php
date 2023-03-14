@@ -37,6 +37,7 @@ class Virtual extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
+     * @phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedFunction
      */
     public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product)
     {

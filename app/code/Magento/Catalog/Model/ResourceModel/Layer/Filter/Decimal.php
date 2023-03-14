@@ -86,6 +86,7 @@ class Decimal extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Retrieve clean select with joined index table
+     *
      * Joined table has index
      *
      * @param \Magento\Catalog\Model\Layer\Filter\FilterInterface $filter

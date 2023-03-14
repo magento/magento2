@@ -14,15 +14,11 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class Image extends AbstractBackend
 {
     /**
-     * Filesystem facade
-     *
      * @var \Magento\Framework\Filesystem
      */
     protected $_filesystem;
 
     /**
-     * File Uploader factory
-     *
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
      */
     protected $_fileUploaderFactory;

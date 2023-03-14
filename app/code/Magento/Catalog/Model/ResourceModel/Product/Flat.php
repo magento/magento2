@@ -14,22 +14,16 @@ use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderIn
 class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements DefaultAttributesProvider
 {
     /**
-     * Store scope Id
-     *
      * @var int
      */
     protected $_storeId;
 
     /**
-     * Catalog config
-     *
      * @var \Magento\Catalog\Model\Config
      */
     protected $_catalogConfig;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -180,7 +174,8 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
 
     /**
      * Check whether the attribute is a real field in entity table
-     * Rewrited for EAV Collection
+     *
+     * Rewriten for EAV Collection
      *
      * @param integer|string|\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return bool
@@ -208,6 +203,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
 
     /**
      * Retrieve entity id field name in entity table
+     *
      * Rewrote for EAV collection compatibility
      *
      * @return string
@@ -219,6 +215,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
 
     /**
      * Retrieve attribute instance
+     *
      * Special for non static flat table
      *
      * @param mixed $attribute

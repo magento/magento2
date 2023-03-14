@@ -4,28 +4,23 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Product image attribute frontend
- */
-
 namespace Magento\Catalog\Model\Product\Attribute\Frontend;
 
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Product image attribute frontend
+ */
 class Image extends AbstractFrontend
 {
     /**
-     * Store manager
-     *
      * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Construct
-     *
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(StoreManagerInterface $storeManager)

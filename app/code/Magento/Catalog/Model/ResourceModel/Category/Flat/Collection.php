@@ -22,8 +22,6 @@ use Magento\Store\Model\ScopeInterface;
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'catalog_category_collection';
@@ -36,8 +34,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_eventObject = 'category_collection';
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -95,6 +91,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Initialise the select
+     *
      * @return $this
      */
     protected function _initSelect()
@@ -124,11 +122,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $condition = $categoryIds;
         } elseif (is_string($categoryIds)) {
             $ids = explode(',', $categoryIds);
-            if (empty($ids)) {
-                $condition = $categoryIds;
-            } else {
-                $condition = ['in' => $ids];
-            }
+            $condition = ['in' => $ids];
+        } else {
+            return $this;
         }
         $this->addFieldToFilter('main_table.entity_id', $condition);
         return $this;
@@ -170,6 +166,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * Return store id.
+     *
      * If store id is not set yet, return store of application
      *
      * @return integer
@@ -222,6 +219,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Add a filter to only show active categories
+     *
      * @return $this
      */
     public function addIsActiveFilter()
@@ -328,6 +327,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Join the URL rewrite table to the result
+     *
      * @return $this
      */
     public function addUrlRewriteToResult()
@@ -345,6 +346,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Add a paths filter
+     *
      * @param string|array $paths
      * @return $this
      */
@@ -367,6 +370,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Add a level filter
+     *
      * @param string $level
      * @return $this
      */
@@ -377,6 +382,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Add an order field
+     *
      * @param string $field
      * @return $this
      */
