@@ -22,6 +22,10 @@
             <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
 
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPageBefore"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGridBefore"/>
+            <actionGroup ref="AdminResetColumnDropDownActionGroup" stepKey="ResetColumnDropdownBefore"/>
+
             <!--Create Category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
 
@@ -33,6 +37,10 @@
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteCreatedAttribute">
                 <argument name="ProductAttribute" value="newProductAttribute"/>
             </actionGroup>
+
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPageAfter"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGridAfter"/>
+            <actionGroup ref="AdminResetColumnDropDownActionGroup" stepKey="ResetColumnDropdownAfter"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -98,9 +106,6 @@
         <!--Click on Go Back button -->
         <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackToGridSimple"/>
 
-        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid1"/>
-        <actionGroup ref="AdminResetColumnDropDownActionGroup" stepKey="ResetColumnDropdown1"/>
-
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProductOnProductGridPage">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
@@ -119,9 +124,6 @@
             <argument name="column" value="{{ProductAttributeFrontendLabel.label}}"/>
             <argument name="value" value="value 1 admin"/>
         </actionGroup>
-
-        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid2"/>
-        <actionGroup ref="AdminResetColumnDropDownActionGroup" stepKey="ResetColumnDropdown2"/>
 
         <!--Verify Product Attribute is present in Category Store Front Page -->
         <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToStorefrontPage"/>

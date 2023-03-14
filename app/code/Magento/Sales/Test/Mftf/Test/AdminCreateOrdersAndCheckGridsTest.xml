@@ -96,8 +96,6 @@
             <requiredEntity createDataKey="createGuestCartThree"/>
         </updateData>
 
-        <wait time="60" stepKey="wait1" />
-
         <magentoCron groups="default" stepKey="runCronFive"/>
 
         <createData entity="CreditMemo" stepKey="refundOrderOne">
@@ -136,19 +134,12 @@
 
         <magentoCron groups="default" stepKey="runCronNine"/>
 
-        <wait time="60" stepKey="wait2" />
-
         <magentoCron groups="default" stepKey="runCronTen"/>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
-        <waitForPageLoad time="30" stepKey="waitForGrid"/>
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
-
-        <comment userInput="Comment is added to preserve the step key for backward compatibility"  stepKey="getOrderOneId"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility"  stepKey="getOrderTwoId"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility"  stepKey="getOrderThreeId"/>
 
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderOne">
             <argument name="entityId" value="$createGuestCartOne.return$"/>
@@ -206,23 +197,17 @@
             <argument name="orderId" value="{$grabOrderIdOne}"/>
         </actionGroup>
 
-        <waitForPageLoad time="30" stepKey="waitForGridOne"/>
-
         <see selector="{{AdminDataGridTableSection.gridCell('1', 'Status')}}" userInput="Closed" stepKey="seeOrderClosedInGridOne"/>
 
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdTwo">
             <argument name="orderId" value="{$grabOrderIdTwo}"/>
         </actionGroup>
 
-        <waitForPageLoad time="30" stepKey="waitForGridTwo"/>
-
         <see selector="{{AdminDataGridTableSection.gridCell('1', 'Status')}}" userInput="Closed" stepKey="seeOrderClosedInGridTwo"/>
 
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdThree">
             <argument name="orderId" value="{$grabOrderIdThree}"/>
         </actionGroup>
-
-        <waitForPageLoad time="30" stepKey="waitForGridThree"/>
 
         <see selector="{{AdminDataGridTableSection.gridCell('1', 'Status')}}" userInput="Closed" stepKey="seeOrderClosedInGridThree"/>
     </test>
