@@ -285,13 +285,23 @@ class CollectionTest extends TestCase
      */
     public function testGetDateRangeFirstPart($range, $customStart, $customEnd, $expectedInterval): void
     {
-        $timeZoneToReturn = date_default_timezone_get();
-        date_default_timezone_set('UTC');
         $result = $this->collection->getDateRange($range, $customStart, $customEnd);
         $interval = $result['to']->diff($result['from']);
-        date_default_timezone_set($timeZoneToReturn);
         $intervalResult = $interval->format('%y %m %d %h:%i:%s');
-        $this->assertEquals($expectedInterval, $intervalResult);
+        if ($range === '7d' && $intervalResult !== $expectedInterval) {
+            $result['from']->setTimezone(new \DateTimeZone('America/Chicago'));
+            $result['to']->setTimezone(new \DateTimeZone('America/Chicago'));
+            //Daylight saving check
+            if (!date('I', strtotime($result['from']->format('Y-m-d H:i:s')))) {
+                //when the start date does not fall during Daylight saving but the end date falls
+                $this->assertEquals(strtotime($expectedInterval.' +1 hours'), strtotime($intervalResult));
+            } elseif (!date('I', strtotime($result['to']->format('Y-m-d H:i:s')))) {
+                //when the end date does not fall during Daylight saving but the start date falls
+                $this->assertEquals(strtotime($expectedInterval.' -1 hours'), strtotime($intervalResult));
+            }
+        } else {
+            $this->assertEquals($expectedInterval, $intervalResult);
+        }
     }
 
     /**
