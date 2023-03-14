@@ -4,18 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Source for email send method
- */
 namespace Magento\Config\Model\Config\Source\Email;
 
 /**
+ * Source for email send method
+ *
  * @api
  * @since 100.0.2
  */
 class Method implements \Magento\Framework\Option\ArrayInterface
 {
     /**
+     * Return option array
+     *
      * @return array
      */
     public function toOptionArray()

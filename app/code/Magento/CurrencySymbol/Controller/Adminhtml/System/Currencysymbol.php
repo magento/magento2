@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Adminhtml Currency Symbols Controller
- */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System;
 
 /**
+ * Adminhtml Currency Symbols Controller
+ *
+ * @phpcs:ignore Magento2.Classes.AbstractApi.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -20,5 +20,5 @@ abstract class Currencysymbol extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_CurrencySymbol::symbols';
+    public const ADMIN_RESOURCE = 'Magento_CurrencySymbol::symbols';
 }

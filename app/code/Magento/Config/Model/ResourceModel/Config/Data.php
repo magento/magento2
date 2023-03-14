@@ -43,6 +43,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Validate unique configuration data before save
+     *
      * Set id to object if exists configuration instead of throw exception
      *
      * @param \Magento\Framework\Model\AbstractModel $object
