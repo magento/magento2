@@ -4,17 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Customer country attribute source
- */
 namespace Magento\Customer\Model\ResourceModel\Address\Attribute\Source;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class Country.
- * @package Magento\Customer\Model\ResourceModel\Address\Attribute\Source
+ * Customer country attribute source
  */
 class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
@@ -56,6 +52,8 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     }
 
     /**
+     * Return new countries object
+     *
      * @return \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     protected function _createCountriesCollection()
@@ -65,6 +63,7 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 
     /**
      * Retrieve Store Manager
+     *
      * @deprecated 101.0.0
      * @return StoreManagerInterface
      */

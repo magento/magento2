@@ -14,8 +14,6 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 class Group extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb
 {
     /**
-     * Group Management
-     *
      * @var \Magento\Customer\Api\GroupManagementInterface
      */
     protected $_groupManagement;

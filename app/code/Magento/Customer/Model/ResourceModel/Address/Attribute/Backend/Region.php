@@ -43,6 +43,8 @@ class Region extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
+     * Return new region object
+     *
      * @return \Magento\Directory\Model\Region
      */
     protected function _createRegionInstance()

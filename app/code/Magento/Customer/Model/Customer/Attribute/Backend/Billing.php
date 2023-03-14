@@ -11,6 +11,8 @@ namespace Magento\Customer\Model\Customer\Attribute\Backend;
 class Billing extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
+     * Before save
+     *
      * @param \Magento\Framework\DataObject $object
      * @return void
      */
@@ -23,6 +25,8 @@ class Billing extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
     }
 
     /**
+     * After save
+     *
      * @param \Magento\Framework\DataObject $object
      * @return void
      */

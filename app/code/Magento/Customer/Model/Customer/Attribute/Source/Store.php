@@ -56,6 +56,8 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     }
 
     /**
+     * Return option text
+     *
      * @param string $value
      * @return array|string
      */
@@ -93,6 +95,8 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     }
 
     /**
+     * Return new stores collection
+     *
      * @return \Magento\Store\Model\ResourceModel\Store\Collection
      */
     protected function _createStoresCollection()

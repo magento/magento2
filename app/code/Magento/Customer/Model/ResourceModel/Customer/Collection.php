@@ -15,7 +15,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
     /**
      * Name of collection model
      */
-    const CUSTOMER_MODEL_NAME = \Magento\Customer\Model\Customer::class;
+    public const CUSTOMER_MODEL_NAME = \Magento\Customer\Model\Customer::class;
 
     /**
      * @var \Magento\Framework\DataObject\Copy\Config

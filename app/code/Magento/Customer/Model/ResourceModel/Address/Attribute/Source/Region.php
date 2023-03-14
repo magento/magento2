@@ -42,6 +42,8 @@ class Region extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     }
 
     /**
+     * Return new regions object
+     *
      * @return \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     protected function _createRegionsCollection()

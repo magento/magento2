@@ -42,6 +42,8 @@ class Website extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     }
 
     /**
+     * Return option text
+     *
      * @param int|string $value
      * @return string|false
      */
