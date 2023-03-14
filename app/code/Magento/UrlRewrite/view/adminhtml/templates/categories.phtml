@@ -21,7 +21,7 @@ $root = $block->getRoot(null, 0)
     {
         ".jstree-default": {
             "categoryTree": {
-                "data": <?= $block->getTreeArray(null, true); ?>,
+                "data": <?= /* @noEscape */ $block->getTreeArray(null, true); ?>,
                 "url": "<?= $block->escapeJs($block->escapeUrl($block->getLoadTreeUrl())); ?>"
             }
         }
