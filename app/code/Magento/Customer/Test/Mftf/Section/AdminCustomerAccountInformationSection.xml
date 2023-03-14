@@ -38,5 +38,6 @@
         <element name="customerAttribute" type="input" selector="//input[contains(@name,'{{attributeCode}}')]" parameterized="true"/>
         <element name="attributeImage" type="block" selector="//div[contains(concat(' ',normalize-space(@class),' '),' file-uploader-preview ')]//img"/>
         <element name="dateOfBirthValidationErrorField" type="text" selector="input[name='customer[dob]'] ~ label.admin__field-error"/>
+        <element name="customerAttributeNew" type="input" selector="(//input[contains(@name,'{{attributeCode}}')])[{{index}}]" parameterized="true"/>
     </section>
 </sections>
