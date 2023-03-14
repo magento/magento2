@@ -51,7 +51,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * Prepare global layout
      *
      * @return $this
-     *
      */
     protected function _prepareLayout()
     {

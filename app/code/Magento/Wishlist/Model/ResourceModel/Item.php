@@ -4,12 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Wishlist item model resource
- */
 namespace Magento\Wishlist\Model\ResourceModel;
 
 /**
+ * Wishlist item model resource
+ *
  * @api
  * @since 100.0.2
  */
@@ -54,7 +53,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
