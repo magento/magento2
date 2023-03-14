@@ -1,7 +1,5 @@
 <?php
 /**
- * CatalogInventory Configurable Products Stock Status Indexer Resource Model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
