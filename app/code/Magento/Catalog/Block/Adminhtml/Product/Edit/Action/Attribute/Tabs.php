@@ -14,6 +14,8 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute;
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()

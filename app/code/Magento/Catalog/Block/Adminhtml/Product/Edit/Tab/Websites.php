@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
+
 /**
  * Product Stores tab
  */
-namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
-
 class Websites extends \Magento\Backend\Block\Store\Switcher
 {
     /**
@@ -22,8 +22,6 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
     protected $_template = 'Magento_Catalog::catalog/product/edit/websites.phtml';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;

@@ -11,6 +11,8 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 class Boolean extends \Magento\Framework\Data\Form\Element\Select
 {
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()

@@ -4,9 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Product description block
- */
 namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Catalog\Model\Product;
@@ -14,8 +11,6 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
- * Attributes attributes block
- *
  * @api
  * @since 100.0.2
  */
@@ -27,8 +22,6 @@ class Attributes extends \Magento\Framework\View\Element\Template
     protected $_product = null;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
