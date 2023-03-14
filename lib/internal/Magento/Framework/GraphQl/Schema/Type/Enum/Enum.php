@@ -24,6 +24,11 @@ class Enum extends EnumType
             'name' => $configElement->getName(),
             'description' => $configElement->getDescription()
         ];
+
+        if (empty($configElement->getValues())) {
+            $config['values'] = [];
+        }
+
         foreach ($configElement->getValues() as $value) {
             $config['values'][$value->getValue()] = [
                 'value' => $value->getValue(),
