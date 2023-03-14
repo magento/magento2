@@ -15,5 +15,5 @@ class IdType extends \GraphQL\Type\Definition\IDType implements InputTypeInterfa
     /**
      * @var string
      */
-    public $name = "Magento_Id";
+    public string $name = "Magento_Id";
 }
