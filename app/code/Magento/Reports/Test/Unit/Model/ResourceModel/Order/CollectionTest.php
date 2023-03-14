@@ -288,7 +288,7 @@ class CollectionTest extends TestCase
         $result = $this->collection->getDateRange($range, $customStart, $customEnd);
         $interval = $result['to']->diff($result['from']);
         $intervalResult = $interval->format('%y %m %d %h:%i:%s');
-        if ($range === '7d' && $intervalResult !== $expectedInterval) {
+        if ($intervalResult !== $expectedInterval) {
             $result['from']->setTimezone(new \DateTimeZone('America/Chicago'));
             $result['to']->setTimezone(new \DateTimeZone('America/Chicago'));
             //Daylight saving check
