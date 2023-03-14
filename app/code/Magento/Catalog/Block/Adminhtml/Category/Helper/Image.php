@@ -37,6 +37,8 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
     }
 
     /**
+     * Return the URL
+     *
      * @return bool|string
      */
     protected function _getUrl()

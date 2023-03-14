@@ -11,6 +11,8 @@ namespace Magento\Catalog\Block\Adminhtml\Product;
 class Attribute extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()

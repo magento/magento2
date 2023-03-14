@@ -4,16 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Base block for rendering category and product forms
- */
 namespace Magento\Catalog\Block\Adminhtml;
 
 use Magento\Backend\Block\Widget\Form\Generic;
 
+/**
+ * Base block for rendering category and product forms
+ */
 class Form extends Generic
 {
     /**
+     * Prepare the layout
+     *
      * @return void
      */
     protected function _prepareLayout()

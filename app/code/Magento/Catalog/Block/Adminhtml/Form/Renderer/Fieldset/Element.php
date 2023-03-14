@@ -12,7 +12,7 @@ namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset;
 class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
 {
     /**
-     * Initialize block template
+     * @var string
      */
     protected $_template = 'Magento_Catalog::catalog/form/renderer/fieldset/element.phtml';
 

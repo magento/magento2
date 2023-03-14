@@ -4,17 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Catalog Custom Options Config Renderer
- */
 namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Config;
 
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * Catalog Custom Options Config Renderer
+ */
 class YearRange extends Field
 {
     /**
+     * Return the HTML for this element
+     *
      * @param AbstractElement $element
      * @return string
      */

@@ -19,8 +19,6 @@ use Magento\Framework\App\ObjectManager;
 class Product extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -66,6 +64,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()
@@ -77,6 +77,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Return the category from the core registry
+     *
      * @return array|null
      */
     public function getCategory()
@@ -85,6 +87,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Add a column filter to the collection
+     *
      * @param Column $column
      * @return $this
      */
@@ -108,6 +112,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepare the collection
+     *
      * @return Grid
      */
     protected function _prepareCollection()
@@ -115,6 +121,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
         if ($this->getCategory()->getId()) {
             $this->setDefaultFilter(['in_category' => 1]);
         }
+
         $collection = $this->_productFactory->create()->getCollection()->addAttributeToSelect(
             'name'
         )->addAttributeToSelect(
@@ -137,6 +144,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
         if ($storeId > 0) {
             $collection->addStoreFilter($storeId);
         }
+
         $this->setCollection($collection);
 
         if ($this->getCategory()->getProductsReadonly()) {
@@ -144,6 +152,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
             if (empty($productIds)) {
                 $productIds = 0;
             }
+
             $this->getCollection()->addFieldToFilter('entity_id', ['in' => $productIds]);
         }
 
@@ -151,6 +160,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepare the columns
+     *
      * @return Extended
      */
     protected function _prepareColumns()
@@ -168,6 +179,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
                 ]
             );
         }
+
         $this->addColumn(
             'entity_id',
             [
@@ -228,6 +240,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Return the grid URL
+     *
      * @return string
      */
     public function getGridUrl()
@@ -236,6 +250,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Return the selected products
+     *
      * @return array
      */
     protected function _getSelectedProducts()
@@ -245,6 +261,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
             $products = $this->getCategory()->getProductsPosition();
             return array_keys($products);
         }
+
         return $products;
     }
 }

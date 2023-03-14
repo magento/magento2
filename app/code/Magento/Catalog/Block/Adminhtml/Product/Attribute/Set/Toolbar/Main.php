@@ -4,12 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Adminhtml catalog product sets main page toolbar
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar;
 
 /**
+ * Adminhtml catalog product sets main page toolbar
+ *
  * @api
  * @since 100.0.2
  */
@@ -21,6 +20,8 @@ class Main extends \Magento\Backend\Block\Template
     protected $_template = 'Magento_Catalog::catalog/product/attribute/set/toolbar/main.phtml';
 
     /**
+     * Prepare the layout
+     *
      * @return $this
      */
     protected function _prepareLayout()
@@ -38,6 +39,8 @@ class Main extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return HTML for the new button
+     *
      * @return string
      */
     public function getNewButtonHtml()
@@ -46,6 +49,8 @@ class Main extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return header text
+     *
      * @return \Magento\Framework\Phrase
      */
     protected function _getHeader()
@@ -54,6 +59,8 @@ class Main extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return HTML for this block
+     *
      * @return string
      */
     protected function _toHtml()

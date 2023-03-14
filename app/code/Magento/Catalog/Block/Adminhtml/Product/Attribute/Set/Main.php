@@ -22,8 +22,6 @@ class Main extends \Magento\Backend\Block\Template
     protected $_template = 'Magento_Catalog::catalog/product/attribute/set/main.phtml';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;

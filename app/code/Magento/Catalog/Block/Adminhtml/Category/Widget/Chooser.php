@@ -25,6 +25,8 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     protected $_template = 'Magento_Catalog::catalog/category/widget/tree.phtml';
 
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()

@@ -11,6 +11,8 @@ use Magento\Backend\Block\Widget\Form;
 class Formattribute extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
+     * Prepare the form
+     *
      * @return void
      */
     protected function _prepareForm()
