@@ -32,6 +32,8 @@ class Country extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
     }
 
     /**
+     * Return options
+     *
      * @return array
      */
     protected function _getOptions()
