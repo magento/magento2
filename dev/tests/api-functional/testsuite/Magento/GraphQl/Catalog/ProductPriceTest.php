@@ -37,6 +37,11 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class ProductPriceTest extends GraphQlAbstract
 {
+    /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
     /** @var ObjectManager $objectManager */
     private $objectManager;
 
@@ -692,7 +697,7 @@ class ProductPriceTest extends GraphQlAbstract
                 'customer_group_id' => Group::CUST_GROUP_ALL,
                 'percentage_value'=> null,
                 'qty'=> 2,
-                'value'=> 20
+                'value'=> 20,
             ]
         ];
         foreach ($configurableProductVariants as $configurableProductVariant) {
@@ -772,7 +777,7 @@ class ProductPriceTest extends GraphQlAbstract
                         "value" => round((float) $configurableProductVariants[$key]->getSpecialPrice(), 2)
                     ],
                     "discount" => [
-                        "amount_off" => ($regularPrice[$key] - $finalPrice[$key]),
+                        "amount_off" => round($regularPrice[$key] - $finalPrice[$key], 2),
                         "percent_off" => round(($regularPrice[$key] - $finalPrice[$key])*100/$regularPrice[$key], 2)
                     ]
                 ],
@@ -784,7 +789,7 @@ class ProductPriceTest extends GraphQlAbstract
                         "value" => round((float) $configurableProductVariants[$key]->getSpecialPrice(), 2)
                     ],
                     "discount" => [
-                        "amount_off" => $regularPrice[$key] - $finalPrice[$key],
+                        "amount_off" => round($regularPrice[$key] - $finalPrice[$key], 2),
                         "percent_off" => round(($regularPrice[$key] - $finalPrice[$key])*100/$regularPrice[$key], 2)
                     ]
                 ]
@@ -1218,8 +1223,16 @@ QUERY;
                 $expected['final_price']['currency'] ?? $currency,
                 $actual['final_price']['currency']
             );
-            $this->assertEquals($expected['discount']['amount_off'], $actual['discount']['amount_off']);
-            $this->assertEquals($expected['discount']['percent_off'], $actual['discount']['percent_off']);
+            $this->assertEqualsWithDelta(
+                $expected['discount']['amount_off'],
+                $actual['discount']['amount_off'],
+                self::EPSILON
+            );
+            $this->assertEqualsWithDelta(
+                $expected['discount']['percent_off'],
+                $actual['discount']['percent_off'],
+                self::EPSILON
+            );
         }
     }
 
