@@ -24,15 +24,11 @@ use Magento\Framework\Registry;
 class Composite extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * Core registry
-     *
      * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Catalog product
-     *
      * @var Product
      */
     protected $_catalogProduct = null;
@@ -89,8 +85,9 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Prepares and render result of composite product configuration update for a case
-     * when single configuration submitted
+     * Prepares and render result of composite product configuration update
+     *
+     * This is for a case when single configuration was submitted
      *
      * @param \Magento\Framework\DataObject $updateResult
      * @return \Magento\Framework\View\Result\Layout

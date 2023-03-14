@@ -17,22 +17,16 @@ use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
-     * Catalog helper
-     *
      * @var \Magento\Catalog\Helper\Data
      */
     protected $_helper;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Currency factory
-     *
      * @var \Magento\Directory\Model\CurrencyFactory
      */
     protected $_currencyFactory;
@@ -81,6 +75,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
     /**
      * Set Attribute instance
+     *
      * Rewrite for redefine attribute scope
      *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
@@ -112,6 +107,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
     /**
      * After Save Price Attribute manipulation
+     *
      * Processes product price attributes if price scoped to website and updates data when:
      * * Price changed for non-default store view - will update price for all stores assigned to current website.
      * * Price will be changed according to store currency even if price changed in product with default store id.
@@ -144,6 +140,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
     /**
      * Check whether product uses default attribute's value in selected scope
+     *
      * @param \Magento\Catalog\Model\Product $object
      * @return bool
      */

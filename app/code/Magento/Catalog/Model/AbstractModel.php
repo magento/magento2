@@ -9,6 +9,8 @@ use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Abstract model for catalog entities
+ *
+ * @phpcs:ignore Magento2.Classes.AbstractApi.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
@@ -33,29 +35,21 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     protected $_storeValuesFlags;
 
     /**
-     * Locked attributes
-     *
      * @var array
      */
     protected $_lockedAttributes = [];
 
     /**
-     * Is model deleteable
-     *
      * @var boolean
      */
     protected $_isDeleteable = true;
 
     /**
-     * Is model readonly
-     *
      * @var boolean
      */
     protected $_isReadonly = false;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -312,8 +306,8 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     /**
      * Retrieve default value for attribute code
      *
-     * @param   string $attributeCode
-     * @return  array|boolean
+     * @param string $attributeCode
+     * @return array|boolean
      *
      * @deprecated 101.0.0
      */
@@ -347,8 +341,8 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     /**
      * Check if object attribute has value in current store
      *
-     * @param   string $attributeCode
-     * @return  bool
+     * @param string $attributeCode
+     * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      *
      * @deprecated 101.0.0

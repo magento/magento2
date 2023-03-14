@@ -13,8 +13,6 @@ use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
 class Price implements ProductPriceOptionsInterface
 {
     /**
-     * Store manager.
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
@@ -28,7 +26,7 @@ class Price implements ProductPriceOptionsInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
      * @codeCoverageIgnore
      */

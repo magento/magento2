@@ -4,16 +4,14 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Catalog\Block\Product\Widget\Html;
+
 /**
  * New products widget pager block
  */
-namespace Magento\Catalog\Block\Product\Widget\Html;
-
 class Pager extends \Magento\Theme\Block\Html\Pager
 {
     /**
-     * Collection size
-     *
      * Size of collection which may has a manual limitation
      *
      * @var int
@@ -21,15 +19,11 @@ class Pager extends \Magento\Theme\Block\Html\Pager
     protected $_collectionSize;
 
     /**
-     * Current page
-     *
      * @var int
      */
     protected $_currentPage;
 
     /**
-     * Last page
-     *
      * @var int
      */
     protected $_lastPage;
@@ -204,6 +198,9 @@ class Pager extends \Magento\Theme\Block\Html\Pager
             } elseif ($this->getCurrentPage() > $this->getLastPageNum() - $half) {
                 $finish = $this->getLastPageNum();
                 $start = $finish - $this->_displayPages + 1;
+            } else {
+                $start = 1;
+                $finish = $this->_displayPages;
             }
             $pages = range($start, $finish);
         }

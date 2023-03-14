@@ -11,15 +11,11 @@ namespace Magento\Catalog\Model\Category\Attribute\Source;
 class Sortby extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
-     * Catalog config
-     *
      * @var \Magento\Catalog\Model\Config
      */
     protected $_catalogConfig;
 
     /**
-     * Construct
-     *
      * @param \Magento\Catalog\Model\Config $catalogConfig
      */
     public function __construct(\Magento\Catalog\Model\Config $catalogConfig)

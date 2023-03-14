@@ -27,7 +27,7 @@ class Container extends \Magento\Eav\Model\Entity\Attribute\Source\Config
             }
         }
         if (isset($options[$value])) {
-            return $option[$value];
+            return $options[$value];
         }
         return false;
     }

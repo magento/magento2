@@ -17,7 +17,7 @@ abstract class Widget extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Catalog::categories';
+    public const ADMIN_RESOURCE = 'Magento_Catalog::categories';
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
@@ -37,6 +37,8 @@ abstract class Widget extends \Magento\Backend\App\Action
     }
 
     /**
+     * Return the category tree block
+     *
      * @return BlockInterface
      */
     protected function _getCategoryTreeBlock()

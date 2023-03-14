@@ -29,9 +29,8 @@ use Magento\Framework\View\DesignInterface;
  */
 class Design extends \Magento\Framework\Model\AbstractModel
 {
-    const APPLY_FOR_PRODUCT = 1;
-
-    const APPLY_FOR_CATEGORY = 2;
+    public const APPLY_FOR_PRODUCT = 1;
+    public const APPLY_FOR_CATEGORY = 2;
 
     /**
      * Design package instance
