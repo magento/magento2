@@ -83,5 +83,16 @@
         <element name="newAddedAttributeValue" type="text" selector="//option[contains(@data-title,'{{attributeValue}}')]" parameterized="true"/>
         <element name="country_Of_Manufacture" type="select" selector="//td[contains(text(), 'country_of_manufacture')]"/>
         <element name="textArea" type="text" selector="//textarea[@name='product[test_custom_attribute]']" timeout="30"/>
+        <element name="unassignSource" type="button" selector="//span[text()='{{source_name}}']/../../..//button[@class='action-delete']//span[text()='Unassign']" parameterized="true"/>
+        <element name="btnAssignSources" type="button" selector="//button//span[text()='Assign Sources']/.."/>
+        <element name="chkSourceToAssign" type="checkbox" selector="//input[@id='idscheck{{source_id}}']/.." parameterized="true"/>
+        <element name="btnDoneAssignedSources" type="button" selector="//aside[@class='modal-slide product_form_product_form_sources_assign_sources_modal _show']//button[@class='action-primary']//span[text()='Done']/.." />
+        <element name="assignedSourcesQty" type="input" selector="//input[@name='sources[assigned_sources][0][quantity]']"/>
+        <element name="searchBySource" type="input" selector="//div[contains(@data-bind,'inventory_source_listing.inventory_source_listing')]/div[2]//input[@placeholder='Search by keyword']"/>
+        <element name="clickSearch" type="button" selector="//div[contains(@data-bind,'inventory_source_listing.inventory_source_listing')]/div[2]//button[@aria-label='Search']"/>
+        <element name="btnAdvancedInventory" type="button" selector="//button//span[text()='Advanced Inventory']/.."/>
+        <element name="checkConfigSettingsAdvancedInventory" type="checkbox" selector="//input[@name='product[stock_data][{{args}}]']/..//label[text()='Use Config Settings']/..//input[@type='checkbox']" parameterized="true"/>
+        <element name="selectManageStockOption" type="select" selector="//select[@name='product[stock_data][manage_stock]']"/>
+        <element name="btnDoneAdvancedInventory" type="button" selector="//aside[@class='modal-slide product_form_product_form_advanced_inventory_modal _show']//button[@class='action-primary']//span[text()='Done']/.." />
     </section>
 </sections>
