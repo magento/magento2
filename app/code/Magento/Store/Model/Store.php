@@ -6,6 +6,7 @@
 namespace Magento\Store\Model;
 
 use Laminas\Uri\UriFactory;
+use Laminas\Validator\ValidatorInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Directory\Model\Currency;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -20,6 +21,7 @@ use Magento\Framework\Url\ModifierInterface;
 use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManager;
 
 /**
  * Store model
@@ -197,6 +199,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @var boolean|null
      * @deprecated 101.0.0 unused protected property
+     * @see we don't recommend this approach anymore
      */
     protected $_isAdminSecure = null;
 
@@ -265,6 +268,7 @@ class Store extends AbstractExtensibleModel implements
     /**
      * @var \Magento\Framework\Session\SidResolverInterface
      * @deprecated 101.0.5 Not used anymore.
+     * @see we don't recommend this approach anymore
      */
     protected $_sidResolver;
 
@@ -471,8 +475,7 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Validation rules for store
      *
-     * @return \Zend_Validate_Interface|null
-     * @throws \Zend_Validate_Exception
+     * @return ValidatorInterface|null
      */
     protected function _getValidationRulesBeforeSave()
     {
@@ -758,6 +761,7 @@ class Store extends AbstractExtensibleModel implements
     public function isUseStoreInUrl()
     {
         return !($this->hasDisableStoreInUrl() && $this->getDisableStoreInUrl())
+            && !$this->getConfig(StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED)
             && $this->getConfig(self::XML_PATH_STORE_IN_URL);
     }
 
@@ -1058,6 +1062,7 @@ class Store extends AbstractExtensibleModel implements
      * @throws \Exception
      * @since 100.1.3
      * @deprecated 100.1.3
+     * @see we don't recommend this approach anymore
      */
     public function afterSave()
     {

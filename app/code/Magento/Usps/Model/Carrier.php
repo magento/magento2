@@ -12,6 +12,8 @@ use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\AsyncClient\HttpException;
 use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
+use Magento\Framework\HTTP\LaminasClient;
+use Magento\Framework\HTTP\LaminasClientFactory;
 use Magento\Framework\Measure\Length;
 use Magento\Framework\Measure\Weight;
 use Magento\Framework\Xml\Security;
@@ -27,6 +29,7 @@ use Magento\Usps\Helper\Data as DataHelper;
  * USPS shipping
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
  */
 class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
@@ -124,7 +127,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_productCollectionFactory;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClientFactory
+     * @var LaminasClientFactory
      * @deprecated Use asynchronous client.
      * @see $httpClient
      */
@@ -175,7 +178,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Shipping\Helper\Carrier $carrierHelper
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
+     * @param LaminasClientFactory $httpClientFactory
      * @param array $data
      * @param AsyncClientInterface|null $httpClient
      * @param ProxyDeferredFactory|null $proxyDeferredFactory
@@ -201,7 +204,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         CarrierHelper $carrierHelper,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
+        LaminasClientFactory $httpClientFactory,
         array $data = [],
         ?AsyncClientInterface $httpClient = null,
         ?ProxyDeferredFactory $proxyDeferredFactory = null,
@@ -1992,12 +1995,17 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (!$url) {
             $url = $this->_defaultGatewayUrl;
         }
+        /** @var LaminasClient $client */
         $client = $this->_httpClientFactory->create();
         $client->setUri($url);
-        $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
-        $client->setParameterGet('API', $api);
-        $client->setParameterGet('XML', $requestXml);
-        $response = $client->request()->getBody();
+        $client->setOptions(['maxredirects' => 0, 'timeout' => 30]);
+        $client->setParameterGet(
+            [
+                'API' => $api,
+                'XML' => $requestXml
+            ]
+        );
+        $response = $client->send()->getBody();
 
         $response = $this->parseXml($response);
 
