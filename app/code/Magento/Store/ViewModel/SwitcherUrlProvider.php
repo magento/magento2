@@ -9,44 +9,28 @@ declare(strict_types=1);
 namespace Magento\Store\ViewModel;
 
 use Magento\Framework\App\ActionInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Provides target store redirect url.
  */
-class SwitcherUrlProvider implements \Magento\Framework\View\Element\Block\ArgumentInterface
+class SwitcherUrlProvider implements ArgumentInterface
 {
-    /**
-     * @var EncoderInterface
-     */
-    private $encoder;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var UrlInterface
-     */
-    private $urlBuilder;
-
     /**
      * @param EncoderInterface $encoder
      * @param StoreManagerInterface $storeManager
      * @param UrlInterface $urlBuilder
      */
     public function __construct(
-        EncoderInterface $encoder,
-        StoreManagerInterface $storeManager,
-        UrlInterface $urlBuilder
+        private readonly EncoderInterface $encoder,
+        private readonly StoreManagerInterface $storeManager,
+        private readonly UrlInterface $urlBuilder
     ) {
-        $this->encoder = $encoder;
-        $this->storeManager = $storeManager;
-        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -54,7 +38,7 @@ class SwitcherUrlProvider implements \Magento\Framework\View\Element\Block\Argum
      *
      * @param Store $store
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getTargetStoreRedirectUrl(Store $store): string
     {

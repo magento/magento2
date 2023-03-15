@@ -7,6 +7,7 @@
 namespace Magento\Store\Setup\Patch\Schema;
 
 use Magento\Catalog\Helper\DefaultCategory;
+use Magento\Catalog\Helper\DefaultCategoryFactory;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 use Magento\Framework\Setup\Patch\SchemaPatchInterface;
@@ -20,30 +21,19 @@ use Magento\Store\Api\Data\WebsiteInterface;
 class InitializeStoresAndWebsites implements SchemaPatchInterface, PatchVersionInterface
 {
     /**
-     * @var SchemaSetupInterface
-     */
-    private $schemaSetup;
-
-    /**
      * @var DefaultCategory
      */
     private $defaultCategory;
 
     /**
-     * @var \Magento\Catalog\Helper\DefaultCategoryFactory
-     */
-    private $defaultCategoryFactory;
-
-    /**
      * PatchInitial constructor.
      * @param SchemaSetupInterface $schemaSetup
+     * @param DefaultCategoryFactory $defaultCategoryFactory
      */
     public function __construct(
-        SchemaSetupInterface $schemaSetup,
-        \Magento\Catalog\Helper\DefaultCategoryFactory $defaultCategoryFactory
+        private readonly SchemaSetupInterface $schemaSetup,
+        private readonly DefaultCategoryFactory $defaultCategoryFactory
     ) {
-        $this->schemaSetup = $schemaSetup;
-        $this->defaultCategoryFactory = $defaultCategoryFactory;
     }
 
     /**

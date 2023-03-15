@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Store\Url\Plugin;
 
+use Closure;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Url\SecurityInfo as UrlSecurityInfo;
 use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 use Magento\Store\Model\Store;
 
@@ -16,28 +19,23 @@ use Magento\Store\Model\Store;
 class SecurityInfo
 {
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @param ScopeConfigInterface $scopeConfig
      */
-    protected $scopeConfig;
-
-    /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     */
-    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
-    {
-        $this->scopeConfig = $scopeConfig;
+    public function __construct(
+        protected readonly ScopeConfigInterface $scopeConfig
+    ) {
     }
 
     /**
      * Check if secure URLs are enabled.
      *
-     * @param \Magento\Framework\Url\SecurityInfo $subject
+     * @param UrlSecurityInfo $subject
      * @param callable $proceed
      * @param string $url
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundIsSecure(\Magento\Framework\Url\SecurityInfo $subject, \Closure $proceed, $url)
+    public function aroundIsSecure(UrlSecurityInfo $subject, Closure $proceed, $url)
     {
         if ($this->scopeConfig->getValue(Store::XML_PATH_SECURE_IN_FRONTEND, StoreScopeInterface::SCOPE_STORE)) {
             return $proceed($url);

@@ -5,9 +5,14 @@
  */
 namespace Magento\Store\Url\Plugin;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Url\QueryParamsResolverInterface;
+use Magento\Framework\Url\RouteParamsResolver as UrlRouteParamsResolver;
 use \Magento\Store\Model\Store;
 use \Magento\Store\Api\Data\StoreInterface;
 use \Magento\Store\Model\ScopeInterface as StoreScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Plugin for \Magento\Framework\Url\RouteParamsResolver
@@ -15,49 +20,31 @@ use \Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 class RouteParamsResolver
 {
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var \Magento\Framework\Url\QueryParamsResolverInterface
-     */
-    protected $queryParamsResolver;
-
-    /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver
+     * @param ScopeConfigInterface $scopeConfig
+     * @param StoreManagerInterface $storeManager
+     * @param QueryParamsResolverInterface $queryParamsResolver
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver
+        protected readonly ScopeConfigInterface $scopeConfig,
+        protected readonly StoreManagerInterface $storeManager,
+        protected readonly QueryParamsResolverInterface $queryParamsResolver
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->storeManager = $storeManager;
-        $this->queryParamsResolver = $queryParamsResolver;
     }
 
     /**
      * Process scope query parameters.
      *
-     * @param \Magento\Framework\Url\RouteParamsResolver $subject
+     * @param UrlRouteParamsResolver $subject
      * @param array $data
      * @param bool $unsetOldParams
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     *
      * @return array
+     *@throws NoSuchEntityException
+     *
      */
     public function beforeSetRouteParams(
-        \Magento\Framework\Url\RouteParamsResolver $subject,
+        UrlRouteParamsResolver $subject,
         array $data,
         $unsetOldParams = true
     ) {
