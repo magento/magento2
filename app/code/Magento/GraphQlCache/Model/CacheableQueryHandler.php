@@ -10,6 +10,7 @@ namespace Magento\GraphQlCache\Model;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 use Magento\GraphQlCache\Model\Resolver\IdentityPool;
 
 /**
@@ -63,13 +64,39 @@ class CacheableQueryHandler
         $cacheIdentityClass = $cacheAnnotation['cacheIdentity'] ?? '';
 
         if ($this->request instanceof Http && $this->request->isGet() && !empty($cacheIdentityClass)) {
-            $cacheIdentity = $this->identityPool->get($cacheIdentityClass);
-            $cacheTags = $cacheIdentity->getIdentities($resolvedValue);
+            $cacheTags = $this->getTagsByIdentityClassNameAndResolvedValue($cacheIdentityClass, $resolvedValue);
             $this->cacheableQuery->addCacheTags($cacheTags);
         } else {
             $cacheable = false;
         }
         $this->setCacheValidity($cacheable);
+    }
+
+    /**
+     * TODO
+     *
+     * @param string $cacheIdentityClassName
+     * @param array $resolvedValue
+     * @return string[]
+     */
+    public function getTagsByIdentityClassNameAndResolvedValue(
+        string $cacheIdentityClassName,
+        array $resolvedValue
+    ): array {
+        $cacheIdentity = $this->getCacheIdentityByClassName($cacheIdentityClassName);
+
+        return $cacheIdentity->getIdentities($resolvedValue);
+    }
+
+    /**
+     * TODO
+     *
+     * @param string $cacheIdentityClassName
+     * @return IdentityInterface
+     */
+    private function getCacheIdentityByClassName(string $cacheIdentityClassName): IdentityInterface
+    {
+        return $this->identityPool->get($cacheIdentityClassName);
     }
 
     /**

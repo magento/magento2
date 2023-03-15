@@ -44,7 +44,7 @@ class CacheableQuery
     }
 
     /**
-     * Return if its valid to cache the response
+     * Return if it's valid to cache the response
      *
      * @return bool
      */
@@ -71,7 +71,8 @@ class CacheableQuery
     public function shouldPopulateCacheHeadersWithTags() : bool
     {
         $cacheTags = $this->getCacheTags();
-        $isQueryCaheable = $this->isCacheable();
-        return !empty($cacheTags) && $isQueryCaheable;
+        $isQueryCacheable = $this->isCacheable();
+
+        return !empty($cacheTags) && $isQueryCacheable;
     }
 }
