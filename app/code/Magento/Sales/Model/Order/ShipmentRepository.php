@@ -146,6 +146,8 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
         try {
             $this->metadata->getMapper()->save($entity);
             $this->registry[$entity->getEntityId()] = $entity;
+        } catch (\Magento\Framework\Validator\Exception $exception) {
+            throw new CouldNotSaveException(__($exception->getMessage()), $exception);
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__("The shipment couldn't be saved."), $e);
         }

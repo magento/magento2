@@ -5,11 +5,13 @@
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Bundle\Model\Sales\Order\BundleOrderTypeValidator;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\Collection as CommentsCollection;
+use Magento\Sales\Model\ValidatorInterface;
 
 /**
  * Sales order shipment model
@@ -105,6 +107,11 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     private $commentsCollection;
 
     /**
+     * @var ValidatorInterface|null
+     */
+    private $validator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -117,6 +124,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param ValidatorInterface|null $validator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -131,13 +139,15 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ?ValidatorInterface $validator = null
     ) {
         $this->_shipmentItemCollectionFactory = $shipmentItemCollectionFactory;
         $this->_trackCollectionFactory = $trackCollectionFactory;
         $this->_commentFactory = $commentFactory;
         $this->_commentCollectionFactory = $commentCollectionFactory;
         $this->orderRepository = $orderRepository;
+        $this->validator = $validator;
         parent::__construct(
             $context,
             $registry,
@@ -157,6 +167,14 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     protected function _construct()
     {
         $this->_init(\Magento\Sales\Model\ResourceModel\Order\Shipment::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function _getValidationRulesBeforeSave(): ?ValidatorInterface
+    {
+        return $this->validator;
     }
 
     /**
