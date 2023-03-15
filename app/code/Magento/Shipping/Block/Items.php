@@ -11,29 +11,35 @@
  */
 namespace Magento\Shipping\Block;
 
+use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Magento\Sales\Block\Items\AbstractItems;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Shipment as OrderShipment;
+
 /**
  * Shipping Items Block
  *
  * @api
  * @since 100.0.2
  */
-class Items extends \Magento\Sales\Block\Items\AbstractItems
+class Items extends AbstractItems
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param TemplateContext $context
+     * @param Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Registry $registry,
+        TemplateContext $context,
+        Registry $registry,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
@@ -43,7 +49,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Retrieve current order model instance
      *
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function getOrder()
     {
@@ -75,7 +81,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Get html of shipment comments block
      *
-     * @param   \Magento\Sales\Model\Order\Shipment $shipment
+     * @param OrderShipment $shipment
      * @return  string
      */
     public function getCommentsHtml($shipment)

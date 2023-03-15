@@ -6,16 +6,31 @@
 
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context as ActionContext;
+use Magento\Backend\Model\Session as BackendSession;
+use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\DB\Transaction;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Helper\Data as SalesData;
+use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
+use Magento\Sales\Model\Order\Shipment as OrderShipment;
+use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
 use Magento\Sales\Model\Order\Shipment\Validation\QuantityValidator;
+use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
+use Magento\Shipping\Model\Shipping\LabelGenerator;
+use Psr\Log\LoggerInterface;
 
 /**
  * Controller for generation of new Shipments from Backend
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Backend\App\Action implements HttpPostActionInterface
+class Save extends Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -25,68 +40,40 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
     const ADMIN_RESOURCE = 'Magento_Sales::shipment';
 
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
-     */
-    protected $shipmentLoader;
-
-    /**
-     * @var \Magento\Shipping\Model\Shipping\LabelGenerator
-     */
-    protected $labelGenerator;
-
-    /**
-     * @var \Magento\Sales\Model\Order\Email\Sender\ShipmentSender
-     */
-    protected $shipmentSender;
-
-    /**
-     * @var \Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface
-     */
-    private $shipmentValidator;
-
-    /**
-     * @var SalesData
-     */
-    private $salesData;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
-     * @param \Magento\Shipping\Model\Shipping\LabelGenerator $labelGenerator
-     * @param \Magento\Sales\Model\Order\Email\Sender\ShipmentSender $shipmentSender
-     * @param \Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface|null $shipmentValidator
+     * @param ActionContext $context
+     * @param ShipmentLoader $shipmentLoader
+     * @param LabelGenerator $labelGenerator
+     * @param ShipmentSender $shipmentSender
+     * @param ShipmentValidatorInterface|null $shipmentValidator
      * @param SalesData $salesData
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
-        \Magento\Shipping\Model\Shipping\LabelGenerator $labelGenerator,
-        \Magento\Sales\Model\Order\Email\Sender\ShipmentSender $shipmentSender,
-        \Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface $shipmentValidator = null,
-        SalesData $salesData = null
+        ActionContext $context,
+        protected readonly ShipmentLoader $shipmentLoader,
+        protected readonly LabelGenerator $labelGenerator,
+        protected readonly ShipmentSender $shipmentSender,
+        private ?ShipmentValidatorInterface $shipmentValidator = null,
+        private ?SalesData $salesData = null
     ) {
         parent::__construct($context);
 
-        $this->shipmentLoader = $shipmentLoader;
-        $this->labelGenerator = $labelGenerator;
-        $this->shipmentSender = $shipmentSender;
-        $this->shipmentValidator = $shipmentValidator ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface::class);
-        $this->salesData = $salesData ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->shipmentValidator = $shipmentValidator ?: ObjectManager::getInstance()
+            ->get(ShipmentValidatorInterface::class);
+        $this->salesData = $salesData ?: ObjectManager::getInstance()
             ->get(SalesData::class);
     }
 
     /**
      * Save shipment and order in one transaction
      *
-     * @param \Magento\Sales\Model\Order\Shipment $shipment
+     * @param OrderShipment $shipment
      * @return $this
      */
     protected function _saveShipment($shipment)
     {
         $shipment->getOrder()->setIsInProcess(true);
         $transaction = $this->_objectManager->create(
-            \Magento\Framework\DB\Transaction::class
+            Transaction::class
         );
         $transaction->addObject(
             $shipment
@@ -102,13 +89,13 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
      *
      * We can save only new shipment. Existing shipments are not editable
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var ResultRedirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
         $formKeyIsValid = $this->_formKeyValidator->validate($this->getRequest());
@@ -122,11 +109,11 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
         $orderId = $this->getRequest()->getParam('order_id');
 
         if (!empty($data['comment_text'])) {
-            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setCommentText($data['comment_text']);
+            $this->_objectManager->get(BackendSession::class)->setCommentText($data['comment_text']);
         }
 
         $isNeedCreateLabel = isset($data['create_shipping_label']) && $data['create_shipping_label'];
-        $responseAjax = new \Magento\Framework\DataObject();
+        $responseAjax = new DataObject();
 
         try {
             $this->shipmentLoader->setOrderId($orderId);
@@ -177,8 +164,8 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             $this->messageManager->addSuccessMessage(
                 $isNeedCreateLabel ? $shipmentCreatedMessage . ' ' . $labelCreatedMessage : $shipmentCreatedMessage
             );
-            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getCommentText(true);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->_objectManager->get(BackendSession::class)->getCommentText(true);
+        } catch (LocalizedException $e) {
             if ($isNeedCreateLabel) {
                 $responseAjax->setError(true);
                 $responseAjax->setMessage($e->getMessage());
@@ -187,7 +174,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                 return $resultRedirect->setPath('*/*/new', ['order_id' => $orderId]);
             }
         } catch (\Exception $e) {
-            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            $this->_objectManager->get(LoggerInterface::class)->critical($e);
             if ($isNeedCreateLabel) {
                 $responseAjax->setError(true);
                 $responseAjax->setMessage(__('An error occurred while creating shipping label.'));

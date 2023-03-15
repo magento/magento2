@@ -5,6 +5,13 @@
  */
 namespace Magento\Shipping\Model\Rate;
 
+use Magento\Framework\Filter\Sprintf;
+use Magento\Quote\Model\Quote\Address\RateResult\AbstractResult;
+use Magento\Quote\Model\Quote\Address\RateResult\Error as RateResultError;
+use Magento\Quote\Model\Quote\Address\RateResult\Method as RateResultMethod;
+use Magento\Shipping\Model\Rate\Result as RateResult;
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Class Result
  *
@@ -18,7 +25,7 @@ class Result
     /**
      * Shipping method rates
      *
-     * @var \Magento\Quote\Model\Quote\Address\RateResult\AbstractResult[]
+     * @var AbstractResult[]
      */
     protected $_rates = [];
 
@@ -30,15 +37,16 @@ class Result
     protected $_error = null;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
-    {
+    public function __construct(
+        StoreManagerInterface $storeManager
+    ) {
         $this->_storeManager = $storeManager;
     }
 
@@ -77,17 +85,17 @@ class Result
     /**
      * Add a rate to the result
      *
-     * @param \Magento\Quote\Model\Quote\Address\RateResult\AbstractResult|\Magento\Shipping\Model\Rate\Result $result
+     * @param AbstractResult|RateResult $result
      * @return $this
      */
     public function append($result)
     {
-        if ($result instanceof \Magento\Quote\Model\Quote\Address\RateResult\Error) {
+        if ($result instanceof RateResultError) {
             $this->setError(true);
         }
-        if ($result instanceof \Magento\Quote\Model\Quote\Address\RateResult\AbstractResult) {
+        if ($result instanceof AbstractResult) {
             $this->_rates[] = $result;
-        } elseif ($result instanceof \Magento\Shipping\Model\Rate\Result) {
+        } elseif ($result instanceof RateResult) {
             $rates = $result->getAllRates();
             foreach ($rates as $rate) {
                 $this->append($rate);
@@ -99,7 +107,7 @@ class Result
     /**
      * Return all quotes in the result
      *
-     * @return \Magento\Quote\Model\Quote\Address\RateResult\Method[]
+     * @return RateResultMethod[]
      */
     public function getAllRates()
     {
@@ -110,7 +118,7 @@ class Result
      * Return rate by id in array
      *
      * @param int $id
-     * @return \Magento\Quote\Model\Quote\Address\RateResult\Method|null
+     * @return RateResultMethod|null
      */
     public function getRateById($id)
     {
@@ -153,7 +161,7 @@ class Result
         } elseif ($this->_storeManager->getStore()->getDefaultCurrency()) {
             $currencyFilter = $this->_storeManager->getStore()->getDefaultCurrency()->getFilter();
         } else {
-            $currencyFilter = new \Magento\Framework\Filter\Sprintf('%s', 2);
+            $currencyFilter = new Sprintf('%s', 2);
         }
         $rates = [];
         $allRates = $this->getAllRates();
@@ -171,7 +179,7 @@ class Result
     /**
      * Get cheapest rate
      *
-     * @return null|\Magento\Quote\Model\Quote\Address\RateResult\Method
+     * @return null|RateResultMethod
      */
     public function getCheapestRate()
     {
@@ -197,7 +205,7 @@ class Result
         if (!is_array($this->_rates) || !count($this->_rates)) {
             return $this;
         }
-        /* @var $rate \Magento\Quote\Model\Quote\Address\RateResult\Method */
+        /* @var RateResultMethod $rate */
         foreach ($this->_rates as $i => $rate) {
             $tmp[$i] = $rate->getPrice();
         }

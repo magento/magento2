@@ -11,27 +11,33 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\View;
 
+use Magento\Backend\Block\Text\ListText;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Context as ElementContext;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Shipment as OrderShipment;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Comments extends \Magento\Backend\Block\Text\ListText
+class Comments extends ListText
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Framework\View\Element\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param ElementContext $context
+     * @param Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Context $context,
-        \Magento\Framework\Registry $registry,
+        ElementContext $context,
+        Registry $registry,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
@@ -41,7 +47,7 @@ class Comments extends \Magento\Backend\Block\Text\ListText
     /**
      * Retrieve shipment model instance
      *
-     * @return \Magento\Sales\Model\Order\Shipment
+     * @return OrderShipment
      */
     public function getShipment()
     {
@@ -51,7 +57,7 @@ class Comments extends \Magento\Backend\Block\Text\ListText
     /**
      * Retrieve invoice order
      *
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function getOrder()
     {
@@ -61,7 +67,7 @@ class Comments extends \Magento\Backend\Block\Text\ListText
     /**
      * Retrieve source
      *
-     * @return \Magento\Sales\Model\Order\Shipment
+     * @return OrderShipment
      */
     public function getSource()
     {

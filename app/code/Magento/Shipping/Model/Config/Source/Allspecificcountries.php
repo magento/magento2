@@ -5,7 +5,9 @@
  */
 namespace Magento\Shipping\Model\Config\Source;
 
-class Allspecificcountries implements \Magento\Framework\Option\ArrayInterface
+use Magento\Framework\Option\ArrayInterface;
+
+class Allspecificcountries implements ArrayInterface
 {
     /**
      * {@inheritdoc}

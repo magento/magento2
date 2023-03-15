@@ -5,36 +5,43 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\Order;
 
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context as TemplateContext;
+use Magento\Backend\Block\Widget\Button as WidgetButton;
+use Magento\Framework\Registry;
+use Magento\Sales\Model\Order\Shipment as OrderShipment;
+use Magento\Shipping\Model\Config as ShippingConfig;
+
 /**
  * Shipment tracking control form
  *
  * @api
  * @since 100.0.2
  */
-class Tracking extends \Magento\Backend\Block\Template
+class Tracking extends Template
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Shipping\Model\Config
+     * @var ShippingConfig
      */
     protected $_shippingConfig;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Shipping\Model\Config $shippingConfig
-     * @param \Magento\Framework\Registry $registry
+     * @param TemplateContext $context
+     * @param ShippingConfig $shippingConfig
+     * @param Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Shipping\Model\Config $shippingConfig,
-        \Magento\Framework\Registry $registry,
+        TemplateContext $context,
+        ShippingConfig $shippingConfig,
+        Registry $registry,
         array $data = []
     ) {
         $this->_shippingConfig = $shippingConfig;
@@ -51,7 +58,7 @@ class Tracking extends \Magento\Backend\Block\Template
     {
         $this->addChild(
             'add_button',
-            \Magento\Backend\Block\Widget\Button::class,
+            WidgetButton::class,
             ['label' => __('Add Tracking Number'), 'class' => '', 'onclick' => 'trackingControl.add()']
         );
     }
@@ -59,7 +66,7 @@ class Tracking extends \Magento\Backend\Block\Template
     /**
      * Retrieve shipment model instance
      *
-     * @return \Magento\Sales\Model\Order\Shipment
+     * @return OrderShipment
      */
     public function getShipment()
     {

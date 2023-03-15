@@ -5,38 +5,45 @@
  */
 namespace Magento\Shipping\Block\Tracking;
 
+use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Html\Link as HtmlLink;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Magento\Sales\Model\AbstractModel;
+use Magento\Sales\Model\Order;
+use Magento\Shipping\Helper\Data as ShippingHelper;
+
 /**
  * Tracking info link
  *
  * @api
  * @since 100.0.2
  */
-class Link extends \Magento\Framework\View\Element\Html\Link
+class Link extends HtmlLink
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry;
 
     /**
      * Shipping data
      *
-     * @var \Magento\Shipping\Helper\Data
+     * @var ShippingHelper
      */
     protected $_shippingData;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Shipping\Helper\Data $shippingData
+     * @param TemplateContext $context
+     * @param Registry $registry
+     * @param ShippingHelper $shippingData
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Shipping\Helper\Data $shippingData,
+        TemplateContext $context,
+        Registry $registry,
+        ShippingHelper $shippingData,
         array $data = []
     ) {
         $this->_shippingData = $shippingData;
@@ -45,7 +52,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
     }
 
     /**
-     * @param \Magento\Sales\Model\AbstractModel $model
+     * @param AbstractModel $model
      * @return string
      */
     public function getWindowUrl($model)
@@ -56,7 +63,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
     /**
      * Retrieve current order model instance
      *
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function getOrder()
     {

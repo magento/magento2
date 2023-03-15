@@ -5,29 +5,34 @@
  */
 namespace Magento\Shipping\Block\Adminhtml;
 
+use Magento\Backend\Block\Widget\Context as WidgetContext;
+use Magento\Backend\Block\Widget\Form\Container as FormContainer;
+use Magento\Framework\Registry;
+use Magento\Sales\Model\Order\Shipment as OrderShipment;
+
 /**
  * Adminhtml shipment create
  *
  * @api
  * @since 100.0.2
  */
-class Create extends \Magento\Backend\Block\Widget\Form\Container
+class Create extends FormContainer
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param WidgetContext $context
+     * @param Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Framework\Registry $registry,
+        WidgetContext $context,
+        Registry $registry,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
@@ -51,7 +56,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Retrieve shipment model instance
      *
-     * @return \Magento\Sales\Model\Order\Shipment
+     * @return OrderShipment
      */
     public function getShipment()
     {

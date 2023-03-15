@@ -5,6 +5,14 @@
  */
 namespace Magento\Shipping\Block\Adminhtml;
 
+use DateTime;
+use IntlDateFormatter;
+use Magento\Backend\Block\Widget\Context;
+use Magento\Backend\Block\Widget\Form\Container as FormContainer;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
+use Magento\Sales\Model\Order\Shipment as OrderShipment;
+
 /**
  * Adminhtml shipment create
  *
@@ -12,23 +20,23 @@ namespace Magento\Shipping\Block\Adminhtml;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
-class View extends \Magento\Backend\Block\Widget\Form\Container
+class View extends FormContainer
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param Context $context
+     * @param Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Framework\Registry $registry,
+        Context $context,
+        Registry $registry,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
@@ -77,7 +85,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Retrieve shipment model instance
      *
-     * @return \Magento\Sales\Model\Order\Shipment
+     * @return OrderShipment
      */
     public function getShipment()
     {
@@ -85,7 +93,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getHeaderText()
     {
@@ -99,8 +107,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             $this->getShipment()->getIncrementId(),
             $emailSent,
             $this->formatDate(
-                $this->_localeDate->date(new \DateTime($this->getShipment()->getCreatedAt())),
-                \IntlDateFormatter::MEDIUM,
+                $this->_localeDate->date(new DateTime($this->getShipment()->getCreatedAt())),
+                IntlDateFormatter::MEDIUM,
                 true
             )
         );

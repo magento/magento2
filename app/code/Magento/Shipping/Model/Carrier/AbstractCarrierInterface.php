@@ -5,6 +5,8 @@
  */
 namespace Magento\Shipping\Model\Carrier;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 
 /**
@@ -26,33 +28,33 @@ interface AbstractCarrierInterface
      * Collect and get rates
      *
      * @param RateRequest $request
-     * @return \Magento\Framework\DataObject|bool|null
+     * @return DataObject|bool|null
      */
     public function collectRates(RateRequest $request);
 
     /**
      * Do request to shipment - Implementation must be in overridden method
      *
-     * @param \Magento\Framework\DataObject $request
-     * @return \Magento\Framework\DataObject
+     * @param DataObject $request
+     * @return DataObject
      */
     public function requestToShipment($request);
 
     /**
      * Do return of shipment - Implementation must be in overridden method
      *
-     * @param \Magento\Framework\DataObject $request
-     * @return \Magento\Framework\DataObject
+     * @param DataObject $request
+     * @return DataObject
      */
     public function returnOfShipment($request);
 
     /**
      * Return container types of carrier
      *
-     * @param \Magento\Framework\DataObject|null $params
+     * @param DataObject|null $params
      * @return array
      */
-    public function getContainerTypes(\Magento\Framework\DataObject $params = null);
+    public function getContainerTypes(DataObject $params = null);
 
     /**
      * Get Container Types, that could be customized
@@ -64,26 +66,26 @@ interface AbstractCarrierInterface
     /**
      * Return delivery confirmation types of carrier
      *
-     * @param \Magento\Framework\DataObject|null $params
+     * @param DataObject|null $params
      * @return array
      */
-    public function getDeliveryConfirmationTypes(\Magento\Framework\DataObject $params = null);
+    public function getDeliveryConfirmationTypes(DataObject $params = null);
 
     /**
      * Validate request for available ship countries
      *
-     * @param \Magento\Framework\DataObject $request
-     * @return $this|bool|false|\Magento\Framework\Model\AbstractModel
+     * @param DataObject $request
+     * @return $this|bool|false|AbstractModel
      */
-    public function checkAvailableShipCountries(\Magento\Framework\DataObject $request);
+    public function checkAvailableShipCountries(DataObject $request);
 
     /**
      * Processing additional validation to check is carrier applicable.
      *
-     * @param \Magento\Framework\DataObject $request
-     * @return $this|\Magento\Framework\DataObject|boolean
+     * @param DataObject $request
+     * @return $this|DataObject|boolean
      */
-    public function proccessAdditionalValidation(\Magento\Framework\DataObject $request);
+    public function proccessAdditionalValidation(DataObject $request);
 
     /**
      * Determine whether current carrier enabled for activity
@@ -176,8 +178,8 @@ interface AbstractCarrierInterface
     /**
      * Return content types of package
      *
-     * @param \Magento\Framework\DataObject $params
+     * @param DataObject $params
      * @return array
      */
-    public function getContentTypes(\Magento\Framework\DataObject $params);
+    public function getContentTypes(DataObject $params);
 }

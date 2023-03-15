@@ -5,7 +5,10 @@
  */
 namespace Magento\Shipping\Model\Source;
 
-class HandlingAction implements \Magento\Framework\Option\ArrayInterface
+use Magento\Framework\Option\ArrayInterface;
+use Magento\Shipping\Model\Carrier\AbstractCarrier;
+
+class HandlingAction implements ArrayInterface
 {
     /**
      * {@inheritdoc}
@@ -14,11 +17,11 @@ class HandlingAction implements \Magento\Framework\Option\ArrayInterface
     {
         return [
             [
-                'value' => \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_ACTION_PERORDER,
+                'value' => AbstractCarrier::HANDLING_ACTION_PERORDER,
                 'label' => __('Per Order'),
             ],
             [
-                'value' => \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_ACTION_PERPACKAGE,
+                'value' => AbstractCarrier::HANDLING_ACTION_PERPACKAGE,
                 'label' => __('Per Package')
             ]
         ];

@@ -6,55 +6,67 @@
 
 namespace Magento\Shipping\Model\Shipping;
 
+use Magento\Backend\Model\Auth\Session as AuthSession;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\Directory\Model\RegionFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Math\Division as MathDivision;
+use Magento\Sales\Model\Order\Address as OrderAddress;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Address;
+use Magento\Shipping\Model\CarrierFactory;
+use Magento\Shipping\Model\Config as ShippingConfig;
+use Magento\Shipping\Model\Rate\ResultFactory;
 use Magento\Shipping\Model\Shipment\Request;
+use Magento\Shipping\Model\Shipment\RequestFactory;
+use Magento\Shipping\Model\Shipping;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\User\Model\User;
 
 /**
  * Shipping labels model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Labels extends \Magento\Shipping\Model\Shipping
+class Labels extends Shipping
 {
     /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var AuthSession
      */
     protected $_authSession;
 
     /**
-     * @var \Magento\Shipping\Model\Shipment\Request
+     * @var Request
      */
     protected $_request;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Shipping\Model\Config $shippingConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
-     * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
-     * @param \Magento\Shipping\Model\Shipment\RequestFactory $shipmentRequestFactory
-     * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Framework\Math\Division $mathDivision
-     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
-     * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Shipping\Model\Shipment\Request $request
+     * @param ScopeConfigInterface $scopeConfig
+     * @param ShippingConfig $shippingConfig
+     * @param StoreManagerInterface $storeManager
+     * @param CarrierFactory $carrierFactory
+     * @param ResultFactory $rateResultFactory
+     * @param RequestFactory $shipmentRequestFactory
+     * @param RegionFactory $regionFactory
+     * @param MathDivision $mathDivision
+     * @param StockRegistryInterface $stockRegistry
+     * @param AuthSession $authSession
+     * @param Request $request
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Shipping\Model\Config $shippingConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Shipping\Model\CarrierFactory $carrierFactory,
-        \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
-        \Magento\Shipping\Model\Shipment\RequestFactory $shipmentRequestFactory,
-        \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Framework\Math\Division $mathDivision,
-        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Magento\Backend\Model\Auth\Session $authSession,
+        ScopeConfigInterface $scopeConfig,
+        ShippingConfig $shippingConfig,
+        StoreManagerInterface $storeManager,
+        CarrierFactory $carrierFactory,
+        ResultFactory $rateResultFactory,
+        RequestFactory $shipmentRequestFactory,
+        RegionFactory $regionFactory,
+        MathDivision $mathDivision,
+        StockRegistryInterface $stockRegistry,
+        AuthSession $authSession,
         Request $request
     ) {
         $this->_authSession = $authSession;
@@ -76,8 +88,8 @@ class Labels extends \Magento\Shipping\Model\Shipping
      * Prepare and do request to shipment
      *
      * @param Shipment $orderShipment
-     * @return \Magento\Framework\DataObject
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return DataObject
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -146,7 +158,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
             );
         }
 
-        /** @var $request \Magento\Shipping\Model\Shipment\Request */
+        /** @var Request $request */
         $request = $this->_shipmentRequestFactory->create();
         $request->setOrderShipment($orderShipment);
         $address = $order->getShippingAddress();
@@ -165,9 +177,9 @@ class Labels extends \Magento\Shipping\Model\Shipping
 
     /**
      * Set shipper details into request
-     * @param \Magento\Shipping\Model\Shipment\Request $request
-     * @param \Magento\User\Model\User $storeAdmin
-     * @param \Magento\Framework\DataObject $store
+     * @param Request $request
+     * @param User $storeAdmin
+     * @param DataObject $store
      * @param $shipmentStoreId
      * @param $regionCode
      * @param $originStreet
@@ -222,8 +234,8 @@ class Labels extends \Magento\Shipping\Model\Shipping
 
     /**
      * Set recipient details into request
-     * @param \Magento\Shipping\Model\Shipment\Request $request
-     * @param \Magento\Sales\Model\Order\Address $address
+     * @param Request $request
+     * @param OrderAddress $address
      * @return void
      */
     protected function setRecipientDetails(Request $request, Address $address)

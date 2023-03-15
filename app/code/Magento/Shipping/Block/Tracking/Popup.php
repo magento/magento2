@@ -6,7 +6,14 @@
 
 namespace Magento\Shipping\Block\Tracking;
 
+use DateTime;
+use IntlDateFormatter;
+use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Magento\Shipping\Model\Info;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Tracking popup
@@ -14,35 +21,29 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * @api
  * @since 100.0.2
  */
-class Popup extends \Magento\Framework\View\Element\Template
+class Popup extends Template
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_registry;
 
     /**
-     * @var DateTimeFormatterInterface
-     */
-    protected $dateTimeFormatter;
-
-    /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param TemplateContext $context
+     * @param Registry $registry
      * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        DateTimeFormatterInterface $dateTimeFormatter,
+        TemplateContext $context,
+        Registry $registry,
+        protected readonly DateTimeFormatterInterface $dateTimeFormatter,
         array $data = []
     ) {
         $this->_registry = $registry;
         parent::__construct($context, $data);
-        $this->dateTimeFormatter = $dateTimeFormatter;
     }
 
     /**
@@ -52,7 +53,7 @@ class Popup extends \Magento\Framework\View\Element\Template
      */
     public function getTrackingInfo()
     {
-        /* @var $info \Magento\Shipping\Model\Info */
+        /* @var Info $info */
         $info = $this->_registry->registry('current_shipping_info');
 
         return $info->getTrackingInfo();
@@ -78,8 +79,8 @@ class Popup extends \Magento\Framework\View\Element\Template
      */
     public function formatDeliveryDate($date)
     {
-        $format = $this->_localeDate->getDateFormat(\IntlDateFormatter::MEDIUM);
-        return $this->dateTimeFormatter->formatObject($this->_localeDate->date(new \DateTime($date)), $format);
+        $format = $this->_localeDate->getDateFormat(IntlDateFormatter::MEDIUM);
+        return $this->dateTimeFormatter->formatObject($this->_localeDate->date(new DateTime($date)), $format);
     }
 
     /**
@@ -95,8 +96,8 @@ class Popup extends \Magento\Framework\View\Element\Template
             $time = $date . ' ' . $time;
         }
 
-        $format = $this->_localeDate->getTimeFormat(\IntlDateFormatter::SHORT);
-        return $this->dateTimeFormatter->formatObject($this->_localeDate->date(new \DateTime($time)), $format);
+        $format = $this->_localeDate->getTimeFormat(IntlDateFormatter::SHORT);
+        return $this->dateTimeFormatter->formatObject($this->_localeDate->date(new DateTime($time)), $format);
     }
 
     /**
@@ -109,7 +110,7 @@ class Popup extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->isSetFlag(
             'contact/contact/enabled',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -122,7 +123,7 @@ class Popup extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'trans_email/ident_support/email',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 

@@ -6,6 +6,13 @@
 namespace Magento\Shipping\Block\Order;
 
 use Magento\Customer\Model\Context;
+use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Magento\Payment\Helper\Data as PaymentHelper;
+use Magento\Sales\Model\Order;
 
 /**
  * Sales order view block
@@ -13,7 +20,7 @@ use Magento\Customer\Model\Context;
  * @api
  * @since 100.0.2
  */
-class Shipment extends \Magento\Framework\View\Element\Template
+class Shipment extends Template
 {
     /**
      * @var string
@@ -23,37 +30,31 @@ class Shipment extends \Magento\Framework\View\Element\Template
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Framework\App\Http\Context
-     */
-    protected $httpContext;
-
-    /**
-     * @var \Magento\Payment\Helper\Data
+     * @var PaymentHelper
      */
     protected $_paymentHelper;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Payment\Helper\Data $paymentHelper
+     * @param TemplateContext $context
+     * @param Registry $registry
+     * @param HttpContext $httpContext
+     * @param PaymentHelper $paymentHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Payment\Helper\Data $paymentHelper,
+        TemplateContext $context,
+        Registry $registry,
+        protected readonly HttpContext $httpContext,
+        PaymentHelper $paymentHelper,
         array $data = []
     ) {
         $this->_paymentHelper = $paymentHelper;
         $this->_coreRegistry = $registry;
-        $this->httpContext = $httpContext;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
@@ -79,7 +80,7 @@ class Shipment extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve current order model instance
      *
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function getOrder()
     {
@@ -102,7 +103,7 @@ class Shipment extends \Magento\Framework\View\Element\Template
     /**
      * Return back title for logged in and guest users
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getBackTitle()
     {

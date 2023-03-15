@@ -5,14 +5,19 @@
  */
 namespace Magento\Shipping\Helper;
 
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Measure\Exception\MeasureException;
 use Magento\Framework\Measure\Length;
 use Magento\Framework\Measure\Weight;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Carrier helper
  */
-class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
+class Carrier extends AbstractHelper
 {
     /**
      * Carriers root xml path
@@ -25,28 +30,20 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
     public const XML_PATH_EU_COUNTRIES_LIST = 'general/country/eu_countries';
 
     /**
-     * Locale interface
-     *
-     * @var \Magento\Framework\Locale\ResolverInterface $localeResolver
-     */
-    protected $localeResolver;
-
-    /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param Context $context
+     * @param ResolverInterface $localeResolver Locale interface
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver
+        Context $context,
+        protected readonly ResolverInterface $localeResolver
     ) {
-        $this->localeResolver = $localeResolver;
         parent::__construct($context);
     }
 
     /**
      * Get online shipping carrier codes
      *
-     * @param int|\Magento\Store\Model\Store|null $store
+     * @param int|Store|null $store
      * @return array
      */
     public function getOnlineCarrierCodes($store = null)
@@ -54,7 +51,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
         $carriersCodes = [];
         foreach ($this->scopeConfig->getValue(
             self::XML_PATH_CARRIERS_ROOT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) as $carrierCode => $carrier) {
             if (isset($carrier['is_online']) && $carrier['is_online']) {
@@ -76,7 +73,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             sprintf('%s/%s/%s', self::XML_PATH_CARRIERS_ROOT, $carrierCode, $configPath),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -165,7 +162,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
             ',',
             $this->scopeConfig->getValue(
                 self::XML_PATH_EU_COUNTRIES_LIST,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $storeId
             )
         );

@@ -6,6 +6,8 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
-class PrintAction extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\PrintAction
+use Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\PrintAction as AbstractShipmentPrintAction;
+
+class PrintAction extends AbstractShipmentPrintAction
 {
 }

@@ -7,6 +7,17 @@
 namespace Magento\Shipping\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
+use Magento\Sales\Api\Data\ShipmentTrackExtensionInterface;
+use Magento\Sales\Api\ShipmentRepositoryInterface;
+use Magento\Sales\Model\Order\Shipment\Track as OrderShipmentTrack;
+use Magento\Shipping\Model\CarrierFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @method int getParentId()
@@ -18,39 +29,39 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method string getCarrierCode()
  * @method string getCreatedAt()
  * @method string getUpdatedAt()
- * @method \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface getExtensionAttributes()
+ * @method ShipmentTrackExtensionInterface getExtensionAttributes()
  */
-class Track extends \Magento\Sales\Model\Order\Shipment\Track
+class Track extends OrderShipmentTrack
 {
     /**
-     * @var \Magento\Shipping\Model\CarrierFactory
+     * @var CarrierFactory
      */
     protected $_carrierFactory;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param Context $context
+     * @param Registry $registry
+     * @param ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository
-     * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param StoreManagerInterface $storeManager
+     * @param ShipmentRepositoryInterface $shipmentRepository
+     * @param CarrierFactory $carrierFactory
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        Context $context,
+        Registry $registry,
+        ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository,
-        \Magento\Shipping\Model\CarrierFactory $carrierFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        StoreManagerInterface $storeManager,
+        ShipmentRepositoryInterface $shipmentRepository,
+        CarrierFactory $carrierFactory,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -70,7 +81,7 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
     /**
      * Retrieve detail for shipment track
      *
-     * @return \Magento\Framework\Phrase|string
+     * @return Phrase|string
      */
     public function getNumberDetail()
     {

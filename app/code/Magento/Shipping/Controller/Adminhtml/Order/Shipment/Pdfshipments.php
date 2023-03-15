@@ -6,6 +6,8 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
-class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\Pdfshipments
+use Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\Pdfshipments as AbstractShipmentPdfshipments;
+
+class Pdfshipments extends AbstractShipmentPdfshipments
 {
 }

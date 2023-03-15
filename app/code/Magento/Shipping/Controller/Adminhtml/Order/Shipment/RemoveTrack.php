@@ -6,9 +6,13 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
+use Exception;
 use Magento\Backend\App\Action;
+use Magento\Framework\Json\Helper\Data as Json;
+use Magento\Sales\Model\Order\Shipment\Track as OrderShipmentTrack;
+use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 
-class RemoveTrack extends \Magento\Backend\App\Action
+class RemoveTrack extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -18,19 +22,13 @@ class RemoveTrack extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Magento_Sales::shipment';
 
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
-     */
-    protected $shipmentLoader;
-
-    /**
      * @param Action\Context $context
-     * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
+     * @param ShipmentLoader $shipmentLoader
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
+        protected readonly ShipmentLoader $shipmentLoader
     ) {
-        $this->shipmentLoader = $shipmentLoader;
         parent::__construct($context);
     }
 
@@ -42,8 +40,8 @@ class RemoveTrack extends \Magento\Backend\App\Action
     public function execute()
     {
         $trackId = $this->getRequest()->getParam('track_id');
-        /** @var \Magento\Sales\Model\Order\Shipment\Track $track */
-        $track = $this->_objectManager->create(\Magento\Sales\Model\Order\Shipment\Track::class)->load($trackId);
+        /** @var OrderShipmentTrack $track */
+        $track = $this->_objectManager->create(OrderShipmentTrack::class)->load($trackId);
         if ($track->getId()) {
             try {
                 $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
@@ -63,7 +61,7 @@ class RemoveTrack extends \Magento\Backend\App\Action
                         'message' => __('We can\'t initialize shipment for delete tracking number.'),
                     ];
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $response = ['error' => true, 'message' => __('We can\'t delete tracking number.')];
             }
         } else {
@@ -73,7 +71,7 @@ class RemoveTrack extends \Magento\Backend\App\Action
             ];
         }
         if (is_array($response)) {
-            $response = $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($response);
+            $response = $this->_objectManager->get(Json::class)->jsonEncode($response);
             $this->getResponse()->representJson($response);
         } else {
             $this->getResponse()->setBody($response);

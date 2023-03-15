@@ -5,6 +5,8 @@
  */
 namespace Magento\Shipping\Model\Tracking\Result;
 
-class AbstractResult extends \Magento\Framework\DataObject
+use Magento\Framework\DataObject;
+
+class AbstractResult extends DataObject
 {
 }

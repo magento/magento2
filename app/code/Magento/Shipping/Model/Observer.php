@@ -5,25 +5,29 @@
  */
 namespace Magento\Shipping\Model;
 
+use DateTime;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Sales\Model\ResourceModel\Report\ShippingFactory;
+
 class Observer
 {
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface
+     * @var ResolverInterface
      */
     protected $_localeResolver;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Report\ShippingFactory
+     * @var ShippingFactory
      */
     protected $_shippingFactory;
 
     /**
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Sales\Model\ResourceModel\Report\ShippingFactory $shippingFactory
+     * @param ResolverInterface $localeResolver
+     * @param ShippingFactory $shippingFactory
      */
     public function __construct(
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Sales\Model\ResourceModel\Report\ShippingFactory $shippingFactory
+        ResolverInterface $localeResolver,
+        ShippingFactory $shippingFactory
     ) {
         $this->_localeResolver = $localeResolver;
         $this->_shippingFactory = $shippingFactory;
@@ -37,7 +41,7 @@ class Observer
     public function aggregateSalesReportShipmentData()
     {
         $this->_localeResolver->emulate(0);
-        $currentDate = new \DateTime();
+        $currentDate = new DateTime();
         $date = $currentDate->modify('-25 hours');
         $this->_shippingFactory->create()->aggregate($date);
         $this->_localeResolver->revert();

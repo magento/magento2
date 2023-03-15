@@ -5,6 +5,12 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\Order\Packaging;
 
+use Magento\Backend\Block\Template\Context as TemplateContext;
+use Magento\Framework\Registry;
+use Magento\Sales\Model\Order\Shipment as OrderShipment;
+use Magento\Sales\Model\Order\Shipment\ItemFactory;
+use Magento\Store\Model\ScopeInterface;
+
 class Grid extends \Magento\Backend\Block\Template
 {
     /**
@@ -15,25 +21,25 @@ class Grid extends \Magento\Backend\Block\Template
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\ItemFactory
+     * @var ItemFactory
      */
     protected $_shipmentItemFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory
-     * @param \Magento\Framework\Registry $registry
+     * @param TemplateContext $context
+     * @param ItemFactory $shipmentItemFactory
+     * @param Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory,
-        \Magento\Framework\Registry $registry,
+        TemplateContext $context,
+        ItemFactory $shipmentItemFactory,
+        Registry $registry,
         array $data = []
     ) {
         $this->_shipmentItemFactory = $shipmentItemFactory;
@@ -61,7 +67,7 @@ class Grid extends \Magento\Backend\Block\Template
     /**
      * Retrieve shipment model instance
      *
-     * @return \Magento\Sales\Model\Order\Shipment
+     * @return OrderShipment
      */
     public function getShipment()
     {
@@ -79,8 +85,8 @@ class Grid extends \Magento\Backend\Block\Template
         $order = $this->getShipment()->getOrder();
         $address = $order->getShippingAddress();
         $shipperAddressCountryCode = $this->_scopeConfig->getValue(
-            \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            OrderShipment::XML_PATH_STORE_COUNTRY_ID,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
         $recipientAddressCountryCode = $address->getCountryId();

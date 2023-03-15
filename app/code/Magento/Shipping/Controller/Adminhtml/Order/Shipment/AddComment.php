@@ -7,11 +7,15 @@
 
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
+use Exception;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Json\Helper\Data as Json;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender;
 use Magento\Backend\App\Action;
 use Magento\Framework\View\Result\LayoutFactory;
+use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 
-class AddComment extends \Magento\Backend\App\Action
+class AddComment extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -21,35 +25,17 @@ class AddComment extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Magento_Sales::shipment';
 
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
-     */
-    protected $shipmentLoader;
-
-    /**
-     * @var ShipmentCommentSender
-     */
-    protected $shipmentCommentSender;
-
-    /**
-     * @var LayoutFactory
-     */
-    protected $resultLayoutFactory;
-
-    /**
      * @param Action\Context $context
-     * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
+     * @param ShipmentLoader $shipmentLoader
      * @param ShipmentCommentSender $shipmentCommentSender
      * @param LayoutFactory $resultLayoutFactory
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
-        ShipmentCommentSender $shipmentCommentSender,
-        LayoutFactory $resultLayoutFactory
+        protected readonly ShipmentLoader $shipmentLoader,
+        protected readonly ShipmentCommentSender $shipmentCommentSender,
+        protected readonly LayoutFactory $resultLayoutFactory
     ) {
-        $this->shipmentLoader = $shipmentLoader;
-        $this->shipmentCommentSender = $shipmentCommentSender;
-        $this->resultLayoutFactory = $resultLayoutFactory;
         parent::__construct($context);
     }
 
@@ -64,7 +50,7 @@ class AddComment extends \Magento\Backend\App\Action
             $this->getRequest()->setParam('shipment_id', $this->getRequest()->getParam('id'));
             $data = $this->getRequest()->getPost('comment');
             if (empty($data['comment'])) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __('The comment is missing. Enter and try again.')
                 );
             }
@@ -84,13 +70,13 @@ class AddComment extends \Magento\Backend\App\Action
             $resultLayout = $this->resultLayoutFactory->create();
             $resultLayout->addDefaultHandle();
             $response = $resultLayout->getLayout()->getBlock('shipment_comments')->toHtml();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $response = ['error' => true, 'message' => __('Cannot add new comment.')];
         }
         if (is_array($response)) {
-            $response = $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($response);
+            $response = $this->_objectManager->get(Json::class)->jsonEncode($response);
             $this->getResponse()->representJson($response);
         } else {
             $this->getResponse()->setBody($response);
