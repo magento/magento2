@@ -83,7 +83,7 @@ class Resolver
         array $args = null
     ) {
         $cacheTagSchema = $field->getCache();
-        $hasCacheIdentity = isset($cacheTagSchema, $cacheTagSchema['cacheIdentity']);
+        $hasCacheIdentity = isset($cacheTagSchema['cacheIdentity']);
         $isQuery = $info->operation->operation === 'query';
 
         $isCacheable = $subject instanceof CacheableInterface && $hasCacheIdentity && $isQuery;
