@@ -18,4 +18,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQlCache\Model\Plugin\Query\Resolver">
+        <arguments>
+            <argument name="cacheableResolverClassNames" xsi:type="array">
+                <item name="CmsPageResolver" xsi:type="string">Magento\CmsGraphQl\Model\Resolver\Page</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

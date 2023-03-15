@@ -16,7 +16,6 @@ use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlCache;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQlCache\Model\CacheableQueryHandler;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
-use Magento\GraphQlCache\Model\Resolver\CacheableInterface;
 
 /**
  * Plugin to cache resolver result where applicable, and handle cache validation that can be done after each resolver
@@ -44,21 +43,29 @@ class Resolver
     private $serializer;
 
     /**
+     * @var string[]
+     */
+    private array $cacheableResolverClassNames;
+
+    /**
      * @param CacheableQueryHandler $cacheableQueryHandler
      * @param GraphQlCache $graphqlCache
      * @param CacheIdCalculator $cacheIdCalculator
      * @param SerializerInterface $serializer
+     * @param string[] $cacheableResolverClassNames
      */
     public function __construct(
         CacheableQueryHandler $cacheableQueryHandler,
         GraphQlCache $graphqlCache,
         CacheIdCalculator $cacheIdCalculator,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        array $cacheableResolverClassNames = []
     ) {
         $this->cacheableQueryHandler = $cacheableQueryHandler;
         $this->graphqlCache = $graphqlCache;
         $this->cacheIdCalculator = $cacheIdCalculator;
         $this->serializer = $serializer;
+        $this->cacheableResolverClassNames = $cacheableResolverClassNames;
     }
 
     /**
@@ -86,7 +93,17 @@ class Resolver
         $hasCacheIdentity = isset($cacheTagSchema['cacheIdentity']);
         $isQuery = $info->operation->operation === 'query';
 
-        $isCacheable = $subject instanceof CacheableInterface && $hasCacheIdentity && $isQuery;
+        $isResolverCacheable = false;
+
+        foreach ($this->cacheableResolverClassNames as $cacheableResolverClassName) {
+            $isResolverCacheable = $subject instanceof $cacheableResolverClassName;
+
+            if ($isResolverCacheable) {
+                break;
+            }
+        }
+
+        $isCacheable = $isResolverCacheable && $hasCacheIdentity && $isQuery;
 
         if (!$isCacheable) {
             return $proceed($field, $context, $info, $value, $args);
