@@ -194,11 +194,7 @@ QUERY;
         $response = $this->graphQlController->dispatch($request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
         $expectedOutput = require __DIR__ . '/../_files/schema_response_sdl_description.php';
-
         $schemaResponseFields = $output['data']['__schema']['types'];
-        $schemaResponseFieldsFirstHalf = array_slice($schemaResponseFields, 0, 25);
-        $schemaResponseFieldsSecondHalf = array_slice($schemaResponseFields, -21, 21);
-        $mergedSchemaResponseFields = array_merge($schemaResponseFieldsFirstHalf, $schemaResponseFieldsSecondHalf);
 
         foreach ($expectedOutput as $searchTerm) {
             $sortFields = ['inputFields', 'fields'];
@@ -215,7 +211,7 @@ QUERY;
             }
 
             $this->assertTrue(
-                (in_array($searchTerm, $mergedSchemaResponseFields)),
+                (in_array($searchTerm, $schemaResponseFields)),
                 'Missing type in the response'
             );
         }
