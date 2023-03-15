@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="WhitelistGeneratorTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Whitelist generation using CLI should work without throwing any error."/>
+            <title value="error during declarative schema whitelist generation"/>
+            <description value="Whitelist generation using CLI should work without throwing any error."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-8283"/>
+            <useCaseId value="ACP2E-1709"/>
+            <group value="CatalogStaging"/>
+        </annotations>
+        <magentoCLI command="setup:db-declaration:generate-whitelist --module-name=Magento_CatalogStaging" stepKey="generateWhitelist"/>
+
+        <!--Verify that CLI did not return any error/response-->
+        <assertEquals after="generateWhitelist" stepKey="assertCLINotReturnOutput">
+            <expectedResult type="string">CLI did not return output.</expectedResult>
+            <actualResult type="variable">generateWhitelist</actualResult>
+        </assertEquals>
+    </test>
+</tests>

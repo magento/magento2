@@ -212,10 +212,10 @@ class WhitelistGenerator
                 if (isset($tableElementData['type'], $tableElementData['column'])) {
                     if ($tableElementData['type'] === 'foreign') {
                         if (isset(
-                                $tableElementData['column'],
-                                $tableElementData['referenceTable'],
-                                $tableElementData['referenceColumn']
-                            )) {
+                            $tableElementData['column'],
+                            $tableElementData['referenceTable'],
+                            $tableElementData['referenceColumn']
+                        )) {
                             $referenceTable = $schema->getTableByName($tableElementData['referenceTable']);
                             $column = $table->getColumnByName($tableElementData['column']);
                             $referenceColumn = $referenceTable->getColumnByName($tableElementData['referenceColumn']);
