@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model\UserExpiration;
 
+use Exception;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\Timezone\LocalizedDateToUtcConverterInterface;
@@ -21,32 +22,15 @@ use Magento\Framework\Validator\ValidatorChain;
 class Validator extends AbstractValidator
 {
     /**
-     * @var TimezoneInterface
-     */
-    private $timezone;
-
-    /**
-     * @var DateTime
-     */
-    private $dateTime;
-
-    /**
-     * @var LocalizedDateToUtcConverterInterface
-     */
-    private $localizedDateToUtcConverter;
-
-    /**
      * @param TimezoneInterface $timezone
      * @param DateTime $dateTime
      * @param LocalizedDateToUtcConverterInterface|null $localizedDateToUtcConverter
      */
     public function __construct(
-        TimezoneInterface $timezone,
-        DateTime $dateTime,
-        ?LocalizedDateToUtcConverterInterface $localizedDateToUtcConverter = null
+        private readonly TimezoneInterface $timezone,
+        private readonly DateTime $dateTime,
+        private ?LocalizedDateToUtcConverterInterface $localizedDateToUtcConverter = null
     ) {
-        $this->timezone = $timezone;
-        $this->dateTime = $dateTime;
         $this->localizedDateToUtcConverter = $localizedDateToUtcConverter ?: ObjectManager::getInstance()
             ->get(LocalizedDateToUtcConverterInterface::class);
     }
@@ -56,7 +40,7 @@ class Validator extends AbstractValidator
      *
      * @param string $value
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function isValid($value)
     {

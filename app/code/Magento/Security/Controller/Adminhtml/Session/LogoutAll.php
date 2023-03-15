@@ -5,19 +5,17 @@
  */
 namespace Magento\Security\Controller\Adminhtml\Session;
 
+use Exception;
+use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Security\Model\AdminSessionsManager;
 
 /**
  * Admin session logout all
  */
-class LogoutAll extends \Magento\Backend\App\Action
+class LogoutAll extends Action
 {
-    /**
-     * @var AdminSessionsManager
-     */
-    protected $sessionsManager;
-
     /**
      * Check constructor.
      * @param Context $context
@@ -25,10 +23,9 @@ class LogoutAll extends \Magento\Backend\App\Action
      */
     public function __construct(
         Context $context,
-        AdminSessionsManager $sessionsManager
+        protected readonly AdminSessionsManager $sessionsManager
     ) {
         parent::__construct($context);
-        $this->sessionsManager = $sessionsManager;
     }
 
     /**
@@ -39,9 +36,9 @@ class LogoutAll extends \Magento\Backend\App\Action
         try {
             $this->sessionsManager->logoutOtherUserSessions();
             $this->messageManager->addSuccessMessage(__('All other open sessions for this account were terminated.'));
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addExceptionMessage($e, __("We couldn't logout because of an error."));
         }
         $this->_redirect('*/*/activity');

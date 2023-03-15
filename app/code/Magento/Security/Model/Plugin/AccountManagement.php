@@ -6,7 +6,9 @@
 namespace Magento\Security\Model\Plugin;
 
 use Magento\Customer\Model\AccountManagement as AccountManagementOriginal;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Exception\SecurityViolationException;
 use Magento\Security\Model\PasswordResetRequestEvent;
@@ -18,42 +20,19 @@ use Magento\Security\Model\SecurityManager;
 class AccountManagement
 {
     /**
-     * @var \Magento\Framework\App\RequestInterface
-     */
-    protected $request;
-
-    /**
-     * @var SecurityManager
-     */
-    protected $securityManager;
-
-    /**
-     * @var int
-     */
-    protected $passwordRequestEvent;
-
-    /**
-     * @var ScopeInterface
-     */
-    private $scope;
-
-    /**
      * AccountManagement constructor.
      *
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      * @param SecurityManager $securityManager
      * @param int $passwordRequestEvent
      * @param ScopeInterface $scope
      */
     public function __construct(
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Security\Model\SecurityManager $securityManager,
-        $passwordRequestEvent = PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST,
-        ScopeInterface $scope = null
+        protected readonly RequestInterface $request,
+        protected readonly SecurityManager $securityManager,
+        protected $passwordRequestEvent = PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST,
+        private ?ScopeInterface $scope = null
     ) {
-        $this->request = $request;
-        $this->securityManager = $securityManager;
-        $this->passwordRequestEvent = $passwordRequestEvent;
         $this->scope = $scope ?: ObjectManager::getInstance()->get(ScopeInterface::class);
     }
 
@@ -73,7 +52,7 @@ class AccountManagement
         $template,
         $websiteId = null
     ) {
-        if ($this->scope->getCurrentScope() == \Magento\Framework\App\Area::AREA_FRONTEND
+        if ($this->scope->getCurrentScope() == Area::AREA_FRONTEND
             || $this->passwordRequestEvent == PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST) {
             $this->securityManager->performSecurityCheck(
                 $this->passwordRequestEvent,

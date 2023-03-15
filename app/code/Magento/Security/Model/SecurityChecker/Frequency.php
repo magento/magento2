@@ -8,8 +8,10 @@ namespace Magento\Security\Model\SecurityChecker;
 
 use Magento\Framework\Exception\SecurityViolationException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Magento\Framework\Stdlib\DateTime\DateTime as DateTimeModel;
 use Magento\Security\Model\Config\Source\ResetMethod;
 use Magento\Security\Model\ConfigInterface;
+use Magento\Security\Model\PasswordResetRequestEvent;
 use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory;
 
 /**
@@ -18,41 +20,17 @@ use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFac
 class Frequency implements SecurityCheckerInterface
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     */
-    private $dateTime;
-
-    /**
-     * @var \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var ConfigInterface
-     */
-    private $securityConfig;
-
-    /**
-     * @var RemoteAddress
-     */
-    private $remoteAddress;
-
-    /**
      * @param ConfigInterface $securityConfig
      * @param CollectionFactory $collectionFactory
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param DateTimeModel $dateTime
      * @param RemoteAddress $remoteAddress
      */
     public function __construct(
-        ConfigInterface $securityConfig,
-        CollectionFactory $collectionFactory,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-        RemoteAddress $remoteAddress
+        private readonly ConfigInterface $securityConfig,
+        private readonly CollectionFactory $collectionFactory,
+        private readonly DateTimeModel $dateTime,
+        private readonly RemoteAddress $remoteAddress
     ) {
-        $this->securityConfig = $securityConfig;
-        $this->collectionFactory = $collectionFactory;
-        $this->dateTime = $dateTime;
-        $this->remoteAddress = $remoteAddress;
     }
 
     /**
@@ -97,7 +75,7 @@ class Frequency implements SecurityCheckerInterface
     private function loadLastRecordCreationTimestamp($securityEventType, $accountReference, $longIp)
     {
         $collection = $this->collectionFactory->create($securityEventType, $accountReference, $longIp);
-        /** @var \Magento\Security\Model\PasswordResetRequestEvent $record */
+        /** @var PasswordResetRequestEvent $record */
         $record = $collection->filterLastItem()->getFirstItem();
 
         return (int) strtotime($record->getCreatedAt() ?? '');

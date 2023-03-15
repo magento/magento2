@@ -7,10 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model\ResourceModel\UserExpiration;
 
+use DateTime;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Security\Model\ResourceModel\UserExpiration as ResourceUserExpiration;
+use Magento\Security\Model\UserExpiration as ModelUserExpiration;
+
 /**
  * Admin user expiration collection
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * @var string
@@ -25,8 +30,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            \Magento\Security\Model\UserExpiration::class,
-            \Magento\Security\Model\ResourceModel\UserExpiration::class
+            ModelUserExpiration::class,
+            ResourceUserExpiration::class
         );
     }
 
@@ -37,7 +42,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function addActiveExpiredUsersFilter(): Collection
     {
-        $currentTime = new \DateTime();
+        $currentTime = new DateTime();
         $currentTime->format('Y-m-d H:i:s');
         $this->getSelect()->joinLeft(
             ['user' => $this->getTable('admin_user')],

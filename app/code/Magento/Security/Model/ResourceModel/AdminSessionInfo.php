@@ -7,32 +7,30 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model\ResourceModel;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context as DbContext;
+use Magento\Framework\Stdlib\DateTime;
+
 /**
  * Admin Session Info mysql resource
  *
  * @api
  * @since 100.1.0
  */
-class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class AdminSessionInfo extends AbstractDb
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     * @since 100.1.0
-     */
-    protected $dateTime;
-
-    /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param DbContext $context
+     * @param DateTime $dateTime
      * @param null|string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        DbContext $context,
+        protected readonly DateTime $dateTime,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
-        $this->dateTime = $dateTime;
     }
 
     /**
@@ -51,7 +49,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
      *
      * @param int $timestamp
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @since 100.1.0
      */
     public function deleteSessionsOlderThen($timestamp)
@@ -73,7 +71,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
      * @param array $excludedSessionIds
      * @param int|null $updateOlderThen
      * @return int The number of affected rows.
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @since 100.1.0
      */
     public function updateStatusByUserId(

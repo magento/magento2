@@ -10,6 +10,7 @@ namespace Magento\Security\Model;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Security\Api\Data\UserExpirationExtensionInterface;
 use Magento\Security\Api\Data\UserExpirationInterface;
+use Magento\Security\Model\ResourceModel\UserExpiration as ResourceUserExpiration;
 
 /**
  * Admin User Expiration model.
@@ -24,7 +25,7 @@ class UserExpiration extends AbstractExtensibleModel implements UserExpirationIn
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Security\Model\ResourceModel\UserExpiration::class);
+        $this->_init(ResourceUserExpiration::class);
     }
 
     /**

@@ -5,8 +5,11 @@
  */
 namespace Magento\Security\Model;
 
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\SecurityViolationException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Security\Model\SecurityChecker\SecurityCheckerInterface;
 
 /**
@@ -25,76 +28,29 @@ class SecurityManager
     const SECURITY_CONTROL_RECORDS_LIFE_TIME =  86400;
 
     /**
-     * @var ConfigInterface
-     * @since 100.1.0
-     */
-    protected $securityConfig;
-
-    /**
-     * @var \Magento\Security\Model\PasswordResetRequestEventFactory
-     * @since 100.1.0
-     */
-    protected $passwordResetRequestEventFactory;
-
-    /**
-     * @var ResourceModel\PasswordResetRequestEvent\CollectionFactory
-     * @since 100.1.0
-     */
-    protected $passwordResetRequestEventCollectionFactory;
-
-    /**
-     * @var SecurityCheckerInterface[]
-     * @since 100.1.0
-     */
-    protected $securityCheckers;
-
-    /**
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    private $eventManager;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     */
-    private $dateTime;
-
-    /**
-     * @var RemoteAddress
-     */
-    private $remoteAddress;
-
-    /**
      * SecurityManager constructor.
      *
      * @param ConfigInterface $securityConfig
-     * @param \Magento\Security\Model\PasswordResetRequestEventFactory $passwordResetRequestEventFactory
+     * @param PasswordResetRequestEventFactory $passwordResetRequestEventFactory
      * @param ResourceModel\PasswordResetRequestEvent\CollectionFactory $passwordResetRequestEventCollectionFactory
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param EventManagerInterface $eventManager
+     * @param DateTime $dateTime
      * @param RemoteAddress $remoteAddress
-     * @param array $securityCheckers
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param SecurityCheckerInterface[] $securityCheckers
+     * @throws LocalizedException
      */
     public function __construct(
-        ConfigInterface $securityConfig,
-        \Magento\Security\Model\PasswordResetRequestEventFactory $passwordResetRequestEventFactory,
-        ResourceModel\PasswordResetRequestEvent\CollectionFactory $passwordResetRequestEventCollectionFactory,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-        RemoteAddress $remoteAddress,
-        $securityCheckers = []
+        protected readonly ConfigInterface $securityConfig,
+        protected readonly PasswordResetRequestEventFactory $passwordResetRequestEventFactory,
+        protected readonly ResourceModel\PasswordResetRequestEvent\CollectionFactory $passwordResetRequestEventCollectionFactory,
+        private readonly EventManagerInterface $eventManager,
+        private readonly DateTime $dateTime,
+        private readonly RemoteAddress $remoteAddress,
+        protected $securityCheckers = []
     ) {
-        $this->securityConfig = $securityConfig;
-        $this->passwordResetRequestEventFactory = $passwordResetRequestEventFactory;
-        $this->passwordResetRequestEventCollectionFactory = $passwordResetRequestEventCollectionFactory;
-        $this->securityCheckers = $securityCheckers;
-        $this->eventManager = $eventManager;
-        $this->dateTime = $dateTime;
-        $this->remoteAddress = $remoteAddress;
-
         foreach ($this->securityCheckers as $checker) {
             if (!($checker instanceof SecurityCheckerInterface)) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __('Incorrect Security Checker class. It has to implement SecurityCheckerInterface')
                 );
             }
@@ -151,7 +107,7 @@ class SecurityManager
      */
     protected function createNewPasswordResetRequestEventRecord($requestType, $accountReference, $longIp)
     {
-        /** @var \Magento\Security\Model\PasswordResetRequestEventFactory $passwordResetRequestEvent */
+        /** @var PasswordResetRequestEventFactory $passwordResetRequestEvent */
         $passwordResetRequestEvent = $this->passwordResetRequestEventFactory->create();
         $passwordResetRequestEvent->setRequestType($requestType)
             ->setAccountReference($accountReference)

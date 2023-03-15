@@ -7,6 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model;
 
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context as ModelContext;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\DateTime as DateTimeModel;
+use Magento\Security\Model\ResourceModel\AdminSessionInfo as ResourceAdminSessionInfo;
+
 /**
  * Admin Session Info Model
  *
@@ -18,7 +26,7 @@ namespace Magento\Security\Model;
  * @api
  * @since 100.1.0
  */
-class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
+class AdminSessionInfo extends AbstractModel
 {
     /**
      * Admin session status definition
@@ -52,39 +60,26 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
     protected $isOtherSessionsTerminated = false;
 
     /**
-     * @var ConfigInterface
-     * @since 100.1.0
-     */
-    protected $securityConfig;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     */
-    private $dateTime;
-
-    /**
      * AdminSessionInfo constructor
      *
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param ModelContext $context
+     * @param Registry $registry
      * @param ConfigInterface $securityConfig
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param DateTimeModel $dateTime
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        ConfigInterface $securityConfig,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ModelContext $context,
+        Registry $registry,
+        protected readonly ConfigInterface $securityConfig,
+        private readonly DateTimeModel $dateTime,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->securityConfig = $securityConfig;
-        $this->dateTime = $dateTime;
     }
 
     /**
@@ -95,7 +90,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Security\Model\ResourceModel\AdminSessionInfo::class);
+        $this->_init(ResourceAdminSessionInfo::class);
     }
 
     /**

@@ -5,8 +5,13 @@
  */
 namespace Magento\Security\Model\Plugin;
 
+use Closure;
 use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Security\Model\AdminSessionsManager;
+use Magento\Security\Model\SecurityCookie;
 use Magento\Security\Model\UserExpirationManager;
 
 /**
@@ -15,61 +20,32 @@ use Magento\Security\Model\UserExpirationManager;
 class AuthSession
 {
     /**
-     * @var \Magento\Framework\App\RequestInterface
-     */
-    private $request;
-
-    /**
-     * @var \Magento\Framework\Message\ManagerInterface
-     */
-    private $messageManager;
-
-    /**
-     * @var AdminSessionsManager
-     */
-    private $sessionsManager;
-
-    /**
-     * @var \Magento\Security\Model\SecurityCookie
-     */
-    protected $securityCookie;
-
-    /**
-     * @var UserExpirationManager
-     */
-    private $userExpirationManager;
-
-    /**
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param RequestInterface $request
+     * @param ManagerInterface $messageManager
      * @param AdminSessionsManager $sessionsManager
-     * @param \Magento\Security\Model\SecurityCookie $securityCookie
+     * @param SecurityCookie $securityCookie
      * @param UserExpirationManager|null $userExpirationManager
      */
     public function __construct(
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        AdminSessionsManager $sessionsManager,
-        \Magento\Security\Model\SecurityCookie $securityCookie,
-        \Magento\Security\Model\UserExpirationManager $userExpirationManager = null
+        private readonly RequestInterface $request,
+        private readonly ManagerInterface $messageManager,
+        private readonly AdminSessionsManager $sessionsManager,
+        protected readonly SecurityCookie $securityCookie,
+        private ?UserExpirationManager $userExpirationManager = null
     ) {
-        $this->request = $request;
-        $this->messageManager = $messageManager;
-        $this->sessionsManager = $sessionsManager;
-        $this->securityCookie = $securityCookie;
         $this->userExpirationManager = $userExpirationManager ?:
-            \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Security\Model\UserExpirationManager::class);
+            ObjectManager::getInstance()
+                ->get(UserExpirationManager::class);
     }
 
     /**
      * Admin Session prolong functionality
      *
      * @param Session $session
-     * @param \Closure $proceed
+     * @param Closure $proceed
      * @return mixed
      */
-    public function aroundProlong(Session $session, \Closure $proceed)
+    public function aroundProlong(Session $session, Closure $proceed)
     {
         if (!$this->sessionsManager->getCurrentSession()->isLoggedInStatus()) {
             $session->destroy();

@@ -4,12 +4,15 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
+
 namespace Magento\Security\Setup\Patch\Data;
 
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Psr\Log\LoggerInterface;
+use Throwable;
+use Zend_Db_Statement_Exception;
 
 /**
  * Class Clean Up Data Removes unused data
@@ -17,26 +20,14 @@ use Psr\Log\LoggerInterface;
 class SessionIDColumnCleanUp implements DataPatchInterface
 {
     /**
-     * @var ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * RemoveData constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ModuleDataSetupInterface $moduleDataSetup,
-        LoggerInterface $logger
+        private readonly ModuleDataSetupInterface $moduleDataSetup,
+        private readonly LoggerInterface $logger
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
-        $this->logger = $logger;
     }
 
     /**
@@ -46,7 +37,7 @@ class SessionIDColumnCleanUp implements DataPatchInterface
     {
         try {
             $this->cleanAdminUserSessionTable();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->logger->warning(
                 'Security module SessionIDColumnCleanUp patch experienced an error and could not be completed.'
                 . ' Please submit a support ticket or email us at security@magento.com.'
@@ -61,7 +52,7 @@ class SessionIDColumnCleanUp implements DataPatchInterface
     /**
      * Remove session id from admin_user_session table.
      *
-     * @throws \Zend_Db_Statement_Exception
+     * @throws Zend_Db_Statement_Exception
      */
     private function cleanAdminUserSessionTable()
     {

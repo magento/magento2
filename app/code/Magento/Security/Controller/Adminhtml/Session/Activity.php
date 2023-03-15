@@ -5,10 +5,12 @@
  */
 namespace Magento\Security\Controller\Adminhtml\Session;
 
+use Magento\Backend\App\Action;
+
 /**
  * Admin session activity
  */
-class Activity extends \Magento\Backend\App\Action
+class Activity extends Action
 {
     /**
      * @return void

@@ -23,22 +23,16 @@ use Magento\Framework\Serialize\Serializer\Json;
 class SessionSize extends Field
 {
     /**
-     * @var Json
-     */
-    private $json;
-
-    /**
      * @param Context $context
      * @param Json $json
      * @param array $data
      */
     public function __construct(
         Context $context,
-        Json $json,
+        private readonly Json $json,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->json = $json;
     }
 
     /**

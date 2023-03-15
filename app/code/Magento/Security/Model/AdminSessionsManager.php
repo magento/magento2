@@ -10,8 +10,10 @@ namespace Magento\Security\Model;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\DateTime as DateTimeModel;
 use Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection;
 use Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
+use Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory as AdminSessionInfoCollectionFactory;
 
 /**
  * Admin Sessions Manager Model
@@ -33,44 +35,10 @@ class AdminSessionsManager
     public const LOGOUT_REASON_USER_LOCKED = 10;
 
     /**
-     * @var ConfigInterface
-     * @since 100.1.0
-     */
-    protected $securityConfig;
-
-    /**
-     * @var Session
-     * @since 100.1.0
-     */
-    protected $authSession;
-
-    /**
-     * @var AdminSessionInfoFactory
-     * @since 100.1.0
-     */
-    protected $adminSessionInfoFactory;
-
-    /**
-     * @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory
-     * @since 100.1.0
-     */
-    protected $adminSessionInfoCollectionFactory;
-
-    /**
-     * @var \Magento\Security\Model\AdminSessionInfo
+     * @var AdminSessionInfo
      * @since 100.1.0
      */
     protected $currentSession;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     */
-    private $dateTime;
-
-    /**
-     * @var RemoteAddress
-     */
-    private $remoteAddress;
 
     /**
      * Max lifetime for session prolong to be valid (sec)
@@ -87,23 +55,17 @@ class AdminSessionsManager
      * @param Session $authSession
      * @param AdminSessionInfoFactory $adminSessionInfoFactory
      * @param CollectionFactory $adminSessionInfoCollectionFactory
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param DateTimeModel $dateTime
      * @param RemoteAddress $remoteAddress
      */
     public function __construct(
-        ConfigInterface $securityConfig,
-        Session $authSession,
-        \Magento\Security\Model\AdminSessionInfoFactory $adminSessionInfoFactory,
-        \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory $adminSessionInfoCollectionFactory,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-        RemoteAddress $remoteAddress
+        protected readonly ConfigInterface $securityConfig,
+        protected readonly Session $authSession,
+        protected readonly AdminSessionInfoFactory $adminSessionInfoFactory,
+        protected readonly AdminSessionInfoCollectionFactory $adminSessionInfoCollectionFactory,
+        private readonly DateTimeModel $dateTime,
+        private readonly RemoteAddress $remoteAddress
     ) {
-        $this->securityConfig = $securityConfig;
-        $this->authSession = $authSession;
-        $this->adminSessionInfoFactory = $adminSessionInfoFactory;
-        $this->adminSessionInfoCollectionFactory = $adminSessionInfoCollectionFactory;
-        $this->dateTime = $dateTime;
-        $this->remoteAddress = $remoteAddress;
     }
 
     /**
@@ -253,7 +215,7 @@ class AdminSessionsManager
     public function getSessionsForCurrentUser()
     {
         return $this->createAdminSessionInfoCollection()
-            ->filterByUser($this->authSession->getUser()->getId(), \Magento\Security\Model\AdminSessionInfo::LOGGED_IN)
+            ->filterByUser($this->authSession->getUser()->getId(), AdminSessionInfo::LOGGED_IN)
             ->filterExpiredSessions($this->securityConfig->getAdminSessionLifetime())
             ->loadData();
     }
@@ -271,13 +233,13 @@ class AdminSessionsManager
             $collection = $this->createAdminSessionInfoCollection()
                 ->filterByUser(
                     $user->getId(),
-                    \Magento\Security\Model\AdminSessionInfo::LOGGED_IN,
+                    AdminSessionInfo::LOGGED_IN,
                     $this->authSession->getAdminSessionInfoId()
                 )
                 ->filterExpiredSessions($this->securityConfig->getAdminSessionLifetime())
                 ->loadData();
 
-            $collection->setDataToAll('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT_MANUALLY)
+            $collection->setDataToAll('status', AdminSessionInfo::LOGGED_OUT_MANUALLY)
                 ->save();
         }
 

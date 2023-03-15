@@ -5,8 +5,15 @@
  */
 namespace Magento\Security\Block\Adminhtml\Session;
 
+use DateTime;
+use IntlDateFormatter;
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context as TemplateContext;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Magento\Security\Model\AdminSessionsManager;
 use Magento\Security\Model\ConfigInterface;
+use Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection as AdminSessionInfoCollection;
+use Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
 
 /**
  * Block Session Activity
@@ -14,51 +21,31 @@ use Magento\Security\Model\ConfigInterface;
  * @api
  * @since 100.1.0
  */
-class Activity extends \Magento\Backend\Block\Template
+class Activity extends Template
 {
     /**
-     * @var ConfigInterface
-     * @since 100.1.0
-     */
-    protected $securityConfig;
-
-    /**
-     * @var \Magento\Security\Model\AdminSessionsManager
-     * @since 100.1.0
-     */
-    protected $sessionsManager;
-
-    /**
-     * @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory
+     * @var CollectionFactory
      * @since 100.1.0
      */
     protected $sessionsInfoCollection;
 
     /**
-     * @var RemoteAddress
-     */
-    private $remoteAddress;
-
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param TemplateContext $context
      * @param ConfigInterface $securityConfig
-     * @param \Magento\Security\Model\AdminSessionsManager $sessionsManager
+     * @param AdminSessionsManager $sessionsManager
      * @param RemoteAddress $remoteAddress
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        ConfigInterface $securityConfig,
-        \Magento\Security\Model\AdminSessionsManager $sessionsManager,
-        RemoteAddress $remoteAddress
+        TemplateContext $context,
+        protected readonly ConfigInterface $securityConfig,
+        protected readonly AdminSessionsManager $sessionsManager,
+        private readonly RemoteAddress $remoteAddress
     ) {
         parent::__construct($context);
-        $this->securityConfig = $securityConfig;
-        $this->sessionsManager = $sessionsManager;
-        $this->remoteAddress = $remoteAddress;
     }
 
     /**
-     * @return \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection
+     * @return AdminSessionInfoCollection
      * @since 100.1.0
      */
     public function getSessionInfoCollection()
@@ -96,11 +83,11 @@ class Activity extends \Magento\Backend\Block\Template
      */
     public function formatDateTime($time)
     {
-        $time = new \DateTime($time);
+        $time = new DateTime($time);
         return $this->_localeDate->formatDateTime(
             $time,
-            \IntlDateFormatter::MEDIUM,
-            \IntlDateFormatter::MEDIUM
+            IntlDateFormatter::MEDIUM,
+            IntlDateFormatter::MEDIUM
         );
     }
 }

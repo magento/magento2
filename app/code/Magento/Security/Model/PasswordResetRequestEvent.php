@@ -5,6 +5,9 @@
  */
 namespace Magento\Security\Model;
 
+use Magento\Framework\Model\AbstractModel;
+use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent as ResourcePasswordResetRequestEvent;
+
 /**
  * PasswordResetRequestEvent Model
  *
@@ -19,7 +22,7 @@ namespace Magento\Security\Model;
  * @api
  * @since 100.1.0
  */
-class PasswordResetRequestEvent extends \Magento\Framework\Model\AbstractModel
+class PasswordResetRequestEvent extends AbstractModel
 {
     /**
      * Type of the event under a security control definition
@@ -43,6 +46,6 @@ class PasswordResetRequestEvent extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Security\Model\ResourceModel\PasswordResetRequestEvent::class);
+        $this->_init(ResourcePasswordResetRequestEvent::class);
     }
 }
