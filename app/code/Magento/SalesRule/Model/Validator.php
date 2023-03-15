@@ -372,8 +372,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
                         $cartRules[$rule->getId()] = $rule->getDiscountAmount();
                     }
                     if ($cartRules[$rule->getId()] > 0) {
-                        $shippingQuoteAmount = (float) $address->getShippingAmount()
-                            - (float) $address->getShippingDiscountAmount();
+                        $shippingQuoteAmount = (float) $address->getShippingAmount();
                         $quoteBaseSubtotal = (float) $quote->getBaseSubtotal();
                         $isMultiShipping = $this->cartFixedDiscountHelper->checkMultiShippingQuote($quote);
                         if ($isAppliedToShipping) {

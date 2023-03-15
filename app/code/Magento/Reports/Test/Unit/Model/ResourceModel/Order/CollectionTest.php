@@ -138,6 +138,10 @@ class CollectionTest extends TestCase
             ->getMock();
         $this->timezoneMock = $this->getMockBuilder(TimezoneInterface::class)
             ->getMock();
+        $this->timezoneMock
+            ->expects($this->any())
+            ->method('getConfigTimezone')
+            ->willReturn('America/Chicago');
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -462,7 +466,7 @@ class CollectionTest extends TestCase
         return [
             ['', '', '', '0 0 0 23:59:59'],
             ['24h', '', '', '0 0 1 0:0:0'],
-            ['7d', '', '', '0 0 6 23:59:59']
+            ['7d', '', '', '0 0 6 22:59:59']
         ];
     }
 
