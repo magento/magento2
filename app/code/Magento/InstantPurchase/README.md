@@ -34,13 +34,13 @@ Extension developers can interact with the Magento_InstantPurchase module. For m
 
 - `\Magento\InstantPurchase\Model\ShippingMethodChoose\ShippingMethodChooserInterface`
     - choose shipping method for customer address if available
-    
+
 - `\Magento\InstantPurchase\Model\InstantPurchaseInterface`
     - detects instant purchase options for a customer in a store
-    
+
 - `\Magento\InstantPurchase\PaymentMethodIntegration\AvailabilityCheckerInterface`
     - checks if payment method may be used for instant purchase
-    
+
 - `\Magento\InstantPurchase\PaymentMethodIntegration\PaymentAdditionalInformationProviderInterface`
     - provides additional information part specific for payment method
 

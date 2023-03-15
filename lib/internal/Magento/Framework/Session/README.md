@@ -1,4 +1,4 @@
-#Session
+# Session
 
 * **SessionManager** Manages active sessions and session metadata.
 * **SaveHandler** Supports filesystem and database storage of session data.

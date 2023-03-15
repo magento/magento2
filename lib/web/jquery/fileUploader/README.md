@@ -204,10 +204,13 @@ To run the tests, follow these steps:
 
 1. Start [Docker](https://docs.docker.com/).
 2. Install development dependencies:
+
    ```sh
    npm install
    ```
+
 3. Run the tests:
+
    ```sh
    npm test
    ```

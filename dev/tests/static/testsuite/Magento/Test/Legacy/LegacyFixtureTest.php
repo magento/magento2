@@ -22,7 +22,7 @@ class LegacyFixtureTest extends TestCase
      */
     public function testNew(): void
     {
-        $docUrl = 'https://devdocs.magento.com/guides/v2.4/test/integration/parameterized_data_fixture.html';
+        $docUrl = 'https://developer.adobe.com/commerce/testing/guide/integration/attributes/data-fixture/';
         $files = AddedFiles::getAddedFilesList(__DIR__ . '/..');
         $legacyFixtureFiles = [];
         foreach ($files as $file) {

@@ -11,26 +11,27 @@ For information about a module installation in Magento 2, see [Enable or disable
 
 For information about a typical file structure of a module in Magento 2,
  see [Module file structure](https://developer.adobe.com/commerce/php/development/build/component-file-structure/#module-file-structure).
- 
- ## Extensibility
+
+## Extensibility
 
 Developers can interact with the module and change behaviour using type configuration feature.
 
-Namely, we can change `paymentSpecification` for `Magento\Multishipping\Block\Checkout\Billing` and `Magento\Multishipping\Model\Checkout\Type\Multishipping` classes. 
-As result, we will get changed behaviour, new logic or something what our business need. 
+Namely, we can change `paymentSpecification` for `Magento\Multishipping\Block\Checkout\Billing` and `Magento\Multishipping\Model\Checkout\Type\Multishipping` classes.
+As result, we will get changed behaviour, new logic or something what our business need.
 
 For example:
-```
+
+```xml
 <type name="Magento\Multishipping\Model\Checkout\Type\Multishipping">
      <arguments>
          <argument name="paymentSpecification" xsi:type="object">multishippingPaymentSpecification</argument>
      </arguments>
 </type>
 ```
-Yo can check this configuration and find more examples in the `etc/frontend/di.xml` file.
- 
-More information about [type configuration](https://developer.adobe.com/commerce/php/development/build/dependency-injection-file/).
 
+Yo can check this configuration and find more examples in the `etc/frontend/di.xml` file.
+
+More information about [type configuration](https://developer.adobe.com/commerce/php/development/build/dependency-injection-file/).
 
 Extension developers can interact with the Magento_Multishipping module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://developer.adobe.com/commerce/php/development/components/plugins/).
 
@@ -42,7 +43,7 @@ This module observes the following event:
 
 `etc/frontend/`
 
- - `checkout_cart_save_before` in the `Magento\Multishipping\Observer\DisableMultishippingObserver` file. 
+ - `checkout_cart_save_before` in the `Magento\Multishipping\Observer\DisableMultishippingObserver` file.
 
 The module dispatches the following events:
 
@@ -78,7 +79,7 @@ The module interacts with the following layout handles:
 `view/frontend/layout` directory:
 
  - `checkout_cart_index`
- 
+
 This module introduces the following layouts and layout handles:
 
 `view/frontend/layout` directory:
@@ -134,6 +135,5 @@ Module introduces the new pages:
 - `checkout_cart_multishipping_success` - Multishipping Checkout Success
 
 More information about [layout types](https://developer.adobe.com/commerce/frontend-core/guide/layouts/types/).
-
 
 For information about significant changes in patch releases, see [2.3.x Release information](https://experienceleague.adobe.com/docs/commerce-operations/release/notes/overview.html).

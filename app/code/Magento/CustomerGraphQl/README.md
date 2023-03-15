@@ -23,7 +23,7 @@ Extension developers can interact with the Magento_CustomerGraphQl module. For m
 
 ## Additional information
 
-You can get more information about [GraphQl In Magento 2](https://devdocs.magento.com/guides/v2.4/graphql).
+You can get more information about [GraphQl In Magento 2](https://developer.adobe.com/commerce/webapi/graphql/).
 
 ### GraphQl Query
 
