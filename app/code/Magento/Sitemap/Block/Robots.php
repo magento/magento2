@@ -26,27 +26,6 @@ use Magento\Store\Model\StoreResolver;
 class Robots extends AbstractBlock implements IdentityInterface
 {
     /**
-     * @var CollectionFactory
-     */
-    private $sitemapCollectionFactory;
-
-    /**
-     * @var SitemapHelper
-     * @deprecated
-     */
-    private $sitemapHelper;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var SitemapConfigReader
-     */
-    private $sitemapConfigReader;
-
-    /**
      * @param Context $context
      * @param StoreResolver $storeResolver
      * @param CollectionFactory $sitemapCollectionFactory
@@ -59,15 +38,12 @@ class Robots extends AbstractBlock implements IdentityInterface
     public function __construct(
         Context $context,
         StoreResolver $storeResolver,
-        CollectionFactory $sitemapCollectionFactory,
-        SitemapHelper $sitemapHelper,
-        StoreManagerInterface $storeManager,
+        private readonly CollectionFactory $sitemapCollectionFactory,
+        private readonly SitemapHelper $sitemapHelper,
+        private readonly StoreManagerInterface $storeManager,
         array $data = [],
-        ?SitemapConfigReader $sitemapConfigReader = null
+        private ?SitemapConfigReader $sitemapConfigReader = null
     ) {
-        $this->sitemapCollectionFactory = $sitemapCollectionFactory;
-        $this->sitemapHelper = $sitemapHelper;
-        $this->storeManager = $storeManager;
         $this->sitemapConfigReader = $sitemapConfigReader
             ?: ObjectManager::getInstance()->get(SitemapConfigReader::class);
 
@@ -116,9 +92,7 @@ class Robots extends AbstractBlock implements IdentityInterface
         $collection->addStoreFilter($storeIds);
 
         $sitemapLinks = [];
-        /**
-         * @var Sitemap $sitemap
-         */
+        /** @var Sitemap $sitemap */
         foreach ($collection as $sitemap) {
             $sitemapUrl = $sitemap->getSitemapUrl($sitemap->getSitemapPath(), $sitemap->getSitemapFilename());
             $sitemapLinks[$sitemapUrl] = 'Sitemap: ' . $sitemapUrl;

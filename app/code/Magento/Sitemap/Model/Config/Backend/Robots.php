@@ -33,11 +33,6 @@ class Robots extends Value implements IdentityInterface
     protected $_cacheTag = true;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param Context $context
      * @param Registry $registry
      * @param ScopeConfigInterface $config
@@ -52,12 +47,11 @@ class Robots extends Value implements IdentityInterface
         Registry $registry,
         ScopeConfigInterface $config,
         TypeListInterface $cacheTypeList,
-        StoreManagerInterface $storeManager,
+        private readonly StoreManagerInterface $storeManager,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        $this->storeManager = $storeManager;
 
         parent::__construct(
             $context,

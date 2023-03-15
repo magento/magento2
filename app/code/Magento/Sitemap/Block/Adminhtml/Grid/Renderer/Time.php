@@ -10,21 +10,26 @@
  */
 namespace Magento\Sitemap\Block\Adminhtml\Grid\Renderer;
 
-class Time extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+use Magento\Backend\Block\Context;
+use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
+use Magento\Framework\DataObject;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+
+class Time extends AbstractRenderer
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime
      */
     protected $_date;
 
     /**
-     * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+     * @param Context $context
+     * @param DateTime $date
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Context $context,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
+        Context $context,
+        DateTime $date,
         array $data = []
     ) {
         $this->_date = $date;
@@ -34,10 +39,10 @@ class Time extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     /**
      * Prepare link to display in grid
      *
-     * @param \Magento\Framework\DataObject $row
+     * @param DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\DataObject $row)
+    public function render(DataObject $row)
     {
         $time = date('Y-m-d H:i:s', strtotime($row->getSitemapTime()) + $this->_date->getGmtOffset());
         return $time;

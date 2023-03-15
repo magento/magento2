@@ -19,20 +19,13 @@ class CategoryConfigReader implements ConfigReaderInterface
     /**#@-*/
 
     /**
-     * Scope config
-     *
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * CategoryItemResolverConfigReader constructor.
      *
-     * @param ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig Scope config
      */
-    public function __construct(ScopeConfigInterface $scopeConfig)
-    {
-        $this->scopeConfig = $scopeConfig;
+    public function __construct(
+        private readonly ScopeConfigInterface $scopeConfig
+    ) {
     }
 
     /**

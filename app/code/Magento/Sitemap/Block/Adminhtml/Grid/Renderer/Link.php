@@ -21,21 +21,6 @@ use Magento\Sitemap\Model\SitemapFactory;
 class Link extends AbstractRenderer
 {
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var SitemapFactory
-     */
-    private $sitemapFactory;
-
-    /**
-     * @var DocumentRoot
-     */
-    private $documentRoot;
-
-    /**
      * @param Context $context
      * @param SitemapFactory $sitemapFactory
      * @param Filesystem $filesystem
@@ -44,15 +29,11 @@ class Link extends AbstractRenderer
      */
     public function __construct(
         Context $context,
-        SitemapFactory $sitemapFactory,
-        Filesystem $filesystem,
-        DocumentRoot $documentRoot,
+        private readonly SitemapFactory $sitemapFactory,
+        private readonly Filesystem $filesystem,
+        private readonly DocumentRoot $documentRoot,
         array $data = []
     ) {
-        $this->sitemapFactory = $sitemapFactory;
-        $this->filesystem = $filesystem;
-        $this->documentRoot = $documentRoot;
-
         parent::__construct($context, $data);
     }
 
@@ -65,7 +46,7 @@ class Link extends AbstractRenderer
      */
     public function render(DataObject $row)
     {
-        /** @var $sitemap Sitemap */
+        /** @var Sitemap $sitemap */
         $sitemap = $this->sitemapFactory->create();
         $sitemap->setStoreId($row->getStoreId());
         $url = $this->_escaper->escapeHtml($sitemap->getSitemapUrl($row->getSitemapPath(), $row->getSitemapFilename()));

@@ -10,11 +10,13 @@
  */
 namespace Magento\Sitemap\Model\Source\Product\Image;
 
+use Magento\Framework\Option\ArrayInterface;
+
 /**
  * @api
  * @since 100.0.2
  */
-class IncludeImage implements \Magento\Framework\Option\ArrayInterface
+class IncludeImage implements ArrayInterface
 {
     /**#@+
      * Add Images into Sitemap possible values

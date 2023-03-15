@@ -39,20 +39,13 @@ class SitemapConfigReader implements SitemapConfigReaderInterface
     const XML_PATH_PRODUCT_IMAGES_INCLUDE = 'sitemap/product/image_include';
 
     /**
-     * Scope config
-     *
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * Sitemap Config Reader constructor.
      *
-     * @param ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig Scope config
      */
-    public function __construct(ScopeConfigInterface $scopeConfig)
-    {
-        $this->scopeConfig = $scopeConfig;
+    public function __construct(
+        private readonly ScopeConfigInterface $scopeConfig
+    ) {
     }
 
     /**

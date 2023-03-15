@@ -6,30 +6,49 @@
 
 namespace Magento\Sitemap\Model;
 
+use DateTime;
+use DOMDocument;
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject;
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\File\WriteInterface as FileWriteInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context as ModelContext;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime as FrameworkDateTime;
+use Magento\Framework\Stdlib\DateTime\DateTime as ModelDateTime;
 use Magento\Framework\UrlInterface;
 use Magento\Robots\Model\Config\Value;
+use Magento\Sitemap\Helper\Data as SitemapHelper;
 use Magento\Sitemap\Model\ItemProvider\ItemProviderInterface;
+use Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory;
+use Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory;
+use Magento\Sitemap\Model\ResourceModel\Cms\PageFactory;
 use Magento\Sitemap\Model\ResourceModel\Sitemap as SitemapResource;
+use Magento\Store\Model\Store as ModelStore;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Sitemap model.
  *
  * @method string getSitemapType()
- * @method \Magento\Sitemap\Model\Sitemap setSitemapType(string $value)
+ * @method Sitemap setSitemapType(string $value)
  * @method string getSitemapFilename()
- * @method \Magento\Sitemap\Model\Sitemap setSitemapFilename(string $value)
+ * @method Sitemap setSitemapFilename(string $value)
  * @method string getSitemapPath()
- * @method \Magento\Sitemap\Model\Sitemap setSitemapPath(string $value)
+ * @method Sitemap setSitemapPath(string $value)
  * @method string getSitemapTime()
- * @method \Magento\Sitemap\Model\Sitemap setSitemapTime(string $value)
+ * @method Sitemap setSitemapTime(string $value)
  * @method int getStoreId()
- * @method \Magento\Sitemap\Model\Sitemap setStoreId(int $value)
+ * @method Sitemap setStoreId(int $value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
@@ -37,7 +56,7 @@ use Magento\Sitemap\Model\ResourceModel\Sitemap as SitemapResource;
  * @api
  * @since 100.0.2
  */
-class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
+class Sitemap extends AbstractModel implements IdentityInterface
 {
     public const OPEN_TAG_KEY = 'start';
 
@@ -114,49 +133,44 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected $_stream;
 
     /**
-     * @var \Magento\Sitemap\Helper\Data
+     * @var SitemapHelper
      */
     protected $_sitemapData;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     protected $_escaper;
 
     /**
-     * @var \Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory
+     * @var CategoryFactory
      */
     protected $_categoryFactory;
 
     /**
-     * @var \Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory
+     * @var ProductFactory
      */
     protected $_productFactory;
 
     /**
-     * @var \Magento\Sitemap\Model\ResourceModel\Cms\PageFactory
+     * @var PageFactory
      */
     protected $_cmsFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var ModelDateTime
      */
     protected $_dateModel;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
     protected $_request;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
 
     /**
      * @inheritdoc
@@ -168,35 +182,11 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected $_cacheTag = [Value::CACHE_TAG];
 
     /**
-     * Item resolver
-     *
-     * @var ItemProviderInterface
-     */
-    private $itemProvider;
-
-    /**
-     * Sitemap config reader
-     *
-     * @var SitemapConfigReaderInterface
-     */
-    private $configReader;
-
-    /**
-     * @var \Magento\Sitemap\Model\SitemapItemInterfaceFactory
-     */
-    private $sitemapItemFactory;
-
-    /**
      * Last mode min timestamp value
      *
      * @var int
      */
     private $lastModMinTsVal;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
 
     /**
      * @var DocumentRoot
@@ -206,51 +196,50 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Sitemap\Helper\Data $sitemapData
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param ResourceModel\Catalog\CategoryFactory $categoryFactory
-     * @param ResourceModel\Catalog\ProductFactory $productFactory
-     * @param ResourceModel\Cms\PageFactory $cmsFactory
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $modelDate
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param ModelContext $context
+     * @param Registry $registry
+     * @param Escaper $escaper
+     * @param SitemapHelper $sitemapData
+     * @param Filesystem $filesystem
+     * @param CategoryFactory $categoryFactory
+     * @param ProductFactory $productFactory
+     * @param PageFactory $cmsFactory
+     * @param ModelDateTime $modelDate
+     * @param StoreManagerInterface $storeManager
+     * @param RequestInterface $request
+     * @param FrameworkDateTime $dateTime
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
      * @param array $data
      * @param DocumentRoot|null $documentRoot
-     * @param ItemProviderInterface|null $itemProvider
-     * @param SitemapConfigReaderInterface|null $configReader
-     * @param \Magento\Sitemap\Model\SitemapItemInterfaceFactory|null $sitemapItemFactory
+     * @param ItemProviderInterface|null $itemProvider Item resolver
+     * @param SitemapConfigReaderInterface|null $configReader Sitemap config reader
+     * @param SitemapItemInterfaceFactory|null $sitemapItemFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Escaper $escaper,
-        \Magento\Sitemap\Helper\Data $sitemapData,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory $categoryFactory,
-        \Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory $productFactory,
-        \Magento\Sitemap\Model\ResourceModel\Cms\PageFactory $cmsFactory,
-        \Magento\Framework\Stdlib\DateTime\DateTime $modelDate,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ModelContext $context,
+        Registry $registry,
+        Escaper $escaper,
+        SitemapHelper $sitemapData,
+        private readonly Filesystem $filesystem,
+        CategoryFactory $categoryFactory,
+        ProductFactory  $productFactory,
+        PageFactory $cmsFactory,
+        ModelDateTime $modelDate,
+        StoreManagerInterface $storeManager,
+        RequestInterface $request,
+        protected readonly FrameworkDateTime $dateTime,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot = null,
-        ItemProviderInterface $itemProvider = null,
-        SitemapConfigReaderInterface $configReader = null,
-        \Magento\Sitemap\Model\SitemapItemInterfaceFactory $sitemapItemFactory = null
+        DocumentRoot $documentRoot = null,
+        private ?ItemProviderInterface $itemProvider = null,
+        private ?SitemapConfigReaderInterface $configReader = null,
+        private ?SitemapItemInterfaceFactory $sitemapItemFactory = null
     ) {
         $this->_escaper = $escaper;
         $this->_sitemapData = $sitemapData;
-        $this->filesystem = $filesystem;
         $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
         $this->_categoryFactory = $categoryFactory;
         $this->_productFactory = $productFactory;
@@ -258,11 +247,10 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $this->_dateModel = $modelDate;
         $this->_storeManager = $storeManager;
         $this->_request = $request;
-        $this->dateTime = $dateTime;
         $this->itemProvider = $itemProvider ?: ObjectManager::getInstance()->get(ItemProviderInterface::class);
         $this->configReader = $configReader ?: ObjectManager::getInstance()->get(SitemapConfigReaderInterface::class);
         $this->sitemapItemFactory = $sitemapItemFactory ?: ObjectManager::getInstance()->get(
-            \Magento\Sitemap\Model\SitemapItemInterfaceFactory::class
+            SitemapItemInterfaceFactory::class
         );
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -281,7 +269,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     /**
      * Get file handler
      *
-     * @return \Magento\Framework\Filesystem\File\WriteInterface
+     * @return FileWriteInterface
      * @throws LocalizedException
      */
     protected function _getStream()
@@ -319,7 +307,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     public function collectSitemapItems()
     {
-        /** @var $helper \Magento\Sitemap\Helper\Data */
+        /** @var SitemapHelper $helper */
         $helper = $this->_sitemapData;
         $storeId = $this->getStoreId();
 
@@ -387,7 +375,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     /**
      * Check sitemap file location and permissions
      *
-     * @return \Magento\Framework\Model\AbstractModel
+     * @return AbstractModel
      * @throws LocalizedException
      */
     public function beforeSave()
@@ -454,7 +442,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     {
         $this->_initSitemapItems();
 
-        /** @var $item SitemapItemInterface */
+        /** @var SitemapItemInterface $item */
         foreach ($this->_sitemapItems as $item) {
             $xml = $this->_getSitemapRow(
                 $item->getUrl(),
@@ -520,7 +508,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getCurrentDateTime()
     {
-        return (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+        return (new DateTime())->format(FrameworkDateTime::DATETIME_PHP_FORMAT);
     }
 
     /**
@@ -550,7 +538,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @param null|string $lastmod
      * @param null|string $changefreq
      * @param null|string $priority
-     * @param null|array|\Magento\Framework\DataObject $images
+     * @param null|array|DataObject $images
      * @return string
      * Sitemap images
      * @see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=178636
@@ -600,7 +588,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     private function escapeXmlText(string $text): string
     {
-        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $doc = new DOMDocument('1.0', 'UTF-8');
         $fragment = $doc->createDocumentFragment();
         $fragment->appendChild($doc->createTextNode($text));
         return $doc->saveXML($fragment);
@@ -706,7 +694,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getStoreBaseUrl($type = UrlInterface::URL_TYPE_LINK)
     {
-        /** @var \Magento\Store\Model\Store $store */
+        /** @var ModelStore $store */
         $store = $this->_storeManager->getStore($this->getStoreId());
         $isSecure = $store->isUrlSecure();
         return rtrim($store->getBaseUrl($type, $isSecure), '/') . '/';

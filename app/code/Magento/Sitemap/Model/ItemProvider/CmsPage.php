@@ -12,41 +12,17 @@ use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
 class CmsPage implements ItemProviderInterface
 {
     /**
-     * Cms page factory
-     *
-     * @var PageFactory
-     */
-    private $cmsPageFactory;
-
-    /**
-     * Sitemap item factory
-     *
-     * @var SitemapItemInterfaceFactory
-     */
-    private $itemFactory;
-
-    /**
-     * Config reader
-     *
-     * @var ConfigReaderInterface
-     */
-    private $configReader;
-
-    /**
      * CmsPage constructor.
      *
-     * @param ConfigReaderInterface $configReader
-     * @param PageFactory $cmsPageFactory
+     * @param ConfigReaderInterface $configReader Config reader
+     * @param PageFactory $cmsPageFactory Cms page factory
      * @param SitemapItemInterfaceFactory $itemFactory
      */
     public function __construct(
-        ConfigReaderInterface $configReader,
-        PageFactory $cmsPageFactory,
-        SitemapItemInterfaceFactory $itemFactory
+        private readonly ConfigReaderInterface $configReader,
+        private readonly PageFactory $cmsPageFactory,
+        private readonly SitemapItemInterfaceFactory $itemFactory
     ) {
-        $this->cmsPageFactory = $cmsPageFactory;
-        $this->itemFactory = $itemFactory;
-        $this->configReader = $configReader;
     }
 
     /**

@@ -7,10 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Sitemap\Model;
 
+use Exception;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Sitemap\Model\EmailNotification as SitemapEmail;
+use Magento\Sitemap\Model\ResourceModel\Sitemap\Collection as SitemapCollection;
 use Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory;
+use Magento\Sitemap\Model\Sitemap as ModelSitemap;
 use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\ScopeInterface;
 
@@ -49,51 +52,25 @@ class Observer
     const XML_PATH_ERROR_RECIPIENT = 'sitemap/generate/error_email';
 
     /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var $emailNotification
-     */
-    private $emailNotification;
-
-    /**
-     * @var Emulation
-     */
-    private $appEmulation;
-
-    /**
      * Observer constructor.
-     * @param ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig Core store config
      * @param CollectionFactory $collectionFactory
      * @param EmailNotification $emailNotification
      * @param Emulation $appEmulation
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        CollectionFactory $collectionFactory,
-        SitemapEmail $emailNotification,
-        Emulation $appEmulation
+        private readonly ScopeConfigInterface $scopeConfig,
+        private readonly CollectionFactory $collectionFactory,
+        private readonly SitemapEmail $emailNotification,
+        private readonly Emulation $appEmulation
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->collectionFactory = $collectionFactory;
-        $this->emailNotification = $emailNotification;
-        $this->appEmulation = $appEmulation;
     }
 
     /**
      * Generate sitemaps
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function scheduledGenerateSitemaps()
@@ -113,9 +90,9 @@ class Observer
         }
 
         $collection = $this->collectionFactory->create();
-        /* @var $collection \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection */
+        /* @var SitemapCollection $collection */
         foreach ($collection as $sitemap) {
-            /* @var $sitemap \Magento\Sitemap\Model\Sitemap */
+            /* @var ModelSitemap $sitemap */
             try {
                 $this->appEmulation->startEnvironmentEmulation(
                     $sitemap->getStoreId(),
@@ -123,7 +100,7 @@ class Observer
                     true
                 );
                 $sitemap->generateXml();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $errors[] = $e->getMessage();
             } finally {
                 $this->appEmulation->stopEnvironmentEmulation();

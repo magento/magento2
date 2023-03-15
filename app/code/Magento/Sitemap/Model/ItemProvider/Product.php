@@ -12,41 +12,17 @@ use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
 class Product implements ItemProviderInterface
 {
     /**
-     * Product factory
-     *
-     * @var ProductFactory
-     */
-    private $productFactory;
-
-    /**
-     * Sitemap item factory
-     *
-     * @var SitemapItemInterfaceFactory
-     */
-    private $itemFactory;
-
-    /**
-     * Config reader
-     *
-     * @var ConfigReaderInterface
-     */
-    private $configReader;
-
-    /**
      * ProductSitemapItemResolver constructor.
      *
-     * @param ConfigReaderInterface $configReader
+     * @param ConfigReaderInterface $configReader Config reader
      * @param ProductFactory $productFactory
      * @param SitemapItemInterfaceFactory $itemFactory
      */
     public function __construct(
-        ConfigReaderInterface $configReader,
-        ProductFactory $productFactory,
-        SitemapItemInterfaceFactory $itemFactory
+        private readonly ConfigReaderInterface $configReader,
+        private readonly ProductFactory $productFactory,
+        private readonly SitemapItemInterfaceFactory $itemFactory
     ) {
-        $this->productFactory = $productFactory;
-        $this->itemFactory = $itemFactory;
-        $this->configReader = $configReader;
     }
 
     /**
