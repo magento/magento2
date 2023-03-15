@@ -60,6 +60,7 @@
         <grabTextFrom selector="{{OrdersGridSection.orderID}}" stepKey="orderNumber"/>
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage1"/>
         <scrollToTopOfPage stepKey="scrollToTop" />
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clearFilters" />
         <waitForElementClickable selector="{{AdminOrdersGridSection.allCheckbox}}" stepKey="waitForSelectAllClickable" />
         <checkOption selector="{{AdminOrdersGridSection.allCheckbox}}" stepKey="clickSelectAll"/>
         <openNewTab stepKey="openNewTab"/>
