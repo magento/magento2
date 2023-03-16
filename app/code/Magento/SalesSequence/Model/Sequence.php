@@ -6,6 +6,7 @@
 namespace Magento\SalesSequence\Model;
 
 use Magento\Framework\App\ResourceConnection as AppResource;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Sequence\SequenceInterface;
 
 /**
@@ -27,19 +28,9 @@ class Sequence implements SequenceInterface
     private $lastIncrementId;
 
     /**
-     * @var Meta
-     */
-    private $meta;
-
-    /**
-     * @var false|\Magento\Framework\DB\Adapter\AdapterInterface
+     * @var false|AdapterInterface
      */
     private $connection;
-
-    /**
-     * @var string
-     */
-    private $pattern;
 
     /**
      * @param Meta $meta
@@ -47,13 +38,11 @@ class Sequence implements SequenceInterface
      * @param string $pattern
      */
     public function __construct(
-        Meta $meta,
+        private readonly Meta $meta,
         AppResource $resource,
-        $pattern = self::DEFAULT_PATTERN
+        private $pattern = self::DEFAULT_PATTERN
     ) {
-        $this->meta = $meta;
         $this->connection = $resource->getConnection('sales');
-        $this->pattern = $pattern;
     }
 
     /**

@@ -5,7 +5,10 @@
  */
 namespace Magento\SalesSequence\Model\ResourceModel;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context as DatabaseContext;
+use Magento\SalesSequence\Model\Profile as ModelProfile;
 use Magento\SalesSequence\Model\ProfileFactory;
 
 /**
@@ -14,7 +17,7 @@ use Magento\SalesSequence\Model\ProfileFactory;
  * @api
  * @since 100.0.2
  */
-class Profile extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Profile extends AbstractDb
 {
     /**
      * Event prefix
@@ -34,21 +37,15 @@ class Profile extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * @var ProfileFactory
-     */
-    protected $profileFactory;
-
-    /**
      * @param DatabaseContext $context
      * @param ProfileFactory $profileFactory
      * @param string $connectionName
      */
     public function __construct(
         DatabaseContext $context,
-        ProfileFactory $profileFactory,
+        protected readonly ProfileFactory $profileFactory,
         $connectionName = null
     ) {
-        $this->profileFactory = $profileFactory;
         parent::__construct($context, $connectionName);
     }
 
@@ -56,8 +53,8 @@ class Profile extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Load active profile
      *
      * @param int $metadataId
-     * @return \Magento\SalesSequence\Model\Profile
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return ModelProfile
+     * @throws LocalizedException
      */
     public function loadActiveProfile($metadataId)
     {

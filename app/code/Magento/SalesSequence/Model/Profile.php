@@ -6,6 +6,7 @@
 namespace Magento\SalesSequence\Model;
 
 use Magento\Framework\Model\AbstractModel;
+use Magento\SalesSequence\Model\ResourceModel\Profile as ResourceProfile;
 
 /**
  * Class Profile
@@ -20,6 +21,6 @@ class Profile extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init(\Magento\SalesSequence\Model\ResourceModel\Profile::class);
+        $this->_init(ResourceProfile::class);
     }
 }

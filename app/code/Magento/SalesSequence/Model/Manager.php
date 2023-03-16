@@ -5,6 +5,8 @@
  */
 namespace Magento\SalesSequence\Model;
 
+use Magento\Framework\DB\Sequence\SequenceInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceSequenceMeta;
 
 /**
@@ -15,25 +17,13 @@ use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceSequenceMeta;
 class Manager
 {
     /**
-     * @var ResourceSequenceMeta
-     */
-    protected $resourceSequenceMeta;
-
-    /**
-     * @var SequenceFactory
-     */
-    protected $sequenceFactory;
-
-    /**
      * @param ResourceSequenceMeta $resourceSequenceMeta
      * @param SequenceFactory $sequenceFactory
      */
     public function __construct(
-        ResourceSequenceMeta $resourceSequenceMeta,
-        SequenceFactory $sequenceFactory
+        protected readonly ResourceSequenceMeta $resourceSequenceMeta,
+        protected readonly SequenceFactory $sequenceFactory
     ) {
-        $this->resourceSequenceMeta = $resourceSequenceMeta;
-        $this->sequenceFactory = $sequenceFactory;
     }
 
     /**
@@ -42,8 +32,8 @@ class Manager
      * @param string $entityType
      * @param int $storeId
      *
-     * @return \Magento\Framework\DB\Sequence\SequenceInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return SequenceInterface
+     * @throws LocalizedException
      */
     public function getSequence($entityType, $storeId)
     {

@@ -13,16 +13,11 @@ namespace Magento\SalesSequence\Model;
 class EntityPool
 {
     /**
-     * @var array
-     */
-    protected $entities;
-
-    /**
      * @param array $entities
      */
-    public function __construct(array $entities = [])
-    {
-        $this->entities = $entities;
+    public function __construct(
+        protected readonly array $entities = []
+    ) {
     }
 
     /**
