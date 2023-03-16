@@ -51,7 +51,7 @@
         "laminas/laminas-escaper": "^2.10",
         "laminas/laminas-eventmanager": "^3.5",
         "laminas/laminas-feed": "^2.17",
-        "laminas/laminas-file": "^2.12",
+        "laminas/laminas-file": "^2.11",
         "laminas/laminas-filter": "^2.17",
         "laminas/laminas-http": "^2.15",
         "laminas/laminas-i18n": "^2.17",
@@ -59,7 +59,7 @@
         "laminas/laminas-mime": "^2.9",
         "laminas/laminas-modulemanager": "^2.11",
         "laminas/laminas-mvc": "^3.3",
-        "laminas/laminas-oauth": "^2.5",
+        "laminas/laminas-oauth": "^2.4",
         "laminas/laminas-permissions-acl": "^2.10",
         "laminas/laminas-recaptcha": "^3.6",
         "laminas/laminas-servicemanager": "^3.16",
@@ -91,7 +91,7 @@
         "tubalmartin/cssmin": "^4.1",
         "web-token/jwt-framework": "^3.1",
         "webonyx/graphql-php": "^15.0",
-        "wikimedia/less.php": "^4.0"
+        "wikimedia/less.php": "^3.2"
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "^2",

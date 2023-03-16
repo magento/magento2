@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "82b07757b1dd7d54edeed8d00f68edea",
+    "content-hash": "b063f8b81995ff033b5ea547edd3b368",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -9156,20 +9156,20 @@
         },
         {
             "name": "wikimedia/less.php",
-            "version": "v4.0.0",
+            "version": "v3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wikimedia/less.php.git",
-                "reference": "62ff1b15a14449542521e1d68e1bb3019c273582"
+                "reference": "0d5b30ba792bdbf8991a646fc9c30561b38a5559"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/less.php/zipball/62ff1b15a14449542521e1d68e1bb3019c273582",
-                "reference": "62ff1b15a14449542521e1d68e1bb3019c273582",
+                "url": "https://api.github.com/repos/wikimedia/less.php/zipball/0d5b30ba792bdbf8991a646fc9c30561b38a5559",
+                "reference": "0d5b30ba792bdbf8991a646fc9c30561b38a5559",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.4.3"
+                "php": ">=7.2.9"
             },
             "require-dev": {
                 "mediawiki/mediawiki-codesniffer": "40.0.1",
@@ -9177,7 +9177,7 @@
                 "mediawiki/minus-x": "1.1.1",
                 "php-parallel-lint/php-console-highlighter": "1.0.0",
                 "php-parallel-lint/php-parallel-lint": "1.3.2",
-                "phpunit/phpunit": "9.5.28"
+                "phpunit/phpunit": "^8.5"
             },
             "bin": [
                 "bin/lessc"
@@ -9225,9 +9225,9 @@
             ],
             "support": {
                 "issues": "https://github.com/wikimedia/less.php/issues",
-                "source": "https://github.com/wikimedia/less.php/tree/v4.0.0"
+                "source": "https://github.com/wikimedia/less.php/tree/v3.2.1"
             },
-            "time": "2023-03-11T23:30:18+00:00"
+            "time": "2023-02-03T06:43:41+00:00"
         }
     ],
     "packages-dev": [
