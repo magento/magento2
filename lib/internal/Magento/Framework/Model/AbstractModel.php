@@ -779,7 +779,7 @@ abstract class AbstractModel extends DataObject
     /**
      * @return ValidatorChain
      */
-    protected function getValidator(): ValidatorChain
+    private function getValidator(): ValidatorChain
     {
         return \Magento\Framework\App\ObjectManager::getInstance()->create(ValidatorChain::class);
     }

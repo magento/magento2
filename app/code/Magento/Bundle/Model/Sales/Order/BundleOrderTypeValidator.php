@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
 namespace Magento\Bundle\Model\Sales\Order;
 
@@ -6,6 +11,9 @@ use Magento\Bundle\Model\Sales\Order\Shipment\BundleShipmentTypeValidator;
 use \Laminas\Validator\ValidatorInterface;
 use Magento\Sales\Model\Order\Shipment;
 
+/**
+ * Validate if requested order items can be shipped according to bundle product shipment type
+ */
 class BundleOrderTypeValidator extends BundleShipmentTypeValidator implements ValidatorInterface
 {
     /**
@@ -14,6 +22,8 @@ class BundleOrderTypeValidator extends BundleShipmentTypeValidator implements Va
     private array $messages = [];
 
     /**
+     * Validates shipment items based on order item properties
+     *
      * @param Shipment $value
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -24,7 +34,9 @@ class BundleOrderTypeValidator extends BundleShipmentTypeValidator implements Va
         foreach ($value->getOrder()->getAllItems() as $orderItem) {
             foreach ($value->getItems() as $shipmentItem) {
                 if ($orderItem->getItemId() == $shipmentItem->getOrderItemId()) {
-                    $this->messages = array_merge($this->messages, $this->validate($orderItem));
+                    if ($result = $this->validate($orderItem)) {
+                        $this->messages[] = $result;
+                    }
                 }
             }
         }
@@ -33,6 +45,8 @@ class BundleOrderTypeValidator extends BundleShipmentTypeValidator implements Va
     }
 
     /**
+     * Returns validation messages
+     *
      * @return array|string[]
      */
     public function getMessages(): array
