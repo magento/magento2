@@ -23,21 +23,6 @@ class Popular extends Action implements HttpGetActionInterface
     private const XML_PATH_SEO_SEARCH_TERMS = 'catalog/seo/search_terms';
 
     /**
-     * @var ResultForwardFactory
-     */
-    private $resultForwardFactory;
-
-    /**
-     * @var ResultPageFactory
-     */
-    private $resultPageFactory;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @param Context $context
      * @param ResultForwardFactory $resultForwardFactory
      * @param ResultPageFactory $resultPageFactory
@@ -45,14 +30,11 @@ class Popular extends Action implements HttpGetActionInterface
      */
     public function __construct(
         Context $context,
-        ResultForwardFactory $resultForwardFactory,
-        ResultPageFactory $resultPageFactory,
-        ScopeConfigInterface $scopeConfig
+        private readonly ResultForwardFactory $resultForwardFactory,
+        private readonly ResultPageFactory $resultPageFactory,
+        private readonly ScopeConfigInterface $scopeConfig
     ) {
         parent::__construct($context);
-        $this->resultForwardFactory = $resultForwardFactory;
-        $this->resultPageFactory = $resultPageFactory;
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**

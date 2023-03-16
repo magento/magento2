@@ -8,35 +8,32 @@ namespace Magento\Search\Controller\Ajax;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\Json as ResultJson;
+use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Search\Model\AutocompleteInterface;
 use Magento\Framework\Controller\ResultFactory;
 
 class Suggest extends Action implements HttpGetActionInterface
 {
     /**
-     * @var  \Magento\Search\Model\AutocompleteInterface
-     */
-    private $autocomplete;
-
-    /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Search\Model\AutocompleteInterface $autocomplete
+     * @param Context $context
+     * @param AutocompleteInterface $autocomplete
      */
     public function __construct(
         Context $context,
-        AutocompleteInterface $autocomplete
+        private readonly AutocompleteInterface $autocomplete
     ) {
-        $this->autocomplete = $autocomplete;
         parent::__construct($context);
     }
 
     /**
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute()
     {
         if (!$this->getRequest()->getParam('q', false)) {
-            /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+            /** @var ResultRedirect $resultRedirect */
             $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
             $resultRedirect->setUrl($this->_url->getBaseUrl());
             return $resultRedirect;
@@ -47,7 +44,7 @@ class Suggest extends Action implements HttpGetActionInterface
         foreach ($autocompleteData as $resultItem) {
             $responseData[] = $resultItem->toArray();
         }
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var ResultJson $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setData($responseData);
         return $resultJson;

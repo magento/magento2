@@ -25,19 +25,13 @@ class InstallConfig implements InstallConfigInterface
     ];
 
     /**
-     * @var WriterInterface
-     */
-    private $configWriter;
-
-    /**
      * @param WriterInterface $configWriter
      * @param array $searchConfigMapping
      */
     public function __construct(
-        WriterInterface $configWriter,
+        private readonly WriterInterface $configWriter,
         array $searchConfigMapping = []
     ) {
-        $this->configWriter = $configWriter;
         $this->searchConfigMapping = array_merge($this->searchConfigMapping, $searchConfigMapping);
     }
 

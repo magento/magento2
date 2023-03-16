@@ -5,23 +5,25 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
+use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Search\Model\Query as ModelQuery;
 
 class Delete extends TermController implements HttpPostActionInterface
 {
     /**
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return ResultRedirect
      */
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
+        /** @var ResultRedirect $redirectResult */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if ($id) {
             try {
-                $model = $this->_objectManager->create(\Magento\Search\Model\Query::class);
+                $model = $this->_objectManager->create(ModelQuery::class);
                 $model->setId($id);
                 $model->delete();
                 $this->messageManager->addSuccessMessage(__('You deleted the search.'));

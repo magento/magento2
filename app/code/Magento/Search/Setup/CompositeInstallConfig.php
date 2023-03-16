@@ -16,25 +16,13 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class CompositeInstallConfig implements InstallConfigInterface
 {
     /**
-     * @var InstallConfigInterface[]
-     */
-    private $installConfigList;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param InstallConfigInterface[] $installConfigList
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        array $installConfigList = []
+        private readonly ScopeConfigInterface $scopeConfig,
+        private readonly array $installConfigList = []
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->installConfigList = $installConfigList;
     }
 
     /**

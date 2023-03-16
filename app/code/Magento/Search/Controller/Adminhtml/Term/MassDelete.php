@@ -5,14 +5,17 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
+use Exception;
+use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Search\Model\Query as ModelQuery;
 
 class MassDelete extends TermController implements HttpPostActionInterface
 {
     /**
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return ResultRedirect
      */
     public function execute()
     {
@@ -22,15 +25,15 @@ class MassDelete extends TermController implements HttpPostActionInterface
         } else {
             try {
                 foreach ($searchIds as $searchId) {
-                    $model = $this->_objectManager->create(\Magento\Search\Model\Query::class)->load($searchId);
+                    $model = $this->_objectManager->create(ModelQuery::class)->load($searchId);
                     $model->delete();
                 }
                 $this->messageManager->addSuccessMessage(__('Total of %1 record(s) were deleted.', count($searchIds)));
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             }
         }
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var ResultRedirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('search/*/');
         return $resultRedirect;

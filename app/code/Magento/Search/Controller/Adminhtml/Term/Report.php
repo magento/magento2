@@ -5,6 +5,7 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
+use Magento\Backend\Model\View\Result\Page as ResultPage;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Reports\Controller\Adminhtml\Index as ReportsIndexController;
 use Magento\Framework\Controller\ResultFactory;
@@ -21,12 +22,12 @@ class Report extends ReportsIndexController implements HttpGetActionInterface
     /**
      * Search terms report action
      *
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return ResultPage
      */
     public function execute()
     {
         $this->_eventManager->dispatch('on_view_report', ['report' => 'search']);
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        /** @var ResultPage $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
         $resultPage->setActiveMenu('Magento_Search::report_search_term')
             ->addBreadcrumb(__('Reports'), __('Reports'))

@@ -23,25 +23,13 @@ class ConfigProvider implements ArgumentInterface
     private const SEARCH_SUGGESTION_ENABLED = 'catalog/search/search_suggestion_enabled';
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @var SearchHelper
-     */
-    private $searchHelper;
-
-    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param SearchHelper $searchHelper
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        SearchHelper $searchHelper
+        private readonly ScopeConfigInterface $scopeConfig,
+        private readonly SearchHelper $searchHelper
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->searchHelper = $searchHelper;
     }
 
     /**

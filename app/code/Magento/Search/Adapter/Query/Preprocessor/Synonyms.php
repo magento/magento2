@@ -11,18 +11,13 @@ use Magento\Search\Api\SynonymAnalyzerInterface;
 class Synonyms implements PreprocessorInterface
 {
     /**
-     * @var SynonymAnalyzerInterface
-     */
-    private $synonymsAnalyzer;
-
-    /**
      * Constructor
      *
      * @param SynonymAnalyzerInterface $synonymsAnalyzer
      */
-    public function __construct(SynonymAnalyzerInterface $synonymsAnalyzer)
-    {
-        $this->synonymsAnalyzer = $synonymsAnalyzer;
+    public function __construct(
+        private readonly SynonymAnalyzerInterface $synonymsAnalyzer
+    ) {
     }
 
     /**

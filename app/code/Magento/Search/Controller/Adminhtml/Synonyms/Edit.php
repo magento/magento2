@@ -6,7 +6,16 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
-class Edit extends \Magento\Backend\App\Action
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context as ActionContextAlias;
+use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Registry;
+use Magento\Search\Api\Data\SynonymGroupInterface;
+use Magento\Search\Api\SynonymGroupRepositoryInterface;
+use Magento\Search\Controller\RegistryConstants;
+
+class Edit extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -16,57 +25,39 @@ class Edit extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Magento_Search::synonyms';
 
     /**
-     * @var \Magento\Framework\Registry $registry
-     */
-    private $registry;
-
-    /**
-     * @var \Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder $pageBuilder
-     */
-    private $pageBuilder;
-
-    /**
-     * @var \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
-     */
-    private $synGroupRepository;
-
-    /**
      * Edit constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder $pageBuilder
-     * @param \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+     * @param ActionContextAlias $context
+     * @param Registry $registry
+     * @param ResultPageBuilder $pageBuilder
+     * @param SynonymGroupRepositoryInterface $synGroupRepository
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder $pageBuilder,
-        \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+        ActionContextAlias $context,
+        private readonly Registry $registry,
+        private readonly ResultPageBuilder $pageBuilder,
+        private readonly SynonymGroupRepositoryInterface $synGroupRepository
     ) {
-        $this->registry = $registry;
-        $this->synGroupRepository = $synGroupRepository;
-        $this->pageBuilder = $pageBuilder;
         parent::__construct($context);
     }
 
     /**
      * Edit Synonym Group
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
         // 1. Get ID and create model
         $groupId = $this->getRequest()->getParam('group_id');
-        /** @var \Magento\Search\Api\Data\SynonymGroupInterface $synGroup */
+        /** @var SynonymGroupInterface $synGroup */
         $synGroup = $this->synGroupRepository->get($groupId);
 
         // 2. Initial checking
         if ($groupId && (!$synGroup->getGroupId())) {
                 $this->messageManager->addErrorMessage(__('This synonyms group no longer exists.'));
-                /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+                /** @var ResultRedirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
                 return $resultRedirect->setPath('*/*/');
         }
@@ -82,7 +73,7 @@ class Edit extends \Magento\Backend\App\Action
 
         // 4. Register model to use later in save
         $this->registry->register(
-            \Magento\Search\Controller\RegistryConstants::SEARCH_SYNONYMS,
+            RegistryConstants::SEARCH_SYNONYMS,
             $synGroup
         );
 

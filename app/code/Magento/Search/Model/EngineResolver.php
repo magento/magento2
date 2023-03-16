@@ -24,73 +24,23 @@ class EngineResolver implements EngineResolverInterface
     const CATALOG_SEARCH_MYSQL_ENGINE = 'mysql';
 
     /**
-     * @var ScopeConfigInterface
-     * @since 100.1.0
-     */
-    protected $scopeConfig;
-
-    /**
-     * Path to catalog search engine
-     * @var string
-     * @since 100.1.0
-     */
-    protected $path;
-
-    /**
-     * Scope type
-     * @var string
-     * @since 100.1.0
-     */
-    protected $scopeType;
-
-    /**
-     * Scope code
-     * @var null|string
-     * @since 100.1.0
-     */
-    protected $scopeCode;
-
-    /**
-     * Available engines
-     * @var array
-     */
-    private $engines = [];
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var string
-     */
-    private $defaultEngine;
-
-    /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param array $engines
+     * @param array $engines Available engines
      * @param LoggerInterface $logger
-     * @param string $path
-     * @param string $scopeType
-     * @param string|null $scopeCode
+     * @param string $path Path to catalog search engine
+     * @param string $scopeType Scope type
+     * @param string|null $scopeCode Scope code
      * @param string|null $defaultEngine
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        array $engines,
-        LoggerInterface $logger,
-        $path,
-        $scopeType,
-        $scopeCode = null,
-        $defaultEngine = null
+        protected readonly ScopeConfigInterface $scopeConfig,
+        private readonly array $engines,
+        private readonly LoggerInterface $logger,
+        protected $path,
+        protected $scopeType,
+        protected $scopeCode = null,
+        private $defaultEngine = null
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->path = $path;
-        $this->scopeType = $scopeType;
-        $this->scopeCode = $scopeCode;
-        $this->engines = $engines;
-        $this->logger = $logger;
-        $this->defaultEngine = $defaultEngine;
     }
 
     /**

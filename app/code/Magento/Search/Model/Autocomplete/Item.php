@@ -6,7 +6,9 @@
 
 namespace Magento\Search\Model\Autocomplete;
 
-class Item extends \Magento\Framework\DataObject implements ItemInterface
+use Magento\Framework\DataObject;
+
+class Item extends DataObject implements ItemInterface
 {
     /**
      * {@inheritdoc}

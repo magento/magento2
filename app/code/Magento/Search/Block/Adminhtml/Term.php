@@ -5,11 +5,13 @@
  */
 namespace Magento\Search\Block\Adminhtml;
 
+use Magento\Backend\Block\Widget\Grid\Container;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Term extends \Magento\Backend\Block\Widget\Grid\Container
+class Term extends Container
 {
     /**
      * @return void

@@ -5,23 +5,19 @@
  */
 namespace Magento\Search\Model\SearchEngine;
 
-class Config implements \Magento\Framework\Search\SearchEngine\ConfigInterface
-{
-    /**
-     * Search engine config data storage
-     *
-     * @var Config\Data
-     */
-    protected $dataStorage;
+use Magento\Framework\Config\DataInterface;
+use Magento\Framework\Search\SearchEngine\ConfigInterface;
 
+class Config implements ConfigInterface
+{
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Config\DataInterface $dataStorage
+     * @param Config\Data $dataStorage Search engine config data storage
      */
-    public function __construct(\Magento\Framework\Config\DataInterface $dataStorage)
-    {
-        $this->dataStorage = $dataStorage;
+    public function __construct(
+        protected readonly DataInterface $dataStorage
+    ) {
     }
 
     /**

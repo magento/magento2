@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Search\Model\Search;
 
+use Magento\Search\Model\EngineResolver;
+
 /**
  * Returns max  page size by search engine name
  * @api
@@ -15,25 +17,13 @@ namespace Magento\Search\Model\Search;
 class PageSizeProvider
 {
     /**
-     * @var \Magento\Search\Model\EngineResolver
-     */
-    private $engineResolver;
-
-    /**
-     * @var array
-     */
-    private $pageSizeBySearchEngine;
-
-    /**
-     * @param \Magento\Search\Model\EngineResolver $engineResolver
+     * @param EngineResolver $engineResolver
      * @param array $pageSizeBySearchEngine
      */
     public function __construct(
-        \Magento\Search\Model\EngineResolver $engineResolver,
-        array $pageSizeBySearchEngine = []
+        private readonly EngineResolver $engineResolver,
+        private readonly array $pageSizeBySearchEngine = []
     ) {
-        $this->engineResolver = $engineResolver;
-        $this->pageSizeBySearchEngine = $pageSizeBySearchEngine;
     }
 
     /**

@@ -6,6 +6,7 @@
 namespace Magento\Search\Ui\Component\Listing\Column;
 
 use Magento\Framework\Escaper;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Store\Model\System\Store as SystemStore;
@@ -18,11 +19,6 @@ use Magento\Store\Model\StoreManagerInterface;
 class Website extends Column
 {
     /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
      * Constructor
      *
      * @param ContextInterface $context
@@ -34,11 +30,10 @@ class Website extends Column
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        StoreManagerInterface $storeManager,
+        protected readonly StoreManagerInterface $storeManager,
         array $components = [],
         array $data = []
     ) {
-        $this->storeManager = $storeManager;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -47,7 +42,7 @@ class Website extends Column
      *
      * @param array $dataSource
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -64,7 +59,7 @@ class Website extends Column
      *
      * @param array $item
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function prepareItem(array $item)
     {

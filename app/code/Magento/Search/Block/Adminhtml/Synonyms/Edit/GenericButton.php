@@ -5,6 +5,9 @@
  */
 namespace Magento\Search\Block\Adminhtml\Synonyms\Edit;
 
+use Magento\Backend\Block\Widget\Context as WidgetContext;
+use Magento\Framework\Registry;
+use Magento\Framework\UrlInterface;
 use Magento\Search\Controller\RegistryConstants;
 
 /**
@@ -15,29 +18,21 @@ class GenericButton
     /**
      * Url Builder
      *
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     protected $urlBuilder;
 
     /**
-     * Registry
-     *
-     * @var \Magento\Framework\Registry
-     */
-    protected $registry;
-
-    /**
      * Constructor
      *
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param WidgetContext $context
+     * @param Registry $registry Registry
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Framework\Registry $registry
+        WidgetContext $context,
+        protected readonly Registry $registry
     ) {
         $this->urlBuilder = $context->getUrlBuilder();
-        $this->registry = $registry;
     }
 
     /**

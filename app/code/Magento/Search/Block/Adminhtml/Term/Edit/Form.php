@@ -12,30 +12,41 @@ declare(strict_types=1);
 
 namespace Magento\Search\Block\Adminhtml\Term\Edit;
 
+use Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element as FieldsetElement;
+use Magento\Backend\Block\Template\Context as TemplateContext;
+use Magento\Backend\Block\Widget\Form\Generic as FormGeneric;
+use Magento\Framework\Data\Form as FormData;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Magento\Search\Model\Query as ModelQuery;
+use Magento\Store\Model\System\Store as SystemStore;
+
 /**
  * Edit Form Block
  *
  * Class \Magento\Search\Block\Adminhtml\Term\Edit\Form
  */
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
+class Form extends FormGeneric
 {
     /**
-     * @var \Magento\Store\Model\System\Store
+     * @var SystemStore
      */
     protected $_systemStore;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Store\Model\System\Store $systemStore
+     * @param TemplateContext $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param SystemStore $systemStore
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Store\Model\System\Store $systemStore,
+        TemplateContext $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        SystemStore $systemStore,
         array $data = []
     ) {
         $this->_systemStore = $systemStore;
@@ -58,16 +69,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare form fields
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
+        /* @var ModelQuery $model */
         $model = $this->_coreRegistry->registry('current_catalog_search');
-        /* @var $model \Magento\Search\Model\Query */
 
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var FormData $form */
         $form = $this->_formFactory->create(
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
@@ -104,7 +115,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ]
             );
             $renderer = $this->getLayout()->createBlock(
-                \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element::class
+                FieldsetElement::class
             );
             $field->setRenderer($renderer);
         } else {

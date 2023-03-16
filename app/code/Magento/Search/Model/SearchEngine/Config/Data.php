@@ -5,6 +5,9 @@
  */
 namespace Magento\Search\Model\SearchEngine\Config;
 
+use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Config\Data as ConfigData;
+use Magento\Framework\Search\SearchEngine\Config\Reader;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
@@ -12,19 +15,19 @@ use Magento\Framework\Serialize\SerializerInterface;
  * @api
  * @since 100.1.0
  */
-class Data extends \Magento\Framework\Config\Data
+class Data extends ConfigData
 {
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Search\SearchEngine\Config\Reader $reader
-     * @param \Magento\Framework\Config\CacheInterface $cache
+     * @param Reader $reader
+     * @param CacheInterface $cache
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
      */
     public function __construct(
-        \Magento\Framework\Search\SearchEngine\Config\Reader $reader,
-        \Magento\Framework\Config\CacheInterface $cache,
+        Reader $reader,
+        CacheInterface $cache,
         $cacheId = 'search_engine_config_cache',
         SerializerInterface $serializer = null
     ) {

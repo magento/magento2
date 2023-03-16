@@ -5,26 +5,36 @@
  */
 namespace Magento\Search\Block\Adminhtml\Dashboard;
 
+use Exception;
+use Magento\Backend\Block\Dashboard\Grid as DashboardGrid;
+use Magento\Backend\Block\Dashboard\Searches\Renderer\Searchquery;
+use Magento\Backend\Block\Template\Context as TemplateContext;
+use Magento\Backend\Helper\Data as BackendHelper;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Module\Manager as ModuleManager;
+use Magento\Search\Model\ResourceModel\Query\Collection as QueryCollection;
+use Magento\Search\Model\ResourceModel\Query\CollectionFactory as QueryCollectionFactory;
+
 /**
  * Dashboard last search keywords block
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @since 100.0.2
  */
-class Last extends \Magento\Backend\Block\Dashboard\Grid
+class Last extends DashboardGrid
 {
     /**
-     * @var \Magento\Search\Model\ResourceModel\Query\Collection
+     * @var QueryCollection
      */
     protected $_collection;
 
     /**
-     * @var \Magento\Search\Model\ResourceModel\Query\CollectionFactory
+     * @var QueryCollectionFactory
      */
     protected $_queriesFactory;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var ModuleManager
      */
     protected $_moduleManager;
 
@@ -34,17 +44,17 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
     protected $_template = 'Magento_Backend::dashboard/grid.phtml';
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param \Magento\Search\Model\ResourceModel\Query\CollectionFactory $queriesFactory
+     * @param TemplateContext $context
+     * @param BackendHelper $backendHelper
+     * @param ModuleManager $moduleManager
+     * @param QueryCollectionFactory $queriesFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Framework\Module\Manager $moduleManager,
-        \Magento\Search\Model\ResourceModel\Query\CollectionFactory $queriesFactory,
+        TemplateContext $context,
+        BackendHelper $backendHelper,
+        ModuleManager $moduleManager,
+        QueryCollectionFactory $queriesFactory,
         array $data = []
     ) {
         $this->_moduleManager = $moduleManager;
@@ -67,7 +77,7 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
      * Prepare collection.
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _prepareCollection()
     {
@@ -93,7 +103,7 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
      * Prepare columns.
      *
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     protected function _prepareColumns()
     {
@@ -103,7 +113,7 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
                 'header' => __('Search Term'),
                 'sortable' => false,
                 'index' => 'query_text',
-                'renderer' => \Magento\Backend\Block\Dashboard\Searches\Renderer\Searchquery::class,
+                'renderer' => Searchquery::class,
                 'header_css_class' => 'col-search-query',
                 'column_css_class' => 'col-search-query'
             ]

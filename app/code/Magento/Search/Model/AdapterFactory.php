@@ -5,6 +5,11 @@
  */
 namespace Magento\Search\Model;
 
+use InvalidArgumentException;
+use LogicException;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Search\AdapterInterface;
 use Magento\Framework\Search\EngineResolverInterface;
 
 /**
@@ -16,17 +21,10 @@ class AdapterFactory
     /**
      * Scope configuration
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      * @deprecated 101.0.0 since it is not used anymore
      */
     protected $scopeConfig;
-
-    /**
-     * Object Manager instance
-     *
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    protected $objectManager;
 
     /**
      * Config path
@@ -50,43 +48,36 @@ class AdapterFactory
     private $adapterPool;
 
     /**
-     * @var EngineResolverInterface
-     */
-    private $engineResolver;
-
-    /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager Object Manager instance
      * @param array $adapters
      * @param EngineResolverInterface $engineResolver
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
+        protected readonly ObjectManagerInterface $objectManager,
         array $adapters,
-        EngineResolverInterface $engineResolver
+        private readonly EngineResolverInterface $engineResolver
     ) {
-        $this->objectManager = $objectManager;
         $this->adapterPool = $adapters;
-        $this->engineResolver = $engineResolver;
     }
 
     /**
      * Create Adapter instance
      *
      * @param array $data
-     * @return \Magento\Framework\Search\AdapterInterface
+     * @return AdapterInterface
      */
     public function create(array $data = [])
     {
         $currentAdapter = $this->engineResolver->getCurrentSearchEngine();
         if (!isset($this->adapterPool[$currentAdapter])) {
-            throw new \LogicException(
+            throw new LogicException(
                 'There is no such adapter: ' . $currentAdapter
             );
         }
         $adapterClass = $this->adapterPool[$currentAdapter];
         $adapter = $this->objectManager->create($adapterClass, $data);
-        if (!($adapter instanceof \Magento\Framework\Search\AdapterInterface)) {
-            throw new \InvalidArgumentException(
+        if (!($adapter instanceof AdapterInterface)) {
+            throw new InvalidArgumentException(
                 'Adapter must implement \Magento\Framework\Search\AdapterInterface'
             );
         }

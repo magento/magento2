@@ -5,6 +5,7 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
+use Magento\Backend\Model\View\Result\Forward as ResultForward;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Framework\Controller\ResultFactory;
@@ -12,11 +13,11 @@ use Magento\Framework\Controller\ResultFactory;
 class NewAction extends TermController implements HttpGetActionInterface
 {
     /**
-     * @return \Magento\Backend\Model\View\Result\Forward
+     * @return ResultForward
      */
     public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
+        /** @var ResultForward $resultForward */
         $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
         return $resultForward->forward('edit');
     }

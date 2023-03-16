@@ -7,6 +7,7 @@
 declare(strict_types=1);
 namespace Magento\Search\Model;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Search\Api\SynonymAnalyzerInterface;
 
 /**
@@ -24,8 +25,9 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
      *
      * @param SynonymReader $synReader
      */
-    public function __construct(SynonymReader $synReader)
-    {
+    public function __construct(
+        SynonymReader $synReader
+    ) {
         $this->synReaderModel = $synReader;
     }
 
@@ -45,7 +47,7 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
      *
      * @param string $phrase
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getSynonymsForPhrase($phrase)
     {
@@ -157,7 +159,7 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
      *
      * @param string $phrase
      * @return string[]
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function getSynonymGroupsByPhrase(string $phrase): array
     {

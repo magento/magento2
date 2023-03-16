@@ -7,6 +7,7 @@ namespace Magento\Search\Model;
 
 use Magento\Framework\Model\AbstractModel;
 use Magento\Search\Api\Data\SynonymGroupInterface;
+use Magento\Search\Model\ResourceModel\SynonymGroup as ResourceSynonymGroup;
 
 class SynonymGroup extends AbstractModel implements SynonymGroupInterface
 {
@@ -17,7 +18,7 @@ class SynonymGroup extends AbstractModel implements SynonymGroupInterface
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Search\Model\ResourceModel\SynonymGroup::class);
+        $this->_init(ResourceSynonymGroup::class);
     }
 
     /**

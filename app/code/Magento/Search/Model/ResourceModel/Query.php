@@ -7,9 +7,14 @@
 namespace Magento\Search\Model\ResourceModel;
 
 use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context as DbContext;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\DateTime as DateTimeModel;
 use Magento\Search\Model\Query as QueryModel;
+use Zend_Db_Expr;
 
 /**
  * Search query resource model
@@ -22,29 +27,23 @@ class Query extends AbstractDb
     /**
      * Date
      *
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTimeModel
      */
     protected $_date;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param DbContext $context
+     * @param DateTimeModel $date
+     * @param DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        DbContext $context,
+        DateTimeModel $date,
+        protected readonly DateTime $dateTime,
         $connectionName = null
     ) {
         $this->_date = $date;
-        $this->dateTime = $dateTime;
         parent::__construct($context, $connectionName);
     }
 
@@ -82,7 +81,7 @@ class Query extends AbstractDb
      * @param AbstractModel $object
      * @param int|string $value
      * @param null|string $field
-     * @return $this|\Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @return $this|AbstractDb
      * @SuppressWarnings("unused")
      */
     public function load(AbstractModel $object, $value, $field = null)
@@ -135,7 +134,7 @@ class Query extends AbstractDb
      * @param QueryModel $query
      * @return void
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function saveIncrementalPopularity(QueryModel $query)
     {
@@ -147,7 +146,7 @@ class Query extends AbstractDb
             'popularity' => 1,
         ];
         $updateData = [
-            'popularity' => new \Zend_Db_Expr('`popularity` + 1'),
+            'popularity' => new Zend_Db_Expr('`popularity` + 1'),
         ];
         $adapter->insertOnDuplicate($table, $saveData, $updateData);
     }
@@ -158,7 +157,7 @@ class Query extends AbstractDb
      * @param QueryModel $query
      * @return void
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function saveNumResults(QueryModel $query)
     {

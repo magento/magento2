@@ -5,9 +5,12 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
+use Exception;
+use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Search\Model\Query as ModelQuery;
 use Magento\Search\Model\QueryFactory;
 use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Framework\Exception\LocalizedException;
@@ -15,26 +18,20 @@ use Magento\Framework\Exception\LocalizedException;
 class Save extends TermController implements HttpPostActionInterface
 {
     /**
-     * @var QueryFactory
-     */
-    private $queryFactory;
-
-    /**
      * @param Context $context
      * @param QueryFactory $queryFactory
      */
     public function __construct(
         Context $context,
-        QueryFactory $queryFactory
+        private readonly QueryFactory $queryFactory
     ) {
         parent::__construct($context);
-        $this->queryFactory = $queryFactory;
     }
 
     /**
      * Save search query
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return ResultRedirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
@@ -50,7 +47,7 @@ class Save extends TermController implements HttpPostActionInterface
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 return $this->proceedToEdit($data);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addExceptionMessage(
                     $e,
                     __('Something went wrong while saving the search query.')
@@ -59,7 +56,7 @@ class Save extends TermController implements HttpPostActionInterface
             }
         }
 
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var ResultRedirect $resultRedirect */
         $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $redirectResult->setPath('search/*');
     }
@@ -67,8 +64,8 @@ class Save extends TermController implements HttpPostActionInterface
     /**
      * Create\Load Query model instance
      *
-     * @return \Magento\Search\Model\Query
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return ModelQuery
+     * @throws LocalizedException
      */
     private function loadQuery()
     {
@@ -76,14 +73,14 @@ class Save extends TermController implements HttpPostActionInterface
         $queryText = $this->getRequest()->getPost('query_text', false);
         $queryId = $this->getRequest()->getPost('query_id', null);
 
-        /* @var $model \Magento\Search\Model\Query */
+        /* @var ModelQuery $model */
         $model = $this->queryFactory->create();
         if ($queryText) {
             $storeId = $this->getRequest()->getPost('store_id', false);
             $model->setStoreId($storeId);
             $model->loadByQueryText($queryText);
             if ($model->getId() && $model->getId() != $queryId) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __('You already have an identical search term query.')
                 );
             }
@@ -98,12 +95,12 @@ class Save extends TermController implements HttpPostActionInterface
      * Redirect to Edit page
      *
      * @param array $data
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return ResultRedirect
      */
     private function proceedToEdit($data)
     {
         $this->_getSession()->setPageData($data);
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var ResultRedirect $resultRedirect */
         $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $redirectResult->setPath('search/*/edit', ['id' => $this->getRequest()->getPost('query_id', null)]);
     }

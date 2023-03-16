@@ -6,6 +6,7 @@
 
 namespace Magento\Search\Ui\Component\Listing\Column\Store;
 
+use Magento\Store\Model\Store;
 use Magento\Store\Ui\Component\Listing\Column\Store\Options as StoreOptions;
 
 class Options extends StoreOptions
@@ -25,7 +26,7 @@ class Options extends StoreOptions
         $this->currentOptions['']['value'] = '--';
 
         $this->currentOptions['All Store Views']['label'] = __('All Store Views');
-        $this->currentOptions['All Store Views']['value'] = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+        $this->currentOptions['All Store Views']['value'] = Store::DEFAULT_STORE_ID;
 
         $this->generateCurrentOptions();
 

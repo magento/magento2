@@ -6,12 +6,18 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context as ActionContext;
+use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Phrase;
+use Magento\Search\Api\SynonymGroupRepositoryInterface;
 use Magento\Search\Model\Synonym\MergeConflictException;
 
 /**
  * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
-class Save extends \Magento\Backend\App\Action
+class Save extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -21,32 +27,26 @@ class Save extends \Magento\Backend\App\Action
     public const ADMIN_RESOURCE = 'Magento_Search::synonyms';
 
     /**
-     * @var \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
-     */
-    private $synGroupRepository;
-
-    /**
      * MassDelete constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+     * @param ActionContext $context
+     * @param SynonymGroupRepositoryInterface $synGroupRepository
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+        ActionContext $context,
+        private readonly SynonymGroupRepositoryInterface $synGroupRepository
     ) {
-        $this->synGroupRepository = $synGroupRepository;
         parent::__construct($context);
     }
 
     /**
      * Save action
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var ResultRedirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
         // check if data sent
@@ -110,7 +110,7 @@ class Save extends \Magento\Backend\App\Action
      * Constructs the error message from the Merge conflict exception
      *
      * @param MergeConflictException $exception
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     private function getErrorMessage(MergeConflictException $exception)
     {
