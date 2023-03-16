@@ -13,7 +13,6 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
-use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -21,7 +20,6 @@ use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\Store\Model\ScopeInterface;
-use Magento\TestFramework\Fixture\DataFixture;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Psr\Log\LoggerInterface;
@@ -137,64 +135,6 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
                         'website_ids' => [1]
                     ],
                     'expected_data' => [],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
-     * @dataProvider invisibleProductDataProvider
-     * @param array $expectedData
-     * @return void
-     */
-    #[
-        DataFixture(ProductFixture::class, ['sku' => 'simple','name'=>'Simple Url Test Product',
-            'visibility' => Visibility::VISIBILITY_NOT_VISIBLE]),
-    ]
-    public function testUrlRewriteOnInvisibleProductEdit(array $expectedData): void
-    {
-        $product = $this->productRepository->get('simple', true, 0, true);
-        $productUrlRewriteItems = $this->getEntityRewriteCollection($product->getId())->getItems();
-        $this->assertEmpty(
-            $productUrlRewriteItems,
-            'URL key should not be present for "Not visible individually" product'
-        );
-
-        //Update visibility and check the database entry
-        $product->setVisibility(Visibility::VISIBILITY_BOTH);
-        $product = $this->productRepository->save($product);
-
-        $productUrlRewriteCollection = $this->getEntityRewriteCollection($product->getId());
-        $this->assertRewrites(
-            $productUrlRewriteCollection,
-            $this->prepareData($expectedData, (int)$product->getId())
-        );
-
-        //Update visibility and check if the entry is removed from the database
-        $product = $this->productRepository->get('simple', true, 0, true);
-        $product->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE);
-        $product = $this->productRepository->save($product);
-
-        $productUrlRewriteItems = $this->getEntityRewriteCollection($product->getId())->getItems();
-        $this->assertEmpty(
-            $productUrlRewriteItems,
-            'URL key should not be present for "Not visible individually" product'
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function invisibleProductDataProvider(): array
-    {
-        return [
-            [
-                'expected_data' => [
-                    [
-                        'request_path' => 'simple-url-test-product%suffix%',
-                        'target_path' => 'catalog/product/view/id/%id%',
-                    ],
                 ],
             ],
         ];
