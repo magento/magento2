@@ -147,9 +147,9 @@ QUERY;
             if (in_array($item['sku'], $productsWithTierPrices)) {
                 $this->assertCount(1, $response['products']['items'][$key]['price_tiers']);
             } else {
-                if(empty($response['products']['items'][$key]['price_tiers'])) {
+                if (empty($response['products']['items'][$key]['price_tiers'])) {
                     $this->assertCount(0, $response['products']['items'][$key]['price_tiers']);
-                }  
+                }
             }
         }
     }
