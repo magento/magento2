@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DateFiltersInCustomInstanceTimeZoneTest">
+        <annotations>
+            <features value="LocaleTest"/>
+            <stories value="Verify that Date filters of new Data Grids in Admin (ex: Customers) provide relevant search results if custom Instance Timezone is set"/>
+            <title value="Verify DateFilters"/>
+            <description value="Verify that Date filters of new Data Grids in Admin (ex: Customers) provide relevant search results if custom Instance Timezone is set"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4300"/>
+        </annotations>
+        <before>
+            <!--Login To Admin panel-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Go to *General > General > Locale Options* section -->
+            <actionGroup ref="NavigateToDefaultLocaleSettingActionGroup" stepKey="redirect"/>
+            <!--Set needed Timezone-->
+            <selectOption userInput="New Zealand Standard Time (Antarctica/McMurdo)" selector="{{LocaleOptionsSection.timeZoneDropdown}}" stepKey="selectOption1"/>
+            <!-- Logout From Admin Panel-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </before>
+        <after>
+            <actionGroup ref="NavigateToDefaultLocaleSettingActionGroup" stepKey="redirectAgain"/>
+            <selectOption userInput="Central Standard Time (America/Chicago)" selector="{{LocaleOptionsSection.timeZoneDropdown}}" stepKey="selectDefaultoption"/>
+            <!-- Delete customer -->
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="CustomerEntityOne.email"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
+        </after>
+        <!-- Create Customer -->
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
+            <argument name="Customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <!--Login to Admin-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+        <!--Go to *Customers > All Customers* page-->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToAllCustomerPage">
+            <argument name="menuUiId" value="{{AdminMenuCustomers.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuCustomersAllCustomers.dataUiId}}"/>
+        </actionGroup>
+        <!--Clear Filters if Present on Customer Grid Page-->
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+        <!-- Click on Filters-->
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="clickOnFilters"/>
+        <!-- Generate Today's Date to set in filter-->
+        <generateDate date="now" format="m/d/Y" stepKey="today"/>
+        <!--Set the *Customer Since* filter From Date-->
+        <fillField selector="{{AdminDataGridHeaderSection.dateFilterFrom}}" userInput="{$today}" stepKey="fillDateFrom"/>
+        <!--Set the *Customer Since* filter To Date-->
+        <fillField selector="{{AdminDataGridHeaderSection.dateFilterTo}}" userInput="{$today}" stepKey="fillDateto"/>
+        <!-- Apply Filter-->
+        <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyFilter"/>
+        <!--Customer *A* is present in the grid-->
+        <actionGroup ref="AdminAssertCustomerInCustomersGrid" stepKey="assertCustomer1InGrid">
+            <argument name="text" value="{{CustomerEntityOne.email}}"/>
+            <argument name="row" value="1"/>
+        </actionGroup>
+    </test>
+</tests>
