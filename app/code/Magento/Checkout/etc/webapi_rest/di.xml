@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Checkout\Api\GuestPaymentInformationManagementInterface">
+        <plugin name="verify_is_guest_checkout_enabled" type="Magento\Checkout\Plugin\Api\VerifyIsGuestCheckoutEnabledBeforeSavePaymentInformation"/>
+    </type>
+    <type name="Magento\Checkout\Api\GuestShippingInformationManagementInterface">
+        <plugin name="verify_is_guest_checkout_enabled" type="Magento\Checkout\Plugin\Api\VerifyIsGuestCheckoutEnabledBeforeSaveShippingInformation"/>
+    </type>
+    <type name="Magento\Quote\Api\GuestCartManagementInterface">
+        <plugin name="verify_is_guest_checkout_enabled" type="Magento\Checkout\Plugin\Api\VerifyIsGuestCheckoutEnabledBeforePlaceOrder"/>
+    </type>
+    <type name="Magento\Quote\Api\GuestPaymentMethodManagementInterface">
+        <plugin name="verify_is_guest_checkout_enabled" type="Magento\Checkout\Plugin\Api\VerifyIsGuestCheckoutEnabledBeforeSetPaymentMethod"/>
+    </type>
+    <type name="Magento\Quote\Api\GuestBillingAddressManagementInterface">
+        <plugin name="verify_is_guest_checkout_enabled" type="Magento\Checkout\Plugin\Api\VerifyIsGuestCheckoutEnabledBeforeAssignBillingAddress"/>
+    </type>
+</config>
