@@ -10,10 +10,10 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="DateFiltersInCustomInstanceTimeZoneTest">
         <annotations>
-            <features value="LocaleTest"/>
-            <stories value="Verify that Date filters of new Data Grids in Admin (ex: Customers) provide relevant search results if custom Instance Timezone is set"/>
+            <features value="Config"/>
+            <stories value="Verify that Date filters of new Data Grids in Admin provide relevant search results if custom Instance Timezone is set"/>
             <title value="Verify DateFilters"/>
-            <description value="Verify that Date filters of new Data Grids in Admin (ex: Customers) provide relevant search results if custom Instance Timezone is set"/>
+            <description value="Verify that Date filters of new Data Grids in Admin provide relevant search results if custom Instance Timezone is set"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4300"/>
         </annotations>
