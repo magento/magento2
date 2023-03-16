@@ -12,6 +12,9 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use Magento\Eav\Model\Config;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Checks creating attribute options process.
@@ -23,6 +26,16 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 class CreateOptionsTest extends AbstractBackendController
 {
     /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    private $productAttributeRepository;
+
+    /**
+     * @var Config
+     */
+    private $eavConfig;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -31,6 +44,8 @@ class CreateOptionsTest extends AbstractBackendController
 
         $productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
         $productRepository->cleanCache();
+        $this->productAttributeRepository = $this->_objectManager->create(ProductAttributeRepositoryInterface::class);
+        $this->eavConfig = $this->_objectManager->create(Config::class);
     }
 
     /**
@@ -74,6 +89,28 @@ class CreateOptionsTest extends AbstractBackendController
                 $property->setAccessible(true);
                 $property->setValue($this, null);
             }
+        }
+    }
+
+    /**
+     * Test updating a product attribute and checking the frontend_class for the sku attribute.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_attribute.php
+     */
+    public function testAttributeWithBackendTypeHasSameValueInFrontendClass()
+    {
+        /** @var ProductAttributeInterface $attribute */
+        $attribute = $this->productAttributeRepository->get('sku');
+
+        $attribute->setFrontendClass('my-custom-class');
+
+        $this->productAttributeRepository->save($attribute);
+
+        try {
+            $skuAttribute = $this->eavConfig->getAttribute('catalog_product', 'sku');
+            $this->assertEquals('my-custom-class', $skuAttribute->getFrontendClass());
+        } catch (LocalizedException $e) {
+            $this->fail($e->getMessage());
         }
     }
 }
