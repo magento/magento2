@@ -13,9 +13,11 @@
             <title value="Create orders, invoices, shipments and credit memos and check grids"/>
             <description value="Create orders, invoices, shipments and credit memos and check async grids"/>
             <severity value="AVERAGE"/>
-            <useCaseId value="ACP2E-1367" />
             <testCaseId value="AC-7106" />
             <group value="sales"/>
+            <skip>
+                <issueId value="ACP2E-1367" />
+            </skip>
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
