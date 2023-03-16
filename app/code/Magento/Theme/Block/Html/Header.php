@@ -54,7 +54,7 @@ class Header extends Template
     public function getWelcome()
     {
         if (empty($this->_data['welcome'])) {
-            $this->_data['welcome'] = $this->_scopeConfig->getValue(
+            $this->_data['welcome'] = (string)$this->_scopeConfig->getValue(
                 'design/header/welcome',
                 ScopeInterface::SCOPE_STORE
             );
