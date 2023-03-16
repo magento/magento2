@@ -46,6 +46,7 @@
     <preference for="Magento\Quote\Model\ValidationRules\QuoteValidationRuleInterface" type="Magento\Quote\Model\ValidationRules\QuoteValidationComposite\Proxy"/>
     <preference for="Magento\Quote\Model\QuoteMutexInterface" type="Magento\Quote\Model\QuoteMutex"/>
     <preference for="Magento\Quote\Model\Quote\Item\Option\ComparatorInterface" type="Magento\Quote\Model\Quote\Item\Option\Comparator"/>
+    <preference for="Magento\Quote\Model\Cart\ProductReaderInterface" type="Magento\Quote\Model\Cart\ProductReader"/>
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
         <arguments>
             <argument name="paramOverriders" xsi:type="array">
@@ -141,6 +142,22 @@
     <type name="Magento\Quote\Model\ValidationRules\PaymentMethodValidationRule">
         <arguments>
             <argument name="generalMessage" xsi:type="string" translatable="true">Enter a valid payment method and try again.</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Backpressure\SlidingWindow\CompositeLimitConfigManager">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="quote-order" xsi:type="object">
+                    Magento\Quote\Model\Backpressure\OrderLimitConfigManager
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Webapi\Backpressure\CompositeRequestTypeExtractor">
+        <arguments>
+            <argument name="extractors" xsi:type="array">
+                <item name="quote" xsi:type="object">Magento\Quote\Model\Backpressure\WebapiRequestTypeExtractor</item>
+            </argument>
         </arguments>
     </type>
 </config>
