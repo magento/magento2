@@ -5,28 +5,29 @@
  */
 namespace Magento\SalesRule\Observer;
 
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Rule\Model\Condition\Combine as ConditionCombine;
+use Magento\SalesRule\Model\ResourceModel\Rule\Collection as RuleCollection;
+use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
+use Magento\SalesRule\Model\Rule as ModelRule;
+use Magento\SalesRule\Model\Rule\Condition\Product as ConditionProduct;
+
 class CheckSalesRulesAvailability
 {
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory
+     * @var RuleCollectionFactory
      */
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
-     */
-    protected $messageManager;
-
-    /**
-     * @param \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $collectionFactory
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param RuleCollectionFactory $collectionFactory
+     * @param ManagerInterface $messageManager
      */
     public function __construct(
-        \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $collectionFactory,
-        \Magento\Framework\Message\ManagerInterface $messageManager
+        RuleCollectionFactory $collectionFactory,
+        protected readonly ManagerInterface $messageManager
     ) {
         $this->_collectionFactory = $collectionFactory;
-        $this->messageManager = $messageManager;
     }
 
     /**
@@ -38,14 +39,14 @@ class CheckSalesRulesAvailability
      */
     public function checkSalesRulesAvailability($attributeCode)
     {
-        /* @var $collection \Magento\SalesRule\Model\ResourceModel\Rule\Collection */
+        /* @var RuleCollection $collection */
         $collection = $this->_collectionFactory->create()->addAttributeInConditionFilter($attributeCode);
 
         $disabledRulesCount = 0;
         foreach ($collection as $rule) {
-            /* @var $rule \Magento\SalesRule\Model\Rule */
+            /** @var ModelRule $rule */
             $rule->setIsActive(0);
-            /* @var $rule->getConditions() \Magento\SalesRule\Model\Rule\Condition\Combine */
+            /** @var ConditionCombine $rule->getConditions() */
             $this->_removeAttributeFromConditions($rule->getConditions(), $attributeCode);
             $this->_removeAttributeFromConditions($rule->getActions(), $attributeCode);
             $rule->save();
@@ -69,7 +70,7 @@ class CheckSalesRulesAvailability
     /**
      * Remove catalog attribute condition by attribute code from rule conditions
      *
-     * @param \Magento\Rule\Model\Condition\Combine $combine
+     * @param ConditionCombine $combine
      * @param string $attributeCode
      * @return void
      */
@@ -77,10 +78,10 @@ class CheckSalesRulesAvailability
     {
         $conditions = $combine->getConditions();
         foreach ($conditions as $conditionId => $condition) {
-            if ($condition instanceof \Magento\Rule\Model\Condition\Combine) {
+            if ($condition instanceof ConditionCombine) {
                 $this->_removeAttributeFromConditions($condition, $attributeCode);
             }
-            if ($condition instanceof \Magento\SalesRule\Model\Rule\Condition\Product) {
+            if ($condition instanceof ConditionProduct) {
                 if ($condition->getAttribute() == $attributeCode) {
                     unset($conditions[$conditionId]);
                 }

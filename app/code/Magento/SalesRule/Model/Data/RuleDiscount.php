@@ -10,6 +10,7 @@ namespace Magento\SalesRule\Model\Data;
 use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\SalesRule\Api\Data\RuleDiscountInterface;
 use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\SalesRule\Model\Rule\Action\Discount\Data as DiscountData;
 
 /**
  * Data Model for Rule Discount
@@ -23,7 +24,7 @@ class RuleDiscount extends AbstractExtensibleObject implements RuleDiscountInter
     /**
      * Get Discount Data
      *
-     * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
+     * @return DiscountData
      */
     public function getDiscountData()
     {

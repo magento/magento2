@@ -7,26 +7,29 @@ namespace Magento\SalesRule\Observer;
 
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\SalesRule\Model\Coupon;
+use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Model\RuleFactory;
 
 class AddSalesRuleNameToOrderObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\SalesRule\Model\RuleFactory
+     * @var RuleFactory
      */
     protected $_ruleFactory;
 
     /**
-     * @var \Magento\SalesRule\Model\Coupon
+     * @var Coupon
      */
     protected $_coupon;
 
     /**
-     * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
-     * @param \Magento\SalesRule\Model\Coupon $coupon
+     * @param RuleFactory $ruleFactory
+     * @param Coupon $coupon
      */
     public function __construct(
-        \Magento\SalesRule\Model\RuleFactory $ruleFactory,
-        \Magento\SalesRule\Model\Coupon $coupon
+        RuleFactory $ruleFactory,
+        Coupon $coupon
     ) {
         $this->_ruleFactory = $ruleFactory;
         $this->_coupon = $coupon;
@@ -54,7 +57,7 @@ class AddSalesRuleNameToOrderObserver implements ObserverInterface
             return $this;
         }
 
-        /** @var \Magento\SalesRule\Model\Rule $rule */
+        /** @var Rule $rule */
         $rule = $this->_ruleFactory->create()->load($ruleId);
         $order->setCouponRuleName($rule->getName());
 

@@ -5,40 +5,49 @@
  */
 namespace Magento\SalesRule\Model\Rule\Condition;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Rule\Model\Condition\Combine as ConditionCombine;
+use Magento\Rule\Model\Condition\Context as ConditionContext;
+use Magento\SalesRule\Model\Rule\Condition\Address as RuleConditionAddress;
+use Magento\SalesRule\Model\Rule\Condition\Combine as RuleConditionCombine;
+use Magento\SalesRule\Model\Rule\Condition\Product\Found as RuleCondProductFound;
+use Magento\SalesRule\Model\Rule\Condition\Product\Subselect as RuleCondProductSubselect;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Combine extends \Magento\Rule\Model\Condition\Combine
+class Combine extends ConditionCombine
 {
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var EventManagerInterface
      */
     protected $_eventManager = null;
 
     /**
-     * @var \Magento\SalesRule\Model\Rule\Condition\Address
+     * @var RuleConditionAddress
      */
     protected $_conditionAddress;
 
     /**
-     * @param \Magento\Rule\Model\Condition\Context $context
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\SalesRule\Model\Rule\Condition\Address $conditionAddress
+     * @param ConditionContext $context
+     * @param EventManagerInterface $eventManager
+     * @param RuleConditionAddress $conditionAddress
      * @param array $data
      */
     public function __construct(
-        \Magento\Rule\Model\Condition\Context $context,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\SalesRule\Model\Rule\Condition\Address $conditionAddress,
+        ConditionContext $context,
+        EventManagerInterface $eventManager,
+        RuleConditionAddress $conditionAddress,
         array $data = []
     ) {
         $this->_eventManager = $eventManager;
         $this->_conditionAddress = $conditionAddress;
         parent::__construct($context, $data);
-        $this->setType(\Magento\SalesRule\Model\Rule\Condition\Combine::class);
+        $this->setType(RuleConditionCombine::class);
     }
 
     /**
@@ -62,22 +71,22 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
             $conditions,
             [
                 [
-                    'value' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
+                    'value' => RuleCondProductFound::class,
                     'label' => __('Product attribute combination'),
                 ],
                 [
-                    'value' => \Magento\SalesRule\Model\Rule\Condition\Product\Subselect::class,
+                    'value' => RuleCondProductSubselect::class,
                     'label' => __('Products subselection')
                 ],
                 [
-                    'value' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
+                    'value' => RuleConditionCombine::class,
                     'label' => __('Conditions combination')
                 ],
                 ['label' => __('Cart Attribute'), 'value' => $attributes]
             ]
         );
 
-        $additional = new \Magento\Framework\DataObject();
+        $additional = new DataObject();
         $this->_eventManager->dispatch('salesrule_rule_condition_combine', ['additional' => $additional]);
         $additionalConditions = $additional->getConditions();
         if ($additionalConditions) {

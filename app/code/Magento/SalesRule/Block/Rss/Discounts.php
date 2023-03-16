@@ -6,51 +6,45 @@
 namespace Magento\SalesRule\Block\Rss;
 
 use Magento\Customer\Model\Context;
+use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\Rss\DataProviderInterface;
+use Magento\Framework\App\Rss\UrlBuilderInterface as RssUrlBuilderInterface;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Magento\SalesRule\Model\Rss\Discounts as RssModel;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Review form block
  */
-class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
+class Discounts extends AbstractBlock implements DataProviderInterface
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\SalesRule\Model\Rss\Discounts
-     */
-    protected $rssModel;
-
-    /**
-     * @var \Magento\Framework\App\Http\Context
+     * @var HttpContext
      */
     protected $httpContext;
 
     /**
-     * @var \Magento\Framework\App\Rss\UrlBuilderInterface
-     */
-    private $rssUrlBuilder;
-
-    /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\SalesRule\Model\Rss\Discounts $rssModel
-     * @param \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder
+     * @param TemplateContext $context
+     * @param HttpContext $httpContext
+     * @param RssModel $rssModel
+     * @param RssUrlBuilderInterface $rssUrlBuilder
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\SalesRule\Model\Rss\Discounts $rssModel,
-        \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder,
+        TemplateContext $context,
+        HttpContext $httpContext,
+        protected readonly RssModel $rssModel,
+        private readonly RssUrlBuilderInterface $rssUrlBuilder,
         array $data = []
     ) {
         $this->storeManager = $context->getStoreManager();
-        $this->rssModel = $rssModel;
         $this->httpContext = $httpContext;
-        $this->rssUrlBuilder = $rssUrlBuilder;
         parent::__construct($context, $data);
     }
 

@@ -20,36 +20,6 @@ use Magento\Store\Model\System\Store;
 class ValueProvider
 {
     /**
-     * @var Store
-     */
-    protected $store;
-
-    /**
-     * @var GroupRepositoryInterface
-     */
-    protected $groupRepository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
-
-    /**
-     * @var DataObject
-     */
-    protected $objectConverter;
-
-    /**
-     * @var RuleFactory
-     */
-    protected $salesRuleFactory;
-
-    /**
-     * @var SimpleActionOptionsProvider
-     */
-    private $simpleActionOptionsProvider;
-
-    /**
      * Initialize dependencies.
      *
      * @param Store $store
@@ -60,18 +30,13 @@ class ValueProvider
      * @param SimpleActionOptionsProvider|null $simpleActionOptionsProvider
      */
     public function __construct(
-        Store $store,
-        GroupRepositoryInterface $groupRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        DataObject $objectConverter,
-        RuleFactory $salesRuleFactory,
-        SimpleActionOptionsProvider $simpleActionOptionsProvider = null
+        protected readonly Store $store,
+        protected readonly GroupRepositoryInterface $groupRepository,
+        protected readonly SearchCriteriaBuilder $searchCriteriaBuilder,
+        protected readonly DataObject $objectConverter,
+        protected readonly RuleFactory $salesRuleFactory,
+        private ?SimpleActionOptionsProvider $simpleActionOptionsProvider = null
     ) {
-        $this->store = $store;
-        $this->groupRepository = $groupRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->objectConverter = $objectConverter;
-        $this->salesRuleFactory = $salesRuleFactory;
         $this->simpleActionOptionsProvider = $simpleActionOptionsProvider ?:
             ObjectManager::getInstance()->get(SimpleActionOptionsProvider::class);
     }

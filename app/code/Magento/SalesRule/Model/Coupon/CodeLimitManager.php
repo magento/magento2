@@ -27,41 +27,6 @@ use Magento\Authorization\Model\UserContextInterface;
 class CodeLimitManager implements CodeLimitManagerInterface
 {
     /**
-     * @var CouponRepositoryInterface
-     */
-    private $repository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $criteriaBuilder;
-
-    /**
-     * @var CaptchaHelper
-     */
-    private $captchaHelper;
-
-    /**
-     * @var CaptchaResolver
-     */
-    private $captchaResolver;
-
-    /**
-     * @var RequestInterface
-     */
-    private $request;
-
-    /**
-     * @var UserContextInterface
-     */
-    private $userContext;
-
-    /**
-     * @var CustomerRepositoryInterface
-     */
-    private $customerRepository;
-
-    /**
      * Needed to avoid confusion in case of duplicate checks.
      *
      * Keys are codes, values are whether captcha was required the 1st time we checked the code.
@@ -87,21 +52,14 @@ class CodeLimitManager implements CodeLimitManagerInterface
      * @param CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
-        CouponRepositoryInterface $repository,
-        SearchCriteriaBuilder $criteriaBuilder,
-        CaptchaHelper $captchaHelper,
-        CaptchaResolver $captchaResolver,
-        RequestInterface $request,
-        UserContextInterface $userContext,
-        CustomerRepositoryInterface $customerRepository
+        private readonly CouponRepositoryInterface $repository,
+        private readonly SearchCriteriaBuilder $criteriaBuilder,
+        private readonly CaptchaHelper $captchaHelper,
+        private readonly CaptchaResolver $captchaResolver,
+        private readonly RequestInterface $request,
+        private readonly UserContextInterface $userContext,
+        private readonly CustomerRepositoryInterface $customerRepository
     ) {
-        $this->repository = $repository;
-        $this->criteriaBuilder = $criteriaBuilder;
-        $this->captchaHelper = $captchaHelper;
-        $this->captchaResolver = $captchaResolver;
-        $this->request = $request;
-        $this->userContext = $userContext;
-        $this->customerRepository = $customerRepository;
     }
 
     /**

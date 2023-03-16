@@ -5,77 +5,44 @@
  */
 namespace Magento\SalesRule\Model\Converter;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\SalesRule\Api\Data\ConditionInterfaceFactory;
 use Magento\SalesRule\Api\Data\RuleExtensionFactory;
 use Magento\SalesRule\Api\Data\RuleExtensionInterface;
+use Magento\SalesRule\Api\Data\RuleInterfaceFactory;
+use Magento\SalesRule\Api\Data\RuleLabelInterfaceFactory;
 use Magento\SalesRule\Model\Data\Condition;
 use Magento\SalesRule\Api\Data\RuleInterface;
+use Magento\SalesRule\Model\Data\Condition as ConditionDataModel;
 use Magento\SalesRule\Model\Data\Rule as RuleDataModel;
 use Magento\SalesRule\Model\Rule;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\SalesRule\Model\RuleFactory;
 
 class ToDataModel
 {
     /**
-     * @var \Magento\SalesRule\Model\RuleFactory
-     */
-    protected $ruleFactory;
-
-    /**
-     * @var \Magento\SalesRule\Api\Data\RuleInterfaceFactory
-     */
-    protected $ruleDataFactory;
-
-    /**
-     * @var \Magento\SalesRule\Api\Data\ConditionInterfaceFactory
-     */
-    protected $conditionDataFactory;
-
-    /**
-     * @var \Magento\Framework\Reflection\DataObjectProcessor
-     */
-    protected $dataObjectProcessor;
-
-    /**
-     * @var \Magento\SalesRule\Api\Data\RuleLabelInterfaceFactory
-     */
-    protected $ruleLabelFactory;
-
-    /**
-     * @var Json $serializer
-     */
-    private $serializer;
-
-    /**
-     * @var RuleExtensionFactory
-     */
-    private $extensionFactory;
-
-    /**
-     * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
-     * @param \Magento\SalesRule\Api\Data\RuleInterfaceFactory $ruleDataFactory
-     * @param \Magento\SalesRule\Api\Data\ConditionInterfaceFactory $conditionDataFactory
-     * @param \Magento\SalesRule\Api\Data\RuleLabelInterfaceFactory $ruleLabelFactory
-     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param RuleFactory $ruleFactory
+     * @param RuleInterfaceFactory $ruleDataFactory
+     * @param ConditionInterfaceFactory $conditionDataFactory
+     * @param RuleLabelInterfaceFactory $ruleLabelFactory
+     * @param DataObjectProcessor $dataObjectProcessor
      * @param Json $serializer Optional parameter for backward compatibility
      * @param RuleExtensionFactory|null $extensionFactory
      */
     public function __construct(
-        \Magento\SalesRule\Model\RuleFactory $ruleFactory,
-        \Magento\SalesRule\Api\Data\RuleInterfaceFactory $ruleDataFactory,
-        \Magento\SalesRule\Api\Data\ConditionInterfaceFactory $conditionDataFactory,
-        \Magento\SalesRule\Api\Data\RuleLabelInterfaceFactory $ruleLabelFactory,
-        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
-        Json $serializer = null,
-        RuleExtensionFactory $extensionFactory = null
+        protected readonly RuleFactory $ruleFactory,
+        protected readonly RuleInterfaceFactory $ruleDataFactory,
+        protected readonly ConditionInterfaceFactory $conditionDataFactory,
+        protected readonly RuleLabelInterfaceFactory $ruleLabelFactory,
+        protected readonly DataObjectProcessor $dataObjectProcessor,
+        private ?Json $serializer = null,
+        private ?RuleExtensionFactory $extensionFactory = null
     ) {
-        $this->ruleFactory = $ruleFactory;
-        $this->ruleDataFactory = $ruleDataFactory;
-        $this->conditionDataFactory = $conditionDataFactory;
-        $this->ruleLabelFactory = $ruleLabelFactory;
-        $this->dataObjectProcessor = $dataObjectProcessor;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->extensionFactory = $extensionFactory ?:
-            \Magento\Framework\App\ObjectManager::getInstance()->get(RuleExtensionFactory::class);
+            ObjectManager::getInstance()->get(RuleExtensionFactory::class);
     }
 
     /**
@@ -89,7 +56,7 @@ class ToDataModel
         $modelData = $ruleModel->getData();
         $modelData = $this->convertExtensionAttributesToObject($modelData);
 
-        /** @var \Magento\SalesRule\Model\Data\Rule $dataModel */
+        /** @var RuleDataModel $dataModel */
         $dataModel = $this->ruleDataFactory->create(['data' => $modelData]);
 
         $this->mapFields($dataModel, $ruleModel);
@@ -162,13 +129,13 @@ class ToDataModel
         if ($dataModel->getCouponType()) {
             $mappedValue = '';
             switch ((int)$dataModel->getCouponType()) {
-                case \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON:
+                case Rule::COUPON_TYPE_NO_COUPON:
                     $mappedValue = RuleInterface::COUPON_TYPE_NO_COUPON;
                     break;
-                case \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC:
+                case Rule::COUPON_TYPE_SPECIFIC:
                     $mappedValue = RuleInterface::COUPON_TYPE_SPECIFIC_COUPON;
                     break;
-                case \Magento\SalesRule\Model\Rule::COUPON_TYPE_AUTO:
+                case Rule::COUPON_TYPE_AUTO:
                     $mappedValue = RuleInterface::COUPON_TYPE_AUTO;
                     break;
                 default:
@@ -215,7 +182,7 @@ class ToDataModel
      */
     public function arrayToConditionDataModel(array $input)
     {
-        /** @var \Magento\SalesRule\Model\Data\Condition $conditionDataModel */
+        /** @var ConditionDataModel $conditionDataModel */
         $conditionDataModel = $this->conditionDataFactory->create();
         foreach ($input as $key => $value) {
             switch ($key) {

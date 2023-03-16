@@ -5,7 +5,9 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Widget;
 
-class Chooser extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Widget\Chooser
+use Magento\CatalogRule\Controller\Adminhtml\Promo\Widget\Chooser as PromoWidgetChooser;
+
+class Chooser extends PromoWidgetChooser
 {
     /**
      * Authorization level of a basic admin session

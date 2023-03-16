@@ -5,7 +5,9 @@
  */
 namespace Magento\SalesRule\Model;
 
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\SalesRule\Model\Data\RuleDiscount;
 use Magento\SalesRule\Model\Quote\ChildrenValidationLocator;
@@ -26,39 +28,19 @@ class RulesApplier
     /**
      * Application Event Dispatcher
      *
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var EventManagerInterface
      */
     protected $_eventManager;
 
     /**
-     * @var \Magento\SalesRule\Model\Utility
+     * @var Utility
      */
     protected $validatorUtility;
 
     /**
-     * @var ChildrenValidationLocator
-     */
-    private $childrenValidationLocator;
-
-    /**
-     * @var CalculatorFactory
-     */
-    private $calculatorFactory;
-
-    /**
-     * @var \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory
+     * @var DataFactory
      */
     protected $discountFactory;
-
-    /**
-     * @var RuleDiscountInterfaceFactory
-     */
-    private $discountInterfaceFactory;
-
-    /**
-     * @var DiscountDataInterfaceFactory
-     */
-    private $discountDataInterfaceFactory;
 
     /**
      * @var array
@@ -68,7 +50,7 @@ class RulesApplier
     /**
      * RulesApplier constructor.
      * @param CalculatorFactory $calculatorFactory
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param EventManagerInterface $eventManager
      * @param Utility $utility
      * @param ChildrenValidationLocator|null $childrenValidationLocator
      * @param DataFactory|null $discountDataFactory
@@ -76,15 +58,14 @@ class RulesApplier
      * @param DiscountDataInterfaceFactory|null $discountDataInterfaceFactory
      */
     public function __construct(
-        \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\SalesRule\Model\Utility $utility,
-        ChildrenValidationLocator $childrenValidationLocator = null,
+        private readonly CalculatorFactory $calculatorFactory,
+        EventManagerInterface $eventManager,
+        Utility $utility,
+        private ?ChildrenValidationLocator $childrenValidationLocator = null,
         DataFactory $discountDataFactory = null,
-        RuleDiscountInterfaceFactory $discountInterfaceFactory = null,
-        DiscountDataInterfaceFactory $discountDataInterfaceFactory = null
+        private ?RuleDiscountInterfaceFactory $discountInterfaceFactory = null,
+        private ?DiscountDataInterfaceFactory $discountDataInterfaceFactory = null
     ) {
-        $this->calculatorFactory = $calculatorFactory;
         $this->validatorUtility = $utility;
         $this->_eventManager = $eventManager;
         $this->childrenValidationLocator = $childrenValidationLocator
@@ -178,7 +159,7 @@ class RulesApplier
      *
      * @param AbstractItem $item
      * @param Rule $rule
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param QuoteAddress $address
      * @param mixed $couponCode
      * @return $this
      */
@@ -211,8 +192,8 @@ class RulesApplier
      * Get discount Data
      *
      * @param AbstractItem $item
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param Rule $rule
+     * @param QuoteAddress $address
      * @return Data
      */
     protected function getDiscountData($item, $rule, $address)
@@ -240,9 +221,9 @@ class RulesApplier
      * Set Discount Breakdown
      *
      * @param Data $discountData
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param AbstractItem $item
+     * @param Rule $rule
+     * @param QuoteAddress $address
      * @return $this
      */
     private function setDiscountBreakdown($discountData, $item, $rule, $address)

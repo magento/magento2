@@ -5,23 +5,28 @@
  */
 namespace Magento\SalesRule\Block\Widget\Form\Element;
 
+use Magento\Backend\Block\Context;
+use Magento\Backend\Block\Widget\Form\Element\Dependence as FormElementDependence;
+use Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory;
+use Magento\Framework\Json\EncoderInterface;
+
 /**
  * Form element dependencies mapper
  * Assumes that one element may depend on other element values.
  * Will toggle as "enabled" only if all elements it depends from toggle as true.
  */
-class Dependence extends \Magento\Backend\Block\Widget\Form\Element\Dependence
+class Dependence extends FormElementDependence
 {
     /**
-     * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory
+     * @param Context $context
+     * @param EncoderInterface $jsonEncoder
+     * @param FieldFactory $fieldFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Context $context,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory,
+        Context $context,
+        EncoderInterface $jsonEncoder,
+        FieldFactory $fieldFactory,
         array $data = []
     ) {
         parent::__construct($context, $jsonEncoder, $fieldFactory, $data);

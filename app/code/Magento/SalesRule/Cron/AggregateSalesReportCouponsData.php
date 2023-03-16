@@ -5,32 +5,36 @@
  */
 namespace Magento\SalesRule\Cron;
 
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\SalesRule\Model\ResourceModel\Report\Rule as ReportRule;
+
 class AggregateSalesReportCouponsData
 {
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Report\Rule
+     * @var ReportRule
      */
     protected $_reportRule;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface
+     * @var ResolverInterface
      */
     protected $_localeResolver;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @var TimezoneInterface
      */
     protected $_localeDate;
 
     /**
-     * @param \Magento\SalesRule\Model\ResourceModel\Report\Rule $reportRule
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param ReportRule $reportRule
+     * @param ResolverInterface $localeResolver
+     * @param TimezoneInterface $localeDate
      */
     public function __construct(
-        \Magento\SalesRule\Model\ResourceModel\Report\Rule $reportRule,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+        ReportRule $reportRule,
+        ResolverInterface $localeResolver,
+        TimezoneInterface $localeDate
     ) {
         $this->_reportRule = $reportRule;
         $this->_localeResolver = $localeResolver;

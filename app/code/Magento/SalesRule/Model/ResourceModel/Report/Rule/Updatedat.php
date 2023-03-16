@@ -10,7 +10,7 @@ namespace Magento\SalesRule\Model\ResourceModel\Report\Rule;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Updatedat extends \Magento\SalesRule\Model\ResourceModel\Report\Rule\Createdat
+class Updatedat extends Createdat
 {
     /**
      * Resource Report Rule constructor

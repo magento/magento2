@@ -7,13 +7,24 @@
 namespace Magento\SalesRule\Model;
 
 use Laminas\Validator\ValidatorInterface;
+use Magento\Catalog\Helper\Data as CatalogHelper;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Registry;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\SalesRule\Helper\CartFixedDiscount;
 use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection as RulesCollection;
+use Magento\SalesRule\Model\Validator\Pool;
+use Zend_Db_Select_Exception;
 
 /**
  * SalesRule Validator Model
@@ -28,7 +39,7 @@ use Magento\SalesRule\Model\ResourceModel\Rule\Collection as RulesCollection;
  * @method Validator setCustomerGroupId($id)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Validator extends \Magento\Framework\Model\AbstractModel
+class Validator extends AbstractModel
 {
     /**
      * Rule source collection
@@ -62,7 +73,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     /**
      * Catalog data helper
      *
-     * @var \Magento\Catalog\Helper\Data|null
+     * @var CatalogHelper|null
      */
     protected $_catalogData = null;
 
@@ -72,29 +83,9 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\SalesRule\Model\Utility
+     * @var Utility
      */
     protected $validatorUtility;
-
-    /**
-     * @var \Magento\SalesRule\Model\RulesApplier
-     */
-    protected $rulesApplier;
-
-    /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     */
-    protected $priceCurrency;
-
-    /**
-     * @var Validator\Pool
-     */
-    protected $validators;
-
-    /**
-     * @var \Magento\Framework\Message\ManagerInterface
-     */
-    protected $messageManager;
 
     /**
      * Counter is used for assigning temporary id to quote address
@@ -109,43 +100,39 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     private $cartFixedDiscountHelper;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param Context $context
+     * @param Registry $registry
      * @param CollectionFactory $collectionFactory
-     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param CatalogHelper $catalogData
      * @param Utility $utility
      * @param RulesApplier $rulesApplier
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param PriceCurrencyInterface $priceCurrency
      * @param Validator\Pool $validators
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param ManagerInterface $messageManager
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
      * @param CartFixedDiscount|null $cartFixedDiscount
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
+        Context $context,
+        Registry $registry,
         CollectionFactory $collectionFactory,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\SalesRule\Model\Utility $utility,
-        \Magento\SalesRule\Model\RulesApplier $rulesApplier,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Magento\SalesRule\Model\Validator\Pool $validators,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        CatalogHelper $catalogData,
+        Utility $utility,
+        protected readonly RulesApplier $rulesApplier,
+        protected readonly PriceCurrencyInterface $priceCurrency,
+        protected readonly Pool $validators,
+        protected readonly ManagerInterface $messageManager,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = [],
         ?CartFixedDiscount $cartFixedDiscount = null
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_catalogData = $catalogData;
         $this->validatorUtility = $utility;
-        $this->rulesApplier = $rulesApplier;
-        $this->priceCurrency = $priceCurrency;
-        $this->validators = $validators;
-        $this->messageManager = $messageManager;
         $this->cartFixedDiscountHelper = $cartFixedDiscount ?:
             ObjectManager::getInstance()->get(CartFixedDiscount::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -175,7 +162,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @see we don't recommend this approach anymore
      * @param Address|null $address
      * @return RulesCollection
-     * @throws \Zend_Db_Select_Exception
+     * @throws Zend_Db_Select_Exception
      */
     protected function _getRules(Address $address = null)
     {
@@ -187,7 +174,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @param Address|null $address
      * @return RulesCollection
-     * @throws \Zend_Db_Select_Exception
+     * @throws Zend_Db_Select_Exception
      */
     public function getRules(Address $address = null)
     {
@@ -251,7 +238,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @param AbstractItem $item
      * @return bool
-     * @throws \Zend_Db_Select_Exception
+     * @throws Zend_Db_Select_Exception
      */
     public function canApplyRules(AbstractItem $item)
     {
@@ -292,7 +279,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param AbstractItem $item
      * @param Rule $rule
      * @return $this
-     * @throws \Zend_Db_Select_Exception
+     * @throws Zend_Db_Select_Exception
      */
     public function process(AbstractItem $item, Rule $rule)
     {
@@ -320,7 +307,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @throws \Zend_Db_Select_Exception
+     * @throws Zend_Db_Select_Exception
      */
     public function processShippingAmount(Address $address)
     {
@@ -438,7 +425,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param Address $address
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @throws \Zend_Db_Select_Exception
+     * @throws Zend_Db_Select_Exception
      */
     public function initTotals($items, Address $address)
     {
@@ -616,7 +603,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param array $items
      * @param Address $address
      * @return array $items
-     * @throws \Zend_Db_Select_Exception
+     * @throws Zend_Db_Select_Exception
      */
     public function sortItemsByPriority($items, Address $address = null)
     {
@@ -643,12 +630,12 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $key
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getRuleItemTotalsInfo($key)
     {
         if (empty($this->_rulesItemTotals[$key])) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Item totals are not set for the rule.'));
+            throw new LocalizedException(__('Item totals are not set for the rule.'));
         }
 
         return $this->_rulesItemTotals[$key];

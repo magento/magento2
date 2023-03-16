@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Model\Coupon\Usage;
 
+use Exception;
 use Magento\SalesRule\Model\Coupon;
 use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\SalesRule\Model\Rule\CustomerFactory;
@@ -18,41 +19,17 @@ use Magento\SalesRule\Model\RuleFactory;
 class Processor
 {
     /**
-     * @var RuleFactory
-     */
-    private $ruleFactory;
-
-    /**
-     * @var CustomerFactory
-     */
-    private $ruleCustomerFactory;
-
-    /**
-     * @var Coupon
-     */
-    private $coupon;
-
-    /**
-     * @var Usage
-     */
-    private $couponUsage;
-
-    /**
      * @param RuleFactory $ruleFactory
      * @param CustomerFactory $ruleCustomerFactory
      * @param Coupon $coupon
      * @param Usage $couponUsage
      */
     public function __construct(
-        RuleFactory $ruleFactory,
-        CustomerFactory $ruleCustomerFactory,
-        Coupon $coupon,
-        Usage $couponUsage
+        private readonly RuleFactory $ruleFactory,
+        private readonly CustomerFactory $ruleCustomerFactory,
+        private readonly Coupon $coupon,
+        private readonly Usage $couponUsage
     ) {
-        $this->ruleFactory = $ruleFactory;
-        $this->ruleCustomerFactory = $ruleCustomerFactory;
-        $this->coupon = $coupon;
-        $this->couponUsage = $couponUsage;
     }
 
     /**
@@ -133,7 +110,7 @@ class Processor
      * @param bool $isIncrement
      * @param int $ruleId
      * @param int $customerId
-     * @throws \Exception
+     * @throws Exception
      */
     private function updateCustomerRuleUsages(bool $isIncrement, int $ruleId, int $customerId): void
     {

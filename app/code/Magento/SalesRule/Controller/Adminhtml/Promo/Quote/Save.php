@@ -6,49 +6,51 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
+use Exception;
+use Magento\Backend\App\Action\Context as ActionContext;
+use Magento\Backend\Model\Session as BackendSession;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filter\FilterInput;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\Filter\Date as DateFilter;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\SalesRule\Controller\Adminhtml\Promo\Quote as AdminhtmlPromoQuote;
+use Magento\SalesRule\Model\Rule as ModelRule;
+use Psr\Log\LoggerInterface;
 
 /**
  * SalesRule save controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implements HttpPostActionInterface
+class Save extends AdminhtmlPromoQuote implements HttpPostActionInterface
 {
     /**
-     * @var TimezoneInterface
-     */
-    private $timezone;
-
-    /**
-     * @var DataPersistorInterface
-     */
-    private $dataPersistor;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+     * @param ActionContext $context
+     * @param Registry $coreRegistry
+     * @param FileFactory $fileFactory
+     * @param DateFilter $dateFilter
      * @param TimezoneInterface $timezone
      * @param DataPersistorInterface $dataPersistor
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        TimezoneInterface $timezone = null,
-        DataPersistorInterface $dataPersistor = null
+        ActionContext $context,
+        Registry $coreRegistry,
+        FileFactory $fileFactory,
+        DateFilter $dateFilter,
+        private ?TimezoneInterface $timezone = null,
+        private ?DataPersistorInterface $dataPersistor = null
     ) {
         parent::__construct($context, $coreRegistry, $fileFactory, $dateFilter);
-        $this->timezone =  $timezone ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+        $this->timezone =  $timezone ?? ObjectManager::getInstance()->get(
             TimezoneInterface::class
         );
-        $this->dataPersistor = $dataPersistor ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+        $this->dataPersistor = $dataPersistor ?? ObjectManager::getInstance()->get(
             DataPersistorInterface::class
         );
     }
@@ -68,8 +70,8 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                     ? null : $data['simple_free_shipping'];
 
             try {
-                /** @var $model \Magento\SalesRule\Model\Rule */
-                $model = $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class);
+                /** @var $model ModelRule */
+                $model = $this->_objectManager->create(ModelRule::class);
                 $this->_eventManager->dispatch(
                     'adminhtml_controller_salesrule_prepare_save',
                     ['request' => $this->getRequest()]
@@ -89,12 +91,12 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                 );
                 $data = $inputFilter->getUnescaped();
                 if (!$this->checkRuleExists($model)) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('The wrong rule is specified.'));
+                    throw new LocalizedException(__('The wrong rule is specified.'));
                 }
 
-                $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
+                $session = $this->_objectManager->get(BackendSession::class);
 
-                $validateResult = $model->validateData(new \Magento\Framework\DataObject($data));
+                $validateResult = $model->validateData(new DataObject($data));
                 if ($validateResult !== true) {
                     foreach ($validateResult as $errorMessage) {
                         $this->messageManager->addErrorMessage($errorMessage);
@@ -138,7 +140,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                 }
                 $this->_redirect('sales_rule/*/');
                 return;
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $id = (int)$this->getRequest()->getParam('rule_id');
                 if (!empty($id)) {
@@ -147,12 +149,12 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                     $this->_redirect('sales_rule/*/new');
                 }
                 return;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addErrorMessage(
                     __('Something went wrong while saving the rule data. Please review the error log.')
                 );
-                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setPageData($data);
+                $this->_objectManager->get(LoggerInterface::class)->critical($e);
+                $this->_objectManager->get(BackendSession::class)->setPageData($data);
                 $this->_redirect('sales_rule/*/edit', ['id' => $this->getRequest()->getParam('rule_id')]);
                 return;
             }
@@ -163,10 +165,10 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
     /**
      * Check if Cart Price Rule with provided id exists.
      *
-     * @param \Magento\SalesRule\Model\Rule $model
+     * @param ModelRule $model
      * @return bool
      */
-    private function checkRuleExists(\Magento\SalesRule\Model\Rule $model): bool
+    private function checkRuleExists(ModelRule $model): bool
     {
         $id = $this->getRequest()->getParam('rule_id');
         if ($id) {

@@ -5,7 +5,9 @@
  */
 namespace Magento\SalesRule\Model\Rule\Action;
 
-class Product extends \Magento\Rule\Model\Action\AbstractAction
+use Magento\Rule\Model\Action\AbstractAction;
+
+class Product extends AbstractAction
 {
     /**
      * Load attribute options

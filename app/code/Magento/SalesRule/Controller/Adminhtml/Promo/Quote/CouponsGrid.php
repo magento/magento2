@@ -6,7 +6,9 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
-class CouponsGrid extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
+use Magento\SalesRule\Controller\Adminhtml\Promo\Quote as AdminhtmlPromoQuote;
+
+class CouponsGrid extends AdminhtmlPromoQuote
 {
     /**
      * Coupon codes grid

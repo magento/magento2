@@ -5,19 +5,22 @@
  */
 namespace Magento\SalesRule\Model\Rule;
 
+use Magento\Framework\Model\AbstractModel;
+use Magento\SalesRule\Model\ResourceModel\Rule\Customer as ResourceRuleCustomer;
+
 /**
  * SalesRule Rule Customer Model
  *
  * @method int getRuleId()
- * @method \Magento\SalesRule\Model\Rule\Customer setRuleId(int $value)
+ * @method Customer setRuleId(int $value)
  * @method int getCustomerId()
- * @method \Magento\SalesRule\Model\Rule\Customer setCustomerId(int $value)
+ * @method Customer setCustomerId(int $value)
  * @method int getTimesUsed()
- * @method \Magento\SalesRule\Model\Rule\Customer setTimesUsed(int $value)
+ * @method Customer setTimesUsed(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Customer extends \Magento\Framework\Model\AbstractModel
+class Customer extends AbstractModel
 {
     /**
      * Constructor
@@ -27,7 +30,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init(\Magento\SalesRule\Model\ResourceModel\Rule\Customer::class);
+        $this->_init(ResourceRuleCustomer::class);
     }
 
     /**

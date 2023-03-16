@@ -12,16 +12,11 @@ namespace Magento\SalesRule\Model\Validator;
 class Pool
 {
     /**
-     * @var array
-     */
-    protected $validators = [];
-
-    /**
      * @param array $validators
      */
-    public function __construct(array $validators = [])
-    {
-        $this->validators = $validators;
+    public function __construct(
+        protected readonly array $validators = []
+    ) {
     }
 
     /**

@@ -7,7 +7,9 @@
  */
 namespace Magento\SalesRule\Model\ResourceModel\Rule\Quote;
 
-class Collection extends \Magento\SalesRule\Model\ResourceModel\Rule\Collection
+use Magento\SalesRule\Model\ResourceModel\Rule\Collection as RuleCollection;
+
+class Collection extends RuleCollection
 {
     /**
      * Add websites for load

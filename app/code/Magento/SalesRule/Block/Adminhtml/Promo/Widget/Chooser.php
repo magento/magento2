@@ -6,29 +6,30 @@
 
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Widget;
 
+use Magento\Backend\Block\Template\Context as TemplateContext;
+use Magento\Backend\Block\Widget\Grid\Extended as GridExtended;
+use Magento\Backend\Helper\Data as BackendHelper;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\SalesRule\Model\RuleFactory;
+use Magento\Widget\Block\Adminhtml\Widget\Chooser as WidgetChooser;
+
 /**
  * Widget that allows to select a sales rule.
  */
-class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
+class Chooser extends GridExtended
 {
     /**
-     * @var \Magento\SalesRule\Model\RuleFactory
-     */
-    protected $ruleFactory;
-
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
+     * @param TemplateContext $context
+     * @param BackendHelper $backendHelper
+     * @param RuleFactory $ruleFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\SalesRule\Model\RuleFactory $ruleFactory,
+        TemplateContext $context,
+        BackendHelper $backendHelper,
+        protected readonly RuleFactory $ruleFactory,
         array $data = []
     ) {
-        $this->ruleFactory = $ruleFactory;
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -66,16 +67,16 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare chooser element HTML
      *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element Form Element
-     * @return \Magento\Framework\Data\Form\Element\AbstractElement
+     * @param AbstractElement $element Form Element
+     * @return AbstractElement
      */
-    public function prepareElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    public function prepareElementHtml(AbstractElement $element)
     {
         $uniqId = $this->mathRandom->getUniqueHash($element->getId());
         $sourceUrl = $this->getUrl('sales_rule/promo_quote/chooser', ['uniq_id' => $uniqId]);
 
         $chooser = $this->getLayout()->createBlock(
-            \Magento\Widget\Block\Adminhtml\Widget\Chooser::class
+            WidgetChooser::class
         )->setElement(
             $element
         )->setConfig(

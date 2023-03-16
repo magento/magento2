@@ -5,6 +5,10 @@
  */
 namespace Magento\SalesRule\Model\Plugin\ResourceModel;
 
+use Closure;
+use Magento\Framework\Model\AbstractModel;
+use Magento\SalesRule\Model\ResourceModel\Rule as ResourceRule;
+
 /**
  * Class Rule
  * @package Magento\SalesRule\Model\Plugin\ResourceModel
@@ -13,31 +17,31 @@ namespace Magento\SalesRule\Model\Plugin\ResourceModel;
 class Rule
 {
     /**
-     * @param \Magento\SalesRule\Model\ResourceModel\Rule $subject
-     * @param \Closure $proceed
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return \Magento\Framework\Model\AbstractModel
+     * @param ResourceRule $subject
+     * @param Closure $proceed
+     * @param AbstractModel $object
+     * @return AbstractModel
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundLoadCustomerGroupIds(
-        \Magento\SalesRule\Model\ResourceModel\Rule $subject,
-        \Closure $proceed,
-        \Magento\Framework\Model\AbstractModel $object
+        ResourceRule $subject,
+        Closure $proceed,
+        AbstractModel $object
     ) {
         return $subject;
     }
 
     /**
-     * @param \Magento\SalesRule\Model\ResourceModel\Rule $subject
-     * @param \Closure $proceed
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return \Magento\Framework\Model\AbstractModel
+     * @param ResourceRule $subject
+     * @param Closure $proceed
+     * @param AbstractModel $object
+     * @return AbstractModel
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundLoadWebsiteIds(
-        \Magento\SalesRule\Model\ResourceModel\Rule $subject,
-        \Closure $proceed,
-        \Magento\Framework\Model\AbstractModel $object
+        ResourceRule $subject,
+        Closure $proceed,
+        AbstractModel $object
     ) {
         return $subject;
     }

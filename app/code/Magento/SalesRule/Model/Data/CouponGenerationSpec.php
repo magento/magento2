@@ -7,13 +7,16 @@
  */
 namespace Magento\SalesRule\Model\Data;
 
+use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\SalesRule\Api\Data\CouponGenerationSpecExtensionInterface;
+use Magento\SalesRule\Api\Data\CouponGenerationSpecInterface;
+
 /**
  * Class CouponGenerationSpec
  *
  * @codeCoverageIgnore
  */
-class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\SalesRule\Api\Data\CouponGenerationSpecInterface
+class CouponGenerationSpec extends AbstractExtensibleObject implements CouponGenerationSpecInterface
 {
     const KEY_RULE_ID = 'rule_id';
     const KEY_FORMAT = 'format';
@@ -195,7 +198,7 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\SalesRule\Api\Data\CouponGenerationSpecExtensionInterface|null
+     * @return CouponGenerationSpecExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -205,11 +208,11 @@ class CouponGenerationSpec extends \Magento\Framework\Api\AbstractExtensibleObje
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\SalesRule\Api\Data\CouponGenerationSpecExtensionInterface $extensionAttributes
+     * @param CouponGenerationSpecExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\SalesRule\Api\Data\CouponGenerationSpecExtensionInterface $extensionAttributes
+        CouponGenerationSpecExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

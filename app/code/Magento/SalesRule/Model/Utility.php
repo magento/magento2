@@ -6,7 +6,13 @@
 
 namespace Magento\SalesRule\Model;
 
+use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Quote\Model\Quote\Address as QuoteAddress;
+use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteAbstractItem;
+use Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory;
+use Magento\SalesRule\Model\Rule\Action\Discount\Data as DiscountData;
+use Magento\SalesRule\Model\Rule\Customer as RuleCustomer;
 
 class Utility
 {
@@ -21,56 +27,26 @@ class Utility
     protected $_baseRoundingDeltas = [];
 
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory
-     */
-    protected $usageFactory;
-
-    /**
-     * @var \Magento\SalesRule\Model\CouponFactory
-     */
-    protected $couponFactory;
-
-    /**
-     * @var \Magento\SalesRule\Model\Rule\CustomerFactory
-     */
-    protected $customerFactory;
-
-    /**
-     * @var \Magento\Framework\DataObjectFactory
-     */
-    protected $objectFactory;
-
-    /**
-     * @var PriceCurrencyInterface
-     */
-    protected $priceCurrency;
-
-    /**
-     * @param \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory $usageFactory
+     * @param UsageFactory $usageFactory
      * @param CouponFactory $couponFactory
      * @param Rule\CustomerFactory $customerFactory
-     * @param \Magento\Framework\DataObjectFactory $objectFactory
+     * @param DataObjectFactory $objectFactory
      * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
-        \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory $usageFactory,
-        \Magento\SalesRule\Model\CouponFactory $couponFactory,
-        \Magento\SalesRule\Model\Rule\CustomerFactory $customerFactory,
-        \Magento\Framework\DataObjectFactory $objectFactory,
-        PriceCurrencyInterface $priceCurrency
+        protected readonly UsageFactory $usageFactory,
+        protected readonly CouponFactory $couponFactory,
+        protected readonly Rule\CustomerFactory $customerFactory,
+        protected readonly DataObjectFactory $objectFactory,
+        protected readonly PriceCurrencyInterface $priceCurrency
     ) {
-        $this->couponFactory = $couponFactory;
-        $this->customerFactory = $customerFactory;
-        $this->usageFactory = $usageFactory;
-        $this->objectFactory = $objectFactory;
-        $this->priceCurrency = $priceCurrency;
     }
 
     /**
      * Check if rule can be applied for specific address/quote/customer
      *
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param Rule $rule
+     * @param QuoteAddress $address
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -84,10 +60,10 @@ class Utility
         /**
          * check per coupon usage limit
          */
-        if ($rule->getCouponType() != \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON) {
+        if ($rule->getCouponType() != Rule::COUPON_TYPE_NO_COUPON) {
             $couponCode = $address->getQuote()->getCouponCode();
             if ($couponCode !== null && strlen($couponCode)) {
-                /** @var \Magento\SalesRule\Model\Coupon $coupon */
+                /** @var Coupon $coupon */
                 $coupon = $this->couponFactory->create();
                 $coupon->load($couponCode, 'code');
                 if ($coupon->getId()) {
@@ -122,7 +98,7 @@ class Utility
         $ruleId = $rule->getId();
         if ($ruleId && $rule->getUsesPerCustomer()) {
             $customerId = $address->getQuote()->getCustomerId();
-            /** @var \Magento\SalesRule\Model\Rule\Customer $ruleCustomer */
+            /** @var RuleCustomer $ruleCustomer */
             $ruleCustomer = $this->customerFactory->create();
             $ruleCustomer->loadByCustomerRule($customerId, $ruleId);
             if ($ruleCustomer->getId()) {
@@ -150,14 +126,14 @@ class Utility
     /**
      * Set discount amount (found min)
      *
-     * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param DiscountData $discountData
+     * @param QuoteAbstractItem $item
      * @param float $qty
      * @return void
      */
     public function minFix(
-        \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData,
-        \Magento\Quote\Model\Quote\Item\AbstractItem $item,
+        DiscountData $discountData,
+        QuoteAbstractItem $item,
         $qty
     ) {
         $itemPrice = $this->getItemPrice($item);
@@ -176,13 +152,13 @@ class Utility
     /**
      * Process "delta" rounding
      *
-     * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param DiscountData $discountData
+     * @param QuoteAbstractItem $item
      * @return $this
      */
     public function deltaRoundingFix(
-        \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData,
-        \Magento\Quote\Model\Quote\Item\AbstractItem $item
+        DiscountData $discountData,
+        QuoteAbstractItem $item
     ) {
         $discountAmount = $discountData->getAmount();
         $baseDiscountAmount = $discountData->getBaseAmount();
@@ -229,7 +205,7 @@ class Utility
     /**
      * Return item price
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param QuoteAbstractItem $item
      * @return float
      */
     public function getItemPrice($item)
@@ -242,7 +218,7 @@ class Utility
     /**
      * Return item base price
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param QuoteAbstractItem $item
      * @return float
      */
     public function getItemBasePrice($item)
@@ -254,8 +230,8 @@ class Utility
     /**
      * Return discount item qty
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param \Magento\SalesRule\Model\Rule $rule
+     * @param QuoteAbstractItem $item
+     * @param Rule $rule
      * @return int
      */
     public function getItemQty($item, $rule)

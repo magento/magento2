@@ -9,6 +9,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Rule\Model\Condition\ConditionInterface;
 use Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
+use Magento\SalesRule\Model\Rule as ModelRule;
 
 /**
  * Controller class NewConditionHtml. Returns condition html
@@ -43,7 +44,7 @@ class NewConditionHtml extends Quote implements HttpPostActionInterface
         )->setType(
             $type
         )->setRule(
-            $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class)
+            $this->_objectManager->create(ModelRule::class)
         )->setPrefix(
             'conditions'
         );

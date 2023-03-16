@@ -6,6 +6,7 @@
 
 namespace Magento\SalesRule\Setup\Patch\Data;
 
+use Magento\Framework\Module\Setup\Migration;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
@@ -18,18 +19,12 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 class PrepareRuleModelSerializedData implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
      * PatchInitial constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ModuleDataSetupInterface $moduleDataSetup
+        private readonly ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -43,15 +38,15 @@ class PrepareRuleModelSerializedData implements DataPatchInterface, PatchVersion
         $installer->appendClassAliasReplace(
             'salesrule',
             'conditions_serialized',
-            \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
-            \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_SERIALIZED,
+            Migration::ENTITY_TYPE_MODEL,
+            Migration::FIELD_CONTENT_TYPE_SERIALIZED,
             ['rule_id']
         );
         $installer->appendClassAliasReplace(
             'salesrule',
             'actions_serialized',
-            \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
-            \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_SERIALIZED,
+            Migration::ENTITY_TYPE_MODEL,
+            Migration::FIELD_CONTENT_TYPE_SERIALIZED,
             ['rule_id']
         );
         $installer->doUpdateClassAliases();

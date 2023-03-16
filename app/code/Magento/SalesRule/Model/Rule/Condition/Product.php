@@ -5,12 +5,19 @@
  */
 namespace Magento\SalesRule\Model\Rule\Condition;
 
+use Magento\Catalog\Model\Product as ModelProduct;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as ResourceEavAttribute;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Rule\Model\Condition\Product\AbstractProduct as ConditionAbstractProduct;
+
 /**
  * Product rule condition data model
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
-class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
+class Product extends ConditionAbstractProduct
 {
     /**
      * Add special attributes
@@ -66,7 +73,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
         $attributes = [];
         foreach ($productAttributes as $attribute) {
-            /* @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+            /** @var ResourceEavAttribute $attribute */
             if (!$attribute->isAllowedForRuleCondition()
                 || !$attribute->getDataUsingMethod($this->_isUsedForRuleProperty)
             ) {
@@ -100,9 +107,9 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     /**
      * Retrieve form element for scope element
      *
-     * @return \Magento\Framework\Data\Form\Element\AbstractElement
+     * @return AbstractElement
      */
-    private function getAttributeScopeElement(): \Magento\Framework\Data\Form\Element\AbstractElement
+    private function getAttributeScopeElement(): AbstractElement
     {
         return $this->getForm()->addField(
             $this->getPrefix() . '__' . $this->getId() . '__attribute_scope',
@@ -159,17 +166,17 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     /**
      * Validate Product Rule Condition
      *
-     * @param \Magento\Framework\Model\AbstractModel $model
+     * @param AbstractModel $model
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
-    public function validate(\Magento\Framework\Model\AbstractModel $model)
+    public function validate(AbstractModel $model)
     {
         //@todo reimplement this method when is fixed MAGETWO-5713
-        /** @var \Magento\Catalog\Model\Product $product */
+        /** @var ModelProduct $product */
         $product = $model->getProduct();
-        if (!$product instanceof \Magento\Catalog\Model\Product) {
+        if (!$product instanceof ModelProduct) {
             $product = $this->productRepository->getById($model->getProductId());
         }
 

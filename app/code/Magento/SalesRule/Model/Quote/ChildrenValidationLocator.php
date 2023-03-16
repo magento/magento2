@@ -16,11 +16,6 @@ use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
 class ChildrenValidationLocator
 {
     /**
-     * @var array
-     */
-    private $productTypeChildrenValidationMap;
-
-    /**
      * @param array $productTypeChildrenValidationMap
      * <pre>
      * [
@@ -30,9 +25,8 @@ class ChildrenValidationLocator
      * </pre>
      */
     public function __construct(
-        array $productTypeChildrenValidationMap = []
+        private readonly array $productTypeChildrenValidationMap = []
     ) {
-        $this->productTypeChildrenValidationMap = $productTypeChildrenValidationMap;
     }
 
     /**

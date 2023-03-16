@@ -15,11 +15,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 class DeltaPriceRound
 {
     /**
-     * @var PriceCurrencyInterface
-     */
-    private $priceCurrency;
-
-    /**
      * @var float[]
      */
     private $roundingDeltas;
@@ -27,9 +22,9 @@ class DeltaPriceRound
     /**
      * @param PriceCurrencyInterface $priceCurrency
      */
-    public function __construct(PriceCurrencyInterface $priceCurrency)
-    {
-        $this->priceCurrency = $priceCurrency;
+    public function __construct(
+        private readonly PriceCurrencyInterface $priceCurrency
+    ) {
     }
 
     /**

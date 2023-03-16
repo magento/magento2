@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Widget;
 
+use Magento\CatalogRule\Controller\Adminhtml\Promo\Widget\CategoriesJson as PromoWidgetCategoriesJson;
+
 /**
  * Class for generation of JSON for building tree catalog.
  *
@@ -15,7 +17,7 @@ namespace Magento\SalesRule\Controller\Adminhtml\Promo\Widget;
  * \Magento\Catalog\Block\Adminhtml\Category\Tree::getLoadTreeUrl
  * \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser::getLoadTreeUrl
  */
-class CategoriesJson extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Widget\CategoriesJson
+class CategoriesJson extends PromoWidgetCategoriesJson
 {
     /**
      * Authorization level of a basic admin session.

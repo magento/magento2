@@ -28,18 +28,13 @@ class RuleQuoteRecollectTotalsOnDemand implements RuleQuoteRecollectTotalsInterf
     private const UPDATE_BATCH_SIZE = 1000;
 
     /**
-     * @var Quote
-     */
-    private $quoteResourceModel;
-
-    /**
      * Initializes dependencies
      *
      * @param Quote $quoteResourceModel
      */
-    public function __construct(Quote $quoteResourceModel)
-    {
-        $this->quoteResourceModel = $quoteResourceModel;
+    public function __construct(
+        private readonly Quote $quoteResourceModel
+    ) {
     }
 
     /**

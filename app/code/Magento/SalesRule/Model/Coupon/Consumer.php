@@ -12,6 +12,7 @@ use Magento\Framework\Filesystem;
 use Magento\SalesRule\Api\CouponManagementInterface;
 use Magento\SalesRule\Api\Data\CouponGenerationSpecInterface;
 use Magento\Framework\Notification\NotifierInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Consumer for export coupons generation.
@@ -19,42 +20,18 @@ use Magento\Framework\Notification\NotifierInterface;
 class Consumer
 {
     /**
-     * @var NotifierInterface
-     */
-    private $notifier;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var CouponManagementInterface
-     */
-    private $couponManager;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * Consumer constructor.
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger
      * @param CouponManagementInterface $couponManager
      * @param Filesystem $filesystem
      * @param NotifierInterface $notifier
      */
     public function __construct(
-        \Psr\Log\LoggerInterface $logger,
-        CouponManagementInterface $couponManager,
-        Filesystem $filesystem,
-        NotifierInterface $notifier
+        private readonly LoggerInterface $logger,
+        private readonly CouponManagementInterface $couponManager,
+        private readonly Filesystem $filesystem,
+        private readonly NotifierInterface $notifier
     ) {
-        $this->logger = $logger;
-        $this->couponManager = $couponManager;
-        $this->filesystem = $filesystem;
-        $this->notifier = $notifier;
     }
 
     /**

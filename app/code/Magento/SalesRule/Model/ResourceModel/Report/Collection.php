@@ -5,12 +5,20 @@
  */
 namespace Magento\SalesRule\Model\ResourceModel\Report;
 
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Sales\Model\ResourceModel\Report as ResourceReport;
+use Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection;
+use Psr\Log\LoggerInterface;
+
 /**
  * Sales report coupons collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Period format for report (day, month, year)
@@ -41,27 +49,27 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
     protected $_rulesIdsFilter;
 
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory $ruleFactory
+     * @var RuleFactory $ruleFactory
      */
     protected $_ruleFactory;
 
     /**
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory $ruleFactory
-     * @param \Magento\Sales\Model\ResourceModel\Report $resource
+     * @param EntityFactory $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param RuleFactory $ruleFactory
+     * @param ResourceReport $resource
      * @param mixed $connection
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\ResourceModel\Report $resource,
-        \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory $ruleFactory,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        EntityFactory $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        ResourceReport $resource,
+        RuleFactory $ruleFactory,
+        AdapterInterface $connection = null
     ) {
         $this->_ruleFactory = $ruleFactory;
         $resource->init($this->_aggregationTable);
@@ -81,7 +89,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
         } elseif ('year' == $this->_period) {
             $this->_periodFormat = $connection->getDateExtractSql(
                 'period',
-                \Magento\Framework\DB\Adapter\AdapterInterface::INTERVAL_YEAR
+                AdapterInterface::INTERVAL_YEAR
             );
         } else {
             $this->_periodFormat = $connection->getDateFormatSql('period', '%Y-%m-%d');
@@ -178,7 +186,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
     /**
      * Apply collection custom filter
      *
-     * @return \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
+     * @return AbstractCollection
      */
     protected function _applyCustomFilter()
     {

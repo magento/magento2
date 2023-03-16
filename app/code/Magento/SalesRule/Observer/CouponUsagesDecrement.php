@@ -18,16 +18,11 @@ use Magento\SalesRule\Model\Coupon\Quote\UpdateCouponUsages;
 class CouponUsagesDecrement implements ObserverInterface
 {
     /**
-     * @var UpdateCouponUsages
-     */
-    private $updateCouponUsages;
-
-    /**
      * @param UpdateCouponUsages $updateCouponUsages
      */
-    public function __construct(UpdateCouponUsages $updateCouponUsages)
-    {
-        $this->updateCouponUsages = $updateCouponUsages;
+    public function __construct(
+        private readonly UpdateCouponUsages $updateCouponUsages
+    ) {
     }
 
     /**

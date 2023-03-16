@@ -17,16 +17,11 @@ use Magento\SalesRule\Model\Spi\QuoteResetAppliedRulesInterface;
 class QuoteResetAppliedRulesObserver implements ObserverInterface
 {
     /**
-     * @var QuoteResetAppliedRulesInterface
-     */
-    private $resetAppliedRules;
-
-    /**
      * @param QuoteResetAppliedRulesInterface $resetAppliedRules
      */
-    public function __construct(QuoteResetAppliedRulesInterface $resetAppliedRules)
-    {
-        $this->resetAppliedRules = $resetAppliedRules;
+    public function __construct(
+        private readonly QuoteResetAppliedRulesInterface $resetAppliedRules
+    ) {
     }
 
     /**

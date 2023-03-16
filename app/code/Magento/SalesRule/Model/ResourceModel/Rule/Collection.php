@@ -6,12 +6,28 @@
 
 namespace Magento\SalesRule\Model\ResourceModel\Rule;
 
+use Exception;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Quote\Model\Quote\Address;
+use Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection;
 use Magento\SalesRule\Api\Data\CouponInterface;
 use Magento\SalesRule\Model\Coupon;
+use Magento\SalesRule\Model\ResourceModel\Rule as ResourceRule;
 use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Model\Rule as ModelRule;
+use Psr\Log\LoggerInterface;
+use Zend_Db;
+use Zend_Db_Expr;
+use Zend_Db_Select_Exception;
 
 /**
  * Sales Rules resource collection model.
@@ -20,7 +36,7 @@ use Magento\SalesRule\Model\Rule;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Store associated with rule entities information map
@@ -44,44 +60,39 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     protected $_eventObject = 'rule_collection';
 
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier
+     * @var DateApplier
      * @since 100.1.0
      */
     protected $dateApplier;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @var TimezoneInterface
      */
     protected $_date;
 
     /**
-     * @var Json $serializer
-     */
-    private $serializer;
-
-    /**
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $date
+     * @param EntityFactory $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param TimezoneInterface $date
      * @param mixed $connection
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @param AbstractDb $resource
      * @param Json $serializer Optional parameter for backward compatibility
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $date,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
-        Json $serializer = null
+        EntityFactory $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        TimezoneInterface $date,
+        AdapterInterface $connection = null,
+        AbstractDb $resource = null,
+        private ?Json $serializer = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_date = $date;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
     }
 
@@ -92,7 +103,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      */
     protected function _construct()
     {
-        $this->_init(\Magento\SalesRule\Model\Rule::class, \Magento\SalesRule\Model\ResourceModel\Rule::class);
+        $this->_init(ModelRule::class, ResourceRule::class);
         $this->_map['fields']['rule_id'] = 'main_table.rule_id';
     }
 
@@ -101,7 +112,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      *
      * @param string $entityType
      * @param string $objectField
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return void
      * @since 100.1.0
      */
@@ -139,7 +150,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      *  Add website ids and customer group ids to rules data
      *
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      * @since 100.1.0
      */
     protected function _afterLoad()
@@ -161,7 +172,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param string $couponCode
      * @param string|null $now
      * @param Address $address allow extensions to further filter out rules based on quote address
-     * @throws \Zend_Db_Select_Exception
+     * @throws Zend_Db_Select_Exception
      * @use $this->addWebsiteGroupDateFilter()
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return $this
@@ -228,7 +239,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
             Rule::COUPON_TYPE_NO_COUPON
         );
 
-        $noCouponSelect->columns([Coupon::KEY_CODE => new \Zend_Db_Expr('NULL')]);
+        $noCouponSelect->columns([Coupon::KEY_CODE => new Zend_Db_Expr('NULL')]);
 
         return $noCouponSelect;
     }
@@ -337,7 +348,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
             )->where(
                 'cgw.website_id IS NULL',
                 $websiteId,
-                \Zend_Db::INT_TYPE
+                Zend_Db::INT_TYPE
             );
 
             $this->getDateApplier()->applyDate($this->getSelect(), $now);
@@ -451,9 +462,9 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     private function getAssociatedEntitiesMap()
     {
         if (!$this->_associatedEntitiesMap) {
-            $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
+            $this->_associatedEntitiesMap = ObjectManager::getInstance()
                 // phpstan:ignore "Class Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap not found."
-                ->get(\Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class)
+                ->get(AssociatedEntityMap::class)
                 ->getData();
         }
         return $this->_associatedEntitiesMap;
@@ -468,8 +479,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     private function getDateApplier()
     {
         if (null === $this->dateApplier) {
-            $this->dateApplier = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\SalesRule\Model\ResourceModel\Rule\DateApplier::class);
+            $this->dateApplier = ObjectManager::getInstance()
+                ->get(DateApplier::class);
         }
 
         return $this->dateApplier;

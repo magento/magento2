@@ -24,31 +24,6 @@ class RuleQuoteRecollectTotalsAsync implements RuleQuoteRecollectTotalsInterface
     private const TOPIC_NAME = 'sales.rule.quote.trigger.recollect';
 
     /**
-     * @var BulkManagementInterface
-     */
-    private $bulkManagement;
-
-    /**
-     * @var OperationInterfaceFactory
-     */
-    private $operationFactory;
-
-    /**
-     * @var IdentityGeneratorInterface
-     */
-    private $identityService;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
-     * @var UserContextInterface
-     */
-    private $userContext;
-
-    /**
      * @param BulkManagementInterface $bulkManagement
      * @param OperationInterfaceFactory $operationFactory
      * @param IdentityGeneratorInterface $identityService
@@ -56,17 +31,12 @@ class RuleQuoteRecollectTotalsAsync implements RuleQuoteRecollectTotalsInterface
      * @param UserContextInterface $userContext
      */
     public function __construct(
-        BulkManagementInterface $bulkManagement,
-        OperationInterfaceFactory $operationFactory,
-        IdentityGeneratorInterface $identityService,
-        SerializerInterface $serializer,
-        UserContextInterface $userContext
+        private readonly BulkManagementInterface $bulkManagement,
+        private readonly OperationInterfaceFactory $operationFactory,
+        private readonly IdentityGeneratorInterface $identityService,
+        private readonly SerializerInterface $serializer,
+        private readonly UserContextInterface $userContext
     ) {
-        $this->bulkManagement = $bulkManagement;
-        $this->operationFactory = $operationFactory;
-        $this->identityService = $identityService;
-        $this->serializer = $serializer;
-        $this->userContext = $userContext;
     }
 
     /**

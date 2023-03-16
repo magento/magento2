@@ -5,17 +5,21 @@
  */
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
+use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Model\Rule\Action\Discount\Data as DiscountData;
+
 class ToFixed extends AbstractDiscount
 {
     /**
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param Rule $rule
+     * @param AbstractItem $item
      * @param float $qty
-     * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
+     * @return DiscountData
      */
     public function calculate($rule, $item, $qty)
     {
-        /** @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData */
+        /** @var DiscountData $discountData */
         $discountData = $this->discountFactory->create();
 
         $store = $item->getQuote()->getStore();

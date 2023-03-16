@@ -5,8 +5,20 @@
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
+use Magento\Backend\Block\Template\Context as TemplateContext;
 use Magento\Backend\Block\Widget\Form\Renderer\Fieldset;
+use Magento\Backend\Block\Widget\Form\Renderer\Fieldset as RendererFieldset;
+use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Form as FormData;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Registry;
+use Magento\Rule\Block\Actions as BlockActions;
+use Magento\Rule\Model\Condition\AbstractCondition;
+use Magento\SalesRule\Model\RegistryConstants;
+use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Model\RuleFactory;
 
 class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Ui\Component\Layout\Tabs\TabInterface
@@ -14,17 +26,17 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Core registry
      *
-     * @var \Magento\Backend\Block\Widget\Form\Renderer\Fieldset
+     * @var RendererFieldset
      */
     protected $_rendererFieldset;
 
     /**
-     * @var \Magento\Rule\Block\Actions
+     * @var BlockActions
      */
     protected $_ruleActions;
 
     /**
-     * @var \Magento\Config\Model\Config\Source\Yesno
+     * @var Yesno
      * @deprecated 100.1.0
      */
     protected $_sourceYesno;
@@ -35,37 +47,32 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected $_nameInLayout = 'actions_apply_to';
 
     /**
-     * @var \Magento\SalesRule\Model\RuleFactory
-     */
-    private $ruleFactory;
-
-    /**
      * Constructor
      *
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Config\Model\Config\Source\Yesno $sourceYesno
-     * @param \Magento\Rule\Block\Actions $ruleActions
-     * @param \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset
+     * @param TemplateContext $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param Yesno $sourceYesno
+     * @param BlockActions $ruleActions
+     * @param RendererFieldset $rendererFieldset
      * @param array $data
-     * @param \Magento\SalesRule\Model\RuleFactory|null $ruleFactory
+     * @param RuleFactory|null $ruleFactory
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Config\Model\Config\Source\Yesno $sourceYesno,
-        \Magento\Rule\Block\Actions $ruleActions,
-        \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset,
+        TemplateContext $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        Yesno $sourceYesno,
+        BlockActions $ruleActions,
+        RendererFieldset $rendererFieldset,
         array $data = [],
-        \Magento\SalesRule\Model\RuleFactory $ruleFactory = null
+        private ?RuleFactory $ruleFactory = null
     ) {
         $this->_rendererFieldset = $rendererFieldset;
         $this->_ruleActions = $ruleActions;
         $this->_sourceYesno = $sourceYesno;
         $this->ruleFactory = $ruleFactory ?: ObjectManager::getInstance()
-            ->get(\Magento\SalesRule\Model\RuleFactory::class);
+            ->get(RuleFactory::class);
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -132,7 +139,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     protected function _prepareForm()
     {
-        $model = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
+        $model = $this->_coreRegistry->registry(RegistryConstants::CURRENT_SALES_RULE);
         $form = $this->addTabToForm($model);
         $this->setForm($form);
 
@@ -142,11 +149,11 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Handles addition of actions tab to supplied form.
      *
-     * @param \Magento\SalesRule\Model\Rule $model
+     * @param Rule $model
      * @param string $fieldsetId
      * @param string $formName
-     * @return \Magento\Framework\Data\Form
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return FormData
+     * @throws LocalizedException
      */
     protected function addTabToForm($model, $fieldsetId = 'actions_fieldset', $formName = 'sales_rule_form')
     {
@@ -163,7 +170,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
             ['form_namespace' => $formName]
         );
 
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var FormData $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
 
@@ -221,11 +228,11 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Handles addition of form name to action and its actions.
      *
-     * @param \Magento\Rule\Model\Condition\AbstractCondition $actions
+     * @param AbstractCondition $actions
      * @param string $formName
      * @return void
      */
-    private function setActionFormName(\Magento\Rule\Model\Condition\AbstractCondition $actions, $formName)
+    private function setActionFormName(AbstractCondition $actions, $formName)
     {
         $actions->setFormName($formName);
         if ($actions->getActions() && is_array($actions->getActions())) {

@@ -6,32 +6,37 @@
 namespace Magento\SalesRule\Model\Rule\Condition\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Rule\Model\Condition\Combine as ConditionCombine;
+use Magento\Rule\Model\Condition\Context as ConditionContext;
+use Magento\SalesRule\Model\Rule\Condition\Product as RuleCondProduct;
+use Magento\SalesRule\Model\Rule\Condition\Product\Combine as RuleCondProductCombine;
 
 /**
  * Combine conditions for product.
  * @api
  * @since 100.0.2
  */
-class Combine extends \Magento\Rule\Model\Condition\Combine
+class Combine extends ConditionCombine
 {
     /**
-     * @var \Magento\SalesRule\Model\Rule\Condition\Product
+     * @var RuleCondProduct
      */
     protected $_ruleConditionProd;
 
     /**
-     * @param \Magento\Rule\Model\Condition\Context $context
-     * @param \Magento\SalesRule\Model\Rule\Condition\Product $ruleConditionProduct
+     * @param ConditionContext $context
+     * @param RuleCondProduct $ruleConditionProduct
      * @param array $data
      */
     public function __construct(
-        \Magento\Rule\Model\Condition\Context $context,
-        \Magento\SalesRule\Model\Rule\Condition\Product $ruleConditionProduct,
+        ConditionContext $context,
+        RuleCondProduct $ruleConditionProduct,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_ruleConditionProd = $ruleConditionProduct;
-        $this->setType(\Magento\SalesRule\Model\Rule\Condition\Product\Combine::class);
+        $this->setType(RuleCondProductCombine::class);
     }
 
     /**
@@ -47,12 +52,12 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         foreach ($productAttributes as $code => $label) {
             if (strpos($code, 'quote_item_') === 0 || strpos($code, 'parent::quote_item_') === 0) {
                 $iAttributes[] = [
-                    'value' => \Magento\SalesRule\Model\Rule\Condition\Product::class . '|' . $code,
+                    'value' => RuleCondProduct::class . '|' . $code,
                     'label' => $label,
                 ];
             } else {
                 $pAttributes[] = [
-                    'value' => \Magento\SalesRule\Model\Rule\Condition\Product::class . '|' . $code,
+                    'value' => RuleCondProduct::class . '|' . $code,
                     'label' => $label,
                 ];
             }
@@ -63,7 +68,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
             $conditions,
             [
                 [
-                    'value' => \Magento\SalesRule\Model\Rule\Condition\Product\Combine::class,
+                    'value' => RuleCondProductCombine::class,
                     'label' => __('Conditions Combination'),
                 ],
                 ['label' => __('Cart Item Attribute'), 'value' => $iAttributes],
@@ -101,7 +106,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         $true = (bool)$this->getValue();
 
         foreach ($this->getConditions() as $cond) {
-            if ($entity instanceof \Magento\Framework\Model\AbstractModel) {
+            if ($entity instanceof AbstractModel) {
                 $validated = $this->validateEntity($cond, $entity);
             } else {
                 $validated = $cond->validateByEntityId($entity);
@@ -119,10 +124,10 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      * Validate entity.
      *
      * @param object $cond
-     * @param \Magento\Framework\Model\AbstractModel $entity
+     * @param AbstractModel $entity
      * @return bool
      */
-    private function validateEntity($cond, \Magento\Framework\Model\AbstractModel $entity)
+    private function validateEntity($cond, AbstractModel $entity)
     {
         $true = (bool)$this->getValue();
         $validated = !$true;
@@ -140,10 +145,10 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      * Retrieve entities for validation by attribute scope
      *
      * @param string $attributeScope
-     * @param \Magento\Framework\Model\AbstractModel $entity
-     * @return \Magento\Framework\Model\AbstractModel[]
+     * @param AbstractModel $entity
+     * @return AbstractModel[]
      */
-    private function retrieveValidateEntities($attributeScope, \Magento\Framework\Model\AbstractModel $entity)
+    private function retrieveValidateEntities($attributeScope, AbstractModel $entity)
     {
         if ($attributeScope === 'parent') {
             $parentItem = $entity->getParentItem();

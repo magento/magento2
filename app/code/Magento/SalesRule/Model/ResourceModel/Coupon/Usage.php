@@ -5,12 +5,16 @@
  */
 namespace Magento\SalesRule\Model\ResourceModel\Coupon;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
  * SalesRule Model Resource Coupon_Usage
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Usage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Usage extends AbstractDb
 {
     /**
      * Constructor
@@ -62,12 +66,12 @@ class Usage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Load an object by customer_id & coupon_id
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @param int $customerId
      * @param mixed $couponId
      * @return $this
      */
-    public function loadByCustomerCoupon(\Magento\Framework\DataObject $object, $customerId, $couponId)
+    public function loadByCustomerCoupon(DataObject $object, $customerId, $couponId)
     {
         $connection = $this->getConnection();
         if ($connection && $couponId && $customerId) {
@@ -83,7 +87,7 @@ class Usage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $object->setData($data);
             }
         }
-        if ($object instanceof \Magento\Framework\Model\AbstractModel) {
+        if ($object instanceof AbstractModel) {
             $this->_afterLoad($object);
         }
         return $this;

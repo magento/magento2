@@ -5,110 +5,66 @@
  */
 namespace Magento\SalesRule\Model;
 
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\SalesRule\Api\Data\ConditionInterfaceFactory;
+use Magento\SalesRule\Api\Data\RuleInterface;
+use Magento\SalesRule\Api\Data\RuleInterfaceFactory;
+use Magento\SalesRule\Api\Data\RuleSearchResultInterfaceFactory;
+use Magento\SalesRule\Api\RuleRepositoryInterface;
+use Magento\SalesRule\Model\Converter\ToDataModel as ToDataModelConverter;
+use Magento\SalesRule\Model\Converter\ToModel as ToModelConverter;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
+use Magento\SalesRule\Model\ResourceModel\Rule\Collection as RuleCollection;
+use Magento\SalesRule\Model\Rule as ModelRule;
+use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
 
 /**
  * Sales rule CRUD class
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
+class RuleRepository implements RuleRepositoryInterface
 {
-    /**
-     * @var \Magento\SalesRule\Model\RuleFactory
-     */
-    protected $ruleFactory;
-
-    /**
-     * @var \Magento\SalesRule\Api\Data\RuleInterfaceFactory
-     */
-    protected $ruleDataFactory;
-
-    /**
-     * @var \Magento\SalesRule\Api\Data\ConditionInterfaceFactory
-     */
-    protected $conditionDataFactory;
-
-    /**
-     * @var \Magento\SalesRule\Model\Converter\ToDataModel
-     */
-    protected $toDataModelConverter;
-
-    /**
-     * @var \Magento\SalesRule\Model\Converter\ToModel
-     */
-    protected $toModelConverter;
-
-    /**
-     * @var \Magento\Framework\Reflection\DataObjectProcessor
-     */
-    protected $dataObjectProcessor;
-
-    /**
-     * @var \Magento\SalesRule\Api\Data\RuleSearchResultInterfaceFactory
-     */
-    protected $searchResultFactory;
-
-    /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
-     */
-    protected $extensionAttributesJoinProcessor;
-
-    /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory
-     */
-    protected $ruleCollectionFactory;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
-     */
-    private $collectionProcessor;
-
     /**
      * RuleRepository constructor.
      * @param RuleFactory $ruleFactory
-     * @param \Magento\SalesRule\Api\Data\RuleInterfaceFactory $ruleDataFactory
-     * @param \Magento\SalesRule\Api\Data\ConditionInterfaceFactory $conditionDataFactory
-     * @param Converter\ToDataModel $toDataModelConverter
-     * @param Converter\ToModel $toModelConverter
-     * @param \Magento\SalesRule\Api\Data\RuleSearchResultInterfaceFactory $searchResultFactory
-     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param RuleInterfaceFactory $ruleDataFactory
+     * @param ConditionInterfaceFactory $conditionDataFactory
+     * @param ToDataModelConverter $toDataModelConverter
+     * @param ToModelConverter $toModelConverter
+     * @param RuleSearchResultInterfaceFactory $searchResultFactory
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param ResourceModel\Rule\CollectionFactory $ruleCollectionFactory
-     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param DataObjectProcessor $dataObjectProcessor
      * @param CollectionProcessorInterface|null $collectionProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\SalesRule\Model\RuleFactory $ruleFactory,
-        \Magento\SalesRule\Api\Data\RuleInterfaceFactory $ruleDataFactory,
-        \Magento\SalesRule\Api\Data\ConditionInterfaceFactory $conditionDataFactory,
-        \Magento\SalesRule\Model\Converter\ToDataModel $toDataModelConverter,
-        \Magento\SalesRule\Model\Converter\ToModel $toModelConverter,
-        \Magento\SalesRule\Api\Data\RuleSearchResultInterfaceFactory $searchResultFactory,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleCollectionFactory,
-        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        protected readonly RuleFactory $ruleFactory,
+        protected readonly RuleInterfaceFactory $ruleDataFactory,
+        protected readonly ConditionInterfaceFactory $conditionDataFactory,
+        protected readonly ToDataModelConverter $toDataModelConverter,
+        protected readonly ToModelConverter $toModelConverter,
+        protected readonly RuleSearchResultInterfaceFactory $searchResultFactory,
+        protected readonly JoinProcessorInterface $extensionAttributesJoinProcessor,
+        protected readonly RuleCollectionFactory $ruleCollectionFactory,
+        protected readonly DataObjectProcessor $dataObjectProcessor,
+        private ?CollectionProcessorInterface $collectionProcessor = null
     ) {
-        $this->ruleFactory = $ruleFactory;
-        $this->ruleDataFactory = $ruleDataFactory;
-        $this->conditionDataFactory = $conditionDataFactory;
-        $this->toDataModelConverter = $toDataModelConverter;
-        $this->toModelConverter = $toModelConverter;
-        $this->searchResultFactory = $searchResultFactory;
-        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
-        $this->ruleCollectionFactory = $ruleCollectionFactory;
-        $this->dataObjectProcessor = $dataObjectProcessor;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
      * @inheritdoc
      */
-    public function save(\Magento\SalesRule\Api\Data\RuleInterface $rule)
+    public function save(RuleInterface $rule)
     {
         $model = $this->toModelConverter->toModel($rule);
         $model->save();
@@ -126,7 +82,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
             ->load($id);
 
         if (!$model->getId()) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException();
+            throw new NoSuchEntityException();
         }
 
         $model->getStoreLabels();
@@ -139,14 +95,14 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        /** @var \Magento\SalesRule\Model\ResourceModel\Rule\Collection $collection */
+        /** @var RuleCollection $collection */
         $collection = $this->ruleCollectionFactory->create();
-        $ruleInterfaceName = \Magento\SalesRule\Api\Data\RuleInterface::class;
+        $ruleInterfaceName = RuleInterface::class;
         $this->extensionAttributesJoinProcessor->process($collection, $ruleInterfaceName);
 
         $this->collectionProcessor->process($searchCriteria, $collection);
         $rules = [];
-        /** @var \Magento\SalesRule\Model\Rule $ruleModel */
+        /** @var ModelRule $ruleModel */
         foreach ($collection->getItems() as $ruleModel) {
             $ruleModel->load($ruleModel->getId());
             $ruleModel->getStoreLabels();
@@ -165,15 +121,15 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
      *
      * @param int $id
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function deleteById($id)
     {
         $model = $this->ruleFactory->create()->load($id);
 
         if (!$model->getId()) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException();
+            throw new NoSuchEntityException();
         }
         $model->delete();
         return true;
@@ -212,8 +168,8 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     private function getCollectionProcessor()
     {
         if (!$this->collectionProcessor) {
-            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            $this->collectionProcessor = ObjectManager::getInstance()->get(
+                CollectionProcessorInterface::class
             );
         }
         return $this->collectionProcessor;

@@ -6,34 +6,37 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
+use Magento\Backend\App\Action\Context as ActionContext;
+use Magento\Backend\Model\Session as BackendSession;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\Filter\Date as DateFilter;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\SalesRule\Controller\Adminhtml\Promo\Quote as AdminhtmlPromoQuote;
+use Magento\SalesRule\Model\RegistryConstants;
+use Magento\SalesRule\Model\Rule;
 
-class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implements HttpGetActionInterface
+class Edit extends AdminhtmlPromoQuote implements HttpGetActionInterface
 {
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
-     */
-    protected $resultPageFactory;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param ActionContext $context
+     * @param Registry $coreRegistry
+     * @param FileFactory $fileFactory
+     * @param DateFilter $dateFilter
+     * @param PageFactory $resultPageFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+        ActionContext $context,
+        Registry $coreRegistry,
+        FileFactory $fileFactory,
+        DateFilter $dateFilter,
+        protected readonly PageFactory $resultPageFactory
     ) {
         parent::__construct($context, $coreRegistry, $fileFactory, $dateFilter);
         $this->_coreRegistry = $coreRegistry;
         $this->_fileFactory = $fileFactory;
         $this->_dateFilter = $dateFilter;
-        $this->resultPageFactory = $resultPageFactory;
     }
 
     /**
@@ -45,9 +48,9 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        $model = $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class);
+        $model = $this->_objectManager->create(Rule::class);
 
-        $this->_coreRegistry->register(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE, $model);
+        $this->_coreRegistry->register(RegistryConstants::CURRENT_SALES_RULE, $model);
 
         $resultPage = $this->resultPageFactory->create();
         if ($id) {
@@ -70,7 +73,7 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
         }
 
         // set entered data if was error when we do save
-        $data = $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getPageData(true);
+        $data = $this->_objectManager->get(BackendSession::class)->getPageData(true);
         if (!empty($data)) {
             $model->addData($data);
         }

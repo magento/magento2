@@ -6,8 +6,14 @@
 
 namespace Magento\SalesRule\Setup\Patch\Data;
 
+use Magento\Framework\DB\AggregatedFieldDataConverter;
+use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\DB\FieldToConvert;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
+use Magento\SalesRule\Api\Data\RuleInterface;
 
 /**
  * Class ConvertSerializedDataToJson
@@ -17,33 +23,15 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     */
-    private $metadataPool;
-
-    /**
-     * @param \Magento\Framework\DB\AggregatedFieldDataConverter $aggregatedFieldConverter
-     */
-    private $aggregatedFieldConverter;
-
-    /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
-     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @param \Magento\Framework\DB\AggregatedFieldDataConverter $aggregatedFieldConverter
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param MetadataPool $metadataPool
+     * @param AggregatedFieldDataConverter $aggregatedFieldConverter
+     * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        \Magento\Framework\DB\AggregatedFieldDataConverter $aggregatedFieldConverter,
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+        private readonly MetadataPool $metadataPool,
+        private readonly AggregatedFieldDataConverter $aggregatedFieldConverter,
+        private readonly ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->metadataPool = $metadataPool;
-        $this->aggregatedFieldConverter = $aggregatedFieldConverter;
-        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -91,17 +79,17 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
      */
     private function convertSerializedDataToJson()
     {
-        $metadata = $this->metadataPool->getMetadata(\Magento\SalesRule\Api\Data\RuleInterface::class);
+        $metadata = $this->metadataPool->getMetadata(RuleInterface::class);
         $this->aggregatedFieldConverter->convert(
             [
-                new \Magento\Framework\DB\FieldToConvert(
-                    \Magento\Framework\DB\DataConverter\SerializedToJson::class,
+                new FieldToConvert(
+                    SerializedToJson::class,
                     $this->moduleDataSetup->getTable('salesrule'),
                     $metadata->getLinkField(),
                     'conditions_serialized'
                 ),
-                new \Magento\Framework\DB\FieldToConvert(
-                    \Magento\Framework\DB\DataConverter\SerializedToJson::class,
+                new FieldToConvert(
+                    SerializedToJson::class,
                     $this->moduleDataSetup->getTable('salesrule'),
                     $metadata->getLinkField(),
                     'actions_serialized'

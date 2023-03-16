@@ -5,6 +5,12 @@
  */
 namespace Magento\SalesRule\Plugin;
 
+use Magento\Quote\Api\Data\TotalsExtensionFactory;
+use Magento\Quote\Api\Data\TotalsInterface;
+use Magento\Quote\Model\Cart\CartTotalRepository as CartTotalRepositoryOrg;
+use Magento\SalesRule\Api\RuleRepositoryInterface;
+use Magento\SalesRule\Model\Coupon;
+use Magento\SalesRule\Model\Data\RuleLabel;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -14,54 +20,30 @@ use Magento\Store\Model\StoreManagerInterface;
 class CartTotalRepository
 {
     /**
-     * @var \Magento\Quote\Api\Data\TotalsExtensionFactory
-     */
-    private $extensionFactory;
-
-    /**
-     * @var \Magento\SalesRule\Api\RuleRepositoryInterface
-     */
-    private $ruleRepository;
-
-    /**
-     * @var \Magento\SalesRule\Model\Coupon
-     */
-    private $coupon;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * CartTotalRepository constructor.
-     * @param \Magento\Quote\Api\Data\TotalsExtensionFactory $extensionFactory
-     * @param \Magento\SalesRule\Api\RuleRepositoryInterface $ruleRepository
-     * @param \Magento\SalesRule\Model\Coupon $coupon
+     * @param TotalsExtensionFactory $extensionFactory
+     * @param RuleRepositoryInterface $ruleRepository
+     * @param Coupon $coupon
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Quote\Api\Data\TotalsExtensionFactory $extensionFactory,
-        \Magento\SalesRule\Api\RuleRepositoryInterface $ruleRepository,
-        \Magento\SalesRule\Model\Coupon $coupon,
-        StoreManagerInterface $storeManager
+        private readonly TotalsExtensionFactory $extensionFactory,
+        private readonly RuleRepositoryInterface $ruleRepository,
+        private readonly Coupon $coupon,
+        private readonly StoreManagerInterface $storeManager
     ) {
-        $this->extensionFactory = $extensionFactory;
-        $this->ruleRepository = $ruleRepository;
-        $this->coupon = $coupon;
-        $this->storeManager = $storeManager;
     }
 
     /**
-     * @param \Magento\Quote\Model\Cart\CartTotalRepository $subject
-     * @param \Magento\Quote\Api\Data\TotalsInterface $result
-     * @return \Magento\Quote\Api\Data\TotalsInterface
+     * @param CartTotalRepositoryOrg $subject
+     * @param TotalsInterface $result
+     * @return TotalsInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGet(
-        \Magento\Quote\Model\Cart\CartTotalRepository $subject,
-        \Magento\Quote\Api\Data\TotalsInterface $result
+        CartTotalRepositoryOrg $subject,
+        TotalsInterface $result
     ) {
         if ($result->getExtensionAttributes() === null) {
             $extensionAttributes = $this->extensionFactory->create();
@@ -87,7 +69,7 @@ class CartTotalRepository
 
         $storeLabel = $storeLabelFallback = null;
 
-        /* @var $label \Magento\SalesRule\Model\Data\RuleLabel */
+        /* @var RuleLabel $label */
         foreach ($rule->getStoreLabels() as $label) {
             if ($label->getStoreId() === 0) {
                 $storeLabelFallback = $label->getStoreLabel();

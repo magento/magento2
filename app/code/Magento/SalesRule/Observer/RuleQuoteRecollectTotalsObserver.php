@@ -19,18 +19,13 @@ use Magento\SalesRule\Model\Spi\RuleQuoteRecollectTotalsInterface;
 class RuleQuoteRecollectTotalsObserver implements ObserverInterface
 {
     /**
-     * @var RuleQuoteRecollectTotalsInterface
-     */
-    private $recollectTotals;
-
-    /**
      * Initializes dependencies
      *
      * @param RuleQuoteRecollectTotalsInterface $recollectTotals
      */
-    public function __construct(RuleQuoteRecollectTotalsInterface $recollectTotals)
-    {
-        $this->recollectTotals = $recollectTotals;
+    public function __construct(
+        private readonly RuleQuoteRecollectTotalsInterface $recollectTotals
+    ) {
     }
 
     /**
