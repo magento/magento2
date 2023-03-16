@@ -104,6 +104,7 @@ class ProductAttributesCleanUpTest extends \PHPUnit\Framework\TestCase
         $storeGroup = $this->objectManager->create(\Magento\Store\Model\Group::class);
         $storeGroup->setWebsiteId($website->getId());
         $storeGroup->setName('Fixture Store Group');
+        $storeGroup->setCode('fixturestoregroup');
         $storeGroup->setRootCategoryId(2);
         $storeGroup->setDefaultStoreId($store->getId());
         $storeGroup->save();
