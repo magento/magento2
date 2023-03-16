@@ -23,4 +23,14 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Framework\App\Request\Backpressure\CompositeRequestTypeExtractor">
+        <arguments>
+            <argument name="extractors" xsi:type="array">
+                <item name="instantpurchase" xsi:type="object">
+                    Magento\InstantPurchase\Model\BackpressureTypeExtractor
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
