@@ -45,7 +45,7 @@
         "ezyang/htmlpurifier": "^4.16",
         "guzzlehttp/guzzle": "^7.5",
         "laminas/laminas-captcha": "^2.16",
-        "laminas/laminas-code": "^4.8",
+        "laminas/laminas-code": "^4.5",
         "laminas/laminas-db": "^2.17",
         "laminas/laminas-di": "^3.12",
         "laminas/laminas-escaper": "^2.10",
