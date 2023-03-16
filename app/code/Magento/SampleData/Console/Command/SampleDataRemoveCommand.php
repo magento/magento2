@@ -27,42 +27,17 @@ class SampleDataRemoveCommand extends Command
     public const OPTION_NO_UPDATE = 'no-update';
 
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var Dependency
-     */
-    private $sampleDataDependency;
-
-    /**
-     * @var ArrayInputFactory
-     * @deprecated 100.1.0
-     */
-    private $arrayInputFactory; // phpcs:ignore Magento2.Commenting.ClassPropertyPHPDocFormatting
-
-    /**
-     * @var ApplicationFactory
-     */
-    private $applicationFactory;
-
-    /**
      * @param Filesystem $filesystem
      * @param Dependency $sampleDataDependency
-     * @param ArrayInputFactory $arrayInputFactory
+     * @param ArrayInputFactory $arrayInputFactory @deprecated 100.1.0
      * @param ApplicationFactory $applicationFactory
      */
     public function __construct(
-        Filesystem $filesystem,
-        Dependency $sampleDataDependency,
-        ArrayInputFactory $arrayInputFactory,
-        ApplicationFactory $applicationFactory
+        private readonly Filesystem $filesystem,
+        private readonly Dependency $sampleDataDependency,
+        private readonly ArrayInputFactory $arrayInputFactory,
+        private readonly ApplicationFactory $applicationFactory
     ) {
-        $this->filesystem = $filesystem;
-        $this->sampleDataDependency = $sampleDataDependency;
-        $this->arrayInputFactory = $arrayInputFactory;
-        $this->applicationFactory = $applicationFactory;
         parent::__construct();
     }
 
