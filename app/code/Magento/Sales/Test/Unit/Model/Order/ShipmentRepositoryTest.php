@@ -12,6 +12,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\ShipmentSearchResultInterfaceFactory;
 use Magento\Sales\Model\Order\Shipment;
@@ -256,6 +257,34 @@ class ShipmentRepositoryTest extends TestCase
         $mapper->expects($this->once())
             ->method('save')
             ->willThrowException(new \Exception('error'));
+
+        $this->metadata->expects($this->any())
+            ->method('getMapper')
+            ->willReturn($mapper);
+
+        $this->assertEquals($shipment, $this->subject->save($shipment));
+    }
+
+    public function testSaveWithValidatorException()
+    {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $shipment = $this->createPartialMock(Shipment::class, ['getEntityId']);
+        $shipment->expects($this->never())
+            ->method('getEntityId');
+
+        $mapper = $this->getMockForAbstractClass(
+            AbstractDb::class,
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['save']
+        );
+        $phraseMock = $this->createMock(Phrase::class);
+        $mapper->expects($this->once())
+            ->method('save')
+            ->willThrowException(new \Magento\Framework\Validator\Exception());
 
         $this->metadata->expects($this->any())
             ->method('getMapper')

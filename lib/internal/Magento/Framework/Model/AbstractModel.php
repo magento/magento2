@@ -777,6 +777,8 @@ abstract class AbstractModel extends DataObject
     }
 
     /**
+     * Create validator instance
+     *
      * @return ValidatorChain
      */
     private function getValidator(): ValidatorChain
