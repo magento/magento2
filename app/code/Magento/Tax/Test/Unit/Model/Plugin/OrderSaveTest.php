@@ -21,9 +21,9 @@ use PHPUnit\Framework\TestCase;
 
 class OrderSaveTest extends TestCase
 {
-    const ORDERID = 123;
-    const ITEMID = 151;
-    const ORDER_ITEM_ID = 116;
+    private const ORDERID = 123;
+    private const ITEMID = 151;
+    private const ORDER_ITEM_ID = 116;
 
     /**
      * @var TaxFactory|MockObject
