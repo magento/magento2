@@ -6,6 +6,7 @@
 namespace Magento\SalesInventory\Model\Order;
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Phrase;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
@@ -17,23 +18,18 @@ use Magento\Sales\Api\OrderItemRepositoryInterface;
 class ReturnValidator
 {
     /**
-     * @var OrderItemRepositoryInterface
-     */
-    private $orderItemRepository;
-
-    /**
      * ReturnValidator constructor.
      * @param OrderItemRepositoryInterface $orderItemRepository
      */
-    public function __construct(OrderItemRepositoryInterface $orderItemRepository)
-    {
-        $this->orderItemRepository = $orderItemRepository;
+    public function __construct(
+        private readonly OrderItemRepositoryInterface $orderItemRepository
+    ) {
     }
 
     /**
      * @param int[] $returnToStockItems
      * @param CreditmemoInterface $creditmemo
-     * @return \Magento\Framework\Phrase|null
+     * @return Phrase|null
      */
     public function validate($returnToStockItems, CreditmemoInterface $creditmemo)
     {

@@ -6,10 +6,14 @@
 
 namespace Magento\SalesInventory\Observer;
 
+use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceProcessor;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockManagementInterface;
+use Magento\CatalogInventory\Model\Indexer\Stock\Processor as StockProcessor;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order\Creditmemo as OrderCreditmemo;
 use Magento\SalesInventory\Model\Order\ReturnProcessor;
 
 /**
@@ -19,58 +23,22 @@ use Magento\SalesInventory\Model\Order\ReturnProcessor;
 class RefundOrderInventoryObserver implements ObserverInterface
 {
     /**
-     * @var StockConfigurationInterface
-     */
-    private $stockConfiguration;
-
-    /**
-     * @var StockManagementInterface
-     */
-    private $stockManagement;
-
-    /**
-     * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
-     */
-    private $stockIndexerProcessor;
-
-    /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
-     */
-    private $priceIndexer;
-
-    /**
-     * @var \Magento\SalesInventory\Model\Order\ReturnProcessor
-     */
-    private $returnProcessor;
-
-    /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface
-     */
-    private $orderRepository;
-
-    /**
      * RefundOrderInventoryObserver constructor.
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockManagementInterface $stockManagement
-     * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
-     * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
+     * @param StockProcessor $stockIndexerProcessor
+     * @param PriceProcessor $priceIndexer
      * @param ReturnProcessor $returnProcessor
-     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+     * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
-        StockConfigurationInterface $stockConfiguration,
-        StockManagementInterface $stockManagement,
-        \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor,
-        \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer,
-        \Magento\SalesInventory\Model\Order\ReturnProcessor $returnProcessor,
-        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+        private readonly StockConfigurationInterface $stockConfiguration,
+        private readonly StockManagementInterface $stockManagement,
+        private readonly StockProcessor $stockIndexerProcessor,
+        private readonly PriceProcessor $priceIndexer,
+        private readonly ReturnProcessor $returnProcessor,
+        private readonly OrderRepositoryInterface $orderRepository
     ) {
-        $this->stockConfiguration = $stockConfiguration;
-        $this->stockManagement = $stockManagement;
-        $this->stockIndexerProcessor = $stockIndexerProcessor;
-        $this->priceIndexer = $priceIndexer;
-        $this->returnProcessor = $returnProcessor;
-        $this->orderRepository = $orderRepository;
     }
 
     /**
@@ -81,7 +49,7 @@ class RefundOrderInventoryObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        /* @var $creditmemo \Magento\Sales\Model\Order\Creditmemo */
+        /* @var OrderCreditmemo $creditmemo */
         $creditmemo = $observer->getEvent()->getCreditmemo();
         $order = $this->orderRepository->get($creditmemo->getOrderId());
         $returnToStockItems = [];
