@@ -17,25 +17,13 @@ use Magento\SalesGraphQl\Model\Order\OrderPayments;
 class Order
 {
     /**
-     * @var OrderAddress
-     */
-    private $orderAddress;
-
-    /**
-     * @var OrderPayments
-     */
-    private $orderPayments;
-
-    /**
      * @param OrderAddress $orderAddress
      * @param OrderPayments $orderPayments
      */
     public function __construct(
-        OrderAddress $orderAddress,
-        OrderPayments $orderPayments
+        private readonly OrderAddress $orderAddress,
+        private readonly OrderPayments $orderPayments
     ) {
-        $this->orderAddress = $orderAddress;
-        $this->orderPayments = $orderPayments;
     }
 
     /**

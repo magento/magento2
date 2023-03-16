@@ -20,16 +20,11 @@ use Magento\Shipping\Model\Config\Source\Allmethods;
 class Carrier implements ResolverInterface
 {
     /**
-     * @var Allmethods
-     */
-    private $carrierMethods;
-
-    /**
      * @param Allmethods $carrierMethods
      */
-    public function __construct(Allmethods $carrierMethods)
-    {
-        $this->carrierMethods = $carrierMethods;
+    public function __construct(
+        private readonly Allmethods $carrierMethods
+    ) {
     }
 
     /**

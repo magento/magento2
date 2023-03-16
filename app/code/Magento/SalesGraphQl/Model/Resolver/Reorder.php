@@ -15,6 +15,7 @@ use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Sales\Model\Reorder\Data\Error;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Sales\Model\Reorder\Reorder as ReorderReorder;
 
 /**
  * ReOrder customer order
@@ -27,25 +28,13 @@ class Reorder implements ResolverInterface
     private const ARGUMENT_ORDER_NUMBER = 'orderNumber';
 
     /**
-     * @var OrderFactory
-     */
-    private $orderFactory;
-
-    /**
-     * @var \Magento\Sales\Model\Reorder\Reorder
-     */
-    private $reorder;
-
-    /**
-     * @param \Magento\Sales\Model\Reorder\Reorder $reorder
+     * @param ReorderReorder $reorder
      * @param OrderFactory $orderFactory
      */
     public function __construct(
-        \Magento\Sales\Model\Reorder\Reorder $reorder,
-        OrderFactory $orderFactory
+        private readonly ReorderReorder $reorder,
+        private readonly OrderFactory $orderFactory
     ) {
-        $this->orderFactory = $orderFactory;
-        $this->reorder = $reorder;
     }
 
     /**

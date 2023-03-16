@@ -16,16 +16,11 @@ use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 class OrderItem implements TypeResolverInterface
 {
     /**
-     * @var array
-     */
-    private $productTypeMap;
-
-    /**
      * @param array $productTypeMap
      */
-    public function __construct(array $productTypeMap = [])
-    {
-        $this->productTypeMap = $productTypeMap;
+    public function __construct(
+        private readonly array $productTypeMap = []
+    ) {
     }
 
     /**

@@ -17,16 +17,11 @@ use Magento\SalesGraphQl\Model\Shipment\Item\FormatterInterface;
 class ItemProvider
 {
     /**
-     * @var FormatterInterface[]
-     */
-    private $formatters;
-
-    /**
      * @param FormatterInterface[] $formatters
      */
-    public function __construct(array $formatters = [])
-    {
-        $this->formatters = $formatters;
+    public function __construct(
+        private readonly array $formatters = []
+    ) {
     }
 
     /**

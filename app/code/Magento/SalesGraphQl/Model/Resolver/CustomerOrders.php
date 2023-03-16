@@ -31,36 +31,6 @@ use Magento\Store\Model\StoreManagerInterface;
 class CustomerOrders implements ResolverInterface
 {
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepository;
-
-    /**
-     * @var OrderFilter
-     */
-    private $orderFilter;
-
-    /**
-     * @var OrderFormatter
-     */
-    private $orderFormatter;
-
-    /**
-     * @var OrderSort
-     */
-    private $orderSort;
-
-    /**
-     * @var StoreManagerInterface|mixed|null
-     */
-    private $storeManager;
-
-    /**
      * @param OrderRepositoryInterface $orderRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OrderFilter $orderFilter
@@ -69,18 +39,13 @@ class CustomerOrders implements ResolverInterface
      * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
-        OrderRepositoryInterface $orderRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        OrderFilter $orderFilter,
-        OrderFormatter $orderFormatter,
-        OrderSort $orderSort,
-        ?StoreManagerInterface $storeManager = null
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly SearchCriteriaBuilder $searchCriteriaBuilder,
+        private readonly OrderFilter $orderFilter,
+        private readonly OrderFormatter $orderFormatter,
+        private readonly OrderSort $orderSort,
+        private ?StoreManagerInterface $storeManager = null
     ) {
-        $this->orderRepository = $orderRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->orderFilter = $orderFilter;
-        $this->orderFormatter = $orderFormatter;
-        $this->orderSort = $orderSort;
         $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 

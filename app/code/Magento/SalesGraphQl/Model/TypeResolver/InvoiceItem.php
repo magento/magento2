@@ -16,16 +16,11 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 class InvoiceItem implements TypeResolverInterface
 {
     /**
-     * @var array
-     */
-    private $productTypeMap;
-
-    /**
      * @param array $productTypeMap
      */
-    public function __construct($productTypeMap = [])
-    {
-        $this->productTypeMap = $productTypeMap;
+    public function __construct(
+        private $productTypeMap = []
+    ) {
     }
 
     /**

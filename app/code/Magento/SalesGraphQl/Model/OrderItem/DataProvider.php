@@ -21,31 +21,6 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 class DataProvider
 {
     /**
-     * @var OrderItemRepositoryInterface
-     */
-    private $orderItemRepository;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var OptionsProcessor
-     */
-    private $optionsProcessor;
-
-    /**
      * @var int[]
      */
     private $orderItemIds = [];
@@ -63,17 +38,12 @@ class DataProvider
      * @param OptionsProcessor $optionsProcessor
      */
     public function __construct(
-        OrderItemRepositoryInterface $orderItemRepository,
-        ProductRepositoryInterface $productRepository,
-        OrderRepositoryInterface $orderRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        OptionsProcessor $optionsProcessor
+        private readonly OrderItemRepositoryInterface $orderItemRepository,
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly SearchCriteriaBuilder $searchCriteriaBuilder,
+        private readonly OptionsProcessor $optionsProcessor
     ) {
-        $this->orderItemRepository = $orderItemRepository;
-        $this->productRepository = $productRepository;
-        $this->orderRepository = $orderRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->optionsProcessor = $optionsProcessor;
     }
 
     /**

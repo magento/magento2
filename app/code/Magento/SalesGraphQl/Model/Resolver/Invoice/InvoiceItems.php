@@ -24,25 +24,13 @@ use Magento\SalesGraphQl\Model\OrderItem\DataProvider as OrderItemProvider;
 class InvoiceItems implements ResolverInterface
 {
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
-     * @var OrderItemProvider
-     */
-    private $orderItemProvider;
-
-    /**
      * @param ValueFactory $valueFactory
      * @param OrderItemProvider $orderItemProvider
      */
     public function __construct(
-        ValueFactory $valueFactory,
-        OrderItemProvider $orderItemProvider
+        private readonly ValueFactory $valueFactory,
+        private readonly OrderItemProvider $orderItemProvider
     ) {
-        $this->valueFactory = $valueFactory;
-        $this->orderItemProvider = $orderItemProvider;
     }
 
     /**

@@ -28,16 +28,6 @@ class OrderFilter
     ];
 
     /**
-     * @var FilterBuilder
-     */
-    private $filterBuilder;
-
-    /**
-     * @var FilterGroupBuilder
-     */
-    private $filterGroupBuilder;
-
-    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param FilterBuilder $filterBuilder
      * @param FilterGroupBuilder $filterGroupBuilder
@@ -47,12 +37,10 @@ class OrderFilter
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        FilterBuilder $filterBuilder,
-        FilterGroupBuilder $filterGroupBuilder,
+        private readonly FilterBuilder $filterBuilder,
+        private readonly FilterGroupBuilder $filterGroupBuilder,
         array $fieldTranslatorArray = []
     ) {
-        $this->filterBuilder = $filterBuilder;
-        $this->filterGroupBuilder = $filterGroupBuilder;
         $this->fieldTranslatorArray = array_replace($this->fieldTranslatorArray, $fieldTranslatorArray);
     }
 

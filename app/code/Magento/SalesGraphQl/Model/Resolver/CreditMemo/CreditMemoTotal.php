@@ -23,32 +23,15 @@ use Magento\Tax\Helper\Data as TaxHelper;
 class CreditMemoTotal implements ResolverInterface
 {
     /**
-     * @var TaxHelper
-     */
-    private $taxHelper;
-
-    /**
-     * @var OrderTaxManagementInterface
-     */
-    private $orderTaxManagement;
-
-    /**
-     * @var ShippingTaxCalculator
-     */
-    private $shippingTaxCalculator;
-    /**
      * @param OrderTaxManagementInterface $orderTaxManagement
      * @param TaxHelper $taxHelper
      * @param ShippingTaxCalculator $shippingTaxCalculator
      */
     public function __construct(
-        OrderTaxManagementInterface $orderTaxManagement,
-        TaxHelper $taxHelper,
-        ShippingTaxCalculator $shippingTaxCalculator
+        private readonly OrderTaxManagementInterface $orderTaxManagement,
+        private readonly TaxHelper $taxHelper,
+        private readonly ShippingTaxCalculator $shippingTaxCalculator
     ) {
-        $this->taxHelper = $taxHelper;
-        $this->orderTaxManagement = $orderTaxManagement;
-        $this->shippingTaxCalculator = $shippingTaxCalculator;
     }
 
     /**

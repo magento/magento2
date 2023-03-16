@@ -20,17 +20,11 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class ShippingTaxCalculator
 {
     /**
-     * @var OrderTaxManagementInterface
-     */
-    private $orderTaxManagement;
-
-    /**
      * @param OrderTaxManagementInterface $orderTaxManagement
      */
     public function __construct(
-        OrderTaxManagementInterface $orderTaxManagement
+        private readonly OrderTaxManagementInterface $orderTaxManagement
     ) {
-        $this->orderTaxManagement = $orderTaxManagement;
     }
 
     /**
@@ -79,9 +73,9 @@ class ShippingTaxCalculator
      *  )
      * )
      *
-     * @param  array $taxClassBreakdown
-     * @param  OrderTaxDetailsItemInterface $itemTaxDetail
-     * @param  float $taxRatio
+     * @param array $taxClassBreakdown
+     * @param OrderTaxDetailsItemInterface $itemTaxDetail
+     * @param float $taxRatio
      * @return array
      */
     private function aggregateTaxes(
