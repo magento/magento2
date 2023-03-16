@@ -6,7 +6,9 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
-class ApplyRules extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
+use Magento\SalesRule\Controller\Adminhtml\Promo\Quote as AdminhtmlPromoQuote;
+
+class ApplyRules extends AdminhtmlPromoQuote
 {
     /**
      * Apply rules action

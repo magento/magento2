@@ -6,90 +6,63 @@
 
 namespace Magento\SalesRule\Model;
 
+use Exception;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\SalesRule\Api\CouponRepositoryInterface;
+use Magento\SalesRule\Api\Data\CouponInterface;
+use Magento\SalesRule\Api\Data\CouponSearchResultInterface;
+use Magento\SalesRule\Api\Data\CouponSearchResultInterfaceFactory;
 use Magento\SalesRule\Model\ResourceModel\Coupon\Collection;
+use Magento\SalesRule\Model\ResourceModel\Coupon\Collection as CouponCollection;
+use Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory;
+use Magento\SalesRule\Model\Spi\CouponResourceInterface;
 
 /**
  * Coupon CRUD class
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterface
+class CouponRepository implements CouponRepositoryInterface
 {
-    /**
-     * @var \Magento\SalesRule\Model\CouponFactory
-     */
-    protected $couponFactory;
-
-    /**
-     * @var \Magento\SalesRule\Model\RuleFactory
-     */
-    protected $ruleFactory;
-
-    /**
-     * @var \Magento\SalesRule\Api\Data\CouponSearchResultInterfaceFactory
-     */
-    protected $searchResultFactory;
-
-    /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory
-     */
-    protected $collectionFactory;
-
-    /**
-     * @var \Magento\SalesRule\Model\Spi\CouponResourceInterface
-     */
-    protected $resourceModel;
-
-    /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
-     */
-    protected $extensionAttributesJoinProcessor;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
-     */
-    private $collectionProcessor;
-
     /**
      * CouponRepository constructor.
      * @param CouponFactory $couponFactory
      * @param RuleFactory $ruleFactory
-     * @param \Magento\SalesRule\Api\Data\CouponSearchResultInterfaceFactory $searchResultFactory
-     * @param ResourceModel\Coupon\CollectionFactory $collectionFactory
+     * @param CouponSearchResultInterfaceFactory $searchResultFactory
+     * @param CollectionFactory $collectionFactory
      * @param Spi\CouponResourceInterface $resourceModel
-     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
-        \Magento\SalesRule\Model\CouponFactory $couponFactory,
-        \Magento\SalesRule\Model\RuleFactory $ruleFactory,
-        \Magento\SalesRule\Api\Data\CouponSearchResultInterfaceFactory $searchResultFactory,
-        \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory $collectionFactory,
-        \Magento\SalesRule\Model\Spi\CouponResourceInterface $resourceModel,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        protected readonly CouponFactory $couponFactory,
+        protected readonly RuleFactory $ruleFactory,
+        protected readonly CouponSearchResultInterfaceFactory $searchResultFactory,
+        protected readonly CollectionFactory $collectionFactory,
+        protected readonly CouponResourceInterface $resourceModel,
+        protected readonly JoinProcessorInterface $extensionAttributesJoinProcessor,
+        private ?CollectionProcessorInterface $collectionProcessor = null
     ) {
-        $this->couponFactory = $couponFactory;
-        $this->ruleFactory = $ruleFactory;
-        $this->searchResultFactory = $searchResultFactory;
-        $this->collectionFactory = $collectionFactory;
-        $this->resourceModel = $resourceModel;
-        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
      * Save coupon.
      *
-     * @param \Magento\SalesRule\Api\Data\CouponInterface $coupon
-     * @return \Magento\SalesRule\Api\Data\CouponInterface
-     * @throws \Magento\Framework\Exception\InputException If there is a problem with the input
-     * @throws \Magento\Framework\Exception\NoSuchEntityException If a coupon ID is sent but the coupon does not exist
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param CouponInterface $coupon
+     * @return CouponInterface
+     * @throws InputException If there is a problem with the input
+     * @throws NoSuchEntityException If a coupon ID is sent but the coupon does not exist
+     * @throws LocalizedException
      */
-    public function save(\Magento\SalesRule\Api\Data\CouponInterface $coupon)
+    public function save(CouponInterface $coupon)
     {
         //if coupon id is provided, use the existing coupon and blend in the new data supplied
         $couponId = $coupon->getCouponId();
@@ -103,25 +76,25 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
         try {
             $rule = $this->ruleFactory->create()->load($coupon->getRuleId());
             if (!$rule->getRuleId()) {
-                throw \Magento\Framework\Exception\NoSuchEntityException::singleField('rule_id', $coupon->getRuleId());
+                throw NoSuchEntityException::singleField('rule_id', $coupon->getRuleId());
             }
             if ($rule->getCouponType() == $rule::COUPON_TYPE_NO_COUPON) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __('Specified rule does not allow coupons')
                 );
             } elseif ($rule->getUseAutoGeneration() && $coupon->getType() == $coupon::TYPE_MANUAL) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __('Specified rule only allows auto generated coupons')
                 );
             } elseif (!$rule->getUseAutoGeneration() && $coupon->getType() == $coupon::TYPE_GENERATED) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __('Specified rule does not allow auto generated coupons')
                 );
             }
             $coupon->setUsageLimit($rule->getUsesPerCoupon());
             $coupon->setUsagePerCustomer($rule->getUsesPerCustomer());
-        } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+        } catch (Exception $e) {
+            throw new LocalizedException(
                 __('Error occurred when saving coupon: %1', $e->getMessage())
             );
         }
@@ -134,16 +107,16 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      * Get coupon by coupon id.
      *
      * @param int $couponId
-     * @return \Magento\SalesRule\Api\Data\CouponInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException If $couponId is not found
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return CouponInterface
+     * @throws NoSuchEntityException If $couponId is not found
+     * @throws LocalizedException
      */
     public function getById($couponId)
     {
         $coupon = $this->couponFactory->create()->load($couponId);
 
         if (!$coupon->getCouponId()) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException();
+            throw new NoSuchEntityException();
         }
         return $coupon;
     }
@@ -151,15 +124,15 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
     /**
      * Retrieve coupon.
      *
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Magento\SalesRule\Api\Data\CouponSearchResultInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return CouponSearchResultInterface
+     * @throws LocalizedException
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        /** @var \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $collection */
+        /** @var CouponCollection $collection */
         $collection = $this->collectionFactory->create();
-        $couponInterfaceName = \Magento\SalesRule\Api\Data\CouponInterface::class;
+        $couponInterfaceName = CouponInterface::class;
         $this->extensionAttributesJoinProcessor->process($collection, $couponInterfaceName);
 
         $this->collectionProcessor->process($searchCriteria, $collection);
@@ -175,17 +148,17 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      *
      * @param int $couponId
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function deleteById($couponId)
     {
-        /** @var \Magento\SalesRule\Model\Coupon $coupon */
+        /** @var Coupon $coupon */
         $coupon = $this->couponFactory->create()
             ->load($couponId);
 
         if (!$coupon->getCouponId()) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException();
+            throw new NoSuchEntityException();
         }
 
         $this->resourceModel->delete($coupon);
@@ -225,8 +198,8 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
     private function getCollectionProcessor()
     {
         if (!$this->collectionProcessor) {
-            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            $this->collectionProcessor = ObjectManager::getInstance()->get(
+                CollectionProcessorInterface::class
             );
         }
         return $this->collectionProcessor;

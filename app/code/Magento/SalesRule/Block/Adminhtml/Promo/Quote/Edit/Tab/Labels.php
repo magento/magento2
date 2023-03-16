@@ -5,28 +5,38 @@
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
-class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
-    \Magento\Ui\Component\Layout\Tabs\TabInterface
+use Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset as FormRendererFieldset;
+use Magento\Backend\Block\Template\Context as TemplateContext;
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Framework\Data\Form as FormData;
+use Magento\Framework\Data\Form\Element\Fieldset;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Registry;
+use Magento\SalesRule\Model\RegistryConstants;
+use Magento\SalesRule\Model\RuleFactory;
+use Magento\Ui\Component\Layout\Tabs\TabInterface;
+
+class Labels extends Generic implements TabInterface
 {
     /**
-     * @var \Magento\SalesRule\Model\RuleFactory
+     * @var RuleFactory
      */
     private $ruleFactory;
 
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
+     * @param TemplateContext $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param RuleFactory $ruleFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\SalesRule\Model\RuleFactory $ruleFactory,
+        TemplateContext $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        RuleFactory $ruleFactory,
         array $data = []
     ) {
         $this->ruleFactory = $ruleFactory;
@@ -108,7 +118,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     protected function _prepareForm()
     {
-        $rule = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
+        $rule = $this->_coreRegistry->registry(RegistryConstants::CURRENT_SALES_RULE);
 
         if (!$rule) {
             $id = $this->getRequest()->getParam('id');
@@ -116,7 +126,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
             $rule->load($id);
         }
 
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var FormData $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
 
@@ -138,9 +148,9 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Create store specific fieldset
      *
-     * @param \Magento\Framework\Data\Form $form
+     * @param FormData $form
      * @param array $labels
-     * @return \Magento\Framework\Data\Form\Element\Fieldset
+     * @return Fieldset
      */
     protected function _createStoreSpecificFieldset($form, $labels)
     {
@@ -149,7 +159,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
             ['legend' => __('Store View Specific Labels'), 'class' => 'store-scope']
         );
         $renderer = $this->getLayout()->createBlock(
-            \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset::class
+            FormRendererFieldset::class
         );
         $fieldset->setRenderer($renderer);
 

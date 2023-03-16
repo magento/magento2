@@ -23,16 +23,6 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 class CaptchaConfigProvider implements ConfigProviderInterface
 {
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var Helper
-     */
-    private $captchaData;
-
-    /**
      * @var CustomerSession
      */
     private $customerSession;
@@ -42,10 +32,11 @@ class CaptchaConfigProvider implements ConfigProviderInterface
      * @param Helper $captchaData
      * @param CustomerSession $session
      */
-    public function __construct(StoreManagerInterface $storeManager, Helper $captchaData, CustomerSession $session)
-    {
-        $this->storeManager = $storeManager;
-        $this->captchaData = $captchaData;
+    public function __construct(
+        private readonly StoreManagerInterface $storeManager,
+        private readonly Helper $captchaData,
+        CustomerSession $session
+    ) {
         $this->customerSession = $session;
     }
 

@@ -5,45 +5,42 @@
  */
 namespace Magento\SalesRule\Model\Converter;
 
+use DateTime;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Phrase;
+use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\SalesRule\Api\Data\RuleInterface;
+use Magento\SalesRule\Api\Data\RuleLabelInterface;
 use Magento\SalesRule\Model\Data\Condition;
 use Magento\SalesRule\Model\Data\Rule as RuleDataModel;
 use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Model\Rule as ModelRule;
+use Magento\SalesRule\Model\RuleFactory;
 
 class ToModel
 {
     public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s';
 
     /**
-     * @var \Magento\SalesRule\Model\RuleFactory
-     */
-    protected $ruleFactory;
-
-    /**
-     * @var \Magento\Framework\Reflection\DataObjectProcessor
-     */
-    protected $dataObjectProcessor;
-
-    /**
-     * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
-     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param RuleFactory $ruleFactory
+     * @param DataObjectProcessor $dataObjectProcessor
      */
     public function __construct(
-        \Magento\SalesRule\Model\RuleFactory $ruleFactory,
-        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+        protected readonly RuleFactory $ruleFactory,
+        protected readonly DataObjectProcessor $dataObjectProcessor
     ) {
-        $this->ruleFactory = $ruleFactory;
-        $this->dataObjectProcessor = $dataObjectProcessor;
     }
 
     /**
      * Map conditions
      *
-     * @param \Magento\SalesRule\Model\Rule $ruleModel
+     * @param ModelRule $ruleModel
      * @param RuleDataModel $dataModel
      * @return $this
      */
-    protected function mapConditions(\Magento\SalesRule\Model\Rule $ruleModel, RuleDataModel $dataModel)
+    protected function mapConditions(ModelRule $ruleModel, RuleDataModel $dataModel)
     {
         $condition = $dataModel->getCondition();
         if ($condition) {
@@ -57,11 +54,11 @@ class ToModel
     /**
      * Map action conditions
      *
-     * @param \Magento\SalesRule\Model\Rule $ruleModel
+     * @param ModelRule $ruleModel
      * @param RuleDataModel $dataModel
      * @return $this
      */
-    protected function mapActionConditions(\Magento\SalesRule\Model\Rule $ruleModel, RuleDataModel $dataModel)
+    protected function mapActionConditions(ModelRule $ruleModel, RuleDataModel $dataModel)
     {
         $condition = $dataModel->getActionCondition();
         if ($condition) {
@@ -84,7 +81,7 @@ class ToModel
         //translate store labels object into array
         if ($dataModel->getStoreLabels() !== null) {
             $storeLabels = [];
-            /** @var \Magento\SalesRule\Api\Data\RuleLabelInterface $ruleLabel */
+            /** @var RuleLabelInterface $ruleLabel */
             foreach ($dataModel->getStoreLabels() as $ruleLabel) {
                 $storeLabels[$ruleLabel->getStoreId()] = $ruleLabel->getStoreLabel();
             }
@@ -105,13 +102,13 @@ class ToModel
             $mappedValue = '';
             switch ($ruleModel->getCouponType()) {
                 case RuleInterface::COUPON_TYPE_NO_COUPON:
-                    $mappedValue = \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON;
+                    $mappedValue = ModelRule::COUPON_TYPE_NO_COUPON;
                     break;
                 case RuleInterface::COUPON_TYPE_SPECIFIC_COUPON:
-                    $mappedValue = \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC;
+                    $mappedValue = ModelRule::COUPON_TYPE_SPECIFIC;
                     break;
                 case RuleInterface::COUPON_TYPE_AUTO:
-                    $mappedValue = \Magento\SalesRule\Model\Rule::COUPON_TYPE_AUTO;
+                    $mappedValue = ModelRule::COUPON_TYPE_AUTO;
                     break;
                 default:
             }
@@ -123,11 +120,11 @@ class ToModel
     /**
      * Map fields
      *
-     * @param \Magento\SalesRule\Model\Rule $ruleModel
+     * @param ModelRule $ruleModel
      * @param RuleDataModel $dataModel
      * @return $this
      */
-    protected function mapFields(\Magento\SalesRule\Model\Rule $ruleModel, RuleDataModel $dataModel)
+    protected function mapFields(ModelRule $ruleModel, RuleDataModel $dataModel)
     {
         $this->mapConditions($ruleModel, $dataModel);
         $this->mapActionConditions($ruleModel, $dataModel);
@@ -169,8 +166,8 @@ class ToModel
      *
      * @param RuleDataModel $dataModel
      * @return $this|Rule
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws NoSuchEntityException
+     * @throws InputException
      */
     public function toModel(RuleDataModel $dataModel)
     {
@@ -179,7 +176,7 @@ class ToModel
         if ($ruleId) {
             $ruleModel = $this->ruleFactory->create()->load($ruleId);
             if (!$ruleModel->getId()) {
-                throw new \Magento\Framework\Exception\NoSuchEntityException();
+                throw new NoSuchEntityException();
             }
         } else {
             $ruleModel = $this->ruleFactory->create();
@@ -195,7 +192,7 @@ class ToModel
 
         $data = $this->dataObjectProcessor->buildOutputDataArray(
             $dataModel,
-            \Magento\SalesRule\Api\Data\RuleInterface::class
+            RuleInterface::class
         );
 
         $data = array_filter($data, function ($value) {
@@ -203,15 +200,15 @@ class ToModel
         });
         $mergedData = array_merge($modelData, $data);
 
-        $validateResult = $ruleModel->validateData(new \Magento\Framework\DataObject($mergedData));
+        $validateResult = $ruleModel->validateData(new DataObject($mergedData));
         if ($validateResult !== true) {
             $text = '';
-            /** @var \Magento\Framework\Phrase $errorMessage */
+            /** @var Phrase $errorMessage */
             foreach ($validateResult as $errorMessage) {
                 $text .= $errorMessage->getText();
                 $text .= '; ';
             }
-            throw new \Magento\Framework\Exception\InputException(new \Magento\Framework\Phrase($text));
+            throw new InputException(new Phrase($text));
         }
 
         $ruleModel->setData($mergedData);
@@ -230,7 +227,7 @@ class ToModel
     private function formattingDate($date)
     {
         if ($date) {
-            $fromDate = new \DateTime($date);
+            $fromDate = new DateTime($date);
             $date = $fromDate->format(self::DATE_TIME_FORMAT);
         }
 

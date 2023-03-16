@@ -5,45 +5,54 @@
  */
 namespace Magento\SalesRule\Model\Rule\Condition;
 
+use Magento\Directory\Model\Config\Source\Allregion as DirectoryAllregion;
+use Magento\Directory\Model\Config\Source\Country as DirectoryCountry;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Payment\Model\Config\Source\Allmethods as PaymentAllmethods;
+use Magento\Quote\Model\Quote\Address as QuoteAddress;
+use Magento\Rule\Model\Condition\AbstractCondition;
+use Magento\Rule\Model\Condition\Context as ConditionContext;
+use Magento\Shipping\Model\Config\Source\Allmethods as ShippingAllmethods;
+
 /**
  * Address rule condition data model.
  */
-class Address extends \Magento\Rule\Model\Condition\AbstractCondition
+class Address extends AbstractCondition
 {
     /**
-     * @var \Magento\Directory\Model\Config\Source\Country
+     * @var DirectoryCountry
      */
     protected $_directoryCountry;
 
     /**
-     * @var \Magento\Directory\Model\Config\Source\Allregion
+     * @var DirectoryAllregion
      */
     protected $_directoryAllregion;
 
     /**
-     * @var \Magento\Shipping\Model\Config\Source\Allmethods
+     * @var ShippingAllmethods
      */
     protected $_shippingAllmethods;
 
     /**
-     * @var \Magento\Payment\Model\Config\Source\Allmethods
+     * @var PaymentAllmethods
      */
     protected $_paymentAllmethods;
 
     /**
-     * @param \Magento\Rule\Model\Condition\Context $context
-     * @param \Magento\Directory\Model\Config\Source\Country $directoryCountry
-     * @param \Magento\Directory\Model\Config\Source\Allregion $directoryAllregion
-     * @param \Magento\Shipping\Model\Config\Source\Allmethods $shippingAllmethods
-     * @param \Magento\Payment\Model\Config\Source\Allmethods $paymentAllmethods
+     * @param ConditionContext $context
+     * @param DirectoryCountry $directoryCountry
+     * @param DirectoryAllregion $directoryAllregion
+     * @param ShippingAllmethods $shippingAllmethods
+     * @param PaymentAllmethods $paymentAllmethods
      * @param array $data
      */
     public function __construct(
-        \Magento\Rule\Model\Condition\Context $context,
-        \Magento\Directory\Model\Config\Source\Country $directoryCountry,
-        \Magento\Directory\Model\Config\Source\Allregion $directoryAllregion,
-        \Magento\Shipping\Model\Config\Source\Allmethods $shippingAllmethods,
-        \Magento\Payment\Model\Config\Source\Allmethods $paymentAllmethods,
+        ConditionContext $context,
+        DirectoryCountry $directoryCountry,
+        DirectoryAllregion $directoryAllregion,
+        ShippingAllmethods $shippingAllmethods,
+        PaymentAllmethods $paymentAllmethods,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -167,13 +176,13 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     /**
      * Validate Address Rule Condition
      *
-     * @param \Magento\Framework\Model\AbstractModel $model
+     * @param AbstractModel $model
      * @return bool
      */
-    public function validate(\Magento\Framework\Model\AbstractModel $model)
+    public function validate(AbstractModel $model)
     {
         $address = $model;
-        if (!$address instanceof \Magento\Quote\Model\Quote\Address) {
+        if (!$address instanceof QuoteAddress) {
             if ($model->getQuote()->isVirtual()) {
                 $address = $model->getQuote()->getBillingAddress();
             } else {

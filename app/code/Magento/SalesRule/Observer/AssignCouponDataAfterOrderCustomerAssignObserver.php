@@ -22,19 +22,13 @@ class AssignCouponDataAfterOrderCustomerAssignObserver implements ObserverInterf
     private const EVENT_KEY_ORDER = 'order';
 
     /**
-     * @var UpdateCouponUsages
-     */
-    private $updateCouponUsages;
-
-    /**
      * AssignCouponDataAfterOrderCustomerAssign constructor.
      *
      * @param UpdateCouponUsages $updateCouponUsages
      */
     public function __construct(
-        UpdateCouponUsages $updateCouponUsages
+        private readonly UpdateCouponUsages $updateCouponUsages
     ) {
-        $this->updateCouponUsages = $updateCouponUsages;
     }
 
     /**

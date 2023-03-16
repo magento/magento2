@@ -5,20 +5,26 @@
  */
 namespace Magento\SalesRule\Model\Rule\Condition\Product;
 
-class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
+use Magento\Framework\Model\AbstractModel;
+use Magento\Rule\Model\Condition\Context as ConditionContext;
+use Magento\SalesRule\Model\Rule\Condition\Product as RuleCondProduct;
+use Magento\SalesRule\Model\Rule\Condition\Product\Combine as RuleCondProductCombine;
+use Magento\SalesRule\Model\Rule\Condition\Product\Found as RuleCondProductFound;
+
+class Found extends RuleCondProductCombine
 {
     /**
-     * @param \Magento\Rule\Model\Condition\Context $context
-     * @param \Magento\SalesRule\Model\Rule\Condition\Product $ruleConditionProduct
+     * @param ConditionContext $context
+     * @param RuleCondProduct $ruleConditionProduct
      * @param array $data
      */
     public function __construct(
-        \Magento\Rule\Model\Condition\Context $context,
-        \Magento\SalesRule\Model\Rule\Condition\Product $ruleConditionProduct,
+        ConditionContext $context,
+        RuleCondProduct $ruleConditionProduct,
         array $data = []
     ) {
         parent::__construct($context, $ruleConditionProduct, $data);
-        $this->setType(\Magento\SalesRule\Model\Rule\Condition\Product\Found::class);
+        $this->setType(RuleCondProductFound::class);
     }
 
     /**
@@ -53,11 +59,11 @@ class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
     /**
      * Validate
      *
-     * @param \Magento\Framework\Model\AbstractModel $model
+     * @param AbstractModel $model
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function validate(\Magento\Framework\Model\AbstractModel $model)
+    public function validate(AbstractModel $model)
     {
         $isValid = false;
 

@@ -5,49 +5,44 @@
  */
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Model\Rule\Action\Discount\Data as DiscountData;
+use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory as DiscountDataFactory;
+use Magento\SalesRule\Model\Validator;
+
 abstract class AbstractDiscount implements DiscountInterface
 {
     /**
-     * @var \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory
+     * @var DiscountDataFactory
      */
     protected $discountFactory;
 
     /**
-     * @var \Magento\SalesRule\Model\Validator
-     */
-    protected $validator;
-
-    /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     */
-    protected $priceCurrency;
-
-    /**
-     * @param \Magento\SalesRule\Model\Validator $validator
+     * @param Validator $validator
      * @param DataFactory $discountDataFactory
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
-        \Magento\SalesRule\Model\Validator $validator,
-        \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory $discountDataFactory,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+        protected readonly Validator $validator,
+        DiscountDataFactory $discountDataFactory,
+        protected readonly PriceCurrencyInterface $priceCurrency
     ) {
-        $this->validator = $validator;
         $this->discountFactory = $discountDataFactory;
-        $this->priceCurrency = $priceCurrency;
     }
 
     /**
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param Rule $rule
+     * @param AbstractItem $item
      * @param float $qty
-     * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
+     * @return DiscountData
      */
     abstract public function calculate($rule, $item, $qty);
 
     /**
      * @param float $qty
-     * @param \Magento\SalesRule\Model\Rule $rule
+     * @param Rule $rule
      * @return float
      */
     public function fixQuantity($qty, $rule)

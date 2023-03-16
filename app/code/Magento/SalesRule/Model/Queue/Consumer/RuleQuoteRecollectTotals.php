@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Model\Queue\Consumer;
 
+use Exception;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\DeadlockException;
@@ -23,41 +24,17 @@ use Throwable;
 class RuleQuoteRecollectTotals
 {
     /**
-     * @var RuleQuoteRecollectTotalsInterface
-     */
-    private $ruleQuoteRecollectTotals;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
-
-    /**
      * @param RuleQuoteRecollectTotalsInterface $ruleQuoteRecollectTotals
      * @param LoggerInterface $logger
      * @param SerializerInterface $serializer
      * @param EntityManager $entityManager
      */
     public function __construct(
-        RuleQuoteRecollectTotalsInterface $ruleQuoteRecollectTotals,
-        LoggerInterface $logger,
-        SerializerInterface $serializer,
-        EntityManager $entityManager
+        private readonly RuleQuoteRecollectTotalsInterface $ruleQuoteRecollectTotals,
+        private readonly LoggerInterface $logger,
+        private readonly SerializerInterface $serializer,
+        private readonly EntityManager $entityManager
     ) {
-        $this->ruleQuoteRecollectTotals = $ruleQuoteRecollectTotals;
-        $this->logger = $logger;
-        $this->serializer = $serializer;
-        $this->entityManager = $entityManager;
     }
 
     /**
@@ -65,7 +42,7 @@ class RuleQuoteRecollectTotals
      *
      * @param OperationInterface $operation
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function process(OperationInterface $operation): void
     {

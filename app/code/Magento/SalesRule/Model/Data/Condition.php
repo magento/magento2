@@ -7,6 +7,8 @@
  */
 namespace Magento\SalesRule\Model\Data;
 
+use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\SalesRule\Api\Data\ConditionExtensionInterface;
 use Magento\SalesRule\Api\Data\ConditionInterface;
 
 /**
@@ -14,8 +16,7 @@ use Magento\SalesRule\Api\Data\ConditionInterface;
  *
  * @codeCoverageIgnore
  */
-class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\SalesRule\Api\Data\ConditionInterface
+class Condition extends AbstractExtensibleObject implements ConditionInterface
 {
     const KEY_CONDITION_TYPE = 'condition_type';
     const KEY_CONDITIONS = 'conditions';
@@ -151,7 +152,7 @@ class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implemen
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\SalesRule\Api\Data\ConditionExtensionInterface|null
+     * @return ConditionExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -161,11 +162,11 @@ class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implemen
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\SalesRule\Api\Data\ConditionExtensionInterface $extensionAttributes
+     * @param ConditionExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\SalesRule\Api\Data\ConditionExtensionInterface $extensionAttributes
+        ConditionExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

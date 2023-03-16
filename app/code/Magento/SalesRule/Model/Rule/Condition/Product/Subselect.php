@@ -5,25 +5,30 @@
  */
 namespace Magento\SalesRule\Model\Rule\Condition\Product;
 
+use Magento\Catalog\Model\Product\Type as ProductType;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Quote\Api\Data\TotalsItemInterface;
+use Magento\Rule\Model\Condition\Context as ConditionContext;
+use Magento\SalesRule\Model\Rule\Condition\Product as RuleConditionProduct;
+use Magento\SalesRule\Model\Rule\Condition\Product\Combine as RuleCondProductCombine;
 
 /**
  * Subselect conditions for product.
  */
-class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
+class Subselect extends RuleCondProductCombine
 {
     /**
-     * @param \Magento\Rule\Model\Condition\Context $context
-     * @param \Magento\SalesRule\Model\Rule\Condition\Product $ruleConditionProduct
+     * @param ConditionContext $context
+     * @param RuleConditionProduct $ruleConditionProduct
      * @param array $data
      */
     public function __construct(
-        \Magento\Rule\Model\Condition\Context $context,
-        \Magento\SalesRule\Model\Rule\Condition\Product $ruleConditionProduct,
+        ConditionContext $context,
+        RuleConditionProduct $ruleConditionProduct,
         array $data = []
     ) {
         parent::__construct($context, $ruleConditionProduct, $data);
-        $this->setType(\Magento\SalesRule\Model\Rule\Condition\Product\Subselect::class)->setValue(null);
+        $this->setType(Subselect::class)->setValue(null);
     }
 
     /**
@@ -139,11 +144,11 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
     /**
      * Validate
      *
-     * @param \Magento\Framework\Model\AbstractModel $model
+     * @param AbstractModel $model
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function validate(\Magento\Framework\Model\AbstractModel $model)
+    public function validate(AbstractModel $model)
     {
         if (!$this->getConditions()) {
             return false;
@@ -152,7 +157,7 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
         $total = 0;
         foreach ($model->getQuote()->getAllVisibleItems() as $item) {
             $hasValidChild = false;
-            $useChildrenTotal = ($item->getProductType() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE);
+            $useChildrenTotal = ($item->getProductType() == ProductType::TYPE_BUNDLE);
             $childrenAttrTotal = 0;
             $children = $item->getChildren();
             if (!empty($children)) {

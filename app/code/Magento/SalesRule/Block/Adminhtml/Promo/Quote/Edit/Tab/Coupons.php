@@ -5,12 +5,15 @@
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
+use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Framework\View\Element\Template;
+
 /**
  * "Manage Coupons Codes" Tab
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Coupons extends \Magento\Framework\View\Element\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Coupons extends Template implements TabInterface
 {
     /**
      * {@inheritdoc}

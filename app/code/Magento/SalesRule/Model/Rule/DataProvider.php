@@ -5,15 +5,20 @@
  */
 namespace Magento\SalesRule\Model\Rule;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Registry;
+use Magento\SalesRule\Model\RegistryConstants;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
 use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory;
 use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Model\Rule\Metadata\ValueProvider as MetadataValueProvider;
+use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
  * Class DataProvider
  */
-class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
+class DataProvider extends AbstractDataProvider
 {
     /**
      * @var Collection
@@ -28,19 +33,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $coreRegistry;
-
-    /**
-     * @var \Magento\SalesRule\Model\Rule\Metadata\ValueProvider
-     */
-    protected $metadataValueProvider;
-
-    /**
-     * @var DataPersistorInterface
-     */
-    private $dataPersistor;
 
     /**
      * Initialize dependencies.
@@ -49,7 +44,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
-     * @param \Magento\Framework\Registry $registry
+     * @param Registry $registry
      * @param Metadata\ValueProvider $metadataValueProvider
      * @param array $meta
      * @param array $data
@@ -60,17 +55,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
-        \Magento\Framework\Registry $registry,
-        \Magento\SalesRule\Model\Rule\Metadata\ValueProvider $metadataValueProvider,
+        Registry $registry,
+        protected readonly MetadataValueProvider $metadataValueProvider,
         array $meta = [],
         array $data = [],
-        DataPersistorInterface $dataPersistor = null
+        private ?DataPersistorInterface $dataPersistor = null
     ) {
         $this->collection = $collectionFactory->create();
         $this->coreRegistry = $registry;
-        $this->metadataValueProvider = $metadataValueProvider;
         $meta = array_replace_recursive($this->getMetadataValues(), $meta);
-        $this->dataPersistor = $dataPersistor ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+        $this->dataPersistor = $dataPersistor ?? ObjectManager::getInstance()->get(
             DataPersistorInterface::class
         );
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
@@ -83,7 +77,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     protected function getMetadataValues()
     {
-        $rule = $this->coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
+        $rule = $this->coreRegistry->registry(RegistryConstants::CURRENT_SALES_RULE);
         return $this->metadataValueProvider->getMetadataValues($rule);
     }
 

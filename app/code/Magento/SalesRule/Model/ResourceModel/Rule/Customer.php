@@ -5,12 +5,15 @@
  */
 namespace Magento\SalesRule\Model\ResourceModel\Rule;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\SalesRule\Model\Rule\Customer as ModelRuleCustomer;
+
 /**
  * SalesRule Rule Customer Model Resource
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Customer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Customer extends AbstractDb
 {
     /**
      * Constructor
@@ -25,7 +28,7 @@ class Customer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Get rule usage record for a customer
      *
-     * @param \Magento\SalesRule\Model\Rule\Customer $rule
+     * @param ModelRuleCustomer $rule
      * @param int $customerId
      * @param int $ruleId
      * @return $this

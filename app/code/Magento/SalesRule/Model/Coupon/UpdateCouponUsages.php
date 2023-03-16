@@ -19,25 +19,13 @@ use Magento\SalesRule\Model\Coupon\Usage\UpdateInfoFactory;
 class UpdateCouponUsages
 {
     /**
-     * @var CouponUsageProcessor
-     */
-    private $couponUsageProcessor;
-
-    /**
-     * @var UpdateInfoFactory
-     */
-    private $updateInfoFactory;
-
-    /**
      * @param CouponUsageProcessor $couponUsageProcessor
      * @param UpdateInfoFactory $updateInfoFactory
      */
     public function __construct(
-        CouponUsageProcessor $couponUsageProcessor,
-        UpdateInfoFactory $updateInfoFactory
+        private readonly CouponUsageProcessor $couponUsageProcessor,
+        private readonly UpdateInfoFactory $updateInfoFactory
     ) {
-        $this->couponUsageProcessor = $couponUsageProcessor;
-        $this->updateInfoFactory = $updateInfoFactory;
     }
 
     /**

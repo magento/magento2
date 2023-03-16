@@ -7,13 +7,16 @@
  */
 namespace Magento\SalesRule\Model\Data;
 
+use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\SalesRule\Api\Data\RuleLabelExtensionInterface;
+use Magento\SalesRule\Api\Data\RuleLabelInterface;
+
 /**
  * Class Rule label
  *
  * @codeCoverageIgnore
  */
-class RuleLabel extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\SalesRule\Api\Data\RuleLabelInterface
+class RuleLabel extends AbstractExtensibleObject implements RuleLabelInterface
 {
     const KEY_STORE_ID = 'store_id';
     const KEY_STORE_LABEL = 'store_label';
@@ -63,7 +66,7 @@ class RuleLabel extends \Magento\Framework\Api\AbstractExtensibleObject implemen
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\SalesRule\Api\Data\RuleLabelExtensionInterface|null
+     * @return RuleLabelExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -73,11 +76,11 @@ class RuleLabel extends \Magento\Framework\Api\AbstractExtensibleObject implemen
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\SalesRule\Api\Data\RuleLabelExtensionInterface $extensionAttributes
+     * @param RuleLabelExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\SalesRule\Api\Data\RuleLabelExtensionInterface $extensionAttributes
+        RuleLabelExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

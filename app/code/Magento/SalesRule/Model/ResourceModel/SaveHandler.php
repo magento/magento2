@@ -5,6 +5,7 @@
  */
 namespace Magento\SalesRule\Model\ResourceModel;
 
+use Exception;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\AttributeInterface;
 
@@ -14,25 +15,13 @@ use Magento\Framework\EntityManager\Operation\AttributeInterface;
 class SaveHandler implements AttributeInterface
 {
     /**
-     * @var Rule
-     */
-    protected $ruleResource;
-
-    /**
-     * @var MetadataPool
-     */
-    protected $metadataPool;
-
-    /**
      * @param Rule $ruleResource
      * @param MetadataPool $metadataPool
      */
     public function __construct(
-        Rule $ruleResource,
-        MetadataPool $metadataPool
+        protected readonly Rule $ruleResource,
+        protected readonly MetadataPool $metadataPool
     ) {
-        $this->ruleResource = $ruleResource;
-        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -42,7 +31,7 @@ class SaveHandler implements AttributeInterface
      * @param array $entityData
      * @param array $arguments
      * @return array
-     * @throws \Exception
+     * @throws Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entityType, $entityData, $arguments = [])

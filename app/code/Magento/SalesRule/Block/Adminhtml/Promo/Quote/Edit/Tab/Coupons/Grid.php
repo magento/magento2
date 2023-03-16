@@ -6,38 +6,47 @@
 
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons;
 
+use Magento\Backend\Block\Template\Context as TemplateContext;
+use Magento\Backend\Block\Widget\Grid\Extended as GridExtended;
+use Magento\Backend\Helper\Data as BackendHelper;
+use Magento\Framework\Registry;
+use Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid\Column\Renderer\Used as GridColumnRendererUsed;
+use Magento\SalesRule\Model\RegistryConstants;
+use Magento\SalesRule\Model\ResourceModel\Coupon\Collection as CouponCollection;
+use Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory as CouponCollectionFactory;
+
 /**
  * Coupon codes grid
  *
  * @api
  * @since 100.0.2
  */
-class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
+class Grid extends GridExtended
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory
+     * @var CouponCollectionFactory
      */
     protected $_salesRuleCoupon;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory $salesRuleCoupon
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param TemplateContext $context
+     * @param BackendHelper $backendHelper
+     * @param CouponCollectionFactory $salesRuleCoupon
+     * @param Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory $salesRuleCoupon,
-        \Magento\Framework\Registry $coreRegistry,
+        TemplateContext $context,
+        BackendHelper $backendHelper,
+        CouponCollectionFactory $salesRuleCoupon,
+        Registry $coreRegistry,
         array $data = []
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -60,11 +69,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        $priceRule = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
+        $priceRule = $this->_coreRegistry->registry(RegistryConstants::CURRENT_SALES_RULE);
 
-        /**
-         * @var \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $collection
-         */
+        /** @var CouponCollection $collection */
         $collection = $this->_salesRuleCoupon->create()->addRuleToFilter($priceRule)->addGeneratedCouponsFilter();
 
         if ($this->_isExport && $this->getMassactionBlock()->isAvailable()) {
@@ -106,7 +113,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'type' => 'options',
                 'options' => [__('No'), __('Yes')],
                 'renderer' =>
-                    \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid\Column\Renderer\Used::class,
+                    GridColumnRendererUsed::class,
                 'filter_condition_callback' => [$this->_salesRuleCoupon->create(), 'addIsUsedFilterCallback']
             ]
         );

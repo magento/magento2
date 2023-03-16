@@ -5,6 +5,8 @@
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo;
 
+use Magento\Backend\Block\Widget\Grid\Container;
+
 /**
  * Catalog price rules
  *
@@ -12,7 +14,7 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
-class Quote extends \Magento\Backend\Block\Widget\Grid\Container
+class Quote extends Container
 {
     /**
      * Constructor

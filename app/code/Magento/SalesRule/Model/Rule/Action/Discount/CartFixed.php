@@ -27,11 +27,6 @@ class CartFixed extends AbstractDiscount
     protected $_cartFixedRuleUsedForAddress = [];
 
     /**
-     * @var DeltaPriceRound
-     */
-    private $deltaPriceRound;
-
-    /**
      * @var CartFixedDiscount
      */
     private $cartFixedDiscountHelper;
@@ -52,10 +47,9 @@ class CartFixed extends AbstractDiscount
         Validator $validator,
         DataFactory $discountDataFactory,
         PriceCurrencyInterface $priceCurrency,
-        DeltaPriceRound $deltaPriceRound,
+        private readonly DeltaPriceRound $deltaPriceRound,
         ?CartFixedDiscount $cartFixedDiscount = null
     ) {
-        $this->deltaPriceRound = $deltaPriceRound;
         $this->cartFixedDiscountHelper = $cartFixedDiscount ?:
             ObjectManager::getInstance()->get(CartFixedDiscount::class);
         parent::__construct($validator, $discountDataFactory, $priceCurrency);

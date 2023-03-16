@@ -6,13 +6,17 @@
 
 namespace Magento\SalesRule\Helper;
 
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context as HelperContext;
+use Magento\Store\Model\ScopeInterface;
+
 /**
  * Helper for coupon codes creating and managing
  *
  * @api
  * @since 100.0.2
  */
-class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
+class Coupon extends AbstractHelper
 {
     /**
      * Constants which defines all possible coupon codes formats
@@ -47,11 +51,11 @@ class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_couponParameters;
 
     /**
-     * @param \Magento\Framework\App\Helper\Context $context
+     * @param HelperContext $context
      * @param array $couponParameters
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
+        HelperContext $context,
         array $couponParameters
     ) {
         $this->_couponParameters = $couponParameters;
@@ -81,7 +85,7 @@ class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (int)$this->scopeConfig->getValue(
             self::XML_PATH_SALES_RULE_COUPON_LENGTH,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -94,7 +98,7 @@ class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_SALES_RULE_COUPON_FORMAT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -107,7 +111,7 @@ class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_SALES_RULE_COUPON_PREFIX,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -120,7 +124,7 @@ class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_SALES_RULE_COUPON_SUFFIX,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -133,7 +137,7 @@ class Coupon extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (int)$this->scopeConfig->getValue(
             self::XML_PATH_SALES_RULE_COUPON_DASH_INTERVAL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 

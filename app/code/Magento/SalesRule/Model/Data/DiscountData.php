@@ -7,13 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Model\Data;
 
+use Magento\Framework\Api\AbstractExtensibleObject;
 use Magento\SalesRule\Api\Data\DiscountDataInterface;
 use Magento\Framework\Api\ExtensionAttributesInterface;
 
 /**
  * Discount Data Model
  */
-class DiscountData extends \Magento\Framework\Api\AbstractExtensibleObject implements DiscountDataInterface
+class DiscountData extends AbstractExtensibleObject implements DiscountDataInterface
 {
 
     const AMOUNT = 'amount';

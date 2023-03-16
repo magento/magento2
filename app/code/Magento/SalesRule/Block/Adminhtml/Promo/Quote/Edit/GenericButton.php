@@ -6,6 +6,9 @@
 
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit;
 
+use Magento\Backend\Block\Widget\Context as WidgetContext;
+use Magento\Framework\Registry;
+use Magento\Framework\UrlInterface;
 use Magento\SalesRule\Model\RegistryConstants;
 
 class GenericButton
@@ -13,29 +16,21 @@ class GenericButton
     /**
      * Url Builder
      *
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     protected $urlBuilder;
 
     /**
-     * Registry
-     *
-     * @var \Magento\Framework\Registry
-     */
-    protected $registry;
-
-    /**
      * Constructor
      *
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param WidgetContext $context
+     * @param Registry $registry Registry
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Framework\Registry $registry
+        WidgetContext $context,
+        protected readonly Registry $registry
     ) {
         $this->urlBuilder = $context->getUrlBuilder();
-        $this->registry = $registry;
     }
 
     /**
@@ -52,9 +47,9 @@ class GenericButton
     /**
      * Generate url by route and parameters
      *
-     * @param   string $route
-     * @param   array $params
-     * @return  string
+     * @param string $route
+     * @param array $params
+     * @return string
      */
     public function getUrl($route = '', $params = [])
     {

@@ -12,11 +12,6 @@ use Magento\SalesRule\Model\ResourceModel\Rule as RuleResource;
 class QuoteConfigProductAttributes
 {
     /**
-     * @var RuleResource
-     */
-    private $ruleResource;
-
-    /**
      * @var array|null
      */
     private $activeAttributeCodes;
@@ -24,9 +19,9 @@ class QuoteConfigProductAttributes
     /**
      * @param RuleResource $ruleResource
      */
-    public function __construct(RuleResource $ruleResource)
-    {
-        $this->ruleResource = $ruleResource;
+    public function __construct(
+        private readonly RuleResource $ruleResource
+    ) {
     }
 
     /**

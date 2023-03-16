@@ -5,7 +5,9 @@
  */
 namespace Magento\SalesRule\Model\Coupon;
 
-class Codegenerator extends \Magento\Framework\DataObject implements CodegeneratorInterface
+use Magento\Framework\DataObject;
+
+class Codegenerator extends DataObject implements CodegeneratorInterface
 {
     /**
      * The minimum length of the default

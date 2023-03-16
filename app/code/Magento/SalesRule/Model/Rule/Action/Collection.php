@@ -5,22 +5,29 @@
  */
 namespace Magento\SalesRule\Model\Rule\Action;
 
-class Collection extends \Magento\Rule\Model\Action\Collection
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Rule\Model\Action\Collection as ActionCollection;
+use Magento\Rule\Model\ActionFactory;
+use Magento\SalesRule\Model\Rule\Action\Collection as RuleActionCollection;
+use Magento\SalesRule\Model\Rule\Action\Product as RuleActionProduct;
+
+class Collection extends ActionCollection
 {
     /**
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\View\LayoutInterface $layout
-     * @param \Magento\Rule\Model\ActionFactory $actionFactory
+     * @param Repository $assetRepo
+     * @param LayoutInterface $layout
+     * @param ActionFactory $actionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\View\LayoutInterface $layout,
-        \Magento\Rule\Model\ActionFactory $actionFactory,
+        Repository $assetRepo,
+        LayoutInterface $layout,
+        ActionFactory $actionFactory,
         array $data = []
     ) {
         parent::__construct($assetRepo, $layout, $actionFactory, $data);
-        $this->setType(\Magento\SalesRule\Model\Rule\Action\Collection::class);
+        $this->setType(RuleActionCollection::class);
     }
 
     /**
@@ -31,7 +38,7 @@ class Collection extends \Magento\Rule\Model\Action\Collection
         $actions = parent::getNewChildSelectOptions();
         $actions = array_merge_recursive(
             $actions,
-            [['value' => \Magento\SalesRule\Model\Rule\Action\Product::class, 'label' => __('Update the Product')]]
+            [['value' => RuleActionProduct::class, 'label' => __('Update the Product')]]
         );
         return $actions;
     }

@@ -5,18 +5,21 @@
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid\Column\Renderer;
 
+use Magento\Backend\Block\Widget\Grid\Column\Renderer\Text;
+use Magento\Framework\DataObject;
+
 /**
  * Coupon codes grid "Used" column renderer
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Used extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
+class Used extends Text
 {
     /**
-     * @param \Magento\Framework\DataObject $row
+     * @param DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\DataObject $row)
+    public function render(DataObject $row)
     {
         $value = (int)$row->getData($this->getColumn()->getIndex());
         return empty($value) ? __('No') : __('Yes');

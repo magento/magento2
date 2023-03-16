@@ -5,11 +5,14 @@
  */
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
+use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\SalesRule\Model\Rule as ModelRule;
+
 class ToPercent extends ByPercent
 {
     /**
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param ModelRule $rule
+     * @param AbstractItem $item
      * @param float $qty
      * @return Data
      */

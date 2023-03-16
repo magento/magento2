@@ -23,29 +23,9 @@ class CouponUsagePublisher
     private const TOPIC_NAME = 'sales.rule.update.coupon.usage';
 
     /**
-     * @var BulkManagementInterface
-     */
-    private $bulkManagement;
-
-    /**
      * @var OperationInterfaceFactory
      */
     private $operationFactory;
-
-    /**
-     * @var IdentityGeneratorInterface
-     */
-    private $identityService;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
-     * @var UserContextInterface
-     */
-    private $userContext;
 
     /**
      * @param BulkManagementInterface $bulkManagement
@@ -55,23 +35,19 @@ class CouponUsagePublisher
      * @param UserContextInterface $userContext
      */
     public function __construct(
-        BulkManagementInterface $bulkManagement,
+        private readonly BulkManagementInterface $bulkManagement,
         OperationInterfaceFactory $operartionFactory,
-        IdentityGeneratorInterface $identityService,
-        SerializerInterface $serializer,
-        UserContextInterface $userContext
+        private readonly IdentityGeneratorInterface $identityService,
+        private readonly SerializerInterface $serializer,
+        private readonly UserContextInterface $userContext
     ) {
-        $this->bulkManagement = $bulkManagement;
         $this->operationFactory = $operartionFactory;
-        $this->identityService = $identityService;
-        $this->serializer = $serializer;
-        $this->userContext = $userContext;
     }
 
     /**
      * Publish sales rule usage info into the queue
      *
-     * @param string $updateInfo
+     * @param UpdateInfo $updateInfo
      * @return boolean
      */
     public function publish(UpdateInfo $updateInfo): bool

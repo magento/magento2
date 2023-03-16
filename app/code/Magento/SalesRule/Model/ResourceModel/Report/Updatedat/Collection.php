@@ -5,12 +5,14 @@
  */
 namespace Magento\SalesRule\Model\ResourceModel\Report\Updatedat;
 
+use Magento\SalesRule\Model\ResourceModel\Report\Collection as ReportCollection;
+
 /**
  * Sales report coupons collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\SalesRule\Model\ResourceModel\Report\Collection
+class Collection extends ReportCollection
 {
     /**
      * Aggregated Data Table

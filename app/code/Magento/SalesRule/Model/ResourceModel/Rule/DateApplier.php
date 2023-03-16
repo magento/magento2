@@ -5,6 +5,8 @@
  */
 namespace Magento\SalesRule\Model\ResourceModel\Rule;
 
+use Magento\Framework\DB\Select;
+
 /**
  * Class DateApplier
  * adds the dates just for SalesRule
@@ -12,7 +14,7 @@ namespace Magento\SalesRule\Model\ResourceModel\Rule;
 class DateApplier
 {
     /**
-     * @param \Magento\Framework\DB\Select $select
+     * @param Select $select
      * @param int|string $now
      * @return void
      */

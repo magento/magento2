@@ -17,25 +17,13 @@ use Magento\SalesRule\Model\Coupon\UpdateCouponUsages;
 class CouponUsagesDecrement
 {
     /**
-     * @var UpdateCouponUsages
-     */
-    private $updateCouponUsages;
-
-    /**
-     * @var OrderRepository
-     */
-    private $orderRepository;
-
-    /**
      * @param UpdateCouponUsages $updateCouponUsages
      * @param OrderRepository $orderRepository
      */
     public function __construct(
-        UpdateCouponUsages $updateCouponUsages,
-        OrderRepository $orderRepository
+        private readonly UpdateCouponUsages $updateCouponUsages,
+        private readonly OrderRepository $orderRepository
     ) {
-        $this->updateCouponUsages = $updateCouponUsages;
-        $this->orderRepository = $orderRepository;
     }
 
     /**

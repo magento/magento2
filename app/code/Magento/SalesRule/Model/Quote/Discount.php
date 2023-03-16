@@ -42,44 +42,12 @@ class Discount extends AbstractTotal
     protected $calculator;
 
     /**
-     * Core event manager proxy
-     *
-     * @var ManagerInterface
-     */
-    protected $eventManager = null;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var PriceCurrencyInterface
-     */
-    protected $priceCurrency;
-
-    /**
-     * @var RuleDiscountInterfaceFactory
-     */
-    private $discountInterfaceFactory;
-
-    /**
-     * @var DiscountDataInterfaceFactory
-     */
-    private $discountDataInterfaceFactory;
-
-    /**
-     * @var RulesApplier|null
-     */
-    private $rulesApplier;
-
-    /**
      * @var array
      */
     private $addressDiscountAggregator = [];
 
     /**
-     * @param ManagerInterface $eventManager
+     * @param ManagerInterface $eventManager Core event manager proxy
      * @param StoreManagerInterface $storeManager
      * @param Validator $validator
      * @param PriceCurrencyInterface $priceCurrency
@@ -88,19 +56,16 @@ class Discount extends AbstractTotal
      * @param RulesApplier|null $rulesApplier
      */
     public function __construct(
-        ManagerInterface $eventManager,
-        StoreManagerInterface $storeManager,
+        protected readonly ManagerInterface $eventManager,
+        protected readonly StoreManagerInterface $storeManager,
         Validator $validator,
-        PriceCurrencyInterface $priceCurrency,
-        RuleDiscountInterfaceFactory $discountInterfaceFactory = null,
-        DiscountDataInterfaceFactory $discountDataInterfaceFactory = null,
-        RulesApplier $rulesApplier = null
+        protected readonly PriceCurrencyInterface $priceCurrency,
+        private ?RuleDiscountInterfaceFactory $discountInterfaceFactory = null,
+        private ?DiscountDataInterfaceFactory $discountDataInterfaceFactory = null,
+        private ?RulesApplier $rulesApplier = null
     ) {
         $this->setCode(self::COLLECTOR_TYPE_CODE);
-        $this->eventManager = $eventManager;
         $this->calculator = $validator;
-        $this->storeManager = $storeManager;
-        $this->priceCurrency = $priceCurrency;
         $this->discountInterfaceFactory = $discountInterfaceFactory
             ?: ObjectManager::getInstance()->get(RuleDiscountInterfaceFactory::class);
         $this->discountDataInterfaceFactory = $discountDataInterfaceFactory
@@ -247,7 +212,7 @@ class Discount extends AbstractTotal
      * @param AbstractItem $item
      * @return $this
      * @deprecated No longer used.
-     * @see \Magento\SalesRule\Model\RulesApplier::applyRule()
+     * @see RulesApplier::applyRule
      */
     protected function distributeDiscount(AbstractItem $item)
     {

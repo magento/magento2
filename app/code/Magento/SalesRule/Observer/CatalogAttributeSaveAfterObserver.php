@@ -11,17 +11,11 @@ use Magento\Framework\Event\ObserverInterface;
 class CatalogAttributeSaveAfterObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\SalesRule\Observer\CheckSalesRulesAvailability
-     */
-    protected $checkSalesRulesAvailability;
-
-    /**
      * @param CheckSalesRulesAvailability $checkSalesRulesAvailability
      */
     public function __construct(
-        \Magento\SalesRule\Observer\CheckSalesRulesAvailability $checkSalesRulesAvailability
+        protected readonly CheckSalesRulesAvailability $checkSalesRulesAvailability
     ) {
-        $this->checkSalesRulesAvailability = $checkSalesRulesAvailability;
     }
 
     /**

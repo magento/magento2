@@ -5,14 +5,18 @@
  */
 namespace Magento\SalesRule\Model;
 
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\SalesRule\Api\Data\CouponExtensionInterface;
+use Magento\SalesRule\Api\Data\CouponInterface;
+use Magento\SalesRule\Model\ResourceModel\Coupon as ResourceCoupon;
+
 /**
  * SalesRule Coupon Model
  *
  * @api
  * @since 100.0.2
  */
-class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\SalesRule\Api\Data\CouponInterface
+class Coupon extends AbstractExtensibleModel implements CouponInterface
 {
     const KEY_COUPON_ID = 'coupon_id';
     const KEY_RULE_ID = 'rule_id';
@@ -36,7 +40,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     protected function _construct()
     {
         parent::_construct();
-        $this->_init(\Magento\SalesRule\Model\ResourceModel\Coupon::class);
+        $this->_init(ResourceCoupon::class);
     }
 
     /**
@@ -293,7 +297,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\SalesRule\Api\Data\CouponExtensionInterface|null
+     * @return CouponExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -303,11 +307,11 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\SalesRule\Api\Data\CouponExtensionInterface $extensionAttributes
+     * @param CouponExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\SalesRule\Api\Data\CouponExtensionInterface $extensionAttributes
+        CouponExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

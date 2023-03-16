@@ -10,25 +10,21 @@ namespace Magento\SalesRule\Model\Quote\Address\Total;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface as ShippingAssignment;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
+use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Magento\SalesRule\Model\Quote\Discount as DiscountCollector;
 use Magento\SalesRule\Model\Validator;
 
 /**
  * Total collector for shipping discounts.
  */
-class ShippingDiscount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
+class ShippingDiscount extends AbstractTotal
 {
-    /**
-     * @var Validator
-     */
-    private $calculator;
-
     /**
      * @param Validator $calculator
      */
-    public function __construct(Validator $calculator)
-    {
-        $this->calculator = $calculator;
+    public function __construct(
+        private readonly Validator $calculator
+    ) {
     }
 
     /**
@@ -82,8 +78,8 @@ class ShippingDiscount extends \Magento\Quote\Model\Quote\Address\Total\Abstract
     /**
      * @inheritdoc
      *
-     * @param \Magento\Quote\Model\Quote $quote
-     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * @param Quote $quote
+     * @param Total $total
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

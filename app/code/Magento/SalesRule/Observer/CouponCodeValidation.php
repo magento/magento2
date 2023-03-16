@@ -23,33 +23,15 @@ use Magento\SalesRule\Model\Spi\CodeLimitManagerInterface;
 class CouponCodeValidation implements ObserverInterface
 {
     /**
-     * @var CartRepositoryInterface
-     */
-    private $cartRepository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $criteriaBuilder;
-
-    /**
-     * @var CodeLimitManagerInterface
-     */
-    private $codeLimitManager;
-
-    /**
      * @param CodeLimitManagerInterface $codeLimitManager
      * @param CartRepositoryInterface $cartRepository
      * @param SearchCriteriaBuilder $criteriaBuilder
      */
     public function __construct(
-        CodeLimitManagerInterface $codeLimitManager,
-        CartRepositoryInterface $cartRepository,
-        SearchCriteriaBuilder $criteriaBuilder
+        private readonly CodeLimitManagerInterface $codeLimitManager,
+        private readonly CartRepositoryInterface $cartRepository,
+        private readonly SearchCriteriaBuilder $criteriaBuilder
     ) {
-        $this->codeLimitManager = $codeLimitManager;
-        $this->cartRepository = $cartRepository;
-        $this->criteriaBuilder = $criteriaBuilder;
     }
 
     /**

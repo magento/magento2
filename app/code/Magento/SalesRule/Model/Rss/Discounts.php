@@ -5,6 +5,11 @@
  */
 namespace Magento\SalesRule\Model\Rss;
 
+use DateTime;
+use Magento\Framework\Stdlib\DateTime as FrameworkDateTime;
+use Magento\SalesRule\Model\ResourceModel\Rule\Collection as RuleCollection;
+use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
+
 /**
  * Class Discounts
  * @package Magento\SalesRule\Model\Rss
@@ -12,40 +17,28 @@ namespace Magento\SalesRule\Model\Rss;
 class Discounts
 {
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory
-     */
-    protected $collectionFactory;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $collectionFactory
+     * @param FrameworkDateTime $dateTime
+     * @param RuleCollectionFactory $collectionFactory
      */
     public function __construct(
-        \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $collectionFactory
+        protected readonly FrameworkDateTime $dateTime,
+        protected readonly RuleCollectionFactory $collectionFactory
     ) {
-        $this->dateTime = $dateTime;
-        $this->collectionFactory = $collectionFactory;
     }
 
     /**
      * @param int $websiteId
      * @param int $customerGroupId
-     * @return \Magento\SalesRule\Model\ResourceModel\Rule\Collection
+     * @return RuleCollection
      */
     public function getDiscountCollection($websiteId, $customerGroupId)
     {
-        /** @var $collection \Magento\SalesRule\Model\ResourceModel\Rule\Collection */
+        /** @var RuleCollection $collection */
         $collection = $this->collectionFactory->create();
         $collection->addWebsiteGroupDateFilter(
             $websiteId,
             $customerGroupId,
-            (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
+            (new DateTime())->format(FrameworkDateTime::DATETIME_PHP_FORMAT)
         )
             ->addFieldToFilter('is_rss', 1)
             ->setOrder('from_date', 'desc');

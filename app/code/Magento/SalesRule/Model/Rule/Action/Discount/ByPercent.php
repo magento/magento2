@@ -5,13 +5,17 @@
  */
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
+use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Model\Rule\Action\Discount\Data as DiscountData;
+
 class ByPercent extends AbstractDiscount
 {
     /**
      * Calculate discount by percent
      *
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param Rule $rule
+     * @param AbstractItem $item
      * @param float $qty
      * @return Data
      */
@@ -27,7 +31,7 @@ class ByPercent extends AbstractDiscount
      * Fix quantity depending on discount step
      *
      * @param float $qty
-     * @param \Magento\SalesRule\Model\Rule $rule
+     * @param Rule $rule
      * @return float
      */
     public function fixQuantity($qty, $rule)
@@ -43,15 +47,15 @@ class ByPercent extends AbstractDiscount
     /**
      * Calculate discount by rule percent
      *
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param Rule $rule
+     * @param AbstractItem $item
      * @param float $qty
      * @param float $rulePercent
      * @return Data
      */
     protected function _calculate($rule, $item, $qty, $rulePercent)
     {
-        /** @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData */
+        /** @var DiscountData $discountData */
         $discountData = $this->discountFactory->create();
 
         $itemPrice = $this->validator->getItemPrice($item);

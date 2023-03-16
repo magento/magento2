@@ -6,12 +6,16 @@
 
 namespace Magento\SalesRule\Model\ResourceModel\Report\Rule;
 
+use Exception;
+use Magento\Reports\Model\ResourceModel\Report\AbstractReport;
+use Zend_Db_Expr;
+
 /**
  * Rule report resource model with aggregation by created at
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
+class Createdat extends AbstractReport
 {
     /**
      * Resource Report Rule constructor
@@ -38,7 +42,7 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
     /**
      * Aggregate coupons reports by orders
      *
-     * @throws \Exception
+     * @throws Exception
      * @param string $aggregationField
      * @param mixed $from
      * @param mixed $to
@@ -161,7 +165,7 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
 
             $columns = [
                 'period' => 'period',
-                'store_id' => new \Zend_Db_Expr('0'),
+                'store_id' => new Zend_Db_Expr('0'),
                 'order_status' => 'order_status',
                 'coupon_code' => 'coupon_code',
                 'rule_name' => 'rule_name',
@@ -184,7 +188,7 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
 
             $connection->query($select->insertFromSelect($table, array_keys($columns)));
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $connection->rollBack();
             throw $e;
         }

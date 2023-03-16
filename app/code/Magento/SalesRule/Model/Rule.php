@@ -5,67 +5,89 @@
  */
 namespace Magento\SalesRule\Model;
 
+use Exception;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Quote\Model\Quote\Address;
+use Magento\Rule\Model\AbstractModel;
+use Magento\SalesRule\Api\Data\CouponInterface;
+use Magento\SalesRule\Model\Coupon\CodegeneratorFactory;
+use Magento\SalesRule\Model\Coupon\CodegeneratorInterface as CouponCodegeneratorInterface;
+use Magento\SalesRule\Model\ResourceModel\Coupon\Collection as CouponCollection;
+use Magento\SalesRule\Model\ResourceModel\Rule as ResourceRule;
+use Magento\SalesRule\Model\Rule\Condition\Combine as CondCombine;
+use Magento\SalesRule\Model\Rule\Condition\Product\Combine as CondProductCombine;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory as CondProductCombineFactory;
+use Magento\SalesRule\Model\Rule\Condition\CombineFactory as CondCombineFactory;
 
 /**
  * Shopping Cart Rule data model
  *
  * @api
  * @method string getName()
- * @method \Magento\SalesRule\Model\Rule setName(string $value)
+ * @method Rule setName(string $value)
  * @method string getDescription()
- * @method \Magento\SalesRule\Model\Rule setDescription(string $value)
- * @method \Magento\SalesRule\Model\Rule setFromDate(string $value)
- * @method \Magento\SalesRule\Model\Rule setToDate(string $value)
+ * @method Rule setDescription(string $value)
+ * @method Rule setFromDate(string $value)
+ * @method Rule setToDate(string $value)
  * @method int getUsesPerCustomer()
- * @method \Magento\SalesRule\Model\Rule setUsesPerCustomer(int $value)
+ * @method Rule setUsesPerCustomer(int $value)
  * @method int getUsesPerCoupon()
- * @method \Magento\SalesRule\Model\Rule setUsesPerCoupon(int $value)
- * @method \Magento\SalesRule\Model\Rule setCustomerGroupIds(string $value)
+ * @method Rule setUsesPerCoupon(int $value)
+ * @method Rule setCustomerGroupIds(string $value)
  * @method int getIsActive()
- * @method \Magento\SalesRule\Model\Rule setIsActive(int $value)
+ * @method Rule setIsActive(int $value)
  * @method string getConditionsSerialized()
- * @method \Magento\SalesRule\Model\Rule setConditionsSerialized(string $value)
+ * @method Rule setConditionsSerialized(string $value)
  * @method string getActionsSerialized()
- * @method \Magento\SalesRule\Model\Rule setActionsSerialized(string $value)
+ * @method Rule setActionsSerialized(string $value)
  * @method int getStopRulesProcessing()
- * @method \Magento\SalesRule\Model\Rule setStopRulesProcessing(int $value)
+ * @method Rule setStopRulesProcessing(int $value)
  * @method int getIsAdvanced()
- * @method \Magento\SalesRule\Model\Rule setIsAdvanced(int $value)
+ * @method Rule setIsAdvanced(int $value)
  * @method string getProductIds()
- * @method \Magento\SalesRule\Model\Rule setProductIds(string $value)
+ * @method Rule setProductIds(string $value)
  * @method int getSortOrder()
- * @method \Magento\SalesRule\Model\Rule setSortOrder(int $value)
+ * @method Rule setSortOrder(int $value)
  * @method string getSimpleAction()
- * @method \Magento\SalesRule\Model\Rule setSimpleAction(string $value)
+ * @method Rule setSimpleAction(string $value)
  * @method float getDiscountAmount()
- * @method \Magento\SalesRule\Model\Rule setDiscountAmount(float $value)
+ * @method Rule setDiscountAmount(float $value)
  * @method float getDiscountQty()
- * @method \Magento\SalesRule\Model\Rule setDiscountQty(float $value)
+ * @method Rule setDiscountQty(float $value)
  * @method int getDiscountStep()
- * @method \Magento\SalesRule\Model\Rule setDiscountStep(int $value)
+ * @method Rule setDiscountStep(int $value)
  * @method int getApplyToShipping()
- * @method \Magento\SalesRule\Model\Rule setApplyToShipping(int $value)
+ * @method Rule setApplyToShipping(int $value)
  * @method int getTimesUsed()
- * @method \Magento\SalesRule\Model\Rule setTimesUsed(int $value)
+ * @method Rule setTimesUsed(int $value)
  * @method int getIsRss()
- * @method \Magento\SalesRule\Model\Rule setIsRss(int $value)
+ * @method Rule setIsRss(int $value)
  * @method string getWebsiteIds()
- * @method \Magento\SalesRule\Model\Rule setWebsiteIds(string $value)
+ * @method Rule setWebsiteIds(string $value)
  * @method int getCouponType()
- * @method \Magento\SalesRule\Model\Rule setCouponType(int $value)
+ * @method Rule setCouponType(int $value)
  * @method int getUseAutoGeneration()
- * @method \Magento\SalesRule\Model\Rule setUseAutoGeneration(int $value)
+ * @method Rule setUseAutoGeneration(int $value)
  * @method string getCouponCode()
- * @method \Magento\SalesRule\Model\Rule setCouponCode(string $value)
+ * @method Rule setCouponCode(string $value)
  * @method int getRuleId()
- * @method \Magento\SalesRule\Model\Rule setRuleId(int $ruleId)
+ * @method Rule setRuleId(int $ruleId)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Rule extends \Magento\Rule\Model\AbstractModel
+class Rule extends AbstractModel
 {
     /**
      * Coupon types
@@ -94,7 +116,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * Store coupon code generator instance
      *
-     * @var \Magento\SalesRule\Model\Coupon\CodegeneratorInterface
+     * @var CouponCodegeneratorInterface
      */
     protected $_couponCodeGenerator;
 
@@ -117,14 +139,14 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * Rule's primary coupon
      *
-     * @var \Magento\SalesRule\Model\Coupon
+     * @var Coupon
      */
     protected $_primaryCoupon;
 
     /**
      * Rule's subordinate coupons
      *
-     * @var \Magento\SalesRule\Model\Coupon[]
+     * @var Coupon[]
      */
     protected $_coupons;
 
@@ -143,74 +165,74 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected $_validatedAddresses = [];
 
     /**
-     * @var \Magento\SalesRule\Model\CouponFactory
+     * @var CouponFactory
      */
     protected $_couponFactory;
 
     /**
-     * @var \Magento\SalesRule\Model\Coupon\CodegeneratorFactory
+     * @var CodegeneratorFactory
      */
     protected $_codegenFactory;
 
     /**
-     * @var \Magento\SalesRule\Model\Rule\Condition\CombineFactory
+     * @var CondCombineFactory
      */
     protected $_condCombineFactory;
 
     /**
-     * @var \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory
+     * @var CondProductCombineFactory
      */
     protected $_condProdCombineF;
 
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\Collection
+     * @var CouponCollection
      */
     protected $_couponCollection;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * Rule constructor
      *
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param TimezoneInterface $localeDate
      * @param CouponFactory $couponFactory
      * @param Coupon\CodegeneratorFactory $codegenFactory
      * @param Rule\Condition\CombineFactory $condCombineFactory
      * @param Rule\Condition\Product\CombineFactory $condProdCombineF
      * @param ResourceModel\Coupon\Collection $couponCollection
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param StoreManagerInterface $storeManager
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
      * @param array $data
      * @param ExtensionAttributesFactory|null $extensionFactory
      * @param AttributeValueFactory|null $customAttributeFactory
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param Json $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\SalesRule\Model\CouponFactory $couponFactory,
-        \Magento\SalesRule\Model\Coupon\CodegeneratorFactory $codegenFactory,
-        \Magento\SalesRule\Model\Rule\Condition\CombineFactory $condCombineFactory,
-        \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineF,
-        \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $couponCollection,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        TimezoneInterface $localeDate,
+        CouponFactory $couponFactory,
+        CodegeneratorFactory $codegenFactory,
+        CondCombineFactory $condCombineFactory,
+        CondProductCombineFactory $condProdCombineF,
+        CouponCollection $couponCollection,
+        StoreManagerInterface $storeManager,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = [],
         ExtensionAttributesFactory $extensionFactory = null,
         AttributeValueFactory $customAttributeFactory = null,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        Json $serializer = null
     ) {
         $this->_couponFactory = $couponFactory;
         $this->_codegenFactory = $codegenFactory;
@@ -240,7 +262,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init(\Magento\SalesRule\Model\ResourceModel\Rule::class);
+        $this->_init(ResourceRule::class);
         $this->setIdFieldName('rule_id');
     }
 
@@ -325,7 +347,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * Get rule condition combine model instance
      *
-     * @return \Magento\SalesRule\Model\Rule\Condition\Combine
+     * @return CondCombine
      */
     public function getConditionsInstance()
     {
@@ -335,7 +357,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * Get rule condition product combine model instance
      *
-     * @return \Magento\SalesRule\Model\Rule\Condition\Product\Combine
+     * @return CondProductCombine
      */
     public function getActionsInstance()
     {
@@ -345,7 +367,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * Returns code generator instance for auto generated coupons
      *
-     * @return \Magento\SalesRule\Model\Coupon\CodegeneratorInterface
+     * @return CouponCodegeneratorInterface
      */
     public function getCouponCodeGenerator()
     {
@@ -358,10 +380,10 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * Set code generator instance for auto generated coupons
      *
-     * @param \Magento\SalesRule\Model\Coupon\CodegeneratorInterface $codeGenerator
+     * @param CouponCodegeneratorInterface $codeGenerator
      * @return void
      */
-    public function setCouponCodeGenerator(\Magento\SalesRule\Model\Coupon\CodegeneratorInterface $codeGenerator)
+    public function setCouponCodeGenerator(CouponCodegeneratorInterface $codeGenerator)
     {
         $this->_couponCodeGenerator = $codeGenerator;
     }
@@ -369,7 +391,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * Retrieve rule's primary coupon
      *
-     * @return \Magento\SalesRule\Model\Coupon
+     * @return Coupon
      */
     public function getPrimaryCoupon()
     {
@@ -398,7 +420,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * Get Rule label by specified store
      *
-     * @param \Magento\Store\Model\Store|int|bool|null $store
+     * @param Store|int|bool|null $store
      * @return string|bool
      */
     public function getStoreLabel($store = null)
@@ -434,7 +456,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * Retrieve subordinate coupons
      *
-     * @return \Magento\SalesRule\Model\Coupon[]
+     * @return Coupon[]
      */
     public function getCoupons()
     {
@@ -454,16 +476,16 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     {
         if ($this->_couponTypes === null) {
             $this->_couponTypes = [
-                \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON => __('No Coupon'),
-                \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC => __('Specific Coupon'),
+                Rule::COUPON_TYPE_NO_COUPON => __('No Coupon'),
+                Rule::COUPON_TYPE_SPECIFIC => __('Specific Coupon'),
             ];
-            $transport = new \Magento\Framework\DataObject(
+            $transport = new DataObject(
                 ['coupon_types' => $this->_couponTypes, 'is_coupon_type_auto_visible' => false]
             );
             $this->_eventManager->dispatch('salesrule_rule_get_coupon_types', ['transport' => $transport]);
             $this->_couponTypes = $transport->getCouponTypes();
             if ($transport->getIsCouponTypeAutoVisible()) {
-                $this->_couponTypes[\Magento\SalesRule\Model\Rule::COUPON_TYPE_AUTO] = __('Auto');
+                $this->_couponTypes[Rule::COUPON_TYPE_AUTO] = __('Auto');
             }
         }
         return $this->_couponTypes;
@@ -474,8 +496,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      *
      * @param bool $saveNewlyCreated Whether or not to save newly created coupon
      * @param int $saveAttemptCount Number of attempts to save newly created coupon
-     * @return \Magento\SalesRule\Model\Coupon|null
-     * @throws \Exception|\Magento\Framework\Exception\LocalizedException
+     * @return Coupon|null
+     * @throws Exception|LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -487,7 +509,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         if ($this->getCouponType() == self::COUPON_TYPE_SPECIFIC) {
             return $this->getPrimaryCoupon();
         }
-        /** @var \Magento\SalesRule\Model\Coupon $coupon */
+        /** @var Coupon $coupon */
         $coupon = $this->_couponFactory->create();
         $coupon->setRule(
             $this
@@ -498,7 +520,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         )->setUsagePerCustomer(
             $this->getUsesPerCustomer() ? $this->getUsesPerCustomer() : null
         )->setType(
-            \Magento\SalesRule\Api\Data\CouponInterface::TYPE_GENERATED
+            CouponInterface::TYPE_GENERATED
         );
 
         $couponCode = self::getCouponCodeGenerator()->generateCode();
@@ -512,8 +534,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
                 for ($attemptNum = 0; $attemptNum < $saveAttemptCount; $attemptNum++) {
                     try {
                         $coupon->save();
-                    } catch (\Exception $e) {
-                        if ($e instanceof \Magento\Framework\Exception\LocalizedException || $coupon->getId()) {
+                    } catch (Exception $e) {
+                        if ($e instanceof LocalizedException || $coupon->getId()) {
                             throw $e;
                         }
                         $coupon->setCode(
@@ -530,7 +552,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             }
         }
         if (!$ok) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Can\'t acquire coupon.'));
+            throw new LocalizedException(__('Can\'t acquire coupon.'));
         }
 
         return $coupon;

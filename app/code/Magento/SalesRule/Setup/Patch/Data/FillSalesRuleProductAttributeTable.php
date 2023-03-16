@@ -6,9 +6,16 @@
 
 namespace Magento\SalesRule\Setup\Patch\Data;
 
+use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Framework\App\State;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
+use Magento\SalesRule\Model\ResourceModel\Rule as ResourceRule;
+use Magento\SalesRule\Model\ResourceModel\Rule\Collection as RuleCollection;
+use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
+use Magento\SalesRule\Model\Rule as ModelRule;
 
 /**
  * Class FillSalesRuleProductAttributeTable
@@ -18,50 +25,20 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 class FillSalesRuleProductAttributeTable implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @param \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleColletionFactory
-     */
-    private $ruleColletionFactory;
-
-    /**
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
-     */
-    private $serializer;
-
-    /**
-     * @param \Magento\SalesRule\Model\ResourceModel\Rule $resourceModelRule
-     */
-    private $resourceModelRule;
-
-    /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
-     * @var State
-     */
-    private $appState;
-
-    /**
      * FillSalesRuleProductAttributeTable constructor.
-     * @param \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleColletionFactory
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
-     * @param \Magento\SalesRule\Model\ResourceModel\Rule $resourceModelRule
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param RuleCollectionFactory $ruleColletionFactory
+     * @param SerializerInterface $serializer
+     * @param ResourceRule $resourceModelRule
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param State $appState
      */
     public function __construct(
-        \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleColletionFactory,
-        \Magento\Framework\Serialize\SerializerInterface $serializer,
-        \Magento\SalesRule\Model\ResourceModel\Rule $resourceModelRule,
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
-        State $appState
+        private readonly RuleCollectionFactory $ruleColletionFactory,
+        private readonly SerializerInterface $serializer,
+        private readonly ResourceRule $resourceModelRule,
+        private readonly ModuleDataSetupInterface $moduleDataSetup,
+        private readonly State $appState
     ) {
-        $this->ruleColletionFactory = $ruleColletionFactory;
-        $this->serializer = $serializer;
-        $this->resourceModelRule = $resourceModelRule;
-        $this->moduleDataSetup = $moduleDataSetup;
-        $this->appState = $appState;
     }
 
     /**
@@ -71,7 +48,7 @@ class FillSalesRuleProductAttributeTable implements DataPatchInterface, PatchVer
     {
         $this->moduleDataSetup->getConnection()->startSetup();
             $this->appState->emulateAreaCode(
-                \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
+                FrontNameResolver::AREA_CODE,
                 [$this, 'fillSalesRuleProductAttributeTable']
             );
             $this->fillSalesRuleProductAttributeTable();
@@ -83,9 +60,9 @@ class FillSalesRuleProductAttributeTable implements DataPatchInterface, PatchVer
      */
     public function fillSalesRuleProductAttributeTable()
     {
-        /** @var \Magento\SalesRule\Model\ResourceModel\Rule\Collection $ruleCollection */
+        /** @var RuleCollection $ruleCollection */
         $ruleCollection = $this->ruleColletionFactory->create();
-        /** @var \Magento\SalesRule\Model\Rule $rule */
+        /** @var ModelRule $rule */
         foreach ($ruleCollection as $rule) {
             // Save product attributes used in rule
             $conditions = $rule->getConditions()->asArray();

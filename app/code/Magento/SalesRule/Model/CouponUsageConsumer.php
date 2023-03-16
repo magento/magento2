@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Model;
 
+use Exception;
 use Magento\SalesRule\Model\Coupon\Usage\UpdateInfoFactory;
 use Magento\SalesRule\Model\Coupon\Usage\Processor as CouponUsageProcessor;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
@@ -21,31 +22,6 @@ use Psr\Log\LoggerInterface;
 class CouponUsageConsumer
 {
     /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var CouponUsageProcessor
-     */
-    private $processor;
-
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
-
-    /**
-     * @var UpdateInfoFactory
-     */
-    private $updateInfoFactory;
-
-    /**
      * @param UpdateInfoFactory $updateInfoFactory
      * @param CouponUsageProcessor $processor
      * @param LoggerInterface $logger
@@ -53,17 +29,12 @@ class CouponUsageConsumer
      * @param EntityManager $entityManager
      */
     public function __construct(
-        UpdateInfoFactory $updateInfoFactory,
-        CouponUsageProcessor $processor,
-        LoggerInterface $logger,
-        SerializerInterface $serializer,
-        EntityManager $entityManager
+        private readonly UpdateInfoFactory $updateInfoFactory,
+        private readonly CouponUsageProcessor $processor,
+        private readonly LoggerInterface $logger,
+        private readonly SerializerInterface $serializer,
+        private readonly EntityManager $entityManager
     ) {
-        $this->updateInfoFactory = $updateInfoFactory;
-        $this->processor = $processor;
-        $this->logger = $logger;
-        $this->serializer = $serializer;
-        $this->entityManager = $entityManager;
     }
 
     /**
@@ -71,7 +42,7 @@ class CouponUsageConsumer
      *
      * @param OperationInterface $operation
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function process(OperationInterface $operation): void
     {
@@ -86,7 +57,7 @@ class CouponUsageConsumer
             $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
             $errorCode = $e->getCode();
             $message = $e->getMessage();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->critical($e->getMessage());
             $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
             $errorCode = $e->getCode();

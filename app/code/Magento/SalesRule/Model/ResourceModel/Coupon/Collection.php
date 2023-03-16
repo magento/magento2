@@ -7,6 +7,8 @@ namespace Magento\SalesRule\Model\ResourceModel\Coupon;
 
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\SalesRule\Model\Coupon as ModelCoupon;
+use Magento\SalesRule\Model\ResourceModel\Coupon as ResourceCoupon;
 use Magento\SalesRule\Model\Rule;
 
 /**
@@ -24,7 +26,7 @@ class Collection extends AbstractCollection
     protected function _construct()
     {
         parent::_construct();
-        $this->_init(\Magento\SalesRule\Model\Coupon::class, \Magento\SalesRule\Model\ResourceModel\Coupon::class);
+        $this->_init(ModelCoupon::class, ResourceCoupon::class);
     }
 
     /**

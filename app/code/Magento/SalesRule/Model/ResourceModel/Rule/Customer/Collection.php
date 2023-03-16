@@ -5,12 +5,16 @@
  */
 namespace Magento\SalesRule\Model\ResourceModel\Rule\Customer;
 
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\SalesRule\Model\ResourceModel\Rule\Customer as ResourceRuleCustomer;
+use Magento\SalesRule\Model\Rule\Customer as ModelRuleCustomer;
+
 /**
  * SalesRule Model Resource Rule Customer_Collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Collection constructor
@@ -21,8 +25,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         parent::_construct();
         $this->_init(
-            \Magento\SalesRule\Model\Rule\Customer::class,
-            \Magento\SalesRule\Model\ResourceModel\Rule\Customer::class
+            ModelRuleCustomer::class,
+            ResourceRuleCustomer::class
         );
     }
 }

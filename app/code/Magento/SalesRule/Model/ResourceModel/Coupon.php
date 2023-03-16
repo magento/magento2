@@ -5,15 +5,19 @@
  */
 namespace Magento\SalesRule\Model\ResourceModel;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\SalesRule\Model\Coupon as ModelCoupon;
+use Magento\SalesRule\Model\Rule as ModelRule;
+use Magento\SalesRule\Model\Spi\CouponResourceInterface;
 
 /**
  * SalesRule Resource Coupon
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Coupon extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements
-    \Magento\SalesRule\Model\Spi\CouponResourceInterface
+class Coupon extends AbstractDb implements CouponResourceInterface
 {
     /**
      * Constructor adds unique fields
@@ -43,16 +47,16 @@ class Coupon extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
     /**
      * Load primary coupon (is_primary = 1) for specified rule
      *
-     * @param \Magento\SalesRule\Model\Coupon $object
-     * @param \Magento\SalesRule\Model\Rule|int $rule
+     * @param ModelCoupon $object
+     * @param ModelRule|int $rule
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    public function loadPrimaryByRule(\Magento\SalesRule\Model\Coupon $object, $rule)
+    public function loadPrimaryByRule(ModelCoupon $object, $rule)
     {
         $connection = $this->getConnection();
 
-        if ($rule instanceof \Magento\SalesRule\Model\Rule) {
+        if ($rule instanceof ModelRule) {
             $ruleId = $rule->getId();
         } else {
             $ruleId = (int)$rule;
@@ -100,10 +104,10 @@ class Coupon extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
     /**
      * Update auto generated Specific Coupon if its rule changed
      *
-     * @param \Magento\SalesRule\Model\Rule $rule
+     * @param ModelRule $rule
      * @return $this
      */
-    public function updateSpecificCoupons(\Magento\SalesRule\Model\Rule $rule)
+    public function updateSpecificCoupons(ModelRule $rule)
     {
         if (!$rule || !$rule->getId() || !$rule->hasDataChanges()) {
             return $this;

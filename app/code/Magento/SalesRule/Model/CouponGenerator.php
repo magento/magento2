@@ -5,6 +5,9 @@
  */
 namespace Magento\SalesRule\Model;
 
+use Magento\SalesRule\Api\Data\CouponGenerationSpecInterfaceFactory;
+use Magento\SalesRule\Model\Service\CouponManagementService;
+
 /**
  * Allows to generate a pool of coupon codes.
  *
@@ -30,28 +33,16 @@ class CouponGenerator
     ];
 
     /**
-     * @var Service\CouponManagementService
-     */
-    private $couponManagementService;
-
-    /**
-     * @var \Magento\SalesRule\Api\Data\CouponGenerationSpecInterfaceFactory
-     */
-    private $generationSpecFactory;
-
-    /**
      * All objects should be injected through constructor, because we need to have working service already
      * after it initializing
      *
      * @param Service\CouponManagementService $couponManagementService
-     * @param \Magento\SalesRule\Api\Data\CouponGenerationSpecInterfaceFactory $generationSpecFactory
+     * @param CouponGenerationSpecInterfaceFactory $generationSpecFactory
      */
     public function __construct(
-        \Magento\SalesRule\Model\Service\CouponManagementService $couponManagementService,
-        \Magento\SalesRule\Api\Data\CouponGenerationSpecInterfaceFactory $generationSpecFactory
+        private readonly CouponManagementService $couponManagementService,
+        private readonly CouponGenerationSpecInterfaceFactory $generationSpecFactory
     ) {
-        $this->couponManagementService = $couponManagementService;
-        $this->generationSpecFactory = $generationSpecFactory;
     }
 
     /**

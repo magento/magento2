@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Model\Rule;
 
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\SalesRule\Model\Spi\QuoteResetAppliedRulesInterface;
 
 /**
@@ -17,7 +18,7 @@ class QuoteResetAppliedRules implements QuoteResetAppliedRulesInterface
     /**
      * @inheritDoc
      */
-    public function execute(\Magento\Quote\Api\Data\CartInterface $quote): void
+    public function execute(CartInterface $quote): void
     {
         $quote->setCartFixedRules([]);
     }

@@ -22,41 +22,17 @@ use Magento\Store\Model\ScopeInterface;
 class CartFixedDiscount
 {
     /**
-     * @var DeltaPriceRound
-     */
-    private $deltaPriceRound;
-
-    /**
-     * @var PriceCurrencyInterface
-     */
-    private $priceCurrency;
-
-    /**
-     * @var ShippingMethodConverter
-     */
-    private $shippingMethodConverter = null;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig = null;
-
-    /**
      * @param DeltaPriceRound $deltaPriceRound
      * @param PriceCurrencyInterface $priceCurrency
      * @param ShippingMethodConverter $shippingMethodConverter
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        DeltaPriceRound $deltaPriceRound,
-        PriceCurrencyInterface $priceCurrency,
-        ShippingMethodConverter $shippingMethodConverter,
-        ScopeConfigInterface $scopeConfig
+        private readonly DeltaPriceRound $deltaPriceRound,
+        private readonly PriceCurrencyInterface $priceCurrency,
+        private readonly ShippingMethodConverter $shippingMethodConverter,
+        private readonly ScopeConfigInterface $scopeConfig
     ) {
-        $this->deltaPriceRound = $deltaPriceRound;
-        $this->priceCurrency = $priceCurrency;
-        $this->shippingMethodConverter = $shippingMethodConverter;
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**

@@ -7,27 +7,37 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
+use Magento\Backend\Block\Template\Context as TemplateContext;
+use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Framework\App\ObjectManager;
 use Magento\Backend\Block\Widget\Form\Renderer\Fieldset;
+use Magento\Framework\Data\Form as FormData;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Registry;
+use Magento\Rule\Block\Conditions as BlockConditions;
+use Magento\Rule\Model\Condition\AbstractCondition;
+use Magento\SalesRule\Model\RegistryConstants;
 use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Model\RuleFactory;
+use Magento\Ui\Component\Layout\Tabs\TabInterface;
 
 /**
  * Block for rendering Conditions tab on Sales Rules creation page.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
-    \Magento\Ui\Component\Layout\Tabs\TabInterface
+class Conditions extends Generic implements TabInterface
 {
     /**
      * Core registry
      *
-     * @var \Magento\Backend\Block\Widget\Form\Renderer\Fieldset
+     * @var Fieldset
      */
     protected $_rendererFieldset;
 
     /**
-     * @var \Magento\Rule\Block\Conditions
+     * @var BlockConditions
      */
     protected $_conditions;
 
@@ -37,32 +47,32 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected $_nameInLayout = 'conditions_apply_to';
 
     /**
-     * @var \Magento\SalesRule\Model\RuleFactory
+     * @var RuleFactory
      */
     private $ruleFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Rule\Block\Conditions $conditions
-     * @param \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset
+     * @param TemplateContext $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param BlockConditions $conditions
+     * @param Fieldset $rendererFieldset
      * @param array $data
-     * @param \Magento\SalesRule\Model\RuleFactory|null $ruleFactory
+     * @param RuleFactory|null $ruleFactory
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Rule\Block\Conditions $conditions,
-        \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset,
+        TemplateContext $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        BlockConditions $conditions,
+        Fieldset $rendererFieldset,
         array $data = [],
-        \Magento\SalesRule\Model\RuleFactory $ruleFactory = null
+        RuleFactory $ruleFactory = null
     ) {
         $this->_rendererFieldset = $rendererFieldset;
         $this->_conditions = $conditions;
         $this->ruleFactory = $ruleFactory ?: ObjectManager::getInstance()
-            ->get(\Magento\SalesRule\Model\RuleFactory::class);
+            ->get(RuleFactory::class);
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -131,7 +141,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     protected function _prepareForm()
     {
-        $model = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
+        $model = $this->_coreRegistry->registry(RegistryConstants::CURRENT_SALES_RULE);
         $form = $this->addTabToForm($model);
         $this->setForm($form);
 
@@ -144,8 +154,8 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param Rule $model
      * @param string $fieldsetId
      * @param string $formName
-     * @return \Magento\Framework\Data\Form
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return FormData
+     * @throws LocalizedException
      */
     protected function addTabToForm($model, $fieldsetId = 'conditions_fieldset', $formName = 'sales_rule_form')
     {
@@ -160,7 +170,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
             ['form_namespace' => $formName]
         );
 
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var FormData $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
 
@@ -207,11 +217,11 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Handles addition of form name to condition and its conditions.
      *
-     * @param \Magento\Rule\Model\Condition\AbstractCondition $conditions
+     * @param AbstractCondition $conditions
      * @param string $formName
      * @return void
      */
-    private function setConditionFormName(\Magento\Rule\Model\Condition\AbstractCondition $conditions, $formName)
+    private function setConditionFormName(AbstractCondition $conditions, $formName)
     {
         $conditions->setFormName($formName);
         if ($conditions->getConditions() && is_array($conditions->getConditions())) {

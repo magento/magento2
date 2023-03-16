@@ -5,13 +5,21 @@
  */
 namespace Magento\SalesRule\Model\ResourceModel;
 
+use Exception;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\Context as DbContext;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Stdlib\StringUtils;
 use Magento\Rule\Model\ResourceModel\AbstractResource;
 use Magento\SalesRule\Api\Data\RuleInterface;
+use Magento\SalesRule\Model\ResourceModel\Coupon as ResourceCoupon;
+use Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap;
+use Magento\SalesRule\Model\Rule as ModelRule;
+use Zend_Db_Expr;
 
 /**
  * Sales Rule resource model
@@ -37,14 +45,7 @@ class Rule extends AbstractResource
     protected $websiteIds = [];
 
     /**
-     * Magento string lib
-     *
-     * @var \Magento\Framework\Stdlib\StringUtils
-     */
-    protected $string;
-
-    /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Coupon
+     * @var ResourceCoupon
      */
     protected $_resourceCoupon;
 
@@ -54,38 +55,32 @@ class Rule extends AbstractResource
     protected $entityManager;
 
     /**
-     * @var MetadataPool
-     */
-    private $metadataPool;
-
-    /**
      * @var string
      */
     private $linkedField;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Stdlib\StringUtils $string
-     * @param \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon
+     * @param DbContext $context
+     * @param StringUtils $string Magento string lib
+     * @param ResourceCoupon $resourceCoupon
      * @param string $connectionName
-     * @param \Magento\Framework\DataObject|null $associatedEntityMapInstance
+     * @param DataObject|null $associatedEntityMapInstance
      * @param Json $serializer Optional parameter for backward compatibility
      * @param MetadataPool $metadataPool Optional parameter for backward compatibility
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Stdlib\StringUtils $string,
-        \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon,
+        DbContext $context,
+        protected readonly StringUtils $string,
+        ResourceCoupon $resourceCoupon,
         $connectionName = null,
-        \Magento\Framework\DataObject $associatedEntityMapInstance = null,
+        DataObject $associatedEntityMapInstance = null,
         Json $serializer = null,
-        MetadataPool $metadataPool = null
+        private ?MetadataPool $metadataPool = null
     ) {
-        $this->string = $string;
         $this->_resourceCoupon = $resourceCoupon;
         $associatedEntitiesMapInstance = $associatedEntityMapInstance ?: ObjectManager::getInstance()->get(
             // phpstan:ignore "Class Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap not found."
-            \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class
+            AssociatedEntityMap::class
         );
         $this->_associatedEntitiesMap = $associatedEntitiesMapInstance->getData();
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
@@ -135,13 +130,13 @@ class Rule extends AbstractResource
     /**
      * Prepare sales rule's discount quantity
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
      */
     public function _beforeSave(AbstractModel $object)
     {
         if (!$object->getDiscountQty()) {
-            $object->setDiscountQty(new \Zend_Db_Expr('NULL'));
+            $object->setDiscountQty(new Zend_Db_Expr('NULL'));
         }
 
         parent::_beforeSave($object);
@@ -168,7 +163,7 @@ class Rule extends AbstractResource
      * Save rule's associated store labels.
      * Save product attributes used in rule.
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
      */
     protected function _afterSave(AbstractModel $object)
@@ -196,7 +191,7 @@ class Rule extends AbstractResource
     /**
      * Retrieve coupon/rule uses for specified customer
      *
-     * @param \Magento\SalesRule\Model\Rule $rule
+     * @param ModelRule $rule
      * @param int $customerId
      * @return string
      */
@@ -219,7 +214,7 @@ class Rule extends AbstractResource
      *
      * @param int $ruleId
      * @param array $labels
-     * @throws \Exception
+     * @throws Exception
      * @return $this
      */
     public function saveStoreLabels($ruleId, $labels)
@@ -249,7 +244,7 @@ class Rule extends AbstractResource
                     [$this->getLinkField() . '=?' => $ruleId, 'store_id IN (?)' => $deleteByStoreIds]
                 );
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $connection->rollBack();
             throw $e;
         }
@@ -307,7 +302,7 @@ class Rule extends AbstractResource
         $connection = $this->getConnection();
         $select = $connection->select()->from(
             ['a' => $this->getTable('salesrule_product_attribute')],
-            new \Zend_Db_Expr('DISTINCT ea.attribute_code')
+            new Zend_Db_Expr('DISTINCT ea.attribute_code')
         )->joinInner(
             ['ea' => $this->getTable('eav_attribute')],
             'ea.attribute_id = a.attribute_id',
@@ -319,7 +314,7 @@ class Rule extends AbstractResource
     /**
      * Save product attributes currently used in conditions and actions of rule
      *
-     * @param \Magento\SalesRule\Model\Rule $rule
+     * @param ModelRule $rule
      * @param mixed $attributes
      * @return $this
      */
@@ -386,10 +381,10 @@ class Rule extends AbstractResource
     /**
      * Save cart rule
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
      */
-    public function save(\Magento\Framework\Model\AbstractModel $object)
+    public function save(AbstractModel $object)
     {
         $this->getEntityManager()->save($object);
         return $this;
@@ -398,7 +393,7 @@ class Rule extends AbstractResource
     /**
      * Delete the object
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
      */
     public function delete(AbstractModel $object)
@@ -410,13 +405,13 @@ class Rule extends AbstractResource
     /**
      * Init EntityManager
      *
-     * @return \Magento\Framework\EntityManager\EntityManager
+     * @return EntityManager
      */
     private function getEntityManager()
     {
         if (null === $this->entityManager) {
-            $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\EntityManager::class);
+            $this->entityManager = ObjectManager::getInstance()
+                ->get(EntityManager::class);
         }
         return $this->entityManager;
     }

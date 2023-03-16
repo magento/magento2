@@ -6,9 +6,14 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
+use Exception;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\SalesRule\Controller\Adminhtml\Promo\Quote as AdminhtmlPromoQuote;
+use Magento\SalesRule\Model\Rule;
+use Psr\Log\LoggerInterface;
 
-class Delete extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implements HttpPostActionInterface
+class Delete extends AdminhtmlPromoQuote implements HttpPostActionInterface
 {
     /**
      * Delete promo quote action
@@ -20,19 +25,19 @@ class Delete extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote impleme
         $id = $this->getRequest()->getParam('id');
         if ($id) {
             try {
-                $model = $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class);
+                $model = $this->_objectManager->create(Rule::class);
                 $model->load($id);
                 $model->delete();
                 $this->messageManager->addSuccessMessage(__('You deleted the rule.'));
                 $this->_redirect('sales_rule/*/');
                 return;
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addErrorMessage(
                     __('We can\'t delete the rule right now. Please review the log and try again.')
                 );
-                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+                $this->_objectManager->get(LoggerInterface::class)->critical($e);
                 $this->_redirect('sales_rule/*/edit', ['id' => $this->getRequest()->getParam('id')]);
                 return;
             }
