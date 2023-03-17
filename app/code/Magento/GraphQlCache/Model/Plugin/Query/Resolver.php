@@ -112,7 +112,11 @@ class Resolver
         $cacheIdentityFullPageContextString = $this->cacheIdCalculator->getCacheId();
         $cacheIdentityQueryPayloadString = $info->returnType->name . $this->serializer->serialize($args ?? []);
 
-        $cacheIdentityString = $cacheIdentityFullPageContextString . '-' . sha1($cacheIdentityQueryPayloadString);
+        $cacheIdentityString = GraphQlCache::CACHE_TAG
+            . '_'
+            . $cacheIdentityFullPageContextString
+            . '_'
+            . sha1($cacheIdentityQueryPayloadString);
 
         $cachedResult = $this->graphqlCache->load($cacheIdentityString);
 
