@@ -15,7 +15,6 @@
 
         <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="navigateToLocaleConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <scrollTo selector="{{LocaleOptionsSection.sectionHeader}}" stepKey="scrollToAnchor"/>
         <conditionalClick stepKey="expandDefaultLayouts" selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.CheckIfTabExpand}}" visible="true"/>
         <waitForElementVisible selector="{{LocaleOptionsSection.timezone}}" stepKey="waitForLocaleTimeZone"/>
     </actionGroup>

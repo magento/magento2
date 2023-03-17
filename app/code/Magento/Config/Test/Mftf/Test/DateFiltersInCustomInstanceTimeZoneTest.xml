@@ -24,12 +24,14 @@
             <actionGroup ref="NavigateToDefaultLocaleSettingActionGroup" stepKey="redirect"/>
             <!--Set needed Timezone-->
             <selectOption userInput="New Zealand Standard Time (Antarctica/McMurdo)" selector="{{LocaleOptionsSection.timeZoneDropdown}}" stepKey="selectOption1"/>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="savedefaultConfiguration"/>
             <!-- Logout From Admin Panel-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </before>
         <after>
             <actionGroup ref="NavigateToDefaultLocaleSettingActionGroup" stepKey="redirectAgain"/>
             <selectOption userInput="Central Standard Time (America/Chicago)" selector="{{LocaleOptionsSection.timeZoneDropdown}}" stepKey="selectDefaultoption"/>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
             <!-- Delete customer -->
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="CustomerEntityOne.email"/>
