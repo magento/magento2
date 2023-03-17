@@ -22,7 +22,7 @@
         <click stepKey="chooseCustomer" selector="{{AdminOrdersGridSection.customerInOrdersSection(customer.firstname)}}"/>
         <waitForPageLoad stepKey="waitForStoresPageOpened"/>
         <waitForElementClickable stepKey="waitForStoreClickable" selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}"/>
-        <selectOption stepKey="chooseStore" selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}"/>
+        <selectOption selector="{{AdminOrderStoreScopeTreeSection.storeTree}}" userInput="{{storeView.name}}" stepKey="chooseStore"/>
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <waitForPageLoad stepKey="waitForStoreToAppear"/>
         <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickOnAddProducts"/>
