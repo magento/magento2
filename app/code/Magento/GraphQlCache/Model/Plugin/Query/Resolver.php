@@ -69,7 +69,7 @@ class Resolver
     }
 
     /**
-     * TODO - doc
+     * Checks for cacheability of resolver's data, and, if cachable, loads and persists cache entry for future use
      *
      * @param ResolverInterface $subject
      * @param \Closure $proceed

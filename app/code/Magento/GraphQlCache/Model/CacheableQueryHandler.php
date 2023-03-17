@@ -73,7 +73,7 @@ class CacheableQueryHandler
     }
 
     /**
-     * TODO
+     * Get cache tags by class name and resolved value
      *
      * @param string $cacheIdentityClassName
      * @param array $resolvedValue
@@ -89,7 +89,7 @@ class CacheableQueryHandler
     }
 
     /**
-     * TODO
+     * Get cache identity object by class name
      *
      * @param string $cacheIdentityClassName
      * @return IdentityInterface
