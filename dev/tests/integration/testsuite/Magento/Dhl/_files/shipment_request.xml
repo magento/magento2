@@ -48,6 +48,26 @@
         <DeclaredCurrency>USD</DeclaredCurrency>
         <TermsOfTrade>DAP</TermsOfTrade>
     </Dutiable>
+    <ExportDeclaration>
+        <InvoiceNumber/>
+        <InvoiceDate>1970-01-01</InvoiceDate>
+        <ExportLineItem>
+            <LineNumber>item1</LineNumber>
+            <Quantity>1</Quantity>
+            <QuantityUnit>PCS</QuantityUnit>
+            <Description>item_name</Description>
+            <Value>10.00</Value>
+            <Weight>
+                <Weight>0.454000000001</Weight>
+                <WeightUnit>K</WeightUnit>
+            </Weight>
+            <GrossWeight>
+                <Weight>0.454000000001</Weight>
+                <WeightUnit>K</WeightUnit>
+            </GrossWeight>
+            <ManufactureCountryCode>GB</ManufactureCountryCode>
+        </ExportLineItem>
+    </ExportDeclaration>
     <Reference xmlns="">
         <ReferenceID>shipment reference</ReferenceID>
         <ReferenceType>St</ReferenceType>
