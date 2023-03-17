@@ -38,7 +38,7 @@
             is used the step with Store selection is absent. That is why click is conditional.
         -->
         <wait time="5" stepKey="wait" />
-        <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeForOrder(storeView.name)}}" dependentSelector="{{AdminOrderStoreScopeTreeSection.storeForOrder(storeView.name)}}" visible="true" stepKey="selectStoreViewIfAppears"/>
+        <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" dependentSelector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" visible="true" stepKey="selectStoreViewIfAppears"/>
         <waitForPageLoad stepKey="waitForCreateOrderPageLoadAfterStoreSelect"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
     </actionGroup>
