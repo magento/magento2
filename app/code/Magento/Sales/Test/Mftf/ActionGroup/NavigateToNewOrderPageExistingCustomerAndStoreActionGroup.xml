@@ -16,7 +16,7 @@
             <argument name="storeView" defaultValue="_defaultStore"/>
         </arguments>
 
-        <selectOption selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" stepKey="selectStoreView" after="waitForCreateOrderPageLoad"/>
+        <selectOption selector="{{AdminOrderStoreScopeTreeSection.storeTree}}" userInput="{{storeView.name}}" stepKey="selectStoreView" after="waitForCreateOrderPageLoad"/>
         <waitForPageLoad stepKey="waitForLoad" after="selectStoreView"/>
     </actionGroup>
 </actionGroups>
