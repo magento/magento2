@@ -93,7 +93,6 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                 }
 
                 $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
-
                 $validateResult = $model->validateData(new \Magento\Framework\DataObject($data));
                 if ($validateResult !== true) {
                     foreach ($validateResult as $errorMessage) {
@@ -120,13 +119,14 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                     $data['actions'] = $data['rule']['actions'];
                 }
                 unset($data['rule']);
+
+                $data = $this->updateCouponData($data);
                 $model->loadPost($data);
 
                 $useAutoGeneration = (int)(
                     !empty($data['use_auto_generation']) && $data['use_auto_generation'] !== 'false'
                 );
                 $model->setUseAutoGeneration($useAutoGeneration);
-
                 $session->setPageData($model->getData());
 
                 $model->save();
@@ -176,5 +176,22 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
             }
         }
         return true;
+    }
+
+    /**
+     * Update data related to Coupon
+     *
+     * @param array $data
+     * @return array
+     */
+    private function updateCouponData(array $data): array
+    {
+        if (isset($data['uses_per_coupon']) && $data['uses_per_coupon'] === '') {
+            $data['uses_per_coupon'] = 0;
+        }
+        if (isset($data['uses_per_customer']) && $data['uses_per_customer'] === '') {
+            $data['uses_per_customer'] = 0;
+        }
+        return $data;
     }
 }
