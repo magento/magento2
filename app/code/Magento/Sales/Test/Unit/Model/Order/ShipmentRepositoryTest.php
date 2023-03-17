@@ -12,7 +12,6 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\ShipmentSearchResultInterfaceFactory;
 use Magento\Sales\Model\Order\Shipment;
@@ -281,7 +280,6 @@ class ShipmentRepositoryTest extends TestCase
             true,
             ['save']
         );
-        $phraseMock = $this->createMock(Phrase::class);
         $mapper->expects($this->once())
             ->method('save')
             ->willThrowException(new \Magento\Framework\Validator\Exception());
