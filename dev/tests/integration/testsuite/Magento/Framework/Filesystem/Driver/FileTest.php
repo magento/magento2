@@ -1,7 +1,5 @@
 <?php
 /**
- * Test for \Magento\Framework\Filesystem\Driver\File
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -13,6 +11,7 @@ use Magento\Framework\Exception\FileSystemException;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Test for \Magento\Framework\Filesystem\Driver\File
  * Verify File class
  */
 class FileTest extends TestCase
@@ -104,7 +103,7 @@ class FileTest extends TestCase
             'foo/bar/file_two.txt',
             'foo/file_three.txt',
         ];
-        $expected = array_map(['self', 'getTestPath'], $paths);
+        $expected = array_map([self::class, 'getTestPath'], $paths);
         $actual = $this->driver->readDirectoryRecursively($this->getTestPath('foo'));
         sort($actual);
         $this->assertEquals($expected, $actual);
