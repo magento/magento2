@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-define([
+ define([
     'jquery',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/alert',
@@ -158,6 +158,7 @@ define([
             //this.loadArea(['header', 'sidebar','data'], true);
             this.dataShow();
             this.loadArea(['header', 'data'], true);
+            location.reload();
         },
 
         setCurrencyId: function (id) {
