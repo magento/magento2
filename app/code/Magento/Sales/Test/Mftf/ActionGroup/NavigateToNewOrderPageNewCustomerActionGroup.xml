@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Navigate to create order page (New Order -> Create New Customer)-->
-    <actionGroup name="NavigateToNewOrderPageNewCustomerActionGroup">
+    <actionGroup name="NavigateToNewOrderPageNewCustomerActionGroup" deprecated="This Action Group is deprecated. Please use AdminNavigateToNewOrderPageNewCustomerActionGroup + AdminSelectStoreDuringOrderCreationActionGroup.">
         <annotations>
             <description>Goes to the Admin Orders grid page. Clicks on 'Create New Order'. Clicks on 'Create New Customer'. Select the provided Store View, if present. Validates that Page Title is present and correct.</description>
         </annotations>

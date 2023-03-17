@@ -110,7 +110,7 @@
         <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="openBundleProductEditPage"/>
 
         <!--Create new customer order.-->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$createCustomer$"/>
         </actionGroup>
         <!--Add bundle product to order.-->
@@ -134,7 +134,7 @@
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
         <wait time="2" stepKey="waitForPageLoad1"/>
         <!--Create new customer order.-->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer2">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer2">
             <argument name="customer" value="$createCustomer2$"/>
         </actionGroup>
         <!--Add bundle product to order.-->
