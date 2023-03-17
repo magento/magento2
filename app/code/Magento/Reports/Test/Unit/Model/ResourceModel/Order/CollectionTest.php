@@ -278,7 +278,7 @@ class CollectionTest extends TestCase
      * @param int $range
      * @param string $customStart
      * @param string $customEnd
-     * @param string $expectedInterval
+     * @param array $expectedInterval
      *
      * @return void
      * @dataProvider firstPartDateRangeDataProvider
@@ -288,20 +288,7 @@ class CollectionTest extends TestCase
         $result = $this->collection->getDateRange($range, $customStart, $customEnd);
         $interval = $result['to']->diff($result['from']);
         $intervalResult = $interval->format('%y %m %d %h:%i:%s');
-        if ($intervalResult !== $expectedInterval) {
-            $result['from']->setTimezone(new \DateTimeZone('America/Chicago'));
-            $result['to']->setTimezone(new \DateTimeZone('America/Chicago'));
-            //Daylight saving check
-            if (!date('I', strtotime($result['from']->format('Y-m-d H:i:s')))) {
-                //when the start date does not fall during Daylight saving but the end date falls
-                $this->assertEquals(strtotime($expectedInterval.' +1 hours'), strtotime($intervalResult));
-            } elseif (!date('I', strtotime($result['to']->format('Y-m-d H:i:s')))) {
-                //when the end date does not fall during Daylight saving but the start date falls
-                $this->assertEquals(strtotime($expectedInterval.' -1 hours'), strtotime($intervalResult));
-            }
-        } else {
-            $this->assertEquals($expectedInterval, $intervalResult);
-        }
+        $this->assertContains($intervalResult, $expectedInterval);
     }
 
     /**
@@ -474,9 +461,9 @@ class CollectionTest extends TestCase
     public function firstPartDateRangeDataProvider(): array
     {
         return [
-            ['', '', '', '0 0 0 23:59:59'],
-            ['24h', '', '', '0 0 1 0:0:0'],
-            ['7d', '', '', '0 0 6 23:59:59']
+            ['', '', '', ['0 0 0 23:59:59', '0 0 1 0:59:59', '0 0 0 22:59:59']],
+            ['24h', '', '', ['0 0 1 0:0:0', '0 0 1 1:0:0', '0 0 0 23:0:0']],
+            ['7d', '', '', ['0 0 6 23:59:59', '0 0 7 0:59:59', '0 0 6 22:59:59']]
         ];
     }
 
