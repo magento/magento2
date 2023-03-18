@@ -23,9 +23,9 @@
         <waitForPageLoad stepKey="waitForStoresPageOpened"/>
         <waitForElementClickable stepKey="waitForStoreClickable" selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}"/>
         <selectOption selector="{{AdminOrderStoreScopeTreeSection.storeTree}}" userInput="{{storeView.name}}" stepKey="chooseStore"/>
-        <selectOption selector="{{AdminOrderStoreScopeTreeSection.storeTree}}" userInput="{{storeView.name}}" stepKey="chooseStore2"/>
-        <scrollToTopOfPage stepKey="scrollToTop"/>
         <waitForPageLoad stepKey="waitForStoreToAppear"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <waitForElementClickable selector="{{OrdersGridSection.addProducts}}" stepKey="waitForAddProductsButton" />
         <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickOnAddProducts"/>
         <waitForPageLoad stepKey="waitForProductsListForOrder"/>
         <click selector="{{AdminOrdersGridSection.productForOrder(product.sku)}}" stepKey="chooseTheProduct"/>
