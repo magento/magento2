@@ -20,7 +20,7 @@ use Magento\Catalog\Test\Fixture\Product as ProductFixture;
  */
 class ProductUrlRewriteVisibilityTest extends AbstractUrlRewriteTest
 {
-    const URL_KEY_EMPTY_MESSAGE = 'Failed asserting URL key is empty for the given product';
+    private const URL_KEY_EMPTY_MESSAGE = 'Failed asserting URL key is empty for the given product';
 
     /** @var string */
     private $suffix;
