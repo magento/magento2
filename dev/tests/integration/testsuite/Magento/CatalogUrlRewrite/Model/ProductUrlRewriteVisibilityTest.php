@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
+namespace Magento\CatalogUrlRewrite\Model;
+
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogUrlRewrite\Model\AbstractUrlRewriteTest;
 use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
-use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\Catalog\Model\Product\Visibility;
@@ -18,8 +18,9 @@ use Magento\Catalog\Test\Fixture\Product as ProductFixture;
  * Class for product url rewrites tests
  *
  */
-class ProductUrlRewriteDataTest extends AbstractUrlRewriteTest
+class ProductUrlRewriteVisibilityTest extends AbstractUrlRewriteTest
 {
+    const URL_KEY_EMPTY_MESSAGE = 'Failed asserting URL key is empty for the given product';
 
     /** @var string */
     private $suffix;
@@ -54,7 +55,7 @@ class ProductUrlRewriteDataTest extends AbstractUrlRewriteTest
     public function testUrlRewriteOnInvisibleProductEdit(array $expectedData): void
     {
         $product = $this->productRepository->get('simple', true, 0, true);
-        $this->assertUrlKeyEmpty($product);
+        $this->assertUrlKeyEmpty($product, self::URL_KEY_EMPTY_MESSAGE);
 
         //Update visibility and check the database entry
         $product->setVisibility(Visibility::VISIBILITY_BOTH);
@@ -71,7 +72,7 @@ class ProductUrlRewriteDataTest extends AbstractUrlRewriteTest
         $product->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE);
         $product = $this->productRepository->save($product);
 
-        $this->assertUrlKeyEmpty($product);
+        $this->assertUrlKeyEmpty($product, self::URL_KEY_EMPTY_MESSAGE);
     }
 
     /**
@@ -95,15 +96,14 @@ class ProductUrlRewriteDataTest extends AbstractUrlRewriteTest
      * Assert URL key is empty in database for the given product
      *
      * @param $product
+     * @param string $message
+     *
      * @return void
      */
-    public function assertUrlKeyEmpty($product): void
+    public function assertUrlKeyEmpty($product, $message = ''): void
     {
         $productUrlRewriteItems = $this->getEntityRewriteCollection($product->getId())->getItems();
-        $this->assertEmpty(
-            $productUrlRewriteItems,
-            'Failed asserting URL key is empty for the given product'
-        );
+        $this->assertEmpty($productUrlRewriteItems, $message);
     }
 
     /**
