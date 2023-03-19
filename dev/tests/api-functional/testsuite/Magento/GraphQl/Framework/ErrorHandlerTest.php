@@ -43,7 +43,7 @@ QUERY;
             self::assertCount(1, $responseData['errors']);
 
             $errorMsg = $responseData['errors'][0]['message'];
-            self::assertMatchesRegularExpression('/Unknown directive \"aaaaaa\"./', $errorMsg);
+            self::assertMatchesRegularExpression('/Unknown directive \"@aaaaaa\"./', $errorMsg);
         }
     }
 }
