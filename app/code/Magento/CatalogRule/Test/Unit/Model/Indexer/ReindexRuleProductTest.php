@@ -318,30 +318,6 @@ class ReindexRuleProductTest extends TestCase
                         'action_amount' => 43,
                         'action_stop' => true,
                         'sort_order' => 1
-                    ],
-                    [
-                        'rule_id' => 100,
-                        'from_time' => 1498028400,
-                        'to_time' => 1498892399,
-                        'website_id' => 3,
-                        'customer_group_id' => 10,
-                        'product_id' => 3,
-                        'action_operator' => 'simple_action',
-                        'action_amount' => 43,
-                        'action_stop' => true,
-                        'sort_order' => 1
-                    ],
-                    [
-                        'rule_id' => 100,
-                        'from_time' => 1498028400,
-                        'to_time' => 1498892399,
-                        'website_id' => 3,
-                        'customer_group_id' => 20,
-                        'product_id' => 3,
-                        'action_operator' => 'simple_action',
-                        'action_amount' => 43,
-                        'action_stop' => true,
-                        'sort_order' => 1
                     ]
                 ]
             ],
@@ -412,7 +388,41 @@ class ReindexRuleProductTest extends TestCase
                         'sort_order' => 1
                     ]
                 ]
-            ]
+                ],
+                [
+                    [1, 2, 3],
+                    [
+                        1 => [1 => true],
+                        2 => [2 => true],
+                        3 => [3 => false]
+                    ],
+                    [
+                        [
+                            'rule_id' => 100,
+                            'from_time' => 1498028400,
+                            'to_time' => 1498892399,
+                            'website_id' => 1,
+                            'customer_group_id' => 20,
+                            'product_id' => 1,
+                            'action_operator' => 'simple_action',
+                            'action_amount' => 43,
+                            'action_stop' => true,
+                            'sort_order' => 1
+                        ],
+                        [
+                            'rule_id' => 100,
+                            'from_time' => 1498028400,
+                            'to_time' => 1498892399,
+                            'website_id' => 2,
+                            'customer_group_id' => 20,
+                            'product_id' => 2,
+                            'action_operator' => 'simple_action',
+                            'action_amount' => 43,
+                            'action_stop' => true,
+                            'sort_order' => 1
+                        ]
+                    ]
+                ]
         ];
     }
 
