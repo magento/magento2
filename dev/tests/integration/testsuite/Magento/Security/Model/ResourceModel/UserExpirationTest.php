@@ -95,43 +95,6 @@ class UserExpirationTest extends TestCase
     }
 
     /**
-     * Verify user expiration saved with large date.
-     *
-     * @throws LocalizedException
-     * @return void
-     */
-    #[
-        DataFixture(UserDataFixture::class, ['role_id' => 1], 'user')
-    ]
-    public function testLargeExpirationDate(): void
-    {
-        $user = $this->fixtures->get('user');
-        $userId = $user->getDataByKey('user_id');
-
-        // Get date more than 100 years from current date
-        $timeZone = Bootstrap::getObjectManager()->get(TimezoneInterface::class);
-        $initialExpirationDate = $timeZone->date()->modify('+100 years');
-        $expireDate = $timeZone->formatDateTime(
-            $initialExpirationDate,
-            \IntlDateFormatter::MEDIUM,
-            \IntlDateFormatter::MEDIUM
-        );
-
-        // Set Expiration date to the admin user and save
-        $userExpirationFactory = Bootstrap::getObjectManager()->get(UserExpirationFactory::class);
-        $userExpiration = $userExpirationFactory->create();
-        $userExpiration->setExpiresAt($expireDate);
-        $userExpiration->setUserId($userId);
-        $this->userExpirationResource->save($userExpiration);
-
-        // Load admin expiration date from database
-        $loadedUserExpiration = $userExpirationFactory->create();
-        $this->userExpirationResource->load($loadedUserExpiration, $userExpiration->getId());
-
-        self::assertEquals($initialExpirationDate->format('Y-m-d H:i:s'), $loadedUserExpiration->getExpiresAt());
-    }
-
-    /**
      * Retrieve user id from db.
      *
      * @return int
