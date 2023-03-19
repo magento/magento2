@@ -7,16 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model\ResourceModel;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Security\Model\UserExpirationFactory;
-use Magento\TestFramework\Fixture\DataFixture;
-use Magento\TestFramework\Fixture\DataFixtureStorage;
-use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\User\Model\ResourceModel\User as UserResource;
-use Magento\User\Test\Fixture\User as UserDataFixture;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,18 +25,11 @@ class UserExpirationTest extends TestCase
     private $userExpirationResource;
 
     /**
-     * @var DataFixtureStorage
-     */
-    private $fixtures;
-
-    /**
      * @inheritdoc
-     * @throws LocalizedException
      */
     protected function setUp(): void
     {
         $this->userExpirationResource = Bootstrap::getObjectManager()->get(UserExpiration::class);
-        $this->fixtures = DataFixtureStorageManager::getStorage();
     }
 
     /**
