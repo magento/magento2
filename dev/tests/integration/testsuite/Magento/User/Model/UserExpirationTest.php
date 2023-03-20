@@ -43,6 +43,11 @@ class UserExpirationTest extends TestCase
     private $userExpiration;
 
     /**
+     * @var UserExpirationFactory
+     */
+    private $userExpirationFactory;
+
+    /**
      * @inheritdoc
      * @throws LocalizedException
      */
