@@ -47,7 +47,7 @@
         <click selector="{{AdminCustomerAddressesDefaultBillingSection.editButton}}" stepKey="clickEditDefaultBillingAddress"/>
         <waitForPageLoad stepKey="waitForCustomerAddressAddUpdateFormLoad"/>
 
-        <!-- Select Country = Canada And Region =Saskatchewan , Click on Save Button -->
+        <!-- Select Country = Finland And Region =Ahvenanmaa , Click on Save Button -->
         <click selector="{{AdminCustomerAddressesSection.country}}" stepKey="clickCountryToOpenListOfCountries"/>
         <click selector="{{AdminCustomerAddressesSection.countryId(Finland_Address.country_id)}}" stepKey="fillCountry"/>
         <click selector="{{AdminCustomerAddressesSection.state}}" stepKey="clickRegionToOpenListOfRegions"/>
