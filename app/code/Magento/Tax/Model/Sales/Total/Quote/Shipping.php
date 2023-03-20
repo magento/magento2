@@ -63,6 +63,8 @@ class Shipping extends CommonTaxCollector
     }
 
     /**
+     * Fetch shipping including tax
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @param Address\Total $total
      * @return array|null
