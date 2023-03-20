@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Translate;
 
 class InlineTest extends \PHPUnit\Framework\TestCase
@@ -95,7 +96,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
     {
         $actualText = $originalText;
         $this->_model->processResponseBody($actualText, false);
-        $this->markTestIncomplete('Bug MAGE-2494');
+        $this->markTestSkipped('Bug MAGE-2494');
 
         $expected = new \DOMDocument();
         $expected->preserveWhiteSpace = false;
@@ -116,10 +117,6 @@ class InlineTest extends \PHPUnit\Framework\TestCase
         $originalText = file_get_contents(__DIR__ . '/_files/_inline_page_original.html');
         $expectedText = file_get_contents(__DIR__ . '/_files/_inline_page_expected.html');
 
-        $package = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\View\DesignInterface::class
-        )->getDesignTheme()->getPackageCode();
-        $expectedText = str_replace('{{design_package}}', $package, $expectedText);
         return [
             'plain text' => ['text with no translations and tags', 'text with no translations and tags'],
             'html string' => [$originalText, $expectedText],

@@ -7,6 +7,7 @@ app/code/Magento/Sales/view/adminhtml/web/order/create/giftmessage.js
 app/code/Magento/Sales/view/adminhtml/web/order/create/scripts.js
 app/code/Magento/Shipping/view/adminhtml/web/order/packaging.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/magento-swagger.js
+app/code/Magento/AdminAdobeIms/view/adminhtml/web/js/loadicons.js
 lib/web/mage/adminhtml/tools.js
 lib/web/mage/adminhtml/varienLoader.js
 lib/web/magnifier/magnifier.js
@@ -15,3 +16,6 @@ lib/web/varien/js.js
 
 // MINIFIED FILES
 app/code/**/*.min.js
+
+// TEST
+vendor/magento/magento-coding-standard/Magento2/Tests/Eslint/*

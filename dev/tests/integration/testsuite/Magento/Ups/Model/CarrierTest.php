@@ -207,6 +207,44 @@ class CarrierTest extends TestCase
     }
 
     /**
+     * Test collect rates function without any allowed methods set.
+     *
+     * @return void
+     * @magentoConfigFixture default_store shipping/origin/country_id GB
+     * @magentoConfigFixture default_store carriers/ups/type UPS_XML
+     * @magentoConfigFixture default_store carriers/ups/active 1
+     * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
+     * @magentoConfigFixture default_store carriers/ups/origin_shipment Shipments Originating in the European Union
+     * @magentoConfigFixture default_store carriers/ups/username user
+     * @magentoConfigFixture default_store carriers/ups/password pass
+     * @magentoConfigFixture default_store carriers/ups/access_license_number acn
+     * @magentoConfigFixture default_store carriers/ups/debug 1
+     * @magentoConfigFixture default_store currency/options/allow GBP,USD,EUR
+     * @magentoConfigFixture default_store currency/options/base GBP
+     */
+    public function testCollectRatesWithoutAnyAllowedMethods(): void
+    {
+        $request = Bootstrap::getObjectManager()->create(
+            RateRequest::class,
+            [
+                'data' => [
+                    'dest_country' => 'GB',
+                    'dest_postal' => '01104',
+                    'product' => '11',
+                    'action' => 'Rate',
+                    'unit_measure' => 'KGS',
+                    'base_currency' => new DataObject(['code' => 'GBP'])
+                ]
+            ]
+        );
+        $this->config->setValue('carriers/ups/allowed_methods', '', 'store');
+        $rates = $this->carrier->collectRates($request)->getAllRates();
+        $this->assertInstanceOf(Error::class, current($rates));
+        $this->assertEquals(current($rates)['carrier_title'], $this->carrier->getConfigData('title'));
+        $this->assertEquals(current($rates)['error_message'], $this->carrier->getConfigData('specificerrmsg'));
+    }
+
+    /**
      * Get list of rates variations
      *
      * @return array

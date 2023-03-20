@@ -186,7 +186,9 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
                 $this->assertStringContainsString($expectedFileName, $customAttribute[AttributeValue::VALUE]);
                 $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
                 $customerMediaPath = $mediaDirectory->getAbsolutePath(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-                $imageAttributeFound = file_exists($customerMediaPath . $customAttribute[AttributeValue::VALUE]);
+                $imageAttributeFound = $mediaDirectory->getDriver()->isExists(
+                    $customerMediaPath . $customAttribute[AttributeValue::VALUE]
+                );
                 $this->assertTrue($imageAttributeFound, 'Expected file was not created');
             }
         }

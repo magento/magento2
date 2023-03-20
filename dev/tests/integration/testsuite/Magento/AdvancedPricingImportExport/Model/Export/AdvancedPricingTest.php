@@ -6,19 +6,19 @@
 
 namespace Magento\AdvancedPricingImportExport\Model\Export;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\File\Csv;
-use Magento\TestFramework\Indexer\TestCase;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\Filesystem;
 use Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing as ExportAdvancedPricing;
+use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as ImportAdvancedPricing;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
 use Magento\ImportExport\Model\Export\Adapter\Csv as ExportAdapterCsv;
-use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as ImportAdvancedPricing;
-use Magento\ImportExport\Model\Import\Source\Csv as ImportSourceCsv;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\Source\Csv as ImportSourceCsv;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Indexer\TestCase;
 
 /**
  * Test for \Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing
@@ -40,6 +40,11 @@ class AdvancedPricingTest extends TestCase
      * @var Filesystem
      */
     protected $fileSystem;
+
+    /**
+     * @var Write
+     */
+    private $directory;
 
     // @codingStandardsIgnoreStart
     public static function setUpBeforeClass(): void
@@ -64,6 +69,7 @@ class AdvancedPricingTest extends TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->fileSystem = $this->objectManager->get(Filesystem::class);
+        $this->directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
         $this->model = $this->objectManager->create(ExportAdvancedPricing::class);
     }
 
@@ -179,7 +185,7 @@ class AdvancedPricingTest extends TestCase
     {
         $simpleSku = 'simple';
         $secondSimpleSku = 'second_simple';
-        $csvfile = uniqid('importexport_') . '.csv';
+        $csvfile = $this->directory->getAbsolutePath(uniqid('importexport_') . '.csv');
         $exportContent = $this->exportData($csvfile);
         $this->assertStringContainsString(
             \sprintf('%s,"All Websites [USD]","ALL GROUPS",10.0000,3.00,Discount', $secondSimpleSku),
@@ -269,10 +275,7 @@ class AdvancedPricingTest extends TestCase
             ],
         ];
 
-        /** @var Csv $csv */
-        $csv = $this->objectManager->get(Csv::class);
-        $varDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $csv->appendData($varDirectory->getAbsolutePath($csvfile), $csvNewData);
+        $this->updateCsvFile($csvfile, $csvNewData);
     }
 
     /**
@@ -281,15 +284,14 @@ class AdvancedPricingTest extends TestCase
      */
     private function exportData($csvFile)
     {
-        $this->model->setWriter(
-            Bootstrap::getObjectManager()
-                ->create(
-                    ExportAdapterCsv::class,
-                    ['fileSystem' => $this->fileSystem, 'destination' => $csvFile]
-                )
-        );
+        $writer = Bootstrap::getObjectManager()->create(ExportAdapterCsv::class, ['fileSystem' => $this->fileSystem]);
+
+        $this->model->setWriter($writer);
         $exportContent = $this->model->export();
         $this->assertNotEmpty($exportContent);
+
+        $driver = $this->directory->getDriver();
+        $driver->filePutContents($this->directory->getAbsolutePath($csvFile), $exportContent);
 
         return $exportContent;
     }
@@ -301,12 +303,11 @@ class AdvancedPricingTest extends TestCase
     {
         /** @var ImportAdvancedPricing $importModel */
         $importModel = $this->objectManager->create(ImportAdvancedPricing::class);
-        $directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $source = $this->objectManager->create(
             ImportSourceCsv::class,
             [
                 'file' => $csvFile,
-                'directory' => $directory
+                'directory' => $this->directory
             ]
         );
         $errors = $importModel->setParameters(
@@ -365,5 +366,25 @@ class AdvancedPricingTest extends TestCase
 
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', false);
+    }
+
+    /**
+     * Appends csv data to the file
+     *
+     * @param string $filePath
+     * @param array $csv
+     * @return void
+     */
+    private function updateCsvFile(string $filePath, array $csv): void
+    {
+        $driver = $this->directory->getDriver();
+        $driver->deleteFile($filePath);
+        $fileResource = $driver->fileOpen($filePath, 'w');
+
+        foreach ($csv as $dataRow) {
+            $driver->filePutCsv($fileResource, $dataRow);
+        }
+
+        $driver->fileClose($fileResource);
     }
 }

@@ -166,8 +166,8 @@ class CartTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSuggestItemsQty(): void
     {
         $data = [[] , ['qty' => -2], ['qty' => 3], ['qty' => 3.5], ['qty' => 5], ['qty' => 4]];
@@ -202,8 +202,8 @@ class CartTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testUpdateItems(): void
     {
         $data = [['qty' => 5.5, 'before_suggest_qty' => 5.5]];
@@ -221,7 +221,8 @@ class CartTest extends TestCase
                 [
                     'checkout_cart_update_items_before',
                     ['cart' => $this->cart, 'info' => $infoDataObject]
-                ], [
+                ],
+                [
                     'checkout_cart_update_items_after',
                     ['cart' => $this->cart, 'info' => $infoDataObject]
                 ]

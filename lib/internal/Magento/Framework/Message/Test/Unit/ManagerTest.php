@@ -187,9 +187,7 @@ class ManagerTest extends TestCase
 
         $this->messageFactory->expects($this->atLeastOnce())
             ->method('create')
-            ->with(
-                MessageInterface::TYPE_ERROR,
-                $alternativeText)
+            ->with(MessageInterface::TYPE_ERROR, $alternativeText)
             ->willReturn($messageError);
 
         $messageCollection = $this->getMockBuilder(Collection::class)->disableOriginalConstructor()

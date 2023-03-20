@@ -24,66 +24,53 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class ProductStockTest extends ProductTestBase
 {
     /**
+     * @var StockRegistryStorage
+     */
+    private $stockRegistryStorage;
+
+    /**
+     * @var StockRegistry
+     */
+    private $stockRegistry;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->stockRegistryStorage = $this->objectManager->get(StockRegistryStorage::class);
+        $this->stockRegistry = $this->objectManager->get(StockRegistry::class);
+    }
+
+    /**
      * Test if stock item quantity properly saved after import
      *
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      */
     public function testSaveStockItemQty()
     {
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class
-        );
-        $id1 = $productRepository->get('simple1')->getId();
-        $id2 = $productRepository->get('simple2')->getId();
-        $id3 = $productRepository->get('simple3')->getId();
-        $existingProductIds = [$id1, $id2, $id3];
-        $stockItems = [];
-        foreach ($existingProductIds as $productId) {
-            /** @var $stockRegistry StockRegistry */
-            $stockRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                StockRegistry::class
-            );
+        $id1 = $this->getProductBySku('simple1')->getId();
+        $id2 = $this->getProductBySku('simple2')->getId();
+        $id3 = $this->getProductBySku('simple3')->getId();
+        $stockItem = $this->stockRegistry->getStockItem($id1, 1);
+        $id1Qty = $stockItem->getQty();
+        $stockItem = $this->stockRegistry->getStockItem($id2, 1);
+        $id2Qty = $stockItem->getQty();
+        $stockItem = $this->stockRegistry->getStockItem($id3, 1);
+        $id3Qty = $stockItem->getQty();
 
-            $stockItem = $stockRegistry->getStockItem($productId, 1);
-            $stockItems[$productId] = $stockItem;
-        }
+        $this->importFile('products_to_import.csv');
 
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Framework\Filesystem::class);
-        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
-            [
-                'file' => __DIR__ . '/../_files/products_to_import.csv',
-                'directory' => $directory
-            ]
-        );
-        $errors = $this->_model->setParameters(
-            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
-        )->setSource(
-            $source
-        )->validateData();
-
-        $this->assertTrue($errors->getErrorsCount() == 0);
-
-        $this->_model->importData();
-
-        /** @var $stockItmBeforeImport \Magento\CatalogInventory\Model\Stock\Item */
-        foreach ($stockItems as $productId => $stockItmBeforeImport) {
-            /** @var $stockRegistry StockRegistry */
-            $stockRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                StockRegistry::class
-            );
-
-            $stockItemAfterImport = $stockRegistry->getStockItem($productId, 1);
-
-            $this->assertEquals($stockItmBeforeImport->getQty(), $stockItemAfterImport->getQty());
-            $this->assertEquals(1, $stockItemAfterImport->getIsInStock());
-            unset($stockItemAfterImport);
-        }
-
-        unset($stockItems, $stockItem);
+        $stockItem = $this->stockRegistry->getStockItem($id1, 1);
+        $this->assertEquals(1, $stockItem->getIsInStock());
+        $this->assertEquals($id1Qty, $stockItem->getQty());
+        $stockItem = $this->stockRegistry->getStockItem($id2, 1);
+        $this->assertEquals(1, $stockItem->getIsInStock());
+        $this->assertEquals($id2Qty, $stockItem->getQty());
+        $stockItem = $this->stockRegistry->getStockItem($id3, 1);
+        $this->assertEquals(1, $stockItem->getIsInStock());
+        $this->assertEquals($id3Qty, $stockItem->getQty());
     }
 
     /**
@@ -95,47 +82,16 @@ class ProductStockTest extends ProductTestBase
      */
     public function testSaveIsInStockByZeroQty(): void
     {
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class
-        );
-        $id1 = $productRepository->get('simple1')->getId();
-        $id2 = $productRepository->get('simple2')->getId();
-        $id3 = $productRepository->get('simple3')->getId();
-        $existingProductIds = [$id1, $id2, $id3];
-
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Framework\Filesystem::class);
-        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
-            [
-                'file' => __DIR__ . '/../_files/products_to_import_zero_qty.csv',
-                'directory' => $directory
-            ]
-        );
-        $errors = $this->_model->setParameters(
-            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
-        )->setSource(
-            $source
-        )->validateData();
-
-        $this->assertTrue($errors->getErrorsCount() == 0);
-
-        $this->_model->importData();
-
-        /** @var $stockItmBeforeImport \Magento\CatalogInventory\Model\Stock\Item */
-        foreach ($existingProductIds as $productId) {
-            /** @var $stockRegistry StockRegistry */
-            $stockRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                StockRegistry::class
-            );
-
-            $stockItemAfterImport = $stockRegistry->getStockItem($productId, 1);
-
-            $this->assertEquals(0, $stockItemAfterImport->getIsInStock());
-            unset($stockItemAfterImport);
-        }
+        $this->importFile('products_to_import_zero_qty.csv');
+        $product = $this->getProductBySku('simple1');
+        $stockItem = $this->stockRegistry->getStockItem($product->getId(), 1);
+        $this->assertEquals(0, $stockItem->getIsInStock());
+        $product = $this->getProductBySku('simple2');
+        $stockItem = $this->stockRegistry->getStockItem($product->getId(), 1);
+        $this->assertEquals(0, $stockItem->getIsInStock());
+        $product = $this->getProductBySku('simple3');
+        $stockItem = $this->stockRegistry->getStockItem($product->getId(), 1);
+        $this->assertEquals(0, $stockItem->getIsInStock());
     }
 
     /**
@@ -201,19 +157,13 @@ class ProductStockTest extends ProductTestBase
      */
     public function testProductStockStatusShouldBeUpdated()
     {
-        /** @var $stockRegistry StockRegistry */
-        $stockRegistry = $this->objectManager->create(StockRegistry::class);
-        /** @var StockRegistryStorage $stockRegistryStorage */
-        $stockRegistryStorage = $this->objectManager->get(StockRegistryStorage::class);
-        $status = $stockRegistry->getStockStatusBySku('simple');
+        $status = $this->stockRegistry->getStockStatusBySku('simple');
         $this->assertEquals(Stock::STOCK_IN_STOCK, $status->getStockStatus());
-        $this->importDataForMediaTest('disable_product.csv');
-        $stockRegistryStorage->clean();
-        $status = $stockRegistry->getStockStatusBySku('simple');
+        $this->importFile('disable_product.csv');
+        $status = $this->stockRegistry->getStockStatusBySku('simple');
         $this->assertEquals(Stock::STOCK_OUT_OF_STOCK, $status->getStockStatus());
         $this->importDataForMediaTest('enable_product.csv');
-        $stockRegistryStorage->clean();
-        $status = $stockRegistry->getStockStatusBySku('simple');
+        $status = $this->stockRegistry->getStockStatusBySku('simple');
         $this->assertEquals(Stock::STOCK_IN_STOCK, $status->getStockStatus());
     }
 
@@ -229,21 +179,64 @@ class ProductStockTest extends ProductTestBase
     {
         /** * @var $indexProcessor \Magento\Indexer\Model\Processor */
         $indexProcessor = $this->objectManager->create(\Magento\Indexer\Model\Processor::class);
-        /** @var $stockRegistry StockRegistry */
-        $stockRegistry = $this->objectManager->create(StockRegistry::class);
-        /** @var StockRegistryStorage $stockRegistryStorage */
-        $stockRegistryStorage = $this->objectManager->get(StockRegistryStorage::class);
-        $status = $stockRegistry->getStockStatusBySku('simple');
+        $status = $this->stockRegistry->getStockStatusBySku('simple');
         $this->assertEquals(Stock::STOCK_IN_STOCK, $status->getStockStatus());
         $this->importDataForMediaTest('disable_product.csv');
         $indexProcessor->updateMview();
-        $stockRegistryStorage->clean();
-        $status = $stockRegistry->getStockStatusBySku('simple');
+        $status = $this->stockRegistry->getStockStatusBySku('simple');
         $this->assertEquals(Stock::STOCK_OUT_OF_STOCK, $status->getStockStatus());
         $this->importDataForMediaTest('enable_product.csv');
         $indexProcessor->updateMview();
-        $stockRegistryStorage->clean();
-        $status = $stockRegistry->getStockStatusBySku('simple');
+        $status = $this->stockRegistry->getStockStatusBySku('simple');
         $this->assertEquals(Stock::STOCK_IN_STOCK, $status->getStockStatus());
+    }
+
+    /**
+     * Test that product stock status should be 'out of stock' if quantity is 0 regardless of 'is_in_stock' value
+     *
+     * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
+     */
+    public function testImportWithQtyZeroAndWithoutStockStatus(): void
+    {
+        $this->importFile('products_to_import_with_qty_zero_only.csv');
+        $product = $this->getProductBySku('simple1');
+        $stockItem = $this->stockRegistry->getStockItem($product->getId(), 1);
+        $this->assertEquals(0, $stockItem->getIsInStock());
+        $product = $this->getProductBySku('simple2');
+        $stockItem = $this->stockRegistry->getStockItem($product->getId(), 1);
+        $this->assertEquals(0, $stockItem->getIsInStock());
+        $product = $this->getProductBySku('simple3');
+        $stockItem = $this->stockRegistry->getStockItem($product->getId(), 1);
+        $this->assertEquals(0, $stockItem->getIsInStock());
+    }
+
+    /**
+     * Test that product stock status should be 'in stock' if quantity is 0 and backorders is enabled
+     *
+     * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
+     */
+    public function testImportWithQtyZeroAndWithBackOrdersEnabled(): void
+    {
+        $this->importFile('products_to_import_with_qty_zero_backorders_enabled.csv');
+        $product = $this->getProductBySku('simple1');
+        $stockItem = $this->stockRegistry->getStockItem($product->getId(), 1);
+        $this->assertEquals(1, $stockItem->getIsInStock());
+        $product = $this->getProductBySku('simple2');
+        $stockItem = $this->stockRegistry->getStockItem($product->getId(), 1);
+        $this->assertEquals(1, $stockItem->getIsInStock());
+        $product = $this->getProductBySku('simple3');
+        $stockItem = $this->stockRegistry->getStockItem($product->getId(), 1);
+        $this->assertEquals(1, $stockItem->getIsInStock());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function importFile(string $fileName, int $bunchSize = 100): bool
+    {
+        $this->stockRegistryStorage->clean();
+        $result = parent::importFile($fileName, $bunchSize);
+        $this->stockRegistryStorage->clean();
+        return $result;
     }
 }

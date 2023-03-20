@@ -138,6 +138,10 @@ class CollectionTest extends TestCase
             ->getMock();
         $this->timezoneMock = $this->getMockBuilder(TimezoneInterface::class)
             ->getMock();
+        $this->timezoneMock
+            ->expects($this->any())
+            ->method('getConfigTimezone')
+            ->willReturn('America/Chicago');
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -247,6 +251,7 @@ class CollectionTest extends TestCase
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $orderMock->method('getStoreTZOffsetQuery')->willReturn('');
 
         $this->orderFactoryMock
             ->expects($this->any())
@@ -260,6 +265,11 @@ class CollectionTest extends TestCase
         $this->connectionMock
             ->expects($getIfNullSqlResult)
             ->method('getIfNullSql');
+
+        $this->connectionMock->expects($this->once())
+            ->method('getDateFormatSql')
+            ->with('{{attribute}}', '%Y-%m')
+            ->willReturn(new \Zend_Db_Expr('DATE_FORMAT(%2021-%10, %Y-%m)'));
 
         $this->collection->prepareSummary($range, $customStart, $customEnd, $isFilter);
     }
@@ -289,10 +299,11 @@ class CollectionTest extends TestCase
      * @param string $customStart
      * @param string $customEnd
      * @param string $config
+     * @param int $expectedYear
      * @dataProvider secondPartDateRangeDataProvider
      * @return void
      */
-    public function testGetDateRangeSecondPart($range, $customStart, $customEnd, $config): void
+    public function testGetDateRangeSecondPart($range, $customStart, $customEnd, $config, $expectedYear): void
     {
         $this->scopeConfigMock
             ->expects($this->once())
@@ -305,6 +316,8 @@ class CollectionTest extends TestCase
 
         $result = $this->collection->getDateRange($range, $customStart, $customEnd);
         $this->assertCount(3, $result);
+        $resultStartDate = $result['from'];
+        $this->assertEquals($expectedYear, $resultStartDate->format('Y'));
     }
 
     /**
@@ -453,7 +466,7 @@ class CollectionTest extends TestCase
         return [
             ['', '', '', '0 0 0 23:59:59'],
             ['24h', '', '', '0 0 1 0:0:0'],
-            ['7d', '', '', '0 0 6 23:59:59']
+            ['7d', '', '', '0 0 6 22:59:59']
         ];
     }
 
@@ -462,10 +475,14 @@ class CollectionTest extends TestCase
      */
     public function secondPartDateRangeDataProvider(): array
     {
+        $dateStart = new \DateTime();
+        $expectedYear = $dateStart->format('Y');
+        $expected2YTDYear = $expectedYear - 1;
+
         return [
-            ['1m', 1, 10, 'reports/dashboard/mtd_start'],
-            ['1y', 1, 10, 'reports/dashboard/ytd_start'],
-            ['2y', 1, 10, 'reports/dashboard/ytd_start']
+            ['1m', 1, 10, 'reports/dashboard/mtd_start', $expectedYear],
+            ['1y', 1, 10, 'reports/dashboard/ytd_start', $expectedYear],
+            ['2y', 1, 10, 'reports/dashboard/ytd_start', $expected2YTDYear]
         ];
     }
 

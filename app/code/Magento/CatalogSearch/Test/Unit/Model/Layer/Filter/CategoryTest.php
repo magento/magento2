@@ -173,7 +173,17 @@ class CategoryTest extends TestCase
             ->willReturn([]);
 
         $this->request->method('getParam')
-            ->withConsecutive([$requestField]);
+            ->withConsecutive([$requestField])
+            ->willReturnOnConsecutiveCalls(
+                function ($field) use ($requestField, $idField, $requestValue, $idValue) {
+                    switch ($field) {
+                        case $requestField:
+                            return $requestValue;
+                        case $idField:
+                            return $idValue;
+                    }
+                }
+            );
 
         $result = $this->target->apply($this->request);
         $this->assertSame($this->target, $result);
@@ -201,8 +211,8 @@ class CategoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testApply(): void
     {
         $categoryId = 123;

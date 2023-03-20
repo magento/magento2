@@ -75,8 +75,8 @@ class ConditionsTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecute(): void
     {
         $type = 'Magento\CatalogWidget\Model\Rule\Condition\Product|attribute_set_id';

@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <group value="store"/>
             <group value="mtf_migrated"/>
+            <group value="skip_in_cloud_native_s3"/>
         </annotations>
 
         <before>
@@ -27,8 +28,13 @@
                 <argument name="storeGroupName" value="{{customStore.name}}"/>
                 <argument name="storeGroupCode" value="{{customStore.code}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
+            <actionGroup ref="AdminBackupIndexPageOpenActionGroup" stepKey="navigateToBackupPage"/>
+            <actionGroup ref="AdminBackupDeleteActionGroup" stepKey="deleteDatabaseBackup">
+                <argument name="backup" value="WebSetupWizardBackup"/>
+            </actionGroup>
             <magentoCLI command="config:set system/backup/functionality_enabled 0" stepKey="setEnableBackupToNo"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -37,6 +43,7 @@
         <actionGroup ref="DeleteCustomStoreBackupEnabledYesActionGroup" stepKey="deleteCustomStoreGroup">
             <argument name="storeGroupName" value="{{customStore.name}}"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Verify deleted Store group is not present in grid and verify AssertStoreGroupNotInGrid message-->
         <actionGroup ref="AssertStoreNotInGridActionGroup" stepKey="verifyDeletedStoreGroupNotInGrid">
@@ -46,9 +53,6 @@
         <!--Go to backup index page and verify AssertBackupInGrid-->
         <actionGroup ref="AdminBackupIndexPageOpenActionGroup" stepKey="navigateToBackupPage"/>
         <see selector="{{AdminGridTableSection.backupNameColumn}}" userInput="{{WebSetupWizardBackup.name}}" stepKey="seeBackupInGrid"/>
-        <!--Delete database backup-->
-        <actionGroup ref="AdminBackupDeleteActionGroup" stepKey="deleteDatabaseBackup">
-            <argument name="backup" value="WebSetupWizardBackup"/>
-        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="deleteDatabaseBackup"/>
     </test>
 </tests>

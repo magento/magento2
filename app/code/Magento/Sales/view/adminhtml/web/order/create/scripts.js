@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-define([
+ define([
     'jquery',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/alert',
@@ -158,6 +158,7 @@ define([
             //this.loadArea(['header', 'sidebar','data'], true);
             this.dataShow();
             this.loadArea(['header', 'data'], true);
+            location.reload();
         },
 
         setCurrencyId: function (id) {
@@ -272,6 +273,14 @@ define([
 
             if (resetShipping) {
                 data['reset_shipping'] = true;
+            }
+
+            if (name !== 'customer_address_id' && this.selectAddressEvent === false) {
+                if (this.shippingAsBilling) {
+                    $('order-shipping_address_customer_address_id').value = '';
+                }
+
+                $('order-' + type + '_address_customer_address_id').value = '';
             }
 
             data['order[' + type + '_address][customer_address_id]'] = null;
@@ -418,6 +427,9 @@ define([
             data = data.toObject();
             data['shipping_as_billing'] = flag ? 1 : 0;
             data['reset_shipping'] = 1;
+            // set customer_address_id to null for shipping address in order to treat it as new from backend
+            // Checkbox(Same As Billing Address) uncheck event
+            data['order[shipping_address][customer_address_id]'] = null;
             this.loadArea(areasToLoad, true, data);
         },
 
@@ -574,7 +586,7 @@ define([
         applyCoupon: function (code) {
             this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {
                 'order[coupon][code]': code,
-                reset_shipping: 0
+                reset_shipping: true
             });
             this.orderItemChanged = false;
             jQuery('html, body').animate({

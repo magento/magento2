@@ -822,7 +822,17 @@ class Price implements DimensionalIndexerInterface
             ]
         );
 
-        $this->tableMaintainer->insertFromSelect($select, $priceTable->getTableName(), []);
+        $this->tableMaintainer->insertFromSelect($select, $priceTable->getTableName(), [
+            "entity_id",
+            "customer_group_id",
+            "website_id",
+            "tax_class_id",
+            "price",
+            "final_price",
+            "min_price",
+            "max_price",
+            "tier_price",
+        ]);
     }
 
     /**
