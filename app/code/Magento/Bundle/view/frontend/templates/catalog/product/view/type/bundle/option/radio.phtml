@@ -55,7 +55,8 @@ $viewModel = $block->getData('validateQuantityViewModel');
                                data-selector="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                                <?php if ($block->isSelected($_selection)) { echo ' checked="checked"'; } ?>
                                <?php if (!$_selection->isSaleable()) { echo ' disabled="disabled"'; } ?>
-                               value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"/>
+                               value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
+                               data-errors-message-box="#validation-message-box-radio"/>
                         <label class="label"
                                for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>">
                             <span><?= /* @noEscape */ $block->getSelectionTitlePrice($_selection) ?></span>
@@ -65,6 +66,7 @@ $viewModel = $block->getData('validateQuantityViewModel');
                     </div>
                 <?php endforeach; ?>
                 <div id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-container"></div>
+                <div id="validation-message-box-radio"></div>
             <?php endif; ?>
             <div class="field qty qty-holder">
                 <label class="label" for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input">
