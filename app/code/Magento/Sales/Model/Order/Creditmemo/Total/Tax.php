@@ -134,16 +134,10 @@ class Tax extends AbstractTotal
             $baseShippingDiscountTaxCompensationAmount = 0;
             $shippingDelta = $baseOrderShippingAmount - $baseOrderShippingRefundedAmount;
 
-            if ($shippingDelta > $creditmemo->getBaseShippingAmount() ||
-                $this->isShippingIncludeTaxWithTaxAfterDiscount($order->getStoreId())) {
-                $part = $creditmemo->getShippingAmount();
-                if ($orderShippingAmount > 0) {
-                    $part = $creditmemo->getShippingAmount() / $orderShippingAmount;
-                }
-                $basePart = $creditmemo->getBaseShippingAmount();
-                if ($baseOrderShippingAmount > 0) {
-                    $basePart = $creditmemo->getBaseShippingAmount() / $baseOrderShippingAmount;
-                }
+            if ($orderShippingAmount > 0 && ($shippingDelta > $creditmemo->getBaseShippingAmount() ||
+                $this->isShippingIncludeTaxWithTaxAfterDiscount($order->getStoreId()))) {
+                $part = $creditmemo->getShippingAmount() / $orderShippingAmount;
+                $basePart = $creditmemo->getBaseShippingAmount() / $baseOrderShippingAmount;
                 $shippingTaxAmount = $order->getShippingTaxAmount() * $part;
                 $baseShippingTaxAmount = $order->getBaseShippingTaxAmount() * $basePart;
                 $shippingDiscountTaxCompensationAmount = $order->getShippingDiscountTaxCompensationAmount() * $part;

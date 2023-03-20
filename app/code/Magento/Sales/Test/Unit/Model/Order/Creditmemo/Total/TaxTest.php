@@ -860,7 +860,7 @@ class TaxTest extends TestCase
                     ],
                 ],
                 'creditmemo_data' => [
-                    'grand_total' => 13.4,
+                    'grand_total' => 14.76,
                     'base_grand_total' => 13.4,
                     'tax_amount' => 1.22,
                     'base_tax_amount' => 1.22,
