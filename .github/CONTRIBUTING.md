@@ -33,7 +33,7 @@ This will allow you to collaborate with the Magento 2 development team, fork the
 1. Search current [listed issues](https://github.com/magento/magento2/issues) (open or closed) for similar proposals of intended contribution before starting work on a new contribution.
 2. Review the [Contributor License Agreement](https://opensource.adobe.com/cla.html) if this is your first time contributing.
 3. Create and test your work.
-4. Follow the [Forks And Pull Requests Instructions](https://devdocs.magento.com/contributor-guide/contributing.html#forks-and-pull-requests) to fork the Magento 2 repository and send us a pull request.
+4. Follow the [Forks And Pull Requests Instructions](https://developer.adobe.com/commerce/contributor/guides/code-contributions/) to fork the Magento 2 repository and send us a pull request.
 5. Once your contribution is received the Magento 2 development team will review the contribution and collaborate with you as needed.
 
 ## Code of Conduct

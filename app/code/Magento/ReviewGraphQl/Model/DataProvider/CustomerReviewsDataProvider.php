@@ -36,10 +36,10 @@ class CustomerReviewsDataProvider
      * @param int $customerId
      * @param int $currentPage
      * @param int $pageSize
-     *
+     * @param int $storeId
      * @return ReviewsCollection
      */
-    public function getData(int $customerId, int $currentPage, int $pageSize): ReviewsCollection
+    public function getData(int $customerId, int $currentPage, int $pageSize, int $storeId): ReviewsCollection
     {
         /** @var ReviewsCollection $reviewsCollection */
         $reviewsCollection = $this->collectionFactory->create();
@@ -47,6 +47,7 @@ class CustomerReviewsDataProvider
             ->addCustomerFilter($customerId)
             ->setPageSize($pageSize)
             ->setCurPage($currentPage)
+            ->addStoreFilter($storeId)
             ->setDateOrder();
         $reviewsCollection->getSelect()->join(
             ['cpe' => $reviewsCollection->getTable('catalog_product_entity')],

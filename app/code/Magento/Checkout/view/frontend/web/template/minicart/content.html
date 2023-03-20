@@ -38,7 +38,7 @@
                 <!-- ko if: (getCartParam('summary_count') > 1) -->
                     <span translate="'Items in Cart'"></span>
                 <!--/ko-->
-                <!-- ko if: (getCartParam('summary_count') === 1) -->
+                <!-- ko if: (getCartParam('summary_count') <= 1) -->
                     <span translate="'Item in Cart'"></span>
                 <!--/ko-->
         </div>
