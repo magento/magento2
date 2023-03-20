@@ -49,13 +49,13 @@
 
         <!-- Select Country = Canada And Region =Saskatchewan , Click on Save Button -->
         <click selector="{{AdminCustomerAddressesSection.country}}" stepKey="clickCountryToOpenListOfCountries"/>
-        <click selector="{{AdminCustomerAddressesSection.countryId(Canada_Address.country_id)}}" stepKey="fillCountry"/>
+        <click selector="{{AdminCustomerAddressesSection.countryId(Finland_Address.country_id)}}" stepKey="fillCountry"/>
         <click selector="{{AdminCustomerAddressesSection.state}}" stepKey="clickRegionToOpenListOfRegions"/>
-        <click selector="{{AdminCustomerAddressesSection.regionId(Canada_Address.state)}}" stepKey="fillRegion"/>
+        <click selector="{{AdminCustomerAddressesSection.regionId(Finland_Address.state)}}" stepKey="fillRegion"/>
         <click selector="{{AdminCustomerAddressesSection.saveAddress}}" stepKey="clickSaveCustomer"/>
 
         <!--Verify state name in address details section-->
-        <see userInput="{{Canada_Address.state}}" selector="{{AdminCustomerAddressesSection.regionId(Canada_Address.state)}}" stepKey="seeStateInAddress"/>
+        <see userInput="{{Finland_Address.state}}" selector="{{AdminCustomerAddressesSection.regionId(Finland_Address.state)}}" stepKey="seeStateInAddress"/>
 
         <!-- Click on edit link for default billing address , deselect region and click on save button-->
         <click selector="{{AdminCustomerAddressesDefaultBillingSection.editButton}}" stepKey="clickEditDefaultBillingAddressAgain"/>
@@ -69,6 +69,6 @@
         </actionGroup>
 
         <!--Verify state name not visible under address details section-->
-        <dontSee userInput="{{Canada_Address.state}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="dontSeeStateInAddress"/>
+        <dontSee userInput="{{Finland_Address.state}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="dontSeeStateInAddress"/>
      </test>
  </tests>
