@@ -92,16 +92,20 @@ class GetAttributeData implements GetAttributeDataInterface
         if (!$attribute->getOptions()) {
             return [];
         }
-        return array_map(
-            function (AttributeOptionInterface $option) {
-                return [
-                    'uid' => $this->uid->encode($option->getValue()), // TODO retrieve option id
-                    'label' => $option->getLabel(),
-                    'value' => $option->getValue(), // TODO test option labels and values for different stores
-                    'sort_order' => $option->getSortOrder(),
-                ];
-            },
-            $attribute->getOptions()
+        return array_filter(
+            array_map(
+                function (AttributeOptionInterface $option) {
+                    if (empty(trim($option->getValue())) && empty(trim($option->getLabel()))) {
+                        return null;
+                    }
+                    return [
+                        'uid' => $this->uid->encode($option->getValue()),
+                        'label' => $option->getLabel(),
+                        'value' => $option->getValue()
+                    ];
+                },
+                $attribute->getOptions()
+            )
         );
     }
 }

@@ -34,9 +34,6 @@ class AttributeOption implements TypeResolverInterface
      */
     public function resolveType(array $data): string
     {
-        if (!isset($this->typeResolvers[$data['entity_type']])) {
-            return self::TYPE;
-        }
-        return $this->typeResolvers[$data['entity_type']]->resolveType($data);
+        return self::TYPE;
     }
 }

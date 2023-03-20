@@ -62,4 +62,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper">
+        <arguments>
+            <argument name="map" xsi:type="array">
+                <item name="AttributeEntityTypeEnum" xsi:type="array">
+                    <item name="customer" xsi:type="string">customer</item>
+                    <item name="customer_address" xsi:type="string">customer_address</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

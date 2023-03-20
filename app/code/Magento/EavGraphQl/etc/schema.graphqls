@@ -77,10 +77,9 @@ interface AttributeMetadataInterface @typeResolver(class: "Magento\\EavGraphQl\\
 }
 
 interface AttributeOptionInterface @typeResolver(class: "Magento\\EavGraphQl\\Model\\TypeResolver\\AttributeOption") {
-    uid: ID @doc(description: "The unique ID of an attribute option.")
-    label: String @doc(description: "The label assigned to the attribute option.")
-    value: String @doc(description: "The attribute option value.")
-    sort_order: Int @doc(description: "Sort order of the option.")
+    uid: ID! @doc(description: "The unique ID of an attribute option.")
+    label: String! @doc(description: "The label assigned to the attribute option.")
+    value: String! @doc(description: "The attribute option value.")
 }
 
 type AttributeOptionMetadata implements AttributeOptionInterface @doc(description: "Base EAV implementation of AttributeOptionInterface.") {

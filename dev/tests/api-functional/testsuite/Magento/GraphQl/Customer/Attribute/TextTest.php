@@ -5,10 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Catalog\Attribute;
+namespace Magento\GraphQl\Customer\Attribute;
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Catalog\Test\Fixture\Attribute;
+use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Eav\Test\Fixture\Attribute;
 use Magento\EavGraphQl\Model\Uid;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -18,7 +19,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 /**
  * Test catalog EAV attributes metadata retrieval via GraphQL API
  */
-class MetadataTest extends GraphQlAbstract
+class TextTest extends GraphQlAbstract
 {
     private const QUERY = <<<QRY
 {
@@ -32,12 +33,6 @@ class MetadataTest extends GraphQlAbstract
       is_required
       default_value
       is_unique
-      options {
-        uid
-        label
-        value
-        sort_order
-      }
     }
     errors {
       type
@@ -48,15 +43,21 @@ class MetadataTest extends GraphQlAbstract
 QRY;
 
     #[
-        DataFixture(Attribute::class, as: 'attribute')
+        DataFixture(
+            Attribute::class,
+            [
+                'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER
+            ],
+            'attribute'
+        )
     ]
     public function testTextField(): void
     {
-        /** @var ProductAttributeInterface $attribute */
+        /** @var AttributeInterface $attribute */
         $attribute = DataFixtureStorageManager::getStorage()->get('attribute');
 
         $uid = Bootstrap::getObjectManager()->get(Uid::class)->encode(
-            'catalog_product',
+            'customer',
             $attribute->getAttributeCode()
         );
 
@@ -68,12 +69,11 @@ QRY;
                             'uid' => $uid,
                             'code' => $attribute->getAttributeCode(),
                             'label' => $attribute->getDefaultFrontendLabel(),
-                            'entity_type' => 'CATALOG_PRODUCT',
+                            'entity_type' => 'CUSTOMER',
                             'frontend_input' => 'TEXT',
                             'is_required' => false,
                             'default_value' => $attribute->getDefaultValue(),
-                            'is_unique' => false,
-                            'options' => []
+                            'is_unique' => false
                         ]
                     ],
                     'errors' => []
