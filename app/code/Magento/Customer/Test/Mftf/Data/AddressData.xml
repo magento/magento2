@@ -478,4 +478,19 @@
         <data key="default_billing">true</data>
         <data key="telephone">613-582-4782</data>
     </entity>
+    <entity name="Switzerland_Address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>Kapelle St.</item>
+            <item>Niklaus 3</item>
+        </array>
+        <data key="city">Baden</data>
+        <data key="country_id">CH</data>
+        <data key="country">Switzerland</data>
+        <data key="state">Aargau</data>
+        <data key="postcode">5555</data>
+        <data key="telephone">555-55-555-55</data>
+    </entity>
 </entities>
