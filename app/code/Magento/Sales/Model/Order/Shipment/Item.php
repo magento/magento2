@@ -389,16 +389,18 @@ class Item extends AbstractModel implements ShipmentItemInterface
      */
     private function loadChildren(): void
     {
-        $collection = $this->_orderItem->getOrder()->getItemsCollection();
-        $collection->filterByParent($this->_orderItem->getItemId());
+        if ($this->_orderItem) {
+            $collection = $this->_orderItem->getOrder()->getItemsCollection();
+            $collection->filterByParent($this->_orderItem->getItemId());
 
-        if ($collection->count()) {
-            $this->_orderItem->setData('has_children', true);
+            if ($collection->count()) {
+                $this->_orderItem->setData('has_children', true);
 
-            /** @var \Magento\Sales\Model\Order\Item $childItem */
-            foreach ($collection as $childItem) {
-                if ($childItem->getItemId() != $this->_orderItem->getItemId()) {
-                    $this->_orderItem->addChildItem($childItem);
+                /** @var \Magento\Sales\Model\Order\Item $childItem */
+                foreach ($collection as $childItem) {
+                    if ($childItem->getItemId() != $this->_orderItem->getItemId()) {
+                        $this->_orderItem->addChildItem($childItem);
+                    }
                 }
             }
         }
