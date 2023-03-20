@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Data\Tree;
 
 use Magento\Framework\Data\Tree;
@@ -31,8 +33,6 @@ class Node extends \Magento\Framework\DataObject
     protected $_tree;
 
     /**
-     * Child nodes
-     *
      * @var Collection
      */
     protected $_childNodes;
@@ -45,8 +45,6 @@ class Node extends \Magento\Framework\DataObject
     protected $_idField;
 
     /**
-     * Data tree node constructor
-     *
      * @param array $data
      * @param string $idField
      * @param Tree $tree
@@ -75,6 +73,7 @@ class Node extends \Magento\Framework\DataObject
      * Set node id field name
      *
      * @param   string $idField
+     *
      * @return  $this
      */
     public function setIdField($idField)
@@ -97,6 +96,7 @@ class Node extends \Magento\Framework\DataObject
      * Set node tree object
      *
      * @param   Tree $tree
+     *
      * @return  $this
      */
     public function setTree(Tree $tree)
@@ -119,6 +119,7 @@ class Node extends \Magento\Framework\DataObject
      * Set node parent
      *
      * @param   Node $parent
+     *
      * @return  $this
      */
     public function setParent($parent)
@@ -148,7 +149,10 @@ class Node extends \Magento\Framework\DataObject
     }
 
     /**
+     * Set level
+     *
      * @param mixed $level
+     *
      * @return $this
      */
     public function setLevel($level)
@@ -158,7 +162,10 @@ class Node extends \Magento\Framework\DataObject
     }
 
     /**
+     * Set path ID
+     *
      * @param mixed $path
+     *
      * @return $this
      */
     public function setPathId($path)
@@ -168,7 +175,10 @@ class Node extends \Magento\Framework\DataObject
     }
 
     /**
+     * Seemingyly useless method
+     *
      * @param Node $node
+     *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -180,6 +190,7 @@ class Node extends \Magento\Framework\DataObject
      * Load node children
      *
      * @param   int  $recursionLevel
+     *
      * @return  \Magento\Framework\Data\Tree\Node
      */
     public function loadChildren($recursionLevel = 0)
@@ -199,7 +210,10 @@ class Node extends \Magento\Framework\DataObject
     }
 
     /**
+     * Get all child nodes
+     *
      * @param array $nodes
+     *
      * @return array
      */
     public function getAllChildNodes(&$nodes = [])
@@ -212,6 +226,8 @@ class Node extends \Magento\Framework\DataObject
     }
 
     /**
+     * Get last child
+     *
      * @return mixed
      */
     public function getLastChild()
@@ -223,6 +239,7 @@ class Node extends \Magento\Framework\DataObject
      * Add child node
      *
      * @param   Node $node
+     *
      * @return  Node
      */
     public function addChild($node)
@@ -232,7 +249,10 @@ class Node extends \Magento\Framework\DataObject
     }
 
     /**
+     * Append child
+     *
      * @param Node $prevNode
+     *
      * @return $this
      */
     public function appendChild($prevNode = null)
@@ -242,8 +262,11 @@ class Node extends \Magento\Framework\DataObject
     }
 
     /**
+     * Move to
+     *
      * @param Node $parentNode
      * @param Node $prevNode
+     *
      * @return $this
      */
     public function moveTo($parentNode, $prevNode = null)
@@ -253,8 +276,11 @@ class Node extends \Magento\Framework\DataObject
     }
 
     /**
+     * Copy to
+     *
      * @param Node $parentNode
      * @param Node $prevNode
+     *
      * @return $this
      */
     public function copyTo($parentNode, $prevNode = null)
@@ -264,7 +290,10 @@ class Node extends \Magento\Framework\DataObject
     }
 
     /**
+     * Remove child
+     *
      * @param Node $childNode
+     *
      * @return $this
      */
     public function removeChild($childNode)
@@ -274,7 +303,10 @@ class Node extends \Magento\Framework\DataObject
     }
 
     /**
+     * Get path
+     *
      * @param array $prevNodes
+     *
      * @return array
      */
     public function getPath(&$prevNodes = [])
@@ -283,10 +315,13 @@ class Node extends \Magento\Framework\DataObject
             $prevNodes[] = $this;
             $this->_parent->getPath($prevNodes);
         }
+
         return $prevNodes;
     }
 
     /**
+     * Get is active
+     *
      * @return mixed
      */
     public function getIsActive()
@@ -295,6 +330,8 @@ class Node extends \Magento\Framework\DataObject
     }
 
     /**
+     * Get name
+     *
      * @return mixed
      */
     public function getName()

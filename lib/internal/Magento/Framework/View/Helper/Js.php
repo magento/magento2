@@ -1,10 +1,10 @@
 <?php
+
 /**
- * JavaScript helper
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View\Helper;
 
 use Magento\Framework\App\ObjectManager;
@@ -32,6 +32,7 @@ class Js
      * Retrieve framed javascript
      *
      * @param   string $script
+     *
      * @return  string
      */
     public function getScript($script)
