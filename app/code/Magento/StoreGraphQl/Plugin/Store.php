@@ -24,7 +24,7 @@ class Store
     public function afterGetIdentities(\Magento\Store\Model\Store $subject, array $result): array
     {
         $result[] = sprintf('%s_%s', ConfigIdentity::CACHE_TAG, $subject->getId());
-        if ($subject->isObjectNew()) {
+        if ($subject->getOrigData('is_active') !== $subject->getIsActive() && $subject->getIsActive()) {
             $websiteId = $subject->getWebsiteId();
             if ($websiteId !== null) {
                 $result[] = sprintf('%s_%s', ConfigIdentity::CACHE_TAG, 'website_' . $websiteId);
