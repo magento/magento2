@@ -8,6 +8,8 @@ namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config as CatalogConfig;
+use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
+use Magento\Catalog\Model\Indexer\Product\Price\Processor as ProductPriceIndexer;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\LinkProcessor;
@@ -1102,6 +1104,7 @@ class Product extends AbstractEntity
                     'catalog_product_import_bunch_delete_after',
                     ['adapter' => $this, 'bunch' => $bunch]
                 );
+                $this->reindexProducts($idsToDelete);
             }
         }
         return $this;
@@ -1660,7 +1663,7 @@ class Product extends AbstractEntity
                         $prevAttributeSet,
                         $attributes
                     );
-                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
                 } catch (Skip $skip) {
                     // Product is skipped.  Go on to the next one.
                 }
@@ -2466,9 +2469,17 @@ class Product extends AbstractEntity
      */
     private function reindexProducts($productIdsToReindex = [])
     {
-        $indexer = $this->indexerRegistry->get('catalog_product_category');
-        if (is_array($productIdsToReindex) && count($productIdsToReindex) > 0 && !$indexer->isScheduled()) {
-            $indexer->reindexList($productIdsToReindex);
+        if (is_array($productIdsToReindex) && !empty($productIdsToReindex)) {
+            $indexersToReindex = [
+                ProductCategoryIndexer::INDEXER_ID,
+                ProductPriceIndexer::INDEXER_ID
+            ];
+            foreach ($indexersToReindex as $id) {
+                $indexer = $this->indexerRegistry->get($id);
+                if (!$indexer->isScheduled()) {
+                    $indexer->reindexList($productIdsToReindex);
+                }
+            }
         }
     }
 
