@@ -119,6 +119,9 @@ class RelatedProductDataProvider
         $collection->addFieldToFilter('product_id', ['in' => array_keys($productsByActualIds)]);
         $collection->addLinkTypeIdFilter();
 
+        $collection->addProductIdFilter();
+        $collection->joinAttributes();
+        $collection->setOrder('position', 'ASC');
         //Prepare map
         $map = [];
         /** @var Link $item */
