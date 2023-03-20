@@ -100,7 +100,7 @@ class UserExpirationTest extends TestCase
      * @return void
      * @throws AlreadyExistsException
      */
-    public function setExpirationDateToUser(string $expirationDate, int $userId): void
+    private function setExpirationDateToUser(string $expirationDate, int $userId): void
     {
         $this->userExpiration = $this->userExpirationFactory->create();
         $this->userExpiration->setExpiresAt($expirationDate);
