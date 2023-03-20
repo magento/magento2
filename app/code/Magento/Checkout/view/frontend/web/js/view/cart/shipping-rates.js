@@ -11,21 +11,8 @@ define([
     'Magento_Catalog/js/price-utils',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/action/select-shipping-method',
-    'Magento_Checkout/js/model/shipping-save-processor',
-    'Magento_Checkout/js/model/cart/shipping-save-processor/default',
     'Magento_Checkout/js/checkout-data'
-], function (
-    ko,
-    _,
-    Component,
-    shippingService,
-    priceUtils,
-    quote,
-    selectShippingMethodAction,
-    shippingSaveProcessor,
-    cartShippingProcessor,
-    checkoutData
-) {
+], function (ko, _, Component, shippingService, priceUtils, quote, selectShippingMethodAction, checkoutData) {
     'use strict';
 
     return Component.extend({
@@ -50,12 +37,6 @@ define([
 
             this._super();
 
-            shippingSaveProcessor.registerProcessor('cart', cartShippingProcessor);
-            this.selectedShippingMethod.subscribe(function () {
-                if (quote.shippingMethod()) {
-                    shippingSaveProcessor.saveShippingInformation('cart');
-                }
-            });
             this.shippingRates.subscribe(function (rates) {
                 self.shippingRateGroups([]);
                 _.each(rates, function (rate) {
@@ -96,6 +77,7 @@ define([
         selectShippingMethod: function (methodData) {
             selectShippingMethodAction(methodData);
             checkoutData.setSelectedShippingRate(methodData['carrier_code'] + '_' + methodData['method_code']);
+
             return true;
         }
     });
