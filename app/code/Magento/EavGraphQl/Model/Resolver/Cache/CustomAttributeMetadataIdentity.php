@@ -20,7 +20,7 @@ class CustomAttributeMetadataIdentity implements IdentityInterface
      */
     public function getIdentities(array $resolvedData): array
     {
-        $identities = [EavAttribute::CACHE_TAG];
+        $identities = [];
         if (isset($resolvedData['items']) && !empty($resolvedData['items'])) {
             foreach ($resolvedData['items'] as $item) {
                 if (is_array($item)) {

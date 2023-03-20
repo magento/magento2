@@ -11,6 +11,7 @@ use Magento\Eav\Model\AttributeRepository;
 use Magento\GraphQl\PageCache\GraphQLPageCacheAbstract;
 use Magento\Store\Model\StoreRepository;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 
 class CustomAttributesMetadataCacheTest extends GraphQLPageCacheAbstract
 {
@@ -173,6 +174,55 @@ class CustomAttributesMetadataCacheTest extends GraphQLPageCacheAbstract
                 'entity_type' => 'catalog_product',
                 'input_type' => 'select',
             ]
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/dropdown_attribute.php
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     *
+     * @return void
+     */
+    public function testCacheInvalidationOnAttributeDelete()
+    {
+        $query = $this->getAttributeQuery("dropdown_attribute", "catalog_product");
+        // check cache missed on first query
+        $response = $this->assertCacheMissAndReturnResponse($query, []);
+        $this->assertResponseFields(
+            $response['body']['customAttributeMetadata']['items'][0],
+            [
+                'attribute_code' => 'dropdown_attribute',
+                'attribute_type' => 'String',
+                'entity_type' => 'catalog_product',
+                'input_type' => 'select',
+            ]
+        );
+        // assert cache hit on second query
+        $this->assertCacheHitAndReturnResponse($query, []);
+        /** @var AttributeRepository $eavAttributeRepo */
+        $eavAttributeRepo = $this->objectManager->get(AttributeRepository::class);
+        $attribute = $eavAttributeRepo->get("catalog_product", "dropdown_attribute");
+        $eavAttributeRepo->delete($attribute);
+        $caughtException = null;
+        try {
+            // get response
+            $response = $this->graphQlQuery($query, []);
+        } catch (ResponseContainsErrorsException $exception) {
+            $caughtException = $exception;
+        }
+        $this->assertInstanceOf(
+            ResponseContainsErrorsException::class,
+            $caughtException
+        );
+        // cannot use expectException because need to assert the headers
+        $this->assertStringContainsString(
+            "GraphQL response contains errors: Internal server error",
+            $caughtException->getMessage()
+        );
+        // assert that it's a miss after deletion
+        $this->assertEquals(
+            $response['headers']['X-Magento-Cache-Debug'],
+            'MISS'
         );
     }
 
