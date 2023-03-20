@@ -34,13 +34,13 @@
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
             <!-- Delete customer -->
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
-                <argument name="customerEmail" value="CustomerEntityOne.email"/>
+                <argument name="customerEmail" value="Simple_US_Customer.email"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
         </after>
         <!-- Create Customer -->
         <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
-            <argument name="Customer" value="CustomerEntityOne"/>
+            <argument name="Customer" value="Simple_US_Customer"/>
         </actionGroup>
         <!--Login to Admin-->
         <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
@@ -63,7 +63,7 @@
         <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyFilter"/>
         <!--Customer *A* is present in the grid-->
         <actionGroup ref="AdminAssertCustomerInCustomersGrid" stepKey="assertCustomer1InGrid">
-            <argument name="text" value="{{CustomerEntityOne.email}}"/>
+            <argument name="text" value="{{Simple_US_Customer.email}}"/>
             <argument name="row" value="1"/>
         </actionGroup>
     </test>
