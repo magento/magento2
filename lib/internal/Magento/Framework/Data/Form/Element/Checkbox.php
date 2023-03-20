@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
@@ -30,6 +32,8 @@ class Checkbox extends AbstractElement
     }
 
     /**
+     * Get HTML attributes
+     *
      * @return string[]
      */
     public function getHtmlAttributes()
@@ -51,6 +55,8 @@ class Checkbox extends AbstractElement
     }
 
     /**
+     * Get Element HTML
+     *
      * @return string
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -61,6 +67,7 @@ class Checkbox extends AbstractElement
         } else {
             $this->unsetData('checked');
         }
+
         return parent::getElementHtml();
     }
 
@@ -68,6 +75,7 @@ class Checkbox extends AbstractElement
      * Set check status of checkbox
      *
      * @param bool $value
+     *
      * @return Checkbox
      */
     public function setIsChecked($value = false)

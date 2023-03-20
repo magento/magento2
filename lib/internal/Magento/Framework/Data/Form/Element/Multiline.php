@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -31,6 +32,8 @@ class Multiline extends AbstractElement
     }
 
     /**
+     * Get HTML attributes
+     *
      * @return string[]
      */
     public function getHtmlAttributes()
@@ -51,13 +54,17 @@ class Multiline extends AbstractElement
     }
 
     /**
+     * Get label HTML
+     *
      * @param int $suffix
      * @param string $scopeLabel
+     *
      * @return string
      */
     public function getLabelHtml($suffix = 0, $scopeLabel = '')
     {
-        return parent::getLabelHtml($suffix, $scopeLabel);
+        $html = parent::getLabelHtml($suffix, $scopeLabel);
+        return $html;
     }
 
     /**
@@ -76,6 +83,7 @@ class Multiline extends AbstractElement
             } else {
                 $this->setClass('input-text admin__control-text');
             }
+
             $html .= '<div class="multi-input admin__field-control"><input id="' .
                 $this->getHtmlId() .
                 $i .
@@ -95,12 +103,16 @@ class Multiline extends AbstractElement
             if ($i == 0) {
                 $html .= $this->getAfterElementHtml();
             }
+
             $html .= '</div>';
         }
+
         return $html;
     }
 
     /**
+     * Get default HTML
+     *
      * @return mixed
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -127,6 +139,7 @@ class Multiline extends AbstractElement
                 $this->setClass('input-text');
                 $html .= '<label>&nbsp;</label>' . "\n";
             }
+
             $html .= '<input id="' .
                 $this->getHtmlId() .
                 $i .
@@ -144,13 +157,15 @@ class Multiline extends AbstractElement
             if ($i == 0) {
                 $html .= $this->getAfterElementHtml();
             }
+
             $html .= $this->getNoSpan() === true ? '' : '</span>' . "\n";
         }
+
         return $html;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getEscapedValue($index = null)
     {
