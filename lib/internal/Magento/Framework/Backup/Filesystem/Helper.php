@@ -20,7 +20,7 @@ class Helper
      *
      * @const int
      */
-    const INFO_WRITABLE = 1;
+    public const INFO_WRITABLE = 1;
 
     /**
      * Constant can be used in getInfo() function as second parameter.
@@ -28,7 +28,7 @@ class Helper
      *
      * @const int
      */
-    const INFO_READABLE = 2;
+    public const INFO_READABLE = 2;
 
     /**
      * Constant can be used in getInfo() function as second parameter.
@@ -36,7 +36,7 @@ class Helper
      *
      * @const int
      */
-    const INFO_SIZE = 4;
+    public const INFO_SIZE = 4;
 
     /**
      * Constant can be used in getInfo() function as second parameter.
@@ -44,7 +44,7 @@ class Helper
      *
      * @const int
      */
-    const INFO_ALL = 7;
+    public const INFO_ALL = 7;
 
     /**
      * Recursively delete $path
@@ -52,6 +52,7 @@ class Helper
      * @param string $path
      * @param array $skipPaths
      * @param bool $removeRoot
+     *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ShortMethodName)
@@ -80,6 +81,7 @@ class Helper
      * @param string $path
      * @param int $infoOptions
      * @param array $skipFiles
+     *
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)

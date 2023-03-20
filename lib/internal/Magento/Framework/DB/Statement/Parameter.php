@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\DB\Statement;
 
 /**
@@ -72,6 +74,7 @@ class Parameter
      * Sets parameter value.
      *
      * @param mixed $value
+     *
      * @return $this
      */
     public function setValue($value)
@@ -98,6 +101,7 @@ class Parameter
      * as a BLOB value.
      *
      * @param bool $isBlob
+     *
      * @return $this
      */
     public function setIsBlob($isBlob)
@@ -124,6 +128,7 @@ class Parameter
      * Sets data type option to be used during binding parameter value.
      *
      * @param mixed $dataType
+     *
      * @return $this
      */
     public function setDataType($dataType)
@@ -146,6 +151,7 @@ class Parameter
      * Sets length option to be used during binding parameter value.
      *
      * @param mixed $length
+     *
      * @return $this
      */
     public function setLength($length)
@@ -168,6 +174,7 @@ class Parameter
      * Sets specific driver options to be used during binding parameter value.
      *
      * @param mixed $driverOptions
+     *
      * @return $this
      */
     public function setDriverOptions($driverOptions)
@@ -188,9 +195,11 @@ class Parameter
 
     /**
      * Sets additional information for concrete DB adapter.
+     *
      * Set there any data you want to pass along with query parameter.
      *
      * @param \Magento\Framework\DataObject $additional
+     *
      * @return $this
      */
     public function setAdditional($additional)
