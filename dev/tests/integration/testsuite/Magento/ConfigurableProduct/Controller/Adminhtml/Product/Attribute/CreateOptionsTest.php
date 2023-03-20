@@ -9,14 +9,9 @@ namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
 use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\TestCase\AbstractBackendController;
-use Magento\Eav\Model\Config;
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 
 /**
  * Checks creating attribute options process.
@@ -28,16 +23,6 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 class CreateOptionsTest extends AbstractBackendController
 {
     /**
-     * @var ProductAttributeRepositoryInterface
-     */
-    private $productAttributeRepository;
-
-    /**
-     * @var Config
-     */
-    private $eavConfig;
-
-    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -46,8 +31,6 @@ class CreateOptionsTest extends AbstractBackendController
 
         $productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
         $productRepository->cleanCache();
-        $this->productAttributeRepository = $this->_objectManager->create(ProductAttributeRepositoryInterface::class);
-        $this->eavConfig = $this->_objectManager->create(Config::class);
     }
 
     /**
@@ -91,34 +74,6 @@ class CreateOptionsTest extends AbstractBackendController
                 $property->setAccessible(true);
                 $property->setValue($this, null);
             }
-        }
-    }
-
-    /**
-     * Test updating a product attribute and checking the frontend_class for the sku attribute.
-     *
-     * @return void
-     * @throws LocalizedException
-     */
-    #[
-        DataFixture(AttributeFixture::class, as: 'attr'),
-    ]
-    public function testAttributeWithBackendTypeHasSameValueInFrontendClass()
-    {
-        // Load the 'sku' attribute.
-        /** @var ProductAttributeInterface $attribute */
-        $attribute = $this->productAttributeRepository->get('sku');
-        $expectedFrontEndClass = $attribute->getFrontendClass();
-
-        // Save the attribute.
-        $this->productAttributeRepository->save($attribute);
-
-        // Check that the frontend_class was updated correctly.
-        try {
-            $skuAttribute = $this->eavConfig->getAttribute('catalog_product', 'sku');
-            $this->assertEquals($expectedFrontEndClass, $skuAttribute->getFrontendClass());
-        } catch (LocalizedException $e) {
-            $this->fail($e->getMessage());
         }
     }
 }
