@@ -5,7 +5,6 @@
  */
 namespace Magento\Sales\Model\Order;
 
-use Magento\Bundle\Model\Sales\Order\BundleOrderTypeValidator;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Model\AbstractModel;
