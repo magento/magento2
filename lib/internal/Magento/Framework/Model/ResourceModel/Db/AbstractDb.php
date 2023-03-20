@@ -407,7 +407,7 @@ abstract class AbstractDb extends AbstractResource
             $this->rollBack();
             $object->setHasDataChanges(true);
             throw new AlreadyExistsException(new Phrase('Unique constraint violation found'), $e);
-        } catch (\Magento\Framework\Validator\Exception | \Exception $e) {
+        } catch (\Exception $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);
             throw $e;
