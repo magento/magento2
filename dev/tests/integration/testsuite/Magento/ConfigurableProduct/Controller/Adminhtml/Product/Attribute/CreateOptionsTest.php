@@ -9,12 +9,14 @@ namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 use Magento\Eav\Model\Config;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Checks creating attribute options process.
@@ -95,20 +97,26 @@ class CreateOptionsTest extends AbstractBackendController
     /**
      * Test updating a product attribute and checking the frontend_class for the sku attribute.
      *
-     * @magentoDataFixture Magento/Catalog/_files/product_attribute.php
+     * @return void
+     * @throws LocalizedException
      */
+    #[
+        DataFixture(AttributeFixture::class, as: 'attr'),
+    ]
     public function testAttributeWithBackendTypeHasSameValueInFrontendClass()
     {
+        // Load the 'sku' attribute.
         /** @var ProductAttributeInterface $attribute */
         $attribute = $this->productAttributeRepository->get('sku');
+        $expectedFrontEndClass = $attribute->getFrontendClass();
 
-        $attribute->setFrontendClass('my-custom-class');
-
+        // Save the attribute.
         $this->productAttributeRepository->save($attribute);
 
+        // Check that the frontend_class was updated correctly.
         try {
             $skuAttribute = $this->eavConfig->getAttribute('catalog_product', 'sku');
-            $this->assertEquals('my-custom-class', $skuAttribute->getFrontendClass());
+            $this->assertEquals($expectedFrontEndClass, $skuAttribute->getFrontendClass());
         } catch (LocalizedException $e) {
             $this->fail($e->getMessage());
         }
