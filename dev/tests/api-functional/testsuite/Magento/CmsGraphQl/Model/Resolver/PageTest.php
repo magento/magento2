@@ -13,6 +13,7 @@ use Magento\Cms\Model\PageRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlCache;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -33,27 +34,27 @@ class PageTest extends GraphQlAbstract
      */
     private $searchCriteriaBuilder;
 
+    /**
+     * @var CustomerTokenServiceInterface
+     */
+    private $customerTokenService;
+
     protected function setUp(): void
     {
-        $this->graphqlCache = ObjectManager::getInstance()->get(GraphQlCache::class);
-        $this->pageRepository = ObjectManager::getInstance()->get(PageRepository::class);
-        $this->searchCriteriaBuilder = ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
+        $objectManager = ObjectManager::getInstance();
+        $this->graphqlCache = $objectManager->get(GraphQlCache::class);
+        $this->pageRepository = $objectManager->get(PageRepository::class);
+        $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
+        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
     }
 
     /**
      * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
      * @return void
      */
-    public function testCmsPageResolverIsCached()
+    public function testCmsPageResolverCacheAndInvalidationAsGuest()
     {
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter('title', 'Page with 1column layout')
-            ->create();
-
-        $pages = $this->pageRepository->getList($searchCriteria)->getItems();
-
-        /** @var PageInterface $page */
-        $page = reset($pages);
+        $page = $this->getPageByTitle('Page with 1column layout');
 
         $query = $this->getQuery($page->getIdentifier());
         $response = $this->graphQlQueryWithResponseHeaders($query);
@@ -64,21 +65,111 @@ class PageTest extends GraphQlAbstract
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
-            [
-                'page_id' => $page->getId(),
-                'identifier' => $page->getIdentifier(),
-                'url_key' => $page->getIdentifier(),
-                'title' => $page->getTitle(),
-                'content' => $page->getContent(),
-                'content_heading' => $page->getContentHeading(),
-                'page_layout' => $page->getPageLayout(),
-                'meta_keywords' => $page->getMetaKeywords(),
-                'meta_title' => $page->getMetaTitle(),
-                'meta_description' => $page->getMetaDescription(),
-            ],
+            $this->generateExpectedDataFromPage($page),
             $cacheEntryDecoded
         );
 
+        $this->assertTagsByCacheIdentityAndPage($cacheIdentityString, $page);
+
+        // update CMS page and assert cache is invalidated
+        $page->setContent('something different');
+        $this->pageRepository->save($page);
+
+        $this->assertFalse(
+            $this->graphqlCache->test($cacheIdentityString),
+            'Cache entry still exists for CMS page'
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
+     * @return void
+     */
+    public function testCmsPageResolverCacheAndInvalidationAsCustomer()
+    {
+        $authHeader = [
+            'Authorization' => 'Bearer ' . $this->customerTokenService->createCustomerAccessToken(
+                'customer@example.com',
+                'password'
+            )
+        ];
+
+        $page = $this->getPageByTitle('Page with 1column layout');
+        $query = $this->getQuery($page->getIdentifier());
+        $response = $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            $authHeader
+        );
+
+        $cacheIdentityString = $this->getCacheIdentityStringFromResponseAndPage($response, $page);
+
+        $cacheEntry = $this->graphqlCache->load($cacheIdentityString);
+        $cacheEntryDecoded = json_decode($cacheEntry, true);
+
+        $this->assertEqualsCanonicalizing(
+            $this->generateExpectedDataFromPage($page),
+            $cacheEntryDecoded
+        );
+
+        $this->assertTagsByCacheIdentityAndPage($cacheIdentityString, $page);
+
+        // update CMS page and assert cache is invalidated
+        $page->setIdentifier('1-column-page-different-identifier');
+        $this->pageRepository->save($page);
+
+        $this->assertFalse(
+            $this->graphqlCache->test($cacheIdentityString),
+            'Cache entry still exists for CMS page'
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testCmsPageResolverCacheWithPostRequest()
+    {
+        $page = $this->getPageByTitle('Page with 1column layout');
+
+        $getGraphQlClient = new \ReflectionMethod($this, 'getGraphQlClient');
+        $getGraphQlClient->setAccessible(true);
+
+        $query = $this->getQuery($page->getIdentifier());
+        $response = $getGraphQlClient->invoke($this)->postWithResponseHeaders($query);
+
+        $cacheIdentityString = $this->getCacheIdentityStringFromResponseAndPage($response, $page);
+
+        $cacheEntry = $this->graphqlCache->load($cacheIdentityString);
+        $cacheEntryDecoded = json_decode($cacheEntry, true);
+
+        $this->assertEqualsCanonicalizing(
+            $this->generateExpectedDataFromPage($page),
+            $cacheEntryDecoded
+        );
+    }
+
+    private function generateExpectedDataFromPage(PageInterface $page): array
+    {
+        return [
+            'page_id' => $page->getId(),
+            'identifier' => $page->getIdentifier(),
+            'url_key' => $page->getIdentifier(),
+            'title' => $page->getTitle(),
+            'content' => $page->getContent(),
+            'content_heading' => $page->getContentHeading(),
+            'page_layout' => $page->getPageLayout(),
+            'meta_keywords' => $page->getMetaKeywords(),
+            'meta_title' => $page->getMetaTitle(),
+            'meta_description' => $page->getMetaDescription(),
+        ];
+    }
+
+    private function assertTagsByCacheIdentityAndPage(string $cacheIdentityString, PageInterface $page): void
+    {
         $lowLevelFrontendCache = $this->graphqlCache->getLowLevelFrontend();
         $cacheIdPrefix = $lowLevelFrontendCache->getOption('cache_id_prefix');
         $metadatas = $lowLevelFrontendCache->getMetadatas($cacheIdentityString);
@@ -93,15 +184,20 @@ class PageTest extends GraphQlAbstract
             ],
             $tags
         );
+    }
 
-        // update CMS page and assert cache is invalidated
-        $page->setContent('something different');
-        $this->pageRepository->save($page);
+    private function getPageByTitle(string $title): PageInterface
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter('title', $title)
+            ->create();
 
-        $this->assertFalse(
-            $this->graphqlCache->test($cacheIdentityString),
-            'Cache entry still exists for CMS page'
-        );
+        $pages = $this->pageRepository->getList($searchCriteria)->getItems();
+
+        /** @var PageInterface $page */
+        $page = reset($pages);
+
+        return $page;
     }
 
     private function getQuery(string $identifier): string
