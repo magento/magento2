@@ -10,7 +10,7 @@ namespace Magento\StoreGraphQl\Plugin;
 use Magento\StoreGraphQl\Model\Resolver\Store\ConfigIdentity;
 
 /**
- * Store group plugin
+ * Store group plugin to provide identities for cache invalidation
  */
 class Group
 {
