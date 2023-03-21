@@ -16,24 +16,24 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-5606"/>
         </annotations>
-    <before>
-        <!-- Create customer -->
-        <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-        <createData entity="_defaultCategory" stepKey="createCategory"/>
-        <!-- Create simple product -->
-        <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
-            <requiredEntity createDataKey="createCategory"/>
-        </createData>
-        <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
-        <!-- Login as admin -->
-        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
-    </before>
-    <after>
-        <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-        <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-        <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
-        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-    </after>
+        <before>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!-- Create simple product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
         <!-- Create order -->
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrderPage">
             <argument name="customer" value="$$createCustomer$$"/>
