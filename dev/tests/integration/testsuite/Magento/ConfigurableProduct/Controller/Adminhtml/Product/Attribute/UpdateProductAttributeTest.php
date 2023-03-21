@@ -67,7 +67,7 @@ class UpdateProductAttributeTest extends AbstractBackendController
         // Save the attribute.
         $this->productAttributeRepository->save($attribute);
 
-        // Check that the frontend_class was updated correctly.
+        // Check that the value of the frontend_class changed or not.
         try {
             $skuAttribute = $this->eavConfig->getAttribute('catalog_product', 'sku');
             $this->assertEquals($expectedFrontEndClass, $skuAttribute->getFrontendClass());
