@@ -5,10 +5,10 @@
  */
 namespace Magento\Sales\Block\Order;
 
-use Magento\Sales\Model\Order\Address;
-use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Magento\Payment\Helper\Data as PaymentHelper;
+use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Address\Renderer as AddressRenderer;
 
 /**
@@ -25,8 +25,6 @@ class Info extends \Magento\Framework\View\Element\Template
     protected $_template = 'Magento_Sales::order/info.phtml';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $coreRegistry = null;
@@ -63,6 +61,8 @@ class Info extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Prepare Layout
+     *
      * @return void
      */
     protected function _prepareLayout()
@@ -73,6 +73,8 @@ class Info extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get payment info html
+     *
      * @return string
      */
     public function getPaymentInfoHtml()

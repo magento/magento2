@@ -18,8 +18,6 @@ namespace Magento\Sales\Block\Order\Invoice;
 class Items extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;

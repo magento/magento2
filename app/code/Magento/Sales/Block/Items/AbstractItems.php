@@ -17,7 +17,7 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
     /**
      * Block alias fallback
      */
-    const DEFAULT_TYPE = 'default';
+    public const DEFAULT_TYPE = 'default';
 
     /**
      * Retrieve item renderer block

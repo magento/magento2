@@ -21,11 +21,9 @@ abstract class Transactions extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::transactions';
+    public const ADMIN_RESOURCE = 'Magento_Sales::transactions';
 
     /**
-     * Core registry
-     *
      * @var Registry
      */
     protected $_coreRegistry = null;

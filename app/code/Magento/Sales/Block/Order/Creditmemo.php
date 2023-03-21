@@ -51,6 +51,8 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
     }
 
     /**
+     * Prepare Layout
+     *
      * @return void
      */
     protected function _prepareLayout()
@@ -61,6 +63,8 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
     }
 
     /**
+     * Get payment info html
+     *
      * @return string
      */
     public function getPaymentInfoHtml()
@@ -105,6 +109,8 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
     }
 
     /**
+     * Invoice URL getter
+     *
      * @param object $order
      * @return string
      */
@@ -114,6 +120,8 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
     }
 
     /**
+     * Shipment URL getter
+     *
      * @param object $order
      * @return string
      */
@@ -123,6 +131,8 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
     }
 
     /**
+     * Get order view URL
+     *
      * @param object $order
      * @return string
      */
@@ -132,6 +142,8 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
     }
 
     /**
+     * Get CreditMemo Print Url
+     *
      * @param object $creditmemo
      * @return string
      */
@@ -141,6 +153,8 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
     }
 
     /**
+     * Get PrintAll CreditMemos Url
+     *
      * @param object $order
      * @return string
      */
