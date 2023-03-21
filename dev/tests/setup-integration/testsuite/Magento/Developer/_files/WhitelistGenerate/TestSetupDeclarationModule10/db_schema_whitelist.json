@@ -1,0 +1,18 @@
+{
+    "test_table": {
+        "column": {
+            "tinyint": true,
+            "customint": true
+        },
+        "index": {
+            "TEST_TABLE_TINYINT_REFERENCE": true,
+            "TEST_TABLE_CUSTOMINT_REFERENCE": true,
+            "TEST_TABLE_CUSTOMINT_BIGINT": true
+        },
+        "constraint": {
+            "TEST_TABLE_INDEX": true,
+            "TEST_TABLE_CUSTOMINT_INDEX": true,
+            "TEST_TABLE_CUSTOMINT_REFERENCE_TABLE_TINYINT_REF": true
+        }
+    }
+}
