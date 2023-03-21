@@ -65,8 +65,8 @@ class BundleOrderTypeValidator extends BundleShipmentTypeValidator implements Va
      */
     private function canValidate(): bool
     {
-        $url = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Url::class);
+        $request = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Webapi\Request::class);
 
-        return str_contains(strtolower($url->getCurrentUrl()), self::SHIPMENT_API_ROUTE);
+        return str_contains(strtolower($request->getUri()->getPath()), self::SHIPMENT_API_ROUTE);
     }
 }
