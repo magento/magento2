@@ -9,6 +9,7 @@ namespace Magento\Eav\Test\Fixture;
 
 use Magento\Eav\Api\AttributeOptionManagementInterface;
 use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\TestFramework\Fixture\Api\DataMerger;
@@ -111,11 +112,33 @@ class AttributeOption implements DataFixtureInterface
         $attribute = $this->attributeRepository->get($entityType, $attributeCode);
 
         foreach ($attribute->getOptions() as $option) {
-            if ($option->getLabel() === $mergedData['label']) {
+            if ($this->getDefaultLabel($mergedData) === $option->getLabel()) {
                 return $option;
             }
         }
 
         return null;
+    }
+
+    /**
+     * Retrieve default label or label for default store
+     *
+     * @param array $mergedData
+     * @return string
+     */
+    private function getDefaultLabel(array $mergedData): string
+    {
+        $defaultLabel = $mergedData['label'];
+        if (!isset($mergedData['store_labels']) || !is_array($mergedData['store_labels'])) {
+            return $defaultLabel;
+        }
+
+        foreach ($mergedData['store_labels'] as $label) {
+            if (isset($label['store_id']) && $label['store_id'] === 0 && isset($label['label'])) {
+                return $label['label'];
+            }
+        }
+
+        return $defaultLabel;
     }
 }
