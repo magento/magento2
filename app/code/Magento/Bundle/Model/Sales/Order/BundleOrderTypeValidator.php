@@ -9,6 +9,8 @@ namespace Magento\Bundle\Model\Sales\Order;
 
 use Magento\Bundle\Model\Sales\Order\Shipment\BundleShipmentTypeValidator;
 use \Laminas\Validator\ValidatorInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\Webapi\Request;
 use Magento\Sales\Model\Order\Shipment;
 
 /**
@@ -16,12 +18,25 @@ use Magento\Sales\Model\Order\Shipment;
  */
 class BundleOrderTypeValidator extends BundleShipmentTypeValidator implements ValidatorInterface
 {
-    private const SHIPMENT_API_ROUTE = '/v1/shipment/';
+    private const SHIPMENT_API_ROUTE = 'v1/shipment';
 
     /**
      * @var array
      */
     private array $messages = [];
+
+    /**
+     * @var Request
+     */
+    private Request $request;
+
+    /**
+     * @param Request $request
+     */
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
 
     /**
      * Validates shipment items based on order item properties
@@ -40,8 +55,8 @@ class BundleOrderTypeValidator extends BundleShipmentTypeValidator implements Va
         foreach ($value->getOrder()->getAllItems() as $orderItem) {
             foreach ($value->getItems() as $shipmentItem) {
                 if ($orderItem->getItemId() == $shipmentItem->getOrderItemId()) {
-                    if ($result = $this->validate($orderItem)) {
-                        $this->messages[] = $result;
+                    if ($validationMessages = $this->validate($orderItem)) {
+                        $this->renderValidationMessages($validationMessages);
                     }
                 }
             }
@@ -61,12 +76,27 @@ class BundleOrderTypeValidator extends BundleShipmentTypeValidator implements Va
     }
 
     /**
+     * Determines if the validation should be triggered or not
+     *
      * @return bool
      */
     private function canValidate(): bool
     {
-        $request = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Webapi\Request::class);
+        return str_contains(strtolower($this->request->getUri()->getPath()), self::SHIPMENT_API_ROUTE);
+    }
 
-        return str_contains(strtolower($request->getUri()->getPath()), self::SHIPMENT_API_ROUTE);
+    /**
+     * Creates text based validation messages
+     *
+     * @param array $validationMessages
+     * @return void
+     */
+    private function renderValidationMessages(array $validationMessages): void
+    {
+        foreach ($validationMessages as $message) {
+            if ($message instanceof Phrase) {
+                $this->messages[] = $message->render();
+            }
+        }
     }
 }

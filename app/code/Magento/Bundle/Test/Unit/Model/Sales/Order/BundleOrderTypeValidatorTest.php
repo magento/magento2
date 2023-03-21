@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model\Sales\Order;
 
+use Laminas\Uri\Http as HttpUri;
 use Magento\Bundle\Model\Sales\Order\BundleOrderTypeValidator;
-use Magento\Framework\Phrase;
+use Magento\Framework\Webapi\Request;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order\Shipment;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -17,6 +18,31 @@ use Magento\Catalog\Model\Product\Type;
 
 class BundleOrderTypeValidatorTest extends TestCase
 {
+    /**
+     * @var Request|Request&MockObject|MockObject
+     */
+    private Request $request;
+
+    /**
+     * @var BundleOrderTypeValidator
+     */
+    private BundleOrderTypeValidator $validator;
+
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->request = $this->createMock(Request::class);
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getPath')->willReturn('V1/shipment/');
+        $this->request->expects($this->any())->method('getUri')->willReturn($uri);
+
+        $this->validator = new BundleOrderTypeValidator($this->request);
+
+        parent::setUp();
+    }
+
     /**
      * @return void
      */
@@ -56,9 +82,8 @@ class BundleOrderTypeValidatorTest extends TestCase
         $shipment->expects($this->once())->method('getOrder')->willReturn($order);
 
         try {
-            $validator = new BundleOrderTypeValidator();
-            $validator->isValid($shipment);
-            $this->assertEmpty($validator->getMessages());
+            $this->validator->isValid($shipment);
+            $this->assertEmpty($this->validator->getMessages());
         } catch (\Exception $e) {
             $this->fail('Could not perform shipment validation. ' . $e->getMessage());
         }
@@ -91,19 +116,11 @@ class BundleOrderTypeValidatorTest extends TestCase
         $shipment->expects($this->once())->method('getOrder')->willReturn($order);
 
         try {
-            $validator = new BundleOrderTypeValidator();
-            $validator->isValid($shipment);
-            $messages = $validator->getMessages();
+            $this->validator->isValid($shipment);
+            $messages = $this->validator->getMessages();
             $this->assertNotEmpty($messages);
-            /** @var Phrase $validationMsg */
-            $validationMsg = current($messages)[0];
-            foreach ($validationMsg->getArguments() as $argument) {
-                if (is_string($argument)) {
-                    $this->assertSame($argument, 'bundleSKU');
-                } else {
-                    $this->assertTrue(in_array($argument->getText(), ['Separately', 'Bundle product options']));
-                }
-            }
+            $this->assertStringContainsString("bundleSKU", current($messages));
+            $this->assertStringContainsString("Separately", current($messages));
         } catch (\Exception $e) {
             $this->fail('Could not perform shipment validation. ' . $e->getMessage());
         }
@@ -140,19 +157,11 @@ class BundleOrderTypeValidatorTest extends TestCase
         $shipment->expects($this->once())->method('getOrder')->willReturn($order);
 
         try {
-            $validator = new BundleOrderTypeValidator();
-            $validator->isValid($shipment);
-            $messages = $validator->getMessages();
+            $this->validator->isValid($shipment);
+            $messages = $this->validator->getMessages();
             $this->assertNotEmpty($messages);
-            /** @var Phrase $validationMsg */
-            $validationMsg = current($messages)[0];
-            foreach ($validationMsg->getArguments() as $argument) {
-                if (is_string($argument)) {
-                    $this->assertSame($argument, 'bundleSKU');
-                } else {
-                    $this->assertTrue(in_array($argument->getText(), ['Together', 'Bundle product itself']));
-                }
-            }
+            $this->assertStringContainsString("bundleSKU", current($messages));
+            $this->assertStringContainsString("Together", current($messages));
         } catch (\Exception $e) {
             $this->fail('Could not perform shipment validation. ' . $e->getMessage());
         }
