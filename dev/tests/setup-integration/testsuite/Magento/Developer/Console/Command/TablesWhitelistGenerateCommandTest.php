@@ -67,7 +67,7 @@ class TablesWhitelistGenerateCommandTest extends SetupTestCase
 
     /**
      * Execute generate command for whitelist.
-     *app/code/Magento/Developer/Test/Mftf/Test/WhitelistGeneratorTest.xml
+     *
      * @moduleName Magento_TestSetupDeclarationModule1
      * @moduleName Magento_TestSetupDeclarationModule8
      * @moduleName Magento_TestSetupDeclarationModule10
