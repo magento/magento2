@@ -16,6 +16,8 @@ use Magento\Sales\Model\Order\Shipment;
  */
 class BundleOrderTypeValidator extends BundleShipmentTypeValidator implements ValidatorInterface
 {
+    private const SHIPMENT_API_ROUTE = '/v1/shipment/';
+
     /**
      * @var array
      */
@@ -31,6 +33,10 @@ class BundleOrderTypeValidator extends BundleShipmentTypeValidator implements Va
      */
     public function isValid($value): bool
     {
+        if (false === $this->canValidate()) {
+            return true;
+        }
+
         foreach ($value->getOrder()->getAllItems() as $orderItem) {
             foreach ($value->getItems() as $shipmentItem) {
                 if ($orderItem->getItemId() == $shipmentItem->getOrderItemId()) {
@@ -52,5 +58,15 @@ class BundleOrderTypeValidator extends BundleShipmentTypeValidator implements Va
     public function getMessages(): array
     {
         return $this->messages;
+    }
+
+    /**
+     * @return bool
+     */
+    private function canValidate(): bool
+    {
+        $url = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Url::class);
+
+        return str_contains(strtolower($url->getCurrentUrl()), self::SHIPMENT_API_ROUTE);
     }
 }
