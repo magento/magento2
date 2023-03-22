@@ -43,6 +43,7 @@ class BackpressureFieldValidator implements ValidatorInterface
     /**
      * Validate resolver args
      *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param Field $field
      * @param array $args
      * @return void
