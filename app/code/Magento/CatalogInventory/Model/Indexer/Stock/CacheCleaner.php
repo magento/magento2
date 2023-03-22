@@ -162,7 +162,7 @@ class CacheCleaner
             }
         }
 
-        return $productIds;
+        return array_map('intval', $productIds);
     }
 
     /**
