@@ -176,7 +176,7 @@ class CacheCleaner
         $categoryProductTable = $this->resource->getTableName('catalog_category_product');
         $select = $this->getConnection()->select()
             ->from(['catalog_category_product' => $categoryProductTable], ['category_id'])
-            ->where('product_id IN (?)', $productIds);
+            ->where('product_id IN (?)', $productIds, \Zend_Db::INT_TYPE);
 
         return $this->getConnection()->fetchCol($select);
     }
