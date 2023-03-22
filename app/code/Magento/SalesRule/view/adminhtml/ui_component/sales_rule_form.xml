@@ -199,7 +199,7 @@
                                 </action>
                                 <action name="2">
                                     <target>sales_rule_form.sales_rule_form.rule_information.uses_per_coupon</target>
-                                    <callback>hide</callback>
+                                    <callback>show</callback>
                                 </action>
                             </actions>
                         </rule>
