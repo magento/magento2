@@ -87,6 +87,8 @@ class PageTest extends TestCase
     }
 
     /**
+     * Test that result can be loaded continuously after saving once when passing the same arguments
+     *
      * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
      * @return void
      */
