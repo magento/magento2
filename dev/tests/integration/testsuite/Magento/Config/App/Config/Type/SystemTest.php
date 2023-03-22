@@ -68,4 +68,10 @@ class SystemTest extends \PHPUnit\Framework\TestCase
             $this->system->get('stores/default/abc/qrs/xyz')
         );
     }
+
+    protected function tearDown(): void
+    {
+        unset($_ENV['CONFIG__STORES__DEFAULT__ABC__QRS__XYZ']);
+        parent::tearDown();
+    }
 }
