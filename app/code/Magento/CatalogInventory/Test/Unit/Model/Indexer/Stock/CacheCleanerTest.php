@@ -123,9 +123,6 @@ class CacheCleanerTest extends TestCase
             ->method('from')
             ->willReturnSelf();
         $this->selectMock->expects($this->any())
-            ->method('where')
-            ->willReturnSelf();
-        $this->selectMock->expects($this->any())
             ->method('joinLeft')
             ->willReturnSelf();
         $this->connectionMock->expects($this->exactly(3))
@@ -141,6 +138,21 @@ class CacheCleanerTest extends TestCase
                     ['product_id' => $productId, 'stock_status' => $stockStatusAfter, 'qty' => $qtyAfter],
                 ]
             );
+        $this->connectionMock->expects($this->exactly(3))
+            ->method('select')
+            ->willReturn($this->selectMock);
+        $this->selectMock->expects($this->exactly(7))
+            ->method('where')
+            ->withConsecutive(
+                ['product_id IN (?)'],
+                ['stock_id = ?'],
+                ['website_id = ?'],
+                ['product_id IN (?)'],
+                ['stock_id = ?'],
+                ['website_id = ?'],
+                ['product_id IN (?)', [123], \Zend_Db::INT_TYPE]
+            )
+            ->willReturnSelf();
         $this->connectionMock->expects($this->exactly(1))
             ->method('fetchCol')
             ->willReturn([$categoryId]);
