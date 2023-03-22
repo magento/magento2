@@ -101,9 +101,11 @@ class Client
     }
 
     /**
-     * Process response from GraphQl server
+     * Process response from GraphQL server.
      *
      * @param string $response
+     * @param array $responseHeaders
+     * @param array $responseCookies
      * @return mixed
      * @throws \Exception
      */
@@ -196,10 +198,13 @@ class Client
     }
 
     /**
-     * Process errors
+     * Process errors.
      *
-     * @param array $responseBodyArray
-     * @throws \Exception
+     * @param $responseBodyArray
+     * @param array $responseHeaders
+     * @param array $responseCookies
+     * @return void
+     * @throws ResponseContainsErrorsException
      */
     private function processErrors($responseBodyArray, array $responseHeaders = [], array $responseCookies = [])
     {

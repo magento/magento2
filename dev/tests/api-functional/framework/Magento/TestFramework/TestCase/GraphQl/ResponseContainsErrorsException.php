@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\TestFramework\TestCase\GraphQl;
 
 /**
- * Response contains errors exception
+ * Exception thrown when GraphQL response contains errors.
  */
 class ResponseContainsErrorsException extends \Exception
 {
@@ -32,6 +32,8 @@ class ResponseContainsErrorsException extends \Exception
      * @param array $responseData
      * @param \Exception|null $cause
      * @param int $code
+     * @param array $responseHeaders
+     * @param array $responseCookies
      */
     public function __construct(
         string $message,
