@@ -37,9 +37,9 @@ class PageTest extends TestCase
     private $graphQlRequest;
 
     /**
-     * @var GraphQlCache
+     * @var ResolverPlugin
      */
-    private $originalGraphQlCache;
+    private $originalResolverPlugin;
 
     /**
      * @var SearchCriteriaBuilder
@@ -67,7 +67,7 @@ class PageTest extends TestCase
         $this->graphQlRequest = $objectManager->create(GraphQlRequest::class);
         $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
         $this->pageRepository = $objectManager->get(PageRepository::class);
-        $this->originalGraphQlCache = $objectManager->get(GraphQlCache::class);
+        $this->originalResolverPlugin = $objectManager->get(ResolverPlugin::class);
 
         $this->cacheState = $objectManager->get(CacheStateInterface::class);
         $this->originalCacheStateEnabledStatus = $this->cacheState->isEnabled(GraphQlCache::TYPE_IDENTIFIER);
@@ -78,10 +78,11 @@ class PageTest extends TestCase
     {
         $objectManager = $this->objectManager;
 
-        $objectManager->addSharedInstance($this->originalGraphQlCache, GraphQlCache::class);
-        $objectManager->removeSharedInstance(ResolverPlugin::class);
+        // reset to original resolver plugin
+        $objectManager->addSharedInstance($this->originalResolverPlugin, ResolverPlugin::class);
 
-        $this->originalGraphQlCache->clean();
+        // clean graphql resolver cache and reset to original enablement status
+        $objectManager->get(GraphQlCache::class)->clean();
         $this->cacheState->setEnabled(GraphQlCache::TYPE_IDENTIFIER, $this->originalCacheStateEnabledStatus);
     }
 
@@ -103,10 +104,12 @@ class PageTest extends TestCase
             ])
             ->getMock();
 
+        // assert cache proxy calls load at least once for the same CMS page query
         $cacheProxy
             ->expects($this->atLeastOnce())
             ->method('load');
 
+        // assert save is called at most once for the same CMS page query
         $cacheProxy
             ->expects($this->once())
             ->method('save');
@@ -115,6 +118,7 @@ class PageTest extends TestCase
             'graphqlCache' => $cacheProxy,
         ]);
 
+        // override resolver plugin with plugin instance containing cache proxy class
         $objectManager->addSharedInstance($resolverPluginWithCacheProxy, ResolverPlugin::class);
 
         $query = $this->getQuery($page->getIdentifier());
