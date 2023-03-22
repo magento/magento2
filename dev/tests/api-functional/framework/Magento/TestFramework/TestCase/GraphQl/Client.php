@@ -200,7 +200,7 @@ class Client
     /**
      * Process errors.
      *
-     * @param $responseBodyArray
+     * @param array $responseBodyArray
      * @param array $responseHeaders
      * @param array $responseCookies
      * @return void
