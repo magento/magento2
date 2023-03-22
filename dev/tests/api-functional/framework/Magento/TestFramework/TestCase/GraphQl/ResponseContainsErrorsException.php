@@ -18,15 +18,33 @@ class ResponseContainsErrorsException extends \Exception
     private $responseData;
 
     /**
+     * @var array
+     */
+    private $responseHeaders;
+
+    /**
+     * @var array
+     */
+    private $responseCookies;
+
+    /**
      * @param string $message
      * @param array $responseData
      * @param \Exception|null $cause
      * @param int $code
      */
-    public function __construct(string $message, array $responseData, \Exception $cause = null, int $code = 0)
-    {
+    public function __construct(
+        string $message,
+        array $responseData,
+        \Exception $cause = null,
+        int $code = 0,
+        array $responseHeaders = [],
+        array $responseCookies = []
+    ) {
         parent::__construct($message, $code, $cause);
         $this->responseData = $responseData;
+        $this->responseHeaders = $responseHeaders;
+        $this->responseCookies = $responseCookies;
     }
 
     /**
@@ -37,5 +55,25 @@ class ResponseContainsErrorsException extends \Exception
     public function getResponseData(): array
     {
         return $this->responseData;
+    }
+
+    /**
+     * Get response headers
+     *
+     * @return array
+     */
+    public function getResponseHeaders(): array
+    {
+        return $this->responseHeaders;
+    }
+
+    /**
+     * Get response cookies
+     *
+     * @return array
+     */
+    public function getResponseCookies(): array
+    {
+        return $this->responseCookies;
     }
 }

@@ -13,6 +13,9 @@ use Magento\Store\Model\StoreRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 
+/**
+ * Test caching for custom attribute metadata GraphQL query.
+ */
 class CustomAttributesMetadataCacheTest extends GraphQLPageCacheAbstract
 {
     /**
@@ -203,10 +206,57 @@ class CustomAttributesMetadataCacheTest extends GraphQLPageCacheAbstract
         $eavAttributeRepo = $this->objectManager->get(AttributeRepository::class);
         $attribute = $eavAttributeRepo->get("catalog_product", "dropdown_attribute");
         $eavAttributeRepo->delete($attribute);
+        $this->assertQueryResultIsCacheMissWithError(
+            $query,
+            "GraphQL response contains errors: Internal server error"
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/dropdown_attribute.php
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     *
+     * @return void
+     */
+    public function testCacheMissingAttributeParam()
+    {
+        $query = $this->getAttributeQueryNoCode("catalog_product");
+        // check cache missed on each query
+        $this->assertQueryResultIsCacheMissWithError(
+            $query,
+            "Missing attribute_code for the input entity_type: catalog_product."
+        );
+        $this->assertQueryResultIsCacheMissWithError(
+            $query,
+            "Missing attribute_code for the input entity_type: catalog_product."
+        );
+
+        $query = $this->getAttributeQueryNoEntityType("dropdown_attribute");
+        // check cache missed on each query
+        $this->assertQueryResultIsCacheMissWithError(
+            $query,
+            "Missing entity_type for the input attribute_code: dropdown_attribute."
+        );
+        $this->assertQueryResultIsCacheMissWithError(
+            $query,
+            "Missing entity_type for the input attribute_code: dropdown_attribute."
+        );
+    }
+
+    /**
+     * Assert that query produces an error and the cache is missed.
+     *
+     * @param string $query
+     * @param string $expectedError
+     * @return void
+     * @throws \Exception
+     */
+    private function assertQueryResultIsCacheMissWithError(string $query, string $expectedError)
+    {
         $caughtException = null;
         try {
-            // get response
-            $response = $this->graphQlQuery($query, []);
+            // query for response, expect response to be present in exception
+            $this->graphQlQueryWithResponseHeaders($query, []);
         } catch (ResponseContainsErrorsException $exception) {
             $caughtException = $exception;
         }
@@ -216,12 +266,12 @@ class CustomAttributesMetadataCacheTest extends GraphQLPageCacheAbstract
         );
         // cannot use expectException because need to assert the headers
         $this->assertStringContainsString(
-            "GraphQL response contains errors: Internal server error",
+            $expectedError,
             $caughtException->getMessage()
         );
         // assert that it's a miss after deletion
         $this->assertEquals(
-            $response['headers']['X-Magento-Cache-Debug'],
+            $caughtException->getResponseHeaders()['X-Magento-Cache-Debug'],
             'MISS'
         );
     }
@@ -279,6 +329,64 @@ class CustomAttributesMetadataCacheTest extends GraphQLPageCacheAbstract
         label
         value
       }
+    }
+  }
+ }
+QUERY;
+    }
+
+    /**
+     * Prepare and return GraphQL query for given entity type with no code.
+     *
+     * @param string $code
+     * @param string $entityType
+     * @return string
+     */
+    private function getAttributeQueryNoCode(string $entityType) : string
+    {
+        return <<<QUERY
+{
+  customAttributeMetadata(attributes:
+  [
+    {
+      entity_type:"{$entityType}"
+    }
+  ]
+  )
+  {
+    items
+    {
+      attribute_code
+      entity_type
+    }
+  }
+ }
+QUERY;
+    }
+
+    /**
+     * Prepare and return GraphQL query for given code with no entity type.
+     *
+     * @param string $code
+     * @param string $entityType
+     * @return string
+     */
+    private function getAttributeQueryNoEntityType(string $code) : string
+    {
+        return <<<QUERY
+{
+  customAttributeMetadata(attributes:
+  [
+    {
+      attribute_code:"{$code}"
+    }
+  ]
+  )
+  {
+    items
+    {
+      attribute_code
+      entity_type
     }
   }
  }
