@@ -15,7 +15,6 @@ use Magento\Framework\App\Cache\Type\FrontendPool;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlCache;
-use Magento\GraphQlCache\Model\Plugin\Query\Resolver;
 use Magento\GraphQlCache\Model\Plugin\Query\Resolver as ResolverPlugin;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
