@@ -88,7 +88,7 @@ class UserExpirationTest extends TestCase
         $loadedUserExpiration = $this->userExpirationFactory->create();
         $this->userExpirationResource->load($loadedUserExpiration, $this->userExpiration->getId());
 
-        self::assertEquals($initialExpirationDate->format('Y-m-d H:i:s'), $loadedUserExpiration->getExpiresAt());
+        self::assertEquals(strtotime($initialExpirationDate->format('Y-m-d H:i:s')), strtotime($loadedUserExpiration->getExpiresAt()));
     }
 
     /**
