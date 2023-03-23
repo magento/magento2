@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
-use GraphQL\Language\AST\NodeKind;
+use Magento\CatalogGraphQl\Model\AttributesJoiner;
 use Magento\Framework\GraphQl\Query\FieldTranslator;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
@@ -21,12 +21,22 @@ class ProductFieldsSelector
      */
     private $fieldTranslator;
 
+
+    /**
+     * @var AttributesJoiner
+     */
+    private $attributesJoiner;
+
     /**
      * @param FieldTranslator $fieldTranslator
+     * @param AttributesJoiner $attributesJoiner
      */
-    public function __construct(FieldTranslator $fieldTranslator)
-    {
+    public function __construct(
+        FieldTranslator $fieldTranslator,
+        AttributesJoiner $attributesJoiner
+    ) {
         $this->fieldTranslator = $fieldTranslator;
+        $this->attributesJoiner = $attributesJoiner;
     }
 
     /**
@@ -44,16 +54,8 @@ class ProductFieldsSelector
                 continue;
             }
             foreach ($node->selectionSet->selections as $selectionNode) {
-                if ($selectionNode->kind === NodeKind::INLINE_FRAGMENT) {
-                    foreach ($selectionNode->selectionSet->selections as $inlineSelection) {
-                        if ($inlineSelection->kind === NodeKind::INLINE_FRAGMENT) {
-                            continue;
-                        }
-                        $fieldNames[] = $this->fieldTranslator->translate($inlineSelection->name->value);
-                    }
-                    continue;
-                }
-                $fieldNames[] = $this->fieldTranslator->translate($selectionNode->name->value);
+                $queryFields = $this->attributesJoiner->getQueryFields($node, $info);
+                $fieldNames = array_merge($fieldNames, $queryFields);
             }
         }
 
