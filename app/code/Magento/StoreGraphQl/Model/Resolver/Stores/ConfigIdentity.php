@@ -33,36 +33,41 @@ class ConfigIdentity implements IdentityInterface
     public function getIdentities(array $resolvedData): array
     {
         $ids = [];
-        $storeGroupIds = [];
-        $store = null;
-        $storeGroupCount = 0;
         foreach ($resolvedData as $storeConfig) {
             $ids[] = sprintf('%s_%s', StoreConfigIdentity::CACHE_TAG, $storeConfig['id']);
-            if ($storeGroupCount < 2) {
-                try {
-                    // Record store groups
-                    $store = $this->storeManager->getStore($storeConfig['id']);
-                    $storeGroupId = $store->getStoreGroupId();
-                    if ($storeGroupId !== null && !in_array($storeGroupId, $storeGroupIds)) {
-                        $storeGroupIds[] = $storeGroupId;
-                        $storeGroupCount ++;
-                    }
-                } catch (NoSuchEntityException $e) {
-                    // Do nothing
-                    ;
-                }
-            }
         }
-        if ($storeGroupCount > 1) { // the resolved stores for any store groups in a website
-            $ids[] = sprintf('%s_%s', StoreConfigIdentity::CACHE_TAG, 'website_' . $store->getWebsiteId());
-        } elseif ($storeGroupCount == 1) { // the resolved stores for a particular store group in a website
-            $ids[] = sprintf(
-                '%s_%s',
-                StoreConfigIdentity::CACHE_TAG,
-                'website_' . $store->getWebsiteId() . 'group_' . $storeGroupIds[0]
-            );
+        if (!empty($resolvedData)) {
+            $websiteId = $resolvedData[0]['website_id'];
+            $currentStoreGroupId = $this->getCurrectStoreGroupId($resolvedData);
+            $groupTag = $currentStoreGroupId ? 'group_' . $currentStoreGroupId : '';
+            $ids[] = sprintf('%s_%s', StoreConfigIdentity::CACHE_TAG, 'website_' . $websiteId . $groupTag);
         }
 
         return empty($ids) ? [] : array_merge([StoreConfigIdentity::CACHE_TAG], $ids);
+    }
+
+    /**
+     * Return current store group id if it is certain that useCurrentGroup is true in the querry
+     *
+     * @param array $resolvedData
+     * @return string|int|null
+     */
+    private function getCurrectStoreGroupId(array $resolvedData)
+    {
+        $storeGroupCodes = array_unique(array_column($resolvedData, 'store_group_code'));
+        if (count($storeGroupCodes) == 1) {
+            try {
+                $store = $this->storeManager->getStore($resolvedData[0]['id']);
+                if ($store->getWebsite()->getGroupCollection()->count() != 1) {
+                    // There are multiple store groups in the website while there is only one store group
+                    // in the resolved data. Therefore useCurrentGroup must be true in the query
+                    return $store->getStoreGroupId();
+                }
+            } catch (NoSuchEntityException $e) {
+                // Do nothing
+                ;
+            }
+        }
+        return null;
     }
 }
