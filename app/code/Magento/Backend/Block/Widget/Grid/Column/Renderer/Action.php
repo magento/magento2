@@ -132,10 +132,11 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
         }
 
         if (empty($action['id'])) {
-            $action['id'] = 'id' .$this->random->getRandomString(10);
+            $action['id'] = 'id' . $this->random->getRandomString(10);
         }
         $actionAttributes->setData($action);
-        $onclick = $actionAttributes->getData('onclick');
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $onclick = html_entity_decode($actionAttributes->getData('onclick'));
         $style = $actionAttributes->getData('style');
         $actionAttributes->unsetData(['onclick', 'style']);
         $html = '<a ' . $actionAttributes->serialize() . '>' . $actionCaption . '</a>';
