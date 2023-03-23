@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\ProductAlert\Model\Mailing;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Locale\Resolver;
@@ -18,10 +21,13 @@ use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\Translate;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreRepository;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\ObjectManager;
+use Magento\Translation\Test\Fixture\Translation as TranslationFixture;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -100,40 +106,58 @@ class AlertProcessorTest extends TestCase
      * @magentoConfigFixture fixture_second_store_store general/locale/code pt_BR
      * @magentoDataFixture Magento/ProductAlert/_files/product_alert_with_store.php
      */
+    #[
+        DataFixture(
+            TranslationFixture::class,
+            [
+                'string' => 'Price change alert! We wanted you to know that prices have changed for these products:',
+                'translate' => 'Alerta de mudanca de preco! Queriamos que voce soubesse' .
+                    ' que os precos mudaram para esses produtos:',
+                'locale' => 'pt_BR',
+            ]
+        ),
+    ]
     public function testProcessPortuguese()
     {
-        // get second store
-        $storeRepository = $this->objectManager->create(StoreRepository::class);
-        $secondStore = $storeRepository->get('fixture_second_store');
-
-        // check if Portuguese language is specified for the second store
-        $storeResolver = $this->objectManager->get(Resolver::class);
-        $storeResolver->emulate($secondStore->getId());
-        $this->assertEquals('pt_BR', $storeResolver->getLocale());
-
-        // set translation data and check it
-        $modulesReader = $this->createPartialMock(Reader::class, ['getModuleDir']);
-        $modulesReader->method('getModuleDir')
-            ->willReturn(dirname(__DIR__) . '/../_files/i18n');
-        /** @var Translate $translator */
-        $translator = $this->objectManager->create(Translate::class, ['modulesReader' => $modulesReader]);
-        $translation = [
-            'Price change alert! We wanted you to know that prices have changed for these products:' =>
-                'Alerta de mudanca de preco! Queriamos que voce soubesse que os precos mudaram para esses produtos:'
-        ];
-        $translator->loadData();
-        $this->assertEquals($translation, $translator->getData());
-        $this->objectManager->addSharedInstance($translator, Translate::class);
-        $this->objectManager->removeSharedInstance(PhraseRendererTranslate::class);
-        Phrase::setRenderer($this->objectManager->create(RendererInterface::class));
-
         // dispatch process() method and check sent message
         $this->processAlerts();
         $message = $this->transportBuilder->getSentMessage();
         $messageContent = $message->getBody()->getParts()[0]->getRawContent();
-        $expectedText = array_shift($translation);
+        $expectedText = 'Alerta de mudanca de preco! Queriamos que voce soubesse' .
+            ' que os precos mudaram para esses produtos:';
         $this->assertStringContainsString('/frontend/Magento/luma/pt_BR/', $messageContent);
         $this->assertStringContainsString(substr($expectedText, 0, 50), $messageContent);
+    }
+
+    /**
+     * @magentoConfigFixture current_store catalog/productalert/allow_price 1
+     * @magentoDataFixture Magento/ProductAlert/_files/product_alert.php
+     */
+    public function testCustomerShouldGetEmailForEveryProductPriceDrop(): void
+    {
+        $this->processAlerts();
+
+        $this->assertStringContainsString(
+            '$10.00',
+            $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
+        );
+
+        // Intentional: update product without using ProductRepository
+        // to prevent changes from being cached on application level
+        $product = $this->objectManager->get(ProductFactory::class)->create();
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $productResource = $this->objectManager->get(ProductResourceModel::class);
+        $product->setStoreId(Store::DEFAULT_STORE_ID);
+        $productResource->load($product, $productRepository->get('simple')->getId());
+        $product->setPrice(5);
+        $productResource->save($product);
+
+        $this->processAlerts();
+
+        $this->assertStringContainsString(
+            '$5.00',
+            $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
+        );
     }
 
     /**
