@@ -404,7 +404,9 @@ class Item extends AbstractModel implements ShipmentItemInterface
                 }
             }
         }
-        $this->_orderItem->setData('has_children', $hasChildrenFlag);
+        if ($this->_orderItem) {
+            $this->_orderItem->setData('has_children', $hasChildrenFlag);
+        }
     }
 
     /**
@@ -424,8 +426,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
         $order = $this->_shipment->getOrder();
         /** @var Item $item */
         foreach ($this->getShipment()->getAllItems() as $item) {
-            if (
-                $this->_orderItem->getItemId() != $item->getOrderItemId() &&
+            if ($this->_orderItem->getItemId() != $item->getOrderItemId() &&
                 $this->_orderItem->getItemId() == $order->getItemById($item->getOrderItemId())->getParentItemId()
             ) {
                 return false;
