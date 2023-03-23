@@ -389,11 +389,11 @@ class Item extends AbstractModel implements ShipmentItemInterface
      */
     private function loadChildren(): void
     {
-        if ($this->_orderItem) {
+        $hasChildrenFlag = null;
+        if ($this->shouldLoadChildren()) {
             $collection = $this->_orderItem->getOrder()->getItemsCollection();
             $collection->filterByParent($this->_orderItem->getItemId());
 
-            $hasChildrenFlag = false;
             if ($collection->count()) {
                 /** @var \Magento\Sales\Model\Order\Item $childItem */
                 foreach ($collection as $childItem) {
@@ -403,7 +403,35 @@ class Item extends AbstractModel implements ShipmentItemInterface
                     }
                 }
             }
-            $this->_orderItem->setData('has_children', $hasChildrenFlag);
         }
+        $this->_orderItem->setData('has_children', $hasChildrenFlag);
+    }
+
+    /**
+     * Checks if children items are already available in the shipment
+     *
+     * @return bool
+     */
+    private function shouldLoadChildren(): bool
+    {
+        if (!$this->_orderItem || $this->_orderItem->getParentItemId()) {
+            return false;
+        }
+        if (!$this->_shipment) {
+            return true;
+        }
+
+        $order = $this->_shipment->getOrder();
+        /** @var Item $item */
+        foreach ($this->getShipment()->getAllItems() as $item) {
+            if (
+                $this->_orderItem->getItemId() != $item->getOrderItemId() &&
+                $this->_orderItem->getItemId() == $order->getItemById($item->getOrderItemId())->getParentItemId()
+            ) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
