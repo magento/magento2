@@ -70,6 +70,7 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
                     ->setShippingMethod($shippingMethod);
 
                 $this->cartRepository->save($quote);
+                $quote->setTotalsCollectedFlag(false);
             }
         }
         $quote->collectTotals();
