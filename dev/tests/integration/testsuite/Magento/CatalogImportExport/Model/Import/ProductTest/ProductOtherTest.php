@@ -9,6 +9,7 @@ namespace Magento\CatalogImportExport\Model\Import\ProductTest;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogImportExport\Model\Import\ProductTestBase;
 use Magento\CatalogInventory\Model\StockRegistry;
 use Magento\Framework\Api\SearchCriteria;
@@ -16,7 +17,12 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\ImportExport\Helper\Data;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\ImportExport\Test\Fixture\CsvFile as CsvFileFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\Translation\Test\Fixture\Translation;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
 
 /**
@@ -724,5 +730,62 @@ class ProductOtherTest extends ProductTestBase
         $this->assertSame('0', (string) $simpleProduct->getTaxClassId());
         $simpleProduct = $this->getProductBySku('simple2');
         $this->assertSame('0', (string) $simpleProduct->getTaxClassId());
+    }
+
+    #[
+        DataFixture(
+            Translation::class,
+            [
+                'string' => 'Not Visible Individually',
+                'translate' => 'Nicht individuell sichtbar',
+                'locale' => 'de_DE',
+            ]
+        ),
+        DataFixture(ProductFixture::class, as: 'p1'),
+        DataFixture(
+            CsvFileFixture::class,
+            [
+                'rows' => [
+                    ['sku', 'visibility'],
+                    ['$p1.sku$', 'Nicht individuell sichtbar'],
+                ]
+            ],
+            'file'
+        )
+    ]
+    public function testImportWithSpecificLocale(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $p1 = $fixtures->get('p1');
+        $pathToFile = $fixtures->get('file')->getAbsolutePath();
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => $pathToFile,
+                'directory' => $directory
+            ]
+        );
+
+        $importModel = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import::class
+        );
+        $importModel->setData(
+            [
+                'entity' => 'catalog_product',
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                Import::FIELD_NAME_VALIDATION_STRATEGY =>
+                    ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR,
+                Import::FIELD_NAME_ALLOWED_ERROR_COUNT => 0,
+                Import::FIELD_FIELD_SEPARATOR => ',',
+                'locale' => 'de_DE'
+            ]
+        );
+        $importModel->validateSource($source);
+        $this->assertErrorsCount(0, $importModel->getErrorAggregator());
+        $importModel->importSource();
+        $simpleProduct = $this->getProductBySku($p1->getSku());
+        $this->assertEquals(Product\Visibility::VISIBILITY_NOT_VISIBLE, (int) $simpleProduct->getVisibility());
     }
 }

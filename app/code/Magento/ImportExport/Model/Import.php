@@ -211,17 +211,22 @@ class Import extends AbstractModel
     private $upload;
 
     /**
+     * @var LocaleEmulatorInterface
+     */
+    private $localeEmulator;
+
+    /**
      * @param LoggerInterface $logger
      * @param Filesystem $filesystem
      * @param DataHelper $importExportData
      * @param ScopeConfigInterface $coreConfig
-     * @param Import\ConfigInterface $importConfig
-     * @param Import\Entity\Factory $entityFactory
+     * @param ConfigInterface $importConfig
+     * @param Factory $entityFactory
      * @param Data $importData
-     * @param Export\Adapter\CsvFactory $csvFactory
+     * @param CsvFactory $csvFactory
      * @param FileTransferFactory $httpFactory
      * @param UploaderFactory $uploaderFactory
-     * @param Source\Import\Behavior\Factory $behaviorFactory
+     * @param Factory $behaviorFactory
      * @param IndexerRegistry $indexerRegistry
      * @param History $importHistoryModel
      * @param DateTime $localeDate
@@ -229,6 +234,7 @@ class Import extends AbstractModel
      * @param ManagerInterface|null $messageManager
      * @param Random|null $random
      * @param Upload|null $upload
+     * @param LocaleEmulatorInterface|null $localeEmulator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -249,7 +255,8 @@ class Import extends AbstractModel
         array $data = [],
         ManagerInterface $messageManager = null,
         Random $random = null,
-        Upload $upload = null
+        Upload $upload = null,
+        LocaleEmulatorInterface $localeEmulator = null
     ) {
         $this->_importExportData = $importExportData;
         $this->_coreConfig = $coreConfig;
@@ -270,7 +277,27 @@ class Import extends AbstractModel
             ->get(Random::class);
         $this->upload = $upload ?: ObjectManager::getInstance()
             ->get(Upload::class);
+        $this->localeEmulator = $localeEmulator ?: ObjectManager::getInstance()
+            ->get(LocaleEmulatorInterface::class);
         parent::__construct($logger, $filesystem, $data);
+    }
+
+    /**
+     * Returns or create existing instance of entity adapter
+     *
+     * @throws LocalizedException
+     * @return EntityInterface
+     */
+    protected function _getEntityAdapter()
+    {
+        if (!$this->_entityAdapter) {
+            $this->_entityAdapter = $this->localeEmulator->emulate(
+                $this->createEntityAdapter(...),
+                $this->getData('locale') ?: null
+            );
+        }
+
+        return $this->_entityAdapter;
     }
 
     /**
@@ -279,7 +306,7 @@ class Import extends AbstractModel
      * @throws LocalizedException
      * @return EntityInterface
      */
-    protected function _getEntityAdapter()
+    private function createEntityAdapter()
     {
         if (!$this->_entityAdapter) {
             $entities = $this->_importConfig->getEntities();
@@ -480,6 +507,20 @@ class Import extends AbstractModel
      */
     public function importSource()
     {
+        return $this->localeEmulator->emulate(
+            $this->importSourceCallback(...),
+            $this->getData('locale') ?: null
+        );
+    }
+
+    /**
+     * Import source file structure to DB.
+     *
+     * @return bool
+     * @throws LocalizedException
+     */
+    private function importSourceCallback()
+    {
         $ids = $this->_getEntityAdapter()->getIds();
         if (empty($ids)) {
             $idsFromPostData = $this->getData(self::FIELD_IMPORT_IDS);
@@ -632,6 +673,21 @@ class Import extends AbstractModel
     /**
      * Validates source file and returns validation result
      *
+     * @param AbstractSource $source
+     * @return bool
+     * @throws LocalizedException
+     */
+    public function validateSource(AbstractSource $source)
+    {
+        return $this->localeEmulator->emulate(
+            fn () => $this->validateSourceCallback($source),
+            $this->getData('locale') ?: null
+        );
+    }
+
+    /**
+     * Validates source file and returns validation result
+     *
      * Before validate data the method requires to initialize error aggregator (ProcessingErrorAggregatorInterface)
      * with 'validation strategy' and 'allowed error count' values to allow using this parameters in validation process.
      *
@@ -639,7 +695,7 @@ class Import extends AbstractModel
      * @return bool
      * @throws LocalizedException
      */
-    public function validateSource(AbstractSource $source)
+    private function validateSourceCallback(AbstractSource $source)
     {
         $this->addLogComment(__('Begin data validation'));
 

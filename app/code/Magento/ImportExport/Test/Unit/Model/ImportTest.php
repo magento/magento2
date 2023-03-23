@@ -30,6 +30,7 @@ use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\Entity\Factory;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\ImportExport\Model\LocaleEmulatorInterface;
 use Magento\ImportExport\Model\Source\Upload;
 use Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase;
 use Magento\MediaStorage\Model\File\UploaderFactory;
@@ -139,6 +140,11 @@ class ImportTest extends AbstractImportTestCase
     private $upload;
 
     /**
+     * @var LocaleEmulatorInterface|MockObject
+     */
+    private $localeEmulator;
+
+    /**
      * Set up
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -232,6 +238,7 @@ class ImportTest extends AbstractImportTestCase
             ->method('getDriver')
             ->willReturn($this->_driver);
         $this->upload = $this->createMock(Upload::class);
+        $this->localeEmulator = $this->getMockForAbstractClass(LocaleEmulatorInterface::class);
         $this->import = $this->getMockBuilder(Import::class)
             ->setConstructorArgs(
                 [
@@ -252,7 +259,8 @@ class ImportTest extends AbstractImportTestCase
                     [],
                     null,
                     null,
-                    $this->upload
+                    $this->upload,
+                    $this->localeEmulator
                 ]
             )
             ->setMethods(
@@ -281,6 +289,17 @@ class ImportTest extends AbstractImportTestCase
     public function testImportSource()
     {
         $entityTypeCode = 'code';
+        $locale = 'fr_FR';
+        $this->localeEmulator->method('emulate')
+            ->with($this->callback(fn ($callback) => is_callable($callback)), $locale)
+            ->willReturnCallback(fn (callable $callback) => $callback());
+        $this->import->expects($this->any())
+            ->method('getData')
+            ->willReturnMap(
+                [
+                    ['locale', null, $locale],
+                ]
+            );
         $this->_importData->expects($this->any())
             ->method('getEntityTypeCode')
             ->willReturn($entityTypeCode);
@@ -333,6 +352,17 @@ class ImportTest extends AbstractImportTestCase
             __('URL key for specified store already exists.')
         );
         $entityTypeCode = 'code';
+        $locale = 'fr_FR';
+        $this->localeEmulator->method('emulate')
+            ->with($this->callback(fn ($callback) => is_callable($callback)), $locale)
+            ->willReturnCallback(fn (callable $callback) => $callback());
+        $this->import->expects($this->any())
+            ->method('getData')
+            ->willReturnMap(
+                [
+                    ['locale', null, $locale],
+                ]
+            );
         $this->_importData->expects($this->any())
             ->method('getEntityTypeCode')
             ->willReturn($entityTypeCode);
@@ -471,6 +501,10 @@ class ImportTest extends AbstractImportTestCase
     {
         $validationStrategy = ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR;
         $allowedErrorCount = 1;
+        $locale = 'fr_FR';
+        $this->localeEmulator->method('emulate')
+            ->with($this->callback(fn ($callback) => is_callable($callback)), $locale)
+            ->willReturnCallback(fn (callable $callback) => $callback());
 
         $this->errorAggregatorMock->expects($this->once())
             ->method('initValidationStrategy')
@@ -503,6 +537,7 @@ class ImportTest extends AbstractImportTestCase
                 [
                     [Import::FIELD_NAME_VALIDATION_STRATEGY, null, $validationStrategy],
                     [Import::FIELD_NAME_ALLOWED_ERROR_COUNT, null, $allowedErrorCount],
+                    ['locale', null, $locale],
                 ]
             );
 
