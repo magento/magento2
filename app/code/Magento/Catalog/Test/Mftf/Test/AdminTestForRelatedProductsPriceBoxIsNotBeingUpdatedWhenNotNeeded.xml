@@ -163,6 +163,11 @@
             <actualResult type="variable">grabProductPrice</actualResult>
             <expectedResult type="string">As low as</expectedResult>
         </assertEquals>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.asLowAsLabelAgain}}" stepKey="grabProductPriceSecond"/>
+        <assertEquals message="ExpectedPrice" stepKey="assertcreateConfigProductSecond">
+            <actualResult type="variable">grabProductPrice</actualResult>
+            <expectedResult type="string">As low as</expectedResult>
+        </assertEquals>
         <scrollToTopOfPage stepKey="scrollToTopOfPage5"/>
         <selectOption userInput="option1" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption3"/>
         <waitForPageLoad time="30" stepKey="waitForPreviewLoad"/>
@@ -172,6 +177,12 @@
             <actualResult type="variable">grabProductPrice</actualResult>
             <expectedResult type="string">As low as</expectedResult>
         </assertEquals>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.asLowAsLabelAgain}}" stepKey="grabProductPriceAgainAgain"/>
+        <assertEquals message="ExpectedPrice" stepKey="assertcreateConfigProductAgainAgain">
+            <actualResult type="variable">grabProductPrice</actualResult>
+            <expectedResult type="string">As low as</expectedResult>
+        </assertEquals>
+
     </test>
 </tests>
 
