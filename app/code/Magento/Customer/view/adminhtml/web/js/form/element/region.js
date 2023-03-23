@@ -19,10 +19,12 @@ define([
          * @param {String} value - region
          */
         setDifferedFromDefault: function (value) {
-            var label = parseFloat(value) ? this.indexedOptions[value].label : '';
-
             this._super();
+
+            let label = parseFloat(value) ? this.indexedOptions[value].label : '';
+
             this.source.set(this.regionScope,label);
+
         }
     });
 });
