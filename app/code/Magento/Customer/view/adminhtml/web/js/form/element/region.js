@@ -19,9 +19,9 @@ define([
          * @param {String} value - region
          */
         setDifferedFromDefault: function (value) {
-            this._super();
-
             var label = parseFloat(value) ? this.indexedOptions[value].label : '';
+
+            this._super();
             this.source.set(this.regionScope,label);
         }
     });
