@@ -22,15 +22,11 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 class Order extends SalesResource implements OrderResourceInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_resource';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'resource';

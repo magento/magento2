@@ -18,8 +18,6 @@ use Magento\Sales\Model\Spi\CreditmemoResourceInterface;
 class Creditmemo extends SalesResource implements CreditmemoResourceInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_creditmemo_resource';

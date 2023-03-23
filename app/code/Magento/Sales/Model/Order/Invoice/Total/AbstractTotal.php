@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Order\Invoice\Total;
 
 /**
  * Base class for invoice total
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */

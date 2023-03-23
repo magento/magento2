@@ -30,6 +30,8 @@ namespace Magento\Sales\Model\Order;
 class Tax extends \Magento\Framework\Model\AbstractModel
 {
     /**
+     * Constructor
+     *
      * @return void
      */
     protected function _construct()

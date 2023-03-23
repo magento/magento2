@@ -20,7 +20,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     /**
      * Code of custom carrier
      */
-    const CUSTOM_CARRIER_CODE = 'custom';
+    public const CUSTOM_CARRIER_CODE = 'custom';
 
     /**
      * @var \Magento\Sales\Model\Order\Shipment|null
@@ -244,7 +244,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCreatedAt($createdAt)
     {
@@ -322,7 +322,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setUpdatedAt($timestamp)
     {
@@ -330,7 +330,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setParentId($id)
     {
@@ -338,7 +338,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setWeight($weight)
     {
@@ -346,7 +346,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQty($qty)
     {
@@ -354,7 +354,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setOrderId($id)
     {
@@ -362,7 +362,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTrackNumber($trackNumber)
     {
@@ -370,7 +370,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDescription($description)
     {
@@ -378,7 +378,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTitle($title)
     {
@@ -386,7 +386,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCarrierCode($code)
     {
@@ -394,7 +394,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface|null
      */
@@ -404,7 +404,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface $extensionAttributes
      * @return $this
