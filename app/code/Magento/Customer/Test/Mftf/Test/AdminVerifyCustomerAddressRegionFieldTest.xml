@@ -47,28 +47,34 @@
         <click selector="{{AdminCustomerAddressesDefaultBillingSection.editButton}}" stepKey="clickEditDefaultBillingAddress"/>
         <waitForPageLoad stepKey="waitForCustomerAddressAddUpdateFormLoad"/>
 
-        <!-- Select Country = Finland And Region =Ahvenanmaa , Click on Save Button -->
+        <!-- Select Country = Finland And Region =Ahvenanmaa , Click on Save Button-->
         <click selector="{{AdminCustomerAddressesSection.country}}" stepKey="clickCountryToOpenListOfCountries"/>
         <click selector="{{AdminCustomerAddressesSection.countryId(Finland_Address.country_id)}}" stepKey="fillCountry"/>
         <click selector="{{AdminCustomerAddressesSection.state}}" stepKey="clickRegionToOpenListOfRegions"/>
         <click selector="{{AdminCustomerAddressesSection.regionId(Finland_Address.state)}}" stepKey="fillRegion"/>
         <click selector="{{AdminCustomerAddressesSection.saveAddress}}" stepKey="clickSaveCustomer"/>
+        <waitForPageLoad stepKey="waitForPageToBeSave"/>
 
         <!--Verify state name in address details section-->
-        <see userInput="{{Finland_Address.state}}" selector="{{AdminCustomerAddressesSection.regionId(Finland_Address.state)}}" stepKey="seeStateInAddress"/>
+        <grabTextFrom selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="grabAddress"/>
+        <assertStringContainsString stepKey="SeeStateInAddress">
+            <expectedResult type="string">{{Finland_Address.state}}</expectedResult>
+            <actualResult type="string">{$grabAddress}</actualResult>
+        </assertStringContainsString>
 
         <!-- Click on edit link for default billing address , deselect region and click on save button-->
         <click selector="{{AdminCustomerAddressesDefaultBillingSection.editButton}}" stepKey="clickEditDefaultBillingAddressAgain"/>
         <waitForPageLoad stepKey="waitForCustomerAddressAddUpdateFormLoad2"/>
         <selectOption selector="{{AdminCustomerAddressesSection.state}}" userInput="Please select a region, state or province." stepKey="selectState"/>
-        <click selector="{{AdminCustomerAddressesSection.saveAddress}}" stepKey="clickSaveCustomerAgain"/>
-
-        <!--Open/Reload customer details page-->
-        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPageAgain">
-            <argument name="customerId" value="$firstCustomer.id$"/>
-        </actionGroup>
+        <click selector="{{AdminCustomerAddressesSection.saveAddress}}" stepKey="clickSaveCustomerAfterDeselectRegion"/>
+        <waitForPageLoad stepKey="waitForPageToBeSaved"/>
 
         <!--Verify state name not visible under address details section-->
-        <dontSee userInput="{{Finland_Address.state}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="dontSeeStateInAddress"/>
-     </test>
- </tests>
+        <grabTextFrom selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="grabAddressAgain"/>
+        <assertStringNotContainsString stepKey="dontSeeStateInAddress">
+            <expectedResult type="string">{{Finland_Address.state}}</expectedResult>
+            <actualResult type="string">{$grabAddressAgain}</actualResult>
+        </assertStringNotContainsString>
+
+    </test>
+</tests>

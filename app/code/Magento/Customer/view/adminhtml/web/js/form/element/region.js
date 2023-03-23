@@ -21,11 +21,8 @@ define([
         setDifferedFromDefault: function (value) {
             this._super();
 
-            if (parseFloat(value)) {
-                this.source.set(this.regionScope, this.indexedOptions[value].label);
-            } else if (value === undefined) {
-                this.source.set(this.regionScope,'');
-            }
+            var label = parseFloat(value) ? this.indexedOptions[value].label : '';
+            this.source.set(this.regionScope,label);
         }
     });
 });
