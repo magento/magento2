@@ -22,7 +22,8 @@ use Magento\User\Model\UserFactory;
 
 /**
  * Test class for user reset password email
- *
+ * 
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea adminhtml
  */
 class UserResetPasswordEmailTest extends AbstractBackendController
