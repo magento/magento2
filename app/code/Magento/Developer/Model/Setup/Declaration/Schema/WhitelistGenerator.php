@@ -211,30 +211,24 @@ class WhitelistGenerator
                 $constraintName = null;
                 if (isset($tableElementData['type'], $tableElementData['column'])) {
                     if ($tableElementData['type'] === 'foreign') {
-                        if (isset(
-                            $tableElementData['column'],
-                            $tableElementData['referenceTable'],
-                            $tableElementData['referenceColumn']
-                        )) {
-                            $referenceTable = $schema->getTableByName($tableElementData['referenceTable']);
-                            $column = $table->getColumnByName($tableElementData['column']);
-                            $referenceColumn = $referenceTable->getColumnByName($tableElementData['referenceColumn']);
-                            $constraintName = ($column !== false && $referenceColumn !== false) ?
-                                $this->elementNameResolver->getFullFKName(
-                                    $table,
-                                    $column,
-                                    $referenceTable,
-                                    $referenceColumn
-                                ) : null;
-                        }
-                    } else {
-                        if (isset($tableElementData['column'])) {
-                            $constraintName = $this->elementNameResolver->getFullIndexName(
+                        $column = $table->getColumnByName($tableElementData['column']);
+                        $referenceTable = $schema->getTableByName($tableElementData['referenceTable'] ?? null);
+                        $referenceColumn = ($referenceTable !== false)
+                            ? $referenceTable->getColumnByName($tableElementData['referenceColumn'] ?? null) : false;
+
+                        $constraintName = ($column !== false && $referenceColumn !== false) ?
+                            $this->elementNameResolver->getFullFKName(
                                 $table,
-                                $tableElementData['column'],
-                                $tableElementData['type']
-                            );
-                        }
+                                $column,
+                                $referenceTable,
+                                $referenceColumn
+                            ) : null;
+                    } else {
+                        $constraintName = $this->elementNameResolver->getFullIndexName(
+                            $table,
+                            $tableElementData['column'],
+                            $tableElementData['type']
+                        );
                     }
                 }
                 if ($constraintName) {
