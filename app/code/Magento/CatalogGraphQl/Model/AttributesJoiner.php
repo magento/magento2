@@ -111,7 +111,7 @@ class AttributesJoiner
         ResolveInfo $resolveInfo,
         InlineFragmentNode $inlineFragmentField,
         $inlineFragmentFields = []
-    ): array {
+    ): array{
         $query = $inlineFragmentField->selectionSet->selections;
         /** @var FieldNode $field */
         $fragmentFields = [];
@@ -122,6 +122,7 @@ class AttributesJoiner
                 if ($field->kind === NodeKind::FIELD && isset($field->name)) {
                     $inlineFragmentFields[] = $field->name->value;
                 }
+                $fragmentFields[] = $this->getQueryFields($field, $resolveInfo);
             } else {
                 $inlineFragmentFields[] = $field->name->value;
             }

@@ -21,7 +21,6 @@ class ProductFieldsSelector
      */
     private $fieldTranslator;
 
-
     /**
      * @var AttributesJoiner
      */
@@ -46,7 +45,7 @@ class ProductFieldsSelector
      * @param string $productNodeName
      * @return string[]
      */
-    public function getProductFieldsFromInfo(ResolveInfo $info, string $productNodeName = 'product') : array
+    public function getProductFieldsFromInfo(ResolveInfo $info, string $productNodeName = 'product'): array
     {
         $fieldNames = [];
         foreach ($info->fieldNodes as $node) {
