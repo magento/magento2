@@ -9,6 +9,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\AppIsolation;
@@ -45,6 +46,11 @@ class ProductTest extends TestCase
     private $objectManager;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -53,6 +59,8 @@ class ProductTest extends TestCase
 
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $this->model = $this->objectManager->create(Product::class);
+
+        $this->storeManager = $this->objectManager->create(StoreManagerInterface::class);
     }
 
     /**
@@ -212,5 +220,58 @@ class ProductTest extends TestCase
 
         $attribute = $this->model->getAttributeRawValue($product->getId(), $attributeCode, 1);
         $this->assertEmpty($attribute);
+    }
+
+    /**
+     * Test update product custom attributes
+     *
+     * @return void
+     */
+    #[
+        DataFixture(AttributeFixture::class, ['attribute_code' => 'first_custom_attribute']),
+        DataFixture(AttributeFixture::class, ['attribute_code' => 'second_custom_attribute']),
+        DataFixture(AttributeFixture::class, ['attribute_code' => 'third_custom_attribute']),
+        DataFixture(ProductFixture::class, ['sku' => 'simple','media_gallery_entries' => [[], []]], as: 'product')
+    ]
+
+    public function testUpdateCustomerAttributesAutoIncrement()
+    {
+        $resource = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class);
+        $connection = $resource->getConnection();
+        $currentTableStatus = $connection->showTableStatus('catalog_product_entity_varchar');
+        $this->storeManager->setCurrentStore('admin');
+        $product = $this->productRepository->get('simple');
+        $product->setCustomAttribute(
+            'first_custom_attribute',
+            'first attribute'
+        );
+        $firstAttributeSavedProduct = $this->productRepository->save($product);
+        $currentTableStatusAfterFirstAttrSave = $connection->showTableStatus('catalog_product_entity_varchar');
+        $this->assertSame(
+            ((int) ($currentTableStatus['Auto_increment']) + 1),
+            (int) $currentTableStatusAfterFirstAttrSave['Auto_increment']
+        );
+
+        $firstAttributeSavedProduct->setCustomAttribute(
+            'second_custom_attribute',
+            'second attribute'
+        );
+        $secondAttributeSavedProduct = $this->productRepository->save($firstAttributeSavedProduct);
+        $currentTableStatusAfterSecondAttrSave = $connection->showTableStatus('catalog_product_entity_varchar');
+        $this->assertSame(
+            (((int) $currentTableStatusAfterFirstAttrSave['Auto_increment']) + 1),
+            (int) $currentTableStatusAfterSecondAttrSave['Auto_increment']
+        );
+
+        $secondAttributeSavedProduct->setCustomAttribute(
+            'third_custom_attribute',
+            'third attribute'
+        );
+        $this->productRepository->save($secondAttributeSavedProduct);
+        $currentTableStatusAfterThirdAttrSave = $connection->showTableStatus('catalog_product_entity_varchar');
+        $this->assertSame(
+            (((int)$currentTableStatusAfterSecondAttrSave['Auto_increment']) + 1),
+            (int) $currentTableStatusAfterThirdAttrSave['Auto_increment']
+        );
     }
 }
