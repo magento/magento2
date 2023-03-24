@@ -499,6 +499,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param string $type Convert given value to the this type
      * @return mixed
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws SerializationException
      */
     public function convertValue($data, $type)
     {
@@ -519,6 +520,12 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                     foreach ($data as $key => $item) {
                         $result[$key] = $this->_createFromArray($itemType, $item);
                     }
+                } else {
+                    throw new SerializationException(
+                        new Phrase(
+                            'The value "' . $data . '" must be an array.'
+                        )
+                    );
                 }
             } else {
                 $result = $this->_createFromArray($type, $data);
