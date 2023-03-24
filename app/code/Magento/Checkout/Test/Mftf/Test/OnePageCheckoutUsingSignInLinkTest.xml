@@ -20,6 +20,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!-- Create Simple Product -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
                 <field key="price">560</field>
