@@ -103,13 +103,19 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
                 ScopeInterface::SCOPE_STORE,
                 $category->getStoreId()
             );
+            $catProdRewritesEn = $this->isCategoryRewritesEnabled();
+
             $category->setData('save_rewrites_history', $saveRewritesHistory);
             $categoryUrlRewriteResult = $this->categoryUrlRewriteGenerator->generate($category, true);
+
+            if ($catProdRewritesEn) {
+                $productUrlRewriteResult = $this->urlRewriteHandler->generateProductUrlRewrites($category);
+            }
+
             $this->urlRewriteHandler->deleteCategoryRewritesForChildren($category);
             $this->urlRewriteBunchReplacer->doBunchReplace($categoryUrlRewriteResult);
 
-            if ($this->isCategoryRewritesEnabled()) {
-                $productUrlRewriteResult = $this->urlRewriteHandler->generateProductUrlRewrites($category);
+            if ($catProdRewritesEn) {
                 $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
             }
 
