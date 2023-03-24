@@ -448,9 +448,9 @@ class Helper
     }
 
     /**
-     * Remove ids of non selected websites from $websiteIds array and return filtered data
+     * Remove ids of non-selected websites from $websiteIds array and return filtered data
      *
-     * $websiteIds parameter expects array with website ids as keys and 1 (selected) or 0 (non selected) as values
+     * $websiteIds parameter expects array with website ids as keys and id (selected) or 0 (non-selected) as values
      * Only one id (default website ID) will be set to $websiteIds array when the single store mode is turned on
      *
      * @param array $websiteIds
@@ -461,7 +461,7 @@ class Helper
         if (!$this->storeManager->isSingleStoreMode()) {
             $websiteIds = array_filter((array) $websiteIds);
         } else {
-            $websiteIds[$this->storeManager->getWebsite(true)->getId()] = 1;
+            $websiteIds[$this->storeManager->getWebsite(true)->getId()] = $this->storeManager->getWebsite(true)->getId();
         }
 
         return $websiteIds;

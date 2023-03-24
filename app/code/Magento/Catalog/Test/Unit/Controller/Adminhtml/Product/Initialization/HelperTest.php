@@ -388,8 +388,8 @@ class HelperTest extends TestCase
         return [
             [
                 'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'website_ids' => ['1' => 1, '2' => 2],
+                'expected_website_ids' => ['1' => 1, '2' => 2],
                 'links' => [],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
                 'expected_links' => [],
@@ -423,8 +423,8 @@ class HelperTest extends TestCase
             // Related links
             [
                 'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'website_ids' => ['1' => 1, '2' => 2],
+                'expected_website_ids' => ['1' => 1, '2' => 2],
                 'links' => [
                     'related' => [
                         0 => [
@@ -449,8 +449,8 @@ class HelperTest extends TestCase
             // Custom link
             [
                 'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'website_ids' => ['1' => 1, '2' => 2],
+                'expected_website_ids' => ['1' => 1, '2' => 2],
                 'links' => [
                     'customlink' => [
                         0 => [
@@ -475,8 +475,8 @@ class HelperTest extends TestCase
             // Both links
             [
                 'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'website_ids' => ['1' => 1, '2' => 2],
+                'expected_website_ids' => ['1' => 1, '2' => 2],
                 'links' => [
                     'related' => [
                         0 => [
@@ -515,8 +515,8 @@ class HelperTest extends TestCase
             // Undefined link type
             [
                 'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'website_ids' => ['1' => 1, '2' => 2],
+                'expected_website_ids' => ['1' => 1, '2' => 2],
                 'links' => [
                     'related' => [
                         0 => [
