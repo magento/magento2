@@ -34,4 +34,13 @@
             </argument>
         </arguments>
     </type>
+    <!-- <type name="Magento\EavGraphQl\Model\Resolver\EntityTypeAttributesList">
+        <arguments>
+            <argument name="resolvers" xsi:type="array">
+                <item name="is_searchable" xsi:type="object">
+                    Magento\CatalogGraphQl\Model\Resolver\SampleResolver
+                </item>
+            </argument>
+        </arguments>
+    </type> -->
 </config>
