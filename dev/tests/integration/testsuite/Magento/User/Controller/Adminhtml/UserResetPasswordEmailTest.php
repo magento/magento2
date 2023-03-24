@@ -19,10 +19,6 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 use Magento\User\Model\User as UserModel;
 use Magento\User\Test\Fixture\User as UserDataFixture;
 use Magento\User\Model\UserFactory;
-use Magento\TestFramework\Bootstrap;
-use Magento\Framework\Mail\MessageInterface;
-use Magento\Framework\Mail\MessageInterfaceFactory;
-use Magento\Framework\Mail\TransportInterfaceFactory;
 
 /**
  * Test class for user reset password email
@@ -47,12 +43,12 @@ class UserResetPasswordEmailTest extends AbstractBackendController
     private $userFactory;
 
     /**
-     * @var MessageInterfaceFactory
+     * @var \Magento\Framework\Mail\MessageInterfaceFactory
      */
     private $messageFactory;
 
     /**
-     * @var TransportInterfaceFactory
+     * @var \Magento\Framework\Mail\TransportInterfaceFactory
      */
     private $transportFactory;
 
@@ -64,8 +60,8 @@ class UserResetPasswordEmailTest extends AbstractBackendController
         parent::setUp();
         $this->fixtures = DataFixtureStorageManager::getStorage();
         $this->userModel = $this->_objectManager->create(UserModel::class);
-        $this->messageFactory = $this->_objectManager->get(MessageInterfaceFactory::class);
-        $this->transportFactory = $this->_objectManager->get(TransportInterfaceFactory::class);
+        $this->messageFactory = $this->_objectManager->get(\Magento\Framework\Mail\MessageInterfaceFactory::class);
+        $this->transportFactory = $this->_objectManager->get(\Magento\Framework\Mail\TransportInterfaceFactory::class);
         $this->userFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(UserFactory::class);
     }
 
@@ -100,7 +96,6 @@ class UserResetPasswordEmailTest extends AbstractBackendController
 
     /**
      * Test admin email notification after password change
-     * @magentoDbIsolation disabled
      * @throws LocalizedException
      */
     #[
@@ -115,7 +110,7 @@ class UserResetPasswordEmailTest extends AbstractBackendController
 
         // login with old credentials
         $adminUser = $this->userFactory->create();
-        $adminUser->login($username, Bootstrap::ADMIN_PASSWORD);
+        $adminUser->login($username, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
 
         // Change password
         $adminUser->setPassword('newPassword123');
@@ -148,7 +143,7 @@ class UserResetPasswordEmailTest extends AbstractBackendController
         $transport->sendMessage();
 
         $sentMessage = $transport->getMessage();
-        $this->assertInstanceOf(MessageInterface::class, $sentMessage);
+        $this->assertInstanceOf(\Magento\Framework\Mail\MessageInterface::class, $sentMessage);
         $this->assertNotNull($sentMessage);
         $this->assertEquals($subject, $sentMessage->getSubject());
         $this->assertStringContainsString($body, $sentMessage->getBody()->getParts()[0]->getRawContent());
