@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Customer\Attribute;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Catalog\Setup\CategorySetup;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Test\Fixture\Attribute;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -25,7 +26,7 @@ class EntityTypeAttributesListTest extends GraphQlAbstract
 {
     private const QUERY = <<<QRY
     {
-        entityTypeAttributesList(entity_type: CUSTOMER) {
+        entityTypeAttributesList(entity_type: $entityType) {
           items {
             uid
           }
@@ -59,6 +60,20 @@ QRY;
                 'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER
             ],
             'attribute2'
+        ),
+        DataFixture(
+            Attribute::class,
+            [
+                'entity_type_id' => CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID,
+            ],
+            'attribute3'
+        ),
+        DataFixture(
+            Attribute::class,
+            [
+                'entity_type_id' => CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID,
+            ],
+            'attribute4'
         )
     ]
     public function testAttributesList(): void
@@ -72,8 +87,14 @@ QRY;
         /** @var AttributeInterface $attribute */
         $attribute2 = DataFixtureStorageManager::getStorage()->get('attribute2');
 
-        $result = $this->graphQlQuery(self::QUERY);
+        /** @var AttributeInterface $attribute */
+        $attribute3 = DataFixtureStorageManager::getStorage()->get('attribute3');
 
+        /** @var AttributeInterface $attribute */
+        $attribute4 = DataFixtureStorageManager::getStorage()->get('attribute4');
+
+
+        $result = $this->graphQlQuery(sprintf(self::QUERY, 'CUSTOMER'));
         $this->assertEquals(
             [
                 'entityTypeAttributesList' => [
@@ -86,6 +107,24 @@ QRY;
                         ],
                         [
                             "uid" => $attribute2->getAttributeId()
+                        ]
+                    ],
+                    'errors' => []
+                ]
+            ],
+            $result
+        );
+
+        $result = $this->graphQlQuery(sprintf(self::QUERY, 'CATALOG_PRODUCT'));
+        $this->assertEquals(
+            [
+                'entityTypeAttributesList' => [
+                    'items' => [
+                        [
+                            "uid" => $attribute3->getAttributeId()
+                        ],
+                        [
+                            "uid" => $attribute4->getAttributeId()
                         ]
                     ],
                     'errors' => []
