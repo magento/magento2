@@ -90,7 +90,6 @@ type AttributeMetadata implements AttributeMetadataInterface @doc(description: "
 }
 
 enum AttributeEntityTypeEnum @doc(description: "List of all entity types. Populated by the modules introducing EAV entities.") {
-    CATALOG_PRODUCT
 }
 
 enum AttributeFrontendInputEnum @doc(description: "EAV attribute frontend input types.") {
