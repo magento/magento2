@@ -127,7 +127,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         if (!is_array($storeId)) {
             $storeId = [$storeId === null ? -1 : $storeId];
         }
-        if (empty($storeId)) {
+        if ($storeId == 0) {
             return $this;
         }
         if (!$this->_isStoreJoined) {
