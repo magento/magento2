@@ -84,7 +84,7 @@ class EntityTypeAttributesList implements ResolverInterface
             $args['entity_type']
         );
 
-        // $entityType = 'catalog_product';
+        $entityType = 'customer';
         $searchCriteria = $this->searchCriteriaBuilder;
 
         foreach ($this->resolvers as $resolver) {
@@ -100,6 +100,12 @@ class EntityTypeAttributesList implements ResolverInterface
         ];
     }
 
+    /**
+     * Returns formatted list of attributes
+     * 
+     * @param array $attributesList
+     * @return array
+     */
     private function getAtrributesMetadata($attributesList)
     {
         return array_map(function ($attribute) {
