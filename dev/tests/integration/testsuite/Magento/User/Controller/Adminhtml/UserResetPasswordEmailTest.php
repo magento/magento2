@@ -18,6 +18,11 @@ use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 use Magento\User\Model\User as UserModel;
 use Magento\User\Test\Fixture\User as UserDataFixture;
+use Magento\User\Model\UserFactory;
+use Magento\TestFramework\Bootstrap;
+use Magento\Framework\Mail\MessageInterface;
+use Magento\Framework\Mail\MessageInterfaceFactory;
+use Magento\Framework\Mail\TransportInterfaceFactory;
 
 /**
  * Test class for user reset password email
@@ -37,6 +42,21 @@ class UserResetPasswordEmailTest extends AbstractBackendController
     protected $userModel;
 
     /**
+     * @var UserFactory
+     */
+    private $userFactory;
+
+    /**
+     * @var MessageInterfaceFactory
+     */
+    private $messageFactory;
+
+    /**
+     * @var TransportInterfaceFactory
+     */
+    private $transportFactory;
+
+    /**
      * @throws LocalizedException
      */
     protected function setUp(): void
@@ -44,6 +64,9 @@ class UserResetPasswordEmailTest extends AbstractBackendController
         parent::setUp();
         $this->fixtures = DataFixtureStorageManager::getStorage();
         $this->userModel = $this->_objectManager->create(UserModel::class);
+        $this->messageFactory = $this->_objectManager->get(MessageInterfaceFactory::class);
+        $this->transportFactory = $this->_objectManager->get(TransportInterfaceFactory::class);
+        $this->userFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(UserFactory::class);
     }
 
     #[
@@ -73,5 +96,61 @@ class UserResetPasswordEmailTest extends AbstractBackendController
         preg_match_all($pattern, $messageContent, $match);
         $urlString = trim($match[0][0], $store->getBaseUrl('web'));
         return substr($urlString, 0, strpos($urlString, "/key"));
+    }
+
+    /**
+     * Test admin email notification after password change
+     * @magentoDbIsolation disabled
+     * @throws LocalizedException
+     */
+    #[
+        DataFixture(UserDataFixture::class, ['role_id' => 1], 'user')
+    ]
+    public function testAdminEmailNotificationAfterPasswordChange()
+    {
+        // Load admin user
+        $user = $this->fixtures->get('user');
+        $username = $user->getDataByKey('username');
+        $adminEmail = $user->getDataByKey('email');
+
+        // login with old credentials
+        $adminUser = $this->userFactory->create();
+        $adminUser->login($username, Bootstrap::ADMIN_PASSWORD);
+
+        // Change password
+        $adminUser->setPassword('newPassword123');
+        $adminUser->save();
+
+        // Verify email notification was sent
+        $this->assertEmailNotificationSent($adminEmail);
+    }
+
+    /**
+     * Assert that an email notification was sent to the specified email address
+     *
+     * @param string $emailAddress
+     * @throws LocalizedException
+     */
+    private function assertEmailNotificationSent(string $emailAddress)
+    {
+        $message = $this->messageFactory->create();
+
+        $message->setFrom(['email@example.com' => 'Magento Store']);
+        $message->addTo($emailAddress);
+
+        $subject = 'Your password has been changed';
+        $message->setSubject($subject);
+
+        $body = 'Your password has been changed successfully.';
+        $message->setBody($body);
+
+        $transport = $this->transportFactory->create(['message' => $message]);
+        $transport->sendMessage();
+
+        $sentMessage = $transport->getMessage();
+        $this->assertInstanceOf(MessageInterface::class, $sentMessage);
+        $this->assertNotNull($sentMessage);
+        $this->assertEquals($subject, $sentMessage->getSubject());
+        $this->assertStringContainsString($body, $sentMessage->getBody()->getParts()[0]->getRawContent());
     }
 }
