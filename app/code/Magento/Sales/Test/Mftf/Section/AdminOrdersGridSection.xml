@@ -46,5 +46,6 @@
         <element name="orderId" type="text" selector="//table[contains(@class, 'data-grid')]//div[contains(text(), '{{orderId}}')]" parameterized="true"/>
         <element name="exactOrderId" type="text" selector="//table[contains(@class, 'data-grid')]//div[text()='{{orderId}}']" parameterized="true"/>
         <element name="orderIdByIncrementId" type="text" selector="//input[@class='admin__control-checkbox' and @value={{incrId}}]/parent::label/parent::td/following-sibling::td"  parameterized="true"/>
+        <element name="orderSubtotal" type="input" selector="//tbody//tr[@class='col-0']//td[@class='label' and contains(text(),'Subtotal')]/..//td//span[@class='price']"/>
     </section>
 </sections>
