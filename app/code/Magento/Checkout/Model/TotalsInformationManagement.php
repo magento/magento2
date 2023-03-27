@@ -71,6 +71,7 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
                 $quoteShippingAddress->save();
             }
         }
+        $quote->collectTotals()
 
         return $this->cartTotalRepository->get($cartId);
     }
