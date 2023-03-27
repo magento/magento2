@@ -2204,6 +2204,7 @@ class AvailableStoresCacheTest extends GraphQLPageCacheAbstract
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', true);
         $store->delete();
+        $storeGroup->delete();
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', false);
     }

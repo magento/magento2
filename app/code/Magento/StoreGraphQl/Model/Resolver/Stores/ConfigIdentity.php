@@ -38,7 +38,7 @@ class ConfigIdentity implements IdentityInterface
         }
         if (!empty($resolvedData)) {
             $websiteId = $resolvedData[0]['website_id'];
-            $currentStoreGroupId = $this->getCurrectStoreGroupId($resolvedData);
+            $currentStoreGroupId = $this->getCurrentStoreGroupId($resolvedData);
             $groupTag = $currentStoreGroupId ? 'group_' . $currentStoreGroupId : '';
             $ids[] = sprintf('%s_%s', StoreConfigIdentity::CACHE_TAG, 'website_' . $websiteId . $groupTag);
         }
@@ -47,12 +47,12 @@ class ConfigIdentity implements IdentityInterface
     }
 
     /**
-     * Return current store group id if it is certain that useCurrentGroup is true in the querry
+     * Return current store group id if it is certain that useCurrentGroup is true in the query
      *
      * @param array $resolvedData
      * @return string|int|null
      */
-    private function getCurrectStoreGroupId(array $resolvedData)
+    private function getCurrentStoreGroupId(array $resolvedData)
     {
         $storeGroupCodes = array_unique(array_column($resolvedData, 'store_group_code'));
         if (count($storeGroupCodes) == 1) {
