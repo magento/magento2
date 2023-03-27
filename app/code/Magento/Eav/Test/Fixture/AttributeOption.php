@@ -25,7 +25,7 @@ class AttributeOption implements DataFixtureInterface
         'label' => 'Option Label %uniqid%',
         'sort_order' => null,
         'store_labels' => '',
-        'is_default' => ''
+        'is_default' => false
     ];
 
     /**
@@ -94,7 +94,10 @@ class AttributeOption implements DataFixtureInterface
         }
 
         $mergedData = array_filter(
-            $this->processor->process($this, $this->dataMerger->merge(self::DEFAULT_DATA, $data))
+            $this->processor->process($this, $this->dataMerger->merge(self::DEFAULT_DATA, $data)),
+            function ($value) {
+                return $value !== null;
+            }
         );
 
         $entityType = $mergedData['entity_type'];
@@ -113,6 +116,9 @@ class AttributeOption implements DataFixtureInterface
 
         foreach ($attribute->getOptions() as $option) {
             if ($this->getDefaultLabel($mergedData) === $option->getLabel()) {
+                if (isset($mergedData['is_default']) && $mergedData['is_default']) {
+                    $option->setIsDefault(true);
+                }
                 return $option;
             }
         }

@@ -81,6 +81,7 @@ interface AttributeOptionInterface @typeResolver(class: "Magento\\EavGraphQl\\Mo
     uid: ID! @doc(description: "The unique ID of an attribute option.")
     label: String! @doc(description: "The label assigned to the attribute option.")
     value: String! @doc(description: "The attribute option value.")
+    is_default: Boolean @doc(description: "Is the option value default.")
 }
 
 type AttributeOptionMetadata implements AttributeOptionInterface @doc(description: "Base EAV implementation of AttributeOptionInterface.") {
