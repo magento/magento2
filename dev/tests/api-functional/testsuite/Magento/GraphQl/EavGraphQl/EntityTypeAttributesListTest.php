@@ -1,22 +1,16 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer\Attribute;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Catalog\Setup\CategorySetup;
-use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Test\Fixture\Attribute;
 use Magento\TestFramework\Fixture\DataFixture;
-use Magento\TestFramework\Fixture\DataFixtureStorageManager;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -24,40 +18,30 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class EntityTypeAttributesListTest extends GraphQlAbstract
 {
-    private const QUERY = <<<QRY
-    {
-        entityTypeAttributesList(entity_type: $entityType) {
-          items {
-            uid
-          }
-          errors {
-            type
-            message
-          }
-        }
-      }
-QRY;
+    private const ATTRIBUTE_NOT_FOUND_ERROR = "Attribute was not found in query result";
 
     #[
-        DbIsolation(false),
         DataFixture(
             Attribute::class,
             [
-                'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER
+                'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
+                'attribute_code' => 'attribute_0'
             ],
             'attribute0'
         ),
         DataFixture(
             Attribute::class,
             [
-                'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER
+                'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
+                'attribute_code' => 'attribute_1'
             ],
             'attribute1'
         ),
         DataFixture(
             Attribute::class,
             [
-                'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER
+                'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
+                'attribute_code' => 'attribute_2'
             ],
             'attribute2'
         ),
@@ -65,6 +49,7 @@ QRY;
             Attribute::class,
             [
                 'entity_type_id' => CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID,
+                'attribute_code' => 'attribute_3'
             ],
             'attribute3'
         ),
@@ -72,65 +57,82 @@ QRY;
             Attribute::class,
             [
                 'entity_type_id' => CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID,
+                'attribute_code' => 'attribute_4'
             ],
             'attribute4'
         )
     ]
     public function testAttributesList(): void
     {
-        /** @var AttributeInterface $attribute */
-        $attribute0 = DataFixtureStorageManager::getStorage()->get('attribute0');
+        $queryResult = $this->graphQlQuery(<<<QRY
+        {
+            entityTypeAttributesList(entity_type: CUSTOMER) {
+                items {
+                    uid
+                    attribute_code
+                }
+                errors {
+                    type
+                    message
+                }
+            }
+        }
+QRY);
 
-        /** @var AttributeInterface $attribute */
-        $attribute1 = DataFixtureStorageManager::getStorage()->get('attribute1');
+        $this->assertArrayHasKey('items', $queryResult['entityTypeAttributesList'], 'Query result does not contain items');
+        $this->assertGreaterThanOrEqual(3, count($queryResult['entityTypeAttributesList']['items']));
 
-        /** @var AttributeInterface $attribute */
-        $attribute2 = DataFixtureStorageManager::getStorage()->get('attribute2');
-
-        /** @var AttributeInterface $attribute */
-        $attribute3 = DataFixtureStorageManager::getStorage()->get('attribute3');
-
-        /** @var AttributeInterface $attribute */
-        $attribute4 = DataFixtureStorageManager::getStorage()->get('attribute4');
-
-
-        $result = $this->graphQlQuery(sprintf(self::QUERY, 'CUSTOMER'));
-        $this->assertEquals(
-            [
-                'entityTypeAttributesList' => [
-                    'items' => [
-                        [
-                            "uid" => $attribute0->getAttributeId()
-                        ],
-                        [
-                            "uid" => $attribute1->getAttributeId()
-                        ],
-                        [
-                            "uid" => $attribute2->getAttributeId()
-                        ]
-                    ],
-                    'errors' => []
-                ]
-            ],
-            $result
+        $this->assertNotEmpty(
+            $this->getAttributeByCode($queryResult['entityTypeAttributesList']['items'], 'attribute_0'),
+            self::ATTRIBUTE_NOT_FOUND_ERROR
+        );
+        $this->assertNotEmpty(
+            $this->getAttributeByCode($queryResult['entityTypeAttributesList']['items'], 'attribute_1'),
+            self::ATTRIBUTE_NOT_FOUND_ERROR
+        );
+        $this->assertNotEmpty(
+            $this->getAttributeByCode($queryResult['entityTypeAttributesList']['items'], 'attribute_2'),
+            self::ATTRIBUTE_NOT_FOUND_ERROR
         );
 
-        $result = $this->graphQlQuery(sprintf(self::QUERY, 'CATALOG_PRODUCT'));
-        $this->assertEquals(
-            [
-                'entityTypeAttributesList' => [
-                    'items' => [
-                        [
-                            "uid" => $attribute3->getAttributeId()
-                        ],
-                        [
-                            "uid" => $attribute4->getAttributeId()
-                        ]
-                    ],
-                    'errors' => []
-                ]
-            ],
-            $result
+        $queryResult = $this->graphQlQuery(<<<QRY
+        {
+            entityTypeAttributesList(entity_type: CATALOG_PRODUCT) {
+                items {
+                    uid
+                    attribute_code
+                }
+                errors {
+                    type
+                    message
+                }
+            }
+        }
+QRY);
+        $this->assertArrayHasKey('items', $queryResult['entityTypeAttributesList'], 'Query result does not contain items');
+        $this->assertGreaterThanOrEqual(2, count($queryResult['entityTypeAttributesList']['items']));
+
+        $this->assertNotEmpty(
+            $this->getAttributeByCode($queryResult['entityTypeAttributesList']['items'], 'attribute_3'),
+            self::ATTRIBUTE_NOT_FOUND_ERROR
         );
+        $this->assertNotEmpty(
+            $this->getAttributeByCode($queryResult['entityTypeAttributesList']['items'], 'attribute_4'),
+            self::ATTRIBUTE_NOT_FOUND_ERROR
+        );
+    }
+
+    /**
+     * Finds attribute in query result
+     * 
+     * @param array $items
+     * @param string $attribute_code
+     * @return array
+     */
+    private function getAttributeByCode($items, $attribute_code)
+    {
+        return array_filter($items, function ($item) use ($attribute_code) {
+            return $item['attribute_code'] == $attribute_code;
+        });
     }
 }

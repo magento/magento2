@@ -67,7 +67,7 @@ enum AttributeMetadataErrorType @doc(description: "Attribute metadata retrieval 
 
 interface AttributeMetadataInterface @typeResolver(class: "Magento\\EavGraphQl\\Model\\TypeResolver\\AttributeMetadata") @doc(description: "An interface containing fields that define the EAV attribute."){
     uid: ID! @doc(description: "The unique ID of an attribute. Based on entity type and attribute code")
-    code: String! @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
+    attribute_code: String! @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
     label: String @doc(description: "The label assigned to the attribute.")
     entity_type: AttributeEntityTypeEnum! @doc(description: "The type of entity that defines the attribute.")
     frontend_input: AttributeFrontendInputEnum @doc(description: "The frontend input type of the attribute.")

@@ -79,10 +79,10 @@ class EntityTypeAttributesList implements ResolverInterface
 
         $entityType = $this->enumLookup->getEnumValueFromField(
             'AttributeEntityTypeEnum',
-            $args['entity_type']
+            mb_strtolower($args['entity_type'])
         );
 
-        $entityType = 'customer';
+        // $entityType = 'customer';
         $searchCriteria = $this->searchCriteriaBuilder;
 
         foreach ($this->resolvers as $resolver) {
@@ -90,7 +90,7 @@ class EntityTypeAttributesList implements ResolverInterface
         }
         $searchCriteria = $searchCriteria->create();
 
-        $attributesList = $this->attributeRepository->getList($entityType, $searchCriteria)->getItems();
+        $attributesList = $this->attributeRepository->getList(mb_strtolower($entityType), $searchCriteria)->getItems();
 
         return [
             'items' => $this->getAtrributesMetadata($attributesList),
@@ -109,7 +109,6 @@ class EntityTypeAttributesList implements ResolverInterface
         return array_map(function ($attribute) {
             return [
                 'uid' => $attribute->getAttributeId(),
-                'attribute_id' => $attribute->getAttributeId(),
                 'is_unique' => $attribute->getIsUnique(),
                 'scope' => $attribute->getData('scope'),
                 'frontend_class' => $attribute->getData('frontend_class'),
@@ -125,9 +124,7 @@ class EntityTypeAttributesList implements ResolverInterface
                 'source_model' => $attribute->getData('source_model'),
                 'backend_model' => $attribute->getData('backend_model'),
                 'validate_rules' => $attribute->getData('validate_rules'),
-                'entity_type_id' => $attribute->getData('entity_type_id'),
-                'code' => $attribute->getAttributeCode(),
-                'label' => $attribute->getDefaultFrontendLabel()
+                'entity_type_id' => $attribute->getData('entity_type_id')
             ];
         }, $attributesList);
     }
