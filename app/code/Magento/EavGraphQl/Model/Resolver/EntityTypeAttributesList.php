@@ -82,11 +82,10 @@ class EntityTypeAttributesList implements ResolverInterface
             mb_strtolower($args['entity_type'])
         );
 
-        // $entityType = 'customer';
         $searchCriteria = $this->searchCriteriaBuilder;
 
         foreach ($this->resolvers as $resolver) {
-            $searchCriteria->addFilter($resolver['name'], $resolver['object']->resolve());
+            $searchCriteria->addFilter($resolver['name'], $resolver['object']->execute());
         }
         $searchCriteria = $searchCriteria->create();
 
