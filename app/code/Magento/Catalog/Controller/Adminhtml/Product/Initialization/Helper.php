@@ -461,7 +461,8 @@ class Helper
         if (!$this->storeManager->isSingleStoreMode()) {
             $websiteIds = array_filter((array) $websiteIds);
         } else {
-            $websiteIds[$this->storeManager->getWebsite(true)->getId()] = $this->storeManager->getWebsite(true)->getId();
+            $websiteId = $this->storeManager->getWebsite(true)->getId();
+            $websiteIds[$websiteId] = $websiteId;
         }
 
         return $websiteIds;
