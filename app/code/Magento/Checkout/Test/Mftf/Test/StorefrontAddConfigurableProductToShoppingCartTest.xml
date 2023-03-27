@@ -135,7 +135,8 @@
 
         <!-- Select Mini Cart and select 'View And Edit Cart' -->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
-
+        <click selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" stepKey="openEstimateTaxSection"/>
+        <selectOption selector="{{AdminOrderFormPaymentSection.flatRateOption}}" userInput="flatrate_flatrate" stepKey="checkFlatRate"/>
         <!--Assert Shopping Cart Summary -->
         <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="AssertCartSummary" >
             <argument name="subtotal" value="$40.00"/>
