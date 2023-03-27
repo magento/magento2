@@ -52,11 +52,9 @@ class ProductFieldsSelector
             if ($node->name->value !== $productNodeName) {
                 continue;
             }
-            foreach ($node->selectionSet->selections as $selectionNode) {
                 $queryFields = $this->attributesJoiner->getQueryFields($node, $info);
                 $fieldNames = array_merge($fieldNames, $queryFields);
             }
-        }
 
         return $fieldNames;
     }
