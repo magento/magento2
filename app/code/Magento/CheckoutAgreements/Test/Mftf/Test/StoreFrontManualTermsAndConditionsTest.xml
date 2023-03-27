@@ -18,9 +18,11 @@
             <testCaseId value="AC-4723"/>
         </annotations>
         <before>
+            <!--enable flat rate-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!--Create Category-->
             <createData entity="_defaultCategory" stepKey="testCategory"/>
-            <!-- Create SimpleProductwithPrice100 -->
+            <!-- Create SimpleProductWithPrice100 -->
             <createData entity="SimpleProduct_100" stepKey="simpleProductOne">
                 <requiredEntity createDataKey="testCategory"/>
             </createData>
@@ -39,20 +41,23 @@
             <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
                 <argument name="term" value="newHtmlTerm"/>
             </actionGroup>
-            <grabTextFrom selector="{{AdminNewTermFormSection.conditionName}}" stepKey="conditionname"/>
+            <grabTextFrom selector="{{AdminNewTermFormSection.conditionName}}" stepKey="conditionName"/>
             <!-- Save Details-->
-            <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="savefillterm"/>
+            <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveFilledTerm"/>
             <!-- Enable Check Money Order Method-->
             <actionGroup ref="CliEnableCheckMoneyOrderPaymentMethodActionGroup" stepKey="enableCheckMoneyOrderPaymentMethod"/>
             <!--Enable Cash On Delivery Method -->
-            <magentoCLI command="config:set {{CashOnDeliveryEnableConfigData.path}} {{CashOnDeliveryEnableConfigData.value}}" stepKey="enableCashOndelivery"/>
+            <magentoCLI command="config:set {{CashOnDeliveryEnableConfigData.path}} {{CashOnDeliveryEnableConfigData.value}}" stepKey="enableCashOnDelivery"/>
         </before>
         <after>
             <deleteData createDataKey="simpleProductOne" stepKey="deleteProduct"/>
             <deleteData createDataKey="testCategory" stepKey="deleteTestCategory"/>
             <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
             <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
-            <actionGroup ref="CliDisableCheckMoneyOrderPaymentMethodActionGroup" stepKey="disableCheckMoneyOrder"/>
+            <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openTermToDelete">
+                <argument name="termName" value="{{newHtmlTerm.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminTermsConditionsDeleteTermByNameActionGroup" stepKey="deleteOpenedTerm"/>
             <magentoCLI command="config:set {{CashOnDeliveryDisabledConfigData.path}} {{CashOnDeliveryDisabledConfigData.value}}" stepKey="disabledCashOnDelivery"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
@@ -81,40 +86,40 @@
         </actionGroup>
         <!--Check-box with text for Terms and Condition is present-->
         <seeElement selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" stepKey="seeTermInCheckout"/>
-        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementButton}}" userInput="{{newHtmlTerm.checkboxText}}" stepKey="seeTermtextInCheckout"/>
+        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementButton}}" userInput="{{newHtmlTerm.checkboxText}}" stepKey="seeTermTextInCheckout"/>
         <!--Click Place Order-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <!-- Check "This is a required field." message is appeared under check-box-->
-        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementErrorMessage}}" userInput="This is a required field." stepKey="seeErrorextInCheckout"/>
+        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementErrorMessage}}" userInput="This is a required field." stepKey="seeErrorTextInCheckout"/>
         <!-- Select Check Money Order-->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
         <!--Section for *CheckMoneyOrder* is opened-->
-        <seeElement selector ="{{StorefrontCheckoutAgreementsSection.checkoutPaymentMethod('checkmo')}}" stepKey="checkmoneyOrderisopened"/>
+        <seeElement selector ="{{StorefrontCheckoutAgreementsSection.checkoutPaymentMethod('checkmo')}}" stepKey="checkMoneyOrderPageIsOpened"/>
         <!--Check Section for *Cash On Delivery* is closed -->
-        <dontSeeElement selector ="{{StorefrontCheckoutAgreementsSection.checkoutPaymentMethod('cashondelivery')}}"  stepKey="cashondelivery"/>
+        <dontSeeElement selector ="{{StorefrontCheckoutAgreementsSection.checkoutPaymentMethod('cashondelivery')}}"  stepKey="cashOnDelivery"/>
         <!--Check-box with text for Terms and Condition is presented-->
-        <seeElement selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" stepKey="seeTermInCheckoutispresent"/>
-        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementButton}}" userInput="{{newHtmlTerm.checkboxText}}" stepKey="seeTermtextInCheckoutispresent"/>
+        <seeElement selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" stepKey="seeTermInCheckoutIsPresent"/>
+        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementButton}}" userInput="{{newHtmlTerm.checkboxText}}" stepKey="seeTermTextInCheckoutIsPresent"/>
         <!-- Click PLace Order-->
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderagain"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderAgain"/>
         <!--Check This is a required field." message is appeared under check-box -->
         <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementErrorMessage}}" userInput="This is a required field." stepKey="seeErrorMessage"/>
         <!-- Check check-box for Terms and Condition-->
         <selectOption selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" userInput="{{newHtmlTerm.checkboxText}}" stepKey="checkAgreement"/>
         <!-- Select Cash On Delivery payment method Again-->
-        <click selector="{{StorefrontCheckoutPaymentMethodsSection.cashOnDelivery}}" stepKey="selectCashOnDeliveryMethodagain"/>
+        <click selector="{{StorefrontCheckoutPaymentMethodsSection.cashOnDelivery}}" stepKey="selectCashOnDeliveryMethodAgain"/>
         <!-- Check Address is present-->
-        <actionGroup ref="CheckBillingAddressInCheckoutActionGroup" stepKey="checkBillingAddressOnBillingPageagain">
+        <actionGroup ref="CheckBillingAddressInCheckoutActionGroup" stepKey="checkBillingAddressOnBillingPageAgain">
             <argument name="customerVar" value="Simple_US_Customer_NY" />
             <argument name="customerAddressVar" value="US_Address_NY" />
         </actionGroup>
         <!--Check-box with text for Terms and Condition is presented-->
-        <seeElement selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" stepKey="seeTermInCheckoutagain"/>
-        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementButton}}" userInput="{{newHtmlTerm.checkboxText}}" stepKey="seeTermtextInCheckoutagain"/>
+        <seeElement selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" stepKey="seeTermInCheckoutAgain"/>
+        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementButton}}" userInput="{{newHtmlTerm.checkboxText}}" stepKey="seeTermTextInCheckoutAgain"/>
         <seeCheckboxIsChecked selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckboxcheck(newHtmlTerm.checkboxText)}}" stepKey="checkbox"/>
         <!-- Click PLace Order Again-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="PlaceOrder"/>
         <!--This is a required field." message is appeared under check-box -->
-        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementErrorMessage}}" userInput="This is a required field." stepKey="seeAgainErrortextInCheckoutBox"/>
+        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementErrorMessage}}" userInput="This is a required field." stepKey="seeAgainErrorTextInCheckoutBox"/>
     </test>
 </tests>
