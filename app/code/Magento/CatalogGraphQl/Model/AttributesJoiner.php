@@ -111,7 +111,7 @@ class AttributesJoiner
         ResolveInfo $resolveInfo,
         InlineFragmentNode $inlineFragmentField,
         $inlineFragmentFields = []
-    ): array{
+    ): array {
         $query = $inlineFragmentField->selectionSet->selections;
         /** @var FieldNode $field */
         $fragmentFields = [];
