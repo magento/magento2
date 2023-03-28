@@ -41,7 +41,7 @@ define([
                 this.setOption = false;
                 this.currentRegionOption = $(e.target).val();
 
-                if(this.currentRegionOption === '') {
+                if (this.currentRegionOption === '') {
                     $(this.options.regionListId).val('');
                     $(this.options.regionInputId).val('');
                 }
