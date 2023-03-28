@@ -20,7 +20,8 @@
         </annotations>
         <before>
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="LoginAsAdmin"/>
-           
+            <!-- Enable Flat rate-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct01">
                 <requiredEntity createDataKey="createCategory"/>
@@ -87,6 +88,7 @@
 
         </before>
         <after>
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct01" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct02" stepKey="deleteProduct2"/>

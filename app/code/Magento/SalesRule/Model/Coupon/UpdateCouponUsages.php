@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\SalesRule\Model\Coupon;
 
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order;
 use Magento\SalesRule\Model\Coupon\Usage\Processor as CouponUsageProcessor;
 use Magento\SalesRule\Model\Coupon\Usage\UpdateInfo;
 use Magento\SalesRule\Model\Coupon\Usage\UpdateInfoFactory;
@@ -59,7 +60,7 @@ class UpdateCouponUsages
         $updateInfo->setCustomerId((int)$subject->getCustomerId());
         $updateInfo->setIsIncrement($increment);
 
-        if ($subject->getOrigData('coupon_code') !== null) {
+        if ($subject->getOrigData('coupon_code') !== null && $subject->getStatus() !== Order::STATE_CANCELED) {
             $updateInfo->setCouponAlreadyApplied(true);
         }
 
