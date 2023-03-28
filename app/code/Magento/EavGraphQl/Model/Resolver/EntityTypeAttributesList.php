@@ -74,7 +74,7 @@ class EntityTypeAttributesList implements ResolverInterface
         $errors = [];
 
         if (!$args['entity_type']) {
-            throw new GraphQlInputException(__("Missing rquired 'entity_type' argument"));
+            throw new GraphQlInputException(__('Required parameter "%1" of type string.', 'entity_type'));
         }
 
         $entityType = $this->enumLookup->getEnumValueFromField(
@@ -108,22 +108,14 @@ class EntityTypeAttributesList implements ResolverInterface
         return array_map(function ($attribute) {
             return [
                 'uid' => $attribute->getAttributeId(),
-                'is_unique' => $attribute->getIsUnique(),
-                'scope' => $attribute->getData('scope'),
-                'frontend_class' => $attribute->getData('frontend_class'),
-                'frontend_input' => $attribute->getData('frontend_input'),
                 'attribute_code' => $attribute->getData('attribute_code'),
-                'is_required' => $attribute->getData('is_required'),
-                'options' => $attribute->getData('options'),
-                'is_user_defined' => $attribute->getData('is_user_defined'),
                 'frontend_label' => $attribute->getData('frontend_label'),
-                'note' => $attribute->getData('note'),
-                'frontend_labels' => $attribute->getData('frontend_labels'),
-                'backend_type' => $attribute->getData('backend_type'),
-                'source_model' => $attribute->getData('source_model'),
-                'backend_model' => $attribute->getData('backend_model'),
-                'validate_rules' => $attribute->getData('validate_rules'),
-                'entity_type_id' => $attribute->getData('entity_type_id')
+                'entity_type_id' => $attribute->getData('entity_type_id'),
+                'frontend_input' => $attribute->getData('frontend_input'),
+                'is_required' => $attribute->getData('is_required'),
+                'default_value' => $attribute->getData('default_value'),
+                'is_unique' => $attribute->getIsUnique(),
+                'options' => $attribute->getData('options')
             ];
         }, $attributesList);
     }
