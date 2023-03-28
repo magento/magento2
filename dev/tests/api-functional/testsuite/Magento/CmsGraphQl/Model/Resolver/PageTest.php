@@ -10,22 +10,12 @@ namespace Magento\CmsGraphQl\Model\Resolver;
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\Page as CmsPage;
 use Magento\Cms\Model\PageRepository;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Api\Data\GroupInterface as CustomerGroupInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\App\Area;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
-use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\GraphQl\Model\Query\ContextExtensionInterface;
-use Magento\GraphQl\Model\Query\ContextFactoryInterface;
-use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlCache;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -60,16 +50,6 @@ class PageTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
-     * @var CustomerRepositoryInterface
-     */
-    private $customerRepository;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var CacheState
      */
     private $cacheState;
@@ -87,8 +67,6 @@ class PageTest extends GraphQlAbstract
         $this->pageRepository = $objectManager->get(PageRepository::class);
         $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-        $this->customerRepository = $objectManager->get(CustomerRepositoryInterface::class);
-        $this->storeManager = $objectManager->get(StoreManagerInterface::class);
 
         $this->cacheState = $objectManager->get(CacheState::class);
         $this->originalCacheStateEnabledStatus = $this->cacheState->isEnabled(GraphQlCache::TYPE_IDENTIFIER);
@@ -115,12 +93,9 @@ class PageTest extends GraphQlAbstract
         $page = $this->getPageByTitle('Page with 1column layout');
 
         $query = $this->getQuery($page->getIdentifier());
-        $this->graphQlQuery($query);
+        $response = $this->graphQlQueryWithResponseHeaders($query);
 
-        $store = $this->storeManager->getDefaultStoreView();
-
-        $guestCacheId = $this->calculateCacheIdByStoreAndCustomer($store);
-        $cacheIdentityString = $this->getResolverCacheKeyByCacheIdAndPage($guestCacheId, $page);
+        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndPage($response, $page);
 
         $cacheEntry = $this->graphqlCache->load($cacheIdentityString);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
@@ -159,18 +134,14 @@ class PageTest extends GraphQlAbstract
 
         $page = $this->getPageByTitle('Page with 1column layout');
         $query = $this->getQuery($page->getIdentifier());
-        $this->graphQlQuery(
+        $response = $this->graphQlQueryWithResponseHeaders(
             $query,
             [],
             '',
             $authHeader
         );
 
-        $store = $this->storeManager->getDefaultStoreView();
-        $customer = $this->customerRepository->get('customer@example.com');
-
-        $customerCacheId = $this->calculateCacheIdByStoreAndCustomer($store, $customer);
-        $cacheIdentityString = $this->getResolverCacheKeyByCacheIdAndPage($customerCacheId, $page);
+        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndPage($response, $page);
 
         $cacheEntry = $this->graphqlCache->load($cacheIdentityString);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
@@ -206,12 +177,9 @@ class PageTest extends GraphQlAbstract
         $getGraphQlClient->setAccessible(true);
 
         $query = $this->getQuery($page->getIdentifier());
-        $getGraphQlClient->invoke($this)->post($query);
+        $response = $getGraphQlClient->invoke($this)->postWithResponseHeaders($query);
 
-        $store = $this->storeManager->getDefaultStoreView();
-
-        $guestCacheId = $this->calculateCacheIdByStoreAndCustomer($store);
-        $cacheIdentityString = $this->getResolverCacheKeyByCacheIdAndPage($guestCacheId, $page);
+        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndPage($response, $page);
 
         $cacheEntry = $this->graphqlCache->load($cacheIdentityString);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
@@ -239,12 +207,6 @@ class PageTest extends GraphQlAbstract
             )
         ];
 
-        $store = $this->storeManager->getDefaultStoreView();
-        $customer = $this->customerRepository->get('customer@example.com');
-
-        $guestCacheId = $this->calculateCacheIdByStoreAndCustomer($store);
-        $customerCacheId = $this->calculateCacheIdByStoreAndCustomer($store, $customer);
-
         foreach ($titles as $title) {
             $page = $this->getPageByTitle($title);
 
@@ -252,7 +214,7 @@ class PageTest extends GraphQlAbstract
             $query = $this->getQuery($page->getIdentifier());
             $response = $this->graphQlQueryWithResponseHeaders($query);
 
-            $resolverCacheKeyForGuestQuery = $this->getResolverCacheKeyByCacheIdAndPage($guestCacheId, $page);
+            $resolverCacheKeyForGuestQuery = $this->getResolverCacheKeyFromResponseAndPage($response, $page);
 
             $cacheEntry = $this->graphqlCache->load($resolverCacheKeyForGuestQuery);
             $cacheEntryDecoded = json_decode($cacheEntry, true);
@@ -275,9 +237,7 @@ class PageTest extends GraphQlAbstract
                 $authHeader
             );
 
-            print_r($response['headers']);
-
-            $resolverCacheKeyForUserQuery = $this->getResolverCacheKeyByCacheIdAndPage($customerCacheId, $page);
+            $resolverCacheKeyForUserQuery = $this->getResolverCacheKeyFromResponseAndPage($response, $page);
 
             $cacheEntry = $this->graphqlCache->load($resolverCacheKeyForUserQuery);
             $cacheEntryDecoded = json_decode($cacheEntry, true);
@@ -369,8 +329,10 @@ class PageTest extends GraphQlAbstract
 QUERY;
     }
 
-    private function getResolverCacheKeyByCacheIdAndPage(string $cacheIdValue, PageInterface $page): string
+    private function getResolverCacheKeyFromResponseAndPage(array $response, PageInterface $page): string
     {
+        $cacheIdValue = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+
         $cacheIdQueryPayloadMetadata = sprintf('CmsPage%s', json_encode([
             'identifier' => $page->getIdentifier(),
         ]));
@@ -383,65 +345,5 @@ QUERY;
 
         // strtoupper is called in \Magento\Framework\Cache\Frontend\Adapter\Zend::_unifyId
         return strtoupper(implode('_', $cacheIdParts));
-    }
-
-    /**
-     * @param StoreInterface $store
-     * @param CustomerInterface|null $customer - guest if null
-     * @return string
-     */
-    private function calculateCacheIdByStoreAndCustomer(
-        StoreInterface $store,
-        ?CustomerInterface $customer = null
-    ): string {
-        $contextFactory = $this->getMockForAbstractClass(ContextFactoryInterface::class);
-
-        // get idFactorProviders which are only available in GraphQL Area
-        $configLoader = $this->objectManager->get(ConfigLoader::class);
-        $graphQlAreaConfig = $configLoader->load(Area::AREA_GRAPHQL);
-        $idFactorProviders = $graphQlAreaConfig[CacheIdCalculator::class]['arguments']['idFactorProviders'];
-
-        $cacheIdCalculator = $this->objectManager->create(CacheIdCalculator::class, [
-            'contextFactory' => $contextFactory,
-            'idFactorProviders' => $idFactorProviders,
-        ]);
-
-        $context = $this->getMockForAbstractClass(ContextInterface::class);
-
-        $contextFactory
-            ->expects($this->atLeastOnce())
-            ->method('get')
-            ->willReturn($context);
-
-        $context
-            ->expects($customer ? $this->atLeastOnce() : $this->any())
-            ->method('getUserId')
-            ->willReturn($customer ? (int) $customer->getId() : null);
-
-        $extensionAttributes = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $context
-            ->expects($this->atLeastOnce())
-            ->method('getExtensionAttributes')
-            ->willReturn($extensionAttributes);
-
-        $extensionAttributes
-            ->expects($this->atLeastOnce())
-            ->method('getIsCustomer')
-            ->willReturn((bool) $customer);
-
-        $extensionAttributes
-            ->expects($this->atLeastOnce())
-            ->method('getStore')
-            ->willReturn($store);
-
-        $extensionAttributes
-            ->expects($this->atLeastOnce())
-            ->method('getCustomerGroupId')
-            ->willReturn($customer ? $customer->getGroupId() : CustomerGroupInterface::NOT_LOGGED_IN_ID);
-
-        return $cacheIdCalculator->getCacheId();
     }
 }
