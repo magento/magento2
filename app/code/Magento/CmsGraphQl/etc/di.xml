@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Cms\Api\Data\PageInterface">
+    <type name="Magento\Cms\Model\Page">
         <plugin name="append_id_specific_tag_to_list" type="Magento\CmsGraphQl\Plugin\AppendIdSpecificTagToList" />
     </type>
 </config>

@@ -7,9 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CmsGraphQl\Plugin;
 
-use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\Page;
-use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Append id-specific tag to the list of tags for invalidation when global CMS page tag is present.
@@ -25,11 +23,11 @@ class AppendIdSpecificTagToList
     /**
      * Append id-specific tag to the list of tags
      *
-     * @param PageInterface $subject
+     * @param Page $subject
      * @param array|false $tagsResult
      * @return array|false
      */
-    public function afterGetCacheTags(PageInterface $subject, $tagsResult)
+    public function afterGetCacheTags(Page $subject, $tagsResult)
     {
         if (!is_array($tagsResult)) {
             return $tagsResult;
@@ -37,7 +35,7 @@ class AppendIdSpecificTagToList
 
         $hasGlobalCmsPageTag = in_array(Page::CACHE_TAG, $tagsResult);
 
-        if ($hasGlobalCmsPageTag && $subject instanceof IdentityInterface) {
+        if ($hasGlobalCmsPageTag) {
             $tagsResult = array_merge($tagsResult, $subject->getIdentities());
         }
 
