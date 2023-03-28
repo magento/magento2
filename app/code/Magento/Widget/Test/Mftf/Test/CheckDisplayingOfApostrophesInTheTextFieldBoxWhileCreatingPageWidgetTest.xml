@@ -23,13 +23,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Pre-condition - Disable the page builder -->
-<!--            <magentoCLI command="config:set cms/pagebuilder/enabled 0" stepKey="disablePageBuilder" after="enableTinyMCE"/>-->
-<!--            <magentoCLI command="cache:clean config" stepKey="flushCache" after="disablePageBuilder"/>-->
-
-            <!-- Pre-condition 2- Create a New Page  -->
-<!--            <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>-->
-<!--            <actionGroup ref="FillOutCMSPageContent" stepKey="fillBasicPageData"/>-->
-<!--            <actionGroup ref="SaveCmsPageActionGroup" stepKey="saveNewPage"/>-->
+            <magentoCLI command="config:set cms/pagebuilder/enabled 0" stepKey="disablePageBuilder"/>
 
             <!-- Pre-condition 3- Verify page in grid-->
             <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="openCMSPagesGridActionGroup"/>
