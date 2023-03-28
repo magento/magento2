@@ -93,16 +93,19 @@ enum AttributeEntityTypeEnum @doc(description: "List of all entity types. Popula
 }
 
 enum AttributeFrontendInputEnum @doc(description: "EAV attribute frontend input types.") {
-    TEXT
-    GALLERY
-    MEDIA_IMAGE
-    IMAGE
-    TEXTAREA
-    MULTISELECT
+    BOOLEAN
     DATE
     DATETIME
-    SELECT
-    BOOLEAN
+    FILE
+    GALLERY
+    HIDDEN
+    IMAGE
+    MEDIA_IMAGE
+    MULTILINE
+    MULTISELECT
     PRICE
+    SELECT
+    TEXT
+    TEXTAREA
     WEIGHT
 }

@@ -95,14 +95,18 @@ class GetAttributeData implements GetAttributeDataInterface
         return array_filter(
             array_map(
                 function (AttributeOptionInterface $option) use ($attribute) {
-                    if (empty(trim($option->getValue())) && empty(trim($option->getLabel()))) {
+                    $value = (string)$option->getValue();
+                    $label = (string)$option->getLabel();
+                    if (empty(trim($value)) && empty(trim($label))) {
                         return null;
                     }
                     return [
-                        'uid' => $this->uid->encode($option->getValue()),
-                        'label' => $option->getLabel(),
-                        'value' => $option->getValue(),
-                        'is_default' => in_array($option->getValue(), explode(',', $attribute->getDefaultValue()))
+                        'uid' => $this->uid->encode($value),
+                        'label' => $label,
+                        'value' => $value,
+                        'is_default' =>
+                            $attribute->getDefaultValue() ?
+                            in_array($value, explode(',', $attribute->getDefaultValue())): null
                     ];
                 },
                 $attribute->getOptions()
