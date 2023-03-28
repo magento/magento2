@@ -12,6 +12,7 @@
             <argument name="currentAdminPassword" type="string" defaultValue="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
         </arguments>
         <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{currentAdminPassword}}" stepKey="enterThePassword" />
+        <waitForElementVisible selector="{{AdminMainActionsSection.delete}}" stepKey="waitForDeleteButton"/>
         <click selector="{{AdminMainActionsSection.delete}}" stepKey="deleteUser"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
