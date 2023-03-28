@@ -279,7 +279,7 @@ define([
         _configureElement: function (element) {
             this.simpleProduct = this._getSimpleProductId(element);
 
-            if (element.value) {
+            if (element.value && element.config) {
                 this.options.state[element.config.id] = element.value;
 
                 if (element.nextSetting) {
@@ -298,9 +298,11 @@ define([
             }
 
             this._reloadPrice();
-            this._displayRegularPriceBlock(this.simpleProduct);
-            this._displayTierPriceBlock(this.simpleProduct);
-            this._displayNormalPriceLabel();
+            if (element.config) {
+                this._displayRegularPriceBlock(this.simpleProduct);
+                this._displayTierPriceBlock(this.simpleProduct);
+                this._displayNormalPriceLabel();
+            }
             this._changeProductImage();
         },
 
@@ -439,8 +441,10 @@ define([
                 filteredSalableProducts;
 
             this._clearSelect(element);
-            element.options[0] = new Option('', '');
-            element.options[0].innerHTML = this.options.spConfig.chooseText;
+            if (element.options) {
+                element.options[0] = new Option('', '');
+                element.options[0].innerHTML = this.options.spConfig.chooseText;
+            }
             prevConfig = false;
 
             if (element.prevSetting) {
@@ -552,8 +556,10 @@ define([
         _clearSelect: function (element) {
             var i;
 
-            for (i = element.options.length - 1; i >= 0; i--) {
-                element.remove(i);
+            if (element.options) {
+                for (i = element.options.length - 1; i >= 0; i--) {
+                    element.remove(i);
+                }
             }
         },
 
@@ -588,23 +594,25 @@ define([
                 allowedProduct;
 
             _.each(elements, function (element) {
-                var selected = element.options[element.selectedIndex],
-                    config = selected && selected.config,
-                    priceValue = this._calculatePrice({});
+                if (element.options) {
+                    var selected = element.options[element.selectedIndex],
+                        config = selected && selected.config,
+                        priceValue = this._calculatePrice({});
 
-                if (config && config.allowedProducts.length === 1) {
-                    priceValue = this._calculatePrice(config);
-                } else if (element.value) {
-                    allowedProduct = this._getAllowedProductWithMinPrice(config.allowedProducts);
-                    priceValue = this._calculatePrice({
-                        'allowedProducts': [
-                            allowedProduct
-                        ]
-                    });
-                }
+                    if (config && config.allowedProducts.length === 1) {
+                        priceValue = this._calculatePrice(config);
+                    } else if (element.value) {
+                        allowedProduct = this._getAllowedProductWithMinPrice(config.allowedProducts);
+                        priceValue = this._calculatePrice({
+                            'allowedProducts': [
+                                allowedProduct
+                            ]
+                        });
+                    }
 
-                if (!_.isEmpty(priceValue)) {
-                    prices.prices = priceValue;
+                    if (!_.isEmpty(priceValue)) {
+                        prices.prices = priceValue;
+                    }
                 }
             }, this);
 
@@ -664,19 +672,20 @@ define([
         _getSimpleProductId: function (element) {
             // TODO: Rewrite algorithm. It should return ID of
             //        simple product based on selected options.
-            var allOptions = element.config.options,
-                value = element.value,
-                config;
+            if (element.config) {
+                var allOptions = element.config.options,
+                    value = element.value,
+                    config;
 
-            config = _.filter(allOptions, function (option) {
-                return option.id === value;
-            });
-            config = _.first(config);
+                config = _.filter(allOptions, function (option) {
+                    return option.id === value;
+                });
+                config = _.first(config);
 
-            return _.isEmpty(config) ?
-                undefined :
-                _.first(config.allowedProducts);
-
+                return _.isEmpty(config) ?
+                    undefined :
+                    _.first(config.allowedProducts);
+            }
         },
 
         /**
