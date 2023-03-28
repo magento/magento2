@@ -7,6 +7,7 @@
 
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
@@ -35,6 +36,11 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
     protected $urlFinder;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    protected ProductRepositoryInterface $productRepository;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator $productUrlPathGenerator
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
@@ -46,13 +52,16 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
         \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator $productUrlPathGenerator,
         \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator,
         \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator $cmsPageUrlPathGenerator,
-        UrlFinderInterface $urlFinder
+        UrlFinderInterface $urlFinder,
+        ProductRepositoryInterface $productRepository = null
     ) {
         parent::__construct($context);
         $this->productUrlPathGenerator = $productUrlPathGenerator;
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
         $this->cmsPageUrlPathGenerator = $cmsPageUrlPathGenerator;
         $this->urlFinder = $urlFinder;
+        $this->productRepository = $productRepository ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->create(ProductRepositoryInterface::class);
     }
 
     /**
@@ -97,12 +106,18 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
             ];
             $rewrite = $this->urlFinder->findOneByData($data);
             if (!$rewrite) {
-                $message = $model->getEntityType() === self::ENTITY_TYPE_PRODUCT
-                    ? __("The selected product isn't associated with the selected store or category.")
-                    : __("The selected category isn't associated with the selected store.");
-                throw new LocalizedException($message);
+                $check = $model->getEntityType() === self::ENTITY_TYPE_PRODUCT ?
+                    $this->_getProduct()->canBeShowInCategory($this->_getCategory()->getId()) :
+                    $this->_getCategory()->getStoreId() == $model->getStoreId();
+                if (false === $check) {
+                    $message = $model->getEntityType() === self::ENTITY_TYPE_PRODUCT
+                        ? __("The selected product isn't associated with the selected store or category.")
+                        : __("The selected category isn't associated with the selected store.");
+                    throw new LocalizedException($message);
+                }
+            } else {
+                $targetPath = $rewrite->getRequestPath();
             }
-            $targetPath = $rewrite->getRequestPath();
         }
         return $targetPath;
     }
