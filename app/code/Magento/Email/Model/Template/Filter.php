@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Email\Model\Template;
 
 use Exception;
+use Magento\Backend\Model\Url as BackendModelUrl;
 use Magento\Cms\Block\Block;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -69,14 +70,14 @@ class Filter extends Template
     /**
      * @var bool
      * @deprecated SID is not being used as query parameter anymore.
-     * @see Session ID's in URL
+     * @see storeDirective
      */
     protected $_useSessionInUrl = false;
 
     /**
      * @var array
      * @deprecated 101.0.4 Use the new Directive Processor interfaces
-     * @see Directive Processor interfaces
+     * @see applyModifiers
      */
     protected $_modifiers = ['nl2br' => ''];
 
@@ -598,7 +599,9 @@ class Filter extends Template
          * Pass extra parameter to distinguish stores urls for property Magento\Framework\Url $cacheUrl
          * in multi-store environment
          */
-        $this->urlModel->setScope($this->_storeManager->getStore());
+        if (!$this->urlModel instanceof BackendModelUrl) {
+            $this->urlModel->setScope($this->_storeManager->getStore());
+        }
         $params['_escape_params'] = $this->_storeManager->getStore()->getCode();
 
         return $this->urlModel->getUrl($path, $params);
