@@ -12,7 +12,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlCache;
+use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQlCache\Model\CacheableQueryHandler;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
@@ -28,9 +28,11 @@ class Resolver
     private $cacheableQueryHandler;
 
     /**
-     * @var GraphQlCache
+     * Built-in GraphQL Resolver cache type
+     *
+     * @var GraphQlResolverCache
      */
-    private $graphqlCache;
+    private $graphQlResolverCache;
 
     /**
      * @var CacheIdCalculator
@@ -49,20 +51,20 @@ class Resolver
 
     /**
      * @param CacheableQueryHandler $cacheableQueryHandler
-     * @param GraphQlCache $graphqlCache
+     * @param GraphQlResolverCache $graphQlResolverCache
      * @param CacheIdCalculator $cacheIdCalculator
      * @param SerializerInterface $serializer
      * @param string[] $cacheableResolverClassNames
      */
     public function __construct(
         CacheableQueryHandler $cacheableQueryHandler,
-        GraphQlCache $graphqlCache,
+        GraphQlResolverCache $graphQlResolverCache,
         CacheIdCalculator $cacheIdCalculator,
         SerializerInterface $serializer,
         array $cacheableResolverClassNames = []
     ) {
         $this->cacheableQueryHandler = $cacheableQueryHandler;
-        $this->graphqlCache = $graphqlCache;
+        $this->graphQlResolverCache = $graphQlResolverCache;
         $this->cacheIdCalculator = $cacheIdCalculator;
         $this->serializer = $serializer;
         $this->cacheableResolverClassNames = $cacheableResolverClassNames;
@@ -112,13 +114,13 @@ class Resolver
         $cacheIdentityFullPageContextString = $this->cacheIdCalculator->getCacheId();
         $cacheIdentityQueryPayloadString = $info->returnType->name . $this->serializer->serialize($args ?? []);
 
-        $cacheIdentityString = GraphQlCache::CACHE_TAG
+        $cacheIdentityString = GraphQlResolverCache::CACHE_TAG
             . '_'
             . $cacheIdentityFullPageContextString
             . '_'
             . sha1($cacheIdentityQueryPayloadString);
 
-        $cachedResult = $this->graphqlCache->load($cacheIdentityString);
+        $cachedResult = $this->graphQlResolverCache->load($cacheIdentityString);
 
         if ($cachedResult !== false) {
             return $this->serializer->unserialize($cachedResult);
@@ -128,12 +130,13 @@ class Resolver
 
         $cacheIdentityClassName = $cacheTagSchema['cacheIdentity'];
 
-        $tags = $this->cacheableQueryHandler->getTagsByIdentityClassNameAndResolvedValue(
+        $tags = $this->cacheableQueryHandler->getCacheTagsByIdentityClassNameAndResolvedValue(
             $cacheIdentityClassName,
-            $resolvedValue
+            $resolvedValue,
+            true
         );
 
-        $this->graphqlCache->save(
+        $this->graphQlResolverCache->save(
             $this->serializer->serialize($resolvedValue),
             $cacheIdentityString,
             $tags

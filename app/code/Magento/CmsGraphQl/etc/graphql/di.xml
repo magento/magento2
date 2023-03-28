@@ -25,4 +25,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQlCache\Model\CacheableQueryHandler">
+        <arguments>
+            <argument name="fullPageIdentityToResolverIdentityClassMap" xsi:type="array">
+                <item name="Magento\CmsGraphQl\Model\Resolver\Page\Identity" xsi:type="string">
+                    Magento\CmsGraphQl\Model\Resolver\Page\BuiltInIdentity
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

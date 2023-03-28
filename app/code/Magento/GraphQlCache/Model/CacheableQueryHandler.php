@@ -7,14 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlCache\Model;
 
-use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 use Magento\GraphQlCache\Model\Resolver\IdentityPool;
 
 /**
- * Handler of collecting tagging on cache.
+ * Handler for collecting tags on full page and built-in resolver caches.
  *
  * This class would be used to collect tags after each operation where we need to collect tags
  * usually after data is fetched or resolved.
@@ -37,22 +36,30 @@ class CacheableQueryHandler
     private $identityPool;
 
     /**
+     * @var array
+     */
+    private $fullPageIdentityToResolverIdentityClassMap;
+
+    /**
      * @param CacheableQuery $cacheableQuery
      * @param RequestInterface $request
      * @param IdentityPool $identityPool
+     * @param array $fullPageIdentityToResolverIdentityClassMap
      */
     public function __construct(
         CacheableQuery $cacheableQuery,
         RequestInterface $request,
-        IdentityPool $identityPool
+        IdentityPool $identityPool,
+        array $fullPageIdentityToResolverIdentityClassMap = []
     ) {
         $this->cacheableQuery = $cacheableQuery;
         $this->request = $request;
         $this->identityPool = $identityPool;
+        $this->fullPageIdentityToResolverIdentityClassMap = $fullPageIdentityToResolverIdentityClassMap;
     }
 
     /**
-     * Set cache validity to the cacheableQuery after resolving any resolver or evaluating a promise in a query
+     * Set full page cache validity on $cacheableQuery after resolving any resolver or evaluating a promise in a query
      *
      * @param array $resolvedValue
      * @param array $cacheAnnotation Eg: ['cacheable' => true, 'cacheTag' => 'someTag', cacheIdentity=>'\Mage\Class']
@@ -64,7 +71,10 @@ class CacheableQueryHandler
         $cacheIdentityClass = $cacheAnnotation['cacheIdentity'] ?? '';
 
         if ($this->request instanceof Http && $this->request->isGet() && !empty($cacheIdentityClass)) {
-            $cacheTags = $this->getTagsByIdentityClassNameAndResolvedValue($cacheIdentityClass, $resolvedValue);
+            $cacheTags = $this->getCacheTagsByIdentityClassNameAndResolvedValue(
+                $cacheIdentityClass,
+                $resolvedValue
+            );
             $this->cacheableQuery->addCacheTags($cacheTags);
         } else {
             $cacheable = false;
@@ -77,15 +87,36 @@ class CacheableQueryHandler
      *
      * @param string $cacheIdentityClassName
      * @param array $resolvedValue
+     * @param bool $isForBuiltInResolverCache - for full page cache if false
      * @return string[]
      */
-    public function getTagsByIdentityClassNameAndResolvedValue(
+    public function getCacheTagsByIdentityClassNameAndResolvedValue(
         string $cacheIdentityClassName,
-        array $resolvedValue
+        array $resolvedValue,
+        bool $isForBuiltInResolverCache = false
     ): array {
+        if ($isForBuiltInResolverCache) {
+            $cacheIdentityClassName = $this->getResolverCacheIdentityClassName($cacheIdentityClassName);
+        }
+
         $cacheIdentity = $this->getCacheIdentityByClassName($cacheIdentityClassName);
 
         return $cacheIdentity->getIdentities($resolvedValue);
+    }
+
+    /**
+     * Get resolver cache identity class name if present.  If not, use original $cacheIdentityClassName
+     *
+     * @param string $cacheIdentityClassName
+     * @return string
+     */
+    private function getResolverCacheIdentityClassName(string $cacheIdentityClassName): string
+    {
+        if (isset($this->fullPageIdentityToResolverIdentityClassMap[$cacheIdentityClassName])) {
+            $cacheIdentityClassName = $this->fullPageIdentityToResolverIdentityClassMap[$cacheIdentityClassName];
+        }
+
+        return $cacheIdentityClassName;
     }
 
     /**
@@ -100,7 +131,7 @@ class CacheableQueryHandler
     }
 
     /**
-     * Set cache validity for the graphql request
+     * Set full page cache validity for the graphql request
      *
      * @param bool $isValid
      * @return void

@@ -26,7 +26,6 @@ use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -107,6 +106,7 @@ class PageTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
      * @return void
      */
@@ -143,6 +143,7 @@ class PageTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
      * @return void
@@ -192,6 +193,7 @@ class PageTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
      * @return void
      * @throws \ReflectionException
@@ -220,6 +222,95 @@ class PageTest extends GraphQlAbstract
         );
     }
 
+    /**
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
+     * @return void
+     */
+    public function testCmsPageResolverCacheGeneratesSeparateEntriesBasedOnArgumentsAndContext()
+    {
+        $titles = ['Page with 1column layout', 'Page with unavailable layout'];
+
+        $authHeader = [
+            'Authorization' => 'Bearer ' . $this->customerTokenService->createCustomerAccessToken(
+                'customer@example.com',
+                'password'
+            )
+        ];
+
+        $store = $this->storeManager->getDefaultStoreView();
+        $customer = $this->customerRepository->get('customer@example.com');
+
+        $guestCacheId = $this->calculateCacheIdByStoreAndCustomer($store);
+        $customerCacheId = $this->calculateCacheIdByStoreAndCustomer($store, $customer);
+
+        foreach ($titles as $title) {
+            $page = $this->getPageByTitle($title);
+
+            // query $page as guest
+            $query = $this->getQuery($page->getIdentifier());
+            $response = $this->graphQlQueryWithResponseHeaders($query);
+
+            $resolverCacheKeyForGuestQuery = $this->getResolverCacheKeyByCacheIdAndPage($guestCacheId, $page);
+
+            $cacheEntry = $this->graphqlCache->load($resolverCacheKeyForGuestQuery);
+            $cacheEntryDecoded = json_decode($cacheEntry, true);
+
+            $this->assertEqualsCanonicalizing(
+                $this->generateExpectedDataFromPage($page),
+                $cacheEntryDecoded
+            );
+
+            $this->assertTagsByCacheIdentityAndPage($resolverCacheKeyForGuestQuery, $page);
+
+            $resolverCacheKeys[] = $resolverCacheKeyForGuestQuery;
+
+            // query $page as customer
+            $query = $this->getQuery($page->getIdentifier());
+            $response = $this->graphQlQueryWithResponseHeaders(
+                $query,
+                [],
+                '',
+                $authHeader
+            );
+
+            print_r($response['headers']);
+
+            $resolverCacheKeyForUserQuery = $this->getResolverCacheKeyByCacheIdAndPage($customerCacheId, $page);
+
+            $cacheEntry = $this->graphqlCache->load($resolverCacheKeyForUserQuery);
+            $cacheEntryDecoded = json_decode($cacheEntry, true);
+
+            $this->assertEqualsCanonicalizing(
+                $this->generateExpectedDataFromPage($page),
+                $cacheEntryDecoded
+            );
+
+            $this->assertTagsByCacheIdentityAndPage($resolverCacheKeyForUserQuery, $page);
+
+            $resolverCacheKeys[] = $resolverCacheKeyForUserQuery;
+        }
+
+        foreach ($resolverCacheKeys as $cacheIdentityString) {
+            $this->assertNotFalse($this->graphqlCache->load($cacheIdentityString));
+        }
+
+        // invalidate first page and assert first two cache identities (guest and user) are invalidated,
+        // while the rest are not
+        $page = $this->getPageByTitle($titles[0]);
+        $page->setMetaDescription('whatever');
+        $this->pageRepository->save($page);
+
+        list($page1GuestKey, $page1UserKey, $page2GuestKey, $page2UserKey) = $resolverCacheKeys;
+
+        $this->assertFalse($this->graphqlCache->load($page1GuestKey));
+        $this->assertFalse($this->graphqlCache->load($page1UserKey));
+
+        $this->assertNotFalse($this->graphqlCache->load($page2GuestKey));
+        $this->assertNotFalse($this->graphqlCache->load($page2UserKey));
+    }
+
     private function generateExpectedDataFromPage(PageInterface $page): array
     {
         return [
@@ -245,7 +336,6 @@ class PageTest extends GraphQlAbstract
 
         $this->assertEqualsCanonicalizing(
             [
-                $cacheIdPrefix . strtoupper(CmsPage::CACHE_TAG),
                 $cacheIdPrefix . strtoupper(CmsPage::CACHE_TAG) . '_' . $page->getId(),
                 $cacheIdPrefix . strtoupper(GraphQlCache::CACHE_TAG),
                 $cacheIdPrefix . 'MAGE',
