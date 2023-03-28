@@ -14,13 +14,15 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Test\Fixture\Group as GroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
 use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
-use Magento\TestFramework\Fixture\DataFixtureStorage;
-use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 
 /**
  * Test querying Bundle products
@@ -279,7 +281,7 @@ QUERY;
                 'quantity' => (int)$bundleProductLink->getQty(),
                 'position' => $bundleProductLink->getPosition(),
                 'is_default' => (bool)$bundleProductLink->getIsDefault(),
-                 'price_type' => self::KEY_PRICE_TYPE_FIXED,
+                'price_type' => self::KEY_PRICE_TYPE_FIXED,
                 'can_change_quantity' => $bundleProductLink->getCanChangeQuantity()
             ]
         );
@@ -448,9 +450,20 @@ QUERY;
         $this->graphQlQuery($query);
     }
 
-    /**
-     * @magentoApiDataFixture Magento/Bundle/_files/product_1.php
-     */
+    #[
+        DbIsolation(false),
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(GroupFixture::class, ['website_id' => '$website2.id$'], 'group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$group2.id$', 'code' => 'store2'], 'store2'),
+        DataFixture(ProductFixture::class, ['sku' => 'p1', 'website_ids' => [1, '$website2.id$']], 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'p2', 'website_ids' => [1, '$website2.id$']], 'p2'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$p1$']], 'opt1'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$p2$']], 'opt2'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['sku' => 'bundle-product', '_options' => ['$opt1$', '$opt2$'], 'website_ids' => [1, '$website2.id$']]
+        ),
+    ]
     public function testBundleProductWithDisabledProductOption()
     {
         /** @var StoreManagerInterface $storeManager */
@@ -458,7 +471,7 @@ QUERY;
         $storeIdDefault = $storeManager->getDefaultStoreView()->getId();
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $simpleProduct = $productRepository->get('simple', false, $storeIdDefault, true);
+        $simpleProduct = $productRepository->get('p1', true, $storeIdDefault, true);
         $simpleProduct->setStatus(ProductStatus::STATUS_DISABLED);
         $simpleProduct->setStoreIds([$storeIdDefault]);
         $productRepository->save($simpleProduct);
@@ -513,8 +526,11 @@ QUERY;
 }
 QUERY;
 
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlQuery($query, [], '', ['Store' => 'default']);
         $this->assertEmpty($response['products']['items']);
+        $response = $this->graphQlQuery($query, [], '', ['Store' => 'store2']);
+        $this->assertNotEmpty($response['products']['items']);
+        $this->assertEquals($productSku, $response['products']['items'][0]['sku']);
     }
 
     #[
