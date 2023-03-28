@@ -523,7 +523,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 } else {
                     throw new SerializationException(
                         new Phrase(
-                            'The value "' . $data . '" must be an array.'
+                            'The value "%fieldValue" must be an array.',
+                            ['fieldValue' => $data]
                         )
                     );
                 }
