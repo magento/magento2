@@ -16,7 +16,7 @@ interface VclGeneratorInterface
      * Return generated varnish.vcl configuration file
      *
      * @param int $version
-     * $param string $inputFile
+     * @param string $inputFile
      * @return string
      * @since 100.2.0
      */

@@ -9,7 +9,7 @@ namespace Magento\PageCache\Model;
 use Magento\PageCache\Exception\UnsupportedVarnishVersion;
 
 /**
- * Vcl template locator interface
+ * Vcl template locator
  *
  * @api
  * @since 100.2.0

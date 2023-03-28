@@ -29,36 +29,36 @@ class GenerateVclCommand extends Command
     /**
      * Access list option name
      */
-    const ACCESS_LIST_OPTION = 'access-list';
+    public const ACCESS_LIST_OPTION = 'access-list';
 
     /**
      * Backend host option name
      */
-    const BACKEND_HOST_OPTION = 'backend-host';
+    public const BACKEND_HOST_OPTION = 'backend-host';
 
     /**
      * Backend port option name
      */
-    const BACKEND_PORT_OPTION = 'backend-port';
+    public const BACKEND_PORT_OPTION = 'backend-port';
 
     /**
      * Varnish version option name
      */
-    const EXPORT_VERSION_OPTION = 'export-version';
+    public const EXPORT_VERSION_OPTION = 'export-version';
 
     /**
      * Grace period option name
      */
-    const GRACE_PERIOD_OPTION = 'grace-period';
+    public const GRACE_PERIOD_OPTION = 'grace-period';
 
     /**
      * Input file option name
      */
-    const INPUT_FILE_OPTION = 'input-file';
+    public const INPUT_FILE_OPTION = 'input-file';
     /**
      * Output file option name
      */
-    const OUTPUT_FILE_OPTION = 'output-file';
+    public const OUTPUT_FILE_OPTION = 'output-file';
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteFactory
@@ -222,6 +222,8 @@ class GenerateVclCommand extends Command
     }
 
     /**
+     * Input vcl params
+     *
      * @param InputInterface $input
      * @return array
      */
