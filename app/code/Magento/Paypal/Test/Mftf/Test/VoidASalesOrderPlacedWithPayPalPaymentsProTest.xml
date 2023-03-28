@@ -1,0 +1,80 @@
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VoidASalesOrderPlacedWithPayPalPaymentsProTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Paypal Payments Pro"/>
+            <title value="Void a Sales Order placed with PayPal Payments Pro"/>
+            <description value="Void a Sales Order placed with PayPal Payments Pro"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5461"/>
+            <group value="paypal"/>
+        </annotations>
+        <before>
+            <!--Enable free shipping method -->
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminPayPalPaymentsProActionGroup" stepKey="ConfigPayPalExpress">
+                <argument name="credentials" value="SamplePaypalPaymentsProConfig"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set payment/paypal_payment_pro/active 0" stepKey="disablePayPalExpress"/>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct1.custom_attributes[url_key]$$)}}" stepKey="goToStorefront"/>
+
+        <!-- Add product 1 to cart -->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$createSimpleProduct1.name$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <!--Place order-->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
+            <argument name="shippingMethod" value="Flat Rate"/>
+        </actionGroup>
+
+        <waitForPageLoad stepKey="waitForLoadingMask"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" visible="true" stepKey="selectPaymentsProMethod"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
+
+        <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataPaypal">
+            <argument name="cardData" value="VisaDefaultCard"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForFillCardData"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
+
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchForOrder">
+            <argument name="keyword" value="{$grabOrderNumber}"/>
+        </actionGroup>
+
+        <!-- Open order -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+
+        <actionGroup ref="VoidPendingOrderActionGroup" stepKey="voidOrder"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderStatus"/>
+        <grabTextFrom selector="{{AdminOrderNotesSection.voidAuthorizationNotes}}" stepKey="voidAuthorizationNotesWithID"/>
+
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
+        <comment userInput="BIC workaround" stepKey="waitForCommentHistoryToLoad"/>
+        <see selector="{{AdminOrderCommentsTabSection.orderComment}}" userInput="$voidAuthorizationNotesWithID" stepKey="seeOrderHistoryNotes"/>
+
+        <!-- Check the last transaction of the order-->
+        <actionGroup ref="AdminValidatesVoidTransactionInOrderActionGroup" stepKey="validateVoidTxn"/>
+        <see selector="{{AdminTransactionsGridSection.isClosed}}" userInput="Yes" stepKey="seeIsClosedIsYes"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButton"/>
+        <actionGroup ref="AdminValidatesAuthorizationTransactionInOrderActionGroup" stepKey="validateAuthTxn"/>
+        <see selector="{{AdminTransactionsGridSection.isClosed}}" userInput="Yes" stepKey="seeIsClosedIsYesForAuthorization"/>
+    </test>
+</tests>
+
