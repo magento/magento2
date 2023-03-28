@@ -9,11 +9,9 @@ namespace Magento\EavGraphQl\Model\Resolver;
 
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Framework\GraphQl\Query\EnumLookup;
-use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Phrase;
@@ -39,9 +37,9 @@ class EntityTypeAttributesList implements ResolverInterface
     private EnumLookup $enumLookup;
 
     /**
-     * array
+     * @var array
      */
-    private $resolvers;
+    private array $resolvers;
 
     /**
      * @param AttributeRepository $attributeRepository
@@ -99,7 +97,7 @@ class EntityTypeAttributesList implements ResolverInterface
 
     /**
      * Returns formatted list of attributes
-     * 
+     *
      * @param array $attributesList
      * @return array
      */
