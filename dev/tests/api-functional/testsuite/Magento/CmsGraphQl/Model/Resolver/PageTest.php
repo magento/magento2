@@ -84,11 +84,6 @@ class PageTest extends GraphQlAbstract
     {
         $this->objectManager = $objectManager = ObjectManager::getInstance();
 
-        // extend object manager with graphql area preferences in order to get idFactorProviders later in
-        // calculateCacheIdByStoreAndCustomer; objectManager is reinitialized in tearDown
-        $configLoader = $objectManager->get(ConfigLoader::class);
-        $objectManager->configure($configLoader->load(Area::AREA_GRAPHQL));
-
         $this->graphqlCache = $objectManager->get(GraphQlCache::class);
         $this->pageRepository = $objectManager->get(PageRepository::class);
         $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
@@ -109,8 +104,6 @@ class PageTest extends GraphQlAbstract
             GraphQlCache::TYPE_IDENTIFIER,
             $this->originalCacheStateEnabledStatus
         );
-
-        Bootstrap::getInstance()->reinitialize();
     }
 
     /**
@@ -313,8 +306,14 @@ QUERY;
     ): string {
         $contextFactory = $this->getMockForAbstractClass(ContextFactoryInterface::class);
 
+        // get idFactorProviders which are only available in GraphQL Area
+        $configLoader = $this->objectManager->get(ConfigLoader::class);
+        $graphQlAreaConfig = $configLoader->load(Area::AREA_GRAPHQL);
+        $idFactorProviders = $graphQlAreaConfig[CacheIdCalculator::class]['arguments']['idFactorProviders'];
+
         $cacheIdCalculator = $this->objectManager->create(CacheIdCalculator::class, [
             'contextFactory' => $contextFactory,
+            'idFactorProviders' => $idFactorProviders,
         ]);
 
         $context = $this->getMockForAbstractClass(ContextInterface::class);
