@@ -15,7 +15,7 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test catalog EAV attributes metadata retrieval via GraphQL API
+ * Test EAV attributes metadata retrieval for entity type via GraphQL API
  */
 class EntityTypeAttributesListTest extends GraphQlAbstract
 {
