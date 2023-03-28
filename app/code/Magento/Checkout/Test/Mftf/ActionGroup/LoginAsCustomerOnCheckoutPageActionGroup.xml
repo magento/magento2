@@ -17,7 +17,7 @@
         </arguments>
 
         <waitForPageLoad stepKey="waitForCheckoutShippingSectionToLoad"/>
-        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{customer.email}}" stepKey="fillEmailField"/>
+        <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{customer.email}}" stepKey="fillEmailField"/>
         <waitForPageLoad stepKey="waitForLoadingMaskToDisappear"/>
         <waitForElementVisible selector="{{CheckoutShippingSection.password}}" stepKey="waitForElementVisible"/>
         <fillField selector="{{CheckoutShippingSection.password}}" userInput="{{customer.password}}" stepKey="fillPasswordField"/>
