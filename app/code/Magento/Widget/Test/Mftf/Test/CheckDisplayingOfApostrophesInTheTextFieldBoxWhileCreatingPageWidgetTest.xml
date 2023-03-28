@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CheckDisplayingOfApostrophesInTheTextFieldBoxWhileCreatingPageWidgetTest">
+        <annotations>
+            <features value="Widget"/>
+            <stories value="Checking displaying of apostrophes (') in the text field box while creating page widget"/>
+            <title value="Checking displaying of apostrophes (') in the text field box while creating page widget"/>
+            <description value="Checking displaying of apostrophes (') in the text field box while creating page widget"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4389"/>
+            <group value="widget"/>
+        </annotations>
+        <before>
+            <!-- Pre-condition 1- Login as Admin  -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Pre-condition - Disable the page builder -->
+<!--            <magentoCLI command="config:set cms/pagebuilder/enabled 0" stepKey="disablePageBuilder" after="enableTinyMCE"/>-->
+<!--            <magentoCLI command="cache:clean config" stepKey="flushCache" after="disablePageBuilder"/>-->
+
+            <!-- Pre-condition 2- Create a New Page  -->
+<!--            <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>-->
+<!--            <actionGroup ref="FillOutCMSPageContent" stepKey="fillBasicPageData"/>-->
+<!--            <actionGroup ref="SaveCmsPageActionGroup" stepKey="saveNewPage"/>-->
+
+            <!-- Pre-condition 3- Verify page in grid-->
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="openCMSPagesGridActionGroup"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters"/>
+            <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortGridByIdDescending"/>
+            <click selector="{{CmsPagesPageActionsSection.select('home')}}" stepKey="clickSelectCMSPage" />
+
+            <!-- Pre-condition 4- Update the page in grid-->
+            <click selector="{{CmsPagesPageActionsSection.edit('home')}}" stepKey="OpenThePageToBeEdited"/>
+            <waitForPageLoad stepKey="waitForPageLoadPostSelectingHomePage"/>
+            <waitForElementVisible selector="{{CmsNewPagePageContentSection.header}}" stepKey="waitForContentTabForPageToBeVisible"/>
+
+            <!-- Pre-condition 5- Expand the Content section > Insert Widget -->
+            <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContentTabForPage"/>
+            <waitForElementVisible selector="{{CmsNewPagePageActionsSection.insertWidget}}" stepKey="waitForTheInsertWidgetButtonToDisplay"/>
+            <actionGroup ref="AdminInsertWidgetToCmsPageContentActionGroup" stepKey="selectCMSpageLinkFromDropdown"/>
+            <waitForPageLoad stepKey="waitForPageLoadPostSelectingFromDropDown"/>
+
+            <!-- Pre-condition 6 - 11 - Update the Anchor Custom Text -->
+            <fillField selector="{{WidgetSection.InputAnchorCustomText}}" userInput="Custom texts&apos; for tests" stepKey="InputValuesWithApostrophe"/>
+            <click selector="{{WidgetSection.SelectPageButton}}" stepKey="clickOnSelectPageButton"/>
+            <waitForElementVisible selector="{{WidgetSection.url_key_selectPage}}" stepKey="waitForSelectPageDialogToPopulate"/>
+            <fillField selector="{{WidgetSection.url_key_selectPage}}" userInput="home" stepKey="EnterThePageURL"/>
+            <click selector="{{WidgetSection.SearchButton_selectPage}}" stepKey="clickOnSearchButton"/>
+            <waitForPageLoad stepKey="waitForResultsToBeDisplayed"/>
+            <click selector="{{WidgetSection.search_result_selectPage('home')}}" stepKey="clickOnDisplayedResult"/>
+            <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickOnInsertWidget"/>
+            <waitForElementVisible selector="{{CmsNewPagePageActionsSection.savePageBtn}}" stepKey="waitForInsertWidgetDialogToDisappear" time="5"/>
+            <click selector="{{CmsNewPagePageActionsSection.savePageBtn}}" stepKey="clickSavePage"/>
+            <waitForElementVisible selector="{{CmsPagesPageActionsSection.savePageSuccessMessage}}" stepKey="waitForSuccessMessageLoggedOut" time="5"/>
+            <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+
+        </before>
+        <after>
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="openCMSPagesGridActionGroupToReset"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFiltersToReset"/>
+            <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortGridByIdDescendingToReset"/>
+            <click selector="{{CmsPagesPageActionsSection.select('home')}}" stepKey="clickSelectCMSPageToReset" />
+
+            <!-- Pre-condition 4- Update the page in grid To Reset-->
+            <click selector="{{CmsPagesPageActionsSection.edit('home')}}" stepKey="OpenThePageToBeEditedToReset"/>
+            <waitForPageLoad stepKey="waitForPageLoadPostSelectingHomePageToReset"/>
+            <waitForElementVisible selector="{{CmsNewPagePageContentSection.header}}" stepKey="waitForContentTabForPageToBeVisibleToReset"/>
+
+            <!-- Pre-condition 5- Expand the Content section > Insert Widget To Reset -->
+            <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContentTabForPageToReset"/>
+            <waitForElementVisible selector="{{CmsNewPagePageActionsSection.insertWidget}}" stepKey="waitForTheInsertWidgetButtonToDisplayToReset"/>
+            <clearField selector="{{CmsNewPagePageContentSection.content}}" stepKey="clearWidgetTextFieldToReset"/>
+            <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="&lt;p&gt;CMS homepage content goes here.&lt;/p&gt;" stepKey="InputDefaultValuesInWidgetTextFieldToReset"/>
+            <waitForElementVisible selector="{{CmsNewPagePageActionsSection.savePageBtn}}" stepKey="waitForInsertWidgetDialogToDisappearToReset" time="5"/>
+            <click selector="{{CmsNewPagePageActionsSection.savePageBtn}}" stepKey="clickSavePageToReset"/>
+            <waitForElementVisible selector="{{CmsPagesPageActionsSection.savePageSuccessMessage}}" stepKey="waitForSuccessMessageLoggedOutToReset" time="5"/>
+            <see userInput="You saved the page." stepKey="seeSuccessMessageToReset"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="navigateToHomePage"/>
+        <waitForPageLoad stepKey="waitToLoadHomePage"/>
+        <grabTextFrom selector="{{StorefrontCMSPageSection.widgetContent_Apostrophe('Custom texts')}}" stepKey="grabContentFromWidget"/>
+
+        <assertEquals message="Asserts the widget contains apostrophe On storefront" stepKey="assertApostropheOnWidgetText">
+            <expectedResult type="string">Custom texts' for tests</expectedResult>
+            <actualResult type="string">{$grabContentFromWidget}</actualResult>
+        </assertEquals>
+    </test>
+</tests>

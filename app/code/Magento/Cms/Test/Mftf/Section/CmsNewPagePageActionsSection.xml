@@ -23,5 +23,6 @@
         <element name="spinner" type="input" selector='//div[@data-component="cms_page_form.cms_page_form"]' />
         <element name="saveAndClose" type="button" selector="#save_and_close" timeout="10"/>
         <element name="insertWidget" type="button" selector="//span[contains(text(),'Insert Widget...')]"/>
+        <element name="savePageBtn" type="button" selector="//button[@id='save-button']" timeout="10"/>
     </section>
 </sections>
