@@ -37,7 +37,8 @@
         <waitForPageLoad stepKey="waitForIFrame"/>
         <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame"/>
         <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{colorProductAttribute.default_label}}" stepKey="fillDefaultLabel"/>
-        <!-- Change to visual swatches -->
+
+        <!-- Change to text swatches -->
         <selectOption selector="{{AdminNewAttributePanel.inputType}}" userInput="swatch_text" stepKey="selectTextSwatch"/>
         <click selector="{{AdminNewAttributePanel.addTextSwatchOption}}" stepKey="clickAddSwatch"/>
         <fillField selector="input[name='optiontext[value][option_0][0]']" userInput="Test Text Swatch" stepKey="fillTextSwatchLabel"/>

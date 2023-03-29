@@ -18,7 +18,9 @@
             <testCaseId value="AC-5328"/>
         </annotations>
         <before>
+            <!-- create category -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!-- Login to Admin Portal -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -30,7 +32,7 @@
                 <argument name="filterInputName" value="sku"/>
                 <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-
+            <!--Delete created configurable product-->
             <actionGroup ref="AdminGridFilterFillSelectFieldActionGroup" stepKey="addTypeFilterConfigurable">
                 <argument name="filterName" value="type_id"/>
                 <argument name="filterValue" value="Configurable Product"/>
@@ -49,6 +51,7 @@
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
+            <!-- Delete created product attribute -->
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
                 <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
             </actionGroup>
@@ -72,12 +75,12 @@
         <fillField selector="{{AdminDataGridHeaderSection.attributeCodeFilterInput}}" userInput="{{colorProductAttribute.default_label}}" stepKey="fillFilterAttributeCodeField"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
         <click selector="{{AdminDataGridTableSection.rowCheckbox('1')}}" stepKey="clickOnFirstCheckbox"/>
-
+        <!-- click on Next button -->
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextStep1"/>
-
+        <!-- Select the created attribute -->
         <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(colorProductAttribute.default_label)}}" stepKey="clickSelectAll"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextStep2"/>
-
+        <!-- Add the quantities to each SKU's -->
         <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
         <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="100" stepKey="enterAttributeQuantity"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextStep3"/>
