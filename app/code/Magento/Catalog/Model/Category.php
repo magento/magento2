@@ -211,7 +211,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @var array
      */
-    private static $flatEnabled = [];
+    private static array $flatEnabled = [];
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -301,7 +301,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         }
     }
 
-    private function isEnabledFlat()
+    private function isEnabledFlat(): bool
     {
         if (!isset(static::$flatEnabled[$this->getStoreId()])) {
             static::$flatEnabled[$this->getStoreId()] = $this->flatState->isAvailable();
