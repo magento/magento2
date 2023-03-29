@@ -271,6 +271,52 @@ class PageTest extends GraphQlAbstract
         $this->assertNotFalse($this->graphqlCache->load($page2UserKey));
     }
 
+    /**
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
+     * @return void
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     */
+    public function testCmsPageResolverCacheInvalidatesWhenPageGetsDeleted()
+    {
+        // cache page1
+        $page1 = $this->getPageByTitle('Page with 1column layout');
+
+        $query = $this->getQuery($page1->getIdentifier());
+        $response = $this->graphQlQueryWithResponseHeaders($query);
+
+        $cacheIdentityStringPage1 = $this->getResolverCacheKeyFromResponseAndPage($response, $page1);
+
+        $this->assertIsNumeric(
+            $this->graphqlCache->test($cacheIdentityStringPage1)
+        );
+
+        // cache page2
+        $page2 = $this->getPageByTitle('Page with unavailable layout');
+
+        $query = $this->getQuery($page2->getIdentifier());
+        $response = $this->graphQlQueryWithResponseHeaders($query);
+
+        $cacheIdentityStringPage2 = $this->getResolverCacheKeyFromResponseAndPage($response, $page2);
+
+        $this->assertIsNumeric(
+            $this->graphqlCache->test($cacheIdentityStringPage2)
+        );
+
+        // delete page1 and assert cache is invalidated
+        $this->pageRepository->delete($page1);
+
+        $this->assertFalse(
+            $this->graphqlCache->test($cacheIdentityStringPage1),
+            'Cache entry still exists for deleted CMS page'
+        );
+
+        // assert page2 cache entry still exists
+        $this->assertIsNumeric(
+            $this->graphqlCache->test($cacheIdentityStringPage2)
+        );
+    }
+
     private function generateExpectedDataFromPage(PageInterface $page): array
     {
         return [
