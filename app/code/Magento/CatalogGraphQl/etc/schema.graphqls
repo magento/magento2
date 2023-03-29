@@ -13,10 +13,12 @@ type Query {
     category (
      id: Int @doc(description: "The category ID to use as the root of the search.")
     ): CategoryTree
-    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "Search for categories that match the criteria specified in the `search` and `filter` attributes.") @deprecated(reason: "Use `categoryList` instead.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryTreeIdentity")
+    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "Search for categories that match the criteria specified in the `search` and `filter` attributes.") @deprecated(reason: "Use `categories` instead.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryTreeIdentity")
     categoryList(
         filters: CategoryFilterInput @doc(description: "Identifies which Category filter inputs to search for and return.")
-    ): [CategoryTree] @doc(description: "Return an array of categories based on the specified filters.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryList") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity")
+        pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. The default value is 20.")
+        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1.")
+    ): [CategoryTree] @doc(description: "Return an array of categories based on the specified filters.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryList") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity") @deprecated(reason: "Use `categories` instead.")
     categories (
         filters: CategoryFilterInput @doc(description: "Identifies which Category filter inputs to search for and return.")
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. The default value is 20.")
