@@ -91,7 +91,7 @@ class PageTest extends TestCase
      * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
      * @return void
      */
-    public function testResultIsLoadedAfterBeingSavedOnce()
+    public function testResultIsLoadedMultipleTimesAfterOnlyBeingSavedOnce()
     {
         $objectManager = $this->objectManager;
         $page = $this->getPageByTitle('Page with 1column layout');
@@ -116,7 +116,7 @@ class PageTest extends TestCase
             ->method('save');
 
         $resolverPluginWithCacheProxy = $objectManager->create(ResolverPlugin::class, [
-            'graphqlCache' => $cacheProxy,
+            'graphQlResolverCache' => $cacheProxy,
         ]);
 
         // override resolver plugin with plugin instance containing cache proxy class
