@@ -234,7 +234,7 @@ QUERY;
     public function testCreateCustomerIfPassedAttributeDosNotExistsInCustomerInput()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Field "test123" is not defined by type CustomerInput.');
+        $this->expectExceptionMessage('Field "test123" is not defined by type "CustomerInput".');
 
         $newFirstname = 'Richard';
         $newLastname = 'Rowe';
