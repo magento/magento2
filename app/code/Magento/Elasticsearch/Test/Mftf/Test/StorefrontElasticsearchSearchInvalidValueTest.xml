@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontElasticsearchSearchInvalidValueTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Search Product on Storefront"/>
+            <title value="Elasticsearch: try to search by invalid value of 'Searchable' attribute"/>
+            <description value="Elasticsearch: try to search by invalid value of 'Searchable' attribute"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-17906"/>
+            <useCaseId value="MC-15759"/>
+            <group value="elasticsearch"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create category-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <!--Set Minimal Query Length-->
+            <magentoCLI command="config:set {{SetMinQueryLength2Config.path}} {{SetMinQueryLength2Config.value}}" stepKey="setMinQueryLength"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </before>
+        <after>
+            <!--Set configs to default-->
+            <magentoCLI command="config:set {{SetMinQueryLength3Config.path}} {{SetMinQueryLength3Config.value}}" stepKey="setMinQueryLengthPreviousState"/>
+            <!--Delete created data-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
+                <argument name="productAttributeCode" value="{{textProductAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttributeByAttributeCode">
+                <argument name="productAttributeCode" value="{{textProductAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess"/>
+            <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttributeGrid"/>
+            <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
+            <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToProductCatalog"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteProduct"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfExist"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Create new searchable product attribute-->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+        <actionGroup ref="AdminCreateSearchableProductAttributeActionGroup" stepKey="createAttribute">
+            <argument name="attribute" value="textProductAttribute"/>
+        </actionGroup>
+        <!--Assign attribute to the Default set-->
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
+        <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="{{textProductAttribute.attribute_code}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
+        <!--Create product and fill new attribute field-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPage"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="ProductWithSpecialSymbols"/>
+        </actionGroup>
+        <actionGroup ref="SetCategoryByNameActionGroup" stepKey="addCategoryToProduct">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductFormSection.attributeRequiredInput(textProductAttribute.attribute_code)}}" userInput="searchable" stepKey="fillTheAttributeRequiredInputField"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        <!--Assert search results on storefront-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForFirstSearchTerm">
+            <argument name="phrase" value="?searchable;"/>
+        </actionGroup>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductName"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForSecondSearchTerm">
+            <argument name="phrase" value="? searchable ;"/>
+        </actionGroup>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductNameSecondTime"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForSecondSearchTerm">
+            <argument name="phrase" value="?;"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckSearchIsEmptyActionGroup" stepKey="checkEmptyForSecondSearchTerm"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForWithSpecialSymbols">
+            <argument name="phrase" value="?{{ProductWithSpecialSymbols.name}};"/>
+        </actionGroup>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductWithSpecialSymbols"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForWithSpecialSymbolsSecondTime">
+            <argument name="phrase" value="? {{ProductWithSpecialSymbols.name}} ;"/>
+        </actionGroup>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductWithSpecialSymbolsSecondTime"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForThirdSearchTerm">
+            <argument name="phrase" value="?anythingcangobetween;"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckSearchIsEmptyActionGroup" stepKey="checkEmptyForThirdSearchTerm"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForForthSearchTerm">
+            <argument name="phrase" value="? anything at all ;"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckSearchIsEmptyActionGroup" stepKey="checkEmptyForForthSearchTerm"/>
+    </test>
+</tests>

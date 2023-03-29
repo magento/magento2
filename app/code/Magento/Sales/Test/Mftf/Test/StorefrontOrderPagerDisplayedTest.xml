@@ -20,7 +20,8 @@
         </annotations>
         <before>
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="LoginAsAdmin"/>
-    
+            <!-- Enable Flat rate-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct01">
                 <requiredEntity createDataKey="createCategory"/>
@@ -92,7 +93,7 @@
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
-
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct01" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct02" stepKey="deleteProduct2"/>
@@ -247,7 +248,19 @@
             <argument name="orderId" value="$createCustomerCart.return$"/>
             <argument name="orderNumber" value="$getOrderData.increment_id$"/>
         </actionGroup>
-        
+
         <seeElement selector="{{StorefrontCustomerOrderViewSection.pager}}" stepKey="assertPagerIsDisplayed"/>
+        <executeJS function="var len = document.querySelectorAll('{{StorefrontCustomerOrderViewSection.itemCountOnPage}}').length; return len;" stepKey="orderItemsCountOnFirstPage"/>
+        <assertEquals stepKey="assertOrderItemsOnFirstPage">
+            <actualResult type="const">($orderItemsCountOnFirstPage)</actualResult>
+            <expectedResult type="const">20</expectedResult>
+        </assertEquals>
+        <click selector="{{StorefrontCustomerOrderViewSection.pagerLink($createCustomerCart.return$, '2')}}" stepKey="assertPagerLink" />
+        <waitForPageLoad stepKey="waitForPageLoading"/>
+        <executeJS function="var len = document.querySelectorAll('{{StorefrontCustomerOrderViewSection.itemCountOnPage}}').length; return len;" stepKey="orderItemsCountOnSecondPage"/>
+        <assertEquals stepKey="assertOrderItemsOnSecondPage">
+            <actualResult type="const">($orderItemsCountOnSecondPage)</actualResult>
+            <expectedResult type="const">1</expectedResult>
+        </assertEquals>
     </test>
 </tests>

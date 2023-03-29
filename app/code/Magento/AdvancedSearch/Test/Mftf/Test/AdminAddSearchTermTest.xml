@@ -16,6 +16,7 @@
             <description value="Admin should be able to create a new search term using search terms grid"/>
             <severity value="CRITICAL"/>
             <group value="AdvancedSearch"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

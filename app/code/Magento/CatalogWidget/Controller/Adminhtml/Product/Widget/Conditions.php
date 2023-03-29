@@ -5,37 +5,42 @@
  */
 namespace Magento\CatalogWidget\Controller\Adminhtml\Product\Widget;
 
+use Magento\Backend\App\Action\Context;
+use Magento\CatalogWidget\Model\Rule;
 use Magento\Rule\Model\Condition\AbstractCondition;
+use Magento\CatalogWidget\Controller\Adminhtml\Product\Widget;
 
 /**
- * Class Conditions
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
-class Conditions extends \Magento\CatalogWidget\Controller\Adminhtml\Product\Widget
+class Conditions extends Widget
 {
     /**
-     * @var \Magento\CatalogWidget\Model\Rule
+     * @var Rule
      */
     protected $rule;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\CatalogWidget\Model\Rule $rule
+     * @param Context $context
+     * @param Rule $rule
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\CatalogWidget\Model\Rule $rule
+        Context $context,
+        Rule $rule
     ) {
         $this->rule = $rule;
         parent::__construct($context);
     }
 
     /**
+     * Product widget conditions action
+     *
      * @return void
      */
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        $typeData = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
+        $typeData = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type', '')));
         $className = $typeData[0];
 
         $model = $this->_objectManager->create($className)

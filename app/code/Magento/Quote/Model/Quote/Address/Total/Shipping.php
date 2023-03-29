@@ -73,7 +73,7 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $address->setFreeMethodWeight($data['freeMethodWeight']);
 
         $isFreeShipping = $this->freeShipping->isFreeShipping($quote, $shippingAssignment->getItems());
-        $address->setFreeShipping($isFreeShipping);
+        $address->setFreeShipping((int)$isFreeShipping);
         // recalculate weights
         $data = $this->getAssignmentWeightData($address, $shippingAssignment->getItems());
         $address->setItemQty($data['addressQty']);

@@ -68,3 +68,8 @@ Carts,Carts
 "Invalid state change requested","Invalid state change requested"
 "Validated Country Code","Validated Country Code"
 "Validated Vat Number","Validated Vat Number"
+"Invalid Quote Item id %1","Invalid Quote Item id %1"
+"Number above 0 is required for the limit","Number above 0 is required for the limit"
+"Please select a valid rate limit period in seconds: %1.","Please select a valid rate limit period in seconds: %1."
+"Identity type not found","Identity type not found"
+"Invalid order backpressure limit config","Invalid order backpressure limit config"

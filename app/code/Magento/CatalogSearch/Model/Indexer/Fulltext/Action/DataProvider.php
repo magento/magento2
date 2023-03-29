@@ -69,15 +69,11 @@ class DataProvider
     private $productAttributeCollectionFactory;
 
     /**
-     * Eav config
-     *
      * @var Config
      */
     private $eavConfig;
 
     /**
-     * Catalog product type
-     *
      * @var Type
      */
     private $catalogProductType;
@@ -90,8 +86,6 @@ class DataProvider
     private $eventManager;
 
     /**
-     * Store manager
-     *
      * @var StoreManagerInterface
      */
     private $storeManager;
@@ -155,6 +149,7 @@ class DataProvider
      * @param int $antiGapMultiplier
      * @param GetSearchableProductsSelect|null $getSearchableProductsSelect
      * @throws Exception
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ResourceConnection $resource,
@@ -178,7 +173,8 @@ class DataProvider
         $this->engine = $engineProvider->get();
         $this->metadata = $metadataPool->getMetadata(ProductInterface::class);
         $this->antiGapMultiplier = $antiGapMultiplier;
-        $this->selectSearchableProducts = $getSearchableProductsSelect ?: ObjectManager::getInstance()->get(GetSearchableProductsSelect::class);
+        $this->selectSearchableProducts = $getSearchableProductsSelect ?:
+            ObjectManager::getInstance()->get(GetSearchableProductsSelect::class);
     }
 
     /**
@@ -208,9 +204,15 @@ class DataProvider
         array $staticFields,
         $productIds = null,
         $lastProductId = 0,
-        $batch = 100
+        $batch = 1000
     ) {
-        $select = $this->selectSearchableProducts->execute((int)$storeId, $staticFields, $productIds, $lastProductId, $batch);
+        $select = $this->selectSearchableProducts->execute(
+            (int) $storeId,
+            $staticFields,
+            $productIds,
+            $lastProductId,
+            $batch
+        );
         if ($productIds === null) {
             $select->where(
                 'e.entity_id < ?',
@@ -221,7 +223,13 @@ class DataProvider
         if ($productIds === null && !$products) {
             // try to search without limit entity_id by batch size for cover case with a big gap between entity ids
             $products = $this->connection->fetchAll(
-                $this->selectSearchableProducts->execute((int)$storeId, $staticFields, $productIds, $lastProductId, $batch)
+                $this->selectSearchableProducts->execute(
+                    (int) $storeId,
+                    $staticFields,
+                    $productIds,
+                    $lastProductId,
+                    $batch
+                )
             );
         }
 
@@ -576,12 +584,14 @@ class DataProvider
      * @param int $attributeId
      * @param int|string $valueIds
      * @param int $storeId
+     *
      * @return null|string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getAttributeOptionValue($attributeId, $valueIds, $storeId)
     {
         $optionKey = $attributeId . '-' . $storeId;
-        $attributeValueIds = explode(',', $valueIds);
+        $attributeValueIds = $valueIds !== null ? explode(',', $valueIds) : [];
         $attributeOptionValue = '';
         if (!array_key_exists($optionKey, $this->attributeOptions)
         ) {
@@ -615,11 +625,11 @@ class DataProvider
     /**
      * Remove whitespaces and tags from attribute value
      *
-     * @param string $value
+     * @param string|null $value
      * @return string
      */
-    private function filterAttributeValue($value)
+    private function filterAttributeValue(?string $value)
     {
-        return preg_replace('/\s+/iu', ' ', trim(strip_tags($value)));
+        return $value !== null ? preg_replace('/\s+/iu', ' ', trim(strip_tags($value))) : '';
     }
 }

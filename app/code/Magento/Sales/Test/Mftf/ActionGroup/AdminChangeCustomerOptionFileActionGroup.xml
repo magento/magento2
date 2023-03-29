@@ -12,15 +12,19 @@
             <description>Change custom option file on admin order page.</description>
         </annotations>
         <arguments>
-            <argument name="file" type="string" defaultValue="{{TestImageNew.file}}" />
+            <argument name="file" type="string" defaultValue="{{TestImageNew.file}}"/>
         </arguments>
 
         <click selector="{{AdminOrderFormItemsSection.configure}}" stepKey="clickConfigure"/>
-        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <waitForPageLoad stepKey="waitForAjaxLoad"/>
+        <waitForElementVisible selector="{{AdminOrderFormCustomOptionsSection.linkChange}}" stepKey="waitForLinkChange"/>
         <click selector="{{AdminOrderFormCustomOptionsSection.linkChange}}" stepKey="clickLinkChange"/>
         <waitForPageLoad stepKey="waitForChangeLoad"/>
+        <waitForElementVisible selector="{{AdminOrderFormCustomOptionsSection.file}}" stepKey="waitForAttachImage"/>
         <attachFile selector="{{AdminOrderFormCustomOptionsSection.file}}" userInput="{{file}}" stepKey="changeAttachImage"/>
+        <waitForPageLoad stepKey="waitForImageUploaded"/>
         <click selector="{{AdminOrderFormCustomOptionsSection.buttonOk}}" stepKey="clickButtonOK"/>
         <waitForPageLoad stepKey="waitForCustomOptionApplied"/>
+        <waitForElementNotVisible selector="{{AdminOrderFormCustomOptionsSection.buttonOk}}" stepKey="waitForOkButtonGone"/>
     </actionGroup>
 </actionGroups>

@@ -11,6 +11,8 @@ use Magento\Framework\Api\CustomAttributesDataInterface;
 
 /**
  * Product attribute adapter for elasticsearch context.
+ *
+ * @api
  */
 class AttributeAdapter
 {
@@ -135,7 +137,7 @@ class AttributeAdapter
     public function isComplexType(): bool
     {
         return in_array($this->getAttribute()->getFrontendInput(), ['select', 'multiselect'], true)
-            || $this->getAttribute()->usesSource();
+            || ($this->getAttribute()->usesSource() && $this->getAttribute()->getFrontendInput() !== 'boolean');
     }
 
     /**
