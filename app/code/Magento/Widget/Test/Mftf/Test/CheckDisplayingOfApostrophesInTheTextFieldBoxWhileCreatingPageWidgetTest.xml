@@ -24,7 +24,8 @@
 
             <!-- Pre-condition - Disable the page builder -->
             <magentoCLI command="config:set cms/pagebuilder/enabled 0" stepKey="disablePageBuilder"/>
-
+            <magentoCLI stepKey="reindex" command="indexer:reindex"/>
+            <magentoCLI stepKey="flushCache" command="cache:flush"/>
             <!-- Pre-condition 3- Verify page in grid-->
             <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="openCMSPagesGridActionGroup"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters"/>
