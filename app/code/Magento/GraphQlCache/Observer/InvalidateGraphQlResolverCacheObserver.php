@@ -1,0 +1,73 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+namespace Magento\GraphQlCache\Observer;
+
+use Magento\Framework\App\Cache\StateInterface as CacheState;
+use Magento\Framework\App\Cache\Tag\Resolver as TagResolver;
+use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Event\Observer;
+use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlCache;
+
+class InvalidateGraphQlResolverCacheObserver implements ObserverInterface
+{
+    /**
+     * @var GraphQlCache
+     */
+    private $graphQlCache;
+
+    /**
+     * @var CacheState
+     */
+    private $cacheState;
+
+    /**
+     * @var TagResolver
+     */
+    private $tagResolver;
+
+    /**
+     * @param GraphQlCache $graphQlCache
+     * @param CacheState $cacheState
+     * @param TagResolver $tagResolver
+     */
+    public function __construct(
+        GraphQlCache $graphQlCache,
+        CacheState $cacheState,
+        TagResolver $tagResolver
+    ) {
+        $this->graphQlCache = $graphQlCache;
+        $this->cacheState = $cacheState;
+        $this->tagResolver = $tagResolver;
+    }
+
+    /**
+     * Clean identities of event object from GraphQL Resolver cache
+     *
+     * @param Observer $observer
+     *
+     * @return void
+     */
+    public function execute(Observer $observer)
+    {
+        $object = $observer->getEvent()->getObject();
+
+        if (!is_object($object)) {
+            return;
+        }
+
+        if (!$this->cacheState->isEnabled(GraphQlCache::TYPE_IDENTIFIER)) {
+            return;
+        }
+
+        $tags = $this->tagResolver->getTags($object);
+
+        if (!empty($tags)) {
+            $this->graphQlCache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $tags);
+        }
+    }
+}
