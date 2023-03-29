@@ -9,33 +9,44 @@
  */
 namespace Magento\Store\Model\App;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\Translate\Inline\ConfigInterface;
+use Magento\Framework\Translate\Inline\StateInterface;
+use Magento\Framework\TranslateInterface;
+use Magento\Framework\View\DesignInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Emulation extends \Magento\Framework\DataObject
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\TranslateInterface
+     * @var TranslateInterface
      */
     protected $_translate;
 
     /**
      * Core store config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface
+     * @var ResolverInterface
      */
     protected $_localeResolver;
 
@@ -50,7 +61,7 @@ class Emulation extends \Magento\Framework\DataObject
     protected $inlineConfig;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\StateInterface
+     * @var StateInterface
      */
     protected $inlineTranslation;
 
@@ -62,39 +73,46 @@ class Emulation extends \Magento\Framework\DataObject
     private $initialEnvironmentInfo;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @var \Magento\Framework\View\DesignInterface
+     * @var DesignInterface
      */
     private $_viewDesign;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\View\DesignInterface $viewDesign
+     * @var RendererInterface
+     */
+    private $phraseRenderer;
+
+    /**
+     * @param StoreManagerInterface $storeManager
+     * @param DesignInterface $viewDesign
      * @param \Magento\Framework\App\DesignInterface $design
-     * @param \Magento\Framework\TranslateInterface $translate
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param TranslateInterface $translate
+     * @param ScopeConfigInterface $scopeConfig
      * @param ConfigInterface $inlineConfig
-     * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param StateInterface $inlineTranslation
+     * @param ResolverInterface $localeResolver
+     * @param LoggerInterface $logger
      * @param array $data
+     * @param RendererInterface|null $phraseRenderer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\View\DesignInterface $viewDesign,
+        StoreManagerInterface $storeManager,
+        DesignInterface $viewDesign,
         \Magento\Framework\App\DesignInterface $design,
-        \Magento\Framework\TranslateInterface $translate,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        TranslateInterface $translate,
+        ScopeConfigInterface $scopeConfig,
         ConfigInterface $inlineConfig,
-        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Psr\Log\LoggerInterface $logger,
-        array $data = []
+        StateInterface $inlineTranslation,
+        ResolverInterface $localeResolver,
+        LoggerInterface $logger,
+        array $data = [],
+        ?RendererInterface $phraseRenderer = null
     ) {
         $this->_localeResolver = $localeResolver;
         parent::__construct($data);
@@ -106,6 +124,8 @@ class Emulation extends \Magento\Framework\DataObject
         $this->inlineConfig = $inlineConfig;
         $this->inlineTranslation = $inlineTranslation;
         $this->logger = $logger;
+        $this->phraseRenderer = $phraseRenderer
+            ?? ObjectManager::getInstance()->get(RendererInterface::class);
     }
 
     /**
@@ -158,6 +178,7 @@ class Emulation extends \Magento\Framework\DataObject
         $this->_localeResolver->setLocale($newLocaleCode);
         $this->_translate->setLocale($newLocaleCode);
         $this->_translate->loadData($area);
+        Phrase::setRenderer($this->phraseRenderer);
     }
 
     /**
@@ -179,7 +200,7 @@ class Emulation extends \Magento\Framework\DataObject
         // Current store needs to be changed right before locale change and after design change
         $this->_storeManager->setCurrentStore($initialDesign['store']);
         $this->_restoreInitialLocale($this->initialEnvironmentInfo->getInitialLocaleCode(), $initialDesign['area']);
-
+        Phrase::setRenderer($this->initialEnvironmentInfo->getPhraseRenderer());
         $this->initialEnvironmentInfo = null;
         return $this;
     }
@@ -202,6 +223,8 @@ class Emulation extends \Magento\Framework\DataObject
             ]
         )->setInitialLocaleCode(
             $this->_localeResolver->getLocale()
+        )->setPhraseRenderer(
+            Phrase::getRenderer()
         );
     }
 
