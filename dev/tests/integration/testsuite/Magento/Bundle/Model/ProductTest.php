@@ -197,7 +197,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 $productLink->setQty($selectionQty);
             }
         }
-        $productRepository->save($bundle);
+        $bundle = $productRepository->save($bundle);
 
         $this->assertEquals($isSalable, $bundle->isSalable());
     }
