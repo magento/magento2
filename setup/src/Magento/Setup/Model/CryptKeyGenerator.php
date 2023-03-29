@@ -37,10 +37,7 @@ class CryptKeyGenerator implements CryptKeyGeneratorInterface
      */
     public function generate()
     {
-        // md5() here is not for cryptographic use. It used for generate encryption key itself
-        // and do not encrypt any passwords
-        // phpcs:ignore Magento2.Security.InsecureFunction
-        return md5($this->getRandomString());
+        return $this->getRandomString();
     }
 
     /**

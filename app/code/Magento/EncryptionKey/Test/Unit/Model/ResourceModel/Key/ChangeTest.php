@@ -148,7 +148,7 @@ class ChangeTest extends TestCase
     public function testChangeEncryptionKey()
     {
         $this->setUpChangeEncryptionKey();
-        $this->randomMock->expects($this->never())->method('getRandomString');
+        $this->randomMock->expects($this->never())->method('getRandomBytes');
         $key = 'key';
         $this->assertEquals($key, $this->model->changeEncryptionKey($key));
     }
@@ -156,8 +156,8 @@ class ChangeTest extends TestCase
     public function testChangeEncryptionKeyAutogenerate()
     {
         $this->setUpChangeEncryptionKey();
-        $this->randomMock->expects($this->once())->method('getRandomString')->willReturn('abc');
-        $this->assertEquals(hash('md5', 'abc'), $this->model->changeEncryptionKey());
+        $this->randomMock->expects($this->once())->method('getRandomBytes')->willReturn('abc');
+        $this->assertEquals('abc', $this->model->changeEncryptionKey());
     }
 
     public function testChangeEncryptionKeyThrowsException()
