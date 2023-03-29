@@ -78,7 +78,7 @@ class ConfigGeneratorTest extends TestCase
         $returnValue = $this->configGeneratorObject->createCryptConfig([]);
         $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
         // phpcs:ignore Magento2.Security.InsecureFunction
-        $this->assertEquals(['crypt' => ['key' => md5('key')]], $returnValue->getData());
+        $this->assertEquals(['crypt' => ['key' => 'key']], $returnValue->getData());
     }
 
     public function testCreateSessionConfigWithInput()

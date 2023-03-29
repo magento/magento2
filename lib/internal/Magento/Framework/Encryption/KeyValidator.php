@@ -25,7 +25,12 @@ class KeyValidator
      */
     public function isValid($value) : bool
     {
-        return $value && strlen($value) === ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE
-            && preg_match('/^\S+$/', $value);
+        if (strpos($value, ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX) === 0) {
+            return (bool)$value;
+        } else {
+            return $value
+                && strlen($value) === ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE
+                && preg_match('/^\S+$/', $value);
+        }
     }
 }
