@@ -32,6 +32,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use PHPUnit\Framework\TestCase;
+use Magento\Newsletter\Model\Subscriber;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Tests for customer creation via customer account management service.
@@ -754,5 +756,50 @@ class CreateAccountTest extends TestCase
             ->addFieldToFilter('template_code', $templateCode)
             ->getFirstItem()
             ->getId();
+    }
+
+    /**
+     * @magentoConfigFixture default_store newsletter/general/active 1
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Newsletter/_files/subscribers.php
+     *
+     * @return void
+     * @throws InputException
+     * @throws InputMismatchException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    public function testCreateAccountWithNewsLetterSubscription() :void
+    {
+        $customerEmail = 'test@example.com';
+        $firstName = 'John';
+        $lastName = 'Doe';
+
+        $customer = $this->customerRepository->getById(1);
+        $customer->setEmail($customerEmail)
+            ->setFirstname($firstName)
+            ->setLastname($lastName);
+        $this->customerRepository->save($customer);
+
+        /** @var Subscriber $subscriber */
+        $subscriber = $this->objectManager->create(Subscriber::class);
+        $subscriber->subscribe($customerEmail);
+        $subscriber->confirm($subscriber->getSubscriberConfirmCode());
+
+        // Verify if the customer is subscribed to newsletter
+        $this->assertTrue($subscriber->isSubscribed());
+
+        /** @var TransportBuilderMock $transportBuilderMock */
+        $transportBuilderMock = $this->objectManager->get(TransportBuilderMock::class);
+        $sentMessage = $transportBuilderMock->getSentMessage();
+
+        // Verify an email was dispatched to the correct user
+        $this->assertNotNull($sentMessage);
+        $this->assertEquals($customerEmail, $sentMessage->getTo()[0]->getEmail());
+
+        // Assert the email contains the expected content
+        $this->assertEquals('Newsletter subscription success', $sentMessage->getSubject());
+        $messageRaw = $sentMessage->getBody()->getParts()[0]->getRawContent();
+        $this->assertStringContainsString('You have been successfully subscribed to our newsletter.', $messageRaw);
     }
 }
