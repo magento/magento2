@@ -7,7 +7,11 @@
 
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
+use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
+use Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
@@ -41,11 +45,12 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
     protected ProductRepositoryInterface $productRepository;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator $productUrlPathGenerator
-     * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
-     * @param \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator $cmsPageUrlPathGenerator
+     * @param Context $context
+     * @param ProductUrlPathGenerator $productUrlPathGenerator
+     * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
+     * @param CmsPageUrlPathGenerator $cmsPageUrlPathGenerator
      * @param UrlFinderInterface $urlFinder
+     * @param ProductRepositoryInterface|null $productRepository
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -123,6 +128,8 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
     }
 
     /**
+     * Generate canonical product / category path
+     *
      * @return string
      */
     protected function getCanonicalTargetPath()
@@ -157,6 +164,8 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
     }
 
     /**
+     * Process save URL rewrite request
+     *
      * @return void
      */
     public function execute()
