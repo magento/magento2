@@ -136,8 +136,8 @@ class Item extends AbstractModel implements ShipmentItemInterface
                 $this->_orderItem = $this->getShipment()->getOrder()->getItemById($this->getOrderItemId());
             } else {
                 $this->_orderItem = $this->_orderItemFactory->create()->load($this->getOrderItemId());
+                $this->loadChildren();
             }
-            $this->loadChildren();
         }
 
         return $this->_orderItem;
