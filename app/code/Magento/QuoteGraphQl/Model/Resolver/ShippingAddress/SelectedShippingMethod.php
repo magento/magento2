@@ -50,7 +50,11 @@ class SelectedShippingMethod implements ResolverInterface
             return null;
         }
 
-        /** @var Rate $rate */
+        /**
+         * @var Rate $rate;
+         * @var string $carrierCode;
+         * @var string $methodCode;
+         */
         foreach ($rates as $rate) {
             if ($rate->getCode() === $address->getShippingMethod()) {
                 $carrierCode = $rate->getCarrier();
