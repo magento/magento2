@@ -611,7 +611,7 @@ class Encryptor implements EncryptorInterface
      */
     private function decodeKey(string $key)
     {
-        return (strpos($key, ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX) === 0) ?
+        return (str_starts_with($key, ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX)) ?
             base64_decode(substr($key, strlen(ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX))) :
             $key;
     }

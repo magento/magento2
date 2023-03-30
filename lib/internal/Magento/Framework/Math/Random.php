@@ -89,12 +89,11 @@ class Random
      * Generate a base64 encoded binary string.
      *
      * @param int $length
-     * @param string $prefix
      * @return string
      * @throws Exception
      */
-    public function getRandomBytes($length, $prefix = '')
+    public function getRandomBytes($length)
     {
-        return $prefix . base64_encode(random_bytes($length));
+        return base64_encode(random_bytes($length));
     }
 }

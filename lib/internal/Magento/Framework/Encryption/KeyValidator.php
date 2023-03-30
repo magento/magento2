@@ -25,8 +25,9 @@ class KeyValidator
      */
     public function isValid($value) : bool
     {
-        if (strpos($value, ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX) === 0) {
-            return (bool)$value;
+        if (str_starts_with($value, ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX)) {
+            return (bool)$value
+                && preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $value);
         } else {
             return $value
                 && strlen($value) === ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE
