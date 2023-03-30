@@ -269,7 +269,7 @@ class CustomAttributesMetadataCacheTest extends GraphQLPageCacheAbstract
             $expectedError,
             $caughtException->getMessage()
         );
-        // assert that it's a miss after deletion
+        // assert that it's a miss
         $this->assertEquals(
             $caughtException->getResponseHeaders()['X-Magento-Cache-Debug'],
             'MISS'
