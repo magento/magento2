@@ -7,7 +7,6 @@
 namespace Magento\Sales\Model\Order\Shipment;
 
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\ShipmentItemInterface;
 use Magento\Sales\Model\AbstractModel;
 
@@ -136,10 +135,8 @@ class Item extends AbstractModel implements ShipmentItemInterface
                 $this->_orderItem = $this->getShipment()->getOrder()->getItemById($this->getOrderItemId());
             } else {
                 $this->_orderItem = $this->_orderItemFactory->create()->load($this->getOrderItemId());
-                $this->loadChildren();
             }
         }
-
         return $this->_orderItem;
     }
 
@@ -148,7 +145,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      *
      * @param float $qty
      * @return \Magento\Sales\Model\Order\Shipment\Item
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setQty($qty)
     {
@@ -160,7 +157,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Applying qty to order item
      *
      * @return $this
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function register()
     {
@@ -380,59 +377,6 @@ class Item extends AbstractModel implements ShipmentItemInterface
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
-
-    /**
-     * Loads child items for a master shipment item
-     *
-     * @return void
-     */
-    private function loadChildren(): void
-    {
-        $hasChildrenFlag = null;
-        if ($this->shouldLoadChildren()) {
-            $collection = $this->_orderItem->getOrder()->getItemsCollection();
-            $collection->filterByParent($this->_orderItem->getItemId());
-
-            if ($collection->count()) {
-                /** @var \Magento\Sales\Model\Order\Item $childItem */
-                foreach ($collection as $childItem) {
-                    if ($childItem->getItemId() != $this->_orderItem->getItemId()) {
-                        $this->_orderItem->addChildItem($childItem);
-                        $hasChildrenFlag = true;
-                    }
-                }
-            }
-        }
-        if ($this->_orderItem) {
-            $this->_orderItem->setData('has_children', $hasChildrenFlag);
-        }
-    }
-
-    /**
-     * Checks if children items are already available in the shipment
-     *
-     * @return bool
-     */
-    private function shouldLoadChildren(): bool
-    {
-        if (!$this->_orderItem || $this->_orderItem->getParentItemId()) {
-            return false;
-        }
-        if (!$this->_shipment) {
-            return true;
-        }
-
-        $order = $this->_shipment->getOrder();
-        /** @var Item $item */
-        foreach ($this->getShipment()->getAllItems() as $item) {
-            if ($this->_orderItem->getItemId() != $item->getOrderItemId() &&
-                $this->_orderItem->getItemId() == $order->getItemById($item->getOrderItemId())->getParentItemId()
-            ) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 }
