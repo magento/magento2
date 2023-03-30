@@ -12,7 +12,7 @@
         <annotations>
             <description>Clicks next on Checkout Shipping step</description>
         </annotations>
-        <waitForElementVisible selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <waitForElementClickable selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
     </actionGroup>
 </actionGroups>
