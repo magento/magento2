@@ -24,19 +24,17 @@ class Group
     public function afterGetIdentities(\Magento\Store\Model\Group $subject, array $result): array
     {
         $storeIds = $subject->getStoreIds();
-        foreach ($storeIds as $storeId) {
-            $result[] = sprintf('%s_%s', ConfigIdentity::CACHE_TAG, $storeId);
+        if (count($storeIds) > 0) {
+            foreach ($storeIds as $storeId) {
+                $result[] = sprintf('%s_%s', ConfigIdentity::CACHE_TAG, $storeId);
+            }
+            $origWebsiteId = $subject->getOrigData('website_id');
+            $websiteId = $subject->getWebsiteId();
+            if ($origWebsiteId != $websiteId) { // Add or switch to a new website
+                $result[] = sprintf('%s_%s', ConfigIdentity::CACHE_TAG, 'website_' . $websiteId);
+            }
         }
-        $origWebsiteId = $subject->getOrigData('website_id');
-        // An existing store group switches website
-        if ($origWebsiteId != null && $origWebsiteId != $subject->getWebsiteId()) {
-            $result[] = sprintf('%s_%s', ConfigIdentity::CACHE_TAG, 'website_' . $origWebsiteId);
-            $result[] = sprintf(
-                '%s_%s',
-                ConfigIdentity::CACHE_TAG,
-                'website_' . $origWebsiteId . 'group_' . $subject->getId()
-            );
-        }
+
         return $result;
     }
 }

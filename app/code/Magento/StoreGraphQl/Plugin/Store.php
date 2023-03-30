@@ -24,28 +24,16 @@ class Store
     public function afterGetIdentities(\Magento\Store\Model\Store $subject, array $result): array
     {
         $result[] = sprintf('%s_%s', ConfigIdentity::CACHE_TAG, $subject->getId());
-        $origStoreGroupId = $subject->getOrigData('group_id');
-        $origIsActive = $subject->getOrigData('is_active');
-        // An existing active store switches store group
-        if ($origIsActive && $this->isStoreGroupSwitched($subject)) {
-            $origWebsiteId = $subject->getOrigData('website_id');
-            $result[] = sprintf('%s_%s', ConfigIdentity::CACHE_TAG, 'website_' . $origWebsiteId);
-            $result[] = sprintf(
-                '%s_%s',
-                ConfigIdentity::CACHE_TAG,
-                'website_' . $origWebsiteId . 'group_' . $origStoreGroupId
-            );
-        }
 
-        // New active store or newly activated store or an active store switched store group
-        $storeGroupId = $subject->getStoreGroupId();
         $isActive = $subject->getIsActive();
+        // New active store or newly activated store or an active store switched store group
         if ($isActive
             && ($subject->getOrigData('is_active') !== $isActive || $this->isStoreGroupSwitched($subject))
         ) {
             $websiteId = $subject->getWebsiteId();
             if ($websiteId !== null) {
                 $result[] = sprintf('%s_%s', ConfigIdentity::CACHE_TAG, 'website_' . $websiteId);
+                $storeGroupId = $subject->getStoreGroupId();
                 if ($storeGroupId !== null) {
                     $result[] = sprintf(
                         '%s_%s',
