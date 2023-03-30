@@ -14,17 +14,34 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Phrase;
+use Magento\EavGraphQl\Model\Output\GetAttributeData;
+use Magento\Framework\GraphQl\Query\Uid;
+use Magento\EavGraphQl\Model\Uid as AttributeUid;
 
 /**
  * Resolve attribute options data for custom attribute.
  */
-class EntityTypeAttributesList implements ResolverInterface
+class AttributesList implements ResolverInterface
 {
     /**
      * @var AttributeRepository
      */
     private AttributeRepository $attributeRepository;
+
+    /**
+     * @var Uid
+     */
+    private Uid $uid;
+
+    /**
+     * @var AttributeUid
+     */
+    private AttributeUid $attributeUid;
+
+     /**
+     * @var GetAttributeData
+     */
+    private GetAttributeData $getAttributeData;
 
     /**
      * @var SearchCriteriaBuilder
@@ -45,18 +62,25 @@ class EntityTypeAttributesList implements ResolverInterface
      * @param AttributeRepository $attributeRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param EnumLookup $enumLookup
+     * @param Uid $uid
+     * @param AttributeUid $attributeUid
      * @param array $resolvers
      */
     public function __construct(
         AttributeRepository $attributeRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         EnumLookup $enumLookup,
+        Uid $uid,
+        AttributeUid $attributeUid,
         array $resolvers = []
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->enumLookup = $enumLookup;
+        $this->uid = $uid;
+        $this->attributeUid = $attributeUid;
         $this->resolvers = $resolvers;
+        $this->getAttributeData = new GetAttributeData($this->attributeUid, $this->uid, $this->enumLookup);
     }
 
     /**
@@ -68,29 +92,27 @@ class EntityTypeAttributesList implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): mixed {
-        $errors = [];
-
+    ): array {
         if (!$args['entity_type']) {
             throw new GraphQlInputException(__('Required parameter "%1" of type string.', 'entity_type'));
         }
 
+        $errors = [];
+        $storeId = (int) $context->getExtensionAttributes()->getStore()->getId();
         $entityType = $this->enumLookup->getEnumValueFromField(
             'AttributeEntityTypeEnum',
             mb_strtolower($args['entity_type'])
         );
 
         $searchCriteria = $this->searchCriteriaBuilder;
-
         foreach ($this->resolvers as $resolver) {
             $searchCriteria->addFilter($resolver['name'], $resolver['object']->execute());
         }
         $searchCriteria = $searchCriteria->create();
 
         $attributesList = $this->attributeRepository->getList(mb_strtolower($entityType), $searchCriteria)->getItems();
-
         return [
-            'items' => $this->getAtrributesMetadata($attributesList),
+            'items' => $this->getAtrributesMetadata($attributesList, $entityType, $storeId),
             'errors' => $errors
         ];
     }
@@ -99,22 +121,15 @@ class EntityTypeAttributesList implements ResolverInterface
      * Returns formatted list of attributes
      *
      * @param array $attributesList
+     * @param string $entityType
+     * @param int $storeId
+     * 
      * @return array
      */
-    private function getAtrributesMetadata($attributesList)
+    private function getAtrributesMetadata(array $attributesList, string $entityType, int $storeId)
     {
-        return array_map(function ($attribute) {
-            return [
-                'uid' => $attribute->getAttributeId(),
-                'attribute_code' => $attribute->getData('attribute_code'),
-                'frontend_label' => $attribute->getData('frontend_label'),
-                'entity_type_id' => $attribute->getData('entity_type_id'),
-                'frontend_input' => $attribute->getData('frontend_input'),
-                'is_required' => $attribute->getData('is_required'),
-                'default_value' => $attribute->getData('default_value'),
-                'is_unique' => $attribute->getIsUnique(),
-                'options' => $attribute->getData('options')
-            ];
+        return array_map(function ($attribute) use ($entityType, $storeId) {
+            return $this->getAttributeData->execute($attribute, mb_strtolower($entityType), $storeId);
         }, $attributesList);
     }
 }

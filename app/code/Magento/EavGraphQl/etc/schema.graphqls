@@ -4,7 +4,7 @@
 type Query {
     customAttributeMetadata(attributes: [AttributeInput!]! @doc(description: "An input object that specifies the attribute code and entity type to search.")): CustomAttributeMetadata @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata") @doc(description: "Return the attribute type, given an attribute code and entity type.") @cache(cacheable: false)
     attributesMetadata(input: AttributesMetadataInput!): AttributesMetadataOutput! @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesMetadata") @doc(description: "Retrieve EAV attributes metadata.")
-    entityTypeAttributesList(entity_type: AttributeEntityTypeEnum! @doc(description: "Entity type.")): AttributesMetadataOutput @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\EntityTypeAttributesList") @doc(description: "Returns list of atributes metadata for given entity type.") @cache(cacheable: false)
+    attributesList(entity_type: AttributeEntityTypeEnum! @doc(description: "Entity type.")): AttributesMetadataOutput @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesList") @doc(description: "Returns list of atributes metadata for given entity type.") @cache(cacheable: false)
 }
 
 type CustomAttributeMetadata @doc(description: "Defines an array of custom attributes.") {

@@ -62,7 +62,7 @@ class GetAttributeData implements GetAttributeDataInterface
     ): array {
         return [
             'uid' => $this->attributeUid->encode($entityType, $attribute->getAttributeCode()),
-            'code' => $attribute->getAttributeCode(),
+            'attribute_code' => $attribute->getAttributeCode(),
             'label' => $attribute->getStoreLabel($storeId),
             'sort_order' => $attribute->getPosition(),
             'entity_type' => $this->enumLookup->getEnumValueFromField(
@@ -71,7 +71,7 @@ class GetAttributeData implements GetAttributeDataInterface
             ),
             'frontend_input' => $this->enumLookup->getEnumValueFromField(
                 'AttributeFrontendInputEnum',
-                $attribute->getFrontendInput()
+                $attribute->getFrontendInput() ?? ""
             ),
             'is_required' => $attribute->getIsRequired(),
             'default_value' => $attribute->getDefaultValue(),
@@ -89,6 +89,8 @@ class GetAttributeData implements GetAttributeDataInterface
      */
     private function getOptions(AttributeInterface $attribute): array
     {
+        return [];
+        
         if (!$attribute->getOptions()) {
             return [];
         }
@@ -102,7 +104,7 @@ class GetAttributeData implements GetAttributeDataInterface
                         'uid' => $this->uid->encode($option->getValue()),
                         'label' => $option->getLabel(),
                         'value' => $option->getValue(),
-                        'is_default' => in_array($option->getValue(), explode(',', $attribute->getDefaultValue()))
+                        'is_default' => $attribute->getDefaultValue() ? in_array($option->getValue(), explode(',', $attribute->getDefaultValue())) : null
                     ];
                 },
                 $attribute->getOptions()

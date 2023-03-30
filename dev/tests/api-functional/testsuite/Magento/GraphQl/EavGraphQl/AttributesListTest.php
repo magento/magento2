@@ -17,7 +17,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 /**
  * Test EAV attributes metadata retrieval for entity type via GraphQL API
  */
-class EntityTypeAttributesListTest extends GraphQlAbstract
+class AttributesListTest extends GraphQlAbstract
 {
     private const ATTRIBUTE_NOT_FOUND_ERROR = "Attribute was not found in query result";
 
@@ -61,8 +61,7 @@ class EntityTypeAttributesListTest extends GraphQlAbstract
                 'attribute_code' => 'attribute_4'
             ],
             'attribute4'
-        )
-        ,
+        ),
         DataFixture(
             Attribute::class,
             [
@@ -72,11 +71,11 @@ class EntityTypeAttributesListTest extends GraphQlAbstract
             'attribute5'
         )
     ]
-    public function testEntityTypeAttributesList(): void
+    public function testAttributesList(): void
     {
         $queryResult = $this->graphQlQuery(<<<QRY
         {
-            entityTypeAttributesList(entity_type: CUSTOMER) {
+            attributesList(entity_type: CUSTOMER) {
                 items {
                     uid
                     attribute_code
@@ -89,33 +88,33 @@ class EntityTypeAttributesListTest extends GraphQlAbstract
         }
 QRY);
 
-        $this->assertArrayHasKey('items', $queryResult['entityTypeAttributesList'], 'Query result does not contain items');
-        $this->assertGreaterThanOrEqual(3, count($queryResult['entityTypeAttributesList']['items']));
+        $this->assertArrayHasKey('items', $queryResult['attributesList'], 'Query result does not contain items');
+        $this->assertGreaterThanOrEqual(3, count($queryResult['attributesList']['items']));
 
         $this->assertEquals(
             'attribute_0',
-            $this->getAttributeByCode($queryResult['entityTypeAttributesList']['items'], 'attribute_0')['attribute_code'],
+            $this->getAttributeByCode($queryResult['attributesList']['items'], 'attribute_0')['attribute_code'],
             self::ATTRIBUTE_NOT_FOUND_ERROR
         );
-        
+
         $this->assertEquals(
             'attribute_1',
-            $this->getAttributeByCode($queryResult['entityTypeAttributesList']['items'], 'attribute_1')['attribute_code'],
+            $this->getAttributeByCode($queryResult['attributesList']['items'], 'attribute_1')['attribute_code'],
             self::ATTRIBUTE_NOT_FOUND_ERROR
         );
         $this->assertEquals(
             'attribute_2',
-            $this->getAttributeByCode($queryResult['entityTypeAttributesList']['items'], 'attribute_2')['attribute_code'],
+            $this->getAttributeByCode($queryResult['attributesList']['items'], 'attribute_2')['attribute_code'],
             self::ATTRIBUTE_NOT_FOUND_ERROR
         );
         $this->assertEquals(
             [],
-            $this->getAttributeByCode($queryResult['entityTypeAttributesList']['items'], 'attribute_5')
+            $this->getAttributeByCode($queryResult['attributesList']['items'], 'attribute_5')
         );
 
         $queryResult = $this->graphQlQuery(<<<QRY
         {
-            entityTypeAttributesList(entity_type: CATALOG_PRODUCT) {
+            attributesList(entity_type: CATALOG_PRODUCT) {
                 items {
                     uid
                     attribute_code
@@ -127,22 +126,22 @@ QRY);
             }
         }
 QRY);
-        $this->assertArrayHasKey('items', $queryResult['entityTypeAttributesList'], 'Query result does not contain items');
-        $this->assertGreaterThanOrEqual(2, count($queryResult['entityTypeAttributesList']['items']));
+        $this->assertArrayHasKey('items', $queryResult['attributesList'], 'Query result does not contain items');
+        $this->assertGreaterThanOrEqual(2, count($queryResult['attributesList']['items']));
 
         $this->assertEquals(
             'attribute_3',
-            $this->getAttributeByCode($queryResult['entityTypeAttributesList']['items'], 'attribute_3')['attribute_code'],
+            $this->getAttributeByCode($queryResult['attributesList']['items'], 'attribute_3')['attribute_code'],
             self::ATTRIBUTE_NOT_FOUND_ERROR
         );
         $this->assertEquals(
             'attribute_4',
-            $this->getAttributeByCode($queryResult['entityTypeAttributesList']['items'], 'attribute_4')['attribute_code'],
+            $this->getAttributeByCode($queryResult['attributesList']['items'], 'attribute_4')['attribute_code'],
             self::ATTRIBUTE_NOT_FOUND_ERROR
         );
         $this->assertEquals(
             [],
-            $this->getAttributeByCode($queryResult['entityTypeAttributesList']['items'], 'attribute_5')
+            $this->getAttributeByCode($queryResult['attributesList']['items'], 'attribute_5')
         );
     }
 
@@ -153,7 +152,7 @@ QRY);
      * @param string $attribute_code
      * @return array
      */
-    private function getAttributeByCode($items, $attribute_code)
+    private function getAttributeByCode(array $items, string $attribute_code): array
     {
         $attribute = array_filter($items, function ($item) use ($attribute_code) {
             return $item['attribute_code'] == $attribute_code;
