@@ -54,7 +54,7 @@ class ProductFieldsSelector
             }
                 $queryFields = $this->attributesJoiner->getQueryFields($node, $info);
                 $fieldNames = array_merge($fieldNames, $queryFields);
-            }
+        }
 
         return $fieldNames;
     }
