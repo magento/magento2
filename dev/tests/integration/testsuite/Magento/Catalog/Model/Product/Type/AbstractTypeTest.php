@@ -377,7 +377,7 @@ class AbstractTypeTest extends TestCase
 
     public function testHasOptions()
     {
-        $this->markTestIncomplete('Bug MAGE-2814');
+        $this->markTestSkipped('Bug MAGE-2814');
 
         $product = new DataObject();
         $this->assertFalse($this->_model->hasOptions($product));
