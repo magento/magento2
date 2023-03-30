@@ -35,8 +35,8 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Create order -->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrderPage">
-            <argument name="customer" value="$$createCustomer$$"/>
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$createCustomer$"/>
         </actionGroup>
         <!-- Add product to order -->
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrder">
