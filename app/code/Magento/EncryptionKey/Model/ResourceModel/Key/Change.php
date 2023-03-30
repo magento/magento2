@@ -120,10 +120,8 @@ class Change extends AbstractDb
         }
 
         if (null === $key) {
-            $key = $this->random->getRandomBytes(
-                ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE,
-                ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX
-            );
+            $key = ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX .
+                $this->random->getRandomBytes(ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE);
         }
         $this->encryptor->setNewKey($key);
 
