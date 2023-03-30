@@ -781,6 +781,8 @@ class CreateAccountTest extends TestCase
             ->setLastname($lastName);
         $this->customerRepository->save($customer);
 
+        $this->assertAndSendEmailNotification($customer, $customerEmail, 'customer_create_account_email_template');
+
         /** @var Subscriber $subscriber */
         $subscriber = $this->objectManager->create(Subscriber::class);
         $subscriber->subscribe($customerEmail);
@@ -789,17 +791,37 @@ class CreateAccountTest extends TestCase
         // Verify if the customer is subscribed to newsletter
         $this->assertTrue($subscriber->isSubscribed());
 
-        /** @var TransportBuilderMock $transportBuilderMock */
-        $transportBuilderMock = $this->objectManager->get(TransportBuilderMock::class);
-        $sentMessage = $transportBuilderMock->getSentMessage();
+        $this->assertAndSendEmailNotification($customer, $customerEmail, 'newsletter_subscription_confirm_email_template');
+    }
 
-        // Verify an email was dispatched to the correct user
-        $this->assertNotNull($sentMessage);
-        $this->assertEquals($customerEmail, $sentMessage->getTo()[0]->getEmail());
+    /**
+     * @param $customer
+     * @param $customerEmail
+     * @param $templateIdentifier
+     * @return void
+     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\MailException
+     */
+    private function assertAndSendEmailNotification($customer, $customerEmail, $templateIdentifier) :void
+    {
+        /** @var TransportBuilder $transportBuilder */
+        $transportBuilder = $this->objectManager->get(TransportBuilder::class);
+        $transport = $transportBuilder->setTemplateIdentifier($templateIdentifier)
+            ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID])
+            ->setTemplateVars(['customer' => $customer])
+            ->addTo($customerEmail)
+            ->getTransport();
+        $transport->sendMessage();
+        $sendMessage = $transport->getMessage();
+        $this->assertNotNull($sendMessage);
 
-        // Assert the email contains the expected content
-        $this->assertEquals('Newsletter subscription success', $sentMessage->getSubject());
-        $messageRaw = $sentMessage->getBody()->getParts()[0]->getRawContent();
-        $this->assertStringContainsString('You have been successfully subscribed to our newsletter.', $messageRaw);
+        switch ($templateIdentifier) {
+            case 'customer_create_account_email_template':
+                $this->assertEquals('Welcome to Default', $sendMessage->getSubject());
+                break;
+            case 'newsletter_subscription_confirm_email_template':
+                $this->assertEquals('Newsletter subscription confirmation', $sendMessage->getSubject());
+                break;
+        }
     }
 }
