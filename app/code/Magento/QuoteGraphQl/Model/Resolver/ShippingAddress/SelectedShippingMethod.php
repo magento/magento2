@@ -22,6 +22,16 @@ use Magento\Quote\Model\Quote\Address\Rate;
 class SelectedShippingMethod implements ResolverInterface
 {
     /**
+     * @var string
+     */
+    private $carrierCode;
+
+    /**
+     * @var string
+     */
+    private $methodCode;
+
+    /**
      * @var ShippingMethodConverter
      */
     private $shippingMethodConverter;
@@ -50,11 +60,7 @@ class SelectedShippingMethod implements ResolverInterface
             return null;
         }
 
-        /**
-         * @var Rate $rate;
-         * @var string $carrierCode;
-         * @var string $methodCode;
-         */
+        /** @var Rate $rate */
         foreach ($rates as $rate) {
             if ($rate->getCode() === $address->getShippingMethod()) {
                 $carrierCode = $rate->getCarrier();
