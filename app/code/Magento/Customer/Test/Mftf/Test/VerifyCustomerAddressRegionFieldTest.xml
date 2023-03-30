@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyCustomerAddressRegionFieldTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Region field is getting blank after selecting any region for a country"/>
+            <title value="Region field is not getting blank after selecting any region for a country"/>
+            <description value="After saving customer address details in the admin without state/region, it will disappered from the address section."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-8302"/>
+            <useCaseId value="ACP2E-1609"/>
+            <group value="customer"/>
+        </annotations>
+
+        <before>
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="firstCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="firstCustomer" stepKey="deleteFirstCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Open customer grid page,select created customer and click edit mode-->
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPageWithAddresses">
+            <argument name="customer" value="$$firstCustomer$$"/>
+        </actionGroup>
+
+        <!--Select Addresses tab click on Edit link for Default Billing Address -->
+        <click selector="{{AdminEditCustomerInformationSection.addresses}}" stepKey="openAddressesTabOfFirstCustomer"/>
+        <waitForPageLoad stepKey="waitForAddressesOfFirstCustomer"/>
+        <click selector="{{AdminCustomerAddressesDefaultBillingSection.editButton}}" stepKey="clickEditDefaultBillingAddress"/>
+        <waitForPageLoad stepKey="waitForCustomerAddressAddUpdateFormLoad"/>
+
+        <!-- Select Country = Finland And Region =Ahvenanmaa , Click on Save Button-->
+        <click selector="{{AdminCustomerAddressesSection.country}}" stepKey="clickCountryToOpenListOfCountries"/>
+        <click selector="{{AdminCustomerAddressesSection.countryId(Finland_Address.country_id)}}" stepKey="fillCountry"/>
+        <click selector="{{AdminCustomerAddressesSection.state}}" stepKey="clickRegionToOpenListOfRegions"/>
+        <click selector="{{AdminCustomerAddressesSection.regionId(Finland_Address.state)}}" stepKey="fillRegion"/>
+        <click selector="{{AdminCustomerAddressesSection.saveAddress}}" stepKey="clickSaveCustomer"/>
+        <waitForPageLoad stepKey="waitForPageToBeSave"/>
+
+        <!--Verify state name in address details section-->
+        <see selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" userInput="{{Finland_Address.state}}" stepKey="SeeStateInAddress"/>
+
+        <!-- Click on edit link for default billing address , deselect region and click on save button-->
+        <click selector="{{AdminCustomerAddressesDefaultBillingSection.editButton}}" stepKey="clickEditDefaultBillingAddressAgain"/>
+        <waitForPageLoad stepKey="waitForCustomerAddressAddUpdateFormLoad2"/>
+        <selectOption selector="{{AdminCustomerAddressesSection.state}}" userInput="Please select a region, state or province." stepKey="selectState"/>
+        <click selector="{{AdminCustomerAddressesSection.saveAddress}}" stepKey="clickSaveCustomerAfterDeselectRegion"/>
+        <waitForPageLoad stepKey="waitForPageToBeSaved"/>
+
+        <!--Verify state name not visible under address details section-->
+        <dontSee userInput="{{Finland_Address.state}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="dontSeeStateInAddress"/>
+
+        <!--Logout from admin-->
+        <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearFilters"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+
+        <!--Log in to Storefront as First Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginFirstCustomer">
+            <argument name="Customer" value="$$firstCustomer$$"/>
+        </actionGroup>
+
+        <!--Go to customer address book and click edit default billing address for storefront -->
+        <actionGroup ref="StorefrontGoToCustomerAddressesPageActionGroup" stepKey="goToCustomerAddressBook"/>
+        <click stepKey="ClickEditDefaultBillingAddressForStorefront" selector="{{StorefrontCustomerAddressesSection.editDefaultBillingAddress}}"/>
+        <waitForPageLoad stepKey="waitForStorefrontSignInPageLoad"/>
+
+        <!-- Select Region =Ahvenanmaa and click on save button-->
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="{{Finland_Address.state}}" stepKey="selectStateForStorefront"/>
+        <actionGroup ref="AdminSaveCustomerAddressActionGroup" stepKey="saveAddress"/>
+
+        <!--Verify state name in address details section-->
+        <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="{{Finland_Address.state}}" stepKey="seeAssertCustomerDefaultShippingAddressState"/>
+
+        <!-- Click on edit link for default billing address , deselect region and click on save button-->
+        <click stepKey="ClickEditDefaultBillingAddressForStorefrontAgain" selector="{{StorefrontCustomerAddressesSection.editDefaultBillingAddress}}"/>
+        <waitForPageLoad stepKey="waitForStorefrontSignInPageLoad2"/>
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Please select a region, state or province." stepKey="deselectStateForStorefront"/>
+        <actionGroup ref="AdminSaveCustomerAddressActionGroup" stepKey="saveAddressAfterDeselectRegion"/>
+
+        <!--Verify state name not visible under address details section-->
+        <dontSee userInput="{{Finland_Address.state}}" selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" stepKey="dontSeeAssertCustomerDefaultShippingAddressState"/>
+
+    </test>
+</tests>
