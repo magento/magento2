@@ -39,7 +39,7 @@
         </after>
         <!-- Create new order and choose an existing customer -->
         <comment userInput="Create new order and choose an existing customer" stepKey="createOrderAndAddCustomer"/>
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPage">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPage">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <!-- Add simple product to order -->
