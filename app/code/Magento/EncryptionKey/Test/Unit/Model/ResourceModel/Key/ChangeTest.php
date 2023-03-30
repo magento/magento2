@@ -11,6 +11,7 @@ use Magento\Config\Model\Config\Structure;
 use Magento\EncryptionKey\Model\ResourceModel\Key\Change;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Encryption\EncryptorInterface;
@@ -157,7 +158,7 @@ class ChangeTest extends TestCase
     {
         $this->setUpChangeEncryptionKey();
         $this->randomMock->expects($this->once())->method('getRandomBytes')->willReturn('abc');
-        $this->assertEquals('abc', $this->model->changeEncryptionKey());
+        $this->assertEquals(ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX . 'abc', $this->model->changeEncryptionKey());
     }
 
     public function testChangeEncryptionKeyThrowsException()
