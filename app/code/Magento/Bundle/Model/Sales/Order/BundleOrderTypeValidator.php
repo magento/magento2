@@ -93,6 +93,8 @@ class BundleOrderTypeValidator extends BundleShipmentTypeValidator implements Va
     }
 
     /**
+     * Checks if shipment child item can be processed
+     *
      * @param Item $orderItem
      * @param array $shipmentInfo
      * @return Phrase|null
@@ -126,6 +128,8 @@ class BundleOrderTypeValidator extends BundleShipmentTypeValidator implements Va
     }
 
     /**
+     * Checks if bundle item can be processed as a shipment item
+     *
      * @param array $shippingItemInfo
      * @param array $shippingInfo
      * @return Phrase|null
