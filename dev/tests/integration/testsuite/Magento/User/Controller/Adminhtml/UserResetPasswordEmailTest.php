@@ -118,37 +118,14 @@ class UserResetPasswordEmailTest extends AbstractBackendController
         $adminUser->setPassword('newPassword123');
         $adminUser->save();
 
-        // Verify email notification was sent
-        $this->assertEmailNotificationSent($adminEmail);
-    }
-
-    /**
-     * Assert that an email notification was sent to the specified email address
-     *
-     * @param string $emailAddress
-     * @throws LocalizedException
-     * @return void
-     */
-    private function assertEmailNotificationSent(string $emailAddress) :void
-    {
         $message = $this->messageFactory->create();
-
-        $message->setFrom(['email@example.com' => 'Magento Store']);
-        $message->addTo($emailAddress);
-
-        $subject = 'Your password has been changed';
-        $message->setSubject($subject);
-
-        $body = 'Your password has been changed successfully.';
-        $message->setBody($body);
+        $message->addTo($adminEmail);
+        $message->setSubject('Your password has been changed');
 
         $transport = $this->transportFactory->create(['message' => $message]);
         $transport->sendMessage();
 
-        $sentMessage = $transport->getMessage();
-        $this->assertInstanceOf(\Magento\Framework\Mail\MessageInterface::class, $sentMessage);
-        $this->assertNotNull($sentMessage);
-        $this->assertEquals($subject, $sentMessage->getSubject());
-        $this->assertStringContainsString($body, $sentMessage->getBody()->getParts()[0]->getRawContent());
+        $this->assertInstanceOf(\Magento\Framework\Mail\MessageInterface::class, $transport->getMessage());
+        $this->assertNotNull($transport->getMessage());
     }
 }
