@@ -27,7 +27,7 @@ class Store
         $origStoreGroupId = $subject->getOrigData('group_id');
         $origIsActive = $subject->getOrigData('is_active');
         // An existing active store switches store group
-        if ($origIsActive && $origStoreGroupId != null && $origStoreGroupId != $subject->getStoreGroupId()) {
+        if ($origIsActive && $this->isStoreGroupSwitched($subject)) {
             $origWebsiteId = $subject->getOrigData('website_id');
             $result[] = sprintf('%s_%s', ConfigIdentity::CACHE_TAG, 'website_' . $origWebsiteId);
             $result[] = sprintf(
@@ -36,13 +36,12 @@ class Store
                 'website_' . $origWebsiteId . 'group_' . $origStoreGroupId
             );
         }
+
         // New active store or newly activated store or an active store switched store group
         $storeGroupId = $subject->getStoreGroupId();
         $isActive = $subject->getIsActive();
-        if ($isActive && (
-            $subject->getOrigData('is_active') !== $isActive
-            || ($origStoreGroupId != null && $origStoreGroupId != $storeGroupId)
-            )
+        if ($isActive
+            && ($subject->getOrigData('is_active') !== $isActive || $this->isStoreGroupSwitched($subject))
         ) {
             $websiteId = $subject->getWebsiteId();
             if ($websiteId !== null) {
@@ -58,5 +57,18 @@ class Store
         }
 
         return $result;
+    }
+
+    /**
+     * Check whether the store group of the store is switched
+     *
+     * @param \Magento\Store\Model\Store $store
+     * @return bool
+     */
+    private function isStoreGroupSwitched(\Magento\Store\Model\Store $store): bool
+    {
+        $origStoreGroupId = $store->getOrigData('group_id');
+        $storeGroupId = $store->getStoreGroupId();
+        return $origStoreGroupId != null && $origStoreGroupId != $storeGroupId;
     }
 }
