@@ -338,8 +338,8 @@ QUERY;
     /**
      * Prepare and return GraphQL query for given entity type with no code.
      *
-     * @param string $code
      * @param string $entityType
+     * 
      * @return string
      */
     private function getAttributeQueryNoCode(string $entityType) : string
@@ -368,7 +368,7 @@ QUERY;
      * Prepare and return GraphQL query for given code with no entity type.
      *
      * @param string $code
-     * @param string $entityType
+     *
      * @return string
      */
     private function getAttributeQueryNoEntityType(string $code) : string
