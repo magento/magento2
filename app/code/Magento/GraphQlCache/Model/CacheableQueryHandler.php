@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 use Magento\GraphQlCache\Model\Resolver\IdentityPool;
 
 /**
- * Handler for collecting tags on full page and built-in resolver caches.
+ * Handler for collecting tags on HTTP full page and built-in resolver caches.
  *
  * This class would be used to collect tags after each operation where we need to collect tags
  * usually after data is fetched or resolved.
@@ -59,7 +59,7 @@ class CacheableQueryHandler
     }
 
     /**
-     * Set full page cache validity on $cacheableQuery after resolving any resolver or evaluating a promise in a query
+     * Set HTTP full page cache validity on $cacheableQuery after resolving any resolver in a query
      *
      * @param array $resolvedValue
      * @param array $cacheAnnotation Eg: ['cacheable' => true, 'cacheTag' => 'someTag', cacheIdentity=>'\Mage\Class']
@@ -87,7 +87,7 @@ class CacheableQueryHandler
      *
      * @param string $cacheIdentityClassName
      * @param array $resolvedValue
-     * @param bool $isForBuiltInResolverCache - for full page cache if false
+     * @param bool $isForBuiltInResolverCache - for HTTP full page cache if false
      * @return string[]
      */
     public function getCacheTagsByIdentityClassNameAndResolvedValue(
@@ -131,7 +131,7 @@ class CacheableQueryHandler
     }
 
     /**
-     * Set full page cache validity for the graphql request
+     * Set HTTP full page cache validity for the graphql request
      *
      * @param bool $isValid
      * @return void
