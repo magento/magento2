@@ -29,8 +29,7 @@
         <after>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
-            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="disableFlatRate"/>
-            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
         </after>
 
         <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">

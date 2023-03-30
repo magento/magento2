@@ -33,10 +33,9 @@
             </actionGroup>
         </before>
         <after>
-            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="disableFlatRate"/>
-            <!-- set shipping as default -->
-            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
-            <!--Logout from customer account -->
+            <!-- Disable shipping method for customer with default address -->
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
+            <!--Logout from customer account-->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

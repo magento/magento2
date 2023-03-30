@@ -26,8 +26,8 @@
             </createData>
         </before>
         <after>
-            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="disableFlatRate"/>
-            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <!-- Disable shipping method for customer with default address -->
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
@@ -35,7 +35,6 @@
         <!--Create order via Admin-->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <comment userInput="Admin creates order" stepKey="adminCreateOrderComment"/>
-        <!--<actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage"/>-->
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToOrderIndexPage"/>
         <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeIndexPageTitle">
             <argument name="value" value="Orders"/>

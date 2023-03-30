@@ -29,8 +29,8 @@
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="login"/>
         </before>
         <after>
-            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="disableFlatRate"/>
-            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <!-- Disable shipping method for customer with default address -->
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
             <deleteData createDataKey="createSimpleCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

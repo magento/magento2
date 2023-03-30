@@ -74,8 +74,8 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="disableFlatRate"/>
-            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <!-- Disable shipping method for customer with default address -->
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
         </after>
 
         <actionGroup ref="AdminGoToOrdersReportPageActionGroup" stepKey="goToOrdersReportPage1"/>
