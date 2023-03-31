@@ -120,6 +120,7 @@ class ShipmentSender extends Sender
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $shipment->getOrder();
             $this->identityContainer->setStore($order->getStore());
+            $paymentHTML = $this->getPaymentHtml($order);
             $this->appEmulation->startEnvironmentEmulation($order->getStoreId(), Area::AREA_FRONTEND, true);
             $transport = [
                 'order' => $order,
@@ -128,7 +129,7 @@ class ShipmentSender extends Sender
                 'shipment_id' => $shipment->getId(),
                 'comment' => $shipment->getCustomerNoteNotify() ? $shipment->getCustomerNote() : '',
                 'billing' => $order->getBillingAddress(),
-                'payment_html' => $this->getPaymentHtml($order),
+                'payment_html' => $paymentHTML,
                 'store' => $order->getStore(),
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
                 'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
