@@ -34,6 +34,8 @@ use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use PHPUnit\Framework\TestCase;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\App\Area;
+use Magento\Framework\Mail\Template\TransportBuilder;
 
 /**
  * Tests for customer creation via customer account management service.
