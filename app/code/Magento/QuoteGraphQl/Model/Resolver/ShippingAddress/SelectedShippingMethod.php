@@ -22,16 +22,6 @@ use Magento\Quote\Model\Quote\Address\Rate;
 class SelectedShippingMethod implements ResolverInterface
 {
     /**
-     * @var string
-     */
-    private $carrierCode;
-
-    /**
-     * @var string
-     */
-    private $methodCode;
-
-    /**
      * @var ShippingMethodConverter
      */
     private $shippingMethodConverter;
@@ -49,6 +39,8 @@ class SelectedShippingMethod implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
+        $carrierCode="";
+        $methodCode="";
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
