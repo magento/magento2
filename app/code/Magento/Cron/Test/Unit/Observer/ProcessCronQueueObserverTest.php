@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Cron\Test\Unit\Observer;
 
 use Exception;
+use Laminas\Http\PhpEnvironment\Request as Environment;
 use Magento\Cron\Model\Config;
 use Magento\Cron\Model\DeadlockRetrierInterface;
 use Magento\Cron\Model\ResourceModel\Schedule as ScheduleResourceModel;
@@ -20,8 +21,8 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Console\Request as ConsoleRequest;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\State;
 use Magento\Framework\App\State as AppState;
+use Magento\Framework\App\State;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Event\ManagerInterface;
@@ -219,6 +220,14 @@ class ProcessCronQueueObserverTest extends TestCase
 
         $this->retrierMock = $this->getMockForAbstractClass(DeadlockRetrierInterface::class);
 
+        $environmentMock = $this->getMockBuilder(Environment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $environmentMock->expects($this->any())
+            ->method('getServer')
+            ->with('argv')
+            ->willReturn([]);
+
         $this->cronQueueObserver = new ProcessCronQueueObserver(
             $this->objectManagerMock,
             $this->scheduleFactoryMock,
@@ -234,7 +243,8 @@ class ProcessCronQueueObserverTest extends TestCase
             $this->statFactory,
             $this->lockManagerMock,
             $this->eventManager,
-            $this->retrierMock
+            $this->retrierMock,
+            $environmentMock
         );
     }
 

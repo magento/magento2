@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Quote\Model\Quote;
 
 /**
@@ -17,25 +17,17 @@ use Magento\Quote\Model\Quote;
 class GetCartProducts
 {
     /**
-     * @var ProductRepositoryInterface
+     * @var ProductCollectionFactory
      */
-    private $productRepository;
+    private $productCollectionFactory;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @param ProductRepositoryInterface $productRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param ProductCollectionFactory $productCollectionFactory
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        ProductCollectionFactory $productCollectionFactory
     ) {
-        $this->productRepository = $productRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->productCollectionFactory = $productCollectionFactory;
     }
 
     /**
@@ -57,8 +49,11 @@ class GetCartProducts
             $cartItems
         );
 
-        $searchCriteria = $this->searchCriteriaBuilder->addFilter('entity_id', $cartItemIds, 'in')->create();
-        $products = $this->productRepository->getList($searchCriteria)->getItems();
+        $productCollection = $this->productCollectionFactory->create()
+            ->addAttributeToSelect('*')
+            ->addIdFilter($cartItemIds)
+            ->setFlag('has_stock_status_filter', true);
+        $products = $productCollection->getItems();
 
         return $products;
     }

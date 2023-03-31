@@ -171,14 +171,15 @@ class ProductStockTest extends ProductTestBase
      * Test that product stock status is updated after import on schedule
      *
      * @magentoDataFixture mediaImportImageFixture
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/CatalogImportExport/_files/cataloginventory_stock_item_update_by_schedule.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDbIsolation disabled
      */
     public function testProductStockStatusShouldBeUpdatedOnSchedule()
     {
         /** * @var $indexProcessor \Magento\Indexer\Model\Processor */
         $indexProcessor = $this->objectManager->create(\Magento\Indexer\Model\Processor::class);
+        $indexProcessor->updateMview();
         $status = $this->stockRegistry->getStockStatusBySku('simple');
         $this->assertEquals(Stock::STOCK_IN_STOCK, $status->getStockStatus());
         $this->importDataForMediaTest('disable_product.csv');
