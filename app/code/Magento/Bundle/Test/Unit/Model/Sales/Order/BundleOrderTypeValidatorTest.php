@@ -166,8 +166,8 @@ class BundleOrderTypeValidatorTest extends TestCase
         try {
             $this->validator->isValid($shipment);
             $this->assertNotEmpty($this->validator->getMessages());
-            print_r($this->validator->getMessages());
-            $this->assertTrue(in_array(
+            $this->assertTrue(
+                in_array(
                     'Cannot create shipment as bundle product sku should be included as well.',
                     $this->validator->getMessages()
                 )
@@ -220,9 +220,11 @@ class BundleOrderTypeValidatorTest extends TestCase
         try {
             $this->validator->isValid($shipment);
             $this->assertNotEmpty($this->validator->getMessages());
-            $this->assertTrue(in_array(
+            $this->assertTrue(
+                in_array(
                     'Cannot create shipment as bundle product "sku" has shipment type "Together". '
-                    . 'Bundle product itself should be shipped instead.', $this->validator->getMessages()
+                    . 'Bundle product itself should be shipped instead.',
+                    $this->validator->getMessages()
                 )
             );
         } catch (\Exception $e) {
