@@ -105,7 +105,6 @@ define([
                 this.bindFormSubmit();
             }
             this._updateAddToWishlistButton(dataToAdd, event);
-            event.stopPropagation();
         },
 
         /**
@@ -139,7 +138,7 @@ define([
                 params.data = $.extend({}, params.data, dataToAdd, {
                     'qty': $(self.options.qtyInfo).val()
                 });
-                $(element).data('post', params);
+                $(element).attr('data-post', JSON.stringify(params));
             });
         },
 
@@ -273,6 +272,8 @@ define([
 
                 return;
             }
+
+            this._updateWishlistData(event);
         }
     });
 
