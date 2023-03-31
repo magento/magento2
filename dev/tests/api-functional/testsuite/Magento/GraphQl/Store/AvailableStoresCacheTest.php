@@ -1083,7 +1083,8 @@ class AvailableStoresCacheTest extends GraphQLPageCacheAbstract
         $currentStoreGroupQuery = $this->getQuery('true');
         $responseDefaultStoreCurrentStoreGroup = $this->graphQlQueryWithResponseHeaders($currentStoreGroupQuery);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseDefaultStoreCurrentStoreGroup['headers']);
-        $defaultStoreCurrentStoreGroupCacheId = $responseDefaultStoreCurrentStoreGroup['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $defaultStoreCurrentStoreGroupCacheId =
+            $responseDefaultStoreCurrentStoreGroup['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS at the 1st time
         $this->assertCacheMissAndReturnResponse(
             $currentStoreGroupQuery,
@@ -1314,7 +1315,8 @@ class AvailableStoresCacheTest extends GraphQLPageCacheAbstract
         $currentStoreGroupQuery = $this->getQuery('true');
         $responseDefaultStoreCurrentStoreGroup = $this->graphQlQueryWithResponseHeaders($currentStoreGroupQuery);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseDefaultStoreCurrentStoreGroup['headers']);
-        $defaultStoreCurrentStoreGroupCacheId = $responseDefaultStoreCurrentStoreGroup['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $defaultStoreCurrentStoreGroupCacheId =
+            $responseDefaultStoreCurrentStoreGroup['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS at the 1st time
         $this->assertCacheMissAndReturnResponse(
             $currentStoreGroupQuery,
@@ -1414,6 +1416,9 @@ class AvailableStoresCacheTest extends GraphQLPageCacheAbstract
         /** @var Store $store */
         $store = $this->objectManager->create(Store::class);
         $store->load($secondStoreCode, 'code');
+        $store->setStoreGroupId($storeGroup->getId());
+        $store->setWebsiteId($storeGroup->getWebsiteId());
+        $store->save();
 
         // Query available stores of default store's website
         // after second store switched from second store group to main_website_store store group
