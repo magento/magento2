@@ -781,7 +781,11 @@ class CreateAccountTest extends TestCase
             ->setLastname($lastName);
         $this->customerRepository->save($customer);
 
-        $this->assertAndSendEmailNotification($customer, $customerEmail, 'customer_create_account_email_template');
+        $this->assertAndSendEmailNotification(
+            $customer,
+            $customerEmail,
+            'customer_create_account_email_template'
+        );
 
         /** @var Subscriber $subscriber */
         $subscriber = $this->objectManager->create(Subscriber::class);
@@ -791,7 +795,11 @@ class CreateAccountTest extends TestCase
         // Verify if the customer is subscribed to newsletter
         $this->assertTrue($subscriber->isSubscribed());
 
-        $this->assertAndSendEmailNotification($customer, $customerEmail, 'newsletter_subscription_confirm_email_template');
+        $this->assertAndSendEmailNotification(
+            $customer,
+            $customerEmail,
+            'newsletter_subscription_confirm_email_template'
+        );
     }
 
     /**
@@ -807,7 +815,12 @@ class CreateAccountTest extends TestCase
         /** @var TransportBuilder $transportBuilder */
         $transportBuilder = $this->objectManager->get(TransportBuilder::class);
         $transport = $transportBuilder->setTemplateIdentifier($templateIdentifier)
-            ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID])
+            ->setTemplateOptions(
+                [
+                    'area' => Area::AREA_FRONTEND,
+                    'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                ]
+            )
             ->setTemplateVars(['customer' => $customer])
             ->addTo($customerEmail)
             ->getTransport();
