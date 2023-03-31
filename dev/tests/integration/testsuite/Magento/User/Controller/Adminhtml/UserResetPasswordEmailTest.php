@@ -122,8 +122,15 @@ class UserResetPasswordEmailTest extends AbstractBackendController
 
         /** @var TransportBuilder $transportBuilder */
         $transportBuilder = $this->_objectManager->get(TransportBuilder::class);
-        $transport = $transportBuilder->setTemplateIdentifier('customer_account_information_change_email_and_password_template')
-            ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID])
+        $transport = $transportBuilder->setTemplateIdentifier(
+            'customer_account_information_change_email_and_password_template'
+            )
+            ->setTemplateOptions(
+                [
+                    'area' => Area::AREA_FRONTEND,
+                    'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                ]
+            )
             ->setTemplateVars(['customer' => $adminUser])
             ->addTo($adminEmail)
             ->getTransport();
