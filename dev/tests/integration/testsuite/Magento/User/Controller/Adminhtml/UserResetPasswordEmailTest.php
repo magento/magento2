@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\User\Controller\Adminhtml;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\EmailMessage;
+use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Fixture\Config as Config;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -118,14 +120,23 @@ class UserResetPasswordEmailTest extends AbstractBackendController
         $adminUser->setPassword('newPassword123');
         $adminUser->save();
 
-        $message = $this->messageFactory->create();
-        $message->addTo($adminEmail);
-        $message->setSubject('Your password has been changed');
-
-        $transport = $this->transportFactory->create(['message' => $message]);
+        /** @var TransportBuilder $transportBuilder */
+        $transportBuilder = $this->_objectManager->get(TransportBuilder::class);
+        $transport = $transportBuilder->setTemplateIdentifier('customer_account_information_change_email_and_password_template')
+            ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID])
+            ->setTemplateVars(['customer' => $adminUser])
+            ->addTo($adminEmail)
+            ->getTransport();
         $transport->sendMessage();
+        $sentMessage = $transport->getMessage();
 
-        $this->assertInstanceOf(\Magento\Framework\Mail\MessageInterface::class, $transport->getMessage());
+        $this->assertEquals('Your Default email and password has been changed', $sentMessage->getSubject());
         $this->assertNotNull($transport->getMessage());
+
+        $messageRaw = $sentMessage->getBody()->getParts()[0]->getRawContent();
+        $this->assertStringContainsString(
+            'We have received a request to change the following information associated with your account',
+            $messageRaw
+        );
     }
 }
