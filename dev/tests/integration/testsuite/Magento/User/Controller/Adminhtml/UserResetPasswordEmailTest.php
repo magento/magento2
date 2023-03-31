@@ -122,9 +122,8 @@ class UserResetPasswordEmailTest extends AbstractBackendController
 
         /** @var TransportBuilder $transportBuilder */
         $transportBuilder = $this->_objectManager->get(TransportBuilder::class);
-        $transport = $transportBuilder->setTemplateIdentifier(
-            'customer_account_information_change_email_and_password_template'
-            )
+        $templateIdentifier = 'customer_account_information_change_email_and_password_template';
+        $transport = $transportBuilder->setTemplateIdentifier($templateIdentifier)
             ->setTemplateOptions(
                 [
                     'area' => Area::AREA_FRONTEND,
