@@ -27,12 +27,16 @@
             <magentoCLI command="cache:flush" stepKey="cleanCache"/>
         </before>
         <after>
+            <!-- Clear filters: URL re-write, product -->
+            <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteEditPage"/>
+            <conditionalClick selector="{{AdminUrlRewriteIndexSection.clearFiltersButton}}" dependentSelector="{{AdminUrlRewriteIndexSection.clearFiltersButton}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
+            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
             <!-- Delete the category and product -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
+            <magentoCLI command="indexer:reindex" stepKey="performExitReindex"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
         </after>
 
         <!--Delete created product url rewrite and verify AssertUrlRewriteDeletedMessage-->
