@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\EavGraphQl\Model\Output;
@@ -76,7 +78,7 @@ class GetAttributeData implements GetAttributeDataInterface
             'is_required' => $attribute->getIsRequired(),
             'default_value' => $attribute->getDefaultValue(),
             'is_unique' => $attribute->getIsUnique(),
-            'options' => $this->getOptions($attribute),
+            // 'options' => $this->getOptions($attribute),
             'attribute' => $attribute
         ];
     }
@@ -89,22 +91,22 @@ class GetAttributeData implements GetAttributeDataInterface
      */
     private function getOptions(AttributeInterface $attribute): array
     {
-        return [];
-        
         if (!$attribute->getOptions()) {
             return [];
         }
         return array_filter(
             array_map(
                 function (AttributeOptionInterface $option) use ($attribute) {
-                    if (empty(trim($option->getValue())) && empty(trim($option->getLabel()))) {
+                    if (empty($option->getValue()) && empty($option->getLabel())) {
                         return null;
                     }
                     return [
                         'uid' => $this->uid->encode($option->getValue()),
                         'label' => $option->getLabel(),
                         'value' => $option->getValue(),
-                        'is_default' => $attribute->getDefaultValue() ? in_array($option->getValue(), explode(',', $attribute->getDefaultValue())) : null
+                        'is_default' =>
+                        $attribute->getDefaultValue() ?
+                            in_array($option->getValue(), explode(',', $attribute->getDefaultValue())) : null
                     ];
                 },
                 $attribute->getOptions()

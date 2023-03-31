@@ -18,17 +18,20 @@
         <arguments>
             <argument name="map" xsi:type="array">
                 <item name="AttributeFrontendInputEnum" xsi:type="array">
-                    <item name="text" xsi:type="string">text</item>
-                    <item name="gallery" xsi:type="string">gallery</item>
-                    <item name="media_image" xsi:type="string">media_image</item>
-                    <item name="image" xsi:type="string">image</item>
-                    <item name="textarea" xsi:type="string">textarea</item>
-                    <item name="multiselect" xsi:type="string">multiselect</item>
+                    <item name="boolean" xsi:type="string">boolean</item>
                     <item name="date" xsi:type="string">date</item>
                     <item name="datetime" xsi:type="string">datetime</item>
-                    <item name="select" xsi:type="string">select</item>
-                    <item name="boolean" xsi:type="string">boolean</item>
+                    <item name="file" xsi:type="string">file</item>
+                    <item name="gallery" xsi:type="string">gallery</item>
+                    <item name="hidden" xsi:type="string">hidden</item>
+                    <item name="image" xsi:type="string">image</item>
+                    <item name="media_image" xsi:type="string">media_image</item>
+                    <item name="multiline" xsi:type="string">multiline</item>
+                    <item name="multiselect" xsi:type="string">multiselect</item>
                     <item name="price" xsi:type="string">price</item>
+                    <item name="select" xsi:type="string">select</item>
+                    <item name="text" xsi:type="string">text</item>
+                    <item name="textarea" xsi:type="string">textarea</item>
                     <item name="weight" xsi:type="string">weight</item>
                 </item>
             </argument>
