@@ -110,7 +110,7 @@ class BundleOrderTypeValidator extends BundleShipmentTypeValidator implements Va
                 '%3 should be shipped instead.',
                 $orderItem->getParentItem()->getSku(),
                 __('Together'),
-                __('Bundle product itself'),
+                __('Bundle product itself')
             );
         }
 
@@ -150,7 +150,7 @@ class BundleOrderTypeValidator extends BundleShipmentTypeValidator implements Va
                 '%3 should be shipped instead.',
                 $orderItem->getSku(),
                 __('Together'),
-                __('Bundle product itself'),
+                __('Bundle product itself')
             );
         }
         if ($orderItem->getProduct()->getShipmentType() === self::SHIPMENT_TYPE_SEPARATELY &&
@@ -158,10 +158,9 @@ class BundleOrderTypeValidator extends BundleShipmentTypeValidator implements Va
         ) {
             $result = __(
                 'Cannot create shipment as bundle product "%1" has shipment type "%2". ' .
-                '%3.',
+                'Shipment should also incorporate bundle options.',
                 $orderItem->getSku(),
-                __('Separately'),
-                __('Shipment should also incorporate bundle options'),
+                __('Separately')
             );
         }
         return $result;
