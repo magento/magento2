@@ -35,4 +35,16 @@
         <data key="scope_id">1</data>
         <data key="value">0</data>
     </entity>
+    <entity name="DisableFreeOrderPaymentAutomaticInvoiceAction">
+        <data key="path">payment/free/payment_action</data>
+        <data key="scope">default</data>
+        <data key="scope_id">1</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnableFreeOrderPaymentAutomaticInvoiceAction">
+        <data key="path">payment/free/payment_action</data>
+        <data key="scope">default</data>
+        <data key="scope_id">1</data>
+        <data key="value">1</data>
+    </entity>
 </entities>
