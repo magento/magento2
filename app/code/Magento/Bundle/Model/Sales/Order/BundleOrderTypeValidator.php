@@ -56,7 +56,7 @@ class BundleOrderTypeValidator extends BundleShipmentTypeValidator implements Va
      */
     public function isValid($value): bool
     {
-        if (false === $this->canValidate()) {
+        if (false === $this->validationNeeded()) {
             return true;
         }
 
@@ -212,7 +212,7 @@ class BundleOrderTypeValidator extends BundleShipmentTypeValidator implements Va
      *
      * @return bool
      */
-    private function canValidate(): bool
+    private function validationNeeded(): bool
     {
         return str_contains(strtolower($this->request->getUri()->getPath()), self::SHIPMENT_API_ROUTE);
     }
