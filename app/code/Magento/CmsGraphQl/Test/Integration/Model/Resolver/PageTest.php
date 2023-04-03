@@ -15,7 +15,7 @@ use Magento\Framework\App\Cache\Type\FrontendPool;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlCache;
-use Magento\GraphQlCache\Model\Plugin\Query\Resolver as ResolverPlugin;
+use Magento\GraphQlCache\Model\Plugin\Query\Resolver\Result\Cache as ResolverResultCachePlugin;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -36,9 +36,9 @@ class PageTest extends TestCase
     private $graphQlRequest;
 
     /**
-     * @var ResolverPlugin
+     * @var ResolverResultCachePlugin
      */
-    private $originalResolverPlugin;
+    private $originalResolverResultCachePlugin;
 
     /**
      * @var SearchCriteriaBuilder
@@ -66,7 +66,7 @@ class PageTest extends TestCase
         $this->graphQlRequest = $objectManager->create(GraphQlRequest::class);
         $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
         $this->pageRepository = $objectManager->get(PageRepository::class);
-        $this->originalResolverPlugin = $objectManager->get(ResolverPlugin::class);
+        $this->originalResolverResultCachePlugin = $objectManager->get(ResolverResultCachePlugin::class);
 
         $this->cacheState = $objectManager->get(CacheStateInterface::class);
         $this->originalCacheStateEnabledStatus = $this->cacheState->isEnabled(GraphQlCache::TYPE_IDENTIFIER);
@@ -78,7 +78,7 @@ class PageTest extends TestCase
         $objectManager = $this->objectManager;
 
         // reset to original resolver plugin
-        $objectManager->addSharedInstance($this->originalResolverPlugin, ResolverPlugin::class);
+        $objectManager->addSharedInstance($this->originalResolverResultCachePlugin, ResolverResultCachePlugin::class);
 
         // clean graphql resolver cache and reset to original enablement status
         $objectManager->get(GraphQlCache::class)->clean();
@@ -115,12 +115,12 @@ class PageTest extends TestCase
             ->expects($this->once())
             ->method('save');
 
-        $resolverPluginWithCacheProxy = $objectManager->create(ResolverPlugin::class, [
+        $resolverPluginWithCacheProxy = $objectManager->create(ResolverResultCachePlugin::class, [
             'graphQlResolverCache' => $cacheProxy,
         ]);
 
         // override resolver plugin with plugin instance containing cache proxy class
-        $objectManager->addSharedInstance($resolverPluginWithCacheProxy, ResolverPlugin::class);
+        $objectManager->addSharedInstance($resolverPluginWithCacheProxy, ResolverResultCachePlugin::class);
 
         $query = $this->getQuery($page->getIdentifier());
 

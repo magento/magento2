@@ -9,11 +9,10 @@ namespace Magento\GraphQlCache\Model;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 use Magento\GraphQlCache\Model\Resolver\IdentityPool;
 
 /**
- * Handler for collecting tags on HTTP full page and built-in resolver caches.
+ * Handler for collecting tags on HTTP full page cache.
  *
  * This class would be used to collect tags after each operation where we need to collect tags
  * usually after data is fetched or resolved.
@@ -36,26 +35,18 @@ class CacheableQueryHandler
     private $identityPool;
 
     /**
-     * @var array
-     */
-    private $fullPageIdentityToResolverIdentityClassMap;
-
-    /**
      * @param CacheableQuery $cacheableQuery
      * @param RequestInterface $request
      * @param IdentityPool $identityPool
-     * @param array $fullPageIdentityToResolverIdentityClassMap
      */
     public function __construct(
         CacheableQuery $cacheableQuery,
         RequestInterface $request,
-        IdentityPool $identityPool,
-        array $fullPageIdentityToResolverIdentityClassMap = []
+        IdentityPool $identityPool
     ) {
         $this->cacheableQuery = $cacheableQuery;
         $this->request = $request;
         $this->identityPool = $identityPool;
-        $this->fullPageIdentityToResolverIdentityClassMap = $fullPageIdentityToResolverIdentityClassMap;
     }
 
     /**
@@ -71,63 +62,14 @@ class CacheableQueryHandler
         $cacheIdentityClass = $cacheAnnotation['cacheIdentity'] ?? '';
 
         if ($this->request instanceof Http && $this->request->isGet() && !empty($cacheIdentityClass)) {
-            $cacheTags = $this->getCacheTagsByIdentityClassNameAndResolvedValue(
-                $cacheIdentityClass,
-                $resolvedValue
-            );
+            $cacheIdentity = $this->identityPool->get($cacheIdentityClass);
+            $cacheTags = $cacheIdentity->getIdentities($resolvedValue);
             $this->cacheableQuery->addCacheTags($cacheTags);
         } else {
             $cacheable = false;
         }
+
         $this->setCacheValidity($cacheable);
-    }
-
-    /**
-     * Get cache tags by class name and resolved value
-     *
-     * @param string $cacheIdentityClassName
-     * @param array $resolvedValue
-     * @param bool $isForBuiltInResolverCache - for HTTP full page cache if false
-     * @return string[]
-     */
-    public function getCacheTagsByIdentityClassNameAndResolvedValue(
-        string $cacheIdentityClassName,
-        array $resolvedValue,
-        bool $isForBuiltInResolverCache = false
-    ): array {
-        if ($isForBuiltInResolverCache) {
-            $cacheIdentityClassName = $this->getResolverCacheIdentityClassName($cacheIdentityClassName);
-        }
-
-        $cacheIdentity = $this->getCacheIdentityByClassName($cacheIdentityClassName);
-
-        return $cacheIdentity->getIdentities($resolvedValue);
-    }
-
-    /**
-     * Get resolver cache identity class name if present.  If not, use original $cacheIdentityClassName
-     *
-     * @param string $cacheIdentityClassName
-     * @return string
-     */
-    private function getResolverCacheIdentityClassName(string $cacheIdentityClassName): string
-    {
-        if (isset($this->fullPageIdentityToResolverIdentityClassMap[$cacheIdentityClassName])) {
-            $cacheIdentityClassName = $this->fullPageIdentityToResolverIdentityClassMap[$cacheIdentityClassName];
-        }
-
-        return $cacheIdentityClassName;
-    }
-
-    /**
-     * Get cache identity object by class name
-     *
-     * @param string $cacheIdentityClassName
-     * @return IdentityInterface
-     */
-    private function getCacheIdentityByClassName(string $cacheIdentityClassName): IdentityInterface
-    {
-        return $this->identityPool->get($cacheIdentityClassName);
     }
 
     /**
