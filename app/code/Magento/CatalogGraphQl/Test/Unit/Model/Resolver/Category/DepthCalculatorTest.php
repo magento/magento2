@@ -41,12 +41,12 @@ class DepthCalculatorTest extends TestCase
     public function testCalculateWithNullAsSelectionSet(): void
     {
         $this->fieldNodeMock->kind = NodeKind::FIELD;
-        /** @var SelectionSetNode $selectionSetMock */
-        $selectionSetMock = $this->createMock(SelectionSetNode::class);
-        $selectionSetMock->selections = $this->getMockSelectionsArrayForNullCase();
-        $this->fieldNodeMock->selectionSet = $selectionSetMock;
+        /** @var SelectionSetNode $selectionSetNode */
+        $selectionSetNode = new SelectionSetNode([]);
+        $selectionSetNode->selections = $this->getSelectionsArrayForNullCase();
+        $this->fieldNodeMock->selectionSet = $selectionSetNode;
         $result = $this->depthCalculator->calculate($this->resolveInfoMock, $this->fieldNodeMock);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
     }
 
     /**
@@ -56,9 +56,9 @@ class DepthCalculatorTest extends TestCase
     public function testCalculateNonNullAsSelectionSet(): void
     {
         $this->fieldNodeMock->kind = NodeKind::FIELD;
-        $selectionSetMock = $this->createMock(SelectionSetNode::class);
-        $selectionSetMock->selections = $this->getMockSelectionsArrayForNonNullCase();
-        $this->fieldNodeMock->selectionSet = $selectionSetMock;
+        $selectionSetNode = $this->getSelectionSetNode();
+        $selectionSetNode->selections = $this->getSelectionsArrayForNonNullCase();
+        $this->fieldNodeMock->selectionSet = $selectionSetNode;
         $result = $this->depthCalculator->calculate($this->resolveInfoMock, $this->fieldNodeMock);
         $this->assertEquals(2, $result);
     }
@@ -66,56 +66,50 @@ class DepthCalculatorTest extends TestCase
     /**
      * @return NodeList
      */
-    private function getMockSelectionsArrayForNullCase()
+    private function getSelectionsArrayForNullCase()
     {
-        /** @var SelectionSetNode $selectionSetMock */
-        $selectionSetMock = $this->createMock(SelectionSetNode::class);
-        $selectionSetMock->selections = [$this->getNewFieldNodeMock()];
-        $inlineFragmentMock = $this->getNewInlineFragmentNodeMock();
-        $inlineFragmentMock->selectionSet = $selectionSetMock;
+        $selectionSetNode = $this->getSelectionSetNode();
+        $selectionSetNode->selections = $this->getNodeList();
+        $inlineFragmentNode = $this->getNewInlineFragmentNode();
+        $inlineFragmentNode->selectionSet = $selectionSetNode;
         return new NodeList([
-            $this->getNewFieldNodeMock(),
-            $inlineFragmentMock
+            $this->getNewFieldNode(),
+            $inlineFragmentNode
         ]);
     }
 
     /**
-     * @return FieldNode|MockObject
+     * @return FieldNode
      */
-    private function getNewFieldNodeMock()
+    private function getNewFieldNode()
     {
-        return $this->getMockBuilder(FieldNode::class)
-            ->setConstructorArgs(['vars' => []])
-            ->getMock();
+        return new FieldNode([]);
     }
 
     /**
-     * @return InlineFragmentNode|MockObject
+     * @return InlineFragmentNode
      */
-    private function getNewInlineFragmentNodeMock()
+    private function getNewInlineFragmentNode()
     {
-        return $this->getMockBuilder(InlineFragmentNode::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return new InlineFragmentNode([]);
     }
 
     /**
      * @return NodeList
      */
-    private function getMockSelectionsArrayForNonNullCase()
+    private function getSelectionsArrayForNonNullCase()
     {
-        $newFieldMock = $this->getNewFieldNodeMock();
-        $newFieldMock->selectionSet = $this->createMock(SelectionSetNode::class);
-        $newFieldMock->selectionSet->selections = [$this->getNewFieldNodeMock()];
-        /** @var SelectionSetNode $selectionSetMock */
-        $selectionSetMock = $this->createMock(SelectionSetNode::class);
-        $selectionSetMock->selections = [$newFieldMock];
-
-        $inlineFragmentMock = $this->getNewInlineFragmentNodeMock();
-        $inlineFragmentMock->selectionSet = $selectionSetMock;
+        $newFieldNode = $this->getNewFieldNode();
+        $newFieldNode->selectionSet = $this->getSelectionSetNode();
+        $newFieldNode->selectionSet->selections = $this->getNodeList();
+        $newFieldNode->selectionSet->selections[] = $this->getNewFieldNode();
+        $selectionSetNode = $this->getSelectionSetNode();
+        $selectionSetNode->selections = new NodeList([$newFieldNode]);
+        $inlineFragmentNode = $this->getNewInlineFragmentNode();
+        $inlineFragmentNode->selectionSet = $selectionSetNode;
         return new NodeList([
-            $this->getNewFieldNodeMock(),
-            $inlineFragmentMock
+            $newFieldNode,
+            $inlineFragmentNode
         ]);
     }
 
@@ -129,5 +123,21 @@ class DepthCalculatorTest extends TestCase
         $this->fieldNodeMock = $this->getMockBuilder(FieldNode::class)
             ->disableOriginalConstructor()
             ->getMock();
+    }
+
+    /**
+     * @return \GraphQL\Language\AST\SelectionSetNode
+     */
+    protected function getSelectionSetNode($nodes = []): SelectionSetNode
+    {
+        return new SelectionSetNode($nodes);
+    }
+
+    /**
+     * @return \GraphQL\Language\AST\NodeList
+     */
+    protected function getNodeList(): NodeList
+    {
+        return new NodeList([]);
     }
 }
