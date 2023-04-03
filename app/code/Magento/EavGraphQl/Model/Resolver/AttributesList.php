@@ -15,8 +15,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\EavGraphQl\Model\Output\GetAttributeData;
-use Magento\Framework\GraphQl\Query\Uid;
-use Magento\EavGraphQl\Model\Uid as AttributeUid;
+use Magento\EavGraphQl\Model\Output\GetAttributeDataInterface;
 
 /**
  * Resolve attribute options data for custom attribute.
@@ -29,19 +28,9 @@ class AttributesList implements ResolverInterface
     private AttributeRepository $attributeRepository;
 
     /**
-     * @var Uid
+     * @var GetAttributeDataInterface
      */
-    private Uid $uid;
-
-    /**
-     * @var AttributeUid
-     */
-    private AttributeUid $attributeUid;
-
-     /**
-     * @var GetAttributeData
-     */
-    private GetAttributeData $getAttributeData;
+    private GetAttributeDataInterface $getAttributeData;
 
     /**
      * @var SearchCriteriaBuilder
@@ -62,25 +51,21 @@ class AttributesList implements ResolverInterface
      * @param AttributeRepository $attributeRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param EnumLookup $enumLookup
-     * @param Uid $uid
-     * @param AttributeUid $attributeUid
+     * @param GetAttributeDataInterface $getAttributeData
      * @param array $resolvers
      */
     public function __construct(
         AttributeRepository $attributeRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         EnumLookup $enumLookup,
-        Uid $uid,
-        AttributeUid $attributeUid,
+        GetAttributeDataInterface $getAttributeData,
         array $resolvers = []
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->enumLookup = $enumLookup;
-        $this->uid = $uid;
-        $this->attributeUid = $attributeUid;
+        $this->getAttributeData = $getAttributeData;
         $this->resolvers = $resolvers;
-        $this->getAttributeData = new GetAttributeData($this->attributeUid, $this->uid, $this->enumLookup);
     }
 
     /**
