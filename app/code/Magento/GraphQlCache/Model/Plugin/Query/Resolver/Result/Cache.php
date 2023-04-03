@@ -71,7 +71,7 @@ class Cache
     }
 
     /**
-     * Checks for cacheability of resolver's data, and, if cachable, loads and persists cache entry for future use
+     * Checks for cacheability of resolver's data, and, if cacheable, loads and persists cache entry for future use
      *
      * @param ResolverInterface $subject
      * @param \Closure $proceed
@@ -132,11 +132,11 @@ class Cache
         $resolvedValue = $proceed($field, $context, $info, $value, $args);
 
         $matchingCacheableResolverClassName = reset($matchingCacheableResolverClassNames);
-        $matchingCachableResolverIdentityClassName = $this->cacheableResolverClassNameIdentityMap[
+        $matchingCacheableResolverIdentityClassName = $this->cacheableResolverClassNameIdentityMap[
             $matchingCacheableResolverClassName
         ];
 
-        $cacheableResolverIdentity = $this->identityPool->get($matchingCachableResolverIdentityClassName);
+        $cacheableResolverIdentity = $this->identityPool->get($matchingCacheableResolverIdentityClassName);
 
         $this->graphQlResolverCache->save(
             $this->serializer->serialize($resolvedValue),
