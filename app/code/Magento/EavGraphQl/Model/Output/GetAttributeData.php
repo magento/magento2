@@ -97,7 +97,11 @@ class GetAttributeData implements GetAttributeDataInterface
         return array_filter(
             array_map(
                 function (AttributeOptionInterface $option) use ($attribute) {
-                    $value = is_array($option->getValue()) ? (empty($option->getValue()) ? '' : (string)$option->getValue()[0]['value']) : (string)$option->getValue();
+                    if (is_array($option->getValue())) {
+                        $value =  (empty($option->getValue()) ? '' : (string)$option->getValue()[0]['value']);
+                    } else {
+                        $value = (string)$option->getValue();
+                    }
                     $label = (string)$option->getLabel();
                     if (empty(trim($value)) && empty(trim($label))) {
                         return null;

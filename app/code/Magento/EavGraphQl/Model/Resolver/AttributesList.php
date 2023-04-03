@@ -108,7 +108,7 @@ class AttributesList implements ResolverInterface
      * @param array $attributesList
      * @param string $entityType
      * @param int $storeId
-     * 
+     *
      * @return array
      */
     private function getAtrributesMetadata(array $attributesList, string $entityType, int $storeId)
