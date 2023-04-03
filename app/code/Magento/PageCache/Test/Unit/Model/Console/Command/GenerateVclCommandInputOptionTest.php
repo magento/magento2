@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Customer\Test\Unit\Console\Command;
+namespace Magento\PageCache\Test\Unit\Console\Command;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Filesystem\File\WriteFactory;
@@ -72,7 +72,6 @@ class GenerateVclCommandInputOptionTest extends TestCase
             $this->scopeConfigMock,
             $this->serializer
         );
-
     }
 
     public function testConfigure()

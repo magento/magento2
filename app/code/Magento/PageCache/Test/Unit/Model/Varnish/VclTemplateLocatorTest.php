@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Customer\Test\Unit\Model\Varnish;
+namespace Magento\PageCache\Test\Unit\Model\Varnish;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Filesystem\Directory\Read;
@@ -37,6 +37,9 @@ class VclTemplateLocatorTest extends TestCase
      */
     private $directoryListMock;
 
+    /**
+     * @var VclTemplateLocator
+     */
     private $vclTemplateLocator;
 
     public function setUp(): void
@@ -71,6 +74,4 @@ class VclTemplateLocatorTest extends TestCase
             $template
         );
     }
-
-
 }
