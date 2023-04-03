@@ -58,6 +58,16 @@ define([
                 }
             }
             this._on(events);
+            this._ready();
+        },
+
+        /**
+         * Update wishlist on page load
+         *
+         * @private
+         */
+        _ready: function () {
+            $(this.options.qtyInfo).trigger('change');
         },
 
         /**
@@ -105,6 +115,7 @@ define([
                 this.bindFormSubmit();
             }
             this._updateAddToWishlistButton(dataToAdd, event);
+            event.stopPropagation();
         },
 
         /**
@@ -272,8 +283,6 @@ define([
 
                 return;
             }
-
-            this._updateWishlistData(event);
         }
     });
 
