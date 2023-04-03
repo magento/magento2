@@ -37,6 +37,6 @@
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
         <waitForPageLoad stepKey="waitForPaymentLoading"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
-        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+        <seeCurrentUrlMatches regex="~/checkout/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
     </actionGroup>
 </actionGroups>

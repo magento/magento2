@@ -30,6 +30,11 @@ class SystemTest extends \PHPUnit\Framework\TestCase
         $this->system = $this->objectManager->create(System::class);
     }
 
+    public static function tearDownAfterClass(): void
+    {
+        unset($_ENV['CONFIG__STORES__DEFAULT__ABC__QRS__XYZ']);
+    }
+
     public function testGetValueDefaultScope()
     {
         $this->assertEquals(
