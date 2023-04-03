@@ -159,7 +159,7 @@ Transactions,Transactions
 "Order View","Order View"
 Any,Any
 Specified,Specified
-"Applies to Any of the Specified Order Statuses except canceled orders","Applies to Any of the Specified Order Statuses except canceled orders"
+"Applies to Any of the Specified Order Statuses except canceled orders","Applies to Any of the Specified Order Statuses except canceled and pending orders"
 "Cart Price Rule","Cart Price Rule"
 Yes,Yes
 No,No
@@ -458,6 +458,7 @@ State/Province,State/Province
 "Order # %1 Notification(s)","Order # %1 Notification(s)"
 "You can not cancel Credit Memo","You can not cancel Credit Memo"
 "Could not cancel creditmemo","Could not cancel creditmemo"
+"We found an invalid order to refund.","We found an invalid order to refund."
 "We cannot register an existing credit memo.","We cannot register an existing credit memo."
 "We found an invalid quantity to invoice item ""%1"".","We found an invalid quantity to invoice item ""%1""."
 "The Order State ""%1"" must not be set manually.","The Order State ""%1"" must not be set manually."
@@ -806,3 +807,4 @@ If set YES Email field will be required during Admin order creation for new Cust
 "The coupon code has been removed.","The coupon code has been removed."
 "This creditmemo no longer exists.","This creditmemo no longer exists."
 "Add to address book","Add to address book"
+"Logo for PDF Print-outs","Logo for PDF Print-outs"

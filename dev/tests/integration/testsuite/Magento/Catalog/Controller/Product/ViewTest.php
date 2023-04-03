@@ -428,4 +428,23 @@ class ViewTest extends AbstractController
 
         return $this->productRepository->save($product);
     }
+
+    /**
+     * Test product details block as active on load
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_without_custom_options.php
+     * @return void
+     */
+    public function testProductDetailsBlock(): void
+    {
+        $product = $this->productRepository->get('simple-2');
+        $this->dispatch(sprintf('catalog/product/view/id/%s/', $product->getId()));
+        $content = $this->getResponse()->getContent();
+
+        $this->assertStringContainsString(
+            '<div class="data item title active"
+                     data-role="collapsible" id="tab-label-description">',
+            $content
+        );
+    }
 }

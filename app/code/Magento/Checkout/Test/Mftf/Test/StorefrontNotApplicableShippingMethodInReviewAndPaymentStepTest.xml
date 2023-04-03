@@ -20,6 +20,8 @@
         </annotations>
 
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+
             <!-- Enable Free Shipping Method and set Minimum Order Amount to 100-->
             <magentoCLI command="config:set {{AdminFreeshippingActiveConfigData.path}} {{AdminFreeshippingActiveConfigData.enabled}}" stepKey="enableFreeShippingMethod" />
             <magentoCLI command="config:set {{AdminFreeshippingMinimumOrderAmountConfigData.path}} {{AdminFreeshippingMinimumOrderAmountConfigData.hundred}}" stepKey="setFreeShippingMethodMinimumOrderAmountToBe100" />
