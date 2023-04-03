@@ -62,7 +62,7 @@ class GetAttributeData implements GetAttributeDataInterface
     ): array {
         return [
             'uid' => $this->attributeUid->encode($entityType, $attribute->getAttributeCode()),
-            'attribute_code' => $attribute->getAttributeCode(),
+            'code' => $attribute->getAttributeCode(),
             'label' => $attribute->getStoreLabel($storeId),
             'sort_order' => $attribute->getPosition(),
             'entity_type' => $this->enumLookup->getEnumValueFromField(
@@ -95,16 +95,18 @@ class GetAttributeData implements GetAttributeDataInterface
         return array_filter(
             array_map(
                 function (AttributeOptionInterface $option) use ($attribute) {
-                    if (empty($option->getValue()) && empty($option->getLabel())) {
+                    $value = (string)$option->getValue();
+                    $label = (string)$option->getLabel();
+                    if (empty(trim($value)) && empty(trim($label))) {
                         return null;
                     }
                     return [
-                        'uid' => $this->uid->encode($option->getValue()),
-                        'label' => $option->getLabel(),
-                        'value' => $option->getValue(),
+                        'uid' => $this->uid->encode($value),
+                        'label' => $label,
+                        'value' => $value,
                         'is_default' =>
                         $attribute->getDefaultValue() ?
-                            in_array($option->getValue(), explode(',', $attribute->getDefaultValue())) : null
+                            in_array($value, explode(',', $attribute->getDefaultValue())) : null
                     ];
                 },
                 $attribute->getOptions()
