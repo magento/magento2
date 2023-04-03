@@ -10,7 +10,6 @@ namespace Magento\PageCache\Test\Unit\Console\Command;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Filesystem\File\WriteFactory;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Console\Command\GenerateVclCommand;
 use Magento\PageCache\Model\Varnish\VclGenerator;
 use Magento\PageCache\Model\VclGeneratorInterfaceFactory;
@@ -23,11 +22,6 @@ class GenerateVclCommandInputOptionTest extends TestCase
      * @var GenerateVclCommand
      */
     private $command;
-
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
 
     /**
      * @var VclGeneratorInterfaceFactory
