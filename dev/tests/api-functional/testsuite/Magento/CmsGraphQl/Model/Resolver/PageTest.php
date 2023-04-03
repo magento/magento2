@@ -252,6 +252,9 @@ class PageTest extends GraphQlAbstract
             $resolverCacheKeys[] = $resolverCacheKeyForUserQuery;
         }
 
+        // assert that every cache key is unique
+        $this->assertCount(count($resolverCacheKeys), array_unique($resolverCacheKeys));
+
         foreach ($resolverCacheKeys as $cacheIdentityString) {
             $this->assertNotFalse($this->graphqlCache->load($cacheIdentityString));
         }
