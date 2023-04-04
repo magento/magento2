@@ -149,13 +149,8 @@ class PageTest extends TestCase
         $objectManager = $this->objectManager;
         $page = $this->getPageByTitle('Page with 1column layout');
 
-        $cacheState = $this->getMockForAbstractClass(CacheStateInterface::class);
-
-        $cacheState
-            ->expects($this->atLeastOnce())
-            ->method('isEnabled')
-            ->with(GraphQlResolverCache::TYPE_IDENTIFIER)
-            ->willReturn(false);
+        // disable graphql resolver cache
+        $this->cacheState->setEnabled(GraphQlResolverCache::TYPE_IDENTIFIER, false);
 
         $frontendPool = $objectManager->get(FrontendPool::class);
 
@@ -178,7 +173,6 @@ class PageTest extends TestCase
 
         $resolverPluginWithCacheProxy = $objectManager->create(ResolverResultCachePlugin::class, [
             'graphQlResolverCache' => $cacheProxy,
-            'cacheState' => $cacheState,
         ]);
 
         // override resolver plugin with plugin instance containing cache proxy class
