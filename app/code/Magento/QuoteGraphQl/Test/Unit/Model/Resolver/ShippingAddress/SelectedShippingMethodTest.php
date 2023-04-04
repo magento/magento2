@@ -28,52 +28,52 @@ class SelectedShippingMethodTest extends TestCase
     /**
      * @var SelectedShippingMethod
      */
-    private  $selectedShippingMethod;
+    private $selectedShippingMethod;
 
     /**
      * @var ShippingMethodConverter|MockObject
      */
-    private  $shippingMethodConverterMock;
+    private $shippingMethodConverterMock;
 
     /**
      * @var ScopeConfigInterface|MockObject
      */
-    private  $scopeConfigMock;
+    private $scopeConfigMock;
 
     /**
      * @var Address|MockObject
      */
-    private  $addressMock;
+    private $addressMock;
 
     /**
      * @var Rate|MockObject
      */
-    private  $rateMock;
+    private $rateMock;
 
     /**
      * @var Field|MockObject
      */
-    private  $fieldMock;
+    private $fieldMock;
 
     /**
      * @var ResolveInfo|MockObject
      */
-    private  $resolveInfoMock;
+    private $resolveInfoMock;
 
     /**
      * @var Context|MockObject
      */
-    private  $contextMock;
+    private $contextMock;
 
     /**
      * @var Quote|MockObject
      */
-    private  $quoteMock;
+    private $quoteMock;
 
     /**
      * @var array
      */
-    private  $valueMock = [];
+    private $valueMock = [];
 
     protected function setUp(): void
     {
@@ -98,7 +98,13 @@ class SelectedShippingMethodTest extends TestCase
             ->getMock();
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getQuoteCurrencyCode','getMethodTitle','getCarrierTitle','getPriceExclTax','getPriceInclTax'])
+            ->addMethods([
+                'getQuoteCurrencyCode',
+                'getMethodTitle',
+                'getCarrierTitle',
+                'getPriceExclTax',
+                'getPriceInclTax'
+            ])
             ->getMock();
         $this->selectedShippingMethod = new SelectedShippingMethod(
             $this->shippingMethodConverterMock
@@ -109,7 +115,12 @@ class SelectedShippingMethodTest extends TestCase
     {
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage('"model" value should be specified');
-        $this->selectedShippingMethod->resolve($this->fieldMock, $this->contextMock, $this->resolveInfoMock, $this->valueMock);
+        $this->selectedShippingMethod->resolve(
+            $this->fieldMock,
+            $this->contextMock,
+            $this->resolveInfoMock,
+            $this->valueMock
+        );
     }
 
     public function testResolve(): void
@@ -159,7 +170,11 @@ class SelectedShippingMethodTest extends TestCase
             ->willReturn($this->quoteMock);
         $this->shippingMethodConverterMock->method('modelToDataObject')
             ->willReturn($this->quoteMock);
-        $this->selectedShippingMethod->resolve($this->fieldMock, $this->contextMock, $this->resolveInfoMock, $this->valueMock);
+        $this->selectedShippingMethod->resolve(
+            $this->fieldMock,
+            $this->contextMock,
+            $this->resolveInfoMock,
+            $this->valueMock
+        );
     }
-
 }
