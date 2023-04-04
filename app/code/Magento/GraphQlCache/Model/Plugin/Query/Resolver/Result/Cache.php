@@ -24,7 +24,7 @@ use Magento\GraphQlCache\Model\Resolver\IdentityPool;
 class Cache
 {
     /**
-     * Built-in GraphQL Resolver cache type
+     * GraphQL Resolver cache type
      *
      * @var GraphQlResolverCache
      */
