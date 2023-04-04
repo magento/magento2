@@ -336,7 +336,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
             $isScalar = true;
             foreach ($value as $val) {
-                if (!is_scalar($val)) {
+                if ($val !== null && !is_scalar($val)) {
                     $isScalar = false;
                     break;
                 }
