@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\ResolverLocator;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\GraphQlCache\Model\Resolver\IdentityPool;
@@ -51,9 +52,9 @@ class Cache
     private $cacheState;
 
     /**
-     * @var string[]
+     * @var ResolverLocator
      */
-    private array $cacheableResolverClassNameIdentityMap;
+    private $cacheableResolverLocator;
 
     /**
      * @param GraphQlResolverCache $graphQlResolverCache
@@ -61,7 +62,7 @@ class Cache
      * @param IdentityPool $identityPool
      * @param SerializerInterface $serializer
      * @param CacheState $cacheState
-     * @param string[] $cacheableResolverClassNameIdentityMap
+     * @param ResolverLocator $cacheableResolverLocator
      */
     public function __construct(
         GraphQlResolverCache $graphQlResolverCache,
@@ -69,14 +70,14 @@ class Cache
         IdentityPool $identityPool,
         SerializerInterface $serializer,
         CacheState $cacheState,
-        array $cacheableResolverClassNameIdentityMap = []
+        ResolverLocator $cacheableResolverLocator
     ) {
         $this->graphQlResolverCache = $graphQlResolverCache;
         $this->cacheIdCalculator = $cacheIdCalculator;
         $this->identityPool = $identityPool;
         $this->serializer = $serializer;
         $this->cacheState = $cacheState;
-        $this->cacheableResolverClassNameIdentityMap = $cacheableResolverClassNameIdentityMap;
+        $this->cacheableResolverLocator = $cacheableResolverLocator;
     }
 
     /**
@@ -118,7 +119,9 @@ class Cache
             class_implements($subject)
         );
 
-        $cacheableResolverClassNames = array_keys($this->cacheableResolverClassNameIdentityMap);
+        $cacheableResolverIdentityMap = $this->cacheableResolverLocator->getCacheableResolverClassNameIdentityMap();
+
+        $cacheableResolverClassNames = array_keys($cacheableResolverIdentityMap);
 
         $matchingCacheableResolverClassNames = array_intersect($cacheableResolverClassNames, $resolverClassHierarchy);
 
@@ -147,7 +150,7 @@ class Cache
         $resolvedValue = $proceed($field, $context, $info, $value, $args);
 
         $matchingCacheableResolverClassName = reset($matchingCacheableResolverClassNames);
-        $matchingCacheableResolverIdentityClassName = $this->cacheableResolverClassNameIdentityMap[
+        $matchingCacheableResolverIdentityClassName = $cacheableResolverIdentityMap[
             $matchingCacheableResolverClassName
         ];
 
