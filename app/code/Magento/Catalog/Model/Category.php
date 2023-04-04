@@ -619,7 +619,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         $requestPath = $this->getRequestPath() ?: $this->resolveRewriteRequestPath();
         if ($requestPath) {
             try {
-                return $this->getStore()->getUrl('', ['_direct' => $requestPath]);
+                return $this->getStore()->getBaseUrl() . $requestPath];
             } catch (NoSuchEntityException $e) {
                 $this->_logger->error($e->getMessage(), $e->getTrace());
             }
