@@ -49,7 +49,7 @@ class ResolverIdentityClassLocator
 
         foreach ($this->cacheableResolverClassNameIdentityMap as $resolverClassName => $identityProviderClassName) {
             if ($resolver instanceof $resolverClassName) {
-                $matchingIdentityProviderClassName =  $identityProviderClassName;
+                $matchingIdentityProviderClassName = $identityProviderClassName;
                 break;
             }
         }
