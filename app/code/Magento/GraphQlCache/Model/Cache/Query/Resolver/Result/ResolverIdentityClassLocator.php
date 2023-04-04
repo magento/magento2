@@ -38,7 +38,7 @@ class ResolverIdentityClassLocator
     }
 
     /**
-     * Get array of matching cacheable resolver class names matching $resolver's class hierarchy
+     * Get Identity provider based on $resolver
      *
      * @param ResolverInterface $resolver
      * @return IdentityInterface|null
