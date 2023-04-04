@@ -20,7 +20,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <after>
-            <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openTermToDelete">
+            <actionGroup ref="AdminOpenEditPageTermsConditionsByNameActionGroup" stepKey="openTermToDelete">
                 <argument name="termName" value="{{disabledHtmlTerm.name}}"/>
             </actionGroup>
         </after>
