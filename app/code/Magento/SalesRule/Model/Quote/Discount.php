@@ -20,11 +20,10 @@ use Magento\SalesRule\Api\Data\DiscountDataInterface;
 use Magento\SalesRule\Api\Data\DiscountDataInterfaceFactory;
 use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
 use Magento\SalesRule\Model\Data\RuleDiscount;
-use Magento\SalesRule\Model\Discount\PostProcessorFactory;
 use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Model\RulesApplier;
 use Magento\SalesRule\Model\Validator;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\SalesRule\Model\RulesApplier;
 
 /**
  * Discount totals calculation model.
@@ -33,7 +32,7 @@ use Magento\SalesRule\Model\RulesApplier;
  */
 class Discount extends AbstractTotal
 {
-    const COLLECTOR_TYPE_CODE = 'discount';
+    public const COLLECTOR_TYPE_CODE = 'discount';
 
     /**
      * Discount calculation object
@@ -177,21 +176,25 @@ class Discount extends AbstractTotal
         $this->calculator->init($store->getWebsiteId(), $quote->getCustomerGroupId(), $quote->getCouponCode());
         $this->calculator->initTotals($items, $address);
         $items = $this->calculator->sortItemsByPriority($items, $address);
+        $itemsToApplyRules = $items;
         $rules = $this->calculator->getRules($address);
         /** @var Rule $rule */
         foreach ($rules as $rule) {
             /** @var Item $item */
-            foreach ($items as $item) {
+            foreach ($itemsToApplyRules as $key => $item) {
+                if ($quote->getIsMultiShipping() && $item->getAddress()->getId() !== $address->getId()) {
+                    continue;
+                }
                 if ($item->getNoDiscount() || !$this->calculator->canApplyDiscount($item) || $item->getParentItem()) {
                     continue;
                 }
                 $eventArgs['item'] = $item;
                 $this->eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
                 $this->calculator->process($item, $rule);
-            }
-            $appliedRuleIds = $quote->getAppliedRuleIds() ? explode(',', $quote->getAppliedRuleIds()) : [];
-            if ($rule->getStopRulesProcessing() && in_array($rule->getId(), $appliedRuleIds)) {
-                break;
+                $appliedRuleIds = $item->getAppliedRuleIds() ? explode(',', $item->getAppliedRuleIds()) : [];
+                if ($rule->getStopRulesProcessing() && in_array($rule->getId(), $appliedRuleIds)) {
+                    unset($itemsToApplyRules[$key]);
+                }
             }
             $this->calculator->initTotals($items, $address);
         }
@@ -293,7 +296,7 @@ class Discount extends AbstractTotal
         $amount = $total->getDiscountAmount();
 
         if ($amount != 0) {
-            $description = $total->getDiscountDescription();
+            $description = $total->getDiscountDescription() ?? '';
             $result = [
                 'code' => $this->getCode(),
                 'title' => strlen($description) ? __('Discount (%1)', $description) : __('Discount'),

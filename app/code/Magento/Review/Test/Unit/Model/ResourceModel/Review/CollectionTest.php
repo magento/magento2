@@ -104,7 +104,7 @@ class CollectionTest extends TestCase
             ->with(
                 ['detail' => 'review_detail'],
                 'main_table.review_id = detail.review_id',
-                ['detail_id', 'title', 'detail', 'nickname', 'customer_id']
+                ['detail_id', 'store_id', 'title', 'detail', 'nickname', 'customer_id']
             );
         $this->objectManager->getObject(
             Collection::class,

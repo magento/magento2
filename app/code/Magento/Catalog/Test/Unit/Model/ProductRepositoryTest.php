@@ -25,6 +25,7 @@ use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Model\ProductRepository\MediaGalleryProcessor;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Eav\Model\Entity\Attribute\Exception as AttributeException;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
@@ -263,6 +264,7 @@ class ProductRepositoryTest extends TestCase
             ['create']
         );
         $this->resourceModel = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
+        $this->resourceModel->method('getLinkField')->willReturn('some_value');
         $this->objectManager = new ObjectManager($this);
         $this->extensibleDataObjectConverter = $this->getMockBuilder(ExtensibleDataObjectConverter::class)
             ->onlyMethods(['toNestedArray'])
@@ -326,6 +328,7 @@ class ProductRepositoryTest extends TestCase
                     return json_decode($value, true);
                 }
             );
+        $this->serializerMock->method('serialize')->willReturn(''); // PHP 8.1. Compatibility
 
         $mediaProcessor = $this->objectManager->getObject(
             MediaGalleryProcessor::class,
@@ -791,7 +794,7 @@ class ProductRepositoryTest extends TestCase
     public function testSaveException(): void
     {
         $this->expectException('Magento\Framework\Exception\InputException');
-        $this->expectExceptionMessage('Invalid value of "" provided for the  field.');
+        $this->expectExceptionMessage('Invalid value of "" provided for the attribute_code field.');
         $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $this->resourceModel->expects($this->exactly(1))->method('getIdBySku')->willReturn(null);
         $this->productFactory->expects($this->exactly(2))
@@ -800,8 +803,11 @@ class ProductRepositoryTest extends TestCase
         $this->initializationHelper->expects($this->never())->method('initialize');
         $this->resourceModel->expects($this->once())->method('validate')->with($this->product)
             ->willReturn(true);
+
+        $attributeException = new AttributeException(__('123'));
+        $attributeException->setAttributeCode('attribute_code');
         $this->resourceModel->expects($this->once())->method('save')->with($this->product)
-            ->willThrowException(new \Magento\Eav\Model\Entity\Attribute\Exception(__('123')));
+            ->willThrowException($attributeException);
         $this->product->expects($this->exactly(2))->method('getId')->willReturn(null);
         $this->extensibleDataObjectConverter
             ->expects($this->once())

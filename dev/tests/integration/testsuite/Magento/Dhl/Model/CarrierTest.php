@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Dhl\Model;
 
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\AsyncClient\HttpException;
 use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
@@ -49,6 +50,11 @@ class CarrierTest extends TestCase
     private $config;
 
     /**
+     * @var ProductMetadataInterface
+     */
+    private $productMetadata;
+
+    /**
      * @var string
      */
     private $restoreCountry;
@@ -62,6 +68,7 @@ class CarrierTest extends TestCase
         $this->dhlCarrier = $objectManager->get(Carrier::class);
         $this->httpClient = $objectManager->get(AsyncClientInterface::class);
         $this->config = $objectManager->get(ReinitableConfigInterface::class);
+        $this->productMetadata = $objectManager->get(ProductMetadataInterface::class);
         $this->restoreCountry = $this->config->getValue('shipping/origin/country_id', 'store', 'default_store');
     }
 
@@ -273,13 +280,19 @@ class CarrierTest extends TestCase
             'store',
             null
         );
+        $convmap = [0x80, 0x10FFFF, 0, 0x1FFFFF];
+        $content = mb_encode_numericentity(
+            file_get_contents(__DIR__ . '/../_files/response_shipping_label.xml'),
+            $convmap,
+            'UTF-8'
+        );
         //phpcs:disable Magento2.Functions.DiscouragedFunction
         $this->httpClient->nextResponses(
             [
                 new Response(
                     200,
                     [],
-                    utf8_encode(file_get_contents(__DIR__ . '/../_files/response_shipping_label.xml'))
+                    $content
                 )
             ]
         );
@@ -303,6 +316,9 @@ class CarrierTest extends TestCase
                         'items' => [
                             'item1' => [
                                 'name' => $productName,
+                                'qty' => 1,
+                                'weight' => '0.454000000001',
+                                'price' => '10.00',
                             ],
                         ],
                     ],
@@ -402,17 +418,33 @@ class CarrierTest extends TestCase
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $expectedRequestElement = new ShippingElement(file_get_contents(__DIR__ . $requestXmlPath));
 
+        $expectedRequestElement->Request->MetaData->SoftwareVersion = $this->buildSoftwareVersion();
         $expectedRequestElement->Consignee->CountryCode = $destCountryId;
         $expectedRequestElement->Consignee->CountryName = $countryNames[$destCountryId];
         $expectedRequestElement->Shipper->CountryCode = $origCountryId;
         $expectedRequestElement->Shipper->CountryName = $countryNames[$origCountryId];
         $expectedRequestElement->RegionCode = $regionCode;
 
+        if ($origCountryId !== $destCountryId) {
+            $expectedRequestElement->ExportDeclaration->ExportLineItem->ManufactureCountryCode = $origCountryId;
+        }
+
         if ($isProductNameContainsSpecialChars) {
             $expectedRequestElement->ShipmentDetails->Pieces->Piece->PieceContents = self::PRODUCT_NAME_SPECIAL_CHARS;
+            $expectedRequestElement->ExportDeclaration->ExportLineItem->Description = self::PRODUCT_NAME_SPECIAL_CHARS;
         }
 
         return $expectedRequestElement->asXML();
+    }
+
+    /**
+     * Builds a string to be used as the request SoftwareVersion.
+     *
+     * @return string
+     */
+    private function buildSoftwareVersion(): string
+    {
+        return substr($this->productMetadata->getVersion(), 0, 10);
     }
 
     /**
