@@ -14,7 +14,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\EavGraphQl\Model\Output\GetAttributeData;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\EavGraphQl\Model\Output\GetAttributeDataInterface;
 
 /**
@@ -45,27 +45,27 @@ class AttributesList implements ResolverInterface
     /**
      * @var array
      */
-    private array $resolvers;
+    private array $searchCriteriaProviders;
 
     /**
      * @param AttributeRepository $attributeRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param EnumLookup $enumLookup
      * @param GetAttributeDataInterface $getAttributeData
-     * @param array $resolvers
+     * @param array $searchCriteriaProviders
      */
     public function __construct(
         AttributeRepository $attributeRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         EnumLookup $enumLookup,
         GetAttributeDataInterface $getAttributeData,
-        array $resolvers = []
+        array $searchCriteriaProviders = []
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->enumLookup = $enumLookup;
         $this->getAttributeData = $getAttributeData;
-        $this->resolvers = $resolvers;
+        $this->searchCriteriaProviders = $searchCriteriaProviders;
     }
 
     /**
@@ -90,8 +90,13 @@ class AttributesList implements ResolverInterface
         );
 
         $searchCriteria = $this->searchCriteriaBuilder;
-        foreach ($this->resolvers as $resolver) {
-            $searchCriteria->addFilter($resolver['name'], $resolver['object']->execute());
+        foreach ($this->searchCriteriaProviders as $key => $provider) {
+            if (!$provider instanceof ResolverInterface) {
+                throw new RuntimeException(
+                    __('Configured search criteria provider should implement ResolverInterface')
+                );
+            }
+            $searchCriteria->addFilter($key, $provider->resolve($field, $context, $info));
         }
         $searchCriteria = $searchCriteria->create();
 
