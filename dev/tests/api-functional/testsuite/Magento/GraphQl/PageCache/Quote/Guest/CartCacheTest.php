@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQl\PageCache\Quote\Guest;
 
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
-use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\GraphQl\PageCache\GraphQLPageCacheAbstract;
 
 /**

@@ -121,7 +121,6 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
         $block = $blockRepository->getById($identifier);
         $block->setContent($newContent);
         $blockRepository->save($block);
-
         return $block;
     }
 

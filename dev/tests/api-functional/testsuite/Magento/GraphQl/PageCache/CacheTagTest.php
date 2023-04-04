@@ -11,7 +11,6 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\TestFramework\ObjectManager;
-use Magento\GraphQl\PageCache\GraphQLPageCacheAbstract;
 
 /**
  * Test the caching works properly for products and categories
