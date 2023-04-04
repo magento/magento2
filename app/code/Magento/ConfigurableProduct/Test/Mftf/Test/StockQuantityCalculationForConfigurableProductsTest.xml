@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StockQuantityCalculationForConfigurableProductsTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Stock Quantity calculation for configurable products"/>
+            <title value="Stock Quantity calculation for configurable products"/>
+            <description value="Stock Quantity calculation for configurable products"/>
+            <testCaseId value="AC-7320"/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="quantity">5</field>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="quantity">2</field>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct3">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="quantity">3</field>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Update quantity on createSimpleProduct1-->
+            <amOnPage url="{{AdminProductEditPage.url($createSimpleProduct1.id$)}}" stepKey="openEditProduct"/>
+            <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="5" stepKey="fillQuantity"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
+
+            <!-- Update quantity on createSimpleProduct2-->
+            <amOnPage url="{{AdminProductEditPage.url($createSimpleProduct2.id$)}}" stepKey="openEditProduct2"/>
+            <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="2" stepKey="fillQuantity2"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct2"/>
+
+            <!-- Update quantity on createSimpleProduct3-->
+            <amOnPage url="{{AdminProductEditPage.url($createSimpleProduct3.id$)}}" stepKey="openEditProduct3"/>
+            <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="3" stepKey="fillQuantity3"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct3"/>
+
+            <!-- Create Configurable Prduct-->
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+            <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="createConfigurableProduct">
+                <argument name="product" value="ApiConfigurableProduct"/>
+            </actionGroup>
+            <!-- Add Category to created Configurable Product-->
+            <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="openDropDown"/>
+            <checkOption selector="{{AdminProductFormSection.selectCategory($$createCategory.name$$)}}" stepKey="selectCategory"/>
+            <click selector="{{AdminProductFormSection.done}}" stepKey="clickDone"/>
+
+            <!-- Fill configurable product values -->
+            <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillConfigurableProductValues">
+                <argument name="product" value="ApiConfigurableProduct"/>
+            </actionGroup>
+
+            <!-- Create product configurations -->
+            <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations" after="fillConfigurableProductValues"/>
+            <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" time="30" stepKey="waitForConfigurationModalOpen" after="clickCreateConfigurations"/>
+
+            <!--Create new attribute with three options -->
+            <actionGroup ref="AddNewProductConfigurationWithThreeAttributeActionGroup" stepKey="createProductConfigurationAttribute">
+                <argument name="attribute" value="colorProductAttribute"/>
+                <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
+                <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
+                <argument name="thirdOption" value="colorConfigurableProductAttribute3"/>
+            </actionGroup>
+
+            <!-- Change product configurations in grid -->
+            <actionGroup ref="ChangeProductConfigurationsWithThirdInGridActionGroup" stepKey="changeProductConfigurationsInGrid">
+                <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
+                <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
+                <argument name="thirdOption" value="colorConfigurableProductAttribute3"/>
+            </actionGroup>
+
+            <!-- Save configurable product; add product to new attribute set -->
+            <actionGroup ref="SaveConfigurableProductWithNewAttributeSetActionGroup" stepKey="saveConfigurableProduct"/>
+        </before>
+        <after>
+
+
+            <!-- Delete configurable product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="ApiConfigurableProduct"/>
+            </actionGroup>
+
+            <!-- Delete children products -->
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteThirdChildProduct">
+                <argument name="sku" value="{{colorConfigurableProductAttribute3.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSecondChildProduct">
+                <argument name="sku" value="{{colorConfigurableProductAttribute2.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteFirstChildProduct">
+                <argument name="sku" value="{{colorConfigurableProductAttribute1.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+
+            <!-- Delete product attribute -->
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+            <comment userInput="BIC workaround" stepKey="reindex"/>
+
+            <!-- Delete attribute set & reindex -->
+            <actionGroup ref="DeleteAttributeSetByLabelActionGroup" stepKey="deleteAttributeSet">
+                <argument name="label" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex2">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandCategoryTree"/>
+        <actionGroup ref="AssertAdminCategoryIsListedInCategoriesTreeActionGroup" stepKey="seeCategoryInTree">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+
+        <actionGroup ref="OpenProductsInCategorySectionActionGroup" stepKey="openProductsInCategorySectionBeforeSort"/>
+
+        <actionGroup ref="SortProductsByCriteriaInCategoryActionGroup" stepKey="SelectSortOrderInProductInCategory1">
+            <argument name="criteria" value="Move low stock to top"/>
+        </actionGroup>
+
+        <see selector="{{AdminCategoryProductsGridSection.rowProductName('1')}}" userInput="{{colorConfigurableProductAttribute1.name}}" stepKey="assertProductPosition"/>
+        <see selector="{{AdminCategoryProductsGridSection.rowProductName('2')}}" userInput="$createSimpleProduct2.name$" stepKey="assertProductPosition2"/>
+        <see selector="{{AdminCategoryProductsGridSection.rowProductName('3')}}" userInput="$createSimpleProduct3.name$" stepKey="assertProductPosition3"/>
+        <see selector="{{AdminCategoryProductsGridSection.rowProductName('4')}}" userInput="$createSimpleProduct1.name$" stepKey="assertProductPosition4"/>
+        <see selector="{{AdminCategoryProductsGridSection.rowProductName('5')}}" userInput="{{colorConfigurableProductAttribute3.name}}" stepKey="assertProductPosition5"/>
+        <see selector="{{AdminCategoryProductsGridSection.rowProductName('6')}}" userInput="{{colorConfigurableProductAttribute2.name}}" stepKey="assertProductPosition6"/>
+        <see selector="{{AdminCategoryProductsGridSection.rowProductName('7')}}" userInput="{{ApiConfigurableProduct.name}}" stepKey="assertProductPosition7"/>
+
+        <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategoryAfterAutoSort"/>
+
+    </test>
+</tests>
