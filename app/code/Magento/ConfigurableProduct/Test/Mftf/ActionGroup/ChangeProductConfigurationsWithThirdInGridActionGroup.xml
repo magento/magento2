@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ChangeProductConfigurationsWithThirdInGridActionGroup">
+        <annotations>
+            <description>Edit the Product Configuration via the Admin Product grid page.</description>
+        </annotations>
+        <arguments>
+            <argument name="firstOption" type="entity"/>
+            <argument name="secondOption" type="entity"/>
+            <argument name="thirdOption" type="entity"/>
+        </arguments>
+
+        <fillField userInput="{{firstOption.name}}" selector="{{AdminProductFormConfigurationsSection.confProductNameCell(firstOption.name)}}" stepKey="fillFieldNameForFirstAttributeOption"/>
+        <fillField userInput="{{secondOption.name}}" selector="{{AdminProductFormConfigurationsSection.confProductNameCell(secondOption.name)}}" stepKey="fillFieldNameForSecondAttributeOption"/>
+        <fillField userInput="{{thirdOption.name}}" selector="{{AdminProductFormConfigurationsSection.confProductNameCell(thirdOption.name)}}" stepKey="fillFieldNameForThirdAttributeOption"/>
+        <fillField userInput="{{firstOption.sku}}" selector="{{AdminProductFormConfigurationsSection.confProductSkuCell(firstOption.name)}}" stepKey="fillFieldSkuForFirstAttributeOption"/>
+        <fillField userInput="{{secondOption.sku}}" selector="{{AdminProductFormConfigurationsSection.confProductSkuCell(secondOption.name)}}" stepKey="fillFieldSkuForSecondAttributeOption"/>
+        <fillField userInput="{{thirdOption.sku}}" selector="{{AdminProductFormConfigurationsSection.confProductSkuCell(thirdOption.name)}}" stepKey="fillFieldSkuForThirdAttributeOption"/>
+        <fillField userInput="{{firstOption.price}}" selector="{{AdminProductFormConfigurationsSection.confProductPriceCell(firstOption.name)}}" stepKey="fillFieldPriceForFirstAttributeOption"/>
+        <fillField userInput="{{secondOption.price}}" selector="{{AdminProductFormConfigurationsSection.confProductPriceCell(secondOption.name)}}" stepKey="fillFieldPriceForSecondAttributeOption"/>
+        <fillField userInput="{{thirdOption.price}}" selector="{{AdminProductFormConfigurationsSection.confProductPriceCell(thirdOption.name)}}" stepKey="fillFieldPriceForThirdAttributeOption"/>
+        <fillField userInput="{{firstOption.quantity}}" selector="{{AdminProductFormConfigurationsSection.confProductQuantityCell(firstOption.name)}}" stepKey="fillFieldQuantityForFirstAttributeOption"/>
+        <fillField userInput="{{secondOption.quantity}}" selector="{{AdminProductFormConfigurationsSection.confProductQuantityCell(secondOption.name)}}" stepKey="fillFieldQuantityForSecondAttributeOption"/>
+        <fillField userInput="{{thirdOption.quantity}}" selector="{{AdminProductFormConfigurationsSection.confProductQuantityCell(thirdOption.name)}}" stepKey="fillFieldQuantityForThirdAttributeOption"/>
+        <fillField userInput="{{firstOption.weight}}" selector="{{AdminProductFormConfigurationsSection.confProductWeightCell(firstOption.name)}}" stepKey="fillFieldWeightForFirstAttributeOption"/>
+        <fillField userInput="{{secondOption.weight}}" selector="{{AdminProductFormConfigurationsSection.confProductWeightCell(secondOption.name)}}" stepKey="fillFieldWeightForSecondAttributeOption"/>
+        <fillField userInput="{{thirdOption.weight}}" selector="{{AdminProductFormConfigurationsSection.confProductWeightCell(thirdOption.name)}}" stepKey="fillFieldWeightForThirdAttributeOption"/>
+    </actionGroup>
+</actionGroups>
