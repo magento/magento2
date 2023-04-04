@@ -31,16 +31,16 @@ class InvalidateGraphQlResolverCacheObserver implements ObserverInterface
     private $tagResolver;
 
     /**
-     * @param GraphQlResolverCache $graphQlCache
+     * @param GraphQlResolverCache $graphQlResolverCache
      * @param CacheState $cacheState
      * @param TagResolver $tagResolver
      */
     public function __construct(
-        GraphQlResolverCache $graphQlCache,
+        GraphQlResolverCache $graphQlResolverCache,
         CacheState $cacheState,
         TagResolver $tagResolver
     ) {
-        $this->graphQlResolverCache = $graphQlCache;
+        $this->graphQlResolverCache = $graphQlResolverCache;
         $this->cacheState = $cacheState;
         $this->tagResolver = $tagResolver;
     }
