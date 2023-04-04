@@ -26,6 +26,8 @@ class LoginAsCustomerCleanUp
     }
 
     /**
+     * Cleans persistence cookie on sales representative login
+     *
      * @param AuthenticateCustomerBySecretInterface $subject
      * @param string $secret
      * @return string
