@@ -14,7 +14,7 @@ use Magento\Framework\App\Cache\StateInterface as CacheStateInterface;
 use Magento\Framework\App\Cache\Type\FrontendPool;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Service\GraphQlRequest;
-use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlCache;
+use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\GraphQlCache\Model\Plugin\Query\Resolver\Result\Cache as ResolverResultCachePlugin;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -69,8 +69,8 @@ class PageTest extends TestCase
         $this->originalResolverResultCachePlugin = $objectManager->get(ResolverResultCachePlugin::class);
 
         $this->cacheState = $objectManager->get(CacheStateInterface::class);
-        $this->originalCacheStateEnabledStatus = $this->cacheState->isEnabled(GraphQlCache::TYPE_IDENTIFIER);
-        $this->cacheState->setEnabled(GraphQlCache::TYPE_IDENTIFIER, true);
+        $this->originalCacheStateEnabledStatus = $this->cacheState->isEnabled(GraphQlResolverCache::TYPE_IDENTIFIER);
+        $this->cacheState->setEnabled(GraphQlResolverCache::TYPE_IDENTIFIER, true);
     }
 
     protected function tearDown(): void
@@ -81,8 +81,8 @@ class PageTest extends TestCase
         $objectManager->addSharedInstance($this->originalResolverResultCachePlugin, ResolverResultCachePlugin::class);
 
         // clean graphql resolver cache and reset to original enablement status
-        $objectManager->get(GraphQlCache::class)->clean();
-        $this->cacheState->setEnabled(GraphQlCache::TYPE_IDENTIFIER, $this->originalCacheStateEnabledStatus);
+        $objectManager->get(GraphQlResolverCache::class)->clean();
+        $this->cacheState->setEnabled(GraphQlResolverCache::TYPE_IDENTIFIER, $this->originalCacheStateEnabledStatus);
     }
 
     /**
@@ -98,7 +98,7 @@ class PageTest extends TestCase
 
         $frontendPool = $objectManager->get(FrontendPool::class);
 
-        $cacheProxy = $this->getMockBuilder(GraphQlCache::class)
+        $cacheProxy = $this->getMockBuilder(GraphQlResolverCache::class)
             ->enableProxyingToOriginalMethods()
             ->setConstructorArgs([
                 $frontendPool
@@ -136,6 +136,59 @@ class PageTest extends TestCase
         // send again with a different field and assert save is not called (i.e. result is loaded from resolver cache)
         $differentQuery = $this->getQuery($page->getIdentifier(), ['meta_title']);
         $this->graphQlRequest->send($differentQuery);
+    }
+
+    /**
+     * Test that resolver plugin does not call GraphQlResolverCache's save or load methods when it is disabled
+     *
+     * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
+     * @return void
+     */
+    public function testNeitherSaveNorLoadAreCalledWhenResolverCacheIsDisabled()
+    {
+        $objectManager = $this->objectManager;
+        $page = $this->getPageByTitle('Page with 1column layout');
+
+        $cacheState = $this->getMockForAbstractClass(CacheStateInterface::class);
+
+        $cacheState
+            ->expects($this->atLeastOnce())
+            ->method('isEnabled')
+            ->with(GraphQlResolverCache::TYPE_IDENTIFIER)
+            ->willReturn(false);
+
+        $frontendPool = $objectManager->get(FrontendPool::class);
+
+        $cacheProxy = $this->getMockBuilder(GraphQlResolverCache::class)
+            ->enableProxyingToOriginalMethods()
+            ->setConstructorArgs([
+                $frontendPool
+            ])
+            ->getMock();
+
+        // assert cache proxy never calls load
+        $cacheProxy
+            ->expects($this->never())
+            ->method('load');
+
+        // assert save is also never called
+        $cacheProxy
+            ->expects($this->never())
+            ->method('save');
+
+        $resolverPluginWithCacheProxy = $objectManager->create(ResolverResultCachePlugin::class, [
+            'graphQlResolverCache' => $cacheProxy,
+            'cacheState' => $cacheState,
+        ]);
+
+        // override resolver plugin with plugin instance containing cache proxy class
+        $objectManager->addSharedInstance($resolverPluginWithCacheProxy, ResolverResultCachePlugin::class);
+
+        $query = $this->getQuery($page->getIdentifier());
+
+        // send request multiple times and assert neither save nor load are called
+        $this->graphQlRequest->send($query);
+        $this->graphQlRequest->send($query);
     }
 
     private function getQuery(string $identifier, array $fields = ['title']): string

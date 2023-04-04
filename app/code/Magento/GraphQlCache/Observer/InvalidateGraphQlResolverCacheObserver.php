@@ -11,14 +11,14 @@ use Magento\Framework\App\Cache\StateInterface as CacheState;
 use Magento\Framework\App\Cache\Tag\Resolver as TagResolver;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
-use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlCache;
+use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
 
 class InvalidateGraphQlResolverCacheObserver implements ObserverInterface
 {
     /**
-     * @var GraphQlCache
+     * @var GraphQlResolverCache
      */
-    private $graphQlCache;
+    private $graphQlResolverCache;
 
     /**
      * @var CacheState
@@ -31,16 +31,16 @@ class InvalidateGraphQlResolverCacheObserver implements ObserverInterface
     private $tagResolver;
 
     /**
-     * @param GraphQlCache $graphQlCache
+     * @param GraphQlResolverCache $graphQlCache
      * @param CacheState $cacheState
      * @param TagResolver $tagResolver
      */
     public function __construct(
-        GraphQlCache $graphQlCache,
+        GraphQlResolverCache $graphQlCache,
         CacheState $cacheState,
         TagResolver $tagResolver
     ) {
-        $this->graphQlCache = $graphQlCache;
+        $this->graphQlResolverCache = $graphQlCache;
         $this->cacheState = $cacheState;
         $this->tagResolver = $tagResolver;
     }
@@ -60,14 +60,14 @@ class InvalidateGraphQlResolverCacheObserver implements ObserverInterface
             return;
         }
 
-        if (!$this->cacheState->isEnabled(GraphQlCache::TYPE_IDENTIFIER)) {
+        if (!$this->cacheState->isEnabled(GraphQlResolverCache::TYPE_IDENTIFIER)) {
             return;
         }
 
         $tags = $this->tagResolver->getTags($object);
 
         if (!empty($tags)) {
-            $this->graphQlCache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $tags);
+            $this->graphQlResolverCache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $tags);
         }
     }
 }

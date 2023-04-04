@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlCache\Model\Plugin\Query\Resolver\Result;
 
+use Magento\Framework\App\Cache\StateInterface as CacheState;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -45,6 +46,11 @@ class Cache
     private $serializer;
 
     /**
+     * @var CacheState
+     */
+    private $cacheState;
+
+    /**
      * @var string[]
      */
     private array $cacheableResolverClassNameIdentityMap;
@@ -54,6 +60,7 @@ class Cache
      * @param CacheIdCalculator $cacheIdCalculator
      * @param IdentityPool $identityPool
      * @param SerializerInterface $serializer
+     * @param CacheState $cacheState
      * @param string[] $cacheableResolverClassNameIdentityMap
      */
     public function __construct(
@@ -61,12 +68,14 @@ class Cache
         CacheIdCalculator $cacheIdCalculator,
         IdentityPool $identityPool,
         SerializerInterface $serializer,
+        CacheState $cacheState,
         array $cacheableResolverClassNameIdentityMap = []
     ) {
         $this->graphQlResolverCache = $graphQlResolverCache;
         $this->cacheIdCalculator = $cacheIdCalculator;
         $this->identityPool = $identityPool;
         $this->serializer = $serializer;
+        $this->cacheState = $cacheState;
         $this->cacheableResolverClassNameIdentityMap = $cacheableResolverClassNameIdentityMap;
     }
 
@@ -91,6 +100,12 @@ class Cache
         array $value = null,
         array $args = null
     ) {
+        // even though a frontend access proxy is used to prevent saving/loading in $graphQlResolverCache when it is
+        // disabled, it's best to return as early as possible to avoid unnecessary processing
+        if (!$this->cacheState->isEnabled(GraphQlResolverCache::TYPE_IDENTIFIER)) {
+            return $proceed($field, $context, $info, $value, $args);
+        }
+
         $isQuery = $info->operation->operation === 'query';
 
         if (!$isQuery) {
