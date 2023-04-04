@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlCache\Observer;
 
+use Magento\Cms\Api\Data\PageInterface;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
 use Magento\Framework\App\Cache\Tag\Resolver as TagResolver;
 use Magento\Framework\Event\ObserverInterface;
@@ -57,6 +58,10 @@ class InvalidateGraphQlResolverCacheObserver implements ObserverInterface
         $object = $observer->getEvent()->getObject();
 
         if (!is_object($object)) {
+            return;
+        }
+
+        if (!($object instanceof PageInterface)) {
             return;
         }
 
