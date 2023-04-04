@@ -45,25 +45,19 @@ class ResolverIdentityClassLocator
      */
     public function getIdentityFromResolver(ResolverInterface $resolver): ?IdentityInterface
     {
-        $resolverClassHierarchy = array_merge(
-            [get_class($resolver) => get_class($resolver)],
-            class_parents($resolver),
-            class_implements($resolver)
-        );
+        $matchingIdentityProviderClassName = null;
 
-        $cacheableResolverClassNames = array_keys($this->cacheableResolverClassNameIdentityMap);
+        foreach ($this->cacheableResolverClassNameIdentityMap as $resolverClassName => $identityProviderClassName) {
+            if ($resolver instanceof $resolverClassName) {
+                $matchingIdentityProviderClassName =  $identityProviderClassName;
+                break;
+            }
+        }
 
-        $matchingCacheableResolverClassNames = array_intersect($cacheableResolverClassNames, $resolverClassHierarchy);
-
-        if (!count($matchingCacheableResolverClassNames)) {
+        if (!$matchingIdentityProviderClassName) {
             return null;
         }
 
-        $matchingCacheableResolverClassName = reset($matchingCacheableResolverClassNames);
-        $matchingCacheableResolverIdentityClassName = $this->cacheableResolverClassNameIdentityMap[
-            $matchingCacheableResolverClassName
-        ];
-
-        return $this->identityPool->get($matchingCacheableResolverIdentityClassName);
+        return $this->identityPool->get($matchingIdentityProviderClassName);
     }
 }
