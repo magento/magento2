@@ -144,6 +144,7 @@ abstract class AbstractAction
      * @param QueryGenerator $queryGenerator
      * @param MetadataPool|null $metadataPool
      * @param TableMaintainer|null $tableMaintainer
+     * @param Visibility|null $visibility
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
