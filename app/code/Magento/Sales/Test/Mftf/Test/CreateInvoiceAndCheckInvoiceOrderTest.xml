@@ -35,7 +35,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrderPage">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrderPage">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <actionGroup ref="AddSimpleProductWithQtyToOrderActionGroup" stepKey="addProductToOrder">
@@ -96,7 +96,7 @@
         </actionGroup>
         <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickOrderApplyFilters"/>
         <dontSeeElement selector="{{AdminDataGridTableSection.dataGridEmpty}}" stepKey="assertThatInvoiceGridNotEmpty"/>
-       
+
         <actionGroup ref="FilterInvoiceGridByOrderIdWithCleanFiltersActionGroup" stepKey="filterInvoiceByOrderId">
             <argument name="orderId" value="$orderNumber"/>
         </actionGroup>

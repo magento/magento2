@@ -94,9 +94,7 @@ abstract class AbstractLikedProducts implements BatchResolverInterface
         $this->searchCriteriaBuilder->addFilter('entity_id', $relatedIds, 'in');
         $relatedSearchResult = $this->productDataProvider->getList(
             $this->searchCriteriaBuilder->create(),
-            $loadAttributes,
-            false,
-            true
+            $loadAttributes
         );
         //Filling related products map.
         /** @var \Magento\Catalog\Api\Data\ProductInterface[] $relatedProducts */

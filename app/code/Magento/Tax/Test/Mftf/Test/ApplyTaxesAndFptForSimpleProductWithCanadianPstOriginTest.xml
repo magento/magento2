@@ -16,6 +16,7 @@
             <description value="Apply tax and fpt for simple product with canadian pst origin test"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4061"/>
+            <group value="tax_isolated" />
         </annotations>
         <before>
              <!-- Create a new user with canadian address -->
