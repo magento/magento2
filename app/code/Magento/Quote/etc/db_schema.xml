@@ -97,8 +97,9 @@
             <column name="store_id"/>
             <column name="is_active"/>
         </index>
-        <index referenceId="QUOTE_STORE_ID" indexType="btree">
+        <index referenceId="QUOTE_STORE_ID_UPDATED_AT" indexType="btree">
             <column name="store_id"/>
+            <column name="updated_at"/>
         </index>
     </table>
     <table name="quote_address" resource="checkout" engine="innodb" comment="Sales Flat Quote Address">
