@@ -31,26 +31,18 @@ class InvalidateGraphQlResolverCacheObserver implements ObserverInterface
     private $tagResolver;
 
     /**
-     * @var array
-     */
-    private $invalidatableObjectTypes;
-
-    /**
      * @param GraphQlResolverCache $graphQlResolverCache
      * @param CacheState $cacheState
      * @param TagResolver $tagResolver
-     * @param array $invalidatableObjectTypes
      */
     public function __construct(
         GraphQlResolverCache $graphQlResolverCache,
         CacheState $cacheState,
-        TagResolver $tagResolver,
-        array $invalidatableObjectTypes = []
+        TagResolver $tagResolver
     ) {
         $this->graphQlResolverCache = $graphQlResolverCache;
         $this->cacheState = $cacheState;
         $this->tagResolver = $tagResolver;
-        $this->invalidatableObjectTypes = $invalidatableObjectTypes;
     }
 
     /**
