@@ -131,7 +131,7 @@
             <argument name="category" value="$$createCategory$$"/>
         </actionGroup>
 
-        <actionGroup ref="OpenProductsInCategorySectionActionGroup" stepKey="openProductsInCategorySectionBeforeSort"/>
+        <actionGroup ref="AdminCategoryPageOpenProductsInCategorySectionActionGroup" stepKey="openProductsInCategorySectionBeforeSort"/>
 
         <actionGroup ref="SortProductsByCriteriaInCategoryActionGroup" stepKey="SelectSortOrderInProductInCategory1">
             <argument name="criteria" value="Move low stock to top"/>
