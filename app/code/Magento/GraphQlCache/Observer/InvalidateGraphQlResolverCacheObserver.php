@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlCache\Observer;
 
-use Magento\Cms\Api\Data\PageInterface;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
 use Magento\Framework\App\Cache\Tag\Resolver as TagResolver;
 use Magento\Framework\Event\ObserverInterface;
@@ -32,18 +31,26 @@ class InvalidateGraphQlResolverCacheObserver implements ObserverInterface
     private $tagResolver;
 
     /**
+     * @var array
+     */
+    private $invalidatableObjectTypes;
+
+    /**
      * @param GraphQlResolverCache $graphQlResolverCache
      * @param CacheState $cacheState
      * @param TagResolver $tagResolver
+     * @param array $invalidatableObjectTypes
      */
     public function __construct(
         GraphQlResolverCache $graphQlResolverCache,
         CacheState $cacheState,
-        TagResolver $tagResolver
+        TagResolver $tagResolver,
+        array $invalidatableObjectTypes = []
     ) {
         $this->graphQlResolverCache = $graphQlResolverCache;
         $this->cacheState = $cacheState;
         $this->tagResolver = $tagResolver;
+        $this->invalidatableObjectTypes = $invalidatableObjectTypes;
     }
 
     /**
@@ -61,11 +68,21 @@ class InvalidateGraphQlResolverCacheObserver implements ObserverInterface
             return;
         }
 
-        if (!($object instanceof PageInterface)) {
+        if (!$this->cacheState->isEnabled(GraphQlResolverCache::TYPE_IDENTIFIER)) {
             return;
         }
 
-        if (!$this->cacheState->isEnabled(GraphQlResolverCache::TYPE_IDENTIFIER)) {
+        $isInvalidatable = false;
+
+        foreach ($this->invalidatableObjectTypes as $invalidatableObjectType) {
+            $isInvalidatable = $object instanceof $invalidatableObjectType;
+
+            if ($isInvalidatable) {
+                break;
+            }
+        }
+
+        if (!$isInvalidatable) {
             return;
         }
 
