@@ -10,7 +10,7 @@ namespace Magento\GraphQlCache\Observer;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
-use Magento\GraphQlCache\Model\Cache\Query\Resolver\TagResolver as TagResolver;
+use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\TagResolver;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
 
 class InvalidateGraphQlResolverCacheObserver implements ObserverInterface

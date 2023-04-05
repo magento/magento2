@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQlCache\Model\Cache\Query\Resolver;
+namespace Magento\GraphQlCache\Model\Cache\Query\Resolver\Result;
 
 use Magento\Framework\App\Cache\Tag\Resolver;
 use Magento\Framework\App\Cache\Tag\Strategy\Factory as StrategyFactory;
