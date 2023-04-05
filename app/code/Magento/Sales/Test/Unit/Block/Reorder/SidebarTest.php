@@ -83,7 +83,7 @@ class SidebarTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->markTestIncomplete('MAGETWO-36789');
+        $this->markTestSkipped('MAGETWO-36789');
         $this->objectManagerHelper = new ObjectManager($this);
         $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->httpContext = $this->createPartialMock(\Magento\Framework\App\Http\Context::class, ['getValue']);

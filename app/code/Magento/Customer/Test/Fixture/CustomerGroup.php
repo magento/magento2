@@ -3,20 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Customer\Test\Fixture;
 
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\Hydrator;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Tax\Api\TaxClassRepositoryInterface;
+use Magento\TestFramework\Fixture\Api\DataMerger;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
+use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
 /**
@@ -35,50 +32,46 @@ class CustomerGroup implements RevertibleDataFixtureInterface
     private ServiceFactory $serviceFactory;
 
     /**
-     * @var TaxClassRepositoryInterface
+     * @var Hydrator
      */
-    private TaxClassRepositoryInterface $taxClassRepository;
-
-    /** @var Hydrator */
     private Hydrator $hydrator;
 
     /**
+     * @var DataMerger
+     */
+    private DataMerger $dataMerger;
+
+    /**
+     * @var ProcessorInterface
+     */
+    private ProcessorInterface $dataProcessor;
+
+    /**
      * @param ServiceFactory $serviceFactory
-     * @param TaxClassRepositoryInterface $taxClassRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Hydrator $hydrator
+     * @param DataMerger $dataMerger
+     * @param ProcessorInterface $dataProcessor
      */
     public function __construct(
         ServiceFactory $serviceFactory,
-        TaxClassRepositoryInterface $taxClassRepository,
-        Hydrator $hydrator
+        Hydrator $hydrator,
+        DataMerger $dataMerger,
+        ProcessorInterface $dataProcessor
     ) {
         $this->serviceFactory = $serviceFactory;
-        $this->taxClassRepository = $taxClassRepository;
         $this->hydrator = $hydrator;
+        $this->dataMerger = $dataMerger;
+        $this->dataProcessor = $dataProcessor;
     }
 
     /**
-     * {@inheritdoc}
-     * @param array $data Parameters. Same format as Customer::DEFAULT_DATA.
-     * @return DataObject|null
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
+     * @inheritdoc
      */
     public function apply(array $data = []): ?DataObject
     {
-        $customerGroupSaveService = $this->serviceFactory->create(
-            GroupRepositoryInterface::class,
-            'save'
-        );
-        $data = self::DEFAULT_DATA;
-        if (!empty($data['tax_class_id'])) {
-            $data[GroupInterface::TAX_CLASS_ID] = $this->taxClassRepository->get($data['tax_class_id'])->getClassId();
-        }
-
-        $customerGroup =  $customerGroupSaveService->execute(
+        $customerGroup = $this->serviceFactory->create(GroupRepositoryInterface::class, 'save')->execute(
             [
-                'group' => $data,
+                'group' => $this->dataProcessor->process($this, $this->dataMerger->merge(self::DEFAULT_DATA, $data))
             ]
         );
 
@@ -90,8 +83,7 @@ class CustomerGroup implements RevertibleDataFixtureInterface
      */
     public function revert(DataObject $data): void
     {
-        $service = $this->serviceFactory->create(GroupRepositoryInterface::class, 'deleteById');
-        $service->execute(
+        $this->serviceFactory->create(GroupRepositoryInterface::class, 'deleteById')->execute(
             [
                 'id' => $data->getId()
             ]
