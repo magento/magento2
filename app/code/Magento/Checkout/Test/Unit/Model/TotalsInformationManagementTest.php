@@ -135,6 +135,7 @@ class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
                     'getShippingMethod',
                     'setShippingAmount',
                     'setBaseShippingAmount',
+                    'save'
                 ]
             )
             ->disableOriginalConstructor()
@@ -166,6 +167,9 @@ class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
         $addressMock->expects($this->once())
             ->method('setShippingMethod')
             ->with($carrierCode . '_' . $carrierMethod);
+        $addressMock->expects($this->once())
+            ->method('save')
+            ->willReturnSelf();
         $cartMock->expects($this->once())
             ->method('collectTotals');
 
