@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\EavGraphQl\Model\Output;
 
 use Magento\Eav\Api\Data\AttributeInterface;
-use Magento\EavGraphQl\Model\Uid;
 use Magento\Framework\Exception\RuntimeException;
 
 /**
