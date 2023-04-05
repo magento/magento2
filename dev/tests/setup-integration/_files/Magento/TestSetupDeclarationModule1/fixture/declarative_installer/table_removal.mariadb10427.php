@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 return [
     'auto_increment_test' => 'CREATE TABLE `auto_increment_test` (
   `int_auto_increment_with_nullable` int(10) unsigned NOT NULL AUTO_INCREMENT,

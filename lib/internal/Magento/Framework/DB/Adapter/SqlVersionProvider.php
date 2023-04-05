@@ -153,9 +153,9 @@ class SqlVersionProvider
     public function isMariaDBGte10611(): bool
     {
         $sqlVersion = $this->getSqlVersion();
-        $isMariaDB = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_VERSION);
+        $isMariaDB106 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_6_VERSION);
         $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
-        if ($isMariaDB && version_compare($sqlExactVersion, '10.6.11', '>=')) {
+        if ($isMariaDB106 && version_compare($sqlExactVersion, '10.6.11', '>=')) {
             return true;
         }
         return false;
@@ -170,9 +170,9 @@ class SqlVersionProvider
     public function isMariaDBGte10427(): bool
     {
         $sqlVersion = $this->getSqlVersion();
-        $isMariaDB = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_VERSION);
+        $isMariaDB104 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_4_VERSION);
         $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
-        if ($isMariaDB && version_compare($sqlExactVersion, '10.4.27', '>=')) {
+        if ($isMariaDB104 && version_compare($sqlExactVersion, '10.4.27', '>=')) {
             return true;
         }
         return false;
