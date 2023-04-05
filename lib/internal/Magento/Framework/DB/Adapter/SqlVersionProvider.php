@@ -150,7 +150,7 @@ class SqlVersionProvider
      * @return bool
      * @throws ConnectionException
      */
-    public function isMariaDBGte10_6_11(): bool
+    public function isMariaDBGte10611(): bool
     {
         $sqlVersion = $this->getSqlVersion();
         $isMariaDB = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_VERSION);
@@ -167,7 +167,7 @@ class SqlVersionProvider
      * @return bool
      * @throws ConnectionException
      */
-    public function isMariaDBGte10_4_27(): bool
+    public function isMariaDBGte10427(): bool
     {
         $sqlVersion = $this->getSqlVersion();
         $isMariaDB = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_VERSION);
