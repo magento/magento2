@@ -396,6 +396,9 @@ class AccountManagement implements AccountManagementInterface
      */
     private CustomerLogger $customerLogger;
 
+    /**
+     * @var Session
+     */
     private $authSession;
 
     /**
