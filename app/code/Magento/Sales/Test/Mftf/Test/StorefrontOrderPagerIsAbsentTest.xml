@@ -88,7 +88,7 @@
 
         </before>
         <after>
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct01" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct02" stepKey="deleteProduct2"/>
@@ -114,11 +114,11 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        
+
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
             <argument name="Customer" value="$$createCustomer$$" />
         </actionGroup>
-        
+
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onCategoryPage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToLimiter"/>
@@ -209,7 +209,7 @@
             <requiredEntity createDataKey="createCustomerCart"/>
             <requiredEntity createDataKey="createProduct20"/>
         </createData>
-        
+
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onCheckout"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="see20Products"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickNextButton"/>
