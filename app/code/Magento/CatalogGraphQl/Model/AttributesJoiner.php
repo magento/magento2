@@ -82,6 +82,7 @@ class AttributesJoiner
      *
      * @param array $query
      * @param ResolveInfo $resolveInfo
+     * @return array
      */
     public function getQueryData($query, $resolveInfo)
     {
