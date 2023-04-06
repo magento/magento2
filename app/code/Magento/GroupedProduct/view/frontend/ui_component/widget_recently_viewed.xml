@@ -17,6 +17,9 @@
                                     <item name="regular_price" xsi:type="array">
                                         <item name="bodyTmpl" xsi:type="string">Magento_GroupedProduct/product/price/regular_price</item>
                                     </item>
+                                    <item name="special_price" xsi:type="array">
+                                        <item name="bodyTmpl" xsi:type="string">Magento_GroupedProduct/product/price/special_price</item>
+                                    </item>
                                     <item name="minimal_price" xsi:type="array">
                                         <item name="label" xsi:type="string" translate="true">Starting at</item>
                                         <item name="bodyTmpl" xsi:type="string">Magento_GroupedProduct/product/price/minimal_price</item>
