@@ -50,7 +50,7 @@ class PageCacheTest extends GraphQLPageCacheAbstract
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheMissAndReturResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         $this->assertArrayHasKey('X-Magento-Tags', $response['headers']);
         $actualTags = explode(',', $response['headers']['X-Magento-Tags']);
@@ -76,8 +76,8 @@ class PageCacheTest extends GraphQLPageCacheAbstract
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
-//        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-//        $this->assertCacheMissAndReturResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
         $responseHit = $this->graphQlQueryWithResponseHeaders($query);
@@ -85,19 +85,7 @@ class PageCacheTest extends GraphQLPageCacheAbstract
         $this->assertEquals('HIT', $response['headers']['X-Magento-Cache-Debug']);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $this->assertEquals($cacheId, $response['headers'][CacheIdCalculator::CACHE_ID_HEADER]);
-
-        // needs this need to be removed
-
-//        //cache-debug should be a MISS on first request
-//        $responseMiss = $this->graphQlQueryWithResponseHeaders($query);
-//        $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseMiss['headers']);
-//        $this->assertEquals('MISS', $responseMiss['headers']['X-Magento-Cache-Debug']);
-//
-//        //cache-debug should be a HIT on second request
-//        $responseHit = $this->graphQlQueryWithResponseHeaders($query);
-//        $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseHit['headers']);
-//        $this->assertEquals('HIT', $responseHit['headers']['X-Magento-Cache-Debug']);
-
+        
         //cached data should be correct
         $this->assertNotEmpty($responseHit['body']);
         $this->assertArrayNotHasKey('errors', $responseHit['body']);
