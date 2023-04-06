@@ -30,20 +30,20 @@
         </before>
 
         <!-- Initiate create new order -->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$createSimpleCustomer$$"/>
         </actionGroup>
 
         <actionGroup ref="AdminAddSimpleProductToOrderAndCheckCheckboxActionGroup" stepKey="clickAddProducts">
             <argument name="product" value="$createSimpleProduct$"/>
         </actionGroup>
-        
-         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillSkuFilterBundle"/>        
-         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchBundle"/>     
+
+         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillSkuFilterBundle"/>
+         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchBundle"/>
          <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToCheckColumn"/>
          <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectProduct"/>
          <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="verifyProductChecked"/>
-       
+
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>

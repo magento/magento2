@@ -42,7 +42,7 @@
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <!--Create order.-->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$customer$"/>
         </actionGroup>
         <actionGroup ref="AdminAddSimpleProductWithCustomOptionFileToOrderActionGroup" stepKey="addSimpleProductToOrder">
