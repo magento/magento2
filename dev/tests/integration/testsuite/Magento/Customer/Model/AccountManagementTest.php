@@ -6,10 +6,14 @@
 
 namespace Magento\Customer\Model;
 
+use Magento\Authorization\Model\Role;
+use Magento\Backend\Model\Auth\Session;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Reflection\DataObjectProcessor;
@@ -18,6 +22,7 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Url as UrlBuilder;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\User\Model\User;
 
 /**
  * Integration test for service layer \Magento\Customer\Model\AccountManagementTest
@@ -49,6 +54,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
     /** @var  \Magento\Framework\Api\DataObjectHelper */
     protected $dataObjectHelper;
+
+    /**
+     * @var CustomerInterfaceFactory
+     */
+    private $customerFactory;
 
     protected function setUp(): void
     {
@@ -99,6 +109,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->dataProcessor = $this->objectManager
             ->create(\Magento\Framework\Reflection\DataObjectProcessor::class);
+        $this->customerFactory = $this->objectManager->get(CustomerInterfaceFactory::class);
     }
 
     /**
@@ -832,5 +843,90 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $visitor->setLastVisitAt((new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT));
         $visitor->save();
         return $visitor;
+    }
+
+    /**
+     * Check groupId mapping for newly created account
+     *
+     * @param bool $isUserSessionActive
+     * @param array $customerData
+     * @param int $expectedGroupId
+     * @return void
+     * @throws LocalizedException
+     * @dataProvider recordsProvider
+     */
+    public function testCustomerGroupIdForAccountCreate(
+        bool $isUserSessionActive,
+        array $customerData,
+        int $expectedGroupId
+    ): void {
+        /** @var Session $authSession */
+        $authSession = $this->objectManager->create(Session::class);
+        if ($isUserSessionActive) {
+            $role = $this->objectManager->create(Role::class)->load('role_has_test_website_access_only', 'role_name');
+            /** @var User $currentAdmin */
+            $currentAdmin = $this->objectManager->create(User::class)
+                ->loadByUsername('johnAdmin' . $role->getId());
+            $authSession->setUser($currentAdmin);
+        } else {
+            $authSession->setUser(null);
+        }
+        $customer = $this->customerFactory->create();
+        $customer->setWebsiteId($customerData['websiteId'])
+            ->setEmail($customerData['email'])
+            ->setGroupId($customerData['groupdId'])
+            ->setStoreId($customerData['storeId'])
+            ->setPrefix($customerData['prefix'])
+            ->setFirstname($customerData['firstname'])
+            ->setMiddlename($customerData['middlename'])
+            ->setLastname($customerData['lastname'])
+            ->setSuffix($customerData['suffix'])
+            ->setTaxvat($customerData['taxvat'])
+            ->setGender($customerData['gender']);
+        $result = $this->accountManagement->createAccount($customer);
+        $this->assertEquals($expectedGroupId, $result->getGroupId());
+    }
+
+    /**
+     * @return array
+     */
+    public function recordsProvider(): array
+    {
+        return [
+            [
+                true,
+                [
+                    'websiteId' => 1,
+                    'email' => 'customerTestData1@example.com',
+                    'groupdId' => 5,
+                    'storeId' => '1',
+                    'prefix' => 'Mr.',
+                    'firstname' => 'John',
+                    'middlename' => 'A',
+                    'lastname' => 'Smith',
+                    'suffix' => 'Esq',
+                    'taxvat' => '12',
+                    'gender' => 0,
+                ],
+                1
+            ],
+            [
+                false,
+                [
+                    'websiteId' => 1,
+                    'email' => 'customerTestData2@example.com',
+                    'groupdId' => 3,
+                    'storeId' => '1',
+                    'prefix' => 'Mr.',
+                    'firstname' => 'John',
+                    'middlename' => 'A',
+                    'lastname' => 'Smith',
+                    'suffix' => 'Esq',
+                    'taxvat' => '12',
+                    'gender' => 0,
+                ],
+                3
+            ]
+        ];
     }
 }
