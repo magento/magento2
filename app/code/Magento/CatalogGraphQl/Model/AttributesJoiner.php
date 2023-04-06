@@ -67,19 +67,13 @@ class AttributesJoiner
     {
         if (null === $this->getFieldNodeSelections($fieldNode)) {
             $query = $fieldNode->selectionSet->selections;
-            $selectedFields = [];
-            $fragmentFields = [];
-            $res = $resolveInfo;
             /** @var FieldNode $field */
-            $response=$this->getQueryData($query, $res);
-            $selectedFields=$response['selectedFields'];
-            $fragmentFields=$response['fragmentFields'];
-            if ($fragmentFields) {
-                $selectedFields = array_merge([], $selectedFields, ...$fragmentFields);
+            $res = $this->getQueryData($query, $resolveInfo);
+            if ($res['fragmentFields']) {
+                $res['selectedFields'] = array_merge([], $res['selectedFields'], ...$res['fragmentFields']);
             }
-            $this->setSelectionsForFieldNode($fieldNode, array_unique($selectedFields));
+            $this->setSelectionsForFieldNode($fieldNode, array_unique($res['selectedFields']));
         }
-
         return $this->getFieldNodeSelections($fieldNode);
     }
 
@@ -91,14 +85,12 @@ class AttributesJoiner
      */
     public function getQueryData($query, $resolveInfo)
     {
-        $selectedFields = [];
-        $fragmentFields = [];
+        $selectedFields = $fragmentFields = [];
         foreach ($query as $field) {
             if ($field->kind === NodeKind::INLINE_FRAGMENT) {
                 $fragmentFields[] = $this->addInlineFragmentFields($resolveInfo, $field);
             } elseif ($field->kind === NodeKind::FRAGMENT_SPREAD &&
                 ($spreadFragmentNode = $resolveInfo->fragments[$field->name->value])) {
-
                 foreach ($spreadFragmentNode->selectionSet->selections as $spreadNode) {
                     if (isset($spreadNode->selectionSet->selections)) {
                         if ($spreadNode->kind === NodeKind::FIELD && isset($spreadNode->name)) {
