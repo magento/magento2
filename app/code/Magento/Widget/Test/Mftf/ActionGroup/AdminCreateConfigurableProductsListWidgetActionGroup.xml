@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateConfigurableProductsListWidgetActionGroup" extends="AdminCreateWidgetActionGroup">
+        <annotations>
+            <description>Create a widget for configurable products</description>
+        </annotations>
+        <arguments>
+            <argument name="configProductSku" type="string" defaultValue="someString"/>
+            <argument name="widgetTitle" type="string" defaultValue="someString"/>
+            <argument name="numberOfProductsPerPage" type="string" defaultValue="someString"/>
+            <argument name="numberOfProductsToDisplay" type="string" defaultValue="someString"/>
+        </arguments>
+
+        <selectOption selector="{{AdminNewWidgetSection.specificEntitySelectContainerForConfigurableProduct}}" userInput="{{widget.container}}" stepKey="setContainer"/>
+        <seeElement selector="{{AdminNewWidgetSection.specificEntitySelectRadioForConfigurableProduct}}" stepKey="seeSpecificEntityRadio" after="waitForPageLoad"/>
+        <click selector="{{AdminNewWidgetSection.specificEntitySelectRadioForConfigurableProduct}}" stepKey="clickSpecificEntityRadio" after="seeSpecificEntityRadio"/>
+        <seeElement selector="{{AdminNewWidgetSection.specificEntityOptionsChooserForConfigurableProduct}}" stepKey="seeChooserTrigger" after="clickSpecificEntityRadio"/>
+        <click selector="{{AdminNewWidgetSection.specificEntityOptionsChooserForConfigurableProduct}}" stepKey="clickChooserTrigger" after="seeChooserTrigger"/>
+        <waitForAjaxLoad after="clickChooserTrigger" stepKey="waitForAjaxLoad1"/>
+        <fillField selector="{{AdminNewWidgetSection.selectConfigurableProductSku}}" after="waitForAjaxLoad1" userInput="{{configProductSku}}" stepKey="fillConfigurableProductSku"/>
+        <click selector="{{AdminNewWidgetSection.searchBlock}}" after="fillConfigurableProductSku" stepKey="searchConfigurableProduct"/>
+        <waitForAjaxLoad after="searchConfigurableProduct" stepKey="waitForAjaxLoad2"/>
+        <click selector="{{AdminNewWidgetSection.searchedConfigurableProduct}}" after="waitForAjaxLoad2" stepKey="clickSearchedConfigurableProduct"/>
+        <fillField selector="{{AdminNewWidgetSection.title}}" userInput="{{widgetTitle}}" stepKey="fillWidgetTitle"/>
+        <fillField selector="{{AdminNewWidgetSection.numberOfProductsPerPage}}" userInput="{{numberOfProductsPerPage}}" stepKey="fillNumberOfProductsPerPage"/>
+        <fillField selector="{{AdminNewWidgetSection.numberOfProductsToDisplay}}" userInput="{{numberOfProductsToDisplay}}" stepKey="fillNumberOfProductsToDisplay"/>
+        <click selector="{{AdminNewWidgetSection.saveWidget}}" stepKey="saveWidget"/>
+        <waitForPageLoad stepKey="waitForSaving"/>
+        <see userInput="The widget instance has been saved." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

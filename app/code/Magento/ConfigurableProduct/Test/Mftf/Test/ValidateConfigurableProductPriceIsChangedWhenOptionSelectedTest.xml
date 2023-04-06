@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ValidateConfigurableProductPriceIsChangedWhenOptionSelectedTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Configurable product price is not changed when option is selected"/>
+            <title value="Validate configurable product price need to be change when option is selected"/>
+            <description value="Validate configurable product price need to be change when option is selected"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-8423"/>
+            <group value="Catalog"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createConfigurableProduct1" stepKey="deleteConfigurableProduct1"/>
+            <deleteData createDataKey="createConfigurableProduct2" stepKey="deleteConfigurableProduct2"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
+                <argument name="ProductAttribute" value="{{dropdownProductAttribute.attribute_code}}"/>
+            </actionGroup>
+            <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
+            <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
+            <waitForPageLoad stepKey="waitForDeletion"/>
+            <!-- Delete color attribute -->
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteColorAttribute">
+                <argument name="ProductAttribute" value="ProductColorAttribute"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteWidgetActionGroup" stepKey="deleteWidget">
+                <argument name="widget" value="ConfigurableProductsListWidget"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Navigate to Stores > Attributes > Product.-->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+
+        <!--Create new Product Attribute as TextField, with code and default value.-->
+        <actionGroup ref="CreateProductAttributeActionGroup" stepKey="createAttribute">
+            <argument name="attribute" value="dropdownProductAttribute"/>
+        </actionGroup>
+
+        <!--Navigate to Product Attribute, add Product Options and Save - 1-->
+        <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage1">
+            <argument name="ProductAttribute" value="{{dropdownProductAttribute.attribute_code}}"/>
+        </actionGroup>
+        <!-- Set scope to global -->
+        <actionGroup ref="AdminSwitchScopeForProductAttributeActionGroup" stepKey="switchScopeForProductAttribute"/>
+        <actionGroup ref="CreateAttributeDropdownNthOptionActionGroup" stepKey="createOption1">
+            <argument name="adminName" value="Small"/>
+            <argument name="frontName" value="Small"/>
+            <argument name="row" value="1"/>
+        </actionGroup>
+        <actionGroup ref="CreateAttributeDropdownNthOptionActionGroup" stepKey="createOption2">
+            <argument name="adminName" value="Medium"/>
+            <argument name="frontName" value="Medium"/>
+            <argument name="row" value="2"/>
+        </actionGroup>
+        <actionGroup ref="CreateAttributeDropdownNthOptionAsDefaultActionGroup" stepKey="createOption3">
+            <argument name="adminName" value="Large"/>
+            <argument name="frontName" value="Large"/>
+            <argument name="row" value="3"/>
+        </actionGroup>
+        <click stepKey="saveAttribute" selector="{{AttributePropertiesSection.Save}}"/>
+        <!--Create text swatch attribute with 3 options:  Black, White and Blue-->
+        <actionGroup ref="AddTextSwatchToProductActionGroup" stepKey="addColorAttribute">
+            <argument name="attributeName" value="{{ProductColorAttribute.frontend_label}}"/>
+            <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
+            <argument name="option1" value="Black"/>
+            <argument name="option2" value="White"/>
+            <argument name="option3" value="Blue"/>
+            <argument name="usedInProductListing" value="Yes"/>
+        </actionGroup>
+        <amOnPage url="{{AdminProductEditPage.url($createConfigurableProduct1.id$)}}" stepKey="goToConfigurableProduct1"/>
+
+        <actionGroup ref="AdminCreateConfigurableProductWithAttributeUncheckOptionWithUniquePricesActionGroup" stepKey="createConfigurationProductWithAttribute1">
+            <argument name="attributeCode" value="{{dropdownProductAttribute.attribute_code}}"/>
+            <argument name="attributeOption" value="Medium"/>
+            <argument name="attributeSelection" value="{{dropdownProductAttribute.attribute_code}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveConfigurableProduct1" />
+
+        <amOnPage url="{{AdminProductEditPage.url($createConfigurableProduct2.id$)}}" stepKey="goToConfigurableProduct2"/>
+
+        <actionGroup ref="AdminCreateConfigurableProductWithAttributeUncheckOptionWithUniquePricesActionGroup" stepKey="createConfigurationProductWithAttribute2">
+            <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
+            <argument name="attributeOption" value="Blue"/>
+            <argument name="attributeSelection" value="{{ProductColorAttribute.frontend_label}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateConfigurableProductWithAttributeUncheckOptionWithUniquePricesActionGroup" stepKey="createConfigurationProductWithAttribute3">
+            <argument name="attributeCode" value="{{dropdownProductAttribute.attribute_code}}"/>
+            <argument name="attributeOption" value="Medium"/>
+            <argument name="attributeSelection" value="{{dropdownProductAttribute.attribute_code}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveConfigurableProduct2" />
+        <amOnPage url="{{AdminNewWidgetPage.url}}" stepKey="createWidgetPage"/>
+        <actionGroup ref="AdminCreateConfigurableProductsListWidgetActionGroup" stepKey="fillForm">
+            <argument name="widget" value="ConfigurableProductsListWidget"/>
+            <argument name="configProductSku" value="$$createConfigurableProduct1.sku$$"/>
+            <argument name="widgetTitle" value="Catalog Products List"/>
+            <argument name="numberOfProductsPerPage" value="1"/>
+            <argument name="numberOfProductsToDisplay" value="1"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontProductPage.url($$createConfigurableProduct1.custom_attributes[url_key]$$)}}" stepKey="goToStorefrontConfigProductPage1"/>
+        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.price}}" stepKey="configProductSmallPriceText"/>
+        <selectOption userInput="Large +$1.00" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectSecondOption"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.price}}" stepKey="configProductLargePriceText"/>
+        <assertNotEquals stepKey="assertChange">
+            <expectedResult type="string">$configProductSmallPriceText</expectedResult>
+            <actualResult type="string">$configProductLargePriceText</actualResult>
+        </assertNotEquals>
+    </test>
+</tests>

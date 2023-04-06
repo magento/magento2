@@ -55,8 +55,14 @@
         <element name="numberOfProductsToDisplay" type="input" selector="[name='parameters[products_count]']"/>
         <element name="template" type="select" selector="[name='parameters[template]']"/>
         <element name="cacheLifetime" type="input" selector="[name='parameters[cache_lifetime]']"/>
-        <element name="deleteWidgetLayoutAction" type="button" selector="#page_group_container > div:first-of-type > div.fieldset-wrapper-title > div > .action-default.action-delete"/> 
+        <element name="deleteWidgetLayoutAction" type="button" selector="#page_group_container > div:first-of-type > div.fieldset-wrapper-title > div > .action-default.action-delete"/>
         <element name="CountDeleteButtons" type="button" selector="#page_group_container > .fieldset-wrapper.page_group_container > div.fieldset-wrapper-title > div > .action-default.action-delete"/>
+        <element name="specificEntitySelectContainerForConfigurableProduct" type="select" selector="select[name='widget_instance[0][configurable_products][block]']"/>
+        <element name="specificEntitySelectRadioForConfigurableProduct" type="input" selector="#specific_configurable_products_0"/>
+        <element name="specificEntityOptionsChooserForConfigurableProduct" type="button" selector="#configurable_products_ids_0 .widget-option-chooser"/>
+        <element name="selectConfigurableProductSku" type="input" selector="//input[@name='chooser_sku']"/>
+        <element name="searchedConfigurableProduct" type="button" selector="//*[@class='data-grid']//tbody/tr/td[1]"/>
+        <element name="numberOfProductsPerPage" type="input" selector="[name='parameters[products_per_page]']"/>
     </section>
 </sections>
 

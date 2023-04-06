@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateConfigurableProductWithAttributeUncheckOptionWithUniquePricesActionGroup" extends="GenerateConfigurationsByAttributeCodeActionGroup">
+        <annotations>
+            <description>EXTENDS: generateConfigurationsByAttributeCode. Click to uncheck created option with unique prices. Enter Attribute price</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeOption" type="string" defaultValue="option1"/>
+            <argument name="attributeSelection" type="string" defaultValue="SomeString"/>
+        </arguments>
+        <remove keyForRemoval="clickOnSelectAll"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(attributeSelection)}}" stepKey="selectAllOptionsOfAttribute" before="clickOnNextButton2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeOption(attributeOption)}}" after="selectAllOptionsOfAttribute" stepKey="clickToUncheckOption"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" after="clickToUncheckOption" stepKey="clickOnNextButton22"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" after="clickOnNextButton22" stepKey="waitForNextPageOpened2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyUniquePricesByAttributeToEachSku}}" after="waitForNextPageOpened2" stepKey="clickOnApplyUniquePricesByAttributeToEachSku"/>
+        <selectOption selector="{{AdminCreateProductConfigurationsPanel.selectAttribute}}" userInput="{{attributeSelection}}" before="clickOnApplySingleQuantityToEachSku" stepKey="selectAttributes"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attribute1}}" userInput="{{colorProductAttribute1.price}}" before="clickOnApplySingleQuantityToEachSku" stepKey="fillAttributePrice1"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attribute2}}" userInput="{{colorProductAttribute2.price}}" before="clickOnApplySingleQuantityToEachSku" stepKey="fillAttributePrice2"/>
+    </actionGroup>
+</actionGroups>
