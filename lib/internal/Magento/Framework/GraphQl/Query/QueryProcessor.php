@@ -9,6 +9,7 @@ namespace Magento\Framework\GraphQl\Query;
 
 use GraphQL\Error\DebugFlag;
 use GraphQL\GraphQL;
+use GraphQL\Language\AST\DocumentNode;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -54,7 +55,7 @@ class QueryProcessor
      * Process a GraphQl query according to defined schema
      *
      * @param Schema $schema
-     * @param string $source
+     * @param DocumentNode|string $source
      * @param ContextInterface|null $contextValue
      * @param array|null $variableValues
      * @param string|null $operationName
@@ -63,7 +64,7 @@ class QueryProcessor
      */
     public function process(
         Schema $schema,
-        string $source,
+        DocumentNode|string $source,
         ContextInterface $contextValue = null,
         array $variableValues = null,
         string $operationName = null

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query;
 
+use GraphQL\Language\AST\DocumentNode;
 use GraphQL\Language\AST\Node;
 use GraphQL\Language\AST\NodeKind;
 
@@ -23,7 +24,7 @@ class Fields
     /**
      * Set Query for extracting list of fields.
      *
-     * @param string $query
+     * @param DocumentNode|string $query
      * @param array|null $variables
      *
      * @return void
@@ -32,9 +33,11 @@ class Fields
     {
         $queryFields = [];
         try {
-            $queryAst = \GraphQL\Language\Parser::parse(new \GraphQL\Language\Source($query ?: '', 'GraphQL'));
+            if (is_string($query)) {
+                $query = \GraphQL\Language\Parser::parse(new \GraphQL\Language\Source($query ?: '', 'GraphQL'));
+            }
             \GraphQL\Language\Visitor::visit(
-                $queryAst,
+                $query,
                 [
                     'leave' => [
                         NodeKind::NAME => function (Node $node) use (&$queryFields) {
