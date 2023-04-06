@@ -46,10 +46,9 @@ class LoginAsCustomerCleanUpTest extends TestCase
 
     public function testBeforeExecute()
     {
-        $key = 'key';
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->persistentSessionModelMock->expects($this->once())->method('removePersistentCookie');
-        $result = $this->plugin->beforeExecute($this->subjectMock, $key);
-        $this->assertEquals($key, $result);
+        $result = $this->plugin->afterExecute($this->subjectMock);
+        $this->assertEquals(null, $result);
     }
 }

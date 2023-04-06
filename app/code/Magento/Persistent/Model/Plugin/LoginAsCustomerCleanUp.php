@@ -26,18 +26,16 @@ class LoginAsCustomerCleanUp
     }
 
     /**
-     * Cleans persistence cookie on sales representative login
+     * Disable persistence for sales representative login
      *
      * @param AuthenticateCustomerBySecretInterface $subject
-     * @param string $secret
-     * @return string
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeExecute(AuthenticateCustomerBySecretInterface $subject, string $secret)
+    public function afterExecute(AuthenticateCustomerBySecretInterface $subject)
     {
         if ($this->persistentSession->isPersistent()) {
             $this->persistentSession->getSession()->removePersistentCookie();
         }
-        return $secret;
     }
 }
