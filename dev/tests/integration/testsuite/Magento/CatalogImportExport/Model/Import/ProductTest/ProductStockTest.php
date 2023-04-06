@@ -157,12 +157,15 @@ class ProductStockTest extends ProductTestBase
      */
     public function testProductStockStatusShouldBeUpdated()
     {
+        $this->stockRegistryStorage->clean();
         $status = $this->stockRegistry->getStockStatusBySku('simple');
         $this->assertEquals(Stock::STOCK_IN_STOCK, $status->getStockStatus());
         $this->importFile('disable_product.csv');
+        $this->stockRegistryStorage->clean();
         $status = $this->stockRegistry->getStockStatusBySku('simple');
         $this->assertEquals(Stock::STOCK_OUT_OF_STOCK, $status->getStockStatus());
         $this->importDataForMediaTest('enable_product.csv');
+        $this->stockRegistryStorage->clean();
         $status = $this->stockRegistry->getStockStatusBySku('simple');
         $this->assertEquals(Stock::STOCK_IN_STOCK, $status->getStockStatus());
     }
@@ -177,17 +180,19 @@ class ProductStockTest extends ProductTestBase
      */
     public function testProductStockStatusShouldBeUpdatedOnSchedule()
     {
-        /** * @var $indexProcessor \Magento\Indexer\Model\Processor */
         $indexProcessor = $this->objectManager->create(\Magento\Indexer\Model\Processor::class);
         $indexProcessor->updateMview();
+        $this->stockRegistryStorage->clean();
         $status = $this->stockRegistry->getStockStatusBySku('simple');
         $this->assertEquals(Stock::STOCK_IN_STOCK, $status->getStockStatus());
         $this->importDataForMediaTest('disable_product.csv');
         $indexProcessor->updateMview();
+        $this->stockRegistryStorage->clean();
         $status = $this->stockRegistry->getStockStatusBySku('simple');
         $this->assertEquals(Stock::STOCK_OUT_OF_STOCK, $status->getStockStatus());
         $this->importDataForMediaTest('enable_product.csv');
         $indexProcessor->updateMview();
+        $this->stockRegistryStorage->clean();
         $status = $this->stockRegistry->getStockStatusBySku('simple');
         $this->assertEquals(Stock::STOCK_IN_STOCK, $status->getStockStatus());
     }
