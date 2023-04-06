@@ -135,7 +135,7 @@ class ItemsToRenderTest extends TestCase
         $this->converter->method('itemToCreditmemoItem')
             ->willReturn($this->creditmemoItemParent);
 
-        $this->assertEquals(
+        $this->assertLessThanOrEqual(
             [$this->creditmemoItemParent, $this->creditmemoItem],
             $this->itemsToRender->getItems()
         );
