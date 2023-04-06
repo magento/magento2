@@ -8,7 +8,6 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AutoCompleteSearchTermsAndPhrasesWhileUserIsTypingTest">
-
         <annotations>
             <stories value="Search Terms"/>
             <title value="In this test-case we need to verify that previously used earlier search terms are auto-complete"/>
@@ -22,7 +21,9 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create Simple Product -->
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
@@ -68,6 +69,5 @@
         <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductNameSku">
             <argument name="productName" value="$$simpleProduct.name$$"/>
         </actionGroup>
-
     </test>
 </tests>
