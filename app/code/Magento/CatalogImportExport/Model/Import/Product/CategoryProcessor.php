@@ -5,6 +5,8 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
+use Magento\Store\Model\Store;
+
 /**
  * @api
  * @since 100.0.2
@@ -119,6 +121,7 @@ class CategoryProcessor
         $category->setIsActive(true);
         $category->setIncludeInMenu(true);
         $category->setAttributeSetId($category->getDefaultAttributeSetId());
+        $category->setStoreId(Store::DEFAULT_STORE_ID);
         $category->save();
         $this->categoriesCache[$category->getId()] = $category;
         return $category->getId();
