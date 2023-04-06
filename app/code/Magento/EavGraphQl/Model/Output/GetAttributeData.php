@@ -108,8 +108,7 @@ class GetAttributeData implements GetAttributeDataInterface
                         'uid' => $this->uid->encode($value),
                         'label' => $label,
                         'value' => $value,
-                        'is_default' =>
-                        $attribute->getDefaultValue() ?
+                        'is_default' => $attribute->getDefaultValue() ?
                             in_array($value, explode(',', $attribute->getDefaultValue())) : null
                     ];
                 },
