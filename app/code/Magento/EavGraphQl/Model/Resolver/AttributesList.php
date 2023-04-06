@@ -78,15 +78,15 @@ class AttributesList implements ResolverInterface
         array $value = null,
         array $args = null
     ): array {
-        if (!$args['entity_type']) {
-            throw new GraphQlInputException(__('Required parameter "%1" of type string.', 'entity_type'));
+        if (!$args['entityType']) {
+            throw new GraphQlInputException(__('Required parameter "%1" of type string.', 'entityType'));
         }
 
         $errors = [];
         $storeId = (int) $context->getExtensionAttributes()->getStore()->getId();
         $entityType = $this->enumLookup->getEnumValueFromField(
             'AttributeEntityTypeEnum',
-            mb_strtolower($args['entity_type'])
+            mb_strtolower($args['entityType'])
         );
 
         $searchCriteria = $this->searchCriteriaBuilder;

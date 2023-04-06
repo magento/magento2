@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Customer\Attribute;
+namespace Magento\GraphQl\EavGraphQl;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Catalog\Setup\CategorySetup;
@@ -83,7 +83,7 @@ class AttributesListTest extends GraphQlAbstract
     {
         $queryResult = $this->graphQlQuery(<<<QRY
         {
-            attributesList(entity_type: CUSTOMER) {
+            attributesList(entityType: CUSTOMER) {
                 items {
                     uid
                     code
@@ -132,7 +132,7 @@ QRY);
 
         $queryResult = $this->graphQlQuery(<<<QRY
         {
-            attributesList(entity_type: CATALOG_PRODUCT) {
+            attributesList(entityType: CATALOG_PRODUCT) {
                 items {
                     uid
                     code
@@ -170,7 +170,7 @@ QRY);
 
     /**
      * Finds attribute in query result
-     * 
+     *
      * @param array $items
      * @param string $attribute_code
      * @return array
