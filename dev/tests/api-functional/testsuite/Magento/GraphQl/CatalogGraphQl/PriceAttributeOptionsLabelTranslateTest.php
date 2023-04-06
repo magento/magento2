@@ -144,8 +144,8 @@ QUERY;
         DataFixture(
             TranslationFixture::class,
             [
-                'string' => 'Price',
-                'translate' => 'Preis',
+                'string' => 'Price View2',
+                'translate' => 'Preisansicht',
                 'locale' => 'de_DE',
             ]
         ),
@@ -192,23 +192,16 @@ QUERY;
         $query = $this->getProductsQueryWithAggregations();
         $headers = ['Store' => $secondStoreViewFixtureName];
         $response = $this->graphQlQuery($query, [], '', $headers);
-        echo '<xmp>agg';
-        print_r($response['products']['aggregations']);
-        echo '</xmp>';
         $this->assertNotEmpty($response['products']['aggregations']);
         $aggregationAttributes = $response['products']['aggregations'];
         $priceAttributeOptionLabel = '';
-        echo '<xmp>att';
-        print_r($aggregationAttributes);
-        echo '</xmp>';
+
         foreach ($aggregationAttributes as $attribute) {
-            echo $attribute['attribute_code'].'>> setcode -'.$attributeCode;
             if ($attribute['attribute_code'] === $attributeCode) {
-                echo 'label '.$attribute['label'];
-                    $priceAttributeOptionLabel = $attribute['label'];
+                $priceAttributeOptionLabel = $attribute['label'];
             }
         }
-        echo 'priceAttributeOptionLabel '.$priceAttributeOptionLabel;
-        $this->assertEquals($priceAttributeOptionLabel, 'Preis');
+
+        $this->assertEquals($priceAttributeOptionLabel, 'Preisansicht');
     }
 }
