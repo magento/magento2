@@ -591,13 +591,16 @@ define([
         _getPrices: function () {
             var prices = {},
                 elements = _.toArray(this.options.settings),
-                allowedProduct;
+                allowedProduct,
+                selected,
+                config,
+                priceValue;
 
             _.each(elements, function (element) {
                 if (element.options) {
-                    var selected = element.options[element.selectedIndex],
-                        config = selected && selected.config,
-                        priceValue = this._calculatePrice({});
+                    selected = element.options[element.selectedIndex];
+                    config = selected && selected.config;
+                    priceValue = this._calculatePrice({});
 
                     if (config && config.allowedProducts.length === 1) {
                         priceValue = this._calculatePrice(config);
