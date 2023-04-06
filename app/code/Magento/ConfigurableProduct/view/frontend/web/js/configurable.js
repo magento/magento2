@@ -675,10 +675,12 @@ define([
         _getSimpleProductId: function (element) {
             // TODO: Rewrite algorithm. It should return ID of
             //        simple product based on selected options.
+            var allOptions,
+                value,
+                config;
             if (element.config) {
-                var allOptions = element.config.options,
-                    value = element.value,
-                    config;
+                allOptions = element.config.options;
+                value = element.value;
 
                 config = _.filter(allOptions, function (option) {
                     return option.id === value;
