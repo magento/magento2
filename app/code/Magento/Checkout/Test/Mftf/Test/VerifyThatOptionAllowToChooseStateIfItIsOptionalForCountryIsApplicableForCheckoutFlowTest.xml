@@ -26,8 +26,6 @@
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
-            <magentoCLI command="config:set {{EnablePaymentCheckMOConfigData.path}} {{EnablePaymentCheckMOConfigData.value}}" stepKey="enableCheckMoneyOrderPayment"/>
         </before>
         <after>
             <actionGroup ref="AdminAllowToChooseStateActionGroup" stepKey="enableAllowState">
