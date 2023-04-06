@@ -19,7 +19,7 @@ class CartCacheTest extends GraphQLPageCacheAbstract
 {
     public function testCartIsNotCached()
     {
-        $qty = 2;
+        $qty = 2.0;
         $sku = 'simple';
         $cartId = $this->createEmptyCart();
         $this->addSimpleProductToCart($cartId, $qty, $sku);
@@ -66,10 +66,10 @@ QUERY;
      * Add simple product to the cart using the maskedQuoteId
      *
      * @param string $maskedCartId
-     * @param int $qty
+     * @param float $qty
      * @param string $sku
      */
-    private function addSimpleProductToCart(string $maskedCartId, int $qty, string $sku): void
+    private function addSimpleProductToCart(string $maskedCartId, float $qty, string $sku): void
     {
         $addProductToCartQuery =
             <<<QUERY

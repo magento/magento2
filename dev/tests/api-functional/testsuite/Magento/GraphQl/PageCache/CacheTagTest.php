@@ -59,6 +59,8 @@ QUERY;
         $productRepository->save($product);
         // Cache invalidation happens and cache-debug header value is a MISS after product update
         $responseMiss = $this->graphQlQueryWithResponseHeaders($query);
+        print_r("Debug value");
+        var_dump($responseMiss);
         $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseMiss['headers']);
         $this->assertEquals('MISS', $responseMiss['headers']['X-Magento-Cache-Debug']);
         $this->assertArrayHasKey('X-Magento-Tags', $responseMiss['headers']);

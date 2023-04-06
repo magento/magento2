@@ -85,7 +85,7 @@ class PageCacheTest extends GraphQLPageCacheAbstract
         $this->assertEquals('HIT', $response['headers']['X-Magento-Cache-Debug']);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $this->assertEquals($cacheId, $response['headers'][CacheIdCalculator::CACHE_ID_HEADER]);
-        
+
         //cached data should be correct
         $this->assertNotEmpty($responseHit['body']);
         $this->assertArrayNotHasKey('errors', $responseHit['body']);
