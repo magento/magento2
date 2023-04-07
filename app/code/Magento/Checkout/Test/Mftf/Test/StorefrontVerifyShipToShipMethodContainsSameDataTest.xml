@@ -85,8 +85,10 @@
        <!-- click on Edit button next to "Ship To" Text -->
         <click selector="{{CheckoutPaymentSection.editShipToInformation}}" stepKey="clickOnEditButton"/>
 
-        <!-- Fill Shipping Form -->
-        <actionGroup ref="ShipmentFormFreeShippingActionGroup" stepKey="shipmentFormFreeShippingActionGroup"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSectionAgain">
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
+        </actionGroup>
 
         <!-- Check that "Ship To" block contains correct information -->
         <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="seeShipToFirstNameAgain" />
