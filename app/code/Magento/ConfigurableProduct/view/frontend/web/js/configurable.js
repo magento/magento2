@@ -678,6 +678,7 @@ define([
             var allOptions,
                 value,
                 config;
+
             if (element.config) {
                 allOptions = element.config.options;
                 value = element.value;
