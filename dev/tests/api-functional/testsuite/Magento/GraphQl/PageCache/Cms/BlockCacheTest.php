@@ -21,6 +21,7 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
      * Test that X-Magento-Tags are correct
      *
      * @magentoApiDataFixture Magento/Cms/_files/block.php
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      */
     public function testCacheTagsHaveExpectedValue()
     {
@@ -43,6 +44,7 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
      * Test the second request for the same block will return a cached result
      *
      * @magentoApiDataFixture Magento/Cms/_files/block.php
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      */
     public function testCacheIsUsedOnSecondRequest()
     {
@@ -71,6 +73,7 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
      *
      * @magentoApiDataFixture Magento/Cms/_files/blocks.php
      * @magentoApiDataFixture Magento/Cms/_files/block.php
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      */
     public function testCacheIsInvalidatedOnBlockUpdate()
     {

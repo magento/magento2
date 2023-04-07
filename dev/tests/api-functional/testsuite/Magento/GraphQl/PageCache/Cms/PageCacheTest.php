@@ -35,6 +35,7 @@ class PageCacheTest extends GraphQLPageCacheAbstract
      * Test that X-Magento-Tags are correct
      *
      * @magentoApiDataFixture Magento/Cms/_files/pages.php
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      */
     public function testCacheTagsHaveExpectedValue()
     {
@@ -62,6 +63,7 @@ class PageCacheTest extends GraphQLPageCacheAbstract
      * Test the second request for the same page will return a cached result
      *
      * @magentoApiDataFixture Magento/Cms/_files/pages.php
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      */
     public function testCacheIsUsedOnSecondRequest()
     {
@@ -97,6 +99,7 @@ class PageCacheTest extends GraphQLPageCacheAbstract
      * Test that cache is invalidated when page is updated
      *
      * @magentoApiDataFixture Magento/Cms/_files/pages.php
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      */
     public function testCacheIsInvalidatedOnPageUpdate()
     {
