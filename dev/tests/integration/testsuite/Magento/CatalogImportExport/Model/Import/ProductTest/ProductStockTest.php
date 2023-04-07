@@ -154,6 +154,7 @@ class ProductStockTest extends ProductTestBase
      *
      * @magentoDataFixture mediaImportImageFixture
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testProductStockStatusShouldBeUpdated()
     {
