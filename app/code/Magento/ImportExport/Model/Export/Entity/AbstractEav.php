@@ -286,7 +286,8 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
 
             if ($this->isMultiselect($attributeCode)) {
                 $values = [];
-                $attributeValue = explode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $attributeValue);
+                $attributeValue =
+                    $attributeValue ? explode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $attributeValue) : [];
                 foreach ($attributeValue as $value) {
                     $values[] = $this->getAttributeValueById($attributeCode, $value);
                 }
