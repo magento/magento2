@@ -101,7 +101,7 @@ class Ga extends Template
      */
     public function getCurrentWebsiteId(): int
     {
-        return $this->_storeManager->getWebsite()->getId();
+        return (int) $this->_storeManager->getWebsite()->getId();
     }
 
     /**
