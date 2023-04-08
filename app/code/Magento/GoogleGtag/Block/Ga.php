@@ -113,7 +113,7 @@ class Ga extends Template
      * @param string $measurementId
      * @return array
      */
-    public function getPageTrackingData(string $measurementId): array
+    public function getPageTrackingData($measurementId): array
     {
         return [
             'optPageUrl' => $this->getOptPageUrl(),
@@ -152,8 +152,12 @@ class Ga extends Template
                     'index' => $index,
                     'item_id' => $this->_escaper->escapeHtmlAttr($item->getSku()),
                     'item_name' =>  $this->_escaper->escapeHtmlAttr($item->getName()),
-                    'affiliation' => $this->_escaper->escapeHtmlAttr($this->_storeManager->getStore()->getFrontendName()),
-                    'item_brand' => $this->_escaper->escapeHtmlAttr($item->getProduct()->getAttributeText('manufacturer')),
+                    'affiliation' => $this->_escaper->escapeHtmlAttr(
+                        $this->_storeManager->getStore()->getFrontendName()
+                    ),
+                    'item_brand' => $this->_escaper->escapeHtmlAttr(
+                        $item->getProduct()->getAttributeText('manufacturer')
+                    ),
                     'price' => number_format((float) $item->getPrice(), 2),
                     'quantity' => (int)$item->getQtyOrdered()
                 ];
@@ -205,10 +209,10 @@ class Ga extends Template
     /**
      * Provide analytics events data
      *
-     * @return bool|string
+     * @return string
      * @throws \Magento\Framework\Exception\NoSuchEntityException|\Magento\Framework\Exception\LocalizedException
      */
-    public function getAnalyticsData(): bool|string
+    public function getAnalyticsData()
     {
         $analyticData = [
             'isCookieRestrictionModeEnabled' => $this->isCookieRestrictionModeEnabled(),
@@ -218,6 +222,7 @@ class Ga extends Template
             'ordersTrackingData' => $this->getOrdersTrackingData(),
             'googleAnalyticsAvailable' => $this->googleGtagConfig->isGoogleAnalyticsAvailable()
         ];
+
         return $this->serializer->serialize($analyticData);
     }
 }
