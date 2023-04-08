@@ -17,6 +17,8 @@
             <group value="customer"/>
         </annotations>
         <before>
+             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+
             <magentoCLI command="config:set --scope={{SetAllowedCountryUsConfig.scope}} --scope-code={{SetAllowedCountryUsConfig.scope_code}} {{SetAllowedCountryUsConfig.path}} {{SetAllowedCountryUsConfig.value}}" stepKey="setAllowedCountryUs"/>
             <magentoCLI command="config:set {{SetAllowedCountryUsConfig.path}} ''" stepKey="unselectAllCountriesFromAllowedCounties"/>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
