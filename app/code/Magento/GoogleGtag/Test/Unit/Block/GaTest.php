@@ -163,21 +163,21 @@ class GaTest extends TestCase
             'orders' => [
                 [
                     'transaction_id' => 100,
-                    'affiliation' => 'test',
                     'value' => 10.00,
                     'tax' => 2.00,
-                    'shipping' => 1.00
+                    'shipping' => 1.00,
+                    'currency' => 'USD'
                 ]
             ],
             'products' => [
                 [
                     'item_id' => 'sku0',
                     'item_name' => 'testName0',
+                    'affiliation' => 'test',
                     'price' => 0.00,
                     'quantity' => 1
                 ]
             ],
-            'currency' => 'USD'
         ];
         $this->gaBlock->setOrderIds([1, 2]);
         $tempResults = $this->gaBlock->getOrdersTrackingData();

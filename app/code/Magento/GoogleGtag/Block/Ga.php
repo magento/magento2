@@ -90,7 +90,7 @@ class Ga extends Template
      */
     public function isCookieRestrictionModeEnabled(): bool
     {
-        return $this->cookieHelper->isCookieRestrictionModeEnabled();
+        return (bool) $this->cookieHelper->isCookieRestrictionModeEnabled();
     }
 
     /**
@@ -209,7 +209,7 @@ class Ga extends Template
     /**
      * Provide analytics events data
      *
-     * @return string
+     * @return bool|string
      * @throws \Magento\Framework\Exception\NoSuchEntityException|\Magento\Framework\Exception\LocalizedException
      */
     public function getAnalyticsData()
