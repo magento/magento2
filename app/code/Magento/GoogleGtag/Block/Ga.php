@@ -25,27 +25,27 @@ class Ga extends Template
     /**
      * @var GtagConfiguration
      */
-    private $googleGtagConfig;
+    private GtagConfiguration $googleGtagConfig;
 
     /**
      * @var Cookie
      */
-    private $cookieHelper;
+    private Cookie $cookieHelper;
 
     /**
      * @var SerializerInterface
      */
-    private $serializer;
+    private SerializerInterface $serializer;
 
     /**
      * @var OrderRepositoryInterface
      */
-    private $orderRepository;
+    private OrderRepositoryInterface $orderRepository;
 
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchCriteriaBuilder;
+    private SearchCriteriaBuilder $searchCriteriaBuilder;
 
     /**
      * @param Context $context
@@ -90,17 +90,18 @@ class Ga extends Template
      */
     public function isCookieRestrictionModeEnabled(): bool
     {
-        return (bool) $this->cookieHelper->isCookieRestrictionModeEnabled();
+        return $this->cookieHelper->isCookieRestrictionModeEnabled();
     }
 
     /**
      * Return current website id.
      *
      * @return int
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getCurrentWebsiteId(): int
     {
-        return (int) $this->_storeManager->getWebsite()->getId();
+        return $this->_storeManager->getWebsite()->getId();
     }
 
     /**
@@ -112,11 +113,11 @@ class Ga extends Template
      * @param string $measurementId
      * @return array
      */
-    public function getPageTrackingData($measurementId): array
+    public function getPageTrackingData(string $measurementId): array
     {
         return [
             'optPageUrl' => $this->getOptPageUrl(),
-            'measurementId' => $this->escapeHtmlAttr($measurementId, false)
+            'measurementId' => $this->_escaper->escapeHtmlAttr($measurementId, false)
         ];
     }
 
@@ -129,11 +130,12 @@ class Ga extends Template
      * @link https://developers.google.com/gtagjs/reference/event#purchase
      *
      * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getOrdersTrackingData(): array
     {
         $result = [];
-        $orderIds = $this->getOrderIds();
+        $orderIds = $this->getData('order_ids');
         if (empty($orderIds) || !is_array($orderIds)) {
             return $result;
         }
@@ -145,23 +147,43 @@ class Ga extends Template
         $collection = $this->orderRepository->getList($this->searchCriteriaBuilder->create());
 
         foreach ($collection->getItems() as $order) {
-            foreach ($order->getAllVisibleItems() as $item) {
-                $result['products'][] = [
-                    'item_id' => $this->escapeJsQuote($item->getSku()),
-                    'item_name' =>  $this->escapeJsQuote($item->getName()),
+            foreach ($order->getAllVisibleItems() as $index => $item) {
+                $product = [
+                    'index' => $index,
+                    'item_id' => $this->_escaper->escapeHtmlAttr($item->getSku()),
+                    'item_name' =>  $this->_escaper->escapeHtmlAttr($item->getName()),
+                    'affiliation' => $this->_escaper->escapeHtmlAttr($this->_storeManager->getStore()->getFrontendName()),
+                    'item_brand' => $this->_escaper->escapeHtmlAttr($item->getProduct()->getAttributeText('manufacturer')),
                     'price' => number_format((float) $item->getPrice(), 2),
-                    'quantity' => (int)$item->getQtyOrdered(),
+                    'quantity' => (int)$item->getQtyOrdered()
                 ];
+
+                if ($item->getDiscountAmount() > 0) {
+                    $product['discount'] = $this->_escaper->escapeHtmlAttr($item->getDiscountAmount());
+
+                    if (!empty($order->getCouponCode())) {
+                        $product['coupon'] = $this->_escaper->escapeHtmlAttr($order->getCouponCode());
+                    }
+                }
+
+                $result['products'][] = $product;
             }
-            $result['orders'][] = [
+
+            $resultOrder = [
                 'transaction_id' =>  $order->getIncrementId(),
-                'affiliation' => $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
-                'value' => number_format((float) $order->getGrandTotal(), 2),
+                'currency' =>  $order->getOrderCurrencyCode(),
+                'value' => number_format($order->getGrandTotal(), 2),
                 'tax' => number_format((float) $order->getTaxAmount(), 2),
                 'shipping' => number_format((float) $order->getShippingAmount(), 2),
             ];
-            $result['currency'] = $order->getOrderCurrencyCode();
+
+            if (!empty($order->getCouponCode())) {
+                $order['coupon'] = $this->_escaper->escapeHtmlAttr($order->getCouponCode());
+            }
+
+            $result['orders'][] = $resultOrder;
         }
+
         return $result;
     }
 
@@ -174,8 +196,8 @@ class Ga extends Template
     {
         $optPageURL = '';
         $pageName = $this->getPageName() !== null ? trim($this->getPageName()) : '';
-        if ($pageName && substr($pageName, 0, 1) === '/' && strlen($pageName) > 1) {
-            $optPageURL = ", '" . $this->escapeHtmlAttr($pageName, false) . "'";
+        if ($pageName && str_starts_with($pageName, '/') && strlen($pageName) > 1) {
+            $optPageURL = ", '" . $this->_escaper->escapeHtmlAttr($pageName, false) . "'";
         }
         return $optPageURL;
     }
@@ -184,8 +206,9 @@ class Ga extends Template
      * Provide analytics events data
      *
      * @return bool|string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException|\Magento\Framework\Exception\LocalizedException
      */
-    public function getAnalyticsData()
+    public function getAnalyticsData(): bool|string
     {
         $analyticData = [
             'isCookieRestrictionModeEnabled' => $this->isCookieRestrictionModeEnabled(),
