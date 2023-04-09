@@ -18,9 +18,7 @@ class AttributeDataFactory
     public const OUTPUT_FORMAT_ONELINE = 'oneline';
     public const OUTPUT_FORMAT_ARRAY = 'array';
 
-    // available only for multiply attributes
-
-    /** @var array */
+    /** @var array available only for multiply attributes */
     protected $_dataModels = [];
 
     /**
