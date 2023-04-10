@@ -207,9 +207,8 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertEquals(2, $response['products']['total_count']);
         /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product1 = $productRepository->get('simple');
-        $product2 = $productRepository->get('simple-4');
+        $product1 = $this->productRepository->get('simple');
+        $product2 = $this->productRepository->get('simple-4');
         $filteredProducts = [$product2, $product1];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
@@ -252,10 +251,9 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertEquals(3, $response['products']['total_count']);
         /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product1 = $productRepository->get('simple');
-        $product2 = $productRepository->get('12345');
-        $product3 = $productRepository->get('simple-4');
+        $product1 = $this->productRepository->get('simple');
+        $product2 = $this->productRepository->get('12345');
+        $product3 = $this->productRepository->get('simple-4');
         $filteredProducts = [$product3, $product2, $product1];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
