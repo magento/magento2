@@ -38,7 +38,7 @@ class AddressTest extends TestCase
     /**
      * Test attribute code
      */
-    const ATTRIBUTE_CODE = 'code1';
+    public const ATTRIBUTE_CODE = 'code1';
 
     /**
      * Websites array (website id => code)
@@ -52,10 +52,16 @@ class AddressTest extends TestCase
      *
      * @var array
      */
-    protected $_attributes = [['attribute_id' => 1, 'attribute_code' => self::ATTRIBUTE_CODE]];
+    protected $_attributes = [
+        [
+            'attribute_id' => 1,
+            'attribute_code' => self::ATTRIBUTE_CODE,
+            'frontend_input' => 'multiselect'
+        ]
+    ];
 
     /**
-     * Customer data
+     * Customer details
      *
      * @var array
      */
@@ -166,8 +172,11 @@ class AddressTest extends TestCase
                 true,
                 true,
                 true,
-                ['_construct']
+                ['_construct', 'getSource']
             );
+
+            $attributeSource = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class);
+            $attribute->expects($this->once())->method('getSource')->willReturn($attributeSource);
             $attributeCollection->addItem($attribute);
         }
 
