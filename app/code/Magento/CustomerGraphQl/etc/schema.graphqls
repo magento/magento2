@@ -425,3 +425,8 @@ enum CountryCodeEnum @doc(description: "The list of country codes.") {
     ZM @doc(description: "Zambia")
     ZW @doc(description: "Zimbabwe")
 }
+
+enum AttributeEntityTypeEnum {
+    CUSTOMER
+    CUSTOMER_ADDRESS
+}
