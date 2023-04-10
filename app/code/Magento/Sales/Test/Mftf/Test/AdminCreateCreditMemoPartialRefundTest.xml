@@ -90,6 +90,10 @@
         <!-- Assert Credit Memo button -->
         <seeElement selector="{{AdminOrderFormItemsSection.creditMemo}}" stepKey="assertCreditMemoButton"/>
 
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeAdminOrderStatus">
+            <argument name="status" value="{{OrderStatus.processing}}"/>
+        </actionGroup>
+
         <!--Assert refund in Credit Memo Tab-->
         <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemoTab"/>
         <waitForPageLoad stepKey="waitForTabLoad"/>
