@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query;
 
-use GraphQL\Language\AST\DocumentNode;
 use GraphQL\Language\AST\Node;
 use GraphQL\Language\AST\NodeKind;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * This class holds a list of all queried fields and is used to enable performance optimization for schema loading.
@@ -22,9 +22,22 @@ class Fields
     private $fieldsUsedInQuery = [];
 
     /**
+     * @var QueryParser
+     */
+    private $queryParser;
+
+    /**
+     * @param QueryParser|null $queryParser
+     */
+    public function __construct(QueryParser $queryParser = null)
+    {
+        $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
+    }
+
+    /**
      * Set Query for extracting list of fields.
      *
-     * @param DocumentNode|string $query
+     * @param string $query
      * @param array|null $variables
      *
      * @return void
@@ -33,11 +46,9 @@ class Fields
     {
         $queryFields = [];
         try {
-            if (is_string($query)) {
-                $query = \GraphQL\Language\Parser::parse(new \GraphQL\Language\Source($query ?: '', 'GraphQL'));
-            }
+            $parsedQuery = $this->queryParser->parse($query);
             \GraphQL\Language\Visitor::visit(
-                $query,
+                $parsedQuery,
                 [
                     'leave' => [
                         NodeKind::NAME => function (Node $node) use (&$queryFields) {

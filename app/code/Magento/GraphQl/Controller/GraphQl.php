@@ -41,7 +41,6 @@ class GraphQl implements FrontControllerInterface
     /**
      * @var \Magento\Framework\Webapi\Response
      * @deprecated 100.3.2
-     * @see was only added to fix the constructor
      */
     private $response;
 
@@ -67,8 +66,7 @@ class GraphQl implements FrontControllerInterface
 
     /**
      * @var ContextInterface
-     * @deprecated 100.3.3
-     * @see $contextFactory is used for creating Context object
+     * @deprecated 100.3.3 $contextFactory is used for creating Context object
      */
     private $resolverContext;
 
@@ -187,14 +185,12 @@ class GraphQl implements FrontControllerInterface
 
             // We must extract queried field names to avoid instantiation of unnecessary fields in webonyx schema
             // Temporal coupling is required for performance optimization
-            $data['parsedQuery'] =
-                \GraphQL\Language\Parser::parse(new \GraphQL\Language\Source($query ?: '', 'GraphQL'));
-            $this->queryFields->setQuery($data['parsedQuery'], $variables);
+            $this->queryFields->setQuery($query, $variables);
             $schema = $this->schemaGenerator->generate();
 
             $result = $this->queryProcessor->process(
                 $schema,
-                $data['parsedQuery'],
+                $query,
                 $this->contextFactory->create(),
                 $data['variables'] ?? []
             );

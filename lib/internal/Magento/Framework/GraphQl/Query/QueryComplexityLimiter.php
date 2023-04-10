@@ -7,15 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query;
 
-use GraphQL\Language\AST\DocumentNode;
 use GraphQL\Language\AST\NodeKind;
-use GraphQL\Language\Parser;
-use GraphQL\Language\Source;
 use GraphQL\Language\Visitor;
 use GraphQL\Validator\DocumentValidator;
 use GraphQL\Validator\Rules\DisableIntrospection;
 use GraphQL\Validator\Rules\QueryDepth;
 use GraphQL\Validator\Rules\QueryComplexity;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
@@ -45,18 +43,26 @@ class QueryComplexityLimiter
     private $introspectionConfig;
 
     /**
+     * @var QueryParser
+     */
+    private $queryParser;
+
+    /**
      * @param int $queryDepth
      * @param int $queryComplexity
      * @param IntrospectionConfiguration $introspectionConfig
+     * @param QueryParser|null $queryParser
      */
     public function __construct(
         int $queryDepth,
         int $queryComplexity,
-        IntrospectionConfiguration $introspectionConfig
+        IntrospectionConfiguration $introspectionConfig,
+        QueryParser $queryParser = null
     ) {
         $this->queryDepth = $queryDepth;
         $this->queryComplexity = $queryComplexity;
         $this->introspectionConfig = $introspectionConfig;
+        $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
     }
 
     /**
@@ -80,19 +86,17 @@ class QueryComplexityLimiter
      * This is necessary for performance optimization, as extremely large queries require a substantial
      * amount of time to fully validate and can affect server performance.
      *
-     * @param DocumentNode|string $query
+     * @param string $query
      * @throws GraphQlInputException
      */
-    public function validateFieldCount(DocumentNode|string $query): void
+    public function validateFieldCount(string $query): void
     {
         if (!empty($query)) {
             $totalFieldCount = 0;
-            if (is_string($query)) {
-                $query = Parser::parse(new Source($query, 'GraphQL'));
-            }
+            $parsedQuery = $this->queryParser->parse($query);
 
             Visitor::visit(
-                $query,
+                $parsedQuery,
                 [
                     'leave' => [
                         NodeKind::FIELD => function () use (&$totalFieldCount) {
