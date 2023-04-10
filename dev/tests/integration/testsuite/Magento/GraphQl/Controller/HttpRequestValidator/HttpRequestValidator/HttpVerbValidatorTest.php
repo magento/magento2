@@ -5,10 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Test\Unit\Controller\HttpRequestValidator;
+namespace Magento\GraphQl\Controller\HttpRequestValidator\HttpRequestValidator;
 
 use Magento\Framework\App\HttpRequestInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GraphQl\Controller\HttpRequestValidator\HttpVerbValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -33,7 +32,7 @@ class HttpVerbValidatorTest extends TestCase
      */
     protected function setup(): void
     {
-        $objectManager = new ObjectManager($this);
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->requestMock = $this->getMockBuilder(HttpRequestInterface::class)
             ->disableOriginalConstructor()
             ->onlyMethods(
@@ -47,9 +46,7 @@ class HttpVerbValidatorTest extends TestCase
             )
             ->getMockForAbstractClass();
 
-        $this->httpVerbValidator = $objectManager->getObject(
-            HttpVerbValidator::class
-        );
+        $this->httpVerbValidator = $objectManager->get(HttpVerbValidator::class);
     }
 
     /**
