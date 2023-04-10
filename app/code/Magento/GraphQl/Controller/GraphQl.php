@@ -20,6 +20,7 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
 use Magento\Framework\GraphQl\Query\Fields as QueryFields;
+use Magento\Framework\GraphQl\Query\QueryParser;
 use Magento\Framework\GraphQl\Query\QueryProcessor;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
@@ -111,6 +112,11 @@ class GraphQl implements FrontControllerInterface
     private $areaList;
 
     /**
+     * @var QueryParser
+     */
+    private $queryParser;
+
+    /**
      * @param Response $response
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
@@ -125,6 +131,7 @@ class GraphQl implements FrontControllerInterface
      * @param LogData|null $logDataHelper
      * @param LoggerPool|null $loggerPool
      * @param AreaList|null $areaList
+     * @param QueryParser|null $queryParser
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -141,7 +148,8 @@ class GraphQl implements FrontControllerInterface
         ContextFactoryInterface $contextFactory = null,
         LogData $logDataHelper = null,
         LoggerPool $loggerPool = null,
-        AreaList $areaList = null
+        AreaList $areaList = null,
+        QueryParser $queryParser = null
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
@@ -157,6 +165,7 @@ class GraphQl implements FrontControllerInterface
         $this->logDataHelper = $logDataHelper ?: ObjectManager::getInstance()->get(LogData::class);
         $this->loggerPool = $loggerPool ?: ObjectManager::getInstance()->get(LoggerPool::class);
         $this->areaList = $areaList ?: ObjectManager::getInstance()->get(AreaList::class);
+        $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
     }
 
     /**
@@ -172,25 +181,22 @@ class GraphQl implements FrontControllerInterface
 
         $statusCode = 200;
         $jsonResult = $this->jsonFactory->create();
-        $data = $this->getDataFromRequest($request);
         $result = [];
 
         $schema = null;
         try {
             /** @var Http $request */
             $this->requestProcessor->validateRequest($request);
-
-            $query = $data['query'] ?? '';
-            $variables = $data['variables'] ?? null;
+            $data = $this->getDataFromRequest($request);
 
             // We must extract queried field names to avoid instantiation of unnecessary fields in webonyx schema
             // Temporal coupling is required for performance optimization
-            $this->queryFields->setQuery($query, $variables);
+            $this->queryFields->setQuery($data['parsedQuery'], $data['variables'] ?? null);
             $schema = $this->schemaGenerator->generate();
 
             $result = $this->queryProcessor->process(
                 $schema,
-                $query,
+                $data['parsedQuery'],
                 $this->contextFactory->create(),
                 $data['variables'] ?? []
             );
@@ -231,9 +237,11 @@ class GraphQl implements FrontControllerInterface
             $data['variables'] = is_array($data['variables']) ?
                 $data['variables'] : null;
         } else {
-            return [];
+            $data = [];
         }
-
+        $query = $data['query'] ?? '';
+        $parsedQuery = $this->queryParser->parse($query);
+        $data['parsedQuery'] = $parsedQuery;
         return $data;
     }
 }

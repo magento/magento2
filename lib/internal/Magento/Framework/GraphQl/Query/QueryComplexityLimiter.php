@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query;
 
+use GraphQL\Language\AST\DocumentNode;
 use GraphQL\Language\AST\NodeKind;
 use GraphQL\Language\Visitor;
 use GraphQL\Validator\DocumentValidator;
@@ -86,17 +87,19 @@ class QueryComplexityLimiter
      * This is necessary for performance optimization, as extremely large queries require a substantial
      * amount of time to fully validate and can affect server performance.
      *
-     * @param string $query
+     * @param DocumentNode|string $query
      * @throws GraphQlInputException
      */
-    public function validateFieldCount(string $query): void
+    public function validateFieldCount(DocumentNode|string $query): void
     {
         if (!empty($query)) {
             $totalFieldCount = 0;
-            $parsedQuery = $this->queryParser->parse($query);
+            if (is_string($query)) {
+                $query = $this->queryParser->parse($query);
+            }
 
             Visitor::visit(
-                $parsedQuery,
+                $query,
                 [
                     'leave' => [
                         NodeKind::FIELD => function () use (&$totalFieldCount) {

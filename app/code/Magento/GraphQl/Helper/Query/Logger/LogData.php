@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Helper\Query\Logger;
 
 use GraphQL\Error\SyntaxError;
+use GraphQL\Language\AST\DocumentNode;
 use GraphQL\Language\AST\Node;
 use GraphQL\Language\AST\NodeKind;
 use GraphQL\Language\Visitor;
@@ -56,7 +57,7 @@ class LogData
         $logData = array_merge($logData, $this->gatherRequestInformation($request));
 
         try {
-            $complexity = $this->getFieldCount($data['query'] ?? '');
+            $complexity = $this->getFieldCount($data['parsedQuery'] ?? $data['query'] ?? '');
             $logData[LoggerInterface::COMPLEXITY] = $complexity;
             if ($schema) {
                 $logData = array_merge($logData, $this->gatherQueryInformation($schema));
@@ -127,18 +128,20 @@ class LogData
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @param string $query
+     * @param DocumentNode|string $query
      * @return int
      * @throws SyntaxError
      * @throws \Exception
      */
-    private function getFieldCount(string $query): int
+    private function getFieldCount(DocumentNode|string $query): int
     {
         if (!empty($query)) {
             $totalFieldCount = 0;
-            $parsedQuery = $this->queryParser->parse($query);
+            if (is_string($query)) {
+                $query = $this->queryParser->parse($query);
+            }
             Visitor::visit(
-                $parsedQuery,
+                $query,
                 [
                     'leave' => [
                         NodeKind::FIELD => function (Node $node) use (&$totalFieldCount) {
