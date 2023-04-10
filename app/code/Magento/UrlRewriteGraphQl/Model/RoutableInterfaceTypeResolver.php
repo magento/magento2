@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\UrlRewriteGraphQl\Model;
 
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use \Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
@@ -15,17 +14,28 @@ use \Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
  */
 class RoutableInterfaceTypeResolver implements TypeResolverInterface
 {
+    private const DEFAULT_TYPE = 'RoutableUrl';
+
     /**
-     * TypeResolverInterface[]
+     * @var TypeResolverInterface[]
      */
-    private $productTypeNameResolvers = [];
+    private array $productTypeNameResolvers;
+
+    /**
+     * @var string
+     */
+    private string $defaultType;
 
     /**
      * @param TypeResolverInterface[] $productTypeNameResolvers
+     * @param string $defaultType
      */
-    public function __construct(array $productTypeNameResolvers = [])
-    {
+    public function __construct(
+        array $productTypeNameResolvers = [],
+        string $defaultType = self::DEFAULT_TYPE
+    ) {
         $this->productTypeNameResolvers = $productTypeNameResolvers;
+        $this->defaultType = $defaultType;
     }
 
     /**
@@ -40,18 +50,15 @@ class RoutableInterfaceTypeResolver implements TypeResolverInterface
 
         foreach ($this->productTypeNameResolvers as $productTypeNameResolver) {
             if (!isset($data['type_id'])) {
-                throw new GraphQlInputException(
-                    __('Missing key %1 in product data', ['type_id'])
-                );
+                $data['type_id'] = '';
             }
+
             $resolvedType = $productTypeNameResolver->resolveType($data);
             if (!empty($resolvedType)) {
-                return $resolvedType;
+                 break;
             }
         }
 
-        throw new GraphQlInputException(
-            __('Concrete type for %1 not implemented', ['ProductInterface'])
-        );
+        return $resolvedType ?: $this->defaultType;
     }
 }

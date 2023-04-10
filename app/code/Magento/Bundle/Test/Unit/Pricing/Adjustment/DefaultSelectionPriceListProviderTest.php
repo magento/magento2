@@ -177,7 +177,47 @@ class DefaultSelectionPriceListProviderTest extends TestCase
         $this->selectionCollection->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([]));
+        $this->selectionCollection->expects($this->once())
+            ->method('setFlag')
+            ->with('has_stock_status_filter', true);
 
         $this->model->getPriceList($this->product, false, false);
+    }
+
+    public function testGetPriceListWithSearchMin(): void
+    {
+        $option = $this->createMock(Option::class);
+        $option->expects($this->once())->method('getRequired')
+            ->willReturn(true);
+        $this->optionsCollection->expects($this->any())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$option]));
+        $this->typeInstance->expects($this->any())
+            ->method('getOptionsCollection')
+            ->with($this->product)
+            ->willReturn($this->optionsCollection);
+        $this->product->expects($this->any())
+            ->method('getTypeInstance')
+            ->willReturn($this->typeInstance);
+        $this->selectionCollection->expects($this->once())
+            ->method('getFirstItem')
+            ->willReturn($this->createMock(Product::class));
+        $this->typeInstance->expects($this->once())
+            ->method('getSelectionsCollection')
+            ->willReturn($this->selectionCollection);
+        $this->selectionCollection->expects($this->once())
+            ->method('setFlag')
+            ->with('has_stock_status_filter', true);
+        $this->selectionCollection->expects($this->once())
+            ->method('addQuantityFilter');
+        $this->product->expects($this->once())->method('isSalable')->willReturn(true);
+        $this->optionsCollection->expects($this->once())
+            ->method('getSize')
+            ->willReturn(1);
+        $this->optionsCollection->expects($this->once())
+            ->method('addFilter')
+            ->willReturn($this->optionsCollection);
+
+        $this->model->getPriceList($this->product, true, false);
     }
 }
