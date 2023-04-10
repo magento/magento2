@@ -207,15 +207,15 @@ class RuleTest extends TestCase
             'updated_at' => '2014-06-25 14:37:15'
         ];
         $this->storeManager->expects($this->any())->method('getWebsites')->with(false)
-            ->willReturn([$this->websiteModel, $this->websiteModel]);
+            ->willReturn([$this->websiteModel, $this->websiteModel, $this->websiteModel]);
         $this->websiteModel
             ->method('getId')
-            ->willReturnOnConsecutiveCalls('1', '2');
+            ->willReturnOnConsecutiveCalls('1', '2', '3');
         $this->websiteModel->expects($this->any())->method('getDefaultStore')
             ->willReturn($this->storeModel);
         $this->storeModel
             ->method('getId')
-            ->willReturnOnConsecutiveCalls('1', '2');
+            ->willReturnOnConsecutiveCalls('1', '2', '3');
         $this->combineFactory->expects($this->any())->method('create')
             ->willReturn($this->condition);
         $this->condition->expects($this->any())->method('validate')
@@ -224,12 +224,14 @@ class RuleTest extends TestCase
         $this->productModel->expects($this->any())->method('getId')
             ->willReturn(1);
 
+        $this->rule->setWebsiteIds('1,2');
         $this->rule->callbackValidateProduct($args);
 
         $matchingProducts = $this->rule->getMatchingProductIds();
         foreach ($matchingProducts['1'] as $matchingRules) {
             $this->assertEquals($validate, $matchingRules);
         }
+        $this->assertNull($matchingProducts['1']['3'] ?? null);
     }
 
     /**
