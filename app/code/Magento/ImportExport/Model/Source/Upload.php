@@ -17,6 +17,7 @@ use Magento\ImportExport\Helper\Data as DataHelper;
 use Magento\ImportExport\Model\Import;
 use Magento\MediaStorage\Model\File\Uploader;
 use Magento\MediaStorage\Model\File\UploaderFactory;
+use Laminas\Validator\File\Upload as FileUploadValidator;
 
 class Upload
 {
@@ -74,11 +75,11 @@ class Upload
      */
     public function uploadSource(string $entity)
     {
-        /** @var $adapter \Zend_File_Transfer_Adapter_Http */
+        /** @var $adapter \Laminas\File\Transfer\Adapter\Http */
         $adapter = $this->httpFactory->create();
         if (!$adapter->isValid(Import::FIELD_NAME_SOURCE_FILE)) {
             $errors = $adapter->getErrors();
-            if ($errors[0] == \Zend_Validate_File_Upload::INI_SIZE) {
+            if ($errors[0] == FileUploadValidator::INI_SIZE) {
                 $errorMessage = $this->importExportData->getMaxUploadSizeMessage();
             } else {
                 $errorMessage = __('The file was not uploaded.');
