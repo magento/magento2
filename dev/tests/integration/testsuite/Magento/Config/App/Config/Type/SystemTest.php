@@ -30,6 +30,11 @@ class SystemTest extends \PHPUnit\Framework\TestCase
         $this->system = $this->objectManager->create(System::class);
     }
 
+    public static function tearDownAfterClass(): void
+    {
+        unset($_ENV['CONFIG__STORES__DEFAULT__ABC__QRS__XYZ']);
+    }
+
     public function testGetValueDefaultScope()
     {
         $this->assertEquals(
@@ -56,8 +61,8 @@ class SystemTest extends \PHPUnit\Framework\TestCase
      */
     public function testEnvGetValueStoreScope()
     {
-        $this->system->clean();
         $_ENV['CONFIG__STORES__DEFAULT__ABC__QRS__XYZ'] = 'test_env_value';
+        $this->system->clean();
 
         $this->assertEquals(
             'value1.db.default.test',
