@@ -37,9 +37,11 @@ class HttpVerbValidator implements HttpRequestValidatorInterface
             $query = $request->getParam('query', '');
             if (!empty($query)) {
                 $operationType = '';
-                $queryAst = Parser::parse(new Source($query ?: '', 'GraphQL'));
+                if (is_string($query)) {
+                    $query = Parser::parse(new Source($query, 'GraphQL'));
+                }
                 Visitor::visit(
-                    $queryAst,
+                    $query,
                     [
                         'leave' => [
                             NodeKind::OPERATION_DEFINITION => function (Node $node) use (&$operationType) {
