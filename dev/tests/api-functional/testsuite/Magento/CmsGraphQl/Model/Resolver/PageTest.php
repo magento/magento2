@@ -320,6 +320,52 @@ class PageTest extends GraphQlAbstract
         );
     }
 
+    /**
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
+     * @return void
+     */
+    public function testCmsPageResolverCacheInvalidatesWhenPageGetsDisabled()
+    {
+        // cache page1
+        $page1 = $this->getPageByTitle('Page with 1column layout');
+
+        $query = $this->getQuery($page1->getIdentifier());
+        $response = $this->graphQlQueryWithResponseHeaders($query);
+
+        $cacheIdentityStringPage1 = $this->getResolverCacheKeyFromResponseAndPage($response, $page1);
+
+        $this->assertIsNumeric(
+            $this->graphqlCache->test($cacheIdentityStringPage1)
+        );
+
+        // cache page2
+        $page2 = $this->getPageByTitle('Page with unavailable layout');
+
+        $query = $this->getQuery($page2->getIdentifier());
+        $response = $this->graphQlQueryWithResponseHeaders($query);
+
+        $cacheIdentityStringPage2 = $this->getResolverCacheKeyFromResponseAndPage($response, $page2);
+
+        $this->assertIsNumeric(
+            $this->graphqlCache->test($cacheIdentityStringPage2)
+        );
+
+        // disable page 1
+        $page1->setIsActive(false);
+        $this->pageRepository->save($page1);
+
+        $this->assertFalse(
+            $this->graphqlCache->test($cacheIdentityStringPage1),
+            'Cache entry still exists for disabled CMS page'
+        );
+
+        // assert page2 cache entry still exists
+        $this->assertIsNumeric(
+            $this->graphqlCache->test($cacheIdentityStringPage2)
+        );
+    }
+
     private function generateExpectedDataFromPage(PageInterface $page): array
     {
         return [
