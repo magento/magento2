@@ -132,21 +132,18 @@
         <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickOnAddProducts"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnButtonClickForPage1"/>
         <seeElement selector="{{OrdersGridSection.pageNumber('1')}}" stepKey="verifyPage1"/>
-        <wait time="5" stepKey="waitForPage1ToPopulate"/>
         <waitForElementVisible selector="{{OrdersGridSection.displayedProducts}}" stepKey="verifyDisplayedProductsOnPage1"/>
 
         <!-- Step6: Click on Next Page and verify products are listed on next page 2 -->
         <click selector="{{OrdersGridSection.selectProductNextPage}}" stepKey="clickOnNextPageForSelectProuct"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnButtonClickForPage2"/>
         <seeElement selector="{{OrdersGridSection.pageNumber('2')}}" stepKey="verifyPage2"/>
-        <wait time="5" stepKey="waitForPage2ToPopulate"/>
         <waitForElementVisible selector="{{OrdersGridSection.displayedProducts}}" stepKey="verifyDisplayedProductsOnPage2"/>
 
         <!-- Step6: Click on Previous Page and verify products are listed on previous page 1 -->
         <click selector="{{OrdersGridSection.selectProductPreviousPage}}" stepKey="clickOnPreviousPageForSelectProuct"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnButtonClickForPreviousPage1"/>
         <seeElement selector="{{OrdersGridSection.pageNumber('1')}}" stepKey="verifyPreviousPage1"/>
-        <wait time="5" stepKey="waitForPreviousPage1ToPopulate"/>
         <waitForElementVisible selector="{{OrdersGridSection.displayedProducts}}" stepKey="verifyDisplayedProductsOnPreviousPage1"/>
     </test>
 </tests>
