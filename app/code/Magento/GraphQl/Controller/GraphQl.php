@@ -42,6 +42,7 @@ class GraphQl implements FrontControllerInterface
     /**
      * @var \Magento\Framework\Webapi\Response
      * @deprecated 100.3.2
+     * @see
      */
     private $response;
 
@@ -67,7 +68,8 @@ class GraphQl implements FrontControllerInterface
 
     /**
      * @var ContextInterface
-     * @deprecated 100.3.3 $contextFactory is used for creating Context object
+     * @deprecated 100.3.3
+     * @see $contextFactory is used for creating Context object
      */
     private $resolverContext;
 
