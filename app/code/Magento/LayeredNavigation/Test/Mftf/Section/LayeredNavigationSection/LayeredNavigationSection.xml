@@ -16,6 +16,5 @@
         <element name="NavigationStepCalculationSystemValue" type="button" selector="#catalog_layered_navigation_price_range_calculation_inherit"/>
         <element name="PriceNavigationStep" type="button" selector="#catalog_layered_navigation_price_range_step"/>
         <element name="PriceNavigationStepSystemValue" type="button" selector="#catalog_layered_navigation_price_range_step_inherit"/>
-        <element name="layeredNavigationNthSwatch" type="block" selector="//a[@class='swatch-option-link-layered' and @aria-label='{{attribute_value}}']/div" parameterized="true"/>
     </section>
 </sections>
