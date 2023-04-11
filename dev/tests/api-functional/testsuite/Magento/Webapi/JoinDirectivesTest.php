@@ -10,6 +10,8 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Sales\Model\Order;
+use Magento\User\Model\User;
 
 /**
  * Test join directives.
@@ -32,9 +34,14 @@ class JoinDirectivesTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     private $filterBuilder;
 
     /**
-     * @var \Magento\User\Model\User
+     * @var User
      */
     private $user;
+
+    /**
+     * @var Order|mixed
+     */
+    private mixed $order;
 
     protected function setUp(): void
     {
@@ -42,7 +49,8 @@ class JoinDirectivesTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $this->searchBuilder = $objectManager->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
         $this->sortOrderBuilder = $objectManager->create(\Magento\Framework\Api\SortOrderBuilder::class);
         $this->filterBuilder = $objectManager->create(\Magento\Framework\Api\FilterBuilder::class);
-        $this->user = $objectManager->create(\Magento\User\Model\User::class);
+        $this->user = $objectManager->create(User::class);
+        $this->order = $objectManager->create(Order::class);
     }
 
     /**
@@ -168,6 +176,52 @@ class JoinDirectivesTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $this->assertArrayHasKey('extension_attributes', $itemData);
         $this->assertArrayHasKey('order_api_test_attribute', $itemData['extension_attributes']);
         $testAttribute = $itemData['extension_attributes']['order_api_test_attribute'];
+        $this->assertEquals($expectedExtensionAttributes['firstname'], $testAttribute['first_name']);
+        $this->assertEquals($expectedExtensionAttributes['lastname'], $testAttribute['last_name']);
+        $this->assertEquals($expectedExtensionAttributes['email'], $testAttribute['email']);
+    }
+
+    /**
+     * Test get list of order items with extension attributes.
+     *
+     * @magentoApiDataFixture Magento/Sales/_files/order.php
+     * @magentoAppIsolation enabled
+     */
+    public function testGetOrderItemList()
+    {
+        $orderItem = current($this->order->loadByIncrementId('100000001')->getItems());
+        $orderItemId = $orderItem->getId();
+        $filter = $this->filterBuilder
+            ->setField('item_id')
+            ->setValue($orderItemId)
+            ->setConditionType('eq')
+            ->create();
+        $this->searchBuilder->addFilters([$filter]);
+        $searchData = $this->searchBuilder->create()->__toArray();
+
+        $requestData = ['searchCriteria' => $searchData];
+
+        $restResourcePath = '/V1/orders/items/';
+        $soapService = 'salesOrderItemRepositoryV1';
+        $expectedExtensionAttributes = $this->getExpectedExtensionAttributes();
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => $restResourcePath . '?' . http_build_query($requestData),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => $soapService,
+                'operation' => $soapService . 'GetList',
+            ],
+        ];
+        $searchResult = $this->_webApiCall($serviceInfo, $requestData);
+
+        $this->assertArrayHasKey('items', $searchResult);
+        $itemData = array_pop($searchResult['items']);
+        $this->assertArrayHasKey('extension_attributes', $itemData);
+        $this->assertArrayHasKey('order_item_api_test_attribute', $itemData['extension_attributes']);
+        $testAttribute = $itemData['extension_attributes']['order_item_api_test_attribute'];
         $this->assertEquals($expectedExtensionAttributes['firstname'], $testAttribute['first_name']);
         $this->assertEquals($expectedExtensionAttributes['lastname'], $testAttribute['last_name']);
         $this->assertEquals($expectedExtensionAttributes['email'], $testAttribute['email']);

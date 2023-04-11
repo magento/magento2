@@ -24,6 +24,7 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 $product = $productRepository->get('simple');
 $billingAddress = $objectManager->create(OrderAddress::class, ['data' => $addressData]);
+$storeId = $objectManager->get(StoreManagerInterface::class)->getStore()->getId();
 $billingAddress->setAddressType('billing');
 
 $shippingAddress = clone $billingAddress;
@@ -50,7 +51,8 @@ $orderItem->setProductId($product->getId())
     ->setRowTotal($product->getPrice())
     ->setProductType('simple')
     ->setName($product->getName())
-    ->setSku($product->getSku());
+    ->setSku($product->getSku())
+    ->setStoreId($storeId);
 
 /** @var Order $order */
 $order = $objectManager->create(Order::class);
@@ -67,7 +69,7 @@ $order->setIncrementId('100000001')
     ->setCustomerEmail('customer@example.com')
     ->setBillingAddress($billingAddress)
     ->setShippingAddress($shippingAddress)
-    ->setStoreId($objectManager->get(StoreManagerInterface::class)->getStore()->getId())
+    ->setStoreId($storeId)
     ->addItem($orderItem)
     ->setPayment($payment);
 
