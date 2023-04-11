@@ -761,7 +761,8 @@ class CreateAccountTest extends TestCase
     }
 
     /**
-     * @magentoConfigFixture default_store newsletter/general/active 1
+     * @magentoConfigFixture current_store newsletter/general/active 1
+     * @magentoConfigFixture current_store newsletter/subscription/confirm 1
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Newsletter/_files/subscribers.php
      *
@@ -773,47 +774,53 @@ class CreateAccountTest extends TestCase
      */
     public function testCreateAccountWithNewsLetterSubscription() :void
     {
-        $customerEmail = 'test@example.com';
-        $firstName = 'John';
-        $lastName = 'Doe';
-
         $customer = $this->customerRepository->getById(1);
-        $customer->setEmail($customerEmail)
-            ->setFirstname($firstName)
-            ->setLastname($lastName);
-        $this->customerRepository->save($customer);
-
+        $customerEmail = $customer->getEmail();
+        $customerData = [
+            'name' => $customer->getFirstname() . ' ' . $customer->getLastname(),
+            'email' => $customerEmail,
+            'id' => $customer->getId(),
+            'rp_token' => 'randomstring'
+        ];
         $this->assertAndSendEmailNotification(
-            $customer,
+            $customerData,
             $customerEmail,
-            'customer_create_account_email_template'
+            'customer_create_account_email_template',
+            null
         );
 
         /** @var Subscriber $subscriber */
         $subscriber = $this->objectManager->create(Subscriber::class);
         $subscriber->subscribe($customerEmail);
         $subscriber->confirm($subscriber->getSubscriberConfirmCode());
+        $confirmationLink = $subscriber->getConfirmationLink();
 
         // Verify if the customer is subscribed to newsletter
         $this->assertTrue($subscriber->isSubscribed());
 
         $this->assertAndSendEmailNotification(
-            $customer,
+            $customerData,
             $customerEmail,
-            'newsletter_subscription_confirm_email_template'
+            'newsletter_subscription_confirm_email_template',
+            $confirmationLink
         );
     }
 
     /**
-     * @param $customer
+     * @param $customerData
      * @param $customerEmail
      * @param $templateIdentifier
+     * @param $confirmationLink
      * @return void
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\MailException
      */
-    private function assertAndSendEmailNotification($customer, $customerEmail, $templateIdentifier) :void
-    {
+    private function assertAndSendEmailNotification(
+        $customerData,
+        $customerEmail,
+        $templateIdentifier,
+        $confirmationLink = null
+    ) :void {
         /** @var TransportBuilder $transportBuilder */
         $transportBuilder = $this->objectManager->get(TransportBuilder::class);
         $transport = $transportBuilder->setTemplateIdentifier($templateIdentifier)
@@ -823,7 +830,14 @@ class CreateAccountTest extends TestCase
                     'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
                 ]
             )
-            ->setTemplateVars(['customer' => $customer])
+            ->setTemplateVars(
+                [
+                    'customer' => $customerData,
+                    'subscriber_data' => [
+                        'confirmation_link' => $confirmationLink,
+                    ],
+                ]
+            )
             ->addTo($customerEmail)
             ->getTransport();
         $transport->sendMessage();
@@ -833,8 +847,20 @@ class CreateAccountTest extends TestCase
         switch ($templateIdentifier) {
             case 'customer_create_account_email_template':
                 $this->assertEquals('Welcome to Default', $sendMessage->getSubject());
+                $this->assertStringContainsString(
+                    $customerData['name'],
+                    $sendMessage->getBody()->getParts()[0]->getRawContent()
+                );
+                $this->assertStringContainsString(
+                    $customerData['email'],
+                    $sendMessage->getBody()->getParts()[0]->getRawContent()
+                );
                 break;
             case 'newsletter_subscription_confirm_email_template':
+                $this->assertStringContainsString(
+                    $confirmationLink,
+                    $sendMessage->getBody()->getParts()[0]->getRawContent()
+                );
                 $this->assertEquals('Newsletter subscription confirmation', $sendMessage->getSubject());
                 break;
         }
