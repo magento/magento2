@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Framework\DB\Adapter\TableNotFoundException;
 
 /**
  * Category resource collection
@@ -332,7 +333,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             // Retrieve Anchor categories product counts
             $categoryIds = array_keys($anchor);
             $countSelect = $this->getProductsCountQuery($categoryIds, (bool)$websiteId);
-            $categoryProductsCount = $this->_conn->fetchPairs($countSelect);
+            try {
+                $categoryProductsCount = $this->_conn->fetchPairs($countSelect);
+            }
+            catch(TableNotFoundException $e) {
+                // If the index has not run yet and no table exists, 
+                // we do not compute a product count.
+                $categoryProductsCount = [];
+            }
             foreach ($anchor as $item) {
                 $productsCount = isset($categoryProductsCount[$item->getId()])
                     ? (int)$categoryProductsCount[$item->getId()]
