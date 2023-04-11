@@ -4,7 +4,7 @@ type Query {
     storeConfig : StoreConfig @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\StoreConfigResolver") @doc(description: "Return details about the store's configuration.") @cache(cacheIdentity: "Magento\\StoreGraphQl\\Model\\Resolver\\Store\\ConfigIdentity")
     availableStores(
         useCurrentGroup: Boolean @doc(description: "Filter store views by the current store group.")
-    ): [StoreConfig] @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\AvailableStoresResolver") @doc(description: "Get a list of available store views and their config information.")
+    ): [StoreConfig] @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\AvailableStoresResolver") @doc(description: "Get a list of available store views and their config information.") @cache(cacheIdentity: "Magento\\StoreGraphQl\\Model\\Resolver\\Stores\\ConfigIdentity")
 }
 
 type Website @doc(description: "Deprecated. It should not be used on the storefront. Contains information about a website.") {
