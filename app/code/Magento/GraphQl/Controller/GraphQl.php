@@ -42,7 +42,7 @@ class GraphQl implements FrontControllerInterface
     /**
      * @var \Magento\Framework\Webapi\Response
      * @deprecated 100.3.2
-     * @see
+     * @see no replacement
      */
     private $response;
 
