@@ -16,7 +16,6 @@
             <argument name="product" defaultValue="_defaultProduct"/>
             <argument name="category" defaultValue="_defaultCategory"/>
         </arguments>
-
         <!-- fill in basic configurable product values -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
         <waitForPageLoad time="30" stepKey="wait1"/>
@@ -30,14 +29,12 @@
         <selectOption userInput="{{product.visibility}}" selector="{{AdminProductFormSection.visibility}}" stepKey="fillVisibility"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
         <fillField userInput="{{product.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
-
         <!-- create configurations for colors the product is available in -->
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickOnNewAttribute"/>
         <waitForPageLoad stepKey="waitForIFrame"/>
         <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame"/>
         <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{colorProductAttribute.default_label}}" stepKey="fillDefaultLabel"/>
-
         <!-- Change to text swatches -->
         <selectOption selector="{{AdminNewAttributePanel.inputType}}" userInput="swatch_text" stepKey="selectTextSwatch"/>
         <click selector="{{AdminNewAttributePanel.addTextSwatchOption}}" stepKey="clickAddSwatch"/>

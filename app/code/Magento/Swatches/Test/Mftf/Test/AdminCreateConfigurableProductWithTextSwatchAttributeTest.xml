@@ -18,8 +18,6 @@
             <testCaseId value="AC-5328"/>
         </annotations>
         <before>
-            <!-- Enable Flat Rate -->
-            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!-- create category -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <!-- Login to Admin Portal -->
