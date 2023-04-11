@@ -20,19 +20,15 @@
         <before>
             <!-- Step1: Login as Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
-
             <!-- Disable all sources and delete any pre-existing stocks -->
             <actionGroup ref="DisableAllSourcesActionGroup" stepKey="DisableAllSources"/>
             <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
                 <argument name="stockName" value="{{_defaultStock.name}}"/>
                 <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
             </actionGroup>
-            <magentoCLI stepKey="reindexBefore" command="indexer:reindex"/>
-            <magentoCLI stepKey="flushCacheBefore" command="cache:flush"/>
-
             <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 5" stepKey="setStockThresholdValueTo5"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache1"/>
+            <magentoCLI stepKey="reindexPostSettingTheMainWebsiteToDefaultStock" command="indexer:reindex"/>
+            <magentoCLI stepKey="flushCachePostSettingTheMainWebsiteToDefaultStock" command="cache:flush"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -44,16 +40,14 @@
                 <argument name="stockName" value="{{_defaultStock.name}}"/>
                 <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
             </actionGroup>
-
             <deleteData createDataKey="createStock" stepKey="deleteStock"/>
-            <magentoCLI stepKey="reindexAfter" command="indexer:reindex"/>
-            <magentoCLI stepKey="flushCacheAfter" command="cache:flush"/>
             <magentoCLI command="config:set {{CatalogInventoryOptionsOnlyXleftThreshold.path}} {{CatalogInventoryOptionsOnlyXleftThreshold.value}}" stepKey="removedStockThresholdQty"/>
+            <magentoCLI stepKey="reindexAfterDeletingTheStock" command="indexer:reindex"/>
+            <magentoCLI stepKey="flushCacheAfterDeletingTheStock" command="cache:flush"/>
         </after>
 
         <!-- Step2: Create the Subcategory -->
         <createData entity="_defaultCategory" stepKey="createCategory"/>
-
         <!-- Step3: Create the Source and the Stock -->
         <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock"/>
         <createData entity="FullSource1" stepKey="createSource"/>
@@ -61,20 +55,16 @@
             <requiredEntity createDataKey="createSource"/>
             <requiredEntity createDataKey="createStock"/>
         </createData>
-
-        <!-- Step8: Create the Simple Product -->
+        <!-- Create and Update the product as per the test case -->
         <createData entity="ApiSimpleProduct" stepKey="createProduct">
             <requiredEntity createDataKey="createCategory"/>
         </createData>
-
-        <!-- Update the product as per the test case -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForCreatedProduct">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
-
         <fillField  userInput="10" selector="{{AdminProductFormSection.productPrice}}" stepKey="updatePriceTo10"/>
         <fillField  userInput="1" selector="{{AdminProductFormSection.productWeight}}" stepKey="updateWeight"/>
         <conditionalClick selector="{{AdminProductFormConfigurationsSection.unAssignSource('Default Source')}}" dependentSelector="{{AdminProductFormConfigurationsSection.unAssignSource('Default Source')}}" visible="true" stepKey="unAssignDefaultSource"/>
@@ -88,16 +78,13 @@
         <fillField  userInput="2" selector="{{AdminProductFormSection.assignedSourcesQty}}" stepKey="setQtyForAssignedSources"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickOnSaveButton"/>
         <see userInput="You saved the product." stepKey="saveSuccessfulForManageStockAsYes"/>
-
-        <magentoCLI stepKey="reindexForAssignedSources" command="indexer:reindex"/>
-        <magentoCLI stepKey="flushCacheForAssignedSources" command="cache:flush"/>
-
+        <magentoCLI stepKey="reindexPostAssigningTheSource" command="indexer:reindex"/>
+        <magentoCLI stepKey="flushCachePostAssigningTheSource" command="cache:flush"/>
         <!-- Verify with Manage Stock set as Yes for the product -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
             <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
         </actionGroup>
         <see selector=".availability.only" userInput="Only 2 left" stepKey="seeCurrentProductQuantity2"/>
-
         <!-- Update the Manage Stock as No for the product -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForCreatedProductForManageStockAsNo">
             <argument name="product" value="$$createProduct$$"/>
@@ -115,11 +102,11 @@
         <see userInput="You saved the product." stepKey="saveSuccessfulForManageStockAsNo"/>
         <magentoCLI stepKey="reindexForSettingManageStockAsNo" command="indexer:reindex"/>
         <magentoCLI stepKey="flushCacheForSettingManageStockAsNo" command="cache:flush"/>
-
         <!-- Verify with Manage Stock set as No for the product -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPageOnStorefrontForManageStockAsNo">
             <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
         </actionGroup>
         <dontSee selector=".availability.only" userInput="Only 2 left" stepKey="ShouldNotSeeCurrentProductQuantity"/>
+
     </test>
 </tests>
