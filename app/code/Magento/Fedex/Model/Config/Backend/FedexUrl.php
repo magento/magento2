@@ -13,11 +13,11 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Framework\Validator\Url;
-use Magento\Framework\Model\AbstractModel;
 
 /**
  * Represents a config URL that may point to a Fedex endpoint
@@ -49,12 +49,14 @@ class FedexUrl extends Value
         Url $url,
         array $data = []
     ) {
-        $this->url = $url;
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
+        $this->url = $url;
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
+     *
+     * @return AbstractModel
      * @throws ValidatorException
      */
     public function beforeSave(): AbstractModel

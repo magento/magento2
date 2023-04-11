@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\Fedex\Test\Unit\Model\Config\Backend;
 
-use Magento\Fedex\Model\Config\Backend\FedexUrl;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Fedex\Model\Config\Backend\FedexUrl;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,6 +24,9 @@ class FedexUrlTest extends TestCase
      */
     private $config;
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
