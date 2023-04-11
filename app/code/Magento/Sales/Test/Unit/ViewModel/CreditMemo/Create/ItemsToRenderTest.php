@@ -93,7 +93,7 @@ class ItemsToRenderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->orderItem = $this->getMockBuilder(OrderItem::class)
-            ->onlyMethods(['getParentItem'])
+            ->onlyMethods(['getParentItem','getQtyInvoiced','getQtyRefunded'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->orderItemParent = $this->getMockBuilder(OrderItem::class)
@@ -126,6 +126,10 @@ class ItemsToRenderTest extends TestCase
             ->willReturn($this->creditmemo);
         $this->creditmemo->method('getStoreId')
             ->willReturn(1);
+        $this->orderItem->method('getQtyInvoiced')
+            ->willReturn($this->orderItem);
+        $this->orderItem->method('getQtyRefunded')
+            ->willReturn($this->orderItem);
         $this->creditmemoItem->method('getOrderItem')
             ->willReturn($this->orderItem);
         $this->orderItem->method('getParentItem')
