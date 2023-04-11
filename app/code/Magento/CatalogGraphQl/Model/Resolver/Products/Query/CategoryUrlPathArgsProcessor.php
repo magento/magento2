@@ -39,7 +39,7 @@ class CategoryUrlPathArgsProcessor implements ArgumentsProcessorInterface
     /**
      * Composite processor that loops through available processors for arguments that come from graphql input
      *
-     * @param string $fieldName,
+     * @param string $fieldName
      * @param array $args
      * @return array
      * @throws GraphQlInputException
