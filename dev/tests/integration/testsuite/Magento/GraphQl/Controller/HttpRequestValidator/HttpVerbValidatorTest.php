@@ -5,10 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Controller\HttpRequestValidator\HttpRequestValidator;
+namespace Magento\GraphQl\Controller\HttpRequestValidator;
 
 use Magento\Framework\App\HttpRequestInterface;
-use Magento\GraphQl\Controller\HttpRequestValidator\HttpVerbValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
