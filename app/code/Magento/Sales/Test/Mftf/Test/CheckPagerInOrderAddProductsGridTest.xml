@@ -19,7 +19,6 @@
         <before>
             <!-- Step1: Create new category and 21 products -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
-
             <createData entity="_defaultProduct" stepKey="createSimpleProduct1">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
@@ -85,7 +84,7 @@
             </createData>
         </before>
         <after>
-            <!-- Delete created categry and products created-->
+            <!-- Delete created category and products -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
@@ -108,38 +107,31 @@
             <deleteData createDataKey="createSimpleProduct19" stepKey="deleteSimpleProduct19"/>
             <deleteData createDataKey="createSimpleProduct20" stepKey="deleteSimpleProduct20"/>
             <deleteData createDataKey="createSimpleProduct21" stepKey="deleteSimpleProduct21"/>
-
             <!-- Delete the created customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-
             <!--Logout-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!-- Step2: Create customer -->
         <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-
         <!-- Step3: Login as admin-->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-
         <!-- Step4: Navigate to Orders and create an order -->
         <amOnPage stepKey="navigateToNewOrderPage" url="{{AdminOrderCreatePage.url}}"/>
         <waitForPageLoad stepKey="waitForNewOrderPageOpened"/>
         <click stepKey="chooseCustomer" selector="{{AdminOrdersGridSection.customerInOrdersSection('$$createCustomer.firstname$$')}}"/>
         <waitForPageLoad stepKey="waitForStoresPageOpened"/>
-
         <!-- Step5: Click on Add Products -->
         <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickOnAddProducts"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnButtonClickForPage1"/>
         <seeElement selector="{{OrdersGridSection.pageNumber('1')}}" stepKey="verifyPage1"/>
         <waitForElementVisible selector="{{OrdersGridSection.displayedProducts}}" stepKey="verifyDisplayedProductsOnPage1"/>
-
         <!-- Step6: Click on Next Page and verify products are listed on next page 2 -->
         <click selector="{{OrdersGridSection.selectProductNextPage}}" stepKey="clickOnNextPageForSelectProuct"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnButtonClickForPage2"/>
         <seeElement selector="{{OrdersGridSection.pageNumber('2')}}" stepKey="verifyPage2"/>
         <waitForElementVisible selector="{{OrdersGridSection.displayedProducts}}" stepKey="verifyDisplayedProductsOnPage2"/>
-
         <!-- Step6: Click on Previous Page and verify products are listed on previous page 1 -->
         <click selector="{{OrdersGridSection.selectProductPreviousPage}}" stepKey="clickOnPreviousPageForSelectProuct"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnButtonClickForPreviousPage1"/>
