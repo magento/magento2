@@ -139,6 +139,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         $options = [];
         $options['value'][$optionId][0] = $optionLabel;
         $options['order'][$optionId] = $option->getSortOrder();
+        $options['is_default'][$optionId] = $option->getIsDefault();
         if (is_array($option->getStoreLabels())) {
             foreach ($option->getStoreLabels() as $label) {
                 $options['value'][$optionId][$label->getStoreId()] = $label->getLabel();
