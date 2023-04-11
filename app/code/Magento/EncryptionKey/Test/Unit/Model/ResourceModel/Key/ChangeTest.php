@@ -158,7 +158,10 @@ class ChangeTest extends TestCase
     {
         $this->setUpChangeEncryptionKey();
         $this->randomMock->expects($this->once())->method('getRandomBytes')->willReturn('abc');
-        $this->assertEquals(ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX . 'abc', $this->model->changeEncryptionKey());
+        $this->assertEquals(
+            ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX . 'abc',
+            $this->model->changeEncryptionKey()
+        );
     }
 
     public function testChangeEncryptionKeyThrowsException()
