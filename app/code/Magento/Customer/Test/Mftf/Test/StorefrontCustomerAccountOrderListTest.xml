@@ -106,7 +106,7 @@
         </before>
 
         <after>
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="Product" stepKey="deleteProduct"/>
             <deleteData createDataKey="Customer" stepKey="deleteCustomer"/>
