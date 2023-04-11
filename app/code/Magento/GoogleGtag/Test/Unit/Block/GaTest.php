@@ -142,6 +142,7 @@ class GaTest extends TestCase
     /**
      * Test for getOrdersTrackingData()
      * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testOrderTrackingData()
     {
@@ -163,14 +164,15 @@ class GaTest extends TestCase
             'orders' => [
                 [
                     'transaction_id' => 100,
+                    'currency' => 'USD',
                     'value' => 10.00,
                     'tax' => 2.00,
-                    'shipping' => 1.00,
-                    'currency' => 'USD'
+                    'shipping' => 1.00
                 ]
             ],
             'products' => [
                 [
+                    'index' => 1,
                     'item_id' => 'sku0',
                     'item_name' => 'testName0',
                     'affiliation' => 'test',

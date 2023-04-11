@@ -182,7 +182,7 @@ class Ga extends Template
             ];
 
             if (!empty($order->getCouponCode())) {
-                $order['coupon'] = $this->_escaper->escapeHtmlAttr($order->getCouponCode());
+                $resultOrder['coupon'] = $this->_escaper->escapeHtmlAttr($order->getCouponCode());
             }
 
             $result['orders'][] = $resultOrder;
