@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertProductQuantityInWishlistActionGroup">
+        <annotations>
+            <description>Go to storefront customer wishlist page and assert product name and quantity.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="productQuantity" type="string"/>
+        </arguments>
+        <amOnPage url="{{StorefrontCustomerWishlistPage.url}}" stepKey="goToWishList"/>
+        <waitForElement selector="{{StorefrontCustomerWishlistProductSection.ProductTitleByName(productName)}}" time="30" stepKey="assertProductName"/>
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
+        <waitForElement selector="{{StorefrontCustomerWishlistProductSection.ProductQuantityByQuantity(productName,productQuantity)}}" stepKey="assertProductQuantity"/>
+    </actionGroup>
+</actionGroups>
