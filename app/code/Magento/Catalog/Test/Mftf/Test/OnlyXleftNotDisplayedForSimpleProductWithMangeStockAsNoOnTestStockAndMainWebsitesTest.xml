@@ -22,7 +22,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
             <!-- Disable all sources and delete any pre-existing stocks -->
-            <actionGroup ref="DisableAllSourcesActionGroup" stepKey="DisableAllsources"/>
+            <actionGroup ref="DisableAllSourcesActionGroup" stepKey="DisableAllSources"/>
             <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
                 <argument name="stockName" value="{{_defaultStock.name}}"/>
                 <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
@@ -121,6 +121,5 @@
             <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
         </actionGroup>
         <dontSee selector=".availability.only" userInput="Only 2 left" stepKey="ShouldNotSeeCurrentProductQuantity"/>
-
     </test>
 </tests>
