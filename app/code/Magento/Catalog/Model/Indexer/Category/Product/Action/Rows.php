@@ -29,8 +29,6 @@ use Magento\Indexer\Model\WorkingStateProvider;
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
 {
     /**
-     * Limitation by categories
-     *
      * @var int[]
      */
     protected $limitationByCategories;

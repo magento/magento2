@@ -44,7 +44,8 @@ abstract class AbstractAction
 
     /**
      * Suffix for table to show it is temporary
-     * @deprecated see getIndexTable
+     * @deprecated 102.0.5
+     * @see getIndexTable
      */
     public const TEMPORARY_TABLE_SUFFIX = '_tmp';
 
@@ -221,6 +222,7 @@ abstract class AbstractAction
      *
      * @return string
      * @deprecated 102.0.5
+     * @see getIndexTable
      */
     protected function getMainTable()
     {
@@ -232,6 +234,7 @@ abstract class AbstractAction
      *
      * @return string
      * @deprecated 102.0.5
+     * @see getIndexTable
      */
     protected function getMainTmpTable()
     {

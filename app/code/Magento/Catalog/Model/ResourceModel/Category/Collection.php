@@ -335,9 +335,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $countSelect = $this->getProductsCountQuery($categoryIds, (bool)$websiteId);
             try {
                 $categoryProductsCount = $this->_conn->fetchPairs($countSelect);
-            }
-            catch(TableNotFoundException $e) {
-                // If the index has not run yet and no table exists, 
+            } catch (TableNotFoundException $e) {
+                // If the index has not run yet and no table exists,
                 // we do not compute a product count.
                 $categoryProductsCount = [];
             }
