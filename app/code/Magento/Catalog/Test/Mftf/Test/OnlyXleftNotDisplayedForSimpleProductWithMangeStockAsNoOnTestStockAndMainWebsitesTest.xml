@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="OnlyXleftNotDisplayedForSimpleProductWithMangeStockAsNoOnTestStockAndMainWebsitesTest">
         <annotations>
             <features value="Inventory"/>
@@ -77,17 +77,17 @@
 
         <fillField  userInput="10" selector="{{AdminProductFormSection.productPrice}}" stepKey="updatePriceTo10"/>
         <fillField  userInput="1" selector="{{AdminProductFormSection.productWeight}}" stepKey="updateWeight"/>
-        <conditionalClick selector="{{AdminProductFormSection.unassignSource('Default Source')}}" dependentSelector="{{AdminProductFormSection.unassignSource('Default Source')}}" visible="true" stepKey="unassignDefaultSource"/>
-        <click selector="{{AdminProductFormSection.btnAssignSources}}" stepKey="clickAssignSourcesButton"/>
-        <waitForElementVisible selector="{{AdminProductFormSection.searchBySource}}" stepKey="waitForSearchSourceToBeVisible"/>
-        <fillField  userInput="$$createSource.source[source_code]$$" selector="{{AdminProductFormSection.searchBySource}}" stepKey="enterSource"/>
-        <click selector="{{AdminProductFormSection.clickSearch}}" stepKey="clickSearchButton"/>
-        <waitForElementVisible selector="{{AdminProductFormSection.chkSourceToAssign('$$createSource.source[source_code]$$')}}" stepKey="waitForAssignsourcesToBeVisible"/>
-        <checkOption selector="{{AdminProductFormSection.chkSourceToAssign('$$createSource.source[source_code]$$')}}" stepKey="checkTheCreatedSource"/>
-        <click selector="{{AdminProductFormSection.btnDoneAssignedSources}}" stepKey="clickOnDoneButton"/>
+        <conditionalClick selector="{{AdminProductFormConfigurationsSection.unAssignSource('Default Source')}}" dependentSelector="{{AdminProductFormConfigurationsSection.unAssignSource('Default Source')}}" visible="true" stepKey="unAssignDefaultSource"/>
+        <click selector="{{AdminProductFormConfigurationsSection.btnAssignSources}}" stepKey="clickAssignSourcesButton"/>
+        <waitForElementVisible selector="{{AdminProductFormConfigurationsSection.searchBySource}}" stepKey="waitForSearchSourceToBeVisible"/>
+        <fillField  userInput="$$createSource.source[source_code]$$" selector="{{AdminProductFormConfigurationsSection.searchBySource}}" stepKey="enterSource"/>
+        <click selector="{{AdminProductFormConfigurationsSection.clickSearch}}" stepKey="clickSearchButton"/>
+        <waitForElementVisible selector="{{AdminProductFormConfigurationsSection.chkSourceToAssign('$$createSource.source[source_code]$$')}}" stepKey="waitForAssignSourcesToBeVisible"/>
+        <checkOption selector="{{AdminProductFormConfigurationsSection.chkSourceToAssign('$$createSource.source[source_code]$$')}}" stepKey="checkTheCreatedSource"/>
+        <click selector="{{AdminProductFormConfigurationsSection.btnDoneAssignedSources}}" stepKey="clickOnDoneButton"/>
         <fillField  userInput="2" selector="{{AdminProductFormSection.assignedSourcesQty}}" stepKey="setQtyForAssignedSources"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickOnSaveButton"/>
-        <see userInput="You saved the product." stepKey="saveSuccessfulForManagestockAsYes"/>
+        <see userInput="You saved the product." stepKey="saveSuccessfulForManageStockAsYes"/>
 
         <magentoCLI stepKey="reindexForAssignedSources" command="indexer:reindex"/>
         <magentoCLI stepKey="flushCacheForAssignedSources" command="cache:flush"/>
@@ -107,14 +107,14 @@
         </actionGroup>
         <waitForElementVisible selector="{{AdminProductFormSection.btnAdvancedInventory}}" stepKey="waitForAdvancedInventoryToBeVisible"/>
         <click selector="{{AdminProductFormSection.btnAdvancedInventory}}" stepKey="clickOnAdvancedInventoryButton"/>
-        <waitForElementVisible selector="{{AdminProductFormSection.checkConfigSettingsAdvancedInventory('use_config_manage_stock')}}" stepKey="waitForAdvancedInventoryPageToBeLoaded"/>
-        <uncheckOption selector="{{AdminProductFormSection.checkConfigSettingsAdvancedInventory('use_config_manage_stock')}}" stepKey="uncheckManageStockOption"/>
-        <selectOption userInput="No" selector="{{AdminProductFormSection.selectManageStockOption}}" stepKey="selectNoAsManageStock"/>
-        <click selector="{{AdminProductFormSection.btnDoneAdvancedInventory}}" stepKey="clickOnAdvancedInventoryDoneButton"/>
+        <waitForElementVisible selector="{{AdminProductFormAdvancedInventorySection.checkConfigSettingsAdvancedInventory('use_config_manage_stock')}}" stepKey="waitForAdvancedInventoryPageToBeLoaded"/>
+        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.checkConfigSettingsAdvancedInventory('use_config_manage_stock')}}" stepKey="uncheckManageStockOption"/>
+        <selectOption userInput="No" selector="{{AdminProductFormAdvancedInventorySection.manageStock}}" stepKey="selectNoAsManageStock"/>
+        <click selector="{{AdminProductFormAdvancedInventorySection.doneButton}}" stepKey="clickOnAdvancedInventoryDoneButton"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickOnSaveButtonPostSettingManageStockAsNo"/>
-        <see userInput="You saved the product." stepKey="saveSuccessfulForManagestockAsNo"/>
-        <magentoCLI stepKey="reindexForSettingManagestockAsNo" command="indexer:reindex"/>
-        <magentoCLI stepKey="flushCacheForSettingManagestockAsNo" command="cache:flush"/>
+        <see userInput="You saved the product." stepKey="saveSuccessfulForManageStockAsNo"/>
+        <magentoCLI stepKey="reindexForSettingManageStockAsNo" command="indexer:reindex"/>
+        <magentoCLI stepKey="flushCacheForSettingManageStockAsNo" command="cache:flush"/>
 
         <!-- Verify with Manage Stock set as No for the product -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPageOnStorefrontForManageStockAsNo">

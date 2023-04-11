@@ -36,5 +36,7 @@
         <element name="maxiQtyAllowedInCartError" type="text" selector="[name='product[stock_data][max_sale_qty]'] + label.admin__field-error"/>
         <element name="backorders" type="select" selector="//*[@name='product[stock_data][backorders]']"/>
         <element name="useConfigSettingsForBackorders" type="checkbox" selector="//input[@name='product[stock_data][use_config_backorders]']"/>
+        <element name="checkConfigSettingsAdvancedInventory" type="checkbox" selector="//input[@name='product[stock_data][{{args}}]']/..//label[text()='Use Config Settings']/..//input[@type='checkbox']" parameterized="true"/>
+        <element name="selectManageStockOption" type="select" selector="//select[@name='product[stock_data][manage_stock]']"/>
     </section>
 </sections>
