@@ -8,14 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\ViewModel\CreditMemo\Create;
 
-use Magento\Sales\Model\Convert\Order as ConvertOrder;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Items as BlockItems;
-use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
+use Magento\Sales\Model\Convert\Order as ConvertOrder;
 use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\ViewModel\CreditMemo\Create\ItemsToRender;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -127,9 +127,9 @@ class ItemsToRenderTest extends TestCase
         $this->creditmemo->method('getStoreId')
             ->willReturn(1);
         $this->orderItem->method('getQtyInvoiced')
-            ->willReturn($this->orderItem);
+            ->willReturn(1.0);
         $this->orderItem->method('getQtyRefunded')
-            ->willReturn($this->orderItem);
+            ->willReturn(1.0);
         $this->creditmemoItem->method('getOrderItem')
             ->willReturn($this->orderItem);
         $this->orderItem->method('getParentItem')
