@@ -182,8 +182,5 @@
             <actualResult type="variable">grabProductPrice</actualResult>
             <expectedResult type="string">As low as</expectedResult>
         </assertEquals>
-
-    </test>
+</test>
 </tests>
-
-
