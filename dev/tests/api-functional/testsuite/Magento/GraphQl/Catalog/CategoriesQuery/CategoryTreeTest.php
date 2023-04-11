@@ -347,6 +347,8 @@ QUERY;
           }
         }
         name
+        new_from_date
+        new_to_date
         options_container
         price {
           minimalPrice {
@@ -622,6 +624,48 @@ QUERY;
     }
 
     /**
+     * Test categories query when category image is not found or missing.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/catalog_category_with_missing_image.php
+     */
+    public function testCategoriesQueryWhenCategoryImageIsMissing(): void
+    {
+        /** @var CategoryCollection $categoryCollection */
+        $categoryCollection = $this->objectManager->get(CategoryCollection::class);
+        $categoryModel = $categoryCollection
+            ->addAttributeToSelect('image')
+            ->addAttributeToFilter('name', ['eq' => 'Parent Image Category'])
+            ->getFirstItem();
+        $categoryId = $categoryModel->getId();
+        $query = <<<QUERY
+{
+    categories(filters: {ids: {in: ["$categoryId"]}}) {
+        items {
+            id
+            name
+            url_key
+            image
+            children {
+                id
+                name
+                url_key
+                image
+            }
+        }
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertNotEmpty($response['categories']);
+        $categories = current($response['categories']['items']);
+        $this->assertEquals($categoryId, $categories['id']);
+        $this->assertEquals('Parent Image Category', $categories['name']);
+        $this->assertStringEndsWith('Magento_Catalog/images/category/placeholder/image.jpg', $categories['image']);
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */
     public function testGetCategoryWithIdAndUid()
@@ -725,6 +769,8 @@ QUERY;
             'short_description',
             'country_of_manufacture',
             'gift_message_available',
+            'new_from_date',
+            'new_to_date',
             'options_container',
             'special_price',
             'special_to_date',

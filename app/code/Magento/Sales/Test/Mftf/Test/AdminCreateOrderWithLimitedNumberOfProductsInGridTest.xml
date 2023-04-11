@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithLimitedNumberOfProductsInGridTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Limit number of products in grid during order creation"/>
+            <title value="Limit total number of products in grid collection during order creation"/>
+            <description value="Verify that total number of products in grid collection can be limited during order creation"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACPT-706"/>
+            <group value="Sales"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
+            <magentoCLI stepKey="enableLimitNumberOfProductsInGrid" command="config:set admin/grid/limit_total_number_of_products 1"/>
+            <magentoCLI stepKey="setCustomRecordsLimit" command="config:set admin/grid/records_limit 2"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct2"/>
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <createData entity="CashOnDeliveryPaymentMethodDefault" stepKey="cashOnDeliveryPaymentMethod"/>
+            <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
+        </before>
+
+        <after>
+            <magentoCLI stepKey="disableLimitNumberOfProductsInGrid" command="config:set admin/grid/limit_total_number_of_products 0"/>
+            <magentoCLI stepKey="setDefaultRecordsLimit" command="config:set admin/grid/records_limit 20000"/>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <magentoCLI command="config:set payment/cashondelivery/active 0" stepKey="disableCashOnDeliveryMethod"/>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Start Order Creation -->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+
+        <!-- Click Add Products button to open products grid-->
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
+
+        <!-- Check that number of records and pagination is not displayed because number of products equal or greater than limit -->
+        <dontSee userInput="2" selector="{{AdminOrderFormItemsSection.totalRecords}}" stepKey="dontSeeRecords"/>
+        <dontSee userInput="1" selector="{{AdminOrderFormItemsSection.numberOfPages}}" stepKey="dontSeeCurrentPageFound"/>
+
+        <!-- Search for the SimpleProduct1 using grid filter -->
+        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{SimpleProduct.sku}}" stepKey="fillSkuFilter"/>
+        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearch"/>
+
+        <!-- Check that 1 record found and pagination is displayed because number of filtered products is less than limit -->
+        <see userInput="1" selector="{{AdminOrderFormItemsSection.totalRecords}}" stepKey="seeRecords"/>
+        <see userInput="1" selector="{{AdminOrderFormItemsSection.numberOfPages}}" stepKey="SeeCurrentPageFound"/>
+
+        <!-- Add SimpleProduct1 to the order -->
+        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectProduct"/>
+        <waitForPageLoad stepKey="waitForProductLoad"/>
+        <fillField selector="{{AdminOrderFormItemsSection.rowQty('1')}}" userInput="{{SimpleProduct.quantity}}" stepKey="fillProductQty"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
+        <waitForPageLoad stepKey="waitForOptionsToLoad"/>
+
+        <!-- Select payment method, shipping method and place order -->
+        <actionGroup ref="SelectCashOnDeliveryPaymentMethodActionGroup" stepKey="selectPaymentMethod"/>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+        <comment userInput="BIC workaround" stepKey="getOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="{$orderId}"/>
+        </actionGroup>
+
+        <!-- Create a shipment for placed order -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
+
+        <!-- Check that SimpleProduct1 has become out of stock after shipment -->
+        <actionGroup ref="AssertAdminProductStockStatusActionGroup" stepKey="checkProductStockStatus">
+            <argument name="productId" value="$$createSimpleProduct1.id$$"/>
+            <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>
+
+        <!-- Increase records limit -->
+        <magentoCLI stepKey="setCustomRecordsLimit" command="config:set admin/grid/records_limit 3"/>
+
+        <!-- Start order creation again -->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer2">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+
+        <!-- Click Add Products button to open products grid-->
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts2"/>
+
+        <!-- Check that 2 records found and pagination is displayed because number of products is less than limit -->
+        <see userInput="2" selector="{{AdminOrderFormItemsSection.totalRecords}}" stepKey="seeRecords2"/>
+        <see userInput="1" selector="{{AdminOrderFormItemsSection.numberOfPages}}" stepKey="SeeCurrentPageFound2"/>
+    </test>
+</tests>

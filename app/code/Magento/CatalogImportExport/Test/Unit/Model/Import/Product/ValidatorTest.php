@@ -12,6 +12,7 @@ use Magento\CatalogImportExport\Model\Import\Product\Type\Simple;
 use Magento\CatalogImportExport\Model\Import\Product\Validator;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\Media;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\Website;
+use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ImportExport\Model\Import;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -64,7 +65,10 @@ class ValidatorTest extends TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->validator = $this->objectManagerHelper->getObject(
             Validator::class,
-            ['validators' => $this->validators]
+            [
+                'string' => new StringUtils(),
+                'validators' => $this->validators
+            ]
         );
         $this->validator->init($this->context);
     }

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CustomerOrderSimpleProductTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Customer Order Simple Product"/>
+            <title value="Customer Order Simple Product"/>
+            <description value="Customer Order Simple Product"/>
+            <stories value="Customer Checkoqut"/>
+            <severity value="MAJOR"/>
+            <group value="checkout"/>
+            <group value="shoppingCart"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <!-- create category -->
+            <createData entity="_defaultCategory" stepKey="testCategory"/>
+            <!-- create data -->
+            <createData entity="SimpleProductQty100" stepKey="testProduct">
+                <requiredEntity createDataKey="testCategory"/>
+            </createData>
+            <!-- Assign Product to Category -->
+            <createData entity="AssignProductToCategory" stepKey="assignTestCategoryToTestProduct">
+                <requiredEntity createDataKey="testCategory"/>
+                <requiredEntity createDataKey="testProduct"/>
+            </createData>
+            <!-- create customer -->
+            <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
+        </before>
+
+        <after>
+            <!-- delete category,product,customer -->
+            <deleteData createDataKey="testProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="testCategory" stepKey="deleteSimpleCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Customer placed order from storefront with payment method -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$testProduct$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFlatRate"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentStep"/>
+
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+
+        <!-- order number is captured for future validation -->
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="getOrderNumber"/>
+    </test>
+</tests>

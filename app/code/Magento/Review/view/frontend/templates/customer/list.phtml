@@ -44,6 +44,7 @@ $reviewHelper = $block->getData('reviewHelper');
                         <div class="rating-summary">
                             <span class="label"><span><?= $escaper->escapeHtml(__('Rating')) ?>:</span></span>
                             <div class="rating-result"
+                                 id="rating-result_<?= /* @noEscape */ $block->escapeHtml($review->getId()) ?>"
                                  title="<?= /* @noEscape */ ((int)$review->getSum() / (int)$review->getCount()) ?>%">
                                 <span class="rating_<?= $escaper->escapeUrl($review->getReviewId())?>">
                                     <span>
@@ -52,9 +53,11 @@ $reviewHelper = $block->getData('reviewHelper');
                                 </span>
                             </div>
                         </div>
-                        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                        <?= /* @noEscape */
+                        $secureRenderer->renderStyleAsTag(
                             "width:" . /* @noEscape */ ((int)$review->getSum() / (int)$review->getCount()) . "%;",
-                            'div.rating-summary div.rating-result>span.rating_' . $escaper->escapeUrl($review->getReviewId())
+                            'div.rating-summary div.rating-result>span.rating_' .
+                                            $escaper->escapeUrl($review->getReviewId())
                         ) ?>
                     <?php endif; ?>
                     </td>

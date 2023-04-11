@@ -7,11 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model\ResourceModel;
 
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\AccountConfirmation;
 use Magento\Customer\Model\Customer\NotificationStorage;
+use Magento\Eav\Model\Entity\Context;
+use Magento\Eav\Model\Entity\VersionControl\AbstractEntity;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
+use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Validator\Exception as ValidatorException;
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Validator\Factory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Customer entity resource model
@@ -20,27 +34,27 @@ use Magento\Framework\Validator\Exception as ValidatorException;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
+class Customer extends AbstractEntity
 {
     /**
-     * @var \Magento\Framework\Validator\Factory
+     * @var Factory
      */
     protected $_validatorFactory;
 
     /**
      * Core store config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var DateTime
      */
     protected $dateTime;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
@@ -55,28 +69,36 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     private $notificationStorage;
 
     /**
+     * @var EncryptorInterface
+     */
+    private $encryptor;
+
+    /**
      * Customer constructor.
      *
-     * @param \Magento\Eav\Model\Entity\Context $context
-     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot
-     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Validator\Factory $validatorFactory
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Context $context
+     * @param Snapshot $entitySnapshot
+     * @param RelationComposite $entityRelationComposite
+     * @param ScopeConfigInterface $scopeConfig
+     * @param Factory $validatorFactory
+     * @param DateTime $dateTime
+     * @param StoreManagerInterface $storeManager
      * @param array $data
-     * @param AccountConfirmation $accountConfirmation
+     * @param AccountConfirmation|null $accountConfirmation
+     * @param EncryptorInterface|null $encryptor
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Eav\Model\Entity\Context $context,
-        \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
-        \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Validator\Factory $validatorFactory,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        Context $context,
+        Snapshot $entitySnapshot,
+        RelationComposite $entityRelationComposite,
+        ScopeConfigInterface $scopeConfig,
+        Factory $validatorFactory,
+        DateTime $dateTime,
+        StoreManagerInterface $storeManager,
         $data = [],
-        AccountConfirmation $accountConfirmation = null
+        AccountConfirmation $accountConfirmation = null,
+        EncryptorInterface $encryptor = null
     ) {
         parent::__construct($context, $entitySnapshot, $entityRelationComposite, $data);
 
@@ -88,6 +110,8 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         $this->setType('customer');
         $this->setConnection('customer_read');
         $this->storeManager = $storeManager;
+        $this->encryptor = $encryptor ?? ObjectManager::getInstance()
+                ->get(EncryptorInterface::class);
     }
 
     /**
@@ -109,16 +133,16 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     /**
      * Check customer scope, email and confirmation key before saving
      *
-     * @param \Magento\Framework\DataObject|\Magento\Customer\Api\Data\CustomerInterface $customer
+     * @param DataObject|CustomerInterface $customer
      *
      * @return $this
      * @throws AlreadyExistsException
      * @throws ValidatorException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _beforeSave(\Magento\Framework\DataObject $customer)
+    protected function _beforeSave(DataObject $customer)
     {
         /** @var \Magento\Customer\Model\Customer $customer */
         if ($customer->getStoreId() === null) {
@@ -158,13 +182,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         }
 
         // set confirmation key logic
-        if (!$customer->getId() &&
-            $this->accountConfirmation->isConfirmationRequired(
-                $customer->getWebsiteId(),
-                $customer->getId(),
-                $customer->getEmail()
-            )
-        ) {
+        if ($this->isConfirmationRequired($customer)) {
             $customer->setConfirmation($customer->getRandomConfirmationKey());
         }
         // remove customer confirmation key from database, if empty
@@ -176,7 +194,57 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
             $this->_validate($customer);
         }
 
+        if ($customer->getData('rp_token')) {
+            $rpToken = $customer->getData('rp_token');
+            $customer->setRpToken($this->encryptor->encrypt($rpToken));
+        }
+
         return $this;
+    }
+
+    /**
+     * Checks if customer email verification is required
+     *
+     * @param DataObject|CustomerInterface $customer
+     * @return bool
+     */
+    private function isConfirmationRequired(DataObject $customer): bool
+    {
+        return $this->isNewCustomerConfirmationRequired($customer)
+            || $this->isExistingCustomerConfirmationRequired($customer);
+    }
+
+    /**
+     * Checks if customer email verification is required for a new customer
+     *
+     * @param DataObject|CustomerInterface $customer
+     * @return bool
+     */
+    private function isNewCustomerConfirmationRequired(DataObject $customer): bool
+    {
+        return !$customer->getId()
+            && $this->accountConfirmation->isConfirmationRequired(
+                $customer->getWebsiteId(),
+                $customer->getId(),
+                $customer->getEmail()
+            );
+    }
+
+    /**
+     * Checks if customer email verification is required for an existing customer
+     *
+     * @param DataObject|CustomerInterface $customer
+     * @return bool
+     */
+    private function isExistingCustomerConfirmationRequired(DataObject $customer): bool
+    {
+         return $customer->getId()
+             && $customer->dataHasChangedFor('email')
+             && $this->accountConfirmation->isEmailChangedConfirmationRequired(
+                 (int)$customer->getWebsiteId(),
+                 (int)$customer->getId(),
+                 $customer->getEmail()
+             );
     }
 
     /**
@@ -215,24 +283,28 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     /**
      * Save customer addresses and set default addresses in attributes backend
      *
-     * @param \Magento\Framework\DataObject $customer
+     * @param DataObject $customer
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\DataObject $customer)
+    protected function _afterSave(DataObject $customer)
     {
         $this->getNotificationStorage()->add(
             NotificationStorage::UPDATE_CUSTOMER_SESSION,
             $customer->getId()
         );
+        if ($customer->getData('rp_token')) {
+            $rpToken = $customer->getData('rp_token');
+            $customer->setRpToken($this->encryptor->decrypt($rpToken));
+        }
         return parent::_afterSave($customer);
     }
 
     /**
      * Retrieve select object for loading base entity row
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @param string|int $rowId
-     * @return \Magento\Framework\DB\Select
+     * @return Select
      */
     protected function _getLoadRowSelect($object, $rowId)
     {
@@ -250,7 +322,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * @param \Magento\Customer\Model\Customer $customer
      * @param string $email
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function loadByEmail(\Magento\Customer\Model\Customer $customer, $email)
     {
@@ -265,7 +337,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 
         if ($customer->getSharingConfig()->isWebsiteScope()) {
             if (!$customer->hasData('website_id')) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __("A customer website ID wasn't specified. The ID must be specified to use the website scope.")
                 );
             }
@@ -370,10 +442,10 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     /**
      * Custom setter of increment ID if its needed
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @return $this
      */
-    public function setNewIncrementId(\Magento\Framework\DataObject $object)
+    public function setNewIncrementId(DataObject $object)
     {
         if ($this->_scopeConfig->getValue(
             \Magento\Customer\Model\Customer::XML_PATH_GENERATE_HUMAN_FRIENDLY_ID,
@@ -399,7 +471,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         if (is_string($passwordLinkToken) && !empty($passwordLinkToken)) {
             $customer->setRpToken($passwordLinkToken);
             $customer->setRpTokenCreatedAt(
-                (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
+                (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT)
             );
         }
         return $this;
@@ -444,5 +516,17 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
             ['session_cutoff' => $this->dateTime->formatDate($timestamp)],
             $this->getConnection()->quoteInto('entity_id = ?', $customerId)
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function _afterLoad(DataObject $customer)
+    {
+        if ($customer->getData('rp_token')) {
+            $rpToken = $customer->getData('rp_token');
+            $customer->setRpToken($this->encryptor->decrypt($rpToken));
+        }
+        return parent::_afterLoad($customer); //
     }
 }

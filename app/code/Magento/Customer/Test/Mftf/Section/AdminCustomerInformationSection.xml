@@ -18,5 +18,6 @@
         <element name="billingAgreements" type="button" selector="#tab_customer_edit_tab_agreements_content"/>
         <element name="productReviews" type="button" selector="#tab_reviews_content"/>
         <element name="wishList" type="button" selector="#tab_wishlist_content"/>
+        <element name="showCart" type="button" selector="//a[@class='action showcart']"/>
     </section>
 </sections>

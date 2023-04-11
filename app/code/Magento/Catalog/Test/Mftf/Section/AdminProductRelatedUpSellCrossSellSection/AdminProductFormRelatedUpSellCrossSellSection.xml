@@ -20,5 +20,7 @@
         <element name="selectedRelatedProduct" type="block" selector="//span[@data-index='name']"/>
         <element name="removeRelatedProduct" type="button" selector="//span[text()='Related Products']//..//..//..//span[text()='{{productName}}']//..//..//..//..//..//button[@class='action-delete']" parameterized="true"/>
         <element name="selectedProductSku" type="text" selector="//div[@data-index='{{section}}']//span[@data-index='sku']" parameterized="true" timeout="30"/>
+        <element name="removeCrossSellProduct" type="button" selector="//span[text()='Cross-Sell Products']//..//..//..//span[text()='{{productName}}']//..//..//..//..//..//button[@class='action-delete']" parameterized="true"/>
+        <element name="removeUpsellProduct" type="button" selector="//span[text()='Up-Sell Products']//..//..//..//span[text()='{{productName}}']//..//..//..//..//..//button[@class='action-delete']" parameterized="true"/>
     </section>
 </sections>

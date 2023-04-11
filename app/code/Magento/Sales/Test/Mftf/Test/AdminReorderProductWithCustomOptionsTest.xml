@@ -19,8 +19,8 @@
         </annotations>
 
         <!-- Reorder created order -->
-        <actionGroup ref="OpenOrderByIdActionGroup" after="placeReorder" stepKey="adminOpenOrderById">
-            <argument name="orderId" value="{$grabOrderNumber}"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" after="placeReorder" stepKey="adminOpenOrderById">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
         <actionGroup ref="AdminStartReorderFromOrderPageActionGroup" after="adminOpenOrderById" stepKey="adminStartReorder"/>
         <actionGroup ref="AdminSubmitOrderActionGroup" after="adminStartReorder" stepKey="adminSubmitOrder"/>

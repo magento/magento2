@@ -9,6 +9,7 @@ namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
@@ -26,6 +27,7 @@ use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\RefundAdapterInterface;
 use Magento\Sales\Model\Order\Validation\RefundOrderInterface;
+use Magento\Sales\Model\OrderMutex;
 use Magento\Sales\Model\RefundOrder;
 use Magento\Sales\Model\ValidatorResultInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -193,7 +195,8 @@ class RefundOrderTest extends TestCase
             $this->refundOrderValidatorMock,
             $this->notifierMock,
             $this->configMock,
-            $this->loggerMock
+            $this->loggerMock,
+            new OrderMutex($this->resourceConnectionMock)
         );
     }
 
@@ -208,10 +211,7 @@ class RefundOrderTest extends TestCase
     public function testOrderCreditmemo($orderId, $notify, $appendComment)
     {
         $items = [$this->creditmemoItemCreationMock];
-        $this->resourceConnectionMock->expects($this->once())
-            ->method('getConnection')
-            ->with('sales')
-            ->willReturn($this->adapterInterface);
+        $this->mockConnection($orderId);
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->willReturn($this->orderMock);
@@ -304,7 +304,7 @@ class RefundOrderTest extends TestCase
         $notify = true;
         $appendComment = true;
         $errorMessages = ['error1', 'error2'];
-
+        $this->mockConnection($orderId);
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->willReturn($this->orderMock);
@@ -357,10 +357,7 @@ class RefundOrderTest extends TestCase
         $items = [$this->creditmemoItemCreationMock];
         $notify = true;
         $appendComment = true;
-        $this->resourceConnectionMock->expects($this->once())
-            ->method('getConnection')
-            ->with('sales')
-            ->willReturn($this->adapterInterface);
+        $this->mockConnection($orderId);
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->willReturn($this->orderMock);
@@ -418,5 +415,35 @@ class RefundOrderTest extends TestCase
             'TestWithNotifyTrue' => [1, true, true],
             'TestWithNotifyFalse' => [1, false, true],
         ];
+    }
+
+    /**
+     * @param int $orderId
+     */
+    private function mockConnection(int $orderId): void
+    {
+        $select = $this->createMock(Select::class);
+        $select->expects($this->once())
+            ->method('from')
+            ->with('sales_order', 'entity_id')
+            ->willReturnSelf();
+        $select->expects($this->once())
+            ->method('where')
+            ->with('entity_id = ?', $orderId)
+            ->willReturnSelf();
+        $select->expects($this->once())
+            ->method('forUpdate')
+            ->with(true)
+            ->willReturnSelf();
+        $this->adapterInterface->expects($this->once())
+            ->method('select')
+            ->willReturn($select);
+        $this->resourceConnectionMock->expects($this->once())
+            ->method('getConnection')
+            ->with('sales')
+            ->willReturn($this->adapterInterface);
+        $this->resourceConnectionMock->expects($this->once())
+            ->method('getTableName')
+            ->willReturnArgument(0);
     }
 }

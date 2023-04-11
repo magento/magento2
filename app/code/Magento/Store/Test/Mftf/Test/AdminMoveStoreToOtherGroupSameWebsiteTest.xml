@@ -42,6 +42,7 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="storeViewData2"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteFirstStore">
@@ -50,6 +51,7 @@
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteSecondStore">
                 <argument name="storeGroupName" value="customStoreGroup.name"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
