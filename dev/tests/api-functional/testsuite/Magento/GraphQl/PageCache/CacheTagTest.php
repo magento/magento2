@@ -20,8 +20,8 @@ class CacheTagTest extends GraphQLPageCacheAbstract
     /**
      * Test if Magento cache tags and debug headers for products are generated properly
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      */
     public function testCacheTagsAndCacheDebugHeaderForProducts()
     {
@@ -61,7 +61,9 @@ QUERY;
         // Cache invalidation happens and cache-debug header value is a MISS after product update
         $responseMiss = $this->graphQlQueryWithResponseHeaders($query);
         print_r("Debug value");
-        var_dump($responseMiss);
+        $json_response = json_encode($responseMiss, JSON_PRETTY_PRINT);
+        echo $json_response;
+        print_r("Debug value end");
         $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseMiss['headers']);
         $this->assertEquals('MISS', $responseMiss['headers']['X-Magento-Cache-Debug']);
         $this->assertArrayHasKey('X-Magento-Tags', $responseMiss['headers']);
@@ -76,6 +78,7 @@ QUERY;
      * Test if X-Magento-Tags for categories are generated properly
      *
      * Also tests the use case for cache invalidation
+     *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
      */

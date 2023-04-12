@@ -22,7 +22,7 @@ class CartCacheTest extends GraphQLPageCacheAbstract
      */
     public function testCartIsNotCached()
     {
-        $qty = 2.0;
+        $qty = 2;
         $sku = 'simple';
         $cartId = $this->createEmptyCart();
         $this->addSimpleProductToCart($cartId, $qty, $sku);
@@ -31,7 +31,6 @@ class CartCacheTest extends GraphQLPageCacheAbstract
         $responseMiss = $this->graphQlQueryWithResponseHeaders($getCartQuery);
         $this->assertArrayHasKey('cart', $responseMiss['body']);
         $this->assertArrayHasKey('items', $responseMiss['body']['cart']);
-
 
         // Obtain the X-Magento-Cache-Id from the response which will be used as the cache key
         $response = $this->graphQlQueryWithResponseHeaders($getCartQuery);
@@ -69,10 +68,10 @@ QUERY;
      * Add simple product to the cart using the maskedQuoteId
      *
      * @param string $maskedCartId
-     * @param float $qty
+     * @param int $qty
      * @param string $sku
      */
-    private function addSimpleProductToCart(string $maskedCartId, float $qty, string $sku): void
+    private function addSimpleProductToCart(string $maskedCartId, int $qty, string $sku): void
     {
         $addProductToCartQuery =
             <<<QUERY

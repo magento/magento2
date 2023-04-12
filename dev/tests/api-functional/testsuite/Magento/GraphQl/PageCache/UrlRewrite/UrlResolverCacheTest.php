@@ -23,6 +23,7 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
     /**
      * Tests that X-Magento-tags and cache debug headers are correct for product urlResolver
      *
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
      */
     public function testCacheTagsForProducts()
@@ -41,15 +42,15 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
         $this->assertEquals($expectedTags, $actualTags);
 
         // Obtain the X-Magento-Cache-Id from the response which will be used as the cache key
-        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $response = $this->graphQlQueryWithResponseHeaders($urlResolverQuery);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheMissAndReturnResponse($urlResolverQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-        $responseHit = $this->assertCacheHitAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $responseHit = $this->assertCacheHitAndReturnResponse($urlResolverQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         //cached data should be correct
         $this->assertNotEmpty($responseHit['body']);
@@ -59,6 +60,7 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
     /**
      * Tests that X-Magento-tags and cache debug headers are correct for category urlResolver
      *
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
      */
     public function testCacheTagsForCategory()
@@ -104,6 +106,7 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
     /**
      * Test that X-Magento-Tags Cache debug headers are correct for cms page url resolver
      *
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/Cms/_files/pages.php
      */
     public function testUrlResolverCachingForCMSPage()
@@ -137,6 +140,7 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
     /**
      * Tests that cache is invalidated when url key is updated and access the original request path
      *
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
      */
     public function testCacheIsInvalidatedForUrlResolver()
