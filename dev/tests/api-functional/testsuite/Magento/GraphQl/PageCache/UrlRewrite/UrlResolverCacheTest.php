@@ -32,10 +32,10 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
         $urlKey = 'p002.html';
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        /** @var Product $product */
-        $product = $productRepository->get($productSku, false, null, true);
+//        /** @var Product $product */
+//        $product = $productRepository->get($productSku, false, null, true);
         $urlResolverQuery = $this->getUrlResolverQuery($urlKey);
-        $responseMiss = $this->graphQlQueryWithResponseHeaders($urlResolverQuery);
+//        $responseMiss = $this->graphQlQueryWithResponseHeaders($urlResolverQuery);
 
 //        print_r("Debug value UrlResolverCacheTest testCacheTagsForProducts\n");
 //        $json_response = json_encode($responseMiss, JSON_PRETTY_PRINT);
@@ -91,7 +91,7 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
                 'store_id' => $storeId
             ]
         );
-        $categoryId = $actualUrls->getEntityId();
+//        $categoryId = $actualUrls->getEntityId();
         $query = $this->getUrlResolverQuery($categoryUrlKey);
         $responseMiss = $this->graphQlQueryWithResponseHeaders($query);
 
@@ -130,7 +130,7 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
         /** @var \Magento\Cms\Model\Page $page */
         $page = Bootstrap::getObjectManager()->get(\Magento\Cms\Model\Page::class);
         $page->load('page100');
-        $cmsPageId = $page->getId();
+//        $cmsPageId = $page->getId();
         $requestPath = $page->getIdentifier();
 
         $query = $this->getUrlResolverQuery($requestPath);

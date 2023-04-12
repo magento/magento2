@@ -36,11 +36,9 @@ class CartCacheTest extends GraphQLPageCacheAbstract
         $response = $this->graphQlQueryWithResponseHeaders($getCartQuery);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($getCartQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
-
-        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        // Verify we obtain a cache MISS the second time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($getCartQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
     }
 

@@ -96,7 +96,7 @@ QUERY;
         /** @var Product $firstProduct */
         $firstProduct = $productRepository->get($firstProductSku, false, null, true);
         /** @var Product $secondProduct */
-        $secondProduct = $productRepository->get($secondProductSku, false, null, true);
+//        $secondProduct = $productRepository->get($secondProductSku, false, null, true);
 
         $categoryQueryVariables =[
             'id' => $categoryId,
