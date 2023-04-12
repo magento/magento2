@@ -18,8 +18,6 @@
             <testCaseId value="AC-4723"/>
         </annotations>
         <before>
-            <!--enable flat rate-->
-            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!--Create Category-->
             <createData entity="_defaultCategory" stepKey="testCategory"/>
             <!-- Create SimpleProductWithPrice100 -->
@@ -96,7 +94,7 @@
         <!--Section for *CheckMoneyOrder* is opened-->
         <seeElement selector ="{{StorefrontCheckoutAgreementsSection.checkoutPaymentMethod('checkmo')}}" stepKey="checkMoneyOrderPageIsOpened"/>
         <!--Check Section for *Cash On Delivery* is closed -->
-        <dontSeeElement selector ="{{StorefrontCheckoutAgreementsSection.checkoutPaymentMethod('cashondelivery')}}"  stepKey="cashOnDelivery"/>
+        <dontSeeElement selector ="{{AdminOrderFormPaymentSection.checkoutPaymentMethod('cashondelivery')}}"  stepKey="cashOnDelivery"/>
         <!--Check-box with text for Terms and Condition is presented-->
         <seeElement selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" stepKey="seeTermInCheckoutIsPresent"/>
         <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementButton}}" userInput="{{newHtmlTerm.checkboxText}}" stepKey="seeTermTextInCheckoutIsPresent"/>
