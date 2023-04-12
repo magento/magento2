@@ -24,7 +24,7 @@ class LayerFormatter
     public function buildLayer($layerName, $itemsCount, $requestName, $position = null): array
     {
         return [
-            'label' => $layerName,
+            'label' => __($layerName),
             'count' => $itemsCount,
             'attribute_code' => $requestName,
             'position' => isset($position) ? (int)$position : null
