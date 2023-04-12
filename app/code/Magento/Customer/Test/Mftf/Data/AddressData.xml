@@ -493,11 +493,4 @@
         <data key="postcode">5555</data>
         <data key="telephone">555-55-555-55</data>
     </entity>
-    <entity name="Finland_Address" type="address">
-        <data key="state">Ahvenanmaa</data>
-        <data key="country_id">FI</data>
-        <data key="country">Finland</data>
-        <data key="default_shipping">true</data>
-        <data key="default_billing">true</data>
-    </entity>
 </entities>
