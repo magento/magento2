@@ -185,6 +185,44 @@ class PageTest extends TestCase
         $this->graphQlRequest->send($query);
     }
 
+    public function testSaveIsNeverCalledWhenMissingRequiredArgumentInQuery()
+    {
+        $objectManager = $this->objectManager;
+
+        $frontendPool = $objectManager->get(FrontendPool::class);
+
+        $cacheProxy = $this->getMockBuilder(GraphQlResolverCache::class)
+            ->enableProxyingToOriginalMethods()
+            ->setConstructorArgs([
+                $frontendPool
+            ])
+            ->getMock();
+
+        // assert cache proxy never calls save
+        $cacheProxy
+            ->expects($this->never())
+            ->method('save');
+
+        $resolverPluginWithCacheProxy = $objectManager->create(ResolverResultCachePlugin::class, [
+            'graphQlResolverCache' => $cacheProxy,
+        ]);
+
+        // override resolver plugin with plugin instance containing cache proxy class
+        $objectManager->addSharedInstance($resolverPluginWithCacheProxy, ResolverResultCachePlugin::class);
+
+        $query = <<<QUERY
+{
+  cmsPage {
+    title
+  }
+}
+QUERY;
+
+        // send request multiple times and assert save is never called
+        $this->graphQlRequest->send($query);
+        $this->graphQlRequest->send($query);
+    }
+
     private function getQuery(string $identifier, array $fields = ['title']): string
     {
         $fields = implode(PHP_EOL, $fields);
