@@ -28,10 +28,10 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
      */
     public function testCacheTagsForProducts()
     {
-        $productSku = 'p002';
+//        $productSku = 'p002';
         $urlKey = 'p002.html';
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+//        /** @var ProductRepositoryInterface $productRepository */
+//        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
 //        /** @var Product $product */
 //        $product = $productRepository->get($productSku, false, null, true);
         $urlResolverQuery = $this->getUrlResolverQuery($urlKey);
@@ -76,21 +76,21 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
     public function testCacheTagsForCategory()
     {
         $categoryUrlKey = 'cat-1.html';
-        $productSku = 'p002';
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
-        /** @var Product $product */
-        $product = $productRepository->get($productSku, false, null, true);
-        $storeId = $product->getStoreId();
+//        $productSku = 'p002';
+//        /** @var ProductRepositoryInterface $productRepository */
+//        $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+//        /** @var Product $product */
+//        $product = $productRepository->get($productSku, false, null, true);
+//        $storeId = $product->getStoreId();
 
-        /** @var  UrlFinderInterface $urlFinder */
-        $urlFinder = Bootstrap::getObjectManager()->get(UrlFinderInterface::class);
-        $actualUrls = $urlFinder->findOneByData(
-            [
-                'request_path' => $categoryUrlKey,
-                'store_id' => $storeId
-            ]
-        );
+//        /** @var  UrlFinderInterface $urlFinder */
+//        $urlFinder = Bootstrap::getObjectManager()->get(UrlFinderInterface::class);
+//        $actualUrls = $urlFinder->findOneByData(
+//            [
+//                'request_path' => $categoryUrlKey,
+//                'store_id' => $storeId
+//            ]
+//        );
 //        $categoryId = $actualUrls->getEntityId();
         $query = $this->getUrlResolverQuery($categoryUrlKey);
         $responseMiss = $this->graphQlQueryWithResponseHeaders($query);

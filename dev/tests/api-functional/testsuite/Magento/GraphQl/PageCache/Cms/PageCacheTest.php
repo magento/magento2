@@ -96,11 +96,11 @@ class PageCacheTest extends GraphQLPageCacheAbstract
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
         $responseHit = $this->graphQlQueryWithResponseHeaders($query);
 
-//        print_r("Debug value HIT PageCacheTest testCacheIsUsedOnSecondRequest\n");
-//        $json_response = json_encode($responseHit, JSON_PRETTY_PRINT);
-//        print_r($json_response);
-//        print_r("\n end \n");
-//        print_r("Debug value End HIT of testCacheIsUsedOnSecondRequest\n");
+        print_r("Debug value HIT PageCacheTest testCacheIsUsedOnSecondRequest\n");
+        $json_response = json_encode($responseHit, JSON_PRETTY_PRINT);
+        print_r($json_response);
+        print_r("\n end \n");
+        print_r("Debug value End HIT of testCacheIsUsedOnSecondRequest\n");
 
         $this->assertArrayHasKey('X-Magento-Cache-Debug', $response['headers']);
         $this->assertEquals('HIT', $response['headers']['X-Magento-Cache-Debug']);
@@ -189,11 +189,11 @@ class PageCacheTest extends GraphQLPageCacheAbstract
         $this->assertEquals('MISS', $pageBlankMiss['headers']['X-Magento-Cache-Debug']);
         $page100Hit = $this->graphQlQueryWithResponseHeaders($page100Query);
 
-        print_r("Debug value Page100 HIT PageCacheTest testCacheIsInvalidatedOnPageUpdate\n");
-        $json_response = json_encode($page100Hit, JSON_PRETTY_PRINT);
-        print_r($json_response);
-        print_r("\n end \n");
-        print_r("Debug value End of testCacheIsInvalidatedOnPageUpdate\n");
+//        print_r("Debug value Page100 HIT PageCacheTest testCacheIsInvalidatedOnPageUpdate\n");
+//        $json_response = json_encode($page100Hit, JSON_PRETTY_PRINT);
+//        print_r($json_response);
+//        print_r("\n end \n");
+//        print_r("Debug value End of testCacheIsInvalidatedOnPageUpdate\n");
 
         $this->assertEquals('HIT', $page100Hit['headers']['X-Magento-Cache-Debug']);
         //updated page data should be correct

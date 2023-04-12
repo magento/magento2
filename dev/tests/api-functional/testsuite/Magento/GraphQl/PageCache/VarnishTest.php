@@ -27,13 +27,6 @@ class VarnishTest extends GraphQLPageCacheAbstract
 
         // Obtain the X-Magento-Cache-Id from the response which will be used as the cache key
         $response = $this->graphQlQueryWithResponseHeaders($query);
-
-        print_r("Debug value VarnishTest testCacheResultForGuest\n");
-        $json_response = json_encode($response, JSON_PRETTY_PRINT);
-        print_r($json_response);
-        print_r("\n end \n");
-        print_r("Debug value End of testCacheResultForGuest\n");
-
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
