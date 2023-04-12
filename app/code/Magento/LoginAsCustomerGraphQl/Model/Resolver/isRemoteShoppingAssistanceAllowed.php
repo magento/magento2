@@ -51,6 +51,6 @@ class isRemoteShoppingAssistanceAllowed implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        return $this->isAssistanceEnabled->execute((int)$value['model']->getId());
+        return $this->isAssistanceEnabled->execute((int)$value['model_id']);
     }
 }

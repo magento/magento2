@@ -62,4 +62,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\ResolverIdentityClassLocator">
+        <arguments>
+            <argument name="cacheableResolverClassNameIdentityMap" xsi:type="array">
+                <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="string">
+                    Magento\CustomerGraphQl\Model\Resolver\Cache\CustomerResolverCacheIdentity
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

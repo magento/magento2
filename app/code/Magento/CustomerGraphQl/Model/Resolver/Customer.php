@@ -14,6 +14,7 @@ use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
+use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\StrategyInterface;
 
 /**
  * Customers field resolver, used for GraphQL request processing.
@@ -31,15 +32,22 @@ class Customer implements ResolverInterface
     private $extractCustomerData;
 
     /**
+     * @var StrategyInterface
+     */
+    private StrategyInterface $cachingStrategy;
+
+    /**
      * @param GetCustomer $getCustomer
      * @param ExtractCustomerData $extractCustomerData
      */
     public function __construct(
         GetCustomer $getCustomer,
-        ExtractCustomerData $extractCustomerData
+        ExtractCustomerData $extractCustomerData,
+        StrategyInterface $cachingStrategy
     ) {
         $this->getCustomer = $getCustomer;
         $this->extractCustomerData = $extractCustomerData;
+        $this->cachingStrategy = $cachingStrategy;
     }
 
     /**
