@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\EncryptionKey\Setup\Patch\Data;
 
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Encryption\Encryptor;
@@ -88,7 +89,7 @@ class SodiumChachaPatchTest extends \PHPUnit\Framework\TestCase
         $handle = @mcrypt_module_open(MCRYPT_RIJNDAEL_256, '', MCRYPT_MODE_CBC, '');
         $initVectorSize = @mcrypt_enc_get_iv_size($handle);
         $initVector = str_repeat("\0", $initVectorSize);
-        @mcrypt_generic_init($handle, $this->deployConfig->get(static::PATH_KEY), $initVector);
+        @mcrypt_generic_init($handle, $this->getEncryptionKey(), $initVector);
 
         $encrpted = @mcrypt_generic($handle, $data);
 
@@ -97,5 +98,13 @@ class SodiumChachaPatchTest extends \PHPUnit\Framework\TestCase
         // @codingStandardsIgnoreEnd
 
         return '0:' . Encryptor::CIPHER_RIJNDAEL_256 . ':' . base64_encode($encrpted);
+    }
+
+    private function getEncryptionKey(): string
+    {
+        $key = $this->deployConfig->get(static::PATH_KEY);
+        return (str_starts_with($key, ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX)) ?
+        base64_decode(substr($key, strlen(ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX))) :
+        $key;
     }
 }
