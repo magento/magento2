@@ -50,7 +50,10 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
         $this->assertCacheMissAndReturnResponse($urlResolverQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-        $responseHit = $this->assertCacheHitAndReturnResponse($urlResolverQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $responseHit = $this->assertCacheHitAndReturnResponse(
+            $urlResolverQuery,
+            [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
+        );
 
         //cached data should be correct
         $this->assertNotEmpty($responseHit['body']);
