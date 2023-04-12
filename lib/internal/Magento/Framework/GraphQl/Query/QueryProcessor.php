@@ -18,6 +18,7 @@ use Magento\Framework\GraphQl\Schema;
 
 /**
  * Wrapper for GraphQl execution of a schema
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QueryProcessor
 {
