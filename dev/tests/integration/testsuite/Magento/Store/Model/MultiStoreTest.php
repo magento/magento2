@@ -87,7 +87,7 @@ class MultiStoreTest extends \PHPUnit\Framework\TestCase
         $customerOne = $this->fixtures->get('customer1');
         $storeOne = $this->fixtures->get('store2');
         $customerOneData = [
-            'email' => $customerOne->getEmail(),
+            'email' => $customerOne->getData('email'),
             'storeId' => $storeOne->getData('store_id'),
             'storeEmail' => 'store_one@example.com'
         ];
@@ -97,7 +97,7 @@ class MultiStoreTest extends \PHPUnit\Framework\TestCase
         $customerTwo = $this->fixtures->get('customer2');
         $storeTwo = $this->fixtures->get('store3');
         $customerTwoData = [
-            'email' => $customerTwo->getEmail(),
+            'email' => $customerTwo->getData('email'),
             'storeId' => $storeTwo->getData('store_id'),
             'storeEmail' => 'store_two@example.com'
         ];
