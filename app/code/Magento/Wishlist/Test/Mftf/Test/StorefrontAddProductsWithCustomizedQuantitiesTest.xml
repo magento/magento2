@@ -15,7 +15,7 @@
             <title value="Add simple product with customized quantities from product page"/>
             <description value="Add simple Product with customizable file option to Wishlist and verify customizable options are preserved"/>
             <severity value="AVERAGE"/>
-            <testCaseId value="ACP2E-1784"/>
+            <testCaseId value="AC-8504"/>
             <useCaseId value="ACP2E-1784"/>
             <group value="wishlist"/>
         </annotations>
