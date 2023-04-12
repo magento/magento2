@@ -31,40 +31,6 @@ class PageCacheTest extends GraphQLPageCacheAbstract
         $this->pageByIdentifier = Bootstrap::getObjectManager()->get(GetPageByIdentifier::class);
     }
 
-//    /**
-//     * Test that X-Magento-Tags are correct
-//     *
-//     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
-//     * @magentoApiDataFixture Magento/Cms/_files/pages.php
-//     */
-//    public function testCacheTagsHaveExpectedValue()
-//    {
-//        $pageIdentifier = 'page100';
-//        $page = $this->pageByIdentifier->execute($pageIdentifier, 0);
-//        $pageId = (int) $page->getId();
-//
-//        $query = $this->getPageQuery($pageId);
-//
-//        // Obtain the X-Magento-Cache-Id from the response which will be used as the cache key
-//        $response = $this->graphQlQueryWithResponseHeaders($query);
-//        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
-//        $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-//
-//        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-//        $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
-//
-//        print_r("Debug value PageCacheTest testCacheTagsHaveExpectedValue\n");
-//        $json_response = json_encode($response, JSON_PRETTY_PRINT);
-//        print_r($json_response);
-//        print_r("\n end \n");
-//        print_r("Debug value End of testCacheTagsHaveExpectedValue\n");
-//
-//        $this->assertArrayHasKey('X-Magento-Tags', $response['headers']);
-//        $actualTags = explode(',', $response['headers']['X-Magento-Tags']);
-//        $expectedTags = ["cms_p", "cms_p_{$pageId}", "FPC"];
-//        $this->assertEquals($expectedTags, $actualTags);
-//    }
-
     /**
      * Test the second request for the same page will return a cached result
      *
@@ -83,34 +49,15 @@ class PageCacheTest extends GraphQLPageCacheAbstract
         $response = $this->graphQlQueryWithResponseHeaders($query);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-
-//        print_r("Debug value MISS PageCacheTest testCacheIsUsedOnSecondRequest\n");
-//        $json_response = json_encode($response, JSON_PRETTY_PRINT);
-//        print_r($json_response);
-//        print_r("\n end \n");
-//        print_r("Debug value End MISS of testCacheIsUsedOnSecondRequest\n");
-
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
-
-        // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-        $responseHit = $this->graphQlQueryWithResponseHeaders($query);
-
-        print_r("Debug value HIT PageCacheTest testCacheIsUsedOnSecondRequest\n");
-        $json_response = json_encode($responseHit, JSON_PRETTY_PRINT);
-        print_r($json_response);
-        print_r("\n end \n");
-        print_r("Debug value End HIT of testCacheIsUsedOnSecondRequest\n");
-
-        $this->assertArrayHasKey('X-Magento-Cache-Debug', $response['headers']);
-        $this->assertEquals('HIT', $response['headers']['X-Magento-Cache-Debug']);
-        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
-        $this->assertEquals($cacheId, $response['headers'][CacheIdCalculator::CACHE_ID_HEADER]);
+        // Verify we obtain a cache HIT the second time we search the cache using this X-Magento-Cache-Id
+        $this->assertCacheHitAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         //cached data should be correct
-        $this->assertNotEmpty($responseHit['body']);
-        $this->assertArrayNotHasKey('errors', $responseHit['body']);
-        $pageData = $responseHit['body']['cmsPage'];
+        $this->assertNotEmpty($response['body']);
+        $this->assertArrayNotHasKey('errors', $response['body']);
+        $pageData = $response['body']['cmsPage'];
         $this->assertEquals('Cms Page 100', $pageData['title']);
     }
 
@@ -133,44 +80,21 @@ class PageCacheTest extends GraphQLPageCacheAbstract
         $pageBlankQuery = $this->getPageQuery($pageBlankId);
 
         //cache-debug should be a MISS on first request
-        $page100Miss = $this->graphQlQueryWithResponseHeaders($page100Query);
-
-//        print_r("Debug value Page100 MISS PageCacheTest testCacheIsInvalidatedOnPageUpdate\n");
-//        $json_response = json_encode($page100Miss, JSON_PRETTY_PRINT);
-//        print_r($json_response);
-//        print_r("\n end \n");
-//        print_r("Debug value End of testCacheIsInvalidatedOnPageUpdate\n");
-
-        $this->assertEquals('MISS', $page100Miss['headers']['X-Magento-Cache-Debug']);
-        $pageBlankMiss = $this->graphQlQueryWithResponseHeaders($pageBlankQuery);
-
-//        print_r("Debug value PageBlank MISS PageCacheTest testCacheIsInvalidatedOnPageUpdate\n");
-//        $json_response = json_encode($pageBlankMiss, JSON_PRETTY_PRINT);
-//        print_r($json_response);
-//        print_r("\n end \n");
-//        print_r("Debug value End of testCacheIsInvalidatedOnPageUpdate\n");
-
-        $this->assertEquals('MISS', $pageBlankMiss['headers']['X-Magento-Cache-Debug']);
-
+        $page100 = $this->graphQlQueryWithResponseHeaders($page100Query);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $page100['headers']);
+        $cacheId = $page100['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        $this->assertCacheMissAndReturnResponse($page100Query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
         //cache-debug should be a HIT on second request
-        $page100Hit = $this->graphQlQueryWithResponseHeaders($page100Query);
+        $this->assertCacheHitAndReturnResponse($page100Query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
-//        print_r("Debug value Page100 HIT PageCacheTest testCacheIsInvalidatedOnPageUpdate\n");
-//        $json_response = json_encode($page100Hit, JSON_PRETTY_PRINT);
-//        print_r($json_response);
-//        print_r("\n end \n");
-//        print_r("Debug value End HIT of testCacheIsInvalidatedOnPageUpdate\n");
-
-        $this->assertEquals('HIT', $page100Hit['headers']['X-Magento-Cache-Debug']);
-        $pageBlankHit = $this->graphQlQueryWithResponseHeaders($pageBlankQuery);
-
-//        print_r("Debug value Page100 MISS PageCacheTest testCacheIsInvalidatedOnPageUpdate\n");
-//        $json_response = json_encode($pageBlankHit, JSON_PRETTY_PRINT);
-//        print_r($json_response);
-//        print_r("\n end \n");
-//        print_r("Debug value pageBlankHit End of testCacheIsInvalidatedOnPageUpdate\n");
-
-        $this->assertEquals('HIT', $pageBlankHit['headers']['X-Magento-Cache-Debug']);
+        $pageBlank = $this->graphQlQueryWithResponseHeaders($pageBlankQuery);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $pageBlank['headers']);
+        $cacheId = $pageBlank['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        $this->assertCacheMissAndReturnResponse($pageBlankQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        //cache-debug should be a HIT on second request
+        $this->assertCacheHitAndReturnResponse($pageBlankQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         $pageRepository = Bootstrap::getObjectManager()->get(PageRepository::class);
         $newPageContent = 'New page content for blank page.';
@@ -178,31 +102,21 @@ class PageCacheTest extends GraphQLPageCacheAbstract
         $pageRepository->save($pageBlank);
 
         //cache-debug should be a MISS after updating the page
-        $pageBlankMiss = $this->graphQlQueryWithResponseHeaders($pageBlankQuery);
+        $pageBlank = $this->graphQlQueryWithResponseHeaders($pageBlankQuery);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $pageBlank['headers']);
+        $cacheId = $pageBlank['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        $this->assertCacheMissAndReturnResponse($pageBlankQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
-//        print_r("Debug value Page0 MISS PageCacheTest testCacheIsInvalidatedOnPageUpdate\n");
-//        $json_response = json_encode($pageBlankMiss, JSON_PRETTY_PRINT);
-//        print_r($json_response);
-//        print_r("\n end \n");
-//        print_r("Debug value End of testCacheIsInvalidatedOnPageUpdate\n");
+        $page100 = $this->graphQlQueryWithResponseHeaders($page100Query);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $page100['headers']);
+        $cacheId = $page100['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $this->assertCacheHitAndReturnResponse($page100Query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
-        $this->assertEquals('MISS', $pageBlankMiss['headers']['X-Magento-Cache-Debug']);
-        $page100Hit = $this->graphQlQueryWithResponseHeaders($page100Query);
-
-//        print_r("Debug value Page100 HIT PageCacheTest testCacheIsInvalidatedOnPageUpdate\n");
-//        $json_response = json_encode($page100Hit, JSON_PRETTY_PRINT);
-//        print_r($json_response);
-//        print_r("\n end \n");
-//        print_r("Debug value End of testCacheIsInvalidatedOnPageUpdate\n");
-
-        $this->assertEquals('HIT', $page100Hit['headers']['X-Magento-Cache-Debug']);
         //updated page data should be correct
-        $this->assertNotEmpty($pageBlankMiss['body']);
-        $pageData = $pageBlankMiss['body']['cmsPage'];
-
-//        print_r($pageData."\n");
-
-        $this->assertArrayNotHasKey('errors', $pageBlankMiss['body']);
+        $this->assertNotEmpty($pageBlank['body']);
+        $pageData = $pageBlank['body']['cmsPage'];
+        $this->assertArrayNotHasKey('errors', $pageBlank['body']);
         $this->assertEquals('Cms Page Design Blank', $pageData['title']);
         $this->assertEquals($newPageContent, $pageData['content']);
     }
