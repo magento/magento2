@@ -92,7 +92,7 @@ class Random
      * @return string
      * @throws Exception
      */
-    public function getRandomBytes($length)
+    public function getRandomBytes(int $length) : string
     {
         return base64_encode(random_bytes($length));
     }
