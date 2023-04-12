@@ -17,6 +17,7 @@ use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlCache;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -363,6 +364,34 @@ class PageTest extends GraphQlAbstract
         // assert page2 cache entry still exists
         $this->assertIsNumeric(
             $this->graphqlCache->test($cacheIdentityStringPage2)
+        );
+    }
+
+    /**
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
+     * @return void
+     */
+    public function testCmsPageResolverCacheDoesNotSaveNonExistentCmsPage()
+    {
+        $nonExistentPage = ObjectManager::getInstance()->create(PageInterface::class);
+        $nonExistentPage->setIdentifier('non-existent-page');
+
+        $query = $this->getQuery($nonExistentPage->getIdentifier());
+
+        try {
+            $response = $this->graphQlQueryWithResponseHeaders($query);
+            $this->fail('Expected exception was not thrown');
+        } catch (ResponseContainsErrorsException $e) {
+            // expected exception
+        }
+
+        $response['headers'] = $e->getResponseHeaders();
+
+        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndPage($response, $nonExistentPage);
+
+        $this->assertFalse(
+            $this->graphqlCache->load($cacheIdentityString)
         );
     }
 
