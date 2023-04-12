@@ -531,3 +531,7 @@ type SimpleWishlistItem implements WishlistItemInterface @doc(description: "Cont
 
 type VirtualWishlistItem implements WishlistItemInterface @doc(description: "Contains a virtual product wish list item.") {
 }
+
+enum AttributeEntityTypeEnum {
+    CATALOG_PRODUCT
+}
