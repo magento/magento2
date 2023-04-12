@@ -90,7 +90,7 @@ class QueryComplexityLimiter
      * @param DocumentNode|string $query
      * @throws GraphQlInputException
      */
-    public function validateFieldCount($query): void
+    public function validateFieldCount(DocumentNode|string $query): void
     {
         if (!empty($query)) {
             $totalFieldCount = 0;

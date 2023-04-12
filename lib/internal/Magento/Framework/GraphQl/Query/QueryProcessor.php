@@ -73,7 +73,7 @@ class QueryProcessor
      */
     public function process(
         Schema $schema,
-        $source,
+        DocumentNode|string $source,
         ContextInterface $contextValue = null,
         array $variableValues = null,
         string $operationName = null

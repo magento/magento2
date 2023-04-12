@@ -133,7 +133,7 @@ class LogData
      * @throws SyntaxError
      * @throws \Exception
      */
-    private function getFieldCount($query): int
+    private function getFieldCount(DocumentNode|string $query): int
     {
         if (!empty($query)) {
             $totalFieldCount = 0;
