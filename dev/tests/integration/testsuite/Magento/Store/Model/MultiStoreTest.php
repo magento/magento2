@@ -82,12 +82,12 @@ class MultiStoreTest extends \PHPUnit\Framework\TestCase
             as: 'customer2'
         ),
     ]
-    public function testStoreSpecificEmailInFromHeader()
+    public function testStoreSpecificEmailInFromHeader() :void
     {
         $customerOne = $this->fixtures->get('customer1');
         $storeOne = $this->fixtures->get('store2');
         $customerOneData = [
-            'email' => $customerOne->getData('email'),
+            'email' => $customerOne->getDataByKey('email'),
             'storeId' => $storeOne->getData('store_id'),
             'storeEmail' => 'store_one@example.com'
         ];
@@ -97,7 +97,7 @@ class MultiStoreTest extends \PHPUnit\Framework\TestCase
         $customerTwo = $this->fixtures->get('customer2');
         $storeTwo = $this->fixtures->get('store3');
         $customerTwoData = [
-            'email' => $customerTwo->getData('email'),
+            'email' => $customerTwo->getDataByKey('email'),
             'storeId' => $storeTwo->getData('store_id'),
             'storeEmail' => 'store_two@example.com'
         ];
