@@ -92,7 +92,7 @@
         <!-- Select Check Money Order-->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
         <!--Section for *CheckMoneyOrder* is opened-->
-        <seeElement selector ="{{StorefrontCheckoutAgreementsSection.checkoutPaymentMethod('checkmo')}}" stepKey="checkMoneyOrderPageIsOpened"/>
+        <seeElement selector ="{{AdminOrderFormPaymentSection.checkoutPaymentMethod('checkmo')}}" stepKey="checkMoneyOrderPageIsOpened"/>
         <!--Check Section for *Cash On Delivery* is closed -->
         <dontSeeElement selector ="{{AdminOrderFormPaymentSection.checkoutPaymentMethod('cashondelivery')}}"  stepKey="cashOnDelivery"/>
         <!--Check-box with text for Terms and Condition is presented-->
