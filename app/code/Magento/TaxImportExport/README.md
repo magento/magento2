@@ -1,7 +1,6 @@
-# SwatchesGraphQl
+# Magento_TaxImportExport
 
-**SwatchesGraphQl** provides type information for the GraphQl module
-to generate swatches fields for catalog and product information endpoints.
+**Magento_TaxImportExport** This module implements tax import/export functionality.
 
 ## Extensibility
 

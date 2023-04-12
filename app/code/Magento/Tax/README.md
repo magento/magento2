@@ -30,3 +30,40 @@ The Magento_Tax module is installed automatically (using the native Magento inst
 
 ## Uninstall
 The Magento_Tax module should not be uninstalled; it is a required module.
+
+
+###Layouts
+
+The module interacts with the following layout handles:
+
+`view/base/layout` directory:
+ - `catalog_product_prices.xml`
+The module interacts with the following layout handles:
+
+`view/adminhtml/layout` directory:
+ - `sales_creditmemo_item_price.xml`
+ - `sales_invoice_item_price.xml`
+ - `sales_order_create_item_price.xml`
+ - `sales_order_item_price.xml`
+ - `tax_rate_block.xml`
+ - `tax_rate_exportcsv.xml`
+ - `tax_rate_exportxml.xml`
+ - `tax_rate_index.xml`
+ - `tax_rule_block.xml`
+ - `tax_rule_edit.xml`
+ - `tax_rule_index.xml`
+The module interacts with the following layout handles in the `view/frontend/layout` directory:
+ - `checkout_cart_index.xml`
+ - `checkout_cart_sidebar_total_renderers.xml`
+ - `checkout_index_index.xml`
+ - `checkout_item_price_renderers.xml`
+ - `sales_email_item_price.xml`
+ - `sales_order_item_price.xml`
+ 
+## Extensibility
+
+Extension developers can interact with the Magento_CatalogUrlRewrite module. For more information about the Magento extension mechanism, see [Magento plugins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
+
+[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_CatalogUrlRewrite module.
+
+A lot of functionality in the module is on JavaScript, use [mixins](https://devdocs.magento.com/guides/v2.4/javascript-dev-guide/javascript/js_mixins.html) to extend it.
