@@ -22,10 +22,10 @@ class CartCacheTest extends GraphQLPageCacheAbstract
      */
     public function testCartIsNotCached()
     {
-        $qty = 2;
+        $quantity = 2;
         $sku = 'simple';
         $cartId = $this->createEmptyCart();
-        $this->addSimpleProductToCart($cartId, $qty, $sku);
+        $this->addSimpleProductToCart($cartId, $quantity, $sku);
 
         $getCartQuery = $this->getCartQuery($cartId);
         $responseMiss = $this->graphQlQueryWithResponseHeaders($getCartQuery);
@@ -71,7 +71,7 @@ QUERY;
      * @param int $qty
      * @param string $sku
      */
-    private function addSimpleProductToCart(string $maskedCartId, int $qty, string $sku): void
+    private function addSimpleProductToCart(string $maskedCartId, int $quantity, string $sku): void
     {
         $addProductToCartQuery =
             <<<QUERY
@@ -82,7 +82,7 @@ QUERY;
             cart_items: [
               {
                 data: {
-                  qty: $qty
+                  quantity: $quantity
                   sku: "$sku"
                 }
               }
@@ -91,7 +91,7 @@ QUERY;
         ) {
           cart {
             items {
-              qty
+              quantity
               product {
                 sku
               }
@@ -117,7 +117,7 @@ QUERY;
   cart(cart_id: "{$maskedQuoteId}") {
     items {
       id
-      qty
+      quantity
       product {
         sku
       }
