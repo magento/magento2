@@ -21,7 +21,7 @@
             <!--Login To Admin panel-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Go to *General > General > Locale Options* section -->
-            <actionGroup ref="NavigateToDefaultLocaleSettingActionGroup" stepKey="redirect"/>
+            <actionGroup ref="AdminNavigateToDefaultLocaleSettingActionGroup" stepKey="redirect"/>
             <!--Set needed Timezone-->
             <selectOption userInput="New Zealand Standard Time (Antarctica/McMurdo)" selector="{{LocaleOptionsSection.timeZoneDropdown}}" stepKey="selectOption1"/>
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>

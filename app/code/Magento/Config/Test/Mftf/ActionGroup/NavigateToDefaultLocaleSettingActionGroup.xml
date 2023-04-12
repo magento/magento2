@@ -8,14 +8,14 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="NavigateToDefaultLocaleSettingActionGroup">
+    <actionGroup name="AdminNavigateToDefaultLocaleSettingActionGroup">
         <annotations>
-            <description>Goes to the 'Configuration' page for 'Locale'. Expands the 'Locale Layouts' section.</description>
+            <description>Goes to the 'Configuration' page for 'Locale Options'. Expands the 'Locale Options' section.</description>
         </annotations>
 
         <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="navigateToLocaleConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <conditionalClick stepKey="expandDefaultLayouts" selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.CheckIfTabExpand}}" visible="true"/>
+        <conditionalClick stepKey="expandLocaleOptions" selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.CheckIfTabExpand}}" visible="true"/>
         <waitForElementVisible selector="{{LocaleOptionsSection.timezone}}" stepKey="waitForLocaleTimeZone"/>
     </actionGroup>
 </actionGroups>
