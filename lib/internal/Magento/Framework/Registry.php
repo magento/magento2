@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * Registry model. Used to manage values in registry
  *
@@ -15,7 +17,7 @@ namespace Magento\Framework;
  * @deprecated 102.0.0
  * @since 100.0.2
  */
-class Registry
+class Registry implements ResetAfterRequestInterface
 {
     /**
      * Registry collection
@@ -90,5 +92,14 @@ class Registry
     {
         $keys = array_keys($this->_registry);
         array_walk($keys, [$this, 'unregister']);
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->__destruct();
     }
 }

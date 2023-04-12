@@ -7,6 +7,7 @@ namespace Magento\Store\Model;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
 
@@ -317,5 +318,16 @@ class StoreManager implements
     public function getStoreByWebsiteId($websiteId)
     {
         return $this->getStoreWebsiteRelation()->getStoreByWebsiteId($websiteId);
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return ['currentStoreId' => $this->currentStoreId];
     }
 }

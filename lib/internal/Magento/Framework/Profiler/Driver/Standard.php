@@ -37,7 +37,14 @@ class Standard implements DriverInterface
     {
         $this->_initOutputs($config);
         $this->_initStat($config);
-        register_shutdown_function([$this, 'display']);
+    }
+
+    /**
+     * Destructor
+     */
+    public function __destruct()
+    {
+        $this->display();
     }
 
     /**

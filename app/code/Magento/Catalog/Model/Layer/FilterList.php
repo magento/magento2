@@ -9,11 +9,12 @@ namespace Magento\Catalog\Model\Layer;
 
 use Magento\Catalog\Model\Config\LayerCategoryConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Layer navigation filters
  */
-class FilterList
+class FilterList implements ResetAfterRequestInterface
 {
     const CATEGORY_FILTER   = 'category';
     const ATTRIBUTE_FILTER  = 'attribute';
@@ -130,5 +131,13 @@ class FilterList
         }
 
         return $filterClassName;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->filters = [];
     }
 }

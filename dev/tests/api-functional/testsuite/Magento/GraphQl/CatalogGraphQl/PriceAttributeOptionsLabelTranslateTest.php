@@ -98,8 +98,7 @@ class PriceAttributeOptionsLabelTranslateTest extends GraphQlAbstract
                 $priceAttributeOptionLabel = $attribute['label'];
             }
         }
-
-        $this->assertEquals($priceAttributeOptionLabel, 'Price View2');
+        $this->assertEquals('Price View2', $priceAttributeOptionLabel);
     }
 
     /**

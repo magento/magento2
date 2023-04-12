@@ -5,10 +5,12 @@
  */
 namespace Magento\Eav\Model\Entity\VersionControl;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * Class Metadata represents a list of entity fields that are applicable for persistence operations
  */
-class Metadata extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata
+class Metadata extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata implements ResetAfterRequestInterface
 {
     /**
      * Returns list of entity fields that are applicable for persistence operations
@@ -35,5 +37,13 @@ class Metadata extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\
         }
 
         return $this->metadataInfo[$entityClass];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->metadataInfo = [];
     }
 }

@@ -177,4 +177,15 @@ class Core extends \Zend_Cache_Core
 
         return $backendObject;
     }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
+    }
 }

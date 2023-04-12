@@ -8,11 +8,12 @@ namespace Magento\CatalogInventory\Model;
 use Magento\CatalogInventory\Api\Data\StockInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Class StockRegistryStorage
  */
-class StockRegistryStorage
+class StockRegistryStorage implements ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -141,5 +142,13 @@ class StockRegistryStorage
         $this->stockItems = [];
         $this->stocks = [];
         $this->stockStatuses = [];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState(): void
+    {
+        $this->clean();
     }
 }

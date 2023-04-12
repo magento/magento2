@@ -40,7 +40,6 @@ class ExceptionFormatter
     public function __construct(State $appState, ErrorProcessor $errorProcessor, LoggerInterface $logger)
     {
         $this->appState = $appState;
-        $errorProcessor->registerShutdownFunction();
         $this->logger = $logger;
     }
 

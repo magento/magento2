@@ -56,6 +56,9 @@ class ValueProcessor
      */
     private $jsonSerializer;
 
+    /** @var Structure */
+    private $configStructure;
+
     /**
      * @param ScopeInterface $scope The object for managing configuration scope
      * @param StructureFactory $structureFactory The system configuration structure factory.
@@ -87,11 +90,7 @@ class ValueProcessor
      */
     public function process($scope, $scopeCode, $value, $path)
     {
-        $areaScope = $this->scope->getCurrentScope();
-        $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
-        /** @var Structure $configStructure */
-        $configStructure = $this->configStructureFactory->create();
-        $this->scope->setCurrentScope($areaScope);
+        $configStructure = $this->getConfigStructure();
 
         /** @var Field $field */
         $field = $configStructure->getElementByConfigPath($path);
@@ -117,5 +116,22 @@ class ValueProcessor
          * It should be converted to string for displaying.
          */
         return is_array($processedValue) ? $this->jsonSerializer->serialize($processedValue) : $processedValue;
+    }
+
+    /**
+     * Retrieve config structure
+     *
+     * @return Structure
+     */
+    private function getConfigStructure(): Structure
+    {
+        if (empty($this->configStructure)) {
+            $areaScope = $this->scope->getCurrentScope();
+            $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
+            /** @var Structure $configStructure */
+            $this->configStructure = $this->configStructureFactory->create();
+            $this->scope->setCurrentScope($areaScope);
+        }
+        return $this->configStructure;
     }
 }

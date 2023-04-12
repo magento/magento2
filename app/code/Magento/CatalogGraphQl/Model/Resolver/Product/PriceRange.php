@@ -21,23 +21,13 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 class PriceRange implements ResolverInterface
 {
     /**
-     * @var Discount
-     */
-    private Discount $discount;
-
-    /**
-     * @var PriceProviderPool
-     */
-    private PriceProviderPool $priceProviderPool;
-
-    /**
      * @var PriceRangeDataProvider
      */
     private PriceRangeDataProvider $priceRangeDataProvider;
 
     /**
-     * @param PriceProviderPool $priceProviderPool
-     * @param Discount $discount
+     * @param PriceProviderPool $priceProviderPool Deprecated.  @use $priceRangeDataProvider
+     * @param Discount $discount Deprecated.  @use $priceRangeDataProvider
      * @param PriceRangeDataProvider|null $priceRangeDataProvider
      */
     public function __construct(
@@ -45,8 +35,6 @@ class PriceRange implements ResolverInterface
         Discount $discount,
         PriceRangeDataProvider $priceRangeDataProvider = null
     ) {
-        $this->priceProviderPool = $priceProviderPool;
-        $this->discount = $discount;
         $this->priceRangeDataProvider = $priceRangeDataProvider
             ?? ObjectManager::getInstance()->get(PriceRangeDataProvider::class);
     }

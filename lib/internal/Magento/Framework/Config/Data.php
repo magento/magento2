@@ -155,4 +155,15 @@ class Data implements \Magento\Framework\Config\DataInterface
     {
         $this->cache->remove($this->cacheId);
     }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
+    }
 }

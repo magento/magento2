@@ -8,11 +8,12 @@ namespace Magento\Tax\Observer;
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Modifies the bundle config for the front end to resemble the tax included price when tax included prices.
  */
-class GetPriceConfigurationObserver implements ObserverInterface
+class GetPriceConfigurationObserver implements ObserverInterface, ResetAfterRequestInterface
 {
     /**
      * Tax data
@@ -145,5 +146,13 @@ class GetPriceConfigurationObserver implements ObserverInterface
             }
         }
         return $holder;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->selectionCache = [];
     }
 }

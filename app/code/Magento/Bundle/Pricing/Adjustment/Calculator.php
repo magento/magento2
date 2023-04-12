@@ -12,6 +12,7 @@ use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Pricing\Price\BundleSelectionFactory;
 use Magento\Bundle\Pricing\Price\BundleSelectionPrice;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\Adjustment\Calculator as CalculatorBase;
 use Magento\Framework\Pricing\Amount\AmountFactory;
 use Magento\Framework\Pricing\Amount\AmountInterface;
@@ -25,7 +26,7 @@ use Magento\Tax\Helper\Data as TaxHelper;
  * Bundle price calculator
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Calculator implements BundleCalculatorInterface
+class Calculator implements BundleCalculatorInterface, ResetAfterRequestInterface
 {
     /**
      * @var CalculatorBase
@@ -424,5 +425,13 @@ class Calculator implements BundleCalculatorInterface
             }
         }
         return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->optionAmount = [];
     }
 }

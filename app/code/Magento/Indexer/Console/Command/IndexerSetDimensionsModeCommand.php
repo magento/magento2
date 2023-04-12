@@ -7,13 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Indexer\Console\Command;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManagerFactory;
+use Magento\Framework\Console\Cli;
+use Magento\Indexer\Console\Command\IndexerSetDimensionsModeCommand\ModeInputArgument;
+use Magento\Indexer\Model\ModeSwitcherInterface;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Magento\Framework\App\ObjectManagerFactory;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Console\Cli;
-use Magento\Indexer\Model\ModeSwitcherInterface;
 
 /**
  * Command to set indexer dimensions mode
@@ -144,17 +145,19 @@ class IndexerSetDimensionsModeCommand extends AbstractIndexerCommand
             InputArgument::OPTIONAL,
             $indexerOptionDescription
         );
-        $modeOptionDescription = 'Indexer dimension modes' . PHP_EOL;
-        foreach ($this->dimensionProviders as $indexer => $provider) {
-            $availableModes = implode(',', array_keys($provider->getDimensionModes()->getDimensions()));
-            $modeOptionDescription .= sprintf('%-30s ', $indexer) . $availableModes . PHP_EOL;
-        }
-        $arguments[] = new InputArgument(
+        $modeOptionDescriptionClosure = function () {
+            $modeOptionDescription = 'Indexer dimension modes' . PHP_EOL;
+            foreach ($this->dimensionProviders as $indexer => $provider) {
+                $availableModes = implode(',', array_keys($provider->getDimensionModes()->getDimensions()));
+                $modeOptionDescription .= sprintf('%-30s ', $indexer) . $availableModes . PHP_EOL;
+            }
+            return $modeOptionDescription;
+        };
+        $arguments[] = new ModeInputArgument(
             self::INPUT_KEY_MODE,
             InputArgument::OPTIONAL,
-            $modeOptionDescription
+            $modeOptionDescriptionClosure
         );
-
         return $arguments;
     }
 

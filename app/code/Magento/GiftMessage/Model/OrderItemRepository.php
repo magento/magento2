@@ -10,11 +10,12 @@ namespace Magento\GiftMessage\Model;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Order item gift message repository object.
  */
-class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositoryInterface
+class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositoryInterface, ResetAfterRequestInterface
 {
     /**
      * Order factory.
@@ -174,5 +175,13 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
             return $item;
         }
         return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->orders = [];
     }
 }

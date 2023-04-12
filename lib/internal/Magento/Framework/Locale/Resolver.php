@@ -8,11 +8,12 @@ namespace Magento\Framework\Locale;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Manages locale config information.
  */
-class Resolver implements ResolverInterface
+class Resolver implements ResolverInterface, ResetAfterRequestInterface
 {
     /**
      * Resolver default locale
@@ -174,5 +175,10 @@ class Resolver implements ResolverInterface
             $result = $this->locale;
         }
         return $result;
+    }
+
+    public function _resetState(): void
+    {
+        $this->locale = null;
     }
 }

@@ -45,7 +45,6 @@ class RemoveAction
     public function isAllowed(AbstractModel $model)
     {
         $isAllowed = true;
-
         if ($this->registry->registry('isSecureArea')) {
             $isAllowed = true;
         } elseif (in_array($this->getBaseClassName($model), $this->protectedModels)) {

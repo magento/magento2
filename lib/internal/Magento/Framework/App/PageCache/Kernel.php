@@ -131,7 +131,10 @@ class Kernel
      */
     public function process(\Magento\Framework\App\Response\Http $response)
     {
-        if (preg_match('/public.*s-maxage=(\d+)/', $response->getHeader('Cache-Control')->getFieldValue(), $matches)) {
+        $cacheControlHeader = $response->getHeader('Cache-Control');
+        if ($cacheControlHeader
+            && preg_match('/public.*s-maxage=(\d+)/', $cacheControlHeader->getFieldValue(), $matches)
+        ) {
             $maxAge = $matches[1];
             $response->setNoCacheHeaders();
             if (($response->getHttpResponseCode() == 200 || $response->getHttpResponseCode() == 404)

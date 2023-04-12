@@ -40,7 +40,7 @@ class CacheableQuery
      */
     public function addCacheTags(array $cacheTags): void
     {
-        $this->cacheTags = array_merge($this->cacheTags, $cacheTags);
+        $this->cacheTags = array_unique(array_merge($this->cacheTags, $cacheTags));
     }
 
     /**

@@ -7,7 +7,9 @@
  */
 namespace Magento\Framework\Session;
 
-class Storage extends \Magento\Framework\DataObject implements StorageInterface
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
+class Storage extends \Magento\Framework\DataObject implements StorageInterface, ResetAfterRequestInterface
 {
     /**
      * Namespace of storage
@@ -15,6 +17,14 @@ class Storage extends \Magento\Framework\DataObject implements StorageInterface
      * @var string
      */
     protected $namespace;
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_data = [];
+    }
 
     /**
      * Constructor
@@ -29,7 +39,7 @@ class Storage extends \Magento\Framework\DataObject implements StorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function init(array $data)
     {
@@ -41,7 +51,7 @@ class Storage extends \Magento\Framework\DataObject implements StorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getNamespace()
     {
