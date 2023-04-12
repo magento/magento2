@@ -68,10 +68,10 @@ QUERY;
      * Add simple product to the cart using the maskedQuoteId
      *
      * @param string $maskedCartId
-     * @param int $qty
+     * @param float $quantity
      * @param string $sku
      */
-    private function addSimpleProductToCart(string $maskedCartId, int $quantity, string $sku): void
+    private function addSimpleProductToCart(string $maskedCartId, float $quantity, string $sku): void
     {
         $addProductToCartQuery =
             <<<QUERY
