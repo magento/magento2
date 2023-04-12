@@ -61,15 +61,11 @@ QUERY;
         // Cache invalidation happens and cache-debug header value is a MISS after product update
         $responseMiss = $this->graphQlQueryWithResponseHeaders($query);
 
-        print_r("Debug value testCacheTagsAndCacheDebugHeaderForProducts        /");
+        print_r("Debug value CacheTagTest testCacheTagsAndCacheDebugHeaderForProducts\n");
         $json_response = json_encode($responseMiss, JSON_PRETTY_PRINT);
-        print_r("Debug value testCacheTagsAndCacheDebugHeaderForProducts after       /");
         print_r($json_response);
-        print_r("       ");
-        echo $json_response;
-        print_r(" end      ");
-        print_r("Debug value end testCacheTagsAndCacheDebugHeaderForProducts /");
-
+        print_r("\n end \n");
+        print_r("Debug value End of testCacheTagsAndCacheDebugHeaderForProducts\n");
 
         $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseMiss['headers']);
         $this->assertEquals('MISS', $responseMiss['headers']['X-Magento-Cache-Debug']);
@@ -117,15 +113,11 @@ QUERY;
         $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseMiss['headers']);
         $this->assertEquals('MISS', $responseMiss['headers']['X-Magento-Cache-Debug']);
 
-        print_r("Debug value testCacheTagForCategoriesWithProduct        /");
+        print_r("Debug value CacheTagTest testCacheTagForCategoriesWithProduct\n");
         $json_response = json_encode($responseMiss, JSON_PRETTY_PRINT);
-        print_r("Debug value testCacheTagForCategoriesWithProduct after       /");
         print_r($json_response);
-        print_r("       ");
-        echo $json_response;
-        print_r(" end      ");
-        print_r("Debug value end testCacheTagForCategoriesWithProduct /");
-
+        print_r("\n end \n");
+        print_r("Debug value End of testCacheTagForCategoriesWithProduct\n");
 
         $this->assertArrayHasKey('X-Magento-Tags', $responseMiss['headers']);
         $actualCacheTags = explode(',', $responseMiss['headers']['X-Magento-Tags']);

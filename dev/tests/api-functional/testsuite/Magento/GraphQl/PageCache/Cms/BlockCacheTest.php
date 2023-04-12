@@ -20,8 +20,8 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
     /**
      * Test that X-Magento-Tags are correct
      *
-     * @magentoApiDataFixture Magento/Cms/_files/block.php
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoApiDataFixture Magento/Cms/_files/block.php
      */
     public function testCacheTagsHaveExpectedValue()
     {
@@ -34,6 +34,12 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
         //cache-debug should be a MISS on first request
         $response = $this->graphQlQueryWithResponseHeaders($query);
 
+        print_r("Debug value Page0 MISS BlockCacheTest testCacheTagsHaveExpectedValue\n");
+        $json_response = json_encode($response, JSON_PRETTY_PRINT);
+        print_r($json_response);
+        print_r("\n end \n");
+        print_r("Debug value End of testCacheTagsHaveExpectedValue\n");
+
         $this->assertArrayHasKey('X-Magento-Tags', $response['headers']);
         $actualTags = explode(',', $response['headers']['X-Magento-Tags']);
         $expectedTags = ["cms_b", "cms_b_{$blockId}", "cms_b_{$blockIdentifier}", "FPC"];
@@ -43,8 +49,8 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
     /**
      * Test the second request for the same block will return a cached result
      *
-     * @magentoApiDataFixture Magento/Cms/_files/block.php
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoApiDataFixture Magento/Cms/_files/block.php
      */
     public function testCacheIsUsedOnSecondRequest()
     {
@@ -71,9 +77,9 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
     /**
      * Test that cache is invalidated when block is updated
      *
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/Cms/_files/blocks.php
      * @magentoApiDataFixture Magento/Cms/_files/block.php
-     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      */
     public function testCacheIsInvalidatedOnBlockUpdate()
     {

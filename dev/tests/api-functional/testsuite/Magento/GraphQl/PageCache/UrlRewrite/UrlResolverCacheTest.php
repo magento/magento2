@@ -36,6 +36,13 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
         $product = $productRepository->get($productSku, false, null, true);
         $urlResolverQuery = $this->getUrlResolverQuery($urlKey);
         $responseMiss = $this->graphQlQueryWithResponseHeaders($urlResolverQuery);
+
+        print_r("Debug value UrlResolverCacheTest testCacheTagsForProducts\n");
+        $json_response = json_encode($responseMiss, JSON_PRETTY_PRINT);
+        print_r($json_response);
+        print_r("\n end \n");
+        print_r("Debug value End of testCacheTagsForProducts\n");
+
         $this->assertArrayHasKey('X-Magento-Tags', $responseMiss['headers']);
         $actualTags = explode(',', $responseMiss['headers']['X-Magento-Tags']);
         $expectedTags = ["cat_p", "cat_p_{$product->getId()}", "FPC"];
@@ -87,6 +94,12 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
         $categoryId = $actualUrls->getEntityId();
         $query = $this->getUrlResolverQuery($categoryUrlKey);
         $responseMiss = $this->graphQlQueryWithResponseHeaders($query);
+
+        print_r("Debug value UrlResolverCacheTest testCacheTagsForCategory\n");
+        $json_response = json_encode($responseMiss, JSON_PRETTY_PRINT);
+        print_r($json_response);
+        print_r("\n end \n");
+
         $this->assertArrayHasKey('X-Magento-Tags', $responseMiss['headers']);
         $actualTags = explode(',', $responseMiss['headers']['X-Magento-Tags']);
         $expectedTags = ["cat_c", "cat_c_{$categoryId}", "FPC"];
@@ -122,6 +135,12 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
 
         $query = $this->getUrlResolverQuery($requestPath);
         $responseMiss = $this->graphQlQueryWithResponseHeaders($query);
+
+        print_r("Debug value UrlResolverCacheTest testUrlResolverCachingForCMSPage\n");
+        $json_response = json_encode($responseMiss, JSON_PRETTY_PRINT);
+        print_r($json_response);
+        print_r("\n end \n");
+
         $this->assertArrayHasKey('X-Magento-Tags', $responseMiss['headers']);
         $actualTags = explode(',', $responseMiss['headers']['X-Magento-Tags']);
         $expectedTags = ["cms_p", "cms_p_{$cmsPageId}", "FPC"];
