@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\CacheIdFactorProviders;
 
 use Magento\GraphQl\Model\Query\ContextInterface;
-use Magento\GraphQlCache\Model\CacheId\CacheIdFactorProviderInterface;
 use Magento\GraphQlCache\Model\CacheId\InitializableCacheIdFactorProviderInterface;
 
 /**
@@ -40,25 +39,14 @@ class CurrentCustomerCacheIdProvider implements InitializableCacheIdFactorProvid
     }
 
     /**
-     * Set factor value for customer ID provider.
-     *
-     * @param string $factorValue
-     * @return void
-     */
-    public function setFactorValue(string $factorValue): void
-    {
-        $this->factorValue = $factorValue;
-    }
-
-    /**
      * @param array $resolvedData
      * @return void
      */
     public function initFromResolvedData(array $resolvedData): void
     {
-        if (isset($resolvedData['model_id'])) {
-            $this->factorValue = $resolvedData['model_id'];
-        }
+//        if (isset($resolvedData['model_id'])) {
+//            $this->factorValue = $resolvedData['model_id'];
+//        }
     }
 
     /**
@@ -67,8 +55,8 @@ class CurrentCustomerCacheIdProvider implements InitializableCacheIdFactorProvid
      */
     public function initFromContext(ContextInterface $context): void
     {
-        if ($context->getUserId()) {
-            $this->factorValue = (string)$context->getUserId();
-        }
+//        if ($context->getUserId()) {
+//            $this->factorValue = (string)$context->getUserId();
+//        }
     }
 }

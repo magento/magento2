@@ -5,21 +5,41 @@ namespace Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\ObjectManager\ConfigInterface;
-use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
-use Magento\GraphQlCache\Model\CacheId\CacheIdCalculatorFactory;
-use Magento\GraphQlCache\Model\CacheId\CacheIdFactorProviderInterface;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\GraphQlCache\Model\CacheId\InitializableCacheIdFactorProviderInterface;
+use Magento\GraphQlCache\Model\Resolver\Cache\CacheIdCalculator;
+use Magento\GraphQlCache\Model\Resolver\Cache\CacheIdCalculatorFactory;
 
 class Strategy implements StrategyInterface
 {
+    /**
+     * @var array
+     */
     private array $customFactorProviders = [];
 
+    /**
+     * @var array
+     */
     private array $factorProviderInstances = [];
 
+    /**
+     * @var array
+     */
     private array $resolverCacheIdCalculatorsInitialized = [];
 
+    /**
+     * @var CacheIdCalculator
+     */
+    private CacheIdCalculator $genericCacheIdCalculator;
+
+    /**
+     * @var ConfigInterface
+     */
     private ConfigInterface $objectManagerConfig;
 
+    /**
+     * @var CacheIdCalculatorFactory
+     */
     private CacheIdCalculatorFactory $cacheIdCalculatorFactory;
 
     /**
@@ -37,10 +57,23 @@ class Strategy implements StrategyInterface
         $this->cacheIdCalculatorFactory = $cacheIdCalculatorFactory;
     }
 
+    /**
+     * @param ResolverInterface $resolver
+     * @return void
+     */
     public function initForResolver(ResolverInterface $resolver): void
     {
         $resolverClass = trim(get_class($resolver), '\\');
+        if (isset($this->resolverCacheIdCalculatorsInitialized[$resolverClass])) {
+            return;
+        }
         $customProviders = $this->getCustomProvidersForResolverObject($resolver);
+        if (empty($customProviders)) {
+            if (empty($this->genericCacheIdCalculator)) {
+                $this->genericCacheIdCalculator = $this->cacheIdCalculatorFactory->create();
+            }
+            $this->resolverCacheIdCalculatorsInitialized[$resolverClass] = $this->genericCacheIdCalculator;
+        }
         $this->factorProviderInstances[$resolverClass] = [];
         $arguments = $this->objectManagerConfig->getArguments(CacheIdCalculator::class);
         if (isset($arguments['idFactorProviders']) && is_array($arguments['idFactorProviders'])) {
@@ -59,6 +92,7 @@ class Strategy implements StrategyInterface
             foreach ($customProviders['append'] as $key => $customProviderInstance) {
                 if (!isset($customFactorProviders['suppress'][$key])
                     && !isset($customFactorProviders['suppress'][get_class($customProviderInstance)])
+                    //todo create workaround for inheritance chain
                 ) {
                     $this->factorProviderInstances[$resolverClass][$key] = $customProviderInstance;
                 }
@@ -71,7 +105,11 @@ class Strategy implements StrategyInterface
             );
     }
 
-    public function getForResolver(ResolverInterface $resolver): CacheIdCalculator
+    /**
+     * @param ResolverInterface $resolver
+     * @return CacheIdCalculator
+     */
+    public function getCacheIdCalculatorForResolver(ResolverInterface $resolver): CacheIdCalculator
     {
         $resolverClass = trim(get_class($resolver), '\\');
         if (!isset($this->resolverCacheIdCalculatorsInitialized[$resolverClass])) {
@@ -80,6 +118,10 @@ class Strategy implements StrategyInterface
         return $this->resolverCacheIdCalculatorsInitialized[$resolverClass];
     }
 
+    /**
+     * @param ResolverInterface $resolver
+     * @return array
+     */
     private function getResolverClassChain(ResolverInterface $resolver): array
     {
         $resolverClasses = [trim(get_class($resolver), '\\')];
@@ -89,6 +131,10 @@ class Strategy implements StrategyInterface
         return $resolverClasses;
     }
 
+    /**
+     * @param ResolverInterface $resolver
+     * @return array
+     */
     private function getCustomProvidersForResolverObject(ResolverInterface $resolver): array
     {
         foreach ($this->getResolverClassChain($resolver) as $resolverClass) {
@@ -99,16 +145,31 @@ class Strategy implements StrategyInterface
         return [];
     }
 
-    public function restateFromResolverResult(array $result): void
+    /**
+     * @param array $result
+     * @return void
+     */
+    public function restateFromPreviousResolvedValues(ResolverInterface $resolverObject, ?array $result): void
     {
-        foreach ($this->factorProviderInstances as $factorProviderInstance) {
+        if (!is_array($result)) {
+            return;
+        }
+        $resolverClass = trim(get_class($resolverObject), '\\');
+        if (!isset($this->factorProviderInstances[$resolverClass])) {
+            return;
+        }
+        foreach ($this->factorProviderInstances[$resolverClass] as $factorProviderInstance) {
             if ($factorProviderInstance instanceof InitializableCacheIdFactorProviderInterface) {
                 $factorProviderInstance->initFromResolvedData($result);
             }
         }
     }
 
-    public function restateFromContext(\Magento\GraphQl\Model\Query\ContextInterface $context): void
+    /**
+     * @param ContextInterface $context
+     * @return void
+     */
+    public function restateFromContext(ContextInterface $context): void
     {
         foreach ($this->factorProviderInstances as $factorProviderInstance) {
             if ($factorProviderInstance instanceof InitializableCacheIdFactorProviderInterface) {
