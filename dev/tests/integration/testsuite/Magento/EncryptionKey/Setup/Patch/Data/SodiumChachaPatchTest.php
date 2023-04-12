@@ -15,7 +15,7 @@ use Magento\Framework\Encryption\Encryptor;
 
 class SodiumChachaPatchTest extends \PHPUnit\Framework\TestCase
 {
-    const PATH_KEY = 'crypt/key';
+    private const PATH_KEY = 'crypt/key';
 
     /**
      * @var ObjectManagerInterface
