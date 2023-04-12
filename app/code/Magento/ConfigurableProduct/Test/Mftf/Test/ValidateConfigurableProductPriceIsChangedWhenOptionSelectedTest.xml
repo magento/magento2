@@ -14,6 +14,7 @@
             <title value="Validate configurable product price need to be change when option is selected"/>
             <description value="Validate configurable product price need to be change when option is selected"/>
             <severity value="CRITICAL"/>
+            <useCaseId value="ACP2E-1764"/>
             <testCaseId value="AC-8423"/>
             <group value="Catalog"/>
         </annotations>
@@ -32,6 +33,12 @@
             <deleteData createDataKey="createConfigurableProduct1" stepKey="deleteConfigurableProduct1"/>
             <deleteData createDataKey="createConfigurableProduct2" stepKey="deleteConfigurableProduct2"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Navigate to catalog product grid page -->
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
+            <!-- Clean applied product filters before delete -->
+            <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clearAppliedFilters"/>
+            <!-- Delete all the products from the catalog product grid -->
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
             <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
                 <argument name="ProductAttribute" value="{{dropdownProductAttribute.attribute_code}}"/>
             </actionGroup>
