@@ -60,10 +60,17 @@ QUERY;
         $productRepository->save($product);
         // Cache invalidation happens and cache-debug header value is a MISS after product update
         $responseMiss = $this->graphQlQueryWithResponseHeaders($query);
-        print_r("Debug value");
+
+        print_r("Debug value testCacheTagsAndCacheDebugHeaderForProducts        /");
         $json_response = json_encode($responseMiss, JSON_PRETTY_PRINT);
+        print_r("Debug value testCacheTagsAndCacheDebugHeaderForProducts after       /");
+        print_r($json_response);
+        print_r("       ");
         echo $json_response;
-        print_r("Debug value end");
+        print_r(" end      ");
+        print_r("Debug value end testCacheTagsAndCacheDebugHeaderForProducts /");
+
+
         $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseMiss['headers']);
         $this->assertEquals('MISS', $responseMiss['headers']['X-Magento-Cache-Debug']);
         $this->assertArrayHasKey('X-Magento-Tags', $responseMiss['headers']);
@@ -109,6 +116,17 @@ QUERY;
         $responseMiss = $this->graphQlQueryWithResponseHeaders($categoryQuery, $categoryQueryVariables);
         $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseMiss['headers']);
         $this->assertEquals('MISS', $responseMiss['headers']['X-Magento-Cache-Debug']);
+
+        print_r("Debug value testCacheTagForCategoriesWithProduct        /");
+        $json_response = json_encode($responseMiss, JSON_PRETTY_PRINT);
+        print_r("Debug value testCacheTagForCategoriesWithProduct after       /");
+        print_r($json_response);
+        print_r("       ");
+        echo $json_response;
+        print_r(" end      ");
+        print_r("Debug value end testCacheTagForCategoriesWithProduct /");
+
+
         $this->assertArrayHasKey('X-Magento-Tags', $responseMiss['headers']);
         $actualCacheTags = explode(',', $responseMiss['headers']['X-Magento-Tags']);
         $expectedCacheTags =
