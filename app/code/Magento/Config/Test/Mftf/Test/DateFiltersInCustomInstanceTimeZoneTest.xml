@@ -28,7 +28,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="NavigateToDefaultLocaleSettingActionGroup" stepKey="redirectAgain"/>
+            <actionGroup ref="AdminNavigateToDefaultLocaleSettingActionGroup" stepKey="redirectAgain"/>
             <selectOption userInput="Central Standard Time (America/Chicago)" selector="{{LocaleOptionsSection.timeZoneDropdown}}" stepKey="selectDefaultoption"/>
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
             <!-- Delete customer -->
