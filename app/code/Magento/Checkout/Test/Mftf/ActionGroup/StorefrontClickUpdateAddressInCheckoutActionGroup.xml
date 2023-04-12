@@ -12,7 +12,9 @@
         <annotations>
             <description>Clicks the Update button on the checkout page when entering a New Address.</description>
         </annotations>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForElementVisible selector="{{CheckoutShippingSection.updateAddress}}" stepKey="waitForUpdateButton"/>
+        <waitForElementClickable selector="{{CheckoutShippingSection.updateAddress}}" stepKey="waitForUpdateButtonClickable"/>
         <click selector="{{CheckoutShippingSection.updateAddress}}" stepKey="clickUpdateButton"/>
         <waitForPageLoad stepKey="waitForAddressSaved"/>
     </actionGroup>

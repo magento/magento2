@@ -39,7 +39,7 @@
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteVirtualProducts">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
                 <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
             </actionGroup>
@@ -52,7 +52,7 @@
         </after>
 
         <!--Add first configurable product to order-->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToFirstOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToFirstOrderWithExistingCustomer">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <actionGroup ref="AddConfigurableProductToOrderActionGroup" stepKey="addFirstConfigurableProductToOrder">
@@ -63,7 +63,7 @@
         <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitFirstOrder" />
 
         <!--Add second configurable product to order-->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToSecondOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToSecondOrderWithExistingCustomer">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <actionGroup ref="AddConfigurableProductToOrderActionGroup" stepKey="addSecondConfigurableProductToOrder">

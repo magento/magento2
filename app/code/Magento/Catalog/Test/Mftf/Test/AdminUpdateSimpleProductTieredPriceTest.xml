@@ -26,7 +26,7 @@
             </createData>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
 
-            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <magentoCron groups="index" stepKey="reindex"/>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
@@ -35,6 +35,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{simpleProductTierPrice300InStock.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -61,7 +62,9 @@
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" userInput="{{tierPriceHighCostSimpleProduct.qty}}" stepKey="fillProductTierPriceQuantityInput"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceFixedPriceInput('0')}}" userInput="{{tierPriceHighCostSimpleProduct.price}}" stepKey="selectProductTierPriceFixedPrice"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{simpleProductTierPrice300InStock.quantity}}" stepKey="fillSimpleProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillSimpleProductQuantity">
+            <argument name="productQty" value="{{simpleProductTierPrice300InStock.quantity}}"/>
+        </actionGroup>
         <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{simpleProductTierPrice300InStock.status}}" stepKey="selectStockStatusInStock"/>
         <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductTierPrice300InStock.weight}}" stepKey="fillSimpleProductWeight"/>
         <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="{{simpleProductTierPrice300InStock.weightSelect}}" stepKey="selectProductWeight"/>

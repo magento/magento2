@@ -22,25 +22,32 @@
             <before>
                 <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
                 <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
+                <magentoCron groups="index" stepKey="reindex"/>
             </before>
 
             <after>
                 <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
                     <argument name="customStore" value="customStore"/>
                 </actionGroup>
-                <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+                <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="resetSearchFilter"/>
+                <magentoCron groups="index" stepKey="reindex"/>
                 <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             </after>
 
             <!--Filter grid and see created store view-->
-            <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="navigateToStoresIndex"/>
-            <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
-            <fillField selector="{{AdminStoresGridSection.storeFilterTextField}}" userInput="{{customStore.name}}" stepKey="fillStoreViewFilterField"/>
-            <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearch"/>
-            <see selector="{{AdminStoresGridSection.gridCell('1', 'Store View')}}" userInput="{{customStore.name}}" stepKey="seeNewStoreView"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="navigateToStoresIndex"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="resetSearchFilter"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillStoreViewFilterField"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearch"/>
+            <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="seeNewStoreView">
+                <argument name="storeViewName" value="{{customStore.name}}"/>
+            </actionGroup>
             <!--Try to create store view with the same code-->
             <actionGroup ref="AdminCreateStoreViewWithoutCheckActionGroup" stepKey="createSameStoreView"/>
             <dontSeeElement selector="{{AdminMessagesSection.success}}" stepKey="dontSeeSuccessMessage"/>
-            <see selector="{{AdminMessagesSection.error}}" userInput="Store with the same code already exists." stepKey="seeErrorMessage"/>
+            <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorMessage">
+                <argument name="message" value="Store with the same code already exists."/>
+                <argument name="messageType" value="error" />
+            </actionGroup>
         </test>
 </tests>

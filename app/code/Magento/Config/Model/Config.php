@@ -74,8 +74,6 @@ class Config extends \Magento\Framework\DataObject
     protected $_objectFactory;
 
     /**
-     * TransactionFactory
-     *
      * @var \Magento\Framework\DB\TransactionFactory
      */
     protected $_transactionFactory;
@@ -184,6 +182,10 @@ class Config extends \Magento\Framework\DataObject
             return $this;
         }
 
+        /**
+         * Reload config to make sure config data is consistent with the database at this point.
+         */
+        $this->_appConfig->reinit();
         $oldConfig = $this->_getConfig(true);
 
         /** @var \Magento\Framework\DB\Transaction $deleteTransaction */
@@ -532,7 +534,7 @@ class Config extends \Magento\Framework\DataObject
      */
     public function setDataByPath($path, $value)
     {
-        $path = trim($path);
+        $path = $path !== null ? trim($path) : '';
         if ($path === '') {
             throw new \UnexpectedValueException('Path must not be empty');
         }

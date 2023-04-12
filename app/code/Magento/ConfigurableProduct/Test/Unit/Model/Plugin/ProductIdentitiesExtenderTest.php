@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model\Plugin;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type;
 use Magento\ConfigurableProduct\Model\Plugin\ProductIdentitiesExtender;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -71,7 +72,7 @@ class ProductIdentitiesExtenderTest extends TestCase
             ->willReturn($productId);
         $productMock->expects($this->exactly(2))
             ->method('getTypeId')
-            ->willReturn(Configurable::TYPE_CODE);
+            ->willReturn(Type::TYPE_SIMPLE);
         $this->configurableTypeMock->expects($this->once())
             ->method('getParentIdsByChild')
             ->with($productId)

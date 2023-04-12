@@ -45,6 +45,17 @@ interface FileAssertionsInterface
     public function copy($source, $destination): void;
 
     /**
+     * Copy file from the local source into local or remote destination depends on storage FS
+     *
+     * @param string $source
+     * @param string $destination
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function copyFromLocal($source, $destination): void;
+
+    /**
      * Create directory in the storage
      *
      * @param string $path

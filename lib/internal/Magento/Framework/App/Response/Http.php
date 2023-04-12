@@ -18,8 +18,10 @@ use Magento\Framework\Session\Config\ConfigInterface;
 /**
  * HTTP Response.
  *
+ * @api
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
+#[\AllowDynamicProperties]
 class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
 {
     /** Cookie to store page vary string */
