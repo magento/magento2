@@ -52,12 +52,12 @@ class PageCacheTest extends GraphQLPageCacheAbstract
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
         // Verify we obtain a cache HIT the second time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheHitAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $responseAfterUpdate = $this->assertCacheHitAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         //cached data should be correct
-        $this->assertNotEmpty($response['body']);
-        $this->assertArrayNotHasKey('errors', $response['body']);
-        $pageData = $response['body']['cmsPage'];
+        $this->assertNotEmpty($responseAfterUpdate['body']);
+        $this->assertArrayNotHasKey('errors', $responseAfterUpdate['body']);
+        $pageData = $responseAfterUpdate['body']['cmsPage'];
         $this->assertEquals('Cms Page 100', $pageData['title']);
     }
 
@@ -102,21 +102,21 @@ class PageCacheTest extends GraphQLPageCacheAbstract
         $pageRepository->save($pageBlank);
 
         //cache-debug should be a MISS after updating the page
-        $pageBlankResponse = $this->graphQlQueryWithResponseHeaders($pageBlankQuery);
+        $pageBlankResponseAfterUpdate = $this->graphQlQueryWithResponseHeaders($pageBlankQuery);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $pageBlank['headers']);
-        $cacheId = $pageBlankResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $cacheId = $pageBlankResponseAfterUpdate['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($pageBlankQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
-        $page100Response = $this->graphQlQueryWithResponseHeaders($page100Query);
+        $page100ResponseAfterUpdate = $this->graphQlQueryWithResponseHeaders($page100Query);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $page100Response['headers']);
-        $cacheId = $page100Response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $cacheId = $page100ResponseAfterUpdate['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         $this->assertCacheHitAndReturnResponse($page100Query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         //updated page data should be correct
-        $this->assertNotEmpty($pageBlankResponse['body']);
-        $pageData = $pageBlankResponse['body']['cmsPage'];
-        $this->assertArrayNotHasKey('errors', $pageBlankResponse['body']);
+        $this->assertNotEmpty($pageBlankResponseAfterUpdate['body']);
+        $pageData = $pageBlankResponseAfterUpdate['body']['cmsPage'];
+        $this->assertArrayNotHasKey('errors', $pageBlankResponseAfterUpdate['body']);
         $this->assertEquals('Cms Page Design Blank', $pageData['title']);
         $this->assertEquals($newPageContent, $pageData['content']);
     }
