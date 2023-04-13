@@ -73,7 +73,6 @@ define([
         isNewAddressAdded: ko.observable(false),
         saveInAddressBook: 1,
         quoteIsVirtual: quote.isVirtual(),
-        selectedShippingRate: null,
         /**
          * @return {exports}
          */
@@ -113,7 +112,6 @@ define([
 
             registry.async('checkoutProvider')(function (checkoutProvider) {
                 var shippingAddressData = checkoutData.getShippingAddressFromData();
-                this.selectedShippingRate = checkoutData.getSelectedShippingRate();
                 if (shippingAddressData) {
                     checkoutProvider.set(
                         'shippingAddress',
