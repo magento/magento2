@@ -53,10 +53,10 @@ class IsSubscribed implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($value['model_id'])) {
+        if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
-        $customerId = (int)$value['model_id'];
+        $customerId = (int)$value['model']->getId();
 
         $extensionAttributes = $context->getExtensionAttributes();
         if (!$extensionAttributes) {

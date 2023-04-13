@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\StrategyInterface;
+use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\HydratorProviderInterface;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\ResolverIdentityClassLocator;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
@@ -51,25 +52,30 @@ class Cache
      */
     private StrategyInterface $cacheIdProviderStrategy;
 
+    private HydratorProviderInterface $hydratorProvider;
+
     /**
      * @param GraphQlResolverCache $graphQlResolverCache
      * @param SerializerInterface $serializer
      * @param CacheState $cacheState
      * @param ResolverIdentityClassLocator $resolverIdentityClassLocator
      * @param StrategyInterface $cacheIdProviderStrategy
+     * @param HydratorProviderInterface $hydratorProvider
      */
     public function __construct(
         GraphQlResolverCache $graphQlResolverCache,
         SerializerInterface $serializer,
         CacheState $cacheState,
         ResolverIdentityClassLocator $resolverIdentityClassLocator,
-        StrategyInterface $cacheIdProviderStrategy
+        StrategyInterface $cacheIdProviderStrategy,
+        HydratorProviderInterface $hydratorProvider
     ) {
         $this->graphQlResolverCache = $graphQlResolverCache;
         $this->serializer = $serializer;
         $this->cacheState = $cacheState;
         $this->resolverIdentityClassLocator = $resolverIdentityClassLocator;
         $this->cacheIdProviderStrategy = $cacheIdProviderStrategy;
+        $this->hydratorProvider = $hydratorProvider;
     }
 
     /**
@@ -116,8 +122,13 @@ class Cache
         $cachedResult = $this->graphQlResolverCache->load($cacheIdentityString);
 
         if ($cachedResult !== false) {
-            return $this->serializer->unserialize($cachedResult);
+            $result = $this->serializer->unserialize($cachedResult);
             // rehydration point
+            $hydrator = $this->hydratorProvider->getForResolver($subject);
+            if ($hydrator) {
+                $hydrator->hydrate($result);
+            }
+            return $result;
         }
 
         $resolvedValue = $proceed($field, $context, $info, $value, $args);

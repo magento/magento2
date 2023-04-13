@@ -14,7 +14,6 @@ use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
-use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\StrategyInterface;
 
 /**
  * Customers field resolver, used for GraphQL request processing.
