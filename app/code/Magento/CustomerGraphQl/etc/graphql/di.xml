@@ -62,6 +62,15 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQlCache\Model\Resolver\Cache\ResolverCacheIdCalculator">
+        <arguments>
+            <argument name="idFactorProviders" xsi:type="array">
+                <item name="customergroup" xsi:type="object">Magento\CustomerGraphQl\CacheIdFactorProviders\CustomerGroupProvider</item>
+                <item name="customertaxrate" xsi:type="object">Magento\CustomerGraphQl\CacheIdFactorProviders\CustomerTaxRateProvider</item>
+                <item name="isloggedin" xsi:type="object">Magento\CustomerGraphQl\CacheIdFactorProviders\IsLoggedInProvider</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper">
         <arguments>
             <argument name="map" xsi:type="array">

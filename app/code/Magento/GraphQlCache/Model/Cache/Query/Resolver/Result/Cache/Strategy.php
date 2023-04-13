@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
 namespace Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache;
 
@@ -7,9 +12,12 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\GraphQlCache\Model\CacheId\InitializableCacheIdFactorProviderInterface;
-use Magento\GraphQlCache\Model\Resolver\Cache\CacheIdCalculator;
-use Magento\GraphQlCache\Model\Resolver\Cache\CacheIdCalculatorFactory;
+use Magento\GraphQlCache\Model\Resolver\Cache\ResolverCacheIdCalculator;
+use Magento\GraphQlCache\Model\Resolver\Cache\ResolverCacheIdCalculatorFactory;
 
+/**
+ * Provides custom cache id providers for resolvers chain.
+ */
 class Strategy implements StrategyInterface
 {
     /**
@@ -28,9 +36,9 @@ class Strategy implements StrategyInterface
     private array $resolverCacheIdCalculatorsInitialized = [];
 
     /**
-     * @var CacheIdCalculator
+     * @var ResolverCacheIdCalculator
      */
-    private CacheIdCalculator $genericCacheIdCalculator;
+    private ResolverCacheIdCalculator $genericCacheIdCalculator;
 
     /**
      * @var ConfigInterface
@@ -38,19 +46,19 @@ class Strategy implements StrategyInterface
     private ConfigInterface $objectManagerConfig;
 
     /**
-     * @var CacheIdCalculatorFactory
+     * @var ResolverCacheIdCalculatorFactory
      */
-    private CacheIdCalculatorFactory $cacheIdCalculatorFactory;
+    private ResolverCacheIdCalculatorFactory $cacheIdCalculatorFactory;
 
     /**
      * @param ConfigInterface $objectManagerConfig
-     * @param CacheIdCalculatorFactory $cacheIdCalculatorFactory
+     * @param ResolverCacheIdCalculatorFactory $cacheIdCalculatorFactory
      * @param array $customFactorProviders
      */
     public function __construct(
-        ConfigInterface $objectManagerConfig,
-        CacheIdCalculatorFactory $cacheIdCalculatorFactory,
-        array $customFactorProviders = []
+        ConfigInterface                  $objectManagerConfig,
+        ResolverCacheIdCalculatorFactory $cacheIdCalculatorFactory,
+        array                            $customFactorProviders = []
     ) {
         $this->customFactorProviders = $customFactorProviders;
         $this->objectManagerConfig = $objectManagerConfig;
@@ -58,8 +66,7 @@ class Strategy implements StrategyInterface
     }
 
     /**
-     * @param ResolverInterface $resolver
-     * @return void
+     * @inheritDoc
      */
     public function initForResolver(ResolverInterface $resolver): void
     {
@@ -74,42 +81,15 @@ class Strategy implements StrategyInterface
             }
             $this->resolverCacheIdCalculatorsInitialized[$resolverClass] = $this->genericCacheIdCalculator;
         }
-        $this->factorProviderInstances[$resolverClass] = [];
-        $arguments = $this->objectManagerConfig->getArguments(CacheIdCalculator::class);
-        if (isset($arguments['idFactorProviders']) && is_array($arguments['idFactorProviders'])) {
-            foreach ($arguments['idFactorProviders'] as $key => $idFactorProvider) {
-                $instance = $idFactorProvider['instance'];
-                if (isset($customProviders['suppress'][$key])
-                    || isset($customProviders['suppress'][$instance])
-                ) {
-                    unset($arguments['idFactorProviders'][$key]);
-                } else {
-                    $this->factorProviderInstances[$resolverClass][$key] = ObjectManager::getInstance()->get($instance);
-                }
-            }
-        }
-        if (isset($customProviders['append']) && is_array($customProviders['append'])) {
-            foreach ($customProviders['append'] as $key => $customProviderInstance) {
-                if (!isset($customFactorProviders['suppress'][$key])
-                    && !isset($customFactorProviders['suppress'][get_class($customProviderInstance)])
-                    //todo create workaround for inheritance chain
-                ) {
-                    $this->factorProviderInstances[$resolverClass][$key] = $customProviderInstance;
-                }
-            }
-        }
 
         $this->resolverCacheIdCalculatorsInitialized[$resolverClass] =
-            $this->cacheIdCalculatorFactory->create(
-                $this->factorProviderInstances[$resolverClass]
-            );
+            $this->cacheIdCalculatorFactory->create($customProviders);
     }
 
     /**
-     * @param ResolverInterface $resolver
-     * @return CacheIdCalculator
+     * @inheritDoc
      */
-    public function getCacheIdCalculatorForResolver(ResolverInterface $resolver): CacheIdCalculator
+    public function getCacheIdCalculatorForResolver(ResolverInterface $resolver): ResolverCacheIdCalculator
     {
         $resolverClass = trim(get_class($resolver), '\\');
         if (!isset($this->resolverCacheIdCalculatorsInitialized[$resolverClass])) {
@@ -119,6 +99,8 @@ class Strategy implements StrategyInterface
     }
 
     /**
+     * Get class inheritance chain for the given resolver object.
+     *
      * @param ResolverInterface $resolver
      * @return array
      */
@@ -132,6 +114,8 @@ class Strategy implements StrategyInterface
     }
 
     /**
+     * Get custom factor providers for the given resolver object.
+     *
      * @param ResolverInterface $resolver
      * @return array
      */
@@ -146,35 +130,22 @@ class Strategy implements StrategyInterface
     }
 
     /**
-     * @param array $result
-     * @return void
+     * @inheritDoc
      */
-    public function restateFromPreviousResolvedValues(ResolverInterface $resolverObject, ?array $result): void
+    public function actualize(ResolverInterface $resolver, ?array $result, ContextInterface $context): void
     {
         if (!is_array($result)) {
             return;
         }
-        $resolverClass = trim(get_class($resolverObject), '\\');
-        if (!isset($this->factorProviderInstances[$resolverClass])) {
+        $resolverClass = trim(get_class($resolver), '\\');
+        if (!isset($this->resolverCacheIdCalculatorsInitialized[$resolverClass])) {
             return;
         }
-        foreach ($this->factorProviderInstances[$resolverClass] as $factorProviderInstance) {
-            if ($factorProviderInstance instanceof InitializableCacheIdFactorProviderInterface) {
-                $factorProviderInstance->initFromResolvedData($result);
+        foreach ($this->resolverCacheIdCalculatorsInitialized[$resolverClass] as $cacheIdProvider) {
+            if ($cacheIdProvider instanceof InitializableCacheIdFactorProviderInterface) {
+                $cacheIdProvider->initialize($result, $context);
             }
         }
-    }
-
-    /**
-     * @param ContextInterface $context
-     * @return void
-     */
-    public function restateFromContext(ContextInterface $context): void
-    {
-        foreach ($this->factorProviderInstances as $factorProviderInstance) {
-            if ($factorProviderInstance instanceof InitializableCacheIdFactorProviderInterface) {
-                $factorProviderInstance->initFromContext($context);
-            }
-        }
+        $this->genericCacheIdCalculator->initialize($result, $context);
     }
 }

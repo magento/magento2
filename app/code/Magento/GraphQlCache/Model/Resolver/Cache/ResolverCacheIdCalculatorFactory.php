@@ -8,26 +8,26 @@ namespace Magento\GraphQlCache\Model\Resolver\Cache;
 use Magento\Framework\App\ObjectManager;
 
 /**
- * Custom cache id calculator factory.
+ * Custom resolver cache id calculator factory.
  */
-class CacheIdCalculatorFactory
+class ResolverCacheIdCalculatorFactory
 {
     /**
      * Create cache ID calculator instance with given cache id providers.
      *
      * @param array $resolverFactorIdProviders
-     * @return CacheIdCalculator
+     * @return ResolverCacheIdCalculator
      */
-    public function create(array $customFactorProviders = []): CacheIdCalculator
+    public function create(array $customFactorProviders = []): ResolverCacheIdCalculator
     {
         if (empty($customFactorProviders)) {
-            return ObjectManager::getInstance()->get(CacheIdCalculator::class);
+            return ObjectManager::getInstance()->get(ResolverCacheIdCalculator::class);
         }
         /**
          * Returns cache id calculator with custom set of factor providers;
          */
         return ObjectManager::getInstance()->create(
-            CacheIdCalculator::class,
+            ResolverCacheIdCalculator::class,
             ['idFactorProviders' => $customFactorProviders]
         );
     }

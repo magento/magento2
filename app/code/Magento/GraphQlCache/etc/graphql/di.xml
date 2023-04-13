@@ -35,16 +35,7 @@
         <arguments>
             <argument name="customFactorProviders" xsi:type="array">
                 <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="array">
-                    <item name="append" xsi:type="array">
-                        <item name="customer_id" xsi:type="object">Magento\CustomerGraphQl\CacheIdFactorProviders\CurrentCustomerCacheIdProvider</item>
-                    </item>
-                    <item name="suppress" xsi:type="array">
-                        <item name="store" xsi:type="boolean">true</item>
-                        <item name="currency" xsi:type="boolean">true</item>
-                        <item name="customergroup" xsi:type="boolean">true</item>
-                        <item name="customertaxrate" xsi:type="boolean">true</item>
-                        <item name="isloggedin" xsi:type="boolean">true</item>
-                    </item>
+                    <item name="customer_id" xsi:type="object">Magento\CustomerGraphQl\CacheIdFactorProviders\CurrentCustomerCacheIdProvider</item>
                 </item>
             </argument>
         </arguments>

@@ -11,16 +11,19 @@ use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\GraphQlCache\Model\CacheId\InitializableCacheIdFactorProviderInterface;
 
 /**
- * Provides logged-in status as a factor to use in the cache id
+ * Provides logged-in customer id as a factor to use in the cache id.
  */
 class CurrentCustomerCacheIdProvider implements InitializableCacheIdFactorProviderInterface
 {
+    /**
+     * Factor name.
+     */
     const NAME = "CUSTOMER_ID";
 
     /**
-     * @var string|null
+     * @var string
      */
-    private $factorValue = null;
+    private $factorValue = '';
 
     /**
      * @inheritdoc
@@ -35,28 +38,14 @@ class CurrentCustomerCacheIdProvider implements InitializableCacheIdFactorProvid
      */
     public function getFactorValue(ContextInterface $context): string
     {
-        return (string)$this->factorValue ?: ((string)$context->getUserId() ?: '');
+        return $this->factorValue;
     }
 
     /**
-     * @param array $resolvedData
-     * @return void
+     * @inheritdoc
      */
-    public function initFromResolvedData(array $resolvedData): void
+    public function initialize(array $resolvedData, ContextInterface $context): void
     {
-//        if (isset($resolvedData['model_id'])) {
-//            $this->factorValue = $resolvedData['model_id'];
-//        }
-    }
-
-    /**
-     * @param ContextInterface $context
-     * @return void
-     */
-    public function initFromContext(ContextInterface $context): void
-    {
-//        if ($context->getUserId()) {
-//            $this->factorValue = (string)$context->getUserId();
-//        }
+        $this->factorValue = ((string)$context->getUserId() ?: '');
     }
 }

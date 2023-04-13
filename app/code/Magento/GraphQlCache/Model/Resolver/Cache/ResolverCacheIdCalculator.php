@@ -7,13 +7,16 @@ namespace Magento\GraphQlCache\Model\Resolver\Cache;
 
 use Exception;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\GraphQlCache\Model\CacheId\CacheIdFactorProviderInterface;
+use Magento\GraphQlCache\Model\CacheId\InitializableCacheIdFactorProviderInterface;
+use Magento\GraphQlCache\Model\CacheId\InitializableInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Generator for the X-Magento-Cache-Id header value used as a cache key
+ * Generator for the resolver cache identifier used as a cache key for resolver results
  */
-class CacheIdCalculator
+class ResolverCacheIdCalculator implements InitializableInterface
 {
     /**
      * @var ContextFactoryInterface
@@ -46,7 +49,7 @@ class CacheIdCalculator
     }
 
     /**
-     * Calculates the value of X-Magento-Cache-Id
+     * Calculates the value of resolver cache identifier.
      *
      * @return string|null
      */
@@ -67,6 +70,18 @@ class CacheIdCalculator
         } catch (Exception $e) {
             $this->logger->warning("Unable to obtain cache id for resolver results. " . $e->getMessage());
             return null;
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function initialize(array $resolvedData, ContextInterface $context): void
+    {
+        foreach ($this->idFactorProviders as $factorProviderInstance) {
+            if ($factorProviderInstance instanceof InitializableCacheIdFactorProviderInterface) {
+                $factorProviderInstance->initialize($resolvedData, $context);
+            }
         }
     }
 }
