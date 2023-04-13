@@ -49,9 +49,6 @@ QUERY;
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
         $this->assertCacheHitAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
-        // Please refer this Magento/GraphQlCache/Controller/Catalog/ProductsCacheTest.php
-        // cache-tags for 'X-Magento-Tags' coverage
-
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         /** @var Product $product */
@@ -188,7 +185,6 @@ query GetCategoryQuery(\$id: Int!, \$pageSize: Int!, \$currentPage: Int!) {
         }
     }
 QUERY;
-
         return $categoryQueryString;
     }
 }

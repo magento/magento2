@@ -26,9 +26,6 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
      */
     public function testCacheIsUsedOnSecondRequest()
     {
-        // Please refer this Magento/GraphQlCache/Controller/Cms/BlockCacheTest.php
-        // cache-tags for 'X-Magento-Tags' coverage
-
         $blockIdentifier = 'fixture_block';
         $query = $this->getBlockQuery([$blockIdentifier]);
 

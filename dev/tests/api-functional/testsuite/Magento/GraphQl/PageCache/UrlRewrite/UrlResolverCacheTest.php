@@ -26,9 +26,6 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
      */
     public function testCacheTagsForProducts()
     {
-        // Please refer this Magento/GraphQlCache/Controller/Catalog/ProductsCacheTest.php
-        // cache-tags for 'X-Magento-Tags' coverage
-
         $urlKey = 'p002.html';
         $urlResolverQuery = $this->getUrlResolverQuery($urlKey);
 
@@ -57,9 +54,6 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
      */
     public function testCacheTagsForCategory()
     {
-        // Please refer this Magento/GraphQlCache/Controller/Catalog/CategoryCacheTest.php
-        // cache-tags for 'X-Magento-Tags' coverage
-
         $categoryUrlKey = 'cat-1.html';
         $query = $this->getUrlResolverQuery($categoryUrlKey);
 
@@ -87,9 +81,6 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
      */
     public function testUrlResolverCachingForCMSPage()
     {
-        // Please refer this Magento/GraphQlCache/Controller/Cms/CmsPageCacheTest.php
-        // cache-tags for 'X-Magento-Tags' coverage
-
         /** @var \Magento\Cms\Model\Page $page */
         $page = Bootstrap::getObjectManager()->get(\Magento\Cms\Model\Page::class);
         $page->load('page100');
