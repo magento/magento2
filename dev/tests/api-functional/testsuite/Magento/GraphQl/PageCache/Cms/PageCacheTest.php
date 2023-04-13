@@ -39,6 +39,9 @@ class PageCacheTest extends GraphQLPageCacheAbstract
      */
     public function testCacheIsUsedOnSecondRequest()
     {
+        // Please refer this Magento/GraphQlCache/Controller/Cms/CmsPageCacheTest.php
+        // cache-tags for 'X-Magento-Tags' coverage
+
         $pageIdentifier = 'page100';
         $page = $this->pageByIdentifier->execute($pageIdentifier, 0);
         $pageId = (int) $page->getId();

@@ -49,6 +49,9 @@ QUERY;
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
         $this->assertCacheHitAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
+        // Please refer this Magento/GraphQlCache/Controller/Catalog/ProductsCacheTest.php
+        // cache-tags for 'X-Magento-Tags' coverage
+
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         /** @var Product $product */
@@ -92,6 +95,7 @@ QUERY;
         $product2Query =$this->getProductQuery($secondProductSku);
         $categoryQuery = $this->getCategoryQuery();
 
+        // cache-debug header value should be a MISS when category is loaded first time
         $response = $this->graphQlQueryWithResponseHeaders($categoryQuery, $categoryQueryVariables);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
@@ -99,6 +103,9 @@ QUERY;
         $this->assertCacheMissAndReturnResponse($categoryQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
         $this->assertCacheHitAndReturnResponse($categoryQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+
+        // Please refer this Magento/GraphQlCache/Controller/Catalog/CategoriesWithProductsCacheTest.php
+        // cache-tags for 'X-Magento-Tags' coverage
 
         // Cache-debug header should be a MISS for product 1 on first request
         $responseFirstProduct = $this->graphQlQueryWithResponseHeaders($product1Query);
@@ -128,6 +135,8 @@ QUERY;
         $responseHitSecondProduct = $this->graphQlQueryWithResponseHeaders($product2Query);
         $cacheId = $responseHitSecondProduct['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        $this->assertCacheMissAndReturnResponse($product2Query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
         $this->assertCacheHitAndReturnResponse($product2Query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
     }
 
