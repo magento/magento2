@@ -10,7 +10,6 @@ namespace Magento\Store\Model;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\App\Area;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
@@ -20,7 +19,9 @@ use Magento\TestFramework\Fixture\Config as ConfigFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -56,6 +57,7 @@ class MultiStoreTest extends \PHPUnit\Framework\TestCase
      * @throws \Magento\Framework\Exception\MailException
      */
     #[
+        DbIsolation(false),
         ConfigFixture('system/smtp/transport', 'smtp', 'store'),
         DataFixture(WebsiteFixture::class, as: 'website2'),
         DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
@@ -117,37 +119,32 @@ class MultiStoreTest extends \PHPUnit\Framework\TestCase
         /** @var Subscriber $subscriber */
         $subscriber = $this->objectManager->create(Subscriber::class);
         $subscriber->subscribe($customerData['email']);
-        $subscriber->confirm($subscriber->getSubscriberConfirmCode());
 
-        /** @var TransportBuilder $transportBuilder */
-        $transportBuilder = $this->objectManager->get(TransportBuilder::class);
-        $transport = $transportBuilder->setTemplateIdentifier('newsletter_subscription_confirm_email_template')
-            ->setTemplateOptions(
-                [
-                    'area' => Area::AREA_FRONTEND,
-                    'store' => (int) $customerData['storeId']
-                ]
-            )
-            ->setFromByScope(
-                [
-                    'email' => $customerData['storeEmail'],
-                    'name' => 'Store Email Name'
-                ],
-                (int) $customerData['storeId']
-            )
-            ->setTemplateVars(
-                [
-                    'subscriber_data' => [
-                        'confirmation_link' => $subscriber->getConfirmationLink(),
-                    ],
-                ]
-            )
-            ->addTo($customerData['email'])
-            ->getTransport();
-        $transport->sendMessage();
+        /** @var TransportBuilderMock $transportBuilderMock */
+        $transportBuilderMock = $this->objectManager->get(TransportBuilderMock::class);
+        $transport = $transportBuilderMock->setTemplateIdentifier(
+            'customer_password_reset_password_template'
+        )->setTemplateVars([
+            'subscriber_data' => [
+                'confirmation_link' => $subscriber->getConfirmationLink(),
+            ],
+        ])->setTemplateOptions([
+            'area' => Area::AREA_FRONTEND,
+            'store' => (int) $customerData['storeId']
+        ])
+        ->setFromByScope(
+            [
+                'email' => $customerData['storeEmail'],
+                'name' => 'Store Email Name'
+            ],
+            (int) $customerData['storeId']
+        )
+        ->addTo($customerData['email'])
+        ->getTransport();
+
         $headers = $transport->getMessage()->getHeaders();
-        $sendMessage = $transport->getMessage();
-        $this->assertNotNull($sendMessage);
+
+        $this->assertNotNull($transport->getMessage());
         $this->assertStringContainsString($customerData['storeEmail'], $headers['From']);
     }
 }
