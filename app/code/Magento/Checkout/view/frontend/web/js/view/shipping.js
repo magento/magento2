@@ -259,7 +259,8 @@ define([
         rates: shippingService.getShippingRates(),
         isLoading: shippingService.isLoading,
         isSelected: ko.computed(function () {
-            return checkoutData.getSelectedShippingRate() ? checkoutData.getSelectedShippingRate() :
+            const selectedShippingMethod = checkoutData.getSelectedShippingRate();
+            return selectedShippingMethod ? selectedShippingMethod :
                 quote.shippingMethod() ?
                 quote.shippingMethod()['carrier_code'] + '_' + quote.shippingMethod()['method_code'] :
                 null;
