@@ -9,6 +9,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 
 /**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Security.Superglobal
  * @magentoAppIsolation enabled
  */
 class PluginTest extends \PHPUnit\Framework\TestCase
