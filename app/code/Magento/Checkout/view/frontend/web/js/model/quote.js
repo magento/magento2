@@ -8,8 +8,9 @@
 define([
     'ko',
     'underscore',
+    'Magento_Checkout/js/checkout-data',
     'domReady!'
-], function (ko, _) {
+], function (ko, _, checkoutData) {
     'use strict';
 
     /**
@@ -148,6 +149,17 @@ define([
          */
         isPersistent: function () {
             return !!Number(quoteData['is_persistent']);
+        },
+
+        /**
+         * @return {String|null}
+         */
+        getSelectedMethod: function () {
+            const selectedShippingMethod = checkoutData.getSelectedShippingRate();
+            return selectedShippingMethod ? selectedShippingMethod :
+                this.shippingMethod() ?
+                    this.shippingMethod()['carrier_code'] + '_' + quote.shippingMethod()['method_code'] :
+                    null;
         }
     };
 });

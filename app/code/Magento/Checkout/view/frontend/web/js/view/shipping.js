@@ -73,7 +73,7 @@ define([
         isNewAddressAdded: ko.observable(false),
         saveInAddressBook: 1,
         quoteIsVirtual: quote.isVirtual(),
-
+        selectedShippingRate: null,
         /**
          * @return {exports}
          */
@@ -113,7 +113,7 @@ define([
 
             registry.async('checkoutProvider')(function (checkoutProvider) {
                 var shippingAddressData = checkoutData.getShippingAddressFromData();
-
+                this.selectedShippingRate = checkoutData.getSelectedShippingRate();
                 if (shippingAddressData) {
                     checkoutProvider.set(
                         'shippingAddress',
@@ -259,11 +259,7 @@ define([
         rates: shippingService.getShippingRates(),
         isLoading: shippingService.isLoading,
         isSelected: ko.computed(function () {
-            const selectedShippingMethod = checkoutData.getSelectedShippingRate();
-            return selectedShippingMethod ? selectedShippingMethod :
-                quote.shippingMethod() ?
-                quote.shippingMethod()['carrier_code'] + '_' + quote.shippingMethod()['method_code'] :
-                null;
+            return quote.getSelectedMethod();
         }),
 
         /**
