@@ -409,7 +409,7 @@ class PageTest extends GraphQlAbstract
      * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
      * @return void
      */
-    public function testCmsResolverCacheIsInvalidatedAfterSwitchingStoreView()
+    public function testCmsResolverCacheIsInvalidatedAfterChangingItsStoreView()
     {
         /** @var \Magento\Cms\Model\Page $page */
         $page = $this->getPageByTitle('Page with 1column layout');
