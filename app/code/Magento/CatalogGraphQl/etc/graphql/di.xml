@@ -208,4 +208,20 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\EavGraphQl\Model\TypeResolver\AttributeMetadata">
+        <arguments>
+            <argument name="entityTypes" xsi:type="array">
+                <item name="PRODUCT" xsi:type="string">CatalogAttributeMetadata</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper">
+        <arguments>
+            <argument name="map" xsi:type="array">
+                <item name="AttributeEntityTypeEnum" xsi:type="array">
+                    <item name="catalog_product" xsi:type="string">catalog_product</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
