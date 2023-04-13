@@ -38,7 +38,7 @@
 
         <!--Click on edit default billing address and update the address-->
         <actionGroup ref="AdminClickEditLinkForDefaultBillingAddressActionGroup" stepKey="clickEditDefaultBillingAddress"/>
-        <actionGroup ref="AdminSaveCustomerAddressInformationActionGroup" stepKey="fillAndSaveCustomerAddressInformation">
+        <actionGroup ref="AdminFillAndSaveCustomerAddressWithoutRegionActionGroup" stepKey="fillAndSaveCustomerAddressInformation">
             <argument name="address" value="updateCustomerFranceAddress"/>
         </actionGroup>
 
