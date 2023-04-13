@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
@@ -41,27 +40,19 @@ class Strategy implements StrategyInterface
     private ResolverCacheIdCalculator $genericCacheIdCalculator;
 
     /**
-     * @var ConfigInterface
-     */
-    private ConfigInterface $objectManagerConfig;
-
-    /**
      * @var ResolverCacheIdCalculatorFactory
      */
     private ResolverCacheIdCalculatorFactory $cacheIdCalculatorFactory;
 
     /**
-     * @param ConfigInterface $objectManagerConfig
      * @param ResolverCacheIdCalculatorFactory $cacheIdCalculatorFactory
      * @param array $customFactorProviders
      */
     public function __construct(
-        ConfigInterface                  $objectManagerConfig,
         ResolverCacheIdCalculatorFactory $cacheIdCalculatorFactory,
-        array                            $customFactorProviders = []
+        array $customFactorProviders = []
     ) {
         $this->customFactorProviders = $customFactorProviders;
-        $this->objectManagerConfig = $objectManagerConfig;
         $this->cacheIdCalculatorFactory = $cacheIdCalculatorFactory;
     }
 
