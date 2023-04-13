@@ -120,23 +120,25 @@ class UserResetPasswordEmailTest extends AbstractBackendController
         $adminUser->setPassword('newPassword123');
         $adminUser->save();
 
-        /** @var TransportBuilder $transportBuilder */
-        $transportBuilder = $this->_objectManager->get(TransportBuilder::class);
-        $transport = $transportBuilder->setTemplateIdentifier('customer_password_reset_password_template')
-            ->setTemplateOptions(
-                [
-                    'area' => Area::AREA_FRONTEND,
-                    'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
-                ]
-            )
-            ->setTemplateVars(['customer' => $adminUser])
-            ->addTo($adminEmail)
-            ->getTransport();
-        $transport->sendMessage();
-        $sentMessage = $transport->getMessage();
+        /** @var TransportBuilderMock $transportBuilderMock */
+        $transportBuilderMock = $this->_objectManager->get(TransportBuilderMock::class);
+        $transport = $transportBuilderMock->setTemplateIdentifier(
+            'customer_password_reset_password_template'
+        )->setTemplateVars([
+            'customer' => [
+                'name' => $user->getDataByKey('firstname') . ' ' . $user->getDataByKey('lastname')
+            ]
+        ])->setTemplateOptions([
+            'area' => Area::AREA_FRONTEND,
+            'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
+        ])
+        ->addTo($adminEmail)
+        ->getTransport();
+
+        $message = $transport->getMessage();
 
         // Verify an email was dispatched to the correct user
         $this->assertNotNull($transport->getMessage());
-        $this->assertEquals($adminEmail, $sentMessage->getTo()[0]->getEmail());
+        $this->assertEquals($adminEmail, $message->getTo()[0]->getEmail());
     }
 }
