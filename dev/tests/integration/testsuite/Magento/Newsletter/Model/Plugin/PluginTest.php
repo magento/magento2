@@ -6,6 +6,7 @@
 namespace Magento\Newsletter\Model\Plugin;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 
 /**
  * @magentoAppIsolation enabled
@@ -24,6 +25,11 @@ class PluginTest extends \PHPUnit\Framework\TestCase
      */
     protected $customerRepository;
 
+    /**
+     * @var TransportBuilderMock
+     */
+    protected $transportBuilderMock;
+
     protected function setUp(): void
     {
         $this->accountManagement = Bootstrap::getObjectManager()->get(
@@ -31,6 +37,9 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         );
         $this->customerRepository = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Api\CustomerRepositoryInterface::class
+        );
+        $this->transportBuilderMock = Bootstrap::getObjectManager()->get(
+            TransportBuilderMock::class
         );
     }
 
@@ -222,5 +231,72 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $customer = $items[0];
         $extensionAttributes = $customer->getExtensionAttributes();
         $this->assertTrue($extensionAttributes->getIsSubscribed());
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoConfigFixture current_store newsletter/general/active 1
+     * @magentoDataFixture Magento/Customer/_files/customer_welcome_email_template.php
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testCreateAccountWithNewsLetterSubscription() :void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
+        $customerFactory = $objectManager->get(\Magento\Customer\Api\Data\CustomerInterfaceFactory::class);
+        $customerDataObject = $customerFactory->create()
+            ->setFirstname('John')
+            ->setLastname('Doe')
+            ->setEmail('customer@example.com');
+        $extensionAttributes = $customerDataObject->getExtensionAttributes();
+        $extensionAttributes->setIsSubscribed(true);
+        $customerDataObject->setExtensionAttributes($extensionAttributes);
+        $this->accountManagement->createAccount($customerDataObject, '123123qW');
+
+        $message = $this->transportBuilderMock->getSentMessage();
+
+        $this->assertEquals('Welcome to Main Website Store', $message->getSubject());
+        $this->assertStringContainsString(
+            'John',
+            $message->getBody()->getParts()[0]->getRawContent()
+        );
+        $this->assertStringContainsString(
+            'customer@example.com',
+            $message->getBody()->getParts()[0]->getRawContent()
+        );
+
+        /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
+        $subscriber = $objectManager->create(\Magento\Newsletter\Model\Subscriber::class);
+        $subscriber->loadByEmail('customer@example.com');
+        $this->assertTrue($subscriber->isSubscribed());
+
+        /** @var \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder */
+        $transportBuilder = $objectManager->get(\Magento\Framework\Mail\Template\TransportBuilder::class);
+        $transport = $transportBuilder->setTemplateIdentifier('newsletter_subscription_confirm_email_template')
+            ->setTemplateOptions(
+                [
+                    'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+                    'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                ]
+            )
+            ->setTemplateVars(
+                [
+                    'subscriber_data' => [
+                        'confirmation_link' => $subscriber->getConfirmationLink(),
+                    ],
+                ]
+            )
+            ->addTo('customer@example.com')
+            ->getTransport();
+        $sendMessage = $transport->getMessage();
+
+        $this->assertStringContainsString(
+            $subscriber->getConfirmationLink(),
+            $sendMessage->getBody()->getParts()[0]->getRawContent()
+        );
+        $this->assertEquals('Newsletter subscription confirmation', $sendMessage->getSubject());
     }
 }
