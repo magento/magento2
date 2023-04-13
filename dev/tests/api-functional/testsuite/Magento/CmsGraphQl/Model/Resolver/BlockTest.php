@@ -12,6 +12,7 @@ use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Cms\Model\Block;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlCache;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Widget\Model\Template\FilterEmulate;
@@ -33,12 +34,18 @@ class BlockTest extends GraphQlAbstract
      */
     private $widgetFilter;
 
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
     protected function setUp(): void
     {
         $objectManager = ObjectManager::getInstance();
         $this->blockRepository = $objectManager->get(BlockRepositoryInterface::class);
         $this->graphqlCache = $objectManager->get(GraphQlCache::class);
         $this->widgetFilter = $objectManager->get(FilterEmulate::class);
+        $this->storeManager = $objectManager->get(StoreManagerInterface::class);
     }
 
     /**
@@ -120,6 +127,47 @@ class BlockTest extends GraphQlAbstract
         $this->assertFalse(
             $this->graphqlCache->test($cacheIdentityString),
             'Cache entry should be invalidated after block content change'
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Cms/_files/block.php
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     */
+    public function testCmsBlockResolverCacheIsInvalidatedAfterChangingItsStoreView()
+    {
+        /** @var Block $block */
+        $block = $this->blockRepository->getById('fixture_block');
+
+        $query = $this->getQuery([
+            $block->getIdentifier(),
+        ]);
+
+        $response = $this->graphQlQueryWithResponseHeaders($query);
+
+        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$block]);
+
+        $cacheEntry = $this->graphqlCache->load($cacheIdentityString);
+        $cacheEntryDecoded = json_decode($cacheEntry, true);
+
+        $this->assertEqualsCanonicalizing(
+            $this->generateExpectedDataFromBlocks([$block]),
+            $cacheEntryDecoded
+        );
+
+        $this->assertTagsByCacheIdentityAndBlocks(
+            $cacheIdentityString,
+            [$block]
+        );
+
+        // assert that cache is invalidated after changing block's store view
+        $secondStoreViewId = $this->storeManager->getStore('fixture_second_store')->getId();
+        $block->setStoreId($secondStoreViewId);
+        $this->blockRepository->save($block);
+
+        $this->assertFalse(
+            $this->graphqlCache->test($cacheIdentityString),
+            'Cache entry should be invalidated after changing block\'s store view'
         );
     }
 
@@ -233,18 +281,4 @@ QUERY;
         // strtoupper is called in \Magento\Framework\Cache\Frontend\Adapter\Zend::_unifyId
         return strtoupper(implode('_', $cacheIdParts));
     }
-
-//    private function getBlockBy(string $title): PageInterface
-//    {
-//        $searchCriteria = $this->searchCriteriaBuilder
-//            ->addFilter('title', $title)
-//            ->create();
-//
-//        $blocks = $this->blockRepository->getList($searchCriteria)->getItems();
-//
-//        /** @var BlockInterface $blocks */
-//        $block = reset($blocks);
-//
-//        return $block;
-//    }
 }
