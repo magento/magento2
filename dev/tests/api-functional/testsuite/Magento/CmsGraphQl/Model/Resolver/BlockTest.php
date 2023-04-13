@@ -60,15 +60,16 @@ class BlockTest extends GraphQlAbstract
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
-            $this->generateExpectedDataFromBlocks($block),
+            $this->generateExpectedDataFromBlocks([$block]),
             $cacheEntryDecoded
         );
 
-        $this->assertTagsByCacheIdentityAndBlock(
+        $this->assertTagsByCacheIdentityAndBlocks(
             $cacheIdentityString,
-            $block
+            [$block]
         );
 
+        // assert that cache is invalidated after block content change
         $block->setContent('New Content');
         $this->blockRepository->save($block);
 
@@ -104,35 +105,54 @@ QUERY;
         return implode(',', $identifiers);
     }
 
-    private function generateExpectedDataFromBlocks(BlockInterface $block): array
+    /**
+     * @param BlockInterface[] $blocks
+     * @return array
+     */
+    private function generateExpectedDataFromBlocks(array $blocks): array
     {
+        $expectedBlockData = [];
+
+        foreach ($blocks as $block) {
+            $expectedBlockData[$block->getIdentifier()] = [
+                'block_id' => $block->getId(),
+                'identifier' => $block->getIdentifier(),
+                'title' => $block->getTitle(),
+                'content' => $this->widgetFilter->filterDirective($block->getContent()),
+            ];
+        }
+
         return [
-            'items' => [
-                $block->getIdentifier() => [
-                    'block_id' => $block->getId(),
-                    'identifier' => $block->getIdentifier(),
-                    'title' => $block->getTitle(),
-                    'content' => $this->widgetFilter->filterDirective($block->getContent()),
-                ],
-            ],
+            'items' => $expectedBlockData,
         ];
     }
 
-    private function assertTagsByCacheIdentityAndBlock(string $cacheIdentityString, BlockInterface $block): void
+    /**
+     * @param string $cacheIdentityString
+     * @param BlockInterface[] $blocks
+     * @return void
+     * @throws \Zend_Cache_Exception
+     */
+    private function assertTagsByCacheIdentityAndBlocks(string $cacheIdentityString, array $blocks): void
     {
         $lowLevelFrontendCache = $this->graphqlCache->getLowLevelFrontend();
         $cacheIdPrefix = $lowLevelFrontendCache->getOption('cache_id_prefix');
         $metadatas = $lowLevelFrontendCache->getMetadatas($cacheIdentityString);
         $tags = $metadatas['tags'];
 
+        $expectedTags = [
+            $cacheIdPrefix . strtoupper(Block::CACHE_TAG),
+            $cacheIdPrefix . strtoupper(GraphQlCache::CACHE_TAG),
+            $cacheIdPrefix . 'MAGE',
+        ];
+
+        foreach ($blocks as $block) {
+            $expectedTags[] = $cacheIdPrefix . strtoupper(Block::CACHE_TAG) . '_' . $block->getId();
+            $expectedTags[] = $cacheIdPrefix . strtoupper(Block::CACHE_TAG . '_' . $block->getIdentifier());
+        }
+
         $this->assertEqualsCanonicalizing(
-            [
-                $cacheIdPrefix . strtoupper(Block::CACHE_TAG),
-                $cacheIdPrefix . strtoupper(Block::CACHE_TAG) . '_' . $block->getId(),
-                $cacheIdPrefix . strtoupper(Block::CACHE_TAG . '_' . $block->getIdentifier()),
-                $cacheIdPrefix . strtoupper(GraphQlCache::CACHE_TAG),
-                $cacheIdPrefix . 'MAGE',
-            ],
+            $expectedTags,
             $tags
         );
     }
