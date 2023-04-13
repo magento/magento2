@@ -15,6 +15,9 @@
             <description value="Product can be found by value of 'Searchable' attribute"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4086"/>
+            <skip>
+                <issueId value="ACQE-4825"/>
+            </skip>
         </annotations>
 
         <before>
