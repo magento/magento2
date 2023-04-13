@@ -131,7 +131,8 @@ class Cache
         $this->graphQlResolverCache->save(
             $this->serializer->serialize($resolvedValue),
             $cacheIdentityString,
-            $identityProvider->getIdentities($resolvedValue)
+            $identityProvider->getIdentities($resolvedValue),
+            false, // use default lifetime directive
         );
 
         return $resolvedValue;

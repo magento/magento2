@@ -11,11 +11,13 @@ use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\Page as CmsPage;
 use Magento\Cms\Model\PageRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Cache\Frontend\Factory as CacheFrontendFactory;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlCache;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -56,6 +58,11 @@ class PageTest extends GraphQlAbstract
     private $cacheState;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @var bool
      */
     private $originalCacheStateEnabledStatus;
@@ -68,6 +75,7 @@ class PageTest extends GraphQlAbstract
         $this->pageRepository = $objectManager->get(PageRepository::class);
         $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->storeManager = $objectManager->get(StoreManagerInterface::class);
 
         $this->cacheState = $objectManager->get(CacheState::class);
         $this->originalCacheStateEnabledStatus = $this->cacheState->isEnabled(GraphQlCache::TYPE_IDENTIFIER);
@@ -392,6 +400,72 @@ class PageTest extends GraphQlAbstract
 
         $this->assertFalse(
             $this->graphqlCache->load($cacheIdentityString)
+        );
+    }
+
+    /**
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
+     * @return void
+     */
+    public function testCmsResolverCacheIsInvalidatedAfterChangingItsStoreView()
+    {
+        /** @var \Magento\Cms\Model\Page $page */
+        $page = $this->getPageByTitle('Page with 1column layout');
+
+        // query first page in default store and assert cache entry is created; use default store header
+        $query = $this->getQuery($page->getIdentifier());
+
+        $response = $this->graphQlQueryWithResponseHeaders(
+            $query
+        );
+
+        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndPage(
+            $response,
+            $page
+        );
+
+        $this->assertIsNumeric(
+            $this->graphqlCache->test($cacheIdentityString)
+        );
+
+        // change store id of page
+        $secondStoreViewId = $this->storeManager->getStore('fixture_second_store')->getId();
+        $page->setStoreId($secondStoreViewId);
+        $this->pageRepository->save($page);
+
+        // assert cache entry is invalidated
+        $this->assertFalse(
+            $this->graphqlCache->test($cacheIdentityString)
+        );
+    }
+
+    /**
+     * Test that resolver cache is saved with default TTL
+     *
+     * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
+     * @return void
+     */
+    public function testCacheExpirationTimeUsesDefaultDirective()
+    {
+        $page = $this->getPageByTitle('Page with 1column layout');
+        $query = $this->getQuery($page->getIdentifier());
+        $response = $this->graphQlQueryWithResponseHeaders(
+            $query
+        );
+
+        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndPage(
+            $response,
+            $page
+        );
+
+        $lowLevelFrontendCache = $this->graphqlCache->getLowLevelFrontend();
+        $metadatas = $lowLevelFrontendCache->getMetadatas($cacheIdentityString);
+
+        $this->assertEquals(
+            $metadatas['mtime'] + CacheFrontendFactory::DEFAULT_LIFETIME,
+            $metadatas['expire']
         );
     }
 
