@@ -23,11 +23,13 @@ class ResolverCacheIdCalculatorFactory
     public function create(array $customFactorProviders = []): ResolverCacheIdCalculator
     {
         if (empty($customFactorProviders)) {
+            // phpstan:ignore "File has calls static method. (phpStaticMethodCalls)"
             return ObjectManager::getInstance()->get(ResolverCacheIdCalculator::class);
         }
         /**
          * Returns cache id calculator with custom set of factor providers;
          */
+        // phpstan:ignore "File has calls static method. (phpStaticMethodCalls)"
         return ObjectManager::getInstance()->create(
             ResolverCacheIdCalculator::class,
             ['idFactorProviders' => $customFactorProviders]

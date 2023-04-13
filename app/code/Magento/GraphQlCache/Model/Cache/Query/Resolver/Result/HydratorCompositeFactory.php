@@ -24,8 +24,10 @@ class HydratorCompositeFactory {
     {
         $hydratorInstances = [];
         foreach ($hydratorsOrdered as $hydratorClass) {
+            // phpstan:ignore "File has calls static method. (phpStaticMethodCalls)"
             $hydratorInstances[] = ObjectManager::getInstance()->get($hydratorClass);
         }
+        // phpstan:ignore "File has calls static method. (phpStaticMethodCalls)"
         return ObjectManager::getInstance()->create(HydratorComposite::class, ['hydrators' => $hydratorInstances]);
     }
 }
