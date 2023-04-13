@@ -132,6 +132,43 @@ class BlockTest extends GraphQlAbstract
 
     /**
      * @magentoDataFixture Magento/Cms/_files/block.php
+     */
+    public function testCmsBlockResolverCacheInvalidatesWhenBlockGetsDeleted()
+    {
+        $block = $this->blockRepository->getById('fixture_block');
+
+        $query = $this->getQuery([
+            $block->getIdentifier(),
+        ]);
+
+        $response = $this->graphQlQueryWithResponseHeaders($query);
+
+        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$block]);
+
+        $cacheEntry = $this->graphqlCache->load($cacheIdentityString);
+        $cacheEntryDecoded = json_decode($cacheEntry, true);
+
+        $this->assertEqualsCanonicalizing(
+            $this->generateExpectedDataFromBlocks([$block]),
+            $cacheEntryDecoded
+        );
+
+        $this->assertTagsByCacheIdentityAndBlocks(
+            $cacheIdentityString,
+            [$block]
+        );
+
+        // assert that cache is invalidated after block deletion
+        $this->blockRepository->delete($block);
+
+        $this->assertFalse(
+            $this->graphqlCache->test($cacheIdentityString),
+            'Cache entry should be invalidated after block deletion'
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Cms/_files/block.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
      */
     public function testCmsBlockResolverCacheIsInvalidatedAfterChangingItsStoreView()
