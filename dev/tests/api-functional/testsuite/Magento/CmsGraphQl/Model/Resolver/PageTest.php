@@ -85,11 +85,13 @@ class PageTest extends GraphQlAbstract
     protected function tearDown(): void
     {
         // clean graphql resolver cache and reset to original enablement status
-        $this->objectManager->get(GraphQlCache::class)->clean();
+        $this->graphqlCache->clean();
         $this->cacheState->setEnabled(
             GraphQlCache::TYPE_IDENTIFIER,
             $this->originalCacheStateEnabledStatus
         );
+
+        parent::tearDown();
     }
 
     /**
