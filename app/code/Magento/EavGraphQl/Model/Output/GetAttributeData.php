@@ -88,7 +88,7 @@ class GetAttributeData implements GetAttributeDataInterface
      */
     private function getFrontendInput(AttributeInterface $attribute): string
     {
-        if ($attribute->getFrontendInput() == null) {
+        if ($attribute->getFrontendInput() === null) {
             return "UNDEFINED";
         }
         return $this->enumLookup->getEnumValueFromField(
