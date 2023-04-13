@@ -82,7 +82,7 @@ class GetAttributeData implements GetAttributeDataInterface
 
     /**
      * Returns default frontend input for attribute if not set
-     * 
+     *
      * @param AttributeInterface $attribute
      * @return string
      */
