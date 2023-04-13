@@ -9,7 +9,7 @@ namespace Magento\GraphQlCache\Model\CacheId;
 use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
- * Interface for factors that should go into calculating the X-Magento-Cache-Id value used as a cache key
+ * Initializable id factor provider interface for resolver cache.
  */
 interface InitializableCacheIdFactorProviderInterface extends CacheIdFactorProviderInterface, InitializableInterface
 {
