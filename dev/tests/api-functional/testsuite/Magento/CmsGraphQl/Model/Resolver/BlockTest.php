@@ -14,6 +14,7 @@ use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlCache;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Widget\Model\Template\FilterEmulate;
 
@@ -46,6 +47,13 @@ class BlockTest extends GraphQlAbstract
         $this->graphqlCache = $objectManager->get(GraphQlCache::class);
         $this->widgetFilter = $objectManager->get(FilterEmulate::class);
         $this->storeManager = $objectManager->get(StoreManagerInterface::class);
+    }
+
+    protected function tearDown(): void
+    {
+        $this->graphqlCache->clean();
+
+        parent::tearDown();
     }
 
     /**
@@ -243,6 +251,35 @@ class BlockTest extends GraphQlAbstract
         $this->assertFalse(
             $this->graphqlCache->test($cacheIdentityString),
             'Cache entry should be invalidated after changing block\'s store view'
+        );
+    }
+
+    /**
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @return void
+     */
+    public function testCmsBlockResolverCacheDoesNotSaveNonExistentCmsBlock()
+    {
+        $nonExistentBlock = ObjectManager::getInstance()->create(BlockInterface::class);
+        $nonExistentBlock->setIdentifier('non-existent-block');
+
+        $query = $this->getQuery([$nonExistentBlock->getIdentifier()]);
+
+        try {
+            $response = $this->graphQlQueryWithResponseHeaders($query);
+            $this->fail('Expected exception was not thrown');
+        } catch (ResponseContainsErrorsException $e) {
+            // expected exception
+        }
+
+        print_r($e->getResponseData());
+
+        $response['headers'] = $e->getResponseHeaders();
+
+        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$nonExistentBlock]);
+
+        $this->assertFalse(
+            $this->graphqlCache->load($cacheIdentityString)
         );
     }
 
