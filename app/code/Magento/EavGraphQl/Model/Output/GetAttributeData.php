@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\EavGraphQl\Model\Output;
@@ -69,16 +71,30 @@ class GetAttributeData implements GetAttributeDataInterface
                 'AttributeEntityTypeEnum',
                 $entityType
             ),
-            'frontend_input' => $this->enumLookup->getEnumValueFromField(
-                'AttributeFrontendInputEnum',
-                $attribute->getFrontendInput() ?? ""
-            ),
+            'frontend_input' => $this->getFrontendInput($attribute),
             'is_required' => $attribute->getIsRequired(),
             'default_value' => $attribute->getDefaultValue(),
             'is_unique' => $attribute->getIsUnique(),
             'options' => $this->getOptions($attribute),
             'attribute' => $attribute
         ];
+    }
+
+    /**
+     * Returns default frontend input for attribute if not set
+     * 
+     * @param AttributeInterface $attribute
+     * @return string
+     */
+    private function getFrontendInput(AttributeInterface $attribute): string
+    {
+        if ($attribute->getFrontendInput() == null) {
+            return "UNDEFINED";
+        }
+        return $this->enumLookup->getEnumValueFromField(
+            'AttributeFrontendInputEnum',
+            $attribute->getFrontendInput() ?? "undefined"
+        );
     }
 
     /**

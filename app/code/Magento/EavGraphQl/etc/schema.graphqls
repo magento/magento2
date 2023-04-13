@@ -110,6 +110,7 @@ enum AttributeFrontendInputEnum @doc(description: "EAV attribute frontend input 
     TEXT
     TEXTAREA
     WEIGHT
+    UNDEFINED
 }
 
 type AttributesFormOutput @doc(description: "Metadata of EAV attributes associated to form") {
