@@ -122,4 +122,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\Strategy">
+        <arguments>
+            <argument name="customFactorProviders" xsi:type="array">
+                <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="array">
+                    <item name="customer_id" xsi:type="object">Magento\CustomerGraphQl\CacheIdFactorProviders\CurrentCustomerCacheIdProvider</item>
+                    <item name="isloggedin" xsi:type="object">Magento\CustomerGraphQl\CacheIdFactorProviders\IsLoggedInProvider</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

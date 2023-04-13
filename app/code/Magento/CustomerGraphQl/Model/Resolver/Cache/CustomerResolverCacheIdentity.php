@@ -17,7 +17,7 @@ class CustomerResolverCacheIdentity implements IdentityInterface
     /**
      * @var string
      */
-    private $cacheTag = 'CUSTOMER';
+    private $cacheTag = \Magento\Customer\Model\Customer::ENTITY;
 
     /**
      * Get page ID from resolved data
