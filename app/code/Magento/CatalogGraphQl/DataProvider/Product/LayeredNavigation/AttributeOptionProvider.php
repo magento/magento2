@@ -63,6 +63,7 @@ class AttributeOptionProvider
                     'attribute_id' => 'a.attribute_id',
                     'attribute_code' => 'a.attribute_code',
                     'attribute_label' => 'a.frontend_label',
+                    'attribute_type' => 'a.frontend_input',
                     'position' => 'attribute_configuration.position'
                 ]
             )
@@ -137,6 +138,7 @@ class AttributeOptionProvider
                     'attribute_code' => $option['attribute_code'],
                     'attribute_label' => $option['attribute_store_label']
                         ? $option['attribute_store_label'] : $option['attribute_label'],
+                    'attribute_type' => $option['attribute_type'],
                     'position' => $option['position'],
                     'options' => [],
                 ];
