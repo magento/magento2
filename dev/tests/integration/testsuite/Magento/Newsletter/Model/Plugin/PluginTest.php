@@ -257,7 +257,6 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $extensionAttributes->setIsSubscribed(true);
         $customerDataObject->setExtensionAttributes($extensionAttributes);
         $this->accountManagement->createAccount($customerDataObject, '123123qW');
-
         $message = $this->transportBuilderMock->getSentMessage();
 
         $this->assertEquals('Welcome to Main Website Store', $message->getSubject());
@@ -275,30 +274,25 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $subscriber->loadByEmail('customer@example.com');
         $this->assertTrue($subscriber->isSubscribed());
 
-        /** @var \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder */
-        $transportBuilder = $objectManager->get(\Magento\Framework\Mail\Template\TransportBuilder::class);
-        $transport = $transportBuilder->setTemplateIdentifier('newsletter_subscription_confirm_email_template')
-            ->setTemplateOptions(
-                [
-                    'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                    'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
-                ]
-            )
-            ->setTemplateVars(
-                [
-                    'subscriber_data' => [
-                        'confirmation_link' => $subscriber->getConfirmationLink(),
-                    ],
-                ]
-            )
-            ->addTo('customer@example.com')
-            ->getTransport();
-        $sendMessage = $transport->getMessage();
+        $transport = $this->transportBuilderMock->setTemplateIdentifier(
+            'newsletter_subscription_confirm_email_template'
+        )->setTemplateVars([
+            'subscriber_data' => [
+                'confirmation_link' => $subscriber->getConfirmationLink(),
+            ],
+        ])->setTemplateOptions([
+            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+            'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
+        ])
+        ->addTo('customer@example.com')
+        ->getTransport();
+
+        $message = $transport->getMessage();
 
         $this->assertStringContainsString(
             $subscriber->getConfirmationLink(),
-            $sendMessage->getBody()->getParts()[0]->getRawContent()
+            $message->getBody()->getParts()[0]->getRawContent()
         );
-        $this->assertEquals('Newsletter subscription confirmation', $sendMessage->getSubject());
+        $this->assertEquals('Newsletter subscription confirmation', $message->getSubject());
     }
 }
