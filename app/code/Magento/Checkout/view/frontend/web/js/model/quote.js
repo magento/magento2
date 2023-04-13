@@ -158,7 +158,7 @@ define([
             const selectedShippingMethod = checkoutData.getSelectedShippingRate();
             return selectedShippingMethod ? selectedShippingMethod :
                 this.shippingMethod() ?
-                    this.shippingMethod()['carrier_code'] + '_' + quote.shippingMethod()['method_code'] :
+                    this.shippingMethod()['carrier_code'] + '_' + this.shippingMethod()['method_code'] :
                     null;
         }
     };
