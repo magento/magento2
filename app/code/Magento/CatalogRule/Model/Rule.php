@@ -405,9 +405,16 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         $product->setData($args['row']);
 
         $websites = $this->_getWebsitesMap();
+        $websiteIds = $this->getWebsiteIds();
+        if (!is_array($websiteIds)) {
+            $websiteIds = explode(',', $websiteIds);
+        }
         $results = [];
 
         foreach ($websites as $websiteId => $defaultStoreId) {
+            if (!in_array($websiteId, $websiteIds)) {
+                continue;
+            }
             $product->setStoreId($defaultStoreId);
             $results[$websiteId] = $this->getConditions()->validate($product);
         }

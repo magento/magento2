@@ -34,15 +34,14 @@
         </before>
         <after>
             <!-- Disable shipping method for customer with default address -->
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}"
-                        stepKey="disableFlatRate"/>
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="LogoutAsAdmin"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
         <!-- Create new order -->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="CreateNewOrder">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="CreateNewOrder">
             <argument name="customer" value="Simple_US_Customer"/>
         </actionGroup>
 
