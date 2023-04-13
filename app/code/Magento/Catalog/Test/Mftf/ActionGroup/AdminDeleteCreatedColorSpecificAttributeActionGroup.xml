@@ -21,7 +21,7 @@
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
         <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="clickOnAttributeRow"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <click selector="{{AdminColorGridBodySection.deleteSpecificColorAttribute(Color)}}" stepKey="deleteColor"/>
+        <click selector="{{AdminProductAttributeGridSection.deleteSpecificColorAttribute(Color)}}" stepKey="deleteColor"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveTheDeletedColor"/>
         <see userInput="You saved the product attribute." stepKey="seeSuccessMessage"/>

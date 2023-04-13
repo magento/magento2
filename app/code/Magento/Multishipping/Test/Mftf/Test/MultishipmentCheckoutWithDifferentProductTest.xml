@@ -346,9 +346,9 @@
         <seeElement selector="{{MultishippingSection.addressSection('2')}}" stepKey="secondAddressSection"/>
         <seeElement selector="{{MultishippingSection.addressSection('3')}}" stepKey="thirdAddressSection"/>
         <!--verify flat rate charge for all three section-->
-        <seeElement selector="{{MultishippingSection.firstFlatRateCharge}}" stepKey="verifyFirstFlatRateAmount"/>
-        <seeElement selector="{{MultishippingSection.secondFlatRateCharge}}" stepKey="verifySecondFlatRateAmount"/>
-        <seeElement selector="{{MultishippingSection.thirdFlatRateCharge}}" stepKey="verifyThirdFlatRateAmount"/>
+        <seeElement selector="{{MultishippingSection.FlatRateCharge('10.00')}}" stepKey="verifyFirstFlatRateAmount"/>
+        <seeElement selector="{{MultishippingSection.FlatRateCharge('15.00')}}" stepKey="verifySecondFlatRateAmount"/>
+        <seeElement selector="{{MultishippingSection.FlatRateCharge('30.00')}}" stepKey="verifyThirdFlatRateAmount"/>
         <!-- Click On Continue to Billing-->
         <click selector="{{StorefrontMultishippingCheckoutShippingToolbarSection.continueToBilling}}" stepKey="clickContinueToBilling"/>
         <waitForPageLoad stepKey="waitForCheckoutShippingToolbarPageLoad"/>

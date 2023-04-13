@@ -19,8 +19,6 @@
         <element name="removeItemButton" type="button" selector="//a[contains(@title, 'Remove Item')][{{var}}]" parameterized="true"/>
         <element name="back" type="button" selector=".action.back"/>
         <element name="addressSection" type="text" selector="//div[@class='block-title']/strong[text()='Address {{var}} ']" parameterized="true"/>
-        <element name="firstFlatRateCharge" type="text" selector="//span[@class='price' and text()='$10.00']/../../label[contains(text(),'Fixed')]"/>
-        <element name="secondFlatRateCharge" type="text" selector="//span[@class='price' and text()='$15.00']/../../label[contains(text(),'Fixed')]"/>
-        <element name="thirdFlatRateCharge" type="text" selector="//span[@class='price' and text()='$30.00']/../../label[contains(text(),'Fixed')]"/>
+        <element name="FlatRateCharge" type="text" selector="//span[@class='price' and text()='${{price}}']/../../label[contains(text(),'Fixed')]" parameterized="true"/>
     </section>
 </sections>
