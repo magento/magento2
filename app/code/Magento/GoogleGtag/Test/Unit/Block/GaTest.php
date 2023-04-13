@@ -139,7 +139,7 @@ class GaTest extends TestCase
 
         $escaper->expects($this->any())
             ->method('escapeHtmlAttr')
-            ->willReturnCallback(function($value) {
+            ->willReturnCallback(function ($value) {
                 return $value;
             });
 
@@ -195,7 +195,8 @@ class GaTest extends TestCase
         $this->searchCriteriaBuilder->method('create')->willReturn($searchCriteria);
         $this->storeMock->expects($this->once())->method('getFrontendName')->willReturn('test');
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
-        $this->productMock->expects($this->once())->method('getAttributeText')->with('manufacturer')->willReturn('Brand 1');
+        $this->productMock->expects($this->once())->method('getAttributeText')
+            ->with('manufacturer')->willReturn('Brand 1');
 
         $expectedResult = [
             'orders' => [
