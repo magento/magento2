@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 class HttpVerbValidatorTest extends TestCase
 {
     /**
-     * @var HttpVerbValidator|MockObject
+     * @var HttpVerbValidator
      */
     private $httpVerbValidator;
 

@@ -32,7 +32,7 @@ class QueryParser
     {
         $cacheKey = sha1($query);
         if (!isset($this->parsedQueries[$cacheKey])) {
-            $this->parsedQueries[$cacheKey] = Parser::parse(new Source($query ?: '', 'GraphQL'));
+            $this->parsedQueries[$cacheKey] = Parser::parse(new Source($query, 'GraphQL'));
         }
         return $this->parsedQueries[$cacheKey];
     }
