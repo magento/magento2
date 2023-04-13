@@ -79,9 +79,53 @@ class BlockTest extends GraphQlAbstract
         );
     }
 
+    /**
+     * @magentoDataFixture Magento/Cms/_files/block.php
+     * @magentoDataFixture Magento/Cms/_files/blocks.php
+     */
+    public function testCmsMultipleBlockResolverCacheAndInvalidationAsGuest()
+    {
+        $block1 = $this->blockRepository->getById('enabled_block');
+        $block2 = $this->blockRepository->getById('fixture_block');
+
+        $query = $this->getQuery([
+            $block1->getIdentifier(),
+            $block2->getIdentifier(),
+        ]);
+
+        $response = $this->graphQlQueryWithResponseHeaders($query);
+
+        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [
+            $block1,
+            $block2,
+        ]);
+
+        $cacheEntry = $this->graphqlCache->load($cacheIdentityString);
+        $cacheEntryDecoded = json_decode($cacheEntry, true);
+
+        $this->assertEqualsCanonicalizing(
+            $this->generateExpectedDataFromBlocks([$block1, $block2]),
+            $cacheEntryDecoded
+        );
+
+        $this->assertTagsByCacheIdentityAndBlocks(
+            $cacheIdentityString,
+            [$block1, $block2]
+        );
+
+        // assert that cache is invalidated after a single block content change
+        $block2->setContent('New Content');
+        $this->blockRepository->save($block2);
+
+        $this->assertFalse(
+            $this->graphqlCache->test($cacheIdentityString),
+            'Cache entry should be invalidated after block content change'
+        );
+    }
+
     private function getQuery(array $identifiers): string
     {
-        $identifiersStr = $this->getBlockIdentifiersListAsString($identifiers);
+        $identifiersStr = $this->getQuotedBlockIdentifiersListAsString($identifiers);
 
         return <<<QUERY
 {
@@ -100,9 +144,11 @@ QUERY;
      * @param string[] $identifiers
      * @return string
      */
-    private function getBlockIdentifiersListAsString(array $identifiers): string
+    private function getQuotedBlockIdentifiersListAsString(array $identifiers): string
     {
-        return implode(',', $identifiers);
+        return implode(',', array_map(function (string $identifier) {
+            return "\"$identifier\"";
+        }, $identifiers));
     }
 
     /**
@@ -173,7 +219,7 @@ QUERY;
         print_r($this->getBlockIdentifiersListAsString($blockIdentifiers));
 
         $cacheIdQueryPayloadMetadata = sprintf('CmsBlocks%s', json_encode([
-            'identifiers' => [$this->getBlockIdentifiersListAsString($blockIdentifiers)],
+            'identifiers' => $blockIdentifiers,
         ]));
 
         echo $cacheIdQueryPayloadMetadata, PHP_EOL;
