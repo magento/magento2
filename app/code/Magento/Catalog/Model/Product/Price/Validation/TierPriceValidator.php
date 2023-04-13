@@ -482,7 +482,7 @@ class TierPriceValidator
             $itemCode = $item->getCode();
             $itemId = $item->getId();
 
-            if ($itemCode !== $code) {
+            if (strtolower($itemCode) !== $code) {
                 $this->customerGroupsByCode[$code] = false;
                 return false;
             }
