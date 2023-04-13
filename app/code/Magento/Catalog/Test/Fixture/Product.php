@@ -120,11 +120,7 @@ class Product implements RevertibleDataFixtureInterface
     public function revert(DataObject $data): void
     {
         $service = $this->serviceFactory->create(ProductRepositoryInterface::class, 'deleteById');
-        $service->execute(
-            [
-                'sku' => $data->getSku()
-            ]
-        );
+        $service->execute(['sku' => $data->getSku()]);
     }
 
     /**
