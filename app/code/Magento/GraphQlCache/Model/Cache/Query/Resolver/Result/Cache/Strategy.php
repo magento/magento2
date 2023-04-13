@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache;
 
 use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\GraphQlCache\Model\CacheId\InitializableCacheIdFactorProviderInterface;
 use Magento\GraphQlCache\Model\Resolver\Cache\ResolverCacheIdCalculator;
@@ -23,11 +22,6 @@ class Strategy implements StrategyInterface
      * @var array
      */
     private array $customFactorProviders = [];
-
-    /**
-     * @var array
-     */
-    private array $factorProviderInstances = [];
 
     /**
      * @var array

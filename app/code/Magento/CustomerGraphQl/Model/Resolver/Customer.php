@@ -32,22 +32,15 @@ class Customer implements ResolverInterface
     private $extractCustomerData;
 
     /**
-     * @var StrategyInterface
-     */
-    private StrategyInterface $cachingStrategy;
-
-    /**
      * @param GetCustomer $getCustomer
      * @param ExtractCustomerData $extractCustomerData
      */
     public function __construct(
         GetCustomer $getCustomer,
-        ExtractCustomerData $extractCustomerData,
-        StrategyInterface $cachingStrategy
+        ExtractCustomerData $extractCustomerData
     ) {
         $this->getCustomer = $getCustomer;
         $this->extractCustomerData = $extractCustomerData;
-        $this->cachingStrategy = $cachingStrategy;
     }
 
     /**

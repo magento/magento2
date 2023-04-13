@@ -138,6 +138,7 @@ class Cache
      * @param ResolveInfo $info
      * @param array|null $args
      * @param array|null $value
+     * @param ContextInterface $context
      * @return string
      */
     private function prepareCacheIdentityString(
@@ -146,8 +147,7 @@ class Cache
         ?array $args,
         ?array $value,
         $context
-    ): string
-    {
+    ): string {
         $this->cacheIdProviderStrategy->initForResolver($resolver);
         $this->cacheIdProviderStrategy->actualize($resolver, $value, $context);
         $cacheIdentityString = $this->cacheIdProviderStrategy

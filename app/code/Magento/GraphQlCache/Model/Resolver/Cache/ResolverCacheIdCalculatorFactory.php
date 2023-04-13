@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GraphQlCache\Model\Resolver\Cache;
 
 use Magento\Framework\App\ObjectManager;
@@ -15,7 +17,7 @@ class ResolverCacheIdCalculatorFactory
     /**
      * Create cache ID calculator instance with given cache id providers.
      *
-     * @param array $resolverFactorIdProviders
+     * @param array $customFactorProviders
      * @return ResolverCacheIdCalculator
      */
     public function create(array $customFactorProviders = []): ResolverCacheIdCalculator

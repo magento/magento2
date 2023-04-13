@@ -18,7 +18,7 @@ class CurrentCustomerCacheIdProvider implements InitializableCacheIdFactorProvid
     /**
      * Factor name.
      */
-    const NAME = "CUSTOMER_ID";
+    private const NAME = "CUSTOMER_ID";
 
     /**
      * @var string
