@@ -114,7 +114,10 @@ QUERY;
         $productRepository->save($firstProduct);
 
         // cache-debug header value should be MISS after  updating product1 and reloading the Category
-        $responseMissCategoryAfterUpdate = $this->graphQlQueryWithResponseHeaders($categoryQuery, $categoryQueryVariables);
+        $responseMissCategoryAfterUpdate = $this->graphQlQueryWithResponseHeaders(
+            $categoryQuery,
+            $categoryQueryVariables
+        );
         $cacheId = $responseMissCategoryAfterUpdate['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($categoryQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);

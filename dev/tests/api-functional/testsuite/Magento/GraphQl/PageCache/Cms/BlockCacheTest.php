@@ -36,7 +36,10 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
         // Verify we obtain a cache HIT the second time we search the cache using this X-Magento-Cache-Id
-        $responseAfterUpdate = $this->assertCacheHitAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $responseAfterUpdate = $this->assertCacheHitAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
+        );
 
         //cached data should be correct
         $this->assertNotEmpty($responseAfterUpdate['body']);

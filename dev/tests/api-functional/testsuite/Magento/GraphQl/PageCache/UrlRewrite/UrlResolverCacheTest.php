@@ -63,7 +63,10 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-        $cachedResponse = $this->assertCacheHitAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $cachedResponse = $this->assertCacheHitAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
+        );
 
         //verify cached data is correct
         $this->assertNotEmpty($cachedResponse['body']);
@@ -91,7 +94,10 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-        $cachedResponse = $this->assertCacheHitAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $cachedResponse = $this->assertCacheHitAndReturnResponse(
+            $query,
+            [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
+        );
 
         //verify cached data is correct
         $this->assertNotEmpty($cachedResponse['body']);
