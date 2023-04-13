@@ -10,7 +10,6 @@ namespace Magento\User\Controller\Adminhtml;
 use Magento\Framework\App\Area;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\EmailMessage;
-use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Fixture\Config as Config;
 use Magento\TestFramework\Fixture\DataFixture;
