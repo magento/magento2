@@ -8,7 +8,8 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminFillAndSaveCustomerAddressWithoutRegionActionGroup" extends="AdminFillAndSaveCustomerAddressInformationActionGroup">        <annotations>
+    <actionGroup name="AdminFillAndSaveCustomerAddressWithoutRegionActionGroup" extends="AdminFillAndSaveCustomerAddressInformationActionGroup">
+        <annotations>
         <description>Fill and save customer address information omitting the region.</description>
         </annotations>
         <arguments>
