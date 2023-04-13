@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GoogleGtag\Test\Unit\Block;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Cookie\Helper\Cookie;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -53,6 +55,11 @@ class GaTest extends TestCase
     private $storeMock;
 
     /**
+     * @var MockObject
+     */
+    private $productMock;
+
+    /**
      * @var GtagConfiguration|mixed|MockObject
      */
     private $googleGtagConfig;
@@ -61,10 +68,17 @@ class GaTest extends TestCase
      * @var SearchCriteriaBuilder|mixed|MockObject
      */
     private $searchCriteriaBuilder;
+
     /**
      * @var OrderRepositoryInterface|mixed|MockObject
      */
     private $orderRepository;
+
+    /**
+     * @var OrderRepositoryInterface|mixed|MockObject
+     */
+    private $productRepository;
+
     /**
      * @var SerializerInterface|mixed|MockObject
      */
@@ -77,13 +91,10 @@ class GaTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $contextMock->expects($this->once())
-            ->method('getEscaper')
-            ->willReturn($objectManager->getObject(Escaper::class));
-
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+
         $this->serializerMock = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -102,6 +113,18 @@ class GaTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
+            ->onlyMethods(['get'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->productMock = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getAttributeText'])
+            ->getMock();
+
+        $this->productRepository->expects($this->once())->method('get')->willReturn($this->productMock);
+
         $this->googleGtagConfig = $this->getMockBuilder(GtagConfiguration::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -109,6 +132,16 @@ class GaTest extends TestCase
         $this->cookieHelperMock = $this->getMockBuilder(Cookie::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $escaper = $this->getMockBuilder(Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $escaper->expects($this->any())
+            ->method('escapeHtmlAttr')
+            ->willReturnCallback(function($value) {
+                return $value;
+            });
 
         $this->gaBlock = $objectManager->getObject(
             Ga::class,
@@ -118,7 +151,9 @@ class GaTest extends TestCase
                 'cookieHelper' => $this->cookieHelperMock,
                 'serializer' => $this->serializerMock,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
-                'orderRepository' => $this->orderRepository
+                'orderRepository' => $this->orderRepository,
+                'productRepository' => $this->productRepository,
+                '_escaper' => $escaper
             ]
         );
     }
@@ -160,6 +195,8 @@ class GaTest extends TestCase
         $this->searchCriteriaBuilder->method('create')->willReturn($searchCriteria);
         $this->storeMock->expects($this->once())->method('getFrontendName')->willReturn('test');
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
+        $this->productMock->expects($this->once())->method('getAttributeText')->with('manufacturer')->willReturn('Brand 1');
+
         $expectedResult = [
             'orders' => [
                 [
@@ -167,7 +204,8 @@ class GaTest extends TestCase
                     'currency' => 'USD',
                     'value' => 10.00,
                     'tax' => 2.00,
-                    'shipping' => 1.00
+                    'shipping' => 1.00,
+                    'coupon' => 'coupon1'
                 ]
             ],
             'products' => [
@@ -175,9 +213,12 @@ class GaTest extends TestCase
                     'index' => 1,
                     'item_id' => 'sku0',
                     'item_name' => 'testName0',
+                    'item_brand' => 'Brand 1',
                     'affiliation' => 'test',
                     'price' => 0.00,
-                    'quantity' => 1
+                    'quantity' => 1,
+                    'discount' => 0.01,
+                    'coupon' => 'coupon1',
                 ]
             ],
         ];
@@ -210,10 +251,11 @@ class GaTest extends TestCase
             $orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
-            $orderItemMock->expects($this->once())->method('getSku')->willReturn('sku' . $i);
+            $orderItemMock->expects($this->exactly(2))->method('getSku')->willReturn('sku' . $i);
             $orderItemMock->expects($this->once())->method('getName')->willReturn('testName' . $i);
             $orderItemMock->expects($this->once())->method('getPrice')->willReturn($i . '.00');
             $orderItemMock->expects($this->once())->method('getQtyOrdered')->willReturn($i + 1);
+            $orderItemMock->expects($this->exactly(2))->method('getDiscountAmount')->willReturn(0.01);
             $orderItems[] = $orderItemMock;
         }
 
@@ -226,6 +268,7 @@ class GaTest extends TestCase
         $orderMock->expects($this->once())->method('getTaxAmount')->willReturn(2);
         $orderMock->expects($this->once())->method('getShippingAmount')->willReturn($orderItemCount);
         $orderMock->expects($this->once())->method('getOrderCurrencyCode')->willReturn('USD');
+        $orderMock->expects($this->exactly(4))->method('getCouponCode')->willReturn('coupon1');
         return $orderMock;
     }
 

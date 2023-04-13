@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GoogleGtag\Block;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Cookie\Helper\Cookie;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -48,12 +49,18 @@ class Ga extends Template
     private SearchCriteriaBuilder $searchCriteriaBuilder;
 
     /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    private ProductRepositoryInterface $productRepository;
+
+    /**
      * @param Context $context
      * @param GtagConfiguration $googleGtagConfig
      * @param Cookie $cookieHelper
      * @param SerializerInterface $serializer
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OrderRepositoryInterface $orderRepository
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param array $data
      */
     public function __construct(
@@ -63,6 +70,7 @@ class Ga extends Template
         SerializerInterface $serializer,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         OrderRepositoryInterface $orderRepository,
+        ProductRepositoryInterface $productRepository,
         array $data = []
     ) {
         $this->googleGtagConfig = $googleGtagConfig;
@@ -70,6 +78,8 @@ class Ga extends Template
         $this->serializer = $serializer;
         $this->orderRepository = $orderRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->productRepository = $productRepository;
+
         parent::__construct($context, $data);
     }
 
@@ -148,37 +158,38 @@ class Ga extends Template
 
         foreach ($collection->getItems() as $order) {
             foreach ($order->getAllVisibleItems() as $index => $item) {
-                $product = [
-                    'index' => $index,
+                $product = $this->productRepository->get($item->getSku());
+                $orderProduct = [
+                    'index' => $index+1,
                     'item_id' => $this->_escaper->escapeHtmlAttr($item->getSku()),
                     'item_name' =>  $this->_escaper->escapeHtmlAttr($item->getName()),
+                    'item_brand' => $this->_escaper->escapeHtmlAttr(
+                        $product->getAttributeText('manufacturer')
+                    ),
                     'affiliation' => $this->_escaper->escapeHtmlAttr(
                         $this->_storeManager->getStore()->getFrontendName()
                     ),
-                    'item_brand' => $this->_escaper->escapeHtmlAttr(
-                        $item->getProduct()->getAttributeText('manufacturer')
-                    ),
-                    'price' => number_format((float) $item->getPrice(), 2),
+                    'price' => round((float) $item->getPrice(), 2),
                     'quantity' => (int)$item->getQtyOrdered()
                 ];
 
                 if ($item->getDiscountAmount() > 0) {
-                    $product['discount'] = $this->_escaper->escapeHtmlAttr($item->getDiscountAmount());
+                    $orderProduct['discount'] = $this->_escaper->escapeHtmlAttr($item->getDiscountAmount());
 
                     if (!empty($order->getCouponCode())) {
-                        $product['coupon'] = $this->_escaper->escapeHtmlAttr($order->getCouponCode());
+                        $orderProduct['coupon'] = $this->_escaper->escapeHtmlAttr($order->getCouponCode());
                     }
                 }
 
-                $result['products'][] = $product;
+                $result['products'][] = $orderProduct;
             }
 
             $resultOrder = [
                 'transaction_id' =>  $order->getIncrementId(),
                 'currency' =>  $order->getOrderCurrencyCode(),
-                'value' => number_format($order->getGrandTotal(), 2),
-                'tax' => number_format((float) $order->getTaxAmount(), 2),
-                'shipping' => number_format((float) $order->getShippingAmount(), 2),
+                'value' => round($order->getGrandTotal(), 2),
+                'tax' => round((float) $order->getTaxAmount(), 2),
+                'shipping' => round((float) $order->getShippingAmount(), 2),
             ];
 
             if (!empty($order->getCouponCode())) {
