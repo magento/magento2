@@ -11,6 +11,7 @@ use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\Page as CmsPage;
 use Magento\Cms\Model\PageRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Cache\Frontend\Factory as CacheFrontendFactory;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlCache;
@@ -392,6 +393,34 @@ class PageTest extends GraphQlAbstract
 
         $this->assertFalse(
             $this->graphqlCache->load($cacheIdentityString)
+        );
+    }
+
+    /**
+     * Test that resolver cache is saved with default TTL
+     *
+     * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
+     * @return void
+     */
+    public function testCacheExpirationTimeUsesDefaultDirective()
+    {
+        $page = $this->getPageByTitle('Page with 1column layout');
+        $query = $this->getQuery($page->getIdentifier());
+        $response = $this->graphQlQueryWithResponseHeaders(
+            $query
+        );
+
+        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndPage(
+            $response,
+            $page
+        );
+
+        $lowLevelFrontendCache = $this->graphqlCache->getLowLevelFrontend();
+        $metadatas = $lowLevelFrontendCache->getMetadatas($cacheIdentityString);
+
+        $this->assertEquals(
+            $metadatas['mtime'] + CacheFrontendFactory::DEFAULT_LIFETIME,
+            $metadatas['expire']
         );
     }
 
