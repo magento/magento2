@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver\Cache;
 
-use Magento\Company\Model\CustomerFactory;
+use Magento\Customer\Model\CustomerFactory;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\HydratorInterface;
 
 /**
