@@ -38,7 +38,10 @@ class SodiumChachaPatchTest extends \PHPUnit\Framework\TestCase
         $testPath = 'test/config';
         $testValue = 'test';
 
-        $structureMock = $this->createMock(\Magento\Config\Model\Config\Structure\Proxy::class);
+        $structureMock = $this->createMock(
+            // phpstan:ignore "Class Magento\Config\Model\Config\Structure\Proxy not found."
+            \Magento\Config\Model\Config\Structure\Proxy::class
+        );
         $structureMock->expects($this->once())
             ->method('getFieldPathsByAttribute')
             ->willReturn([$testPath]);
