@@ -1680,7 +1680,7 @@ QUERY;
                 'options' => [
                     [
                         'label' => 'Colorful Category',
-                        'value' => '330',
+                        'value' => 'MzMw',
                         'count' => 2,
                     ],
                 ],
@@ -1746,6 +1746,7 @@ QUERY;
      */
     public function testFilterProductsBySingleCategoryId(string $fieldName, string $queryCategoryId)
     {
+        CacheCleaner::clean(['config']);
         if (is_numeric($queryCategoryId)) {
             $queryCategoryId = (int) $queryCategoryId;
         }

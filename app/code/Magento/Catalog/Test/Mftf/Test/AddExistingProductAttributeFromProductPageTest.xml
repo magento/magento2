@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AddExistingProductAttributeFromProductPageTest">
+        <annotations>
+            <stories value="Add Existing Product Attribute From Product Page"/>
+            <title value="Add Existing Product Attribute From Product Page"/>
+            <description value="Add Existing Product Attribute From Product Page to new products"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-26780"/>
+            <group value="Catalog"/>
+        </annotations>
+
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+
+            <!--Create Category-->
+            <createData entity="NewRootCategory" stepKey="createAnchorCategory"/>
+
+            <!--Create SubCategory-->
+            <createData entity="SubCategoryWithParent" stepKey="subCategory">
+                <requiredEntity createDataKey="createAnchorCategory"/>
+            </createData>
+
+            <!--Create Simple Product-->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="subCategory"/>
+            </createData>
+
+            <!-- Select the anchorCategory for Main Webstore Store-->
+            <actionGroup ref="UpdateRootCategoryForStoresActionGroup" stepKey="UpdateRootCategoryForStores">
+                <argument name="rootCategoryName" value="$$createAnchorCategory.name$$"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!-- Delete created attribute -->
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToAttributeEditPage">
+                <argument name="ProductAttribute" value="Test Attribute"/>
+            </actionGroup>
+            <click selector="{{AttributePropertiesSection.DeleteAttribute}}"  stepKey="clickDeleteAttribute" />
+            <click selector="{{AttributeDeleteModalSection.confirm}}" stepKey="clickOkToConfirmDelete" />
+            <waitForPageLoad stepKey="waitForDeletion"/>
+
+            <!-- Select the Default Category for Main Webstore -->
+            <actionGroup ref="UpdateRootCategoryForStoresActionGroup" stepKey="UpdateRootCategoryForStores">
+                <argument name="rootCategoryName" value="Default Category"/>
+            </actionGroup>
+
+            <!-- Delete created category and product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="subCategory" stepKey="deleteSubCategory"/>
+            <deleteData createDataKey="createAnchorCategory" stepKey="deleteAnchorCategory"/>
+
+            <!-- logout of the application -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Create Custom Attribute -->
+        <actionGroup ref="CreateCustomAttributeActionGroup" stepKey="createCustomAttribute"/>
+
+        <!-- Navigate to the created Products and select the filtered product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+
+        <!-- Select the product to which attribute ahs to be added -->
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}" stepKey="selectTheFilteredProduct" />
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
+
+        <!-- Add the created attribute to the selected product -->
+        <actionGroup ref="AdminAddCustomAttributeToSelectedProductActionGroup" stepKey="addCreatedAttributeToTheProduct"/>
+
+        <!-- Navigate to Storefront -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage2">
+            <argument name="category" value="$$subCategory$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForStoreFrontPageToBeLoaded"/>
+
+        <!-- Verify the attributes added to the product in storefront -->
+        <actionGroup ref="VerifyTheProductAttributeOnStoreFrontActionGroup" stepKey="verifyTheAttributesAddedToTheProductInStorefront"/>
+    </test>
+</tests>

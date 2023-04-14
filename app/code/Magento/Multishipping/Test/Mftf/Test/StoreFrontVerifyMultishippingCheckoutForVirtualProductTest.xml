@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontVerifyMultishippingCheckoutForVirtualProductTest">
+        <annotations>
+            <stories value="Verify Multishipping checkout flow if cart contains virtual product type"/>
+            <title value="Verify Multishipping checkout flow if cart contains virtual product type"/>
+            <description value="Verify Multishipping checkout flow if cart contains virtual product type"/>
+            <testCaseId value="MC-26600"/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <!-- Create default category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!-- Create virtual product -->
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create simple product -->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Assign virtual product to default category -->
+            <createData entity="AssignProductToCategory" stepKey="assignCategoryToVirtualProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <requiredEntity createDataKey="createVirtualProduct"/>
+            </createData>
+            <!-- Assign Simple product to default category -->
+            <createData entity="AssignProductToCategory" stepKey="assignCategoryToSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <!-- delete category,product,customer -->
+            <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteSimpleCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+        <!-- Go to Storefront as Customer from preconditions -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Customer added Virtual Product to Cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addVirtualProductToCart">
+            <argument name="product" value="$$createVirtualProduct$$"/>
+        </actionGroup>
+        <!-- Customer added Simple Product to Cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!-- Go to Shopping Cart page -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickOnViewEditCart"/>
+        <!-- Check shopping cart contains both the Product-->
+        <seeElement selector="{{StorefrontMinicartSection.productCartName($$createVirtualProduct.name$$)}}" stepKey="AssertVirtualProduct"/>
+        <seeElement selector="{{StorefrontMinicartSection.productCartName($$createSimpleProduct.name$$)}}" stepKey="AssertSimpleProduct"/>
+        <!-- Link "Check Out with Multiple Addresses" is shown -->
+        <seeLink userInput="Check Out with Multiple Addresses" stepKey="seeLinkIsOpened"/>
+        <!-- Click Check Out with Multiple Addresses -->
+        <actionGroup ref="StorefrontCheckoutWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
+        <!-- Check Ship to Multiple Address Page is opened-->
+        <waitForPageLoad stepKey="waitForAddressPage"/>
+        <seeInCurrentUrl url="{{MultishippingCheckoutAddressesPage.url}}" stepKey="seeShiptoMultipleAddressesPageIsOpened"/>
+        <!-- Assert Simple product has address in Send To section-->
+        <actionGroup ref="AssertStorefrontMultishippingAddressAndItemActionGroup" stepKey="verifyLine1Qty">
+            <argument name="productName" value="$createSimpleProduct.name$"/>
+        </actionGroup>
+        <!--Virtual product has a message in Send To section : "A shipping selection is not applicable.-->
+        <grabTextFrom selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.shippingnotapplicable($$createVirtualProduct.name$$)}}" stepKey="grabshippingtext"/>
+        <assertEquals message="Virtual product has a message in Send To section : 'A shipping selection is not applicable" stepKey="assertmessage">
+            <expectedResult type="string">A shipping selection is not applicable.</expectedResult>
+            <actualResult type="string">$grabshippingtext</actualResult>
+        </assertEquals>
+        <!-- Click Go to Shipping Information* -->
+        <click selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.goToShippingInformation}}" stepKey="clickGoToShippingInformation"/>
+        <!-- See Shipping Method is opened -->
+        <wait time="10" stepKey="waitForCheckoutShippingPageUrl"/>
+        <seeInCurrentUrl url="{{MultishippingCheckoutShippingPage.url}}" stepKey="seeSelectShippingMethodPageIsOpened"/>
+        <!-- wait for selector -->
+        <waitForElement selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.shippingmethods($$createSimpleProduct.name$$)}}" stepKey="waitForShippingMethodsVisible"/>
+        <!-- See Shipping Method available ONLY for Simple product-->
+        <seeElement selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.shippingmethods($$createSimpleProduct.name$$)}}" stepKey="ShippingMethodForSimpleProduct"/>
+        <!-- See For Virtual product : "Shipping is not applicable.-->
+        <seeElement selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.otheritems($$createVirtualProduct.name$$)}}" stepKey="ShippingMethodForVirtalProduct"/>
+        <!-- Click On Continue to Billing-->
+        <click selector="{{StorefrontMultishippingCheckoutShippingToolbarSection.continueToBilling}}" stepKey="clickContinueToBilling"/>
+        <waitForPageLoad stepKey="waitForCheckoutShippingToolbarPageLoad"/>
+        <!-- See Billing Information Page is opened-->
+        <seeInCurrentUrl url="{{MultishippingCheckoutBillingPage.url}}" stepKey="seeBillingPageIsOpened"/>
+        <!-- Check Page contains customer's billing address-->
+        <actionGroup ref="StorefrontAssertBillingAddressInBillingInfoStepActionGroup" stepKey="assertCustomerBillingInformation"/>
+        <!-- Page contains Payment Method -->
+        <seeElement selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.checkmoneyorder}}" stepKey="CheckMoney"/>
+        <!-- Select Payment method  "Check / Money Order -->
+        <conditionalClick selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.checkmoneyorder}}" dependentSelector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.checkmoneyorder}}" visible="true" stepKey="selectCheckmoPaymentMethod"/>
+        <!--  Select Payment method e.g. "Check / Money Order" and click Go to Review Your Order -->
+        <waitForElement selector="{{StorefrontMultishippingCheckoutBillingToolbarSection.goToReviewOrder}}" stepKey="waitForElementgoToReviewOrder"/>
+        <click selector="{{StorefrontMultishippingCheckoutBillingToolbarSection.goToReviewOrder}}" stepKey="clickGoToReviewOrder"/>
+        <!-- Check Page contains customer's billing address on OverViewPage-->
+        <actionGroup ref="StorefrontAssertBillingAddressInBillingInfoStepActionGroup" stepKey="assertCustomerBillingInformationonOverViewPage"/>
+        <!-- Check Payment Method on OverViewPage-->
+        <seeElement selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.checkmoneyorderonOverViewPage}}" stepKey="CheckMoneyonOverViewPage"/>
+        <!-- "Shipping To" - address that customer selected for shipping -->
+        <actionGroup ref="StoreFrontAssertCustomerShippingAddressOrderViewPageActionGroup" stepKey="assertCustomerShippinginformation"/>
+        <!--other shipping methods contain Virtual Product-->
+        <seeElement selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.othershippingitems($$createVirtualProduct.name$$)}}" stepKey="otherItemsContainsVirtualProduct" />
+        <!--Click on Place Order"-->
+        <click selector="{{StorefrontMultishippingCheckoutOverviewReviewSection.placeOrder}}" stepKey="tryToPlaceOrder1"/>
+        <!--Check Thank you for your purchase!" page is opened -->
+        <see selector="{{StorefrontMultipleShippingMethodSection.successMessage}}" userInput="Successfully ordered" stepKey="seeSuccessMessage"/>
+        <!--Grab Order ID of Simple and Virtual Product -->
+        <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('1')}}" stepKey="grabFirstOrderId"/>
+        <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('2')}}" stepKey="grabSecondOrderId"/>
+        <!--Open Simple Product Link -->
+        <click selector="{{StorefrontMultipleShippingMethodSection.orderByPosition('1')}}" stepKey="openOrderDetailsPage"/>
+        <!--Assert Shipping Information for Simple Product -->
+        <seeElement selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.shippingaddresstext}}" stepKey="assertSimpleProductShippingOrderDetails"/>
+        <!-- Move back one page in history. -->
+        <moveBack stepKey="moveBack"/>
+        <!--Open Virtual Product Link -->
+        <click selector="{{StorefrontMultipleShippingMethodSection.orderByPosition('2')}}" stepKey="assertVirtualProductShippingOrderDetails"/>
+        <!--Open Virtual Product Link -->
+        <dontSeeElement selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.shippingaddresstext}}" stepKey="assertVirtualsseehipping"/>
+    </test>
+</tests>
