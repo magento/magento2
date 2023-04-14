@@ -13,8 +13,7 @@ use Magento\Cms\Model\PageRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Cache\Frontend\Factory as CacheFrontendFactory;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlCache;
+use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -28,14 +27,9 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class PageTest extends GraphQlAbstract
 {
     /**
-     * @var ObjectManagerInterface
+     * @var GraphQlResolverCache
      */
-    private $objectManager;
-
-    /**
-     * @var GraphQlCache
-     */
-    private $graphqlCache;
+    private $graphQlResolverCache;
 
     /**
      * @var PageRepository
@@ -69,25 +63,25 @@ class PageTest extends GraphQlAbstract
 
     protected function setUp(): void
     {
-        $this->objectManager = $objectManager = ObjectManager::getInstance();
+        $objectManager = ObjectManager::getInstance();
 
-        $this->graphqlCache = $objectManager->get(GraphQlCache::class);
+        $this->graphQlResolverCache = $objectManager->get(GraphQlResolverCache::class);
         $this->pageRepository = $objectManager->get(PageRepository::class);
         $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
         $this->storeManager = $objectManager->get(StoreManagerInterface::class);
 
         $this->cacheState = $objectManager->get(CacheState::class);
-        $this->originalCacheStateEnabledStatus = $this->cacheState->isEnabled(GraphQlCache::TYPE_IDENTIFIER);
-        $this->cacheState->setEnabled(GraphQlCache::TYPE_IDENTIFIER, true);
+        $this->originalCacheStateEnabledStatus = $this->cacheState->isEnabled(GraphQlResolverCache::TYPE_IDENTIFIER);
+        $this->cacheState->setEnabled(GraphQlResolverCache::TYPE_IDENTIFIER, true);
     }
 
     protected function tearDown(): void
     {
         // clean graphql resolver cache and reset to original enablement status
-        $this->graphqlCache->clean();
+        $this->graphQlResolverCache->clean();
         $this->cacheState->setEnabled(
-            GraphQlCache::TYPE_IDENTIFIER,
+            GraphQlResolverCache::TYPE_IDENTIFIER,
             $this->originalCacheStateEnabledStatus
         );
 
@@ -108,7 +102,7 @@ class PageTest extends GraphQlAbstract
 
         $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndPage($response, $page);
 
-        $cacheEntry = $this->graphqlCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
@@ -123,7 +117,7 @@ class PageTest extends GraphQlAbstract
         $this->pageRepository->save($page);
 
         $this->assertFalse(
-            $this->graphqlCache->test($cacheIdentityString),
+            $this->graphQlResolverCache->test($cacheIdentityString),
             'Cache entry still exists for CMS page'
         );
     }
@@ -154,7 +148,7 @@ class PageTest extends GraphQlAbstract
 
         $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndPage($response, $page);
 
-        $cacheEntry = $this->graphqlCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
@@ -169,7 +163,7 @@ class PageTest extends GraphQlAbstract
         $this->pageRepository->save($page);
 
         $this->assertFalse(
-            $this->graphqlCache->test($cacheIdentityString),
+            $this->graphQlResolverCache->test($cacheIdentityString),
             'Cache entry still exists for CMS page'
         );
     }
@@ -192,7 +186,7 @@ class PageTest extends GraphQlAbstract
 
         $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndPage($response, $page);
 
-        $cacheEntry = $this->graphqlCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
@@ -227,7 +221,7 @@ class PageTest extends GraphQlAbstract
 
             $resolverCacheKeyForGuestQuery = $this->getResolverCacheKeyFromResponseAndPage($response, $page);
 
-            $cacheEntry = $this->graphqlCache->load($resolverCacheKeyForGuestQuery);
+            $cacheEntry = $this->graphQlResolverCache->load($resolverCacheKeyForGuestQuery);
             $cacheEntryDecoded = json_decode($cacheEntry, true);
 
             $this->assertEqualsCanonicalizing(
@@ -250,7 +244,7 @@ class PageTest extends GraphQlAbstract
 
             $resolverCacheKeyForUserQuery = $this->getResolverCacheKeyFromResponseAndPage($response, $page);
 
-            $cacheEntry = $this->graphqlCache->load($resolverCacheKeyForUserQuery);
+            $cacheEntry = $this->graphQlResolverCache->load($resolverCacheKeyForUserQuery);
             $cacheEntryDecoded = json_decode($cacheEntry, true);
 
             $this->assertEqualsCanonicalizing(
@@ -267,7 +261,7 @@ class PageTest extends GraphQlAbstract
         $this->assertCount(count($resolverCacheKeys), array_unique($resolverCacheKeys));
 
         foreach ($resolverCacheKeys as $cacheIdentityString) {
-            $this->assertNotFalse($this->graphqlCache->load($cacheIdentityString));
+            $this->assertNotFalse($this->graphQlResolverCache->load($cacheIdentityString));
         }
 
         // invalidate first page and assert first two cache identities (guest and user) are invalidated,
@@ -278,11 +272,11 @@ class PageTest extends GraphQlAbstract
 
         list($page1GuestKey, $page1UserKey, $page2GuestKey, $page2UserKey) = $resolverCacheKeys;
 
-        $this->assertFalse($this->graphqlCache->load($page1GuestKey));
-        $this->assertFalse($this->graphqlCache->load($page1UserKey));
+        $this->assertFalse($this->graphQlResolverCache->load($page1GuestKey));
+        $this->assertFalse($this->graphQlResolverCache->load($page1UserKey));
 
-        $this->assertNotFalse($this->graphqlCache->load($page2GuestKey));
-        $this->assertNotFalse($this->graphqlCache->load($page2UserKey));
+        $this->assertNotFalse($this->graphQlResolverCache->load($page2GuestKey));
+        $this->assertNotFalse($this->graphQlResolverCache->load($page2UserKey));
     }
 
     /**
@@ -302,7 +296,7 @@ class PageTest extends GraphQlAbstract
         $cacheIdentityStringPage1 = $this->getResolverCacheKeyFromResponseAndPage($response, $page1);
 
         $this->assertIsNumeric(
-            $this->graphqlCache->test($cacheIdentityStringPage1)
+            $this->graphQlResolverCache->test($cacheIdentityStringPage1)
         );
 
         // cache page2
@@ -314,20 +308,20 @@ class PageTest extends GraphQlAbstract
         $cacheIdentityStringPage2 = $this->getResolverCacheKeyFromResponseAndPage($response, $page2);
 
         $this->assertIsNumeric(
-            $this->graphqlCache->test($cacheIdentityStringPage2)
+            $this->graphQlResolverCache->test($cacheIdentityStringPage2)
         );
 
         // delete page1 and assert cache is invalidated
         $this->pageRepository->delete($page1);
 
         $this->assertFalse(
-            $this->graphqlCache->test($cacheIdentityStringPage1),
+            $this->graphQlResolverCache->test($cacheIdentityStringPage1),
             'Cache entry still exists for deleted CMS page'
         );
 
         // assert page2 cache entry still exists
         $this->assertIsNumeric(
-            $this->graphqlCache->test($cacheIdentityStringPage2)
+            $this->graphQlResolverCache->test($cacheIdentityStringPage2)
         );
     }
 
@@ -347,7 +341,7 @@ class PageTest extends GraphQlAbstract
         $cacheIdentityStringPage1 = $this->getResolverCacheKeyFromResponseAndPage($response, $page1);
 
         $this->assertIsNumeric(
-            $this->graphqlCache->test($cacheIdentityStringPage1)
+            $this->graphQlResolverCache->test($cacheIdentityStringPage1)
         );
 
         // cache page2
@@ -359,7 +353,7 @@ class PageTest extends GraphQlAbstract
         $cacheIdentityStringPage2 = $this->getResolverCacheKeyFromResponseAndPage($response, $page2);
 
         $this->assertIsNumeric(
-            $this->graphqlCache->test($cacheIdentityStringPage2)
+            $this->graphQlResolverCache->test($cacheIdentityStringPage2)
         );
 
         // disable page 1
@@ -367,13 +361,13 @@ class PageTest extends GraphQlAbstract
         $this->pageRepository->save($page1);
 
         $this->assertFalse(
-            $this->graphqlCache->test($cacheIdentityStringPage1),
+            $this->graphQlResolverCache->test($cacheIdentityStringPage1),
             'Cache entry still exists for disabled CMS page'
         );
 
         // assert page2 cache entry still exists
         $this->assertIsNumeric(
-            $this->graphqlCache->test($cacheIdentityStringPage2)
+            $this->graphQlResolverCache->test($cacheIdentityStringPage2)
         );
     }
 
@@ -401,7 +395,7 @@ class PageTest extends GraphQlAbstract
         $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndPage($response, $nonExistentPage);
 
         $this->assertFalse(
-            $this->graphqlCache->load($cacheIdentityString)
+            $this->graphQlResolverCache->load($cacheIdentityString)
         );
     }
 
@@ -429,7 +423,7 @@ class PageTest extends GraphQlAbstract
         );
 
         $this->assertIsNumeric(
-            $this->graphqlCache->test($cacheIdentityString)
+            $this->graphQlResolverCache->test($cacheIdentityString)
         );
 
         // change store id of page
@@ -439,7 +433,7 @@ class PageTest extends GraphQlAbstract
 
         // assert cache entry is invalidated
         $this->assertFalse(
-            $this->graphqlCache->test($cacheIdentityString)
+            $this->graphQlResolverCache->test($cacheIdentityString)
         );
     }
 
@@ -462,7 +456,7 @@ class PageTest extends GraphQlAbstract
             $page
         );
 
-        $lowLevelFrontendCache = $this->graphqlCache->getLowLevelFrontend();
+        $lowLevelFrontendCache = $this->graphQlResolverCache->getLowLevelFrontend();
         $metadatas = $lowLevelFrontendCache->getMetadatas($cacheIdentityString);
 
         $this->assertEquals(
@@ -489,7 +483,7 @@ class PageTest extends GraphQlAbstract
 
     private function assertTagsByCacheIdentityAndPage(string $cacheIdentityString, PageInterface $page): void
     {
-        $lowLevelFrontendCache = $this->graphqlCache->getLowLevelFrontend();
+        $lowLevelFrontendCache = $this->graphQlResolverCache->getLowLevelFrontend();
         $cacheIdPrefix = $lowLevelFrontendCache->getOption('cache_id_prefix');
         $metadatas = $lowLevelFrontendCache->getMetadatas($cacheIdentityString);
         $tags = $metadatas['tags'];
@@ -497,7 +491,7 @@ class PageTest extends GraphQlAbstract
         $this->assertEqualsCanonicalizing(
             [
                 $cacheIdPrefix . strtoupper(CmsPage::CACHE_TAG) . '_' . $page->getId(),
-                $cacheIdPrefix . strtoupper(GraphQlCache::CACHE_TAG),
+                $cacheIdPrefix . strtoupper(GraphQlResolverCache::CACHE_TAG),
                 $cacheIdPrefix . 'MAGE',
             ],
             $tags
@@ -538,7 +532,7 @@ QUERY;
         ]));
 
         $cacheIdParts = [
-            GraphQlCache::CACHE_TAG,
+            GraphQlResolverCache::CACHE_TAG,
             $cacheIdValue,
             sha1($cacheIdQueryPayloadMetadata)
         ];
