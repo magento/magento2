@@ -7,28 +7,31 @@ namespace Magento\Framework\View\Asset\MergeStrategy;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Math\Random;
 use Magento\Framework\View\Asset;
+use Magento\Framework\View\Asset\MergeStrategyInterface;
+use Magento\Framework\View\Url\CssResolver;
 
 /**
  * The actual merging service
  */
-class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
+class Direct implements MergeStrategyInterface
 {
-    /**#@+
+    /**
      * Delimiters for merging files of various content type
      */
-    const MERGE_DELIMITER_JS = ';';
+    private const MERGE_DELIMITER_JS = ';';
 
-    const MERGE_DELIMITER_EMPTY = '';
+    private const MERGE_DELIMITER_EMPTY = '';
 
-    /**#@-*/
-
-    /**#@-*/
+    /**
+     * @var Filesystem
+     */
     private $filesystem;
 
     /**
-     * @var \Magento\Framework\View\Url\CssResolver
+     * @var CssResolver
      */
     private $cssUrlResolver;
 
@@ -38,13 +41,13 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
     private $mathRandom;
 
     /**
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\View\Url\CssResolver $cssUrlResolver
+     * @param Filesystem $filesystem
+     * @param CssResolver $cssUrlResolver
      * @param Random|null $mathRandom
      */
     public function __construct(
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\View\Url\CssResolver $cssUrlResolver,
+        Filesystem $filesystem,
+        CssResolver $cssUrlResolver,
         Random $mathRandom = null
     ) {
         $this->filesystem = $filesystem;
@@ -61,9 +64,8 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
         $filePath = $resultAsset->getPath();
         $tmpFilePath = $filePath . $this->mathRandom->getUniqueHash('_');
         $staticDir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
-        $tmpDir = $this->filesystem->getDirectoryWrite(DirectoryList::TMP);
-        $tmpDir->writeFile($tmpFilePath, $mergedContent);
-        $tmpDir->renameFile($tmpFilePath, $filePath, $staticDir);
+        $staticDir->writeFile($tmpFilePath, $mergedContent);
+        $staticDir->renameFile($tmpFilePath, $filePath, $staticDir);
     }
 
     /**

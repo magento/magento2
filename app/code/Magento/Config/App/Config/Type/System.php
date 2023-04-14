@@ -6,22 +6,22 @@
 
 namespace Magento\Config\App\Config\Type;
 
+use Magento\Config\App\Config\Type\System\Reader;
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Config\App\Config\Type\System\Reader;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Cache\LockGuardedCacheLoader;
+use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
-use Magento\Framework\Encryption\Encryptor;
 use Magento\Store\Model\ScopeInterface as StoreScope;
-use Magento\Framework\App\Cache\StateInterface;
-use Magento\Framework\App\Cache\Type\Config;
 
 /**
  * System configuration type
@@ -292,11 +292,13 @@ class System implements ConfigTypeInterface
         }
 
         $loadAction = function () use ($scopeType, $scopeId) {
+            /* Note: configType . '_scopes' needs to be loaded first to avoid race condition where cache finishes
+               saving after configType . '_' . $scopeType . '_' . $scopeId but before configType . '_scopes'. */
+            $cachedScopeData = $this->cache->load($this->configType . '_scopes');
             $cachedData = $this->cache->load($this->configType . '_' . $scopeType . '_' . $scopeId);
             $scopeData = false;
             if ($cachedData === false) {
                 if ($this->availableDataScopes === null) {
-                    $cachedScopeData = $this->cache->load($this->configType . '_scopes');
                     if ($cachedScopeData !== false) {
                         $serializedCachedData = $this->encryptor->decrypt($cachedScopeData);
                         $this->availableDataScopes = $this->serializer->unserialize($serializedCachedData);
@@ -437,18 +439,102 @@ class System implements ConfigTypeInterface
      */
     public function clean()
     {
-        $this->data = [];
         $cleanAction = function () {
-            $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
+            $this->cacheData($this->readData()); // Note: If cache is enabled, pre-load the new config data.
         };
-
+        $this->data = [];
         if (!$this->cacheState->isEnabled(Config::TYPE_IDENTIFIER)) {
-            return $cleanAction();
+            // Note: If cache is disabled, we still clean cache in case it will be enabled later
+            $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
+            return;
         }
+        $this->lockQuery->lockedCleanData(self::$lockName, $cleanAction);
+    }
 
-        $this->lockQuery->lockedCleanData(
-            self::$lockName,
-            $cleanAction
-        );
+    /**
+     * Prepares data for cache by serializing and encrypting them
+     *
+     * Prepares data per scope to avoid reading data for all scopes on every request
+     *
+     * @param array $data
+     * @return array
+     */
+    private function prepareDataForCache(array $data) :array
+    {
+        $dataToSave = [];
+        $dataToSave[] = [
+            $this->encryptor->encryptWithFastestAvailableAlgorithm($this->serializer->serialize($data)),
+            $this->configType,
+            [System::CACHE_TAG]
+        ];
+        $dataToSave[] = [
+            $this->encryptor->encryptWithFastestAvailableAlgorithm($this->serializer->serialize($data['default'])),
+            $this->configType . '_default',
+            [System::CACHE_TAG]
+        ];
+        $scopes = [];
+        foreach ([StoreScope::SCOPE_WEBSITES, StoreScope::SCOPE_STORES] as $curScopeType) {
+            foreach ($data[$curScopeType] ?? [] as $curScopeId => $curScopeData) {
+                $scopes[$curScopeType][$curScopeId] = 1;
+                $dataToSave[] = [
+                    $this->encryptor->encryptWithFastestAvailableAlgorithm($this->serializer->serialize($curScopeData)),
+                    $this->configType . '_' . $curScopeType . '_' . $curScopeId,
+                    [System::CACHE_TAG]
+                ];
+            }
+        }
+        $dataToSave[] = [
+            $this->encryptor->encryptWithFastestAvailableAlgorithm($this->serializer->serialize($scopes)),
+            $this->configType . '_scopes',
+            [System::CACHE_TAG]
+        ];
+        return $dataToSave;
+    }
+
+    /**
+     * Cache prepared configuration data.
+     *
+     * Takes data prepared by prepareDataForCache
+     *
+     * @param array $dataToSave
+     * @return void
+     */
+    private function cachePreparedData(array $dataToSave) : void
+    {
+        foreach ($dataToSave as $datumToSave) {
+            $this->cache->save($datumToSave[0], $datumToSave[1], $datumToSave[2]);
+        }
+    }
+
+    /**
+     * Gets configuration then cleans and warms it while locked
+     *
+     * This is to reduce the lock time after flushing config cache.
+     *
+     * @param callable $cleaner
+     * @return void
+     */
+    public function cleanAndWarmDefaultScopeData(callable $cleaner)
+    {
+        if (!$this->cacheState->isEnabled(Config::TYPE_IDENTIFIER)) {
+            $cleaner();
+            return;
+        }
+        $loadAction = function () {
+            return false;
+        };
+        $dataCollector = function () use ($cleaner) {
+            /* Note: call to readData() needs to be inside lock to avoid race conditions such as multiple
+               saves at the same time. */
+            $newData = $this->readData();
+            $preparedData = $this->prepareDataForCache($newData);
+            unset($newData);
+            $cleaner(); // Note: This is where other readers start waiting for us to finish saving cache.
+            return $preparedData;
+        };
+        $dataSaver = function (array $preparedData) {
+            $this->cachePreparedData($preparedData);
+        };
+        $this->lockQuery->lockedLoadData(self::$lockName, $loadAction, $dataCollector, $dataSaver);
     }
 }
