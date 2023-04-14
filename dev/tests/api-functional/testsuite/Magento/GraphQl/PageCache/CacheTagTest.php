@@ -75,7 +75,7 @@ QUERY;
     {
         $firstProductSku = 'simple333';
         $secondProductSku = 'simple444';
-        $categoryId ='4';
+        $categoryId = 4;
 
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
