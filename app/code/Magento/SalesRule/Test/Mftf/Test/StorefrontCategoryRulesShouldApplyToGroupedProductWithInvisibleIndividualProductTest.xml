@@ -108,9 +108,10 @@
         </actionGroup>
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="openTheCartWithFirstAndSecondGroupedProducts"/>
         <waitForPageLoad stepKey="waitForGrandTotalToLoad"/>
-        <waitForElement time="30" selector="{{CheckoutCartSummarySection.estimateShippingAndTaxForm}}" stepKey="waitForEstimateShippingAndTaxForm"/>
-        <waitForElement time="30" selector="{{CheckoutCartSummarySection.shippingMethodForm}}" stepKey="waitForShippingMethodForm"/>
+        <waitForElementVisible time="30" selector="{{CheckoutCartSummarySection.estimateShippingAndTaxForm}}" stepKey="waitForEstimateShippingAndTaxForm"/>
+        <waitForElementVisible time="30" selector="{{CheckoutCartSummarySection.shippingMethodForm}}" stepKey="waitForShippingMethodForm"/>
         <waitForElementVisible time="30" selector="{{CheckoutCartSummarySection.total}}" stepKey="waitForTotalElement"/>
+        <actionGroup ref="StorefrontCartEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxSection" />
         <!-- Discount amount is applied for product from first category only -->
         <actionGroup ref="StorefrontCheckCartTotalWithDiscountCategoryActionGroup" stepKey="checkDiscountIsApplied">
             <argument name="subtotal" value="$1,000.00"/>
