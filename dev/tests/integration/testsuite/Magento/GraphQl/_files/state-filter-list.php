@@ -42,7 +42,6 @@ return [
         Magento\Framework\App\View\Deployment\Version::class => [
             'cachedValue' => null // deployment version of static files
         ],
-        Magento\Framework\View\Design\Fallback\RulePool::class => ['rules' => null],
         Magento\Framework\View\Asset\Minification::class => ['configCache' => null], // TODO: depends on mode
         Magento\Eav\Model\Config::class => [ // TODO: is this risky?
             'attributeProto' => null,
@@ -62,7 +61,6 @@ return [
             'config' => null, // $_connectionNames changes
         ],
         Magento\Framework\Cache\InvalidateLogger::class => ['request' => null],
-        Magento\Framework\View\Design\Fallback\RulePool::class => ['filesystem' => null],
         Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple::class => ['rulePool' => null],
         Magento\Framework\View\Template\Html\Minifier::class => ['filesystem' => null],
         Magento\Store\Model\Config\Processor\Fallback::class => ['scopes' => null],
@@ -99,11 +97,9 @@ return [
         Magento\Framework\Event\Invoker\InvokerDefault::class => ['_appState' => null], //                          .
         Magento\Developer\Model\Logger\Handler\Debug::class => ['state' => null], //                                .
         Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile::class => //                             .
-            ['appState' => null], // ... using Magento\Framework\App\Http instead of ApplicationServer for the requests
-        Magento\Framework\App\ResourceConnection::class =>  ['connections' => null],
+            ['appState' => null], // ... using Magento\Framework\App\Http for the requests
         Magento\Store\App\Config\Source\RuntimeConfigSource::class =>  ['connection' => null],
         Magento\Framework\Mview\View\Changelog::class =>  ['connection' => null],
         Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::class =>  ['_conn' => null],
-        Magento\Framework\App\ResourceConnection::class => ['config' => null],
     ],
 ];

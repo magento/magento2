@@ -172,12 +172,12 @@ class Comparator
      */
     private function formatValue($type): array
     {
-        $type = \is_array($type) ? $type : [$type];
+        $type = is_array($type) ? $type : [$type];
         $data = [];
         foreach ($type as $k => $v) {
-            if (\is_object($v)) {
-                $v = \get_class($v);
-            } elseif (\is_array($v)) {
+            if (is_object($v)) {
+                $v = get_class($v);
+            } elseif (is_array($v)) {
                 $v = $this->formatValue($v);
             }
             $data[$k] = $v;
@@ -220,8 +220,8 @@ class Comparator
                 break;
             case 'object':
                 if ($before != $after) {
-                    $result['before'] = \get_class($before);
-                    $result['after'] = \get_class($after);
+                    $result['before'] = get_class($before);
+                    $result['after'] = get_class($after);
                 }
                 break;
         }

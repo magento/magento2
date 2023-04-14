@@ -9,12 +9,15 @@ namespace Magento\GraphQl\App\State;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Collects shared objects from ObjectManager and clones properties for later comparison
+ */
 class Collector
 {
     /**
      * @var ObjectManagerInterface
      */
-    private $objectManager;
+    private ObjectManagerInterface $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
@@ -32,12 +35,12 @@ class Collector
      */
     private function cloneArray(array $array) : array
     {
-        return \array_map(
+        return array_map(
             function ($element) {
-                if (\is_object($element)) {
+                if (is_object($element)) {
                     return clone $element;
                 }
-                if (\is_array($element)) {
+                if (is_array($element)) {
                     return $this->cloneArray($element);
                 }
                 return $element;
@@ -57,7 +60,7 @@ class Collector
         $sharedObjects = [];
         $obj = new \ReflectionObject($this->objectManager);
         if (!$obj->hasProperty('_sharedInstances')) {
-            throw new \Exception('Cannot get shared objects from ' . \get_class($this->objectManager));
+            throw new \Exception('Cannot get shared objects from ' . get_class($this->objectManager));
         }
         do {
             $property = $obj->getProperty('_sharedInstances');
@@ -76,11 +79,11 @@ class Collector
                     $propName = $property->getName();
                     $property->setAccessible(true);
                     $value = $property->getValue($object);
-                    if (\is_object($value)) {
+                    if (is_object($value)) {
                         $didClone = true;
                         $properties[$propName] = clone $value;
                         continue;
-                    } elseif (\is_array($value)) {
+                    } elseif (is_array($value)) {
                         $didClone = true;
                         $properties[$propName] = $this->cloneArray($value);
                     } else {

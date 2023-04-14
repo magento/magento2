@@ -7,13 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\App;
 
-use Laminas\Stdlib\Parameters;
 use Magento\Framework\App\Http as HttpApp;
 use Magento\Framework\App\Request\HttpFactory as RequestFactory;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\App\State\Comparator;
-use Magento\MessageQueue\Api\PoisonPillCompareInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -32,13 +30,13 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
     private const CONTENT_TYPE = 'application/json';
 
     /** @var ObjectManagerInterface */
-    private $objectManager;
+    private ObjectManagerInterface $objectManager;
 
     /** @var Comparator */
-    private $comparator;
+    private Comparator $comparator;
 
     /** @var RequestFactory */
-    private $requestFactory;
+    private RequestFactory $requestFactory;
 
     /**
      * @return void
@@ -91,7 +89,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
         $result = $this->comparator->compare($operationName);
         $this->assertEmpty(
             $result,
-            \sprintf(
+            sprintf(
                 '%d objects changed state during request. Details: %s',
                 count($result),
                 var_export($result, true)
@@ -109,24 +107,8 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
     private function doRequest(string $query)
     {
         $request = $this->requestFactory->create();
-        $request->setEnv(new Parameters([]));
-        $request->setContent($query); // TODO add parameter
-        $request->setServer(new Parameters([
-            'query_string' => '',
-            'request_method' => 'POST',
-            'request_uri' => '/graphql',
-            'path_info' => '/graphql',
-            'request_time' => 1678398349,
-            'request_time_float' => 1678398349.6005,
-            'server_protocol' => 'HTTP/1.0',
-            'server_port' => 9501,
-            'remote_port' => 50166,
-            'remote_addr' => '172.22.0.9',
-            'master_time' => 1678398349,
-            'http_content_type' => self::CONTENT_TYPE,
-        ]));
+        $request->setContent($query);
         $request->setMethod('POST');
-        $request->setUri('/graphql');
         $request->setPathInfo('/graphql');
         $request->getHeaders()->addHeaders(['content_type' => self::CONTENT_TYPE]);
         $unusedResponse = $this->objectManager->create(HttpResponse::class);
