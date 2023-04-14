@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Abstract class for controllers Reorder(Customer) and Reorder(Guest)
@@ -41,6 +42,8 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
      */
     private $checkoutSession;
 
+    private $storeManager;
+
     /**
      * Constructor
      *
@@ -50,21 +53,25 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
      * @param ReorderHelper|null $reorderHelper
      * @param \Magento\Sales\Model\Reorder\Reorder|null $reorder
      * @param CheckoutSession|null $checkoutSession
+     * @param StoreManagerInterface|null $storeManager
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
+        StoreManagerInterface $storeManager,
         Action\Context $context,
         OrderLoaderInterface $orderLoader,
         Registry $registry,
         ReorderHelper $reorderHelper = null,
         \Magento\Sales\Model\Reorder\Reorder $reorder = null,
-        CheckoutSession $checkoutSession = null
+        CheckoutSession $checkoutSession = null,
     ) {
+        $this->storeManager = $storeManager;
         $this->orderLoader = $orderLoader;
         $this->_coreRegistry = $registry;
         parent::__construct($context);
         $this->reorder = $reorder ?: ObjectManager::getInstance()->get(\Magento\Sales\Model\Reorder\Reorder::class);
         $this->checkoutSession = $checkoutSession ?: ObjectManager::getInstance()->get(CheckoutSession::class);
+
     }
 
     /**
@@ -78,13 +85,16 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
         if ($result instanceof \Magento\Framework\Controller\ResultInterface) {
             return $result;
         }
+
+        $currentStoreId = $this->storeManager->getStore()->getId();
+
         $order = $this->_coreRegistry->registry('current_order');
 
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
         try {
-            $reorderOutput = $this->reorder->execute($order->getIncrementId(), $order->getStoreId());
+            $reorderOutput = $this->reorder->execute($order->getIncrementId(), $currentStoreId);
         } catch (LocalizedException $localizedException) {
             $this->messageManager->addErrorMessage($localizedException->getMessage());
             return $resultRedirect->setPath('checkout/cart');
