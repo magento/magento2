@@ -33,12 +33,12 @@ class Fulltext implements
     /**
      * Indexer ID in configuration
      */
-    const INDEXER_ID = 'catalogsearch_fulltext';
+    public const INDEXER_ID = 'catalogsearch_fulltext';
 
     /**
      * Default batch size
      */
-    private const BATCH_SIZE = 100;
+    private const BATCH_SIZE = 1000;
 
     /**
      * @var array index structure
@@ -113,6 +113,7 @@ class Fulltext implements
      * @param int|null $batchSize
      * @param DeploymentConfig|null $deploymentConfig
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         FullFactory $fullActionFactory,

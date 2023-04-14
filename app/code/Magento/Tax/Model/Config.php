@@ -23,109 +23,111 @@ class Config
     /**
      * Tax notifications
      */
-    const XML_PATH_TAX_NOTIFICATION_IGNORE_DISCOUNT = 'tax/notification/ignore_discount';
+    public const XML_PATH_TAX_NOTIFICATION_IGNORE_DISCOUNT = 'tax/notification/ignore_discount';
 
-    const XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_DISPLAY = 'tax/notification/ignore_price_display';
+    public const XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_DISPLAY = 'tax/notification/ignore_price_display';
 
-    const XML_PATH_TAX_NOTIFICATION_IGNORE_APPLY_DISCOUNT = 'tax/notification/ignore_apply_discount';
+    public const XML_PATH_TAX_NOTIFICATION_IGNORE_APPLY_DISCOUNT = 'tax/notification/ignore_apply_discount';
 
-    const XML_PATH_TAX_NOTIFICATION_INFO_URL = 'tax/notification/info_url';
+    public const XML_PATH_TAX_NOTIFICATION_INFO_URL = 'tax/notification/info_url';
 
     // tax classes
-    const CONFIG_XML_PATH_SHIPPING_TAX_CLASS = 'tax/classes/shipping_tax_class';
+    public const CONFIG_XML_PATH_SHIPPING_TAX_CLASS = 'tax/classes/shipping_tax_class';
 
     // tax calculation
-    const CONFIG_XML_PATH_PRICE_INCLUDES_TAX = 'tax/calculation/price_includes_tax';
+    public const CONFIG_XML_PATH_PRICE_INCLUDES_TAX = 'tax/calculation/price_includes_tax';
 
-    const CONFIG_XML_PATH_SHIPPING_INCLUDES_TAX = 'tax/calculation/shipping_includes_tax';
+    public const CONFIG_XML_PATH_SHIPPING_INCLUDES_TAX = 'tax/calculation/shipping_includes_tax';
 
-    const CONFIG_XML_PATH_BASED_ON = 'tax/calculation/based_on';
+    public const CONFIG_XML_PATH_BASED_ON = 'tax/calculation/based_on';
 
-    const CONFIG_XML_PATH_APPLY_ON = 'tax/calculation/apply_tax_on';
+    public const CONFIG_XML_PATH_APPLY_ON = 'tax/calculation/apply_tax_on';
 
-    const CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT = 'tax/calculation/apply_after_discount';
+    public const CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT = 'tax/calculation/apply_after_discount';
 
-    const CONFIG_XML_PATH_DISCOUNT_TAX = 'tax/calculation/discount_tax';
+    public const CONFIG_XML_PATH_DISCOUNT_TAX = 'tax/calculation/discount_tax';
 
-    const XML_PATH_ALGORITHM = 'tax/calculation/algorithm';
+    public const XML_PATH_ALGORITHM = 'tax/calculation/algorithm';
 
-    const CONFIG_XML_PATH_CROSS_BORDER_TRADE_ENABLED = 'tax/calculation/cross_border_trade_enabled';
+    public const CONFIG_XML_PATH_CROSS_BORDER_TRADE_ENABLED = 'tax/calculation/cross_border_trade_enabled';
 
     // tax defaults
-    const CONFIG_XML_PATH_DEFAULT_COUNTRY = 'tax/defaults/country';
+    public const CONFIG_XML_PATH_DEFAULT_COUNTRY = 'tax/defaults/country';
 
-    const CONFIG_XML_PATH_DEFAULT_REGION = 'tax/defaults/region';
+    public const CONFIG_XML_PATH_DEFAULT_REGION = 'tax/defaults/region';
 
-    const CONFIG_XML_PATH_DEFAULT_POSTCODE = 'tax/defaults/postcode';
+    public const CONFIG_XML_PATH_DEFAULT_POSTCODE = 'tax/defaults/postcode';
 
     /**
      * Prices display settings
      */
-    const CONFIG_XML_PATH_PRICE_DISPLAY_TYPE = 'tax/display/type';
+    public const CONFIG_XML_PATH_PRICE_DISPLAY_TYPE = 'tax/display/type';
 
-    const CONFIG_XML_PATH_DISPLAY_SHIPPING = 'tax/display/shipping';
+    public const CONFIG_XML_PATH_DISPLAY_SHIPPING = 'tax/display/shipping';
 
     /**
      * Shopping cart display settings
      */
-    const XML_PATH_DISPLAY_CART_PRICE = 'tax/cart_display/price';
+    public const XML_PATH_DISPLAY_CART_PRICE = 'tax/cart_display/price';
 
-    const XML_PATH_DISPLAY_CART_SUBTOTAL = 'tax/cart_display/subtotal';
+    public const XML_PATH_DISPLAY_CART_SUBTOTAL = 'tax/cart_display/subtotal';
 
-    const XML_PATH_DISPLAY_CART_SHIPPING = 'tax/cart_display/shipping';
+    public const XML_PATH_DISPLAY_CART_SHIPPING = 'tax/cart_display/shipping';
 
     /**
      * Tax cart display discount
      *
      * @deprecated
+     * @see MC-22931
      */
-    const XML_PATH_DISPLAY_CART_DISCOUNT = 'tax/cart_display/discount';
+    public const XML_PATH_DISPLAY_CART_DISCOUNT = 'tax/cart_display/discount';
 
-    const XML_PATH_DISPLAY_CART_GRANDTOTAL = 'tax/cart_display/grandtotal';
+    public const XML_PATH_DISPLAY_CART_GRANDTOTAL = 'tax/cart_display/grandtotal';
 
-    const XML_PATH_DISPLAY_CART_FULL_SUMMARY = 'tax/cart_display/full_summary';
+    public const XML_PATH_DISPLAY_CART_FULL_SUMMARY = 'tax/cart_display/full_summary';
 
-    const XML_PATH_DISPLAY_CART_ZERO_TAX = 'tax/cart_display/zero_tax';
+    public const XML_PATH_DISPLAY_CART_ZERO_TAX = 'tax/cart_display/zero_tax';
 
     /**
      * Shopping cart display settings
      */
-    const XML_PATH_DISPLAY_SALES_PRICE = 'tax/sales_display/price';
+    public const XML_PATH_DISPLAY_SALES_PRICE = 'tax/sales_display/price';
 
-    const XML_PATH_DISPLAY_SALES_SUBTOTAL = 'tax/sales_display/subtotal';
+    public const XML_PATH_DISPLAY_SALES_SUBTOTAL = 'tax/sales_display/subtotal';
 
-    const XML_PATH_DISPLAY_SALES_SHIPPING = 'tax/sales_display/shipping';
+    public const XML_PATH_DISPLAY_SALES_SHIPPING = 'tax/sales_display/shipping';
 
     /**
      * Tax sales display discount
      *
      * @deprecated
+     * @see MC-22931
      */
-    const XML_PATH_DISPLAY_SALES_DISCOUNT = 'tax/sales_display/discount';
+    public const XML_PATH_DISPLAY_SALES_DISCOUNT = 'tax/sales_display/discount';
 
-    const XML_PATH_DISPLAY_SALES_GRANDTOTAL = 'tax/sales_display/grandtotal';
+    public const XML_PATH_DISPLAY_SALES_GRANDTOTAL = 'tax/sales_display/grandtotal';
 
-    const XML_PATH_DISPLAY_SALES_FULL_SUMMARY = 'tax/sales_display/full_summary';
+    public const XML_PATH_DISPLAY_SALES_FULL_SUMMARY = 'tax/sales_display/full_summary';
 
-    const XML_PATH_DISPLAY_SALES_ZERO_TAX = 'tax/sales_display/zero_tax';
+    public const XML_PATH_DISPLAY_SALES_ZERO_TAX = 'tax/sales_display/zero_tax';
 
-    const CALCULATION_STRING_SEPARATOR = '|';
+    public const CALCULATION_STRING_SEPARATOR = '|';
 
-    const DISPLAY_TYPE_EXCLUDING_TAX = 1;
+    public const DISPLAY_TYPE_EXCLUDING_TAX = 1;
 
-    const DISPLAY_TYPE_INCLUDING_TAX = 2;
+    public const DISPLAY_TYPE_INCLUDING_TAX = 2;
 
-    const DISPLAY_TYPE_BOTH = 3;
+    public const DISPLAY_TYPE_BOTH = 3;
 
     /**
      * Price conversion constant for positive
      */
-    const PRICE_CONVERSION_PLUS = 1;
+    public const PRICE_CONVERSION_PLUS = 1;
 
     /**
      * Price conversion constant for negative
      */
-    const PRICE_CONVERSION_MINUS = 2;
+    public const PRICE_CONVERSION_MINUS = 2;
 
     /**
      * @var bool|null
@@ -506,6 +508,7 @@ class Config
      * @param null|string|bool|int|Store $store
      * @return bool
      * @deprecated 100.1.3
+     * @see MAGETWO-71174
      */
     public function displayCartDiscountInclTax($store = null)
     {
@@ -522,6 +525,7 @@ class Config
      * @param null|string|bool|int|Store $store
      * @return bool
      * @deprecated 100.1.3
+     * @see MAGETWO-71174s
      */
     public function displayCartDiscountExclTax($store = null)
     {
@@ -538,6 +542,7 @@ class Config
      * @param null|string|bool|int|Store $store
      * @return bool
      * @deprecated 100.1.3
+     * @see MAGETWO-71174
      */
     public function displayCartDiscountBoth($store = null)
     {
@@ -734,6 +739,7 @@ class Config
      * @param null|string|bool|int|Store $store
      * @return bool
      * @deprecated 100.1.3
+     * @see MAGETWO-71174
      */
     public function displaySalesDiscountInclTax($store = null)
     {
@@ -750,6 +756,7 @@ class Config
      * @param null|string|bool|int|Store $store
      * @return bool
      * @deprecated 100.1.3
+     * @see MAGETWO-71174
      */
     public function displaySalesDiscountExclTax($store = null)
     {
@@ -766,6 +773,7 @@ class Config
      * @param null|string|bool|int|Store $store
      * @return bool
      * @deprecated 100.1.3
+     * @see MAGETWO-71174
      */
     public function displaySalesDiscountBoth($store = null)
     {
@@ -912,7 +920,9 @@ class Config
     public function needPriceConversion($store = null)
     {
         $res = false;
-        $priceIncludesTax = $this->priceIncludesTax($store) || $this->getNeedUseShippingExcludeTax();
+        $priceIncludesTax = $this->priceIncludesTax($store)
+            || $this->getNeedUseShippingExcludeTax()
+            || $this->shippingPriceIncludesTax($store);
         if ($priceIncludesTax) {
             switch ($this->getPriceDisplayType($store)) {
                 case self::DISPLAY_TYPE_EXCLUDING_TAX:

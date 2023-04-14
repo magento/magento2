@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Api\Search;
 
+/**
+ * @api
+ */
 class DocumentFactory
 {
     /**

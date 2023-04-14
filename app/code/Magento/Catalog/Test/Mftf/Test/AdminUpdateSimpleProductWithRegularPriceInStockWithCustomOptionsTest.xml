@@ -32,6 +32,10 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{simpleProductRegularPriceCustomOptions.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="cliCacheFlushActionGroup">
+                <argument name="tags" value="" />
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -47,7 +51,9 @@
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductRegularPriceCustomOptions.name}}" stepKey="fillSimpleProductName"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{simpleProductRegularPriceCustomOptions.sku}}" stepKey="fillSimpleProductSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{simpleProductRegularPriceCustomOptions.price}}" stepKey="fillSimpleProductPrice"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{simpleProductRegularPriceCustomOptions.quantity}}" stepKey="fillSimpleProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillSimpleProductQuantity">
+            <argument name="productQty" value="{{simpleProductRegularPriceCustomOptions.quantity}}"/>
+        </actionGroup>
         <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{simpleProductRegularPriceCustomOptions.status}}" stepKey="selectStockStatusInStock"/>
         <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductRegularPriceCustomOptions.weight}}" stepKey="fillSimpleProductWeight"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
@@ -97,7 +103,7 @@
         <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{simpleProductRegularPriceCustomOptions.quantity}}" stepKey="seeSimpleProductQuantity"/>
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{simpleProductRegularPriceCustomOptions.status}}" stepKey="seeSimpleProductStockStatus"/>
         <seeInField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductRegularPriceCustomOptions.weight}}" stepKey="seeSimpleProductWeight"/>
-        
+
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickCategoriesDropDownToVerify"/>
         <actionGroup ref="AssertAdminProductIsAssignedToCategoryActionGroup" stepKey="selectedCategories">
             <argument name="categoryName" value="$$categoryEntity.name$$"/>

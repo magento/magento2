@@ -19,6 +19,10 @@ use Magento\Framework\Phrase;
  */
 class DeploymentConfig
 {
+    private const MAGENTO_ENV_PREFIX = 'MAGENTO_DC_';
+    private const ENV_NAME_PATTERN = '~^#env\(\s*(?<name>\w+)\s*(,\s*"(?<default>[^"]+)")?\)$~';
+    private const OVERRIDE_KEY = self::MAGENTO_ENV_PREFIX . '_OVERRIDE';
+
     /**
      * Configuration reader
      *
@@ -31,14 +35,14 @@ class DeploymentConfig
      *
      * @var array
      */
-    private $data;
+    private $data = [];
 
     /**
      * Flattened data
      *
      * @var array
      */
-    private $flatData;
+    private $flatData = [];
 
     /**
      * Injected configuration data
@@ -72,16 +76,18 @@ class DeploymentConfig
      */
     public function get($key = null, $defaultValue = null)
     {
-        $this->load();
         if ($key === null) {
+            if (empty($this->flatData)) {
+                $this->reloadData();
+            }
             return $this->flatData;
         }
-
-        if (array_key_exists($key, $this->flatData) && $this->flatData[$key] === null) {
-            return '';
+        $result = $this->getByKey($key);
+        if ($result === null) {
+            $this->reloadData();
+            $result = $this->getByKey($key);
         }
-
-        return $this->flatData[$key] ?? $defaultValue;
+        return $result ?? $defaultValue;
     }
 
     /**
@@ -93,27 +99,31 @@ class DeploymentConfig
      */
     public function isAvailable()
     {
-        $this->load();
-        return isset($this->flatData[ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE]);
+        return $this->get(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE) !== null;
     }
 
     /**
      * Gets a value specified key from config data
      *
-     * @param string $key
+     * @param string|null $key
      * @return null|mixed
      * @throws FileSystemException
      * @throws RuntimeException
      */
     public function getConfigData($key = null)
     {
-        $this->load();
-
-        if ($key !== null && !isset($this->data[$key])) {
-            return null;
+        if ($key === null) {
+            if (empty($this->data)) {
+                $this->reloadData();
+            }
+            return $this->data;
         }
-
-        return $this->data[$key] ?? $this->data;
+        $result = $this->getConfigDataByKey($key);
+        if ($result === null) {
+            $this->reloadData();
+            $result = $this->getConfigDataByKey($key);
+        }
+        return $result;
     }
 
     /**
@@ -123,7 +133,8 @@ class DeploymentConfig
      */
     public function resetData()
     {
-        $this->data = null;
+        $this->data = [];
+        $this->flatData = [];
     }
 
     /**
@@ -136,8 +147,20 @@ class DeploymentConfig
      */
     public function isDbAvailable()
     {
-        $this->load();
-        return isset($this->data['db']);
+        return $this->getConfigData('db') !== null;
+    }
+
+    /**
+     * Get additional configuration from env variable MAGENTO_DC__OVERRIDE
+     *
+     * Data should be JSON encoded
+     *
+     * @return array
+     */
+    private function getEnvOverride() : array
+    {
+        $env = getenv(self::OVERRIDE_KEY);
+        return !empty($env) ? (json_decode($env, true) ?? []) : [];
     }
 
     /**
@@ -147,15 +170,27 @@ class DeploymentConfig
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    private function load()
+    private function reloadData(): void
     {
-        if (empty($this->data)) {
-            $this->data = $this->reader->load();
-            if ($this->overrideData) {
-                $this->data = array_replace($this->data, $this->overrideData);
+        $this->data = array_replace(
+            $this->reader->load(),
+            $this->overrideData ?? [],
+            $this->getEnvOverride()
+        );
+        // flatten data for config retrieval using get()
+        $this->flatData = $this->flattenParams($this->data);
+
+        // allow reading values from env variables by convention
+        // MAGENTO_DC_{path}, like db/connection/default/host =>
+        // can be overwritten by MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST
+        foreach (getenv() as $key => $value) {
+            if (false !== \strpos($key, self::MAGENTO_ENV_PREFIX)
+                && $key !== self::OVERRIDE_KEY
+            ) {
+                // convert MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST into db/connection/default/host
+                $flatKey = strtolower(str_replace([self::MAGENTO_ENV_PREFIX, '__'], ['', '/'], $key));
+                $this->flatData[$flatKey] = $value;
             }
-            // flatten data for config retrieval using get()
-            $this->flatData = $this->flattenParams($this->data);
         }
     }
 
@@ -166,12 +201,12 @@ class DeploymentConfig
      * each level of array is accessible by path key
      *
      * @param array $params
-     * @param string $path
-     * @param array $flattenResult
+     * @param string|null $path
+     * @param array|null $flattenResult
      * @return array
      * @throws RuntimeException
      */
-    private function flattenParams(array $params, $path = null, array &$flattenResult = null) : array
+    private function flattenParams(array $params, ?string $path = null, array &$flattenResult = null): array
     {
         if (null === $flattenResult) {
             $flattenResult = [];
@@ -187,12 +222,48 @@ class DeploymentConfig
                 //phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new RuntimeException(new Phrase("Key collision '%1' is already defined.", [$newPath]));
             }
-            $flattenResult[$newPath] = $param;
+
             if (is_array($param)) {
+                $flattenResult[$newPath] = $param;
                 $this->flattenParams($param, $newPath, $flattenResult);
+            } else {
+                // allow reading values from env variables
+                // value need to be specified in %env(NAME, "default value")% format
+                // like #env(DB_PASSWORD), #env(DB_NAME, "test")
+                if ($param !== null && preg_match(self::ENV_NAME_PATTERN, $param, $matches)) {
+                    $param = getenv($matches['name']) ?: ($matches['default'] ?? null);
+                }
+
+                $flattenResult[$newPath] = $param;
             }
         }
 
         return $flattenResult;
+    }
+
+    /**
+     * Returns flat data by key
+     *
+     * @param string|null $key
+     * @return mixed|null
+     */
+    private function getByKey(?string $key)
+    {
+        if (array_key_exists($key, $this->flatData) && $this->flatData[$key] === null) {
+            return '';
+        }
+
+        return $this->flatData[$key] ?? null;
+    }
+
+    /**
+     * Returns data by key
+     *
+     * @param string|null $key
+     * @return mixed|null
+     */
+    private function getConfigDataByKey(?string $key)
+    {
+        return $this->data[$key] ?? null;
     }
 }

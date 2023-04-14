@@ -18,6 +18,7 @@
             <testCaseId value="MC-41040"/>
             <useCaseId value="MC-40417"/>
             <group value="wishlist"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>

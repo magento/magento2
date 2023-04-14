@@ -7,9 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model\Jpeg;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadata\Model\SegmentNames;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
@@ -37,6 +40,11 @@ class ReadFile implements ReadFileInterface
     private $driver;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @var SegmentInterfaceFactory
      */
     private $segmentFactory;
@@ -56,17 +64,20 @@ class ReadFile implements ReadFileInterface
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
      * @param SegmentNames $segmentNames
+     * @param Filesystem|null $filesystem
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         DriverInterface $driver,
         FileInterfaceFactory $fileFactory,
         SegmentInterfaceFactory $segmentFactory,
-        SegmentNames $segmentNames
+        SegmentNames $segmentNames,
+        Filesystem $filesystem = null
     ) {
-        $this->driver = $driver;
         $this->fileFactory = $fileFactory;
         $this->segmentFactory = $segmentFactory;
         $this->segmentNames = $segmentNames;
+        $this->filesystem = $filesystem ?? ObjectManager::getInstance()->get(Filesystem::class);
     }
 
     /**
@@ -78,13 +89,13 @@ class ReadFile implements ReadFileInterface
      */
     private function isApplicable(string $path): bool
     {
-        $resource = $this->driver->fileOpen($path, 'rb');
+        $resource = $this->getDriver()->fileOpen($path, 'rb');
         try {
             $marker = $this->readMarker($resource);
         } catch (LocalizedException $exception) {
             return false;
         }
-        $this->driver->fileClose($resource);
+        $this->getDriver()->fileClose($resource);
 
         return $marker == self::MARKER_IMAGE_FILE_START;
     }
@@ -98,18 +109,18 @@ class ReadFile implements ReadFileInterface
             throw new ValidatorException(__('Not a JPEG image'));
         }
 
-        $resource = $this->driver->fileOpen($path, 'rb');
+        $resource = $this->getDriver()->fileOpen($path, 'rb');
         $marker = $this->readMarker($resource);
 
         if ($marker != self::MARKER_IMAGE_FILE_START) {
-            $this->driver->fileClose($resource);
+            $this->getDriver()->fileClose($resource);
             throw new ValidatorException(__('Not a JPEG image'));
         }
 
         do {
             $marker = $this->readMarker($resource);
             $segments[] = $this->readSegment($resource, ord($marker));
-        } while (($marker != self::MARKER_IMAGE_START) && (!$this->driver->endOfFile($resource)));
+        } while (($marker != self::MARKER_IMAGE_START) && (!$this->getDriver()->endOfFile($resource)));
 
         if ($marker != self::MARKER_IMAGE_START) {
             throw new LocalizedException(__('File is corrupted'));
@@ -120,7 +131,7 @@ class ReadFile implements ReadFileInterface
             'data' => $this->readCompressedImage($resource)
         ]);
 
-        $this->driver->fileClose($resource);
+        $this->getDriver()->fileClose($resource);
 
         return $this->fileFactory->create([
             'path' => $path,
@@ -140,7 +151,7 @@ class ReadFile implements ReadFileInterface
         $data = $this->read($resource, self::TWO_BYTES);
 
         if ($data[0] != self::MARKER_PREFIX) {
-            $this->driver->fileClose($resource);
+            $this->getDriver()->fileClose($resource);
             throw new LocalizedException(__('File is corrupted'));
         }
 
@@ -159,7 +170,7 @@ class ReadFile implements ReadFileInterface
         $compressedImage = '';
         do {
             $compressedImage .= $this->read($resource, self::ONE_MEGABYTE);
-        } while (!$this->driver->endOfFile($resource));
+        } while (!$this->getDriver()->endOfFile($resource));
 
         $endOfImageMarkerPosition = strpos($compressedImage, self::MARKER_PREFIX . self::MARKER_IMAGE_END);
 
@@ -200,10 +211,25 @@ class ReadFile implements ReadFileInterface
     {
         $data = '';
 
-        while (!$this->driver->endOfFile($resource) && strlen($data) < $length) {
-            $data .= $this->driver->fileRead($resource, $length - strlen($data));
+        while (!$this->getDriver()->endOfFile($resource) && strlen($data) < $length) {
+            $data .= $this->getDriver()->fileRead($resource, $length - strlen($data));
         }
 
         return $data;
+    }
+
+    /**
+     * Returns current driver for media directory
+     *
+     * @return DriverInterface
+     * @throws FileSystemException
+     */
+    private function getDriver(): DriverInterface
+    {
+        if ($this->driver === null) {
+            $this->driver = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver();
+        }
+
+        return $this->driver;
     }
 }

@@ -122,7 +122,7 @@
                                   stepKey="waitForElementNotDiscountVisible"/>
 
         <!-- Step 11. Log out from storefront -->
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="storefrontSignOut"/>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="storefrontSignOut"/>
 
         <!-- Step: 12-13. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="openProductPage2"/>
@@ -145,7 +145,7 @@
         </actionGroup>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder1"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder1"/>
         <waitForElement selector="{{CheckoutSuccessMainSection.success}}" time="30" stepKey="waitForLoadSuccessPage1"/>
 
         <!-- Start the usage processing consumer -->

@@ -15,6 +15,7 @@
             <description value="Testing for a required tracking number when adding new shipping information"/>
             <severity value="CRITICAL"/>
             <group value="shipping"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>

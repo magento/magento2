@@ -118,8 +118,12 @@
         </actionGroup>
 
         <!-- Assert related products at the storefront -->
-        <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$createSecondRelatedProduct.name$$)}}" stepKey="seeSecondRelatedProduct"/>
-        <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$createThirdRelatedProduct.name$$)}}" stepKey="seeThirdRelatedProduct"/>
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="seeSecondRelatedProduct">
+            <argument name="productName" value="$$createSecondRelatedProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="seeThirdRelatedProduct">
+            <argument name="productName" value="$$createThirdRelatedProduct.name$$"/>
+        </actionGroup>
 
         <!-- Assert product design settings "Layout empty" -->
         <seeElement selector="{{StorefrontProductPageDesignSection.layoutEmpty}}" stepKey="seeNewDesignChanges"/>
@@ -132,5 +136,6 @@
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

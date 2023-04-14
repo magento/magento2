@@ -18,6 +18,7 @@
             <testCaseId value="MC-17847"/>
             <useCaseId value="MC-17275"/>
             <group value="backend"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{ChangedCookieDomainForMainWebsiteConfigData.path}} --scope={{ChangedCookieDomainForMainWebsiteConfigData.scope}} --scope-code={{ChangedCookieDomainForMainWebsiteConfigData.scope_code}} {{ChangedCookieDomainForMainWebsiteConfigData.value}}" stepKey="changeDomainForMainWebsiteBeforeTestRun"/>

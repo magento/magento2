@@ -23,6 +23,7 @@
         <element name="setQuantity" type="checkbox" selector="//td[contains(., '{{arg}}')]/following-sibling::td[contains(@class, 'col-qty')]/input" parameterized="true"/>
         <element name="addProductsToOrder" type="button" selector="//span[text()='Add Selected Product(s) to Order']"/>
         <element name="customPrice" type="checkbox" selector="//span[.='{{arg}}']/parent::td/following-sibling::td/div//span[contains(text(),'Custom Price')]" parameterized="true"/>
+        <element name="customPriceInput" type="input" selector="//span[.='{{arg}}']/parent::td/following-sibling::td/input[@class='input-text item-price admin__control-text']" parameterized="true"/>
         <element name="customQuantity" type="input" selector="//span[.='{{arg}}']/parent::td/following-sibling::td[@class='col-qty']/input" parameterized="true"/>
         <element name="update" type="button" selector="//span[text()='Update Items and Quantities']"/>
         <element name="discount" type="text" selector="//span[.='{{arg}}']/parent::td/following-sibling::td[@class='col-discount col-price']/span" parameterized="true"/>
@@ -30,5 +31,6 @@
         <element name="removeItems" type="select" selector="//span[.='{{arg}}']/parent::td/following-sibling::td/select[@class='admin__control-select']" parameterized="true"/>
         <element name="applyCoupon" type="input" selector="#coupons:code"/>
         <element name="submitOrder" type="button" selector="#submit_order_top_button" timeout="60"/>
+        <element name="orderID" type="text" selector="|Order # (\d+)|"/>
     </section>
 </sections>

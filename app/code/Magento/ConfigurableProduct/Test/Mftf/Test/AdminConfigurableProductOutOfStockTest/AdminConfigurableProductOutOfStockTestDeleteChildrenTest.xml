@@ -98,6 +98,7 @@
         <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
             <argument name="sku" value="{{ApiSimpleOne.sku}}"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
         <!-- Check to make sure that the configurable product shows up as in stock -->
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToConfigProductPage2"/>

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Request;
 
 use Magento\Framework\App\HttpRequestInterface;
@@ -16,19 +18,21 @@ use Magento\Framework\Stdlib\StringUtils;
 
 /**
  * Http request
+ *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @api
  */
 class Http extends Request implements RequestContentInterface, RequestSafetyInterface, HttpRequestInterface
 {
     /**#@+
      * HTTP Ports
      */
-    const DEFAULT_HTTP_PORT = 80;
-    const DEFAULT_HTTPS_PORT = 443;
+    public const DEFAULT_HTTP_PORT = 80;
+    public const DEFAULT_HTTPS_PORT = 443;
     /**#@-*/
 
     // Configuration path
-    const XML_PATH_OFFLOADER_HEADER = 'web/secure/offloader_header';
+    public const XML_PATH_OFFLOADER_HEADER = 'web/secure/offloader_header';
 
     /**
      * @var string
@@ -36,15 +40,11 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     protected $route;
 
     /**
-     * PATH_INFO
-     *
      * @var string
      */
     protected $pathInfo = '';
 
     /**
-     * ORIGINAL_PATH_INFO
-     *
      * @var string
      */
     protected $originalPathInfo = '';
@@ -255,7 +255,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     /**
      * Get module name of currently used controller
      *
-     * @return  string
+     * @return string
      */
     public function getControllerModule()
     {
@@ -326,7 +326,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
         $headerHttpHost = $this->converter->cleanString($headerHttpHost);
         $headerScriptName = $this->getServer('SCRIPT_NAME');
 
-        if (isset($headerScriptName) && isset($headerHttpHost)) {
+        if (isset($headerScriptName) && $headerHttpHost !== '') {
             if ($secure = $this->isSecure()) {
                 $scheme = 'https://';
             } else {
@@ -377,7 +377,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
             return $url;
         }
 
-        if (($pos = strripos($url, basename($_SERVER['SCRIPT_NAME']))) !== false) {
+        if ($url !== null && ($pos = strripos($url, basename($_SERVER['SCRIPT_NAME']))) !== false) {
             $url = substr($url, 0, $pos);
         }
 

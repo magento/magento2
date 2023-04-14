@@ -86,7 +86,8 @@ class InvoiceSenderTest extends AbstractSenderTest
             $this->paymentHelper,
             $this->invoiceResourceMock,
             $this->globalConfig,
-            $this->eventManagerMock
+            $this->eventManagerMock,
+            $this->appEmulator
         );
     }
 
@@ -184,7 +185,8 @@ class InvoiceSenderTest extends AbstractSenderTest
                         ]
                     ]
                 );
-
+            $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+            $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
             $this->identityContainerMock->expects($this->exactly(2))
                 ->method('isEnabled')
                 ->willReturn($emailSendingResult);
@@ -330,7 +332,8 @@ class InvoiceSenderTest extends AbstractSenderTest
                     ]
                 ]
             );
-
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->identityContainerMock->expects($this->exactly(2))
             ->method('isEnabled')
             ->willReturn(false);

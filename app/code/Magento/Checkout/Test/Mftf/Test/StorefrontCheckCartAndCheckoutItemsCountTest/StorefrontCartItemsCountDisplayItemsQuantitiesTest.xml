@@ -32,13 +32,17 @@
         </after>
 
         <!--  Add simpleProduct1 to cart -->
-        <amOnPage url="{{StorefrontProductPage.url($$simpleProduct1.custom_attributes[url_key]$)}}" stepKey="amOnProduct1Page"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="amOnProduct1Page">
+            <argument name="product" value="$simpleProduct1$"/>
+        </actionGroup>
         <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addProduct1ToCart">
             <argument name="productName" value="$$simpleProduct1.name$$"/>
             <argument name="productQty" value="2"/>
         </actionGroup>
         <!--  Add simpleProduct2 to cart -->
-        <amOnPage url="{{StorefrontProductPage.url($$simpleProduct2.custom_attributes[url_key]$)}}" stepKey="amOnProduct2Page"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="amOnProduct2Page">
+            <argument name="product" value="$simpleProduct2$"/>
+        </actionGroup>
         <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addProduct2ToCart">
             <argument name="productName" value="$$simpleProduct2.name$$"/>
             <argument name="productQty" value="1"/>

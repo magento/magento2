@@ -65,59 +65,59 @@ use Magento\Sales\Model\Order\StatusLabel;
  */
 class Order extends AbstractModel implements EntityInterface, OrderInterface
 {
-    const ENTITY = 'order';
+    public const ENTITY = 'order';
 
     /**
      * Order states
      */
-    const STATE_NEW = 'new';
+    public const STATE_NEW = 'new';
 
-    const STATE_PENDING_PAYMENT = 'pending_payment';
+    public const STATE_PENDING_PAYMENT = 'pending_payment';
 
-    const STATE_PROCESSING = 'processing';
+    public const STATE_PROCESSING = 'processing';
 
-    const STATE_COMPLETE = 'complete';
+    public const STATE_COMPLETE = 'complete';
 
-    const STATE_CLOSED = 'closed';
+    public const STATE_CLOSED = 'closed';
 
-    const STATE_CANCELED = 'canceled';
+    public const STATE_CANCELED = 'canceled';
 
-    const STATE_HOLDED = 'holded';
+    public const STATE_HOLDED = 'holded';
 
-    const STATE_PAYMENT_REVIEW = 'payment_review';
+    public const STATE_PAYMENT_REVIEW = 'payment_review';
 
     /**
      * Order statuses
      */
-    const STATUS_FRAUD = 'fraud';
+    public const STATUS_FRAUD = 'fraud';
 
     /**
      * Order flags
      */
-    const ACTION_FLAG_CANCEL = 'cancel';
+    public const ACTION_FLAG_CANCEL = 'cancel';
 
-    const ACTION_FLAG_HOLD = 'hold';
+    public const ACTION_FLAG_HOLD = 'hold';
 
-    const ACTION_FLAG_UNHOLD = 'unhold';
+    public const ACTION_FLAG_UNHOLD = 'unhold';
 
-    const ACTION_FLAG_EDIT = 'edit';
+    public const ACTION_FLAG_EDIT = 'edit';
 
-    const ACTION_FLAG_CREDITMEMO = 'creditmemo';
+    public const ACTION_FLAG_CREDITMEMO = 'creditmemo';
 
-    const ACTION_FLAG_INVOICE = 'invoice';
+    public const ACTION_FLAG_INVOICE = 'invoice';
 
-    const ACTION_FLAG_REORDER = 'reorder';
+    public const ACTION_FLAG_REORDER = 'reorder';
 
-    const ACTION_FLAG_SHIP = 'ship';
+    public const ACTION_FLAG_SHIP = 'ship';
 
-    const ACTION_FLAG_COMMENT = 'comment';
+    public const ACTION_FLAG_COMMENT = 'comment';
 
     /**
      * Report date types
      */
-    const REPORT_DATE_TYPE_CREATED = 'created';
+    public const REPORT_DATE_TYPE_CREATED = 'created';
 
-    const REPORT_DATE_TYPE_UPDATED = 'updated';
+    public const REPORT_DATE_TYPE_UPDATED = 'updated';
 
     /**
      * @var string
@@ -2029,6 +2029,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Get customer name
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getCustomerName()
     {
@@ -2037,16 +2038,19 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         }
 
         $customerName = '';
-        if ($this->isVisibleCustomerPrefix() && strlen($this->getCustomerPrefix())) {
-            $customerName .= $this->getCustomerPrefix() . ' ';
+        $prefix = $this->getCustomerPrefix();
+        if ($prefix !== null && $this->isVisibleCustomerPrefix() && strlen($prefix)) {
+            $customerName .= $prefix . ' ';
         }
         $customerName .= $this->getCustomerFirstname();
-        if ($this->isVisibleCustomerMiddlename() && strlen($this->getCustomerMiddlename())) {
-            $customerName .= ' ' . $this->getCustomerMiddlename();
+        $middlename = $this->getCustomerMiddlename();
+        if ($middlename !== null && $this->isVisibleCustomerMiddlename() && strlen($middlename)) {
+            $customerName .= ' ' . $middlename;
         }
         $customerName .= ' ' . $this->getCustomerLastname();
-        if ($this->isVisibleCustomerSuffix() && strlen($this->getCustomerSuffix())) {
-            $customerName .= ' ' . $this->getCustomerSuffix();
+        $suffix = $this->getCustomerSuffix();
+        if ($suffix !== null && $this->isVisibleCustomerSuffix() && strlen($suffix)) {
+            $customerName .= ' ' . $suffix;
         }
 
         return $customerName;
@@ -2074,7 +2078,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function getCreatedAtFormatted($format)
     {
         return $this->timezone->formatDateTime(
-            new \DateTime($this->getCreatedAt()),
+            new \DateTime($this->getCreatedAt() ?? 'now'),
             $format,
             $format,
             $this->localeResolver->getDefaultLocale(),

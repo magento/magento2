@@ -43,6 +43,7 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStoreEN"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
@@ -73,6 +74,7 @@
         <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
             <argument name="websiteName" value="{{customWebsite.name}}"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Go to grid page and verify AssertErrorMessage-->
         <actionGroup ref="AssertErrorMessageAfterDeletingWebsiteActionGroup" stepKey="verifyErrorMessage">
@@ -85,7 +87,7 @@
         <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="$$createProduct.name$$" stepKey="fillProductNameInNameFilter"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
         <see selector="{{AdminProductGridFilterSection.nthRow('1')}}" userInput="$$createProduct.name$$" stepKey="seeFirstRowToVerifyProductVisibleInGrid"/>
-        <dontSeeElement selector="{{AdminMessagesSection.error}}" stepKey="dontSeeErrorMessage"/>
+        <actionGroup ref="AdminAssertNoErrorMessageActionGroup" stepKey="dontSeeErrorMessage"/>
 
     </test>
 </tests>

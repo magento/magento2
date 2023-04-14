@@ -16,6 +16,7 @@
             <description value="Admin should be able to select specific entities for widgets"/>
             <severity value="CRITICAL"/>
             <group value="widget"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>

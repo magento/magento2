@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRemoveProductAttributeFromAttributeSetUsingDragAndDropTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Remove product attribute from attrribute set using drag and drop"/>
+            <title value="Remove attribute from attribute set"/>
+            <description value="Remove attribute from attribute set"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-26720"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
+            <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createProductAttribute"/>
+            <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/$$createAttributeSet.attribute_set_id$$/" stepKey="onAttributeSetEdit"/>
+            <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
+                <argument name="group" value="Product Details"/>
+                <argument name="attribute" value="$$createProductAttribute.attribute_code$$"/>
+            </actionGroup>
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Navigate to Stores > Attributes > Attribute Set -->
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSetPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!-- Search and open Attribute Set from preconditions -->
+        <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="searchAttribute">
+            <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
+        </actionGroup>
+        <!-- Move system product attribute from assigned to unassigned -->
+        <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.assignedAttribute('sku')}}" selector2="{{AdminProductAttributeSetEditSection.xThLineItemUnassignedAttribute('1')}}" stepKey="dragAndDrop"/>
+        <waitForPageLoad stepKey="waitForDragAndDrop"/>
+        <see userInput="You can't remove attributes from this attribute set." stepKey="seeErrorMessage"/>
+        <click selector="{{AdminProductAttributeSetEditSection.buttonOk}}" stepKey="clickOk"/>
+        <waitForPageLoad stepKey="waitForPopUpDisappear"/>
+        <!-- Move Custom Product attribute from assigned to unassigned -->
+        <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.assignedAttribute('$$createProductAttribute.attribute_code$$')}}" selector2="{{AdminProductAttributeSetEditSection.xThLineItemUnassignedAttribute('1')}}" stepKey="dragAndDrop1"/>
+        <!-- Click 'Save' -->
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttribute"/>
+        <!-- Again open same attribute set -->
+        <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="searchAttribute1">
+            <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForAttributeOpen"/>
+        <!-- Custom product attribute absent in assigned attribute tree -->
+        <dontSeeElement selector="{{AdminProductAttributeSetEditSection.assignedAttribute('$$createProductAttribute.attribute_code$$')}}"  stepKey="assertProductAttributeIsNotPresent"/>
+        <!-- Navigate to Catalog > Products -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductPage"/>
+        <!-- Start to create a new simple product with the custom attribute set from the preconditions -->
+        <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickAddProduct"/>
+        <waitForPageLoad stepKey="waitForNewProductPage"/>
+        <actionGroup ref="AdminProductPageSelectAttributeSetActionGroup" stepKey="selectAttribute">
+            <argument name="attributeSetName" value="$$createAttributeSet.attribute_set_name$$"/>
+        </actionGroup>
+        <!-- Custom Product attribute is absent in attribute set -->
+        <dontSeeElement selector="{{AdminProductAttributeSection.customAttribute('$$createProductAttribute.attribute_code$$')}}"  stepKey="assertProductAttributeIsNotPresent1"/>
+        <!-- System Product attribute is present in attribute set -->
+        <seeElement selector="{{AdminProductAttributeSection.textAttributeByCode('sku')}}" stepKey="seeAttributePresent"/>
+    </test>
+</tests>

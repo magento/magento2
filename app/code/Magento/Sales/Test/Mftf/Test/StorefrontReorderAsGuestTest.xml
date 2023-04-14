@@ -17,7 +17,8 @@
             <group value="sales"/>
             <skip>
                 <issueId value="DEPRECATED">Use StorefrontReorderAsGuestCustomerTest instead</issueId>
-            </skip> 
+            </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Create simple product.-->
@@ -51,10 +52,9 @@
             <argument name="customerVar" value="$$createCustomer$$"/>
             <argument name="customerAddressVar" value="US_Address_TX"/>
         </actionGroup>
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30"
-                        stepKey="waitForPlaceOrderButtonVisible"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
-        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <comment userInput="BIC workaround" stepKey="waitForPlaceOrderButtonVisible"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <comment userInput="BIC workaround" stepKey="waitUntilOrderPlaced"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="getOrderId"/>
         <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="getOrderId">
             <actualResult type="const">$getOrderId</actualResult>

@@ -67,16 +67,19 @@
         </actionGroup>
 
         <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>
-    
+
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
             <argument name="Customer" value="$$simpleCustomer$$"/>
         </actionGroup>
-    
+
         <getData entity="GetOrderData" stepKey="getOrderData">
             <requiredEntity createDataKey="createCustomerCart"/>
         </getData>
         <actionGroup ref="StorefrontOpenMyOrdersPageActionGroup" stepKey="clickOnMyOrders"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderDetailsToLoad"/>
-        <seeElement selector="{{StorefrontCustomerOrderViewSection.orderStatusInGrid('$getOrderData.increment_id$', 'Canceled')}}" stepKey="seeOrderStatusInGrid"/>
+        <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
+            <argument name="orderId" value="$getOrderData.increment_id$"/>
+            <argument name="status" value="Canceled"/>
+        </actionGroup>
     </test>
 </tests>

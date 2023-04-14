@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckAddressAddedOnCheckoutIsSavedAfterOrderIsPlacedTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout via the Storefront"/>
+            <title value="Check if Shipping Address added on Checkout is saved after Order is placed"/>
+            <description value="Shipping Address added on Checkout is saved after Order is placed"/>
+            <severity value="MAJOR"/>
+            <group value="checkout"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+        
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+
+        <actionGroup ref="StorefrontClickAddNewAddressButtonFromCheckoutShippingActionGroup" stepKey="addAddress"/>
+        <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="changeBillingAddress">
+            <argument name="Address" value="US_Address_NY"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckoutClickSaveAddressButtonActionGroup" stepKey="saveAddress"/>
+
+        <actionGroup ref="StorefrontGoToCustomerAddressesPageActionGroup" stepKey="goToCustomerAddressBook1"/>
+        <actionGroup ref="StorefrontCustomerAddressBookNotContains" stepKey="assertStreetIsNotSaved">
+            <argument name="text" value="{{US_Address_NY.street[0]}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerAddressBookNotContains" stepKey="assertCityIsNotSaved">
+            <argument name="text" value="{{US_Address_NY.city}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerAddressBookNotContains" stepKey="assertPostcodeIsNotSaved">
+            <argument name="text" value="{{US_Address_NY.postcode}}"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goBackToCheckout"/>   
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+
+        <actionGroup ref="StorefrontGoToCustomerAddressesPageActionGroup" stepKey="goToCustomerAddressBook2"/>
+        <actionGroup ref="StorefrontCustomerAddressBookContains" stepKey="assertStreet">
+            <argument name="text" value="{{US_Address_NY.street[0]}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerAddressBookContains" stepKey="assertCity">
+            <argument name="text" value="{{US_Address_NY.city}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerAddressBookContains" stepKey="assertPostcode">
+            <argument name="text" value="{{US_Address_NY.postcode}}"/>
+        </actionGroup>
+
+    </test>
+</tests>

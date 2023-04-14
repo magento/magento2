@@ -14,6 +14,7 @@
             <description value="Admin should be able to Add and Delete multiple layouts"/>
             <severity value="CRITICAL"/>
             <group value="Widget"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>

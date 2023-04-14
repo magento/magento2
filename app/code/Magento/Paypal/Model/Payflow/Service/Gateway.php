@@ -5,9 +5,11 @@
  */
 namespace Magento\Paypal\Model\Payflow\Service;
 
+use Laminas\Http\Exception\RuntimeException;
+use Laminas\Http\Request;
 use Magento\Framework\DataObject;
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Framework\HTTP\LaminasClient;
+use Magento\Framework\HTTP\LaminasClientFactory;
 use Magento\Framework\Math\Random;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\Logger;
@@ -19,7 +21,7 @@ use Magento\Payment\Model\Method\Online\GatewayInterface;
 class Gateway implements GatewayInterface
 {
     /**
-     * @var ZendClientFactory
+     * @var LaminasClientFactory
      */
     protected $httpClientFactory;
 
@@ -34,12 +36,12 @@ class Gateway implements GatewayInterface
     protected $logger;
 
     /**
-     * @param ZendClientFactory $httpClientFactory
+     * @param LaminasClientFactory $httpClientFactory
      * @param Random $mathRandom
      * @param Logger $logger
      */
     public function __construct(
-        ZendClientFactory $httpClientFactory,
+        LaminasClientFactory $httpClientFactory,
         Random $mathRandom,
         Logger $logger
     ) {
@@ -55,7 +57,7 @@ class Gateway implements GatewayInterface
      * @param ConfigInterface $config
      *
      * @return DataObject
-     * @throws \Zend_Http_Client_Exception
+     * @throws RuntimeException
      */
     public function postRequest(DataObject $request, ConfigInterface $config)
     {
@@ -75,7 +77,7 @@ class Gateway implements GatewayInterface
             $clientConfig['proxytype'] = CURLPROXY_HTTP;
         }
 
-        /** @var ZendClient $client */
+        /** @var LaminasClient $client */
         $client = $this->httpClientFactory->create();
 
         $client->setUri(
@@ -83,8 +85,8 @@ class Gateway implements GatewayInterface
             ? $config->getValue('transaction_url_test_mode')
             : $config->getValue('transaction_url')
         );
-        $client->setConfig($clientConfig);
-        $client->setMethod(\Zend_Http_Client::POST);
+        $client->setOptions($clientConfig);
+        $client->setMethod(Request::METHOD_POST);
         $requestData = $this->prepareRequestData($request->getData());
         $client->setParameterPost($requestData);
         $client->setHeaders(
@@ -97,12 +99,12 @@ class Gateway implements GatewayInterface
         $client->setUrlEncodeBody(false);
 
         try {
-            $response = $client->request();
+            $response = $client->send();
             $responseArray = $this->parseNVP(strstr($response->getBody(), 'RESULT'));
 
             $result->setData(array_change_key_case($responseArray, CASE_LOWER));
             $result->setData('result_code', $result->getData('result'));
-        } catch (\Zend_Http_Client_Exception $e) {
+        } catch (RuntimeException $e) {
             $result->addData(
                 [
                     'response_code' => -1,
@@ -138,7 +140,7 @@ class Gateway implements GatewayInterface
     {
         $requestData = [];
         foreach ($data as $k => $v) {
-            if (strpos($v, '&') !== false || strpos($v, '=') !== false) {
+            if (is_string($v) && (strpos($v, '&') !== false || strpos($v, '=') !== false)) {
                 $requestData[$k . '[' . strlen($v) . ']'] = $v;
             } else {
                 $requestData[$k] = $v;

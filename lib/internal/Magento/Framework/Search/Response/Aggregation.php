@@ -35,6 +35,7 @@ class Aggregation implements AggregationInterface, \IteratorAggregate
      *
      * @return \ArrayIterator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->buckets);

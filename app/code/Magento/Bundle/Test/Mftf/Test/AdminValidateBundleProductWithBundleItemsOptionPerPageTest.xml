@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminValidateBundleProductWithBundleItemsOptionPerPageTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Bundle Product Backend : Sort Order does not work of Bundle Items in an Option"/>
+            <title value="Admin to validate bundle product with the bundle items option dynamic rows per page"/>
+            <description value="Admin to validate bundle product with the bundle items option dynamic rows per page"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-2718"/>
+            <useCaseId value="ACP2E-113"/>
+            <group value="BundleProduct"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+        </before>
+        <after>
+            <!--Delete custom added per page-->
+            <actionGroup ref="AdminDataGridDeleteCustomPerPageActionGroup" stepKey="deleteCustomAddedPerPage">
+                <argument name="perPage" value="ProductPerPage.productCount"/>
+            </actionGroup>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <!--Logout to Admin Area-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <!-- Open bundle product creation page. -->
+        <actionGroup ref="AdminOpenCreateBundleProductPageActionGroup" stepKey="goToBundleProductCreationPage"/>
+        <!-- Fill out main field for the bundle product -->
+        <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillMainFieldsForBundle"/>
+        <!-- Add Bundle items option with two simple product -->
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts2">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
+            <argument name="prodTwoSku" value="$$simpleProduct2.sku$$"/>
+            <argument name="optionTitle" value="Option"/>
+            <argument name="inputType" value="select"/>
+        </actionGroup>
+        <!-- Validate bundle items option dynamic rows per page -->
+        <actionGroup ref="AdminOpenAndApplyBundleItemsOptionPerPageActionGroup" stepKey="openAndApplyPerPageDropdown">
+            <argument name="perPageInputValue" value="1"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleItemsOptionTableRows}}" stepKey="waitForRowsToBeVisible"/>
+        <seeNumberOfElements selector="{{AdminProductFormBundleSection.bundleItemsOptionTableRows}}" userInput="1" stepKey="see4RowsOfOptions"/>
+    </test>
+</tests>

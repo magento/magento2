@@ -33,6 +33,10 @@
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
                 <argument name="productAttributeLabel" value="{{visualSwatchAttribute.default_label}}"/>
             </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
             <actionGroup ref="AdminDataGridSelectPerPageActionGroup" stepKey="selectNumberOfProductsPerPage">

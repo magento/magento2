@@ -15,9 +15,10 @@ use Magento\Quote\Api\Data\CartInterface;
 
 /**
  * Extension point for setting shipping addresses for a specified shopping cart
- *
  * All objects that are responsible for setting shipping addresses on a cart via GraphQl
  * should implement this interface.
+ *
+ * @api
  */
 interface SetShippingAddressesOnCartInterface
 {

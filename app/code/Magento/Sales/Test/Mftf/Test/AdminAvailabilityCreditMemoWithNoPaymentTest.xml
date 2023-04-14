@@ -42,7 +42,7 @@
         </after>
 
         <!--Proceed to Admin panel > SALES > Orders. Created order should be in Processing status-->
-        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage"/>
+        <actionGroup ref="AdminNavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage"/>
 
         <!--Check if order can be submitted without the required fields including email address-->
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage"/>
