@@ -128,12 +128,16 @@ class Cache
 
         $resolvedValue = $proceed($field, $context, $info, $value, $args);
 
-        $this->graphQlResolverCache->save(
-            $this->serializer->serialize($resolvedValue),
-            $cacheIdentityString,
-            $identityProvider->getIdentities($resolvedValue),
-            false, // use default lifetime directive
-        );
+        $identities = $identityProvider->getIdentities($resolvedValue);
+
+        if (count($identities)) {
+            $this->graphQlResolverCache->save(
+                $this->serializer->serialize($resolvedValue),
+                $cacheIdentityString,
+                $identities,
+                false, // use default lifetime directive
+            );
+        }
 
         return $resolvedValue;
     }
