@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AssertSuccessMessageAppearsAfterAddingProductToCartThatContainsOutOfStockProductTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Assert success message appears after adding product to cart that contains out of stock product"/>
+            <title value="Assert success message appears after adding product to cart that contains out of stock product"/>
+            <description value="Assert success message appears after adding product to cart that contains out of stock product"/>
+            <severity value="MINOR"/>
+            <testCaseId value="AC-5613"/>
+        </annotations>
+
+        <before>
+            <!-- Create category and simple product -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Delete bundle product data -->
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <!--Open product in storefront-->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct1.custom_attributes[url_key]$$)}}" stepKey="goToProductPageOnStorefront"/>
+        <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
+
+        <!-- Add simple product to the cart-->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <!-- Open the product in backend and update quantity as 0-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+            <argument name="productId" value="$createSimpleProduct1.id$"/>
+        </actionGroup>
+
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="0" stepKey="fillQtyField" />
+
+        <!--Save the product-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+
+        <!-- Open cart page and verify error message-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="gotoCart"/>
+
+        <see selector="{{StorefrontProductPageSection.errorMsg}}" userInput="Some of the products are out of stock." stepKey="verifyErrorMessage"/>
+
+        <!--Open product in storefront-->
+        <amOnPage url="{{StorefrontProductPage.url(createSimpleProduct2.custom_attributes[url_key]$$)}}" stepKey="goToProductPageOnStorefront2"/>
+        <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad2"/>
+
+        <!-- Add Simple Product to cart and verify success message-->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -257,7 +257,7 @@ class AwsS3 implements RemoteDriverInterface
     /**
      * @inheritDoc
      */
-    public function filePutContents($path, $content, $mode = null): int
+    public function filePutContents($path, $content, $mode = null): bool|int
     {
         $path = $this->normalizeRelativePath($path, true);
         $config = self::CONFIG;
@@ -272,10 +272,11 @@ class AwsS3 implements RemoteDriverInterface
 
         try {
             $this->adapter->write($path, $content, new Config($config));
-            return $this->adapter->fileSize($path)->fileSize();
+            return ($this->adapter->fileSize($path)->fileSize() !== null)??true;
+
         } catch (FlysystemFilesystemException | UnableToRetrieveMetadata $e) {
             $this->logger->error($e->getMessage());
-            return 0;
+            return false;
         }
     }
 
@@ -861,15 +862,21 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function fileClose($resource): bool
     {
+        if (!is_resource($resource)) {
+            return false;
+        }
         //phpcs:disable
-        $resourcePath = stream_get_meta_data($resource)['uri'];
+        $meta = stream_get_meta_data($resource);
         //phpcs:enable
 
         foreach ($this->streams as $path => $stream) {
             // phpcs:ignore
-            if (stream_get_meta_data($stream)['uri'] === $resourcePath) {
+            if (stream_get_meta_data($stream)['uri'] === $meta['uri']) {
+                if (isset($meta['seekable']) && $meta['seekable']) {
+                    // rewind the file pointer to make sure the full content of the file is saved
+                    $this->fileSeek($resource, 0);
+                }
                 $this->adapter->writeStream($path, $resource, new Config(self::CONFIG));
-
                 // Remove path from streams after
                 unset($this->streams[$path]);
 

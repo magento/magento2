@@ -144,6 +144,7 @@ class SdkUrlTest extends TestCase
     {
         return [
             "CREDIT" => 'credit',
+            "VENMO" => 'venmo',
             "CARD" => 'card',
             "ELV" => 'sepa'
         ];

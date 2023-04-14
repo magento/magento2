@@ -72,6 +72,8 @@
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="addSecondProductToCompare">
             <argument name="productVar" value="$$createSecondSimpleProduct$$"/>
         </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfPages"/>
+        <wait time="10" stepKey="waitForCompareProductsToPopulate"/>
         <see userInput="Compare Products" selector="{{StorefrontProductCompareMainSection.compareProducts}}" stepKey="assertCompareProductLinkName"/>
         <!-- Open storefront on second store  -->
         <amOnPage url="{{StorefrontStoreHomePage.url(customStore.code)}}" stepKey="openStorefrontPage"/>

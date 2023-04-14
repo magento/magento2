@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="OpenSearchUpgradeVersion2xTest">
+        <annotations>
+            <stories value="Update OpenSearch to the v2.x"/>
+            <title value="Upgrading the version of opensearch to 2x"/>
+            <description value="Upgrading the version of opensearch to 2x"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-6631"/>
+            <group value="catalog_search"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set catalog/search/engine opensearch" stepKey="setSearchEngine"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct01">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createProduct02">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <createData entity="AssignProductToCategory" stepKey="assignTestCategoryToTestProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <requiredEntity createDataKey="createProduct01"/>
+                <requiredEntity createDataKey="createProduct02"/>
+            </createData>
+            <magentoCLI stepKey="reindex" command="indexer:reindex"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct01" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct02" stepKey="deleteProduct2"/>
+        </after>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="goToStorefrontCreatedCategoryPage"/>
+        <wait time="2" stepKey="waitForLoad"/>
+    </test>
+</tests>

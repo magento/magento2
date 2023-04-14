@@ -117,4 +117,20 @@ class Sample_Proxy extends Sample implements \Magento\Framework\ObjectManager\No
     {
         return $this->_getSubject()->getConfig();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAttribute(int|string $attribute)
+    {
+        return $this->_getSubject()->setAttribute($attribute);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttribute() : int|string
+    {
+        return $this->_getSubject()->getAttribute();
+    }
 }

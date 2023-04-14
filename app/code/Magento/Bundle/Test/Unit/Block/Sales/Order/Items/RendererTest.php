@@ -286,4 +286,41 @@ class RendererTest extends TestCase
             [false, ['product_calculations' => 0], false],
         ];
     }
+
+    /**
+     * @dataProvider getValueHtmlWithAttributesDataProvider
+     */
+    public function testGetValueHtmlWithAttributes($qty)
+    {
+        $price = 100;
+        $orderModel = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['formatPrice'])
+            ->getMock();
+        $orderModel->expects($this->any())->method('formatPrice')->willReturn($price);
+
+        $model = $this->getMockBuilder(Renderer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getOrder', 'getSelectionAttributes', 'escapeHtml'])
+            ->getMock();
+        $model->expects($this->any())->method('escapeHtml')->willReturn('Test');
+        $model->expects($this->any())->method('getOrder')->willReturn($orderModel);
+        $model->expects($this->any())->method('getSelectionAttributes')
+            ->willReturn([
+                'qty' => $qty ,
+                'price' => $price,
+            ]);
+        $this->assertSame($qty . ' x Test ' . $price, $model->getValueHtml($this->orderItem));
+    }
+
+    /**
+     * @return array
+     */
+    public function getValueHtmlWithAttributesDataProvider()
+    {
+        return [
+            [1],
+            [1.5],
+        ];
+    }
 }
