@@ -10,7 +10,7 @@ namespace Magento\CmsGraphQl\Model\Resolver;
 use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Cms\Model\Block;
-use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlCache;
+use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\ObjectManager;
@@ -26,9 +26,9 @@ class BlockTest extends GraphQlAbstract
     private $blockRepository;
 
     /**
-     * @var GraphQlCache
+     * @var GraphQlResolverCache
      */
-    private $graphqlCache;
+    private $graphQlResolverCache;
 
     /**
      * @var FilterEmulate
@@ -44,14 +44,14 @@ class BlockTest extends GraphQlAbstract
     {
         $objectManager = ObjectManager::getInstance();
         $this->blockRepository = $objectManager->get(BlockRepositoryInterface::class);
-        $this->graphqlCache = $objectManager->get(GraphQlCache::class);
+        $this->graphQlResolverCache = $objectManager->get(GraphQlResolverCache::class);
         $this->widgetFilter = $objectManager->get(FilterEmulate::class);
         $this->storeManager = $objectManager->get(StoreManagerInterface::class);
     }
 
     protected function tearDown(): void
     {
-        $this->graphqlCache->clean();
+        $this->graphQlResolverCache->clean();
 
         parent::tearDown();
     }
@@ -71,7 +71,7 @@ class BlockTest extends GraphQlAbstract
 
         $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$block]);
 
-        $cacheEntry = $this->graphqlCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
@@ -89,7 +89,7 @@ class BlockTest extends GraphQlAbstract
         $this->blockRepository->save($block);
 
         $this->assertFalse(
-            $this->graphqlCache->test($cacheIdentityString),
+            $this->graphQlResolverCache->test($cacheIdentityString),
             'Cache entry should be invalidated after block content change'
         );
     }
@@ -115,7 +115,7 @@ class BlockTest extends GraphQlAbstract
             $block2,
         ]);
 
-        $cacheEntry = $this->graphqlCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
@@ -133,7 +133,7 @@ class BlockTest extends GraphQlAbstract
         $this->blockRepository->save($block2);
 
         $this->assertFalse(
-            $this->graphqlCache->test($cacheIdentityString),
+            $this->graphQlResolverCache->test($cacheIdentityString),
             'Cache entry should be invalidated after block content change'
         );
     }
@@ -153,7 +153,7 @@ class BlockTest extends GraphQlAbstract
 
         $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$block]);
 
-        $cacheEntry = $this->graphqlCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
@@ -170,7 +170,7 @@ class BlockTest extends GraphQlAbstract
         $this->blockRepository->delete($block);
 
         $this->assertFalse(
-            $this->graphqlCache->test($cacheIdentityString),
+            $this->graphQlResolverCache->test($cacheIdentityString),
             'Cache entry should be invalidated after block deletion'
         );
     }
@@ -190,7 +190,7 @@ class BlockTest extends GraphQlAbstract
 
         $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$block]);
 
-        $cacheEntry = $this->graphqlCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
@@ -208,7 +208,7 @@ class BlockTest extends GraphQlAbstract
         $this->blockRepository->save($block);
 
         $this->assertFalse(
-            $this->graphqlCache->test($cacheIdentityString),
+            $this->graphQlResolverCache->test($cacheIdentityString),
             'Cache entry should be invalidated after block disablement'
         );
     }
@@ -230,7 +230,7 @@ class BlockTest extends GraphQlAbstract
 
         $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$block]);
 
-        $cacheEntry = $this->graphqlCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
@@ -249,7 +249,7 @@ class BlockTest extends GraphQlAbstract
         $this->blockRepository->save($block);
 
         $this->assertFalse(
-            $this->graphqlCache->test($cacheIdentityString),
+            $this->graphQlResolverCache->test($cacheIdentityString),
             'Cache entry should be invalidated after changing block\'s store view'
         );
     }
@@ -279,7 +279,7 @@ class BlockTest extends GraphQlAbstract
         $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$nonExistentBlock]);
 
         $this->assertFalse(
-            $this->graphqlCache->load($cacheIdentityString)
+            $this->graphQlResolverCache->load($cacheIdentityString)
         );
     }
 
@@ -341,14 +341,14 @@ QUERY;
      */
     private function assertTagsByCacheIdentityAndBlocks(string $cacheIdentityString, array $blocks): void
     {
-        $lowLevelFrontendCache = $this->graphqlCache->getLowLevelFrontend();
+        $lowLevelFrontendCache = $this->graphQlResolverCache->getLowLevelFrontend();
         $cacheIdPrefix = $lowLevelFrontendCache->getOption('cache_id_prefix');
         $metadatas = $lowLevelFrontendCache->getMetadatas($cacheIdentityString);
         $tags = $metadatas['tags'];
 
         $expectedTags = [
             $cacheIdPrefix . strtoupper(Block::CACHE_TAG),
-            $cacheIdPrefix . strtoupper(GraphQlCache::CACHE_TAG),
+            $cacheIdPrefix . strtoupper(GraphQlResolverCache::CACHE_TAG),
             $cacheIdPrefix . 'MAGE',
         ];
 
@@ -376,16 +376,12 @@ QUERY;
             return $block->getIdentifier();
         }, $blocks);
 
-        print_r($this->getBlockIdentifiersListAsString($blockIdentifiers));
-
         $cacheIdQueryPayloadMetadata = sprintf('CmsBlocks%s', json_encode([
             'identifiers' => $blockIdentifiers,
         ]));
 
-        echo $cacheIdQueryPayloadMetadata, PHP_EOL;
-
         $cacheIdParts = [
-            GraphQlCache::CACHE_TAG,
+            GraphQlResolverCache::CACHE_TAG,
             $cacheIdValue,
             sha1($cacheIdQueryPayloadMetadata)
         ];
