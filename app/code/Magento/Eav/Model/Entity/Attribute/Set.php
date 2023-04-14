@@ -491,5 +491,12 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         return $this->_setExtensionAttributes($extensionAttributes);
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        // @todo
+    }
     //@codeCoverageIgnoreEnd
 }

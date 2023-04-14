@@ -99,4 +99,13 @@ class QueryParamsResolver extends \Magento\Framework\DataObject implements Query
 
         return $this;
     }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_data = [];
+    }
 }

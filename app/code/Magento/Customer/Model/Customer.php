@@ -1308,7 +1308,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         }
 
         $hourDifference = floor(($currentTimestamp - $tokenTimestamp) / (60 * 60));
-        
+
         return $hourDifference >= $expirationPeriod;
     }
 
@@ -1403,4 +1403,16 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         return (string) $this->getData('password');
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        // @todo:
+
+        $this->_data = [];
+    }
+
+
 }

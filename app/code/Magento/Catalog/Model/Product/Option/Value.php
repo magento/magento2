@@ -462,5 +462,12 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
         return $this->setData(self::KEY_OPTION_TYPE_ID, $optionTypeId);
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        // @todo
+    }
     //@codeCoverageIgnoreEnd
 }

@@ -176,6 +176,14 @@ T: {{telephone}}";
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        self::$_format = [];
+    }
+
+    /**
      * Retrieve country format
      *
      * @param string $type

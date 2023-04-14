@@ -9,11 +9,12 @@ namespace Magento\Framework\GraphQl\Query;
 
 use GraphQL\Language\AST\Node;
 use GraphQL\Language\AST\NodeKind;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * This class holds a list of all queried fields and is used to enable performance optimization for schema loading.
  */
-class Fields
+class Fields implements ResetAfterRequestInterface
 {
     /**
      * @var string[]
@@ -89,5 +90,13 @@ class Fields
         }
 
         return $fields;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->fieldsUsedInQuery = [];
     }
 }

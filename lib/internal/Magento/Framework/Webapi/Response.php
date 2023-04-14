@@ -7,8 +7,10 @@
  */
 namespace Magento\Framework\Webapi;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 class Response extends \Magento\Framework\HTTP\PhpEnvironment\Response implements
-    \Magento\Framework\App\Response\HttpInterface
+    \Magento\Framework\App\Response\HttpInterface, ResetAfterRequestInterface
 {
     /**
      * Character set which must be used in response.
@@ -93,5 +95,14 @@ class Response extends \Magento\Framework\HTTP\PhpEnvironment\Response implement
     {
         $this->_messages = [];
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->clearMessages();
+        parent::_resetState();
     }
 }

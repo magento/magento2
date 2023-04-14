@@ -1185,4 +1185,13 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         }
         return $this->escaper;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_data = [];
+        self::$_configDataCache = [];
+    }
 }

@@ -75,12 +75,6 @@ class Registry implements ResetAfterRequestInterface
     public function unregister($key)
     {
         if (isset($this->_registry[$key])) {
-            if (is_object($this->_registry[$key])
-                && method_exists($this->_registry[$key], '__destruct')
-                && is_callable([$this->_registry[$key], '__destruct'])
-            ) {
-                $this->_registry[$key]->__destruct();
-            }
             unset($this->_registry[$key]);
         }
     }
@@ -94,12 +88,11 @@ class Registry implements ResetAfterRequestInterface
         array_walk($keys, [$this, 'unregister']);
     }
 
-
     /**
      * @inheritDoc
      */
     public function _resetState(): void
     {
-        $this->__destruct();
+        $this->_registry = [];
     }
 }

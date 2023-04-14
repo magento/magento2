@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * Universal data container with array access implementation
  *
@@ -13,7 +15,7 @@ namespace Magento\Framework;
  * @since 100.0.2
  */
 #[\AllowDynamicProperties] //@phpstan-ignore-line
-class DataObject implements \ArrayAccess
+class DataObject implements \ArrayAccess, ResetAfterRequestInterface
 {
     /**
      * Object attributes
@@ -566,5 +568,16 @@ class DataObject implements \ArrayAccess
                 return is_scalar($v) || is_array($v);
             }
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        // @todo
+//        if ("Magento\Framework\DataObject" !== get_class($this)) {
+//             throw new \Exception('You should not create "' . get_class($this) . '"model"" with OM');
+//        }
     }
 }
