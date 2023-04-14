@@ -101,7 +101,7 @@ class AttributesList implements ResolverInterface
         }
         $searchCriteria = $searchCriteria->create();
 
-        $attributesList = $this->attributeRepository->getList(mb_strtolower($entityType), $searchCriteria)->getItems();
+        $attributesList = $this->attributeRepository->getList(strtolower($entityType), $searchCriteria)->getItems();
         return [
             'items' => $this->getAtrributesMetadata($attributesList, $entityType, $storeId),
             'errors' => $errors
