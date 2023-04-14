@@ -47,6 +47,7 @@ define([
 
             imports: {
                 totalRecords: '${ $.provider }:data.totalRecords',
+                showTotalRecords: '${ $.provider }:data.showTotalRecords',
                 rows: '${ $.provider }:data.items'
             },
 
@@ -78,6 +79,7 @@ define([
                     'allSelected',
                     'indetermine',
                     'totalRecords',
+                    'showTotalRecords',
                     'rows'
                 ]);
 
@@ -345,6 +347,7 @@ define([
                 excluded: this.excluded(),
                 selected: this.selected(),
                 total: this.totalSelected(),
+                showTotalRecords: this.showTotalRecords(),
                 excludeMode: this.excludeMode(),
                 params: this.getFiltering()
             };

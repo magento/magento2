@@ -100,7 +100,7 @@ class FileUploaderDataResolver
                 [
                     'file' => $file,
                     'size' => null !== $stat ? $stat['size'] : 0,
-                    'url' => $viewUrl ?? '',
+                    'url' => $viewUrl,
                     // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     'name' => basename($file),
                     'type' => $fileProcessor->getMimeType($file),
@@ -164,6 +164,7 @@ class FileUploaderDataResolver
                 'required' => $this->getMetadataValue($config, 'required'),
                 'visible' => $this->getMetadataValue($config, 'visible'),
                 'validation' => $this->getMetadataValue($config, 'validation'),
+                'attributeId' => $this->getMetadataValue($config, 'attributeId'),
             ];
         }
     }

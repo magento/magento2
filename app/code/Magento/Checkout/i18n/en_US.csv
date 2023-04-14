@@ -186,3 +186,8 @@ Payment,Payment
 "Show Cross-sell Items in the Shopping Cart","Show Cross-sell Items in the Shopping Cart"
 "You added %1 to your <a href=""%2"">shopping cart</a>.","You added %1 to your <a href=""%2"">shopping cart</a>."
 "The shipping method is missing. Select the shipping method and try again.","The shipping method is missing. Select the shipping method and try again."
+"Invalid Item Quantity Requested.","Invalid Item Quantity Requested."
+Are you sure you want to leave the page?,Are you sure you want to leave the page?
+Changes you made to the cart will not be saved.,Changes you made to the cart will not be saved.
+Leave,Leave
+Cancel,Cancel

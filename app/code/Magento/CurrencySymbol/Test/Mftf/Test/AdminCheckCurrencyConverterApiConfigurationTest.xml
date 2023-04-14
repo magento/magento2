@@ -18,6 +18,8 @@
             <testCaseId value="MC-28786"/>
             <useCaseId value="MAGETWO-94919"/>
             <group value="currency"/>
+            <!--      Remove this group when Subscription is finalized or Mocking is enabled      -->
+            <group value="pr_exclude" />
         </annotations>
         <before>
             <!--Set currency configuration-->

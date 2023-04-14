@@ -17,6 +17,7 @@
             <testCaseId value="MC-10926"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openProductFillForm">
             <argument name="productType" value="configurable"/>

@@ -955,7 +955,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                      * to be sure that it will be unique as its parent
                      */
                     if ($optionIds = $product->getCustomOption('option_ids')) {
-                        $optionIds = explode(',', $optionIds->getValue());
+                        $optionIds = explode(',', $optionIds->getValue() ?? '');
                         foreach ($optionIds as $optionId) {
                             if ($option = $product->getCustomOption('option_' . $optionId)) {
                                 $_result[0]->addCustomOption('option_' . $optionId, $option->getValue());

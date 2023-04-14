@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit;
@@ -10,6 +12,8 @@ namespace Magento\Framework\App\Test\Unit;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\RuntimeException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -20,12 +24,12 @@ class DeploymentConfigTest extends TestCase
      */
     private static $fixture
         = [
-            'configData1'   => 'scalar_value',
-            'configData2'   => [
+            'configData1' => 'scalar_value',
+            'configData2' => [
                 'foo' => 1,
                 'bar' => ['baz' => 2],
             ],
-            'configData3'   => null,
+            'configData3' => null,
             'test_override' => 'original',
         ];
 
@@ -34,16 +38,16 @@ class DeploymentConfigTest extends TestCase
      */
     private static $flattenedFixture
         = [
-            'configData1'         => 'scalar_value',
-            'configData2'         => [
+            'configData1' => 'scalar_value',
+            'configData2' => [
                 'foo' => 1,
                 'bar' => ['baz' => 2],
             ],
-            'configData2/foo'     => 1,
-            'configData2/bar'     => ['baz' => 2],
+            'configData2/foo' => 1,
+            'configData2/bar' => ['baz' => 2],
             'configData2/bar/baz' => 2,
-            'configData3'         => null,
-            'test_override'       => 'overridden',
+            'configData3' => null,
+            'test_override' => 'overridden',
         ];
 
     /**
@@ -59,7 +63,7 @@ class DeploymentConfigTest extends TestCase
     /**
      * @var DeploymentConfig
      */
-    protected $_deploymentConfig;
+    protected $deploymentConfig;
 
     /**
      * @var DeploymentConfig
@@ -69,81 +73,100 @@ class DeploymentConfigTest extends TestCase
     /**
      * @var MockObject
      */
-    private $reader;
+    private $readerMock;
 
     public static function setUpBeforeClass(): void
     {
-        self::$fixtureConfig       = require __DIR__ . '/_files/config.php';
+        self::$fixtureConfig = require __DIR__ . '/_files/config.php';
         self::$fixtureConfigMerged = require __DIR__ . '/_files/other/local_developer_merged.php';
     }
 
     protected function setUp(): void
     {
-        $this->reader                  = $this->createMock(Reader::class);
-        $this->_deploymentConfig       = new DeploymentConfig(
-            $this->reader,
+        $this->readerMock = $this->createMock(Reader::class);
+        $this->deploymentConfig = new DeploymentConfig(
+            $this->readerMock,
             ['test_override' => 'overridden']
         );
         $this->_deploymentConfigMerged = new DeploymentConfig(
-            $this->reader,
+            $this->readerMock,
             require __DIR__ . '/_files/other/local_developer.php'
         );
     }
 
+    /**
+     * @return void
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
     public function testGetters(): void
     {
-        $this->reader->expects($this->once())->method('load')->willReturn(self::$fixture);
-        $this->assertSame(self::$flattenedFixture, $this->_deploymentConfig->get());
-        // second time to ensure loader will be invoked only once
-        $this->assertSame(self::$flattenedFixture, $this->_deploymentConfig->get());
-        $this->assertSame('scalar_value', $this->_deploymentConfig->getConfigData('configData1'));
-        $this->assertSame(self::$fixture['configData2'], $this->_deploymentConfig->getConfigData('configData2'));
-        $this->assertSame(self::$fixture['configData3'], $this->_deploymentConfig->getConfigData('configData3'));
-        $this->assertSame('', $this->_deploymentConfig->get('configData3'));
-        $this->assertSame('defaultValue', $this->_deploymentConfig->get('invalid_key', 'defaultValue'));
-        $this->assertNull($this->_deploymentConfig->getConfigData('invalid_key'));
-        $this->assertSame('overridden', $this->_deploymentConfig->get('test_override'));
+        $this->readerMock->expects($this->any())->method('load')->willReturn(self::$fixture);
+        $this->assertSame(self::$flattenedFixture, $this->deploymentConfig->get());
+        $this->assertSame('scalar_value', $this->deploymentConfig->getConfigData('configData1'));
+        $this->assertSame(self::$fixture['configData2'], $this->deploymentConfig->getConfigData('configData2'));
+        $this->assertSame(self::$fixture['configData3'], $this->deploymentConfig->getConfigData('configData3'));
+        $this->assertSame('', $this->deploymentConfig->get('configData3'));
+        $this->assertSame('defaultValue', $this->deploymentConfig->get('invalid_key', 'defaultValue'));
+        $this->assertNull($this->deploymentConfig->getConfigData('invalid_key'));
+        $this->assertSame('overridden', $this->deploymentConfig->get('test_override'));
     }
 
+    /**
+     * @return void
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
     public function testIsAvailable(): void
     {
-        $this->reader->expects($this->once())->method('load')->willReturn(
+        $this->readerMock->expects($this->once())->method('load')->willReturn(
             [
                 ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE => 1,
             ]
         );
-        $object = new DeploymentConfig($this->reader);
+        $object = new DeploymentConfig($this->readerMock);
         $this->assertTrue($object->isAvailable());
     }
 
+    /**
+     * @return void
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
     public function testNotAvailable(): void
     {
-        $this->reader->expects($this->once())->method('load')->willReturn([]);
-        $object = new DeploymentConfig($this->reader);
+        $this->readerMock->expects($this->once())->method('load')->willReturn([]);
+        $object = new DeploymentConfig($this->readerMock);
         $this->assertFalse($object->isAvailable());
     }
 
     /**
      * test if the configuration changes during the same request, the configuration remain the same
+     *
+     * @return void
+     * @throws FileSystemException
+     * @throws RuntimeException
      */
     public function testNotAvailableThenAvailable(): void
     {
-        $this->reader->expects($this->once())->method('load')->willReturn(['Test']);
-        $object = new DeploymentConfig($this->reader);
+        $this->readerMock->expects($this->exactly(2))->method('load')->willReturn(['Test']);
+        $object = new DeploymentConfig($this->readerMock);
         $this->assertFalse($object->isAvailable());
         $this->assertFalse($object->isAvailable());
     }
 
     /**
-     * @param array $data
      * @dataProvider keyCollisionDataProvider
+     * @param array $data
+     * @throws FileSystemException
+     * @throws RuntimeException
      */
     public function testKeyCollision(array $data): void
     {
         $this->expectException('Exception');
         $this->expectExceptionMessage('Key collision');
-        $this->reader->expects($this->once())->method('load')->willReturn($data);
-        $object = new DeploymentConfig($this->reader);
+        $this->readerMock->expects($this->once())->method('load')->willReturn($data);
+        $object = new DeploymentConfig($this->readerMock);
         $object->get();
     }
 
@@ -171,49 +194,71 @@ class DeploymentConfigTest extends TestCase
         ];
     }
 
+    /**
+     * @return void
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
     public function testResetData(): void
     {
-        $this->reader->expects($this->exactly(2))->method('load')->willReturn(self::$fixture);
-        $this->assertSame(self::$flattenedFixture, $this->_deploymentConfig->get());
-        $this->_deploymentConfig->resetData();
+        $this->readerMock->expects($this->exactly(2))->method('load')->willReturn(self::$fixture);
+        $this->assertSame(self::$flattenedFixture, $this->deploymentConfig->get());
+        $this->deploymentConfig->resetData();
         // second time to ensure loader will be invoked only once after reset
-        $this->assertSame(self::$flattenedFixture, $this->_deploymentConfig->get());
-        $this->assertSame(self::$flattenedFixture, $this->_deploymentConfig->get());
+        $this->assertSame(self::$flattenedFixture, $this->deploymentConfig->get());
+        $this->assertSame(self::$flattenedFixture, $this->deploymentConfig->get());
     }
 
+    /**
+     * @return void
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
     public function testIsDbAvailable(): void
     {
-        $this->reader->expects($this->exactly(2))->method('load')->willReturnOnConsecutiveCalls([], ['db' => []]);
-        $this->assertFalse($this->_deploymentConfig->isDbAvailable());
-        $this->_deploymentConfig->resetData();
-        $this->assertTrue($this->_deploymentConfig->isDbAvailable());
+        $this->readerMock->expects($this->exactly(2))->method('load')->willReturnOnConsecutiveCalls([], ['db' => []]);
+        $this->assertFalse($this->deploymentConfig->isDbAvailable());
+        $this->assertTrue($this->deploymentConfig->isDbAvailable());
     }
 
-    public function testNoEnvVariables()
+    /**
+     * @return void
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
+    public function testResetDataOnMissingConfig(): void
     {
-        $this->reader->expects($this->once())->method('load')->willReturn(['a'=>'b']);
-        $this->assertSame('b', $this->_deploymentConfig->get('a'));
+        $this->readerMock->expects($this->once())->method('load')->willReturn(self::$fixture);
+        $defaultValue = 'some_default_value';
+        $result = $this->deploymentConfig->get('missing/key', $defaultValue);
+        $this->assertEquals($defaultValue, $result);
     }
 
-    public function testEnvVariables()
+    public function testNoEnvVariables(): void
     {
-        $this->reader->expects($this->once())->method('load')->willReturn([]);
+        $this->readerMock->expects($this->once())->method('load')->willReturn(['a'=>'b']);
+        $this->assertSame('b', $this->deploymentConfig->get('a'));
+    }
+
+    public function testEnvVariables(): void
+    {
+        $this->readerMock->expects($this->once())->method('load')->willReturn([]);
         putenv('MAGENTO_DC__OVERRIDE={"a": "c"}');
-        $this->assertSame('c', $this->_deploymentConfig->get('a'));
+        $this->assertSame('c', $this->deploymentConfig->get('a'));
     }
 
-    public function testEnvVariablesWithNoBaseConfig()
+    public function testEnvVariablesWithNoBaseConfig(): void
     {
-        $this->reader->expects($this->once())->method('load')->willReturn(['a'=>'b']);
+        $this->readerMock->expects($this->once())->method('load')->willReturn(['a'=>'b']);
         putenv('MAGENTO_DC_A=c');
         putenv('MAGENTO_DC_B__B__B=D');
-        $this->assertSame('c', $this->_deploymentConfig->get('a'));
-        $this->assertSame('D', $this->_deploymentConfig->get('b/b/b'));
+        $this->assertSame('c', $this->deploymentConfig->get('a'));
+        $this->assertSame('D', $this->deploymentConfig->get('b/b/b'));
     }
 
-    public function testEnvVariablesSubstitution()
+    public function testEnvVariablesSubstitution(): void
     {
-        $this->reader->expects($this->once())
+        $this->readerMock->expects($this->once())
             ->method('load')
             ->willReturn(
                 [
@@ -224,8 +269,8 @@ class DeploymentConfigTest extends TestCase
             );
         putenv('MAGENTO_DC____A=c');
         putenv('MAGENTO_DC____B=D');
-        $this->assertSame('c', $this->_deploymentConfig->get('a'));
-        $this->assertSame('D', $this->_deploymentConfig->get('b'), 'return value from env');
-        $this->assertSame('e$%^&', $this->_deploymentConfig->get('c'), 'return default value');
+        $this->assertSame('c', $this->deploymentConfig->get('a'));
+        $this->assertSame('D', $this->deploymentConfig->get('b'), 'return value from env');
+        $this->assertSame('e$%^&', $this->deploymentConfig->get('c'), 'return default value');
     }
 }

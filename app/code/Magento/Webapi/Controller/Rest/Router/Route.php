@@ -61,7 +61,7 @@ class Route implements RouterInterface
      */
     public function __construct($route = '')
     {
-        $this->route = trim($route, '/');
+        $this->route = $route !== null ? trim($route, '/') : '';
     }
 
     /**
@@ -72,9 +72,9 @@ class Route implements RouterInterface
     protected function getRouteParts()
     {
         $result = [];
-        $routeParts = explode('/', $this->route);
+        $routeParts = explode('/', $this->route ?? '');
         foreach ($routeParts as $key => $value) {
-            if ($this->isVariable($value)) {
+            if ($this->isVariable((string)$value)) {
                 $this->variables[$key] = substr($value, 1);
                 $value = null;
             }

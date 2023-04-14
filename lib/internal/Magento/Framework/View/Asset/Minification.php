@@ -18,9 +18,9 @@ class Minification
     /**
      * XML path for asset minification configuration
      */
-    const XML_PATH_MINIFICATION_ENABLED = 'dev/%s/minify_files';
+    public const XML_PATH_MINIFICATION_ENABLED = 'dev/%s/minify_files';
 
-    const XML_PATH_MINIFICATION_EXCLUDES = 'dev/%s/minify_exclude';
+    public const XML_PATH_MINIFICATION_EXCLUDES = 'dev/%s/minify_exclude';
 
     /**
      * @var ScopeConfigInterface
@@ -88,7 +88,8 @@ class Minification
             !$this->isExcluded($filename) &&
             !$this->isMinifiedFilename($filename)
         ) {
-            $filename = substr($filename, 0, -strlen($extension)) . 'min.' . $extension;
+            $filename = $filename !== null ? substr($filename, 0, -strlen($extension)) : '';
+            $filename = $filename . 'min.' . $extension;
         }
         return $filename;
     }
@@ -107,7 +108,8 @@ class Minification
             !$this->isExcluded($filename) &&
             $this->isMinifiedFilename($filename)
         ) {
-            $filename = substr($filename, 0, -strlen($extension) - 4) . $extension;
+            $filename = $filename !== null ? substr($filename, 0, -strlen($extension) - 4) : '';
+            $filename = $filename . $extension;
         }
         return $filename;
     }
@@ -120,7 +122,7 @@ class Minification
      */
     public function isMinifiedFilename($filename)
     {
-        return substr($filename, strrpos($filename, '.') - 4, 5) == '.min.';
+        return $filename && substr($filename, strrpos($filename, '.') - 4, 5) == '.min.';
     }
 
     /**
@@ -132,7 +134,7 @@ class Minification
     public function isExcluded($filename)
     {
         foreach ($this->getExcludes(pathinfo($filename, PATHINFO_EXTENSION)) as $exclude) {
-            if (preg_match('/' . str_replace('/', '\/', $exclude) . '/', $filename)) {
+            if ($filename && preg_match('/' . str_replace('/', '\/', $exclude) . '/', $filename)) {
                 return true;
             }
         }
@@ -152,7 +154,7 @@ class Minification
             $key = sprintf(self::XML_PATH_MINIFICATION_EXCLUDES, $contentType);
             $excludeValues = $this->getMinificationExcludeValues($key);
             foreach ($excludeValues as $exclude) {
-                if (trim($exclude) != '') {
+                if ($exclude && trim($exclude) != '') {
                     $this->configCache[self::XML_PATH_MINIFICATION_EXCLUDES][$contentType][] = trim($exclude);
                 }
             }
@@ -173,7 +175,7 @@ class Minification
         if (!is_array($configValues)) {
             $configValuesFromString = [];
             foreach (explode("\n", $configValues) as $exclude) {
-                if (trim($exclude) != '') {
+                if ($exclude && trim($exclude) != '') {
                     $configValuesFromString[] = trim($exclude);
                 }
             }
@@ -221,7 +223,7 @@ class Minification
     {
         $area = '';
         $pathParts = explode('/', $filename);
-        if (!empty($pathParts) && isset($pathParts[0])) {
+        if (isset($pathParts[0])) {
             $area = $pathParts[0];
         }
         return $area;

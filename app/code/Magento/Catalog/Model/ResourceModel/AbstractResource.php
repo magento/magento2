@@ -24,14 +24,14 @@ use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 {
     /**
-     * Store manager
+     * Store manager to get the store information
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Model factory
+     * Model factory to create a model object
      *
      * @var \Magento\Catalog\Model\Factory
      */
@@ -325,7 +325,25 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _updateAttribute($object, $attribute, $valueId, $value)
     {
-        return $this->_saveAttributeValue($object, $attribute, $value);
+        $entity = $attribute->getEntity();
+        $row = $this->getAttributeRow($entity, $object, $attribute);
+        $hasSingleStore = $this->_storeManager->hasSingleStore();
+        $storeId = $hasSingleStore
+            ? $this->getDefaultStoreId()
+            : (int) $this->_storeManager->getStore($object->getStoreId())->getId();
+        if ($valueId > 0 && array_key_exists('store_id', $row) && $storeId === $row['store_id']) {
+            $table = $attribute->getBackend()->getTable();
+            $connection = $this->getConnection();
+            $connection->update(
+                $table,
+                ['value' => $this->_prepareValueForSave($value, $attribute)],
+                sprintf('%s=%d', $connection->quoteIdentifier('value_id'), $valueId)
+            );
+
+            return $this;
+        } else {
+            return $this->_saveAttributeValue($object, $attribute, $value);
+        }
     }
 
     /**

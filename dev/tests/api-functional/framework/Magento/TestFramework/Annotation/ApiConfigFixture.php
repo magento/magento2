@@ -52,6 +52,7 @@ class ApiConfigFixture extends ConfigFixture
     protected function setGlobalConfigValue($configPathAndValue): void
     {
         [$configPath, $requiredValue] = preg_split('/\s+/', $configPathAndValue, 2);
+        $configPath = str_starts_with($configPath, 'default/') ? substr($configPath, 8) : $configPath;
         /** @var ConfigStorage $configStorage */
         $configStorage = Bootstrap::getObjectManager()->get(ConfigStorage::class);
         if (!$configStorage->checkIsRecordExist($configPath)) {

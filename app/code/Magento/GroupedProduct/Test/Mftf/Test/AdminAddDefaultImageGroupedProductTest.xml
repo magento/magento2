@@ -32,6 +32,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteGroupedProduct">
                 <argument name="sku" value="{{GroupedProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>

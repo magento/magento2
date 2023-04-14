@@ -14,7 +14,7 @@ use OAuth\Common\Http\Uri\UriInterface;
 class Signature extends \OAuth\OAuth1\Signature\Signature
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
      * In addition to the original method, allows array parameters for filters.
      */
@@ -30,6 +30,7 @@ class Signature extends \OAuth\OAuth1\Signature\Signature
             []
         );
 
+        $signatureData = [];
         foreach (array_merge($queryStringData, $params) as $key => $value) {
             $signatureData[rawurlencode($key)] = rawurlencode($value);
         }
@@ -50,5 +51,18 @@ class Signature extends \OAuth\OAuth1\Signature\Signature
         $baseString .= rawurlencode($this->buildSignatureDataString($signatureData));
 
         return base64_encode($this->hash($baseString));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function hash($data)
+    {
+        switch (strtoupper($this->algorithm)) {
+            case 'HMAC-SHA256':
+                return hash_hmac('sha256', $data, $this->getSigningKey(), true);
+            default:
+                return parent::hash($data);
+        }
     }
 }

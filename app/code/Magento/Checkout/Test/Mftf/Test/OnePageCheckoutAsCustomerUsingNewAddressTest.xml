@@ -82,8 +82,8 @@
         <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="changeBillingAddress">
             <argument name="Address" value="US_Address_NY"/>
         </actionGroup>
-        <click selector="{{CheckoutShippingSection.updateAddress}}" stepKey="saveAddress"/>
-        <waitForPageLoad stepKey="waitForAddressSaved"/>
+        <actionGroup ref="StorefrontClickUpdateAddressInCheckoutActionGroup" stepKey="saveAddress"/>
+        <comment userInput="BIC workaround" stepKey="waitForAddressSaved"/>
 
         <!-- Place order -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>

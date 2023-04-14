@@ -33,6 +33,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSecondChildProduct">
                 <argument name="sku" value="{{colorConfigurableProductAttribute2.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Delete product attribute -->
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">

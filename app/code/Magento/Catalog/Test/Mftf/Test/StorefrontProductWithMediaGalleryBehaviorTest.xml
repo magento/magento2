@@ -18,10 +18,10 @@
             <testCaseId value="MC-26305"/>
             <group value="catalog"/>
             <group value="productVideo"/>
-            <skip>
-                <issueId value="MC-33903"/>
-            </skip>
             <group value="pr_exclude"/>
+            <skip>
+                <issueId value="AC-2668"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="createProduct"/>

@@ -256,7 +256,6 @@ class Attribute extends AbstractDb
      * Returns config instance
      *
      * @return Config
-     * @deprecated 100.0.7
      */
     private function getConfig()
     {
@@ -282,7 +281,7 @@ class Attribute extends AbstractDb
                 $connection->delete($this->getTable('eav_attribute_label'), $condition);
             }
             foreach ($storeLabels as $storeId => $label) {
-                if ($storeId == 0 || !strlen($label)) {
+                if ($storeId == 0 || $label === null || !strlen($label)) {
                     continue;
                 }
                 $bind = ['attribute_id' => $object->getId(), 'store_id' => $storeId, 'value' => $label];
@@ -388,6 +387,10 @@ class Attribute extends AbstractDb
             $defaultValue = $this->_processAttributeOptions($object, $option);
         }
 
+        if ($object->getDefaultValue()) {
+            $defaultValue[] = $object->getDefaultValue();
+        }
+        
         $this->_saveDefaultValue($object, $defaultValue);
         return $this;
     }

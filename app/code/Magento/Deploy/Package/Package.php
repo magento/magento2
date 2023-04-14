@@ -11,6 +11,8 @@ use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 
 /**
  * Deployment Package
+ *
+ * @api
  */
 class Package
 {

@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-6421"/>
             <group value="Search"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <!-- Login as admin -->
@@ -27,6 +28,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
                 <argument name="sku" value="{{SimpleProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Delete category -->
             <comment userInput="BIC workaround" stepKey="deleteCreatedNewRootCategory"/>

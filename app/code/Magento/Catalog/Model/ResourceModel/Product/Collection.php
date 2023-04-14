@@ -1177,7 +1177,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
 
         $groupBy = array_filter($originalGroupBy, function ($field) {
-            return false === strpos($field, $this->getIdFieldName());
+            return !$field || false === strpos($field, $this->getIdFieldName());
         });
 
         $select->setPart(Select::GROUP, $groupBy);

@@ -1,7 +1,5 @@
 <?php
 /**
- * Origin filesystem driver
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -13,7 +11,7 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
 
 /**
- * Filesystem driver that uses the local filesystem.
+ * Origin filesystem driver. Filesystem driver that uses the local filesystem.
  *
  * Assumed that stat cache is cleanup by data modification methods
  *
@@ -517,7 +515,7 @@ class StatefulFile implements DriverInterface
      */
     protected function fixSeparator($path)
     {
-        return str_replace('\\', '/', $path);
+        return $path !== null ? str_replace('\\', '/', $path) : '';
     }
 
     /**

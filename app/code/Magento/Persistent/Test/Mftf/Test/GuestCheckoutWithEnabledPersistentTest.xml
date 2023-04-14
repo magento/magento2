@@ -58,7 +58,7 @@
         <seeInField selector="{{CheckoutShippingGuestInfoSection.postcode}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="seePostcodeOnCheckout" />
         <seeInField selector="{{CheckoutShippingGuestInfoSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="seePhoneOnCheckout" />
         <!-- Click next button to open payment section -->
-        <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectCheckMoneyOrderPayment" />
         <!-- Reload payment section -->
         <amOnPage url="{{GuestCheckoutReviewAndPaymentsPage.url}}" stepKey="amOnCheckoutPaymentsPage"/>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminClickConfigureAndAddToOrderForConfigurableProductInWishListSectionOnCreateOrderPageActionGroup">
+        <annotations>
+            <description>Clicks the "Configure And Add To Order" button for a Configurable Product in the WishList Section on the Create Order Page</description>
+        </annotations>
+        <arguments>
+            <argument name="product" type="entity"/>
+            <argument name="productAttribute" type="entity"/>
+            <argument name="option" type="entity"/>
+        </arguments>
+         
+        <waitForElementVisible selector="{{AdminCreateOrderWishListSection.addConfigProductToOrder(product.name)}}" stepKey="seeConfigurableProductInWishList"/>
+        <click selector="{{AdminCreateOrderWishListSection.addConfigProductToOrder(product.name)}}" stepKey="addConfigurableProductToOrder"/>
+        <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect(productAttribute.default_frontend_label)}}" stepKey="waitForConfigureProductPopup"/>
+        <selectOption selector="{{AdminOrderFormConfigureProductSection.optionSelect(productAttribute.default_frontend_label)}}" userInput="{{option.label}}" stepKey="selectConfigurableOption"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForPageIsUpdated"/>
+
+    </actionGroup>
+</actionGroups>

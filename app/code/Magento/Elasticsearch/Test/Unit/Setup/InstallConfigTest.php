@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Test\Unit\Setup;
 
-use Magento\Elasticsearch\Setup\InstallConfig;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Search\Setup\InstallConfig;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

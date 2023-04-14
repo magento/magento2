@@ -527,7 +527,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     protected function _checkDdlTransaction($sql)
     {
         if ($this->getTransactionLevel() > 0) {
-            $sql = ltrim(preg_replace('/\s+/', ' ', $sql));
+            $sql = $sql !== null ? ltrim(preg_replace('/\s+/', ' ', $sql)) : '';
             $sqlMessage = explode(' ', $sql, 3);
             $startSql = strtolower(substr($sqlMessage[0], 0, 3));
             if (in_array($startSql, $this->_ddlRoutines) && strcasecmp($sqlMessage[1], 'temporary') !== 0) {
@@ -623,7 +623,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function query($sql, $bind = [])
     {
-        if (strpos(rtrim($sql, " \t\n\r\0;"), ';') !== false && count($this->_splitMultiQuery($sql)) > 1) {
+        if ($sql !== null &&
+            strpos(rtrim($sql, " \t\n\r\0;"), ';') !== false &&
+            count($this->_splitMultiQuery($sql)) > 1
+        ) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 new Phrase("Multiple queries can't be executed. Run a single query and try again.")
             );
@@ -646,6 +649,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @deprecated 101.0.0
+     * @see _query
      */
     public function multiQuery($sql, $bind = [])
     {
@@ -746,6 +750,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     {
         $positions  = [];
         $offset     = 0;
+        $sql = (string)$sql;
         // get positions
         while (true) {
             $pos = strpos($sql, '?', $offset);
@@ -812,6 +817,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @deprecated 100.1.2
+     * @see MAGETWO-60073
      */
     protected function _splitMultiQuery($sql)
     {
@@ -879,7 +885,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function dropForeignKey($tableName, $fkName, $schemaName = null)
     {
         $foreignKeys = $this->getForeignKeys($tableName, $schemaName);
-        $fkName = strtoupper($fkName);
+        $fkName = $fkName !== null ? strtoupper($fkName) : '';
         if (substr($fkName, 0, 3) == 'FK_') {
             $fkName = substr($fkName, 3);
         }
@@ -1220,7 +1226,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     private function isMysql8EngineUsed(): bool
     {
         if (!$this->isMysql8Engine) {
-            $version = $this->fetchPairs("SHOW variables LIKE 'version'")['version'];
+            $version = $this->fetchPairs("SHOW variables LIKE 'version'")['version'] ?? '';
             $this->isMysql8Engine = (bool) preg_match('/^(8\.)/', $version);
         }
 
@@ -1430,11 +1436,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 $fieldColumn    = 'Column_name';
                 $fieldIndexType = 'Index_type';
 
-                if (strtolower($row[$fieldKeyName]) == AdapterInterface::INDEX_TYPE_PRIMARY) {
+                if (strtolower($row[$fieldKeyName] ?? '') == AdapterInterface::INDEX_TYPE_PRIMARY) {
                     $indexType  = AdapterInterface::INDEX_TYPE_PRIMARY;
                 } elseif ($row[$fieldNonUnique] == 0) {
                     $indexType  = AdapterInterface::INDEX_TYPE_UNIQUE;
-                } elseif (strtolower($row[$fieldIndexType]) == AdapterInterface::INDEX_TYPE_FULLTEXT) {
+                } elseif (strtolower($row[$fieldIndexType] ?? '') == AdapterInterface::INDEX_TYPE_FULLTEXT) {
                     $indexType  = AdapterInterface::INDEX_TYPE_FULLTEXT;
                 } else {
                     $indexType  = AdapterInterface::INDEX_TYPE_INDEX;
@@ -1990,7 +1996,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 if (array_diff($cols, array_keys($row))) {
                     throw new \Zend_Db_Exception('Invalid data for insert');
                 }
-                $values[] = $this->_prepareInsertData($row, $bind);
+                $line = [];
+                foreach ($cols as $field) {
+                    $line[] = $row[$field];
+                }
+                $values[] = $this->_prepareInsertData($line, $bind);
             }
             unset($row);
         } else { // Column-value pairs
@@ -2368,7 +2378,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     protected function isNdb(Table $table)
     {
-        $engineType = strtolower($table->getOption('type'));
+        $engineType = strtolower($table->getOption('type') ?? '');
         return $engineType == 'ndb' || $engineType == 'ndbcluster';
     }
 
@@ -2783,7 +2793,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
         $fieldSql = implode(',', $fieldSql);
 
-        switch (strtolower($indexType)) {
+        switch (strtolower((string)$indexType)) {
             case AdapterInterface::INDEX_TYPE_PRIMARY:
                 $condition = 'PRIMARY KEY';
                 break;
@@ -2806,7 +2816,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 $result = $this->rawQuery($query);
                 $cycle  = false;
             } catch (\Exception $e) {
-                if (in_array(strtolower($indexType), ['primary', 'unique'])) {
+                if ($indexType !== null && in_array(strtolower($indexType), ['primary', 'unique'])) {
                     $match = [];
                     // phpstan:ignore
                     if (preg_match('#SQLSTATE\[23000\]: [^:]+: 1062[^\']+\'([\d.-]+)\'#', $e->getMessage(), $match)) {
@@ -2837,7 +2847,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     {
         $indexList = $this->getIndexList($tableName, $schemaName);
         $indexType = 'index';
-        $keyName = strtoupper($keyName);
+        $keyName = $keyName !== null ? strtoupper($keyName) : '';
         if (!isset($indexList[$keyName])) {
             return true;
         }
@@ -3076,7 +3086,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     protected function _prepareQuotedSqlCondition($text, $value, $fieldName)
     {
-        $text = str_replace('{{fieldName}}', $fieldName, $text);
+        $text = str_replace('{{fieldName}}', (string)$fieldName, (string)$text);
         $sql = $this->quoteInto($text, $value);
         return $sql;
     }
@@ -3480,7 +3490,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $fields = implode('_', $fields);
         }
 
-        switch (strtolower($indexType)) {
+        switch (strtolower((string)$indexType)) {
             case AdapterInterface::INDEX_TYPE_UNIQUE:
                 $prefix = 'unq_';
                 break;
@@ -3561,6 +3571,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $query .= ' IGNORE';
         }
         $query = sprintf('%s INTO %s', $query, $this->quoteIdentifier($table));
+        $countFieldsInSelect = count($select->getPart(Select::COLUMNS));
+        if (empty($fields) && $countFieldsInSelect > 1) {
+            $fields = array_slice(
+                array_keys($this->describeTable($table)),
+                0,
+                $countFieldsInSelect
+            );
+        }
         if ($fields) {
             $columns = array_map([$this, 'quoteIdentifier'], $fields);
             $query = sprintf('%s (%s)', $query, join(', ', $columns));
@@ -3609,6 +3627,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @return \Magento\Framework\DB\Select[]
      * @throws LocalizedException
      * @deprecated 100.1.3
+     * @see MAGETWO-55589
      */
     public function selectsByRange($rangeField, \Magento\Framework\DB\Select $select, $stepCount = 100)
     {
@@ -3625,6 +3644,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @return QueryGenerator
      * @deprecated 100.1.3
+     * @see MAGETWO-55589
      */
     private function getQueryGenerator()
     {
