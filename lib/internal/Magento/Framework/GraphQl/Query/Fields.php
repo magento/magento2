@@ -76,9 +76,9 @@ class Fields implements ResetAfterRequestInterface
      *
      * @param array $variables
      *
-     * @return string[]
+     * @return void
      */
-    private function extractVariables(array &$fields, array $variables): array
+    private function extractVariables(array &$fields, array $variables): void
     {
         foreach ($variables as $key => $value) {
             if (is_array($value)) {
