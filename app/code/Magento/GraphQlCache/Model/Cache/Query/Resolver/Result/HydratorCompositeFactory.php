@@ -12,7 +12,8 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Factory class for composite hydrator.
  */
-class HydratorCompositeFactory {
+class HydratorCompositeFactory
+{
 
     /**
      * Create composite hydrator instance with list of hydrator instances.

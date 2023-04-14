@@ -30,6 +30,7 @@ class HydratorProvider implements HydratorProviderInterface
     private array $resolverHydratorInstances = [];
 
     /**
+     * @param HydratorCompositeFactory $compositeFactory
      * @param array $resolverResultHydrators
      */
     public function __construct(
@@ -55,8 +56,8 @@ class HydratorProvider implements HydratorProviderInterface
             return null;
         }
         $hydratorsList = [];
-        foreach ($resolverClassChainHydrators as $class => $hydratorChain) {
-            foreach ($hydratorChain as $hydratorCode => $hydratorData) {
+        foreach ($resolverClassChainHydrators as $hydratorChain) {
+            foreach ($hydratorChain as $hydratorData) {
                 $hydratorsList[] = $hydratorData;
             }
         }

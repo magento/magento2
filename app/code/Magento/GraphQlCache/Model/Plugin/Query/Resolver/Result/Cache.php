@@ -52,6 +52,9 @@ class Cache
      */
     private StrategyInterface $cacheIdProviderStrategy;
 
+    /**
+     * @var HydratorProviderInterface
+     */
     private HydratorProviderInterface $hydratorProvider;
 
     /**
