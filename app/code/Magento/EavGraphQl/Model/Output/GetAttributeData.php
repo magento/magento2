@@ -93,7 +93,7 @@ class GetAttributeData implements GetAttributeDataInterface
         }
         return $this->enumLookup->getEnumValueFromField(
             'AttributeFrontendInputEnum',
-            $attribute->getFrontendInput() ?? "undefined"
+            $attribute->getFrontendInput()
         );
     }
 

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\EavGraphQl\Model\Resolver;
 
 use Magento\Eav\Model\AttributeRepository;
+use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -86,7 +87,7 @@ class AttributesList implements ResolverInterface
         $storeId = (int) $context->getExtensionAttributes()->getStore()->getId();
         $entityType = $this->enumLookup->getEnumValueFromField(
             'AttributeEntityTypeEnum',
-            mb_strtolower($args['entityType'])
+            strtolower($args['entityType'])
         );
 
         $searchCriteria = $this->searchCriteriaBuilder;
@@ -110,16 +111,16 @@ class AttributesList implements ResolverInterface
     /**
      * Returns formatted list of attributes
      *
-     * @param array $attributesList
+     * @param AttributeInterface[] $attributesList
      * @param string $entityType
      * @param int $storeId
      *
-     * @return array
+     * @return array[]
      */
-    private function getAtrributesMetadata(array $attributesList, string $entityType, int $storeId)
+    private function getAtrributesMetadata(array $attributesList, string $entityType, int $storeId): array
     {
-        return array_map(function ($attribute) use ($entityType, $storeId) {
-            return $this->getAttributeData->execute($attribute, mb_strtolower($entityType), $storeId);
+        return array_map(function (AttributeInterface $attribute) use ($entityType, $storeId): array {
+            return $this->getAttributeData->execute($attribute, strtolower($entityType), $storeId);
         }, $attributesList);
     }
 }
