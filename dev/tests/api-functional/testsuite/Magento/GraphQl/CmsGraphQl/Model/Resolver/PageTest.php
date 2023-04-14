@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CmsGraphQl\Model\Resolver;
+namespace Magento\GraphQl\CmsGraphQl\Model\Resolver;
 
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\Page as CmsPage;
