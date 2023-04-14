@@ -16,19 +16,13 @@ use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Report\ReportProcessorInterface;
+use Magento\ImportExport\Controller\Adminhtml\ImportResult;
 
 /**
  * Import Render Error Messages Service model.
  */
 class RenderErrorMessages
 {
-    public const IMPORT_HISTORY_FILE_DOWNLOAD_ROUTE = '*/history/download';
-
-    /**
-     * Limit view errors
-     */
-    public const LIMIT_ERRORS_MESSAGE = 100;
-
     /**
      * @var ReportProcessorInterface
      */
@@ -92,7 +86,7 @@ class RenderErrorMessages
             $escapedMessages = [];
             foreach ($this->getErrorMessages($errorAggregator) as $error) {
                 $escapedMessages[] = (++$counter) . '. ' . $this->escaper->escapeHtml($error);
-                if ($counter >= self::LIMIT_ERRORS_MESSAGE) {
+                if ($counter >= ImportResult::LIMIT_ERRORS_MESSAGE) {
                     break;
                 }
             }
@@ -168,6 +162,6 @@ class RenderErrorMessages
      */
     public function createDownloadUrlImportHistoryFile($fileName): string
     {
-        return $this->backendUrl->getUrl(self::IMPORT_HISTORY_FILE_DOWNLOAD_ROUTE, ['filename' => $fileName]);
+        return $this->backendUrl->getUrl(ImportResult::IMPORT_HISTORY_FILE_DOWNLOAD_ROUTE, ['filename' => $fileName]);
     }
 }

@@ -20,6 +20,13 @@ use Magento\ImportExport\Model\Report\ReportProcessorInterface;
  */
 abstract class ImportResult extends Import
 {
+    public const IMPORT_HISTORY_FILE_DOWNLOAD_ROUTE = '*/history/download';
+
+    /**
+     * Limit view errors
+     */
+    public const LIMIT_ERRORS_MESSAGE = 100;
+
     /**
      * @var ReportProcessorInterface
      */
