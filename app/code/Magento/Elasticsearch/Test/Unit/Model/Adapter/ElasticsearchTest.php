@@ -111,7 +111,7 @@ class ElasticsearchTest extends TestCase
      */
     protected function setUp(): void
     {
-        if (!class_exists(\Elasticsearch\Client::class)) {
+        if (!class_exists(\Elasticsearch\ClientBuilder::class)) { /** @phpstan-ignore-line */
             $this->markTestSkipped('AC-6597: Skipped as Elasticsearch 8 is configured');
         }
 
