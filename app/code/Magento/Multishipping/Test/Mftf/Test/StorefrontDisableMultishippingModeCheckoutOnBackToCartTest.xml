@@ -64,6 +64,7 @@
 
         <actionGroup ref="StorefrontGoCheckoutWithMultipleAddressesActionGroup" stepKey="goCheckoutWithMultipleAddresses"/>
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goBackToShoppingCartPage"/>
+        <actionGroup ref="StorefrontCheckoutCartFillEstimateShippingAndTaxActionGroup" stepKey="updateShippingAndTaxEstimator" />
         <actionGroup ref="AssertStorefrontCheckoutPaymentSummaryTotalActionGroup" stepKey="assertSummaryTotal">
             <argument name="orderTotal" value="{$grabTotal}"/>
         </actionGroup>
