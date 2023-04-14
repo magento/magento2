@@ -3,6 +3,8 @@
 
 type Query {
     customAttributeMetadata(attributes: [AttributeInput!]! @doc(description: "An input object that specifies the attribute code and entity type to search.")): CustomAttributeMetadata @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata") @doc(description: "Return the attribute type, given an attribute code and entity type.") @cache(cacheIdentity: "Magento\\EavGraphQl\\Model\\Resolver\\Cache\\CustomAttributeMetadataIdentity")
+    attributesMetadata(input: AttributesMetadataInput!): AttributesMetadataOutput! @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesMetadata") @doc(description: "Retrieve EAV attributes metadata.")
+    attributesForm(type: String! @doc(description: "Form type")): AttributesFormOutput! @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesForm") @doc(description: "Retrieve EAV attributes associated to a frontend form.")
 }
 
 type CustomAttributeMetadata @doc(description: "Defines an array of custom attributes.") {
@@ -40,4 +42,76 @@ type AttributeOption @doc(description: "Defines an attribute option.") {
 input AttributeInput @doc(description: "Defines the attribute characteristics to search for the `attribute_code` and `entity_type` to search.") {
     attribute_code: String @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
     entity_type: String @doc(description: "The type of entity that defines the attribute.")
+}
+
+input AttributesMetadataInput @doc(description: "attributesMetadata query input.") {
+    uids: [ID!]! @doc(description: "UIDs of attributes to query.")
+}
+
+type AttributesMetadataOutput @doc(description: "Metadata of EAV attributes.") {
+    items: [AttributeMetadataInterface!]! @doc(description: "Requested attributes metadata.")
+    errors: [AttributeMetadataError!]! @doc(description: "Errors of retrieving certain attributes metadata.")
+}
+
+type AttributeMetadataError @doc(description: "Attribute metadata retrieval error.") {
+    type: AttributeMetadataErrorType! @doc(description: "Attribute metadata retrieval error type.")
+    message: String! @doc(description: "Attribute metadata retrieval error message.")
+}
+
+enum AttributeMetadataErrorType @doc(description: "Attribute metadata retrieval error types.") {
+    INCORRECT_UID @doc(description: "The UID of the attribute is corrupted.")
+    ENTITY_NOT_FOUND @doc(description: "The requested entity was not found.")
+    ATTRIBUTE_NOT_FOUND @doc(description: "The requested attribute was not found.")
+    UNDEFINED @doc(description: "Not categorized error, see the error message.")
+}
+
+interface AttributeMetadataInterface @typeResolver(class: "Magento\\EavGraphQl\\Model\\TypeResolver\\AttributeMetadata") @doc(description: "An interface containing fields that define the EAV attribute."){
+    uid: ID! @doc(description: "The unique ID of an attribute. Based on entity type and attribute code")
+    code: String! @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
+    label: String @doc(description: "The label assigned to the attribute.")
+    entity_type: AttributeEntityTypeEnum! @doc(description: "The type of entity that defines the attribute.")
+    frontend_input: AttributeFrontendInputEnum @doc(description: "The frontend input type of the attribute.")
+    is_required: Boolean! @doc(description: "Whether the attribute value is required.")
+    default_value: String @doc(description: "Default attribute value.")
+    is_unique: Boolean! @doc(description: "Whether the attribute value must be unique.")
+    options: [AttributeOptionInterface!]! @doc(description: "Attribute options.")
+}
+
+interface AttributeOptionInterface @typeResolver(class: "Magento\\EavGraphQl\\Model\\TypeResolver\\AttributeOption") {
+    uid: ID! @doc(description: "The unique ID of an attribute option.")
+    label: String! @doc(description: "The label assigned to the attribute option.")
+    value: String! @doc(description: "The attribute option value.")
+    is_default: Boolean @doc(description: "Is the option value default.")
+}
+
+type AttributeOptionMetadata implements AttributeOptionInterface @doc(description: "Base EAV implementation of AttributeOptionInterface.") {
+}
+
+type AttributeMetadata implements AttributeMetadataInterface @doc(description: "Base EAV implementation of AttributeMetadataInterface.") {
+}
+
+enum AttributeEntityTypeEnum @doc(description: "List of all entity types. Populated by the modules introducing EAV entities.") {
+}
+
+enum AttributeFrontendInputEnum @doc(description: "EAV attribute frontend input types.") {
+    BOOLEAN
+    DATE
+    DATETIME
+    FILE
+    GALLERY
+    HIDDEN
+    IMAGE
+    MEDIA_IMAGE
+    MULTILINE
+    MULTISELECT
+    PRICE
+    SELECT
+    TEXT
+    TEXTAREA
+    WEIGHT
+}
+
+type AttributesFormOutput @doc(description: "Metadata of EAV attributes associated to form") {
+    items: [AttributeMetadataInterface!]! @doc(description: "Requested attributes metadata.")
+    errors: [AttributeMetadataError!]! @doc(description: "Errors of retrieving certain attributes metadata.")
 }
