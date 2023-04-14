@@ -272,14 +272,68 @@ class BlockTest extends GraphQlAbstract
             // expected exception
         }
 
-        print_r($e->getResponseData());
-
         $response['headers'] = $e->getResponseHeaders();
 
         $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$nonExistentBlock]);
 
         $this->assertFalse(
             $this->graphQlResolverCache->load($cacheIdentityString)
+        );
+    }
+
+    /**
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoDataFixture Magento/Cms/_files/block.php
+     * @magentoDataFixture Magento/Cms/_files/blocks.php
+     */
+    public function testCmsBlockResolverCacheRetainsEntriesThatHaveNotBeenUpdated()
+    {
+        // query block1
+        $block1 = $this->blockRepository->getById('fixture_block');
+
+        $queryBlock1 = $this->getQuery([
+            $block1->getIdentifier(),
+        ]);
+
+        $responseBlock1 = $this->graphQlQueryWithResponseHeaders($queryBlock1);
+
+        $cacheIdentityStringBlock1 = $this->getResolverCacheKeyFromResponseAndBlocks($responseBlock1, [$block1]);
+
+        // query block2
+        $block2 = $this->blockRepository->getById('enabled_block');
+
+        $queryBlock2 = $this->getQuery([
+            $block2->getIdentifier(),
+        ]);
+
+        $responseBlock2 = $this->graphQlQueryWithResponseHeaders($queryBlock2);
+
+        $cacheIdentityStringBlock2 = $this->getResolverCacheKeyFromResponseAndBlocks($responseBlock2, [$block2]);
+
+        // assert both cache entries are present
+        $this->assertIsNumeric(
+            $this->graphQlResolverCache->test($cacheIdentityStringBlock1),
+            'Cache entry for block1 should be present'
+        );
+
+        $this->assertIsNumeric(
+            $this->graphQlResolverCache->test($cacheIdentityStringBlock2),
+            'Cache entry for block2 should be present'
+        );
+
+        // assert that cache is invalidated after block1 update
+        $block1->setContent('Updated content');
+        $this->blockRepository->save($block1);
+
+        $this->assertFalse(
+            $this->graphQlResolverCache->test($cacheIdentityStringBlock1),
+            'Cache entry for block1 should be invalidated after block1 update'
+        );
+
+        // assert that cache is not invalidated after block1 update
+        $this->assertIsNumeric(
+            $this->graphQlResolverCache->test($cacheIdentityStringBlock2),
+            'Cache entry for block2 should be present after block1 update'
         );
     }
 
@@ -347,7 +401,6 @@ QUERY;
         $tags = $metadatas['tags'];
 
         $expectedTags = [
-            $cacheIdPrefix . strtoupper(Block::CACHE_TAG),
             $cacheIdPrefix . strtoupper(GraphQlResolverCache::CACHE_TAG),
             $cacheIdPrefix . 'MAGE',
         ];
