@@ -80,7 +80,8 @@ QUERY;
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         /** @var Product $firstProduct */
-        $firstProduct = $productRepository->get($firstProductSku, false, null, true);$secondProduct = $productRepository->get($secondProductSku, false, null, true);
+        $firstProduct = $productRepository->get($firstProductSku, false, null, true);
+        $productRepository->get($secondProductSku, false, null, true);
 
         $categoryQueryVariables =[
             'id' => $categoryId,
