@@ -106,7 +106,7 @@ class PageCacheTest extends GraphQLPageCacheAbstract
 
         //cache-debug should be a MISS after updating the page
         $pageBlankResponseAfterUpdate = $this->graphQlQueryWithResponseHeaders($pageBlankQuery);
-        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $pageBlank['headers']);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $pageBlankResponseAfterUpdate['headers']);
         $cacheId = $pageBlankResponseAfterUpdate['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($pageBlankQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
