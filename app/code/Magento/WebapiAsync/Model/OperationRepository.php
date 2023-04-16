@@ -11,6 +11,7 @@ use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
 use Magento\AsynchronousOperations\Model\OperationRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\MessageQueue\MessageValidator;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -23,6 +24,13 @@ use Magento\WebapiAsync\Controller\Rest\Asynchronous\InputParamsResolver;
  */
 class OperationRepository implements OperationRepositoryInterface
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    public const ADMIN_RESOURCE = 'Magento_Logging::system_magento_logging_bulk_operations';
+
     /**
      * @var OperationInterfaceFactory
      */
@@ -53,6 +61,11 @@ class OperationRepository implements OperationRepositoryInterface
     private $storeManager;
 
     /**
+     * @var AuthorizationInterface
+     */
+    private $authorization;
+
+    /**
      * Initialize dependencies.
      *
      * @param OperationInterfaceFactory $operationFactory
@@ -61,6 +74,7 @@ class OperationRepository implements OperationRepositoryInterface
      * @param Json $jsonSerializer
      * @param InputParamsResolver $inputParamsResolver
      * @param StoreManagerInterface|null $storeManager
+     * @param AuthorizationInterface|null $authorization
      */
     public function __construct(
         OperationInterfaceFactory $operationFactory,
@@ -68,7 +82,8 @@ class OperationRepository implements OperationRepositoryInterface
         MessageValidator $messageValidator,
         Json $jsonSerializer,
         InputParamsResolver $inputParamsResolver,
-        StoreManagerInterface $storeManager = null
+        StoreManagerInterface $storeManager = null,
+        AuthorizationInterface $authorization = null,
     ) {
         $this->operationFactory = $operationFactory;
         $this->jsonSerializer = $jsonSerializer;
@@ -76,6 +91,7 @@ class OperationRepository implements OperationRepositoryInterface
         $this->entityManager = $entityManager;
         $this->inputParamsResolver = $inputParamsResolver;
         $this->storeManager = $storeManager?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->authorization = $authorization ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
     }
 
     /**
@@ -91,6 +107,11 @@ class OperationRepository implements OperationRepositoryInterface
                 'Parameter "$operationId" must not be NULL and must exist in input data'
             );
         }
+
+        if (!$this->authorization->isAllowed(static::ADMIN_RESOURCE)) {
+            $requestData[$operationId]['customer']['group_id'] = 1;
+        }
+
         $encodedMessage = $this->jsonSerializer->serialize($requestData[$operationId]);
 
         $serializedData = [
