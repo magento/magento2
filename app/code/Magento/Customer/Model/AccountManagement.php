@@ -58,6 +58,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as PsrLogger;
 use Magento\Customer\Model\Logger as CustomerLogger;
+use Magento\Backend\Model\Auth\Session;
 
 /**
  * Handle various customer account actions
@@ -396,6 +397,11 @@ class AccountManagement implements AccountManagementInterface
     private CustomerLogger $customerLogger;
 
     /**
+     * @var Session
+     */
+    private $authSession;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -434,6 +440,7 @@ class AccountManagement implements AccountManagementInterface
      * @param AuthenticationInterface|null $authentication
      * @param Backend|null $eavValidator
      * @param CustomerLogger|null $customerLogger
+     * @param Session|null $authSession
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -478,7 +485,8 @@ class AccountManagement implements AccountManagementInterface
         AuthorizationInterface $authorization = null,
         AuthenticationInterface $authentication = null,
         Backend $eavValidator = null,
-        ?CustomerLogger $customerLogger = null
+        ?CustomerLogger $customerLogger = null,
+        Session $authSession = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -522,6 +530,7 @@ class AccountManagement implements AccountManagementInterface
         $this->authentication = $authentication ?? $objectManager->get(AuthenticationInterface::class);
         $this->eavValidator = $eavValidator ?? $objectManager->get(Backend::class);
         $this->customerLogger = $customerLogger ?? $objectManager->get(CustomerLogger::class);
+        $this->authSession = $authSession ?? $objectManager->get(session::class);
     }
 
     /**
@@ -877,6 +886,12 @@ class AccountManagement implements AccountManagementInterface
      */
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
+        $groupId = $customer->getGroupId();
+        if (isset($groupId) && $this->authSession->getUser() &&
+            !$this->authorization->isAllowed(self::ADMIN_RESOURCE)) {
+            $customer->setGroupId(null);
+        }
+
         if ($password !== null) {
             $this->checkPasswordStrength($password);
             $customerEmail = $customer->getEmail();
