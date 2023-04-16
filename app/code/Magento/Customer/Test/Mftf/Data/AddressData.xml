@@ -446,6 +446,21 @@
         <data key="postcode">12345</data>
         <data key="telephone">512-345-6789</data>
     </entity>
+    <entity name="US_Address_Empty_Street_Lines" type="address">
+        <array key="street">
+            <item>123 Street Line</item>
+            <item>empty</item>
+            <item>empty</item>
+            <item>Region Line</item>
+        </array>
+        <data key="city">New York</data>
+        <data key="state">New York</data>
+        <data key="postcode">10001</data>
+        <data key="telephone">512-345-6789</data>
+        <requiredEntity type="region">RegionNY</requiredEntity>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+    </entity>
     <entity name="Canada_Address" type="address">
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
@@ -462,5 +477,20 @@
         <data key="default_shipping">true</data>
         <data key="default_billing">true</data>
         <data key="telephone">613-582-4782</data>
+    </entity>
+    <entity name="Switzerland_Address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>Kapelle St.</item>
+            <item>Niklaus 3</item>
+        </array>
+        <data key="city">Baden</data>
+        <data key="country_id">CH</data>
+        <data key="country">Switzerland</data>
+        <data key="state">Aargau</data>
+        <data key="postcode">5555</data>
+        <data key="telephone">555-55-555-55</data>
     </entity>
 </entities>

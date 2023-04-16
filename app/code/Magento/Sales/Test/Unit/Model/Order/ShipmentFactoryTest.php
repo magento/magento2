@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Convert\Order;
 use Magento\Sales\Model\Convert\OrderFactory;
 use Magento\Sales\Model\Order\Item;
@@ -52,8 +51,6 @@ class ShipmentFactoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
-
         $this->converter = $this->createPartialMock(
             Order::class,
             ['toShipment', 'itemToShipmentItem']
@@ -69,12 +66,9 @@ class ShipmentFactoryTest extends TestCase
             ['create']
         );
 
-        $this->subject = $objectManager->getObject(
-            ShipmentFactory::class,
-            [
-                'convertOrderFactory' => $convertOrderFactory,
-                'trackFactory' => $this->trackFactory
-            ]
+        $this->subject = new ShipmentFactory(
+            $convertOrderFactory,
+            $this->trackFactory
         );
     }
 

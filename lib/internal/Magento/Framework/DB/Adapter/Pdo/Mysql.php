@@ -649,6 +649,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @deprecated 101.0.0
+     * @see _query
      */
     public function multiQuery($sql, $bind = [])
     {
@@ -816,6 +817,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @deprecated 100.1.2
+     * @see MAGETWO-60073
      */
     protected function _splitMultiQuery($sql)
     {
@@ -1994,7 +1996,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 if (array_diff($cols, array_keys($row))) {
                     throw new \Zend_Db_Exception('Invalid data for insert');
                 }
-                $values[] = $this->_prepareInsertData($row, $bind);
+                $line = [];
+                foreach ($cols as $field) {
+                    $line[] = $row[$field];
+                }
+                $values[] = $this->_prepareInsertData($line, $bind);
             }
             unset($row);
         } else { // Column-value pairs
@@ -3621,6 +3627,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @return \Magento\Framework\DB\Select[]
      * @throws LocalizedException
      * @deprecated 100.1.3
+     * @see MAGETWO-55589
      */
     public function selectsByRange($rangeField, \Magento\Framework\DB\Select $select, $stepCount = 100)
     {
@@ -3637,6 +3644,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @return QueryGenerator
      * @deprecated 100.1.3
+     * @see MAGETWO-55589
      */
     private function getQueryGenerator()
     {

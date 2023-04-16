@@ -19,8 +19,6 @@
             <group value="example"/>
             <group value="login"/>
         </annotations>
-
-
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="assertLoggedIn"/>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>

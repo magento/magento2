@@ -197,7 +197,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     {
         $name = '';
         if ($this->_eavConfig->getAttribute('customer_address', 'prefix')->getIsVisible() && $this->getPrefix()) {
-            $name .= $this->getPrefix() . ' ';
+            $name .= __($this->getPrefix()) . ' ';
         }
         $name .= $this->getFirstname();
         $middleName = $this->_eavConfig->getAttribute('customer_address', 'middlename');
@@ -206,7 +206,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         }
         $name .= ' ' . $this->getLastname();
         if ($this->_eavConfig->getAttribute('customer_address', 'suffix')->getIsVisible() && $this->getSuffix()) {
-            $name .= ' ' . $this->getSuffix();
+            $name .= ' ' . __($this->getSuffix());
         }
         return $name;
     }

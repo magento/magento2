@@ -395,8 +395,8 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
             ? $this->getData('conditions_encoded')
             : $this->getData('conditions');
 
-        if ($conditions) {
-            $conditions = $this->conditionsHelper->decode($conditions);
+        if (is_string($conditions)) {
+            $conditions = $this->decodeConditions($conditions);
         }
 
         foreach ($conditions as $key => $condition) {
@@ -576,5 +576,17 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         }
 
         return $pagerBlockName . '.' . $pageName;
+    }
+
+    /**
+     * Decode encoded special characters and unserialize conditions into array
+     *
+     * @param string $encodedConditions
+     * @return array
+     * @see \Magento\Widget\Model\Widget::getDirectiveParam
+     */
+    private function decodeConditions(string $encodedConditions): array
+    {
+        return $this->conditionsHelper->decode(htmlspecialchars_decode($encodedConditions));
     }
 }
