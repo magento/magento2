@@ -1,0 +1,157 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+declare(strict_types=1);
+
+namespace Magento\WebapiAsync\Test\Unit\Model;
+
+use Magento\AsynchronousOperations\Api\Data\OperationInterface;
+use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\MessageQueue\MessageValidator;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\WebapiAsync\Model\OperationRepository;
+use PHPUnit\Framework\TestCase;
+use Magento\Customer\Model\Data\Customer;
+use Magento\WebapiAsync\Controller\Rest\Asynchronous\InputParamsResolver;
+
+class OperationRepositoryTest extends TestCase
+{
+
+    protected function setUp(): void
+    {
+        $this->customerMock = $this->createMock(Customer::class);
+        $this->operationFactoryMock = $this->createPartialMock(
+            OperationInterfaceFactory::class,
+            ['create']
+        );
+        $this->jsonSerializerMock = $this->createMock(Json::class);
+        $this->messageValidatorMock = $this->getMockBuilder(MessageValidator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->entityManagerMock = $this->getMockBuilder(EntityManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->inputParamsResolverMock = $this->getMockBuilder(InputParamsResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->operation = new OperationRepository(
+            $this->operationFactoryMock,
+            $this->entityManagerMock,
+            $this->messageValidatorMock,
+            $this->jsonSerializerMock,
+            $this->inputParamsResolverMock,
+            $this->storeManagerMock,
+            $this->authorizationMock
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProvider()
+    {
+        return [
+            [3, true, 3],
+            [2, false, 1]
+        ];
+    }
+
+    /**
+     * @dataProvider dataProvider
+     * @param $inputGroupId
+     * @param $isAllowed
+     * @param $expectedGroupId
+     * @return void
+     */
+    public function testCreate($inputGroupId, $isAllowed, $expectedGroupId): void
+    {
+        $topicName = "async.magento.customer.api.accountmanagementinterface.createaccount.post";
+        $entityParams = [
+            $this->customerMock,
+            "Password1",
+            ""
+        ];
+        $groupId = "13b44977-7579-421f-a432-85bbcfbafc64";
+        $operationId = 0;
+        $requestData = [
+            0 => [
+                'customer' => [
+                    'lastname' => 'Doe',
+                    'firstname' => 'Jane',
+                    'email' => 'test@gmail.com',
+                    'group_id' => $inputGroupId,
+                    'addresses' => []
+                ],
+                'password' => 'Password1'
+            ]
+        ];
+
+        if (!$isAllowed) {
+            $requestData[$operationId]['customer']['group_id'] = $expectedGroupId;
+        }
+
+        $this->messageValidatorMock->expects($this->once())->method('validate')->willReturn(false);
+        $this->inputParamsResolverMock->expects($this->once())->method('getInputData')->willReturn($requestData);
+
+        $this->authorizationMock->expects($this->once())
+            ->method('isAllowed')
+            ->with('Magento_Logging::system_magento_logging_bulk_operations')
+            ->willReturn($isAllowed);
+
+        $this->jsonSerializerMock->expects($this->at(0))
+            ->method('serialize')
+            ->with($requestData[$operationId])
+            ->willReturn(json_encode($requestData[$operationId]));
+
+        $serializedData = [
+            'entity_id'        => null,
+            'entity_link'      => '',
+            'meta_information' => json_encode($requestData[$operationId]),
+            'store_id' => 1
+        ];
+
+        $this->jsonSerializerMock->expects($this->at(1))
+            ->method('serialize')
+            ->willReturn($serializedData);
+
+        $store = $this->getMockBuilder(StoreInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $store->method('getId')->willReturn(1);
+        $this->storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->willReturn($store);
+        $data = [
+            'data' => [
+                OperationInterface::ID => $operationId,
+                OperationInterface::BULK_ID => $groupId,
+                OperationInterface::TOPIC_NAME => $topicName,
+                OperationInterface::SERIALIZED_DATA => $serializedData,
+                OperationInterface::STATUS => OperationInterface::STATUS_TYPE_OPEN,
+            ],
+        ];
+        $operation = $this->getMockBuilder(OperationInterface::class)
+            ->setMethods(['getData'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $operation->expects($this->once())->method('getData')->willReturn(json_encode($requestData[$operationId]));
+        $this->operationFactoryMock->method('create')->with($data)->willReturn($operation);
+
+        $result = $this->operation->create($topicName, $entityParams, $groupId, $operationId);
+        $jsonDecode = json_decode($result->getData());
+        $this->assertEquals($expectedGroupId, $jsonDecode->customer->group_id);
+    }
+}
