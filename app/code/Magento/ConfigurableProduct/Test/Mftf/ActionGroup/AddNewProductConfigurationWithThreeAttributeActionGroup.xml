@@ -8,46 +8,17 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AddNewProductConfigurationWithThreeAttributeActionGroup">
+    <actionGroup name="AddNewProductConfigurationWithThreeAttributeActionGroup" extends="AddNewProductConfigurationAttributeActionGroup">
         <annotations>
-            <description>Generates the Product Configurations for the 2 provided Attribute Names on the Configurable Product creation/edit page.</description>
+            <description>Generates the Product Configurations for the 3 provided Attribute Names on the Configurable Product creation/edit page.</description>
         </annotations>
         <arguments>
-            <argument name="attribute" type="entity"/>
-            <argument name="firstOption" type="entity"/>
-            <argument name="secondOption" type="entity"/>
             <argument name="thirdOption" type="entity"/>
         </arguments>
 
-        <!-- Create new attribute -->
-        <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickOnNewAttribute"/>
-        <waitForPageLoad stepKey="waitForIFrame"/>
-        <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame"/>
-        <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{attribute.default_label}}" stepKey="fillDefaultLabel"/>
-        <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="clickOnNewAttributePanel"/>
-        <waitForPageLoad stepKey="waitForSaveAttribute"/>
-        <switchToIFrame stepKey="switchOutOfIFrame"/>
-        <waitForPageLoad stepKey="waitForFilters"/>
-
         <!-- Find created below attribute and add option; save attribute -->
-        <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickOnFilters"/>
-        <fillField userInput="{{attribute.default_label}}" selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" stepKey="fillFilterAttributeCodeField"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton"/>
-        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="waitCreateNewValueAppears"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateFirstNewValue"/>
-        <fillField userInput="{{firstOption.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewFirstOption"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateSecondNewValue"/>
-        <fillField userInput="{{secondOption.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewSecondOption"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveAttribute"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateThirdNewValue"/>
-        <fillField userInput="{{thirdOption.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewThirdOption"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveThirdAttribute"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnSecondNextButton"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnThirdNextButton"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnFourthNextButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" after="clickOnSaveAttribute" stepKey="clickOnCreateThirdNewValue"/>
+        <fillField userInput="{{thirdOption.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" after="clickOnCreateThirdNewValue" stepKey="fillFieldForNewThirdOption"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" after="fillFieldForNewThirdOption" stepKey="clickOnSaveThirdAttribute"/>
     </actionGroup>
 </actionGroups>
