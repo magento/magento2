@@ -121,7 +121,7 @@ class UserResetPasswordEmailTest extends AbstractBackendController
 
         /** @var TransportBuilderMock $transportBuilderMock */
         $transportBuilderMock = $this->_objectManager->get(TransportBuilderMock::class);
-        $transport = $transportBuilderMock->setTemplateIdentifier(
+        $transportBuilderMock->setTemplateIdentifier(
             'customer_password_reset_password_template'
         )->setTemplateVars([
             'customer' => [
