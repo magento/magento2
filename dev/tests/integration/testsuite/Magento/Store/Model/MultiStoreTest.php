@@ -122,7 +122,7 @@ class MultiStoreTest extends \PHPUnit\Framework\TestCase
 
         /** @var TransportBuilderMock $transportBuilderMock */
         $transportBuilderMock = $this->objectManager->get(TransportBuilderMock::class);
-        $transport = $transportBuilderMock->setTemplateIdentifier(
+        $transportBuilderMock->setTemplateIdentifier(
             'customer_password_reset_password_template'
         )->setTemplateVars([
             'subscriber_data' => [
