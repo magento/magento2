@@ -19,12 +19,12 @@ class ProductFieldsSelector
     /**
      * @var FieldTranslator
      */
-    private $fieldTranslator;
+    private FieldTranslator $fieldTranslator;
 
     /**
      * @var AttributesJoiner
      */
-    private $attributesJoiner;
+    private AttributesJoiner $attributesJoiner;
 
     /**
      * @param FieldTranslator $fieldTranslator
