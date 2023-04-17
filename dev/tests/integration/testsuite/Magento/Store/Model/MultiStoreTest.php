@@ -142,7 +142,7 @@ class MultiStoreTest extends \PHPUnit\Framework\TestCase
         ->addTo($customerData['email'])
         ->getTransport();
 
-        $headers = $transport->getMessage()->getHeaders();
+        $headers = $transportBuilderMock->getSentMessage()->getHeaders();
 
         $this->assertNotNull($transport->getMessage());
         $this->assertStringContainsString($customerData['storeEmail'], $headers['From']);
