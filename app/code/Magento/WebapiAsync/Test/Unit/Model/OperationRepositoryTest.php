@@ -156,22 +156,16 @@ class OperationRepositoryTest extends TestCase
             ->method('isAllowed')
             ->with('Magento_Logging::system_magento_logging_bulk_operations')
             ->willReturn($isAllowed);
-
-        $this->jsonSerializerMock->expects($this->at(0))
-            ->method('serialize')
-            ->with($requestData[$operationId])
-            ->willReturn(json_encode($requestData[$operationId]));
-
         $serializedData = [
             'entity_id'        => null,
             'entity_link'      => '',
             'meta_information' => json_encode($requestData[$operationId]),
             'store_id' => 1
         ];
-
-        $this->jsonSerializerMock->expects($this->at(1))
+        $this->jsonSerializerMock->expects($this->exactly(2))
             ->method('serialize')
-            ->willReturn($serializedData);
+            ->withConsecutive([$requestData[$operationId]], [$serializedData])
+            ->willReturnOnConsecutiveCalls(json_encode($requestData[$operationId]), $serializedData);
 
         $store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
