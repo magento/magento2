@@ -13,7 +13,7 @@ use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\ParentResolverD
 /**
  * Provides logged-in customer id as a factor to use in the cache id.
  */
-class CurrentCustomerCacheIdProviderParent implements ParentResolverDataFactoredInterface
+class CurrentCustomerCacheIdProvider implements ParentResolverDataFactoredInterface
 {
     /**
      * Factor name.
