@@ -59,6 +59,7 @@ return [
         Magento\Framework\App\Config\ScopeCodeResolver::class => ['resolvedScopeCodes' => null],
         Magento\Framework\App\ResourceConnection::class => [
             'config' => null, // $_connectionNames changes
+            'connections' => null,
         ],
         Magento\Framework\Cache\InvalidateLogger::class => ['request' => null],
         Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple::class => ['rulePool' => null],
