@@ -15,7 +15,7 @@
 
         <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="navigateToLocaleConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <conditionalClick stepKey="expandLocaleOptions" selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.CheckIfTabExpand}}" visible="true"/>
+        <conditionalClick stepKey="expandLocaleOptions" selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.checkIfTabExpand}}" visible="true"/>
         <waitForElementVisible selector="{{LocaleOptionsSection.timezone}}" stepKey="waitForLocaleTimeZone"/>
     </actionGroup>
 </actionGroups>
