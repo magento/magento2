@@ -84,7 +84,7 @@ class AttributesJoiner
      * @param ResolveInfo $resolveInfo
      * @return array
      */
-    public function getQueryData(array $query, ResolveInfo $resolveInfo): array
+    public function getQueryData($query, $resolveInfo): array
     {
         $selectedFields = $fragmentFields = [];
         foreach ($query as $field) {
