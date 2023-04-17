@@ -134,10 +134,10 @@ class UserResetPasswordEmailTest extends AbstractBackendController
         ->addTo($adminEmail)
         ->getTransport();
 
-        $message = $transport->getMessage();
+        $message = $transportBuilderMock->getSentMessage();
 
         // Verify an email was dispatched to the correct user
-        $this->assertNotNull($transport->getMessage());
+        $this->assertNotNull($transportBuilderMock->getSentMessage());
         $this->assertEquals($adminEmail, $message->getTo()[0]->getEmail());
     }
 }
