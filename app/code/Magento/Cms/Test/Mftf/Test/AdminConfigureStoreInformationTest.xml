@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigureStoreInformationTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="able to configure store information data"/>
+            <title value="Admin Configure Store Information"/>
+            <description value="As a Merchant I want to be able to configure store information data"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-3963"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminSetStoreInformationConfigurationActionGroup" stepKey="resetStoreInformationConfig">
+                <argument name="storeName" value=""/>
+                <argument name="storeHoursOfOperation" value=""/>
+                <argument name="vatNumber" value=""/>
+                <argument name="telephone" value=""/>
+                <argument name="country" value=""/>
+                <argument name="state" value=""/>
+                <argument name="city" value=""/>
+                <argument name="postcode" value=""/>
+                <argument name="street" value=""/>
+            </actionGroup>
+            <actionGroup ref="DeletePageByUrlKeyActionGroup" stepKey="deletePage">
+                <argument name="UrlKey" value="{{_defaultCmsPage.identifier}}"/>
+            </actionGroup>
+            <actionGroup ref="EuropeanCountriesOptionActionGroup" stepKey="checkConfig"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Set StoreInformation configs data-->
+            <actionGroup ref="AdminSetStoreInformationConfigurationActionGroup" stepKey="setStoreInformationConfigData">
+                <argument name="telephone" value="{{DE_Address_Berlin_Not_Default_Address.telephone}}"/>
+                <argument name="country" value="{{DE_Address_Berlin_Not_Default_Address.country_id}}"/>
+                <argument name="state" value="{{DE_Address_Berlin_Not_Default_Address.state}}"/>
+                <argument name="city" value="{{DE_Address_Berlin_Not_Default_Address.city}}"/>
+                <argument name="postcode" value="{{DE_Address_Berlin_Not_Default_Address.postcode}}"/>
+                <argument name="street" value="{{DE_Address_Berlin_Not_Default_Address.street[0]}}"/>
+            </actionGroup>
+            <magentoCLI command="config:set {{SetEuropeanUnionCountries.path}} {{SetEuropeanUnionCountries.value}}" stepKey="selectEUCountries"/>
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCmsPageGrid"/>
+            <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPage"/>
+            <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
+            <actionGroup ref="SaveAndContinueEditCmsPageActionGroup" stepKey="saveAndContinueEditCmsPage"/>
+            <actionGroup ref="switchToPageBuilderStage" stepKey="switchToPageBuilderStage"/>
+            <actionGroup ref="dragContentTypeToStage" stepKey="dragRowToRootContainer">
+                <argument name="contentType" value="PageBuilderRowContentType"/>
+                <argument name="containerTargetType" value="PageBuilderRootContainerContentType"/>
+            </actionGroup>
+            <actionGroup ref="expandPageBuilderPanelMenuSection" stepKey="expandPageBuilderPanelMenuSection">
+                <argument name="contentType" value="PageBuilderTextContentType"/>
+            </actionGroup>
+            <actionGroup ref="dragContentTypeToStage" stepKey="dragIntoStage">
+                <argument name="contentType" value="PageBuilderTextContentType"/>
+            </actionGroup>
+            <actionGroup ref="openPageBuilderEditPanel" stepKey="openEditMenuOnStage">
+                <argument name="contentType" value="PageBuilderTextContentType"/>
+            </actionGroup>
+            <click selector="{{TextOnConfiguration.insertVariableButton}}" stepKey="clickInsertVariableButton1"/>
+            <wait time="2" stepKey="waitForLoadOne"/>
+            <click selector="{{VariableSection.VariableRadio('General / Store Information / Store Name')}}" stepKey="selectDefaultVariable"/>
+            <wait time="2" stepKey="waitForLoad121"/>
+            <click selector="{{VariableSection.InsertWidget}}" stepKey="clickInsertVariableone"/>
+            <wait time="2" stepKey="waitForLoadTwo"/>
+            <click selector="{{TextOnConfiguration.insertVariableButton}}" stepKey="clickInsertVariableButtonTwo"/>
+            <wait time="2" stepKey="waitForLoadThree"/>
+            <click selector="{{VariableSection.VariableRadio('General / Store Information / Street Address')}}" stepKey="selectDefaultVariable1"/>
+            <wait time="2" stepKey="waitForLoadFour"/>
+            <click selector="{{VariableSection.InsertWidget}}" stepKey="clickInsertVariableTwo"/>
+            <wait time="2" stepKey="waitForLoadFive"/>
+            <click selector="{{TextOnConfiguration.insertVariableButton}}" stepKey="clickInsertVariableAgainAgain"/>
+            <wait time="2" stepKey="waitForLoadSix"/>
+              <click selector="{{VariableSection.VariableRadio('General / Store Information / City')}}" stepKey="selectDefaultVariable2"/>
+            <wait time="2" stepKey="waitForLoadSeaven"/>
+            <click selector="{{VariableSection.InsertWidget}}" stepKey="clickInsertVariableThree"/>
+            <click selector="{{TextOnConfiguration.insertVariableButton}}" stepKey="clickInsertVariableAgainAgain1"/>
+            <wait time="2" stepKey="waitForLoadEight"/>
+            <click selector="{{VariableSection.VariableRadio('General / Store Information / ZIP/Postal Code')}}" stepKey="selectDefaultVariable3"/>
+            <wait time="2" stepKey="waitForLoadNine"/>
+            <click selector="{{VariableSection.InsertWidget}}" stepKey="clickInsertVariableFour"/>
+            <click selector="{{TextOnConfiguration.insertVariableButton}}" stepKey="clickInsertVariableAgainAgain2"/>
+            <wait time="2" stepKey="waitForLoadTen"/>
+            <click selector="{{VariableSection.VariableRadio('General / Store Information / Region/State')}}" stepKey="selectDefaultVariable4"/>
+            <wait time="2" stepKey="waitForLoadEleaven"/>
+            <click selector="{{VariableSection.InsertWidget}}" stepKey="clickInsertVariableFive"/>
+            <click selector="{{TextOnConfiguration.insertVariableButton}}" stepKey="clickInsertVariableAgainAgain9"/>
+            <wait time="2" stepKey="waitForLoadTwelve"/>
+            <click selector="{{VariableSection.VariableRadio('General / Store Information / Country')}}" stepKey="selectDefaultVariable5"/>
+            <wait time="2" stepKey="waitForLoadThirteen"/>
+            <click selector="{{VariableSection.InsertWidget}}" stepKey="clickInsertVariableSix"/>
+            <wait time="2" stepKey="waitForLoadFourteen"/>
+            <click selector="{{TextOnConfiguration.savePage}}" stepKey="clickOnSave"/>
+            <wait time="2" stepKey="waitForLoadFifteen"/>
+            <click selector="{{TextOnConfiguration.arrowPage}}" stepKey="clickOnArrow"/>
+            <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
+            <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
+            <actionGroup ref="SaveAndContinueEditCmsPageActionGroup" stepKey="saveAndContinueEditCmsPageAgain"/>
+            <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPageRefresh"/>
+    </test>
+</tests>
