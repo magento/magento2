@@ -274,7 +274,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $subscriber->loadByEmail('customer@example.com');
         $this->assertTrue($subscriber->isSubscribed());
 
-        $transport = $this->transportBuilderMock->setTemplateIdentifier(
+        $this->transportBuilderMock->setTemplateIdentifier(
             'newsletter_subscription_confirm_email_template'
         )->setTemplateVars([
             'subscriber_data' => [
