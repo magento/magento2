@@ -17,15 +17,11 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-4389"/>
             <group value="widget"/>
+            <group value="pagebuilder-disable"/>
         </annotations>
         <before>
             <!-- Pre-condition 1- Login as Admin  -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <!-- Pre-condition - Disable the page builder -->
-            <magentoCLI command="config:set cms/pagebuilder/enabled 0" stepKey="disablePageBuilder"/>
-            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
-            <magentoCLI stepKey="reindexingPostDisablingThePageBuilder" command="indexer:reindex"/>
-            <magentoCLI stepKey="flushCachePostDisablingThePageBuilder" command="cache:flush"/>
             <!-- Pre-condition 3- Verify page in grid-->
             <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="openCMSPagesGridActionGroup"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters"/>
@@ -37,6 +33,7 @@
             <waitForElementVisible selector="{{CmsNewPagePageContentSection.header}}" stepKey="waitForContentTabForPageToBeVisible"/>
             <!-- Pre-condition 5- Expand the Content section > Insert Widget -->
             <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContentTabForPage"/>
+            <conditionalClick selector="{{CmsNewPagePageActionsSection.showHideEditor}}" dependentSelector="{{CmsNewPagePageActionsSection.showHideEditor}}" visible="true" stepKey="clickOnShowHideEditorLinkIfVisibleForInsertingWidget"/>
             <waitForElementVisible selector="{{CmsNewPagePageActionsSection.insertWidget}}" stepKey="waitForTheInsertWidgetButtonToDisplay"/>
             <actionGroup ref="AdminInsertWidgetToCmsPageContentActionGroup" stepKey="selectCMSPageLinkFromDropdown"/>
             <waitForPageLoad stepKey="waitForPageLoadPostSelectingFromDropDown"/>
@@ -65,6 +62,7 @@
             <waitForElementVisible selector="{{CmsNewPagePageContentSection.header}}" stepKey="waitForContentTabForPageToBeVisibleToReset"/>
             <!-- Pre-condition 5- Expand the Content section > Insert Widget To Reset -->
             <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContentTabForPageToReset"/>
+            <conditionalClick selector="{{CmsNewPagePageActionsSection.showHideEditor}}" dependentSelector="{{CmsNewPagePageActionsSection.showHideEditor}}" visible="true" stepKey="clickOnShowHideEditorLinkIfVisibleForInsertingWidgetToOriginal"/>
             <waitForElementVisible selector="{{CmsNewPagePageActionsSection.insertWidget}}" stepKey="waitForTheInsertWidgetButtonToDisplayToReset"/>
             <clearField selector="{{CmsNewPagePageContentSection.content}}" stepKey="clearWidgetTextFieldToReset"/>
             <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="&lt;p&gt;CMS homepage content goes here.&lt;/p&gt;" stepKey="InputDefaultValuesInWidgetTextFieldToReset"/>
@@ -72,10 +70,6 @@
             <click selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="clickSavePageToReset"/>
             <waitForElementVisible selector="{{CmsPagesPageActionsSection.savePageSuccessMessage}}" stepKey="waitForSuccessMessageLoggedOutToReset" time="5"/>
             <see userInput="You saved the page." stepKey="seeSuccessMessageToReset"/>
-            <magentoCLI command="config:set cms/pagebuilder/enabled 1" stepKey="enablePageBuilder"/>
-            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
-            <magentoCLI stepKey="reindexPostEnablingThePageBuilder" command="indexer:reindex"/>
-            <magentoCLI stepKey="flushCachePostEnablingThePageBuilder" command="cache:flush"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="navigateToHomePage"/>
