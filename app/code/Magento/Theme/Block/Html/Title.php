@@ -79,7 +79,7 @@ class Title extends Template
     {
         $pageTitle = !empty($this->pageTitle) ? $this->pageTitle : $this->pageConfig->getTitle()->getShortHeading();
 
-        return $this->shouldTranslateTitle() ? __($pageTitle) : $pageTitle;
+        return $this->shouldTranslateTitle() ? __($pageTitle) : (string)$pageTitle;
     }
 
     /**
