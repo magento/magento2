@@ -33,7 +33,7 @@
     </entity>
     <entity name="BundleProductWithSlashSku" type="product">
         <data key="name">BundleProduct</data>
-        <data key="sku">bundle/product</data>
+        <data key="sku">bu/ndle</data>
         <data key="status">1</data>
     </entity>
     <entity name="FixedBundleProduct" type="product2">
