@@ -9,11 +9,13 @@
         "magento/framework": "*",
         "magento/module-webapi": "*",
         "magento/module-asynchronous-operations": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-authorization": "*"
     },
     "suggest": {
         "magento/module-user": "*",
-        "magento/module-customer": "*"
+        "magento/module-customer": "*",
+        "magento/module-logging": "*"
     },
     "type": "magento2-module",
     "license": [
