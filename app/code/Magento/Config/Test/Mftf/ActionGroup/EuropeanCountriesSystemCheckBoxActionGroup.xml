@@ -8,12 +8,17 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="EuropeanCountriesOptionActionGroup" extends="EuropeanCountriesOptionActionGroup">
+    <actionGroup name="EuropeanCountriesSystemCheckBoxActionGroup">
         <annotations>
             <description>check system value european country option value</description>
         </annotations>
 
-        <remove keyForRemoval="uncheckConfigSetting"/>
+        <amOnPage url="{{AdminConfigGeneralPage.url}}" stepKey="navigateToAdminStoreConfiguration"/>
+        <conditionalClick selector="{{CountriesFormSection.block}}" dependentSelector="{{CountriesFormSection.label}}" visible="false" stepKey="expand_panel"/>
+        <scrollTo selector="{{CountriesFormSection.label}}" stepKey="scrollToLabel" />
+        <wait time="2" stepKey="waitForLoad"/>
         <checkOption selector="{{CountriesFormSection.useConfigSettings}}" stepKey="checkConfigSetting"/>
+        <wait time="2" stepKey="waitForPageLoad"/>
+        <click selector="{{CountriesFormSection.saveConfig}}" stepKey="clickSave"/>
     </actionGroup>
 </actionGroups>
