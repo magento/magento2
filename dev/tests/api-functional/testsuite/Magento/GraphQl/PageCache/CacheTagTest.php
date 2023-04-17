@@ -95,6 +95,10 @@ QUERY;
 
         // cache-debug header value should be a MISS when category is loaded first time
         $responseMissOnCategoryQuery = $this->graphQlQueryWithResponseHeaders($categoryQuery, $categoryQueryVariables);
+        print_r("Value of Category Query");
+        print_r("=======");
+        print_r($responseMissOnCategoryQuery);
+        print_r(" end =======");
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseMissOnCategoryQuery['headers']);
         $this->assertArrayHasKey('X-Magento-Cache-Debug', $responseMissOnCategoryQuery['headers']);
         $this->assertEquals('MISS', $responseMissOnCategoryQuery['headers']['X-Magento-Cache-Debug']);
