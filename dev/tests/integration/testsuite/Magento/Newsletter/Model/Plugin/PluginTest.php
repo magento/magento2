@@ -287,7 +287,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         ->addTo('customer@example.com')
         ->getTransport();
 
-        $message = $transport->getMessage();
+        $message = $this->transportBuilderMock->getSentMessage();
 
         $this->assertStringContainsString(
             $subscriber->getConfirmationLink(),
