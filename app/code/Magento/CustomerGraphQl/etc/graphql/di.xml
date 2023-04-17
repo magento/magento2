@@ -62,7 +62,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\GraphQlCache\Model\Resolver\Cache\ResolverCacheIdCalculator">
+    <type name="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator">
         <arguments>
             <argument name="idFactorProviders" xsi:type="array">
                 <item name="customergroup" xsi:type="object">Magento\CustomerGraphQl\CacheIdFactorProviders\CustomerGroupProvider</item>

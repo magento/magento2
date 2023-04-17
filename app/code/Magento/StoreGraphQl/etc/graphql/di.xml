@@ -41,7 +41,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\GraphQlCache\Model\Resolver\Cache\ResolverCacheIdCalculator">
+    <type name="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator">
         <arguments>
             <argument name="idFactorProviders" xsi:type="array">
                 <item name="currency" xsi:type="object">Magento\StoreGraphQl\CacheIdFactorProviders\CurrencyProvider</item>
