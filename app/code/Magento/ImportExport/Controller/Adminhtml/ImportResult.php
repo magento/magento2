@@ -11,6 +11,7 @@ use Magento\ImportExport\Helper\Report;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\History as ModelHistory;
+use Magento\Framework\Escaper;
 use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Model\Import\RenderErrorMessages;
 use Magento\ImportExport\Model\Report\ReportProcessorInterface;
@@ -43,6 +44,11 @@ abstract class ImportResult extends Import
     protected Report $reportHelper;
 
     /**
+     * @var Escaper|null
+     */
+    protected $escaper;
+
+    /**
      * @var RenderErrorMessages
      */
     private RenderErrorMessages $renderErrorMessages;
@@ -52,6 +58,7 @@ abstract class ImportResult extends Import
      * @param ReportProcessorInterface $reportProcessor
      * @param ModelHistory $historyModel
      * @param Report $reportHelper
+     * @param Escaper|null $escaper
      * @param RenderErrorMessages|null $renderErrorMessages
      */
     public function __construct(
@@ -59,12 +66,15 @@ abstract class ImportResult extends Import
         ReportProcessorInterface $reportProcessor,
         ModelHistory $historyModel,
         Report $reportHelper,
+        Escaper $escaper = null,
         ?RenderErrorMessages $renderErrorMessages = null
     ) {
         parent::__construct($context);
         $this->reportProcessor = $reportProcessor;
         $this->historyModel = $historyModel;
         $this->reportHelper = $reportHelper;
+        $this->escaper = $escaper
+            ?? ObjectManager::getInstance()->get(Escaper::class);
         $this->renderErrorMessages = $renderErrorMessages ??
             ObjectManager::getInstance()->get(RenderErrorMessages::class);
     }

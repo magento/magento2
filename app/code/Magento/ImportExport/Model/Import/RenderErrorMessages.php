@@ -75,37 +75,35 @@ class RenderErrorMessages
      * Add Error Messages for Import
      *
      * @param ProcessingErrorAggregatorInterface $errorAggregator
-     * @return string|void
+     * @return string
      */
     public function renderMessages(
         ProcessingErrorAggregatorInterface $errorAggregator
-    ) {
-        if ($errorAggregator->getErrorsCount()) {
-            $message = '';
-            $counter = 0;
-            $escapedMessages = [];
-            foreach ($this->getErrorMessages($errorAggregator) as $error) {
-                $escapedMessages[] = (++$counter) . '. ' . $this->escaper->escapeHtml($error);
-                if ($counter >= ImportResult::LIMIT_ERRORS_MESSAGE) {
-                    break;
-                }
+    ): string {
+        $message = '';
+        $counter = 0;
+        $escapedMessages = [];
+        foreach ($this->getErrorMessages($errorAggregator) as $error) {
+            $escapedMessages[] = (++$counter) . '. ' . $this->escaper->escapeHtml($error);
+            if ($counter >= ImportResult::LIMIT_ERRORS_MESSAGE) {
+                break;
             }
-            if ($errorAggregator->hasFatalExceptions()) {
-                foreach ($this->getSystemExceptions($errorAggregator) as $error) {
-                    $escapedMessages[] = $this->escaper->escapeHtml($error->getErrorMessage())
-                        . ' <a href="#" onclick="$(this).next().show();$(this).hide();return false;">'
-                        . __('Show more') . '</a><div style="display:none;">' . __('Additional data') . ': '
-                        . $this->escaper->escapeHtml($error->getErrorDescription()) . '</div>';
-                }
-            }
-            $message .= implode('<br>', $escapedMessages);
-            return '<strong>' . __('Following Error(s) has been occurred during importing process:') . '</strong><br>'
-                . '<div class="import-error-wrapper">' . __('Only the first 100 errors are shown. ')
-                . '<a href="'
-                . $this->createDownloadUrlImportHistoryFile($this->createErrorReport($errorAggregator))
-                . '">' . __('Download full report') . '</a><br>'
-                . '<div class="import-error-list">' . $message . '</div></div>';
         }
+        if ($errorAggregator->hasFatalExceptions()) {
+            foreach ($this->getSystemExceptions($errorAggregator) as $error) {
+                $escapedMessages[] = $this->escaper->escapeHtml($error->getErrorMessage())
+                    . ' <a href="#" onclick="$(this).next().show();$(this).hide();return false;">'
+                    . __('Show more') . '</a><div style="display:none;">' . __('Additional data') . ': '
+                    . $this->escaper->escapeHtml($error->getErrorDescription()) . '</div>';
+            }
+        }
+        $message .= implode('<br>', $escapedMessages);
+        return '<strong>' . __('Following Error(s) has been occurred during importing process:') . '</strong><br>'
+            . '<div class="import-error-wrapper">' . __('Only the first 100 errors are shown. ')
+            . '<a href="'
+            . $this->createDownloadUrlImportHistoryFile($this->createErrorReport($errorAggregator))
+            . '">' . __('Download full report') . '</a><br>'
+            . '<div class="import-error-list">' . $message . '</div></div>';
     }
 
     /**
