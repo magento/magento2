@@ -27,7 +27,7 @@ class OperationRepository implements OperationRepositoryInterface
     /**
      * Authorization level of a basic admin session
      */
-    public const ADMIN_RESOURCE = 'Magento_Logging::system_magento_logging_bulk_operations';
+    public const ADMIN_RESOURCE = 'Magento_Backend::admin';
 
     /**
      * @var OperationInterfaceFactory

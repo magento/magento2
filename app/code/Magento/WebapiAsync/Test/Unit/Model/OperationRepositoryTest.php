@@ -154,7 +154,7 @@ class OperationRepositoryTest extends TestCase
 
         $this->authorizationMock->expects($this->once())
             ->method('isAllowed')
-            ->with('Magento_Logging::system_magento_logging_bulk_operations')
+            ->with('Magento_Backend::admin')
             ->willReturn($isAllowed);
         $serializedData = [
             'entity_id'        => null,
