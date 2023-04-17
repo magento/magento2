@@ -13,8 +13,7 @@
     },
     "suggest": {
         "magento/module-user": "*",
-        "magento/module-customer": "*",
-        "magento/module-logging": "*"
+        "magento/module-customer": "*"
     },
     "type": "magento2-module",
     "license": [
