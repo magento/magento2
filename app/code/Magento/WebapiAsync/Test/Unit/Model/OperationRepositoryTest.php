@@ -11,18 +11,64 @@ namespace Magento\WebapiAsync\Test\Unit\Model;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Bulk\OperationInterface as OperationInterfaceAlias;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\MessageQueue\MessageValidator;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\WebapiAsync\Model\OperationRepository;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Customer\Model\Data\Customer;
 use Magento\WebapiAsync\Controller\Rest\Asynchronous\InputParamsResolver;
 
 class OperationRepositoryTest extends TestCase
 {
+    /**
+     * @var Customer|MockObject
+     */
+    private $customerMock;
+
+    /**
+     * @var OperationInterfaceFactory|MockObject
+     */
+    private $operationFactoryMock;
+
+    /**
+     * @var Json|MockObject
+     */
+    private $jsonSerializerMock;
+
+    /**
+     * @var MessageValidator|MockObject
+     */
+    private $messageValidatorMock;
+
+    /**
+     * @var EntityManager|MockObject
+     */
+    private $entityManagerMock;
+
+    /**
+     * @var InputParamsResolver|MockObject
+     */
+    private $inputParamsResolverMock;
+
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManagerMock;
+
+    /**
+     * @var AuthorizationInterface|MockObject
+     */
+    private $authorizationMock;
+
+    /**
+     * @var OperationRepository
+     */
+    private $operation;
 
     protected function setUp(): void
     {
@@ -136,11 +182,11 @@ class OperationRepositoryTest extends TestCase
             ->willReturn($store);
         $data = [
             'data' => [
-                OperationInterface::ID => $operationId,
-                OperationInterface::BULK_ID => $groupId,
-                OperationInterface::TOPIC_NAME => $topicName,
-                OperationInterface::SERIALIZED_DATA => $serializedData,
-                OperationInterface::STATUS => OperationInterface::STATUS_TYPE_OPEN,
+                OperationInterfaceAlias::ID => $operationId,
+                OperationInterfaceAlias::BULK_ID => $groupId,
+                OperationInterfaceAlias::TOPIC_NAME => $topicName,
+                OperationInterfaceAlias::SERIALIZED_DATA => $serializedData,
+                OperationInterfaceAlias::STATUS => OperationInterfaceAlias::STATUS_TYPE_OPEN,
             ],
         ];
         $operation = $this->getMockBuilder(OperationInterface::class)
@@ -151,7 +197,7 @@ class OperationRepositoryTest extends TestCase
         $this->operationFactoryMock->method('create')->with($data)->willReturn($operation);
 
         $result = $this->operation->create($topicName, $entityParams, $groupId, $operationId);
-        $jsonDecode = json_decode($result->getData());
-        $this->assertEquals($expectedGroupId, $jsonDecode->customer->group_id);
+        $decode = json_decode($result->getData());
+        $this->assertEquals($expectedGroupId, $decode->customer->group_id);
     }
 }
