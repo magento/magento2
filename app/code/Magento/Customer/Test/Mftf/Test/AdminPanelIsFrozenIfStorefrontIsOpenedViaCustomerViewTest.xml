@@ -30,7 +30,7 @@
         </before>
         <after>
             <!-- Disable shipping method for customer with default address -->
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
             <deleteData createDataKey="createSimpleCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
