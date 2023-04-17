@@ -7,10 +7,10 @@
     "require": {
         "php": "~8.1.0||~8.2.0",
         "magento/framework": "*",
+        "magento/module-authorization": "*",
         "magento/module-webapi": "*",
         "magento/module-asynchronous-operations": "*",
-        "magento/module-store": "*",
-        "magento/module-authorization": "*"
+        "magento/module-store": "*"
     },
     "suggest": {
         "magento/module-user": "*",
