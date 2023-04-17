@@ -7,14 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\CmsGraphQl\Model\Resolver;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\Page as CmsPage;
 use Magento\Cms\Model\PageRepository;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Cache\Frontend\Factory as CacheFrontendFactory;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
+use Magento\Framework\App\ObjectManager\ConfigLoader;
+use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\ProviderInterface;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
-use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\ObjectManager;
@@ -61,19 +65,28 @@ class PageTest extends GraphQlAbstract
      */
     private $originalCacheStateEnabledStatus;
 
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
     protected function setUp(): void
     {
-        $objectManager = ObjectManager::getInstance();
+        $this->objectManager = ObjectManager::getInstance();
 
-        $this->graphQlResolverCache = $objectManager->get(GraphQlResolverCache::class);
-        $this->pageRepository = $objectManager->get(PageRepository::class);
-        $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
-        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-        $this->storeManager = $objectManager->get(StoreManagerInterface::class);
+        $this->graphQlResolverCache = $this->objectManager->get(GraphQlResolverCache::class);
+        $this->pageRepository = $this->objectManager->get(PageRepository::class);
+        $this->searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
+        $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
 
-        $this->cacheState = $objectManager->get(CacheState::class);
+        $this->cacheState = $this->objectManager->get(CacheState::class);
         $this->originalCacheStateEnabledStatus = $this->cacheState->isEnabled(GraphQlResolverCache::TYPE_IDENTIFIER);
         $this->cacheState->setEnabled(GraphQlResolverCache::TYPE_IDENTIFIER, true);
+        // test has to be executed in graphql area
+        $configLoader = $this->objectManager->get(ConfigLoader::class);
+        $this->objectManager->configure($configLoader->load(Area::AREA_GRAPHQL));
+        $this->resetUserInfoContext();
     }
 
     protected function tearDown(): void
@@ -130,6 +143,8 @@ class PageTest extends GraphQlAbstract
      */
     public function testCmsPageResolverCacheAndInvalidationAsCustomer()
     {
+        $this->initUserInfoContext('customer@example.com');
+
         $authHeader = [
             'Authorization' => 'Bearer ' . $this->customerTokenService->createCustomerAccessToken(
                 'customer@example.com',
@@ -219,6 +234,7 @@ class PageTest extends GraphQlAbstract
             $query = $this->getQuery($page->getIdentifier());
             $response = $this->graphQlQueryWithResponseHeaders($query);
 
+            $this->resetUserInfoContext();
             $resolverCacheKeyForGuestQuery = $this->getResolverCacheKeyFromResponseAndPage($response, $page);
 
             $cacheEntry = $this->graphQlResolverCache->load($resolverCacheKeyForGuestQuery);
@@ -242,6 +258,7 @@ class PageTest extends GraphQlAbstract
                 $authHeader
             );
 
+            $this->initUserInfoContext('customer@example.com');
             $resolverCacheKeyForUserQuery = $this->getResolverCacheKeyFromResponseAndPage($response, $page);
 
             $cacheEntry = $this->graphQlResolverCache->load($resolverCacheKeyForUserQuery);
@@ -523,9 +540,43 @@ class PageTest extends GraphQlAbstract
 QUERY;
     }
 
-    private function getResolverCacheKeyFromResponseAndPage(array $response, PageInterface $page): string
+    private function initUserInfoContext(string $customerEmail)
     {
-        $cacheIdValue = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        /** @var CustomerRepositoryInterface $customerRepository */
+        $customerRepository = $this->objectManager->create(CustomerRepositoryInterface::class);
+        $customerModel = $customerRepository->get($customerEmail);
+        $userContextMock = $this->getMockBuilder(UserContextInterface::class)
+            ->onlyMethods(['getUserId', 'getUserType'])->disableOriginalConstructor()->getMock();
+        $userContextMock->expects($this->any())->method('getUserId')->willReturn($customerModel->getId());
+        $userContextMock->expects($this->any())->method('getUserType')->willReturn(3);
+        /** @var \Magento\GraphQl\Model\Query\ContextFactory $contextFactory */
+        $contextFactory = $this->objectManager->get(\Magento\GraphQl\Model\Query\ContextFactory::class);
+        $contextFactory->create($userContextMock);
+    }
+
+    private function resetUserInfoContext()
+    {
+        $userContextMock = $this->getMockBuilder(UserContextInterface::class)
+            ->onlyMethods(['getUserId', 'getUserType'])->disableOriginalConstructor()->getMock();
+        $userContextMock->expects($this->any())->method('getUserId')->willReturn(0);
+        $userContextMock->expects($this->any())->method('getUserType')->willReturn(4);
+        // test has to be executed in graphql area
+        $configLoader = $this->objectManager->get(ConfigLoader::class);
+        $this->objectManager->configure($configLoader->load(Area::AREA_GRAPHQL));
+        /** @var \Magento\GraphQl\Model\Query\ContextFactory $contextFactory */
+        $contextFactory = $this->objectManager->get(\Magento\GraphQl\Model\Query\ContextFactory::class);
+        $contextFactory->create($userContextMock);
+    }
+
+    public function getResolverCacheKeyFromResponseAndPage(array $response, PageInterface $page): string
+    {
+        $resolverMock = $this->getMockBuilder(\Magento\CmsGraphQl\Model\Resolver\Page::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var ProviderInterface $cacheIdStrategy */
+        $cacheIdStrategy = $this->objectManager->get(ProviderInterface::class);
+        $cacheIdProvider = $cacheIdStrategy->getForResolver($resolverMock);
+        $cacheIdValue = $cacheIdProvider->calculateCacheKey();
 
         $cacheIdQueryPayloadMetadata = sprintf('CmsPage%s', json_encode([
             'identifier' => $page->getIdentifier(),

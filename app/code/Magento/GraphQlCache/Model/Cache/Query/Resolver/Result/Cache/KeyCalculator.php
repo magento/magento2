@@ -50,11 +50,11 @@ class KeyCalculator
     /**
      * Calculates the value of resolver cache identifier.
      *
-     * @param array|null $resolvedData
+     * @param array|null $parentResolverData
      *
      * @return string|null
      */
-    public function calculateCacheKey(?array $resolvedData = null): ?string
+    public function calculateCacheKey(?array $parentResolverData = null): ?string
     {
         if (!$this->idFactorProviders) {
             return null;
@@ -66,7 +66,7 @@ class KeyCalculator
                 if ($idFactorProvider instanceof ParentResolverDataFactoredInterface) {
                     $keys[$idFactorProvider->getFactorName()] = $idFactorProvider->getFactorValueForResolvedData(
                         $context,
-                        $resolvedData
+                        $parentResolverData
                     );
                 } else {
                     $keys[$idFactorProvider->getFactorName()] = $idFactorProvider->getFactorValue($context);
