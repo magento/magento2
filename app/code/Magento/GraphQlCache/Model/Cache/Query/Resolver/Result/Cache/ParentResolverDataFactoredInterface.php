@@ -13,14 +13,14 @@ use Magento\GraphQlCache\Model\CacheId\CacheIdFactorProviderInterface;
 /**
  * Id factor provider interface for resolver cache that depends on previous resolver data.
  */
-interface ResolverDependentFactorProviderInterface extends CacheIdFactorProviderInterface
+interface ParentResolverDataFactoredInterface extends CacheIdFactorProviderInterface
 {
     /**
      * Provides factor value based on query context and parent resolver data.
      *
      * @param ContextInterface $context
-     * @param array|null $resolvedData
+     * @param array|null $parentResolverData
      * @return string
      */
-    public function getFactorValueForResolvedData(ContextInterface $context, ?array $resolvedData): string;
+    public function getFactorValueForResolvedData(ContextInterface $context, ?array $parentResolverData): string;
 }

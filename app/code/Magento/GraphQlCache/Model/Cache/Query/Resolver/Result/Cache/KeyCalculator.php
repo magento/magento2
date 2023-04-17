@@ -63,7 +63,7 @@ class KeyCalculator
         try {
             $context = $this->contextFactory->get();
             foreach ($this->idFactorProviders as $idFactorProvider) {
-                if ($idFactorProvider instanceof ResolverDependentFactorProviderInterface && $resolvedData !== null) {
+                if ($idFactorProvider instanceof ParentResolverDataFactoredInterface) {
                     $keys[$idFactorProvider->getFactorName()] = $idFactorProvider->getFactorValueForResolvedData(
                         $context,
                         $resolvedData
