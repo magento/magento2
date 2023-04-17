@@ -9,7 +9,8 @@
         "magento/framework": "*",
         "magento/module-webapi": "*",
         "magento/module-asynchronous-operations": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-authorization": "*"
     },
     "suggest": {
         "magento/module-user": "*",
