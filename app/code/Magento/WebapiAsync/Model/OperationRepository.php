@@ -29,7 +29,7 @@ class OperationRepository implements OperationRepositoryInterface
      *
      * @see _isAllowed()
      */
-    public const ADMIN_RESOURCE = 'Magento_Logging::system_magento_logging_bulk_operations';
+    const ADMIN_RESOURCE = 'Magento_Logging::system_magento_logging_bulk_operations';
 
     /**
      * @var OperationInterfaceFactory
