@@ -48,6 +48,5 @@ class CustomerModelHydrator implements HydratorInterface
             $this->customerModels[$resolverData['model_id']]->setData('group_id', $resolverData['model_group_id']);
             $resolverData['model'] = $this->customerModels[$resolverData['model_id']];
         }
-
     }
 }

@@ -20,8 +20,6 @@ interface ProviderInterface
      * Get cache id calculator for the given resolver.
      *
      * @param ResolverInterface $resolver
-     * @param ContextInterface $context
-     * @param array|null $parentResult
      * @return KeyCalculator
      */
     public function getForResolver(ResolverInterface $resolver): KeyCalculator;

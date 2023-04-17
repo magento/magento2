@@ -114,12 +114,7 @@ class Cache
             return $proceed($field, $context, $info, $value, $args);
         }
 
-        // prehydrate the parent resolver data so that it contained all needed models
-        // for the nested resolvers calls
-        if ($value && isset($value['hydrator_instance']) && $value['hydrator_instance'] instanceof HydratorInterface) {
-            $value['hydrator_instance']->hydrate($value);
-            unset($value['hydrator_instance']);
-        }
+        $this->preprocessParentResolverValue($value);
 
         $identityProvider = $this->resolverIdentityClassLocator->getIdentityFromResolver($subject);
 
@@ -133,10 +128,7 @@ class Cache
 
         if ($cachedResult !== false) {
             $resolvedValue = $this->serializer->unserialize($cachedResult);
-            $hydrator = $this->hydratorProvider->getForResolver($subject);
-            if ($hydrator) {
-                $resolvedValue['hydrator_instance'] = $hydrator;
-            }
+            $this->postProcessCachedResult($resolvedValue, $subject);
             return $resolvedValue;
         }
 
@@ -154,6 +146,35 @@ class Cache
         }
 
         return $resolvedValue;
+    }
+
+    /**
+     * Preprocess parent resolved value and call attached hydrators if they exist.
+     *
+     * @param array|null $value
+     * @return void
+     */
+    private function preprocessParentResolverValue(&$value)
+    {
+        if ($value && isset($value['hydrator_instance']) && $value['hydrator_instance'] instanceof HydratorInterface) {
+            $value['hydrator_instance']->hydrate($value);
+            unset($value['hydrator_instance']);
+        }
+    }
+
+    /**
+     * Postprocess cached result and attach hydrator if required.
+     *
+     * @param array $resolvedValue
+     * @param ResolverInterface $subject
+     * @return void
+     */
+    private function postProcessCachedResult(&$resolvedValue, ResolverInterface $subject)
+    {
+        $hydrator = $this->hydratorProvider->getForResolver($subject);
+        if ($hydrator) {
+            $resolvedValue['hydrator_instance'] = $hydrator;
+        }
     }
 
     /**
