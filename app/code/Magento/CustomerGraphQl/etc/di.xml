@@ -19,7 +19,7 @@
         <arguments>
             <argument name="customStrategies" xsi:type="array">
                 <item name="Magento\Customer\Model\Customer" xsi:type="object">
-                    Magento\CustomerGraphQl\Model\Resolver\Cache\TagsResolverStrategy
+                    Magento\CustomerGraphQl\Model\Resolver\Cache\CustomerTagsStrategy
                 </item>
             </argument>
         </arguments>

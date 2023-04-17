@@ -18,6 +18,7 @@ interface HydratorProviderInterface
      * Returns hydrator for the given resolver, null if no hydrators configured.
      *
      * @param ResolverInterface $resolver
+     *
      * @return HydratorInterface|null
      */
     public function getForResolver(ResolverInterface $resolver) : ?HydratorInterface;

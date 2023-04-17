@@ -5,20 +5,17 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQlCache\Model\Resolver\Cache;
+namespace Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache;
 
 use Exception;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
-use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\GraphQlCache\Model\CacheId\CacheIdFactorProviderInterface;
-use Magento\GraphQlCache\Model\CacheId\InitializableCacheIdFactorProviderInterface;
-use Magento\GraphQlCache\Model\CacheId\InitializableInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Generator for the resolver cache identifier used as a cache key for resolver results
+ * Calculates cache key for the resolver results.
  */
-class ResolverCacheIdCalculator implements InitializableInterface
+class KeyCalculator
 {
     /**
      * @var ContextFactoryInterface
@@ -53,9 +50,11 @@ class ResolverCacheIdCalculator implements InitializableInterface
     /**
      * Calculates the value of resolver cache identifier.
      *
+     * @param array|null $resolvedData
+     *
      * @return string|null
      */
-    public function getCacheId(): ?string
+    public function calculateCacheKey(?array $resolvedData = null): ?string
     {
         if (!$this->idFactorProviders) {
             return null;
@@ -64,7 +63,14 @@ class ResolverCacheIdCalculator implements InitializableInterface
         try {
             $context = $this->contextFactory->get();
             foreach ($this->idFactorProviders as $idFactorProvider) {
-                $keys[$idFactorProvider->getFactorName()] = $idFactorProvider->getFactorValue($context);
+                if ($idFactorProvider instanceof ResolverDependentFactorProviderInterface && $resolvedData !== null) {
+                    $keys[$idFactorProvider->getFactorName()] = $idFactorProvider->getFactorValueForResolvedData(
+                        $context,
+                        $resolvedData
+                    );
+                } else {
+                    $keys[$idFactorProvider->getFactorName()] = $idFactorProvider->getFactorValue($context);
+                }
             }
             ksort($keys);
             $keysString = strtoupper(implode('|', array_values($keys)));
@@ -72,18 +78,6 @@ class ResolverCacheIdCalculator implements InitializableInterface
         } catch (Exception $e) {
             $this->logger->warning("Unable to obtain cache id for resolver results. " . $e->getMessage());
             return null;
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function initialize(array $resolvedData, ContextInterface $context): void
-    {
-        foreach ($this->idFactorProviders as $factorProviderInstance) {
-            if ($factorProviderInstance instanceof InitializableCacheIdFactorProviderInterface) {
-                $factorProviderInstance->initialize($resolvedData, $context);
-            }
         }
     }
 }

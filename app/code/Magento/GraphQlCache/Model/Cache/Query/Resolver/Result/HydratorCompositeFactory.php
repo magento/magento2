@@ -8,12 +8,27 @@ declare(strict_types=1);
 namespace Magento\GraphQlCache\Model\Cache\Query\Resolver\Result;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Factory class for composite hydrator.
  */
 class HydratorCompositeFactory
 {
+    /**
+     * @var ObjectManagerInterface
+     */
+    private ObjectManagerInterface $objectManager;
+
+    /**
+     * Construct
+     *
+     * @param ObjectManagerInterface $objectManager
+     */
+    public function __construct(ObjectManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
 
     /**
      * Create composite hydrator instance with list of hydrator instances.
@@ -25,10 +40,8 @@ class HydratorCompositeFactory
     {
         $hydratorInstances = [];
         foreach ($hydratorsOrdered as $hydratorClass) {
-            // phpstan:ignore "File has calls static method. (phpStaticMethodCalls)"
-            $hydratorInstances[] = ObjectManager::getInstance()->get($hydratorClass);
+            $hydratorInstances[] = $this->objectManager->get($hydratorClass);
         }
-        // phpstan:ignore "File has calls static method. (phpStaticMethodCalls)"
-        return ObjectManager::getInstance()->create(HydratorComposite::class, ['hydrators' => $hydratorInstances]);
+        return $this->objectManager->create(HydratorComposite::class, ['hydrators' => $hydratorInstances]);
     }
 }

@@ -8,22 +8,17 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\CacheIdFactorProviders;
 
 use Magento\GraphQl\Model\Query\ContextInterface;
-use Magento\GraphQlCache\Model\CacheId\InitializableCacheIdFactorProviderInterface;
+use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\ResolverDependentFactorProviderInterface;
 
 /**
  * Provides logged-in customer id as a factor to use in the cache id.
  */
-class CurrentCustomerCacheIdProvider implements InitializableCacheIdFactorProviderInterface
+class CurrentCustomerCacheIdProvider implements ResolverDependentFactorProviderInterface
 {
     /**
      * Factor name.
      */
     private const NAME = "CUSTOMER_ID";
-
-    /**
-     * @var string
-     */
-    private $factorValue = '';
 
     /**
      * @inheritdoc
@@ -36,16 +31,21 @@ class CurrentCustomerCacheIdProvider implements InitializableCacheIdFactorProvid
     /**
      * @inheritdoc
      */
-    public function getFactorValue(ContextInterface $context): string
+    public function getFactorValueForResolvedData(ContextInterface $context, ?array $resolvedData): string
     {
-        return $this->factorValue;
+        $customerId = $resolvedData['model_id'];
+        $currentUserId = $context->getUserId();
+        if ($currentUserId != $customerId) {
+            throw new \Exception("User context is different from the one resolved.");
+        }
+        return (string)$currentUserId;
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
-    public function initialize(array $resolvedData, ContextInterface $context): void
+    public function getFactorValue(ContextInterface $context): string
     {
-        $this->factorValue = ((string)$context->getUserId() ?: '');
+        throw new \Exception("Must call getFactorValueForResolvedData() instead.");
     }
 }

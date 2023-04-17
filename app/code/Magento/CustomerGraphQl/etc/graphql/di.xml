@@ -116,13 +116,13 @@
                 <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="array">
                     <item name="model_hydrator" xsi:type="array">
                         <item name="sortOrder" xsi:type="string">10</item>
-                        <item name="class" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\Cache\ModelHydrator</item>
+                        <item name="class" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\Cache\CustomerModelHydrator</item>
                     </item>
                 </item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\Strategy">
+    <type name="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\Provider">
         <arguments>
             <argument name="customFactorProviders" xsi:type="array">
                 <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="array">

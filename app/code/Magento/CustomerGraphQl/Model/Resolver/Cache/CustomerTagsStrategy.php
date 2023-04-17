@@ -7,16 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver\Cache;
 
+use Magento\Customer\Model\Customer;
+use Magento\Framework\App\Cache\Tag\StrategyInterface;
+
 /**
- * Cusotmer entity tag resolver strategy
+ * Customer entity tag resolver strategy.
  */
-class TagsResolverStrategy implements \Magento\Framework\App\Cache\Tag\StrategyInterface
+class CustomerTagsStrategy implements StrategyInterface
 {
     /**
      * @inheritDoc
      */
     public function getTags($object)
     {
-        return [sprintf('%s_%s', \Magento\Customer\Model\Customer::ENTITY, $object->getId())];
+        return [sprintf('%s_%s', Customer::ENTITY, $object->getId())];
     }
 }

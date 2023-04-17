@@ -10,15 +10,15 @@ namespace Magento\GraphQlCache\Model\Plugin\Query\Resolver\Result;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\StrategyInterface;
+use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\ProviderInterface;
+use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\HydratorInterface;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\HydratorProviderInterface;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\ResolverIdentityClassLocator;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
-use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 
 /**
  * Plugin to cache resolver result where applicable
@@ -48,9 +48,9 @@ class Cache
     private $resolverIdentityClassLocator;
 
     /**
-     * @var StrategyInterface
+     * @var ProviderInterface
      */
-    private StrategyInterface $cacheIdProviderStrategy;
+    private ProviderInterface $cacheIdProviderStrategy;
 
     /**
      * @var HydratorProviderInterface
@@ -62,16 +62,16 @@ class Cache
      * @param SerializerInterface $serializer
      * @param CacheState $cacheState
      * @param ResolverIdentityClassLocator $resolverIdentityClassLocator
-     * @param StrategyInterface $cacheIdProviderStrategy
+     * @param ProviderInterface $cacheIdProviderStrategy
      * @param HydratorProviderInterface $hydratorProvider
      */
     public function __construct(
-        GraphQlResolverCache $graphQlResolverCache,
-        SerializerInterface $serializer,
-        CacheState $cacheState,
+        GraphQlResolverCache         $graphQlResolverCache,
+        SerializerInterface          $serializer,
+        CacheState                   $cacheState,
         ResolverIdentityClassLocator $resolverIdentityClassLocator,
-        StrategyInterface $cacheIdProviderStrategy,
-        HydratorProviderInterface $hydratorProvider
+        ProviderInterface            $cacheIdProviderStrategy,
+        HydratorProviderInterface    $hydratorProvider
     ) {
         $this->graphQlResolverCache = $graphQlResolverCache;
         $this->serializer = $serializer;
@@ -114,24 +114,30 @@ class Cache
             return $proceed($field, $context, $info, $value, $args);
         }
 
+        // prehydrate the parent resolver data so that it contained all needed models
+        // for the nested resolvers calls
+        if ($value && isset($value['hydrator_instance']) && $value['hydrator_instance'] instanceof HydratorInterface) {
+            $value['hydrator_instance']->hydrate($value);
+            unset($value['hydrator_instance']);
+        }
+
         $identityProvider = $this->resolverIdentityClassLocator->getIdentityFromResolver($subject);
 
         if (!$identityProvider) { // not cacheable; proceed
             return $proceed($field, $context, $info, $value, $args);
         }
 
-        $cacheIdentityString = $this->prepareCacheIdentityString($subject, $info, $args, $value, $context);
+        $cacheIdentityString = $this->prepareCacheIdentityString($subject, $info, $args, $value);
 
         $cachedResult = $this->graphQlResolverCache->load($cacheIdentityString);
 
         if ($cachedResult !== false) {
-            $result = $this->serializer->unserialize($cachedResult);
-            // rehydration point
+            $resolvedValue = $this->serializer->unserialize($cachedResult);
             $hydrator = $this->hydratorProvider->getForResolver($subject);
             if ($hydrator) {
-                $hydrator->hydrate($result);
+                $resolvedValue['hydrator_instance'] = $hydrator;
             }
-            return $result;
+            return $resolvedValue;
         }
 
         $resolvedValue = $proceed($field, $context, $info, $value, $args);
@@ -153,21 +159,16 @@ class Cache
      * @param ResolveInfo $info
      * @param array|null $args
      * @param array|null $value
-     * @param ContextInterface $context
+     *
      * @return string
      */
     private function prepareCacheIdentityString(
         ResolverInterface $resolver,
         ResolveInfo $info,
         ?array $args,
-        ?array $value,
-        $context
+        ?array $value
     ): string {
-        $this->cacheIdProviderStrategy->initForResolver($resolver);
-        $this->cacheIdProviderStrategy->actualize($resolver, $value, $context);
-        $cacheIdentityString = $this->cacheIdProviderStrategy
-            ->getCacheIdCalculatorForResolver($resolver)
-            ->getCacheId();
+        $cacheIdentityString = $this->cacheIdProviderStrategy->getForResolver($resolver)->calculateCacheKey($value);
         $cacheIdQueryPayloadString = $info->returnType->name . $this->serializer->serialize($args ?? []);
         return GraphQlResolverCache::CACHE_TAG . '_' . $cacheIdentityString . '_' . sha1($cacheIdQueryPayloadString);
     }

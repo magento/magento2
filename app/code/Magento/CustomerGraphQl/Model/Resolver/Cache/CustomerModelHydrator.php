@@ -13,12 +13,17 @@ use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\HydratorInterface;
 /**
  * Customer resolver data hydrator to rehydrate propagated model.
  */
-class ModelHydrator implements HydratorInterface
+class CustomerModelHydrator implements HydratorInterface
 {
     /**
      * @var CustomerFactory
      */
     private CustomerFactory $customerFactory;
+
+    /**
+     * @var array
+     */
+    private array $customerModels = [];
 
     /**
      * @param CustomerFactory $customerFactory
@@ -33,9 +38,16 @@ class ModelHydrator implements HydratorInterface
      */
     public function hydrate(array &$resolverData): void
     {
-        $model = $this->customerFactory->create(['data' => $resolverData]);
-        $model->setId($resolverData['model_id']);
-        $model->setData('group_id', $resolverData['model_group_id']);
-        $resolverData['model'] = $model;
+        if (isset($this->customerModels[$resolverData['model_id']])) {
+            $resolverData['model'] = $this->customerModels[$resolverData['model_id']];
+        } else {
+            $this->customerModels[$resolverData['model_id']] = $this->customerFactory->create(
+                ['data' => $resolverData]
+            );
+            $this->customerModels[$resolverData['model_id']]->setId($resolverData['model_id']);
+            $this->customerModels[$resolverData['model_id']]->setData('group_id', $resolverData['model_group_id']);
+            $resolverData['model'] = $this->customerModels[$resolverData['model_id']];
+        }
+
     }
 }
