@@ -66,12 +66,12 @@ class Cache
      * @param HydratorProviderInterface $hydratorProvider
      */
     public function __construct(
-        GraphQlResolverCache         $graphQlResolverCache,
-        SerializerInterface          $serializer,
-        CacheState                   $cacheState,
+        GraphQlResolverCache $graphQlResolverCache,
+        SerializerInterface $serializer,
+        CacheState $cacheState,
         ResolverIdentityClassLocator $resolverIdentityClassLocator,
-        ProviderInterface            $cacheIdProviderStrategy,
-        HydratorProviderInterface    $hydratorProvider
+        ProviderInterface $cacheIdProviderStrategy,
+        HydratorProviderInterface $hydratorProvider
     ) {
         $this->graphQlResolverCache = $graphQlResolverCache;
         $this->serializer = $serializer;
