@@ -14,11 +14,11 @@ use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolv
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
-use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Widget\Model\Template\FilterEmulate;
 
-class BlockTest extends GraphQlAbstract
+class BlockTest extends ResolverCacheAbstract
 {
     /**
      * @var BlockRepositoryInterface
@@ -47,13 +47,8 @@ class BlockTest extends GraphQlAbstract
         $this->graphQlResolverCache = $objectManager->get(GraphQlResolverCache::class);
         $this->widgetFilter = $objectManager->get(FilterEmulate::class);
         $this->storeManager = $objectManager->get(StoreManagerInterface::class);
-    }
 
-    protected function tearDown(): void
-    {
-        $this->graphQlResolverCache->clean();
-
-        parent::tearDown();
+        parent::setUp();
     }
 
     /**
