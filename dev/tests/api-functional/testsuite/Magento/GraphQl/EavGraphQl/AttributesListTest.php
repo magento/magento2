@@ -79,7 +79,6 @@ class AttributesListTest extends GraphQlAbstract
 {
     private const ATTRIBUTE_NOT_FOUND_ERROR = "Attribute was not found in query result";
 
-
     public function testAttributesListForCustomerEntityType(): void
     {
         $queryResult = $this->graphQlQuery(<<<QRY
@@ -112,23 +111,35 @@ QRY);
 
         $this->assertEquals(
             $customerAttribute0->getAttributeCode(),
-            $this->getAttributeByCode($queryResult['attributesList']['items'], $customerAttribute0->getAttributeCode())['code'],
+            $this->getAttributeByCode(
+                $queryResult['attributesList']['items'],
+                $customerAttribute0->getAttributeCode()
+            )['code'],
             self::ATTRIBUTE_NOT_FOUND_ERROR
         );
 
         $this->assertEquals(
             $customerAttribute1->getAttributeCode(),
-            $this->getAttributeByCode($queryResult['attributesList']['items'], $customerAttribute1->getAttributeCode())['code'],
+            $this->getAttributeByCode(
+                $queryResult['attributesList']['items'],
+                $customerAttribute1->getAttributeCode()
+            )['code'],
             self::ATTRIBUTE_NOT_FOUND_ERROR
         );
         $this->assertEquals(
             $customerAttribute2->getAttributeCode(),
-            $this->getAttributeByCode($queryResult['attributesList']['items'], $customerAttribute2->getAttributeCode())['code'],
+            $this->getAttributeByCode(
+                $queryResult['attributesList']['items'],
+                $customerAttribute2->getAttributeCode()
+            )['code'],
             self::ATTRIBUTE_NOT_FOUND_ERROR
         );
         $this->assertEquals(
             [],
-            $this->getAttributeByCode($queryResult['attributesList']['items'], $creditmemoAttribute5->getAttributeCode())
+            $this->getAttributeByCode(
+                $queryResult['attributesList']['items'],
+                $creditmemoAttribute5->getAttributeCode()
+            )
         );
     }
 
@@ -161,17 +172,26 @@ QRY);
 
         $this->assertEquals(
             $catalogAttribute3->getAttributeCode(),
-            $this->getAttributeByCode($queryResult['attributesList']['items'], $catalogAttribute3->getAttributeCode())['code'],
+            $this->getAttributeByCode(
+                $queryResult['attributesList']['items'],
+                $catalogAttribute3->getAttributeCode()
+            )['code'],
             self::ATTRIBUTE_NOT_FOUND_ERROR
         );
         $this->assertEquals(
             $catalogAttribute4->getAttributeCode(),
-            $this->getAttributeByCode($queryResult['attributesList']['items'], $catalogAttribute4->getAttributeCode())['code'],
+            $this->getAttributeByCode(
+                $queryResult['attributesList']['items'],
+                $catalogAttribute4->getAttributeCode()
+            )['code'],
             self::ATTRIBUTE_NOT_FOUND_ERROR
         );
         $this->assertEquals(
             [],
-            $this->getAttributeByCode($queryResult['attributesList']['items'], $creditmemoAttribute5->getAttributeCode())
+            $this->getAttributeByCode(
+                $queryResult['attributesList']['items'],
+                $creditmemoAttribute5->getAttributeCode()
+            )
         );
     }
 
