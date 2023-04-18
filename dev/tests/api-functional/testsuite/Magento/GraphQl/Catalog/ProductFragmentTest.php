@@ -19,7 +19,7 @@ class ProductFragmentTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @throws Exception
      */
-    public function testSimpleProductNamedFragment()
+    public function testSimpleProductNamedFragment(): void
     {
         $sku = 'simple';
         $name = 'Simple Product';
@@ -58,7 +58,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @throws Exception
      */
-    public function testSimpleProductInlineFragment()
+    public function testSimpleProductInlineFragment(): void
     {
         $sku = 'simple';
         $name = 'Simple Product';

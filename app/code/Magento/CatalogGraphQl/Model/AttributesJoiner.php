@@ -106,9 +106,9 @@ class AttributesJoiner
                 $selectedFields[] = $field->name->value;
             }
         }
-        $data=[];
-        $data['selectedFields']=$selectedFields;
-        $data['fragmentFields']=$fragmentFields;
+        $data = [];
+        $data['selectedFields'] = $selectedFields;
+        $data['fragmentFields'] = $fragmentFields;
         return $data;
     }
 
