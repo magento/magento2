@@ -21,6 +21,7 @@ use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\P
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\App\State;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -70,6 +71,11 @@ class PageTest extends GraphQlAbstract
      */
     private $objectManager;
 
+    /**
+     * @var string
+     */
+    private $initialAppArea;
+
     protected function setUp(): void
     {
         $this->objectManager = ObjectManager::getInstance();
@@ -85,6 +91,9 @@ class PageTest extends GraphQlAbstract
         $this->cacheState->setEnabled(GraphQlResolverCache::TYPE_IDENTIFIER, true);
         // test has to be executed in graphql area
         $configLoader = $this->objectManager->get(ConfigLoader::class);
+        /** @var State $appArea */
+        $appArea = $this->objectManager->get(State::class);
+        $this->initialAppArea = $appArea->getAreaCode();
         $this->objectManager->configure($configLoader->load(Area::AREA_GRAPHQL));
         $this->resetUserInfoContext();
     }
@@ -97,7 +106,12 @@ class PageTest extends GraphQlAbstract
             GraphQlResolverCache::TYPE_IDENTIFIER,
             $this->originalCacheStateEnabledStatus
         );
-
+        /** @var ConfigLoader $configLoader */
+        $configLoader = $this->objectManager->get(ConfigLoader::class);
+        $this->objectManager->configure($configLoader->load($this->initialAppArea));
+        $this->objectManager->removeSharedInstance(\Magento\GraphQl\Model\Query\ContextFactory::class);
+        $this->objectManager->removeSharedInstance(\Magento\GraphQl\Model\Query\Context::class);
+        $this->objectManager->removeSharedInstance(\Magento\GraphQl\Model\Query\ContextInterface::class);
         parent::tearDown();
     }
 
