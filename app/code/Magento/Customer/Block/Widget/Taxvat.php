@@ -76,4 +76,14 @@ class Taxvat extends AbstractWidget
         $attribute = $this->_getAttribute($attributeCode);
         return $attribute ? __($attribute->getStoreLabel()) : '';
     }
+
+    /**
+     * Get is taxvat visible in register form
+     *
+     * @retrun bool
+     */
+    public function isVatVisible(): bool
+    {
+        return $this->_addressHelper->isVatAttributeVisible(true);
+    }
 }
