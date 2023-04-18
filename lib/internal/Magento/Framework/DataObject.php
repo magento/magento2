@@ -387,7 +387,8 @@ class DataObject implements \ArrayAccess
      */
     public function __call($method, $args)
     {
-        switch ($method[0].($method[1] ?? '').($method[2] ?? '')) {
+        // Compare 3 first letters of the method name
+        switch ($method[0] . ($method[1] ?? '') . ($method[2] ?? '')) {
             case 'get':
                 if (isset($args[0]) && $args[0] !== null) {
                     return $this->getData(
