@@ -380,4 +380,7 @@
             <argument name="configStructure" xsi:type="object">\Magento\Config\Model\Config\Structure\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Cache\TypeList">
+        <plugin name="warm_config_cache" type="Magento\Config\Plugin\Framework\App\Cache\TypeList\WarmConfigCache"/>
+    </type>
 </config>
