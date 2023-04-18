@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Model\Product;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Variation Handler
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -52,6 +52,7 @@ class VariationHandler
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected $stockConfiguration;
 
@@ -120,6 +121,7 @@ class VariationHandler
      * Prepare attribute set comprising all selected configurable attributes
      *
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      */
@@ -209,9 +211,10 @@ class VariationHandler
         }
 
         $postData = $this->processMediaGallery($product, $postData);
-        $postData['status'] = isset($postData['status'])
-            ? $postData['status']
-            : \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED;
+        $postData['status'] = $postData['status'] ?? Status::STATUS_ENABLED;
+        $defaultTaxClassId = isset($this->attributes['tax_class_id']) ?
+            $this->attributes['tax_class_id']->getDefaultValue() : null;
+        $postData['tax_class_id'] = $postData['tax_class_id'] ?? $parentProduct->getTaxClassId() ?? $defaultTaxClassId;
         $product->addData(
             $postData
         )->setWebsiteIds(
