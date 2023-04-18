@@ -37,9 +37,7 @@
             <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewTerm"/>
             <!-- Fill the Required Details-->
             <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
-                <argument name="term" value="activeTextTerm"/>
-                <field key="storeView">All Store Views</field>
-                <field key="name">Test name</field>
+                <argument name="term" value="newHtmlTerm"/>
             </actionGroup>
             <grabTextFrom selector="{{AdminNewTermFormSection.conditionName}}" stepKey="conditionName"/>
             <!-- Save Details-->
