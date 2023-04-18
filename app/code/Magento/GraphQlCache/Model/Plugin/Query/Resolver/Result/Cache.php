@@ -128,7 +128,7 @@ class Cache
 
         if ($cachedResult !== false) {
             $resolvedValue = $this->serializer->unserialize($cachedResult);
-            $this->postProcessCachedResult($resolvedValue, $subject);
+            $this->postprocessResolverResult($resolvedValue, $subject);
             return $resolvedValue;
         }
 
@@ -169,7 +169,7 @@ class Cache
      * @param ResolverInterface $subject
      * @return void
      */
-    private function postProcessCachedResult(&$resolvedValue, ResolverInterface $subject)
+    private function postprocessResolverResult(&$resolvedValue, ResolverInterface $subject)
     {
         $hydrator = $this->hydratorProvider->getForResolver($subject);
         if ($hydrator) {
