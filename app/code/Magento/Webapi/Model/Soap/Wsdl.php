@@ -6,18 +6,20 @@
 namespace Magento\Webapi\Model\Soap;
 
 use DOMElement;
+use Laminas\Soap\Wsdl as SoapWsdl;
+use Laminas\Uri\Uri;
 use Magento\Webapi\Model\Soap\Wsdl\ComplexTypeStrategy;
 
 /**
  * Magento-specific WSDL builder.
  */
-class Wsdl extends \Laminas\Soap\Wsdl
+class Wsdl extends SoapWsdl
 {
     /**
      * Save URI for targetNamespace generation.
      *
      * @param string $name
-     * @param string|\Laminas\Uri\Uri $uri
+     * @param string|Uri $uri
      * @param ComplexTypeStrategy $strategy
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */

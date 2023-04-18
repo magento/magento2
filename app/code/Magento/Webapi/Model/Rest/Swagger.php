@@ -5,6 +5,7 @@
  */
 namespace Magento\Webapi\Model\Rest;
 
+use Magento\Framework\DataObject;
 use Magento\Webapi\Model\Config as ModelConfig;
 
 /**
@@ -16,7 +17,7 @@ use Magento\Webapi\Model\Config as ModelConfig;
  * @method Swagger setDefinitions(array $definitions)
  * @method Swagger setSchemes(array $schemes)
  */
-class Swagger extends \Magento\Framework\DataObject
+class Swagger extends DataObject
 {
     /**
      * Swagger specification version

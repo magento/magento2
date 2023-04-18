@@ -7,7 +7,18 @@
  */
 namespace Magento\Webapi\Model\Soap;
 
+use DOMDocument;
+use Magento\Framework\App\AreaList;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Request;
+use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Webapi\Controller\PathProcessor;
+use Magento\Webapi\Model\Soap\Wsdl\Generator;
 
 /**
  * SOAP Server
@@ -31,12 +42,12 @@ class Server
     const REQUEST_PARAM_LIST_WSDL = 'wsdl_list';
 
     /**
-     * @var \Magento\Framework\App\AreaList
+     * @var AreaList
      */
     protected $_areaList;
 
     /**
-     * @var \Magento\Framework\Config\ScopeInterface
+     * @var ScopeInterface
      */
     protected $_configScope;
 
@@ -46,58 +57,53 @@ class Server
     protected $_request;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Webapi\Model\Soap\ServerFactory
+     * @var ServerFactory
      */
     protected $_soapServerFactory;
 
     /**
-     * @var \Magento\Framework\Reflection\TypeProcessor
+     * @var TypeProcessor
      */
     protected $_typeProcessor;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @var Wsdl\Generator
-     */
-    private $wsdlGenerator;
-
-    /**
      * Initialize dependencies, initialize WSDL cache.
      *
-     * @param \Magento\Framework\App\AreaList $areaList
-     * @param \Magento\Framework\Config\ScopeInterface $configScope
+     * @param AreaList $areaList
+     * @param ScopeInterface $configScope
      * @param Request $request
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Webapi\Model\Soap\ServerFactory $soapServerFactory
-     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param StoreManagerInterface $storeManager
+     * @param ServerFactory $soapServerFactory
+     * @param TypeProcessor $typeProcessor
+     * @param ScopeConfigInterface $scopeConfig
      * @param Wsdl\Generator $wsdlGenerator
-     * @throws \Magento\Framework\Webapi\Exception
+     * @throws Exception
      */
     public function __construct(
-        \Magento\Framework\App\AreaList $areaList,
-        \Magento\Framework\Config\ScopeInterface $configScope,
+        AreaList $areaList,
+        ScopeInterface $configScope,
         Request $request,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Webapi\Model\Soap\ServerFactory $soapServerFactory,
-        \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Webapi\Model\Soap\Wsdl\Generator $wsdlGenerator
+        StoreManagerInterface $storeManager,
+        ServerFactory $soapServerFactory,
+        TypeProcessor $typeProcessor,
+        ScopeConfigInterface $scopeConfig,
+        private readonly Generator $wsdlGenerator
     ) {
         if (!extension_loaded('soap')) {
-            throw new \Magento\Framework\Webapi\Exception(
+            throw new Exception(
                 __('SOAP extension is not loaded.'),
                 0,
-                \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR
+                Exception::HTTP_INTERNAL_ERROR
             );
         }
         $this->_areaList = $areaList;
@@ -107,7 +113,6 @@ class Server
         $this->_soapServerFactory = $soapServerFactory;
         $this->_typeProcessor = $typeProcessor;
         $this->_scopeConfig = $scopeConfig;
-        $this->wsdlGenerator = $wsdlGenerator;
     }
 
     /**
@@ -151,7 +156,7 @@ class Server
     {
         $charset = $this->_scopeConfig->getValue(
             self::CONFIG_PATH_SOAP_CHARSET,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            StoreScopeInterface::SCOPE_STORE
         );
         return $charset ? $charset : self::SOAP_DEFAULT_ENCODING;
     }
@@ -179,8 +184,8 @@ class Server
      */
     public function getEndpointUri()
     {
-        $storeCode = $this->_storeManager->getStore()->getCode() === \Magento\Store\Model\Store::ADMIN_CODE
-            ? \Magento\Webapi\Controller\PathProcessor::ALL_STORE_CODE
+        $storeCode = $this->_storeManager->getStore()->getCode() === Store::ADMIN_CODE
+            ? PathProcessor::ALL_STORE_CODE
             : $this->_storeManager->getStore()->getCode();
         return $this->_storeManager->getStore()->getBaseUrl()
             . $this->_areaList->getFrontName($this->_configScope->getCurrentScope())
@@ -191,25 +196,25 @@ class Server
      * Generate exception if request is invalid.
      *
      * @param string $soapRequest
-     * @throws \Magento\Framework\Webapi\Exception With invalid SOAP extension
+     * @throws Exception With invalid SOAP extension
      * @return $this
      */
     protected function _checkRequest($soapRequest)
     {
-        $dom = new \DOMDocument();
+        $dom = new DOMDocument();
         if (strlen($soapRequest) == 0 || !$dom->loadXML($soapRequest)) {
-            throw new \Magento\Framework\Webapi\Exception(
+            throw new Exception(
                 __('Invalid XML'),
                 0,
-                \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR
+                Exception::HTTP_INTERNAL_ERROR
             );
         }
         foreach ($dom->childNodes as $child) {
             if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
-                throw new \Magento\Framework\Webapi\Exception(
+                throw new Exception(
                     __('Invalid XML: Detected use of illegal DOCTYPE'),
                     0,
-                    \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR
+                    Exception::HTTP_INTERNAL_ERROR
                 );
             }
         }

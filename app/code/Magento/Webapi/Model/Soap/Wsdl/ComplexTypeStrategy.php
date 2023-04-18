@@ -5,8 +5,12 @@
  */
 namespace Magento\Webapi\Model\Soap\Wsdl;
 
+use DomDocument;
+use DOMElement;
+use InvalidArgumentException;
 use Laminas\Soap\Wsdl;
 use Laminas\Soap\Wsdl\ComplexTypeStrategy\AbstractComplexTypeStrategy;
+use Magento\Framework\Reflection\TypeProcessor;
 
 /**
  * Magento-specific Complex type strategy for WSDL auto discovery.
@@ -24,7 +28,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
     public const APP_INF_NS = 'inf';
 
     /**
-     * @var \Magento\Framework\Reflection\TypeProcessor
+     * @var TypeProcessor
      */
     protected $_typeProcessor;
 
@@ -38,17 +42,18 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
     /**
      * Construct strategy with config helper.
      *
-     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
+     * @param TypeProcessor $typeProcessor
      */
-    public function __construct(\Magento\Framework\Reflection\TypeProcessor $typeProcessor)
-    {
+    public function __construct(
+        TypeProcessor $typeProcessor
+    ) {
         $this->_typeProcessor = $typeProcessor;
     }
 
     /**
      * Return DOM Document
      *
-     * @return \DomDocument
+     * @return DomDocument
      */
     protected function _getDom()
     {
@@ -61,7 +66,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param string $type
      * @param array $parentCallInfo array of callInfo from parent complex type
      * @return string
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function addComplexType($type, $parentCallInfo = [])
     {
@@ -93,7 +98,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      *
      * @param array $parameters
      * @param array $callInfo
-     * @return \DOMElement
+     * @return DOMElement
      */
     protected function _processParameters($parameters, $callInfo)
     {
@@ -131,14 +136,14 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
     /**
      * Process parameter and declare complex type if necessary.
      *
-     * @param \DOMElement $element
+     * @param DOMElement $element
      * @param boolean $isRequired
      * @param array $parameterData
      * @param string $parameterType
      * @param array $callInfo
      * @return void
      */
-    protected function _processParameter(\DOMElement $element, $isRequired, $parameterData, $parameterType, $callInfo)
+    protected function _processParameter(DOMElement $element, $isRequired, $parameterData, $parameterType, $callInfo)
     {
         $element->setAttribute('minOccurs', $isRequired ? 1 : 0);
         $maxOccurs = isset($parameterData['isArray']) && $parameterData['isArray'] ? 'unbounded' : 1;
@@ -209,13 +214,13 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * Convert all {key:value} from documentation into appinfo nodes.
      * Override default callInfo values if defined in parameter documentation.
      *
-     * @param \DOMElement $element
+     * @param DOMElement $element
      * @param string $documentation parameter documentation string
      * @param string|null $default
      * @param array $callInfo
      * @return void
      */
-    public function addAnnotation(\DOMElement $element, $documentation, $default = null, $callInfo = [])
+    public function addAnnotation(DOMElement $element, $documentation, $default = null, $callInfo = [])
     {
         $annotationNode = $this->_getDom()->createElement(Wsdl::XSD_NS . ':annotation');
 
@@ -270,10 +275,10 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      *
      * @param string $elementType
      * @param string $documentation
-     * @param \DOMElement $appInfoNode
+     * @param DOMElement $appInfoNode
      * @return void
      */
-    protected function _processElementType($elementType, $documentation, \DOMElement $appInfoNode)
+    protected function _processElementType($elementType, $documentation, DOMElement $appInfoNode)
     {
         if ($elementType == 'int') {
             $this->_processRequiredAnnotation('min', $documentation, $appInfoNode);
@@ -295,10 +300,10 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      *
      * @param string $elementType
      * @param string $default
-     * @param \DOMElement $appInfoNode
+     * @param DOMElement $appInfoNode
      * @return void
      */
-    protected function _processDefaultValueAnnotation($elementType, $default, \DOMElement $appInfoNode)
+    protected function _processDefaultValueAnnotation($elementType, $default, DOMElement $appInfoNode)
     {
         if ($elementType == 'boolean') {
             $default = (bool)$default ? 'true' : 'false';
@@ -313,11 +318,11 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
     /**
      * Retrieve element type.
      *
-     * @param \DOMElement $element
+     * @param DOMElement $element
      * @return string|null
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function _getElementType(\DOMElement $element)
+    protected function _getElementType(DOMElement $element)
     {
         $elementType = null;
         if ($element->hasAttribute('type')) {
@@ -331,10 +336,10 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      *
      * @param string $annotation
      * @param string $documentation
-     * @param \DOMElement $appInfoNode
+     * @param DOMElement $appInfoNode
      * @return void
      */
-    protected function _processRequiredAnnotation($annotation, $documentation, \DOMElement $appInfoNode)
+    protected function _processRequiredAnnotation($annotation, $documentation, DOMElement $appInfoNode)
     {
         if (!$documentation || !preg_match("/{{$annotation}:.+}/Ui", $documentation)) {
             $annotationNode = $this->_getDom()->createElement(self::APP_INF_NS . ':' . $annotation);
@@ -345,11 +350,11 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
     /**
      * Process 'callInfo' appinfo tag.
      *
-     * @param \DOMElement $appInfoNode
+     * @param DOMElement $appInfoNode
      * @param array $callInfo
      * @return void
      */
-    protected function _processCallInfo(\DOMElement $appInfoNode, $callInfo)
+    protected function _processCallInfo(DOMElement $appInfoNode, $callInfo)
     {
         if (!empty($callInfo)) {
             foreach ($callInfo as $direction => $conditions) {
@@ -378,11 +383,11 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
     /**
      * Process 'docInstructions' appinfo tag.
      *
-     * @param \DOMElement $appInfoNode
+     * @param DOMElement $appInfoNode
      * @param string $tagValue
      * @return void
      */
-    protected function _processDocInstructions(\DOMElement $appInfoNode, $tagValue)
+    protected function _processDocInstructions(DOMElement $appInfoNode, $tagValue)
     {
         if ($tagValue && preg_match('/(input|output):(.+)/', $tagValue, $docMatches)) {
             $docInstructionsNode = $this->_getDom()->createElement(self::APP_INF_NS . ':docInstructions');
@@ -397,11 +402,11 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
     /**
      * Process 'seeLink' appinfo tag.
      *
-     * @param \DOMElement $appInfoNode
+     * @param DOMElement $appInfoNode
      * @param string $tagValue
      * @return void
      */
-    protected function _processSeeLink(\DOMElement $appInfoNode, $tagValue)
+    protected function _processSeeLink(DOMElement $appInfoNode, $tagValue)
     {
         if ($tagValue && preg_match('|([http://]?.+):(.+):(.+)|i', $tagValue, $matches)) {
             $seeLink = ['url' => $matches[1], 'title' => $matches[2], 'for' => $matches[3]];

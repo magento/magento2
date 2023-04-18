@@ -7,11 +7,17 @@ namespace Magento\Webapi\Model\Rest\Swagger;
 
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\Authorization;
+use Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Webapi\Controller\Rest;
 use Magento\Webapi\Model\AbstractSchemaGenerator;
+use Magento\Webapi\Model\Cache\Type\Webapi;
 use Magento\Webapi\Model\Config\Converter;
 use Magento\Webapi\Model\Rest\Swagger;
 use Magento\Webapi\Model\Rest\SwaggerFactory;
@@ -41,20 +47,6 @@ class Generator extends AbstractSchemaGenerator
      * Wrapper node for XML requests
      */
     private const XML_SCHEMA_PARAMWRAPPER = 'request';
-
-    /**
-     * Swagger factory instance.
-     *
-     * @var SwaggerFactory
-     */
-    protected SwaggerFactory $swaggerFactory;
-
-    /**
-     * Magento product metadata
-     *
-     * @var ProductMetadataInterface
-     */
-    protected ProductMetadataInterface $productMetadata;
 
     /**
      * A map of Tags
@@ -106,25 +98,23 @@ class Generator extends AbstractSchemaGenerator
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Webapi\Model\Cache\Type\Webapi $cache
-     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
-     * @param \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface $serviceTypeList
-     * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
+     * @param Webapi $cache
+     * @param TypeProcessor $typeProcessor
+     * @param ServiceTypeListInterface $serviceTypeList
+     * @param ServiceMetadata $serviceMetadata
      * @param Authorization $authorization
      * @param SwaggerFactory $swaggerFactory
-     * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
+     * @param ProductMetadataInterface $productMetadata
      */
     public function __construct(
-        \Magento\Webapi\Model\Cache\Type\Webapi $cache,
-        \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
-        \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface $serviceTypeList,
-        \Magento\Webapi\Model\ServiceMetadata $serviceMetadata,
+        Webapi $cache,
+        TypeProcessor $typeProcessor,
+        ServiceTypeListInterface $serviceTypeList,
+        ServiceMetadata $serviceMetadata,
         Authorization $authorization,
-        SwaggerFactory $swaggerFactory,
-        ProductMetadataInterface $productMetadata
+        protected readonly SwaggerFactory $swaggerFactory,
+        protected readonly ProductMetadataInterface $productMetadata
     ) {
-        $this->swaggerFactory = $swaggerFactory;
-        $this->productMetadata = $productMetadata;
         parent::__construct(
             $cache,
             $typeProcessor,
@@ -932,13 +922,13 @@ class Generator extends AbstractSchemaGenerator
     {
         $httpCode = '500';
         $description = 'Internal Server error';
-        if (is_subclass_of($exceptionClass, \Magento\Framework\Exception\LocalizedException::class)) {
+        if (is_subclass_of($exceptionClass, LocalizedException::class)) {
             // Map HTTP codes for LocalizedExceptions according to exception type
-            if (is_subclass_of($exceptionClass, \Magento\Framework\Exception\NoSuchEntityException::class)) {
+            if (is_subclass_of($exceptionClass, NoSuchEntityException::class)) {
                 $httpCode = WebapiException::HTTP_NOT_FOUND;
                 $description = '404 Not Found';
-            } elseif (is_subclass_of($exceptionClass, \Magento\Framework\Exception\AuthorizationException::class)
-                || is_subclass_of($exceptionClass, \Magento\Framework\Exception\AuthenticationException::class)
+            } elseif (is_subclass_of($exceptionClass, AuthorizationException::class)
+                || is_subclass_of($exceptionClass, AuthenticationException::class)
             ) {
                 $httpCode = WebapiException::HTTP_UNAUTHORIZED;
                 $description = self::UNAUTHORIZED_DESCRIPTION;

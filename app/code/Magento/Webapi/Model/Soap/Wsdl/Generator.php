@@ -7,7 +7,10 @@
 
 namespace Magento\Webapi\Model\Soap\Wsdl;
 
+use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface;
 use Magento\Webapi\Model\AbstractSchemaGenerator;
+use Magento\Webapi\Model\Cache\Type\Webapi;
 use Magento\Webapi\Model\Soap\Fault;
 use Magento\Webapi\Model\Soap\Wsdl;
 use Magento\Webapi\Model\Soap\WsdlFactory;
@@ -33,18 +36,18 @@ class Generator extends AbstractSchemaGenerator
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Webapi\Model\Cache\Type\Webapi $cache
-     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
-     * @param \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface $serviceTypeList
-     * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
+     * @param Webapi $cache
+     * @param TypeProcessor $typeProcessor
+     * @param ServiceTypeListInterface $serviceTypeList
+     * @param ServiceMetadata $serviceMetadata
      * @param Authorization $authorization
      * @param WsdlFactory $wsdlFactory
      */
     public function __construct(
-        \Magento\Webapi\Model\Cache\Type\Webapi $cache,
-        \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
-        \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface $serviceTypeList,
-        \Magento\Webapi\Model\ServiceMetadata $serviceMetadata,
+        Webapi $cache,
+        TypeProcessor $typeProcessor,
+        ServiceTypeListInterface $serviceTypeList,
+        ServiceMetadata $serviceMetadata,
         Authorization $authorization,
         WsdlFactory $wsdlFactory
     ) {
@@ -116,8 +119,8 @@ class Generator extends AbstractSchemaGenerator
     /**
      * Create and add WSDL Types for complex custom attribute classes
      *
-     * @param \Magento\Webapi\Model\Soap\Wsdl $wsdl
-     * @return \Magento\Webapi\Model\Soap\Wsdl
+     * @param Wsdl $wsdl
+     * @return Wsdl
      */
     protected function addCustomAttributeTypes($wsdl)
     {

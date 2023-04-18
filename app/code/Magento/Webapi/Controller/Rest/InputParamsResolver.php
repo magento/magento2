@@ -19,6 +19,7 @@ use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
 use Magento\Webapi\Controller\Rest\Router\Route;
+use UnexpectedValueException;
 
 /**
  * This class is responsible for retrieving resolved input data
@@ -27,44 +28,9 @@ use Magento\Webapi\Controller\Rest\Router\Route;
 class InputParamsResolver
 {
     /**
-     * @var RestRequest
-     */
-    private $request;
-
-    /**
-     * @var ParamsOverrider
-     */
-    private $paramsOverrider;
-
-    /**
-     * @var ServiceInputProcessor
-     */
-    private $serviceInputProcessor;
-
-    /**
-     * @var Router
-     */
-    private $router;
-
-    /**
      * @var Route
      */
     private $route;
-
-    /**
-     * @var RequestValidator
-     */
-    private $requestValidator;
-
-    /**
-     * @var MethodsMap
-     */
-    private $methodsMap;
-
-    /**
-     * @var InputArraySizeLimitValue
-     */
-    private $inputArraySizeLimitValue;
 
     /**
      * Initialize dependencies
@@ -78,19 +44,14 @@ class InputParamsResolver
      * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
      */
     public function __construct(
-        RestRequest $request,
-        ParamsOverrider $paramsOverrider,
-        ServiceInputProcessor $serviceInputProcessor,
-        Router $router,
-        RequestValidator $requestValidator,
-        MethodsMap $methodsMap = null,
-        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
+        private readonly RestRequest $request,
+        private readonly ParamsOverrider $paramsOverrider,
+        private readonly ServiceInputProcessor $serviceInputProcessor,
+        private readonly Router $router,
+        private readonly RequestValidator $requestValidator,
+        private ?MethodsMap $methodsMap = null,
+        private ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
     ) {
-        $this->request = $request;
-        $this->paramsOverrider = $paramsOverrider;
-        $this->serviceInputProcessor = $serviceInputProcessor;
-        $this->router = $router;
-        $this->requestValidator = $requestValidator;
         $this->methodsMap = $methodsMap ?: ObjectManager::getInstance()
             ->get(MethodsMap::class);
         $this->inputArraySizeLimitValue = $inputArraySizeLimitValue ?? ObjectManager::getInstance()
@@ -196,7 +157,7 @@ class InputParamsResolver
         if (!empty($paramOverriders)) {
             $message = 'The current request does not expect the next parameters: '
                 . implode(', ', $paramOverriders);
-            throw new \UnexpectedValueException(__($message)->__toString());
+            throw new UnexpectedValueException(__($message)->__toString());
         }
     }
 }

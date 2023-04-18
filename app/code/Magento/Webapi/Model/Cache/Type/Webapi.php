@@ -6,12 +6,14 @@
 namespace Magento\Webapi\Model\Cache\Type;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\App\Cache\Type\FrontendPool;
+use Magento\Framework\Cache\Frontend\Decorator\TagScope;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * System / Cache Management / Cache type "Web Services Configuration"
  */
-class Webapi extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
+class Webapi extends TagScope
 {
     /**
      * Cache type code unique among all cache types
@@ -24,27 +26,15 @@ class Webapi extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
     const CACHE_TAG = 'WEBSERVICE';
 
     /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var UserContextInterface
-     */
-    protected $userContext;
-
-    /**
-     * @param \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool
+     * @param FrontendPool $cacheFrontendPool
      * @param StoreManagerInterface $storeManager
      * @param UserContextInterface $userContext
      */
     public function __construct(
-        \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool,
-        StoreManagerInterface $storeManager,
-        UserContextInterface $userContext
+        FrontendPool $cacheFrontendPool,
+        protected readonly StoreManagerInterface $storeManager,
+        protected readonly UserContextInterface $userContext
     ) {
-        $this->storeManager = $storeManager;
-        $this->userContext = $userContext;
         parent::__construct($cacheFrontendPool->get(self::TYPE_IDENTIFIER), self::CACHE_TAG);
     }
 

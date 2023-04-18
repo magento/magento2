@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\Webapi\Model\Soap;
 
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\Webapi\Exception;
 use Magento\Webapi\Model\ServiceMetadata;
 
 /**
@@ -18,11 +21,6 @@ use Magento\Webapi\Model\ServiceMetadata;
 class Config
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    protected $objectManager;
-
-    /**
      * List of SOAP operations available in the system
      *
      * @var array
@@ -30,30 +28,17 @@ class Config
     protected $soapOperations;
 
     /**
-     * @var \Magento\Framework\Registry
-     */
-    protected $registry;
-
-    /**
-     * @var \Magento\Webapi\Model\ServiceMetadata
-     */
-    protected $serviceMetadata;
-
-    /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
+     * @param ObjectManagerInterface $objectManager
+     * @param Registry $registry
+     * @param ServiceMetadata $serviceMetadata
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\Registry $registry,
-        \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
+        protected readonly ObjectManagerInterface $objectManager,
+        protected readonly Registry $registry,
+        protected readonly ServiceMetadata $serviceMetadata
     ) {
-        $this->objectManager = $objectManager;
-        $this->registry = $registry;
-        $this->serviceMetadata = $serviceMetadata;
     }
 
     /**
@@ -101,16 +86,16 @@ class Config
      * @param string $soapOperation
      * @param array $requestedServices The list of requested services with their versions
      * @return array
-     * @throws \Magento\Framework\Webapi\Exception
+     * @throws Exception
      */
     public function getServiceMethodInfo($soapOperation, $requestedServices)
     {
         $soapOperations = $this->getSoapOperations($requestedServices);
         if (!isset($soapOperations[$soapOperation])) {
-            throw new \Magento\Framework\Webapi\Exception(
+            throw new Exception(
                 __('Operation "%1" not found.', $soapOperation),
                 0,
-                \Magento\Framework\Webapi\Exception::HTTP_NOT_FOUND
+                Exception::HTTP_NOT_FOUND
             );
         }
         $inputArraySizeLimit = $soapOperations[$soapOperation][ServiceMetadata::KEY_INPUT_ARRAY_SIZE_LIMIT];

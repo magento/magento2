@@ -14,27 +14,15 @@ use Magento\Framework\Authorization\RoleLocatorInterface;
 class WebapiRoleLocator implements RoleLocatorInterface
 {
     /**
-     * @var UserContextInterface
-     */
-    protected $userContext;
-
-    /**
-     * @var RoleCollectionFactory
-     */
-    protected $roleCollectionFactory;
-
-    /**
      * Constructs a role locator using the user context.
      *
      * @param UserContextInterface $userContext
      * @param RoleCollectionFactory $roleCollectionFactory
      */
     public function __construct(
-        UserContextInterface $userContext,
-        RoleCollectionFactory $roleCollectionFactory
+        protected readonly UserContextInterface $userContext,
+        protected readonly RoleCollectionFactory $roleCollectionFactory
     ) {
-        $this->userContext = $userContext;
-        $this->roleCollectionFactory = $roleCollectionFactory;
     }
 
     /**

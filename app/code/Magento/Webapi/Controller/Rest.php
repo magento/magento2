@@ -6,10 +6,20 @@
 
 namespace Magento\Webapi\Controller;
 
+use Exception;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\AreaList;
+use Magento\Framework\App\FrontControllerInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\State;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Session\Generic;
 use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Webapi\ErrorProcessor;
+use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Framework\Webapi\Rest\RequestValidatorInterface;
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
@@ -27,7 +37,7 @@ use Magento\Webapi\Controller\Rest\Router\Route;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class Rest implements \Magento\Framework\App\FrontControllerInterface
+class Rest implements FrontControllerInterface
 {
     /**
      * Path for accessing REST API schema
@@ -51,82 +61,39 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected $_route;
 
     /**
-     * @var \Magento\Framework\Webapi\Rest\Request
+     * @var RestRequest
      */
     protected $_request;
 
     /**
-     * @var \Magento\Framework\Webapi\Rest\Response
+     * @var RestResponse
      */
     protected $_response;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var State
      */
     protected $_appState;
 
     /**
-     * @var Authorization
-     * @deprecated 100.1.0
-     * @see MAGETWO-71174
-     */
-    protected $authorization;
-
-    /**
-     * @var ServiceInputProcessor
-     * @deprecated 100.1.0
-     * @see MAGETWO-71174
-     */
-    protected $serviceInputProcessor;
-
-    /**
-     * @var \Magento\Framework\Webapi\ErrorProcessor
+     * @var ErrorProcessor
      */
     protected $_errorProcessor;
 
     /**
-     * @var \Magento\Webapi\Controller\PathProcessor
+     * @var PathProcessor
      */
     protected $_pathProcessor;
 
     /**
-     * @var \Magento\Framework\App\AreaList
-     */
-    protected $areaList;
-
-    /**
-     * @var \Magento\Framework\Session\Generic
+     * @var Generic
      */
     protected $session;
-
-    /**
-     * @var ParamsOverrider
-     * @deprecated 100.1.0
-     * @see MAGETWO-71174
-     */
-    protected $paramsOverrider;
-
-    /**
-     * @var RequestProcessorPool
-     */
-    protected $requestProcessorPool;
-
-    /**
-     * @var RequestValidatorInterface
-     */
-    private $requestValidator;
-
-    /**
-     * @var StoreManagerInterface
-     * @deprecated 100.1.0
-     * @see MAGETWO-71174
-     */
-    private $storeManager;
 
     /**
      * Initialize dependencies
@@ -134,13 +101,13 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @param RestRequest $request
      * @param RestResponse $response
      * @param Router $router
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\App\State $appState
+     * @param ObjectManagerInterface $objectManager
+     * @param State $appState
      * @param Authorization $authorization
      * @param ServiceInputProcessor $serviceInputProcessor
      * @param ErrorProcessor $errorProcessor
      * @param PathProcessor $pathProcessor
-     * @param \Magento\Framework\App\AreaList $areaList
+     * @param AreaList $areaList
      * @param ParamsOverrider $paramsOverrider
      * @param StoreManagerInterface $storeManager
      * @param RequestProcessorPool $requestProcessorPool
@@ -153,32 +120,25 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         RestRequest $request,
         RestResponse $response,
         Router $router,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\App\State $appState,
-        Authorization $authorization,
-        ServiceInputProcessor $serviceInputProcessor,
+        ObjectManagerInterface $objectManager,
+        State $appState,
+        protected readonly Authorization $authorization,
+        protected readonly ServiceInputProcessor $serviceInputProcessor,
         ErrorProcessor $errorProcessor,
         PathProcessor $pathProcessor,
-        \Magento\Framework\App\AreaList $areaList,
-        ParamsOverrider $paramsOverrider,
-        StoreManagerInterface $storeManager,
-        RequestProcessorPool $requestProcessorPool,
-        RequestValidatorInterface $requestValidator
+        protected readonly AreaList $areaList,
+        protected readonly ParamsOverrider $paramsOverrider,
+        protected readonly StoreManagerInterface $storeManager,
+        protected readonly RequestProcessorPool $requestProcessorPool,
+        private readonly RequestValidatorInterface $requestValidator
     ) {
         $this->_router = $router;
         $this->_request = $request;
         $this->_response = $response;
         $this->_objectManager = $objectManager;
         $this->_appState = $appState;
-        $this->authorization = $authorization;
-        $this->serviceInputProcessor = $serviceInputProcessor;
         $this->_errorProcessor = $errorProcessor;
         $this->_pathProcessor = $pathProcessor;
-        $this->areaList = $areaList;
-        $this->paramsOverrider = $paramsOverrider;
-        $this->storeManager = $storeManager;
-        $this->requestProcessorPool = $requestProcessorPool;
-        $this->requestValidator = $requestValidator;
     }
 
     /**
@@ -187,15 +147,15 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * Based on request decide is it schema request or API request and process accordingly.
      * Throws Exception in case if cannot be processed properly.
      *
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @return \Magento\Framework\App\ResponseInterface
+     * @param RequestInterface $request
+     * @return ResponseInterface
      */
-    public function dispatch(\Magento\Framework\App\RequestInterface $request)
+    public function dispatch(RequestInterface $request)
     {
         $path = $this->_pathProcessor->process($request->getPathInfo());
         $this->_request->setPathInfo($path);
         $this->areaList->getArea($this->_appState->getAreaCode())
-            ->load(\Magento\Framework\App\Area::PART_TRANSLATE);
+            ->load(Area::PART_TRANSLATE);
         try {
             $this->requestValidator->validate($this->_request);
             $processor = $this->requestProcessorPool->getProcessor($this->_request);
@@ -204,7 +164,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
             $maskedException = $this->_errorProcessor->maskException($e);
             $this->_response->setException($maskedException);
             $this->_response->setHeader('errorRedirectAction', '#shipping');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $maskedException = $this->_errorProcessor->maskException($e);
             $this->_response->setException($maskedException);
         }
@@ -241,7 +201,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     /**
      * Perform authentication and authorization.
      *
-     * @throws \Magento\Framework\Exception\AuthorizationException
+     * @throws AuthorizationException
      * @return void
      * @deprecated 100.1.0
      * @see \Magento\Webapi\Controller\Rest\RequestValidator::checkPermissions
@@ -260,9 +220,9 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     /**
      * Validate request
      *
-     * @throws AuthorizationException
-     * @throws \Magento\Framework\Webapi\Exception
      * @return void
+     * @throws WebapiException
+     * @throws AuthorizationException
      * @deprecated 100.1.0
      * @see \Magento\Webapi\Controller\Rest\RequestValidator::validate
      */
@@ -270,13 +230,12 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     {
         $this->checkPermissions();
         if ($this->getCurrentRoute()->isSecure() && !$this->_request->isSecure()) {
-            throw new \Magento\Framework\Webapi\Exception(__('Operation allowed only in HTTPS'));
+            throw new WebapiException(__('Operation allowed only in HTTPS'));
         }
         if ($this->storeManager->getStore()->getCode() === Store::ADMIN_CODE
             && strtoupper($this->_request->getMethod()) === RestRequest::HTTP_METHOD_GET
         ) {
-            throw
-            new \Magento\Framework\Webapi\Exception(__('Cannot perform GET operation with store code \'all\''));
+            throw new WebapiException(__('Cannot perform GET operation with store code \'all\''));
         }
     }
 }

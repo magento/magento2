@@ -20,16 +20,6 @@ use Magento\Integration\Model\Validator\BearerTokenValidator;
 class SoapUserContext implements UserContextInterface
 {
     /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var Token
-     */
-    private $tokenFactory;
-
-    /**
      * @var int
      */
     private $userId;
@@ -45,16 +35,6 @@ class SoapUserContext implements UserContextInterface
     private $isRequestProcessed;
 
     /**
-     * @var IntegrationServiceInterface
-     */
-    private IntegrationServiceInterface $integrationService;
-
-    /**
-     * @var BearerTokenValidator
-     */
-    private BearerTokenValidator $bearerTokenValidator;
-
-    /**
      * Initialize dependencies.
      *
      * @param Request $request
@@ -63,14 +43,11 @@ class SoapUserContext implements UserContextInterface
      * @param BearerTokenValidator|null $bearerTokenValidator
      */
     public function __construct(
-        Request $request,
-        TokenFactory $tokenFactory,
-        IntegrationServiceInterface $integrationService,
-        ?BearerTokenValidator $bearerTokenValidator = null
+        private readonly Request $request,
+        private readonly TokenFactory $tokenFactory,
+        private IntegrationServiceInterface $integrationService,
+        private ?BearerTokenValidator $bearerTokenValidator = null
     ) {
-        $this->request = $request;
-        $this->tokenFactory = $tokenFactory;
-        $this->integrationService = $integrationService;
         $this->bearerTokenValidator = $bearerTokenValidator ?? ObjectManager::getInstance()
             ->get(BearerTokenValidator::class);
     }

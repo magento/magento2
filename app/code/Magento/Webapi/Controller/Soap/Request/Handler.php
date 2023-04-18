@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Webapi\Controller\Soap\Request;
 
 use InvalidArgumentException;
+use LogicException;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\MetadataObjectInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
@@ -56,49 +57,14 @@ class Handler
     protected $_apiConfig;
 
     /**
-     * @var Authorization
-     */
-    protected $authorization;
-
-    /**
      * @var SimpleDataObjectConverter
      */
     protected $_dataObjectConverter;
 
     /**
-     * @var ServiceInputProcessor
-     */
-    protected $serviceInputProcessor;
-
-    /**
      * @var DataObjectProcessor
      */
     protected $_dataObjectProcessor;
-
-    /**
-     * @var MethodsMap
-     */
-    protected $methodsMapProcessor;
-
-    /**
-     * @var ParamsOverrider
-     */
-    private $paramsOverrider;
-
-    /**
-     * @var BackpressureContextFactory
-     */
-    private BackpressureContextFactory $backpressureContextFactory;
-
-    /**
-     * @var BackpressureEnforcerInterface
-     */
-    private BackpressureEnforcerInterface $backpressureEnforcer;
-
-    /**
-     * @var InputArraySizeLimitValue
-     */
-    private $inputArraySizeLimitValue;
 
     /**
      * @param WebapiRequest $request
@@ -119,24 +85,21 @@ class Handler
         WebapiRequest  $request,
         ObjectManagerInterface $objectManager,
         SoapConfig $apiConfig,
-        Authorization $authorization,
+        protected readonly Authorization $authorization,
         SimpleDataObjectConverter $dataObjectConverter,
-        ServiceInputProcessor $serviceInputProcessor,
+        protected readonly ServiceInputProcessor $serviceInputProcessor,
         DataObjectProcessor $dataObjectProcessor,
-        MethodsMap $methodsMapProcessor,
-        ?ParamsOverrider $paramsOverrider = null,
-        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null,
-        ?BackpressureContextFactory $backpressureContextFactory = null,
-        ?BackpressureEnforcerInterface $backpressureEnforcer = null
+        protected readonly MethodsMap $methodsMapProcessor,
+        private ?ParamsOverrider $paramsOverrider = null,
+        private ?InputArraySizeLimitValue $inputArraySizeLimitValue = null,
+        private ?BackpressureContextFactory $backpressureContextFactory = null,
+        private ?BackpressureEnforcerInterface $backpressureEnforcer = null
     ) {
         $this->_request = $request;
         $this->_objectManager = $objectManager;
         $this->_apiConfig = $apiConfig;
-        $this->authorization = $authorization;
         $this->_dataObjectConverter = $dataObjectConverter;
-        $this->serviceInputProcessor = $serviceInputProcessor;
         $this->_dataObjectProcessor = $dataObjectProcessor;
-        $this->methodsMapProcessor = $methodsMapProcessor;
         $this->paramsOverrider = $paramsOverrider ?? ObjectManager::getInstance()->get(ParamsOverrider::class);
         $this->inputArraySizeLimitValue = $inputArraySizeLimitValue
             ?? ObjectManager::getInstance()->get(InputArraySizeLimitValue::class);
@@ -153,7 +116,7 @@ class Handler
      * @param array $arguments
      * @return array
      * @throws WebapiException
-     * @throws \LogicException
+     * @throws LogicException
      * @throws AuthorizationException
      * phpcs:disable Magento2.Functions.DiscouragedFunction
      * phpcs:disable Generic.PHP.NoSilencedErrors

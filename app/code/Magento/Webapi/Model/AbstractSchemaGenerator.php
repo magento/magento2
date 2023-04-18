@@ -7,6 +7,7 @@
 namespace Magento\Webapi\Model;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface;
@@ -18,60 +19,23 @@ use Magento\Webapi\Model\Cache\Type\Webapi;
 abstract class AbstractSchemaGenerator
 {
     /**
-     * @var Webapi
-     */
-    protected $cache;
-
-    /**
-     * @var \Magento\Framework\Reflection\TypeProcessor
-     */
-    protected $typeProcessor;
-
-    /**
-     * @var \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface
-     */
-    protected $serviceTypeList;
-
-    /**
-     * @var ServiceMetadata
-     */
-    protected $serviceMetadata;
-
-    /**
-     * @var Authorization
-     */
-    protected $authorization;
-
-    /**
-     * Instance of serializer.
-     *
-     * @var Json
-     */
-    private $serializer;
-
-    /**
      * Initialize dependencies.
      *
      * @param Webapi $cache
-     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
-     * @param \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface $serviceTypeList
-     * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
+     * @param TypeProcessor $typeProcessor
+     * @param ServiceTypeListInterface $serviceTypeList
+     * @param ServiceMetadata $serviceMetadata
      * @param Authorization $authorization
      * @param Json|null $serializer
      */
     public function __construct(
-        Webapi $cache,
-        \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
-        ServiceTypeListInterface $serviceTypeList,
-        ServiceMetadata $serviceMetadata,
-        Authorization $authorization,
-        Json $serializer = null
+        protected readonly Webapi $cache,
+        protected readonly TypeProcessor $typeProcessor,
+        protected readonly ServiceTypeListInterface $serviceTypeList,
+        protected readonly ServiceMetadata $serviceMetadata,
+        protected readonly Authorization $authorization,
+        private ?Json $serializer = null
     ) {
-        $this->cache = $cache;
-        $this->typeProcessor = $typeProcessor;
-        $this->serviceTypeList = $serviceTypeList;
-        $this->serviceMetadata = $serviceMetadata;
-        $this->authorization = $authorization;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 

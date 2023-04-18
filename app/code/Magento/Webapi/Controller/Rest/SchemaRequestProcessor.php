@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Webapi\Controller\Rest;
 
+use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Webapi\Model\Rest\Swagger\Generator;
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
 use Magento\Framework\Webapi\Request;
@@ -20,33 +21,21 @@ class SchemaRequestProcessor implements RequestProcessorInterface
     const PROCESSOR_PATH = 'schema';
 
     /**
-     * @var \Magento\Webapi\Model\Rest\Swagger\Generator
-     */
-    private $swaggerGenerator;
-
-    /**
-     * @var \Magento\Framework\Webapi\Rest\Response
-     */
-    private $response;
-
-    /**
      * Initial dependencies
      *
-     * @param \Magento\Webapi\Model\Rest\Swagger\Generator $swaggerGenerator
-     * @param \Magento\Framework\Webapi\Rest\Response $response
+     * @param Generator $swaggerGenerator
+     * @param RestResponse $response
      */
     public function __construct(
-        Generator $swaggerGenerator,
-        RestResponse $response
+        private readonly Generator $swaggerGenerator,
+        private readonly RestResponse $response
     ) {
-        $this->swaggerGenerator = $swaggerGenerator;
-        $this->response = $response;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function process(\Magento\Framework\Webapi\Rest\Request $request)
+    public function process(RestRequest $request)
     {
         $requestedServices = $request->getRequestedServices('all');
         $requestedServices = $requestedServices == Request::ALL_SERVICES
@@ -64,7 +53,7 @@ class SchemaRequestProcessor implements RequestProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function canProcess(\Magento\Framework\Webapi\Rest\Request $request)
+    public function canProcess(RestRequest $request)
     {
         if (strpos(ltrim($request->getPathInfo(), '/'), self::PROCESSOR_PATH) === 0) {
             return true;

@@ -24,36 +24,6 @@ use Magento\Webapi\Controller\Rest\Router\Route;
 class RequestValidator
 {
     /**
-     * @var RestRequest
-     */
-    private $request;
-
-    /**
-     * @var Router
-     */
-    private $router;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var Authorization
-     */
-    private $authorization;
-
-    /**
-     * @var BackpressureContextFactory
-     */
-    private BackpressureContextFactory $backpressureContextFactory;
-
-    /**
-     * @var BackpressureEnforcerInterface
-     */
-    private BackpressureEnforcerInterface $backpressureEnforcer;
-
-    /**
      * @param RestRequest $request
      * @param Router $router
      * @param StoreManagerInterface $storeManager
@@ -62,17 +32,13 @@ class RequestValidator
      * @param BackpressureEnforcerInterface|null $backpressureEnforcer
      */
     public function __construct(
-        RestRequest $request,
-        Router $router,
-        StoreManagerInterface $storeManager,
-        Authorization $authorization,
-        ?BackpressureContextFactory $backpressureContextFactory = null,
-        ?BackpressureEnforcerInterface $backpressureEnforcer = null
+        private readonly RestRequest $request,
+        private readonly Router $router,
+        private readonly StoreManagerInterface $storeManager,
+        private readonly Authorization $authorization,
+        private ?BackpressureContextFactory $backpressureContextFactory = null,
+        private ?BackpressureEnforcerInterface $backpressureEnforcer = null
     ) {
-        $this->request = $request;
-        $this->router = $router;
-        $this->storeManager = $storeManager;
-        $this->authorization = $authorization;
         $this->backpressureContextFactory = $backpressureContextFactory
             ?? ObjectManager::getInstance()->get(BackpressureContextFactory::class);
         $this->backpressureEnforcer = $backpressureEnforcer

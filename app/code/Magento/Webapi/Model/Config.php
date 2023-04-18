@@ -29,24 +29,9 @@ class Config implements ConfigInterface
     const API_PATTERN = '/^(.+?)\\\\(.+?)\\\\Api(\\\\.+)Interface$/';
 
     /**
-     * @var WebapiCache
-     */
-    protected $cache;
-
-    /**
-     * @var Reader
-     */
-    protected $configReader;
-
-    /**
      * @var array
      */
     protected $services;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
 
     /**
      * Initialize dependencies.
@@ -56,12 +41,10 @@ class Config implements ConfigInterface
      * @param SerializerInterface|null $serializer
      */
     public function __construct(
-        WebapiCache $cache,
-        Reader $configReader,
-        SerializerInterface $serializer = null
+        protected readonly WebapiCache $cache,
+        protected readonly Reader $configReader,
+        private ?SerializerInterface $serializer = null
     ) {
-        $this->cache = $cache;
-        $this->configReader = $configReader;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 

@@ -68,31 +68,6 @@ class ServiceMetadata
     protected $routes;
 
     /**
-     * @var WebApiCache
-     */
-    protected $cache;
-
-    /**
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * @var ClassReflector
-     */
-    protected $classReflector;
-
-    /**
-     * @var TypeProcessor
-     */
-    protected $typeProcessor;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
      * Initialize dependencies.
      *
      * @param Config $config
@@ -102,16 +77,12 @@ class ServiceMetadata
      * @param SerializerInterface|null $serializer
      */
     public function __construct(
-        Config $config,
-        WebApiCache $cache,
-        ClassReflector $classReflector,
-        TypeProcessor $typeProcessor,
-        SerializerInterface $serializer = null
+        protected readonly Config $config,
+        protected readonly WebApiCache $cache,
+        protected readonly ClassReflector $classReflector,
+        protected readonly TypeProcessor $typeProcessor,
+        private ?SerializerInterface $serializer = null
     ) {
-        $this->config = $config;
-        $this->cache = $cache;
-        $this->classReflector = $classReflector;
-        $this->typeProcessor = $typeProcessor;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
