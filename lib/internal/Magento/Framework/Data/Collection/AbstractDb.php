@@ -99,8 +99,11 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      */
     protected $extensionAttributesJoinProcessor;
 
-    /** @see https://en.wikipedia.org/wiki/List_of_SQL_reserved_words */
-    private const SQL_RESERVED_WORDS = [
+    /**
+     * @see https://en.wikipedia.org/wiki/List_of_SQL_reserved_words
+     * @var array
+     */
+    private array $sqlReservedWords = [
         'ABORT', 'ABORTSESSION', 'ABS', 'ABSENT', 'ABSOLUTE', 'ACCESS',
         'ACCESS_LOCK', 'ACCESSIBLE', 'ACCOUNT', 'ACOS', 'ACOSH', 'ACTION',
         'ADD', 'ADD_MONTHS', 'ADMIN', 'AFTER', 'AGGREGATE', 'ALIAS', 'ALL',
@@ -278,6 +281,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
             $this->setConnection($connection);
         }
         $this->_logger = $logger;
+        $this->sqlReservedWords = array_flip($this->sqlReservedWords);
     }
 
     /**
@@ -666,7 +670,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     {
         if (!$this->_isOrdersRendered) {
             foreach ($this->_orders as $field => $direction) {
-                if (in_array(strtoupper($field), self::SQL_RESERVED_WORDS)) {
+                if (isset($this->sqlReservedWords[strtoupper($field)])) {
                     $field = "`$field`";
                 }
                 $this->_select->order(new \Zend_Db_Expr($field . ' ' . $direction));
