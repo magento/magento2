@@ -142,5 +142,25 @@ define([
             qtyElement.trigFunc('input');
             expect($.fn.trigger).toHaveBeenCalledWith('updatePrice', {});
         });
+
+        it('check that configure element method', function () {
+            expect($.mage.configurable).toBeDefined();
+            selectElement.value = 14;
+            widget._configureElement(selectElement);
+            expect(widget).toBeTruthy();
+        });
+
+        it('check that clear select method', function () {
+            expect($.mage.configurable).toBeDefined();
+            selectElement.empty();
+            widget._clearSelect(selectElement);
+            expect(widget).toBeTruthy();
+        });
+
+        it('check that get simple product id method', function () {
+            expect($.mage.configurable).toBeDefined();
+            widget._getSimpleProductId(selectElement);
+            expect(widget).toBeTruthy();
+        });
     });
 });
