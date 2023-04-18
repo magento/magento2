@@ -37,15 +37,15 @@ class Provider implements ProviderInterface
     private KeyCalculatorFactory $keyCalculatorFactory;
 
     /**
-     * @param KeyCalculatorFactory $cacheIdCalculatorFactory
+     * @param KeyCalculatorFactory $keyCalculatorFactory
      * @param array $customFactorProviders
      */
     public function __construct(
-        KeyCalculatorFactory $cacheIdCalculatorFactory,
+        KeyCalculatorFactory $keyCalculatorFactory,
         array $customFactorProviders = []
     ) {
         $this->customFactorProviders = $customFactorProviders;
-        $this->keyCalculatorFactory = $cacheIdCalculatorFactory;
+        $this->keyCalculatorFactory = $keyCalculatorFactory;
     }
 
     /**
