@@ -28,6 +28,16 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- disable table rate meth0d -->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+            <!-- Switch to Website scope -->
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreView">
+                <argument name="website" value="_defaultWebsite"/>
+            </actionGroup>
+            <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="disableTableRatesShippingMethod">
+                <argument name="status" value="0"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Go to Stores > Configuration > Sales > Shipping Methods -->
