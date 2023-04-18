@@ -21,5 +21,5 @@ interface HydratorProviderInterface
      *
      * @return HydratorInterface|null
      */
-    public function getForResolver(ResolverInterface $resolver) : ?HydratorInterface;
+    public function getHydratorForResolver(ResolverInterface $resolver) : ?HydratorInterface;
 }

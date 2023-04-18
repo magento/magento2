@@ -44,7 +44,7 @@ class HydratorProvider implements HydratorProviderInterface
     /**
      * @inheritdoc
      */
-    public function getForResolver(ResolverInterface $resolver): ?HydratorInterface
+    public function getHydratorForResolver(ResolverInterface $resolver): ?HydratorInterface
     {
         $resolverClass = trim(get_class($resolver), '\\');
         if (array_key_exists($resolverClass, $this->resolverHydratorInstances)) {

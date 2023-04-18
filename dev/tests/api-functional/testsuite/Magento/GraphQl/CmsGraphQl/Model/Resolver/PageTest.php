@@ -599,10 +599,9 @@ QUERY;
         $resolverMock = $this->getMockBuilder(\Magento\CmsGraphQl\Model\Resolver\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var ProviderInterface $cacheIdStrategy */
-        $cacheIdStrategy = $this->objectManager->get(ProviderInterface::class);
-        $cacheIdProvider = $cacheIdStrategy->getForResolver($resolverMock);
-        $cacheIdValue = $cacheIdProvider->calculateCacheKey();
+        /** @var ProviderInterface $cacheKeyCalculatorProvider */
+        $cacheKeyCalculatorProvider = $this->objectManager->get(ProviderInterface::class);
+        $cacheKey = $cacheKeyCalculatorProvider->getKeyCalculatorForResolver($resolverMock)->calculateCacheKey();
 
         $cacheIdQueryPayloadMetadata = sprintf('CmsPage%s', json_encode([
             'identifier' => $page->getIdentifier(),
@@ -610,7 +609,7 @@ QUERY;
 
         $cacheIdParts = [
             GraphQlResolverCache::CACHE_TAG,
-            $cacheIdValue,
+            $cacheKey,
             sha1($cacheIdQueryPayloadMetadata)
         ];
 

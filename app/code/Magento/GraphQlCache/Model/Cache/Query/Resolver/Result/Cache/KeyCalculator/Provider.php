@@ -74,7 +74,7 @@ class Provider implements ProviderInterface
     /**
      * @inheritDoc
      */
-    public function getForResolver(ResolverInterface $resolver): KeyCalculator
+    public function getKeyCalculatorForResolver(ResolverInterface $resolver): KeyCalculator
     {
         $resolverClass = trim(get_class($resolver), '\\');
         if (!isset($this->keyCalculatorInstances[$resolverClass])) {

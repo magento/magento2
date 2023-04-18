@@ -22,5 +22,5 @@ interface ProviderInterface
      * @param ResolverInterface $resolver
      * @return KeyCalculator
      */
-    public function getForResolver(ResolverInterface $resolver): KeyCalculator;
+    public function getKeyCalculatorForResolver(ResolverInterface $resolver): KeyCalculator;
 }

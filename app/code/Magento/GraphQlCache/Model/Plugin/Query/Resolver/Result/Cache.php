@@ -50,7 +50,7 @@ class Cache
     /**
      * @var ProviderInterface
      */
-    private ProviderInterface $cacheIdProviderStrategy;
+    private ProviderInterface $cacheKeyCalculatorProvider;
 
     /**
      * @var HydratorProviderInterface
@@ -77,7 +77,7 @@ class Cache
         $this->serializer = $serializer;
         $this->cacheState = $cacheState;
         $this->resolverIdentityClassLocator = $resolverIdentityClassLocator;
-        $this->cacheIdProviderStrategy = $cacheIdProviderStrategy;
+        $this->cacheKeyCalculatorProvider = $cacheIdProviderStrategy;
         $this->hydratorProvider = $hydratorProvider;
     }
 
@@ -171,7 +171,7 @@ class Cache
      */
     private function postprocessResolverResult(&$resolvedValue, ResolverInterface $subject)
     {
-        $hydrator = $this->hydratorProvider->getForResolver($subject);
+        $hydrator = $this->hydratorProvider->getHydratorForResolver($subject);
         if ($hydrator) {
             $resolvedValue['hydrator_instance'] = $hydrator;
         }
@@ -193,7 +193,7 @@ class Cache
         ?array $args,
         ?array $value
     ): string {
-        $cacheIdentityString = $this->cacheIdProviderStrategy->getForResolver($resolver)->calculateCacheKey($value);
+        $cacheIdentityString = $this->cacheKeyCalculatorProvider->getKeyCalculatorForResolver($resolver)->calculateCacheKey($value);
         $cacheIdQueryPayloadString = $info->returnType->name . $this->serializer->serialize($args ?? []);
         return GraphQlResolverCache::CACHE_TAG . '_' . $cacheIdentityString . '_' . sha1($cacheIdQueryPayloadString);
     }
