@@ -10,6 +10,7 @@ namespace Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalcul
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculatorFactory;
+use Magento\GraphQlCache\Model\CacheId\CacheIdFactorProviderInterface;
 
 /**
  * Provides custom cache id providers for resolvers chain.
@@ -52,6 +53,7 @@ class Provider implements ProviderInterface
      * Initialize custom cache key calculator for the given resolver.
      *
      * @param ResolverInterface $resolver
+     *
      * @return void
      */
     private function initForResolver(ResolverInterface $resolver): void
@@ -67,8 +69,29 @@ class Provider implements ProviderInterface
             }
             $this->keyCalculatorInstances[$resolverClass] = $this->genericKeyCalculator;
         } else {
-            $this->keyCalculatorInstances[$resolverClass] = $this->keyCalculatorFactory->create($customProviders);
+            $runtimePoolKey = $this->generateCustomProvidersKey($customProviders);
+            if (!isset($this->keyCalculatorInstances[$runtimePoolKey])) {
+                $this->keyCalculatorInstances[$runtimePoolKey] = $this->keyCalculatorFactory->create($customProviders);
+            }
+            $this->keyCalculatorInstances[$resolverClass] = $this->keyCalculatorInstances[$runtimePoolKey];
         }
+    }
+
+    /**
+     * Generate runtime pool key from the set of custom providers.
+     *
+     * @param array $customProviders
+     * @return string
+     */
+    private function generateCustomProvidersKey(array $customProviders): string
+    {
+        $keyArray = [];
+        /** @var CacheIdFactorProviderInterface $customProvider */
+        foreach ($customProviders as $customProvider) {
+            $keyArray[] = $customProvider->getFactorName();
+        }
+        sort($keyArray);
+        return implode('_', $keyArray);
     }
 
     /**
