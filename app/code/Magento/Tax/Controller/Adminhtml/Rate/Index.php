@@ -6,14 +6,16 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
+use Magento\Backend\Model\View\Result\Page as ResultPage;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Tax\Controller\Adminhtml\Rate;
 
-class Index extends \Magento\Tax\Controller\Adminhtml\Rate implements HttpGetActionInterface
+class Index extends Rate implements HttpGetActionInterface
 {
     /**
      * Show Main Grid
      *
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return ResultPage
      */
     public function execute()
     {

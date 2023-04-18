@@ -11,7 +11,7 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Report\Tax;
 
-class Updatedat extends \Magento\Tax\Model\ResourceModel\Report\Tax\Createdat
+class Updatedat extends Createdat
 {
     /**
      * Resource initialization

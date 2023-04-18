@@ -13,11 +13,6 @@ use Magento\Tax\Model\Calculation\RuleFactory as TaxRuleModelFactory;
 class TaxRuleRegistry
 {
     /**
-     * @var \Magento\Tax\Model\Calculation\RuleFactory
-     */
-    private $taxRuleModelFactory;
-
-    /**
      * @var array taxRuleId => TaxRuleModel
      */
     private $registry = [];
@@ -28,9 +23,8 @@ class TaxRuleRegistry
      * @param TaxRuleModelFactory $taxRuleModelFactory
      */
     public function __construct(
-        TaxRuleModelFactory $taxRuleModelFactory
+        private readonly TaxRuleModelFactory $taxRuleModelFactory
     ) {
-        $this->taxRuleModelFactory = $taxRuleModelFactory;
     }
 
     /**

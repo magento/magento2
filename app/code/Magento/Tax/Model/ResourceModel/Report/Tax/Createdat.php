@@ -11,10 +11,16 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Report\Tax;
 
+use Exception;
+use Magento\Reports\Model\ResourceModel\Report\AbstractReport;
+use Magento\Sales\Model\Order;
+use Magento\Store\Model\Store;
+use Zend_Db_Expr;
+
 /**
  * Class for tax report resource model with aggregation by created at
  */
-class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
+class Createdat extends AbstractReport
 {
     /**
      * Resource initialization
@@ -45,7 +51,7 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
      * @param mixed $from
      * @param mixed $to
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     protected function _aggregateByOrder($aggregationField, $from, $to)
     {
@@ -99,7 +105,7 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
                 []
             )->useStraightJoin()->where(
                 'e.state NOT IN (?)',
-                [\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT, \Magento\Sales\Model\Order::STATE_NEW]
+                [Order::STATE_PENDING_PAYMENT, Order::STATE_NEW]
             );
 
             if ($subSelect !== null) {
@@ -116,7 +122,7 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
 
             $columns = [
                 'period' => 'period',
-                'store_id' => new \Zend_Db_Expr(\Magento\Store\Model\Store::DEFAULT_STORE_ID),
+                'store_id' => new Zend_Db_Expr(Store::DEFAULT_STORE_ID),
                 'code' => 'code',
                 'order_status' => 'order_status',
                 'percent' => 'MAX(' . $connection->quoteIdentifier('percent') . ')',
@@ -134,7 +140,7 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
             $insertQuery = $connection->insertFromSelect($select, $this->getMainTable(), array_keys($columns));
             $connection->query($insertQuery);
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $connection->rollBack();
             throw $e;
         }

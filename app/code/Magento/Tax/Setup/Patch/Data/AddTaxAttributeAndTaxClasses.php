@@ -6,10 +6,16 @@
 
 namespace Magento\Tax\Setup\Patch\Data;
 
+use Magento\Catalog\Model\Product;
+use Magento\Directory\Model\Region;
 use Magento\Directory\Model\RegionFactory;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
+use Magento\Tax\Model\ClassModel;
+use Magento\Tax\Model\TaxClass\Source\Product as TaxClassSourceProduct;
 use Magento\Tax\Setup\TaxSetup;
 use Magento\Tax\Setup\TaxSetupFactory;
 
@@ -20,34 +26,17 @@ use Magento\Tax\Setup\TaxSetupFactory;
 class AddTaxAttributeAndTaxClasses implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @param TaxSetupFactory $taxSetupFactory
-     */
-    private $taxSetupFactory;
-
-    /**
-     * @param RegionFactory $directoryRegionFactory
-     */
-    private $directoryRegionFactory;
-
-    /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
      * AddTacAttributeAndTaxClasses constructor.
+     *
      * @param TaxSetupFactory $taxSetupFactory
      * @param RegionFactory $directoryRegionFactory
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        TaxSetupFactory $taxSetupFactory,
-        RegionFactory $directoryRegionFactory,
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+        private readonly TaxSetupFactory $taxSetupFactory,
+        private readonly RegionFactory $directoryRegionFactory,
+        private readonly ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->taxSetupFactory = $taxSetupFactory;
-        $this->directoryRegionFactory = $directoryRegionFactory;
-        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -62,7 +51,7 @@ class AddTaxAttributeAndTaxClasses implements DataPatchInterface, PatchVersionIn
          * Add tax_class_id attribute to the 'eav_attribute' table
          */
         $taxSetup->addAttribute(
-            \Magento\Catalog\Model\Product::ENTITY,
+            Product::ENTITY,
             'tax_class_id',
             [
                 'group' => 'Product Details',
@@ -73,8 +62,8 @@ class AddTaxAttributeAndTaxClasses implements DataPatchInterface, PatchVersionIn
                 'label' => 'Tax Class',
                 'input' => 'select',
                 'class' => '',
-                'source' => \Magento\Tax\Model\TaxClass\Source\Product::class,
-                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
+                'source' => TaxClassSourceProduct::class,
+                'global' => ScopedAttributeInterface::SCOPE_WEBSITE,
                 'visible' => true,
                 'required' => false,
                 'user_defined' => false,
@@ -99,12 +88,12 @@ class AddTaxAttributeAndTaxClasses implements DataPatchInterface, PatchVersionIn
             [
                 'class_id' => 2,
                 'class_name' => 'Taxable Goods',
-                'class_type' => \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT,
+                'class_type' => ClassModel::TAX_CLASS_TYPE_PRODUCT,
             ],
             [
                 'class_id' => 3,
                 'class_name' => 'Retail Customer',
-                'class_type' => \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER
+                'class_type' => ClassModel::TAX_CLASS_TYPE_CUSTOMER
             ],
         ];
         foreach ($data as $row) {
@@ -116,7 +105,7 @@ class AddTaxAttributeAndTaxClasses implements DataPatchInterface, PatchVersionIn
         /**
          * install tax calculation rates
          */
-        /** @var \Magento\Directory\Model\Region $region */
+        /** @var Region $region */
         $region = $this->directoryRegionFactory->create();
         $data = [
             [

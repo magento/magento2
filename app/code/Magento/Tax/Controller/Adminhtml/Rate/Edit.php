@@ -6,16 +6,21 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
+use Magento\Backend\Model\View\Result\Page as ResultPage;
+use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Tax\Block\Adminhtml\Rate\Form;
+use Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save as ToolbarSave;
+use Magento\Tax\Controller\Adminhtml\Rate;
 use Magento\Tax\Controller\RegistryConstants;
 use Magento\Framework\Controller\ResultFactory;
 
-class Edit extends \Magento\Tax\Controller\Adminhtml\Rate
+class Edit extends Rate
 {
     /**
      * Show Edit Form
      *
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
+     * @return ResultPage|ResultRedirect
      */
     public function execute()
     {
@@ -24,7 +29,7 @@ class Edit extends \Magento\Tax\Controller\Adminhtml\Rate
         try {
             $taxRateDataObject = $this->_taxRateRepository->get($rateId);
         } catch (NoSuchEntityException $e) {
-            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            /** @var ResultRedirect $resultRedirect */
             $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
             return $resultRedirect->setPath("*/*/");
         }
@@ -32,12 +37,12 @@ class Edit extends \Magento\Tax\Controller\Adminhtml\Rate
         $resultPage = $this->initResultPage();
         $layout = $resultPage->getLayout();
 
-        $toolbarSaveBlock = $layout->createBlock(\Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save::class)
+        $toolbarSaveBlock = $layout->createBlock(ToolbarSave::class)
             ->assign('header', __('Edit Tax Rate'))
             ->assign(
                 'form',
                 $layout->createBlock(
-                    \Magento\Tax\Block\Adminhtml\Rate\Form::class,
+                    Form::class,
                     'tax_rate_form'
                 )->setShowLegend(true)
             );

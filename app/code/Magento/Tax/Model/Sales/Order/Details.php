@@ -7,11 +7,16 @@
 
 namespace Magento\Tax\Model\Sales\Order;
 
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface;
+use Magento\Tax\Api\Data\OrderTaxDetailsExtensionInterface;
+use Magento\Tax\Api\Data\OrderTaxDetailsInterface;
+use Magento\Tax\Api\Data\OrderTaxDetailsItemInterface;
+
 /**
  * @codeCoverageIgnore
  */
-class Details extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Tax\Api\Data\OrderTaxDetailsInterface
+class Details extends AbstractExtensibleModel implements OrderTaxDetailsInterface
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely
@@ -39,7 +44,7 @@ class Details extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * Set applied taxes at order level
      *
-     * @param \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[] $appliedTaxes
+     * @param OrderTaxDetailsAppliedTaxInterface[] $appliedTaxes
      * @return $this
      */
     public function setAppliedTaxes(array $appliedTaxes = null)
@@ -50,7 +55,7 @@ class Details extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * Set order item tax details
      *
-     * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[] $items
+     * @param OrderTaxDetailsItemInterface[] $items
      * @return $this
      */
     public function setItems(array $items = null)
@@ -61,7 +66,7 @@ class Details extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Tax\Api\Data\OrderTaxDetailsExtensionInterface|null
+     * @return OrderTaxDetailsExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -71,10 +76,10 @@ class Details extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Tax\Api\Data\OrderTaxDetailsExtensionInterface $extensionAttributes
+     * @param OrderTaxDetailsExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\Tax\Api\Data\OrderTaxDetailsExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(OrderTaxDetailsExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

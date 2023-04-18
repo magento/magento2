@@ -5,8 +5,12 @@
  */
 namespace Magento\Tax\Model\Sales\Quote;
 
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Tax\Api\Data\QuoteDetailsExtensionInterface;
 use Magento\Tax\Api\Data\QuoteDetailsInterface;
+use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
+use Magento\Tax\Api\Data\TaxClassKeyInterface;
 
 /**
  * @codeCoverageIgnore
@@ -75,10 +79,10 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
     /**
      * Set customer billing address
      *
-     * @param \Magento\Customer\Api\Data\AddressInterface $billingAddress
+     * @param AddressInterface $billingAddress
      * @return $this
      */
-    public function setBillingAddress(\Magento\Customer\Api\Data\AddressInterface $billingAddress = null)
+    public function setBillingAddress(AddressInterface $billingAddress = null)
     {
         return $this->setData(self::KEY_BILLING_ADDRESS, $billingAddress);
     }
@@ -86,10 +90,10 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
     /**
      * Set customer shipping address
      *
-     * @param \Magento\Customer\Api\Data\AddressInterface $shippingAddress
+     * @param AddressInterface $shippingAddress
      * @return $this
      */
-    public function setShippingAddress(\Magento\Customer\Api\Data\AddressInterface $shippingAddress = null)
+    public function setShippingAddress(AddressInterface $shippingAddress = null)
     {
         return $this->setData(self::KEY_SHIPPING_ADDRESS, $shippingAddress);
     }
@@ -97,10 +101,10 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
     /**
      * Set customer tax class key
      *
-     * @param \Magento\Tax\Api\Data\TaxClassKeyInterface $customerTaxClassKey
+     * @param TaxClassKeyInterface $customerTaxClassKey
      * @return $this
      */
-    public function setCustomerTaxClassKey(\Magento\Tax\Api\Data\TaxClassKeyInterface $customerTaxClassKey = null)
+    public function setCustomerTaxClassKey(TaxClassKeyInterface $customerTaxClassKey = null)
     {
         return $this->setData(self::KEY_CUSTOMER_TAX_CLASS_KEY, $customerTaxClassKey);
     }
@@ -119,7 +123,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
     /**
      * Set customer data
      *
-     * @param \Magento\Tax\Api\Data\QuoteDetailsItemInterface[] $items
+     * @param QuoteDetailsItemInterface[] $items
      * @return $this
      */
     public function setItems(array $items = null)
@@ -141,7 +145,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Tax\Api\Data\QuoteDetailsExtensionInterface|null
+     * @return QuoteDetailsExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -151,10 +155,10 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Tax\Api\Data\QuoteDetailsExtensionInterface $extensionAttributes
+     * @param QuoteDetailsExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\Tax\Api\Data\QuoteDetailsExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(QuoteDetailsExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

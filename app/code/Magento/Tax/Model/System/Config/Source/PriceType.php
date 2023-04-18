@@ -5,7 +5,9 @@
  */
 namespace Magento\Tax\Model\System\Config\Source;
 
-class PriceType implements \Magento\Framework\Option\ArrayInterface
+use Magento\Framework\Option\ArrayInterface;
+
+class PriceType implements ArrayInterface
 {
     /**
      * @var array

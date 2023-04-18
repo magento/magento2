@@ -44,7 +44,7 @@ class Collection extends AbstractCollection
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
      * @param mixed $connection
-     * @param AbstractDb $resource
+     * @param AbstractDb|null $resource
      */
     public function __construct(
         EntityFactory $entityFactory,

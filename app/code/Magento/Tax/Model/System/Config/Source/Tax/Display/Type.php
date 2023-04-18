@@ -11,7 +11,10 @@
  */
 namespace Magento\Tax\Model\System\Config\Source\Tax\Display;
 
-class Type implements \Magento\Framework\Option\ArrayInterface
+use Magento\Framework\Option\ArrayInterface;
+use Magento\Tax\Model\Config;
+
+class Type implements ArrayInterface
 {
     /**
      * @var array
@@ -26,15 +29,15 @@ class Type implements \Magento\Framework\Option\ArrayInterface
         if (!$this->_options) {
             $this->_options = [];
             $this->_options[] = [
-                'value' => \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX,
+                'value' => Config::DISPLAY_TYPE_EXCLUDING_TAX,
                 'label' => __('Excluding Tax'),
             ];
             $this->_options[] = [
-                'value' => \Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX,
+                'value' => Config::DISPLAY_TYPE_INCLUDING_TAX,
                 'label' => __('Including Tax'),
             ];
             $this->_options[] = [
-                'value' => \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH,
+                'value' => Config::DISPLAY_TYPE_BOTH,
                 'label' => __('Including and Excluding Tax'),
             ];
         }

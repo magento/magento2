@@ -6,32 +6,14 @@
 namespace Magento\Tax\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Tax\Model\Config as TaxConfig;
 
 class TaxConfigProvider implements ConfigProviderInterface
 {
-    /**
-     * @var TaxHelper
-     */
-    protected $taxHelper;
-
-    /**
-     * @var Config
-     */
-    protected $taxConfig;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * @var CheckoutSession
-     */
-    protected $checkoutSession;
-
     /**
      * @param TaxHelper $taxHelper
      * @param Config $taxConfig
@@ -39,15 +21,11 @@ class TaxConfigProvider implements ConfigProviderInterface
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        TaxHelper $taxHelper,
-        Config $taxConfig,
-        CheckoutSession $checkoutSession,
-        ScopeConfigInterface $scopeConfig
+        protected readonly TaxHelper $taxHelper,
+        protected readonly Config $taxConfig,
+        protected readonly CheckoutSession $checkoutSession,
+        protected readonly ScopeConfigInterface $scopeConfig
     ) {
-        $this->taxHelper = $taxHelper;
-        $this->taxConfig = $taxConfig;
-        $this->checkoutSession = $checkoutSession;
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -56,8 +34,8 @@ class TaxConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         $defaultRegionId = $this->scopeConfig->getValue(
-            \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_REGION,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            TaxConfig::CONFIG_XML_PATH_DEFAULT_REGION,
+            ScopeInterface::SCOPE_STORE
         );
         // prevent wrong assignment on shipping rate estimation requests
         if (0 == $defaultRegionId) {
@@ -74,13 +52,13 @@ class TaxConfigProvider implements ConfigProviderInterface
             'isZeroTaxDisplayed' => $this->taxConfig->displayCartZeroTax(),
             'reloadOnBillingAddress' => $this->reloadOnBillingAddress(),
             'defaultCountryId' => $this->scopeConfig->getValue(
-                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_COUNTRY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                TaxConfig::CONFIG_XML_PATH_DEFAULT_COUNTRY,
+                ScopeInterface::SCOPE_STORE
             ),
             'defaultRegionId' => $defaultRegionId,
             'defaultPostcode' => $this->scopeConfig->getValue(
-                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_POSTCODE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                TaxConfig::CONFIG_XML_PATH_DEFAULT_POSTCODE,
+                ScopeInterface::SCOPE_STORE
             ),
         ];
     }
@@ -183,7 +161,7 @@ class TaxConfigProvider implements ConfigProviderInterface
         $quote = $this->checkoutSession->getQuote();
         $configValue = $this->scopeConfig->getValue(
             Config::CONFIG_XML_PATH_BASED_ON,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
         return 'billing' == $configValue || $quote->isVirtual();
     }

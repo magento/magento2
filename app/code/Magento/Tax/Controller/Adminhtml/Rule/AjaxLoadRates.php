@@ -5,6 +5,8 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rule;
 
+use Exception;
+use InvalidArgumentException;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface;
@@ -21,35 +23,23 @@ use Magento\Tax\Model\Calculation\Rate;
 class AjaxLoadRates extends Action implements HttpGetActionInterface
 {
     /**
-     * @var RatesProvider
-     */
-    private $ratesProvider;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
      * @param Context $context
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param RatesProvider $ratesProvider
      */
     public function __construct(
         Context $context,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        RatesProvider $ratesProvider
+        private readonly SearchCriteriaBuilder $searchCriteriaBuilder,
+        private readonly RatesProvider $ratesProvider
     ) {
         parent::__construct($context);
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->ratesProvider = $ratesProvider;
     }
 
     /**
      * Get rates page via AJAX
      *
      * @return Json
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function execute()
     {
@@ -77,7 +67,7 @@ class AjaxLoadRates extends Action implements HttpGetActionInterface
                 'errorMessage' => '',
                 'result'=> $options,
             ];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $response = [
                 'success' => false,
                 'errorMessage' => __('An error occurred while loading tax rates.')

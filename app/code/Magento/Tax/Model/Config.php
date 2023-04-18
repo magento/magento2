@@ -11,6 +11,8 @@
  */
 namespace Magento\Tax\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
 /**
@@ -149,23 +151,24 @@ class Config
     /**
      * Core store config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
-    {
+    public function __construct(
+        ScopeConfigInterface $scopeConfig
+    ) {
         $this->_scopeConfig = $scopeConfig;
     }
 
     /**
      * Check if prices of product in catalog include tax
      *
-     * @param   null|string|bool|int|Store $store
-     * @return  bool
+     * @param null|string|bool|int|Store $store
+     * @return bool
      */
     public function priceIncludesTax($store = null)
     {
@@ -174,7 +177,7 @@ class Config
         }
         return (bool)$this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -198,14 +201,14 @@ class Config
     /**
      * Check what taxes should be applied after discount
      *
-     * @param   null|string|bool|int|Store $store
-     * @return  bool
+     * @param null|string|bool|int|Store $store
+     * @return bool
      */
     public function applyTaxAfterDiscount($store = null)
     {
         return (bool)$this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -216,14 +219,14 @@ class Config
      *  2 - Including tax
      *  3 - Both
      *
-     * @param   null|string|bool|int|Store $store
-     * @return  int
+     * @param null|string|bool|int|Store $store
+     * @return int
      */
     public function getPriceDisplayType($store = null)
     {
         return (int)$this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -231,14 +234,14 @@ class Config
     /**
      * Get configuration setting "Apply Discount On Prices Including Tax" value
      *
-     * @param   null|string|bool|int|Store $store
-     * @return  bool
+     * @param null|string|bool|int|Store $store
+     * @return bool
      */
     public function discountTax($store = null)
     {
         return (int)$this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_DISCOUNT_TAX,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == 1;
     }
@@ -248,22 +251,22 @@ class Config
      *
      * This sequence depends on "Apply Customer Tax" and "Apply Discount On Prices" configuration options.
      *
-     * @param   null|int|string|Store $store
-     * @return  string
+     * @param null|int|string|Store $store
+     * @return string
      */
     public function getCalculationSequence($store = null)
     {
         if ($this->applyTaxAfterDiscount($store)) {
             if ($this->discountTax($store)) {
-                $seq = \Magento\Tax\Model\Calculation::CALC_TAX_AFTER_DISCOUNT_ON_INCL;
+                $seq = Calculation::CALC_TAX_AFTER_DISCOUNT_ON_INCL;
             } else {
-                $seq = \Magento\Tax\Model\Calculation::CALC_TAX_AFTER_DISCOUNT_ON_EXCL;
+                $seq = Calculation::CALC_TAX_AFTER_DISCOUNT_ON_EXCL;
             }
         } else {
             if ($this->discountTax($store)) {
-                $seq = \Magento\Tax\Model\Calculation::CALC_TAX_BEFORE_DISCOUNT_ON_INCL;
+                $seq = Calculation::CALC_TAX_BEFORE_DISCOUNT_ON_INCL;
             } else {
-                $seq = \Magento\Tax\Model\Calculation::CALC_TAX_BEFORE_DISCOUNT_ON_EXCL;
+                $seq = Calculation::CALC_TAX_BEFORE_DISCOUNT_ON_EXCL;
             }
         }
         return $seq;
@@ -272,8 +275,8 @@ class Config
     /**
      * Specify flag what we need use shipping price exclude tax
      *
-     * @param   bool $flag
-     * @return  \Magento\Tax\Model\Config
+     * @param bool $flag
+     * @return Config
      */
     public function setNeedUseShippingExcludeTax($flag)
     {
@@ -295,14 +298,14 @@ class Config
     /**
      * Get defined tax calculation algorithm
      *
-     * @param   null|string|bool|int|Store $store
-     * @return  string
+     * @param null|string|bool|int|Store $store
+     * @return string
      */
     public function getAlgorithm($store = null)
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_ALGORITHM,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -310,14 +313,14 @@ class Config
     /**
      * Get tax class id specified for shipping tax estimation
      *
-     * @param   null|string|bool|int|Store $store
-     * @return  int
+     * @param null|string|bool|int|Store $store
+     * @return int
      */
     public function getShippingTaxClass($store = null)
     {
         return (int)$this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_SHIPPING_TAX_CLASS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -325,14 +328,14 @@ class Config
     /**
      * Get shipping methods prices display type
      *
-     * @param   null|string|bool|int|Store $store
-     * @return  int
+     * @param null|string|bool|int|Store $store
+     * @return int
      */
     public function getShippingPriceDisplayType($store = null)
     {
         return (int)$this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_DISPLAY_SHIPPING,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -340,15 +343,15 @@ class Config
     /**
      * Check if shipping prices include tax
      *
-     * @param   null|string|bool|int|Store $store
-     * @return  bool
+     * @param null|string|bool|int|Store $store
+     * @return bool
      */
     public function shippingPriceIncludesTax($store = null)
     {
         if ($this->_shippingPriceIncludeTax === null) {
             $this->_shippingPriceIncludeTax = (bool)$this->_scopeConfig->getValue(
                 self::CONFIG_XML_PATH_SHIPPING_INCLUDES_TAX,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $store
             );
         }
@@ -377,7 +380,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_CART_PRICE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_INCLUDING_TAX;
     }
@@ -392,7 +395,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_CART_PRICE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_EXCLUDING_TAX;
     }
@@ -407,7 +410,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_CART_PRICE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_BOTH;
     }
@@ -422,7 +425,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_CART_SUBTOTAL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_INCLUDING_TAX;
     }
@@ -437,7 +440,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_CART_SUBTOTAL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_EXCLUDING_TAX;
     }
@@ -452,7 +455,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_CART_SUBTOTAL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_BOTH;
     }
@@ -467,7 +470,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_CART_SHIPPING,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_INCLUDING_TAX;
     }
@@ -482,7 +485,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_CART_SHIPPING,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_EXCLUDING_TAX;
     }
@@ -497,7 +500,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_CART_SHIPPING,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_BOTH;
     }
@@ -514,7 +517,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_CART_DISCOUNT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_INCLUDING_TAX;
     }
@@ -531,7 +534,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_CART_DISCOUNT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_EXCLUDING_TAX;
     }
@@ -548,7 +551,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_CART_DISCOUNT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_BOTH;
     }
@@ -563,7 +566,7 @@ class Config
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_CART_GRANDTOTAL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -578,7 +581,7 @@ class Config
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_CART_FULL_SUMMARY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -593,7 +596,7 @@ class Config
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_CART_ZERO_TAX,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -608,7 +611,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_PRICE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_INCLUDING_TAX;
     }
@@ -623,7 +626,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_PRICE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_EXCLUDING_TAX;
     }
@@ -638,7 +641,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_PRICE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_BOTH;
     }
@@ -653,7 +656,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_SUBTOTAL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_INCLUDING_TAX;
     }
@@ -668,7 +671,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_SUBTOTAL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_EXCLUDING_TAX;
     }
@@ -683,7 +686,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_SUBTOTAL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_BOTH;
     }
@@ -698,7 +701,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_SHIPPING,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_INCLUDING_TAX;
     }
@@ -713,7 +716,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_SHIPPING,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_EXCLUDING_TAX;
     }
@@ -728,7 +731,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_SHIPPING,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_BOTH;
     }
@@ -745,7 +748,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_DISCOUNT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_INCLUDING_TAX;
     }
@@ -762,7 +765,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_DISCOUNT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_EXCLUDING_TAX;
     }
@@ -779,7 +782,7 @@ class Config
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_DISCOUNT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         ) == self::DISPLAY_TYPE_BOTH;
     }
@@ -794,7 +797,7 @@ class Config
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_GRANDTOTAL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -809,7 +812,7 @@ class Config
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_FULL_SUMMARY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -824,7 +827,7 @@ class Config
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_ZERO_TAX,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -839,7 +842,7 @@ class Config
     {
         return (bool)$this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_CROSS_BORDER_TRADE_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -858,7 +861,7 @@ class Config
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_TAX_NOTIFICATION_IGNORE_APPLY_DISCOUNT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -873,7 +876,7 @@ class Config
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_DISPLAY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -888,7 +891,7 @@ class Config
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_TAX_NOTIFICATION_IGNORE_DISCOUNT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -903,7 +906,7 @@ class Config
     {
         return (string)$this->_scopeConfig->getValue(
             self::XML_PATH_TAX_NOTIFICATION_INFO_URL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }

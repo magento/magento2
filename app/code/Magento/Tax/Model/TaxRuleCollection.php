@@ -11,6 +11,7 @@ use Magento\Framework\Api\AbstractServiceCollection;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\DataObject;
 use Magento\Tax\Api\Data\TaxRuleInterface;
 use Magento\Tax\Api\TaxRuleRepositoryInterface;
 
@@ -19,11 +20,6 @@ use Magento\Tax\Api\TaxRuleRepositoryInterface;
  */
 class TaxRuleCollection extends AbstractServiceCollection
 {
-    /**
-     * @var TaxRuleRepositoryInterface
-     */
-    protected $ruleService;
-
     /**
      * Initialize dependencies.
      *
@@ -38,10 +34,9 @@ class TaxRuleCollection extends AbstractServiceCollection
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SortOrderBuilder $sortOrderBuilder,
-        TaxRuleRepositoryInterface $ruleService
+        protected readonly TaxRuleRepositoryInterface $ruleService
     ) {
         parent::__construct($entityFactory, $filterBuilder, $searchCriteriaBuilder, $sortOrderBuilder);
-        $this->ruleService = $ruleService;
     }
 
     /**
@@ -65,11 +60,11 @@ class TaxRuleCollection extends AbstractServiceCollection
      * Creates a collection item that represents a tax rule for the tax rules grid.
      *
      * @param TaxRuleInterface $taxRule Input data for creating the item.
-     * @return \Magento\Framework\DataObject Collection item that represents a tax rule
+     * @return DataObject Collection item that represents a tax rule
      */
     protected function createTaxRuleCollectionItem(TaxRuleInterface $taxRule)
     {
-        $collectionItem = new \Magento\Framework\DataObject();
+        $collectionItem = new DataObject();
         $collectionItem->setTaxCalculationRuleId($taxRule->getId());
         $collectionItem->setCode($taxRule->getCode());
         /* should cast to string so that some optional fields won't be null on the collection grid pages */

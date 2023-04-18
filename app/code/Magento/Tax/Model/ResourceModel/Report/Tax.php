@@ -9,38 +9,51 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Report;
 
-class Tax extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime\DateTime as FrameworkDateTime;
+use Magento\Framework\Stdlib\DateTime\Timezone\Validator;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Reports\Model\Flag;
+use Magento\Reports\Model\FlagFactory;
+use Magento\Reports\Model\ResourceModel\Report\AbstractReport;
+use Magento\Tax\Model\ResourceModel\Report\Tax\Createdat;
+use Magento\Tax\Model\ResourceModel\Report\Tax\CreatedatFactory;
+use Magento\Tax\Model\ResourceModel\Report\Tax\Updatedat;
+use Magento\Tax\Model\ResourceModel\Report\Tax\UpdatedatFactory;
+use Psr\Log\LoggerInterface;
+
+class Tax extends AbstractReport
 {
     /**
-     * @var \Magento\Tax\Model\ResourceModel\Report\Tax\CreatedatFactory
+     * @var CreatedatFactory
      */
     protected $_createdAtFactory;
 
     /**
-     * @var \Magento\Tax\Model\ResourceModel\Report\Tax\UpdatedatFactory
+     * @var UpdatedatFactory
      */
     protected $_updatedAtFactory;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
-     * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
-     * @param \Magento\Tax\Model\ResourceModel\Report\Tax\CreatedatFactory $createdAtFactory
-     * @param \Magento\Tax\Model\ResourceModel\Report\Tax\UpdatedatFactory $updatedAtFactory
+     * @param Context $context
+     * @param LoggerInterface $logger
+     * @param TimezoneInterface $localeDate
+     * @param FlagFactory $reportsFlagFactory
+     * @param Validator $timezoneValidator
+     * @param FrameworkDateTime $dateTime
+     * @param CreatedatFactory $createdAtFactory
+     * @param UpdatedatFactory $updatedAtFactory
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
-        \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-        \Magento\Tax\Model\ResourceModel\Report\Tax\CreatedatFactory $createdAtFactory,
-        \Magento\Tax\Model\ResourceModel\Report\Tax\UpdatedatFactory $updatedAtFactory,
+        Context $context,
+        LoggerInterface $logger,
+        TimezoneInterface $localeDate,
+        FlagFactory $reportsFlagFactory,
+        Validator $timezoneValidator,
+        FrameworkDateTime $dateTime,
+        CreatedatFactory $createdAtFactory,
+        UpdatedatFactory $updatedAtFactory,
         $connectionName = null
     ) {
         $this->_createdAtFactory = $createdAtFactory;
@@ -75,14 +88,14 @@ class Tax extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
      */
     public function aggregate($from = null, $to = null)
     {
-        /** @var $createdAt \Magento\Tax\Model\ResourceModel\Report\Tax\Createdat */
+        /** @var Createdat $createdAt */
         $createdAt = $this->_createdAtFactory->create();
-        /** @var $updatedAt \Magento\Tax\Model\ResourceModel\Report\Tax\Updatedat */
+        /** @var Updatedat $updatedAt */
         $updatedAt = $this->_updatedAtFactory->create();
 
         $createdAt->aggregate($from, $to);
         $updatedAt->aggregate($from, $to);
-        $this->_setFlagData(\Magento\Reports\Model\Flag::REPORT_TAX_FLAG_CODE);
+        $this->_setFlagData(Flag::REPORT_TAX_FLAG_CODE);
 
         return $this;
     }

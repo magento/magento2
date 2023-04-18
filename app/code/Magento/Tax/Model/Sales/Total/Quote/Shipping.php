@@ -7,23 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
+use Magento\Quote\Model\Quote\Address\Total as QuoteAddressTotal;
 
 class Shipping extends CommonTaxCollector
 {
     /**
      * Collect tax totals for shipping. The result can be used to calculate discount on shipping
      *
-     * @param \Magento\Quote\Model\Quote $quote
+     * @param Quote $quote
      * @param ShippingAssignmentInterface $shippingAssignment
-     * @param Address\Total $total
+     * @param QuoteAddressTotal $total
      * @return $this
      */
     public function collect(
-        \Magento\Quote\Model\Quote $quote,
-        \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
-        \Magento\Quote\Model\Quote\Address\Total $total
+        Quote $quote,
+        ShippingAssignmentInterface $shippingAssignment,
+        QuoteAddressTotal $total
     ) {
         $storeId = $quote->getStoreId();
         $items = $shippingAssignment->getItems();
@@ -64,13 +66,13 @@ class Shipping extends CommonTaxCollector
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote $quote
-     * @param Address\Total $total
+     * @param Quote $quote
+     * @param QuoteAddressTotal $total
      * @return array|null
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
+    public function fetch(Quote $quote, QuoteAddressTotal $total)
     {
         if ($total->getShippingInclTax()) {
             return [

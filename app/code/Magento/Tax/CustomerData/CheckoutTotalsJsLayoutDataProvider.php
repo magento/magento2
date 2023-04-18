@@ -7,6 +7,7 @@
 namespace Magento\Tax\CustomerData;
 
 use Magento\Customer\CustomerData\JsLayoutDataProviderInterface;
+use Magento\Tax\Model\Config;
 
 /**
  * Checkout totals js layout data provider
@@ -14,17 +15,11 @@ use Magento\Customer\CustomerData\JsLayoutDataProviderInterface;
 class CheckoutTotalsJsLayoutDataProvider implements JsLayoutDataProviderInterface
 {
     /**
-     * @var \Magento\Tax\Model\Config
-     */
-    protected $taxConfig;
-
-    /**
-     * @param \Magento\Tax\Model\Config $taxConfig
+     * @param Config $taxConfig
      */
     public function __construct(
-        \Magento\Tax\Model\Config $taxConfig
+        protected readonly Config $taxConfig
     ) {
-        $this->taxConfig = $taxConfig;
     }
 
     /**

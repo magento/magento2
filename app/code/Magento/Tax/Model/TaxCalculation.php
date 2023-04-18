@@ -6,6 +6,9 @@
 
 namespace Magento\Tax\Model;
 
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Tax\Api\Data\QuoteDetailsInterface;
+use Magento\Tax\Api\Data\TaxDetailsInterface;
 use Magento\Tax\Api\TaxCalculationInterface;
 use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Api\Data\TaxDetailsItemInterface;
@@ -26,20 +29,6 @@ use Magento\Store\Model\StoreManagerInterface;
 class TaxCalculation implements TaxCalculationInterface
 {
     /**
-     * Tax Details factory
-     *
-     * @var TaxDetailsInterfaceFactory
-     */
-    protected $taxDetailsDataObjectFactory;
-
-    /**
-     * Tax configuration object
-     *
-     * @var Config
-     */
-    protected $config;
-
-    /**
      * Tax calculation model
      *
      * @var Calculation
@@ -52,18 +41,6 @@ class TaxCalculation implements TaxCalculationInterface
      * @var array
      */
     protected $discountTaxCompensations;
-
-    /**
-     * Tax details item factory
-     *
-     * @var TaxDetailsItemInterfaceFactory
-     */
-    protected $taxDetailsItemDataObjectFactory;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
 
     /**
      * Item code to Item object array.
@@ -80,59 +57,33 @@ class TaxCalculation implements TaxCalculationInterface
     private $parentToChildren;
 
     /**
-     * Tax Class Management
-     *
-     * @var TaxClassManagementInterface
-     */
-    protected $taxClassManagement;
-
-    /**
-     * Calculator Factory
-     *
-     * @var CalculatorFactory
-     */
-    protected $calculatorFactory;
-
-    /**
-     * @var \Magento\Framework\Api\DataObjectHelper
-     */
-    protected $dataObjectHelper;
-
-    /**
      * @param Calculation $calculation
-     * @param CalculatorFactory $calculatorFactory
-     * @param Config $config
-     * @param TaxDetailsInterfaceFactory $taxDetailsDataObjectFactory
-     * @param TaxDetailsItemInterfaceFactory $taxDetailsItemDataObjectFactory
+     * @param CalculatorFactory $calculatorFactory Calculator Factory
+     * @param Config $config Tax configuration object
+     * @param TaxDetailsInterfaceFactory $taxDetailsDataObjectFactory Tax Details factory
+     * @param TaxDetailsItemInterfaceFactory $taxDetailsItemDataObjectFactory Tax details item factory
      * @param StoreManagerInterface $storeManager
-     * @param TaxClassManagementInterface $taxClassManagement
-     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param TaxClassManagementInterface $taxClassManagement Tax Class Management
+     * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         Calculation $calculation,
-        CalculatorFactory $calculatorFactory,
-        Config $config,
-        TaxDetailsInterfaceFactory $taxDetailsDataObjectFactory,
-        TaxDetailsItemInterfaceFactory $taxDetailsItemDataObjectFactory,
-        StoreManagerInterface $storeManager,
-        TaxClassManagementInterface $taxClassManagement,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+        protected readonly CalculatorFactory $calculatorFactory,
+        protected readonly Config $config,
+        protected readonly TaxDetailsInterfaceFactory $taxDetailsDataObjectFactory,
+        protected readonly TaxDetailsItemInterfaceFactory $taxDetailsItemDataObjectFactory,
+        protected readonly StoreManagerInterface $storeManager,
+        protected readonly TaxClassManagementInterface $taxClassManagement,
+        protected readonly DataObjectHelper $dataObjectHelper
     ) {
         $this->calculationTool = $calculation;
-        $this->calculatorFactory = $calculatorFactory;
-        $this->config = $config;
-        $this->taxDetailsDataObjectFactory = $taxDetailsDataObjectFactory;
-        $this->taxDetailsItemDataObjectFactory = $taxDetailsItemDataObjectFactory;
-        $this->storeManager = $storeManager;
-        $this->taxClassManagement = $taxClassManagement;
-        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
      * {@inheritdoc}
      */
     public function calculateTax(
-        \Magento\Tax\Api\Data\QuoteDetailsInterface $quoteDetails,
+        QuoteDetailsInterface $quoteDetails,
         $storeId = null,
         $round = true
     ) {
@@ -193,7 +144,7 @@ class TaxCalculation implements TaxCalculationInterface
         $this->dataObjectHelper->populateWithArray(
             $taxDetailsDataObject,
             $taxDetailsData,
-            \Magento\Tax\Api\Data\TaxDetailsInterface::class
+            TaxDetailsInterface::class
         );
         $taxDetailsDataObject->setItems($processedItems);
         return $taxDetailsDataObject;

@@ -5,7 +5,11 @@
  */
 namespace Magento\Tax\Model\System\Message\Notification;
 
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Model\Config;
+use Magento\Tax\Model\System\Message\NotificationInterface;
 
 /**
  * Class allows to show admin notification about possible issues related to "Apply Discount On Prices" setting.
@@ -14,23 +18,8 @@ use Magento\Tax\Model\Config;
  * AND "Apply Discount On Prices" = "Including Tax"
  * AND "Apply Customer Tax" = "After Discount"
  */
-class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\NotificationInterface
+class ApplyDiscountOnPrices implements NotificationInterface
 {
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var \Magento\Framework\UrlInterface
-     */
-    private $urlBuilder;
-
-    /**
-     * @var Config
-     */
-    private $taxConfig;
-
     /**
      * Stores with invalid display settings
      *
@@ -39,18 +28,15 @@ class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\Notific
     private $storesWithInvalidSettings;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param StoreManagerInterface $storeManager
+     * @param UrlInterface $urlBuilder
      * @param Config $taxConfig
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\UrlInterface $urlBuilder,
-        Config $taxConfig
+        private readonly StoreManagerInterface $storeManager,
+        private readonly UrlInterface $urlBuilder,
+        private readonly Config $taxConfig
     ) {
-        $this->storeManager = $storeManager;
-        $this->urlBuilder = $urlBuilder;
-        $this->taxConfig = $taxConfig;
     }
 
     /**
@@ -131,7 +117,7 @@ class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\Notific
     /**
      * Check if settings are valid.
      *
-     * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
+     * @param null|int|bool|string|Store $store $store
      * @return bool false if settings are incorrect
      */
     private function checkSettings($store = null)

@@ -7,6 +7,7 @@ namespace Magento\Tax\Setup;
 
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Sales\Setup\SalesSetup;
 use Magento\Sales\Setup\SalesSetupFactory;
 
 /**
@@ -15,31 +16,23 @@ use Magento\Sales\Setup\SalesSetupFactory;
 class TaxSetup
 {
     /**
-     * @var \Magento\Sales\Setup\SalesSetup
+     * @var SalesSetup
      */
     protected $salesSetup;
-
-    /**
-     * Product type config
-     *
-     * @var ConfigInterface
-     */
-    protected $productTypeConfig;
 
     /**
      * Init
      *
      * @param ModuleDataSetupInterface $setup
      * @param SalesSetupFactory $salesSetupFactory
-     * @param ConfigInterface $productTypeConfig
+     * @param ConfigInterface $productTypeConfig Product type config
      */
     public function __construct(
         ModuleDataSetupInterface $setup,
         SalesSetupFactory $salesSetupFactory,
-        ConfigInterface $productTypeConfig
+        protected readonly ConfigInterface $productTypeConfig
     ) {
         $this->salesSetup = $salesSetupFactory->create(['resourceName' => 'tax_setup', 'setup' => $setup]);
-        $this->productTypeConfig = $productTypeConfig;
     }
 
     /**

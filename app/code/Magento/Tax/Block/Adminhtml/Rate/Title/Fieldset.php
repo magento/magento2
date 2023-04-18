@@ -11,25 +11,31 @@
  */
 namespace Magento\Tax\Block\Adminhtml\Rate\Title;
 
-class Fieldset extends \Magento\Framework\Data\Form\Element\Fieldset
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\Data\Form\Element\Factory;
+use Magento\Framework\Data\Form\Element\Fieldset as FormElementFieldset;
+use Magento\Framework\Escaper;
+use Magento\Tax\Block\Adminhtml\Rate\Title;
+
+class Fieldset extends FormElementFieldset
 {
     /**
-     * @var \Magento\Tax\Block\Adminhtml\Rate\Title
+     * @var Title
      */
     protected $_title;
 
     /**
-     * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Tax\Block\Adminhtml\Rate\Title $title
+     * @param Factory $factoryElement
+     * @param CollectionFactory $factoryCollection
+     * @param Escaper $escaper
+     * @param Title $title
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Data\Form\Element\Factory $factoryElement,
-        \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Framework\Escaper $escaper,
-        \Magento\Tax\Block\Adminhtml\Rate\Title $title,
+        Factory $factoryElement,
+        CollectionFactory $factoryCollection,
+        Escaper $escaper,
+        Title $title,
         $data = []
     ) {
         $this->_title = $title;

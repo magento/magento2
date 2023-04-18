@@ -6,53 +6,61 @@
 
 namespace Magento\Tax\Model\TaxClass\Source;
 
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option as ResourceEntityAttributeOption;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\DB\Select;
 use Magento\Tax\Api\TaxClassManagementInterface;
+use Magento\Tax\Api\TaxClassRepositoryInterface;
 use Magento\Tax\Model\ClassModel;
+use Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory;
 
 /**
  * Product tax class source model.
  */
-class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
+class Product extends AbstractSource
 {
     /**
-     * @var \Magento\Tax\Api\TaxClassRepositoryInterface
+     * @var TaxClassRepositoryInterface
      */
     protected $_taxClassRepository;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @var SearchCriteriaBuilder
      */
     protected $_searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder
+     * @var FilterBuilder
      */
     protected $_filterBuilder;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory
+     * @var OptionFactory
      */
     protected $_optionFactory;
 
     /**
-     * @var \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory
+     * @var CollectionFactory
      */
     private $_classesFactory;
 
     /**
-     * @param \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory $classesFactory
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $optionFactory
-     * @param \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
+     * @param CollectionFactory $classesFactory
+     * @param OptionFactory $optionFactory
+     * @param TaxClassRepositoryInterface $taxClassRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FilterBuilder $filterBuilder
      */
     public function __construct(
-        \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory $classesFactory,
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $optionFactory,
-        \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder
+        CollectionFactory $classesFactory,
+        OptionFactory $optionFactory,
+        TaxClassRepositoryInterface $taxClassRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        FilterBuilder $filterBuilder
     ) {
         $this->_classesFactory = $classesFactory;
         $this->_optionFactory = $optionFactory;
@@ -136,12 +144,12 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     /**
      * Retrieve Select for update attribute value in flat table
      *
-     * @param   int $store
-     * @return  \Magento\Framework\DB\Select|null
+     * @param int $store
+     * @return Select|null
      */
     public function getFlatUpdateSelect($store)
     {
-        /** @var $option \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option */
+        /** @var ResourceEntityAttributeOption $option */
         $option = $this->_optionFactory->create();
         return $option->getFlatUpdateSelect($this->getAttribute(), $store, false);
     }

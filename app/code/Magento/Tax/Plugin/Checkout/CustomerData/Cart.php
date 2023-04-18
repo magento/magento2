@@ -6,6 +6,13 @@
 
 namespace Magento\Tax\Plugin\Checkout\CustomerData;
 
+use Magento\Checkout\CustomerData\Cart as CustomerDataCart;
+use Magento\Checkout\Helper\Data as CheckoutHelper;
+use Magento\Checkout\Model\Session;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Tax\Block\Item\Price\Renderer;
+
 /**
  * Process quote items price, considering tax configuration.
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
@@ -13,22 +20,7 @@ namespace Magento\Tax\Plugin\Checkout\CustomerData;
 class Cart
 {
     /**
-     * @var \Magento\Checkout\Model\Session
-     */
-    protected $checkoutSession;
-
-    /**
-     * @var \Magento\Checkout\Helper\Data
-     */
-    protected $checkoutHelper;
-
-    /**
-     * @var \Magento\Tax\Block\Item\Price\Renderer
-     */
-    protected $itemPriceRenderer;
-
-    /**
-     * @var \Magento\Quote\Model\Quote|null
+     * @var Quote|null
      */
     protected $quote = null;
 
@@ -38,29 +30,26 @@ class Cart
     protected $totals = null;
 
     /**
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Checkout\Helper\Data $checkoutHelper
-     * @param \Magento\Tax\Block\Item\Price\Renderer $itemPriceRenderer
+     * @param Session $checkoutSession
+     * @param CheckoutHelper $checkoutHelper
+     * @param Renderer $itemPriceRenderer
      */
     public function __construct(
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Checkout\Helper\Data $checkoutHelper,
-        \Magento\Tax\Block\Item\Price\Renderer $itemPriceRenderer
+        protected readonly Session $checkoutSession,
+        protected readonly CheckoutHelper $checkoutHelper,
+        protected readonly Renderer $itemPriceRenderer
     ) {
-        $this->checkoutSession = $checkoutSession;
-        $this->checkoutHelper = $checkoutHelper;
-        $this->itemPriceRenderer = $itemPriceRenderer;
     }
 
     /**
      * Add tax data to result
      *
-     * @param \Magento\Checkout\CustomerData\Cart $subject
+     * @param CustomerDataCart $subject
      * @param array $result
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetSectionData(\Magento\Checkout\CustomerData\Cart $subject, $result)
+    public function afterGetSectionData(CustomerDataCart $subject, $result)
     {
         $result['subtotal_incl_tax'] = $this->checkoutHelper->formatPrice($this->getSubtotalInclTax());
         $result['subtotal_excl_tax'] = $this->checkoutHelper->formatPrice($this->getSubtotalExclTax());
@@ -135,7 +124,7 @@ class Cart
     /**
      * Get active quote
      *
-     * @return \Magento\Quote\Model\Quote
+     * @return Quote
      */
     protected function getQuote()
     {
@@ -150,13 +139,13 @@ class Cart
      *
      * @param int $id
      * @param array $itemsHaystack
-     * @return \Magento\Quote\Model\Quote\Item | bool
+     * @return QuoteItem | bool
      */
     protected function findItemById($id, $itemsHaystack)
     {
         if (is_array($itemsHaystack)) {
             foreach ($itemsHaystack as $item) {
-                /** @var $item \Magento\Quote\Model\Quote\Item */
+                /** @var QuoteItem $item */
                 if ((int)$item->getItemId() == $id) {
                     return $item;
                 }

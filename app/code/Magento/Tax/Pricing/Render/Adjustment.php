@@ -7,8 +7,11 @@
 namespace Magento\Tax\Pricing\Render;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\Render;
 use Magento\Framework\Pricing\Render\AbstractAdjustment;
 use Magento\Framework\View\Element\Template;
+use Magento\Tax\Helper\Data as TaxHelper;
+use Magento\Tax\Pricing\Adjustment as PricingAdjustment;
 
 /**
  * @method string getIdSuffix()
@@ -17,20 +20,20 @@ use Magento\Framework\View\Element\Template;
 class Adjustment extends AbstractAdjustment
 {
     /**
-     * @var \Magento\Tax\Helper\Data
+     * @var TaxHelper
      */
     protected $taxHelper;
 
     /**
      * @param Template\Context $context
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Tax\Helper\Data $helper
+     * @param TaxHelper $helper
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Tax\Helper\Data $helper,
+        TaxHelper $helper,
         array $data = []
     ) {
         $this->taxHelper = $helper;
@@ -45,7 +48,7 @@ class Adjustment extends AbstractAdjustment
     protected function apply()
     {
         if ($this->displayBothPrices()) {
-            if ($this->getZone() !== \Magento\Framework\Pricing\Render::ZONE_ITEM_OPTION) {
+            if ($this->getZone() !== Render::ZONE_ITEM_OPTION) {
                 $this->amountRender->setPriceDisplayLabel(__('Incl. Tax'));
             }
             $this->amountRender->setPriceWrapperCss('price-including-tax');
@@ -71,7 +74,7 @@ class Adjustment extends AbstractAdjustment
      */
     public function getAdjustmentCode()
     {
-        return \Magento\Tax\Pricing\Adjustment::ADJUSTMENT_CODE;
+        return PricingAdjustment::ADJUSTMENT_CODE;
     }
 
     /**

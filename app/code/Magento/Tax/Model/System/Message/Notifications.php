@@ -6,32 +6,19 @@
 namespace Magento\Tax\Model\System\Message;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
+use Magento\Framework\Notification\MessageInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Tax\Model\Calculation;
+use Magento\Tax\Model\Config as TaxConfig;
 
 /**
  * Notifications class
  */
-class Notifications implements \Magento\Framework\Notification\MessageInterface
+class Notifications implements MessageInterface
 {
-    /**
-     * Store manager object
-     *
-     * @var \Magento\Store\Model\StoreManagerInterface
-     * @deprecated 100.1.0
-     */
-    protected $storeManager;
-
-    /**
-     * @var \Magento\Framework\UrlInterface
-     */
-    protected $urlBuilder;
-
-    /**
-     * Tax configuration object
-     *
-     * @var \Magento\Tax\Model\Config
-     */
-    protected $taxConfig;
-
     /**
      * Stores with invalid display settings
      *
@@ -51,34 +38,20 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
     protected $storesWithInvalidDiscountSettings;
 
     /**
-     * @var NotificationInterface[]
-     */
-    private $notifications = [];
-
-    /**
-     * @var \Magento\Framework\Escaper
-     */
-    private $escaper;
-
-    /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Tax\Model\Config $taxConfig
+     * @param StoreManagerInterface $storeManager Store manager object @deprecated 100.1.0
+     * @param UrlInterface $urlBuilder
+     * @param TaxConfig $taxConfig Tax configuration object
      * @param NotificationInterface[] $notifications
-     * @param \Magento\Framework\Escaper|null $escaper
+     * @param Escaper|null $escaper
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Tax\Model\Config $taxConfig,
-        $notifications = [],
-        \Magento\Framework\Escaper $escaper = null
+        protected readonly StoreManagerInterface $storeManager,
+        protected readonly UrlInterface $urlBuilder,
+        protected readonly TaxConfig $taxConfig,
+        private $notifications = [],
+        private ?Escaper $escaper = null
     ) {
-        $this->storeManager = $storeManager;
-        $this->urlBuilder = $urlBuilder;
-        $this->taxConfig = $taxConfig;
-        $this->notifications = $notifications;
-        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
     }
 
     /**
@@ -166,18 +139,18 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      *      Tax Calculation Method Based On 'Total' or 'Row'
      *      and at least one Price Display Settings has 'Including and Excluding Tax' value
      *
-     * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
+     * @param null|int|bool|string|Store $store $store
      * @return bool
      * @deprecated 100.1.3
      * @see \Magento\Tax\Model\System\Message\Notification\RoundingErrors::checkSettings
      */
     public function checkDisplaySettings($store = null)
     {
-        if ($this->taxConfig->getAlgorithm($store) == \Magento\Tax\Model\Calculation::CALC_UNIT_BASE) {
+        if ($this->taxConfig->getAlgorithm($store) == Calculation::CALC_UNIT_BASE) {
             return true;
         }
-        return $this->taxConfig->getPriceDisplayType($store) != \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH
-            && $this->taxConfig->getShippingPriceDisplayType($store) != \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH
+        return $this->taxConfig->getPriceDisplayType($store) != TaxConfig::DISPLAY_TYPE_BOTH
+            && $this->taxConfig->getShippingPriceDisplayType($store) != TaxConfig::DISPLAY_TYPE_BOTH
             && !$this->taxConfig->displayCartPricesBoth($store)
             && !$this->taxConfig->displayCartSubtotalBoth($store)
             && !$this->taxConfig->displayCartShippingBoth($store)
@@ -193,7 +166,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      *      Before Discount / Excluding Tax
      *      Before Discount / Including Tax
      *
-     * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
+     * @param null|int|bool|string|Store $store $store
      * @return bool
      * @deprecated 100.1.3
      * @see \Magento\Tax\Model\System\Message\Notification\DiscountErrors::checkSettings

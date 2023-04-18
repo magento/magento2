@@ -8,60 +8,36 @@ namespace Magento\Tax\Model\Quote;
 use Magento\Quote\Api\Data\TotalSegmentExtensionFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Api\Data\TotalSegmentInterface;
+use Magento\Quote\Model\Cart\TotalsConverter;
+use Magento\Quote\Model\Quote\Address\Total as QuoteAddressTotal;
+use Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory;
+use Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory;
+use Magento\Tax\Model\Config as TaxConfig;
 
 class GrandTotalDetailsPlugin
 {
-    /**
-     * @var \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory
-     */
-    private $detailsFactory;
-
-    /**
-     * @var \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory
-     */
-    private $ratesFactory;
-
-    /**
-     * @var TotalSegmentExtensionFactory
-     */
-    private $totalSegmentExtensionFactory;
-
-    /**
-     * @var \Magento\Tax\Model\Config
-     */
-    private $taxConfig;
-
     /**
      * @var string
      */
     private $code;
 
     /**
-     * @var Json
-     */
-    private $serializer;
-
-    /**
      * Constructor
      *
-     * @param \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory $detailsFactory
-     * @param \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory
+     * @param GrandTotalDetailsInterfaceFactory $detailsFactory
+     * @param GrandTotalRatesInterfaceFactory $ratesFactory
      * @param TotalSegmentExtensionFactory $totalSegmentExtensionFactory
-     * @param \Magento\Tax\Model\Config $taxConfig
+     * @param TaxConfig $taxConfig
      * @param Json $serializer
      */
     public function __construct(
-        \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory $detailsFactory,
-        \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory,
-        TotalSegmentExtensionFactory $totalSegmentExtensionFactory,
-        \Magento\Tax\Model\Config $taxConfig,
-        Json $serializer
+        private readonly GrandTotalDetailsInterfaceFactory $detailsFactory,
+        private readonly GrandTotalRatesInterfaceFactory $ratesFactory,
+        private readonly TotalSegmentExtensionFactory $totalSegmentExtensionFactory,
+        private readonly TaxConfig $taxConfig,
+        private readonly Json $serializer
     ) {
-        $this->detailsFactory = $detailsFactory;
-        $this->ratesFactory = $ratesFactory;
-        $this->totalSegmentExtensionFactory = $totalSegmentExtensionFactory;
-        $this->taxConfig = $taxConfig;
-        $this->serializer = $serializer;
         $this->code = 'tax';
     }
 
@@ -82,15 +58,15 @@ class GrandTotalDetailsPlugin
     }
 
     /**
-     * @param \Magento\Quote\Model\Cart\TotalsConverter $subject
-     * @param \Magento\Quote\Api\Data\TotalSegmentInterface[] $totalSegments
-     * @param \Magento\Quote\Model\Quote\Address\Total[] $addressTotals
-     * @return \Magento\Quote\Api\Data\TotalSegmentInterface[]
+     * @param TotalsConverter $subject
+     * @param TotalSegmentInterface[] $totalSegments
+     * @param QuoteAddressTotal[] $addressTotals
+     * @return TotalSegmentInterface[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function afterProcess(
-        \Magento\Quote\Model\Cart\TotalsConverter $subject,
+        TotalsConverter $subject,
         array $totalSegments,
         array $addressTotals = []
     ) {

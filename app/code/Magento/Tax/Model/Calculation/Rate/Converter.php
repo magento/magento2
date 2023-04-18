@@ -7,6 +7,9 @@ namespace Magento\Tax\Model\Calculation\Rate;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Locale\FormatInterface;
+use Magento\Tax\Api\Data\TaxRateInterface;
+use Magento\Tax\Api\Data\TaxRateInterfaceFactory;
+use Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory;
 
 /**
  * Tax Rate Model converter.
@@ -16,42 +19,25 @@ use Magento\Framework\Locale\FormatInterface;
 class Converter
 {
     /**
-     * @var \Magento\Tax\Api\Data\TaxRateInterfaceFactory
-     */
-    protected $taxRateDataObjectFactory;
-
-    /**
-     * @var \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory
-     */
-    protected $taxRateTitleDataObjectFactory;
-
-    /**
-     * @var FormatInterface|null
-     */
-    private $format;
-
-    /**
-     * @param \Magento\Tax\Api\Data\TaxRateInterfaceFactory $taxRateDataObjectFactory
-     * @param \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory
+     * @param TaxRateInterfaceFactory $taxRateDataObjectFactory
+     * @param TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory
      * @param FormatInterface|null $format
      */
     public function __construct(
-        \Magento\Tax\Api\Data\TaxRateInterfaceFactory $taxRateDataObjectFactory,
-        \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory,
-        FormatInterface $format = null
+        protected readonly TaxRateInterfaceFactory $taxRateDataObjectFactory,
+        protected readonly TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory,
+        private ?FormatInterface $format = null
     ) {
-        $this->taxRateDataObjectFactory = $taxRateDataObjectFactory;
-        $this->taxRateTitleDataObjectFactory = $taxRateTitleDataObjectFactory;
         $this->format = $format ?: ObjectManager::getInstance()->get(FormatInterface::class);
     }
 
     /**
      * Convert a tax rate data object to an array of associated titles
      *
-     * @param \Magento\Tax\Api\Data\TaxRateInterface $taxRate
+     * @param TaxRateInterface $taxRate
      * @return array
      */
-    public function createTitleArrayFromServiceObject(\Magento\Tax\Api\Data\TaxRateInterface $taxRate)
+    public function createTitleArrayFromServiceObject(TaxRateInterface $taxRate)
     {
         $titles = $taxRate->getTitles();
         $titleData = [];
@@ -66,14 +52,14 @@ class Converter
     /**
      * Extract tax rate data in a format which is
      *
-     * @param \Magento\Tax\Api\Data\TaxRateInterface $taxRate
+     * @param TaxRateInterface $taxRate
      * @param Boolean $returnNumericLogic
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function createArrayFromServiceObject(
-        \Magento\Tax\Api\Data\TaxRateInterface $taxRate,
+        TaxRateInterface $taxRate,
         $returnNumericLogic = false
     ) {
         $taxRateFormData = [
@@ -125,7 +111,7 @@ class Converter
      * Convert an array to a tax rate data object
      *
      * @param array $formData
-     * @return \Magento\Tax\Api\Data\TaxRateInterface
+     * @return TaxRateInterface
      */
     public function populateTaxRateData($formData)
     {

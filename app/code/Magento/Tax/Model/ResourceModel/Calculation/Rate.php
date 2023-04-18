@@ -11,7 +11,9 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Calculation;
 
-class Rate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
+class Rate extends AbstractDb
 {
     /**
      * Resource initialization
@@ -48,7 +50,7 @@ class Rate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Check if this rate exists in rule
      *
-     * @param  int $rateId
+     * @param int $rateId
      * @return array
      */
     public function isInRule($rateId)

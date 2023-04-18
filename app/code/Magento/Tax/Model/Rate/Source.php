@@ -9,38 +9,19 @@ namespace Magento\Tax\Model\Rate;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Convert\DataObject as Converter;
+use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Tax\Api\TaxRateRepositoryInterface;
 use Magento\Tax\Model\Rate\Provider as RateProvider;
 
 /**
  * Tax rate source model.
  */
-class Source implements \Magento\Framework\Data\OptionSourceInterface
+class Source implements OptionSourceInterface
 {
     /**
      * @var array
      */
     protected $options;
-
-    /**
-     * @var \Magento\Tax\Api\TaxRateRepositoryInterface
-     */
-    protected $taxRateRepository;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
-
-    /**
-     * @var \Magento\Framework\Convert\DataObject
-     */
-    protected $converter;
-
-    /**
-     * @var \Magento\Tax\Model\Rate\Provider
-     */
-    protected $rateProvider;
 
     /**
      * Initialize dependencies.
@@ -51,14 +32,11 @@ class Source implements \Magento\Framework\Data\OptionSourceInterface
      * @param RateProvider $rateProvider
      */
     public function __construct(
-        TaxRateRepositoryInterface $taxRateRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        Converter $converter,
-        RateProvider $rateProvider = null
+        protected readonly TaxRateRepositoryInterface $taxRateRepository,
+        protected readonly SearchCriteriaBuilder $searchCriteriaBuilder,
+        protected readonly Converter $converter,
+        protected ?RateProvider $rateProvider = null
     ) {
-        $this->taxRateRepository = $taxRateRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->converter = $converter;
         $this->rateProvider = $rateProvider ?: ObjectManager::getInstance()->get(RateProvider::class);
     }
 

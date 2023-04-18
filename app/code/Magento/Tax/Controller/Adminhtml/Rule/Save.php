@@ -6,16 +6,21 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rule;
 
+use Exception;
+use Magento\Backend\Model\Session;
+use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Tax\Controller\Adminhtml\Rule;
 
-class Save extends \Magento\Tax\Controller\Adminhtml\Rule
+class Save extends Rule
 {
     /**
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return Redirect
      */
     public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $postData = $this->getRequest()->getPostValue();
         if ($postData) {
@@ -30,13 +35,13 @@ class Save extends \Magento\Tax\Controller\Adminhtml\Rule
                     return $resultRedirect->setPath('tax/*/edit', ['rule' => $taxRule->getId()]);
                 }
                 return $resultRedirect->setPath('tax/*/');
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError(__('We can\'t save this tax rule right now.'));
             }
 
-            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setRuleData($postData);
+            $this->_objectManager->get(Session::class)->setRuleData($postData);
             return $resultRedirect->setUrl($this->_redirect->getRedirectUrl($this->getUrl('*')));
         }
         return $resultRedirect->setPath('tax/rule');

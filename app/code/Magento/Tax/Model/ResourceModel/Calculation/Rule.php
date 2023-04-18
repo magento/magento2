@@ -5,12 +5,14 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Calculation;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
  * Tax rule resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Rule extends AbstractDb
 {
     /**
      * Resource initialization
@@ -25,7 +27,7 @@ class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Initialize unique fields
      *
-     * @return \Magento\Tax\Model\ResourceModel\Calculation\Rule
+     * @return Rule
      */
     protected function _initUniqueFields()
     {

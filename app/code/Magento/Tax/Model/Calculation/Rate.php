@@ -7,17 +7,30 @@
 namespace Magento\Tax\Model\Calculation;
 
 use Magento\Directory\Model\Region;
+use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Tax\Api\Data\TaxRateExtensionInterface;
 use Magento\Tax\Api\Data\TaxRateInterface;
 use Magento\Tax\Api\Data\TaxRateTitleInterface;
+use Magento\Tax\Model\Calculation\Rate as ModelCalculationRate;
+use Magento\Tax\Model\Calculation\Rate\Title as ModelCalculationRateTitle;
+use Magento\Tax\Model\Calculation\Rate\TitleFactory;
+use Magento\Tax\Model\ResourceModel\Calculation\Rate as ResourceCalculationRate;
 
 /**
  * Tax Rate Model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRateInterface
+class Rate extends AbstractExtensibleModel implements TaxRateInterface
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely
@@ -41,53 +54,47 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     protected $_titles = null;
 
     /**
-     * @var \Magento\Tax\Model\Calculation\Rate\Title
+     * @var ModelCalculationRateTitle
      */
     protected $_titleModel = null;
 
     /**
-     * @var \Magento\Directory\Model\RegionFactory
+     * @var RegionFactory
      */
     protected $_regionFactory;
 
     /**
-     * @var \Magento\Tax\Model\Calculation\Rate\TitleFactory
+     * @var TitleFactory
      */
     protected $_titleFactory;
 
     /**
-     * @var Region
-     */
-    protected $directoryRegion;
-
-    /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param Context $context
+     * @param Registry $registry
+     * @param ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param Rate\TitleFactory $taxTitleFactory
+     * @param RegionFactory $regionFactory
+     * @param TitleFactory $taxTitleFactory
      * @param Region $directoryRegion
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        Context $context,
+        Registry $registry,
+        ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Tax\Model\Calculation\Rate\TitleFactory $taxTitleFactory,
-        Region $directoryRegion,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        RegionFactory $regionFactory,
+        TitleFactory $taxTitleFactory,
+        protected readonly Region $directoryRegion,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_regionFactory = $regionFactory;
         $this->_titleFactory = $taxTitleFactory;
-        $this->directoryRegion = $directoryRegion;
         parent::__construct(
             $context,
             $registry,
@@ -106,14 +113,14 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Tax\Model\ResourceModel\Calculation\Rate::class);
+        $this->_init(ResourceCalculationRate::class);
     }
 
     /**
      * Prepare location settings and tax postcode before save rate
      *
-     * @return \Magento\Tax\Model\Calculation\Rate
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return ModelCalculationRate
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -127,13 +134,13 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
             ($this->getTaxPostcode() === '' && !$this->getZipIsRange());
 
         if ($isEmptyValues || $isWrongRange) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The required information is invalid. Verify the information and try again.')
             );
         }
 
         if (!is_numeric($this->getRate()) || $this->getRate() < 0) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The Rate Percent is invalid. Enter a positive number and try again.')
             );
         }
@@ -143,7 +150,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
             $zipTo = $this->getZipTo();
 
             if (($zipFrom && strlen($zipFrom) > 9) || ($zipTo && strlen($zipTo) > 9)) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __(
                         'The ZIP Code length is invalid. '
                         . 'Verify that the length is nine characters or fewer and try again.'
@@ -152,13 +159,13 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
             }
 
             if (!is_numeric($zipFrom) || !is_numeric($zipTo) || $zipFrom < 0 || $zipTo < 0) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __('The ZIP Code is invalid. Use numbers only.')
                 );
             }
 
             if ($zipFrom > $zipTo) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __('Range To should be equal or greater than Range From.')
                 );
             }
@@ -177,7 +184,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
         parent::beforeSave();
         $country = $this->getTaxCountryId();
         $region = $this->getTaxRegionId();
-        /** @var $regionModel \Magento\Directory\Model\Region */
+        /** @var Region $regionModel */
         $regionModel = $this->_regionFactory->create();
         $regionModel->load($region);
         if ($regionModel->getCountryId() != $country) {
@@ -189,7 +196,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     /**
      * Save rate titles
      *
-     * @return \Magento\Tax\Model\Calculation\Rate
+     * @return ModelCalculationRate
      */
     public function afterSave()
     {
@@ -201,8 +208,8 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     /**
      * Processing object before delete data
      *
-     * @return \Magento\Tax\Model\Calculation\Rate
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return ModelCalculationRate
+     * @throws LocalizedException
      */
     public function beforeDelete()
     {
@@ -219,7 +226,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      *
      * Redeclared for dispatch tax_settings_change_after event
      *
-     * @return \Magento\Tax\Model\Calculation\Rate
+     * @return ModelCalculationRate
      */
     public function afterDelete()
     {
@@ -260,7 +267,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     /**
      * Returns a tax title
      *
-     * @return \Magento\Tax\Model\Calculation\Rate\Title
+     * @return ModelCalculationRateTitle
      */
     public function getTitleModel()
     {
@@ -287,7 +294,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     /**
      * Deletes all tax rates
      *
-     * @return \Magento\Tax\Model\Calculation\Rate
+     * @return ModelCalculationRate
      */
     public function deleteAllRates()
     {
@@ -299,8 +306,8 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     /**
      * Load rate model by code
      *
-     * @param  string $code
-     * @return \Magento\Tax\Model\Calculation\Rate
+     * @param string $code
+     * @return ModelCalculationRate
      */
     public function loadByCode($code)
     {
@@ -518,7 +525,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     /**
      * @inheritdoc
      *
-     * @return \Magento\Tax\Api\Data\TaxRateExtensionInterface|null
+     * @return TaxRateExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -528,10 +535,10 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     /**
      * @inheritdoc
      *
-     * @param \Magento\Tax\Api\Data\TaxRateExtensionInterface $extensionAttributes
+     * @param TaxRateExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxRateExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(TaxRateExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

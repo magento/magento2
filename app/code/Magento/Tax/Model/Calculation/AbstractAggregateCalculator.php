@@ -5,6 +5,7 @@
  */
 namespace Magento\Tax\Model\Calculation;
 
+use Magento\Tax\Api\Data\AppliedTaxInterface;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
 
 /**
@@ -70,7 +71,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
         }
 
         // Calculate applied taxes
-        /** @var  \Magento\Tax\Api\Data\AppliedTaxInterface[] $appliedTaxes */
+        /** @var AppliedTaxInterface[] $appliedTaxes */
         $appliedRates = $this->calculationTool->getAppliedRates($taxRateRequest);
         $appliedTaxes = $this->getAppliedTaxes($rowTax, $rate, $appliedRates);
 

@@ -6,6 +6,7 @@
 namespace Magento\Tax\Observer;
 
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Model\Data\Customer;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
@@ -21,63 +22,21 @@ use Magento\Tax\Helper\Data;
 class CustomerLoggedInObserver implements ObserverInterface
 {
     /**
-     * @var Session
-     */
-    protected $customerSession;
-
-    /**
-     * @var Data
-     */
-    protected $taxHelper;
-
-    /**
-     * Module manager
-     *
-     * @var Manager
-     */
-    private $moduleManager;
-
-    /**
-     * Cache config
-     *
-     * @var Config
-     */
-    private $cacheConfig;
-
-    /**
-     * @var GroupRepositoryInterface
-     */
-    private $groupRepository;
-
-    /**
-     * Manager to save data in customer session.
-     *
-     * @var TaxAddressManagerInterface
-     */
-    private $addressManager;
-
-    /**
      * @param GroupRepositoryInterface $groupRepository
      * @param Session $customerSession
      * @param Data $taxHelper
-     * @param Manager $moduleManager
-     * @param Config $cacheConfig
-     * @param TaxAddressManagerInterface $addressManager
+     * @param Manager $moduleManager Module manager
+     * @param Config $cacheConfig Cache config
+     * @param TaxAddressManagerInterface $addressManager Manager to save data in customer session.
      */
     public function __construct(
-        GroupRepositoryInterface $groupRepository,
-        Session $customerSession,
-        Data $taxHelper,
-        Manager $moduleManager,
-        Config $cacheConfig,
-        TaxAddressManagerInterface $addressManager
+        private readonly GroupRepositoryInterface $groupRepository,
+        protected readonly Session $customerSession,
+        protected readonly Data $taxHelper,
+        private readonly Manager $moduleManager,
+        private readonly Config $cacheConfig,
+        private readonly TaxAddressManagerInterface $addressManager
     ) {
-        $this->groupRepository = $groupRepository;
-        $this->customerSession = $customerSession;
-        $this->taxHelper = $taxHelper;
-        $this->moduleManager = $moduleManager;
-        $this->cacheConfig = $cacheConfig;
-        $this->addressManager = $addressManager;
     }
 
     /**
@@ -93,7 +52,7 @@ class CustomerLoggedInObserver implements ObserverInterface
             && $this->cacheConfig->isEnabled()
             && $this->taxHelper->isCatalogPriceDisplayAffectedByTax()
         ) {
-            /** @var \Magento\Customer\Model\Data\Customer $customer */
+            /** @var Customer $customer */
             $customer = $observer->getData('customer');
             $customerGroupId = $customer->getGroupId();
             $customerGroup = $this->groupRepository->getById($customerGroupId);

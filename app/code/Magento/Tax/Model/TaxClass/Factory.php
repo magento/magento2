@@ -9,10 +9,17 @@
  */
 namespace Magento\Tax\Model\TaxClass;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Tax\Model\ClassModel as TaxClassModel;
+use Magento\Tax\Model\TaxClass\Type\Customer as TaxClassTypeCustomer;
+use Magento\Tax\Model\TaxClass\Type\Product as TaxClassTypeProduct;
+use Magento\Tax\Model\TaxClass\Type\TypeInterface as TaxClassTypeInterface;
+
 class Factory
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -22,30 +29,31 @@ class Factory
      * @var array
      */
     protected $_types = [
-        \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER => \Magento\Tax\Model\TaxClass\Type\Customer::class,
-        \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT => \Magento\Tax\Model\TaxClass\Type\Product::class,
+        TaxClassModel::TAX_CLASS_TYPE_CUSTOMER => TaxClassTypeCustomer::class,
+        TaxClassModel::TAX_CLASS_TYPE_PRODUCT => TaxClassTypeProduct::class,
     ];
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager
+    ) {
         $this->_objectManager = $objectManager;
     }
 
     /**
      * Create new config object
      *
-     * @param \Magento\Tax\Model\ClassModel $taxClass
-     * @return \Magento\Tax\Model\TaxClass\Type\TypeInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param TaxClassModel $taxClass
+     * @return TaxClassTypeInterface
+     * @throws LocalizedException
      */
-    public function create(\Magento\Tax\Model\ClassModel $taxClass)
+    public function create(TaxClassModel $taxClass)
     {
         $taxClassType = $taxClass->getClassType();
         if (!array_key_exists($taxClassType, $this->_types)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('Invalid type of tax class "%1"', $taxClassType)
             );
         }

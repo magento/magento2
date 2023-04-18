@@ -11,11 +11,13 @@
  */
 namespace Magento\Tax\Block\Adminhtml;
 
+use Magento\Backend\Block\Widget\Grid\Container;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Rule extends \Magento\Backend\Block\Widget\Grid\Container
+class Rule extends Container
 {
     /**
      * @return void

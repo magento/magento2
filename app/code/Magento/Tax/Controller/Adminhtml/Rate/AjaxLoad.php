@@ -7,24 +7,29 @@
 
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
+use Exception;
+use InvalidArgumentException;
+use Magento\Framework\Controller\Result\Json as ResultJson;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Tax\Api\Data\TaxRateInterface;
+use Magento\Tax\Controller\Adminhtml\Rate;
 
-class AjaxLoad extends \Magento\Tax\Controller\Adminhtml\Rate
+class AjaxLoad extends Rate
 {
     /**
      * Json needed for the Ajax Edit Form
      *
-     * @return \Magento\Framework\Controller\Result\Json
-     * @throws \InvalidArgumentException
+     * @return ResultJson
+     * @throws InvalidArgumentException
      */
     public function execute()
     {
         $rateId = (int)$this->getRequest()->getParam('id');
         try {
-            /* @var \Magento\Tax\Api\Data\TaxRateInterface */
+            /* @var TaxRateInterface $taxRateDataObject */
             $taxRateDataObject = $this->_taxRateRepository->get($rateId);
-            /* @var array */
+            /* @var array $resultArray */
             $resultArray = $this->_taxRateConverter->createArrayFromServiceObject($taxRateDataObject, true);
 
             $responseContent = [
@@ -37,14 +42,14 @@ class AjaxLoad extends \Magento\Tax\Controller\Adminhtml\Rate
                 'success' => false,
                 'error_message' => $e->getMessage(),
             ];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $responseContent = [
                 'success' => false,
                 'error_message' => __('An error occurred while loading this tax rate.'),
             ];
         }
 
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var ResultJson $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setData($responseContent);
         return $resultJson;

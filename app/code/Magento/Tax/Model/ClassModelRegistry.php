@@ -16,13 +16,6 @@ use Magento\Tax\Model\ClassModelFactory as TaxClassModelFactory;
 class ClassModelRegistry
 {
     /**
-     * Tax class model factory
-     *
-     * @var TaxClassModelFactory
-     */
-    private $taxClassModelFactory;
-
-    /**
      * Tax class models
      *
      * @var TaxClassModel[]
@@ -32,11 +25,11 @@ class ClassModelRegistry
     /**
      * Initialize dependencies
      *
-     * @param TaxClassModelFactory $taxClassModelFactory
+     * @param TaxClassModelFactory $taxClassModelFactory Tax class model factory
      */
-    public function __construct(TaxClassModelFactory $taxClassModelFactory)
-    {
-        $this->taxClassModelFactory = $taxClassModelFactory;
+    public function __construct(
+        private readonly TaxClassModelFactory $taxClassModelFactory
+    ) {
     }
 
     /**

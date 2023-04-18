@@ -6,6 +6,8 @@
 namespace Magento\Tax\Model\TaxDetails;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Tax\Api\Data\AppliedTaxInterface;
+use Magento\Tax\Api\Data\TaxDetailsItemExtensionInterface;
 use Magento\Tax\Api\Data\TaxDetailsItemInterface;
 
 /**
@@ -262,7 +264,7 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
     /**
      * Set applied taxes
      *
-     * @param \Magento\Tax\Api\Data\AppliedTaxInterface[] $appliedTaxes
+     * @param AppliedTaxInterface[] $appliedTaxes
      * @return $this
      */
     public function setAppliedTaxes(array $appliedTaxes = null)
@@ -284,7 +286,7 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Tax\Api\Data\TaxDetailsItemExtensionInterface|null
+     * @return TaxDetailsItemExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -294,10 +296,10 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Tax\Api\Data\TaxDetailsItemExtensionInterface $extensionAttributes
+     * @param TaxDetailsItemExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxDetailsItemExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(TaxDetailsItemExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

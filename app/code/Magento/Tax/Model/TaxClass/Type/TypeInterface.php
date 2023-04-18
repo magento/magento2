@@ -5,6 +5,8 @@
  */
 namespace Magento\Tax\Model\TaxClass\Type;
 
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+
 /**
  * Interface \Magento\Tax\Model\TaxClass\Type\TypeInterface
  *
@@ -22,7 +24,7 @@ interface TypeInterface
     /**
      * Get Collection of Tax Rules that are assigned to this tax class
      *
-     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * @return AbstractCollection
      */
     public function getAssignedToRules();
 

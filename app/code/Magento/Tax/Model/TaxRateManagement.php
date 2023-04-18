@@ -15,41 +15,17 @@ use Magento\Tax\Api\TaxRuleRepositoryInterface;
 class TaxRateManagement implements TaxRateManagementInterface
 {
     /**
-     * @var SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
-
-    /**
-     * @var FilterBuilder
-     */
-    protected $filterBuilder;
-
-    /**
-     * @var TaxRuleRepositoryInterface
-     */
-    protected $taxRuleRepository;
-
-    /**
-     * @var TaxRateRepositoryInterface
-     */
-    protected $taxRateRepository;
-
-    /**
      * @param TaxRuleRepositoryInterface $taxRuleRepository
      * @param TaxRateRepositoryInterface $taxRateRepository
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
-        TaxRuleRepositoryInterface $taxRuleRepository,
-        TaxRateRepositoryInterface $taxRateRepository,
-        FilterBuilder $filterBuilder,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        protected readonly TaxRuleRepositoryInterface $taxRuleRepository,
+        protected readonly TaxRateRepositoryInterface $taxRateRepository,
+        protected readonly FilterBuilder $filterBuilder,
+        protected readonly SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
-        $this->taxRuleRepository = $taxRuleRepository;
-        $this->taxRateRepository = $taxRateRepository;
-        $this->filterBuilder = $filterBuilder;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**

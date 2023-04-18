@@ -9,10 +9,16 @@
  */
 namespace Magento\Tax\Model\TaxClass\Type;
 
-class Product extends \Magento\Tax\Model\TaxClass\AbstractType
+use Magento\Catalog\Model\Product as ModelProduct;
+use Magento\Framework\Phrase;
+use Magento\Tax\Model\Calculation\Rule as CalculationRule;
+use Magento\Tax\Model\ClassModel as TaxClassModel;
+use Magento\Tax\Model\TaxClass\AbstractType as TaxClassAbstractType;
+
+class Product extends TaxClassAbstractType
 {
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var ModelProduct
      */
     protected $_modelProduct;
 
@@ -21,16 +27,16 @@ class Product extends \Magento\Tax\Model\TaxClass\AbstractType
      *
      * @var string
      */
-    protected $_classType = \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT;
+    protected $_classType = TaxClassModel::TAX_CLASS_TYPE_PRODUCT;
 
     /**
-     * @param \Magento\Tax\Model\Calculation\Rule $calculationRule
-     * @param \Magento\Catalog\Model\Product $modelProduct
+     * @param CalculationRule $calculationRule
+     * @param ModelProduct $modelProduct
      * @param array $data
      */
     public function __construct(
-        \Magento\Tax\Model\Calculation\Rule $calculationRule,
-        \Magento\Catalog\Model\Product $modelProduct,
+        CalculationRule $calculationRule,
+        ModelProduct $modelProduct,
         array $data = []
     ) {
         parent::__construct($calculationRule, $data);
@@ -49,7 +55,7 @@ class Product extends \Magento\Tax\Model\TaxClass\AbstractType
     /**
      * Get Name of Objects that use this Tax Class Type
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getObjectTypeName()
     {

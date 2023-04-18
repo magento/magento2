@@ -5,7 +5,9 @@
  */
 namespace Magento\Tax\Model\Calculation;
 
+use Magento\Tax\Api\Data\AppliedTaxInterface;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
+use Magento\Tax\Api\Data\TaxDetailsItemInterface;
 
 class UnitBaseCalculator extends AbstractCalculator
 {
@@ -44,7 +46,7 @@ class UnitBaseCalculator extends AbstractCalculator
      * @param QuoteDetailsItemInterface $item
      * @param int $quantity
      * @param bool $round
-     * @return \Magento\Tax\Api\Data\TaxDetailsItemInterface
+     * @return TaxDetailsItemInterface
      */
     protected function calculateWithTaxInPrice(QuoteDetailsItemInterface $item, $quantity, $round = true)
     {
@@ -98,7 +100,7 @@ class UnitBaseCalculator extends AbstractCalculator
         $rowTax = $uniTax * $quantity;
 
         // Calculate applied taxes
-        /** @var  \Magento\Tax\Api\Data\AppliedTaxInterface[] $appliedTaxes */
+        /** @var AppliedTaxInterface[] $appliedTaxes */
         $appliedRates = $this->calculationTool->getAppliedRates($taxRateRequest);
         $appliedTaxes = $this->getAppliedTaxes($rowTax, $rate, $appliedRates);
 
@@ -122,7 +124,7 @@ class UnitBaseCalculator extends AbstractCalculator
      * @param QuoteDetailsItemInterface $item
      * @param int $quantity
      * @param bool $round
-     * @return \Magento\Tax\Api\Data\TaxDetailsItemInterface
+     * @return TaxDetailsItemInterface
      */
     protected function calculateWithTaxNotInPrice(QuoteDetailsItemInterface $item, $quantity, $round = true)
     {

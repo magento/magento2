@@ -6,12 +6,14 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rule;
 
+use Magento\Backend\Model\View\Result\Page as ResultPage;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Tax\Controller\Adminhtml\Rule;
 
-class Index extends \Magento\Tax\Controller\Adminhtml\Rule implements HttpGetActionInterface
+class Index extends Rule implements HttpGetActionInterface
 {
     /**
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return ResultPage
      */
     public function execute()
     {

@@ -11,11 +11,18 @@
  */
 namespace Magento\Tax\Block\Adminhtml\Rate\Toolbar;
 
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Button\ButtonList;
+use Magento\Backend\Block\Widget\Button\Item;
+use Magento\Backend\Block\Widget\Button\ToolbarInterface;
+use Magento\Backend\Block\Widget\ContainerInterface;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Add extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\ContainerInterface
+class Add extends Template implements ContainerInterface
 {
     /**
      * @var string
@@ -23,29 +30,17 @@ class Add extends \Magento\Backend\Block\Template implements \Magento\Backend\Bl
     protected $_template = 'Magento_Tax::toolbar/rate/add.phtml';
 
     /**
-     * @var \Magento\Backend\Block\Widget\Button\ButtonList
-     */
-    protected $buttonList;
-
-    /**
-     * @var \Magento\Backend\Block\Widget\Button\ToolbarInterface
-     */
-    protected $toolbar;
-
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Block\Widget\Button\ButtonList $buttonList
-     * @param \Magento\Backend\Block\Widget\Button\ToolbarInterface $toolbar
+     * @param Context $context
+     * @param ButtonList $buttonList
+     * @param ToolbarInterface $toolbar
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Block\Widget\Button\ButtonList $buttonList,
-        \Magento\Backend\Block\Widget\Button\ToolbarInterface $toolbar,
+        Context $context,
+        protected readonly ButtonList $buttonList,
+        protected readonly ToolbarInterface $toolbar,
         array $data = []
     ) {
-        $this->buttonList = $buttonList;
-        $this->toolbar = $toolbar;
         parent::__construct($context, $data);
     }
 
@@ -97,7 +92,7 @@ class Add extends \Magento\Backend\Block\Template implements \Magento\Backend\Bl
     /**
      * {$@inheritdoc}
      */
-    public function canRender(\Magento\Backend\Block\Widget\Button\Item $item)
+    public function canRender(Item $item)
     {
         return !$item->isDeleted();
     }

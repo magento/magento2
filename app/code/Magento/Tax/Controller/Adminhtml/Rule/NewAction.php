@@ -6,16 +6,18 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rule;
 
+use Magento\Backend\Model\View\Result\Forward;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Tax\Controller\Adminhtml\Rule;
 
-class NewAction extends \Magento\Tax\Controller\Adminhtml\Rule
+class NewAction extends Rule
 {
     /**
-     * @return \Magento\Backend\Model\View\Result\Forward
+     * @return Forward
      */
     public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
+        /** @var Forward $resultForward */
         $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
         return $resultForward->forward('edit');
     }

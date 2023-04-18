@@ -5,25 +5,30 @@
  */
 namespace Magento\Tax\Model\Sales\Pdf;
 
+use Magento\Tax\Helper\Data as TaxHelper;
+use Magento\Tax\Model\Calculation;
+use Magento\Tax\Model\Config as TaxConfig;
+use Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory;
+
 class Grandtotal extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
 {
     /**
-     * @var \Magento\Tax\Model\Config
+     * @var TaxConfig
      */
     protected $_taxConfig;
 
     /**
-     * @param \Magento\Tax\Helper\Data $taxHelper
-     * @param \Magento\Tax\Model\Calculation $taxCalculation
-     * @param \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $ordersFactory
-     * @param \Magento\Tax\Model\Config $taxConfig
+     * @param TaxHelper $taxHelper
+     * @param Calculation $taxCalculation
+     * @param CollectionFactory $ordersFactory
+     * @param TaxConfig $taxConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Tax\Helper\Data $taxHelper,
-        \Magento\Tax\Model\Calculation $taxCalculation,
-        \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $ordersFactory,
-        \Magento\Tax\Model\Config $taxConfig,
+        TaxHelper $taxHelper,
+        Calculation $taxCalculation,
+        CollectionFactory $ordersFactory,
+        TaxConfig $taxConfig,
         array $data = []
     ) {
         $this->_taxConfig = $taxConfig;

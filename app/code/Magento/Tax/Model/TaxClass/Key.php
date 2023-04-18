@@ -6,6 +6,7 @@
 namespace Magento\Tax\Model\TaxClass;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Tax\Api\Data\TaxClassKeyExtensionInterface;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
 
 /**
@@ -61,7 +62,7 @@ class Key extends AbstractExtensibleModel implements TaxClassKeyInterface
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Tax\Api\Data\TaxClassKeyExtensionInterface|null
+     * @return TaxClassKeyExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -71,10 +72,10 @@ class Key extends AbstractExtensibleModel implements TaxClassKeyInterface
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Tax\Api\Data\TaxClassKeyExtensionInterface $extensionAttributes
+     * @param TaxClassKeyExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxClassKeyExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(TaxClassKeyExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

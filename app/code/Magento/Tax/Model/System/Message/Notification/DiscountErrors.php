@@ -5,28 +5,19 @@
  */
 namespace Magento\Tax\Model\System\Message\Notification;
 
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Tax\Model\Config;
+use Magento\Tax\Model\System\Message\NotificationInterface;
+
 /**
  * This class allows to display notification in the admin panel about possible discount errors.
  *
  * Discount errors may be caused by tax settings misconfiguration.
  */
-class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationInterface
+class DiscountErrors implements NotificationInterface
 {
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var \Magento\Framework\UrlInterface
-     */
-    private $urlBuilder;
-
-    /**
-     * @var \Magento\Tax\Model\Config
-     */
-    private $taxConfig;
-
     /**
      * Websites with invalid discount settings
      *
@@ -37,18 +28,15 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Tax\Model\Config $taxConfig
+     * @param StoreManagerInterface $storeManager
+     * @param UrlInterface $urlBuilder
+     * @param Config $taxConfig
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Tax\Model\Config $taxConfig
+        private readonly StoreManagerInterface $storeManager,
+        private readonly UrlInterface $urlBuilder,
+        private readonly Config $taxConfig
     ) {
-        $this->storeManager = $storeManager;
-        $this->urlBuilder = $urlBuilder;
-        $this->taxConfig = $taxConfig;
     }
 
     /**
@@ -92,7 +80,7 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
             );
             $messageDetails .= "</p>";
         }
-        
+
         return $messageDetails;
     }
 
@@ -112,7 +100,7 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
      *      Before Discount / Excluding Tax
      *      Before Discount / Including Tax
      *
-     * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
+     * @param null|int|bool|string|Store $store $store
      * @return bool
      */
     private function checkSettings($store = null)

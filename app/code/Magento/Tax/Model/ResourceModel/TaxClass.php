@@ -5,12 +5,14 @@
  */
 namespace Magento\Tax\Model\ResourceModel;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
  * Tax class resource
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class TaxClass extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class TaxClass extends AbstractDb
 {
     /**
      * Resource initialization

@@ -13,10 +13,25 @@ declare(strict_types=1);
 
 namespace Magento\Tax\Block\Adminhtml\Rate;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Directory\Model\Config\Source\Country;
+use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Form as FormData;
+use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Template;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Tax\Api\TaxRateRepositoryInterface;
+use Magento\Tax\Block\Adminhtml\Rate\Title\FieldsetFactory;
 use Magento\Tax\Controller\RegistryConstants;
+use Magento\Tax\Helper\Data as TaxHelper;
+use Magento\Tax\Model\Calculation\Rate\Converter;
+use Magento\Tax\Model\Config;
+use Magento\Tax\Model\TaxRateCollection;
 
 /**
  * Tax rate form.
@@ -25,7 +40,7 @@ use Magento\Tax\Controller\RegistryConstants;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
+class Form extends Generic
 {
     const FORM_ELEMENT_ID = 'rate-form';
 
@@ -42,66 +57,66 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Tax data
      *
-     * @var \Magento\Tax\Helper\Data|null
+     * @var TaxHelper|null
      */
     protected $_taxData = null;
 
     /**
-     * @var \Magento\Tax\Block\Adminhtml\Rate\Title\FieldsetFactory
+     * @var FieldsetFactory
      */
     protected $_fieldsetFactory;
 
     /**
-     * @var \Magento\Directory\Model\Config\Source\Country
+     * @var Country
      */
     protected $_country;
 
     /**
-     * @var \Magento\Directory\Model\RegionFactory
+     * @var RegionFactory
      */
     protected $_regionFactory;
 
     /**
-     * @var \Magento\Tax\Api\TaxRateRepositoryInterface
+     * @var TaxRateRepositoryInterface
      */
     protected $_taxRateRepository;
 
     /**
-     * @var \Magento\Tax\Model\TaxRateCollection
+     * @var TaxRateCollection
      */
     protected $_taxRateCollection;
 
     /**
-     * @var \Magento\Tax\Model\Calculation\Rate\Converter
+     * @var Converter
      */
     protected $_taxRateConverter;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Directory\Model\Config\Source\Country $country
-     * @param \Magento\Tax\Block\Adminhtml\Rate\Title\FieldsetFactory $fieldsetFactory
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository
-     * @param \Magento\Tax\Model\TaxRateCollection $taxRateCollection
-     * @param \Magento\Tax\Model\Calculation\Rate\Converter $taxRateConverter
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param RegionFactory $regionFactory
+     * @param Country $country
+     * @param FieldsetFactory $fieldsetFactory
+     * @param TaxHelper $taxData
+     * @param TaxRateRepositoryInterface $taxRateRepository
+     * @param TaxRateCollection $taxRateCollection
+     * @param Converter $taxRateConverter
      * @param array $data
      * @param DirectoryHelper|null $directoryHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Directory\Model\Config\Source\Country $country,
-        \Magento\Tax\Block\Adminhtml\Rate\Title\FieldsetFactory $fieldsetFactory,
-        \Magento\Tax\Helper\Data $taxData,
-        \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository,
-        \Magento\Tax\Model\TaxRateCollection $taxRateCollection,
-        \Magento\Tax\Model\Calculation\Rate\Converter $taxRateConverter,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        RegionFactory $regionFactory,
+        Country $country,
+        FieldsetFactory $fieldsetFactory,
+        TaxHelper $taxData,
+        TaxRateRepositoryInterface $taxRateRepository,
+        TaxRateCollection $taxRateCollection,
+        Converter $taxRateConverter,
         array $data = [],
         ?DirectoryHelper $directoryHelper = null
     ) {
@@ -156,7 +171,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $formData['tax_postcode'] = $formData['zip_from'] . '-' . $formData['zip_to'];
         }
 
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var FormData $form */
         $form = $this->_formFactory->create();
 
         $countries = $this->_country->toOptionArray(false, 'US');
@@ -164,15 +179,15 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         if (!isset($formData['tax_country_id'])) {
             $formData['tax_country_id'] = $this->_scopeConfig->getValue(
-                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_COUNTRY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                Config::CONFIG_XML_PATH_DEFAULT_COUNTRY,
+                ScopeInterface::SCOPE_STORE
             );
         }
 
         if (!isset($formData['tax_region_id'])) {
             $formData['tax_region_id'] = $this->_scopeConfig->getValue(
-                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_REGION,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                Config::CONFIG_XML_PATH_DEFAULT_REGION,
+                ScopeInterface::SCOPE_STORE
             );
         }
 
@@ -226,8 +241,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         if (!isset($formData['tax_postcode'])) {
             $formData['tax_postcode'] = $this->_scopeConfig->getValue(
-                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_POSTCODE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                Config::CONFIG_XML_PATH_DEFAULT_POSTCODE,
+                ScopeInterface::SCOPE_STORE
             );
         }
 
@@ -313,7 +328,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->setChild(
             'form_after',
             $this->getLayout()->createBlock(
-                \Magento\Framework\View\Element\Template::class
+                Template::class
             )->setTemplate('Magento_Tax::rate/js.phtml')
         );
 

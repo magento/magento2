@@ -5,9 +5,16 @@
  */
 namespace Magento\Tax\Observer;
 
+use Exception;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Pricing\Amount\Base as PricingAmountBase;
+use Magento\Framework\Registry;
+use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Modifies the bundle config for the front end to resemble the tax included price when tax included prices.
@@ -15,48 +22,34 @@ use Magento\Framework\Event\ObserverInterface;
 class GetPriceConfigurationObserver implements ObserverInterface
 {
     /**
-     * Tax data
-     *
-     * @var \Magento\Tax\Helper\Data
-     */
-    protected $taxData;
-
-    /**
-     * @var \Magento\Framework\Registry
-     */
-    protected $registry;
-
-    /**
      * @var array Cache of the current bundle selection items
      */
     private $selectionCache = [];
 
     /**
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Tax\Helper\Data $taxData
+     * @param Registry $registry
+     * @param TaxHelper $taxData
      */
     public function __construct(
-        \Magento\Framework\Registry $registry,
-        \Magento\Tax\Helper\Data $taxData
+        protected readonly Registry $registry,
+        protected readonly TaxHelper $taxData
     ) {
-        $this->registry = $registry;
-        $this->taxData = $taxData;
     }
 
     /**
      * Modify the bundle config for the front end to resemble the tax included price when tax included prices
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $this->selectionCache = [];
         if ($this->taxData->displayPriceIncludingTax()) {
-            /** @var \Magento\Catalog\Model\Product $product */
+            /** @var Product $product */
             $product = $this->registry->registry('current_product');
-            if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
+            if ($product->getTypeId() == Type::TYPE_BUNDLE) {
                 $priceConfigObj = $observer->getData('configObj');
                 try {
                     $priceConfig = $this->recurConfigAndUpdatePrice(
@@ -64,7 +57,7 @@ class GetPriceConfigurationObserver implements ObserverInterface
                         'prices'
                     );
                     $priceConfigObj->setConfig($priceConfig);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     return $this;
                 }
             }
@@ -112,9 +105,9 @@ class GetPriceConfigurationObserver implements ObserverInterface
     {
         if (array_key_exists($key, $holder)
             && array_key_exists('basePrice', $holder[$key])) {
-            /** @var \Magento\Catalog\Model\Product $product */
+            /** @var Product $product */
             $product = $this->registry->registry('current_product');
-            if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
+            if ($product->getTypeId() == Type::TYPE_BUNDLE) {
                 if (!isset($this->selectionCache[$product->getId()])) {
                     $typeInstance = $product->getTypeInstance();
                     $typeInstance->setStoreFilter($product->getStoreId(), $product);
@@ -129,9 +122,9 @@ class GetPriceConfigurationObserver implements ObserverInterface
 
                 foreach ($arrSelections as $selectionItem) {
                     if ($holder['optionId'] == $selectionItem->getId()) {
-                        /** @var \Magento\Framework\Pricing\Amount\Base $baseAmount */
+                        /** @var PricingAmountBase $baseAmount */
                         $baseAmount = $selectionItem->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getAmount();
-                        /** @var \Magento\Framework\Pricing\Amount\Base $oldAmount */
+                        /** @var PricingAmountBase $oldAmount */
                         $oldAmount =
                                 $selectionItem->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getAmount();
                         if ($baseAmount->hasAdjustment('tax')) {

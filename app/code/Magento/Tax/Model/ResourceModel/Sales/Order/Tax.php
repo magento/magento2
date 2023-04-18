@@ -5,12 +5,14 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Sales\Order;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
  * Sales order tax resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Tax extends AbstractDb
 {
     /**
      * Resource initialization

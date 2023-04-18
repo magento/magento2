@@ -5,12 +5,14 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Calculation\Rate;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
  * Tax Rate Title Collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Title extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Title extends AbstractDb
 {
     /**
      * Resource initialization

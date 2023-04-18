@@ -11,7 +11,9 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Report\Updatedat;
 
-class Collection extends \Magento\Tax\Model\ResourceModel\Report\Collection
+use Magento\Tax\Model\ResourceModel\Report\Collection as ReportCollection;
+
+class Collection extends ReportCollection
 {
     /**
      * Aggregated Data Table

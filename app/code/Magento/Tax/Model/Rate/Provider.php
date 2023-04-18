@@ -17,16 +17,6 @@ use Magento\Tax\Model\Calculation\Rate;
 class Provider
 {
     /**
-     * @var TaxRateRepositoryInterface
-     */
-    private $taxRateRepository;
-
-    /**
-     * @var Converter
-     */
-    private $converter;
-
-    /**
      * @var int
      */
     private $pageSize = 100;
@@ -38,11 +28,9 @@ class Provider
      * @param Converter $converter
      */
     public function __construct(
-        TaxRateRepositoryInterface $taxRateRepository,
-        Converter $converter
+        private readonly TaxRateRepositoryInterface $taxRateRepository,
+        private readonly Converter $converter
     ) {
-        $this->taxRateRepository = $taxRateRepository;
-        $this->converter = $converter;
     }
 
     /**

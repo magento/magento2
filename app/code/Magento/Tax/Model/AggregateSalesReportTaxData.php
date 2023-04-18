@@ -6,36 +6,23 @@
 
 namespace Magento\Tax\Model;
 
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Tax\Model\ResourceModel\Report\Tax as ResourceReportTax;
+use Magento\Tax\Model\ResourceModel\Report\TaxFactory;
+
 class AggregateSalesReportTaxData
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     */
-    protected $localeDate;
-
-    /**
-     * @var \Magento\Tax\Model\ResourceModel\Report\TaxFactory
-     */
-    protected $reportTaxFactory;
-
-    /**
-     * @var \Magento\Framework\Locale\ResolverInterface
-     */
-    protected $localeResolver;
-
-    /**
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Tax\Model\ResourceModel\Report\TaxFactory $reportTaxFactory
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param TimezoneInterface $localeDate
+     * @param TaxFactory $reportTaxFactory
+     * @param ResolverInterface $localeResolver
      */
     public function __construct(
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Tax\Model\ResourceModel\Report\TaxFactory $reportTaxFactory,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver
+        protected readonly TimezoneInterface $localeDate,
+        protected readonly TaxFactory $reportTaxFactory,
+        protected readonly ResolverInterface $localeResolver
     ) {
-        $this->localeDate = $localeDate;
-        $this->reportTaxFactory = $reportTaxFactory;
-        $this->localeResolver = $localeResolver;
     }
 
     /**
@@ -48,7 +35,7 @@ class AggregateSalesReportTaxData
         $this->localeResolver->emulate(0);
         $currentDate = $this->localeDate->date();
         $date = $currentDate->modify('-25 hours');
-        /** @var $reportTax \Magento\Tax\Model\ResourceModel\Report\Tax */
+        /** @var ResourceReportTax $reportTax */
         $reportTax = $this->reportTaxFactory->create();
         $reportTax->aggregate($date);
         $this->localeResolver->revert();

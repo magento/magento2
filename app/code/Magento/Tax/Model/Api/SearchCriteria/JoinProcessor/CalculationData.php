@@ -7,6 +7,8 @@ namespace Magento\Tax\Model\Api\SearchCriteria\JoinProcessor;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\JoinProcessor\CustomJoinInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Db\Select;
+use Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection as CalculationRuleCollection;
 
 /**
  * Class CalculationData
@@ -18,14 +20,14 @@ class CalculationData implements CustomJoinInterface
     const CALCULATION_DATA_ALIAS = "cd";
 
     /**
-     * @param \Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection $collection
+     * @param CalculationRuleCollection $collection
      * @return bool
      */
     public function apply(AbstractDb $collection)
     {
         $isNotApplied = !array_key_exists(
             self::CALCULATION_DATA_ALIAS,
-            $collection->getSelect()->getPart(\Magento\Framework\Db\Select::FROM)
+            $collection->getSelect()->getPart(Select::FROM)
         );
         if ($isNotApplied) {
             $collection->joinCalculationData(self::CALCULATION_DATA_ALIAS);

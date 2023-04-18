@@ -7,12 +7,22 @@ namespace Magento\Tax\Model\Calculation;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Tax\Api\Data\TaxRuleExtensionInterface;
 use Magento\Tax\Api\Data\TaxRuleInterface;
+use Magento\Tax\Model\Calculation;
+use Magento\Tax\Model\Calculation\Rule\Validator;
+use Magento\Tax\Model\ClassModel;
+use Magento\Tax\Model\ResourceModel\Calculation\Rule as ResourceCalculationRule;
 
 /**
  * Tax Rule Model
  */
-class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRuleInterface
+class Rule extends AbstractExtensibleModel implements TaxRuleInterface
 {
     /**#@+
      *
@@ -34,19 +44,14 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     /**
      * Tax Model Class
      *
-     * @var \Magento\Tax\Model\ClassModel
+     * @var ClassModel
      */
     protected $_taxClass;
 
     /**
-     * @var \Magento\Tax\Model\Calculation
+     * @var Calculation
      */
     protected $_calculation;
-
-    /**
-     * @var \Magento\Tax\Model\Calculation\Rule\Validator
-     */
-    protected $validator;
 
     /**
      * Name of object id field
@@ -56,32 +61,31 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     protected $_idFieldName = 'tax_calculation_rule_id';
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param Context $context
+     * @param Registry $registry
      * @param ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Tax\Model\ClassModel $taxClass
-     * @param \Magento\Tax\Model\Calculation $calculation
-     * @param Rule\Validator $validator
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param ClassModel $taxClass
+     * @param Calculation $calculation
+     * @param Validator $validator
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
+        Context $context,
+        Registry $registry,
         ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Tax\Model\ClassModel $taxClass,
-        \Magento\Tax\Model\Calculation $calculation,
-        \Magento\Tax\Model\Calculation\Rule\Validator $validator,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ClassModel $taxClass,
+        Calculation $calculation,
+        protected readonly Validator $validator,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_calculation = $calculation;
-        $this->validator = $validator;
         parent::__construct(
             $context,
             $registry,
@@ -91,7 +95,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
             $resourceCollection,
             $data
         );
-        $this->_init(\Magento\Tax\Model\ResourceModel\Calculation\Rule::class);
+        $this->_init(ResourceCalculationRule::class);
         $this->_taxClass = $taxClass;
     }
 
@@ -147,7 +151,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     }
 
     /**
-     * @return \Magento\Tax\Model\Calculation
+     * @return Calculation
      */
     public function getCalculationModel()
     {
@@ -368,7 +372,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Tax\Api\Data\TaxRuleExtensionInterface|null
+     * @return TaxRuleExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -378,10 +382,10 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Tax\Api\Data\TaxRuleExtensionInterface $extensionAttributes
+     * @param TaxRuleExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxRuleExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(TaxRuleExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

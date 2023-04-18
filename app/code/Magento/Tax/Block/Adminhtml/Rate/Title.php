@@ -6,6 +6,11 @@
 
 namespace Magento\Tax\Block\Adminhtml\Rate;
 
+use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\StoreFactory;
+use Magento\Tax\Api\TaxRateRepositoryInterface;
 use Magento\Tax\Controller\RegistryConstants;
 
 /**
@@ -13,7 +18,7 @@ use Magento\Tax\Controller\RegistryConstants;
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
-class Title extends \Magento\Framework\View\Element\Template
+class Title extends Template
 {
     /**
      * @var array
@@ -26,34 +31,34 @@ class Title extends \Magento\Framework\View\Element\Template
     protected $_template = 'Magento_Tax::rate/title.phtml';
 
     /**
-     * @var \Magento\Store\Model\StoreFactory
+     * @var StoreFactory
      */
     protected $_storeFactory;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Tax\Api\TaxRateRepositoryInterface
+     * @var TaxRateRepositoryInterface
      */
     protected $_taxRateRepository;
 
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Store\Model\StoreFactory $storeFactory
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository
+     * @param Context $context
+     * @param StoreFactory $storeFactory
+     * @param Registry $coreRegistry
+     * @param TaxRateRepositoryInterface $taxRateRepository
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Store\Model\StoreFactory $storeFactory,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository,
+        Context $context,
+        StoreFactory $storeFactory,
+        Registry $coreRegistry,
+        TaxRateRepositoryInterface $taxRateRepository,
         array $data = []
     ) {
         $this->_coreRegistry = $coreRegistry;

@@ -6,7 +6,9 @@
 namespace Magento\Tax\Model\Sales\Quote;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Tax\Api\Data\QuoteDetailsItemExtensionInterface;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
+use Magento\Tax\Api\Data\TaxClassKeyInterface;
 
 /**
  * @codeCoverageIgnore
@@ -142,10 +144,10 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
     /**
      * Set tax class key
      *
-     * @param \Magento\Tax\Api\Data\TaxClassKeyInterface $taxClassKey
+     * @param TaxClassKeyInterface $taxClassKey
      * @return $this
      */
-    public function setTaxClassKey(\Magento\Tax\Api\Data\TaxClassKeyInterface $taxClassKey = null)
+    public function setTaxClassKey(TaxClassKeyInterface $taxClassKey = null)
     {
         return $this->setData(self::KEY_TAX_CLASS_KEY, $taxClassKey);
     }
@@ -241,7 +243,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Tax\Api\Data\QuoteDetailsItemExtensionInterface|null
+     * @return QuoteDetailsItemExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -251,11 +253,11 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Tax\Api\Data\QuoteDetailsItemExtensionInterface $extensionAttributes
+     * @param QuoteDetailsItemExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\Tax\Api\Data\QuoteDetailsItemExtensionInterface $extensionAttributes
+        QuoteDetailsItemExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
