@@ -28,47 +28,45 @@ use Magento\Framework\Webapi\Exception as WebapiException;
  */
 class ErrorProcessor
 {
-    const DEFAULT_SHUTDOWN_FUNCTION = 'apiShutdownFunction';
+    public const DEFAULT_SHUTDOWN_FUNCTION = 'apiShutdownFunction';
 
-    const DEFAULT_ERROR_HTTP_CODE = 500;
+    public const DEFAULT_ERROR_HTTP_CODE = 500;
 
-    const DEFAULT_RESPONSE_CHARSET = 'UTF-8';
-
-    const INTERNAL_SERVER_ERROR_MSG = 'Internal Error. Details are available in Magento log file. Report ID: %s';
+    public const DEFAULT_RESPONSE_CHARSET = 'UTF-8';
 
     /**#@+
      * Error data representation formats.
      */
-    const DATA_FORMAT_JSON = 'json';
+    public const DATA_FORMAT_JSON = 'json';
 
-    const DATA_FORMAT_XML = 'xml';
+    public const DATA_FORMAT_XML = 'xml';
 
-    /**#@-*/
-
-    /**#@-*/
-    protected $encoder;
+    /**
+     * @var \Magento\Framework\Json\Encoder
+     */
+    protected \Magento\Framework\Json\Encoder $encoder;
 
     /**
      * @var \Magento\Framework\App\State
      */
-    protected $_appState;
+    protected \Magento\Framework\App\State $_appState;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    protected $_logger;
+    protected Psr\Log\LoggerInterface $_logger;
 
     /**
      * Filesystem instance
      *
      * @var \Magento\Framework\Filesystem
      */
-    protected $_filesystem;
+    protected \Magento\Framework\Filesystem $_filesystem;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write
      */
-    protected $directoryWrite;
+    protected \Magento\Framework\Filesystem\Directory\Write $directoryWrite;
 
     /**
      * Instance of serializer.
@@ -83,13 +81,14 @@ class ErrorProcessor
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param Json|null $serializer
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Framework\Json\Encoder $encoder,
-        \Magento\Framework\App\State $appState,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Filesystem $filesystem,
-        Json $serializer = null
+        \Magento\Framework\App\State    $appState,
+        \Psr\Log\LoggerInterface        $logger,
+        \Magento\Framework\Filesystem   $filesystem,
+        Json                            $serializer = null
     ) {
         $this->encoder = $encoder;
         $this->_appState = $appState;
@@ -151,7 +150,7 @@ class ErrorProcessor
             if (!$isDevMode) {
                 /** Log information about actual exception */
                 $reportId = $this->_critical($exception);
-                $message = sprintf(self::INTERNAL_SERVER_ERROR_MSG, $reportId);
+                $message = __("Internal Error. Details are available in Magento log file. Report ID: %1", $reportId);
                 $code = 0;
             }
             $maskedException = new WebapiException(
