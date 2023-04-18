@@ -10,6 +10,7 @@ namespace Magento\Wishlist\Helper;
 
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 
@@ -657,7 +658,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     $this->_storeManager->getStore()->getStoreId()
                 );
             }
-            $fragment = $buyRequest->getSuperAttribute() ?? [];
+            $fragment = $this->getFragmentByProductType($buyRequest);
             if ($buyRequest->getQty()) {
                 $additional['_query']['qty'] = $buyRequest->getQty();
             }
@@ -668,5 +669,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         return $url;
+    }
+
+    /**
+     * @param DataObject $buyRequest
+     * @return array
+     */
+    private function getFragmentByProductType(DataObject $buyRequest): array
+    {
+        $fragment = $buyRequest->getSuperAttribute() ?? [];
+        if ($buyRequest->getBundleOption()) {
+            $fragment['bundle_option'] = $buyRequest->getBundleOption() ?? [];
+            $fragment['bundle_option_qty'] = $buyRequest->getBundleOptionQty() ?? [];
+        }
+        return $fragment;
     }
 }

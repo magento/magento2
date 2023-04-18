@@ -11,6 +11,7 @@ define([
     'underscore',
     'mage/template',
     'priceUtils',
+    'jquery/jquery.parsequery',
     'priceBox'
 ], function ($, _, mageTemplate, utils) {
     'use strict';
@@ -58,6 +59,45 @@ define([
             priceBox.on('price-box-initialized', this._updatePriceBox.bind(this));
             options.on('change', this._onBundleOptionChanged.bind(this));
             qty.on('change', this._onQtyFieldChanged.bind(this));
+
+            // Override defaults with URL query parameters and/or inputs values
+            this._overrideDefaults();
+        },
+
+        /**
+         * Override default options values settings with either URL query parameters or
+         * initialized inputs values.
+         * @private
+         */
+        _overrideDefaults: function () {
+            var hashIndex = window.location.href.indexOf('#');
+
+            if (hashIndex !== -1) {
+                this._parseQueryParams(window.location.href.substr(hashIndex + 1));
+            }
+        },
+
+        /**
+         * Parse query parameters from a query string and set options values based on the
+         * key value pairs of the parameters.
+         * @param {*} queryString - URL query string containing query parameters.
+         * @private
+         */
+        _parseQueryParams: function (queryString) {
+            var queryParams = $.parseQuery({
+                query: queryString
+            });
+            var form = this.element,
+                options = $(this.options.productBundleSelector, form),
+                qty = $(this.options.qtyFieldSelector, form);
+
+            $.each(queryParams, $.proxy(function (key, value) {
+                options.each(function(index, option) {
+                    if ( option.name === key ) {
+                        option.value = value;
+                    }
+                })
+            }, this));
         },
 
         /**
