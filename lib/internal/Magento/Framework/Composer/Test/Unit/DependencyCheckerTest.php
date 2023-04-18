@@ -8,28 +8,45 @@ declare(strict_types=1);
 namespace Magento\Framework\Composer\Test\Unit;
 
 use Composer\Console\Application;
+use Composer\Console\ApplicationFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Composer\DependencyChecker;
 use PHPUnit\Framework\TestCase;
 
 class DependencyCheckerTest extends TestCase
 {
+
+    private ApplicationFactory $composerFactory;
+
+    private Application $composerApp;
+
+    protected function setUp(): void
+    {
+        $this->composerFactory = $this->getMockBuilder(ApplicationFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->composerApp = $this->getMockBuilder(Application::class)
+            ->setMethods(['setAutoExit', 'resetComposer', 'run','__destruct'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->composerFactory->method('create')->willReturn($this->composerApp);
+
+    }
     /**
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testCheckDependencies(): void
     {
-        $composerApp = $this->getMockBuilder(Application::class)
-            ->setMethods(['setAutoExit', 'resetComposer', 'run','__destruct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+
         $directoryList = $this->createMock(DirectoryList::class);
         $directoryList->expects($this->exactly(2))->method('getRoot');
-        $composerApp->expects($this->once())->method('setAutoExit')->with(false);
-        $composerApp->expects($this->any())->method('__destruct');
+        $this->composerApp->expects($this->once())->method('setAutoExit')->with(false);
+        $this->composerApp->expects($this->any())->method('__destruct');
 
-        $composerApp
+        $this->composerApp
             ->method('run')
             ->willReturnOnConsecutiveCalls(
                 $this->returnCallback(
@@ -52,7 +69,7 @@ class DependencyCheckerTest extends TestCase
                 )
             );
 
-        $dependencyChecker = new DependencyChecker($composerApp, $directoryList);
+        $dependencyChecker = new DependencyChecker($this->composerFactory, $directoryList);
         $expected = [
             'magento/package-a' => ['magento/package-b', 'magento/package-c'],
             'magento/package-b' => ['magento/package-c', 'magento/package-d'],
@@ -69,16 +86,12 @@ class DependencyCheckerTest extends TestCase
      */
     public function testCheckDependenciesExcludeSelf(): void
     {
-        $composerApp = $this->getMockBuilder(Application::class)
-            ->setMethods(['setAutoExit', 'resetComposer', 'run','__destruct'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $directoryList = $this->createMock(DirectoryList::class);
         $directoryList->expects($this->exactly(3))->method('getRoot');
-        $composerApp->expects($this->once())->method('setAutoExit')->with(false);
-        $composerApp->expects($this->any())->method('__destruct');
+        $this->composerApp->expects($this->once())->method('setAutoExit')->with(false);
+        $this->composerApp->expects($this->any())->method('__destruct');
 
-        $composerApp
+        $this->composerApp
             ->method('run')
             ->willReturnOnConsecutiveCalls(
                 $this->returnCallback(
@@ -109,7 +122,7 @@ class DependencyCheckerTest extends TestCase
                 )
             );
 
-        $dependencyChecker = new DependencyChecker($composerApp, $directoryList);
+        $dependencyChecker = new DependencyChecker($this->composerFactory, $directoryList);
         $expected = [
             'magento/package-a' => [],
             'magento/package-b' => ['magento/package-d'],

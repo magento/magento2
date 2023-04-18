@@ -27,7 +27,7 @@ class ProxyTest extends TestCase
         $this->ioObjectMock = $this->createMock(Io::class);
     }
 
-    public function testGenerate()
+    public function testGenerasste()
     {
         require_once __DIR__ . '/_files/Sample.php';
         $model = $this->getMockBuilder(Proxy::class)
