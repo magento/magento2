@@ -672,12 +672,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get product url with options and qty for complex products
+     *
      * @param DataObject $buyRequest
      * @return array
      */
     private function getFragmentByProductType(DataObject $buyRequest): array
     {
         $fragment = $buyRequest->getSuperAttribute() ?? [];
+        $fragment = $buyRequest->getSuperGroup() ?? [];
         if ($buyRequest->getBundleOption()) {
             $fragment['bundle_option'] = $buyRequest->getBundleOption() ?? [];
             $fragment['bundle_option_qty'] = $buyRequest->getBundleOptionQty() ?? [];
