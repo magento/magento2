@@ -212,7 +212,7 @@ QUERY;
         }
         $this->assertBundleBaseFields($bundleProduct, $response['products']['items'][0]);
 
-        $this->assertBundleProductOptions($bundleProduct, $response['products']['items'][0], false);
+        $this->assertBundleProductOptions($bundleProduct, $response['products']['items'][0]);
         $this->assertNotEmpty(
             $response['products']['items'][0]['items'],
             "Precondition failed: 'items' must not be empty"
@@ -242,9 +242,8 @@ QUERY;
     /**
      * @param ProductInterface $product
      * @param  array $actualResponse
-     * @param bool $isChildVisible
      */
-    private function assertBundleProductOptions($product, $actualResponse, $isChildVisible = true)
+    private function assertBundleProductOptions($product, $actualResponse)
     {
         $this->assertNotEmpty(
             $actualResponse['items'],
@@ -284,22 +283,18 @@ QUERY;
             ]
         );
         $this->assertEquals(
-            $isChildVisible ? $childProduct->getName() : null,
+            $childProduct->getName(),
             $actualResponse['items'][0]['options'][0]['label']
         );
-        if ($isChildVisible) {
-            $this->assertResponseFields(
-                $actualResponse['items'][0]['options'][0]['product'],
-                [
-                    'id' => $childProduct->getId(),
-                    'name' => $childProduct->getName(),
-                    'type_id' => $childProduct->getTypeId(),
-                    'sku' => $childProduct->getSku()
-                ]
-            );
-        } else {
-            $this->assertNull($actualResponse['items'][0]['options'][0]['product']);
-        }
+        $this->assertResponseFields(
+            $actualResponse['items'][0]['options'][0]['product'],
+            [
+                'id' => $childProduct->getId(),
+                'name' => $childProduct->getName(),
+                'type_id' => $childProduct->getTypeId(),
+                'sku' => $childProduct->getSku()
+            ]
+        );
     }
 
     /**
