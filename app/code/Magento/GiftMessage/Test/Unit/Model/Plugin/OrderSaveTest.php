@@ -100,7 +100,6 @@ class OrderSaveTest extends TestCase
         // save Gift Message on order level
         $orderId = 1;
         $orderItemId = 2;
-        $this->orderMock->expects($this->exactly(2))->method('getEntityId')->willReturn($orderId);
         $this->orderItemMock->expects($this->once())->method('getItemId')->willReturn($orderItemId);
         $this->orderMock
             ->expects($this->once())
@@ -112,8 +111,8 @@ class OrderSaveTest extends TestCase
             ->willReturn($this->giftMessageMock);
         $this->giftMessageOrderRepositoryMock
             ->expects($this->once())
-            ->method('save')
-            ->with($orderId, $this->giftMessageMock);
+            ->method('saveForOrder')
+            ->with($this->orderMock, $this->giftMessageMock);
 
         // save Gift Messages on item level
         $this->orderMock->expects($this->once())->method('getItems')->willReturn([$this->orderItemMock]);
@@ -126,8 +125,8 @@ class OrderSaveTest extends TestCase
             ->method('getGiftMessage')
             ->willReturn($this->giftMessageMock);
         $this->giftMessageOrderItemRepositoryMock
-            ->expects($this->once())->method('save')
-            ->with($orderId, $orderItemId, $this->giftMessageMock);
+            ->expects($this->once())->method('saveForOrder')
+            ->with($this->orderMock, $orderItemId, $this->giftMessageMock);
         $this->plugin->afterSave($this->orderRepositoryMock, $this->orderMock);
     }
 
@@ -137,7 +136,6 @@ class OrderSaveTest extends TestCase
         $this->expectExceptionMessage('The gift message couldn\'t be added to the "Test message" order.');
         // save Gift Message on order level
         $orderId = 1;
-        $this->orderMock->expects($this->once())->method('getEntityId')->willReturn($orderId);
         $this->orderMock
             ->expects($this->once())
             ->method('getExtensionAttributes')
@@ -148,7 +146,7 @@ class OrderSaveTest extends TestCase
             ->willReturn($this->giftMessageMock);
         $this->giftMessageOrderRepositoryMock
             ->expects($this->once())
-            ->method('save')
+            ->method('saveForOrder')
             ->willThrowException(new \Exception('Test message'));
 
         // save Gift Messages on item level
@@ -163,7 +161,6 @@ class OrderSaveTest extends TestCase
         // save Gift Message on order level
         $orderId = 1;
         $orderItemId = 2;
-        $this->orderMock->expects($this->once())->method('getEntityId')->willReturn($orderId);
         $this->orderItemMock->expects($this->once())->method('getItemId')->willReturn($orderItemId);
         $this->orderMock
             ->expects($this->once())
@@ -184,8 +181,8 @@ class OrderSaveTest extends TestCase
             ->method('getGiftMessage')
             ->willReturn($this->giftMessageMock);
         $this->giftMessageOrderItemRepositoryMock
-            ->expects($this->once())->method('save')
-            ->with($orderId, $orderItemId, $this->giftMessageMock)
+            ->expects($this->once())->method('saveForOrder')
+            ->with($this->orderMock, $orderItemId, $this->giftMessageMock)
             ->willThrowException(new \Exception('Test message'));
         $this->plugin->afterSave($this->orderRepositoryMock, $this->orderMock);
     }
