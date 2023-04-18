@@ -32,6 +32,7 @@ class DependencyCheckerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->composerFactory->method('create')->willReturn($this->composerApp);
+        parent::setUp();
 
     }
     /**
