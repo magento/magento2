@@ -37,13 +37,13 @@
             <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewTerm"/>
             <!-- Fill the Required Details-->
             <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
-                <argument name="term" value="newHtmlTerm"/>
+                <argument name="term" value="activeTextTerm"/>
+                <field key="storeView">All Store Views</field>
+                <field key="name">Test name</field>
             </actionGroup>
             <grabTextFrom selector="{{AdminNewTermFormSection.conditionName}}" stepKey="conditionName"/>
             <!-- Save Details-->
             <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveFilledTerm"/>
-            <!-- Enable Check Money Order Method-->
-            <actionGroup ref="CliEnableCheckMoneyOrderPaymentMethodActionGroup" stepKey="enableCheckMoneyOrderPaymentMethod"/>
             <!--Enable Cash On Delivery Method -->
             <magentoCLI command="config:set {{CashOnDeliveryEnableConfigData.path}} {{CashOnDeliveryEnableConfigData.value}}" stepKey="enableCashOnDelivery"/>
         </before>
