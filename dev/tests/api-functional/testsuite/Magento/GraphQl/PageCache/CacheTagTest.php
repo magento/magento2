@@ -95,16 +95,9 @@ QUERY;
 
         // cache-debug header value should be a MISS when category is loaded first time
         $responseMissOnCategoryQuery = $this->graphQlQueryWithResponseHeaders($categoryQuery, $categoryQueryVariables);
-        print_r("Debug value Miss CacheTest testCacheIsUsedOnSecondRequest\n");
-        $json_response = json_encode($responseMissOnCategoryQuery, JSON_PRETTY_PRINT);
-        print_r($json_response);
-        print_r("\n end \n");
-        print_r("Debug value End Miss of testCacheIsUsedOnSecondRequest\n");
         $cacheId = $responseMissOnCategoryQuery['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        print_r("\n CacheId start \n");
-        print_r($cacheId ."\n");
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheMissAndReturnResponse($categoryQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheMissAndReturnResponse($categoryQuery, [$categoryQueryVariables, CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         // Cache-debug header should be a MISS for product 1 on first request
         $responseFirstProduct = $this->graphQlQueryWithResponseHeaders($product1Query);
@@ -125,14 +118,6 @@ QUERY;
         );
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseMissCategoryAfterUpdate['headers']);
         $cacheId = $responseMissCategoryAfterUpdate['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        print_r("Debug value Miss CacheTest testCacheIsUsedOnSecondRequest\n");
-        $json_response = json_encode($responseMissOnCategoryQuery, JSON_PRETTY_PRINT);
-        print_r($json_response);
-        print_r("\n end \n");
-        print_r("Debug value End Miss of testCacheIsUsedOnSecondRequest\n");
-        print_r("\n CacheId 2 start \n");
-        print_r($cacheId ."\n");
-
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($categoryQuery, [$categoryQueryVariables, CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
