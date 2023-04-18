@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Data\Collection;
 
 use Magento\Framework\App\ResourceConnection;
@@ -19,6 +21,7 @@ use Psr\Log\LoggerInterface as Logger;
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @since 100.0.2
  */
 abstract class AbstractDb extends \Magento\Framework\Data\Collection
@@ -100,8 +103,8 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     protected $extensionAttributesJoinProcessor;
 
     /**
-     * @see https://en.wikipedia.org/wiki/List_of_SQL_reserved_words
      * @var array
+     * @see https://en.wikipedia.org/wiki/List_of_SQL_reserved_words
      */
     private array $sqlReservedWords = [
         'ABORT', 'ABORTSESSION', 'ABS', 'ABSENT', 'ABSOLUTE', 'ACCESS',
@@ -280,6 +283,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         if ($connection !== null) {
             $this->setConnection($connection);
         }
+
         $this->_logger = $logger;
         $this->sqlReservedWords = array_flip($this->sqlReservedWords);
     }
@@ -296,6 +300,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param string $name
      * @param mixed $value
+     *
      * @return $this
      */
     public function addBindParam($name, $value)
@@ -308,6 +313,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Specify collection objects id field name
      *
      * @param string $fieldName
+     *
      * @return $this
      */
     protected function _setIdFieldName($fieldName)
@@ -330,6 +336,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Get collection item identifier
      *
      * @param \Magento\Framework\DataObject $item
+     *
      * @return mixed
      */
     protected function _getItemId(\Magento\Framework\DataObject $item)
@@ -337,6 +344,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         if ($field = $this->getIdFieldName()) {
             return $item->getData($field);
         }
+
         return parent::_getItemId($item);
     }
 
@@ -344,6 +352,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Set database connection adapter
      *
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $conn
+     *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -386,6 +395,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
             $sql = $this->getSelectCountSql();
             $this->_totalRecords = $this->_totalRecords ?? $this->getConnection()->fetchOne($sql, $this->_bindParams);
         }
+
         return (int)$this->_totalRecords;
     }
 
@@ -412,30 +422,33 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
 
         $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
         $group = $this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP);
-        $countSelect->columns(new \Zend_Db_Expr(("COUNT(DISTINCT ".implode(", ", $group).")")));
+        $countSelect->columns(new \Zend_Db_Expr(("COUNT(DISTINCT " . implode(", ", $group) . ")")));
         return $countSelect;
     }
 
     /**
      * Get sql select string or object
      *
-     * @param   bool $stringMode
-     * @return  string|\Magento\Framework\DB\Select
+     * @param bool $stringMode
+     *
+     * @return string|\Magento\Framework\DB\Select
      */
     public function getSelectSql($stringMode = false)
     {
         if ($stringMode) {
             return $this->_select->__toString();
         }
+
         return $this->_select;
     }
 
     /**
      * Add select order
      *
-     * @param   string $field
-     * @param   string $direction
-     * @return  $this
+     * @param string $field
+     * @param string $direction
+     *
+     * @return $this
      */
     public function setOrder($field, $direction = self::SORT_ORDER_DESC)
     {
@@ -447,6 +460,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param string $field
      * @param string $direction
+     *
      * @return $this
      */
     public function addOrder($field, $direction = self::SORT_ORDER_DESC)
@@ -459,6 +473,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param string $field
      * @param string $direction
+     *
      * @return $this
      */
     public function unshiftOrder($field, $direction = self::SORT_ORDER_DESC)
@@ -472,6 +487,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param string $field
      * @param string $direction
      * @param bool $unshift
+     *
      * @return $this
      */
     private function _setOrder($field, $direction, $unshift = false)
@@ -487,10 +503,12 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
             foreach ($this->_orders as $key => $dir) {
                 $orders[$key] = $dir;
             }
+
             $this->_orders = $orders;
         } else {
             $this->_orders[$field] = $direction;
         }
+
         return $this;
     }
 
@@ -526,6 +544,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
                     $this->_select->where($condition);
             }
         }
+
         $this->_isFiltersRendered = true;
         return $this;
     }
@@ -548,6 +567,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param string|array $field
      * @param null|string|array $condition
+     *
      * @return $this
      */
     public function addFieldToFilter($field, $condition = null)
@@ -571,9 +591,10 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Build sql where condition part
      *
-     * @param   string|array $field
-     * @param   null|string|array $condition
-     * @return  string
+     * @param string|array $field
+     * @param null|string|array $condition
+     *
+     * @return string
      */
     protected function _translateCondition($field, $condition)
     {
@@ -584,8 +605,9 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Try to get mapped field name for filter to collection
      *
-     * @param   string $field
-     * @return  string
+     * @param string $field
+     *
+     * @return string
      */
     protected function _getMappedField($field)
     {
@@ -643,6 +665,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param string $fieldName
      * @param integer|string|array $condition
+     *
      * @return string
      */
     protected function _getConditionSql($fieldName, $condition)
@@ -654,6 +677,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Return the field name for the condition.
      *
      * @param string $fieldName
+     *
      * @return string
      */
     protected function _getConditionFieldName($fieldName)
@@ -673,8 +697,10 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
                 if (isset($this->sqlReservedWords[strtoupper($field)])) {
                     $field = "`$field`";
                 }
+
                 $this->_select->order(new \Zend_Db_Expr($field . ' ' . $direction));
             }
+
             $this->_isOrdersRendered = true;
         }
 
@@ -698,8 +724,9 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Set select distinct
      *
-     * @param   bool $flag
-     * @return  $this
+     * @param bool $flag
+     *
+     * @return $this
      */
     public function distinct($flag)
     {
@@ -720,9 +747,10 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Load data
      *
-     * @param   bool $printQuery
-     * @param   bool $logQuery
-     * @return  $this
+     * @param bool $printQuery
+     * @param bool $logQuery
+     *
+     * @return $this
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -736,9 +764,10 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Load data with filter in place
      *
-     * @param   bool $printQuery
-     * @param   bool $logQuery
-     * @return  $this
+     * @param bool $printQuery
+     * @param bool $logQuery
+     *
+     * @return $this
      */
     public function loadWithFilter($printQuery = false, $logQuery = false)
     {
@@ -753,11 +782,13 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
                 if ($this->getIdFieldName()) {
                     $item->setIdFieldName($this->getIdFieldName());
                 }
+
                 $item->addData($row);
                 $this->beforeAddLoadedItem($item);
                 $this->addItem($item);
             }
         }
+
         $this->_setIsLoaded();
         $this->_afterLoad();
         return $this;
@@ -767,6 +798,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Let do something before add loaded item in collection
      *
      * @param \Magento\Framework\DataObject $item
+     *
      * @return \Magento\Framework\DataObject
      */
     protected function beforeAddLoadedItem(\Magento\Framework\DataObject $item)
@@ -788,16 +820,19 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
 
             $this->_fetchStmt = $this->getConnection()->query($this->getSelect());
         }
+
         $data = $this->_fetchStmt->fetch();
         if (!empty($data) && is_array($data)) {
             $item = $this->getNewEmptyItem();
             if ($this->getIdFieldName()) {
                 $item->setIdFieldName($this->getIdFieldName());
             }
+
             $item->setData($data);
 
             return $item;
         }
+
         return false;
     }
 
@@ -807,6 +842,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param string|null $valueField
      * @param string $labelField
      * @param array $additional
+     *
      * @return array
      */
     protected function _toOptionArray($valueField = null, $labelField = 'name', $additional = [])
@@ -814,21 +850,24 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         if ($valueField === null) {
             $valueField = $this->getIdFieldName();
         }
+
         return parent::_toOptionArray($valueField, $labelField, $additional);
     }
 
     /**
      * Overridden to use _idFieldName by default.
      *
-     * @param   string $valueField
-     * @param   string $labelField
-     * @return  array
+     * @param string $valueField
+     * @param string $labelField
+     *
+     * @return array
      */
     protected function _toOptionHash($valueField = null, $labelField = 'name')
     {
         if ($valueField === null) {
             $valueField = $this->getIdFieldName();
         }
+
         return parent::_toOptionHash($valueField, $labelField);
     }
 
@@ -845,6 +884,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
             $this->_data = $this->_fetchAll($select);
             $this->_afterLoadData();
         }
+
         return $this->_data;
     }
 
@@ -884,6 +924,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param bool $printQuery
      * @param bool $logQuery
+     *
      * @return $this
      */
     public function loadData($printQuery = false, $logQuery = false)
@@ -894,10 +935,11 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Print and/or log query
      *
-     * @param   bool $printQuery
-     * @param   bool $logQuery
-     * @param   string $sql
-     * @return  $this
+     * @param bool $printQuery
+     * @param bool $logQuery
+     * @param string $sql
+     *
+     * @return $this
      */
     public function printLogQuery($printQuery = false, $logQuery = false, $sql = null)
     {
@@ -909,6 +951,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         if ($logQuery || $this->getFlag('log_query')) {
             $this->_logQuery($sql);
         }
+
         return $this;
     }
 
@@ -916,6 +959,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Log query
      *
      * @param string $sql
+     *
      * @return void
      */
     protected function _logQuery($sql)
@@ -943,6 +987,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Fetch collection data
      *
      * @param Select $select
+     *
      * @return array
      */
     protected function _fetchAll(Select $select)
@@ -956,6 +1001,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
                 );
             }
         }
+
         return $data;
     }
 
@@ -964,7 +1010,8 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param string $filter
      * @param string $alias
-     * @param string $group default 'fields'
+     * @param string $group  Default: 'fields'.
+     *
      * @return $this
      */
     public function addFilterToMap($filter, $alias, $group = 'fields')
@@ -974,6 +1021,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         } elseif (empty($this->_map[$group])) {
             $this->_map[$group] = [];
         }
+
         $this->_map[$group][$filter] = $alias;
 
         return $this;
@@ -1008,6 +1056,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param JoinDataInterface $join
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
+     *
      * @return $this
      */
     public function joinExtensionAttribute(
@@ -1025,12 +1074,14 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
                 []
             );
         }
+
         $columns = [];
         foreach ($join->getSelectFields() as $selectField) {
             $fieldWIthDbPrefix = $selectField[JoinDataInterface::SELECT_FIELD_WITH_DB_PREFIX];
             $columns[$selectField[JoinDataInterface::SELECT_FIELD_INTERNAL_ALIAS]] = $fieldWIthDbPrefix;
             $this->addFilterToMap($selectField[JoinDataInterface::SELECT_FIELD_EXTERNAL_ALIAS], $fieldWIthDbPrefix);
         }
+
         $this->getSelect()->columns($columns);
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         return $this;
@@ -1059,6 +1110,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
                 return $tableAlias;
             }
         }
+
         throw new \LogicException("Main table cannot be identified.");
     }
 
