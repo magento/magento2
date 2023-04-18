@@ -66,11 +66,7 @@ return [
         '</route></router></config>',
         [
             "Element 'router', attribute 'id': [facet 'pattern'] The value '' is not accepted by the " .
-            "pattern '[A-Za-z0-9\-_]{3,}'.\nLine: 1\n",
-            "Element 'router', attribute 'id': '' is not a valid value of the atomic type 'routerIdType'.\nLine: 1\n",
-            "Element 'router', attribute 'id': " .
-            "Warning: No precomputed value available, the value was either invalid or " .
-            "something strange happend.\nLine: 1\n"
+            "pattern '[A-Za-z0-9\-_]{3,}'.\nLine: 1\n"
         ],
     ],
     'router_id_value_regexp1' => [
@@ -78,11 +74,7 @@ return [
         '</route></router></config>',
         [
             "Element 'router', attribute 'id': [facet 'pattern'] The value 'as' is not accepted by the " .
-            "pattern '[A-Za-z0-9\-_]{3,}'.\nLine: 1\n",
-            "Element 'router', attribute 'id': 'as' is not a valid value of the atomic type 'routerIdType'.\nLine: 1\n",
-            "Element 'router', attribute 'id': " .
-            "Warning: No precomputed value available, the value was either invalid or " .
-            "something strange happend.\nLine: 1\n"
+            "pattern '[A-Za-z0-9\-_]{3,}'.\nLine: 1\n"
         ],
     ],
     'router_id_value_regexp2' => [
@@ -90,12 +82,7 @@ return [
         '</route></router></config>',
         [
             "Element 'router', attribute 'id': [facet 'pattern'] The value '##%#' is not accepted by the " .
-            "pattern '[A-Za-z0-9\-_]{3,}'.\nLine: 1\n",
-            "Element 'router', attribute 'id': '##%#' is not a valid value of the atomic type" .
-            " 'routerIdType'.\nLine: 1\n",
-            "Element 'router', attribute 'id': " .
-            "Warning: No precomputed value available, the value was either invalid or " .
-            "something strange happend.\nLine: 1\n"
+            "pattern '[A-Za-z0-9\-_]{3,}'.\nLine: 1\n"
         ],
     ],
     'router_route_value_regexp1' => [
@@ -103,10 +90,7 @@ return [
         '</route></router></config>',
         [
             "Element 'route', attribute 'id': [facet 'pattern'] The value 'dc' is not accepted by the " .
-            "pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'route', attribute 'id': 'dc' is not a valid value of the atomic type 'routeIdType'.\nLine: 1\n",
-            "Element 'route', attribute 'id': Warning: No precomputed value available, the value was either " .
-            "invalid or something strange happend.\nLine: 1\n"
+            "pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n"
         ],
     ],
     'router_route_empty_before_attribute_value' => [
@@ -114,9 +98,7 @@ return [
         'before="" /></route></router></config>',
         [
             "Element 'module', attribute 'before': [facet 'pattern'] The value '' is not accepted by the " .
-            "pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'module', attribute 'before': '' is not a valid value of the atomic type" .
-            " 'beforeAfterType'.\nLine: 1\n"
+            "pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n"
         ],
     ],
     'router_route_before_attribute_value_regexp1' => [
@@ -124,9 +106,7 @@ return [
         'name="Some_ModuleName" before="!!!!" /></route></router></config>',
         [
             "Element 'module', attribute 'before': [facet 'pattern'] The value '!!!!' is not accepted by the " .
-            "pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'module', attribute 'before': '!!!!' is not a valid value of the atomic type" .
-            " 'beforeAfterType'.\nLine: 1\n"
+            "pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n"
         ],
     ],
     'router_route_before_attribute_value_regexp2' => [
@@ -134,9 +114,7 @@ return [
         '<module name="Some_ModuleName" before="ab" /></route></router></config>',
         [
             "Element 'module', attribute 'before': [facet 'pattern'] The value 'ab' is not accepted by " .
-            "the pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'module', attribute 'before': 'ab' is not a valid value of the atomic type" .
-            " 'beforeAfterType'.\nLine: 1\n"
+            "the pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n"
         ],
     ],
     'route_module_without_required_name_atrribute' => [
@@ -148,11 +126,7 @@ return [
         '</route></router></config>',
         [
             "Element 'module', attribute 'name': [facet 'pattern'] The value 'ss' is not accepted by the " .
-            "pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'module', attribute 'name': 'ss' is not a valid value of the atomic type" .
-            " 'moduleNameType'.\nLine: 1\n",
-            "Element 'module', attribute 'name': Warning: No precomputed value available, the value was either " .
-            "invalid or something strange happend.\nLine: 1\n"
+            "pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n"
         ],
     ],
     'route_module_name_attribute_value_regexp2' => [
@@ -160,11 +134,7 @@ return [
         '</route></router></config>',
         [
             "Element 'module', attribute 'name': [facet 'pattern'] The value '#$%^' is not accepted by " .
-            "the pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'module', attribute 'name': '#$%^' is not a valid value of the atomic type" .
-            " 'moduleNameType'.\nLine: 1\n",
-            "Element 'module', attribute 'name': Warning: No precomputed value available, the value was either " .
-            "invalid or something strange happend.\nLine: 1\n"
+            "the pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n"
         ],
     ],
     'route_module_before_attribute_empty_value' => [
@@ -172,9 +142,7 @@ return [
         '<module name="Some_ModuleName" before="" /></route></router></config>',
         [
             "Element 'module', attribute 'before': [facet 'pattern'] The value '' is not accepted by " .
-            "the pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'module', attribute 'before': '' is not a valid value of the atomic type" .
-            " 'beforeAfterType'.\nLine: 1\n"
+            "the pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n"
         ],
     ],
     'route_module_before_attribute_value_regexp1' => [
@@ -182,9 +150,7 @@ return [
         '<module name="Some_ModuleName" before="qq" /></route></router></config>',
         [
             "Element 'module', attribute 'before': [facet 'pattern'] The value 'qq' is not accepted by the " .
-            "pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'module', attribute 'before': 'qq' is not a valid value of the atomic type" .
-            " 'beforeAfterType'.\nLine: 1\n"
+            "pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n"
         ],
     ],
     'route_module_before_attribute_value_regexp2' => [
@@ -192,9 +158,7 @@ return [
         '<module name="Some_ModuleName" before="!!!!" /></route></router></config>',
         [
             "Element 'module', attribute 'before': [facet 'pattern'] The value '!!!!' is not accepted by the " .
-            "pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'module', attribute 'before': '!!!!' is not a valid value of the atomic type" .
-            " 'beforeAfterType'.\nLine: 1\n"
+            "pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n"
         ],
     ],
     'route_module_after_attribute_empty_value' => [
@@ -202,9 +166,7 @@ return [
         '</route></router></config>',
         [
             "Element 'module', attribute 'after': [facet 'pattern'] The value '' is not accepted " .
-            "by the pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'module', attribute 'after': '' is not a valid value of the atomic type" .
-            " 'beforeAfterType'.\nLine: 1\n"
+            "by the pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n"
         ],
     ],
     'route_module_after_attribute_value_regexp1' => [
@@ -213,9 +175,7 @@ return [
         '</route></router></config>',
         [
             "Element 'module', attribute 'after': [facet 'pattern'] The value 'sd' is not accepted by" .
-            " the pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'module', attribute 'after': 'sd' is not a valid value of the atomic type" .
-            " 'beforeAfterType'.\nLine: 1\n"
+            " the pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n"
         ],
     ],
     'route_module_after_attribute_value_regexp2' => [
@@ -223,9 +183,7 @@ return [
         '<module name="Some_ModuleName" after="!!!!" /></route></router></config>',
         [
             "Element 'module', attribute 'after': [facet 'pattern'] The value '!!!!' is not accepted by the " .
-            "pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'module', attribute 'after': '!!!!' is not a valid value of the atomic type" .
-            " 'beforeAfterType'.\nLine: 1\n"
+            "pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n"
         ],
     ]
 ];

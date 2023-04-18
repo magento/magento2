@@ -51,7 +51,7 @@
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="uncheckMiniQtyCheckBox"/>
         <actionGroup ref="AdminSetMinAllowedQtyForProductActionGroup" stepKey="fillMiniAllowedQty">
-            <argument name="qty" value="1"/>
+            <argument name="qty" value="4"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="uncheckMaxQtyCheckBox"/>
         <actionGroup ref="AdminSetMaxAllowedQtyForProductActionGroup" stepKey="fillMaxAllowedQty">
@@ -107,16 +107,20 @@
         <!--Add Product to the cart-->
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductQuantity"/>
         <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productQty" value="4"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addAdditionalProductToCart">
             <argument name="productQty" value="1"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSuccessSaveMessage"/>
-        <seeElement selector="{{StorefrontMinicartSection.quantity(1)}}" stepKey="seeAddedProductQuantityInCart"/>
+        <seeElement selector="{{StorefrontMinicartSection.quantity(6)}}" stepKey="seeAddedProductQuantityInCart"/>
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <executeJS function="return {{SimpleProduct.price}} * 5" stepKey="expectedCartSubtotal"/>
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="seeProductNameInMiniCart">
             <argument name="productName" value="{{SimpleProduct.name}}"/>
             <argument name="productPrice" value="{{SimpleProduct.price}}"/>
-            <argument name="cartSubtotal" value="{{SimpleProduct.price}}" />
-            <argument name="qty" value="1"/>
+            <argument name="cartSubtotal" value="{$expectedCartSubtotal}" />
+            <argument name="qty" value="5"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeProductPriceInMiniCart"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeCheckOutButtonInMiniCart"/>

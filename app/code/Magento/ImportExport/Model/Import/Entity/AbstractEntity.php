@@ -9,10 +9,12 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import as ImportExport;
+use Magento\ImportExport\Model\Import\AbstractSource;
+use Magento\ImportExport\Model\Import\EntityInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\ResourceModel\Import\Data as DataSourceModel;
 
 /**
  * Import entity abstract model
@@ -24,7 +26,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-abstract class AbstractEntity
+abstract class AbstractEntity implements EntityInterface
 {
     /**
      * Database constants
@@ -101,7 +103,7 @@ abstract class AbstractEntity
     /**
      * DB data source model.
      *
-     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data
+     * @var DataSourceModel
      */
     protected $_dataSourceModel;
 
@@ -258,6 +260,13 @@ abstract class AbstractEntity
     private $serializer;
 
     /**
+     * Ids of saved data in DB
+     *
+     * @var array
+     */
+    private array $ids = [];
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -387,11 +396,11 @@ abstract class AbstractEntity
         $skuSet = [];
 
         $source->rewind();
-        $this->_dataSourceModel->cleanBunches();
-
+        $this->_dataSourceModel->cleanProcessedBunches();
         while ($source->valid() || $bunchRows) {
             if ($startNewBunch || !$source->valid()) {
-                $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
+                $this->ids[] =
+                    $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
 
                 $bunchRows = $nextRowBackup;
                 $currentDataSize = strlen($this->getSerializer()->serialize($bunchRows));
@@ -442,7 +451,6 @@ abstract class AbstractEntity
      * Workaround. Only way to implement dependency and not to break inherited child classes
      *
      * @return Json
-     * @deprecated 100.2.0
      */
     private function getSerializer()
     {
@@ -515,7 +523,7 @@ abstract class AbstractEntity
             // merge global entity index value attributes
             $indexValAttrs = array_merge($indexValAttrs, $this->_indexValueAttributes);
 
-            // should attribute has index (option value) instead of a label?
+            // should attribute have index (option value) instead of a label?
             $index = in_array($attribute->getAttributeCode(), $indexValAttrs) ? 'value' : 'label';
 
             // only default (admin) store values used
@@ -888,5 +896,36 @@ abstract class AbstractEntity
                 ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
+    }
+
+    /**
+     * Retrieve Ids of Validated Rows
+     *
+     * @return array
+     */
+    public function getIds() : array
+    {
+        return $this->ids;
+    }
+
+    /**
+     * Set Ids of Validated Rows
+     *
+     * @param array $ids
+     * @return void
+     */
+    public function setIds(array $ids)
+    {
+        $this->ids = $ids;
+    }
+
+    /**
+     * Gets the currently used DataSourceModel
+     *
+     * @return DataSourceModel
+     */
+    public function getDataSourceModel() : DataSourceModel
+    {
+        return $this->_dataSourceModel;
     }
 }

@@ -22,7 +22,7 @@ class Edit extends \Magento\Backend\Block\Template
     protected $_template = 'Magento_Newsletter::queue/edit.phtml';
 
     /**
-     * Core registry
+     * Magento Framework Core Registry
      *
      * @var \Magento\Framework\Registry
      */
@@ -43,6 +43,8 @@ class Edit extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Queue Edit constructor
+     *
      * @return void
      */
     protected function _construct()
@@ -135,24 +137,25 @@ class Edit extends \Magento\Backend\Block\Template
                 ]
             ]
         );
-
-        $this->getToolbar()->addChild(
-            'save_and_resume',
-            \Magento\Backend\Block\Widget\Button::class,
-            [
-                'label' => __('Save and Resume'),
-                'class' => 'save',
-                'data_attribute' => [
-                    'mage-init' => [
-                        'button' => [
-                            'event' => 'save',
-                            'target' => '#queue_edit_form',
-                            'eventData' => ['action' => ['args' => ['_resume' => 1]]],
+        if ($this->getCanResume()) {
+            $this->getToolbar()->addChild(
+                'save_and_resume',
+                \Magento\Backend\Block\Widget\Button::class,
+                [
+                    'label' => __('Save and Resume'),
+                    'class' => 'save',
+                    'data_attribute' => [
+                        'mage-init' => [
+                            'button' => [
+                                'event' => 'save',
+                                'target' => '#queue_edit_form',
+                                'eventData' => ['action' => ['args' => ['_resume' => 1]]],
+                            ],
                         ],
-                    ],
+                    ]
                 ]
-            ]
-        );
+            );
+        }
 
         return parent::_prepareLayout();
     }

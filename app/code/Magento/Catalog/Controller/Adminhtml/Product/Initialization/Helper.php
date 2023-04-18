@@ -25,7 +25,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Store\Model\StoreManagerInterface;
-use Zend_Filter_Input;
+use Magento\Framework\Filter\FilterInput;
 
 /**
  * Product helper
@@ -60,6 +60,7 @@ class Helper
     /**
      * @var Date
      * @deprecated 101.0.0
+     * @see we don't recommend this approach anymore
      */
     protected $dateFilter;
 
@@ -250,7 +251,7 @@ class Helper
             }
         }
 
-        $inputFilter = new Zend_Filter_Input($dateFieldFilters, [], $productData);
+        $inputFilter = new FilterInput($dateFieldFilters, [], $productData);
         $productData = $inputFilter->getUnescaped();
 
         if (isset($productData['options'])) {
@@ -435,6 +436,7 @@ class Helper
      *
      * @return LinkResolver
      * @deprecated 102.0.0
+     * @see we don't recommend this approach anymore
      */
     private function getLinkResolver()
     {

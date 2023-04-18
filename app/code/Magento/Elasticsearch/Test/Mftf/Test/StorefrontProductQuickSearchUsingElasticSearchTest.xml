@@ -19,7 +19,7 @@
             <useCaseId value="MC-25138"/>
             <group value="catalog"/>
             <group value="elasticsearch"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
             <group value="catalog_search"/>
             <group value="pr_exclude"/>
         </annotations>

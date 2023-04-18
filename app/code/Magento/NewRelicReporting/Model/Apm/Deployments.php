@@ -5,7 +5,12 @@
  */
 namespace Magento\NewRelicReporting\Model\Apm;
 
-use \Magento\Framework\HTTP\ZendClient;
+use Laminas\Http\Exception\RuntimeException;
+use Laminas\Http\Request;
+use Magento\Framework\HTTP\LaminasClient;
+use Magento\Framework\HTTP\LaminasClientFactory;
+use Magento\NewRelicReporting\Model\Config;
+use Psr\Log\LoggerInterface;
 
 /**
  * Performs the request to make the deployment
@@ -18,31 +23,31 @@ class Deployments
     private const API_URL = 'https://api.newrelic.com/v2/applications/%s/deployments.json';
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Config
+     * @var Config
      */
     protected $config;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClientFactory $clientFactory
+     * @var LaminasClientFactory $clientFactory
      */
     protected $clientFactory;
 
     /**
      * Constructor
      *
-     * @param \Magento\NewRelicReporting\Model\Config $config
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\HTTP\ZendClientFactory $clientFactory
+     * @param Config $config
+     * @param LoggerInterface $logger
+     * @param LaminasClientFactory $clientFactory
      */
     public function __construct(
-        \Magento\NewRelicReporting\Model\Config $config,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\HTTP\ZendClientFactory $clientFactory
+        Config $config,
+        LoggerInterface $logger,
+        LaminasClientFactory $clientFactory
     ) {
         $this->config = $config;
         $this->logger = $logger;
@@ -69,11 +74,10 @@ class Deployments
 
         $apiUrl = sprintf($apiUrl, $this->config->getNewRelicAppId());
 
-        /** @var \Magento\Framework\HTTP\ZendClient $client */
+        /** @var LaminasClient $client */
         $client = $this->clientFactory->create();
         $client->setUri($apiUrl);
-        $client->setMethod(ZendClient::POST);
-
+        $client->setMethod(Request::METHOD_POST);
         $client->setHeaders(
             [
                 'Api-Key' => $this->config->getNewRelicApiKey(),
@@ -97,13 +101,13 @@ class Deployments
         $client->setParameterPost($params);
 
         try {
-            $response = $client->request();
-        } catch (\Zend_Http_Client_Exception $e) {
+            $response = $client->send();
+        } catch (RuntimeException $e) {
             $this->logger->critical($e);
             return false;
         }
 
-        if ($response->getStatus() < 200 || $response->getStatus() > 210) {
+        if ($response->getStatusCode() < 200 || $response->getStatusCode() > 210) {
             $this->logger->warning('Deployment marker request did not send a 200 status code.');
             return false;
         }

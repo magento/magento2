@@ -114,7 +114,7 @@ class RuleTest extends TestCase
             );
 
         $aclMock = $this->createMock(Acl::class);
-        $aclMock->method('has')->willReturn(true);
+        $aclMock->method('hasResource')->willReturn(true);
         $aclMock
             ->method('allow')
             ->withConsecutive(

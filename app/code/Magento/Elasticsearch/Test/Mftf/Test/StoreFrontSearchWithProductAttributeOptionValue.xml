@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontSearchWithProductAttributeOptionValue">
+        <annotations>
+            <stories value="Store front search product when display out of stock products to yes"/>
+            <title value="Catalog shown entire catalog items count if show_of_stock_option enabled"/>
+            <description value="Catalog shown entire catalog items count if show_of_stock_option enabled"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-6395"/>
+            <group value="catalog_search"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set cataloginventory/options/show_out_of_stock 1" stepKey="setOutOfStockToYes"/>
+            <magentoCLI command="cache:clean config" stepKey="cacheClean"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct01">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <createData entity="SimpleProduct" stepKey="createProduct02">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <createData entity="AssignProductToCategory" stepKey="assignTestCategoryToTestProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <requiredEntity createDataKey="createProduct01"/>
+                <requiredEntity createDataKey="createProduct02"/>
+            </createData>
+        </before>
+        <after>
+            <magentoCLI command="config:set cataloginventory/options/show_out_of_stock 0" stepKey="setOutOfStockToNo"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct01" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct02" stepKey="deleteProduct2"/>
+        </after>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="goToStorefrontCreatedCategoryPage"/>
+        <click selector="{{StorefrontCategoryMainSection.productAttributeName('attribute')}}" stepKey="selectProductAttribute"/>
+        <wait time="2" stepKey="waitForLoad"/>
+        <click selector="{{StorefrontCategoryMainSection.productAttributeOptionValue('option')}}" stepKey="selectProductAttributeOptionValue"/>
+    </test>
+</tests>

@@ -80,6 +80,7 @@
         <!--"Drop-down" type option-->
         <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$createProduct1.name$$ +$$$createProduct1.price$$.00" stepKey="selectOption0Product0"/>
         <seeOptionIsSelected selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$createProduct1.name$$ +$$$createProduct1.price$$.00" stepKey="checkOption0Product0"/>
+        <fillField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="-" stepKey="emptyDropdownQuantity"/>
         <fillField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="-1" stepKey="fillQuantity00"/>
         <seeInField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="-1" stepKey="checkQuantity00"/>
         <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="clickAddToCartDropDown"/>
@@ -88,6 +89,7 @@
         <!--"Radio Buttons" type option-->
         <checkOption selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Option Two', '1')}}" stepKey="selectOption1Product0"/>
         <seeCheckboxIsChecked selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Option Two', '1')}}" stepKey="checkOption1Product0"/>
+        <fillField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="-" stepKey="emptyRadioQuantity"/>
         <fillField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="-1" stepKey="fillQuantity10"/>
         <seeInField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="-1" stepKey="checkQuantity10"/>
         <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="clickAddToCartRadioButton"/>

@@ -65,4 +65,14 @@
         <data key="quantity">10</data>
         <data key="weight">1</data>
     </entity>
+    
+    <entity name="colorConfigurableProductAttribute3" type="product_attribute">
+        <data key="name" unique="suffix">Black</data>
+        <data key="sku" unique="suffix">sku-black</data>
+        <data key="type_id">simple</data>
+        <data key="price">2</data>
+        <data key="visibility">1</data>
+        <data key="quantity">10</data>
+        <data key="weight">1</data>
+    </entity>
 </entities>

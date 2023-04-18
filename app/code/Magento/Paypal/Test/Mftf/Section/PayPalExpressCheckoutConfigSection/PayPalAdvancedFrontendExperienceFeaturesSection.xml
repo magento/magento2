@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="PayPalAdvancedFrontendExperienceFeaturesSection">
+        <element name="disableFundingOptionsMultiselect" type="multiselect" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec_settings_ec_advanced_express_checkout_frontend_features_disable_funding_options"  parameterized="true"/>
+    </section>
+</sections>

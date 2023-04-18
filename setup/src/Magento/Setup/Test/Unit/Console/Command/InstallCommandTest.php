@@ -19,10 +19,10 @@ use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Model\ConfigModel;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
+use Magento\Setup\Model\SearchConfigOptionsList;
 use Magento\Setup\Model\StoreConfigurationDataMapper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Setup\Model\SearchConfigOptionsList;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -148,6 +148,9 @@ class InstallCommandTest extends TestCase
         $this->definitionMock->expects($this->any())
             ->method('getOptions')
             ->willReturn([]);
+        $this->definitionMock->expects($this->any())
+            ->method('getArguments')
+            ->willReturn([]);
         $this->applicationMock->expects($this->any())
             ->method('find')
             ->with(ConfigImportCommand::COMMAND_NAME)
@@ -186,7 +189,8 @@ class InstallCommandTest extends TestCase
             ->willReturn($this->installer);
         $this->installer->expects($this->once())->method('install');
         $this->configImportMock->expects($this->once())
-            ->method('run');
+            ->method('run')
+            ->willReturn(Cli::RETURN_SUCCESS);
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($this->input);
@@ -207,6 +211,9 @@ class InstallCommandTest extends TestCase
             ->with('question')
             ->willReturn($this->questionHelperMock);
         $this->command->setHelperSet($this->helperSetMock);
+        $this->configImportMock->expects($this->once())
+            ->method('run')
+            ->willReturn(Cli::RETURN_SUCCESS);
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['--' . InstallCommand::INPUT_KEY_INTERACTIVE_SETUP => true]);
@@ -327,6 +334,9 @@ class InstallCommandTest extends TestCase
             ->willReturn($this->installer);
         $this->installer->expects($this->once())->method('install');
         $this->input['--' . InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX] = $prefixValue;
+        $this->configImportMock->expects($this->once())
+            ->method('run')
+            ->willReturn(Cli::RETURN_SUCCESS);
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($this->input);

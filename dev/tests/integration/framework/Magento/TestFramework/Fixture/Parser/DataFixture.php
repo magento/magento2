@@ -35,7 +35,6 @@ class DataFixture implements ParserInterface
      */
     public function parse(TestCase $test, string $scope): array
     {
-        $fixtures = [];
         try {
             $reflection = $scope === ParserInterface::SCOPE_CLASS
                 ? new \ReflectionClass($test)
@@ -50,14 +49,22 @@ class DataFixture implements ParserInterface
             );
         }
 
+        $fixtures = [];
         $attributes = $reflection->getAttributes($this->attributeClass);
         foreach ($attributes as $attribute) {
             $args = $attribute->getArguments();
-            $fixtures[] = [
-                'name' => $args['as'] ?? $args[2] ?? null,
-                'factory' => $args[0],
-                'data' => $args[1] ?? [],
-            ];
+            $alias = $args['as'] ?? $args[2] ?? null;
+            $count = $args['count'] ?? $args[4] ?? 1;
+            $id = $count > 1 ? 1 : '';
+            do {
+                $fixtures[] = [
+                    'name' => $alias !== null ? ($alias.($id++)) : null,
+                    'factory' => $args[0],
+                    'data' => $args[1] ?? [],
+                    'scope' => $args['scope'] ?? $args[3] ?? null,
+                ];
+            } while (--$count > 0);
+
         }
         return $fixtures;
     }

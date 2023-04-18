@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AddNewProductAttributeInProductPageTest">
+        <annotations>
+            <stories value="Create Attribute from product"/>
+            <title value="Create  Attribute from Product Page"/>
+            <description value="Login as admin and create new product attribute from product page with Text Field"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-26654"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+
+            <!--Create Category-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+
+        </before>
+        <after>
+            <!-- delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- delete created product attribute -->
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteCreatedAttribute">
+                <argument name="ProductAttribute" value="newProductAttribute"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="navigateToCreateProductPage">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="SetCategoryByNameActionGroup" stepKey="addCategoryToProduct">
+            <argument name="categoryName" value="$createCategory.name$"/>
+        </actionGroup>
+
+        <!-- Create New Product Attribute -->
+        <actionGroup ref="AdminStartCreateProductAttributeOnProductPageActionGroup" stepKey="createDropdownAttribute">
+            <argument name="attributeCode" value="{{newProductAttribute.attribute_code}}" />
+            <argument name="attributeLabel" value="{{ProductAttributeFrontendLabel.label}}" />
+            <argument name="inputType" value="Dropdown" />
+        </actionGroup>
+
+
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.isRequired}}" stepKey="enableIsRequiredOption"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.addValue}}" stepKey="waitForAddValueButtonToVisible"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.addValue}}" stepKey="clickOnAddValueButton"/>
+
+        <!-- Adding the values in the grid -->
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.defaultStoreView('0')}}" stepKey="waitForDefaultStoreViewToVisible"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.defaultStoreView('0')}}" userInput="value 1" stepKey="fillDefaultStoreView"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.adminOption('0')}}" userInput="value 1 admin" stepKey="fillAdminField"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.defaultRadioButton('1')}}" stepKey="selectRadioButton"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.addValue}}" stepKey="waitForAddValueButtonToVisible2"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.addValue}}" stepKey="clickOnAddValueButton2"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.defaultStoreView('1')}}" stepKey="waitForDefaultStoreViewToVisible2"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.defaultStoreView('1')}}" userInput="value 2" stepKey="fillDefaultStoreView2"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.adminOption('1')}}" userInput="value 2 admin" stepKey="fillAdminField2"/>
+
+        <!-- Adding the values to the storefront properties -->
+        <scrollTo selector="{{AdminCreateNewProductAttributeSection.storefrontProperties}}"  stepKey="scrollToStorefrontProperties"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.storefrontProperties}}" stepKey="clickOnStorefrontProperties"/>
+        <waitForPageLoad stepKey="waitForStoreFrontToLoad"/>
+        <scrollTo stepKey="scroll1" selector="{{AdminCreateNewProductAttributeSection.sortProductListing}}" x="0" y="-80"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.inSearch}}" stepKey="enableInSearchOption"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.advancedSearch}}" stepKey="enableAdvancedSearch"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.isComparable}}" stepKey="enableIsUComparableption"/>
+
+        <!-- Save created Attribute -->
+        <click selector="{{AdminCreateNewProductAttributeSection.saveAttribute}}" stepKey="clickOnSaveAttribute"/>
+        <waitForPageLoad stepKey="waitForAttributeToSave"/>
+
+        <!-- Verify product attribute added in product form -->
+        <scrollTo selector="{{AdminProductFormSection.contentTab}}" stepKey="scrollToContentTab"/>
+        <waitForElementVisible selector="{{AdminProductFormSection.attributeTab}}" stepKey="waitForAttributeToVisible"/>
+        <click selector="{{AdminProductFormSection.attributeTab}}" stepKey="clickOnAttribute"/>
+        <seeElement selector="{{AdminProductFormSection.attributeRequiredLabelText(ProductAttributeFrontendLabel.label)}}" stepKey="seeAttributeLabelInProductForm"/>
+        <seeElement selector="{{AdminProductFormSection.newAddedAttributeValue('value 1 admin')}}" stepKey="seeAttributeValue"/>
+
+        <!-- Save a Product -->
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="saveTheProduct"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+
+        <!--Click on Go Back button -->
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackToGridSimple"/>
+
+        <!-- Select created attribute as an column -->
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdown"/>
+        <actionGroup ref="CheckAdminProductGridColumnOptionActionGroup" stepKey="checkCreatedAttributeColumn">
+            <argument name="optionName" value="{{ProductAttributeFrontendLabel.label}}"/>
+        </actionGroup>
+        <wait stepKey="waitPostClickingCheck" time="5"/>
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdown"/>
+
+        <!-- Asserting the value of the created column -->
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeCreatedAttributeColumn">
+            <argument name="row" value="1"/>
+            <argument name="column" value="{{ProductAttributeFrontendLabel.label}}"/>
+            <argument name="value" value="value 1 admin"/>
+        </actionGroup>
+
+        <!--Verify Product Attribute is present in Category Store Front Page -->
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForProductFrontPageToLoad"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="clickOnCategory"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <click selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="openSearchedProduct"/>
+        <waitForPageLoad  stepKey="waitForProductToLoad1"/>
+        <scrollTo selector="{{StorefrontProductMoreInformationSection.moreInformationTextArea}}" stepKey="scrollToMoreInformation"/>
+        <see selector="{{StorefrontProductMoreInformationSection.attributeLabel}}"  userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeAttributeLabel"/>
+        <see selector="{{StorefrontProductMoreInformationSection.attributeValue}}"  userInput="value 1" stepKey="seeAttributeValueOnStorefront"/>
+
+        <!-- Return to catgeory page to assert the layered navigation -->
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="clickOnCategoryAgain"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoad2"/>
+        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{SimpleProduct.name}}" stepKey="fillProductName"/>
+        <waitForPageLoad stepKey="waitForSearchButtonEnabled"/>
+        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
+
+        <!-- Assert that attribute values present in layered navigation -->
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertAttributeWithOptionInLayeredNavigation">
+            <argument name="attributeLabel" value="{{ProductAttributeFrontendLabel.label}}"/>
+            <argument name="attributeOptionLabel" value="value 1 1"/>
+        </actionGroup>
+
+        <!-- Click on the attribute -->
+        <click selector="{{StorefrontLayeredNavigationSection.shoppingOptionsExpanded('value 1')}}"  stepKey="clickOnAttributeValue"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.nowShoppingBy}}" stepKey="seeNowShoppingBy"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.actionRemove}}" stepKey="seeX"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.nowShoppingByAttribute(ProductAttributeFrontendLabel.label)}}" stepKey="seeNowShoppingByAttribute"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.nowShoppingByAttributeValue('value 1')}}" stepKey="seeNowShoppingByAttributeValue"/>
+
+    </test>
+</tests>

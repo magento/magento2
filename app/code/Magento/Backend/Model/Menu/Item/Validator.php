@@ -5,10 +5,11 @@
  */
 namespace Magento\Backend\Model\Menu\Item;
 
+use Laminas\Validator\Regex;
+use Magento\Framework\Validator\StringLength;
+use Laminas\Validator\ValidatorChain;
+
 /**
- * Class Validator
- *
- * @package Magento\Backend\Model\Menu\Item
  * @api
  * @since 100.0.2
  */
@@ -31,7 +32,7 @@ class Validator
     /**
      * The list of primitive validators
      *
-     * @var \Zend_Validate[]
+     * @var ValidatorChain[]
      */
     protected $_validators = [];
 
@@ -40,21 +41,21 @@ class Validator
      */
     public function __construct()
     {
-        $idValidator = new \Zend_Validate();
-        $idValidator->addValidator(new \Zend_Validate_StringLength(['min' => 3]));
-        $idValidator->addValidator(new \Zend_Validate_Regex('/^[A-Za-z0-9\/:_]+$/'));
+        $idValidator = new ValidatorChain();
+        $idValidator->addValidator(new StringLength(['min' => 3]));
+        $idValidator->addValidator(new Regex('/^[A-Za-z0-9\/:_]+$/'));
 
-        $resourceValidator = new \Zend_Validate();
-        $resourceValidator->addValidator(new \Zend_Validate_StringLength(['min' => 8]));
+        $resourceValidator = new ValidatorChain();
+        $resourceValidator->addValidator(new StringLength(['min' => 8]));
         $resourceValidator->addValidator(
-            new \Zend_Validate_Regex('/^[A-Z][A-Za-z0-9]+_[A-Z][A-Za-z0-9]+::[A-Za-z_0-9]+$/')
+            new Regex('/^[A-Z][A-Za-z0-9]+_[A-Z][A-Za-z0-9]+::[A-Za-z_0-9]+$/')
         );
 
-        $attributeValidator = new \Zend_Validate();
-        $attributeValidator->addValidator(new \Zend_Validate_StringLength(['min' => 3]));
-        $attributeValidator->addValidator(new \Zend_Validate_Regex('/^[A-Za-z0-9\/_\-]+$/'));
+        $attributeValidator = new ValidatorChain();
+        $attributeValidator->addValidator(new StringLength(['min' => 3]));
+        $attributeValidator->addValidator(new Regex('/^[A-Za-z0-9\/_\-]+$/'));
 
-        $textValidator = new \Zend_Validate_StringLength(['min' => 3, 'max' => 50]);
+        $textValidator = new StringLength(['min' => 3, 'max' => 50]);
 
         $titleValidator = $tooltipValidator = $textValidator;
         $actionValidator = $moduleDepValidator = $configDepValidator = $attributeValidator;
