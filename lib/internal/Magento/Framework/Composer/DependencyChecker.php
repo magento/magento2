@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\BufferedOutput;
 class DependencyChecker
 {
     /**
-     * @var Application
+     * @var ApplicationFactory
      */
     private $applicationFactory;
 
@@ -29,7 +29,7 @@ class DependencyChecker
     /**
      * Constructor
      *
-     * @param Application $applicationFactory
+     * @param ApplicationFactory $applicationFactory
      * @param DirectoryList $directoryList
      */
     public function __construct(ApplicationFactory $applicationFactory, DirectoryList $directoryList)
