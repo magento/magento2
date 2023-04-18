@@ -111,9 +111,9 @@ class PageTest extends GraphQlAbstract
         $page = $this->getPageByTitle('Page with 1column layout');
 
         $query = $this->getQuery($page->getIdentifier());
-        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndPage($response, $page);
+        $cacheIdentityString = $this->getResolverCacheKeyForPage($page);
 
         $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
@@ -154,14 +154,14 @@ class PageTest extends GraphQlAbstract
 
         $page = $this->getPageByTitle('Page with 1column layout');
         $query = $this->getQuery($page->getIdentifier());
-        $response = $this->graphQlQueryWithResponseHeaders(
+        $this->graphQlQueryWithResponseHeaders(
             $query,
             [],
             '',
             $authHeader
         );
 
-        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndPage($response, $page);
+        $cacheIdentityString = $this->getResolverCacheKeyForPage($page);
 
         $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
@@ -197,9 +197,9 @@ class PageTest extends GraphQlAbstract
         $getGraphQlClient->setAccessible(true);
 
         $query = $this->getQuery($page->getIdentifier());
-        $response = $getGraphQlClient->invoke($this)->postWithResponseHeaders($query);
+        $getGraphQlClient->invoke($this)->postWithResponseHeaders($query);
 
-        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndPage($response, $page);
+        $cacheIdentityString = $this->getResolverCacheKeyForPage($page);
 
         $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
@@ -232,10 +232,10 @@ class PageTest extends GraphQlAbstract
 
             // query $page as guest
             $query = $this->getQuery($page->getIdentifier());
-            $response = $this->graphQlQueryWithResponseHeaders($query);
+            $this->graphQlQueryWithResponseHeaders($query);
 
             $this->resetUserInfoContext();
-            $resolverCacheKeyForGuestQuery = $this->getResolverCacheKeyFromResponseAndPage($response, $page);
+            $resolverCacheKeyForGuestQuery = $this->getResolverCacheKeyForPage($page);
 
             $cacheEntry = $this->graphQlResolverCache->load($resolverCacheKeyForGuestQuery);
             $cacheEntryDecoded = json_decode($cacheEntry, true);
@@ -251,7 +251,7 @@ class PageTest extends GraphQlAbstract
 
             // query $page as customer
             $query = $this->getQuery($page->getIdentifier());
-            $response = $this->graphQlQueryWithResponseHeaders(
+            $this->graphQlQueryWithResponseHeaders(
                 $query,
                 [],
                 '',
@@ -259,7 +259,7 @@ class PageTest extends GraphQlAbstract
             );
 
             $this->initUserInfoContext('customer@example.com');
-            $resolverCacheKeyForUserQuery = $this->getResolverCacheKeyFromResponseAndPage($response, $page);
+            $resolverCacheKeyForUserQuery = $this->getResolverCacheKeyForPage($page);
 
             $cacheEntry = $this->graphQlResolverCache->load($resolverCacheKeyForUserQuery);
             $cacheEntryDecoded = json_decode($cacheEntry, true);
@@ -308,9 +308,9 @@ class PageTest extends GraphQlAbstract
         $page1 = $this->getPageByTitle('Page with 1column layout');
 
         $query = $this->getQuery($page1->getIdentifier());
-        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityStringPage1 = $this->getResolverCacheKeyFromResponseAndPage($response, $page1);
+        $cacheIdentityStringPage1 = $this->getResolverCacheKeyForPage($page1);
 
         $this->assertIsNumeric(
             $this->graphQlResolverCache->test($cacheIdentityStringPage1)
@@ -320,9 +320,9 @@ class PageTest extends GraphQlAbstract
         $page2 = $this->getPageByTitle('Page with unavailable layout');
 
         $query = $this->getQuery($page2->getIdentifier());
-        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityStringPage2 = $this->getResolverCacheKeyFromResponseAndPage($response, $page2);
+        $cacheIdentityStringPage2 = $this->getResolverCacheKeyForPage($page2);
 
         $this->assertIsNumeric(
             $this->graphQlResolverCache->test($cacheIdentityStringPage2)
@@ -353,9 +353,9 @@ class PageTest extends GraphQlAbstract
         $page1 = $this->getPageByTitle('Page with 1column layout');
 
         $query = $this->getQuery($page1->getIdentifier());
-        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityStringPage1 = $this->getResolverCacheKeyFromResponseAndPage($response, $page1);
+        $cacheIdentityStringPage1 = $this->getResolverCacheKeyForPage($page1);
 
         $this->assertIsNumeric(
             $this->graphQlResolverCache->test($cacheIdentityStringPage1)
@@ -365,9 +365,9 @@ class PageTest extends GraphQlAbstract
         $page2 = $this->getPageByTitle('Page with unavailable layout');
 
         $query = $this->getQuery($page2->getIdentifier());
-        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityStringPage2 = $this->getResolverCacheKeyFromResponseAndPage($response, $page2);
+        $cacheIdentityStringPage2 = $this->getResolverCacheKeyForPage($page2);
 
         $this->assertIsNumeric(
             $this->graphQlResolverCache->test($cacheIdentityStringPage2)
@@ -401,15 +401,13 @@ class PageTest extends GraphQlAbstract
         $query = $this->getQuery($nonExistentPage->getIdentifier());
 
         try {
-            $response = $this->graphQlQueryWithResponseHeaders($query);
+            $this->graphQlQueryWithResponseHeaders($query);
             $this->fail('Expected exception was not thrown');
         } catch (ResponseContainsErrorsException $e) {
             // expected exception
         }
 
-        $response['headers'] = $e->getResponseHeaders();
-
-        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndPage($response, $nonExistentPage);
+        $cacheIdentityString = $this->getResolverCacheKeyForPage($nonExistentPage);
 
         $this->assertFalse(
             $this->graphQlResolverCache->load($cacheIdentityString)
@@ -430,14 +428,11 @@ class PageTest extends GraphQlAbstract
         // query first page in default store and assert cache entry is created; use default store header
         $query = $this->getQuery($page->getIdentifier());
 
-        $response = $this->graphQlQueryWithResponseHeaders(
+        $this->graphQlQueryWithResponseHeaders(
             $query
         );
 
-        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndPage(
-            $response,
-            $page
-        );
+        $cacheIdentityString = $this->getResolverCacheKeyForPage($page);
 
         $this->assertIsNumeric(
             $this->graphQlResolverCache->test($cacheIdentityString)
@@ -464,14 +459,11 @@ class PageTest extends GraphQlAbstract
     {
         $page = $this->getPageByTitle('Page with 1column layout');
         $query = $this->getQuery($page->getIdentifier());
-        $response = $this->graphQlQueryWithResponseHeaders(
+        $this->graphQlQueryWithResponseHeaders(
             $query
         );
 
-        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndPage(
-            $response,
-            $page
-        );
+        $cacheIdentityString = $this->getResolverCacheKeyForPage($page);
 
         $lowLevelFrontendCache = $this->graphQlResolverCache->getLowLevelFrontend();
         $metadatas = $lowLevelFrontendCache->getMetadatas($cacheIdentityString);
@@ -540,6 +532,14 @@ class PageTest extends GraphQlAbstract
 QUERY;
     }
 
+    /**
+     * Initialize test-scoped user context with user by his email.
+     *
+     * @param string $customerEmail
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     private function initUserInfoContext(string $customerEmail)
     {
         /** @var CustomerRepositoryInterface $customerRepository */
@@ -554,6 +554,12 @@ QUERY;
         $contextFactory->create($userContextMock);
     }
 
+    /**
+     * Reset test-scoped user context to guest.
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     private function resetUserInfoContext()
     {
         $userContextMock = $this->getMockBuilder(UserContextInterface::class)
@@ -568,7 +574,13 @@ QUERY;
         $contextFactory->create($userContextMock);
     }
 
-    public function getResolverCacheKeyFromResponseAndPage(array $response, PageInterface $page): string
+    /**
+     * Create resolver key with key calculator retriever vis the actual key provider.
+     *
+     * @param PageInterface $page
+     * @return string
+     */
+    public function getResolverCacheKeyForPage(PageInterface $page): string
     {
         $resolverMock = $this->getMockBuilder(\Magento\CmsGraphQl\Model\Resolver\Page::class)
             ->disableOriginalConstructor()
