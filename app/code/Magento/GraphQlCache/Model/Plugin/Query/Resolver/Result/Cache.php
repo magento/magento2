@@ -154,7 +154,7 @@ class Cache
      * @param array|null $value
      * @return void
      */
-    private function preprocessParentResolverValue(&$value)
+    private function preprocessParentResolverValue(&$value): void
     {
         if ($value && isset($value['hydrator_instance']) && $value['hydrator_instance'] instanceof HydratorInterface) {
             $value['hydrator_instance']->hydrate($value);
@@ -169,7 +169,7 @@ class Cache
      * @param ResolverInterface $subject
      * @return void
      */
-    private function postprocessResolverResult(&$resolvedValue, ResolverInterface $subject)
+    private function postprocessResolverResult(&$resolvedValue, ResolverInterface $subject): void
     {
         $hydrator = $this->hydratorProvider->getHydratorForResolver($subject);
         if ($hydrator) {
@@ -193,7 +193,8 @@ class Cache
         ?array $args,
         ?array $value
     ): string {
-        $cacheIdentityString = $this->cacheKeyCalculatorProvider->getKeyCalculatorForResolver($resolver)->calculateCacheKey($value);
+        $cacheIdentityString = $this->cacheKeyCalculatorProvider->getKeyCalculatorForResolver($resolver)
+            ->calculateCacheKey($value);
         $cacheIdQueryPayloadString = $info->returnType->name . $this->serializer->serialize($args ?? []);
         return GraphQlResolverCache::CACHE_TAG . '_' . $cacheIdentityString . '_' . sha1($cacheIdQueryPayloadString);
     }
