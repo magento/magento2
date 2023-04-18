@@ -10,9 +10,6 @@ use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
-/**
- * Class StockRegistryStorage
- */
 class StockRegistryStorage implements ResetAfterRequestInterface
 {
     /**
@@ -31,6 +28,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     private $stockStatuses = [];
 
     /**
+     *
      * @param int $scopeId
      * @return StockInterface
      */
@@ -40,6 +38,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     }
 
     /**
+     *
      * @param int $scopeId
      * @param StockInterface $value
      * @return void
@@ -50,6 +49,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     }
 
     /**
+     *
      * @param int|null $scopeId
      * @return void
      */
@@ -63,6 +63,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     }
 
     /**
+     *
      * @param int $productId
      * @param int $scopeId
      * @return StockItemInterface
@@ -73,6 +74,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     }
 
     /**
+     *
      * @param int $productId
      * @param int $scopeId
      * @param StockItemInterface $value
@@ -84,6 +86,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     }
 
     /**
+     *
      * @param int $productId
      * @param int|null $scopeId
      * @return void
@@ -98,6 +101,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     }
 
     /**
+     *
      * @param int $productId
      * @param int $scopeId
      * @return StockStatusInterface
@@ -108,6 +112,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     }
 
     /**
+     *
      * @param int $productId
      * @param int $scopeId
      * @param StockStatusInterface $value
@@ -119,6 +124,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     }
 
     /**
+     *
      * @param int $productId
      * @param int|null $scopeId
      * @return void
@@ -133,6 +139,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     }
 
     /**
+     *
      * Clear cached entities
      *
      * @return void

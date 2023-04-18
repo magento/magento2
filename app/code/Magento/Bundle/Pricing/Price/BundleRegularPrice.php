@@ -15,7 +15,8 @@ use Magento\Bundle\Model\Product\Price;
 /**
  * Bundle product regular price model
  */
-class BundleRegularPrice extends \Magento\Catalog\Pricing\Price\RegularPrice implements RegularPriceInterface, ResetAfterRequestInterface
+class BundleRegularPrice extends \Magento\Catalog\Pricing\Price\RegularPrice implements RegularPriceInterface,
+    ResetAfterRequestInterface
 {
     /**
      * @var BundleCalculatorInterface

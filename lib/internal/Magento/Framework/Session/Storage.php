@@ -48,6 +48,7 @@ class Storage extends \Magento\Framework\DataObject implements StorageInterface,
             $this->setData($data[$namespace]);
         }
         $_SESSION[$namespace] = & $this->_data;
+        return $this;
     }
 
     /**

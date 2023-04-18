@@ -117,9 +117,7 @@ class CustomerRegistry implements ResetAfterRequestInterface
         /** @var Customer $customer */
         $customer = $this->customerFactory->create();
 
-        if (isset($websiteId)) {
-            $customer->setWebsiteId($websiteId);
-        }
+        $customer->setWebsiteId($websiteId);
 
         $customer->loadByEmail($customerEmail);
         if (!$customer->getEmail()) {

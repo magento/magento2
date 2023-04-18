@@ -11,7 +11,6 @@ use Exception;
 use GraphQL\Error\DebugFlag;
 use GraphQL\Error\FormattedError;
 use Magento\Framework\App\State;
-use Magento\Framework\Webapi\ErrorProcessor;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
@@ -34,10 +33,9 @@ class ExceptionFormatter
 
     /**
      * @param State $appState
-     * @param ErrorProcessor $errorProcessor
      * @param LoggerInterface $logger
      */
-    public function __construct(State $appState, ErrorProcessor $errorProcessor, LoggerInterface $logger)
+    public function __construct(State $appState, LoggerInterface $logger)
     {
         $this->appState = $appState;
         $this->logger = $logger;

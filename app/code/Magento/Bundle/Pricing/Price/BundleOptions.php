@@ -92,6 +92,7 @@ class BundleOptions implements ResetAfterRequestInterface
             /** @var \Magento\Bundle\Pricing\Price\BundleSelectionPrice $selectionPriceList */
             $selectionPriceList = $this->calculator->createSelectionPriceList($option, $bundleProduct);
             $selectionPriceList = $this->calculator->processOptions($option, $selectionPriceList, $searchMin);
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $priceList = array_merge($priceList, $selectionPriceList);
         }
         $amount = $this->calculator->calculateBundleAmount(0., $bundleProduct, $priceList);

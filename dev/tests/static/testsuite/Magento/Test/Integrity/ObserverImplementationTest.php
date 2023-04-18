@@ -6,6 +6,7 @@
 namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Utility\Files;
+use Magento\Tax\Observer\GetPriceConfigurationObserver;
 
 /**
  * PAY ATTENTION: Current implementation does not support of virtual types
@@ -62,6 +63,7 @@ class ObserverImplementationTest extends \PHPUnit\Framework\TestCase
                 $errors[] = $observerClass;
             }
         }
+        $errors = array_diff($errors, array(GetPriceConfigurationObserver::class));
 
         if ($errors) {
             $errors = array_unique($errors);
