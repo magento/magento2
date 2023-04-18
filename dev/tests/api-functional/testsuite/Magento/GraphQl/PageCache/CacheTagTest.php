@@ -94,10 +94,10 @@ QUERY;
         $categoryQuery = $this->getCategoryQuery();
 
         // cache-debug header value should be a MISS when category is loaded first time
-        $responseMissOnCategoryQuery = $this->graphQlQueryWithResponseHeaders($categoryQuery, $categoryQueryVariables);
+        $responseMissOnCategoryQuery = $this->graphQlQueryWithResponseHeaders($categoryQuery, [$categoryQueryVariables]);
         $cacheId = $responseMissOnCategoryQuery['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheMissAndReturnResponse($categoryQuery, [$categoryQueryVariables, CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheMissAndReturnResponse($categoryQuery,  [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         // Cache-debug header should be a MISS for product 1 on first request
         $responseFirstProduct = $this->graphQlQueryWithResponseHeaders($product1Query);
@@ -114,12 +114,12 @@ QUERY;
         // cache-debug header value should be MISS after  updating product1 and reloading the Category
         $responseMissCategoryAfterUpdate = $this->graphQlQueryWithResponseHeaders(
             $categoryQuery,
-            $categoryQueryVariables
+           [$categoryQueryVariables]
         );
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseMissCategoryAfterUpdate['headers']);
         $cacheId = $responseMissCategoryAfterUpdate['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheMissAndReturnResponse($categoryQuery, [$categoryQueryVariables, CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheMissAndReturnResponse($categoryQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         // cache-debug should be a MISS for product 1 after it is updated - cache invalidation
         $responseMissFirstProductAfterUpdate = $this->graphQlQueryWithResponseHeaders($product1Query);
