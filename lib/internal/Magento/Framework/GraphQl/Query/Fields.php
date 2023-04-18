@@ -74,6 +74,7 @@ class Fields implements ResetAfterRequestInterface
     /**
      * Extract and return list of all used fields in GraphQL query's variables
      *
+     * @param array $fields
      * @param array $variables
      *
      * @return void

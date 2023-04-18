@@ -76,6 +76,8 @@ class Comparator
      *
      * @param string $operationName
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function compare(string $operationName): array
     {
@@ -191,6 +193,7 @@ class Comparator
      * @param mixed $before
      * @param mixed $after
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function checkValues($before, $after): array
     {

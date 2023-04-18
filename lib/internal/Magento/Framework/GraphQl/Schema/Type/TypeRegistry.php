@@ -94,6 +94,9 @@ class TypeRegistry implements ResetAfterRequestInterface
         return $this->types[$typeName];
     }
 
+    /**
+     * @inheritDoc
+     */
     public function _resetState(): void
     {
         $this->types = [];
