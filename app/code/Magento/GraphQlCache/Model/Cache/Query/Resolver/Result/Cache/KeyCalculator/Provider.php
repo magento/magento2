@@ -66,9 +66,9 @@ class Provider implements ProviderInterface
                 $this->genericKeyCalculator = $this->keyCalculatorFactory->create();
             }
             $this->keyCalculatorInstances[$resolverClass] = $this->genericKeyCalculator;
+        } else {
+            $this->keyCalculatorInstances[$resolverClass] = $this->keyCalculatorFactory->create($customProviders);
         }
-
-        $this->keyCalculatorInstances[$resolverClass] = $this->keyCalculatorFactory->create($customProviders);
     }
 
     /**
