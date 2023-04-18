@@ -984,7 +984,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
     /**
      * Define customer object
-     * 
+     *
      * Important: This method also copies customer data to quote and removes quote addresses
      *
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
