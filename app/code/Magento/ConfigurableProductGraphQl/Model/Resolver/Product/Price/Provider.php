@@ -13,6 +13,7 @@ use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface;
 use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\Amount\BaseFactory;
 use Magento\Framework\Pricing\SaleableInterface;
 
 /**
@@ -24,6 +25,11 @@ class Provider implements ProviderInterface
      * @var ConfigurableOptionsProviderInterface
      */
     private $optionsProvider;
+
+    /**
+     * @var BaseFactory
+     */
+    private $amountFactory;
 
     /**
      * @var array
@@ -43,11 +49,14 @@ class Provider implements ProviderInterface
 
     /**
      * @param ConfigurableOptionsProviderInterface $optionsProvider
+     * @param BaseFactory $amountFactory
      */
     public function __construct(
-        ConfigurableOptionsProviderInterface $optionsProvider
+        ConfigurableOptionsProviderInterface $optionsProvider,
+        BaseFactory $amountFactory
     ) {
         $this->optionsProvider = $optionsProvider;
+        $this->amountFactory = $amountFactory;
     }
 
     /**
@@ -101,7 +110,7 @@ class Provider implements ProviderInterface
     {
         if (!isset($this->minimalPrice[$code][$product->getId()])) {
             $minimumAmount = null;
-            foreach ($this->filterDisabledProducts($this->optionsProvider->getProducts($product)) as $variant) {
+            foreach ($this->optionsProvider->getProducts($product) as $variant) {
                 $variantAmount = $variant->getPriceInfo()->getPrice($code)->getAmount();
                 if (!$minimumAmount || ($variantAmount->getValue() < $minimumAmount->getValue())) {
                     $minimumAmount = $variantAmount;
@@ -110,7 +119,7 @@ class Provider implements ProviderInterface
             }
         }
 
-        return $this->minimalPrice[$code][$product->getId()];
+        return $this->minimalPrice[$code][$product->getId()] ?? $this->amountFactory->create(['amount' => null]);
     }
 
     /**
@@ -133,19 +142,6 @@ class Provider implements ProviderInterface
             }
         }
 
-        return $this->maximalPrice[$code][$product->getId()];
-    }
-
-    /**
-     * Filter out disabled products
-     *
-     * @param array $products
-     * @return array
-     */
-    private function filterDisabledProducts(array $products): array
-    {
-        return array_filter($products, function ($product) {
-            return (int)$product->getStatus() === ProductStatus::STATUS_ENABLED;
-        });
+        return $this->maximalPrice[$code][$product->getId()] ?? $this->amountFactory->create(['amount' => null]);
     }
 }

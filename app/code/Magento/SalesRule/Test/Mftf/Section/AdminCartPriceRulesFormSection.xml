@@ -84,6 +84,7 @@
         <element name="applyDiscountToShipping" type="checkbox" selector="input[name='apply_to_shipping']"/>
         <element name="applyDiscountToShippingLabel" type="checkbox" selector="input[name='apply_to_shipping']+label"/>
         <element name="discountAmount" type="input" selector="input[name='discount_amount']"/>
+        <element name="negativeDiscountAmountError" type="text" selector="//label[@class='admin__field-error' and text()='Please enter a number 0 or greater, without comma in this field.']"/>
         <element name="maximumQtyDiscount" type="input" selector="input[name='discount_qty']"/>
         <element name="discountStep" type="input" selector="input[name='discount_step']"/>
         <element name="applyToShippingAmount" type="checkbox" selector="//div[@class='admin__actions-switch']/input[@name='apply_to_shipping']/../label"/>

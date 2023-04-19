@@ -947,11 +947,11 @@ mutation {
           address: {
             firstname: "Vasyl"
             lastname: "Doe"
-            street: ["1 Svobody"]
-            city: "Lviv"
-            region: "Lviv"
-            postcode: "00000"
-            country_code: "UA"
+            street: ["Via della Posta"]
+            city: "Vatican City"
+            region: "Vatican City"
+            postcode: "00120"
+            country_code: "VA"
             telephone: "555-555-55-55"
           }
         }
@@ -974,8 +974,8 @@ QUERY;
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
         self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
         $cartResponse = $response['setShippingAddressesOnCart']['cart'];
-        self::assertEquals('UA', $cartResponse['shipping_addresses'][0]['country']['code']);
-        self::assertEquals('Lviv', $cartResponse['shipping_addresses'][0]['region']['label']);
+        self::assertEquals('VA', $cartResponse['shipping_addresses'][0]['country']['code']);
+        self::assertEquals('Vatican City', $cartResponse['shipping_addresses'][0]['region']['label']);
     }
 
     /**
