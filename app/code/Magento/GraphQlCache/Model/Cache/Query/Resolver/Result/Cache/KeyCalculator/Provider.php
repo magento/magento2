@@ -13,7 +13,7 @@ use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator;
 use Magento\GraphQlCache\Model\CacheId\CacheIdFactorProviderInterface;
 
 /**
- * Provides custom cache id providers for resolvers chain.
+ * Provides custom cache key calculators for the resolvers chain.
  */
 class Provider implements ProviderInterface
 {
@@ -57,15 +57,15 @@ class Provider implements ProviderInterface
         if (isset($this->keyCalculatorInstances[$resolverClass])) {
             return;
         }
-        $customProviders = $this->getCustomProvidersForResolverObject($resolver);
-        if (empty($customProviders)) {
+        $customKeyFactorProviders = $this->getCustomKeyFactorProvidersForResolver($resolver);
+        if (empty($customKeyFactorProviders)) {
             $this->keyCalculatorInstances[$resolverClass] = $this->objectManager->get(KeyCalculator::class);
         } else {
-            $runtimePoolKey = $this->generateCustomProvidersKey($customProviders);
+            $runtimePoolKey = $this->generateCustomProvidersKey($customKeyFactorProviders);
             if (!isset($this->keyCalculatorInstances[$runtimePoolKey])) {
                 $this->keyCalculatorInstances[$runtimePoolKey] = $this->objectManager->create(
                     KeyCalculator::class,
-                    ['idFactorProviders' => $customProviders]
+                    ['idFactorProviders' => $customKeyFactorProviders]
                 );
             }
             $this->keyCalculatorInstances[$resolverClass] = $this->keyCalculatorInstances[$runtimePoolKey];
@@ -117,12 +117,12 @@ class Provider implements ProviderInterface
     }
 
     /**
-     * Get custom factor providers for the given resolver object.
+     * Get custom cache key factor providers for the given resolver object.
      *
      * @param ResolverInterface $resolver
      * @return array
      */
-    private function getCustomProvidersForResolverObject(ResolverInterface $resolver): array
+    private function getCustomKeyFactorProvidersForResolver(ResolverInterface $resolver): array
     {
         foreach ($this->getResolverClassChain($resolver) as $resolverClass) {
             if (!empty($this->customFactorProviders[$resolverClass])) {

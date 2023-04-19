@@ -96,7 +96,7 @@ class PageTest extends GraphQlAbstract
         $appArea = $this->objectManager->get(State::class);
         $this->initialAppArea = $appArea->getAreaCode();
         $this->objectManager->configure($configLoader->load(Area::AREA_GRAPHQL));
-        $this->resetUserInfoContext();
+        $this->mockGuestUserInfoContext();
     }
 
     protected function tearDown(): void
@@ -158,7 +158,7 @@ class PageTest extends GraphQlAbstract
      */
     public function testCmsPageResolverCacheAndInvalidationAsCustomer()
     {
-        $this->initUserInfoContext('customer@example.com');
+        $this->mockCustomerUserInfoContext('customer@example.com');
 
         $authHeader = [
             'Authorization' => 'Bearer ' . $this->customerTokenService->createCustomerAccessToken(
@@ -249,7 +249,7 @@ class PageTest extends GraphQlAbstract
             $query = $this->getQuery($page->getIdentifier());
             $this->graphQlQueryWithResponseHeaders($query);
 
-            $this->resetUserInfoContext();
+            $this->mockGuestUserInfoContext();
             $resolverCacheKeyForGuestQuery = $this->getResolverCacheKeyForPage($page);
 
             $cacheEntry = $this->graphQlResolverCache->load($resolverCacheKeyForGuestQuery);
@@ -273,7 +273,7 @@ class PageTest extends GraphQlAbstract
                 $authHeader
             );
 
-            $this->initUserInfoContext('customer@example.com');
+            $this->mockCustomerUserInfoContext('customer@example.com');
             $resolverCacheKeyForUserQuery = $this->getResolverCacheKeyForPage($page);
 
             $cacheEntry = $this->graphQlResolverCache->load($resolverCacheKeyForUserQuery);
@@ -555,7 +555,7 @@ QUERY;
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function initUserInfoContext(string $customerEmail)
+    private function mockCustomerUserInfoContext(string $customerEmail)
     {
         /** @var CustomerRepositoryInterface $customerRepository */
         $customerRepository = $this->objectManager->create(CustomerRepositoryInterface::class);
@@ -581,7 +581,7 @@ QUERY;
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function resetUserInfoContext()
+    private function mockGuestUserInfoContext()
     {
         $userContextMock = $this->getMockBuilder(UserContextInterface::class)
             ->onlyMethods(['getUserId', 'getUserType'])

@@ -62,7 +62,7 @@ class Cache
      * @param SerializerInterface $serializer
      * @param CacheState $cacheState
      * @param ResolverIdentityClassLocator $resolverIdentityClassLocator
-     * @param ProviderInterface $cacheIdProviderStrategy
+     * @param ProviderInterface $cacheKeyCalculatorProvider
      * @param HydratorProviderInterface $hydratorProvider
      */
     public function __construct(
@@ -70,14 +70,14 @@ class Cache
         SerializerInterface $serializer,
         CacheState $cacheState,
         ResolverIdentityClassLocator $resolverIdentityClassLocator,
-        ProviderInterface $cacheIdProviderStrategy,
+        ProviderInterface $cacheKeyCalculatorProvider,
         HydratorProviderInterface $hydratorProvider
     ) {
         $this->graphQlResolverCache = $graphQlResolverCache;
         $this->serializer = $serializer;
         $this->cacheState = $cacheState;
         $this->resolverIdentityClassLocator = $resolverIdentityClassLocator;
-        $this->cacheKeyCalculatorProvider = $cacheIdProviderStrategy;
+        $this->cacheKeyCalculatorProvider = $cacheKeyCalculatorProvider;
         $this->hydratorProvider = $hydratorProvider;
     }
 
@@ -122,9 +122,9 @@ class Cache
             return $proceed($field, $context, $info, $value, $args);
         }
 
-        $cacheIdentityString = $this->prepareCacheIdentityString($subject, $info, $args, $value);
+        $cacheKey = $this->prepareCacheKey($subject, $info, $args, $value);
 
-        $cachedResult = $this->graphQlResolverCache->load($cacheIdentityString);
+        $cachedResult = $this->graphQlResolverCache->load($cacheKey);
 
         if ($cachedResult !== false) {
             $resolvedValue = $this->serializer->unserialize($cachedResult);
@@ -139,7 +139,7 @@ class Cache
         if (count($identities)) {
             $this->graphQlResolverCache->save(
                 $this->serializer->serialize($resolvedValue),
-                $cacheIdentityString,
+                $cacheKey,
                 $identities,
                 false, // use default lifetime directive
             );
@@ -178,7 +178,7 @@ class Cache
     }
 
     /**
-     * Prepare cache identity string incorporating factors from parameters.
+     * Generate cache key incorporating factors from parameters.
      *
      * @param ResolverInterface $resolver
      * @param ResolveInfo $info
@@ -187,15 +187,17 @@ class Cache
      *
      * @return string
      */
-    private function prepareCacheIdentityString(
+    private function prepareCacheKey(
         ResolverInterface $resolver,
         ResolveInfo $info,
         ?array $args,
         ?array $value
     ): string {
-        $cacheIdentityString = $this->cacheKeyCalculatorProvider->getKeyCalculatorForResolver($resolver)
-            ->calculateCacheKey($value);
-        $cacheIdQueryPayloadString = $info->returnType->name . $this->serializer->serialize($args ?? []);
-        return GraphQlResolverCache::CACHE_TAG . '_' . $cacheIdentityString . '_' . sha1($cacheIdQueryPayloadString);
+        $queryPayloadHash = sha1($info->returnType->name . $this->serializer->serialize($args ?? []));
+        return GraphQlResolverCache::CACHE_TAG
+            . '_'
+            . $this->cacheKeyCalculatorProvider->getKeyCalculatorForResolver($resolver)->calculateCacheKey($value)
+            . '_'
+            . sha1($queryPayloadHash);
     }
 }

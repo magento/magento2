@@ -5,15 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache;
+namespace Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyFactorProvider;
 
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\GraphQlCache\Model\CacheId\CacheIdFactorProviderInterface;
 
 /**
- * Id factor provider interface for resolver cache that depends on previous resolver data.
+ * Id factor provider interface for resolver cache that depends on parent resolver data.
  */
-interface ParentResolverDataFactoredInterface extends CacheIdFactorProviderInterface
+interface ParentResolverResultFactoredInterface extends CacheIdFactorProviderInterface
 {
     /**
      * Provides factor value based on query context and parent resolver data.
@@ -22,5 +22,5 @@ interface ParentResolverDataFactoredInterface extends CacheIdFactorProviderInter
      * @param array|null $parentResolverData
      * @return string
      */
-    public function getFactorValueForResolvedData(ContextInterface $context, ?array $parentResolverData): string;
+    public function getFactorValueForParentResolvedData(ContextInterface $context, ?array $parentResolverData): string;
 }

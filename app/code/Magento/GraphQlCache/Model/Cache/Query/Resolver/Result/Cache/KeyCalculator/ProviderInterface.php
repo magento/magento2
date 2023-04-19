@@ -11,12 +11,12 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator;
 
 /**
- * Interface for custom resolver cache id providers strategy.
+ * Interface for custom cache key calculator provider.
  */
 interface ProviderInterface
 {
     /**
-     * Get cache id calculator for the given resolver.
+     * Get cache key calculator for the given resolver.
      *
      * @param ResolverInterface $resolver
      * @return KeyCalculator

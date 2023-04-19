@@ -9,6 +9,7 @@ namespace Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache;
 
 use Exception;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
+use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyFactorProvider\ParentResolverResultFactoredInterface;
 use Magento\GraphQlCache\Model\CacheId\CacheIdFactorProviderInterface;
 use Psr\Log\LoggerInterface;
 
@@ -63,8 +64,8 @@ class KeyCalculator
         try {
             $context = $this->contextFactory->get();
             foreach ($this->idFactorProviders as $idFactorProvider) {
-                if ($idFactorProvider instanceof ParentResolverDataFactoredInterface) {
-                    $keys[$idFactorProvider->getFactorName()] = $idFactorProvider->getFactorValueForResolvedData(
+                if ($idFactorProvider instanceof ParentResolverResultFactoredInterface) {
+                    $keys[$idFactorProvider->getFactorName()] = $idFactorProvider->getFactorValueForParentResolvedData(
                         $context,
                         $parentResolverData
                     );
