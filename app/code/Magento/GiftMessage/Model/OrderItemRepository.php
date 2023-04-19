@@ -53,8 +53,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
     protected $helper;
 
     /**
-     * Message factory.
-     *
      * @var \Magento\GiftMessage\Model\MessageFactory
      */
     protected $messageFactory;

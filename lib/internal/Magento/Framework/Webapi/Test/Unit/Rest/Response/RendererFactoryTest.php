@@ -1,7 +1,5 @@
 <?php
 /**
- * Test Rest renderer factory class.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -18,6 +16,9 @@ use Magento\Framework\Webapi\Rest\Response\RendererFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test Rest renderer factory class.
+ */
 class RendererFactoryTest extends TestCase
 {
     /** @var RendererFactory */

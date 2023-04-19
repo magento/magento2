@@ -70,7 +70,6 @@ class IndexerSetDimensionsModeCommand extends AbstractIndexerCommand
     }
 
     /**
-     *
      * @inheritdoc
      * @param InputInterface $input
      * @param OutputInterface $output

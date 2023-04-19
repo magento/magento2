@@ -55,14 +55,11 @@ class Core extends \Zend_Cache_Core
     /**
      * Save some data in a cache
      *
-     * @param  mixed $data Data to put in cache (can be another type than string if
-     * automatic_serialization is on)
-     * @param  null|string $cacheId Cache id (if not set, the last cache id will be used)
-     * @param  string[] $tags Cache tags
-     * @param  bool|int $specificLifetime   If != false, set a specific lifetime for this cache record
-     * (null => infinite lifetime)
-     * @param  int $priority integer between 0 (very low priority) and 10 (maximum priority) used by
-     * some particular backends
+     * @param mixed $data Data to put in cache (can be another type than string if automatic_serialization is on)
+     * @param null|string $cacheId Cache id (if not set, the last cache id will be used)
+     * @param string[] $tags Cache tags
+     * @param bool|int $specificLifetime   If != false, set a specific lifetime for this cache record (null => infinite lifetime)
+     * @param int $priority integer between 0 (very low priority) and 10 (maximum priority) used by some particular backends
      * @return bool True if no problem
      */
     public function save($data, $cacheId = null, $tags = [], $specificLifetime = false, $priority = 8)

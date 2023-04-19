@@ -208,6 +208,7 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
     }
 
     /**
+     *
      * @return void
      */
     public function registerShutdown() {

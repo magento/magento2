@@ -34,11 +34,12 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
     protected $_config;
 
     /**
+     *
      * @param FactoryInterface $factory
      * @param ConfigInterface $config
      * @param array &$sharedInstances
      */
-    public function __construct(FactoryInterface $factory, ConfigInterface $config, &$sharedInstances = [])
+    public function __construct(FactoryInterface $factory, ConfigInterface $config, array &$sharedInstances = [])
     {
         $this->_config = $config;
         $this->_factory = $factory;

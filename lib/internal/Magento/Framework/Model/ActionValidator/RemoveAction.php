@@ -53,8 +53,8 @@ class RemoveAction
     }
 
     /**
-     *
      * Get clean model name without Interceptor and Proxy part and slashes
+     *
      * @param object $object
      * @return mixed
      */
