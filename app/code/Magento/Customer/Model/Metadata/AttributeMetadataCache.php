@@ -23,7 +23,7 @@ class AttributeMetadataCache implements ResetAfterRequestInterface
     /**
      * Cache prefix
      */
-    const ATTRIBUTE_METADATA_CACHE_PREFIX = 'ATTRIBUTE_METADATA_INSTANCES_CACHE';
+    public const ATTRIBUTE_METADATA_CACHE_PREFIX = 'ATTRIBUTE_METADATA_INSTANCES_CACHE';
 
     /**
      * @var CacheInterface

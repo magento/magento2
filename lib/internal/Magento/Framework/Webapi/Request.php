@@ -15,6 +15,9 @@ use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\StringUtils;
 
+/**
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class Request extends HttpRequest implements RequestInterface
 {
     /**

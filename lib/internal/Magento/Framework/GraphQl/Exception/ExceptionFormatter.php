@@ -19,7 +19,7 @@ use Throwable;
  */
 class ExceptionFormatter
 {
-    const HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS = 500;
+    public const HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS = 500;
 
     /**
      * @var State

@@ -20,7 +20,7 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class CustomerRegistry implements ResetAfterRequestInterface
 {
-    const REGISTRY_SEPARATOR = ':';
+    public const REGISTRY_SEPARATOR = ':';
 
     /**
      * @var CustomerFactory

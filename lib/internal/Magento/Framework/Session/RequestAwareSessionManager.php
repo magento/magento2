@@ -11,6 +11,7 @@ use Magento\Framework\ObjectManager\RegisterShutdownInterface;
 
 /**
  * Session Manager instance used to register shutdown script for Application Server
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class RequestAwareSessionManager extends Generic implements RegisterShutdownInterface
 {

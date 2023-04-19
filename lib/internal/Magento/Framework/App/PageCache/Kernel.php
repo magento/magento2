@@ -17,6 +17,7 @@ class Kernel
      * @var \Magento\PageCache\Model\Cache\Type
      *
      * @deprecated 100.1.0
+     * @see Nothing
      */
     protected $cache;
 

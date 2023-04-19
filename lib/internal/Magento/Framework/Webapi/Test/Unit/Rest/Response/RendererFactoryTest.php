@@ -57,8 +57,6 @@ class RendererFactoryTest extends TestCase
      */
     public function testGet()
     {
-        $acceptTypes = ['application/json'];
-
         /** Mock request getAcceptTypes method to return specified value. */
         $this->_requestMock->expects($this->once())->method('getHeader')->willReturn('application/json');
         /** Mock renderer. */

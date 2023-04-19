@@ -28,6 +28,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     private $stockStatuses = [];
 
     /**
+     * Get Stock Data
      *
      * @param int $scopeId
      * @return StockInterface
@@ -38,6 +39,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     }
 
     /**
+     * Set Stock cache
      *
      * @param int $scopeId
      * @param StockInterface $value
@@ -49,6 +51,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     }
 
     /**
+     * Delete cached Stock based on scopeId
      *
      * @param int|null $scopeId
      * @return void
@@ -63,6 +66,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     }
 
     /**
+     * Retrieve Stock Item
      *
      * @param int $productId
      * @param int $scopeId
@@ -74,6 +78,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     }
 
     /**
+     * Update Stock Item
      *
      * @param int $productId
      * @param int $scopeId
@@ -86,6 +91,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     }
 
     /**
+     * Remove stock Item based on productId & scopeId
      *
      * @param int $productId
      * @param int|null $scopeId
@@ -101,6 +107,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     }
 
     /**
+     * Retrieve stock status
      *
      * @param int $productId
      * @param int $scopeId
@@ -112,6 +119,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     }
 
     /**
+     * Update stock Status
      *
      * @param int $productId
      * @param int $scopeId
@@ -124,6 +132,7 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     }
 
     /**
+     * Clear stock status
      *
      * @param int $productId
      * @param int|null $scopeId
@@ -139,7 +148,6 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     }
 
     /**
-     *
      * Clear cached entities
      *
      * @return void

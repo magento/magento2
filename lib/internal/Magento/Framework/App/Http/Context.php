@@ -21,7 +21,7 @@ class Context implements ResetAfterRequestInterface
     /**
      * Currency cache context
      */
-    const CONTEXT_CURRENCY = 'current_currency';
+    public const CONTEXT_CURRENCY = 'current_currency';
 
     /**
      * Data storage
