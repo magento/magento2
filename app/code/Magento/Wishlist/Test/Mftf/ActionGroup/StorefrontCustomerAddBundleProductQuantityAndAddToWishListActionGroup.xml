@@ -13,11 +13,14 @@
             <description>Fills in the provided Bundle Product Quantity on a Storefront product page. Clicks on Add to Wish List.</description>
         </annotations>
         <arguments>
-            <argument name="quantity" defaultValue="1" type="string"/>
-
+            <argument name="childQuantity" defaultValue="1" type="string"/>
+            <argument name="parentQuantity" defaultValue="1" type="string" />
+            <argument name="optionName" type="string"/>
         </arguments>
 
-        <clearField selector="{{StorefrontProductInfoMainSection.qty}}" stepKey="clearTheQuantityField" before="WaitForWishList"/>
-        <fillField selector="{{StorefrontProductInfoMainSection.qty}}" userInput="{{quantity}}" stepKey="fillTheProductQuantity" after="clearTheQuantityField"/>
+        <clearField selector="{{StorefrontProductInfoMainSection.qty}}" stepKey="clearParentQuantityField" before="WaitForWishList"/>
+        <fillField selector="{{StorefrontProductInfoMainSection.qty}}" userInput="{{parentQuantity}}" stepKey="fillParentProductQuantity" after="clearParentQuantityField"/>
+        <clearField selector="{{StorefrontProductInfoMainSection.productBundleOptionQty(optionName)}}" stepKey="clearChildQuantityField" before="fillParentProductQuantity"/>
+        <fillField selector="{{StorefrontProductInfoMainSection.productBundleOptionQty(optionName)}}" userInput="{{childQuantity}}" stepKey="fillChildProductQuantity" after="clearChildQuantityField" />
     </actionGroup>
 </actionGroups>
