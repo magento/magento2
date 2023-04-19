@@ -1353,6 +1353,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 }
             } elseif (!$this->_isAttributeValueEmpty($attribute, $v)) {
                 $insert[$attrId] = is_array($v) ? array_shift($v) : $v;//@TODO: MAGETWO-44182
+            } elseif ($this->_isAttributeValueEmpty($attribute, $v)) {
+                $this->_aggregateDeleteData($delete, $attribute, $newObject);
             }
         }
 
